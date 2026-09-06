@@ -1,0 +1,30 @@
+test_cas_keeps_all_completed_outcomes (__main__.Tests.test_cas_keeps_all_completed_outcomes) ... ok
+test_empty_refused (__main__.Tests.test_empty_refused) ... ok
+test_missing_cannot_be_coerced_to_false (__main__.Tests.test_missing_cannot_be_coerced_to_false) ... ok
+test_negative_and_boolean_prefix_counts_refused (__main__.Tests.test_negative_and_boolean_prefix_counts_refused) ... ok
+test_non_boolean_metric_refused (__main__.Tests.test_non_boolean_metric_refused) ... ok
+test_prefix_compute_is_lower_bound (__main__.Tests.test_prefix_compute_is_lower_bound) ... ok
+test_rejection_cannot_be_success (__main__.Tests.test_rejection_cannot_be_success) ... ok
+test_rule_not_started_is_not_attempted_or_false (__main__.Tests.test_rule_not_started_is_not_attempted_or_false) ... ok
+test_unfinished_is_attempted_but_unknown (__main__.Tests.test_unfinished_is_attempted_but_unknown) ... ok
+test_unknown_status_refused (__main__.Tests.test_unknown_status_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK
+test_bad_action_refused (__main__.Tests.test_bad_action_refused) ... ok
+test_bad_verdict_refused (__main__.Tests.test_bad_verdict_refused) ... ok
+test_boolean_case_index_refused (__main__.Tests.test_boolean_case_index_refused) ... ok
+test_exact_rejection (__main__.Tests.test_exact_rejection) ... ok
+test_missing_cannot_hide_result (__main__.Tests.test_missing_cannot_hide_result) ... ok
+test_rejection_with_native_writes_refused (__main__.Tests.test_rejection_with_native_writes_refused) ... ok
+test_unexpected_missing_slot_refused (__main__.Tests.test_unexpected_missing_slot_refused) ... ok
+test_unfinished_requires_exact_db_wal_shm (__main__.Tests.test_unfinished_requires_exact_db_wal_shm) ... ok
+test_unknown_receipt_status_refused (__main__.Tests.test_unknown_receipt_status_refused) ... ok
+test_unstarted_rule_has_no_files (__main__.Tests.test_unstarted_rule_has_no_files) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK

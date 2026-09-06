@@ -1,4 +1,17 @@
-# V7 report preparation
+# V7 report and preserved preparation record
+
+## Current result — 2026-09-06
+
+The run failed at its fixed evaluation deadline. Its saved partial evidence has now been checked: CAS 0/72 before and after; generic trained 0 correct, 71 incorrect and one unfinished result from 72 attempts; rule 71/71 actual attempts with one scheduled case not started. This is not a completed campaign or a learning acceptance.
+
+- [Final partial-result report](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/FINAL_PARTIAL_REPORT.md>)
+- [Full-address audit index](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/AUDIT_FILES.md>)
+- [All 360 scheduled first-error rows](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/first_errors.csv>)
+- [Final byte/link/capture handoff check](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/handoff_check_001.json>)
+
+The pre-launch template, historical evidence and source-evidence files were kept unchanged. The original preparation text below is preserved as history; its PENDING wording is not the current result. The full-success reviewer was not used on the failed packet. A separate partial reviewer kept the missing outcomes explicit.
+
+## Original pre-launch preparation text
 
 This folder holds a concise final-report template and a checked historical evidence index. It is not a current result packet or a learning acceptance.
 

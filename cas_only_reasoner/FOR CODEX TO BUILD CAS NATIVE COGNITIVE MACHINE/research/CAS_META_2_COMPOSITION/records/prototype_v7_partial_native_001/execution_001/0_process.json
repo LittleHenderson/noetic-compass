@@ -1,0 +1,17 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-S",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_native_001\\test_report.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T11:34:30.204834+00:00",
+  "pid": 61700,
+  "returncode": 0,
+  "started_utc": "2026-09-06T11:34:30.063078+00:00",
+  "stderr_sha256": "5ecab3cfdf70db4037a6b0c968367514a4f727197ed7ad8554144e449904f798",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "wall_seconds": 0.14177529999869876
+}

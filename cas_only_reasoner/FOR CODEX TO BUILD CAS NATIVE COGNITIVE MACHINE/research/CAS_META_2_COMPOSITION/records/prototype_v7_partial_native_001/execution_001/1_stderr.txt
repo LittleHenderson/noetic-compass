@@ -1,0 +1,15 @@
+test_bad_action_refused (__main__.Tests.test_bad_action_refused) ... ok
+test_bad_verdict_refused (__main__.Tests.test_bad_verdict_refused) ... ok
+test_boolean_case_index_refused (__main__.Tests.test_boolean_case_index_refused) ... ok
+test_exact_rejection (__main__.Tests.test_exact_rejection) ... ok
+test_missing_cannot_hide_result (__main__.Tests.test_missing_cannot_hide_result) ... ok
+test_rejection_with_native_writes_refused (__main__.Tests.test_rejection_with_native_writes_refused) ... ok
+test_unexpected_missing_slot_refused (__main__.Tests.test_unexpected_missing_slot_refused) ... ok
+test_unfinished_requires_exact_db_wal_shm (__main__.Tests.test_unfinished_requires_exact_db_wal_shm) ... ok
+test_unknown_receipt_status_refused (__main__.Tests.test_unknown_receipt_status_refused) ... ok
+test_unstarted_rule_has_no_files (__main__.Tests.test_unstarted_rule_has_no_files) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.004s
+
+OK

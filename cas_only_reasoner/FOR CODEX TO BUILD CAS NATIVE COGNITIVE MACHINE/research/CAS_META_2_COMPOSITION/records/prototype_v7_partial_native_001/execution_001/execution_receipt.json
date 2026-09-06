@@ -1,0 +1,78 @@
+{
+  "campaign_success_claim": false,
+  "command": [
+    "records/prototype_v7_partial_native_001/capture.py",
+    "execution_001",
+    "run_001"
+  ],
+  "completed": true,
+  "processes": [
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "-S",
+        "-B",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_native_001\\test_report.py"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T11:34:30.204834+00:00",
+      "pid": 61700,
+      "returncode": 0,
+      "started_utc": "2026-09-06T11:34:30.063078+00:00",
+      "stderr_sha256": "5ecab3cfdf70db4037a6b0c968367514a4f727197ed7ad8554144e449904f798",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wall_seconds": 0.14177529999869876
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "-S",
+        "-B",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_native_001\\test_native_audit.py"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T11:34:30.345340+00:00",
+      "pid": 26444,
+      "returncode": 0,
+      "started_utc": "2026-09-06T11:34:30.216535+00:00",
+      "stderr_sha256": "68d2cd8a0fac1be7c7e34ff98434d265b2384c860f1ab717a6f324512aee9c3f",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wall_seconds": 0.12880240000231424
+    },
+    {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_native_001\\run.py",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_native_001\\run_001"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T11:45:24.785812+00:00",
+      "pid": 68180,
+      "returncode": 0,
+      "started_utc": "2026-09-06T11:34:30.354503+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "e8367fc36c84d3255cc1d1239bf14dc16edfb6796dd4f2ec3a80c33e16eacab5",
+      "wall_seconds": 654.423745600001
+    }
+  ],
+  "source_after_sha256": {
+    "capture.py": "15f0b7361f30cb82512002cbe9bc157c6d28acaba2ed6f33168f982865a0e942",
+    "native_audit.py": "8bd267ee1fa045003562294bce56447ee41213836241e5b2ff893cc3a8cfeb8a",
+    "report.py": "2c52bbae95dac57d04557637d12a50fefe2506254f4a264dd2d43038099fbb44",
+    "run.py": "f2c6f85674d9a8edeb99452c03c66dba078602481baf7f7361c9e1331b12e8cc",
+    "test_native_audit.py": "06d8472bac5769678edcdfd2c1fb9ac08b7eb47fa534d727f76d994897525332",
+    "test_report.py": "77b6c0baed7fa8c176ac8086fdb53eb2161158f71bcc050359b8c8a820901f71"
+  },
+  "source_before_sha256": {
+    "capture.py": "15f0b7361f30cb82512002cbe9bc157c6d28acaba2ed6f33168f982865a0e942",
+    "native_audit.py": "8bd267ee1fa045003562294bce56447ee41213836241e5b2ff893cc3a8cfeb8a",
+    "report.py": "2c52bbae95dac57d04557637d12a50fefe2506254f4a264dd2d43038099fbb44",
+    "run.py": "f2c6f85674d9a8edeb99452c03c66dba078602481baf7f7361c9e1331b12e8cc",
+    "test_native_audit.py": "06d8472bac5769678edcdfd2c1fb9ac08b7eb47fa534d727f76d994897525332",
+    "test_report.py": "77b6c0baed7fa8c176ac8086fdb53eb2161158f71bcc050359b8c8a820901f71"
+  },
+  "source_unchanged": true
+}
