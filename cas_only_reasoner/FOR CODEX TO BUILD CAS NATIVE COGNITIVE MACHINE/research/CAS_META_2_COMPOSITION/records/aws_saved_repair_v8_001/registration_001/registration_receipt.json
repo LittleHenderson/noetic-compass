@@ -1,0 +1,20 @@
+{
+  "authority_sha256": "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919",
+  "boundary": "Registration only; native_execution is requested by the separate paid command, not performed here.",
+  "files": {
+    "capture_parent.py": "c26ad4553f9408c8e6d31f0fb107bb233b25b7f2eef278cd42bbc0b5b8196742",
+    "launch_request.json": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+    "ledger_observation.json": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5",
+    "standing_authority.json": "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919"
+  },
+  "job": "cas-meta2-20260906165606-cbc41523",
+  "native_execution": false,
+  "new_reservation": false,
+  "outer_caller_restored": false,
+  "provider_calls": false,
+  "request_sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+  "source_archive_sha256": "c965a1dabb584f49a6d549129121de61de921658adbcb7cb57ced807d89f9b3d",
+  "source_manifest_sha256": "6a08b2e500a85f9ca4f8d886434e4b5da330d6ff3e291f5aba6f0f9c4914d75d",
+  "source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc",
+  "training": false
+}

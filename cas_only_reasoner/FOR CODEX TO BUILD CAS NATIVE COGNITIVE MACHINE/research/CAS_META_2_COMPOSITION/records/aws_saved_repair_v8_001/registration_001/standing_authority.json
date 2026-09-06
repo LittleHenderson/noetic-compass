@@ -1,0 +1,29 @@
+{
+  "campaign_approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626"
+  },
+  "campaign_cap_usd": "400.00",
+  "experiment": {
+    "entrypoint": "cas_meta2.saved_repair_gpu_v8",
+    "profile": "saved_native_repair_v8"
+  },
+  "job": "cas-meta2-20260906165606-cbc41523",
+  "launch_request_sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+  "max_job_cost_usd": "4.00",
+  "max_native_calls": 2,
+  "max_policy_units": 16384,
+  "native_execution": true,
+  "outer_caller_restored": false,
+  "parent_source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc",
+  "schema": "cas-meta2-saved-repair-standing-authority/8",
+  "source_archive_sha256": "c965a1dabb584f49a6d549129121de61de921658adbcb7cb57ced807d89f9b3d",
+  "source_manifest_sha256": "6a08b2e500a85f9ca4f8d886434e4b5da330d6ff3e291f5aba6f0f9c4914d75d",
+  "standing_campaign_authorization": true,
+  "standing_user_message": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prefix_diagnostic_v8_001\\authorization_001\\user_message_full.txt",
+    "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+  },
+  "training": false,
+  "worker_source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc"
+}
