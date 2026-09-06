@@ -1,0 +1,33 @@
+{
+  "actual_review_executed": false,
+  "boundary": "Fake audit process and fake Git authentication only; small artificial files. Real hash/path/receipt logic.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-S",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_review_execution_001\\test_run.py"
+  ],
+  "completed": true,
+  "current_packet_read": false,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T10:04:11.933842+00:00",
+  "model_execution": false,
+  "pid": 59604,
+  "provider_calls": 0,
+  "returncode": 0,
+  "schema": "cas-meta2-v7-review-execution-checks/0.1",
+  "source_sha256": {
+    "README.md": "8d686e4696d7c0a55e9205ea89afbf5afcab59f6714f8bad40d595da614fc82c",
+    "run.py": "9967487b8c2844db196d229df95c9106ecfd102ed21ba094876e8bdecf1c1452",
+    "run_checks.py": "1533506946dae77a1317ee04daab02ae523aac826b01f83702f0f45cfd2709a2",
+    "test_run.py": "a91b718ababe36333ec9b7c4b9962a70fe1ad806879223d5a1921d6541c0680a"
+  },
+  "source_unchanged": true,
+  "started_utc": "2026-09-06T10:04:08.455602+00:00",
+  "status": "SYNTHETIC_WRAPPER_CHECKS_PASSED",
+  "stderr_sha256": "de59184a054f038ec34776d7f4ea16f236cbab65bfc72f09634a319e8c6ffc37",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "test_functions": 26,
+  "wall_seconds": 3.478233600002568
+}

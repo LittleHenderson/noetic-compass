@@ -1,0 +1,31 @@
+test_duplicate_or_nonfinite_json_rejected (__main__.PureUtilityTests.test_duplicate_or_nonfinite_json_rejected) ... ok
+test_git_batch_binds_requested_fixed_commit_and_exact_raw_bytes (__main__.PureUtilityTests.test_git_batch_binds_requested_fixed_commit_and_exact_raw_bytes) ... ok
+test_import_has_no_neural_provider_or_hook_leak (__main__.PureUtilityTests.test_import_has_no_neural_provider_or_hook_leak) ... ok
+test_all_cli_args_required_no_automatic_packet_hash (__main__.WrapperTests.test_all_cli_args_required_no_automatic_packet_hash) ... ok
+test_changed_checks_receipt_refused (__main__.WrapperTests.test_changed_checks_receipt_refused) ... ok
+test_checks_receipt_hash_and_git_binding_are_required (__main__.WrapperTests.test_checks_receipt_hash_and_git_binding_are_required) ... ok
+test_different_packet_path_is_refused_before_read_or_launch (__main__.WrapperTests.test_different_packet_path_is_refused_before_read_or_launch) ... ok
+test_existing_capture_cannot_be_reused (__main__.WrapperTests.test_existing_capture_cannot_be_reused) ... ok
+test_existing_review_output_or_extraction_refused (__main__.WrapperTests.test_existing_review_output_or_extraction_refused) ... ok
+test_extra_reviewer_python_file_refused (__main__.WrapperTests.test_extra_reviewer_python_file_refused) ... ok
+test_failed_preparation_command_not_admitted_even_with_new_test_pin (__main__.WrapperTests.test_failed_preparation_command_not_admitted_even_with_new_test_pin) ... ok
+test_nonzero_child_failure_file_is_preserved_and_hashed (__main__.WrapperTests.test_nonzero_child_failure_file_is_preserved_and_hashed) ... ok
+test_nonzero_child_with_pass_file_still_fails (__main__.WrapperTests.test_nonzero_child_with_pass_file_still_fails) ... ok
+test_outside_or_root_capture_refused (__main__.WrapperTests.test_outside_or_root_capture_refused) ... ok
+test_packet_change_after_exit_cannot_pass (__main__.WrapperTests.test_packet_change_after_exit_cannot_pass) ... ok
+test_packet_hash_mismatch_is_retained_as_failed_preflight (__main__.WrapperTests.test_packet_hash_mismatch_is_retained_as_failed_preflight) ... ok
+test_prepared_reviewer_byte_change_refused_before_child (__main__.WrapperTests.test_prepared_reviewer_byte_change_refused_before_child) ... ok
+test_prepared_source_change_after_exit_cannot_pass (__main__.WrapperTests.test_prepared_source_change_after_exit_cannot_pass) ... ok
+test_same_review_and_extraction_target_refused (__main__.WrapperTests.test_same_review_and_extraction_target_refused) ... ok
+test_spawn_error_retains_command_and_raw_empty_streams (__main__.WrapperTests.test_spawn_error_retains_command_and_raw_empty_streams) ... ok
+test_synthetic_pass_captures_exact_command_pid_exit_times_and_hashes (__main__.WrapperTests.test_synthetic_pass_captures_exact_command_pid_exit_times_and_hashes) ... ok
+test_wrong_or_missing_external_packet_pin_does_not_start_child (__main__.WrapperTests.test_wrong_or_missing_external_packet_pin_does_not_start_child) ... ok
+test_zero_exit_with_failed_review_status_is_not_pass (__main__.WrapperTests.test_zero_exit_with_failed_review_status_is_not_pass) ... ok
+test_zero_exit_with_missing_summary_is_not_pass (__main__.WrapperTests.test_zero_exit_with_missing_summary_is_not_pass) ... ok
+test_zero_exit_with_wrong_job_source_or_packet_identity_is_not_pass (__main__.WrapperTests.test_zero_exit_with_wrong_job_source_or_packet_identity_is_not_pass) ... ok
+test_zero_exit_without_review_receipt_is_not_pass (__main__.WrapperTests.test_zero_exit_without_review_receipt_is_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 2.644s
+
+OK
