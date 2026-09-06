@@ -1,0 +1,22 @@
+
+=================================== ERRORS ====================================
+______________ ERROR collecting tests/test_child_scaffold_v8.py _______________
+tests\test_child_scaffold_v8.py:10: in <module>
+    from cas_meta2 import child_scaffold_v8 as scaffold, native
+cas_meta2\child_scaffold_v8.py:18: in <module>
+    from .native import EXPECTED, admit_action
+cas_meta2\native.py:14: in <module>
+    import sqlite3
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1333: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:1267: in _find_spec
+    ???
+tools\check_child_call_preparation_v8.py:27: in find_spec
+    raise RuntimeError("V8_PREPARATION_NEURAL_PROVIDER_IMPORT_REFUSED:" + fullname)
+E   RuntimeError: V8_PREPARATION_NEURAL_PROVIDER_IMPORT_REFUSED:sqlite3
+=========================== short test summary info ===========================
+ERROR tests/test_child_scaffold_v8.py - RuntimeError: V8_PREPARATION_NEURAL_P...
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.52s
