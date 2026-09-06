@@ -1,0 +1,2357 @@
+{
+  "action_token_limit": 256,
+  "all_pairs_change_symbolic_native_work": true,
+  "all_procedures_reachable": true,
+  "attempts": {
+    "2/call_target": 144,
+    "2/step_input": 140,
+    "3/call_target": 113,
+    "3/step_input": 88
+  },
+  "boundary": "Prototype practice data, not a launched curriculum or native correctness result. Keep both members of each pair in one partition. Exclude all prototype graphs from future held-out evaluation. One-field contrast is a training hypothesis, not a demonstrated improvement.",
+  "depths": [
+    2,
+    3
+  ],
+  "exposed_graph_signatures": [
+    "0040ae844f62569b0fbf4ac06f758c7dc6d389728eb603d2fa0b4e6dec5bba3e",
+    "00b0d42d32d6aa3d2dbf84a432712f3c82155a6ab38cca630906afc2ca69423f",
+    "0158e8734ccb51ddfab2004cb937988754012dd1643d0785f27d705f84439543",
+    "01c6aeea77abecfe334d4be951f71f1c9fcc6020eec129a5bc2bb83ff0d7f4c0",
+    "020b909c4cb3585b17799838b48ea2a3852dd7d2f7090b214c6b7361f0dfb6bd",
+    "04f511aa517a6e76ee024ec03e7a493e98d1b472069c918eb4d6efb9c60ea036",
+    "08d677e1f0645ee0b2e3b02749a6715cddbb954e65d8fd93a37a61abec4d52e1",
+    "0a81f811e460c2bad75a86c37a814b3d0d7ef7b6bce7317a368c7cd852aebb6c",
+    "0b5066fd6985269b347c36878c63094547ad40c4a34c3b404477298412c8140f",
+    "0bdccabda7ee444b6113a24512499460194c572e0b7c3318c8c365e11599137a",
+    "0c5769b3ff2fba3bcb6ae63d008e302e55a89aeed66a567f92da05e04d75759c",
+    "0db5985401dd78692747f8a1f1379b12d25ea8de809309e214395bb511a037a8",
+    "0ecff8ed28785f7cf8daea845f0590e4a38d76b0c7a2eed7335619b1221b1674",
+    "104c1fcb2752c1529923f931cb28a93cfc6e137a8fc52d503f1dc27cd52a726b",
+    "11326527c7ce6b13a83942965fc585e8f140536fb34fab2cbc30d5fb040974cf",
+    "138df233da96737b919ad6344dd778f5e619c4218416d6b25f8d4d3a4cc77986",
+    "16ab915eea68c18a6de3f2c263f9992781c4fb14135bbcdf189948c9564d08f2",
+    "16d52bff60cffafc2aa08a6aafc7101476dc4101b38a623e39788b3f0991a600",
+    "186dcadf90ff2a186a4d1698996a1ce122e3c550c0a78cb81179a5e3d3bf5d64",
+    "18d1ab2d95a2a1ebdd76d1a6c4bf479ff24cad5f86dbe2e004a7fbd77e817754",
+    "1a08899ca7ac01431925be10747e53e30a2e3cbbcc0c5287b722e91558bedaa5",
+    "1a916abad632dc09e229786088d59998c2b58dc4023e92015a864c8e0e26b6f3",
+    "1b546578f831f4373fd6af11b8a4ad197d52d486276fe663e2fd0d8285442e84",
+    "1c3897d5237058fac104aac62aaf09141f1407a081db541bb2b83b5539612bb1",
+    "1ca40fb02e42d5a6691e32b7872957031904c77c0d720b385dfb7dcaeea1ebfd",
+    "1ec7dd7ade89c6a4b6852a2e3c00fe4ee74b8ce898e5abab84ad88287b5dc4cf",
+    "1f5aff6e14e07cdd9e6412c15e70ac1bdbb14a5030c80a547a5172881e6fdd24",
+    "1fcedf8ab4663e2e9a5e3cf8d045a527173fb18a9a37f180c943f639bb6c4da5",
+    "20961e7871eacf9eb10305a0b114ee8da20bb702533e9d52099cfceba408c82f",
+    "20a63617ffd8201baa37eb23305075310a079c79dfe863eb1a7a7ad25e923ef4",
+    "22be4f37bf0bf310769602f92e04c54bc11b6f3b6566265f68896bc9a984450f",
+    "22dfb8f9f4fc6067a2d4cc47f8e522747d6bd6a2679c51ae07afe6c2579609d9",
+    "232d5f6a6ad51e8634828d0def65521f720c688b5d755d49d7ee2c4fbe4dce98",
+    "26156b23a75fc1d856fb5402de5439a38683693ff1791d01c215cd1b7de82af5",
+    "264684e69274408beb33013f59b261f118c80483562d33d14bfb901e9bec2164",
+    "28002ab28eb42b16d1cf875a74f4cfd96b122b4b696e4353e616412ffcd75317",
+    "28166a1c6bd39dab9e2fc333cc3d6554fd51781f4242e64e35df8ae480d51ad3",
+    "28a56fb79e53a50cf0ecf1636d1391c46edef291d941a9bc67194093b56b7739",
+    "28bbfd2734725669ed2c16448c3f2986c226d5549c786f7ac47c558f3d3ae49a",
+    "28d6382bab45e3b2a090591d96aa1c88cbf75dd66c510ac3d5d2b374f5b03c31",
+    "2a40061b4307080af0758c2716fc7a34cd47a4a20a23742320b9647ba3cf8aec",
+    "2ba8986a7e399f8896bb7aac11cde50685868ec14d66533e67aa53c10b6d09f8",
+    "2c7a69e67cfd5ec6130a70e75e0ae46d4f79114a60791356966191c3996c9a34",
+    "2d1f4af5a97b3e83a58e4d3746182ed5dd79e3b360b39f72d46553735190ee31",
+    "2e485ac27334d7d8a2b14753b4e0f6d94e7b554132a810a13824eaa30770eb46",
+    "2e7eb9141f2df95394be36314f4b1268d8a00c1b3ced645a8972a7d29ee01336",
+    "2f6195b667bf5510d4ee572e1fc4b54a0ede46acdd5abaf21537800319583963",
+    "2fd2a431c7e4c681a5e69697ef2589224cbc346d4bef933757c8bba2df45c1e8",
+    "2fe7e9721ab056f0e57b3212bc1ca24fd58a84e1d84f87ef522f2f853ce21a06",
+    "3004fae06e00448f4438ddf09c8b0557b5270debbb0df8776b578b25df2d4e99",
+    "318ccc2c2e2d5b3bb4191f451617a13cb159c5a656ac1c6ffb8c5abb284bebb3",
+    "31dc3bcccd8c70780c43af2ab8d71342eba3abc1bd43c46ccf81f37b01eb9ae2",
+    "320dac0b3a486f3c77cdc943ea03ab1f96e9931e27085fb8ef6a0deaf7de4930",
+    "3365323d49168622e55b04d85a26eadc154192bb502ad6f2456e875d903d0119",
+    "340f5819b53a7d9b5bff5e49469b790a96695bcc48abe95774c65cc7e8e593ac",
+    "342ce497c40a72bc82a14bdf9478687c0548562a47d5a1a7624156fec96d621d",
+    "346581f850d7fd4d80e44ac54285d7b0e247dcd8c5de45b68186532a9e6891ab",
+    "35c734b0667256a02d35ca5dd205c62223286c43b289f7ec954f57ddd6f75238",
+    "3af380d7db7f764d973807f9b4233ceb49af31cac41e467bcbbb01670ec9fd17",
+    "3b0e0a70711f6b65ef44dd90e8d246229595e060941d368daf0cb851f7743718",
+    "3b8a8aa9406880749d2c9be437891cfdcfe0088098bd92718331446e98dc7816",
+    "3dd6e8bd6016d1aedd402b6bc1201f2575cb127d4ec3a81a8cb7f00a709f6fe5",
+    "3eaa37fa148a0b267f490f579394d7f09b6a91164a99ce215e5f7ffa29041f1e",
+    "3ebe079763f1194bf60c9447d2f5937b6164ea2ed1891648b290a7e1fa66954e",
+    "416abe89c5f156ba6e355576b3917072194db3281dd2e080bd0e96a8a9d8fec5",
+    "416d13e4b26a81bfb7fa49e0f85c7aebc2b3d424af918f1ce18439c54aa933e2",
+    "41e607af73d435954097da5de3c5c5a0f5ac3b5c530ea612b4322417ee05b088",
+    "4303c4bf289e69532e27ea8ac805a7c46133fdacdf9f823815a790673beaf486",
+    "436244881878fafd212fd485afe08be0701d862c6ae3f116d6aa192188b3816d",
+    "46728b51317ab6addfcf025d6cd63ccd81cca8ca5f4d3c0b60f79bf7fca31473",
+    "46de9b115b292671188f7dbe334ee4de4dc203088e11ce6a2e6f328d6d0342de",
+    "4762d03af3f37c4d42753334b2957703cd8461dee4b9b01308c1199340dc3bde",
+    "4860aa5fdc3b30ca21c0d206b71a56d7e1ca04464ad2f951b9eccf5641bd91c5",
+    "4909eb505057a4492eb65d172e6205579155a3bc691b68a11d112af029413caf",
+    "4a52a06340feb827783c4cde3d9c87c9c05cfc83c5462f7af18febc07f5547b4",
+    "4e2c8a8aa4b1d5432189d1198a997f9366d1b37474dc36ca3dd494b6fd68bcbf",
+    "4ea780f46c52f605c0bcdbefbff47cc1d35613a2da353a425d211ca441bb237e",
+    "4f17906ca0da0f6ddf1524737234ef053bbc02f038566989d0baf2621edf52a5",
+    "4f6ea85d45373758f311a952f6a70a716c917b4a19041a261a7dec574d793245",
+    "4fcfd90c5e57aec788e33caa5afe1ab314df4975e20141b380d98ed429edfccd",
+    "5000d96b175a1751a85e7f5799058b6e7aed9db8c1cc6cca443907c15c57d769",
+    "52978c9e981e3920a2cf57769036dfa96ad3045ec84c7b0b1aafc3b036773dc9",
+    "52a554cc4d79d466f55b5ff734c4d3c5a9a89f7ea780232b1c4e5153378fef4a",
+    "532299bc90acd80a9ab45c2f7f947fb0169479e76a0514b137bf2122a855458f",
+    "54feadc0c16470aebfe7dddc1f2df1fe74bd8c9e08467382f6a38e637300a1d9",
+    "55dcec19ca6b8d760ba21057d2db440d8ba2d2d4fa8bdbc9b94e1fc29a107403",
+    "5658bc8e5862a39dd721b1d9a25ebf079d826ee530350605d7bcbcc1b694f988",
+    "57038ebeb66879f5e4e1e29f6c487b3975b7c432f66f21cd3b5b99dcb4a63ad5",
+    "5893bbfeccdd7401c74a9f4a57f6e56d1e0849ec26a77454626b33cac4db03c5",
+    "5a62f4f27139e3abf75d5378ea1cb68b51f972363f6168469dbf45e742caa03d",
+    "5b08bdb6040c8251effa5525a216a2ae36e6bbce64f5f7ed4e5a60cea6874e2f",
+    "5d131fd809fa1603d1d27ee6e3b464b46239c53068444789c22eb91a11ff69b5",
+    "5d516dd5782f91ae49cdf62f220229d2deae2eb978fb0a035e03b8e0caa3bf69",
+    "5de99e99d5ec021bf6fd732280aa6ebdf52bb52891d29a6234008733bb1958d4",
+    "5e0038cff9df953b9e3b7f77ddf4b0295b943fb3aad26765bb772779f021724b",
+    "5e6bb8b72af0fb3e6747d7818193a970edd0b3afcab338b27f61f989b100f8f2",
+    "5ea0d564a01c7632ae684be5bc69885d3a23250b1db0f1f9729d1d5ea896b104",
+    "60b6aa8a2c568ec18eb2fcbc23aeb435db432cea3f176205ceaf75cc7d66e109",
+    "6488e6dc3edc9b25daf7e28f568c43a4bb6e443a2d395c8d475b8ad340b71f1a",
+    "6502690535c32aa53cfb3220e2b52c848991f2a7fc3ef9cafeb8879e316e8266",
+    "6959e3d50e3ef70baf6ed8bf8eac67fad6f347b74576295ae67ffe9682c2aa6d",
+    "69b16e8e88a4138ce3bae62383f5e4ef37c5d524739bf804a82be6ea336d1454",
+    "69b9fa8006da04f354e21545ba0313246703a0b04dc732217404c3ff0b715dc6",
+    "69f807ecba39edb01b6838e240af724b0cecacc8fa8ebe44a9034e06000c1dbf",
+    "6a8497987b81f3c2782e064896a653c555611e35248fdaee65b88f96d1e85d63",
+    "6ab7117503499c304af917752e732afd4be195ab5c5a283197e4bbf83f032169",
+    "6b0f7da6eb660ae6295f8924c86ab6eab9330d27aef28b7d90c6175abd117ab9",
+    "6c1fe687c4fc3f7fb9224e1b75bbe42b1a714bf799e5bcb438b0a49ea9effba2",
+    "6dd93b26f4b8f1d2d0e8fd9ead37f08b423d6f62e06d33fd0cb4c47e2bae0d30",
+    "6fb07cb115f3a1120d54adc3691ce3ee01b51b85b2cdab9ad35010edae3824aa",
+    "710bfd2a30dd5d06d229c79523b68086a1f5143bd828ff7bb2b43342999b21b1",
+    "715e36ed9d37b19e4e61b68ee0288ae46873e0861ea6f79d529e83f456545233",
+    "72090137d93022750293a27a394cd510839c2d18c75d4edcf493f8fc1fef3434",
+    "75a0ae85ede5b97cd387bd8ee8be4f8c7e389f23642b0499478fb1557908f5d3",
+    "78cf34db57f575de65190572b833f7996461f3e6375535d52247c1757272710c",
+    "78ee38dae119c33f46a832ed2157d8f39d0bb8a53d8dc8455aeb24c64ed520ba",
+    "79a61bd702c045c337e234daeba36639120180e3c26962b20b02247a443ac315",
+    "79aa838936dc17ed1673fb5b93f0f82da4c6002e2cca978142a8e9df5c194b81",
+    "7bbdcb7d9fcb070861d73d68168b1ce8ce2c3aca5f637a7aae6ee2696d5e5ae5",
+    "7c85014cc15bc3fc6edcd99b4e3d5d27af00a936dab062d869c574fb380013cf",
+    "7da4b3a18b35de653da77a744884bca7a3f3ada0531eb02a1b0dde30eab73c34",
+    "81da511c748d89c030d197f9b57030cc6c81a1e1859058347b811f466fb4291c",
+    "81fd5cbb1bea9b05177059c5428d50345686a514559afd7a4805795302031b24",
+    "826cf2971f4d581ee29bcb12fb4ba0843d89d99548bfe44028487bf45733993e",
+    "838963510cb00fe6972cd823f530075c494257d522986360f646a8aced54ab6e",
+    "838b64fabdf518d55b98695278b4a2288ced0d34e550726b24faf4e1841057f3",
+    "83d774206b93f2877af1febea1648aaeb61581a55358d3c411a863f12e18c088",
+    "84f20d639ca5f257f5917fc91c1b0a37744b30434759b44dd7533c4afe7ee414",
+    "8529979bf4222bb113462b18666983b8398c5eca22556a923a6e03f5a5f81114",
+    "856c1de934f0a796bda29feab2366dd05305afb7a29d6485a6a7ffc7c217af8d",
+    "86149d67db397cb14b4f38a9cef1856ff2fde3fd9c4e16d6c63ea0e8f768ff8c",
+    "877cf9a6f15a9bfa819058305d0f276becab5c82588ca5a68f74b8972bd8f501",
+    "89f651a6182f0eaa5644030310bf9172e5b191be09c50a5e6ba7f87f84f83d23",
+    "89f829e2361d088de042806f720822325ebab60bb87dccb612c3966150df50e1",
+    "8b5e82f0a5a3498bf17902200336dfe278fee7d6f0d795b7361b14189702a396",
+    "8c5509749f0fdfbbdb97c589e9e848152931794865963ad08e14c1fcbe8e5498",
+    "8c708223dcfc58f3ffd62098be4a7ac7d4caa465a8c934638bb7f8d3bd6b7482",
+    "8d2b4c43f1fa8b6d7556427fef43104dc0203e559da5ea472430e41b4c421094",
+    "8d9febefd47df41493ce227fbd1e61ccbf19938e6c9bb2f77543947c2868f081",
+    "8e9d4f3028c7e0637b5d6602c1eb9569d619e264ac483722afdc3e4038460216",
+    "8fce5a65d4fb106e05b2c2351b43daf8d901f149e42a7bb3d7ee2422bf1527b1",
+    "8fd21a81844a0c0d7c6da567e47f8bc985052c977e2f75b9ea5af71aaed92408",
+    "8fe6d8966dfb6617ee1b9777bb501fd1fa4637aee1105396d98c8cbf441ec365",
+    "90c37518636eb42ba7c0dde58a6c4d64a2ab4bc36a5af2c076f4910dc19579ef",
+    "913f113aab440415704f519239073772b8869a0806ef5b30dda9067a529575ad",
+    "925ed03e21ff9b54eb37c2aa3ec7c99f54c31bdc750e3e7fd702c2f2316adc4f",
+    "92d5f867aba6e46cab43b14c2edc7656fcda6163c2b8014abf43235270677675",
+    "92e6b7cc6cfb0a88d21f86e11f9b794a1c8853193ae71f4015022e8882eb5155",
+    "944fcdf11dad26978529f23edbcc86cdec68c077f41582fb1814570570ff0bca",
+    "949dac3b428e7a1d955dfb39bc2ee2a50adfc14d1404a4638b5be33f2ba38c01",
+    "970af0e12fe0a3fa9aff71455f5dd5bd1045335faf4adf9016a3e167f218a6ac",
+    "982fcba30f359d4d7b1f2b59db7de44e308087dcffe35641ff6009f50cf300f6",
+    "9d6b12d4f0620ee21f10f0f4a014284711ec12dfc72c7f8bc6a5c3249162d85d",
+    "9ddd589781aff495759c860b27cb2507cb193a7d133aa5e6720d712ecbb537e7",
+    "9f072cc8d61c0f8e35cff877ea06c0720216d26763faa30185d5be043cf2e000",
+    "a259520d5bf66ff38feffa9d7753dbfe9cadf4694b748ef1945fad7af772dcf2",
+    "a4556ce1bfc2f91af12787b0c1ac851d58ba0010e3455417d529c0e5b39e94a9",
+    "a4eecc6836ce6e3fc5b49e7e774c7fb11cc8f3974260e8ae543128d69c2e0232",
+    "a5bc63b6a85e65dabbec2d3ac7ebb9b1a166307c9292f7fbf1552660743f7b48",
+    "a5c08ebea28b58018d891235c55408a288b196248b31df8ae91b8302168ca6c4",
+    "a707d3f1d1c2e0465b8802e2ef1cd216dee176d85d6ca5aedcdef2fd8fa693e1",
+    "a71ec5176f3932b1048c5962c710e2b0f3df44b8c8e8a1744831db91fa9869bc",
+    "a7853341238b90e7fa1dd020ef5bc2e2acb1835580b820870f3c38a1b5d838de",
+    "a7eaed91a20a56e801e380198dac2bf3fac8f3ee68d278814fa7aa49ae962afa",
+    "a9a9ab825f2b3b7b91fb90fbe984069dd8b5396408ac742a6a5a3852c43d1936",
+    "aa06832d35481d8f7b62b7ec338a0a36ac14e43a8e8d5c691d4e05e3e28aaa78",
+    "aa915dea07c003b8456d307fd8338aa06dff7f59393fdd08a345ef6118655bc3",
+    "aafed8eebb5d3812b2afd136784163c9b41792c1224c818321f5fbc8b43163ff",
+    "ac9a973479b38c2a66228ca53fbabb8e3a7e60e6d8210e7cc56a7a93e12df37a",
+    "ad8aee29cd96887973d2c858e4fa46e38775b9c99cd627e8a61ade2f27cce316",
+    "ae76fa27b9575972efb5b1cb6c9fbdcffe7b5a9fcc80ff2c83793191b017c988",
+    "aec2ba3cc97e304518d2738fd8029672a9344443982c96027059b728c585b7d5",
+    "af47368ea4354fedb761c0d12704b790bd8c0877a89c7ceb09253df8fdb1f75f",
+    "b077bcdf8c52d63a33044b305409763a76f3d33fad55f749564e981244630650",
+    "b087325dd254e41c1ee6da0e9d7ced7e3697337ea79cd62d33d1063499ce77a0",
+    "b0c8c0d02b724c90ef4ebe18af49d8a372bfe7aa9f60dfaaae22c23252437e24",
+    "b138239a0c48ecee676e19dee420b53d0adcc9823f9a4ccc57adb69de6e77489",
+    "b1ac8e9fd607f3a4df36dd11bdcdf2d515e636170ed47b7a1a285e676e637389",
+    "b1c345b9eeb245d731988706b7a03df7aeb8d337f517f967884de6f7437062e8",
+    "b3311c2c71ec4cca13fa08575da2abaef7c38f21cc3afcd26042c57341d3fe1e",
+    "b37b4e52f5ff462060d724628d41a7ee64a86d39cc4173f7caf9297cb907e4dd",
+    "b432e387822c892119a8174bd1badac6fe50b1d14742dcb9b05334f0edf4605c",
+    "b43676baaded0def6b7dfb509392f43279b534d4aed58242d4cc839d0af3b53c",
+    "b54ef52483f0603b8ad417bce84dbd370c3862a83323c479a1e9e8029651a7d6",
+    "b5cb36cb2d89eb4b6e73e0dc8396b7c61b2f15c53d9f39496aeac07cd79e2e27",
+    "b6b675bc6cd7d9bdf8cb33837d9887ba066c8ac1fd0d1bea733ebda9e599f142",
+    "b8a9bcbf1efc8420dfdb4e6e3687a4a150fa0c1cb5e21615d412bbd9d06d1565",
+    "b939e5f31c980f0194bbd159bc64f328a798408e0bfb378a9e2416592ef1e458",
+    "ba0bd09fb471a60b92cf5dea0fa88c811a99ab3fbca9ccb75d8210403954a6d8",
+    "ba5762726cfdaaac326d06e2a6e7cc3c531cb2416129e9a468df03b0f3dc2cb2",
+    "bac39d08f65ae247120a9b30b97b415da9ced400a88b19d8c0abf1105e34fe4c",
+    "bc0cfdcdc5ed88a79e63f53591369de2d67c330df1c6ea65f256531e172770c3",
+    "bc189f174d4059ccbe311c254de1ee841b44eb754bed3a4c040bf95fbaa3c64f",
+    "bd28493267291da6087ba1d54e4f84ff28eccc2ae859b00a82329bcfdd65b4fe",
+    "bdba89ea54682075a56f9bca0ccc378c5aa2af14d075114a418c5ff02aa8480a",
+    "bf35880750f5490cc817286d34b215f0a93183dc4fc744043e263d42bff1605c",
+    "c1739a4c36b29ee79971417775f5fe8982e1aea68cb1839d46cbbd343de7e716",
+    "c38373dcd92e89bd0e51b99c4d8674c16adc101057855002aa7a05574f6bc077",
+    "c416f2091e5950b683bc6de5befbffc400bbc6b548ad42cfb0a20de7536002ec",
+    "c471b53d6b5ba2910b0195f3cbc5a077771933077c31f835d6652d21b23d1a9a",
+    "c67b0fc5ec3584b0008c32f5f23572a4e6e0620c327387a95540e967c765a572",
+    "c6a1363f2aff25de645638553f8765bb5a55f65655afa98ed80f5650c17bfa83",
+    "c7d8eaef00b7365ec7936fb81fe273a442683c5b734dbc06b4dfc35ab8ea8452",
+    "c912a66b84ca9017fa78c51e7e82218f596ea31b311c3db169cbce70e7cd4185",
+    "c92a7ef3d721560fc64f6452297cdb8f189ecac53f98a35ff2fa9c667b530286",
+    "ca034eb6e9c7f741849c8ac249d93d327ee689df2f84ede60cb5cb04d94bacce",
+    "cb99f5481d79c315107c2d090d4d212a051f509ae5b0097a47aeba2b790911b8",
+    "cddcaf36c9ddac39561e413c30af24590e5e02be3da471fb761894ce502cb2a2",
+    "ce27e78ac3b036b667fa6f5d50aa65d636b90df76f4e75a2def03f1a0be44bc4",
+    "cecd54ac24d19da81c6834e5bd50bf2bf070d1de2bec19590a165b7ce322f0ca",
+    "cf4af376b3ccb9946be5025aea2fb3a4ef1f6e0ed7eb80635322ca6b8190269b",
+    "d0c88619a26c32aada1b42ec7fb18dee1f4e813f2c58be159a2de65dd6e3e334",
+    "d19f8021c1c4ef0800f3d0c1261528a9344ac298e3c55cd6a1ca690b100124c6",
+    "d23ed473bcb5cc44209a1432f3dbe85c8cf41ef10879708667bc155fdd46e7b0",
+    "d356ce61bfd43dac0302fb535ade3dd0e1bb43a7c58abb35f8a74f0dc3cda7eb",
+    "d4824dbc437ed0adc8c1211addd25a58c3e986b17ddcbba9fdb942d42540101c",
+    "d4f9025abfce2d843a094afd4ce804359bd4cabe7accc4b29ccafc57b1d878b9",
+    "d534aec90bf6111fc80f73abe74523d666b882e922951b20aa0701ef2a59deba",
+    "d56f169062c41c8acee396c7d74304d301838c644612a8ca7406c71ee53e9646",
+    "d70397f91cf3d824a5ed30ae4bd12009b3ebc1467545d9eeb5e3d76d6f90331a",
+    "da4340d8e7008c81d5621c51a0c286e0a0f893332b6d5f962b5d0c9561f5ddcd",
+    "db75986ac9b409da35688c1a2ba1bfd04aa4b643a4375cbb6bc7e80d63d38061",
+    "dcb44abf48192e9c343abf6b50fd0a357a9facb76aebeed8678c11dcd184ac3c",
+    "ddd3f9ca1d99cfe5268bbf83b96a61028440e515607bdd6ddb888c3e05ca0d50",
+    "df55d7754b5f163b7ed80bca0b0a7ada6fe38a3da5a15ea013d8589b0407427b",
+    "dfd7b2828b9f9e187fd2b32e0bf890285acef8502813ef90e082d115d68c4458",
+    "e03bac3242813b03a8f4f197901188c2f82b0d6c080a6fd1d024c273a882eaf2",
+    "e06ed17c120879b45dcb8039d4a6342c99d2cca98c37836a82be2d5a47c1449a",
+    "e2550c29e5fb4ec6fb4a35c11082073d3844454d5818b50b516758fdc15a6392",
+    "e28908c35b5d375e3de11a2a4b1ed4b73b67b32bff28629f31f4290e4c1546bd",
+    "e2c7bb8be831eba9d73b412c06870870bd76b404811da256b395865e5a7e226b",
+    "e5532496b415d0a24fb13cbefbbdaf3e876b4b20cd149b331b4be81f726de9ce",
+    "e660c4eca06ce12fadafa91677eccb7eddbb5589e0af41854687f21b2f265284",
+    "e716cb54e6a0a92533cc03bcf03d58fd8c55e5981876901860fe1937057cf673",
+    "e788d18895280cd909955d5b611f24328530424277ba94b0621f6a724cf5c52f",
+    "e79b456dfff8420eaed85c69b5ed1891034c4f61aabb45368d5eb9bfc5d37f2d",
+    "ea52546bffa31b55379f9a25e2e1c60cc02803abea60c310502eeb11d3285100",
+    "eafbde66b832b80568a8c591fc934f2e3d2ff538d68bde1f2775e8bd0d225082",
+    "ebb9b381b3d626b90930c5bce380601ccf79bef016b04b3f0591183c43953ff1",
+    "ebb9f02cbc6268865338eba9b202f5dde6aaf0a1cefc83febcb166786cf59552",
+    "ec971bbeb4e3386fa68f07c2aae9090c700492e9adb026ccb8cf58afe8ea43df",
+    "ecd6219b50c8d35f60a28a013154188d04751547e9403e5f578d2edded3d95f3",
+    "ed85e6fa2f78f9e61acebd047b20674c9444d75bca23c6cdf81d781344cc0a57",
+    "eda473ff17f74baf303ac7541f6bd34dc0e8ebecf1ad31d78b7b7ab624ea326f",
+    "ef4b8f3a80a75b19cb531384718961b976b8baf01e1ebefd298593191e861210",
+    "f06fdd60cc5141d7fea0eb0552bdc35920a56743713ac618e24a73b8a344edf4",
+    "f149b0056e02cffbfd95cb4a7aa06a37dda55e2453e33ba4d577f521794b1c42",
+    "f25de5011a0fadefb500319c74b11ad69d0076d93063ee85dc36b941015f2943",
+    "f263b57a5972e5e75a8f175ac00025cf44869063e98992da567120ebccb3d369",
+    "f3615d71e1734f54c85e2a71b806871c0feb8759231563c69d7439d489ba02cc",
+    "f439ac17f958c708929bd6efa22d703aa02e10c3e2fc2ed958d97b87da6ba96d",
+    "f7662bd43d2cc2e8a8e6a004e7bb001947d19b859ec5fda9555dd896dba7bb88",
+    "f7a2c3730f7bf5c7a7f1c0af9d1ab3bdd82945eb82d88ec6d584ca9be5e7c2a9",
+    "f859eaac028ca554c9be4217b6bbd6db7660b618f219f81db80e94021a189eba",
+    "f8a5a53a7ba2cfb1acfbfb8af22c0e66890d767de98b87f59e61f054fc463b36",
+    "ff230b6bb02dbdd0c98291477b39436c57b54ff2197379a41fce740f2be15b66"
+  ],
+  "fit_probe_only": true,
+  "fresh_evaluation": false,
+  "native_outcomes_checked": false,
+  "negative_controls_passed": 4,
+  "neural_execution": false,
+  "pair_count": 128,
+  "pairs": [
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-000",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-000-left",
+        "contrast-probe-926601-2-step_input-000-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p10",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-001",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-001-left",
+        "contrast-probe-926601-2-step_input-001-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-002",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-002-left",
+        "contrast-probe-926601-2-step_input-002-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-003",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-003-left",
+        "contrast-probe-926601-2-step_input-003-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-004",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-004-left",
+        "contrast-probe-926601-2-step_input-004-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-005",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-005-left",
+        "contrast-probe-926601-2-step_input-005-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-006",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-006-left",
+        "contrast-probe-926601-2-step_input-006-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-007",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-007-left",
+        "contrast-probe-926601-2-step_input-007-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-008",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-008-left",
+        "contrast-probe-926601-2-step_input-008-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-009",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-009-left",
+        "contrast-probe-926601-2-step_input-009-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-010",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-010-left",
+        "contrast-probe-926601-2-step_input-010-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p6",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-011",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-011-left",
+        "contrast-probe-926601-2-step_input-011-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-012",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-012-left",
+        "contrast-probe-926601-2-step_input-012-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-013",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-013-left",
+        "contrast-probe-926601-2-step_input-013-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-014",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-014-left",
+        "contrast-probe-926601-2-step_input-014-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-015",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-015-left",
+        "contrast-probe-926601-2-step_input-015-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-016",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-016-left",
+        "contrast-probe-926601-2-step_input-016-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p11",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-017",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-017-left",
+        "contrast-probe-926601-2-step_input-017-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-018",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-018-left",
+        "contrast-probe-926601-2-step_input-018-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-019",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-019-left",
+        "contrast-probe-926601-2-step_input-019-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-020",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-020-left",
+        "contrast-probe-926601-2-step_input-020-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-021",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-021-left",
+        "contrast-probe-926601-2-step_input-021-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-022",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-022-left",
+        "contrast-probe-926601-2-step_input-022-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-023",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-023-left",
+        "contrast-probe-926601-2-step_input-023-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-024",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-024-left",
+        "contrast-probe-926601-2-step_input-024-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-025",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-025-left",
+        "contrast-probe-926601-2-step_input-025-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-026",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-026-left",
+        "contrast-probe-926601-2-step_input-026-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-027",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-027-left",
+        "contrast-probe-926601-2-step_input-027-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-028",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-028-left",
+        "contrast-probe-926601-2-step_input-028-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-029",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-029-left",
+        "contrast-probe-926601-2-step_input-029-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p9",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-030",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-030-left",
+        "contrast-probe-926601-2-step_input-030-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "input"
+      ],
+      "depth": 2,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-2-step_input-031",
+      "task_ids": [
+        "contrast-probe-926601-2-step_input-031-left",
+        "contrast-probe-926601-2-step_input-031-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-000",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-000-left",
+        "contrast-probe-926601-2-call_target-000-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-001",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-001-left",
+        "contrast-probe-926601-2-call_target-001-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-002",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-002-left",
+        "contrast-probe-926601-2-call_target-002-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-003",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-003-left",
+        "contrast-probe-926601-2-call_target-003-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-004",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-004-left",
+        "contrast-probe-926601-2-call_target-004-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-005",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-005-left",
+        "contrast-probe-926601-2-call_target-005-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-006",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-006-left",
+        "contrast-probe-926601-2-call_target-006-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-007",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-007-left",
+        "contrast-probe-926601-2-call_target-007-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-008",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-008-left",
+        "contrast-probe-926601-2-call_target-008-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-009",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-009-left",
+        "contrast-probe-926601-2-call_target-009-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-010",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-010-left",
+        "contrast-probe-926601-2-call_target-010-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-011",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-011-left",
+        "contrast-probe-926601-2-call_target-011-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-012",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-012-left",
+        "contrast-probe-926601-2-call_target-012-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-013",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-013-left",
+        "contrast-probe-926601-2-call_target-013-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-014",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-014-left",
+        "contrast-probe-926601-2-call_target-014-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-015",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-015-left",
+        "contrast-probe-926601-2-call_target-015-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-016",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-016-left",
+        "contrast-probe-926601-2-call_target-016-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-017",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-017-left",
+        "contrast-probe-926601-2-call_target-017-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-018",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-018-left",
+        "contrast-probe-926601-2-call_target-018-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-019",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-019-left",
+        "contrast-probe-926601-2-call_target-019-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-020",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-020-left",
+        "contrast-probe-926601-2-call_target-020-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-021",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-021-left",
+        "contrast-probe-926601-2-call_target-021-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-022",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-022-left",
+        "contrast-probe-926601-2-call_target-022-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-023",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-023-left",
+        "contrast-probe-926601-2-call_target-023-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-024",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-024-left",
+        "contrast-probe-926601-2-call_target-024-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-025",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-025-left",
+        "contrast-probe-926601-2-call_target-025-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-026",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-026-left",
+        "contrast-probe-926601-2-call_target-026-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-027",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-027-left",
+        "contrast-probe-926601-2-call_target-027-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-028",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-028-left",
+        "contrast-probe-926601-2-call_target-028-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-029",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-029-left",
+        "contrast-probe-926601-2-call_target-029-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-030",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-030-left",
+        "contrast-probe-926601-2-call_target-030-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 2,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-2-call_target-031",
+      "task_ids": [
+        "contrast-probe-926601-2-call_target-031-left",
+        "contrast-probe-926601-2-call_target-031-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p10",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-000",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-000-left",
+        "contrast-probe-926601-3-step_input-000-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p5",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-001",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-001-left",
+        "contrast-probe-926601-3-step_input-001-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-002",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-002-left",
+        "contrast-probe-926601-3-step_input-002-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-003",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-003-left",
+        "contrast-probe-926601-3-step_input-003-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-004",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-004-left",
+        "contrast-probe-926601-3-step_input-004-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-005",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-005-left",
+        "contrast-probe-926601-3-step_input-005-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-006",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-006-left",
+        "contrast-probe-926601-3-step_input-006-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-007",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-007-left",
+        "contrast-probe-926601-3-step_input-007-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-008",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-008-left",
+        "contrast-probe-926601-3-step_input-008-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-009",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-009-left",
+        "contrast-probe-926601-3-step_input-009-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-010",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-010-left",
+        "contrast-probe-926601-3-step_input-010-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-011",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-011-left",
+        "contrast-probe-926601-3-step_input-011-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-012",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-012-left",
+        "contrast-probe-926601-3-step_input-012-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-013",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-013-left",
+        "contrast-probe-926601-3-step_input-013-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-014",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-014-left",
+        "contrast-probe-926601-3-step_input-014-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-015",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-015-left",
+        "contrast-probe-926601-3-step_input-015-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-016",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-016-left",
+        "contrast-probe-926601-3-step_input-016-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p10",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-017",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-017-left",
+        "contrast-probe-926601-3-step_input-017-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-018",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-018-left",
+        "contrast-probe-926601-3-step_input-018-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-019",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-019-left",
+        "contrast-probe-926601-3-step_input-019-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-020",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-020-left",
+        "contrast-probe-926601-3-step_input-020-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-021",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-021-left",
+        "contrast-probe-926601-3-step_input-021-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-022",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-022-left",
+        "contrast-probe-926601-3-step_input-022-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-023",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-023-left",
+        "contrast-probe-926601-3-step_input-023-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-024",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-024-left",
+        "contrast-probe-926601-3-step_input-024-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-025",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-025-left",
+        "contrast-probe-926601-3-step_input-025-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-026",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-026-left",
+        "contrast-probe-926601-3-step_input-026-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-027",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-027-left",
+        "contrast-probe-926601-3-step_input-027-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        1,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-028",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-028-left",
+        "contrast-probe-926601-3-step_input-028-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-029",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-029-left",
+        "contrast-probe-926601-3-step_input-029-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "main",
+        "steps",
+        3,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-030",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-030-left",
+        "contrast-probe-926601-3-step_input-030-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        2,
+        "input"
+      ],
+      "depth": 3,
+      "family": "step_input",
+      "pair_id": "contrast-probe-926601-3-step_input-031",
+      "task_ids": [
+        "contrast-probe-926601-3-step_input-031-left",
+        "contrast-probe-926601-3-step_input-031-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-000",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-000-left",
+        "contrast-probe-926601-3-call_target-000-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-001",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-001-left",
+        "contrast-probe-926601-3-call_target-001-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-002",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-002-left",
+        "contrast-probe-926601-3-call_target-002-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-003",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-003-left",
+        "contrast-probe-926601-3-call_target-003-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-004",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-004-left",
+        "contrast-probe-926601-3-call_target-004-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-005",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-005-left",
+        "contrast-probe-926601-3-call_target-005-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-006",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-006-left",
+        "contrast-probe-926601-3-call_target-006-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-007",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-007-left",
+        "contrast-probe-926601-3-call_target-007-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-008",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-008-left",
+        "contrast-probe-926601-3-call_target-008-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-009",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-009-left",
+        "contrast-probe-926601-3-call_target-009-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-010",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-010-left",
+        "contrast-probe-926601-3-call_target-010-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-011",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-011-left",
+        "contrast-probe-926601-3-call_target-011-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-012",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-012-left",
+        "contrast-probe-926601-3-call_target-012-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-013",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-013-left",
+        "contrast-probe-926601-3-call_target-013-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-014",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-014-left",
+        "contrast-probe-926601-3-call_target-014-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-015",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-015-left",
+        "contrast-probe-926601-3-call_target-015-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-016",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-016-left",
+        "contrast-probe-926601-3-call_target-016-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-017",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-017-left",
+        "contrast-probe-926601-3-call_target-017-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p0",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-018",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-018-left",
+        "contrast-probe-926601-3-call_target-018-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-019",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-019-left",
+        "contrast-probe-926601-3-call_target-019-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-020",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-020-left",
+        "contrast-probe-926601-3-call_target-020-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-021",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-021-left",
+        "contrast-probe-926601-3-call_target-021-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-022",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-022-left",
+        "contrast-probe-926601-3-call_target-022-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        2,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-023",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-023-left",
+        "contrast-probe-926601-3-call_target-023-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-024",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-024-left",
+        "contrast-probe-926601-3-call_target-024-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p8",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-025",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-025-left",
+        "contrast-probe-926601-3-call_target-025-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        3,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-026",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-026-left",
+        "contrast-probe-926601-3-call_target-026-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-027",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-027-left",
+        "contrast-probe-926601-3-call_target-027-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        5,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-028",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-028-left",
+        "contrast-probe-926601-3-call_target-028-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-029",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-029-left",
+        "contrast-probe-926601-3-call_target-029-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p12",
+        "steps",
+        4,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-030",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-030-left",
+        "contrast-probe-926601-3-call_target-030-right"
+      ]
+    },
+    {
+      "changed_target_path": [
+        "procedures",
+        "p4",
+        "steps",
+        6,
+        "procedure"
+      ],
+      "depth": 3,
+      "family": "call_target",
+      "pair_id": "contrast-probe-926601-3-call_target-031",
+      "task_ids": [
+        "contrast-probe-926601-3-call_target-031-left",
+        "contrast-probe-926601-3-call_target-031-right"
+      ]
+    }
+  ],
+  "pairs_per_depth_and_family": 32,
+  "prior_data_sha256": {
+    "test_private.json": "b08ca2f7be8d2ef88988a8a6c15edec087124abdaed788795a795cd541dff65c",
+    "train.json": "579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359",
+    "validation.json": "badbffa8e54d3cadb8a12d1e7d84d79a055b0c1073f4fe48fa068270cddea249"
+  },
+  "prior_excluded_graphs": 7704,
+  "procedures_per_task": 4,
+  "public_meaning_checked": true,
+  "schema": "cas-meta2-contrast-curriculum-probe/0.1",
+  "script_sha256": "69270214d1d7ec4b747b08f8c7431f8bf0dd99093b90335e717804281b8c88f2",
+  "seed": 926601,
+  "source_sha256": {
+    "codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "curriculum_v2.py": "a62e7acb23024a6f195e33af57a3a19cb513b5e7181a9a00370332ee37f1c5bd",
+    "curriculum_v3.py": "75ad59cd42a57eb88c5680b26cf07255c24d36132658ffd91926ccafdf5e987c",
+    "development_exclusions_v3.json": "4642f5c1c5a9fc078343cdc5fb99c042ec6ee3c7e2e2c971ee5965776ab71913",
+    "exclusions_v3.json": "2e11f0e0e5a8cb8bc32907f81cc4c8a02c59f8623ce8f9b5937c59d421050f48",
+    "features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+  },
+  "target_changes_per_pair": 1,
+  "task_count": 256,
+  "tasks_sha256": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46",
+  "training_input_limit": 1024,
+  "training_performed": false
+}

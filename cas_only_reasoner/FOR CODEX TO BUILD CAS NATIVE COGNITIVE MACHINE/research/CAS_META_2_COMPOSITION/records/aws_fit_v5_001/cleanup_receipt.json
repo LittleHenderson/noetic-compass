@@ -1,0 +1,51 @@
+{
+  "boundary": "Read-only provider checks. S3 evidence remains under its separate expiry policy; not an invoice.",
+  "checks": [
+    {
+      "check": "instance_terminated",
+      "passed": true,
+      "request_id": "c49d1647-4dc1-4f20-809e-f3e72236bac6",
+      "state": "terminated"
+    },
+    {
+      "check": "job_volumes_absent",
+      "passed": true,
+      "request_id": "753f9dae-a0c5-4255-aeca-7c36d966bf83",
+      "volume_ids": []
+    },
+    {
+      "check": "security_group_absent",
+      "code": "InvalidGroup.NotFound",
+      "passed": true,
+      "request_id": "f9ec22f5-33c8-4615-afc6-fc3920276397"
+    },
+    {
+      "check": "worker_profile_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "97ea083e-f1c5-4545-9078-133c4e5d0fbb"
+    },
+    {
+      "check": "worker_role_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "95351464-81c2-4009-b951-9285d055d695"
+    },
+    {
+      "check": "timer_role_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "a0b25b1f-f801-4f4f-9955-aac1854b4b1e"
+    },
+    {
+      "check": "schedule_absent",
+      "code": "ResourceNotFoundException",
+      "passed": true,
+      "request_id": "f0092562-04d7-4ee5-8cc2-10041eca7d2d"
+    }
+  ],
+  "job": "cas-meta2-20260906054131-feae01a9",
+  "passed": true,
+  "schema": "cas-meta2-fit-cleanup-observation/0.1",
+  "utc": "2026-09-06T05:54:49.890396+00:00"
+}

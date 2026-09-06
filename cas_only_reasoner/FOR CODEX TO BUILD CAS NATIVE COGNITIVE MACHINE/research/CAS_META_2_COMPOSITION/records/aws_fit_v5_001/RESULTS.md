@@ -64,7 +64,11 @@ This run reserved $7. Shared reservations total $60 of the $400 cap, leaving
 $340 unreserved. Reservations are not an invoice and are not automatically
 refunded. Source and result archives are preserved locally.
 
-At creation of this report, termination had been requested and final cleanup
-was still being observed by the existing launcher. See launch_receipt.json and
-the separate cleanup_receipt.json when available; this report does not claim
-cleanup merely from a successful training return code.
+The launcher finished with termination_confirmed=true, no cleanup errors, and
+no remaining job volumes. A separate provider check at
+2026-09-06T05:54:49.890396+00:00 passed all seven cleanup checks: the instance
+terminated and disks, security group, worker profile, both roles, and shutdown
+schedule were absent. The S3 evidence objects retain their seven-day expiry.
+The launcher estimated compute/disk/IPv4 charges at
+$0.5216805109999999999999999999; this excludes S3, transfer, taxes, and other
+charges and is not an AWS invoice. No reservation refund was applied.

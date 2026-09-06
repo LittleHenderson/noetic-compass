@@ -1,0 +1,19 @@
+{
+  "boundary": "Cold data/meaning verification, not neural learning or held-out generalization. All prototype graphs remain exposed.",
+  "builder_receipt_sha256": "88de2f5ca5b991bf7d5f64d58a334bda85629ea6d63b17bd76e0e208062d2363",
+  "native_outcome_verification": false,
+  "neural_execution": false,
+  "pair_counts": {
+    "2/call_target": 32,
+    "2/step_input": 32,
+    "3/call_target": 32,
+    "3/step_input": 32
+  },
+  "pairs_verified": 128,
+  "passed": true,
+  "provider_calls": false,
+  "schema": "cas-meta2-cold-contrast-verification/0.1",
+  "tasks_sha256": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46",
+  "tasks_verified": 256,
+  "verifier_sha256": "7f7bdc52e17ea47fb1fcae2745bbde7ff04e85c99a033caada1234a407b43502"
+}

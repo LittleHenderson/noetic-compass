@@ -30,6 +30,8 @@ Authoritative raw receipt and output directory:
 `C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta3-audit-63f5b421/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_owner_reconciliation_001/`
 
 This is a separate builder-run checkout, not a third-party execution claim.
+Byte-identical copies of receipt.json, stdout.txt, stderr.txt, and tests.xml are
+also retained in this branch at records/historical_owner_reconciliation_001/.
 
 ## Source and environment findings
 
