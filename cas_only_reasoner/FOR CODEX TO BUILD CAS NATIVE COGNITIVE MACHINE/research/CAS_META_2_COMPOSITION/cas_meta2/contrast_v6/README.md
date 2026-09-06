@@ -56,11 +56,25 @@ and sending all arms through the unchanged native executor/verifier. The CLI
 requires the pinned 8,053-graph exclusion inventory, explicit configuration
 files, curriculum seed, job identity, and external dataset-manifest digest.
 
-The CUDA loop has not yet been executed. The AWS-only end-to-end test is
-`tests/test_contrast_v6_train_gpu.py`; it must pass on authorized non-T4 CUDA
+`checks.py` now recounts saved validation and training-probe actions, replays
+selection, checks checkpoint bytes, and binds the four-arm prediction seal to
+a successful parent-recorded process exit. It reads no private test labels.
+It checks recorded evidence, not independently rerun logits or model gradients.
+
+`evaluation.py` recomputes that gate, adds a rule arm from public problems,
+seals all five arms, and then opens private targets. It validates the dataset
+again and invokes the unchanged `campaign_v3._case_worker` in eight bounded
+spawned workers. Results retain all rejections and report actual task outcomes
+by depth and test condition. Failed workers retain partial files; no retries
+or model promotion are automatic.
+
+Neither the CUDA loop nor this new evaluation adapter has been executed on
+GPU. The AWS-only end-to-end test is `tests/test_contrast_v6_train_gpu.py`;
+it now covers a real training subprocess, parent gate, checkpoint reloads,
+and nine diagnostic native cases. It must pass on authorized non-T4 CUDA
 hardware before the registered experiment starts. This is not yet a complete
-bounded launch package. Source/archive binding, GPU gates, parent evaluation,
-budget reservation, collection, and cleanup must still be connected.
+bounded launch package. Source/archive binding, GPU gates, budget reservation,
+parent orchestration, collection, and cleanup must still be connected.
 
 This is not yet a training launch package. Do not pass these files unchanged
 to `train_v3.py`: that trainer requires the v3 manifest and equal per-depth
