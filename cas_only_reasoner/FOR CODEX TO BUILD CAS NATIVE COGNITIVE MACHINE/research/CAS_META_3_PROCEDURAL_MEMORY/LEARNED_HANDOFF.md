@@ -76,6 +76,8 @@ above the separate tree-size ceiling.
    the executor unchanged. A later scoped learning transition must separately
    preserve a suspended caller and its resource accounting.
 
-Fresh reuse, persistence of this full learned package, retention, rollback,
-qualification, learned retrieval and learning during a suspended call remain
-open. No extra AWS launch or budget reservation was made for this pure work.
+The subsequent `LEARNED_STORAGE.md` records pure full-candidate persistence and
+fresh-process revalidation. Actual learned-package persistence on AWS, native
+reuse, retention, rollback, qualification, learned retrieval and learning during
+a suspended call remain open. No extra AWS launch or budget reservation was
+made for this pure work.
