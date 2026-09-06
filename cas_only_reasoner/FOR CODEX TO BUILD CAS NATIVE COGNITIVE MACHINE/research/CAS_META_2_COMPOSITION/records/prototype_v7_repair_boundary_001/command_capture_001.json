@@ -1,0 +1,10 @@
+{
+  "command": "C:/Python314/python.exe -B records/prototype_v7_repair_boundary_001/check.py",
+  "working_directory": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_repair_boundary_001/../..",
+  "exit_code": 0,
+  "tool_wall_time_seconds": 0.3827737,
+  "tool_chunk_id": "c1541a",
+  "output_file": "receipt_001.json",
+  "capture_boundary": "Receipt copied from the returned command tool output. This is not an independent provider receipt or a byte-captured child stdout stream."
+}
+

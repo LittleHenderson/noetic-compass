@@ -1,0 +1,100 @@
+{
+  "status": "PURE_REPAIR_BOUNDARY_CHECKED",
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "source_archive_sha256": "f9bed05bd582e0796e2c4e78ff0f5174e5e1b6a3f447e5c3eab56ad002d473f9",
+  "source_files": {
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/runtime.py": "5eda27339d0d216d5359116617c6dc8c9f99c376d6cfa6be386845b59ec00187",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/network.py": "748ef8585c84e64e00de99c8b5b320fedb5ef738d7947afb008a2cf250fe1d1f",
+    "CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/fixture.py": "0038db2ed122e7d1ccb312771e0ea14388ee8564d3ffaa9a9f6c7316c6eb1735",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/verifier.py": "c1604059580a553e131233ecdbb5b1de8439edbba03865f7985a71b0dfdfb736",
+    "CAS_META_2_COMPOSITION/cas_meta2/native.py": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512",
+    "CAS_META_2_COMPOSITION/cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+    "CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/executor.py": "4570dec76d8f204c7fccb3d54a71b917b160da072322acb609fc8730ce4fa9df",
+    "CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/compiler.py": "49f7f917e97b8748237034e4c920d7fcd21ae1d705ab2b73d14e47a69589eb78"
+  },
+  "partial_native_receipt_sha256": "bc700054e18dad6de9e2516f441adccdfac0a9ace25a39fd0fce6a0879d37f4f",
+  "actual_source_predicate_on_synthetic_state": {
+    "A": [],
+    "B": [],
+    "C": [
+      "R"
+    ],
+    "R": [
+      "C"
+    ]
+  },
+  "exact_guard_refusals": [
+    "A",
+    "B"
+  ],
+  "predicate_and_guard_cases_checked": 11,
+  "known_failure_witnesses": [
+    {
+      "case_index": 19,
+      "arm": "cas_trained",
+      "committed_runs": 3,
+      "next_sealed_run": {
+        "cjt_id": "B",
+        "frame": 1,
+        "input_node": -1,
+        "kind": "RUN",
+        "node": 3
+      }
+    },
+    {
+      "case_index": 32,
+      "arm": "generic_trained",
+      "committed_runs": 9,
+      "next_sealed_run": {
+        "cjt_id": "B",
+        "frame": 4,
+        "input_node": -1,
+        "kind": "RUN",
+        "node": 9
+      }
+    },
+    {
+      "case_index": 51,
+      "arm": "generic_trained",
+      "committed_runs": 1,
+      "next_sealed_run": {
+        "cjt_id": "B",
+        "frame": 1,
+        "input_node": -1,
+        "kind": "RUN",
+        "node": 1
+      }
+    },
+    {
+      "case_index": 66,
+      "arm": "generic_trained",
+      "committed_runs": 3,
+      "next_sealed_run": {
+        "cjt_id": "B",
+        "frame": 1,
+        "input_node": -1,
+        "kind": "RUN",
+        "node": 3
+      }
+    },
+    {
+      "case_index": 71,
+      "arm": "generic_trained",
+      "committed_runs": 2,
+      "next_sealed_run": {
+        "cjt_id": "B",
+        "frame": 1,
+        "input_node": -1,
+        "kind": "RUN",
+        "node": 2
+      }
+    }
+  ],
+  "native_execution": false,
+  "neural_modules_imported": false,
+  "original_database_opened": false,
+  "provider_calls": false,
+  "failed_candidate_semantic_content": null,
+  "boundary": "Exact source predicate and guard on synthetic state; no new native execution or failed-tick reconstruction."
+}
+
