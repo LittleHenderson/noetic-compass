@@ -1,0 +1,27 @@
+{
+  "archive_sha256": "17cdaaf25a9d07439598bf24ab9105193da1a15614fe9b41a2ba037a49849d4b",
+  "checker_sha256": "3a9afa814bf44e56cc57c2c39e3fda35636174a404a0d1502deed71c13bb595f",
+  "completed": true,
+  "experiment": {
+    "entrypoint": "cas_meta2.fit_campaign_v5",
+    "profile": "known_example_fit_v5",
+    "spec_path": "research/CAS_META_2_COMPOSITION/EXPERIMENT_FIT_V5.json",
+    "spec_sha256": "ba6691134ff37c20affb0a6800b1fb1b9c9af4923b7c9ff0c3709ca3e3eeb40f"
+  },
+  "neural_execution_performed": false,
+  "preimport_files": {
+    "aws/budget.py": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+    "aws/launch_fit_v5.py": "6a275d54668786252124bbc8426d71ac78f38b16e2adda5b5dd9881769f259fd",
+    "aws/launch_plan.json": "65bc41bf4bffe7a373dd9e8c9faa75561fd2d8940d32fd6d4283dbbb55f6f1f6",
+    "requirements-gpu.txt": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379",
+    "tools/build_launch_bundle_fit_v5.py": "f79cdec16883a85b806c7048a6e891741465ded6be5ea33efa1e5a4aecb4e82e",
+    "tools/experiment_profiles_fit_v5.py": "c0c1f0928b52674e617b188d7b7b263572276785d4e5754c22f4112b206bcb81"
+  },
+  "protected_baseline_files": 316,
+  "provider_calls": 0,
+  "remaining_unreserved_usd": "347.00",
+  "reservation_created": false,
+  "schema": "cas-meta2-fit-cold-source-check/0.1",
+  "source_files_checked_against_git_and_disk": 508,
+  "source_sha": "6a71e01c3689a1debe56eed842f101dfa4990556"
+}
