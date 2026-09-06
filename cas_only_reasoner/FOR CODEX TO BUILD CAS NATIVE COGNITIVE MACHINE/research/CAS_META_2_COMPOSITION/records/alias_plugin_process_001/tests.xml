@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.102" timestamp="2026-09-05T19:13:43.891055-07:00" hostname="MSI"><testcase classname="records.alias_plugin_process_001.test_actual_plugin" name="test_actual_plugin" time="0.008" /></testsuite></testsuites>

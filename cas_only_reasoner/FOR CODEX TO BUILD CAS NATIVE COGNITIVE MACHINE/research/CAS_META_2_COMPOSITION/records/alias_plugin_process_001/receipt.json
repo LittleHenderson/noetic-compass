@@ -1,0 +1,31 @@
+{
+  "boundary": "Actual data-only pytest child and plugin loading on Windows; not remote Linux reproduction or model evidence.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-c",
+    "import sys; from tools.validate_local_v3 import NoNeuralOrProviderImports; sys.meta_path.insert(0,NoNeuralOrProviderImports()); import pytest; raise SystemExit(pytest.main(sys.argv[1:]))",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\alias_plugin_process_001\\test_actual_plugin.py",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "-p",
+    "cas_meta2.pytest_no_aliases_v4",
+    "--basetemp=C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\aliasv4-cf6633c80c33\\pytest",
+    "--junitxml=C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\alias_plugin_process_001\\tests.xml"
+  ],
+  "neural_imports_blocked": true,
+  "returncode": 0,
+  "schema": "cas-meta2-v4-alias-plugin-process/0.1",
+  "scratch": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\aliasv4-cf6633c80c33",
+  "scratch_retained": true,
+  "source_sha256": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\pytest_no_aliases_v4.py": "04633b40c44a8cd5e53ed7bac7796fda902689cdea5ba43c91e10c35c7dc5097",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\alias_plugin_process_001\\run.py": "a14c3e159f41c5327a1857436901ead9c278311c02692b3fa646b389c64f37b0",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\alias_plugin_process_001\\test_actual_plugin.py": "442cba0ba5a126a8cbe09a781c0d0fc719554b6e6912ee64dbe0cb2aa07fed09"
+  },
+  "sources_unchanged": true,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "501813a546b6884ee63569c7adc2c7e804e0e66cfff55db409a8a266dd502e98",
+  "utc": "2026-09-06T02:13:44.425718+00:00"
+}
