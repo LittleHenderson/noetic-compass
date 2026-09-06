@@ -1,0 +1,17 @@
+test_json_rejects_overflow_and_duplicate_fields (portable_v7_bridge_tests.BridgeTests.test_json_rejects_overflow_and_duplicate_fields) ... ok
+test_loader_pin_is_required_in_all_public_training_paths (portable_v7_bridge_tests.BridgeTests.test_loader_pin_is_required_in_all_public_training_paths) ... ok
+test_loader_requires_external_pin_before_read (portable_v7_bridge_tests.BridgeTests.test_loader_requires_external_pin_before_read) ... ok
+test_module_imports_are_pure (portable_v7_bridge_tests.BridgeTests.test_module_imports_are_pure) ... ok
+test_native_grouping_and_worker_unchanged (portable_v7_bridge_tests.BridgeTests.test_native_grouping_and_worker_unchanged) ... ok
+test_new_task_count_implies_new_step_count (portable_v7_bridge_tests.BridgeTests.test_new_task_count_implies_new_step_count) ... ok
+test_parent_training_check_is_unchanged_except_explicit_loader_plumbing (portable_v7_bridge_tests.BridgeTests.test_parent_training_check_is_unchanged_except_explicit_loader_plumbing) ... ok
+test_rule_seal_and_private_opening_sequence_unchanged (portable_v7_bridge_tests.BridgeTests.test_rule_seal_and_private_opening_sequence_unchanged) ... ok
+test_selection_and_prediction_helpers_unchanged (portable_v7_bridge_tests.BridgeTests.test_selection_and_prediction_helpers_unchanged) ... ok
+test_training_loop_is_unchanged_except_explicit_loader_plumbing (portable_v7_bridge_tests.BridgeTests.test_training_loop_is_unchanged_except_explicit_loader_plumbing) ... ok
+test_training_rejects_laptop_before_data_or_model (portable_v7_bridge_tests.BridgeTests.test_training_rejects_laptop_before_data_or_model) ... ok
+test_wrong_loader_pin_rejects_before_import (portable_v7_bridge_tests.BridgeTests.test_wrong_loader_pin_rejects_before_import) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.101s
+
+OK

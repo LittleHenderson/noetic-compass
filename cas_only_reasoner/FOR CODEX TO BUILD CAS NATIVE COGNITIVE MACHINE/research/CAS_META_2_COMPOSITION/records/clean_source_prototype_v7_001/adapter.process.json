@@ -1,0 +1,19 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\contrast-v7-audit-80e44f20\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_training_integration_v7_001\\run_checks.py",
+    "--run-name",
+    "checks_clean_source_001"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\contrast-v7-audit-80e44f20\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T07:52:34.567756+00:00",
+  "name": "adapter",
+  "returncode": 0,
+  "started_utc": "2026-09-06T07:52:12.745620+00:00",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "9c93778a618bf4045f8281c440e6c65b9ba8449fee62be71df579bc9b1aa4bac",
+  "timed_out": false,
+  "timeout_seconds": 660,
+  "wall_seconds": 21.822129700000005
+}

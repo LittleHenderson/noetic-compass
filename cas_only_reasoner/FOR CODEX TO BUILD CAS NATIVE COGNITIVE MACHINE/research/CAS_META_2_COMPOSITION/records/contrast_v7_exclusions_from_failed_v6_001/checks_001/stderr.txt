@@ -1,0 +1,21 @@
+test_committed_source_byte_mismatch_stops_before_import (__main__.ExclusionTests.test_committed_source_byte_mismatch_stops_before_import) ... ok
+test_depth_and_graph_provenance_recount (__main__.ExclusionTests.test_depth_and_graph_provenance_recount) ... ok
+test_failed_review_is_allowed_without_native_success (__main__.ExclusionTests.test_failed_review_is_allowed_without_native_success) ... ok
+test_json_duplicate_or_nonfinite_rejected (__main__.ExclusionTests.test_json_duplicate_or_nonfinite_rejected) ... ok
+test_local_source_mismatch_stops_before_import (__main__.ExclusionTests.test_local_source_mismatch_stops_before_import) ... ok
+test_missing_recheck_or_omitted_bytes_rejected (__main__.ExclusionTests.test_missing_recheck_or_omitted_bytes_rejected) ... ok
+test_no_prior_removal (__main__.ExclusionTests.test_no_prior_removal) ... ok
+test_old_origin_cannot_be_replaced (__main__.ExclusionTests.test_old_origin_cannot_be_replaced) ... ok
+test_origin_counts_recounted (__main__.ExclusionTests.test_origin_counts_recounted) ... ok
+test_original_256_must_stay_in_prior_and_union (__main__.ExclusionTests.test_original_256_must_stay_in_prior_and_union) ... ok
+test_prototype_origin_cannot_be_relabelled (__main__.ExclusionTests.test_prototype_origin_cannot_be_relabelled) ... ok
+test_pure_import_did_not_load_neural_libraries (__main__.ExclusionTests.test_pure_import_did_not_load_neural_libraries) ... ok
+test_resealed_json_cannot_replace_external_pin (__main__.ExclusionTests.test_resealed_json_cannot_replace_external_pin) ... ok
+test_success_review_does_not_enter_failure_route (__main__.ExclusionTests.test_success_review_does_not_enter_failure_route) ... ok
+test_union_keeps_prior_and_deduplicates_new (__main__.ExclusionTests.test_union_keeps_prior_and_deduplicates_new) ... ok
+test_wrong_source_or_packet_receipt_rejected (__main__.ExclusionTests.test_wrong_source_or_packet_receipt_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.004s
+
+OK

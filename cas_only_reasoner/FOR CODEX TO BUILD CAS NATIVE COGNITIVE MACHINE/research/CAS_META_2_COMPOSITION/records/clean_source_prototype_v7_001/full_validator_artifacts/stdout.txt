@@ -1,0 +1,121 @@
+........................................................................ [  4%]
+................................................ [  7%]
+.......................................................................... [ 12%]
+........................................................................ [ 17%]
+........................................................................ [ 21%]
+........................................................................ [ 26%]
+......................................................... [ 30%]
+........................................................................ [ 34%]
+........................................................................ [ 39%]
+........................................................................ [ 44%]
+........................................................................ [ 48%]
+........................................................................ [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 63%]
+....................................FF.................... [ 66%]
+.................................................................................................................................................. [ 76%]
+........................................................................ [ 80%]
+........................................................................ [ 85%]
+........................................................................ [ 90%]
+........................................................................ [ 94%]
+................................................................F....... [ 99%]
+......                                                                   [100%]
+================================== FAILURES ===================================
+___ LaunchTests.test_cleanup_deletes_owned_role_when_policy_already_absent ____
+
+self = <test_launch.LaunchTests testMethod=test_cleanup_deletes_owned_role_when_policy_already_absent>
+
+    def test_cleanup_deletes_owned_role_when_policy_already_absent(self):
+>       from botocore.exceptions import ClientError
+
+tests\test_launch.py:307: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1333: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:1267: in _find_spec
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_contrast_v7_bridge.NoNeuralOrProvider object at 0x00000224E8968050>
+fullname = 'botocore', path = None, target = None
+
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split('.')[0] in {'torch', 'tensorflow', 'jax', 'cupy',
+                                     'casformer', 'cas_cjt', 'boto3', 'botocore'}:
+>           raise RuntimeError('NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:' + fullname)
+E           RuntimeError: NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:botocore
+
+tests\test_contrast_v7_bridge.py:19: RuntimeError
+______ LaunchTests.test_cleanup_will_not_delete_untagged_security_group _______
+
+self = <test_launch.LaunchTests testMethod=test_cleanup_will_not_delete_untagged_security_group>
+
+    def test_cleanup_will_not_delete_untagged_security_group(self):
+        deleted=[]
+        ec2=types.SimpleNamespace(describe_security_groups=lambda **kwargs:{"SecurityGroups":[{"GroupId":"sg-other","Tags":[]}]},delete_security_group=lambda **kwargs:deleted.append(kwargs))
+        receipt={"resources":{"security_group":"sg-other"},"cleanup_errors":[]}
+>       launch.remove_owned_auxiliary_resources(ec2,None,None,receipt,self.job,"worker","timer",lambda *args,**kwargs:None)
+
+tests\test_launch.py:302: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+aws\launch.py:242: in remove_owned_auxiliary_resources
+    from botocore.exceptions import ClientError
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1333: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:1267: in _find_spec
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_contrast_v7_bridge.NoNeuralOrProvider object at 0x00000224E8968050>
+fullname = 'botocore', path = None, target = None
+
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split('.')[0] in {'torch', 'tensorflow', 'jax', 'cupy',
+                                     'casformer', 'cas_cjt', 'boto3', 'botocore'}:
+>           raise RuntimeError('NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:' + fullname)
+E           RuntimeError: NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:botocore
+
+tests\test_contrast_v7_bridge.py:19: RuntimeError
+______ test_real_sdk_exception_import_works_without_live_client_modules _______
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000224E98D4AD0>
+
+    def test_real_sdk_exception_import_works_without_live_client_modules(monkeypatch):
+        monkeypatch.setattr(sys, "meta_path", [validator.NoNeuralOrProviderImports(), *sys.meta_path])
+>       from botocore.exceptions import ClientError
+
+tests\test_validate_local_v3.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1333: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:1267: in _find_spec
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_contrast_v7_bridge.NoNeuralOrProvider object at 0x00000224E8968050>
+fullname = 'botocore', path = None, target = None
+
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split('.')[0] in {'torch', 'tensorflow', 'jax', 'cupy',
+                                     'casformer', 'cas_cjt', 'boto3', 'botocore'}:
+>           raise RuntimeError('NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:' + fullname)
+E           RuntimeError: NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:botocore
+
+tests\test_contrast_v7_bridge.py:19: RuntimeError
+============================== warnings summary ===============================
+tests/test_packet.py::test_duplicate_case_alias_and_file_directory_collisions_rejected[names0]
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'a.txt'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_launch.py::LaunchTests::test_cleanup_deletes_owned_role_when_policy_already_absent
+FAILED tests/test_launch.py::LaunchTests::test_cleanup_will_not_delete_untagged_security_group
+FAILED tests/test_validate_local_v3.py::test_real_sdk_exception_import_works_without_live_client_modules
+3 failed, 1538 passed, 10 skipped, 1 warning, 193 subtests passed in 166.80s (0:02:46)

@@ -1,0 +1,23 @@
+[
+  "C:\\Python314\\python.exe",
+  "-B",
+  "-c",
+  "import sys;from tools.validate_local_v3 import NoNeuralOrProviderImports;sys.meta_path.insert(0,NoNeuralOrProviderImports());import pytest;raise SystemExit(pytest.main(sys.argv[1:]))",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "--junitxml",
+  "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\recovery_v6_precommit_002\\tests.xml",
+  "--basetemp",
+  "C:\\Users\\wakil\\AppData\\Local\\Temp\\cas-recovery-pure-zqfo01bg\\pytest",
+  "tests/test_contrast_recovery_v6_core.py",
+  "tests/test_contrast_recovery_v6_binding.py",
+  "tests/test_contrast_recovery_v6_gpu.py",
+  "tests/test_launch_recovery_v6.py",
+  "tests/test_recovery_remote_v6.py",
+  "tests/test_recovery_v6_profile.py",
+  "tests/test_contrast_v7_bridge.py",
+  "tests/test_launch.py::LaunchTests::test_cleanup_deletes_owned_role_when_policy_already_absent",
+  "tests/test_launch.py::LaunchTests::test_cleanup_will_not_delete_untagged_security_group",
+  "tests/test_validate_local_v3.py::test_real_sdk_exception_import_works_without_live_client_modules"
+]

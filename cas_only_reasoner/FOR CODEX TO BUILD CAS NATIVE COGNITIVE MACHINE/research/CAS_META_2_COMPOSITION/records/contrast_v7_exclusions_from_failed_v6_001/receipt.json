@@ -1,0 +1,89 @@
+{
+  "actual_splits": {
+    "test": {
+      "depths": {
+        "3": 48,
+        "4": 24
+      },
+      "source_path": "cloud_job/campaign/dataset/test_private.json",
+      "source_sha256": "583334a658801c71ac9e274f7c6cab790589e4fd232a11993386b65bbf8c9c14",
+      "tasks": 72,
+      "unique_graphs": 48,
+      "unique_graphs_by_depth": {
+        "3": 24,
+        "4": 24
+      }
+    },
+    "train": {
+      "depths": {
+        "1": 128,
+        "2": 256,
+        "3": 256
+      },
+      "source_path": "cloud_job/campaign/dataset/train.json",
+      "source_sha256": "31863ba611d59250e4e1e288f820c33e96748b1cf0151ca0767b5aed79cb43e0",
+      "tasks": 640,
+      "unique_graphs": 640,
+      "unique_graphs_by_depth": {
+        "1": 128,
+        "2": 256,
+        "3": 256
+      }
+    },
+    "validation": {
+      "depths": {
+        "1": 32,
+        "2": 32,
+        "3": 32
+      },
+      "source_path": "cloud_job/campaign/dataset/validation.json",
+      "source_sha256": "74377795da95b8ea278943ab538c515ca79b88af4c59398a23a352c54c66ab20",
+      "tasks": 96,
+      "unique_graphs": 96,
+      "unique_graphs_by_depth": {
+        "1": 32,
+        "2": 32,
+        "3": 32
+      }
+    }
+  },
+  "added_unique": 784,
+  "all_original_256_preserved": true,
+  "all_prior_exposures_preserved": true,
+  "boundary": "Known generated exposures from a FAILED experiment, not native success or new evaluation. Exclude the complete union from all fresh curriculum partitions. The literal original 256 may be appended only through the separate exact-byte training-only import. Never remove their signatures from this exclusion inventory.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/contrast_v7_exclusions_from_failed_v6_001/build.py"
+  ],
+  "completed": true,
+  "count": 8837,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T07:52:55.094701+00:00",
+  "generated_unique_graphs": 784,
+  "graph_generation": false,
+  "helper_source": {
+    "combine_sha256": "2d8e2a8afbfbc475ae37b278050eddb467cef4d7825f273590a52d72f2dc6da8",
+    "commit": "80e44f20a3f2c66a62754212729ce6e11ff9c8fe",
+    "source_audit_sha256": "68b3051902428b71b8c85a3295a52d362f8d321e15f14ff5a2347721157b4435"
+  },
+  "inventory_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_v7_exclusions_from_failed_v6_001\\inventory.json",
+  "inventory_sha256": "9f579ea2d593671dfddf16db39aa22563d6b98f7388758d2a2b99539e66ed623",
+  "learning_accepted": false,
+  "native_success_claim": false,
+  "neural_execution": false,
+  "packet_sha256": "db52b01670c9864da7eeecac25c36446986c6b0b625f6d1b6310bbfdcad55def",
+  "previous_count": 8053,
+  "prior_inventory_sha256": "1a8f7f39bee35f14ef002dfe90f2c6760cbe5c70436c7606fad32ee03f4c1256",
+  "protected_files_verified": 316,
+  "provider_execution": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "returncode": 0,
+  "review_sha256": "d479c90f711d417f2f585b87a0b746e250db8db12029df1586a4fbabf3b82420",
+  "schema": "cas-meta2-failed-exposure-build/7",
+  "script_sha256": "9a21969ba5e0f82cc5d6c54b38206e3cb2531c52abfe3a57c22383e0c3b30649",
+  "source_and_extraction_rechecked_at_end": true,
+  "source_archive_sha256": "3153318664641ea3affdbef306929c3113bb937cd04113bce41d02f736e0f1f1",
+  "source_files_verified": 538,
+  "source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0",
+  "started_utc": "2026-09-06T07:52:14.264215+00:00"
+}

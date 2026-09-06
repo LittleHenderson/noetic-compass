@@ -1,0 +1,18 @@
+test_all_72_preserved_neural_rows_bind (__main__.FailureBoundary.test_all_72_preserved_neural_rows_bind) ... ok
+test_changed_neural_action_rejected (__main__.FailureBoundary.test_changed_neural_action_rejected) ... ok
+test_full_failed_collection_is_admissible (__main__.FailureBoundary.test_full_failed_collection_is_admissible) ... ok
+test_full_index_required (__main__.FailureBoundary.test_full_index_required) ... ok
+test_import_is_pure_and_no_success_gate_called (__main__.FailureBoundary.test_import_is_pure_and_no_success_gate_called) ... ok
+test_missing_false_flags_rejected (__main__.FailureBoundary.test_missing_false_flags_rejected) ... ok
+test_original_wrong_field_name_rejected (__main__.FailureBoundary.test_original_wrong_field_name_rejected) ... ok
+test_partial_or_omitted_collection_rejected (__main__.FailureBoundary.test_partial_or_omitted_collection_rejected) ... ok
+test_rule_must_use_public_input (__main__.FailureBoundary.test_rule_must_use_public_input) ... ok
+test_shortened_neural_rows_rejected (__main__.FailureBoundary.test_shortened_neural_rows_rejected) ... ok
+test_success_return_code_rejected (__main__.FailureBoundary.test_success_return_code_rejected) ... ok
+test_training_incomplete_rejected (__main__.FailureBoundary.test_training_incomplete_rejected) ... ok
+test_wrong_public_or_index_rejected (__main__.FailureBoundary.test_wrong_public_or_index_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.012s
+
+OK

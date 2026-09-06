@@ -1,0 +1,25 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_v7_exclusions_from_failed_v6_001\\test_build.py"
+  ],
+  "current_packet_read": false,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "files": {
+    "build.py": "9a21969ba5e0f82cc5d6c54b38206e3cb2531c52abfe3a57c22383e0c3b30649",
+    "run_checks.py": "58dff5c4ea922ec299b9e58e0840512f99df03e9dd63991d3b01509747fc247e",
+    "stderr.txt": "794612fbb86bfc9df1facafd73eaa932400e01fce54166e691434ff0745616e0",
+    "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "test_build.py": "a699a3a5418a0aeceace2e3f24d51c81da30540d3842a52c64c0a0e48058ef30"
+  },
+  "finished_utc": "2026-09-06T07:52:12.946349+00:00",
+  "graph_generation": false,
+  "neural_execution": false,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "provider_execution": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "returncode": 0,
+  "started_utc": "2026-09-06T07:52:12.604333+00:00",
+  "tests_expected": 16
+}

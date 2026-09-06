@@ -1,0 +1,1 @@
+HEAD is now at 80e44f20 Prepare exact prototype training bridge and retain failed v6 evaluation

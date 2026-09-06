@@ -1,0 +1,85 @@
+{
+  "adapter_test_runner_sha256": {
+    "adapter.py": "cef0faa3f659ceb227cf39e12cf0c1ccdd0d6f9043bd732df8dfbcf85a1ff731",
+    "run_checks.py": "cb2f60ee941e9e46e5a8d8bd3b508f5dad056ed51432492e7445864a6efd8448",
+    "test_adapter.py": "7341ef17828061b4aad2c2f7556ab848025c8d46a3b247795977193fda8db85a"
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\contrast-v7-audit-80e44f20\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_training_integration_v7_001\\run_checks.py",
+    "--child",
+    "--run-name",
+    "checks_clean_source_001",
+    "--scratch",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\prototype-v7-124173862ed2"
+  ],
+  "counts": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 41
+  },
+  "failure": null,
+  "finished_utc": "2026-09-06T07:52:33.898618+00:00",
+  "fixture_seed": 926603,
+  "neural_or_provider_work": false,
+  "pytest": "9.0.2",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "registered_seed_generated": false,
+  "returncode": 0,
+  "schema": "cas-meta2-prototype-integration-pure-checks/7",
+  "scratch_retained": true,
+  "source_after": {
+    "adapter_schema": "cas-meta2-prototype-training-integration/7",
+    "adapter_sha256": "cef0faa3f659ceb227cf39e12cf0c1ccdd0d6f9043bd732df8dfbcf85a1ff731",
+    "frozen_files_sha256": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/contrast_v6/__init__.py": "dcf05cf39d416b2889aba22837493e19456c0927478a0a2d83ff12e946e89db5",
+      "cas_meta2/contrast_v6/curriculum.py": "f6276634d3293b2d84b501300033b023fdc8eac3a654101a7ea8d152447a7631",
+      "cas_meta2/contrast_v6/data.py": "a6246955f37d882cc5de35f2c57676689c41ccef5179941af61874688623b4a8",
+      "cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+      "cas_meta2/curriculum_v2.py": "a62e7acb23024a6f195e33af57a3a19cb513b5e7181a9a00370332ee37f1c5bd",
+      "cas_meta2/curriculum_v3.py": "75ad59cd42a57eb88c5680b26cf07255c24d36132658ffd91926ccafdf5e987c",
+      "cas_meta2/development_exclusions_v3.json": "4642f5c1c5a9fc078343cdc5fb99c042ec6ee3c7e2e2c971ee5965776ab71913",
+      "cas_meta2/exclusions_v3.json": "2e11f0e0e5a8cb8bc32907f81cc4c8a02c59f8623ce8f9b5937c59d421050f48",
+      "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637",
+      "records/contrast_curriculum_v6_probe_001/build.py": "69270214d1d7ec4b747b08f8c7431f8bf0dd99093b90335e717804281b8c88f2",
+      "records/contrast_curriculum_v6_probe_001/receipt.json": "88de2f5ca5b991bf7d5f64d58a334bda85629ea6d63b17bd76e0e208062d2363",
+      "records/contrast_curriculum_v6_probe_001/tasks.json": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46",
+      "records/contrast_curriculum_v6_probe_001/verify.py": "7f7bdc52e17ea47fb1fcae2745bbde7ff04e85c99a033caada1234a407b43502"
+    },
+    "frozen_source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0"
+  },
+  "source_before": {
+    "adapter_schema": "cas-meta2-prototype-training-integration/7",
+    "adapter_sha256": "cef0faa3f659ceb227cf39e12cf0c1ccdd0d6f9043bd732df8dfbcf85a1ff731",
+    "frozen_files_sha256": {
+      "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+      "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+      "cas_meta2/contrast_v6/__init__.py": "dcf05cf39d416b2889aba22837493e19456c0927478a0a2d83ff12e946e89db5",
+      "cas_meta2/contrast_v6/curriculum.py": "f6276634d3293b2d84b501300033b023fdc8eac3a654101a7ea8d152447a7631",
+      "cas_meta2/contrast_v6/data.py": "a6246955f37d882cc5de35f2c57676689c41ccef5179941af61874688623b4a8",
+      "cas_meta2/curriculum.py": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384",
+      "cas_meta2/curriculum_v2.py": "a62e7acb23024a6f195e33af57a3a19cb513b5e7181a9a00370332ee37f1c5bd",
+      "cas_meta2/curriculum_v3.py": "75ad59cd42a57eb88c5680b26cf07255c24d36132658ffd91926ccafdf5e987c",
+      "cas_meta2/development_exclusions_v3.json": "4642f5c1c5a9fc078343cdc5fb99c042ec6ee3c7e2e2c971ee5965776ab71913",
+      "cas_meta2/exclusions_v3.json": "2e11f0e0e5a8cb8bc32907f81cc4c8a02c59f8623ce8f9b5937c59d421050f48",
+      "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+      "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637",
+      "records/contrast_curriculum_v6_probe_001/build.py": "69270214d1d7ec4b747b08f8c7431f8bf0dd99093b90335e717804281b8c88f2",
+      "records/contrast_curriculum_v6_probe_001/receipt.json": "88de2f5ca5b991bf7d5f64d58a334bda85629ea6d63b17bd76e0e208062d2363",
+      "records/contrast_curriculum_v6_probe_001/tasks.json": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46",
+      "records/contrast_curriculum_v6_probe_001/verify.py": "7f7bdc52e17ea47fb1fcae2745bbde7ff04e85c99a033caada1234a407b43502"
+    },
+    "frozen_source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0"
+  },
+  "sources_unchanged": true,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "a347cd4c661a8a1d3df677bea8507cfa45fbe1b635cb31572eba6a3e704752ca",
+  "test_scratch": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\prototype-v7-124173862ed2",
+  "training_performed": false,
+  "wall_seconds": 20.668247300000075
+}

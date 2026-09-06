@@ -1,0 +1,6 @@
+ERROR: not found: C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\tests\test_launch_v3.py::LaunchTests::test_cleanup_deletes_owned_role_when_policy_already_absent
+(no match in any of [<Module test_launch_v3.py>])
+
+ERROR: not found: C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\tests\test_launch_v3.py::LaunchTests::test_cleanup_will_not_delete_untagged_security_group
+(no match in any of [<Module test_launch_v3.py>])
+

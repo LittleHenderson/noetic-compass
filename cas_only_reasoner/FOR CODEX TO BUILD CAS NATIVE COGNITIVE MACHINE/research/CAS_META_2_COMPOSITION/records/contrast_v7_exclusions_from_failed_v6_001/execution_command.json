@@ -1,0 +1,17 @@
+{
+  "schema": "cas-meta2-command-transcription/1",
+  "record_kind": "Post-execution transcription of the exact tool command; not a new execution.",
+  "command": [
+    "C:/Python314/python.exe",
+    "-B",
+    "records/contrast_v7_exclusions_from_failed_v6_001/build.py"
+  ],
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "returncode": 0,
+  "result_receipt_sha256": "a965297027e5ba1c1a2340bb9f9c40d52297debd91af5c4e4fab57065a5d6267",
+  "inventory_sha256": "9f579ea2d593671dfddf16db39aa22563d6b98f7388758d2a2b99539e66ed623",
+  "build_receipt_command_note": "The build receipt captures sys.argv, which omits the Python -B interpreter flag. The original receipt and inventory remain unchanged.",
+  "neural_execution": false,
+  "provider_execution": false,
+  "graph_generation": false
+}

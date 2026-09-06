@@ -1,7 +1,9 @@
 """Pure checks for the versioned training bridge. No neural execution."""
 import ast
 import copy
+from contextlib import contextmanager
 import importlib.abc
+import importlib.util
 import math
 from pathlib import Path
 import sys
@@ -9,7 +11,6 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
 
 
 class NoNeuralOrProvider(importlib.abc.MetaPathFinder):
@@ -19,8 +20,22 @@ class NoNeuralOrProvider(importlib.abc.MetaPathFinder):
             raise RuntimeError('NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN:' + fullname)
 
 
-sys.meta_path.insert(0, NoNeuralOrProvider())
-from cas_meta2.contrast_v7 import data, train, checks, parent, evaluation
+@contextmanager
+def guarded_imports():
+    """Protect this test's scope without changing another module's imports."""
+    hooks, paths = list(sys.meta_path), list(sys.path)
+    sys.meta_path.insert(0, NoNeuralOrProvider())
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
+    try:
+        yield
+    finally:
+        sys.meta_path[:] = hooks
+        sys.path[:] = paths
+
+
+with guarded_imports():
+    from cas_meta2.contrast_v7 import data, train, checks, parent, evaluation
 
 
 def function(version, module, name):
@@ -71,6 +86,11 @@ class RemoveVersionedPlumbing(ast.NodeTransformer):
 
 
 class BridgeTests(unittest.TestCase):
+    def setUp(self):
+        scope = guarded_imports()
+        scope.__enter__()
+        self.addCleanup(scope.__exit__, None, None, None)
+
     def test_training_loop_is_unchanged_except_explicit_loader_plumbing(self):
         before = function('contrast_v6', 'train', 'run')
         after = RemoveVersionedPlumbing().visit(copy.deepcopy(function('contrast_v7', 'train', 'run')))
@@ -103,6 +123,27 @@ class BridgeTests(unittest.TestCase):
     def test_module_imports_are_pure(self):
         self.assertFalse({'torch', 'tensorflow', 'jax', 'cupy', 'casformer',
                           'cas_cjt', 'boto3', 'botocore'}.intersection(sys.modules))
+        hooks, paths = list(sys.meta_path), list(sys.path)
+        with guarded_imports():
+            guard = sys.meta_path[0]
+            with self.assertRaisesRegex(RuntimeError, 'NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN'):
+                guard.find_spec('torch')
+            with self.assertRaisesRegex(RuntimeError, 'NEURAL_OR_PROVIDER_IMPORT_FORBIDDEN'):
+                guard.find_spec('botocore.client')
+        self.assertEqual(sys.meta_path, hooks)
+        self.assertEqual(sys.path, paths)
+        with self.assertRaisesRegex(ValueError, 'scope exit probe'):
+            with guarded_imports():
+                raise ValueError('scope exit probe')
+        self.assertEqual(sys.meta_path, hooks)
+        self.assertEqual(sys.path, paths)
+        # Reload collection code without running its test methods. A module
+        # import must not leave its blocker active for later launcher tests.
+        spec = importlib.util.spec_from_file_location('bridge_collection_scope_probe', __file__)
+        imported = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(imported)
+        self.assertEqual(sys.meta_path, hooks)
+        self.assertEqual(sys.path, paths)
 
     def test_training_rejects_laptop_before_data_or_model(self):
         with patch.object(train.sys, 'platform', 'win32'):

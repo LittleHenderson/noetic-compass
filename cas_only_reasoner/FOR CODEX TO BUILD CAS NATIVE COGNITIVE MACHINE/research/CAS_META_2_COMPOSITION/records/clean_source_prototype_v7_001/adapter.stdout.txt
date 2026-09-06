@@ -1,0 +1,17 @@
+V7_CHECK_CHILD_MODULE_STARTED
+V7_CHECK_ADAPTER_IMPORTED
+V7_CHECK_PYTEST_IMPORTED
+.........................................                                [100%]
+41 passed in 19.92s
+
+{
+  "returncode": 0,
+  "counts": {
+    "tests": 41,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "sources_unchanged": true,
+  "wall_seconds": 20.668247300000075
+}

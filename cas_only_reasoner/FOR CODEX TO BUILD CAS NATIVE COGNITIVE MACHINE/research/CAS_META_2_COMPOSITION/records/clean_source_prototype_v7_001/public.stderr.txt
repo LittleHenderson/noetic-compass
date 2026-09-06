@@ -1,0 +1,23 @@
+test_actual_exact_records_counts_and_train_only_tokenizer (__main__.PublicDataTests.test_actual_exact_records_counts_and_train_only_tokenizer) ... ok
+test_bad_parent_private_bytes_block_export (__main__.PublicDataTests.test_bad_parent_private_bytes_block_export) ... ok
+test_changed_public_files_refused_by_external_manifest (__main__.PublicDataTests.test_changed_public_files_refused_by_external_manifest) ... ok
+test_cold_subprocess_load_has_no_parent_git_parser_or_private_path (__main__.PublicDataTests.test_cold_subprocess_load_has_no_parent_git_parser_or_private_path) ... ok
+test_counts_for_proposed896_shape_without_generation (__main__.PublicDataTests.test_counts_for_proposed896_shape_without_generation) ... ok
+test_export_admits_parent_then_excludes_private_file (__main__.PublicDataTests.test_export_admits_parent_then_excludes_private_file) ... ok
+test_export_refuses_existing_output (__main__.PublicDataTests.test_export_refuses_existing_output) ... ok
+test_external_manifest_and_loader_pins_required (__main__.PublicDataTests.test_external_manifest_and_loader_pins_required) ... ok
+test_extra_private_file_rejected_without_opening_it (__main__.PublicDataTests.test_extra_private_file_rejected_without_opening_it) ... ok
+test_helper_byte_change_is_rejected_before_helper_import (__main__.PublicDataTests.test_helper_byte_change_is_rejected_before_helper_import) ... ok
+test_import_has_no_context_hooks_helper_loading_or_reads (__main__.PublicDataTests.test_import_has_no_context_hooks_helper_loading_or_reads) ... ok
+test_import_map_and_exact_append_cannot_be_rewritten (__main__.PublicDataTests.test_import_map_and_exact_append_cannot_be_rewritten) ... ok
+test_json_duplicate_and_overflow_rejected (__main__.PublicDataTests.test_json_duplicate_and_overflow_rejected) ... ok
+test_loader_and_reload_never_touch_private_parser_parent_git_or_generation (__main__.PublicDataTests.test_loader_and_reload_never_touch_private_parser_parent_git_or_generation) ... ok
+test_loader_does_not_install_cuda_blockers_or_reject_preloaded_neural_module (__main__.PublicDataTests.test_loader_does_not_install_cuda_blockers_or_reject_preloaded_neural_module) ... ok
+test_manifest_counts_and_private_metadata_must_match (__main__.PublicDataTests.test_manifest_counts_and_private_metadata_must_match) ... ok
+test_resealed_base_train_still_bound_to_retained_base_manifest (__main__.PublicDataTests.test_resealed_base_train_still_bound_to_retained_base_manifest) ... ok
+test_serialized_tokenizer_is_recomputed_from_train_only (__main__.PublicDataTests.test_serialized_tokenizer_is_recomputed_from_train_only) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 33.948s
+
+OK
