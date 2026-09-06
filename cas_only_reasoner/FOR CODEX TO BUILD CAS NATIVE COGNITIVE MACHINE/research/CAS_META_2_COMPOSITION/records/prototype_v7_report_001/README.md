@@ -1,0 +1,11 @@
+# V7 report preparation
+
+This folder holds a concise final-report template and a checked historical evidence index. It is not a current result packet or a learning acceptance.
+
+- [Final report template — all current outcomes pending](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/FINAL_REPORT_TEMPLATE.md>)
+- [Historical evidence and full file addresses](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/HISTORICAL_EVIDENCE.md>)
+- [Exact source-evidence pins](<C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_report_001/source_evidence.json>)
+
+Only older completed receipts, the frozen specification, exact known practice-file hash, and one explicitly permitted saved public assembly observation were inspected. No current private packet/task targets, model/checkpoint contents, provider, training, or frozen source was changed or run. The saved observation is dated 2026-09-06 09:53:16 UTC; it must not be described as a later live status.
+
+The current v7 scores must stay PENDING until the full saved evidence has passed the intended review. Before final publication, fill actual attempted denominators, separate literal versus semantic metrics, exact checkpoint/cost identities, and failure/unknown boundaries. Do not replace or soften the previous negative results.

@@ -1,0 +1,121 @@
+{
+  "schema": "cas-meta2-v7-report-source-index/0.1",
+  "status": "TEMPLATE_ONLY_CURRENT_V7_RESULTS_PENDING",
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "current_private_packet_read": false,
+  "model_or_checkpoint_loaded": false,
+  "provider_calls": 0,
+  "frozen_source_modified": false,
+  "inputs": [
+    {
+      "id": "v7_training_conditions_source_text",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/contrast_v7/train.py",
+      "sha256": "16712d8f383da53e98f62f9cfe94e434b370a1b54bda4511286d33aff60a0c43"
+    },
+    {
+      "id": "shared_policy_conditions_source_text",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/policy_v3.py",
+      "sha256": "8a1e03a570df83063c75083b4da67aec6d3fd475730c9c59b4b686cd095baa23"
+    },
+    {
+      "id": "fit_receipt",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/fit_packet_review_v5_001/receipt.json",
+      "sha256": "8da83bbd2f931c9a1735cb255104a88560bab221b37db8354447c3888bcaf0b4"
+    },
+    {
+      "id": "original_composition_recount",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_ablation_v4_stored_audit_002/stored_audit_receipt.json",
+      "sha256": "3dc89119685d6c83ee33bc65019f8ea98ad58f6307613d77d1e95ba8e2502580"
+    },
+    {
+      "id": "recovered_v6_review",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/contrast_recovery_v6_review_001/run_001/recovery_stored_review.json",
+      "sha256": "5396e0ab263fa435eefd2b8925382ce802b7af7c8d1c4dae5702d51435349ac3"
+    },
+    {
+      "id": "historical_13_cases",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/receipt.json",
+      "sha256": "49d4f88227218680efb2623c3a222fd79d4fcc47245314476ce3fcb4ecd9c230"
+    },
+    {
+      "id": "historical_316_before",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/baseline_before.json",
+      "sha256": "3134149fa0e332ecde8fa3830abfd045e258906ed8e51fc852a64ba8ebba208d"
+    },
+    {
+      "id": "historical_316_after",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/baseline_after.json",
+      "sha256": "3134149fa0e332ecde8fa3830abfd045e258906ed8e51fc852a64ba8ebba208d"
+    },
+    {
+      "id": "historical_raw_junit",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/tests.xml",
+      "sha256": "fad4258290979b5c2c229aca5f9a84961a55fca292bfbbade5b2891811ef7fd9"
+    },
+    {
+      "id": "historical_reached_learning_guard",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/inspection_learning.json",
+      "sha256": "b4da0fd3c50e6c1b6ec73f0ab0dab03bed73e2e6a38d54485e781314ed8ebf3e"
+    },
+    {
+      "id": "historical_reached_sidecar_guard",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_3_PROCEDURAL_MEMORY/records/historical_per_case_reconciliation_002/inspection_sidecar.json",
+      "sha256": "481da276225622c5be1bbd8abb548d57e2f34f777a801315f102f74abc274f99"
+    },
+    {
+      "id": "known_original256_training_file",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/contrast_curriculum_v6_probe_001/tasks.json",
+      "sha256": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46"
+    },
+    {
+      "id": "v7_frozen_specification",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/EXPERIMENT_PROTOTYPE_V7.json",
+      "sha256": "d054f7c29810e02fc581eb2f86cf98e1eeb10489cb34dd9f2a0b6cc6aa0d74c8"
+    },
+    {
+      "id": "v7_public_assembly_observation",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_prototype_v7_observation_001/status_20260906T095315185201.json",
+      "sha256": "8297dc59efb0ade489669ce5de7bb599aa745bf06772815f0cbab6270992530f"
+    },
+    {
+      "id": "v7_clean_source_pass",
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_prototype_v7_002/run_003/receipt.json",
+      "sha256": "d761a19b9db1cc469b2439e44da8fda98460064fb88e22b28a276bff929c10c3"
+    }
+  ],
+  "public_assembly": {
+    "observation_utc": "2026-09-06T09:53:16.537776+00:00",
+    "job": "cas-meta2-20260906094002-39762c47",
+    "receipt_sha256_reported_in_stage_log": "0547a6cf730272c409cf4e4e691679df5591aa368c34e71d6835cc327d104f91",
+    "current_assembly_receipt_opened": false,
+    "independent_current_dataset_recount": false,
+    "train": {
+      "tasks": 896,
+      "depths": {
+        "1": 128,
+        "2": 384,
+        "3": 384
+      }
+    },
+    "validation": {
+      "tasks": 96,
+      "depths": {
+        "1": 32,
+        "2": 32,
+        "3": 32
+      }
+    },
+    "test": {
+      "tasks": 72,
+      "depths": {
+        "3": 48,
+        "4": 24
+      }
+    },
+    "imported_training_records": 256
+  },
+  "current_native_scores": "PENDING",
+  "current_checkpoint_identities": "PENDING",
+  "current_actual_cost": "PENDING",
+  "boundary": "Historical receipts and one saved public observation only. No fresh provider probe, current private-data inspection, model run or learning acceptance."
+}
