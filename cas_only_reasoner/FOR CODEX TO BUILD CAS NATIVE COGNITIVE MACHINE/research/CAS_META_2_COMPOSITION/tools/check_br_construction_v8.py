@@ -24,6 +24,7 @@ MANDATORY_TESTS = (
 OPTIONAL_TEST_SOURCES = {
     "test_br_remote_v8.py": "aws/br_remote_v8.py",
     "test_launch_br_construction_v8.py": "aws/launch_br_construction_v8.py",
+    "test_verify_br_clean_package_v8.py": "tools/verify_br_clean_package_v8.py",
 }
 FIXED_SOURCES = (
     "cas_meta2/br_construction_v8.py", "cas_meta2/br_witness_v8.py",

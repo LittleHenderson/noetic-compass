@@ -1,0 +1,35 @@
+{
+  "before_check": {
+    "files_verified": 630,
+    "manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  },
+  "boundary": "Clean extracted-source pure tests only. No neural/native execution, actual SQLite connection, provider call, reservation, paid launch, training or measured B/R result. Harmless sqlite3 and pure adapter imports are allowed.",
+  "failure": {
+    "message": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\wakil\\\\OneDrive\\\\Desktop\\\\tksCAS\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\_worktrees\\\\meta1\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\research\\\\CAS_META_2_COMPOSITION\\\\records\\\\child_call_v8_construction_001\\\\br_clean\\\\checks_001\\\\package\\\\research\\\\CAS_META_2_COMPOSITION\\\\pytest.ini'",
+    "type": "FileNotFoundError"
+  },
+  "package": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_001\\package",
+  "passed": false,
+  "pilot": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION",
+  "pytest_exit_code": null,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-br-clean-child/8",
+  "sys_path": [
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_001\\package\\research\\CAS_META_2_COMPOSITION",
+    "C:\\Python314\\python314.zip",
+    "C:\\Python314\\DLLs",
+    "C:\\Python314\\Lib",
+    "C:\\Python314",
+    "C:\\Python314\\Lib\\site-packages",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "tests": [
+    "test_br_construction_v8.py",
+    "test_br_witness_v8.py",
+    "test_br_package_v8.py",
+    "test_br_snapshot_v8.py",
+    "test_child_scaffold_v8.py",
+    "test_br_snapshot_capture_v8.py"
+  ]
+}

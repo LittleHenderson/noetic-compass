@@ -1,0 +1,99 @@
+{
+  "after_check": {
+    "files_verified": 630,
+    "manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  },
+  "before_check": {
+    "files_verified": 630,
+    "manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  },
+  "boundary": "Clean extracted-source pure tests only. No neural/native execution, actual SQLite connection, provider call, reservation, paid launch, training or measured B/R result. Harmless sqlite3 and pure adapter imports are allowed.",
+  "imported_modules": {
+    "aws": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\aws\\__init__.py",
+      "sha256": "b1ead80f832488352f8fbf0fdaa6750c5f6bc15433001edeaf5935cc276fc221"
+    },
+    "aws.br_package_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\aws\\br_package_v8.py",
+      "sha256": "23a30b7e4e3862702699e078bee953436be630f1390127f8668f519c1119b2e8"
+    },
+    "cas_meta2": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    "cas_meta2.br_construction_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\br_construction_v8.py",
+      "sha256": "96b9fcff510d74863ce720fcc2f0c1f6f730d7ce808e59ef59bbac660d108719"
+    },
+    "cas_meta2.br_snapshot_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\br_snapshot_v8.py",
+      "sha256": "fe11da6ae0399d58f22093c3a13e2b5faec481d75de260af818a7b98cd0ee5d0"
+    },
+    "cas_meta2.br_witness_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\br_witness_v8.py",
+      "sha256": "5cffd02a8653dcc8c1e90a2d571ce2c3a4ed4bbfb0b90093883130c808af7c5f"
+    },
+    "cas_meta2.child_scaffold_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\child_scaffold_v8.py",
+      "sha256": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b"
+    },
+    "cas_meta2.codec": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\codec.py",
+      "sha256": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030"
+    },
+    "cas_meta2.curriculum": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\curriculum.py",
+      "sha256": "c89a03e2f0c381ec4e9c2f8750fd5f5bf6d4b7836ca790d02e256c1cc334e384"
+    },
+    "cas_meta2.diagnostic_v8": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\diagnostic_v8\\__init__.py",
+      "sha256": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8"
+    },
+    "cas_meta2.diagnostic_v8.gpu": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\diagnostic_v8\\gpu.py",
+      "sha256": "4d83203d143ecca241e6248449d2cd97541805ce71cfb3333bdcc45d2fd6cf4d"
+    },
+    "cas_meta2.executor": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\executor.py",
+      "sha256": "edeb83fd3468aaccacb871bc4561c97a78ae087bb47b9d8ad38f1a58fd7efb2a"
+    },
+    "cas_meta2.grammar_v3": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\grammar_v3.py",
+      "sha256": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b"
+    },
+    "cas_meta2.ir": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\ir.py",
+      "sha256": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+    },
+    "cas_meta2.native": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\native.py",
+      "sha256": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+    }
+  },
+  "package": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package",
+  "passed": true,
+  "pilot": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION",
+  "pytest_exit_code": 0,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-br-clean-child/8",
+  "sys_path": [
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION\\tests",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_construction_001\\br_clean\\checks_002\\package\\research\\CAS_META_2_COMPOSITION",
+    "C:\\Python314\\python314.zip",
+    "C:\\Python314\\DLLs",
+    "C:\\Python314\\Lib",
+    "C:\\Python314",
+    "C:\\Python314\\Lib\\site-packages",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "tests": [
+    "test_br_construction_v8.py",
+    "test_br_witness_v8.py",
+    "test_br_package_v8.py",
+    "test_br_snapshot_v8.py",
+    "test_child_scaffold_v8.py",
+    "test_br_snapshot_capture_v8.py"
+  ]
+}

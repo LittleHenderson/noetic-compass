@@ -1,6 +1,6 @@
 # Same-state B/R construction: local implementation checks
 
-Status: IMPLEMENTED_AND_PURE_TESTED. Native AWS construction is not yet executed.
+Status: IMPLEMENTED_AND_CLEAN_PACKAGE_PURE_TESTED. Native AWS construction is not yet executed.
 
 This adds an AWS-only component check. It is separate from the completed saved-prefix diagnostic and does not train a model or change the accepted runtime, verifier, model weights, or fixed C expectation (`L2`).
 
@@ -32,8 +32,32 @@ Independent source review found and corrected two runner gaps before the passing
 
 - No AWS B/R result, measured numerical contrast, or native availability claim yet.
 - No task-conditioned B/R curriculum or child-selection training result yet.
-- Launcher and clean-package checks must complete before a separately recorded bounded job can run.
+- The live provider preflight and a separately recorded bounded construction job remain unexecuted; local launcher and clean-package checks are completed below.
 - No new budget reservation or provider mutation was made for this local work.
 - Preserve earlier CAS held-out composition **0/72**, familiar-program **24/24**, and the completed prefix diagnostic as distinct evidence.
 
 The authoritative campaign ledger remained at revision 12, $82 reserved and $318 unreserved. That is authorization capacity, not a spending target or an invoice total.
+
+## Completed launch and clean-package checks
+
+The dedicated parent and remote runner are now implemented. `checks_003` passed **312 tests in 8.05s**, adding the 51 remote and 58 parent tests. Independent review also corrected S3 deletion reporting: an HTTP-success response with per-object deletion errors can no longer be reported as successful removal.
+
+The final combined local capture, `checks_004`, passed **327 tests in 14.89s**, adding 15 clean-package verifier tests. Its receipt SHA-256 is `eaa5740cc7554305a46739fa77a1dea2f7a38dc115c8492524c1009e67ff9028`. Source, protected files and the canonical ledger remained unchanged. This is simulated/pure evidence, not a live provider launch.
+
+Worker source is frozen at `d047540a635ecccdd2cfd4d96ee3b43da59f7ce7`. `source_001/source.zip` preserves all 616 base members and adds 13 committed source/test files plus its separate root manifest: **630 members, 8,043,470 bytes**.
+
+- Archive SHA-256: `1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a`.
+- Root manifest SHA-256: `7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f`.
+- The accepted baseline remains `0917267b1354e5d036263eaa6ba9a7197eafb776`, with all 316 protected files checked. Published wheels and the dependency lock are included and hashed.
+
+`br_clean/checks_002` independently extracted that exact archive and ran its six shipped pure test files in a fresh isolated Python process: **203 passed in 5.11s**, exit 0. All 630 files were verified before and after. The child receipt lists 15 loaded `cas_meta2`/`aws` modules or namespaces and verifies that each comes from the extracted copy. No original-worktree source was used for the test imports. Receipt SHA-256: `4cf76f96e7519fa8ac2d3ecdbb6a389ccd5899f4d8001803eabd941c710c828c`.
+
+The retained first clean attempt verified all 630 files but stopped before pytest: the wrapper requested a nonexistent `pytest.ini` instead of the shipped `pyproject.toml`. Only the wrapper and its synthetic tests changed; the source archive and worker bytes did not. Both attempts retain receipts and raw outputs.
+
+Clean reproduction command:
+
+```powershell
+& 'C:/Python314/python.exe' -B tools/verify_br_clean_package_v8.py --archive records/child_call_v8_construction_001/source_001/source.zip --archive-sha256 1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a --source-sha d047540a635ecccdd2cfd4d96ee3b43da59f7ce7 --manifest-sha256 7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f --output records/child_call_v8_construction_001/br_clean/checks_003
+```
+
+Use a new `checks_*` output name for each rerun. The command does not install or run a model. The separate live construction scope remains one `g7.2xlarge`, one GPU, a 600-second worker and at most one hour of instance lifetime, within a $4 reservation from existing campaign authority. No retries or later training are included. Actual AWS preflight, reservation, component result and cleanup still require their own receipts.
