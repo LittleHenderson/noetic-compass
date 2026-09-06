@@ -1,0 +1,51 @@
+{
+  "boundary": "Read-only instance, disk and auxiliary-resource check. S3 evidence bucket is retained under its separate expiry policy; not an invoice.",
+  "checks": [
+    {
+      "check": "instance_terminated",
+      "passed": true,
+      "request_id": "e980919e-3e5d-4f95-8e2f-1baeb9f39fa6",
+      "state": "terminated"
+    },
+    {
+      "check": "job_volumes_absent",
+      "passed": true,
+      "request_id": "1010dd95-0cab-4d39-89f5-59d0d6194dcf",
+      "volume_ids": []
+    },
+    {
+      "check": "security_group_absent",
+      "code": "InvalidGroup.NotFound",
+      "passed": true,
+      "request_id": "96803a16-469e-4f0d-9fe8-f69d50819405"
+    },
+    {
+      "check": "worker_profile_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "5c3349e1-7d44-4692-afa6-b95efef7dcdf"
+    },
+    {
+      "check": "worker_role_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "4d798e5a-48ac-426f-86a2-7bca970cb788"
+    },
+    {
+      "check": "timer_role_absent",
+      "code": "NoSuchEntity",
+      "passed": true,
+      "request_id": "9f13149a-1c22-4ff0-86bc-c6d5da984b0c"
+    },
+    {
+      "check": "schedule_absent",
+      "code": "ResourceNotFoundException",
+      "passed": true,
+      "request_id": "9c39ae7e-524b-4dc2-9d78-32d8aacd6dde"
+    }
+  ],
+  "job": "cas-meta2-20260906032109-361b34a0",
+  "passed": true,
+  "schema": "cas-meta2-v4-cleanup-observation/0.1",
+  "utc": "2026-09-06T04:47:22.778354+00:00"
+}
