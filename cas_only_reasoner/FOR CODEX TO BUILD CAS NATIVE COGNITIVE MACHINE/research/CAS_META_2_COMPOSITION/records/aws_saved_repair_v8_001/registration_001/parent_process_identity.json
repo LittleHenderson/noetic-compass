@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "aws.launch_saved_repair_v8",
+    "--execute",
+    "--request",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\registration_001\\launch_request.json",
+    "--request-sha256",
+    "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+    "--authority",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\registration_001\\standing_authority.json",
+    "--authority-sha256",
+    "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919",
+    "--receipt-dir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\execution_001",
+    "--profile",
+    "default"
+  ],
+  "pid": 55504
+}

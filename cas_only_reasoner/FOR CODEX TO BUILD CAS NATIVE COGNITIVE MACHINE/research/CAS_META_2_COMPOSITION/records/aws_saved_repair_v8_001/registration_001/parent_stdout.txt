@@ -1,0 +1,5 @@
+{
+  "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\execution_001",
+  "status": "AWS_SAVED_NATIVE_REPAIR_FAILED"
+}
+

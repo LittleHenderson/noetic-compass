@@ -1,0 +1,261 @@
+{
+  "artifact_sha256": "0189b4def99e9416fa432b0c678dab1f99f44a3a9d202de721f2ec0151dcf5f5",
+  "core_analysis": {
+    "R_rpm_after": {
+      "contract_type": "BIAS_RPM_STATE",
+      "open_repair_ids": [
+        "repair-3295d0e50cc47ac2f23bb183"
+      ],
+      "readiness": {
+        "contract_type": "READINESS_STATE",
+        "desire": {
+          "axis": "DESIRE",
+          "contract_type": "READINESS_AXIS",
+          "evidence_refs": [
+            "evidence:prototype-authored-readiness"
+          ],
+          "provenance": [
+            "prototype:explicit-readiness-input"
+          ],
+          "reason_codes": [
+            "DESIRE_SUFFICIENT"
+          ],
+          "schema_version": "cas.neural-cjt.readiness-axis/0.2",
+          "score_ppm": 1000000,
+          "status": "SUFFICIENT",
+          "threshold_ppm": 500000
+        },
+        "power": {
+          "axis": "POWER",
+          "contract_type": "READINESS_AXIS",
+          "evidence_refs": [
+            "evidence:prototype-authored-readiness"
+          ],
+          "provenance": [
+            "prototype:explicit-readiness-input"
+          ],
+          "reason_codes": [
+            "POWER_SUFFICIENT"
+          ],
+          "schema_version": "cas.neural-cjt.readiness-axis/0.2",
+          "score_ppm": 1000000,
+          "status": "SUFFICIENT",
+          "threshold_ppm": 500000
+        },
+        "profile_id": "PROTOTYPE_DWP_PRODUCT/0.1",
+        "schema_version": "cas.neural-cjt.readiness-state/0.2",
+        "wisdom": {
+          "axis": "WISDOM",
+          "contract_type": "READINESS_AXIS",
+          "evidence_refs": [
+            "evidence:prototype-authored-readiness"
+          ],
+          "provenance": [
+            "prototype:explicit-readiness-input"
+          ],
+          "reason_codes": [
+            "WISDOM_SUFFICIENT"
+          ],
+          "schema_version": "cas.neural-cjt.readiness-axis/0.2",
+          "score_ppm": 1000000,
+          "status": "SUFFICIENT",
+          "threshold_ppm": 500000
+        }
+      },
+      "repair_history": [],
+      "return_addresses": [
+        "cjt:R:cause:cause-0dc915a7acdf9ebf4fc0ae0b"
+      ],
+      "schema_version": "cas.neural-cjt.bias-rpm-state/0.2",
+      "suspended_parent_cause_id": "cause-0dc915a7acdf9ebf4fc0ae0b",
+      "unmet_prerequisites": []
+    },
+    "checks": [
+      {
+        "check": "core_schema",
+        "ok": true
+      },
+      {
+        "check": "snapshot_record_copies",
+        "ok": true
+      },
+      {
+        "check": "pinned_original_six_traces",
+        "ok": true
+      },
+      {
+        "check": "original_six_traces_retained_exactly",
+        "ok": true
+      },
+      {
+        "check": "trace_document_hashes",
+        "ok": true
+      },
+      {
+        "check": "trace_digest_chain",
+        "ok": true
+      },
+      {
+        "check": "snapshot_state_head_binding",
+        "ok": true
+      },
+      {
+        "check": "worker_reported_store_integrity",
+        "ok": true
+      },
+      {
+        "check": "original_immutable_open_frame",
+        "ok": true
+      },
+      {
+        "check": "exact_prestate_R_v1_subgoal_reconstruction",
+        "ok": true
+      },
+      {
+        "check": "model_and_runtime_identity_unchanged",
+        "ok": true
+      },
+      {
+        "check": "frozen_postchecks",
+        "ok": true
+      },
+      {
+        "check": "original_database_bytes_unchanged",
+        "ok": true
+      },
+      {
+        "check": "bounded_attempt_sequence",
+        "ok": true
+      },
+      {
+        "check": "committed_tick_sequence",
+        "ok": true
+      },
+      {
+        "check": "attempt_finished_copy_7",
+        "ok": true
+      },
+      {
+        "check": "frozen_target_and_resume_7",
+        "ok": true
+      },
+      {
+        "check": "attempt_plan_7",
+        "ok": true
+      },
+      {
+        "check": "returned_result_retained_7",
+        "ok": true
+      },
+      {
+        "check": "proposal_call_identity_7",
+        "ok": true
+      },
+      {
+        "check": "returned_call_gpu_observation_7",
+        "ok": true
+      },
+      {
+        "check": "independent_counts_match_receipt",
+        "ok": true
+      },
+      {
+        "check": "claim_boundary",
+        "ok": true
+      }
+    ],
+    "core_failures": [
+      {
+        "message": "an open repair subgoal must verify ACCEPT before tick advancement",
+        "stage": "native_C",
+        "type": "RuntimeContractError"
+      }
+    ],
+    "gpu_forward_audit": {
+      "calls": 27,
+      "counter_kind": "module_forward_pre_hook_entries",
+      "device": "cuda:0"
+    },
+    "independent_counts": {
+      "accepted_new_ticks": 0,
+      "attempted_policy_units": 72,
+      "committed_policy_units": 0,
+      "completed_new_ticks": 0,
+      "native_call_attempts": 1,
+      "returned_native_calls": 0
+    },
+    "repair_closure_verified": false,
+    "repair_facts_succeed": false,
+    "reported_core_status": "REPAIR_REFUSED",
+    "reported_repaired": false,
+    "stages": [
+      {
+        "accepted": false,
+        "attempted": true,
+        "cjt_id": "C",
+        "committed": false,
+        "error": {
+          "message": "an open repair subgoal must verify ACCEPT before tick advancement",
+          "stage": "native_C",
+          "type": "RuntimeContractError"
+        },
+        "expected_symbol": "L2",
+        "gpu_module_entries_delta": 27,
+        "proposal_observation": {
+          "artifact_sha256": "ac9278c10fb4716a58c0476e87790fcfd846742a140d7e1be6d55d0191d74981",
+          "byte_integrity_verified": true,
+          "payload_bytes": 32,
+          "payload_sha256": "d3c0220d35f17ebfac3b788c09846a32f38bec636f0712caf14acb0f732ab4c9",
+          "proves_commit_or_acceptance": false,
+          "reported_decoded_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L0"
+          },
+          "semantic_decoder_reexecuted_locally": false
+        },
+        "published_effect_ids": [],
+        "returned": false,
+        "tick": 7
+      },
+      {
+        "accepted": false,
+        "attempted": false,
+        "cjt_id": "R",
+        "committed": false,
+        "expected_symbol": "L1",
+        "proposal_observation": null,
+        "published_effect_ids": [],
+        "returned": false,
+        "tick": 8
+      }
+    ]
+  },
+  "independent_native_repair_success": false,
+  "job": "cas-meta2-20260906165606-cbc41523",
+  "learning_proven": false,
+  "lifecycle_receipt_sha256": "aa0793b2ff43abb4cf88f44fcdbadfacbe9574cc030f44d6e8a1739fd22de741",
+  "local_neural_execution": false,
+  "local_sqlite_opened": false,
+  "outer_caller_restored": false,
+  "outer_launch_receipt_sha256": "7d08e7d10f9477be192fa3d2ec1c5ed51d74d728e952b2713e22723c9cd3d907",
+  "parent_packet_verification": {
+    "boundary": "Saved native repair only; no restored outer caller, task qualification or training claim.",
+    "failure_tail_hashes": {},
+    "files_verified": 39,
+    "missing_worker_files": [],
+    "native_success": false,
+    "original_member_coverage_verified": true
+  },
+  "provider_calls": false,
+  "qualification_passed": false,
+  "registration_commit_supplied_by_parent": "8af76a090e9f0659a0c84e26c731eb54c3aa285d",
+  "registration_receipt_sha256": "e61afa66c8d556389f97ffe8d8d7dcff837ade34f49ad699a9b02e81beb442c4",
+  "reported_launch_status": "AWS_SAVED_NATIVE_REPAIR_FAILED",
+  "reported_lifecycle_status": "AWS_CHQ_CONSTRUCTION_FAILED",
+  "request_sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+  "schema": "cas-meta2-saved-repair-independent-analysis/8",
+  "source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc",
+  "status": "NEGATIVE_OR_INCOMPLETE",
+  "worker_plan_sha256": "c4aa84288ec0824d6f7e462e9c2f961f9d49d225b0dfd57f23a93df6eacf8f76"
+}

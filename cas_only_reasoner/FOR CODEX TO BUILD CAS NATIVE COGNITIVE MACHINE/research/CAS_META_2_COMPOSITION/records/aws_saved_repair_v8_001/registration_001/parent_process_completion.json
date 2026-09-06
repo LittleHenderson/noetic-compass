@@ -1,0 +1,43 @@
+{
+  "authority_sha256": "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919",
+  "automatic_retries": 0,
+  "capture_source_sha256": "c26ad4553f9408c8e6d31f0fb107bb233b25b7f2eef278cd42bbc0b5b8196742",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "aws.launch_saved_repair_v8",
+    "--execute",
+    "--request",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\registration_001\\launch_request.json",
+    "--request-sha256",
+    "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+    "--authority",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\registration_001\\standing_authority.json",
+    "--authority-sha256",
+    "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919",
+    "--receipt-dir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\execution_001",
+    "--profile",
+    "default"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 1,
+  "finished_utc": "2026-09-06T17:06:50.186589+00:00",
+  "outputs": {
+    "parent_stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parent_stdout.txt": {
+      "bytes": 357,
+      "sha256": "343bc822f8c3af873b8d780f9906ed9547da2da6109c67f0e0f237464b1ce481"
+    }
+  },
+  "pid": 55504,
+  "process_created": true,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "request_sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9",
+  "schema": "cas-meta2-saved-repair-parent-capture/8",
+  "started_utc": "2026-09-06T16:57:07.070313+00:00"
+}

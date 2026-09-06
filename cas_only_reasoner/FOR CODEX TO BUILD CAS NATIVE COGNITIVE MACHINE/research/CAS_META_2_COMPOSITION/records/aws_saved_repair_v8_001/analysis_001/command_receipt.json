@@ -1,0 +1,22 @@
+{
+  "analysis_completed": true,
+  "analysis_sha256": "3b7adc6aba57003e5b6118801ceb3fa5d25b6dbbbec3ddc015313583786de4ce",
+  "analyzer_sha256": "1a54ec271948ce935e9d9d0d7b50b3b5411ec76e2d71042b7ca3ecad5f051267",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_saved_repair_v8_001/analyze_result.py",
+    "--output",
+    "records/aws_saved_repair_v8_001/analysis_001"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T17:07:57.469447+00:00",
+  "forbidden_modules_loaded": [],
+  "local_neural_execution": false,
+  "local_sqlite_opened": false,
+  "provider_calls": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-saved-repair-analysis-command/8",
+  "started_utc": "2026-09-06T17:07:57.295662+00:00",
+  "status": "NEGATIVE_OR_INCOMPLETE",
+  "wall_seconds": 0.17380100000445964
+}

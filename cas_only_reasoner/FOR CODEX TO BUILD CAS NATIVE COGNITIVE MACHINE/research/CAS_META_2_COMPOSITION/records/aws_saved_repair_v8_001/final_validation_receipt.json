@@ -1,0 +1,207 @@
+{
+  "schema": "cas-meta2-saved-repair-final-validation/8",
+  "status": "SAVED_REPAIR_NEGATIVE_EVIDENCE_BOUND",
+  "created_utc": "2026-09-06 17:11:26 UTC",
+  "job": "cas-meta2-20260906165606-cbc41523",
+  "source_freeze_commit": "e85d224842c50b2be202c8a15181df0526fa26cc",
+  "registration_commit": "8af76a090e9f0659a0c84e26c731eb54c3aa285d",
+  "final_parent_status": "AWS_SAVED_NATIVE_REPAIR_FAILED",
+  "parent_exit_code": 1,
+  "native_result": {
+    "native_call_attempts": 1,
+    "returned_native_calls": 0,
+    "committed_new_ticks": 0,
+    "accepted_new_ticks": 0,
+    "attempted_policy_units": 72,
+    "committed_policy_units": 0,
+    "cjt": "C",
+    "tick": 7,
+    "authored_expected_symbol": "L2",
+    "observed_proposal_symbol": "L0",
+    "exception_type": "RuntimeContractError",
+    "exception_message": "an open repair subgoal must verify ACCEPT before tick advancement",
+    "R_tick_8_attempted": false,
+    "repair_closed": false,
+    "original_six_traces_unchanged": true,
+    "original_database_unchanged": true,
+    "accepted_model_unchanged": true,
+    "model_digest": "76a9bcbce5ffdec4c2dbc9d8ea9958a268dcebf3775f53dd6058a72086709528"
+  },
+  "verification": {
+    "source_prelaunch_fake_tests_passed": 131,
+    "packet_files_verified": 39,
+    "packet_coverage_complete": true,
+    "result_consistency_checks_passed": 23,
+    "provider_read_calls": 13,
+    "cleanup_checks_passed": 15,
+    "instance_terminated": true,
+    "local_neural_execution": false,
+    "local_sqlite_connections": false,
+    "third_party_audit": false
+  },
+  "budget": {
+    "cap_usd": "400.00",
+    "job_reserved_usd": "4.00",
+    "ledger_revision": 16,
+    "total_reserved_usd": "98.00",
+    "remaining_unreserved_usd": "302.00",
+    "ledger_sha256": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+    "rough_ec2_observation_estimate_usd": "0.39",
+    "estimate_excludes_ancillary_charges": true,
+    "provider_invoice": false,
+    "automatic_refund": false
+  },
+  "claims": {
+    "native_repair_success": false,
+    "task_qualification_passed": false,
+    "outer_caller_restored": false,
+    "new_learning_proven": false,
+    "universal_C_L2_meaning_established": false,
+    "cas_specific_advantage": false,
+    "previous_0_of_72_overwritten": false,
+    "previous_24_of_24_overwritten": false
+  },
+  "exact_commands": {
+    "paid_already_completed_do_not_repeat": "python -B records/aws_saved_repair_v8_001/registration_001/capture_parent.py",
+    "analysis": "python -B records/aws_saved_repair_v8_001/analyze_result.py --output records/aws_saved_repair_v8_001/analysis_001",
+    "post_run_read_only_provider_check": "python -B records/aws_saved_repair_v8_001/post_run_provider_read.py"
+  },
+  "next_step": "Prepare task-dependent, independently checked candidate learning targets and separate selector accuracy from native result correctness; no paid replay, Bias reset, constant-label shortcut or accepted-source change.",
+  "bound_files": [
+    {
+      "path": "records/aws_saved_repair_v8_001/analysis_001/analysis.json",
+      "bytes": 7732,
+      "sha256": "3b7adc6aba57003e5b6118801ceb3fa5d25b6dbbbec3ddc015313583786de4ce"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/analysis_001/command_receipt.json",
+      "bytes": 1098,
+      "sha256": "4e6b88840bd7c3325386fb08257da488a07f3099d7afe0ff38ddfcb1571f8079"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/analyze_result.py",
+      "bytes": 28377,
+      "sha256": "1a54ec271948ce935e9d9d0d7b50b3b5411ec76e2d71042b7ca3ecad5f051267"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/launch_receipt.json",
+      "bytes": 1806728,
+      "sha256": "7d08e7d10f9477be192fa3d2ec1c5ed51d74d728e952b2713e22723c9cd3d907"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/bootstrap.log",
+      "bytes": 467,
+      "sha256": "e7557a4ee2e891fa43ecbc4c82cdc544ebf54ebb785e6b2ce2f8bcd1b4035ebf"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/cloud_artifacts.zip",
+      "bytes": 623035,
+      "sha256": "0189b4def99e9416fa432b0c678dab1f99f44a3a9d202de721f2ec0151dcf5f5"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/launch_receipt.json",
+      "bytes": 1805425,
+      "sha256": "aa0793b2ff43abb4cf88f44fcdbadfacbe9574cc030f44d6e8a1739fd22de741"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/launch_request.json",
+      "bytes": 4316,
+      "sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/ledger_snapshot.json",
+      "bytes": 41846,
+      "sha256": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/reservation_receipt.json",
+      "bytes": 2307,
+      "sha256": "49f7fae965e89c9cde33fe9a06dbc2a0854597ef90ff19ac1aee81efa46385d0"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/execution_001/lifecycle/worker_plan.json",
+      "bytes": 2816,
+      "sha256": "c4aa84288ec0824d6f7e462e9c2f961f9d49d225b0dfd57f23a93df6eacf8f76"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/post_run_provider_read.py",
+      "bytes": 9539,
+      "sha256": "64c3bbf535ed169a5891b6b950335bda48fcfa32873a5789f0e174b878bf830c"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/provider_check_001/receipt.json",
+      "bytes": 34776,
+      "sha256": "6647073e814353ead2ffd22735ff2baadb35bddf4e5997e23b8fc618a2ebff8d"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/capture_parent.py",
+      "bytes": 4440,
+      "sha256": "c26ad4553f9408c8e6d31f0fb107bb233b25b7f2eef278cd42bbc0b5b8196742"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/launch_request.json",
+      "bytes": 4316,
+      "sha256": "925629d418561f38453cb9fe9dce7c9fdd9e1035775e9cc0a1ba784ab81f10a9"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/parent_process_completion.json",
+      "bytes": 2482,
+      "sha256": "9047e04da84dd18e7f63021edbc0fae7b08fe302c05395cc12c2b6e56693b9dc"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/parent_process_identity.json",
+      "bytes": 1344,
+      "sha256": "2f1dcba8bbb828a7526551c1dd3c341577270e870b152336f7047ce306cd212a"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/parent_process_start.json",
+      "bytes": 2076,
+      "sha256": "3e8f0993d6df2e988790098a67ce2abee16bb7bdce50d4943f503d7249a8e920"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/parent_stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/parent_stdout.txt",
+      "bytes": 357,
+      "sha256": "343bc822f8c3af873b8d780f9906ed9547da2da6109c67f0e0f237464b1ce481"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/registration_receipt.json",
+      "bytes": 1136,
+      "sha256": "e61afa66c8d556389f97ffe8d8d7dcff837ade34f49ad699a9b02e81beb442c4"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/registration_001/standing_authority.json",
+      "bytes": 1732,
+      "sha256": "e112b25fdda5556dfcb1ea6a5401145a20ee61436865586257fa38882b571919"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/RESULT.md",
+      "bytes": 7466,
+      "sha256": "982977db060e9bd2945d338839cc560cc4672fd01396abbbcc6c406e0769b703"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/source_001/receipt.json",
+      "bytes": 159128,
+      "sha256": "61be4cef7833918e2d4cb63ab56eb286fa7d01bd60bc5acfebac3408db6278a6"
+    },
+    {
+      "path": "records/aws_saved_repair_v8_001/source_001/source.zip",
+      "bytes": 8986156,
+      "sha256": "c965a1dabb584f49a6d549129121de61de921658adbcb7cb57ced807d89f9b3d"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json",
+      "bytes": 41846,
+      "sha256": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json.history/00000016.json",
+      "bytes": 41846,
+      "sha256": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32"
+    }
+  ]
+}
