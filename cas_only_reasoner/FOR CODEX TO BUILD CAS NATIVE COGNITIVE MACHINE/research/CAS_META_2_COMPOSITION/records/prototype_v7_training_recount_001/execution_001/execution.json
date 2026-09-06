@@ -1,0 +1,21 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_training_recount_001\\run.py",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_training_recount_001\\receipt_001.json"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T11:26:19.775852+00:00",
+  "output_sha256": {
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.txt": "1c09a56632cfd07bfadbf1c29429bc74a389bd8183240d49773daede73c94ca3"
+  },
+  "pid": 69408,
+  "receipt_sha256": "452705ca332f9cf8b42c8815c3c08f031ec73ba4fc443a51797679acddc62d76",
+  "returncode": 0,
+  "run_py_sha256": "3615080f9bdf88cdce295cda8e1af5715fc9ca87c48feba0a4f919663b587f2b",
+  "started_utc": "2026-09-06T11:25:34.307710+00:00",
+  "timed_out": false,
+  "wall_seconds": 45.46740979999959
+}

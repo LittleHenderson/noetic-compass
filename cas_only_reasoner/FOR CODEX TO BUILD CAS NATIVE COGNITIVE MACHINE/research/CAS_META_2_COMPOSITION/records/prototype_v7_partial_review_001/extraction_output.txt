@@ -1,0 +1,36 @@
+{
+  "campaign_payload_index": {
+    "all_campaign_files_except_index_covered": true,
+    "files_verified": 2871,
+    "payload_sha256_json_sha256": "c1a966a51d073eb775eaa7c11d5c169fbc58c940e71514c9fcb604cbf5771e93"
+  },
+  "collection_checks": {
+    "all_original_file_bytes_verified": true,
+    "all_original_index_entries_reconstructed": 2940,
+    "index_preview_omissions_are_not_file_omissions": true,
+    "original_file_index_sha256": "612a672ef8e8523b4e505f6a071d555dfb5191e4f1f51c2bbb41b48273fa7075"
+  },
+  "extraction": {
+    "all_member_bytes_verified_after_write": true,
+    "all_member_bytes_verified_before_write": true,
+    "files_verified": 2941,
+    "inventory_coverage_exact": true,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_review_001\\extracted_001"
+  },
+  "packet": {
+    "bytes": 131895861,
+    "expanded_bytes_including_collection_receipt": 791935096,
+    "hash_rechecked_at_end": true,
+    "members": 2941,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prototype_v7_001\\cloud_artifacts.zip",
+    "sha256": "f28603b7aab07d7d75a06cfa52fb5b802689b8896001fa9f572971c9140c9799"
+  },
+  "source_preflight": {
+    "additional_source_files": 65,
+    "git_archive_and_local_files_verified": 603,
+    "original_source_files": 538,
+    "protected_files_verified": 316,
+    "source_rechecked_at_end": true
+  },
+  "status": "FAILED_RUN_ALL_PACKET_BYTES_VERIFIED"
+}

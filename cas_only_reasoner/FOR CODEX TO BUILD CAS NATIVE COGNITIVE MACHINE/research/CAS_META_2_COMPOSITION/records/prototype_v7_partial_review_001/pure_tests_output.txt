@@ -1,0 +1,28 @@
+test_all_original_bytes_indexed (__main__.TestBytes.test_all_original_bytes_indexed) ... ok
+test_archive_identity_refused (__main__.TestBytes.test_archive_identity_refused) ... ok
+test_bad_paths (__main__.TestBytes.test_bad_paths) ... ok
+test_boolean_return_code_refused (__main__.TestBytes.test_boolean_return_code_refused) ... ok
+test_case_alias (__main__.TestBytes.test_case_alias) ... ok
+test_changed_hash_refused (__main__.TestBytes.test_changed_hash_refused) ... ok
+test_directory_refused (__main__.TestBytes.test_directory_refused) ... ok
+test_existing_destination_refused (__main__.TestBytes.test_existing_destination_refused) ... ok
+test_extra_extracted_file_refused (__main__.TestBytes.test_extra_extracted_file_refused) ... ok
+test_extraction_roundtrip_and_reseal_detection (__main__.TestBytes.test_extraction_roundtrip_and_reseal_detection) ... ok
+test_file_directory_alias (__main__.TestBytes.test_file_directory_alias) ... ok
+test_file_omission_refused (__main__.TestBytes.test_file_omission_refused) ... ok
+test_job_identity_refused (__main__.TestBytes.test_job_identity_refused) ... ok
+test_json_duplicate_and_nonfinite (__main__.TestBytes.test_json_duplicate_and_nonfinite) ... ok
+test_missing_original_refused (__main__.TestBytes.test_missing_original_refused) ... ok
+test_original_index_uses_linux_path_order_not_string_order (__main__.TestBytes.test_original_index_uses_linux_path_order_not_string_order) ... ok
+test_payload_exact (__main__.TestBytes.test_payload_exact) ... ok
+test_payload_missing_entry (__main__.TestBytes.test_payload_missing_entry) ... ok
+test_payload_unindexed_entry (__main__.TestBytes.test_payload_unindexed_entry) ... ok
+test_preview_omission_is_not_file_omission (__main__.TestBytes.test_preview_omission_is_not_file_omission) ... ok
+test_preview_reordering_refused (__main__.TestBytes.test_preview_reordering_refused) ... ok
+test_success_refused (__main__.TestBytes.test_success_refused) ... ok
+test_symlink_refused (__main__.TestBytes.test_symlink_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.160s
+
+OK
