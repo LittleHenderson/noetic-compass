@@ -83,3 +83,6 @@ A generic-control result must remain labeled generic, not CAS learning.
 
 No extra AWS job, reservation or local neural work was used for this change.
 The frozen v3 source and its evaluator remain unchanged.
+
+The subsequent `LEARNED_REUSE.md` describes the prepared bounded linker and
+AWS-only reuse runner. Its local tests do not close the pending real GPU gate.
