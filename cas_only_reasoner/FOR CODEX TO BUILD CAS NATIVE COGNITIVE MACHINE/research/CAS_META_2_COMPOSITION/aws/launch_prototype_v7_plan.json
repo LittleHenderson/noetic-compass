@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "status": "PREPARATION_ONLY_SOURCE_FREEZE_AND_RECOVERY_REVIEW_REQUIRED",
+  "status": "REGISTERED_SOURCE_FREEZE_AND_CURRENT_JOB_GPU_GATE_REQUIRED",
   "account_id": "807562639912",
   "region": "us-west-2",
   "instance_type": "g7.2xlarge",
@@ -12,8 +12,8 @@
   "per_launch_reserved_cap_usd": "7.00",
   "ancillary_reserved_usd": "1.00",
   "on_demand_hourly_usd_max": "2.52",
-  "runtime_seconds_max": 7200,
-  "compute_seconds_max": 6600,
+  "runtime_seconds_max": 7800,
+  "compute_seconds_max": 7200,
   "required_gpu_name_contains": "RTX PRO 4500",
   "automatic_retries": 0,
   "ebs_gb": 75,
@@ -37,11 +37,11 @@
   "cloud_termination_confirmed_before_training": true,
   "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
   "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
-  "launch_enabled": false,
+  "launch_enabled": true,
   "prerequisite_recovery_review_required": true,
-  "gpu_gate_max_seconds": 300,
+  "gpu_gate_max_seconds": 450,
   "dataset_max_seconds": 180,
   "training_max_seconds": 3300,
-  "native_max_seconds": 2400,
-  "parent_max_seconds": 6300
+  "native_max_seconds": 2700,
+  "parent_max_seconds": 6900
 }

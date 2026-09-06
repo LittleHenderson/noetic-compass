@@ -34,7 +34,7 @@ FIXTURE_PINS = {
 PUBLIC_FILES = {'train.json','validation.json','test_public.json','base_train.json',
                 'base_manifest.json','training_imports.json','tokenizer.json','manifest.json'}
 GPU_TEST = 'test_saved_fixture_exact_append_and_matched_cuda_training_exit'
-NATIVE_GATE_READY = False
+NATIVE_GATE_READY = True
 FORBIDDEN = {'torch','casformer','cas_cjt','tensorflow','jax','cupy','boto3','botocore'}
 
 

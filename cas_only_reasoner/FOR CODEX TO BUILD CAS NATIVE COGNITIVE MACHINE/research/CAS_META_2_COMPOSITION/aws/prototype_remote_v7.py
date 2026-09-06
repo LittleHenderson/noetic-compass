@@ -24,7 +24,7 @@ def require(value,reason):
 
 
 def require_request(job,max_seconds):
-    require(sys.platform=='linux' and type(max_seconds) is int and max_seconds==6300,
+    require(sys.platform=='linux' and type(max_seconds) is int and max_seconds==6900,
         'V7_REMOTE_LINUX_FIXED_PARENT_TIME_REQUIRED')
     require(type(job) is str and re.fullmatch('cas-meta2-[0-9]{14}-[a-f0-9]{8}',job)
         and os.environ.get('CAS_META2_AWS_JOB_ID')==job and os.environ.get('CAS_META1_AWS_JOB_ID')==job

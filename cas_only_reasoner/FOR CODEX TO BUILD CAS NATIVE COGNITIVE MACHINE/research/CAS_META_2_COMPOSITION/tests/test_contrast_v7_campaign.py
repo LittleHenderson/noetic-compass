@@ -71,6 +71,7 @@ def test_spec_changes_are_not_an_implicit_gate_override(field,value):
 
 
 def test_pending_gates_prevent_all_campaign_entrypoints(monkeypatch,tmp_path):
+    monkeypatch.setattr(q,'registered_spec',lambda:deepcopy(SPEC))
     monkeypatch.setattr(q.c,'write',Mock(side_effect=AssertionError('No generation')))
     monkeypatch.setattr(q.t,'run',Mock(side_effect=AssertionError('No training')))
     monkeypatch.setattr(q,'parent_module',Mock(side_effect=AssertionError('No parent execution')))

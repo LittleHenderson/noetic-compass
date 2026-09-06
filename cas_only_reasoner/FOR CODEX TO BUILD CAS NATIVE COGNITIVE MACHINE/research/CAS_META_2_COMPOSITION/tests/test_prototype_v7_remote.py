@@ -22,7 +22,7 @@ def enabled(monkeypatch):
 
 @pytest.mark.parametrize('fault',['linux','job','meta1','enable','gpu','time','booltime'])
 def test_remote_requires_explicit_fixed_aws_job_before_any_source_read(monkeypatch,fault):
-    enabled(monkeypatch);seconds=6300
+    enabled(monkeypatch);seconds=6900
     if fault=='linux':monkeypatch.setattr(r.sys,'platform','win32')
     if fault=='job':monkeypatch.setenv('CAS_META2_AWS_JOB_ID','different')
     if fault=='meta1':monkeypatch.setenv('CAS_META1_AWS_JOB_ID','different')
@@ -104,7 +104,7 @@ def test_outer_coordinator_does_not_change_sealed_campaign_index(monkeypatch,tmp
         sealed.update({p.relative_to(output).as_posix():r.file_hash(p) for p in output.rglob('*') if p.is_file()})
     monkeypatch.setattr(q,'run',fake_campaign)
     output=tmp_path/'runs/cloud_job/campaign'
-    args=SimpleNamespace(output=output,job=JOB,max_wall_seconds=6300,launch_manifest_sha256='b'*64)
+    args=SimpleNamespace(output=output,job=JOB,max_wall_seconds=6900,launch_manifest_sha256='b'*64)
     result=r.run(args)
     assert result['completed'] is True
     assert (output.parent/'prototype_coordinator_receipt.json').is_file()
@@ -153,6 +153,6 @@ def test_external_manifest_mismatch_stops_before_profile_import(monkeypatch,tmp_
     monkeypatch.setattr(r,'ROOT',root)
     path=write(tmp_path/'launch_manifest.json',{})
     monkeypatch.setattr(r.importlib.util,'spec_from_file_location',Mock(side_effect=AssertionError('No imports')))
-    args=SimpleNamespace(job=JOB,max_wall_seconds=6300,launch_manifest=path,launch_manifest_sha256='0'*64)
+    args=SimpleNamespace(job=JOB,max_wall_seconds=6900,launch_manifest=path,launch_manifest_sha256='0'*64)
     with pytest.raises(ValueError,match='EXTERNAL_MANIFEST_PIN'):r.verify_sources(args)
     assert not r.importlib.util.spec_from_file_location.called

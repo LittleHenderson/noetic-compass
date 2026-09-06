@@ -1,10 +1,10 @@
-"""V7 source-ready dataset/training contracts; campaign execution remains blocked.
+"""V7 source-bound dataset, training, and evaluation campaign.
 
 The dataset phase builds a fresh base, appends exact known originals through
 the source-pinned parent, and exports public-only trainer files. Native
 evaluation is deliberately not routed to the old fatal-worker implementation.
-No local generation or training is permitted. Pending GPU/evaluator gates must
-be closed in a new source-bound registration before this entry point can run.
+No local generation or training is permitted. A literal prerequisite review
+and the current job's GPU gate are required before full candidate training.
 """
 from dataclasses import asdict
 from datetime import datetime, timezone
@@ -367,13 +367,13 @@ def run_phase(output, job, name):
     raise ValueError('V7_REGISTERED_PHASE_REQUIRED')
 
 
-def run(output, *, job, max_seconds=6300):
+def run(output, *, job, max_seconds=6900):
     spec = registered_spec()
     profile.require_execution_ready(spec)
     spec, experiment = experiment_identity()
     cfg, training = configurations(spec)
     t.require_request(job, training)
-    c.require(type(max_seconds) is int and max_seconds == spec['max_wall_seconds'] == 6300,
+    c.require(type(max_seconds) is int and max_seconds == spec['max_wall_seconds'] == 6900,
               'V7_REGISTERED_PARENT_TIME_BOUND')
     from ..campaign_v3 import _new_output, _baseline_identity, _run_process, _final_payload_index, _write
     from . import gpu_preflight as gpu
@@ -412,6 +412,9 @@ def run(output, *, job, max_seconds=6300):
         dataset_process, assembly = require_dataset_exit(output, job=job, spec=spec)
         record['actual_splits'] = assembly['actual_splits']
         record['dataset_assembly_receipt_sha256'] = checks.file_hash(output/'dataset_assembly_receipt.json')
+        print(c.canonical({'stage':'dataset_assembled', 'actual_splits':assembly['actual_splits'],
+            'imported_training_records':assembly['imported_train_examples'],
+            'assembly_receipt_sha256':record['dataset_assembly_receipt_sha256']}).decode(), flush=True)
         c.require(deadline-time.monotonic() >= training.max_seconds+spec['native_max_seconds']+90,
                   'V7_INSUFFICIENT_TRAIN_AND_NATIVE_ALLOCATION')
         record.update(training_attempted=True, training_performed=None)
@@ -455,7 +458,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', required=True)
     parser.add_argument('--job', required=True)
-    parser.add_argument('--max-wall-seconds', type=int, default=6300)
+    parser.add_argument('--max-wall-seconds', type=int, default=6900)
     parser.add_argument('--phase', choices=('dataset','evaluate'))
     args = parser.parse_args()
     if args.phase:

@@ -74,8 +74,61 @@ def test_preparation_never_substitutes_for_registered_recovery_review(monkeypatc
     monkeypatch.setattr(p,'PREREQUISITE_REVIEW_SHA256',None)
     monkeypatch.setattr(p,'PREREQUISITE_REVIEW_PATH',None)
     with pytest.raises(ValueError,match='V7_PREPARATION_ONLY'):p.require_execution_ready(p.FIXED_SPEC)
-    m=members();record=p.make_launch_record(m)
+    m=members();m[p.SPEC_PATH]=p.canonical(p.FIXED_SPEC);record=p.make_launch_record(m)
     assert record['profile']=='prototype_training_v7' and record['entrypoint']=='cas_meta2.contrast_v7.campaign'
+
+
+def test_actual_registration_pins_full_large_review_without_weakening_spec_limit():
+    raw=(ROOT.parents[1]/p.PREREQUISITE_REVIEW_PATH).read_bytes()
+    assert len(raw)==p.PREREQUISITE_REVIEW_BYTES==5685892
+    assert sha256(raw).hexdigest()==p.PREREQUISITE_REVIEW_SHA256
+    with pytest.raises(ValueError,match='PROFILE_JSON_BOUND'):p.decode(raw)
+    review=p.check_prerequisite_review(raw)
+    assert review['outcomes']['references_checked']==72 and review['outcomes']['arms_checked']==360
+    spec=p.validate_prototype_spec((ROOT/'EXPERIMENT_PROTOTYPE_V7.json').read_bytes())
+    assert spec==p.REGISTERED_SPEC and p.execution_blockers(spec)==[]
+    assert spec['gpu_gate']['status']=='REQUIRED_BEFORE_DATASET_AND_TRAINING'
+    assert spec['gpu_gate']['expected_tests']==1
+    assert spec['max_wall_seconds']==6900 and spec['native_max_seconds']==2700
+    assert spec['gpu_gate_max_seconds']==450 and spec['training']['max_seconds']==3300
+    assert spec['automatic_retry'] is False and spec['source_release_accepted'] is False
+    p.require_execution_ready(spec)
+    assert p.execution_blockers(p.FIXED_SPEC)==list(p.PENDING)
+
+
+@pytest.mark.parametrize('changed',['truncated','appended','same_size','wrong_type'])
+def test_review_external_size_and_pin_are_checked_before_json_decode(monkeypatch,changed):
+    raw=(ROOT.parents[1]/p.PREREQUISITE_REVIEW_PATH).read_bytes()
+    if changed=='truncated':raw=raw[:-1]
+    if changed=='appended':raw+=b' '
+    if changed=='same_size':raw=raw[:-1]+(b'x' if raw[-1:]!=b'x' else b'y')
+    if changed=='wrong_type':raw=bytearray(raw)
+    monkeypatch.setattr(p,'decode',lambda *a,**k:(_ for _ in ()).throw(AssertionError('No unpinned JSON parse')))
+    with pytest.raises(ValueError,match='REVIEW_BYTES_CHANGED'):p.check_prerequisite_review(raw)
+
+
+@pytest.mark.parametrize('field,value',[
+    ('status','RECOVERY_STORED_REVIEW_FAILED'),('completed',False),('errors',['failure']),
+    ('source_sha','a'*40),('packet_sha256','a'*64),('runtime_manifest_sha256','a'*64),
+    ('job','different'),('sealed_predictions_unchanged',False),('sources_and_extractions_rechecked_at_end',False),
+    ('training_performed',True),('neural_execution_during_audit',True),('provider_calls_during_audit',True)])
+def test_review_semantic_identity_cannot_claim_wrong_run_or_execution(monkeypatch,field,value):
+    # Test the semantic predicate separately with a synthetic byte-authenticated
+    # fixture. Production always retains the literal independent review pin.
+    review=p.check_prerequisite_review((ROOT.parents[1]/p.PREREQUISITE_REVIEW_PATH).read_bytes())
+    review[field]=value;raw=p.canonical(review)
+    monkeypatch.setattr(p,'PREREQUISITE_REVIEW_BYTES',len(raw))
+    monkeypatch.setattr(p,'PREREQUISITE_REVIEW_SHA256',sha256(raw).hexdigest())
+    with pytest.raises(ValueError,match='REVIEW_IDENTITY'):p.check_prerequisite_review(raw)
+
+
+def test_full_review_cannot_be_removed_or_resealed_in_source_manifest():
+    m=members();manifest=b.make_manifest(m,'a'*40)
+    name=p.PREREQUISITE_REVIEW_PATH
+    m[name]+=b' ';manifest['files_sha256'][name]=sha256(m[name]).hexdigest()
+    with pytest.raises(ValueError,match='PREREQUISITE_REVIEW_PIN'):p.validate_launch_manifest(manifest,m.__getitem__)
+    m.pop(name)
+    with pytest.raises(ValueError,match='EXACT_SOURCE_CLOSURE'):p.make_launch_record(m)
 
 
 def test_pure_builder_requires_new_bounded_output_before_git(monkeypatch,tmp_path):

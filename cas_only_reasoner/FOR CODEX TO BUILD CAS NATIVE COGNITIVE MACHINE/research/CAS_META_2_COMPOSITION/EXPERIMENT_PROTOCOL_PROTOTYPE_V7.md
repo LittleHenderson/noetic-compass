@@ -91,3 +91,14 @@ enforce the approved GPU type, resource limits, independent termination timer,
 collection limits, and verified cleanup. Remaining authorization is not a spending
 target. Estimates and reservations are not provider invoices. There is no automatic
 retry, merge, release acceptance, CAS-advantage claim, or neural-core redesign.
+
+The reserved amount is $7. Before launch, the declared time limits are GPU check
+450 seconds, data assembly 180, training 3,300, native evaluation 2,700, campaign
+6,900, compute 7,200, and instance lifetime 7,800. The launcher checks the live
+price against its $2.52/hour ceiling; its conservative compute-plus-ancillary
+budget calculation is $6.46 within the $7 reservation. That is not an invoice.
+The earlier 72-case recovery used 2,221.574 seconds of native evaluation; the new
+limit provides 478.426 seconds of headroom, not proof the fresh cases will fit.
+The earlier nine-case GPU smoke used 203.235 seconds, but the new smoke includes
+more training steps and extra data checks. If a declared time limit is exceeded,
+preserve partial evidence and stop; do not extend the running job or retry it.

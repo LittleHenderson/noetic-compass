@@ -1,0 +1,50 @@
+{
+  "schema": "cas-meta2-v7-registration-timing-preparation/1",
+  "status": "PREPARATION_ONLY_FINAL_INDEPENDENT_REVIEW_PENDING",
+  "packet_path": "records/aws_recovery_v6_001/cloud_artifacts.zip",
+  "packet_sha256": "4b5022d57c6d6f446463284dd79c7a9b3bf588754314b9110029a39827c6a57c",
+  "packet_bytes": 63906943,
+  "packet_hash_verified": true,
+  "job": "cas-meta2-20260906082659-383a339d",
+  "source_sha": "cbf13795202094865744f7c0b5efa234451f9208",
+  "source_archive_sha256": "54101904990bf3945dc1242e80982f05a47853a4fce56f2d9c88e9c9bb6f3bb7",
+  "extracted_timing_members_match_packet": true,
+  "timing_records": [
+    {
+      "member": "cloud_job/recovery/native_process/process_receipt.json",
+      "sha256": "fa57288e189d49eb7a82c38377faed4a33a41d3fad4112a6616544eb5d2e09cf",
+      "bytes": 1975,
+      "wall_seconds": 2221.573727747,
+      "returncode": 0,
+      "scope": "existing fixed prediction recovery native replay, not fresh v7 evaluation"
+    },
+    {
+      "member": "cloud_job/recovery/gpu_process/process_receipt.json",
+      "sha256": "3094d9319c496be90f8a9f5c77524ad179d97052c0beac126b60fd0152e14ac6",
+      "bytes": 1283,
+      "wall_seconds": 256.618320487,
+      "returncode": 0,
+      "scope": "two recovery GPU tests, not the v7 nine-case smoke"
+    }
+  ],
+  "planned_bounds_seconds": {
+    "gpu_gate": 450,
+    "dataset": 180,
+    "training": 3300,
+    "native": 2700,
+    "parent": 6900,
+    "compute": 7200,
+    "instance_lifetime": 7800
+  },
+  "reservation_usd": "7.00",
+  "maximum_hourly_estimate_usd": "2.52",
+  "ancillary_estimate_usd": "1.00",
+  "plan_estimate_usd": "6.46",
+  "is_provider_invoice": false,
+  "automatic_retry": false,
+  "neural_execution": false,
+  "provider_actions": false,
+  "registration_enabled_by_this_note": false,
+  "independent_review_pass_claimed": false,
+  "fresh_v7_timing_measured": false
+}

@@ -44,8 +44,9 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()
 
 
-def decode(raw):
-    require(type(raw) is bytes and 0 < len(raw) <= 4*1024**2, 'PROTOTYPE_PROFILE_JSON_BOUND')
+def decode(raw, *, max_bytes=4*1024**2):
+    require(type(max_bytes) is int and max_bytes > 0 and type(raw) is bytes
+        and 0 < len(raw) <= max_bytes, 'PROTOTYPE_PROFILE_JSON_BOUND')
     def pairs(items):
         result = {}
         for name, value in items:
@@ -140,11 +141,17 @@ def entrypoint(manifest):
 
 
 
-# Only a later reviewed source edit may fill this exact registered specification.
+# This literal registration binds the completed independent recovery review.
+# It still requires the current AWS job's v7 GPU smoke before data or training.
 # Never derive readiness, source pins, or approval from a supplied packet itself.
-REGISTERED_SPEC = None
-PREREQUISITE_REVIEW_PATH = None
-PREREQUISITE_REVIEW_SHA256 = None
+REGISTERED_SPEC = json.loads("{\"schema\":\"cas-meta2-prototype-experiment/7\",\"profile\":\"prototype_training_v7\",\"entrypoint\":\"cas_meta2.contrast_v7.campaign\",\"registration_state\":\"REGISTERED_WITH_REQUIRED_CURRENT_JOB_GPU_GATE\",\"purpose\":\"TRAIN_WITH_EXACT_ORIGINAL_256_PLUS_FRESH_BASE_CURRICULUM\",\"curriculum_seed\":2026092701,\"curriculum\":{\"train_flat\":128,\"train_pairs_per_cell\":64,\"validation_flat\":32,\"validation_pairs_per_cell\":8,\"test_triplets\":24},\"training\":{\"seed\":7,\"epochs\":200,\"batch_size\":16,\"prediction_batch_size\":16,\"validation_interval\":10,\"max_seconds\":3300},\"base_train_count\":640,\"original_train_append_count\":256,\"train_count\":896,\"validation_count\":96,\"test_count\":72,\"matched_test_triplets\":24,\"train_depths\":{\"1\":128,\"2\":384,\"3\":384},\"validation_depths\":{\"1\":32,\"2\":32,\"3\":32},\"test_depths\":{\"3\":48,\"4\":24},\"optimizer_steps_per_family\":11200,\"exclusion_inventory_path\":\"records/contrast_v7_exclusions_from_failed_v6_001/inventory.json\",\"exclusion_inventory_sha256\":\"9f579ea2d593671dfddf16db39aa22563d6b98f7388758d2a2b99539e66ed623\",\"exclusion_count\":8837,\"source_pins_path\":\"records/contrast_v7_bridge_checks_001/source_pins.json\",\"source_pins_sha256\":\"9d66a81fbdc0e4041cd09d460c821f3cf68e244610ed49831324b5accf74084d\",\"public_loader_path\":\"records/prototype_training_integration_v7_001/public_data.py\",\"public_loader_sha256\":\"5db831d685b2343a16b93cbc3d3c16e53978ebf0e3cf9da8fefd7d10692708b0\",\"original_tasks_path\":\"records/contrast_curriculum_v6_probe_001/tasks.json\",\"original_tasks_sha256\":\"ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46\",\"original_tasks_training_only\":true,\"original_graphs_remain_in_fresh_exclusions\":true,\"gpu_gate\":{\"status\":\"REQUIRED_BEFORE_DATASET_AND_TRAINING\",\"test_file\":\"tests/test_contrast_v7_train_gpu.py\",\"expected_tests\":1},\"native_evaluation\":{\"status\":\"NARROW_RECOVERY_BOUNDARY_VALIDATED\",\"entrypoint\":\"cas_meta2.contrast_v7.native_evaluation\"},\"prerequisite_recovery\":{\"source_sha\":\"cbf13795202094865744f7c0b5efa234451f9208\",\"runtime_manifest_sha256\":\"897c6a72c7411676c4ad80ac9734b3dbe7a7ac169951f58d2ab2fd6d387ecb37\",\"job\":\"cas-meta2-20260906082659-383a339d\",\"review_path\":\"records/contrast_recovery_v6_review_001/run_001/recovery_stored_review.json\",\"review_sha256\":\"5396e0ab263fa435eefd2b8925382ce802b7af7c8d1c4dae5702d51435349ac3\"},\"gpu_gate_max_seconds\":450,\"dataset_max_seconds\":180,\"native_max_seconds\":2700,\"max_wall_seconds\":6900,\"execution_enabled\":true,\"training_permitted\":true,\"local_fresh_data_generation\":false,\"local_neural_execution\":false,\"private_test_labels_in_trainer\":false,\"selection\":\"unchanged_validation_only_depth_selection_v3\",\"policies\":\"unchanged_v3\",\"loss\":\"unchanged_v3\",\"optimizer\":\"unchanged_v3\",\"decoder\":\"unchanged_v3\",\"arms\":[\"cas_untrained\",\"cas_trained\",\"generic_untrained\",\"generic_trained\",\"rule\"],\"automatic_retry\":false,\"automatic_promotion\":false,\"source_release_accepted\":false}")
+PREREQUISITE_REVIEW_PATH = PILOT+'/records/contrast_recovery_v6_review_001/run_001/recovery_stored_review.json'
+PREREQUISITE_REVIEW_SHA256 = '5396e0ab263fa435eefd2b8925382ce802b7af7c8d1c4dae5702d51435349ac3'
+PREREQUISITE_REVIEW_BYTES = 5685892
+PREREQUISITE_SOURCE_SHA = 'cbf13795202094865744f7c0b5efa234451f9208'
+PREREQUISITE_SOURCE_ARCHIVE_SHA256 = '54101904990bf3945dc1242e80982f05a47853a4fce56f2d9c88e9c9bb6f3bb7'
+PREREQUISITE_PACKET_SHA256 = '4b5022d57c6d6f446463284dd79c7a9b3bf588754314b9110029a39827c6a57c'
+PREREQUISITE_JOB = 'cas-meta2-20260906082659-383a339d'
 PACKAGES = ('CAS_META_2_COMPOSITION','CAS_META_1_LEARNED_SELECTION',
     'CASFORMER_v0_3_META_LOGIC_WIP','CAS_CJT_TRANSFORMER_v0_2','CASFORMER_v0_1')
 EXPANDED_LIMIT = 512*1024**2
@@ -249,6 +256,36 @@ def check_runtime_source(raw, mapping):
     return source
 
 
+def check_prerequisite_review(raw):
+    # Authenticate the exact larger review before using its dedicated decoder
+    # bound. The ordinary specification/source-pin decoder keeps its 4 MiB cap.
+    require(type(raw) is bytes and len(raw)==PREREQUISITE_REVIEW_BYTES
+        and sha256(raw).hexdigest()==PREREQUISITE_REVIEW_SHA256,
+        'V7_PREREQUISITE_REVIEW_BYTES_CHANGED')
+    review=decode(raw,max_bytes=PREREQUISITE_REVIEW_BYTES)
+    fixed={'schema':'cas-meta2-contrast-recovery-stored-review/6',
+        'status':'RECOVERY_STORED_REVIEW_PASSED','completed':True,'errors':[],
+        'source_sha':PREREQUISITE_SOURCE_SHA,'source_archive_sha256':PREREQUISITE_SOURCE_ARCHIVE_SHA256,
+        'runtime_manifest_sha256':RECOVERY_MANIFEST_SHA256,'packet_sha256':PREREQUISITE_PACKET_SHA256,
+        'job':PREREQUISITE_JOB,'original_packet_sha256':PACKET_SHA256,'original_job':ORIGINAL_JOB,
+        'admission_sha256':ADMISSION_SHA256,'sealed_predictions_unchanged':True,
+        'sources_and_extractions_rechecked_at_end':True,'original_campaign_completed':False,
+        'fresh_test':False,'training_performed':False,'neural_execution_during_audit':False,
+        'provider_calls_during_audit':False,'checkpoint_tensors_loaded':False,'automatic_promotion':False}
+    require(type(review) is dict and all(type(review.get(name)) is type(value)
+        and review.get(name)==value for name,value in fixed.items()),'V7_PREREQUISITE_REVIEW_IDENTITY')
+    outcomes=review.get('outcomes',{})
+    require(outcomes.get('references_checked')==72 and outcomes.get('arms_checked')==360
+        and type(outcomes.get('cases')) is list and len(outcomes['cases'])==72,
+        'V7_PREREQUISITE_REVIEW_DENOMINATORS')
+    evidence=review.get('process_evidence',{})
+    require(evidence.get('gpu_gate',{}).get('tests')==2
+        and evidence.get('original_contract_gpu_gate',{}).get('passed')==4
+        and review.get('extraction',{}).get('all_member_bytes_verified_after_write') is True,
+        'V7_PREREQUISITE_REVIEW_GATES')
+    return review
+
+
 
 def launch_pins(source_pins_raw):
     result = {**pinned_source_map(source_pins_raw), **LAUNCH_PINS}
@@ -277,6 +314,8 @@ def make_launch_record(members, profile='prototype_training_v7'):
     mapping={name:sha256(raw).hexdigest() for name,raw in members.items()}
     require(all(mapping.get(name)==pin for name,pin in {**frozen,**pins}.items()),'V7_FROZEN_OR_PINNED_SOURCE_CHANGED')
     check_runtime_source(members[SOURCE_MANIFEST_PATH],mapping)
+    if PREREQUISITE_REVIEW_PATH is not None:
+        check_prerequisite_review(members[PREREQUISITE_REVIEW_PATH])
     validate_prototype_spec(members[SPEC_PATH])
     return {'profile':PROFILE_NAMES[0],'entrypoint':ENTRYPOINT,'spec_path':SPEC_PATH,'spec_sha256':mapping[SPEC_PATH]}
 
@@ -287,6 +326,7 @@ def prototype_record(mapping):
         'exclusion_inventory_sha256':FIXED_SPEC['exclusion_inventory_sha256'],'exclusion_count':8837,
         'original_training_append':256,'recovery_manifest_sha256':RECOVERY_MANIFEST_SHA256,
         'prerequisite_review_path':PREREQUISITE_REVIEW_PATH,'prerequisite_review_sha256':PREREQUISITE_REVIEW_SHA256,
+        'prerequisite_review_bytes':PREREQUISITE_REVIEW_BYTES if PREREQUISITE_REVIEW_PATH is not None else None,
         'source_input_count':len(mapping),'new_source_input_count':len(mapping)-538,
         'raw_v6_failure_packet_in_archive':False,'local_task_generation':False,'local_neural_execution':False}
 

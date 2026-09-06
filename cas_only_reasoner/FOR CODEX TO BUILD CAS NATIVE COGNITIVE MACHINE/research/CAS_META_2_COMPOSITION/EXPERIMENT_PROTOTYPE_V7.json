@@ -2,7 +2,7 @@
   "schema": "cas-meta2-prototype-experiment/7",
   "profile": "prototype_training_v7",
   "entrypoint": "cas_meta2.contrast_v7.campaign",
-  "registration_state": "PREPARATION_ONLY_GPU_AND_EVALUATION_GATES_PENDING",
+  "registration_state": "REGISTERED_WITH_REQUIRED_CURRENT_JOB_GPU_GATE",
   "purpose": "TRAIN_WITH_EXACT_ORIGINAL_256_PLUS_FRESH_BASE_CURRICULUM",
   "curriculum_seed": 2026092701,
   "curriculum": {
@@ -18,7 +18,7 @@
     "batch_size": 16,
     "prediction_batch_size": 16,
     "validation_interval": 10,
-    "max_seconds": 3600
+    "max_seconds": 3300
   },
   "base_train_count": 640,
   "original_train_append_count": 256,
@@ -53,16 +53,27 @@
   "original_tasks_training_only": true,
   "original_graphs_remain_in_fresh_exclusions": true,
   "gpu_gate": {
-    "status": "PENDING_PRODUCTION_V7_PIPELINE_SMOKE",
-    "test_file": null,
-    "expected_tests": null
+    "status": "REQUIRED_BEFORE_DATASET_AND_TRAINING",
+    "test_file": "tests/test_contrast_v7_train_gpu.py",
+    "expected_tests": 1
   },
   "native_evaluation": {
-    "status": "PENDING_VALIDATED_RECOVERY_WORKER",
-    "entrypoint": null
+    "status": "NARROW_RECOVERY_BOUNDARY_VALIDATED",
+    "entrypoint": "cas_meta2.contrast_v7.native_evaluation"
   },
-  "execution_enabled": false,
-  "training_permitted": false,
+  "prerequisite_recovery": {
+    "source_sha": "cbf13795202094865744f7c0b5efa234451f9208",
+    "runtime_manifest_sha256": "897c6a72c7411676c4ad80ac9734b3dbe7a7ac169951f58d2ab2fd6d387ecb37",
+    "job": "cas-meta2-20260906082659-383a339d",
+    "review_path": "records/contrast_recovery_v6_review_001/run_001/recovery_stored_review.json",
+    "review_sha256": "5396e0ab263fa435eefd2b8925382ce802b7af7c8d1c4dae5702d51435349ac3"
+  },
+  "gpu_gate_max_seconds": 450,
+  "dataset_max_seconds": 180,
+  "native_max_seconds": 2700,
+  "max_wall_seconds": 6900,
+  "execution_enabled": true,
+  "training_permitted": true,
   "local_fresh_data_generation": false,
   "local_neural_execution": false,
   "private_test_labels_in_trainer": false,

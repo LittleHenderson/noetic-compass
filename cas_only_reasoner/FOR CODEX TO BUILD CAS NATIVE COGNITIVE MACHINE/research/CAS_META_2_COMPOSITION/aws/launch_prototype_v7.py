@@ -183,7 +183,7 @@ def validate_approval(cap: str | None, plan: dict) -> None:
     fixed = {"schema_version":2,"approved_cap_usd_required":"400.00","owner_task_cap_usd":"400.00",
              "per_launch_reserved_cap_usd":"7.00","ancillary_reserved_usd":"1.00",
              "account_id":"807562639912","region":"us-west-2","instance_type":"g7.2xlarge",
-             "instance_count":1,"gpu_count":1,"runtime_seconds_max":7200,"compute_seconds_max":6600,
+             "instance_count":1,"gpu_count":1,"runtime_seconds_max":7800,"compute_seconds_max":7200,
              "automatic_retries":0,"ebs_gb":75,"ami_id":"ami-0fbbd0facbc9e3cff","ebs_type":"gp3",
              "on_demand_hourly_usd_max":"2.52","required_gpu_name_contains":"RTX PRO 4500",
              "ebs_encrypted":True,"delete_on_termination":True,"artifact_bytes_max":1073741824,
@@ -195,8 +195,8 @@ def validate_approval(cap: str | None, plan: dict) -> None:
              "inbound_rules":[],"egress_tcp_ports":[443]}
     if any(type(plan.get(k)) is not type(v) or plan.get(k) != v for k,v in fixed.items()):
         raise LaunchRefused("UNREGISTERED_RESOURCE_PLAN")
-    phases = {"gpu_gate_max_seconds":300,"dataset_max_seconds":180,"training_max_seconds":3300,
-              "native_max_seconds":2400,"parent_max_seconds":6300,"prerequisite_recovery_review_required":True}
+    phases = {"gpu_gate_max_seconds":450,"dataset_max_seconds":180,"training_max_seconds":3300,
+              "native_max_seconds":2700,"parent_max_seconds":6900,"prerequisite_recovery_review_required":True}
     if any(type(plan.get(k)) is not type(v) or plan.get(k) != v for k,v in phases.items()) or type(plan.get("launch_enabled")) is not bool:
         raise LaunchRefused("V7_UNREGISTERED_PHASE_ALLOCATION")
     budget.validate_plan(plan,plan["per_launch_reserved_cap_usd"])
@@ -530,14 +530,27 @@ def publish_progress(log_path, status):
     try:
         def tail(path, count):
             try:
+                # Read only regular public progress files, never link targets.
+                if not path.is_file() or any(p.is_symlink() or getattr(p,'is_junction',lambda:False)()
+                                             for p in (path,*path.parents)):
+                    return b''
                 with path.open('rb') as stream:
                     stream.seek(max(0,path.stat().st_size-count))
                     return stream.read(count)
             except OSError: return b''
+        campaign = out/'campaign'
+        stage_log = log_path if log_path in (out/'campaign.log',out/'gpu_contract_tests.log') else None
         header = json.dumps({'job':CONFIG['job'],'utc':datetime.now(timezone.utc).isoformat(),
-                             'stage_log':log_path.name,**status},sort_keys=True).encode()
-        progress = tail(out/'campaign'/'progress.json',8192)
-        content = header+b'\nCAMPAIGN STATUS\n'+progress+b'\nCURRENT STAGE LOG TAIL\n'+tail(log_path,49152)
+                             'stage_log':stage_log.name if stage_log else None,**status},sort_keys=True).encode()
+        if len(header) > 2048:
+            header = json.dumps({'job':CONFIG['job'],'utc':datetime.now(timezone.utc).isoformat(),
+                'stage_log':stage_log.name if stage_log else None,'oversized_status_omitted':True},sort_keys=True).encode()
+        # These are the v7 writer paths. No dataset, private target, prediction,
+        # checkpoint or native database is opened by this progress publisher.
+        content = (header+b'\nCAMPAIGN STATUS\n'+tail(campaign/'campaign_status.json',4096)
+            +b'\nTRAINING EPOCH METRICS TAIL\n'+tail(campaign/'processes/training/stdout.txt',24576)
+            +b'\nNATIVE EVALUATION PROGRESS\n'+tail(campaign/'native/progress.json',8192)
+            +b'\nCURRENT STAGE LOG TAIL\n'+(tail(stage_log,24576) if stage_log else b''))
         target = root/'live-progress.log'
         target.write_bytes(content[:65536])
         subprocess.run(['aws','s3','cp',str(target),'s3://'+CONFIG['bucket']+'/results/bootstrap.log',
@@ -608,7 +621,7 @@ try:
     run([str(py),'-m','pip','install','--disable-pip-version-check','-r',str(package/m['dependency_lock']),'--report',str(out/'dependency_install.json')],timeout=max(1,deadline-time.time()-240))
     run([str(py),'-m','pip','install','--no-deps',*[str(package/w) for w in m['wheel_paths']],'--report',str(out/'frozen_wheel_install.json')],timeout=max(1,deadline-time.time()-240))
     # One shared window starts before the first actual CUDA probe. Installation
-    # is outside this compute window but inside the hard 7200-second lifetime.
+    # is outside this compute window but inside the hard 7800-second lifetime.
     compute_started = time.time()
     compute_deadline = min(deadline-180, compute_started+CONFIG['compute_seconds_max'])
     (out/'compute_window.json').write_text(json.dumps({'started_epoch':compute_started,
@@ -646,15 +659,15 @@ try:
     env['CAS_META2_RUN_GPU_TESTS'] = '1'
     # The source-bound v7 coordinator checks the actual one-test native smoke,
     # then the fixed campaign owns all remaining phase deadlines and processes.
-    if int(compute_deadline-time.time()) < 6300:
+    if int(compute_deadline-time.time()) < 6900:
         raise RuntimeError('V7_INSUFFICIENT_FULL_REGISTERED_PARENT_TIME')
     argv = [str(py),'-B',str(package/m['pilot_dir']/'aws/prototype_remote_v7.py'),
-        '--output',str(out/'campaign'),'--job',CONFIG['job'],'--max-wall-seconds','6300',
+        '--output',str(out/'campaign'),'--job',CONFIG['job'],'--max-wall-seconds','6900',
         '--launch-manifest',str(package/'launch_manifest.json'),
         '--launch-manifest-sha256',sha(package/'launch_manifest.json')]
     (out/'command.json').write_text(json.dumps(argv,indent=2))
     returncode = bounded_process(argv,out/'campaign.log',env=env,cwd=package/m['pilot_dir'],
-        seconds=6300,deadline=min(deadline,compute_deadline+120))
+        seconds=6900,deadline=min(deadline,compute_deadline+120))
     if returncode == 0:
         coordinator = json.loads((out/'prototype_coordinator_receipt.json').read_text())
         if (coordinator.get('schema') != 'cas-meta2-prototype-coordinator/7'

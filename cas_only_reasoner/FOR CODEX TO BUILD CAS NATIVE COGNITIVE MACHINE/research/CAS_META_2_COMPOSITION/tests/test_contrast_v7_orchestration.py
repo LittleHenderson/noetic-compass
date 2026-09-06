@@ -175,8 +175,8 @@ class OrchestrationTests(unittest.TestCase):
                 drift=None, setup_overhead=0, collection_failure=False, exit_mutation=None):
         """Only scheduling is real here; receipts and gate outcomes are synthetic."""
         spec = deepcopy(self.spec)
-        spec.update(max_wall_seconds=6300, gpu_gate_max_seconds=300,
-                    dataset_max_seconds=180, native_max_seconds=2400)
+        spec.update(max_wall_seconds=6900, gpu_gate_max_seconds=450,
+                    dataset_max_seconds=180, native_max_seconds=2700)
         spec["training"]["max_seconds"] = 3300
         self.spec = spec
         events, elapsed, processes = [], [1000.0], {}
@@ -240,6 +240,7 @@ class OrchestrationTests(unittest.TestCase):
                 splits["train"]["tasks"] = 640
             return {"schema": q.SCHEMA, "completed": True, "job": self.job, "pid": pid,
                 "actual_splits": splits, "optimizer_steps_per_family": 11200,
+                "imported_train_examples": 256,
                 "manifest_sha256": q.checks.file_hash(self.output / "dataset/manifest.json"),
                 "source_pins_sha256": spec["source_pins_sha256"],
                 "public_loader_sha256": spec["public_loader_sha256"],
@@ -251,7 +252,7 @@ class OrchestrationTests(unittest.TestCase):
         def launch(command, directory, deadline, *, environment):
             name = Path(directory).name
             events.append(("process", name, list(command), deadline, elapsed[0]))
-            self.assertLessEqual(deadline, 7270)
+            self.assertLessEqual(deadline, 7870)
             elapsed[0] += duration[name]
             if fail_phase == name:
                 raise RuntimeError("SYNTHETIC_PHASE_FAILURE:" + name)
@@ -326,14 +327,14 @@ class OrchestrationTests(unittest.TestCase):
         self.assertFalse(result["training_performed"])
 
     def test_phase_deadlines_fit_registered_time_allocation(self):
-        events, _, _, _ = self.harness(durations={"gpu_gate": 300, "dataset": 180})
+        events, _, _, _ = self.harness(durations={"gpu_gate": 450, "dataset": 180}, setup_overhead=150)
         result = q.run(self.output, job=self.job)
         self.assertTrue(result["completed"])
         calls = [e for e in events if e[0] == "process"]
-        self.assertEqual([e[3] - e[4] for e in calls], [300, 180, 3315, 2415])
+        self.assertEqual([e[3] - e[4] for e in calls], [450, 180, 3315, 2715])
 
-    def test_setup_overhead_past_480_seconds_stops_before_training(self):
-        events, _, _, _ = self.harness(durations={"gpu_gate": 300, "dataset": 180}, setup_overhead=1)
+    def test_setup_overhead_past_780_seconds_stops_before_training(self):
+        events, _, _, _ = self.harness(durations={"gpu_gate": 450, "dataset": 180}, setup_overhead=151)
         result = q.run(self.output, job=self.job)
         self.assertFalse(result["completed"])
         self.assertIn("INSUFFICIENT_TRAIN_AND_NATIVE", result["failure"]["message"])
