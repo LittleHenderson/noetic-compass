@@ -1,0 +1,10 @@
+{
+  "auditor_sha256": "42844666a5fe43eb86af62360a1c1ba4c15131aad0d594f99fdc6f804b488c33",
+  "completed": true,
+  "inspection_receipt_sha256": "8d6fbb1e24a06f12fec70c47f4b6fe3d6929140346101749ebe5be86e7635148",
+  "neural_execution_performed": false,
+  "provider_calls": 0,
+  "script_sha256": "f2946a18a99c0d0a25c88506a5cf6138a3e9e02872bc93219388ba89f4bd037e",
+  "status": "FAILED_EXPERIMENT_REFUSED_FOR_STORED_AUDIT",
+  "stored_outcome_audit_performed": false
+}
