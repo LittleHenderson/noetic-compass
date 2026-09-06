@@ -1,0 +1,199 @@
+[
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "rev-parse",
+      "--show-toplevel"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "1b19251d39754acedf3ba81eff986f8bd13a4803a5d9a1241c75434d93173f6d"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+      "rev-parse",
+      "246f490d7d0dad2c18cc14a125b07e296ed74a3c^{commit}"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "7c6fa012aa76d6470e67e0a477855792a1d56c72a45165f655c5aa8aa8cd29e7"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+      "cat-file",
+      "blob",
+      "246f490d7d0dad2c18cc14a125b07e296ed74a3c:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_prototype_v7_002/run.py"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "5717813217be2fac2ce89a300d173df3d924ba4f61a309a889cc0636260aea61"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+      "cat-file",
+      "blob",
+      "246f490d7d0dad2c18cc14a125b07e296ed74a3c:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_prototype_v7_002/README.md"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "8545098c0497cfd7e189a804e98dcbd326d583234a478a35e42bda67e44f1263"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "7c6fa012aa76d6470e67e0a477855792a1d56c72a45165f655c5aa8aa8cd29e7"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "status",
+      "--porcelain",
+      "--untracked-files=all"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "cat-file",
+      "--batch"
+    ],
+    "requested_blob_paths": [
+      "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/validate_local_v3.py"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": "d8c0f833db18541bd1f4777320547c955c41babadb7d2554ef147b58a3102d98",
+    "stdout_sha256": "d52f4a71d555c54e287bdf8e167d622dab225ef0e2e5c0f04850b299b0294928"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "cat-file",
+      "--batch"
+    ],
+    "requested_blob_paths": [
+      "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/experiment_profiles_prototype_v7.py"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": "fb8a7ea3ceefcaf622aaa70768981d329b253f7363506eb414cb3b9fd8e5b687",
+    "stdout_sha256": "ff10ac8d79a00cac9a2b345a2ee734fa3d6f0b9140de1595ff970fc071d6fad7"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "cat-file",
+      "--batch"
+    ],
+    "requested_blob_paths": [
+      "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/build_launch_bundle_prototype_v7.py"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": "1496718884a44b46ed274279eae5ba2ebd3de59381194e4b60c241c0057dd3c6",
+    "stdout_sha256": "979b4311fb9aa7e75fdc4f5ff2435e40bb370fd892900a31f915a32fea38e35e"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "rev-parse",
+      "HEAD"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "7c6fa012aa76d6470e67e0a477855792a1d56c72a45165f655c5aa8aa8cd29e7"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "status",
+      "--porcelain",
+      "--untracked-files=no"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "cat-file",
+      "--batch"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": "fa746f37d7330935619730cce1ba987aaab812562a4f7441d04154a05e63fbd4",
+    "stdout_sha256": "fe984b474db165af42fa641bbaa46e83d6a925e6eb8160442824e8fd2fcba403"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "status",
+      "--porcelain",
+      "--untracked-files=all"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "git",
+      "-C",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+      "status",
+      "--porcelain",
+      "--untracked-files=no"
+    ],
+    "returncode": 0,
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdin_sha256": null,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

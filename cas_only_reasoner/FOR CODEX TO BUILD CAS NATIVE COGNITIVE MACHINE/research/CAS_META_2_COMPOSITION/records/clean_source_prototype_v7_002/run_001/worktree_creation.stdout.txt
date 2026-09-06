@@ -1,0 +1,1 @@
+HEAD is now at 246f490d Prepare exact-original v7 curriculum campaign with disabled launch gates

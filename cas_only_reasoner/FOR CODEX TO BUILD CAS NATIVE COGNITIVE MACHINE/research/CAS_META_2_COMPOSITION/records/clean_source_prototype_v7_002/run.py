@@ -221,7 +221,7 @@ class Audit:
         for name in ("records/contrast_v7_bridge_checks_001/run.py",
                      "records/contrast_v7_bridge_checks_001/source_pins.json",
                      "records/contrast_v7_exclusions_001/build.py", "records/contrast_v7_exclusions_001/test_build.py",
-                     "records/contrast_v7_exclusions_001/inventory.json", INTEGRATION + "/adapter.py",
+                     "records/contrast_v6_exclusions_001/inventory.json", INTEGRATION + "/adapter.py",
                      INTEGRATION + "/public_data.py", INTEGRATION + "/test_public_data.py",
                      INTEGRATION + "/test_adapter.py", INTEGRATION + "/run_checks.py"):
             add("known_portable_inputs", self.root / name)

@@ -1,0 +1,83 @@
+{
+  "all_checked_files": null,
+  "boundary": "Clean committed source and guarded pure checks in an existing environment. Old diagnostic fixtures and synthetic/mocked execution are permitted; no fresh registered tasks, models, GPU, providers, packet reopening, installation or learning claim.",
+  "closed_v7_source_files": null,
+  "completed": false,
+  "core_autocrlf_on_checkout": false,
+  "errors": [
+    {
+      "message": "REQUIRED_INPUT_NOT_COMMITTED:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/contrast_v7_exclusions_001/inventory.json",
+      "stage": "audit",
+      "traceback": "Traceback (most recent call last):\n  File \"C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\run.py\", line 331, in main\n    before = audit.snapshot()\n  File \"C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\run.py\", line 235, in snapshot\n    blobs = self.blobs(required)\n  File \"C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\run.py\", line 104, in blobs\n    require(len(header) == 3 and header[1] == \"blob\", \"REQUIRED_INPUT_NOT_COMMITTED:\" + name)\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\run.py\", line 42, in require\n    raise ValueError(reason)\nValueError: REQUIRED_INPUT_NOT_COMMITTED:cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/contrast_v7_exclusions_001/inventory.json\n",
+      "type": "ValueError"
+    }
+  ],
+  "existing_environment": {
+    "distribution_metadata_only": {
+      "boto3": "1.43.87",
+      "botocore": "1.43.87",
+      "jsonschema": "4.26.0",
+      "pytest": "9.0.2",
+      "torch": "2.11.0"
+    },
+    "executable": "C:\\Python314\\python.exe",
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "final_git_status": "",
+  "final_tracked_git_status": "",
+  "fresh_environment_or_install": false,
+  "git_blob_or_checkout_mismatches": {
+    "after": null,
+    "before": null
+  },
+  "initial_git_status": "",
+  "neural_execution": false,
+  "output": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\run_001",
+  "package": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "paid_execution": false,
+  "processes": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+        "-c",
+        "core.autocrlf=false",
+        "worktree",
+        "add",
+        "--detach",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d",
+        "246f490d7d0dad2c18cc14a125b07e296ed74a3c"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+      "finished_utc": "2026-09-06T09:03:56.074529+00:00",
+      "name": "worktree_creation",
+      "returncode": 0,
+      "started_utc": "2026-09-06T09:03:51.263937+00:00",
+      "stderr_sha256": "757de9e16a3e1cc8a8f70055239e5d1a55358def1950b9733c29fc22c5a28179",
+      "stdout_sha256": "ca2cc9650a327e9509660c4ee283464c1e0d1ebc350e13bf6372689ec26f5c83",
+      "termination_boundary": "subprocess.run kills and waits for its direct child on timeout; independently detached grandchildren are not covered.",
+      "timed_out": false,
+      "timeout_seconds": 300,
+      "wall_seconds": 4.810594499998842
+    }
+  ],
+  "protected_files": null,
+  "provider_calls": false,
+  "registered_task_generation": false,
+  "runner_command": [
+    "C:\\Python314\\python.exe",
+    "records/clean_source_prototype_v7_002/run.py",
+    "--source",
+    "246f490d7d0dad2c18cc14a125b07e296ed74a3c",
+    "--output",
+    "records/clean_source_prototype_v7_002/run_001"
+  ],
+  "schema": "cas-meta2-clean-prototype-source-audit/7",
+  "source_sha": "246f490d7d0dad2c18cc14a125b07e296ed74a3c",
+  "source_unchanged": false,
+  "status": "CLEAN_PROTOTYPE_SOURCE_CHECKS_FAILED",
+  "training_or_heldout_result_claim": false,
+  "wall_seconds": 11.845308699999805,
+  "worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-246f490d"
+}
