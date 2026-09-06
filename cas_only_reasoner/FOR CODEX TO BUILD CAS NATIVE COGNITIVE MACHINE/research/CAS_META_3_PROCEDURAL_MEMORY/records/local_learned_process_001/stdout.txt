@@ -1,0 +1,45 @@
+........................................................................ [ 11%]
+........................................................................ [ 22%]
+........................................................F............... [ 34%]
+........................................................................ [ 45%]
+........................................................................ [ 57%]
+........................................................................ [ 68%]
+........................................................................ [ 79%]
+........................................................................ [ 91%]
+.......................................................                  [100%]
+================================== FAILURES ===================================
+__________ test_pair_refuses_local_execution_before_source_or_files ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000026840DB5860>
+
+    def test_pair_refuses_local_execution_before_source_or_files(monkeypatch):
+        monkeypatch.delenv('CAS_META3_RUN_GPU_DEMO', raising=False)
+        with pytest.raises(ValueError, match='META3_EXPLICIT_AWS_GPU_JOB_REQUIRED'):
+>           process.run_process_pair(writer_request_path='absent', writer_request_sha256='0'*64,
+                reader_request={'job': 'absent'}, process_output='absent', expected_source_identity={})
+
+tests\test_learned_process.py:39: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta3\learned_process.py:37: in run_process_pair
+    reuse.native_support.aws_guard(reader_request.get('job'))
+cas_meta3\native_demo.py:104: in aws_guard
+    require(os.environ.get("CAS_META3_RUN_GPU_DEMO") == "1"
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'META3_EXPLICIT_AWS_GPU_JOB_REQUIRED'
+
+    def require(condition, code):
+        if not condition:
+>           raise NativeDemoError(code)
+E           cas_meta3.native_demo.NativeDemoError: META3_EXPLICIT_AWS_GPU_JOB_REQUIRED
+
+cas_meta3\native_demo.py:52: NativeDemoError
+============================== warnings summary ===============================
+tests/test_packet_inspection.py::test_duplicate_or_case_alias_zip_is_rejected[same]
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'same'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_learned_process.py::test_pair_refuses_local_execution_before_source_or_files
+1 failed, 630 passed, 1 warning in 53.86s
