@@ -1,0 +1,47 @@
+{
+  "after": {
+    "aws/launch_native_failure_inspection_v8.py": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6",
+    "aws/native_failure_inspection_v8.py": "18b09e310be352f0d1013584ca95b36b6c06c56eda9c30c5e0874ab02f3232d3",
+    "tests/test_launch_native_failure_inspection_v8.py": "305ee38e0a079bd9f8f23d47bfe38585037edfd078ea1af5c1411ca57c6e8028",
+    "tests/test_native_failure_inspection_v8.py": "92e943994a41120dba872aae79d1bfc5837c09aaec39f07a09204ef9c4e063b0",
+    "tools/check_native_failure_inspection_v8.py": "7235d8f773b6db99779f1526553bf150a2e864102765b988919e8b1bc42c98f2"
+  },
+  "before": {
+    "aws/launch_native_failure_inspection_v8.py": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6",
+    "aws/native_failure_inspection_v8.py": "18b09e310be352f0d1013584ca95b36b6c06c56eda9c30c5e0874ab02f3232d3",
+    "tests/test_launch_native_failure_inspection_v8.py": "305ee38e0a079bd9f8f23d47bfe38585037edfd078ea1af5c1411ca57c6e8028",
+    "tests/test_native_failure_inspection_v8.py": "92e943994a41120dba872aae79d1bfc5837c09aaec39f07a09204ef9c4e063b0",
+    "tools/check_native_failure_inspection_v8.py": "7235d8f773b6db99779f1526553bf150a2e864102765b988919e8b1bc42c98f2"
+  },
+  "boundary": "Fake SQL/provider objects and byte-only ZIP checks. No SQLite, model, network, reservation or paid execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_native_failure_inspection_v8.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\checks_001",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-06T16:22:49.576298+00:00",
+  "ledger_after": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c",
+  "ledger_before": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 264,
+      "sha256": "ccc00b55b3108c1cb0513bd87b50f8ad859079dd09e80151526a3ac1910dd315"
+    }
+  },
+  "pid": 56992,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-native-inspection-pure-tests/8",
+  "started_utc": "2026-09-06T16:22:45.396689+00:00",
+  "unchanged": true,
+  "wall_seconds": 4.179588799997873
+}
