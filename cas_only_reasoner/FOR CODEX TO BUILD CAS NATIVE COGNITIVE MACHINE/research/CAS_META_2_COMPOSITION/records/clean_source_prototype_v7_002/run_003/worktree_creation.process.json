@@ -1,0 +1,25 @@
+{
+  "command": [
+    "git",
+    "-C",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+    "-c",
+    "core.autocrlf=false",
+    "worktree",
+    "add",
+    "--detach",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-42f91647",
+    "42f9164754312f12850d9b8789c062fa7fb8069f"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+  "finished_utc": "2026-09-06T09:32:08.586321+00:00",
+  "name": "worktree_creation",
+  "returncode": 0,
+  "started_utc": "2026-09-06T09:32:02.113923+00:00",
+  "stderr_sha256": "1a60d3a111ebfe8c2524087b85c02bd3f8937ae624180fab4af593d1e0fd4a68",
+  "stdout_sha256": "e37df110616d8270de5b8d7eff998e1cdbfe8f1d7b7a42e0a53629850f780899",
+  "termination_boundary": "subprocess.run kills and waits for its direct child on timeout; independently detached grandchildren are not covered.",
+  "timed_out": false,
+  "timeout_seconds": 300,
+  "wall_seconds": 6.472400200000266
+}

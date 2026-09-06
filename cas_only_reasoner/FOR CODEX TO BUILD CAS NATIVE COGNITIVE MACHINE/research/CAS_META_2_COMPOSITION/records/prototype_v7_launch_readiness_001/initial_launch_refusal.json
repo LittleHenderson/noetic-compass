@@ -1,0 +1,31 @@
+{
+  "schema": "cas-meta2-launch-command-correction/1",
+  "record_kind": "tool-observed local refusal; not a provider receipt",
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "command": [
+    "C:/Python314/python.exe",
+    "-B",
+    "aws/launch_prototype_v7.py",
+    "--execute",
+    "--archive",
+    "records/aws_prototype_v7_source_001",
+    "--sha256",
+    "f9bed05bd582e0796e2c4e78ff0f5174e5e1b6a3f447e5c3eab56ad002d473f9",
+    "--source-sha",
+    "42f9164754312f12850d9b8789c062fa7fb8069f",
+    "--approved-cap-usd",
+    "400.00",
+    "--receipt-dir",
+    "records/aws_prototype_v7_001"
+  ],
+  "observed_exit_code": 1,
+  "observed_stdout": "{\"status\": \"LAUNCH_REFUSED\", \"reason\": \"EXPLICIT_SUBNET_REQUIRED\"}\r\n",
+  "job_created": false,
+  "budget_revision_after": 10,
+  "reserved_usd_after": "71.00",
+  "remaining_unreserved_usd_after": "329.00",
+  "correction": "Supply the previously used explicit subnet-0eb3ca4bf5ca98f24. The frozen launcher checks its current provider state before creating a job.",
+  "prior_provider_evidence": "records/aws_recovery_v6_observation_001/status_20260906T091256394314.json",
+  "source_changed": false,
+  "paid_gpu_retry": false
+}

@@ -4,6 +4,8 @@ The recovery evidence passed its independent offline review. The learning result
 
 This is the recovered v6 experiment only. It does not replace the separate earlier result of CAS 0/72 versus generic 12/72. The original v6 campaign remains a failed run; this separate recovery reused its saved predictions without retraining, changing actions, or claiming a fresh test.
 
+The original v6 dataset contained **640 base training records, 96 validation records, and 72 test variants**. Those 640 records **did not include the literal original 256 practice records**. Its checked dataset manifest is `5d5f07f4237834e0b4ffa4854f0352ea667bf288bc4f1df64f9ee56d53e5bc8d` (seed `2026092601`). The separate v7 plan appends those exact 256 records to a new 640-record base, giving **896 training records**, while keeping 96 validation records and 72 test variants separate. No completed v7 result is claimed here.
+
 ## Verified task scores
 
 | Test group | Cases | CAS before → after | Generic before → after | Rule |
@@ -89,4 +91,3 @@ Process receipt SHA256: `b06af16e55472390100802875a7fbecb1faf9083898ebc7598cb4c6
 - Failure-admission receipt: `d479c90f711d417f2f585b87a0b746e250db8db12029df1586a4fbabf3b82420`.
 
 This summary is derived from that completed receipt. It does not change the receipt, checker, frozen source, packet, or prior findings.
-

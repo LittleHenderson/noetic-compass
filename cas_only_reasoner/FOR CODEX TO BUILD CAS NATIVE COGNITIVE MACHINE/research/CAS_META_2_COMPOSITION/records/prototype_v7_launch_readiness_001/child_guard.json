@@ -1,0 +1,7 @@
+{
+  "pid": 58180,
+  "forbidden_attempts": [],
+  "forbidden_modules_loaded": [],
+  "provider_and_neural_imports_blocked": true,
+  "network_and_subprocess_blocked": true
+}

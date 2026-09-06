@@ -1,0 +1,1 @@
+HEAD is now at 42f91647 Freeze exact-original v7 composition experiment with bounded GPU launch
