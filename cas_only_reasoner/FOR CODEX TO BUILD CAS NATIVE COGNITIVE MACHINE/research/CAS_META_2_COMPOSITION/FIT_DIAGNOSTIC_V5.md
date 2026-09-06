@@ -41,11 +41,24 @@ and eight GPU modules skipped (`records/local_fit_diagnostic_v5_001`). All
 123 captured source files and 316 protected baseline files stayed unchanged.
 The real-cohort check also matched all 24 IDs to the recounted old probe
 (`records/fit_input_check_v5_001`). These checks are separate from
-GPU verification. The cloud launcher, GPU tests and actual fit measurements
-are not yet complete. Do not use the older `learning_v3` or `decoder_ablation_v4`
-profile to silently run this different experiment.
+GPU verification. The complete local suite for the coordinator, launcher and
+profile passed 1,324 test functions and 178 subtests, with no failures and
+nine GPU modules skipped (`records/local_fit_launch_v5_001`). All 132 captured
+source files and 316 protected baseline files remained unchanged. Two
+CUDA-only diagnostic checks are implemented but not yet cloud-executed.
+Do not use the older `learning_v3` or `decoder_ablation_v4` profile to run
+this different experiment.
 
-Run the module only through its future source-bound fit profile. Its command
+The source-bound fit launcher is `aws/launch_fit_v5.py`; the builder is
+`tools/build_launch_bundle_fit_v5.py`. They keep the existing $7 per-launch
+reservation, $400 total cap, one Blackwell instance, two-hour termination
+deadline, no automatic retry and owned-resource cleanup. The fit parent is
+limited to 3,600 seconds and its training worker to 2,700 seconds. Local
+contracts check the shared budget/termination/collection functions against
+the existing launcher without changing their bodies. Live capacity and
+source/archive identity must still be checked before any launch.
+
+Run the module only through this source-bound fit profile. Its command
 interface is `python -B -m cas_meta2.fit_diagnostic_v5 --training-file PATH
 --output NEW_DIRECTORY --job VERIFIED_JOB --max-seconds 2700`.
 
