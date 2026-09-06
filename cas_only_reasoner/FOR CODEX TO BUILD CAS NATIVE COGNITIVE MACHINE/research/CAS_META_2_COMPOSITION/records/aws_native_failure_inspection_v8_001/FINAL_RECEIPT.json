@@ -1,0 +1,280 @@
+{
+  "schema": "cas-meta2-native-failure-inspection-final/8",
+  "status": "SAVED_NATIVE_FAILURE_IDENTIFIED",
+  "created_utc": "2026-09-06 16:33:03 UTC",
+  "job": "cas-meta2-20260906162339-56837284",
+  "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "registration_commit": "4a5ed0ca17593c6b78c00767e757b4aa30eeaa74",
+  "original_job": "cas-meta2-20260906155525-195f5ad8",
+  "original_qualification_remains_refused": true,
+  "parent_exit_code": 0,
+  "analysis_exit_code": 0,
+  "provider_check_exit_code": 0,
+  "actual_work": {
+    "aws_read_only_sqlite_export": true,
+    "local_sqlite_connection": false,
+    "native_execution": false,
+    "model_execution": false,
+    "training": false,
+    "repair_attempted": false
+  },
+  "saved_image": {
+    "tables": 20,
+    "schema_objects": 56,
+    "rows": 88,
+    "stored_committed_ticks": 6,
+    "accepted_returnable_ticks": 5,
+    "first_nonreturnable_tick": 6,
+    "cjt": "R",
+    "input_from_cjt": "C",
+    "expected_label": "L1",
+    "decoded_label": "L0",
+    "verifier_disposition": "REPAIR",
+    "reason": "SEMANTIC_OFF_AXIS",
+    "published_effect_count": 0,
+    "repair_id": "repair-3295d0e50cc47ac2f23bb183",
+    "repair_axis": "WISDOM",
+    "repair_axis_is_default_not_proven_readiness_shortage": true,
+    "readiness_all_sufficient": true,
+    "full_unexecuted_subgoal_cause_captured": false,
+    "outer_caller_stack_captured": false,
+    "checked_payload_hashes": 73,
+    "checked_public_payload_hashes": 6,
+    "checked_opaque_blobs": 13
+  },
+  "conclusions": {
+    "output_mismatch_confirmed": true,
+    "generated_wrapper_lacks_repair_continuation": true,
+    "underlying_input_vs_bias_cause_isolated": false,
+    "repair_success_proven": false,
+    "learning_or_generalization_claim": false,
+    "accepted_model_and_executor_unchanged": true
+  },
+  "cleanup": {
+    "status": "POST_RUN_CLEANUP_CONFIRMED",
+    "checks_passed": 15,
+    "getter_calls": 13,
+    "terminated_instance": "i-048a3cc3dfddf75e6",
+    "termination_confirmed_utc": "2026-09-06T16:30:36.302749+00:00",
+    "remaining_job_volumes": 0,
+    "temporary_access_resources_removed": true,
+    "inputs_removed": true,
+    "result_objects_retained": 3,
+    "result_expiry_days": 7
+  },
+  "budget": {
+    "cap_usd": "400.00",
+    "ledger_revision": 15,
+    "reserved_for_job_usd": "4.00",
+    "total_reserved_usd": "94.00",
+    "remaining_unreserved_usd": "306.00",
+    "estimated_ec2_usd": "0.2665710089",
+    "ec2_interval_seconds": "380.815727",
+    "hourly_usd": "2.52",
+    "invoice": false,
+    "other_aws_charges_included": false,
+    "no_refund": true
+  },
+  "pure_tests": {
+    "passed": 153,
+    "seconds": 2.48,
+    "sql_and_provider_objects": "fake"
+  },
+  "earlier_results_preserved": {
+    "held_out_cas_composition": "0/72",
+    "familiar_program": "24/24"
+  },
+  "next_step": "Separately bounded AWS candidate repair attempt: exact subgoal identity checked, C repair then R resume with original repair ID and L1 target. Do not claim recovery of missing outer stack. Only after a successful repair, test a new full-task wrapper with explicit extra-tick, permission, and budget accounting.",
+  "files": [
+    {
+      "path": "aws/launch_native_failure_inspection_v8.py",
+      "bytes": 25768,
+      "sha256": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6"
+    },
+    {
+      "path": "aws/native_failure_inspection_v8.py",
+      "bytes": 19634,
+      "sha256": "18b09e310be352f0d1013584ca95b36b6c06c56eda9c30c5e0874ab02f3232d3"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/analysis_001/analysis.json",
+      "bytes": 16949,
+      "sha256": "770dae90d25fec8099bb167b05e5b454469b288b139f7df416f65ff313bd02ec"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/analysis_001/command_receipt.json",
+      "bytes": 2317,
+      "sha256": "e801a80c7f541dc553a4a4137d7c902cc6fcc3486773cb577a470e7aecd0b689"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/analysis_001/REPORT.md",
+      "bytes": 1335,
+      "sha256": "67c9617f85f2de75483aa5817ad75797b448117169df895bc4c9890a67d9611c"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/analysis_001/selected_records.json",
+      "bytes": 730473,
+      "sha256": "b1d09fcba3a254f2a88d4d933460a7dc9c50a746a0d7c4ede155cfcf2cebb9f5"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/analyze_export.py",
+      "bytes": 26635,
+      "sha256": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/checks_001/receipt.json",
+      "bytes": 3188,
+      "sha256": "3b3bff1763a552aff001897c67c1356ab059b1ac2fd13f8abbd7707ef90492e2"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/checks_001/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/checks_001/stdout.txt",
+      "bytes": 264,
+      "sha256": "ccc00b55b3108c1cb0513bd87b50f8ad859079dd09e80151526a3ac1910dd315"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/launch_receipt.json",
+      "bytes": 50468,
+      "sha256": "60c51946d2ed334bfce40588ab22e3255f9e73fe2af40375ed063b5e1a90b987"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/bootstrap.log",
+      "bytes": 471,
+      "sha256": "6a979b8a2974034bdd26808178f75969210182ded2891363afadb9cc18a0217d"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/cloud_artifacts.zip",
+      "bytes": 127026,
+      "sha256": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/launch_receipt.json",
+      "bytes": 49025,
+      "sha256": "dfa9d36cb480bcf6b987ffbd6805aee3aa36b1f9eb44b69ccbd73beb1603c9cc"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/launch_request.json",
+      "bytes": 3824,
+      "sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/ledger_snapshot.json",
+      "bytes": 39923,
+      "sha256": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/reservation_receipt.json",
+      "bytes": 2240,
+      "sha256": "e38064bcdb5074e9468a9ce0f60e1b6498c305d2c4b9f687380fcf004346fcdd"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/worker_plan.json",
+      "bytes": 2047,
+      "sha256": "4b30978655ce99867b86f85d7eeab1575b9e6d735f259aa6a37084e886be0446"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/post_run_provider_read.py",
+      "bytes": 12596,
+      "sha256": "421955fcdd55304d97b1cf154d2a5178f9f4c5a1209e4325a84f8d2a92eac249"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/provider_check_001/receipt.json",
+      "bytes": 33242,
+      "sha256": "13424d4e1c8300a4b0e89ce946cfdddac426b048a3929072db53267e2d37bd6c"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/README.md",
+      "bytes": 5566,
+      "sha256": "5c370f2ab587887123ddc9d24b98aa819d64c67de9c860f81f53cb5ad3ca4efe"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/register_launch.py",
+      "bytes": 3886,
+      "sha256": "ab264d68cde72775d001d6135d4603ba5925c9178ba0f4314872e4150ef04ce0"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/capture_parent.py",
+      "bytes": 4461,
+      "sha256": "2a930c66cbe0574deaf0781f924df15681d273ba8a35609250fc24d94071b982"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/launch_request.json",
+      "bytes": 3824,
+      "sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/ledger_observation.json",
+      "bytes": 38071,
+      "sha256": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/parent_process_completion.json",
+      "bytes": 2539,
+      "sha256": "1eba12c5d92fb5133f63a504777c396adfb343bf246608c5f12967f60fdb97de"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/parent_process_identity.json",
+      "bytes": 1396,
+      "sha256": "eb266a76c3001383b018e31908decd697d0fd94c4245a9b81e2e5a6de4335c3b"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/parent_process_start.json",
+      "bytes": 2133,
+      "sha256": "134657eda0c935179d3ab73e0eefa4e50b27d7c17dac9b52fce852cfbd86bd73"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/parent_stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/parent_stdout.txt",
+      "bytes": 367,
+      "sha256": "e3fb1c9533384b4327dc03c081325e3ba21a6f3f802a5c74c2ac01d8756ee2b0"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/registration_receipt.json",
+      "bytes": 1014,
+      "sha256": "88eab49f7641595ddee871e012802d4648525d85a966e25cc1e04bc8a12e0c62"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/registration_001/standing_authority.json",
+      "bytes": 1748,
+      "sha256": "1272a507f6f95daaabf41b42dc46343cd86cd21505f2635ad8296124ae69f7c4"
+    },
+    {
+      "path": "records/aws_native_failure_inspection_v8_001/repair_path_review.md",
+      "bytes": 12495,
+      "sha256": "f56ef26bb1b6cbeac7b7189b0abb858781121eccbe1dfeacafb40cececdca409"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json",
+      "bytes": 39923,
+      "sha256": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json.history/00000015.json",
+      "bytes": 39923,
+      "sha256": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5"
+    },
+    {
+      "path": "tests/test_launch_native_failure_inspection_v8.py",
+      "bytes": 16585,
+      "sha256": "305ee38e0a079bd9f8f23d47bfe38585037edfd078ea1af5c1411ca57c6e8028"
+    },
+    {
+      "path": "tests/test_native_failure_inspection_v8.py",
+      "bytes": 22241,
+      "sha256": "92e943994a41120dba872aae79d1bfc5837c09aaec39f07a09204ef9c4e063b0"
+    },
+    {
+      "path": "tools/check_native_failure_inspection_v8.py",
+      "bytes": 4187,
+      "sha256": "7235d8f773b6db99779f1526553bf150a2e864102765b988919e8b1bc42c98f2"
+    }
+  ]
+}

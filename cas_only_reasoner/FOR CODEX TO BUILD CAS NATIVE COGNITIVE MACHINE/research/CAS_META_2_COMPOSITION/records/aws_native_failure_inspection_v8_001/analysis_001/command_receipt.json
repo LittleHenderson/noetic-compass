@@ -1,0 +1,45 @@
+{
+  "analyzer_sha256": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e",
+  "boundary": "Saved-image JSON and hash/link examination only. No SQLite connection, tensor decoding, neural replay, new native execution, training or qualification. This cannot recover state that was never captured in the standalone image.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_native_failure_inspection_v8_001/analyze_export.py",
+    "--archive",
+    "records/aws_native_failure_inspection_v8_001/execution_001/lifecycle/cloud_artifacts.zip",
+    "--archive-sha256",
+    "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "--output",
+    "records/aws_native_failure_inspection_v8_001/analysis_001"
+  ],
+  "files": {
+    "REPORT.md": {
+      "bytes": 1335,
+      "sha256": "67c9617f85f2de75483aa5817ad75797b448117169df895bc4c9890a67d9611c"
+    },
+    "analysis.json": {
+      "bytes": 16949,
+      "sha256": "770dae90d25fec8099bb167b05e5b454469b288b139f7df416f65ff313bd02ec"
+    },
+    "selected_records.json": {
+      "bytes": 730473,
+      "sha256": "b1d09fcba3a254f2a88d4d933460a7dc9c50a746a0d7c4ede155cfcf2cebb9f5"
+    }
+  },
+  "finished_utc": "2026-09-06T16:31:52.811191+00:00",
+  "result_archive": {
+    "bytes": 127026,
+    "indexed_files": 2,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001\\lifecycle\\cloud_artifacts.zip",
+    "sha256": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3"
+  },
+  "schema": "native-failure-json-analysis-command/8",
+  "status": "SAVED_IMAGE_RECORDS_CHECKED",
+  "unchanged_checks": {
+    "analyzer_sha256_after": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e",
+    "analyzer_sha256_before": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e",
+    "analyzer_unchanged": true,
+    "input_archive_sha256_after": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "input_archive_sha256_before": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "input_archive_unchanged": true
+  }
+}

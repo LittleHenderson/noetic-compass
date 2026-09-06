@@ -1,0 +1,740 @@
+{
+  "account_id": "807562639912",
+  "automatic_retries": 0,
+  "boundary": "One read-only cleanup observation, not an invoice or database-export verification. The inner CHQ-named receipt is transport only. The bucket and results remain under the observed lifecycle. This check does not download or rehash object contents; matching archive size is not content identity. No launch, cleanup mutation, SQLite connection or model work.",
+  "checks": {
+    "account_identity": true,
+    "inputs_absent": true,
+    "instance_profile_absent": true,
+    "instance_terminated": true,
+    "local_evidence_unchanged": true,
+    "owned_bucket": true,
+    "owned_instance": true,
+    "retained_archive_size_matches_parent": true,
+    "schedule_absent": true,
+    "security_group_absent": true,
+    "seven_day_result_expiry": true,
+    "three_result_objects_only": true,
+    "timer_role_absent": true,
+    "worker_role_absent": true,
+    "zero_job_volumes": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_native_failure_inspection_v8_001/post_run_provider_read.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T16:31:01.200878+00:00",
+  "getter_helper_sha256": "b28b9d6f1d642b68f277a1dcec6a39ff64a3cc751b70caea9e08171ac02945a9",
+  "input_files": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\budget.py": {
+      "bytes": 14494,
+      "sha256": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\launch_child_qualification_v8.py": {
+      "bytes": 50899,
+      "sha256": "05739bcc5514f1f0dcde736d972c44984610e4441d8fd69f8c31c61a4e87bedf"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\launch_native_failure_inspection_v8.py": {
+      "bytes": 25768,
+      "sha256": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\launch_prefix_diagnostic_v8.py": {
+      "bytes": 46024,
+      "sha256": "d9853e6cbb41fd5efdd927e217bde35fc98a05bf9d784c500cc82b04ba219e48"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\launch_prototype_v7.py": {
+      "bytes": 64059,
+      "sha256": "90f7a8086416ac39c49d9d344d33b128ae19106638f335ceb14cdd26f038577a"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\native_failure_inspection_v8.py": {
+      "bytes": 19634,
+      "sha256": "18b09e310be352f0d1013584ca95b36b6c06c56eda9c30c5e0874ab02f3232d3"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\prefix_remote_v8.py": {
+      "bytes": 27032,
+      "sha256": "e72f5937895d856797e9dae200100b279a39bdbe4850f67b5405a70cb9719f8b"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_child_qualification_v8_001\\post_run_provider_read.py": {
+      "bytes": 15126,
+      "sha256": "b28b9d6f1d642b68f277a1dcec6a39ff64a3cc751b70caea9e08171ac02945a9"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001\\launch_receipt.json": {
+      "bytes": 50468,
+      "sha256": "60c51946d2ed334bfce40588ab22e3255f9e73fe2af40375ed063b5e1a90b987"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001\\lifecycle\\launch_receipt.json": {
+      "bytes": 49025,
+      "sha256": "dfa9d36cb480bcf6b987ffbd6805aee3aa36b1f9eb44b69ccbd73beb1603c9cc"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001\\lifecycle\\launch_request.json": {
+      "bytes": 3824,
+      "sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\capture_parent.py": {
+      "bytes": 4461,
+      "sha256": "2a930c66cbe0574deaf0781f924df15681d273ba8a35609250fc24d94071b982"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\launch_request.json": {
+      "bytes": 3824,
+      "sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\parent_process_completion.json": {
+      "bytes": 2539,
+      "sha256": "1eba12c5d92fb5133f63a504777c396adfb343bf246608c5f12967f60fdb97de"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\parent_process_identity.json": {
+      "bytes": 1396,
+      "sha256": "eb266a76c3001383b018e31908decd697d0fd94c4245a9b81e2e5a6de4335c3b"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\parent_process_start.json": {
+      "bytes": 2133,
+      "sha256": "134657eda0c935179d3ab73e0eefa4e50b27d7c17dac9b52fce852cfbd86bd73"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\parent_stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\parent_stdout.txt": {
+      "bytes": 367,
+      "sha256": "e3fb1c9533384b4327dc03c081325e3ba21a6f3f802a5c74c2ac01d8756ee2b0"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\registration_receipt.json": {
+      "bytes": 1014,
+      "sha256": "88eab49f7641595ddee871e012802d4648525d85a966e25cc1e04bc8a12e0c62"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\registration_001\\standing_authority.json": {
+      "bytes": 1748,
+      "sha256": "1272a507f6f95daaabf41b42dc46343cd86cd21505f2635ad8296124ae69f7c4"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\experiment_profiles_prototype_v7.py": {
+      "bytes": 30281,
+      "sha256": "3331ce53d6f3f57b94cb7603f2b53f3c309a899ab2596b4b040fa1b01ccf6ee0"
+    }
+  },
+  "job": "cas-meta2-20260906162339-56837284",
+  "maximum_getter_calls": 13,
+  "parent_exit_code": 0,
+  "parent_finished_utc": "2026-09-06T16:30:40.124341+00:00",
+  "parent_launch_status": "AWS_NATIVE_FAILURE_INSPECTION_FINISHED",
+  "parent_result": {
+    "bytes": 127026,
+    "experiment": {
+      "entrypoint": "read_only_sqlite_export",
+      "profile": "native_failure_sqlite_inspection_v8"
+    },
+    "job": "cas-meta2-20260906162339-56837284",
+    "omitted_full_file_count": 0,
+    "parent_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+    "partial_evidence": false,
+    "returncode": 0,
+    "sha256": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675"
+  },
+  "parent_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "provider_calls_started": true,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "queries": [
+    {
+      "arguments": {},
+      "finished_utc": "2026-09-06T16:30:58.882025+00:00",
+      "label": "identity",
+      "operation": "get_caller_identity",
+      "outcome": "RETURNED",
+      "response": {
+        "Account": "807562639912",
+        "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "412",
+            "content-type": "text/xml",
+            "date": "Sun, 06 Sep 2026 16:30:58 GMT",
+            "x-amz-sts-extended-request-id": "MTp1cy13ZXN0LTI6UzoxNzg4NzEyMjU4NzM5OlI6Nm51UDAyRUQ=",
+            "x-amzn-requestid": "13783542-fc71-4d07-b705-7f7ed7f05d2d"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "13783542-fc71-4d07-b705-7f7ed7f05d2d",
+          "RetryAttempts": 0
+        },
+        "UserId": "AIDA3YBT37IUN7OWL4UMU"
+      },
+      "service": "sts",
+      "started_utc": "2026-09-06T16:30:58.540388+00:00"
+    },
+    {
+      "arguments": {
+        "InstanceIds": [
+          "i-048a3cc3dfddf75e6"
+        ]
+      },
+      "finished_utc": "2026-09-06T16:30:59.303648+00:00",
+      "label": "instance",
+      "operation": "describe_instances",
+      "outcome": "RETURNED",
+      "response": {
+        "Reservations": [
+          {
+            "Groups": [],
+            "Instances": [
+              {
+                "AmiLaunchIndex": 0,
+                "Architecture": "x86_64",
+                "BlockDeviceMappings": [],
+                "BootMode": "uefi-preferred",
+                "CapacityReservationSpecification": {
+                  "CapacityReservationPreference": "open"
+                },
+                "ClientToken": "cas-meta2-20260906162339-56837284",
+                "CpuOptions": {
+                  "CoreCount": 8,
+                  "ThreadsPerCore": 1
+                },
+                "CurrentInstanceBootMode": "uefi",
+                "EbsOptimized": false,
+                "EnaSupport": true,
+                "EnclaveOptions": {
+                  "Enabled": false
+                },
+                "HibernationOptions": {
+                  "Configured": false
+                },
+                "Hypervisor": "xen",
+                "ImageId": "ami-0fbbd0facbc9e3cff",
+                "InstanceId": "i-048a3cc3dfddf75e6",
+                "InstanceType": "g7.2xlarge",
+                "LaunchTime": "2026-09-06 16:24:16+00:00",
+                "MaintenanceOptions": {
+                  "AutoRecovery": "default",
+                  "RebootMigration": "default"
+                },
+                "MetadataOptions": {
+                  "HttpEndpoint": "enabled",
+                  "HttpProtocolIpv6": "disabled",
+                  "HttpPutResponseHopLimit": 2,
+                  "HttpTokens": "required",
+                  "InstanceMetadataTags": "disabled",
+                  "State": "pending"
+                },
+                "Monitoring": {
+                  "State": "disabled"
+                },
+                "NetworkInterfaces": [],
+                "NetworkPerformanceOptions": {
+                  "BandwidthWeighting": "default"
+                },
+                "Operator": {
+                  "HiddenByDefault": false,
+                  "Managed": false
+                },
+                "Placement": {
+                  "AvailabilityZone": "us-west-2c",
+                  "AvailabilityZoneId": "usw2-az3",
+                  "GroupName": "",
+                  "Tenancy": "default"
+                },
+                "PlatformDetails": "Linux/UNIX",
+                "PrivateDnsName": "",
+                "ProductCodes": [],
+                "PublicDnsName": "",
+                "RootDeviceName": "/dev/sda1",
+                "RootDeviceType": "ebs",
+                "SecondaryInterfaces": [],
+                "SecurityGroups": [],
+                "State": {
+                  "Code": 48,
+                  "Name": "terminated"
+                },
+                "StateReason": {
+                  "Code": "Client.UserInitiatedShutdown",
+                  "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                },
+                "StateTransitionReason": "User initiated (2026-09-06 16:25:35 GMT)",
+                "Tags": [
+                  {
+                    "Key": "cas_meta_job",
+                    "Value": "cas-meta2-20260906162339-56837284"
+                  }
+                ],
+                "UsageOperation": "RunInstances",
+                "UsageOperationUpdateTime": "2026-09-06 16:24:16+00:00",
+                "VirtualizationType": "hvm"
+              }
+            ],
+            "OwnerId": "807562639912",
+            "ReservationId": "r-013083fd25ba11344"
+          }
+        ],
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "cache-control": "no-cache, no-store",
+            "content-length": "2819",
+            "content-type": "text/xml;charset=UTF-8",
+            "date": "Sun, 06 Sep 2026 16:30:59 GMT",
+            "server": "AmazonEC2",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "vary": "accept-encoding",
+            "x-amzn-requestid": "e5092faa-dc1e-4f4e-897b-4585509a9507"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "e5092faa-dc1e-4f4e-897b-4585509a9507",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "ec2",
+      "started_utc": "2026-09-06T16:30:58.882040+00:00"
+    },
+    {
+      "arguments": {
+        "Filters": [
+          {
+            "Name": "tag:cas_meta_job",
+            "Values": [
+              "cas-meta2-20260906162339-56837284"
+            ]
+          }
+        ]
+      },
+      "finished_utc": "2026-09-06T16:30:59.386997+00:00",
+      "label": "volumes",
+      "operation": "describe_volumes",
+      "outcome": "RETURNED",
+      "response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "cache-control": "no-cache, no-store",
+            "content-length": "210",
+            "content-type": "text/xml;charset=UTF-8",
+            "date": "Sun, 06 Sep 2026 16:30:59 GMT",
+            "server": "AmazonEC2",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-amzn-requestid": "01d6983a-e6fa-41b4-a008-a70ea15afdb6"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "01d6983a-e6fa-41b4-a008-a70ea15afdb6",
+          "RetryAttempts": 0
+        },
+        "Volumes": []
+      },
+      "service": "ec2",
+      "started_utc": "2026-09-06T16:30:59.303659+00:00"
+    },
+    {
+      "arguments": {
+        "GroupIds": [
+          "sg-051a6cd8348206b21"
+        ]
+      },
+      "error": {
+        "code": "InvalidGroup.NotFound",
+        "message": "The security group 'sg-051a6cd8348206b21' does not exist",
+        "type": "ClientError"
+      },
+      "finished_utc": "2026-09-06T16:30:59.598280+00:00",
+      "label": "security_group",
+      "operation": "describe_security_groups",
+      "outcome": "ERROR",
+      "response": {
+        "Error": {
+          "Code": "InvalidGroup.NotFound",
+          "Message": "The security group 'sg-051a6cd8348206b21' does not exist"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "cache-control": "no-cache, no-store",
+            "connection": "close",
+            "content-type": "text/xml;charset=UTF-8",
+            "date": "Sun, 06 Sep 2026 16:30:59 GMT",
+            "server": "AmazonEC2",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "transfer-encoding": "chunked",
+            "vary": "accept-encoding",
+            "x-amzn-requestid": "d0fffbf2-ba09-4735-9de9-b0fb77b21dbd"
+          },
+          "HTTPStatusCode": 400,
+          "RequestId": "d0fffbf2-ba09-4735-9de9-b0fb77b21dbd",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "ec2",
+      "started_utc": "2026-09-06T16:30:59.387009+00:00"
+    },
+    {
+      "arguments": {
+        "RoleName": "cas-meta2-20260906162339-56837284-worker"
+      },
+      "error": {
+        "code": "NoSuchEntity",
+        "message": "The role with name cas-meta2-20260906162339-56837284-worker cannot be found.",
+        "type": "NoSuchEntityException"
+      },
+      "finished_utc": "2026-09-06T16:31:00.177552+00:00",
+      "label": "worker_role",
+      "operation": "get_role",
+      "outcome": "ERROR",
+      "response": {
+        "Error": {
+          "Code": "NoSuchEntity",
+          "Message": "The role with name cas-meta2-20260906162339-56837284-worker cannot be found.",
+          "Type": "Sender"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "320",
+            "content-type": "text/xml",
+            "date": "Sun, 06 Sep 2026 16:31:00 GMT",
+            "x-amzn-requestid": "f68fb1b1-b3ae-449b-a8d2-6bbaedb5f6df"
+          },
+          "HTTPStatusCode": 404,
+          "RequestId": "f68fb1b1-b3ae-449b-a8d2-6bbaedb5f6df",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "iam",
+      "started_utc": "2026-09-06T16:30:59.598292+00:00"
+    },
+    {
+      "arguments": {
+        "RoleName": "cas-meta2-20260906162339-56837284-timer"
+      },
+      "error": {
+        "code": "NoSuchEntity",
+        "message": "The role with name cas-meta2-20260906162339-56837284-timer cannot be found.",
+        "type": "NoSuchEntityException"
+      },
+      "finished_utc": "2026-09-06T16:31:00.286663+00:00",
+      "label": "timer_role",
+      "operation": "get_role",
+      "outcome": "ERROR",
+      "response": {
+        "Error": {
+          "Code": "NoSuchEntity",
+          "Message": "The role with name cas-meta2-20260906162339-56837284-timer cannot be found.",
+          "Type": "Sender"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "319",
+            "content-type": "text/xml",
+            "date": "Sun, 06 Sep 2026 16:31:00 GMT",
+            "x-amzn-requestid": "4501d8f2-4f9f-4545-bec4-fe99c72b9b45"
+          },
+          "HTTPStatusCode": 404,
+          "RequestId": "4501d8f2-4f9f-4545-bec4-fe99c72b9b45",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "iam",
+      "started_utc": "2026-09-06T16:31:00.177565+00:00"
+    },
+    {
+      "arguments": {
+        "InstanceProfileName": "cas-meta2-20260906162339-56837284-worker"
+      },
+      "error": {
+        "code": "NoSuchEntity",
+        "message": "Instance Profile cas-meta2-20260906162339-56837284-worker cannot be found.",
+        "type": "NoSuchEntityException"
+      },
+      "finished_utc": "2026-09-06T16:31:00.391251+00:00",
+      "label": "instance_profile",
+      "operation": "get_instance_profile",
+      "outcome": "ERROR",
+      "response": {
+        "Error": {
+          "Code": "NoSuchEntity",
+          "Message": "Instance Profile cas-meta2-20260906162339-56837284-worker cannot be found.",
+          "Type": "Sender"
+        },
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "318",
+            "content-type": "text/xml",
+            "date": "Sun, 06 Sep 2026 16:31:00 GMT",
+            "x-amzn-requestid": "fe88c6f9-0ebc-4fe9-8398-5cee4687de61"
+          },
+          "HTTPStatusCode": 404,
+          "RequestId": "fe88c6f9-0ebc-4fe9-8398-5cee4687de61",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "iam",
+      "started_utc": "2026-09-06T16:31:00.286675+00:00"
+    },
+    {
+      "arguments": {
+        "GroupName": "default",
+        "Name": "cas-meta2-20260906162339-56837284"
+      },
+      "error": {
+        "code": "ResourceNotFoundException",
+        "message": "Schedule cas-meta2-20260906162339-56837284 does not exist.",
+        "type": "ResourceNotFoundException"
+      },
+      "finished_utc": "2026-09-06T16:31:00.691924+00:00",
+      "label": "schedule",
+      "operation": "get_schedule",
+      "outcome": "ERROR",
+      "response": {
+        "Error": {
+          "Code": "ResourceNotFoundException",
+          "Message": "Schedule cas-meta2-20260906162339-56837284 does not exist."
+        },
+        "Message": "Schedule cas-meta2-20260906162339-56837284 does not exist.",
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "72",
+            "content-type": "application/json",
+            "date": "Sun, 06 Sep 2026 16:31:00 GMT",
+            "x-amzn-errortype": "ResourceNotFoundException:http://internal.amazon.com/coral/com.amazonaws.chronos/",
+            "x-amzn-requestid": "5f5ec765-4352-47c1-99c1-34852bf1e6f5"
+          },
+          "HTTPStatusCode": 404,
+          "RequestId": "5f5ec765-4352-47c1-99c1-34852bf1e6f5",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "scheduler",
+      "started_utc": "2026-09-06T16:31:00.391266+00:00"
+    },
+    {
+      "arguments": {
+        "Bucket": "cas-meta2-20260906162339-56837284-807562639912"
+      },
+      "finished_utc": "2026-09-06T16:31:01.012061+00:00",
+      "label": "bucket_tags",
+      "operation": "get_bucket_tagging",
+      "outcome": "RETURNED",
+      "response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "date": "Sun, 06 Sep 2026 16:31:01 GMT",
+            "server": "AmazonS3",
+            "transfer-encoding": "chunked",
+            "x-amz-id-2": "1p0cG0LfccqOqpISQ2u8d2TeXgdL9evGo1Ha2UuE7wUuN5O42Z5lNxGsrfjICHX1dnG3GwtULBk=",
+            "x-amz-request-id": "CXCTZ6S6053JKQ85"
+          },
+          "HTTPStatusCode": 200,
+          "HostId": "1p0cG0LfccqOqpISQ2u8d2TeXgdL9evGo1Ha2UuE7wUuN5O42Z5lNxGsrfjICHX1dnG3GwtULBk=",
+          "RequestId": "CXCTZ6S6053JKQ85",
+          "RetryAttempts": 0
+        },
+        "TagSet": [
+          {
+            "Key": "cas_meta_job",
+            "Value": "cas-meta2-20260906162339-56837284"
+          }
+        ]
+      },
+      "service": "s3",
+      "started_utc": "2026-09-06T16:31:00.691936+00:00"
+    },
+    {
+      "arguments": {
+        "Bucket": "cas-meta2-20260906162339-56837284-807562639912",
+        "Prefix": "input/"
+      },
+      "finished_utc": "2026-09-06T16:31:01.045930+00:00",
+      "label": "input_objects",
+      "operation": "list_objects_v2",
+      "outcome": "RETURNED",
+      "response": {
+        "EncodingType": "url",
+        "IsTruncated": false,
+        "KeyCount": 0,
+        "MaxKeys": 1000,
+        "Name": "cas-meta2-20260906162339-56837284-807562639912",
+        "Prefix": "input/",
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-type": "application/xml",
+            "date": "Sun, 06 Sep 2026 16:31:01 GMT",
+            "server": "AmazonS3",
+            "transfer-encoding": "chunked",
+            "x-amz-bucket-region": "us-west-2",
+            "x-amz-id-2": "KKOMhlyC4f4ZT2Goz/p6uf/h3qFkZm932J28JtBKaK3t7DJ10f22skhDydG3Xie0zGFdVUiy8+k=",
+            "x-amz-request-id": "CXCZ6VWNFQ4VEEFR"
+          },
+          "HTTPStatusCode": 200,
+          "HostId": "KKOMhlyC4f4ZT2Goz/p6uf/h3qFkZm932J28JtBKaK3t7DJ10f22skhDydG3Xie0zGFdVUiy8+k=",
+          "RequestId": "CXCZ6VWNFQ4VEEFR",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "s3",
+      "started_utc": "2026-09-06T16:31:01.012073+00:00"
+    },
+    {
+      "arguments": {
+        "Bucket": "cas-meta2-20260906162339-56837284-807562639912",
+        "Prefix": "results/"
+      },
+      "finished_utc": "2026-09-06T16:31:01.085148+00:00",
+      "label": "result_objects",
+      "operation": "list_objects_v2",
+      "outcome": "RETURNED",
+      "response": {
+        "Contents": [
+          {
+            "ChecksumAlgorithm": [
+              "CRC64NVME"
+            ],
+            "ChecksumType": "FULL_OBJECT",
+            "ETag": "\"3dbecfdefd244a309bb5dae1607a31b9\"",
+            "Key": "results/artifacts.zip",
+            "LastModified": "2026-09-06 16:25:28+00:00",
+            "Size": 127026,
+            "StorageClass": "STANDARD"
+          },
+          {
+            "ChecksumAlgorithm": [
+              "CRC64NVME"
+            ],
+            "ChecksumType": "FULL_OBJECT",
+            "ETag": "\"77099f0568e7289baf052363337eed80\"",
+            "Key": "results/bootstrap.log",
+            "LastModified": "2026-09-06 16:25:29+00:00",
+            "Size": 471,
+            "StorageClass": "STANDARD"
+          },
+          {
+            "ChecksumAlgorithm": [
+              "CRC64NVME"
+            ],
+            "ChecksumType": "FULL_OBJECT",
+            "ETag": "\"1291f0fb97f4119c2fb7016c1aeae9a7\"",
+            "Key": "results/complete.json",
+            "LastModified": "2026-09-06 16:25:29+00:00",
+            "Size": 476,
+            "StorageClass": "STANDARD"
+          }
+        ],
+        "EncodingType": "url",
+        "IsTruncated": false,
+        "KeyCount": 3,
+        "MaxKeys": 1000,
+        "Name": "cas-meta2-20260906162339-56837284-807562639912",
+        "Prefix": "results/",
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-type": "application/xml",
+            "date": "Sun, 06 Sep 2026 16:31:01 GMT",
+            "server": "AmazonS3",
+            "transfer-encoding": "chunked",
+            "x-amz-bucket-region": "us-west-2",
+            "x-amz-id-2": "1Xa6xcL0vy5gJtlJCTN2QVWXW3Y2Tf/6BRPhDa/CouBkijko3UJfTn8NWJH+pU+u3RMitTIiaus=",
+            "x-amz-request-id": "CXCRQN0D808MB173"
+          },
+          "HTTPStatusCode": 200,
+          "HostId": "1Xa6xcL0vy5gJtlJCTN2QVWXW3Y2Tf/6BRPhDa/CouBkijko3UJfTn8NWJH+pU+u3RMitTIiaus=",
+          "RequestId": "CXCRQN0D808MB173",
+          "RetryAttempts": 0
+        }
+      },
+      "service": "s3",
+      "started_utc": "2026-09-06T16:31:01.045942+00:00"
+    },
+    {
+      "arguments": {
+        "Bucket": "cas-meta2-20260906162339-56837284-807562639912",
+        "Key": "results/artifacts.zip"
+      },
+      "finished_utc": "2026-09-06T16:31:01.130497+00:00",
+      "label": "retained_archive_metadata",
+      "operation": "head_object",
+      "outcome": "RETURNED",
+      "response": {
+        "AcceptRanges": "bytes",
+        "ContentLength": 127026,
+        "ContentType": "binary/octet-stream",
+        "ETag": "\"3dbecfdefd244a309bb5dae1607a31b9\"",
+        "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+        "LastModified": "2026-09-06 16:25:28+00:00",
+        "Metadata": {},
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "accept-ranges": "bytes",
+            "content-length": "127026",
+            "content-type": "binary/octet-stream",
+            "date": "Sun, 06 Sep 2026 16:31:01 GMT",
+            "etag": "\"3dbecfdefd244a309bb5dae1607a31b9\"",
+            "last-modified": "Sun, 06 Sep 2026 16:25:28 GMT",
+            "server": "AmazonS3",
+            "x-amz-expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+            "x-amz-id-2": "V/YSy1f/VZHDG6S2cj21JQx3Lr9ndv0AiotHHu3OGQBsSmf0NrqJ79gAPG09bM+WLf3jAIC7PtA=",
+            "x-amz-request-id": "CXCTNMXK95B4EXKM",
+            "x-amz-server-side-encryption": "AES256"
+          },
+          "HTTPStatusCode": 200,
+          "HostId": "V/YSy1f/VZHDG6S2cj21JQx3Lr9ndv0AiotHHu3OGQBsSmf0NrqJ79gAPG09bM+WLf3jAIC7PtA=",
+          "RequestId": "CXCTNMXK95B4EXKM",
+          "RetryAttempts": 0
+        },
+        "ServerSideEncryption": "AES256"
+      },
+      "service": "s3",
+      "started_utc": "2026-09-06T16:31:01.085174+00:00"
+    },
+    {
+      "arguments": {
+        "Bucket": "cas-meta2-20260906162339-56837284-807562639912"
+      },
+      "finished_utc": "2026-09-06T16:31:01.179264+00:00",
+      "label": "bucket_lifecycle",
+      "operation": "get_bucket_lifecycle_configuration",
+      "outcome": "RETURNED",
+      "response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "378",
+            "date": "Sun, 06 Sep 2026 16:31:02 GMT",
+            "server": "AmazonS3",
+            "x-amz-id-2": "o819Le/t0oWaZqDxbVhH3ijtUKI0s/1XKTq9cSV7RFdtkcG8hA4YXVIScWbySSFhGChwNAbr+Sw=",
+            "x-amz-request-id": "FWVKJBB4BS57R2TJ",
+            "x-amz-transition-default-minimum-object-size": "all_storage_classes_128K"
+          },
+          "HTTPStatusCode": 200,
+          "HostId": "o819Le/t0oWaZqDxbVhH3ijtUKI0s/1XKTq9cSV7RFdtkcG8hA4YXVIScWbySSFhGChwNAbr+Sw=",
+          "RequestId": "FWVKJBB4BS57R2TJ",
+          "RetryAttempts": 0
+        },
+        "Rules": [
+          {
+            "AbortIncompleteMultipartUpload": {
+              "DaysAfterInitiation": 1
+            },
+            "Expiration": {
+              "Days": 7
+            },
+            "Filter": {
+              "Prefix": ""
+            },
+            "ID": "job-seven-days",
+            "Status": "Enabled"
+          }
+        ],
+        "TransitionDefaultMinimumObjectSize": "all_storage_classes_128K"
+      },
+      "service": "s3",
+      "started_utc": "2026-09-06T16:31:01.130510+00:00"
+    }
+  ],
+  "read_only": true,
+  "region": "us-west-2",
+  "request_sha256": "33abe7173efd939e6821afe0d1b493a303f253c67e7f423857094a1f4d786e8e",
+  "resources": {
+    "bucket": "cas-meta2-20260906162339-56837284-807562639912",
+    "cas-meta2-20260906162339-56837284-timer": "arn:aws:iam::807562639912:role/cas-meta2-20260906162339-56837284-timer",
+    "cas-meta2-20260906162339-56837284-worker": "arn:aws:iam::807562639912:role/cas-meta2-20260906162339-56837284-worker",
+    "instance": "i-048a3cc3dfddf75e6",
+    "instance_profile": "cas-meta2-20260906162339-56837284-worker",
+    "schedule": "cas-meta2-20260906162339-56837284",
+    "security_group": "sg-051a6cd8348206b21"
+  },
+  "schema": "cas-meta2-native-failure-inspection-post-run-provider-read/8",
+  "script_sha256": "421955fcdd55304d97b1cf154d2a5178f9f4c5a1209e4325a84f8d2a92eac249",
+  "source_archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+  "source_manifest_sha256": "a4b04cb0d97c4fa28883c3b210abf4632ea4b04b7c79d267b4efe0f18ea81fb1",
+  "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "started_utc": "2026-09-06T16:30:57.405930+00:00",
+  "status": "POST_RUN_CLEANUP_CONFIRMED"
+}

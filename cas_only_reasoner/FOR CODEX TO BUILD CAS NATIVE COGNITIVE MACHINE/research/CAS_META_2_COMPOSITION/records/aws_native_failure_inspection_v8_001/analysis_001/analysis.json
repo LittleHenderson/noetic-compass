@@ -1,0 +1,459 @@
+{
+  "accepted_returnable_ticks_in_failed_attempt": 5,
+  "boundary": "Saved-image JSON and hash/link examination only. No SQLite connection, tensor decoding, neural replay, new native execution, training or qualification. This cannot recover state that was never captured in the standalone image.",
+  "collection_receipt": {
+    "experiment": {
+      "entrypoint": "read_only_sqlite_export",
+      "profile": "native_failure_sqlite_inspection_v8"
+    },
+    "files": {
+      "inspection/export.json": {
+        "bytes": 1422416,
+        "sha256": "1e6f587b1f7f3a548e52eb2064edc57b49ad836409e56f02ba7af67769672565"
+      },
+      "inspection/receipt.json": {
+        "bytes": 2428,
+        "sha256": "2ca2a2e65d8784a3f9aab869b4c4cb5804e3d8a328ce52f827dd23e1625cad3e"
+      }
+    },
+    "included_full_file_count": 2,
+    "job": "cas-meta2-20260906162339-56837284",
+    "omitted_full_file_count": 0,
+    "original_file_count": 2,
+    "parent_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+    "partial_evidence": false,
+    "returncode": 0,
+    "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675"
+  },
+  "database": {
+    "archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+    "bytes": 1523712,
+    "historical_uncaptured_state_recovered": false,
+    "member": "qualification/cases/case_00/candidate_03/native.db",
+    "sha256": "41e3d9636cc9ffc026a87ca4bae3901cbf58dcff3c17039229c742f8898f14b2",
+    "sidecars_present": false
+  },
+  "first_nonreturnable": {
+    "candidate_effect_id": "candidate-effect-ffd7a42e81d1440523fa32f5",
+    "cjt": "R",
+    "commit_receipt_id": "commit-7e24d42d525d62cfcc94b9a5",
+    "decoded_content": {
+      "effect_kind": "DECOMPOSITION_SIGNAL",
+      "operation_id": "^6",
+      "symbol": "L0"
+    },
+    "disposition": "REPAIR",
+    "expected_content": {
+      "effect_kind": "DECOMPOSITION_SIGNAL",
+      "operation_id": "^6",
+      "symbol": "L1"
+    },
+    "input_from_tick": 5,
+    "operating_regions": [
+      "ACTIVE"
+    ],
+    "parent_effect_id": "effect-aae95771a9dd283b7dbbc5de",
+    "published_effect_count": 0,
+    "reason_codes": [
+      "SEMANTIC_OFF_AXIS"
+    ],
+    "repair_frames": [
+      {
+        "branch_count": 1,
+        "budget_units": 4,
+        "consumed_units": 1,
+        "contract_type": "REPAIR_FRAME",
+        "cycle_key": "df88dae67c4b4a1401fd1d0167c1670af71806120eced3c48a2da3487d4d9075",
+        "depth": 1,
+        "eligible_tick": 7,
+        "frame_digest": "671bae98960f0791852a2cff43f8e06fd90f0d1060624ba06b9adf3a3f925609",
+        "max_branches": 2,
+        "max_depth": 3,
+        "opened_tick": 6,
+        "parent_cause_id": "cause-0dc915a7acdf9ebf4fc0ae0b",
+        "prerequisite_axis": "WISDOM",
+        "rejected_candidate_effect_id": "candidate-effect-ffd7a42e81d1440523fa32f5",
+        "repair_id": "repair-3295d0e50cc47ac2f23bb183",
+        "result_effect_id": null,
+        "return_address": "cjt:R:cause:cause-0dc915a7acdf9ebf4fc0ae0b",
+        "schema_version": "cas.neural-cjt.repair-frame/0.2",
+        "status": "OPEN",
+        "subgoal_cause_id": "cause-6887f4b6a53020e465d7f15d",
+        "suspended_bias_id": "bias:R",
+        "suspended_bias_version": 1,
+        "verifier_receipt_id": "verifier-receipt-615dec807a7b76995960bfd36126358dd9e20ada183a1af42c8d9b4f0f8f0a47"
+      }
+    ],
+    "repair_outcomes": [],
+    "repair_required": true,
+    "returnable_to_single_run_wrapper": false,
+    "semantic_outcome": "OFF_AXIS",
+    "tick": 6,
+    "trace_digest": "66df9c33794e6ba201da151dd5416d046d095f5aa7f5fa9cd9ec231bfd929eeb",
+    "trace_id": "trace-eb127b9296d596c94d135c7d",
+    "verifier_receipt_id": "verifier-receipt-615dec807a7b76995960bfd36126358dd9e20ada183a1af42c8d9b4f0f8f0a47"
+  },
+  "full_native_store_verifier_run": false,
+  "hash_checks": {
+    "opaque_blobs": 13,
+    "payload_json": 73,
+    "public_payload_json": 6
+  },
+  "head": {
+    "commit_receipt_id": "commit-7e24d42d525d62cfcc94b9a5",
+    "model_digest": "76a9bcbce5ffdec4c2dbc9d8ea9958a268dcebf3775f53dd6058a72086709528",
+    "singleton": 1,
+    "state_digest": "096674a1225dfd1b50acfa26422076cf215f5f3f21cd098d8290f0ab9fe54b17",
+    "state_version": 6,
+    "trace_digest": "66df9c33794e6ba201da151dd5416d046d095f5aa7f5fa9cd9ec231bfd929eeb"
+  },
+  "inspection_job": "cas-meta2-20260906162339-56837284",
+  "inspection_receipt": {
+    "archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+    "database": {
+      "archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+      "bytes": 1523712,
+      "historical_uncaptured_state_recovered": false,
+      "member": "qualification/cases/case_00/candidate_03/native.db",
+      "sha256": "41e3d9636cc9ffc026a87ca4bae3901cbf58dcff3c17039229c742f8898f14b2",
+      "sidecars_present": false
+    },
+    "experiment": {
+      "entrypoint": "read_only_sqlite_export",
+      "profile": "native_failure_sqlite_inspection_v8"
+    },
+    "failure": null,
+    "finished_utc": "2026-09-06T16:25:27.426466+00:00",
+    "input_unchanged": true,
+    "instance_identity": {
+      "accountId": "807562639912",
+      "architecture": "x86_64",
+      "availabilityZone": "us-west-2c",
+      "billingProducts": null,
+      "devpayProductCodes": null,
+      "imageId": "ami-0fbbd0facbc9e3cff",
+      "instanceId": "i-048a3cc3dfddf75e6",
+      "instanceType": "g7.2xlarge",
+      "kernelId": null,
+      "marketplaceProductCodes": null,
+      "pendingTime": "2026-09-06T16:24:16Z",
+      "privateIp": "172.31.14.169",
+      "ramdiskId": null,
+      "region": "us-west-2",
+      "version": "2017-09-30"
+    },
+    "job": "cas-meta2-20260906162339-56837284",
+    "native_execution": false,
+    "parent_source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+    "plan_sha256": "4b30978655ce99867b86f85d7eeab1575b9e6d735f259aa6a37084e886be0446",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]",
+    "schema": "cas-meta2-native-failure-inspection/8",
+    "source_archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+    "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+    "sqlite_read_only": true,
+    "sqlite_version": "3.45.1",
+    "started_utc": "2026-09-06T16:25:26.037194+00:00",
+    "status": "NATIVE_FAILURE_DATABASE_EXPORTED",
+    "table_counts": {
+      "active_head": 1,
+      "artifacts": 13,
+      "candidate_effects": 6,
+      "causes": 6,
+      "commit_receipts": 6,
+      "memory_intents": 5,
+      "memory_records": 5,
+      "model_intents": 0,
+      "model_versions": 1,
+      "published_effects": 5,
+      "qualification_receipts": 0,
+      "rejection_audits": 0,
+      "repair_frames": 1,
+      "repair_outcomes": 0,
+      "state_intents": 13,
+      "state_versions": 7,
+      "store_metadata": 1,
+      "trace_events": 6,
+      "transition_batches": 6,
+      "verifier_receipts": 6
+    },
+    "total_rows": 88,
+    "training": false
+  },
+  "neural_reproduction": false,
+  "nonreturnable_stored_ticks": 1,
+  "original_job": "cas-meta2-20260906155525-195f5ad8",
+  "result_archive": {
+    "bytes": 127026,
+    "indexed_files": 2,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001\\lifecycle\\cloud_artifacts.zip",
+    "sha256": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3"
+  },
+  "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+  "status": "SAVED_IMAGE_RECORDS_CHECKED",
+  "stored_committed_ticks_in_failed_attempt": 6,
+  "table_counts": {
+    "active_head": 1,
+    "artifacts": 13,
+    "candidate_effects": 6,
+    "causes": 6,
+    "commit_receipts": 6,
+    "memory_intents": 5,
+    "memory_records": 5,
+    "model_intents": 0,
+    "model_versions": 1,
+    "published_effects": 5,
+    "qualification_receipts": 0,
+    "rejection_audits": 0,
+    "repair_frames": 1,
+    "repair_outcomes": 0,
+    "state_intents": 13,
+    "state_versions": 7,
+    "store_metadata": 1,
+    "trace_events": 6,
+    "transition_batches": 6,
+    "verifier_receipts": 6
+  },
+  "ticks": [
+    {
+      "candidate_effect_id": "candidate-effect-fb84024d85c4fd52f672086d",
+      "cjt": "A",
+      "commit_receipt_id": "commit-a0842ecc356bdc407f81ac53",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L1"
+      },
+      "disposition": "ACCEPT",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L1"
+      },
+      "input_from_tick": null,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": null,
+      "published_effect_count": 1,
+      "reason_codes": [
+        "EXACT_SEMANTIC_MATCH"
+      ],
+      "repair_frames": [],
+      "repair_outcomes": [],
+      "repair_required": false,
+      "returnable_to_single_run_wrapper": true,
+      "semantic_outcome": "INTENDED",
+      "tick": 1,
+      "trace_digest": "53e12850182ddfd4b53f3fe08e46b976579ca5168e3cd242ec30610863548414",
+      "trace_id": "trace-91ea1e37e94f7187b0170d41",
+      "verifier_receipt_id": "verifier-receipt-87149be56b73557a582bbfebe00da1870820b96ef25e516cdee33df31868f5ac"
+    },
+    {
+      "candidate_effect_id": "candidate-effect-6bed828732959c2cf3301c85",
+      "cjt": "B",
+      "commit_receipt_id": "commit-ba3a7a68385515421cc5a80d",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L3"
+      },
+      "disposition": "ACCEPT",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L3"
+      },
+      "input_from_tick": 1,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": "effect-c30de54994a5ff2db765036d",
+      "published_effect_count": 1,
+      "reason_codes": [
+        "EXACT_SEMANTIC_MATCH"
+      ],
+      "repair_frames": [],
+      "repair_outcomes": [],
+      "repair_required": false,
+      "returnable_to_single_run_wrapper": true,
+      "semantic_outcome": "INTENDED",
+      "tick": 2,
+      "trace_digest": "2831d9be59dfc6f6ecd4779416a95e5f3ac13316203f55bcd638ec23e6107d59",
+      "trace_id": "trace-070206c355346287a16981ec",
+      "verifier_receipt_id": "verifier-receipt-6ca6a99770fe7e1f22ba92461ca79d02018dea76d6a4ee0e3a3f60e6732cd192"
+    },
+    {
+      "candidate_effect_id": "candidate-effect-548d9821916c16a00366138d",
+      "cjt": "C",
+      "commit_receipt_id": "commit-350a20b7d14d538b4a01236d",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L2"
+      },
+      "disposition": "ACCEPT",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L2"
+      },
+      "input_from_tick": 2,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": "effect-30a4700c7c70b394cc2cc0c7",
+      "published_effect_count": 1,
+      "reason_codes": [
+        "EXACT_SEMANTIC_MATCH"
+      ],
+      "repair_frames": [],
+      "repair_outcomes": [],
+      "repair_required": false,
+      "returnable_to_single_run_wrapper": true,
+      "semantic_outcome": "INTENDED",
+      "tick": 3,
+      "trace_digest": "dfb2581ebcb03588b274ecc8a68a3be31ae1ccc78778a07edf4c1acbcfc06fb4",
+      "trace_id": "trace-5e852ccca7e7630210ba86c8",
+      "verifier_receipt_id": "verifier-receipt-ff86db8a4259e5fa66ddc851e760e0b6aa9c6d44c4a2d4aa7b13a19418fd7d5f"
+    },
+    {
+      "candidate_effect_id": "candidate-effect-dde33545ad9106edaa8ddef4",
+      "cjt": "R",
+      "commit_receipt_id": "commit-7a6423f2f0fb4cd690f4fcd9",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L1"
+      },
+      "disposition": "ACCEPT",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L1"
+      },
+      "input_from_tick": 3,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": "effect-e85d27435d8aaf4b2699724f",
+      "published_effect_count": 1,
+      "reason_codes": [
+        "EXACT_SEMANTIC_MATCH"
+      ],
+      "repair_frames": [],
+      "repair_outcomes": [],
+      "repair_required": false,
+      "returnable_to_single_run_wrapper": true,
+      "semantic_outcome": "INTENDED",
+      "tick": 4,
+      "trace_digest": "72630141311548428622144b1a037f778941cb892b6f9466056348f2c956eb62",
+      "trace_id": "trace-0edea746b7a0171432a54bf7",
+      "verifier_receipt_id": "verifier-receipt-1b8a599e3e0d921161899cf6ead1ee7891c3c5208f1a504429f5f3ca81b420e2"
+    },
+    {
+      "candidate_effect_id": "candidate-effect-d6d78b33dd65ad23ecf0f6bd",
+      "cjt": "C",
+      "commit_receipt_id": "commit-9ea2ecdee96b95d79f87a48e",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L2"
+      },
+      "disposition": "ACCEPT",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L2"
+      },
+      "input_from_tick": 4,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": "effect-774e8f789a55f9dc5524f662",
+      "published_effect_count": 1,
+      "reason_codes": [
+        "EXACT_SEMANTIC_MATCH"
+      ],
+      "repair_frames": [],
+      "repair_outcomes": [],
+      "repair_required": false,
+      "returnable_to_single_run_wrapper": true,
+      "semantic_outcome": "INTENDED",
+      "tick": 5,
+      "trace_digest": "f4ac1561bdff893a78cf4be660bc984ab8f20d09626a09a1c37186905fbadf2f",
+      "trace_id": "trace-fdb418007b824962653ba080",
+      "verifier_receipt_id": "verifier-receipt-22e131d1255e7cbb2745e24046e629ace9e9ac4f11ecad8911198b033d8a8b24"
+    },
+    {
+      "candidate_effect_id": "candidate-effect-ffd7a42e81d1440523fa32f5",
+      "cjt": "R",
+      "commit_receipt_id": "commit-7e24d42d525d62cfcc94b9a5",
+      "decoded_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L0"
+      },
+      "disposition": "REPAIR",
+      "expected_content": {
+        "effect_kind": "DECOMPOSITION_SIGNAL",
+        "operation_id": "^6",
+        "symbol": "L1"
+      },
+      "input_from_tick": 5,
+      "operating_regions": [
+        "ACTIVE"
+      ],
+      "parent_effect_id": "effect-aae95771a9dd283b7dbbc5de",
+      "published_effect_count": 0,
+      "reason_codes": [
+        "SEMANTIC_OFF_AXIS"
+      ],
+      "repair_frames": [
+        {
+          "branch_count": 1,
+          "budget_units": 4,
+          "consumed_units": 1,
+          "contract_type": "REPAIR_FRAME",
+          "cycle_key": "df88dae67c4b4a1401fd1d0167c1670af71806120eced3c48a2da3487d4d9075",
+          "depth": 1,
+          "eligible_tick": 7,
+          "frame_digest": "671bae98960f0791852a2cff43f8e06fd90f0d1060624ba06b9adf3a3f925609",
+          "max_branches": 2,
+          "max_depth": 3,
+          "opened_tick": 6,
+          "parent_cause_id": "cause-0dc915a7acdf9ebf4fc0ae0b",
+          "prerequisite_axis": "WISDOM",
+          "rejected_candidate_effect_id": "candidate-effect-ffd7a42e81d1440523fa32f5",
+          "repair_id": "repair-3295d0e50cc47ac2f23bb183",
+          "result_effect_id": null,
+          "return_address": "cjt:R:cause:cause-0dc915a7acdf9ebf4fc0ae0b",
+          "schema_version": "cas.neural-cjt.repair-frame/0.2",
+          "status": "OPEN",
+          "subgoal_cause_id": "cause-6887f4b6a53020e465d7f15d",
+          "suspended_bias_id": "bias:R",
+          "suspended_bias_version": 1,
+          "verifier_receipt_id": "verifier-receipt-615dec807a7b76995960bfd36126358dd9e20ada183a1af42c8d9b4f0f8f0a47"
+        }
+      ],
+      "repair_outcomes": [],
+      "repair_required": true,
+      "returnable_to_single_run_wrapper": false,
+      "semantic_outcome": "OFF_AXIS",
+      "tick": 6,
+      "trace_digest": "66df9c33794e6ba201da151dd5416d046d095f5aa7f5fa9cd9ec231bfd929eeb",
+      "trace_id": "trace-eb127b9296d596c94d135c7d",
+      "verifier_receipt_id": "verifier-receipt-615dec807a7b76995960bfd36126358dd9e20ada183a1af42c8d9b4f0f8f0a47"
+    }
+  ],
+  "total_rows": 88,
+  "uncaptured_historical_state_recovered": false,
+  "unchanged_checks": {
+    "analyzer_sha256_after": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e",
+    "analyzer_sha256_before": "ce76fbdbd57453a4c1f449bc833ef882b411ac5d3ec8261a25cd946cd418f01e",
+    "analyzer_unchanged": true,
+    "input_archive_sha256_after": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "input_archive_sha256_before": "fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3",
+    "input_archive_unchanged": true
+  },
+  "whole_task_qualification": false
+}

@@ -1,5 +1,56 @@
 # Saved native failure: AWS read-only inspection
 
+## Result: exact failure located; repair not yet attempted
+
+The AWS export completed successfully. Six committed native ticks were stored
+in the failed candidate: A, B, C, R, C, R. The first five accepted one Effect
+each. At tick 6, R produced L0 instead of the authored L1 target; the verifier
+recorded REPAIR / SEMANTIC_OFF_AXIS, published no Effect, and opened a repair.
+
+Two gaps are separate: the actual output mismatch and the generated wrapper's
+missing repair continuation. All readiness axes remained SUFFICIENT. WISDOM
+is the default repair axis for this mismatch, not proof of missing knowledge.
+The intended L1 target must not be replaced with L0 to manufacture success.
+
+`analysis_001/REPORT.md` and `analysis.json` record the checked six-tick
+chain. The analyzer verified 73 payload JSON hashes, 6 public-payload hashes,
+13 opaque byte records (including metadata-bound artifact identities), state
+and trace chains, final head, receipt ownership and expected-label links.
+This is analysis of the saved image, not an independent neural replay or a
+full native-store validation. The earlier 21 ticks in four completed executions
+remain separate evidence. No new full-task success or learning is claimed.
+
+`repair_path_review.md` identifies the existing supported next attempt: C on
+the exact repair subgoal, then resumed R with the original repair ID and L1
+expectation. Its success is unproven. The unexecuted subgoal's full Cause and
+outer caller stack were not saved in this database; exact reconstruction of
+the subgoal must be checked before a copy-based attempt. A complete wrapper
+integration also needs explicit multistep budget and trace checks.
+
+## Actual run and cleanup
+
+- Job: `cas-meta2-20260906162339-56837284`.
+- Parent/worker source: `37c591f3d6ae0606b27334c26d4392e0da94c675`.
+- Instance: `i-048a3cc3dfddf75e6`; parent exit 0.
+- Result archive: `execution_001/lifecycle/cloud_artifacts.zip`, 127,026 bytes,
+  SHA256 `fe2a65efe0dc9119ffdc29cf5931e5e6b550774471747e4634dd53ce510862b3`.
+- Exported database image: unchanged; 20 tables, 56 schema objects, 88 rows.
+- Provider check: `provider_check_001/receipt.json`, 15 checks passed using
+  13 read-only provider calls. Instance terminated, no job volumes, temporary
+  access resources and inputs removed. Three result objects and bucket remain
+  under the observed seven-day expiration rule; future deletion is not claimed.
+- Termination confirmed: `2026-09-06T16:30:36.302749+00:00`.
+- Launch-attempt-to-termination interval: 380.815727 seconds at $2.52/hour.
+  Estimated EC2: $0.2665710089, not an invoice; excludes other AWS charges.
+- Ledger revision 15: $94 reserved, $306 unreserved within the $400 cap.
+  The $4 reservation is retained and is not an actual $4 bill.
+
+Accepted source, model and verifier were unchanged. The original qualification
+remains refused. Earlier held-out CAS 0/72 and familiar-program 24/24 results
+remain separate. No new training, automatic retry, merge or deployment followed.
+
+## Scope and reproduction
+
 Purpose: identify the first non-returnable native operation in the saved
 `candidate_03` R_CR execution of job `cas-meta2-20260906155525-195f5ad8`.
 The failed qualification remains negative. This inspection does not train,

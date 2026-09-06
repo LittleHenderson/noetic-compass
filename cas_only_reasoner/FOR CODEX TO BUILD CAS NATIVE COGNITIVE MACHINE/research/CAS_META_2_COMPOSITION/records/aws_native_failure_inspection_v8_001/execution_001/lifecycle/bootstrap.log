@@ -1,0 +1,13 @@
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T16:24:06+00:00",
+    "ContentLength": 21973,
+    "ETag": "\"9eaa83085720d733d973b8c70b9ac010\"",
+    "ChecksumCRC32": "EoPjuQ==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+/opt/cas-meta2-native-inspection/remote.py: OK

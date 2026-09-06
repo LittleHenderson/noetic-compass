@@ -1,0 +1,1 @@
+{"status": "AWS_NATIVE_FAILURE_INSPECTION_FINISHED", "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_native_failure_inspection_v8_001\\execution_001"}

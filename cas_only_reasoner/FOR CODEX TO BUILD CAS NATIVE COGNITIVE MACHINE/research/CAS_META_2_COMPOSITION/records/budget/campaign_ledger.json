@@ -55,8 +55,8 @@
       "total_reserved_usd": "4"
     }
   },
-  "previous_state_sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012",
-  "remaining_unreserved_usd": "310.00",
+  "previous_state_sha256": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c",
+  "remaining_unreserved_usd": "306.00",
   "reservations": [
     {
       "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
@@ -774,11 +774,61 @@
       "reserved_utc": "2026-09-06T15:56:18.909360+00:00",
       "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
       "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+      "job": "cas-meta2-20260906162339-56837284",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": false,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "sqlite_read_only": true,
+        "training": false,
+        "worker_seconds_max": 180
+      },
+      "plan_sha256": "ce200716fef897b660e896ce6122313a95d0aa5d706ba101239975b2ca810291",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T16:24:00.832186+00:00",
+      "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
     }
   ],
-  "revision": 14,
+  "revision": 15,
   "schema": "cas-meta-campaign-budget/2",
   "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
-  "total_reserved_usd": "90.00",
-  "updated_utc": "2026-09-06T15:56:18.909484+00:00"
+  "total_reserved_usd": "94.00",
+  "updated_utc": "2026-09-06T16:24:00.832366+00:00"
 }
