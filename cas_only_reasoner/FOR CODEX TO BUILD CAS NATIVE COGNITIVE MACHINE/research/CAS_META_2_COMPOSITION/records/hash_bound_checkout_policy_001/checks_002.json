@@ -1,0 +1,37 @@
+{
+  "all_unrelated_attributes_unchanged": true,
+  "already_protected_other_source_files": 287,
+  "autocrlf_settings_checked": [
+    "true",
+    "false",
+    "input"
+  ],
+  "baseline_manifest_sha256": "476a8bbdc7a4b07a406e46b246ed417ea1d902e04cfb852ca710de09dcbc59f0",
+  "before_receipt_sha256": "f816cd66437c350981d4dd34f79c55a759f0732715792f82c607bdd775941231",
+  "boundary": "Prospective checkout policy. Historical source and accepted hashes are unchanged.",
+  "command": [
+    "records/hash_bound_checkout_policy_001/verify.py",
+    "--before",
+    "records/hash_bound_checkout_policy_001/before_001.json",
+    "--output",
+    "records/hash_bound_checkout_policy_001/checks_002.json"
+  ],
+  "completed": true,
+  "functional_tests_run": false,
+  "model_or_provider_work": false,
+  "new_exact_path_rules": 316,
+  "policy_sha256": "70d25a0d2692ba973baedca4332d89c9148f9f2188db816603a55351b2dd098a",
+  "protected_files": 316,
+  "pure_subtests": 6,
+  "pure_tests": 5,
+  "readable_diff_policy_unchanged": true,
+  "schema": "cas-hash-bound-checkout-policy-check/1",
+  "seconds": 10.45653890000176,
+  "source_archive_sha256": "f9bed05bd582e0796e2c4e78ff0f5174e5e1b6a3f447e5c3eab56ad002d473f9",
+  "source_files": 603,
+  "source_raw_git_archive_bytes_unchanged": true,
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "status": "CHECKOUT_POLICY_AND_MANIFEST_GATE_PASSED",
+  "tracked_paths_checked": 1944,
+  "verifier_sha256": "8e4dbf4283398b2faed6e4e64a508c85826fd5dc2b0f092b444c9da5fb85c80f"
+}
