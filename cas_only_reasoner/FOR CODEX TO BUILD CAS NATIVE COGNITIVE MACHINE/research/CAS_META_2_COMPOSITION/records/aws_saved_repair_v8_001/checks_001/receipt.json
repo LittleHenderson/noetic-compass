@@ -1,0 +1,71 @@
+{
+  "after": {
+    "aws/budget.py": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+    "aws/child_qualification_package_v8.py": "9925514d1d017cd6b247f3db634a276cc3b4b7ce69cfc858758b32e8e66d4bf7",
+    "aws/child_qualification_remote_v8.py": "fbecb2a6e06bde2052983a9073b72e2791b4ebff29c52909d7244c4366b6ab2d",
+    "aws/launch_child_qualification_v8.py": "05739bcc5514f1f0dcde736d972c44984610e4441d8fd69f8c31c61a4e87bedf",
+    "aws/launch_native_failure_inspection_v8.py": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6",
+    "aws/launch_saved_repair_v8.py": "1e7fe362a5f58b97d57dca594c0af9d0f3bc9b631cde37473be447d5bb111aa6",
+    "aws/saved_repair_package_v8.py": "baf0b56926bca9e485fcc0b202ef90d4bf55aeabbfd06e46d0c90de8850732a7",
+    "aws/saved_repair_remote_v8.py": "c0f355db0592be71b7c29c4f4d7b97394e805707a1f7a30d80afaf90c6ad39be",
+    "cas_meta2/br_construction_v8.py": "96b9fcff510d74863ce720fcc2f0c1f6f730d7ce808e59ef59bbac660d108719",
+    "cas_meta2/child_qualification_gpu_v8.py": "e6a27ffe5b3d38158be0564011f6e8197d68cf48e537138fb4277945b2af4175",
+    "cas_meta2/native.py": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512",
+    "cas_meta2/saved_repair_gpu_v8.py": "3f072b66452c508bd238cee5e23f9152cb798912b7b9e32bc759451a9dc8a037",
+    "cas_meta2/saved_repair_v8.py": "2c9c2e6d898a07047fb8d1712c2669d6576cf711f2e62b25738ae194c376b004",
+    "tests/test_saved_repair_gpu_v8.py": "351d10a92dc149a372242d7ac58e9a59ea7fe0b12a7b252427622f4f6e1918d8",
+    "tests/test_saved_repair_transport_v8.py": "a9e626063963f45ac4571370e896eb73e0dffe392e678dd835f07172e7428786",
+    "tests/test_saved_repair_v8.py": "e9d6c6d1e348f1fe96798d623ba297ade9cd2c5c4713eabb7759026af5f94ea4",
+    "tools/check_saved_repair_v8.py": "43c6de5d154f9ae4d8bff0427477d9ec80b2e54b38ecf4e00bbb5b24909ec1a5"
+  },
+  "before": {
+    "aws/budget.py": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+    "aws/child_qualification_package_v8.py": "9925514d1d017cd6b247f3db634a276cc3b4b7ce69cfc858758b32e8e66d4bf7",
+    "aws/child_qualification_remote_v8.py": "fbecb2a6e06bde2052983a9073b72e2791b4ebff29c52909d7244c4366b6ab2d",
+    "aws/launch_child_qualification_v8.py": "05739bcc5514f1f0dcde736d972c44984610e4441d8fd69f8c31c61a4e87bedf",
+    "aws/launch_native_failure_inspection_v8.py": "2b79a1e8ed73066a6618afedbdfc56c769290ccc221e84fe51d4eb6b01ed1bb6",
+    "aws/launch_saved_repair_v8.py": "1e7fe362a5f58b97d57dca594c0af9d0f3bc9b631cde37473be447d5bb111aa6",
+    "aws/saved_repair_package_v8.py": "baf0b56926bca9e485fcc0b202ef90d4bf55aeabbfd06e46d0c90de8850732a7",
+    "aws/saved_repair_remote_v8.py": "c0f355db0592be71b7c29c4f4d7b97394e805707a1f7a30d80afaf90c6ad39be",
+    "cas_meta2/br_construction_v8.py": "96b9fcff510d74863ce720fcc2f0c1f6f730d7ce808e59ef59bbac660d108719",
+    "cas_meta2/child_qualification_gpu_v8.py": "e6a27ffe5b3d38158be0564011f6e8197d68cf48e537138fb4277945b2af4175",
+    "cas_meta2/native.py": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512",
+    "cas_meta2/saved_repair_gpu_v8.py": "3f072b66452c508bd238cee5e23f9152cb798912b7b9e32bc759451a9dc8a037",
+    "cas_meta2/saved_repair_v8.py": "2c9c2e6d898a07047fb8d1712c2669d6576cf711f2e62b25738ae194c376b004",
+    "tests/test_saved_repair_gpu_v8.py": "351d10a92dc149a372242d7ac58e9a59ea7fe0b12a7b252427622f4f6e1918d8",
+    "tests/test_saved_repair_transport_v8.py": "a9e626063963f45ac4571370e896eb73e0dffe392e678dd835f07172e7428786",
+    "tests/test_saved_repair_v8.py": "e9d6c6d1e348f1fe96798d623ba297ade9cd2c5c4713eabb7759026af5f94ea4",
+    "tools/check_saved_repair_v8.py": "43c6de5d154f9ae4d8bff0427477d9ec80b2e54b38ecf4e00bbb5b24909ec1a5"
+  },
+  "boundary": "Fake SQL/provider objects and byte-only ZIP checks. No SQLite, model, network, reservation or paid execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_saved_repair_v8.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_saved_repair_v8_001\\checks_001",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-06T16:54:21.361883+00:00",
+  "ledger_after": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5",
+  "ledger_before": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 183,
+      "sha256": "005ad525dae19b171d712a7124b379424518cf383c6e10db3485f6a45d618b92"
+    }
+  },
+  "pid": 71296,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-saved-repair-pure-tests/8",
+  "started_utc": "2026-09-06T16:54:18.493571+00:00",
+  "unchanged": true,
+  "wall_seconds": 2.8683099999980186
+}
