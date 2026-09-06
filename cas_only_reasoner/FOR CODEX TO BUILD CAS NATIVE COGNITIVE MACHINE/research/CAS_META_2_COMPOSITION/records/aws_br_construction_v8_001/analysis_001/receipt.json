@@ -1,0 +1,20 @@
+{
+  "boundary": "Recorded AWS component evidence plus pure JSON/byte replay. This analysis opens no database, loads no tensor/model, does not independently re-execute native CJTs, and proves no learned input selection, task correctness, full-program continuation, generalization or CAS-specific advantage. Outer-caller absence remains an explicit construction assertion, not proof from dictionary equality.",
+  "files": {
+    "launch_receipt_observed.json": {
+      "bytes": 55311,
+      "sha256": "6e490f9a8c3fce6b615d62e2ecf17bfbd40f12fa439c7f7c92075f6539af03af"
+    },
+    "summary.json": {
+      "bytes": 444503,
+      "sha256": "bdf3bfa30544e75dafebdaf90090bad184ae4df68e98bc637abaef8e6df78e7e"
+    },
+    "summary.md": {
+      "bytes": 808,
+      "sha256": "b40549df63d649ab75efb00dc9138cc62cc3b73be872e6b8cb06769c82194797"
+    }
+  },
+  "schema": "cas-meta2-br-offline-analysis-files/8",
+  "status": "RECORDED_COMPONENT_EXECUTION_AND_CONTRAST_REPLAYED",
+  "tool_sha256": "b48480388ca00cc75dad1dddf2ce26c2da646190b893812b270c5231e9f3ca81"
+}

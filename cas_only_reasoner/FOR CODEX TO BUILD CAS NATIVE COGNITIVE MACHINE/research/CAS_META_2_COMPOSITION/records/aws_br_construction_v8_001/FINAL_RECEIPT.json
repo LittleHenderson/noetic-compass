@@ -1,0 +1,370 @@
+{
+  "canonical_ledger_matched_saved_revision_at_finalization": true,
+  "created_utc": "2026-09-06T15:20:45.193559+00:00",
+  "file_binding_policy": "All local job files present at finalization, excluding FINAL_RECEIPT.json. Later unlisted files are not covered.",
+  "files": [
+    {
+      "bytes": 55311,
+      "path": "analysis_001/launch_receipt_observed.json",
+      "sha256": "6e490f9a8c3fce6b615d62e2ecf17bfbd40f12fa439c7f7c92075f6539af03af"
+    },
+    {
+      "bytes": 1046,
+      "path": "analysis_001/receipt.json",
+      "sha256": "662c60c36915792c606ee844022eb8a4d69565e22cfd479a5acefc004857af55"
+    },
+    {
+      "bytes": 444503,
+      "path": "analysis_001/summary.json",
+      "sha256": "bdf3bfa30544e75dafebdaf90090bad184ae4df68e98bc637abaef8e6df78e7e"
+    },
+    {
+      "bytes": 808,
+      "path": "analysis_001/summary.md",
+      "sha256": "b40549df63d649ab75efb00dc9138cc62cc3b73be872e6b8cb06769c82194797"
+    },
+    {
+      "bytes": 28373,
+      "path": "analyze_result.py",
+      "sha256": "b48480388ca00cc75dad1dddf2ce26c2da646190b893812b270c5231e9f3ca81"
+    },
+    {
+      "bytes": 1835,
+      "path": "execution_001/bootstrap.log",
+      "sha256": "5715276f5e82b20911532cde942172f8f0fbc48cb1a58cf9d543bfea5b5881ec"
+    },
+    {
+      "bytes": 1502016,
+      "path": "execution_001/cloud_artifacts.zip",
+      "sha256": "3cd1806649e0cd357d37391b805c64f928f0b5615aea524f8d84332f77aa735a"
+    },
+    {
+      "bytes": 60318,
+      "path": "execution_001/launch_receipt.json",
+      "sha256": "807f35fcbd84040861ddd8f4d096ad361d00bec5e4828a3a6432985f21f76a68"
+    },
+    {
+      "bytes": 3530,
+      "path": "execution_001/launch_request.json",
+      "sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677"
+    },
+    {
+      "bytes": 36253,
+      "path": "execution_001/ledger_snapshot.json",
+      "sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012"
+    },
+    {
+      "bytes": 14233,
+      "path": "execution_001/post_run_provider_read.json",
+      "sha256": "f9e9593d63da6efa319a372a0e494abd3a4ed2891910421915626effeaad3921"
+    },
+    {
+      "bytes": 27404,
+      "path": "execution_001/preflight_receipt.json",
+      "sha256": "2baa74c0b1e6f673ec32c75f2e9bf0b9ca369b7ac56fe3c2474800d45615b3d1"
+    },
+    {
+      "bytes": 2207,
+      "path": "execution_001/reservation_receipt.json",
+      "sha256": "0542527f94d6eef7b2db456a3d6dc28cd4dfa0ffb56c5e574973b8426621ccaf"
+    },
+    {
+      "bytes": 2442,
+      "path": "execution_001/worker_plan.json",
+      "sha256": "ff5309e58770e71128412ae7abc315b15509dc34ab549981478bff6f22f26f5c"
+    },
+    {
+      "bytes": 24473,
+      "path": "finalize_evidence.py",
+      "sha256": "251816ae4785489eed02d094fae85cf5874da3c7c4160fd87b8aa3568dcef098"
+    },
+    {
+      "bytes": 4881,
+      "path": "independent_review_001/REVIEW.md",
+      "sha256": "5075ce3fa70c1bbd00afeee6fc6dd5ea91b150481c7a1049cd9346f3a0152377"
+    },
+    {
+      "bytes": 5943,
+      "path": "post_run_provider_read.py",
+      "sha256": "93b7184f39a1513d58f273d6ed9c65fc6b7f60e360088a9281e5b53c0dd0ce15"
+    },
+    {
+      "bytes": 7924,
+      "path": "README.md",
+      "sha256": "2d1aa460022c7e5ebcd1a63ae7b8da26cfee633f5a0a9de51ac416c277e6cf46"
+    },
+    {
+      "bytes": 2614,
+      "path": "registration_001/capture_parent.py",
+      "sha256": "fb9b4659658bce43953c502375a6009f79924e5f53730a6eb3272e00a347f987"
+    },
+    {
+      "bytes": 3530,
+      "path": "registration_001/launch_request.json",
+      "sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677"
+    },
+    {
+      "bytes": 2235,
+      "path": "registration_001/parent_process_completion.json",
+      "sha256": "324f13fabfc454c71393536eb3d04690ba66a516d35b8b6e35b6ff5bc1c07c73"
+    },
+    {
+      "bytes": 1355,
+      "path": "registration_001/parent_process_identity.json",
+      "sha256": "ff50bf347eeabe132cd8379b8cc08c2e037a4a9c5cc7797ea451be959e70e721"
+    },
+    {
+      "bytes": 1855,
+      "path": "registration_001/parent_process_start.json",
+      "sha256": "84304a2017b7a8c3f6116a9b53225d2db4f7c21ab96e2fecfeba64e8bbca2f62"
+    },
+    {
+      "bytes": 0,
+      "path": "registration_001/parent_stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 61580,
+      "path": "registration_001/parent_stdout.txt",
+      "sha256": "54e2ce3fb395175218e88a148e855743964a02f9404fc31962dcd72bc7379d78"
+    },
+    {
+      "bytes": 1953,
+      "path": "registration_001/standing_authority.json",
+      "sha256": "2cc6af381b213bfcaadf03b1ffc204632b9b063ab7497282572c6e25bf5863e5"
+    }
+  ],
+  "finalizer_sha256": "251816ae4785489eed02d094fae85cf5874da3c7c4160fd87b8aa3568dcef098",
+  "proof": {
+    "analyzer_sha256": "b48480388ca00cc75dad1dddf2ce26c2da646190b893812b270c5231e9f3ca81",
+    "boundaries": {
+      "accepted_runtime_and_protected_source_bytes_changed": false,
+      "cas_specific_advantage_established": false,
+      "earlier_heldout_cas_result": "0/72 unchanged",
+      "full_program_continuation_established": false,
+      "generalization_established": false,
+      "learned_input_selection_established": false,
+      "native_validity_independently_reexecuted": false,
+      "no_automatic_merge_or_push": true,
+      "same_state_meaning": "Recorded witnesses match; pure equality does not establish missing outer execution state.",
+      "task_correctness_established": false,
+      "training": false
+    },
+    "budget": {
+      "ancillary_charges": "Additional. The $4 reservation is retained; this is not an AWS invoice.",
+      "approved_job_reservation_usd": "4.00",
+      "automatic_refund": false,
+      "campaign_cap_usd": "400.00",
+      "checked_ec2_rate_usd_per_hour": "2.5200000000",
+      "confirmed_termination_utc": "2026-09-06T15:11:21.277375+00:00",
+      "interval_ec2_estimate_usd": "0.367327296000000",
+      "launch_request_utc": "2026-09-06T15:02:36.524095+00:00",
+      "ledger_revision": 13,
+      "ledger_sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012",
+      "not_a_provider_billing_cap": true,
+      "not_an_aws_invoice": true,
+      "observed_interval_seconds": "524.75328",
+      "rounded_ec2_estimate_usd": "0.3675000000",
+      "rounded_seconds_for_upper_time_estimate": 525,
+      "total_reserved_usd": "86.00",
+      "unreserved_usd": "314.00"
+    },
+    "checks": {
+      "cloud_members_including_collection_receipt": 50,
+      "collected_files_verified": 49,
+      "database_opened_by_finalizer": false,
+      "lifecycle_child_exit_codes": {
+        "lifecycle/cuda_identity/receipt.json": 0,
+        "lifecycle/dependency_install/receipt.json": 0,
+        "lifecycle/pip_freeze/receipt.json": 0,
+        "lifecycle/torch_install/receipt.json": 0,
+        "lifecycle/venv/receipt.json": 0,
+        "lifecycle/wheel_install/receipt.json": 0,
+        "lifecycle/worker/receipt.json": 0
+      },
+      "model_or_tensor_loaded_by_finalizer": false,
+      "native_execution_repeated_by_finalizer": false,
+      "parent_exit_code": 0,
+      "parent_files_verified": 8,
+      "parent_raw_outputs": {
+        "parent_stderr.txt": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "parent_stdout.txt": {
+          "bytes": 61580,
+          "sha256": "54e2ce3fb395175218e88a148e855743964a02f9404fc31962dcd72bc7379d78"
+        }
+      },
+      "provider_called_by_finalizer": false,
+      "raw_cloud_logs_verified": 14,
+      "registration_files_verified": 3,
+      "remote_exit_code": 0,
+      "source_members_verified": 630
+    },
+    "cleanup": {
+      "aws_bucket_retained": "cas-meta2-20260906150012-7c9f6d00-807562639912",
+      "aws_lifecycle_rule_days": 7,
+      "aws_result_objects_retained": 3,
+      "confirmed_utc": "2026-09-06T15:11:21.277375+00:00",
+      "errors": [],
+      "post_run_provider_read_utc": "2026-09-06T15:17:48.859114+00:00",
+      "provider_read_sha256": "f9e9593d63da6efa319a372a0e494abd3a4ed2891910421915626effeaad3921",
+      "remaining_job_volumes": 0,
+      "retained_local_evidence": true,
+      "retention_boundary": "The three result objects expire under the seven-day rule. The bucket is not deleted.",
+      "temporary_auxiliary_resources_absent": true,
+      "termination_confirmed": true,
+      "uploaded_inputs_absent": true
+    },
+    "cloud_archive_sha256": "3cd1806649e0cd357d37391b805c64f928f0b5615aea524f8d84332f77aa735a",
+    "construction_receipt_sha256": "fe527ae5d336ce274a2508d123a2d351678d5d90eb61329cf404e467d0ce12d2",
+    "environment": {
+      "ec2": {
+        "accountId": "807562639912",
+        "architecture": "x86_64",
+        "availabilityZone": "us-west-2c",
+        "billingProducts": null,
+        "devpayProductCodes": null,
+        "imageId": "ami-0fbbd0facbc9e3cff",
+        "instanceId": "i-05ba34f47185eb934",
+        "instanceType": "g7.2xlarge",
+        "kernelId": null,
+        "marketplaceProductCodes": null,
+        "pendingTime": "2026-09-06T15:02:37Z",
+        "privateIp": "172.31.13.36",
+        "ramdiskId": null,
+        "region": "us-west-2",
+        "version": "2017-09-30"
+      },
+      "executable": "/opt/cas-meta2-br/venv/bin/python",
+      "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+      "numeric_settings": {
+        "cublas_workspace_config": ":4096:8",
+        "cuda": "12.8",
+        "cudnn_allow_tf32": false,
+        "cudnn_benchmark": false,
+        "cudnn_deterministic": true,
+        "deterministic_algorithms": true,
+        "matmul_allow_tf32": false,
+        "seed": 7,
+        "torch": "2.11.0+cu128"
+      },
+      "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+    },
+    "final_parent_receipt_sha256": "807f35fcbd84040861ddd8f4d096ad361d00bec5e4828a3a6432985f21f76a68",
+    "job": "cas-meta2-20260906150012-7c9f6d00",
+    "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+    "registration_source_sha": "f6429729c396152479168296ed364fde8926d28e",
+    "request_sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677",
+    "result": {
+      "arm_allowance_each": 8192,
+      "arm_policy_units": {
+        "B": 72,
+        "R": 72
+      },
+      "arm_remaining_units_each": 8120,
+      "contrast": {
+        "decoded_content_equal": true,
+        "intervention": "Whole committed reference: payload, meaning, producer, provenance and publication age.",
+        "max_absolute_difference": 5.323855634742358e-05,
+        "numeric_values_equal": false,
+        "payload_bytes_equal": false,
+        "shape": [
+          1,
+          2,
+          4
+        ],
+        "task_relevance_established": false,
+        "whole_task_verifier_executed": false
+      },
+      "execution_ticks": [
+        {
+          "arm": "shared_prelude",
+          "tick": 1,
+          "trace_id": "trace-7a050065ec0f2d17d4a112b1"
+        },
+        {
+          "arm": "shared_prelude",
+          "tick": 2,
+          "trace_id": "trace-c3ec8f4586b2927cd3f4294d"
+        },
+        {
+          "arm": "shared_prelude",
+          "tick": 3,
+          "trace_id": "trace-faa1a64ac9debf4db0821569"
+        },
+        {
+          "arm": "shared_prelude",
+          "tick": 4,
+          "trace_id": "trace-6f6e3c426b7098d95a3d0858"
+        },
+        {
+          "arm": "B",
+          "tick": 5,
+          "trace_id": "trace-79333c7916dfc728d38869cc"
+        },
+        {
+          "arm": "R",
+          "tick": 5,
+          "trace_id": "trace-cde9dfb54c52a028506ac2b4"
+        }
+      ],
+      "inputs": {
+        "B": {
+          "bound_artifact_sha256": "8dd3b60e4c15e8532f3f3d3b431fa50594db15310f283f3a05500caaa70ddbaa",
+          "comparison_tick": 5,
+          "decoded_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L3"
+          },
+          "payload_sha256": "e5e7444a705956ab43c8375354d751294c7fabd4bd08b1088f5732ca2c4eea5b",
+          "producer_cjt_id": "B",
+          "publication_age_ticks": 3,
+          "published_effect_id": "effect-40674db44aa6bc615458f66f",
+          "published_tick": 2,
+          "shape": [
+            1,
+            2,
+            4
+          ]
+        },
+        "R": {
+          "bound_artifact_sha256": "7e3c06eabffc103ea5de7fc4f1b0ff46442ecdd4d36c70f9a32d1934144de1b5",
+          "comparison_tick": 5,
+          "decoded_content": {
+            "effect_kind": "DECOMPOSITION_SIGNAL",
+            "operation_id": "^6",
+            "symbol": "L1"
+          },
+          "payload_sha256": "77ee3b777a2fe362ef3c5c5abd14f93bde63e6f08ce20ebd0f11bd20814bf378",
+          "producer_cjt_id": "R",
+          "publication_age_ticks": 1,
+          "published_effect_id": "effect-6538d73cc0209611fd2d305f",
+          "published_tick": 4,
+          "shape": [
+            1,
+            2,
+            4
+          ]
+        }
+      },
+      "learning_result": null,
+      "native_cjt_executions": 6,
+      "outer_caller_absence": "Explicit construction assertion, not independently proven.",
+      "prelude_policy_units": 288,
+      "same_state_checks_replayed": 4,
+      "task_accuracy": null,
+      "tick_boundary": "Shared prelude ticks 1-4, then tick 5 separately in B and R; not one linear six-tick history.",
+      "whole_reference_intervention": "Payload, meaning, producer, provenance and publication age differ together.",
+      "worker_process_wall_seconds": 42.52156505799999
+    },
+    "schema": "cas-meta2-br-final-validation/8",
+    "source_archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+    "source_manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "standing_authority_sha256": "2cc6af381b213bfcaadf03b1ffc204632b9b063ab7497282572c6e25bf5863e5",
+    "status": "BR_COMPONENT_EVIDENCE_VALIDATED",
+    "worker_source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  }
+}

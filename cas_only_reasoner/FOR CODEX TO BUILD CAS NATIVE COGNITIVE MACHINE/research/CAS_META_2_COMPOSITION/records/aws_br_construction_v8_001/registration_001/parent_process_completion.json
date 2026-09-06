@@ -1,0 +1,39 @@
+{
+  "automatic_retries": 0,
+  "capture_source_sha256": "fb9b4659658bce43953c502375a6009f79924e5f53730a6eb3272e00a347f987",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "aws.launch_br_construction_v8",
+    "--execute",
+    "--request",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_br_construction_v8_001\\registration_001\\launch_request.json",
+    "--request-sha256",
+    "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677",
+    "--authority",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_br_construction_v8_001\\registration_001\\standing_authority.json",
+    "--authority-sha256",
+    "2cc6af381b213bfcaadf03b1ffc204632b9b063ab7497282572c6e25bf5863e5",
+    "--receipt-dir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_br_construction_v8_001\\execution_001",
+    "--profile",
+    "default"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-06T15:11:24.716288+00:00",
+  "outputs": {
+    "parent_stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parent_stdout.txt": {
+      "bytes": 61580,
+      "sha256": "54e2ce3fb395175218e88a148e855743964a02f9404fc31962dcd72bc7379d78"
+    }
+  },
+  "pid": 9508,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "started_utc": "2026-09-06T15:02:15.854078+00:00"
+}

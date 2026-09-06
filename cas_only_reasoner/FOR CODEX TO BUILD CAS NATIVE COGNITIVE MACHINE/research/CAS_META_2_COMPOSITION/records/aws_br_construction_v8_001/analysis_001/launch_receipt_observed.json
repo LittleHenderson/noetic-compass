@@ -1,0 +1,1110 @@
+{
+  "archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+  "artifact_collection": {
+    "archive_files_sha256": {
+      "artifact_collection_receipt.json": "31ba15642411fb2024fd2d4ea96b890236b15a580f74fd61596db4a44bcc7cdb",
+      "construction/arm_B/before_witness.json": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee",
+      "construction/arm_B/before_witness_check.json": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd",
+      "construction/arm_B/result.json": "aee3bc455ab66ff922b6c63c86b3c42fd3c3d2a99cb809997cc0f7633ba99a5f",
+      "construction/arm_R/before_witness.json": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee",
+      "construction/arm_R/before_witness_check.json": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd",
+      "construction/arm_R/result.json": "fdd41d869ce1bee9e6d39835b42f0f08494a048fc7193eaff2898375dcb0be8d",
+      "construction/construction_receipt.json": "fe527ae5d336ce274a2508d123a2d351678d5d90eb61329cf404e467d0ce12d2",
+      "construction/copies/B.sqlite": "baba300ad6906350104f5eb0b561d919b460bd12f6f8caf76f8f42b28043f2aa",
+      "construction/copies/R.sqlite": "23941a7e479e4df6ef150ad72db0ea76621a08c929b28e291a7d078125157bc1",
+      "construction/copies/master.sqlite": "476f4cfdfdfe755c0542ebf89208b867234c62dbdce34a786bbb5d599e68c75a",
+      "construction/copies/receipt.json": "00a20202466aa7090a5d583b798bb0e40050dde8141c283e6035e41ccb3a6ea3",
+      "construction/preclose_witness.json": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee",
+      "construction/preclose_witness_check.json": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd",
+      "construction/prelude/native.db": "476f4cfdfdfe755c0542ebf89208b867234c62dbdce34a786bbb5d599e68c75a",
+      "construction/progress.json": "06d32c6715e3d89b679640bf04208a1a51101534cb60b0e446641b79bf18148d",
+      "construction/public.json": "cc9006a21bed462fc059a0ee3b01acfbf94270b0b362b36365a353b55c5d4049",
+      "lifecycle/cuda_identity/receipt.json": "9fcc747d3c68318e912e48a2deaa2d8866303c4285516e6901cb599cac887754",
+      "lifecycle/cuda_identity/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/cuda_identity/stdout.txt": "47266ad60304fb507bcc6444c9bd587ad994c7d4c8357836671528058da6dbe2",
+      "lifecycle/deadline_limits.json": "0264e6e16906cfb85e2cc389bb98b6805763f99682655037282ee9d74a72ccf5",
+      "lifecycle/dependency_install.json": "a6b48fd9251ecbacbda775c95ef196f3c343cbf46da9add881ab65d71e47914d",
+      "lifecycle/dependency_install/receipt.json": "65b59b2dc0137f619db500644c6fc1b70ab935468c9cb94882633331a1533058",
+      "lifecycle/dependency_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/dependency_install/stdout.txt": "5bf67b72166bf7f90d276557adf71a7404adc877e230da64788ad175d3316b33",
+      "lifecycle/instance_identity.json": "bc5778a5adaae324a804156abde80a31cf154d2900bd39e823f075c3db05a7c2",
+      "lifecycle/permit.json": "2c3d800718fd305cc93a24d5a30277242af8ccb08bae9cab306c2e6273118763",
+      "lifecycle/pip_freeze/receipt.json": "b51cef3335ef3bcf23b54a495411a01af9a71989dca450dfedcc4a55d27610b7",
+      "lifecycle/pip_freeze/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/pip_freeze/stdout.txt": "a58bd2a7d3ac2db90f137f2b1e39d89df6cca858adfdf35916b36f3d58849efd",
+      "lifecycle/remote_config.json": "a7cd4387d978ca1f13d6960fea93fe30494b0393fb7cdd42457645097c9a0e20",
+      "lifecycle/remote_receipt.json": "020de363700f4a53553846583224b6ba71c47d2ab18c6209a030fc975da64eb3",
+      "lifecycle/source_after.json": "d5b7a71d5877e441306f3711457780c264315c0e28ed370079fbf17600a69d7f",
+      "lifecycle/source_before.json": "d5b7a71d5877e441306f3711457780c264315c0e28ed370079fbf17600a69d7f",
+      "lifecycle/torch_install.json": "ede61b39fcf1946fef93756cda2f5a9948fc15e69866329999eb94b87aaae34b",
+      "lifecycle/torch_install/receipt.json": "1040145db8a5ac12f20ffa1cdfc70da74316b641d3b4ff5f4a9f8528865b4351",
+      "lifecycle/torch_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/torch_install/stdout.txt": "de268ce545b957247ef7acb2cc1fa61f5b5be079e5922318005147b832cf0c26",
+      "lifecycle/transfer_01.json": "337a7669455291f1e42db7ec56e6b5b45efd9f502c18d225a63dc4e67e66a013",
+      "lifecycle/transfer_02.json": "571f2dc333d3e18401bd371d32795d9f6283b131f303da425f288ef8816f3127",
+      "lifecycle/venv/receipt.json": "a071c24cf04b073f874b0462b457e39fc7a94f38d1eb7eb4838ffdc7c1a844cf",
+      "lifecycle/venv/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/venv/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/wheel_install.json": "5d317e9f79aee19123b74aaab8a005ceb8a56708c01e73660065af3880dce2c0",
+      "lifecycle/wheel_install/receipt.json": "420e5289c4d98df0d6285589a3bfa31f6f5228ece117d3f9933d5ff64c5b358d",
+      "lifecycle/wheel_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/wheel_install/stdout.txt": "c020e68f34b85efc464f952f26291b644a98a66e4ea5b1d3f5e409e8b1feba75",
+      "lifecycle/worker/receipt.json": "ed8f849dbca8400eec4194005624bbf3fe2225d08e8af579da8614b48b89a6f4",
+      "lifecycle/worker/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lifecycle/worker/stdout.txt": "ad999da30a72eadd1d6cd4caa8db1e0502bb03692c34ce53debecb70fadebcbf"
+    },
+    "archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+    "construction_status": "BR_COMPONENT_EXECUTED",
+    "experiment": {
+      "entrypoint": "cas_meta2.br_construction_v8",
+      "profile": "same_state_br_construction_v8"
+    },
+    "failure": null,
+    "files": {
+      "construction/arm_B/before_witness.json": {
+        "bytes": 2816056,
+        "sha256": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee"
+      },
+      "construction/arm_B/before_witness_check.json": {
+        "bytes": 81035,
+        "sha256": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd"
+      },
+      "construction/arm_B/result.json": {
+        "bytes": 626173,
+        "sha256": "aee3bc455ab66ff922b6c63c86b3c42fd3c3d2a99cb809997cc0f7633ba99a5f"
+      },
+      "construction/arm_R/before_witness.json": {
+        "bytes": 2816056,
+        "sha256": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee"
+      },
+      "construction/arm_R/before_witness_check.json": {
+        "bytes": 81035,
+        "sha256": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd"
+      },
+      "construction/arm_R/result.json": {
+        "bytes": 626167,
+        "sha256": "fdd41d869ce1bee9e6d39835b42f0f08494a048fc7193eaff2898375dcb0be8d"
+      },
+      "construction/construction_receipt.json": {
+        "bytes": 1416480,
+        "sha256": "fe527ae5d336ce274a2508d123a2d351678d5d90eb61329cf404e467d0ce12d2"
+      },
+      "construction/copies/B.sqlite": {
+        "bytes": 1310720,
+        "sha256": "baba300ad6906350104f5eb0b561d919b460bd12f6f8caf76f8f42b28043f2aa"
+      },
+      "construction/copies/R.sqlite": {
+        "bytes": 1310720,
+        "sha256": "23941a7e479e4df6ef150ad72db0ea76621a08c929b28e291a7d078125157bc1"
+      },
+      "construction/copies/master.sqlite": {
+        "bytes": 1085440,
+        "sha256": "476f4cfdfdfe755c0542ebf89208b867234c62dbdce34a786bbb5d599e68c75a"
+      },
+      "construction/copies/receipt.json": {
+        "bytes": 5978,
+        "sha256": "00a20202466aa7090a5d583b798bb0e40050dde8141c283e6035e41ccb3a6ea3"
+      },
+      "construction/preclose_witness.json": {
+        "bytes": 2816056,
+        "sha256": "e93d887f940076dc6aa6d69f1085ca742521d4c8c1f62721a2289d8bb7562bee"
+      },
+      "construction/preclose_witness_check.json": {
+        "bytes": 81035,
+        "sha256": "3c0279b6181dd70893b34bcfe64079be8211fe536cbe7606126fd08f71b874dd"
+      },
+      "construction/prelude/native.db": {
+        "bytes": 1085440,
+        "sha256": "476f4cfdfdfe755c0542ebf89208b867234c62dbdce34a786bbb5d599e68c75a"
+      },
+      "construction/progress.json": {
+        "bytes": 719568,
+        "sha256": "06d32c6715e3d89b679640bf04208a1a51101534cb60b0e446641b79bf18148d"
+      },
+      "construction/public.json": {
+        "bytes": 1905,
+        "sha256": "cc9006a21bed462fc059a0ee3b01acfbf94270b0b362b36365a353b55c5d4049"
+      },
+      "lifecycle/cuda_identity/receipt.json": {
+        "bytes": 1104,
+        "sha256": "9fcc747d3c68318e912e48a2deaa2d8866303c4285516e6901cb599cac887754"
+      },
+      "lifecycle/cuda_identity/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/cuda_identity/stdout.txt": {
+        "bytes": 176,
+        "sha256": "47266ad60304fb507bcc6444c9bd587ad994c7d4c8357836671528058da6dbe2"
+      },
+      "lifecycle/deadline_limits.json": {
+        "bytes": 193,
+        "sha256": "0264e6e16906cfb85e2cc389bb98b6805763f99682655037282ee9d74a72ccf5"
+      },
+      "lifecycle/dependency_install.json": {
+        "bytes": 112895,
+        "sha256": "a6b48fd9251ecbacbda775c95ef196f3c343cbf46da9add881ab65d71e47914d"
+      },
+      "lifecycle/dependency_install/receipt.json": {
+        "bytes": 864,
+        "sha256": "65b59b2dc0137f619db500644c6fc1b70ab935468c9cb94882633331a1533058"
+      },
+      "lifecycle/dependency_install/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/dependency_install/stdout.txt": {
+        "bytes": 4910,
+        "sha256": "5bf67b72166bf7f90d276557adf71a7404adc877e230da64788ad175d3316b33"
+      },
+      "lifecycle/instance_identity.json": {
+        "bytes": 464,
+        "sha256": "bc5778a5adaae324a804156abde80a31cf154d2900bd39e823f075c3db05a7c2"
+      },
+      "lifecycle/permit.json": {
+        "bytes": 43059,
+        "sha256": "2c3d800718fd305cc93a24d5a30277242af8ccb08bae9cab306c2e6273118763"
+      },
+      "lifecycle/pip_freeze/receipt.json": {
+        "bytes": 673,
+        "sha256": "b51cef3335ef3bcf23b54a495411a01af9a71989dca450dfedcc4a55d27610b7"
+      },
+      "lifecycle/pip_freeze/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/pip_freeze/stdout.txt": {
+        "bytes": 1380,
+        "sha256": "a58bd2a7d3ac2db90f137f2b1e39d89df6cca858adfdf35916b36f3d58849efd"
+      },
+      "lifecycle/remote_config.json": {
+        "bytes": 159319,
+        "sha256": "a7cd4387d978ca1f13d6960fea93fe30494b0393fb7cdd42457645097c9a0e20"
+      },
+      "lifecycle/remote_receipt.json": {
+        "bytes": 1020,
+        "sha256": "020de363700f4a53553846583224b6ba71c47d2ab18c6209a030fc975da64eb3"
+      },
+      "lifecycle/source_after.json": {
+        "bytes": 177,
+        "sha256": "d5b7a71d5877e441306f3711457780c264315c0e28ed370079fbf17600a69d7f"
+      },
+      "lifecycle/source_before.json": {
+        "bytes": 177,
+        "sha256": "d5b7a71d5877e441306f3711457780c264315c0e28ed370079fbf17600a69d7f"
+      },
+      "lifecycle/torch_install.json": {
+        "bytes": 159365,
+        "sha256": "ede61b39fcf1946fef93756cda2f5a9948fc15e69866329999eb94b87aaae34b"
+      },
+      "lifecycle/torch_install/receipt.json": {
+        "bytes": 846,
+        "sha256": "1040145db8a5ac12f20ffa1cdfc70da74316b641d3b4ff5f4a9f8528865b4351"
+      },
+      "lifecycle/torch_install/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/torch_install/stdout.txt": {
+        "bytes": 13278,
+        "sha256": "de268ce545b957247ef7acb2cc1fa61f5b5be079e5922318005147b832cf0c26"
+      },
+      "lifecycle/transfer_01.json": {
+        "bytes": 482,
+        "sha256": "337a7669455291f1e42db7ec56e6b5b45efd9f502c18d225a63dc4e67e66a013"
+      },
+      "lifecycle/transfer_02.json": {
+        "bytes": 480,
+        "sha256": "571f2dc333d3e18401bd371d32795d9f6283b131f303da425f288ef8816f3127"
+      },
+      "lifecycle/venv/receipt.json": {
+        "bytes": 660,
+        "sha256": "a071c24cf04b073f874b0462b457e39fc7a94f38d1eb7eb4838ffdc7c1a844cf"
+      },
+      "lifecycle/venv/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/venv/stdout.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/wheel_install.json": {
+        "bytes": 16148,
+        "sha256": "5d317e9f79aee19123b74aaab8a005ceb8a56708c01e73660065af3880dce2c0"
+      },
+      "lifecycle/wheel_install/receipt.json": {
+        "bytes": 1033,
+        "sha256": "420e5289c4d98df0d6285589a3bfa31f6f5228ece117d3f9933d5ff64c5b358d"
+      },
+      "lifecycle/wheel_install/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/wheel_install/stdout.txt": {
+        "bytes": 400,
+        "sha256": "c020e68f34b85efc464f952f26291b644a98a66e4ea5b1d3f5e409e8b1feba75"
+      },
+      "lifecycle/worker/receipt.json": {
+        "bytes": 1031,
+        "sha256": "ed8f849dbca8400eec4194005624bbf3fe2225d08e8af579da8614b48b89a6f4"
+      },
+      "lifecycle/worker/stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "lifecycle/worker/stdout.txt": {
+        "bytes": 242,
+        "sha256": "ad999da30a72eadd1d6cd4caa8db1e0502bb03692c34ce53debecb70fadebcbf"
+      }
+    },
+    "finished_utc": "2026-09-06T15:06:07.196839+00:00",
+    "generic_helper_sha256": "e72f5937895d856797e9dae200100b279a39bdbe4850f67b5405a70cb9719f8b",
+    "included_full_file_count": 49,
+    "job": "cas-meta2-20260906150012-7c9f6d00",
+    "native_component_result": "BR_COMPONENT_EXECUTED",
+    "native_component_success": true,
+    "native_execution_requested": true,
+    "neural_training": false,
+    "not_task_correctness_or_learning": true,
+    "omitted_full_file_count": 0,
+    "original_bytes": 17400240,
+    "original_file_count": 49,
+    "original_member_coverage_verified": true,
+    "parent_member_hashes_verified": 49,
+    "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+    "partial_evidence": false,
+    "returncode": 0,
+    "schema": "cas-meta2-br-remote-receipt/8",
+    "smoke_only": false,
+    "source_manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+    "started_utc": "2026-09-06T15:03:51.638969+00:00",
+    "task_conditioned_correctness": null,
+    "unsafe_paths": [],
+    "worker_component_completed": true,
+    "worker_process_started": true
+  },
+  "budget_reservation_state": "RESERVED_NO_AUTOMATIC_REFUND",
+  "cleanup_errors": [],
+  "events": [
+    {
+      "event": "BUDGET_RESERVATION_ATTEMPTED",
+      "reserved_usd": "4.00",
+      "utc": "2026-09-06T15:02:22.003898+00:00",
+      "worker_source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+    },
+    {
+      "event": "BUDGET_RESERVED_BEFORE_PROVIDER_CREATION",
+      "reserved_usd": "4.00",
+      "utc": "2026-09-06T15:02:22.049978+00:00",
+      "worker_source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+    },
+    {
+      "bootstrap_sha256": "e80681a1785900b9780a749ce9e02987b0d07fd1ee3af6380f8f710f89b1154d",
+      "event": "REMOTE_AND_BOOTSTRAP_PINNED",
+      "remote_sha256": "420bf6465c1f5d75a87fe8b4e20c0ef0e87319a251fc1ba54ed29422f550d5ee",
+      "utc": "2026-09-06T15:02:26.518790+00:00"
+    },
+    {
+      "client_token": "cas-meta2-20260906150012-7c9f6d00",
+      "event": "INSTANCE_LAUNCH_ATTEMPTED",
+      "lifetime_deadline": "2026-09-06T16:02:36.524066+00:00",
+      "utc": "2026-09-06T15:02:36.524095+00:00"
+    },
+    {
+      "event": "INSTANCE_CREATED",
+      "instance_id": "i-05ba34f47185eb934",
+      "utc": "2026-09-06T15:02:37.656280+00:00"
+    },
+    {
+      "event": "CLOUD_DEADLINE_CONFIRMED",
+      "provider_response": {
+        "ActionAfterCompletion": "DELETE",
+        "Arn": "arn:aws:scheduler:us-west-2:807562639912:schedule/default/cas-meta2-20260906150012-7c9f6d00",
+        "CreationDate": "2026-09-06T08:02:37.934000-07:00",
+        "FlexibleTimeWindow": {
+          "Mode": "OFF"
+        },
+        "GroupName": "default",
+        "LastModificationDate": "2026-09-06T08:02:37.934000-07:00",
+        "Name": "cas-meta2-20260906150012-7c9f6d00",
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "content-length": "939",
+            "content-type": "application/json",
+            "date": "Sun, 06 Sep 2026 15:02:38 GMT",
+            "x-amzn-requestid": "bd93e2f0-95b1-43c2-b42d-56bccc71b7aa"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "bd93e2f0-95b1-43c2-b42d-56bccc71b7aa",
+          "RetryAttempts": 0
+        },
+        "ScheduleExpression": "at(2026-09-06T16:00:36)",
+        "ScheduleExpressionTimezone": "UTC",
+        "State": "ENABLED",
+        "Target": {
+          "Arn": "arn:aws:scheduler:::aws-sdk:ec2:terminateInstances",
+          "Input": "{\"InstanceIds\": [\"i-05ba34f47185eb934\"]}",
+          "RetryPolicy": {
+            "MaximumEventAgeInSeconds": 60,
+            "MaximumRetryAttempts": 0
+          },
+          "RoleArn": "arn:aws:iam::807562639912:role/cas-meta2-20260906150012-7c9f6d00-timer"
+        }
+      },
+      "schedule": "cas-meta2-20260906150012-7c9f6d00",
+      "utc": "2026-09-06T15:02:38.232171+00:00"
+    },
+    {
+      "event": "WORKER_PERMIT_PUBLISHED_AFTER_CONFIRMED_SHUTDOWN",
+      "utc": "2026-09-06T15:02:38.877606+00:00",
+      "worker_plan_sha256": "ff5309e58770e71128412ae7abc315b15509dc34ab549981478bff6f22f26f5c"
+    },
+    {
+      "bytes": 1502016,
+      "event": "ARTIFACT_DOWNLOADED_AND_HASH_VERIFIED",
+      "sha256": "3cd1806649e0cd357d37391b805c64f928f0b5615aea524f8d84332f77aa735a",
+      "utc": "2026-09-06T15:06:15.094522+00:00"
+    },
+    {
+      "event": "INSTANCE_NORMAL_TERMINATION_REQUESTED",
+      "instance_id": "i-05ba34f47185eb934",
+      "provider_response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "cache-control": "no-cache, no-store",
+            "content-length": "426",
+            "content-type": "text/xml;charset=UTF-8",
+            "date": "Sun, 06 Sep 2026 15:06:15 GMT",
+            "server": "AmazonEC2",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-amzn-requestid": "f6154bfa-1e52-4308-9114-b98cf3b65c48"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "f6154bfa-1e52-4308-9114-b98cf3b65c48",
+          "RetryAttempts": 0
+        },
+        "TerminatingInstances": [
+          {
+            "CurrentState": {
+              "Code": 32,
+              "Name": "shutting-down"
+            },
+            "InstanceId": "i-05ba34f47185eb934",
+            "PreviousState": {
+              "Code": 16,
+              "Name": "running"
+            }
+          }
+        ]
+      },
+      "utc": "2026-09-06T15:06:15.940502+00:00"
+    },
+    {
+      "event": "INSTANCE_SKIP_OS_SHUTDOWN_REQUESTED",
+      "instance_id": "i-05ba34f47185eb934",
+      "previous_state": "shutting-down",
+      "provider_response": {
+        "ResponseMetadata": {
+          "HTTPHeaders": {
+            "cache-control": "no-cache, no-store",
+            "content-length": "432",
+            "content-type": "text/xml;charset=UTF-8",
+            "date": "Sun, 06 Sep 2026 15:07:16 GMT",
+            "server": "AmazonEC2",
+            "strict-transport-security": "max-age=31536000; includeSubDomains",
+            "x-amzn-requestid": "32f57c89-7504-41b3-b0e1-16c0cf024c86"
+          },
+          "HTTPStatusCode": 200,
+          "RequestId": "32f57c89-7504-41b3-b0e1-16c0cf024c86",
+          "RetryAttempts": 0
+        },
+        "TerminatingInstances": [
+          {
+            "CurrentState": {
+              "Code": 32,
+              "Name": "shutting-down"
+            },
+            "InstanceId": "i-05ba34f47185eb934",
+            "PreviousState": {
+              "Code": 32,
+              "Name": "shutting-down"
+            }
+          }
+        ]
+      },
+      "utc": "2026-09-06T15:07:16.394461+00:00",
+      "verified_download_required": true
+    },
+    {
+      "additional_termination_requests": 0,
+      "event": "INSTANCE_TERMINATION_OBSERVATION_STARTED",
+      "instance_id": "i-05ba34f47185eb934",
+      "maximum_observation_seconds": 600,
+      "utc": "2026-09-06T15:07:16.395916+00:00"
+    }
+  ],
+  "experiment": {
+    "entrypoint": "cas_meta2.br_construction_v8",
+    "profile": "same_state_br_construction_v8"
+  },
+  "job": "cas-meta2-20260906150012-7c9f6d00",
+  "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+  "plan": {
+    "account_id": "807562639912",
+    "ami_id": "ami-0fbbd0facbc9e3cff",
+    "ancillary_reserved_usd": "1.00",
+    "artifact_bytes_max": 268435456,
+    "artifact_objects_max": 3,
+    "automatic_retries": 0,
+    "cloud_shutdown_seconds": 3480,
+    "delete_on_termination": true,
+    "download_bytes_max": 268435456,
+    "ebs_encrypted": true,
+    "ebs_gb": 75,
+    "ebs_iops": 3000,
+    "ebs_throughput_mib_per_second": 125,
+    "ebs_type": "gp3",
+    "egress_tcp_ports": [
+      443
+    ],
+    "evidence_expanded_bytes_max": 536870912,
+    "gpu_count": 1,
+    "guest_shutdown_seconds": 3400,
+    "inbound_rules": [],
+    "input_bytes_max": 16777216,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "later_curriculum_execution": false,
+    "local_neural_execution": false,
+    "native_execution": true,
+    "on_demand_hourly_usd_max": "2.52",
+    "per_launch_reserved_cap_usd": "4.00",
+    "region": "us-west-2",
+    "required_gpu_name_contains": "RTX PRO 4500",
+    "runtime_seconds_max": 3600,
+    "s3_read_requests_max": 1000,
+    "s3_retention_days": 7,
+    "s3_write_requests_max": 1000,
+    "scheduler_invocations_max": 1,
+    "training": false,
+    "worker_seconds_max": 600
+  },
+  "provider_launch_time": "2026-09-06T15:02:37+00:00",
+  "provider_preflight": {
+    "account_gpu_instances": {
+      "Reservations": [],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "219",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:02:19 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "c4af7cfc-1582-4b5d-9549-335536bb5772"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "c4af7cfc-1582-4b5d-9549-335536bb5772",
+        "RetryAttempts": 0
+      }
+    },
+    "account_gpu_vcpus_in_use": 0,
+    "ancillary_cost_check": {
+      "ancillary_metered_bound_usd": "0.04924282876160000000000000000",
+      "compute_plus_metered_bound_usd": "2.569242828761600000000000000",
+      "item_bound_usd": {
+        "download": "0.0241591910400000000",
+        "ebs": "0.008333333333333333333333333333",
+        "ipv4": "0.0050000000",
+        "requests": "0.0100000000",
+        "retention": "0.001749304388266666666666666667",
+        "scheduler": "0.000001"
+      },
+      "observations": {
+        "gp3_gb_month": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"maxThroughputvolume\":\"2000 MiB/s\",\"volumeType\":\"General Purpose\",\"maxIopsvolume\":\"80000\",\"usagetype\":\"USW2-EBS:VolumeUsage.gp3\",\"locationType\":\"AWS Region\",\"maxVolumeSize\":\"64 TiB\",\"storageMedia\":\"SSD-backed\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonEC2\",\"volumeApiName\":\"gp3\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Elastic Compute Cloud\",\"operation\":\"\"},\"sku\":\"BB8UJWJ4XPFJB95G\"},\"serviceCode\":\"AmazonEC2\",\"terms\":{\"OnDemand\":{\"BB8UJWJ4XPFJB95G.JRTCKXETXF\":{\"priceDimensions\":{\"BB8UJWJ4XPFJB95G.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.08 per GB-month of General Purpose (gp3) provisioned storage - US West (Oregon)\",\"appliesTo\":[],\"rateCode\":\"BB8UJWJ4XPFJB95G.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0800000000\"}}},\"sku\":\"BB8UJWJ4XPFJB95G\",\"effectiveDate\":\"2026-09-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260904231117\",\"publicationDate\":\"2026-09-04T23:11:17Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "1201",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:20 GMT",
+                "x-amzn-requestid": "17c910b3-033b-4749-ab0f-399896ac3716"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "17c910b3-033b-4749-ab0f-399896ac3716",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "GB-Mo",
+          "usd_per_unit": "0.0800000000"
+        },
+        "internet_out_gb": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"productFamily\":\"Data Transfer\",\"attributes\":{\"fromLocationType\":\"AWS Region\",\"toRegionCode\":\"\",\"servicecode\":\"AWSDataTransfer\",\"usagetype\":\"USW2-DataTransfer-Out-Bytes\",\"fromRegionCode\":\"us-west-2\",\"transferType\":\"AWS Outbound\",\"servicename\":\"AWS Data Transfer\",\"fromLocation\":\"US West (Oregon)\",\"toLocationType\":\"Other\",\"toLocation\":\"External\",\"operation\":\"\"},\"sku\":\"5M4327XEUKBBTWAT\"},\"serviceCode\":\"AWSDataTransfer\",\"terms\":{\"OnDemand\":{\"5M4327XEUKBBTWAT.JRTCKXETXF\":{\"priceDimensions\":{\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\":{\"unit\":\"GB\",\"endRange\":\"Inf\",\"description\":\"$0.050 per GB - greater than 150 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\",\"beginRange\":\"153600\",\"pricePerUnit\":{\"USD\":\"0.0500000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\":{\"unit\":\"GB\",\"endRange\":\"51200\",\"description\":\"$0.085 per GB - next 40 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\",\"beginRange\":\"10240\",\"pricePerUnit\":{\"USD\":\"0.0850000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\":{\"unit\":\"GB\",\"endRange\":\"10240\",\"description\":\"$0.090 per GB - first 10 TB / month data transfer out beyond the global free tier\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0900000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\":{\"unit\":\"GB\",\"endRange\":\"153600\",\"description\":\"$0.070 per GB - next 100 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0700000000\"}}},\"sku\":\"5M4327XEUKBBTWAT\",\"effectiveDate\":\"2026-06-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831121448\",\"publicationDate\":\"2026-08-31T12:14:48Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "2052",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:21 GMT",
+                "x-amzn-requestid": "f6472579-8ef6-4e07-bbcc-1621e64f443b"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "f6472579-8ef6-4e07-bbcc-1621e64f443b",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "GB",
+          "usd_per_unit": "0.0900000000"
+        },
+        "ipv4_hour": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonVPC\",\"groupDescription\":\"Hourly charge for In-use Public IPv4 Addresses\",\"usagetype\":\"USW2-PublicIPv4:InUseAddress\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Virtual Private Cloud\",\"operation\":\"\",\"group\":\"VPCPublicIPv4Address\"},\"sku\":\"NBHXEKTE88TJDDQF\"},\"serviceCode\":\"AmazonVPC\",\"terms\":{\"OnDemand\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF\":{\"priceDimensions\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$0.005 per In-use public IPv4 address per hour\",\"appliesTo\":[],\"rateCode\":\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0050000000\"}}},\"sku\":\"NBHXEKTE88TJDDQF\",\"effectiveDate\":\"2026-07-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092232\",\"publicationDate\":\"2026-08-31T09:22:32Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "1055",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:20 GMT",
+                "x-amzn-requestid": "b9d7d006-97f8-47be-b7d8-428c71434d6b"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "b9d7d006-97f8-47be-b7d8-428c71434d6b",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "Hrs",
+          "usd_per_unit": "0.0050000000"
+        },
+        "s3_gb_month": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"volumeType\":\"Standard\",\"storageClass\":\"General Purpose\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"durability\":\"99.999999999%\",\"usagetype\":\"USW2-TimedStorage-ByteHrs\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"availability\":\"99.99%\",\"operation\":\"\"},\"sku\":\"Z3FQZG73HYSPVABR\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF\":{\"priceDimensions\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.021 per GB - storage used / month over 500 TB\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\",\"beginRange\":\"512000\",\"pricePerUnit\":{\"USD\":\"0.0210000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\":{\"unit\":\"GB-Mo\",\"endRange\":\"51200\",\"description\":\"$0.023 per GB - first 50 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0230000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\":{\"unit\":\"GB-Mo\",\"endRange\":\"512000\",\"description\":\"$0.022 per GB - next 450 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0220000000\"}}},\"sku\":\"Z3FQZG73HYSPVABR\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "1708",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:21 GMT",
+                "x-amzn-requestid": "fdf47b6b-e506-4757-be03-56c66d454087"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "fdf47b6b-e506-4757-be03-56c66d454087",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "GB-Mo",
+          "usd_per_unit": "0.0230000000"
+        },
+        "s3_read_request": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"productFamily\":\"API Request\",\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"groupDescription\":\"GET and all other requests\",\"usagetype\":\"USW2-Requests-Tier2\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\",\"group\":\"S3-API-Tier2\"},\"sku\":\"E77AQEM2DC4VV3FC\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"E77AQEM2DC4VV3FC.JRTCKXETXF\":{\"priceDimensions\":{\"E77AQEM2DC4VV3FC.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Requests\",\"endRange\":\"Inf\",\"description\":\"$0.004 per 10,000 GET and all other requests\",\"appliesTo\":[],\"rateCode\":\"E77AQEM2DC4VV3FC.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0000004000\"}}},\"sku\":\"E77AQEM2DC4VV3FC\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "1054",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:21 GMT",
+                "x-amzn-requestid": "551bad0b-7935-4cb6-9fba-67fb8747a602"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "551bad0b-7935-4cb6-9fba-67fb8747a602",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "Requests",
+          "usd_per_unit": "4.000E-7"
+        },
+        "s3_write_request": {
+          "response": {
+            "FormatVersion": "aws_v1",
+            "PriceList": [
+              "{\"product\":{\"productFamily\":\"API Request\",\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"groupDescription\":\"PUT/COPY/POST or LIST requests\",\"usagetype\":\"USW2-Requests-Tier1\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\",\"group\":\"S3-API-Tier1\"},\"sku\":\"D4PMUVH6F64HK2D6\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF\":{\"priceDimensions\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Requests\",\"endRange\":\"Inf\",\"description\":\"$0.005 per 1,000 PUT, COPY, POST, or LIST requests\",\"appliesTo\":[],\"rateCode\":\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0000050000\"}}},\"sku\":\"D4PMUVH6F64HK2D6\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+            ],
+            "ResponseMetadata": {
+              "HTTPHeaders": {
+                "connection": "keep-alive",
+                "content-length": "1064",
+                "content-type": "application/x-amz-json-1.1",
+                "date": "Sun, 06 Sep 2026 15:02:21 GMT",
+                "x-amzn-requestid": "473a9437-c324-437f-9862-f67583a550b2"
+              },
+              "HTTPStatusCode": 200,
+              "RequestId": "473a9437-c324-437f-9862-f67583a550b2",
+              "RetryAttempts": 0
+            }
+          },
+          "unit": "Requests",
+          "usd_per_unit": "0.0000050000"
+        }
+      },
+      "s3_expiration_days": 7,
+      "scheduler_rate_basis": "https://aws.amazon.com/eventbridge/pricing/ ($1 per million invocations, no free-tier credit)",
+      "storage_arithmetic_days": 8,
+      "unmodeled": "Taxes and abnormal provider/control-plane delay; reservation is not a provider billing cap."
+    },
+    "capacity_reserved_or_guaranteed": false,
+    "dns": {
+      "EnableDnsSupport": {
+        "Value": true
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "300",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:02:19 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "0662e4ad-ecf1-4ca5-9115-413c95c734a4"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "0662e4ad-ecf1-4ca5-9115-413c95c734a4",
+        "RetryAttempts": 0
+      },
+      "VpcId": "vpc-0df2f8cc1b9f23838"
+    },
+    "effective_routes": {
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "982",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:02:19 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "9d064efd-1d15-46b6-8ed0-7fe8b5f37e5b"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "9d064efd-1d15-46b6-8ed0-7fe8b5f37e5b",
+        "RetryAttempts": 0
+      },
+      "RouteTables": [
+        {
+          "Associations": [
+            {
+              "AssociationState": {
+                "State": "associated"
+              },
+              "Main": true,
+              "RouteTableAssociationId": "rtbassoc-03c61f37a815604a8",
+              "RouteTableId": "rtb-0675e087f07dba3c3"
+            }
+          ],
+          "OwnerId": "807562639912",
+          "PropagatingVgws": [],
+          "RouteTableId": "rtb-0675e087f07dba3c3",
+          "Routes": [
+            {
+              "DestinationCidrBlock": "172.31.0.0/16",
+              "GatewayId": "local",
+              "Origin": "CreateRouteTable",
+              "State": "active"
+            },
+            {
+              "DestinationCidrBlock": "0.0.0.0/0",
+              "GatewayId": "igw-0a37a4259ed7e1992",
+              "Origin": "CreateRoute",
+              "State": "active"
+            }
+          ],
+          "Tags": [],
+          "VpcId": "vpc-0df2f8cc1b9f23838"
+        }
+      ]
+    },
+    "identity": {
+      "Account": "807562639912",
+      "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "412",
+          "content-type": "text/xml",
+          "date": "Sun, 06 Sep 2026 15:02:18 GMT",
+          "x-amz-sts-extended-request-id": "MTp1cy13ZXN0LTI6UzoxNzg4NzA2OTM4NTc2OlI6VUZoYXlHTEM=",
+          "x-amzn-requestid": "b81d3e1c-566d-4a0c-9c1a-aa2ec21b2e6d"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "b81d3e1c-566d-4a0c-9c1a-aa2ec21b2e6d",
+        "RetryAttempts": 0
+      },
+      "UserId": "AIDA3YBT37IUN7OWL4UMU"
+    },
+    "image": {
+      "Architecture": "x86_64",
+      "BlockDeviceMappings": [
+        {
+          "DeviceName": "/dev/sda1",
+          "Ebs": {
+            "DeleteOnTermination": true,
+            "Encrypted": false,
+            "Iops": 3000,
+            "SnapshotId": "snap-0f7c1eb40403fe3fc",
+            "Throughput": 125,
+            "VolumeSize": 75,
+            "VolumeType": "gp3"
+          }
+        },
+        {
+          "DeviceName": "/dev/sdb",
+          "VirtualName": "ephemeral0"
+        },
+        {
+          "DeviceName": "/dev/sdc",
+          "VirtualName": "ephemeral1"
+        }
+      ],
+      "BootMode": "uefi-preferred",
+      "CreationDate": "2026-08-21T14:48:09.000Z",
+      "DeprecationTime": "2028-08-21T14:48:09.000Z",
+      "Description": "Supported EC2 instances: G4dn, G5, G6, Gr6, G6e, G7, G7e, P4d, P4de, P5, P5e, P5en, P6-B200, P6-B300. Release notes: https://aws.amazon.com/releasenotes/aws-deep-learning-base-gpu-ami-ubuntu-24-04/",
+      "EnaSupport": true,
+      "FreeTierEligible": true,
+      "Hypervisor": "xen",
+      "ImageId": "ami-0fbbd0facbc9e3cff",
+      "ImageLocation": "amazon/Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+      "ImageOwnerAlias": "amazon",
+      "ImageType": "machine",
+      "ImdsSupport": "v2.0",
+      "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+      "OwnerId": "898082745236",
+      "PlatformDetails": "Linux/UNIX",
+      "Public": true,
+      "RootDeviceName": "/dev/sda1",
+      "RootDeviceType": "ebs",
+      "SourceImageId": "ami-072c9da68195bbe78",
+      "SourceImageRegion": "us-east-1",
+      "SriovNetSupport": "simple",
+      "State": "available",
+      "UsageOperation": "RunInstances",
+      "VirtualizationType": "hvm"
+    },
+    "instance_hourly_usd": "2.5200000000",
+    "internet_gateway": {
+      "Attachments": [
+        {
+          "State": "available",
+          "VpcId": "vpc-0df2f8cc1b9f23838"
+        }
+      ],
+      "InternetGatewayId": "igw-0a37a4259ed7e1992",
+      "OwnerId": "807562639912",
+      "Tags": []
+    },
+    "network_acls": {
+      "NetworkAcls": [
+        {
+          "Associations": [
+            {
+              "NetworkAclAssociationId": "aclassoc-0c44fcc4268cb1b0a",
+              "NetworkAclId": "acl-0b07a4ef3f649fa07",
+              "SubnetId": "subnet-0567d22d8a5fb9b72"
+            },
+            {
+              "NetworkAclAssociationId": "aclassoc-0ac344ad74174aeb9",
+              "NetworkAclId": "acl-0b07a4ef3f649fa07",
+              "SubnetId": "subnet-0bb8fa82c2a7177b3"
+            },
+            {
+              "NetworkAclAssociationId": "aclassoc-0bc8c9eee1762e711",
+              "NetworkAclId": "acl-0b07a4ef3f649fa07",
+              "SubnetId": "subnet-0eb3ca4bf5ca98f24"
+            },
+            {
+              "NetworkAclAssociationId": "aclassoc-0d1770ab0bd8827aa",
+              "NetworkAclId": "acl-0b07a4ef3f649fa07",
+              "SubnetId": "subnet-02deacfa16bdaa4f4"
+            }
+          ],
+          "Entries": [
+            {
+              "CidrBlock": "0.0.0.0/0",
+              "Egress": true,
+              "Protocol": "-1",
+              "RuleAction": "allow",
+              "RuleNumber": 100
+            },
+            {
+              "CidrBlock": "0.0.0.0/0",
+              "Egress": true,
+              "Protocol": "-1",
+              "RuleAction": "deny",
+              "RuleNumber": 32767
+            },
+            {
+              "CidrBlock": "0.0.0.0/0",
+              "Egress": false,
+              "Protocol": "-1",
+              "RuleAction": "allow",
+              "RuleNumber": 100
+            },
+            {
+              "CidrBlock": "0.0.0.0/0",
+              "Egress": false,
+              "Protocol": "-1",
+              "RuleAction": "deny",
+              "RuleNumber": 32767
+            }
+          ],
+          "IsDefault": true,
+          "NetworkAclId": "acl-0b07a4ef3f649fa07",
+          "OwnerId": "807562639912",
+          "Tags": [],
+          "VpcId": "vpc-0df2f8cc1b9f23838"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "1785",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:02:19 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "13590532-65ab-453d-b3f8-0db00a22f9ab"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "13590532-65ab-453d-b3f8-0db00a22f9ab",
+        "RetryAttempts": 0
+      }
+    },
+    "offerings": {
+      "InstanceTypeOfferings": [
+        {
+          "InstanceType": "g7.2xlarge",
+          "Location": "us-west-2c",
+          "LocationType": "availability-zone"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:02:20 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-amzn-requestid": "17027763-e068-4d15-a3d4-d667012fa972"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "17027763-e068-4d15-a3d4-d667012fa972",
+        "RetryAttempts": 0
+      }
+    },
+    "price_response": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"Compute Instance\",\"attributes\":{\"enhancedNetworkingSupported\":\"Yes\",\"intelTurboAvailable\":\"Yes\",\"memory\":\"32.0 GiB\",\"dedicatedEbsThroughput\":\"Up to 8000 Mbps\",\"vcpu\":\"8\",\"classicnetworkingsupport\":\"false\",\"capacitystatus\":\"Used\",\"locationType\":\"AWS Region\",\"storage\":\"1x440 GB NVMe SSD\",\"instanceFamily\":\"GPU instance\",\"operatingSystem\":\"Linux\",\"intelAvx2Available\":\"Yes\",\"instanceFamilyCategory\":\"Accelerated Computing\",\"regionCode\":\"us-west-2\",\"physicalProcessor\":\"Intel Xeon Scalable (Granite Rapids)\",\"clockSpeed\":\"3.9 GHz\",\"ecu\":\"NA\",\"networkPerformance\":\"Up to 60 Gigabit\",\"servicename\":\"Amazon Elastic Compute Cloud\",\"gpuMemory\":\"32 GB\",\"dedicatedEbsThroughputDescription\":\"4000 Mbps\",\"vpcnetworkingsupport\":\"true\",\"instanceType\":\"g7.2xlarge\",\"tenancy\":\"Shared\",\"usagetype\":\"USW2-BoxUsage:g7.2xlarge\",\"normalizationSizeFactor\":\"1\",\"gpu\":\"1\",\"intelAvxAvailable\":\"Yes\",\"processorFeatures\":\"Intel AMX; Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo\",\"servicecode\":\"AmazonEC2\",\"licenseModel\":\"No License required\",\"currentGeneration\":\"Yes\",\"preInstalledSw\":\"NA\",\"location\":\"US West (Oregon)\",\"processorArchitecture\":\"64-bit\",\"marketoption\":\"OnDemand\",\"operation\":\"RunInstances\",\"availabilityzone\":\"NA\"},\"sku\":\"DA5FVRBHTKBSVJWJ\"},\"serviceCode\":\"AmazonEC2\",\"terms\":{\"OnDemand\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF\":{\"priceDimensions\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$2.52 per On Demand Linux g7.2xlarge Instance Hour\",\"appliesTo\":[],\"rateCode\":\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"2.5200000000\"}}},\"sku\":\"DA5FVRBHTKBSVJWJ\",\"effectiveDate\":\"2026-09-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260904231117\",\"publicationDate\":\"2026-09-04T23:11:17Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "2078",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Sun, 06 Sep 2026 15:02:20 GMT",
+          "x-amzn-requestid": "fbaaf5f9-f16f-4896-baca-18174bcd89ba"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "fbaaf5f9-f16f-4896-baca-18174bcd89ba",
+        "RetryAttempts": 0
+      }
+    },
+    "quota": {
+      "Quota": {
+        "Adjustable": true,
+        "Description": "Maximum number of vCPUs assigned to the Running On-Demand G and VT instances.",
+        "GlobalQuota": false,
+        "QuotaAppliedAtLevel": "ACCOUNT",
+        "QuotaArn": "arn:aws:servicequotas:us-west-2:807562639912:ec2/L-DB2E81BA",
+        "QuotaCode": "L-DB2E81BA",
+        "QuotaName": "Running On-Demand G and VT instances",
+        "ServiceCode": "ec2",
+        "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+        "Unit": "None",
+        "UsageMetric": {
+          "MetricDimensions": {
+            "Class": "G/OnDemand",
+            "Resource": "vCPU",
+            "Service": "EC2",
+            "Type": "Resource"
+          },
+          "MetricName": "ResourceCount",
+          "MetricNamespace": "AWS/Usage",
+          "MetricStatisticRecommendation": "Maximum"
+        },
+        "Value": 8.0
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "639",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Sun, 06 Sep 2026 15:02:19 GMT",
+          "x-amzn-requestid": "124d3d8d-6b39-42ff-9c9d-31a5e5331f69"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "124d3d8d-6b39-42ff-9c9d-31a5e5331f69",
+        "RetryAttempts": 0
+      }
+    },
+    "subnet": {
+      "AssignIpv6AddressOnCreation": false,
+      "AvailabilityZone": "us-west-2c",
+      "AvailabilityZoneId": "usw2-az3",
+      "AvailableIpAddressCount": 4090,
+      "BlockPublicAccessStates": {
+        "InternetGatewayBlockMode": "off"
+      },
+      "CidrBlock": "172.31.0.0/20",
+      "DefaultForAz": true,
+      "EnableDns64": false,
+      "Ipv6CidrBlockAssociationSet": [],
+      "Ipv6Native": false,
+      "MapCustomerOwnedIpOnLaunch": false,
+      "MapPublicIpOnLaunch": true,
+      "OwnerId": "807562639912",
+      "PrivateDnsNameOptionsOnLaunch": {
+        "EnableResourceNameDnsAAAARecord": false,
+        "EnableResourceNameDnsARecord": false,
+        "HostnameType": "ip-name"
+      },
+      "State": "available",
+      "SubnetArn": "arn:aws:ec2:us-west-2:807562639912:subnet/subnet-0eb3ca4bf5ca98f24",
+      "SubnetId": "subnet-0eb3ca4bf5ca98f24",
+      "VpcId": "vpc-0df2f8cc1b9f23838"
+    }
+  },
+  "request_sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677",
+  "resources": {
+    "bucket": "cas-meta2-20260906150012-7c9f6d00-807562639912",
+    "cas-meta2-20260906150012-7c9f6d00-timer": "arn:aws:iam::807562639912:role/cas-meta2-20260906150012-7c9f6d00-timer",
+    "cas-meta2-20260906150012-7c9f6d00-worker": "arn:aws:iam::807562639912:role/cas-meta2-20260906150012-7c9f6d00-worker",
+    "instance": "i-05ba34f47185eb934",
+    "instance_profile": "cas-meta2-20260906150012-7c9f6d00-worker",
+    "schedule": "cas-meta2-20260906150012-7c9f6d00",
+    "security_group": "sg-04aa8a1cddde8b065"
+  },
+  "result": {
+    "bytes": 1502016,
+    "experiment": {
+      "entrypoint": "cas_meta2.br_construction_v8",
+      "profile": "same_state_br_construction_v8"
+    },
+    "job": "cas-meta2-20260906150012-7c9f6d00",
+    "omitted_full_file_count": 0,
+    "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+    "partial_evidence": false,
+    "returncode": 0,
+    "sha256": "3cd1806649e0cd357d37391b805c64f928f0b5615aea524f8d84332f77aa735a",
+    "smoke_only": false,
+    "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  },
+  "schema": "cas-meta2-br-launch-receipt/8",
+  "source_manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+  "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+  "standing_authority": {
+    "authority_artifact_sha256": "2cc6af381b213bfcaadf03b1ffc204632b9b063ab7497282572c6e25bf5863e5",
+    "campaign_approval": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+      "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626"
+    },
+    "campaign_cap_usd": "400.00",
+    "evidence_kind": "Builder registration of existing campaign authorization and standing user direction; not a new human approval or provider receipt.",
+    "experiment": {
+      "entrypoint": "cas_meta2.br_construction_v8",
+      "profile": "same_state_br_construction_v8"
+    },
+    "job": "cas-meta2-20260906150012-7c9f6d00",
+    "launch_request_sha256": "8323d664ead43665ce5259a5f34185df3c083a6326d9963e801592e9dd186677",
+    "max_job_cost_usd": "4.00",
+    "native_execution": true,
+    "parent_source_sha": "433089fcad368de96e27f93a8f77c375500f677a",
+    "schema": "cas-meta2-br-standing-authority/8",
+    "scope_boundary": "One same-state B/R native component construction only. No training, alternate repair fixture, architectural change, automatic retry, merge or deployment.",
+    "source_archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+    "source_manifest_sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f",
+    "standing_campaign_authorization": true,
+    "standing_user_message": {
+      "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_prefix_diagnostic_v8_001/authorization_001/user_message_full.txt",
+      "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+    },
+    "training": false,
+    "worker_source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7"
+  },
+  "status": "AWS_BR_CONSTRUCTION_FINISHED",
+  "task_budget_reservation": {
+    "ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+    "ledger_sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012",
+    "remaining_unreserved_usd": "314.00",
+    "reservation": {
+      "archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+      "job": "cas-meta2-20260906150012-7c9f6d00",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "training": false,
+        "worker_seconds_max": 600
+      },
+      "plan_sha256": "63963a67ca41c3b037c7b01ce555382426dbb1c8b18dd4eaee2fd115ddcde1d8",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T15:02:22.018440+00:00",
+      "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    "revision": 13,
+    "total_reserved_usd": "86.00"
+  }
+}

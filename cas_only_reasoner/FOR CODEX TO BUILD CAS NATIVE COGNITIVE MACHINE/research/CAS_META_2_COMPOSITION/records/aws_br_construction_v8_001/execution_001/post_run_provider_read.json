@@ -1,0 +1,404 @@
+{
+  "account_id": "807562639912",
+  "boundary": "One read-only provider observation, not an invoice. Three result objects remain under a seven-day lifecycle rule; the bucket itself is retained. No deletion or launch was requested.",
+  "checks": {
+    "inputs_absent": true,
+    "instance_profile_absent": true,
+    "instance_terminated": true,
+    "owned_bucket": true,
+    "owned_instance": true,
+    "schedule_absent": true,
+    "security_group_absent": true,
+    "seven_day_result_expiry": true,
+    "three_result_objects_only": true,
+    "timer_role_absent": true,
+    "worker_role_absent": true,
+    "zero_job_volumes": true
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/aws_br_construction_v8_001/post_run_provider_read.py"
+  ],
+  "finished_utc": "2026-09-06T15:17:48.859114+00:00",
+  "job": "cas-meta2-20260906150012-7c9f6d00",
+  "read_only": true,
+  "region": "us-west-2",
+  "responses": {
+    "bucket_lifecycle": {
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "378",
+          "date": "Sun, 06 Sep 2026 15:17:49 GMT",
+          "server": "AmazonS3",
+          "x-amz-id-2": "9CjjWIRCInctVMtfGtXGb+l/u2ic4Biw4w1Ga+ssKGqwWs8qWuy/haS+ZUgbzBovM2MVtIJ1n0Y=",
+          "x-amz-request-id": "GWA1PFR93WFWXTH9",
+          "x-amz-transition-default-minimum-object-size": "all_storage_classes_128K"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "9CjjWIRCInctVMtfGtXGb+l/u2ic4Biw4w1Ga+ssKGqwWs8qWuy/haS+ZUgbzBovM2MVtIJ1n0Y=",
+        "RequestId": "GWA1PFR93WFWXTH9",
+        "RetryAttempts": 0
+      },
+      "Rules": [
+        {
+          "AbortIncompleteMultipartUpload": {
+            "DaysAfterInitiation": 1
+          },
+          "Expiration": {
+            "Days": 7
+          },
+          "Filter": {
+            "Prefix": ""
+          },
+          "ID": "job-seven-days",
+          "Status": "Enabled"
+        }
+      ],
+      "TransitionDefaultMinimumObjectSize": "all_storage_classes_128K"
+    },
+    "bucket_tags": {
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "date": "Sun, 06 Sep 2026 15:17:49 GMT",
+          "server": "AmazonS3",
+          "transfer-encoding": "chunked",
+          "x-amz-id-2": "LuPAAaPWXaXnpqw2TxIymajt3c6QfD1Lwcad7VLAWUbc8ajKlNk0iAzPH7keKDIy3uEPxtUkpSk=",
+          "x-amz-request-id": "GWAD8B8NCR1GBXTW"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "LuPAAaPWXaXnpqw2TxIymajt3c6QfD1Lwcad7VLAWUbc8ajKlNk0iAzPH7keKDIy3uEPxtUkpSk=",
+        "RequestId": "GWAD8B8NCR1GBXTW",
+        "RetryAttempts": 0
+      },
+      "TagSet": [
+        {
+          "Key": "cas_meta_job",
+          "Value": "cas-meta2-20260906150012-7c9f6d00"
+        }
+      ]
+    },
+    "identity": {
+      "Account": "807562639912",
+      "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "412",
+          "content-type": "text/xml",
+          "date": "Sun, 06 Sep 2026 15:17:45 GMT",
+          "x-amz-sts-extended-request-id": "MTp1cy13ZXN0LTI6UzoxNzg4NzA3ODY1ODMxOlI6cDNpSkp5UjU=",
+          "x-amzn-requestid": "7e9355bd-6a55-43a6-a9ec-1eb9079dec92"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "7e9355bd-6a55-43a6-a9ec-1eb9079dec92",
+        "RetryAttempts": 0
+      },
+      "UserId": "AIDA3YBT37IUN7OWL4UMU"
+    },
+    "input_objects": {
+      "EncodingType": "url",
+      "IsTruncated": false,
+      "KeyCount": 0,
+      "MaxKeys": 1000,
+      "Name": "cas-meta2-20260906150012-7c9f6d00-807562639912",
+      "Prefix": "input/",
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-type": "application/xml",
+          "date": "Sun, 06 Sep 2026 15:17:49 GMT",
+          "server": "AmazonS3",
+          "transfer-encoding": "chunked",
+          "x-amz-bucket-region": "us-west-2",
+          "x-amz-id-2": "05q5pzj15zY0laOrG5XiODSjIb3JyYJoFCjSrt468LIPbVa+J/DtY6T+Jizfp5AzFHzMG0jrwow=",
+          "x-amz-request-id": "GWA8Y6WHG3826P4T"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "05q5pzj15zY0laOrG5XiODSjIb3JyYJoFCjSrt468LIPbVa+J/DtY6T+Jizfp5AzFHzMG0jrwow=",
+        "RequestId": "GWA8Y6WHG3826P4T",
+        "RetryAttempts": 0
+      }
+    },
+    "instance": {
+      "Reservations": [
+        {
+          "Groups": [],
+          "Instances": [
+            {
+              "AmiLaunchIndex": 0,
+              "Architecture": "x86_64",
+              "BlockDeviceMappings": [],
+              "BootMode": "uefi-preferred",
+              "CapacityReservationSpecification": {
+                "CapacityReservationPreference": "open"
+              },
+              "ClientToken": "cas-meta2-20260906150012-7c9f6d00",
+              "CpuOptions": {
+                "CoreCount": 8,
+                "ThreadsPerCore": 1
+              },
+              "CurrentInstanceBootMode": "uefi",
+              "EbsOptimized": false,
+              "EnaSupport": true,
+              "EnclaveOptions": {
+                "Enabled": false
+              },
+              "HibernationOptions": {
+                "Configured": false
+              },
+              "Hypervisor": "xen",
+              "ImageId": "ami-0fbbd0facbc9e3cff",
+              "InstanceId": "i-05ba34f47185eb934",
+              "InstanceType": "g7.2xlarge",
+              "LaunchTime": "2026-09-06 15:02:37+00:00",
+              "MaintenanceOptions": {
+                "AutoRecovery": "default",
+                "RebootMigration": "default"
+              },
+              "MetadataOptions": {
+                "HttpEndpoint": "enabled",
+                "HttpProtocolIpv6": "disabled",
+                "HttpPutResponseHopLimit": 2,
+                "HttpTokens": "required",
+                "InstanceMetadataTags": "disabled",
+                "State": "pending"
+              },
+              "Monitoring": {
+                "State": "disabled"
+              },
+              "NetworkInterfaces": [],
+              "NetworkPerformanceOptions": {
+                "BandwidthWeighting": "default"
+              },
+              "Operator": {
+                "HiddenByDefault": false,
+                "Managed": false
+              },
+              "Placement": {
+                "AvailabilityZone": "us-west-2c",
+                "AvailabilityZoneId": "usw2-az3",
+                "GroupName": "",
+                "Tenancy": "default"
+              },
+              "PlatformDetails": "Linux/UNIX",
+              "PrivateDnsName": "",
+              "ProductCodes": [],
+              "PublicDnsName": "",
+              "RootDeviceName": "/dev/sda1",
+              "RootDeviceType": "ebs",
+              "SecondaryInterfaces": [],
+              "SecurityGroups": [],
+              "State": {
+                "Code": 48,
+                "Name": "terminated"
+              },
+              "StateReason": {
+                "Code": "Client.UserInitiatedShutdown",
+                "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+              },
+              "StateTransitionReason": "User initiated (2026-09-06 15:06:15 GMT)",
+              "Tags": [
+                {
+                  "Key": "cas_meta_job",
+                  "Value": "cas-meta2-20260906150012-7c9f6d00"
+                }
+              ],
+              "UsageOperation": "RunInstances",
+              "UsageOperationUpdateTime": "2026-09-06 15:02:37+00:00",
+              "VirtualizationType": "hvm"
+            }
+          ],
+          "OwnerId": "807562639912",
+          "ReservationId": "r-0dfbb4355e7bda72d"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "2819",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:17:46 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "vary": "accept-encoding",
+          "x-amzn-requestid": "020002fa-ff4f-4b6e-84c8-12b94974de60"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "020002fa-ff4f-4b6e-84c8-12b94974de60",
+        "RetryAttempts": 0
+      }
+    },
+    "instance_profile": {
+      "Error": {
+        "Code": "NoSuchEntity",
+        "Message": "Instance Profile cas-meta2-20260906150012-7c9f6d00-worker cannot be found.",
+        "Type": "Sender"
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "318",
+          "content-type": "text/xml",
+          "date": "Sun, 06 Sep 2026 15:17:47 GMT",
+          "x-amzn-requestid": "692b4fb9-c3e1-449c-a0b4-f63cba89a074"
+        },
+        "HTTPStatusCode": 404,
+        "RequestId": "692b4fb9-c3e1-449c-a0b4-f63cba89a074",
+        "RetryAttempts": 0
+      }
+    },
+    "result_objects": {
+      "Contents": [
+        {
+          "ChecksumAlgorithm": [
+            "CRC64NVME"
+          ],
+          "ChecksumType": "FULL_OBJECT",
+          "ETag": "\"fa8e092ced9e35d80206ae859234f41c\"",
+          "Key": "results/artifacts.zip",
+          "LastModified": "2026-09-06 15:06:08+00:00",
+          "Size": 1502016,
+          "StorageClass": "STANDARD"
+        },
+        {
+          "ChecksumAlgorithm": [
+            "CRC64NVME"
+          ],
+          "ChecksumType": "FULL_OBJECT",
+          "ETag": "\"8751f5d83cc5099ff3d5105d9c068c0a\"",
+          "Key": "results/bootstrap.log",
+          "LastModified": "2026-09-06 15:06:09+00:00",
+          "Size": 1835,
+          "StorageClass": "STANDARD"
+        },
+        {
+          "ChecksumAlgorithm": [
+            "CRC64NVME"
+          ],
+          "ChecksumType": "FULL_OBJECT",
+          "ETag": "\"a4e8204bbdc7c2d9a1591919cec16039\"",
+          "Key": "results/complete.json",
+          "LastModified": "2026-09-06 15:06:09+00:00",
+          "Size": 499,
+          "StorageClass": "STANDARD"
+        }
+      ],
+      "EncodingType": "url",
+      "IsTruncated": false,
+      "KeyCount": 3,
+      "MaxKeys": 1000,
+      "Name": "cas-meta2-20260906150012-7c9f6d00-807562639912",
+      "Prefix": "results/",
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-type": "application/xml",
+          "date": "Sun, 06 Sep 2026 15:17:49 GMT",
+          "server": "AmazonS3",
+          "transfer-encoding": "chunked",
+          "x-amz-bucket-region": "us-west-2",
+          "x-amz-id-2": "c+MwZ8/RFxQzvbSgtbaK13G5mY931e9hIaOPw2ru8H+GjPUeN7C3fb2QoiaF72jqmMbPkGTgwCo=",
+          "x-amz-request-id": "GWAB8VPHE02DBFQF"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "c+MwZ8/RFxQzvbSgtbaK13G5mY931e9hIaOPw2ru8H+GjPUeN7C3fb2QoiaF72jqmMbPkGTgwCo=",
+        "RequestId": "GWAB8VPHE02DBFQF",
+        "RetryAttempts": 0
+      }
+    },
+    "schedule": {
+      "Error": {
+        "Code": "ResourceNotFoundException",
+        "Message": "Schedule cas-meta2-20260906150012-7c9f6d00 does not exist."
+      },
+      "Message": "Schedule cas-meta2-20260906150012-7c9f6d00 does not exist.",
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "72",
+          "content-type": "application/json",
+          "date": "Sun, 06 Sep 2026 15:17:48 GMT",
+          "x-amzn-errortype": "ResourceNotFoundException:http://internal.amazon.com/coral/com.amazonaws.chronos/",
+          "x-amzn-requestid": "d8e42095-1ffb-4178-a140-75f6d730ff9b"
+        },
+        "HTTPStatusCode": 404,
+        "RequestId": "d8e42095-1ffb-4178-a140-75f6d730ff9b",
+        "RetryAttempts": 0
+      }
+    },
+    "security_group": {
+      "Error": {
+        "Code": "InvalidGroup.NotFound",
+        "Message": "The security group 'sg-04aa8a1cddde8b065' does not exist"
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "connection": "close",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:17:46 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-amzn-requestid": "f914c78d-eb9b-408f-b48e-bcf88ee043ec"
+        },
+        "HTTPStatusCode": 400,
+        "RequestId": "f914c78d-eb9b-408f-b48e-bcf88ee043ec",
+        "RetryAttempts": 0
+      }
+    },
+    "timer_role": {
+      "Error": {
+        "Code": "NoSuchEntity",
+        "Message": "The role with name cas-meta2-20260906150012-7c9f6d00-timer cannot be found.",
+        "Type": "Sender"
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "319",
+          "content-type": "text/xml",
+          "date": "Sun, 06 Sep 2026 15:17:47 GMT",
+          "x-amzn-requestid": "2f38ee21-df41-4c72-90bc-ea428821d8b0"
+        },
+        "HTTPStatusCode": 404,
+        "RequestId": "2f38ee21-df41-4c72-90bc-ea428821d8b0",
+        "RetryAttempts": 0
+      }
+    },
+    "volumes": {
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "210",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Sun, 06 Sep 2026 15:17:46 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "62a25733-8122-4593-bda0-9bfce2d6ce2a"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "62a25733-8122-4593-bda0-9bfce2d6ce2a",
+        "RetryAttempts": 0
+      },
+      "Volumes": []
+    },
+    "worker_role": {
+      "Error": {
+        "Code": "NoSuchEntity",
+        "Message": "The role with name cas-meta2-20260906150012-7c9f6d00-worker cannot be found.",
+        "Type": "Sender"
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "content-length": "320",
+          "content-type": "text/xml",
+          "date": "Sun, 06 Sep 2026 15:17:47 GMT",
+          "x-amzn-requestid": "2d002bfd-6bc3-4b1b-8f3c-727b9741aabd"
+        },
+        "HTTPStatusCode": 404,
+        "RequestId": "2d002bfd-6bc3-4b1b-8f3c-727b9741aabd",
+        "RetryAttempts": 0
+      }
+    }
+  },
+  "schema": "cas-meta2-br-post-run-provider-read/8",
+  "script_sha256": "93b7184f39a1513d58f273d6ed9c65fc6b7f60e360088a9281e5b53c0dd0ce15",
+  "started_utc": "2026-09-06T15:17:44.236355+00:00",
+  "status": "POST_RUN_CLEANUP_CONFIRMED"
+}

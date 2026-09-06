@@ -1,0 +1,80 @@
+{
+  "arm_cjt": "C",
+  "arm_expected_symbol": "L2",
+  "arm_policy_units": 8192,
+  "binding": 0,
+  "instance_id": "i-05ba34f47185eb934",
+  "job": "cas-meta2-20260906150012-7c9f6d00",
+  "launch_enabled": true,
+  "ledger_snapshot": {
+    "path": "/opt/cas-meta2-br/launch/ledger_snapshot.json",
+    "sha256": "86b98a81d1fa40844e459a07a0a01f1440a46079100fa83321234552468b8012"
+  },
+  "max_cost_usd": "4.00",
+  "max_image_bytes": 67108864,
+  "max_seconds": 600,
+  "native_execution": true,
+  "prelude": [
+    "A",
+    "B",
+    "C",
+    "R"
+  ],
+  "prelude_policy_units": 32768,
+  "reservation_receipt": {
+    "path": "/opt/cas-meta2-br/launch/reservation_receipt.json",
+    "sha256": "0542527f94d6eef7b2db456a3d6dc28cd4dfa0ffb56c5e574973b8426621ccaf"
+  },
+  "resource_plan": {
+    "account_id": "807562639912",
+    "ami_id": "ami-0fbbd0facbc9e3cff",
+    "ancillary_reserved_usd": "1.00",
+    "artifact_bytes_max": 268435456,
+    "artifact_objects_max": 3,
+    "automatic_retries": 0,
+    "cloud_shutdown_seconds": 3480,
+    "delete_on_termination": true,
+    "download_bytes_max": 268435456,
+    "ebs_encrypted": true,
+    "ebs_gb": 75,
+    "ebs_iops": 3000,
+    "ebs_throughput_mib_per_second": 125,
+    "ebs_type": "gp3",
+    "egress_tcp_ports": [
+      443
+    ],
+    "evidence_expanded_bytes_max": 536870912,
+    "gpu_count": 1,
+    "guest_shutdown_seconds": 3400,
+    "inbound_rules": [],
+    "input_bytes_max": 16777216,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "later_curriculum_execution": false,
+    "local_neural_execution": false,
+    "native_execution": true,
+    "on_demand_hourly_usd_max": "2.52",
+    "per_launch_reserved_cap_usd": "4.00",
+    "region": "us-west-2",
+    "required_gpu_name_contains": "RTX PRO 4500",
+    "runtime_seconds_max": 3600,
+    "s3_read_requests_max": 1000,
+    "s3_retention_days": 7,
+    "s3_write_requests_max": 1000,
+    "scheduler_invocations_max": 1,
+    "training": false,
+    "worker_seconds_max": 600
+  },
+  "schema": "cas-meta2-br-construction-plan/8",
+  "seed": 7,
+  "source_archive": {
+    "path": "/opt/cas-meta2-br/source.zip",
+    "sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a"
+  },
+  "source_manifest": {
+    "path": "/opt/cas-meta2-br/package/br_source_manifest.json",
+    "sha256": "7d5fdf331e74638b5cd1ecf9fca2c4a5ae3610aa562014decc5c03e4ca29944f"
+  },
+  "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+  "training": false
+}

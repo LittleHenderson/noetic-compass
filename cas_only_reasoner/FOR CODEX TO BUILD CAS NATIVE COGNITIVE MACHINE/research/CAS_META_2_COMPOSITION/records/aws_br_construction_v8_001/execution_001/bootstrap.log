@@ -1,0 +1,51 @@
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T15:02:27+00:00",
+    "ContentLength": 184689,
+    "ETag": "\"1c6fd0d6defe56932d9edba5c8942515\"",
+    "ChecksumCRC32": "Uki+Pw==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+/opt/cas-meta2-br/remote.py: OK
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T15:02:39+00:00",
+    "ContentLength": 43059,
+    "ETag": "\"c1aa3173ba3c71c89c9afdb4f9e6f516\"",
+    "ChecksumCRC32": "0VMfcg==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T15:02:26+00:00",
+    "ContentLength": 8043470,
+    "ETag": "\"4587975e83e3417c05c77900e6a29a12\"",
+    "ChecksumCRC32": "2AYFCA==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+{
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "ETag": "\"fa8e092ced9e35d80206ae859234f41c\"",
+    "ChecksumCRC64NVME": "/5rG7c6g+mI=",
+    "ChecksumType": "FULL_OBJECT",
+    "ServerSideEncryption": "AES256"
+}
+{
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "ETag": "\"a4e8204bbdc7c2d9a1591919cec16039\"",
+    "ChecksumCRC64NVME": "VARNQWI+zGs=",
+    "ChecksumType": "FULL_OBJECT",
+    "ServerSideEncryption": "AES256"
+}

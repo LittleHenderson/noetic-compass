@@ -1,0 +1,29 @@
+{
+  "schema": "cas-meta2-br-finalizer-execution-record/8",
+  "record_kind": "Builder record of exact commands and exec-tool outputs; not a new provider receipt",
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "runs": [
+    {
+      "command": [
+        "C:/Python314/python.exe",
+        "-B",
+        "records/aws_br_construction_v8_001/finalize_evidence.py"
+      ],
+      "exec_chunk_id": "7503d9",
+      "exit_code": 0,
+      "stdout": "{\"current_provider_state_requeried\": false, \"files_verified\": 26, \"future_unlisted_files_not_covered\": true, \"job\": \"cas-meta2-20260906150012-7c9f6d00\", \"receipt_sha256\": \"4f6b0656fc077dda75d6737c7f0b1c9d95a85d99a1475b71bc10276c9c609fca\", \"status\": \"FINAL_RECEIPT_VERIFIED\"}\r\n"
+    },
+    {
+      "command": [
+        "C:/Python314/python.exe",
+        "-B",
+        "records/aws_br_construction_v8_001/finalize_evidence.py",
+        "--verify"
+      ],
+      "exec_chunk_id": "b70495",
+      "exit_code": 0,
+      "stdout": "{\"current_provider_state_requeried\": false, \"files_verified\": 26, \"future_unlisted_files_not_covered\": true, \"job\": \"cas-meta2-20260906150012-7c9f6d00\", \"receipt_sha256\": \"4f6b0656fc077dda75d6737c7f0b1c9d95a85d99a1475b71bc10276c9c609fca\", \"status\": \"FINAL_RECEIPT_VERIFIED\"}\r\n"
+    }
+  ],
+  "boundary": "Added after FINAL_RECEIPT creation; that receipt does not cover this file. The evidence commit binds both."
+}

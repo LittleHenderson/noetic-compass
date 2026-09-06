@@ -1,6 +1,8 @@
 # Same-state B/R construction: local implementation checks
 
-Status: IMPLEMENTED_AND_CLEAN_PACKAGE_PURE_TESTED. Native AWS construction is not yet executed.
+Current status: `BR_COMPONENT_EXECUTED`; the separate AWS result and cleanup are recorded in `records/aws_br_construction_v8_001/README.md`. The implementation-stage account below is retained as historical evidence from before that launch.
+
+The new run used the exact source ZIP documented here. Its B/R outputs differ numerically but both decode `L2`; it proves no new learning or task-conditioned correct choice. Campaign ledger revision 13 retains a separate $4 reservation, bringing the campaign to $86 reserved and $314 unreserved. The older revision-12 figures below describe the completed local-only preparation stage.
 
 This adds an AWS-only component check. It is separate from the completed saved-prefix diagnostic and does not train a model or change the accepted runtime, verifier, model weights, or fixed C expectation (`L2`).
 
