@@ -1,0 +1,22 @@
+{
+  "schema": "cas-meta2-provider-status-transcription/0.1",
+  "source": "Read-only boto3 get_requested_service_quota_change and get_schedule output",
+  "region": "us-west-2",
+  "quota_request_id": "7b94b9c2dd564a999316b4217037c59fd72Ae8fc",
+  "case_id": "178865782600617",
+  "status": "CASE_OPENED",
+  "desired_value": 16,
+  "last_updated": "2026-09-05T18:23:50.528000-07:00",
+  "quota_api_request_id": "2c0b2baa-bd36-4b70-98d8-4a38fca96a37",
+  "timer_api_request_id": "2e19c1ec-1009-4ce8-a12e-db06b30fa383",
+  "timer_name": "cas-meta2-20260906002616-34a51f16",
+  "timer_state": "ENABLED",
+  "timer_expression": "at(2026-09-06T02:26:32)",
+  "timer_timezone": "UTC",
+  "timer_target": "arn:aws:scheduler:::aws-sdk:ec2:terminateInstances",
+  "timer_instance": "i-0ce0176a017bbfced",
+  "quota_approved": false,
+  "h100_capacity_proven": false,
+  "new_gpu_launched": false,
+  "boundary": "Transcribed provider observation, not a quota approval or proof of eventual shutdown. Recheck live state before launch and after cleanup."
+}

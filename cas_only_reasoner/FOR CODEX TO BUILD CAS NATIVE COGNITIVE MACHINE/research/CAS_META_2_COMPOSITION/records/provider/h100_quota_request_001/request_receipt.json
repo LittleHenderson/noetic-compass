@@ -1,0 +1,80 @@
+{
+  "schema": "cas-meta2-h100-quota-request/0.1",
+  "utc": "2026-09-06T01:23:44.803396+00:00",
+  "account": "807562639912",
+  "region": "us-west-2",
+  "purpose": "One user-requested H100 p5.4xlarge",
+  "desired_p_vcpus": 16,
+  "quota_before": {
+    "Quota": {
+      "ServiceCode": "ec2",
+      "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+      "QuotaArn": "arn:aws:servicequotas:us-west-2:807562639912:ec2/L-417A185B",
+      "QuotaCode": "L-417A185B",
+      "QuotaName": "Running On-Demand P instances",
+      "Value": 0.0,
+      "Unit": "None",
+      "Adjustable": true,
+      "GlobalQuota": false,
+      "UsageMetric": {
+        "MetricNamespace": "AWS/Usage",
+        "MetricName": "ResourceCount",
+        "MetricDimensions": {
+          "Class": "P/OnDemand",
+          "Resource": "vCPU",
+          "Service": "EC2",
+          "Type": "Resource"
+        },
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "Description": "Maximum number of vCPUs assigned to the Running On-Demand P instances."
+    },
+    "ResponseMetadata": {
+      "RequestId": "bcf61d72-22e9-42c3-a9d5-39e927aed081",
+      "HTTPStatusCode": 200,
+      "HTTPHeaders": {
+        "date": "Sun, 06 Sep 2026 01:23:44 GMT",
+        "content-type": "application/x-amz-json-1.1",
+        "content-length": "625",
+        "connection": "keep-alive",
+        "x-amzn-requestid": "bcf61d72-22e9-42c3-a9d5-39e927aed081"
+      },
+      "RetryAttempts": 0
+    }
+  },
+  "prior_requests": [],
+  "gpu_launched": false,
+  "spending_cap_changed": false,
+  "automatic_retry": false,
+  "status": "REQUEST_SUBMITTED",
+  "response": {
+    "RequestedQuota": {
+      "Id": "7b94b9c2dd564a999316b4217037c59fd72Ae8fc",
+      "ServiceCode": "ec2",
+      "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+      "QuotaCode": "L-417A185B",
+      "QuotaName": "Running On-Demand P instances",
+      "DesiredValue": 16.0,
+      "Status": "PENDING",
+      "Created": "2026-09-05 18:23:44.756000-07:00",
+      "Requester": "{\"accountId\":\"807562639912\",\"callerArn\":\"arn:aws:iam::807562639912:user/cas-g5-operator\"}",
+      "QuotaArn": "arn:aws:servicequotas:us-west-2:807562639912:ec2/L-417A185B",
+      "GlobalQuota": false,
+      "Unit": "None",
+      "QuotaRequestedAtLevel": "ACCOUNT"
+    },
+    "ResponseMetadata": {
+      "RequestId": "cccd4874-94c9-4d23-9b21-2150fb3740ae",
+      "HTTPStatusCode": 200,
+      "HTTPHeaders": {
+        "date": "Sun, 06 Sep 2026 01:23:44 GMT",
+        "content-type": "application/x-amz-json-1.1",
+        "content-length": "534",
+        "connection": "keep-alive",
+        "x-amzn-requestid": "cccd4874-94c9-4d23-9b21-2150fb3740ae"
+      },
+      "RetryAttempts": 0
+    }
+  }
+}

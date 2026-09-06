@@ -1,0 +1,67 @@
+{
+  "boundary": "Fresh-process integration with actual committed packaged source and schema; not cloud execution or result acceptance.",
+  "checks": {
+    "inspector": {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-c",
+        "\nimport importlib.abc,json,sys\nfrom pathlib import Path\nclass NoNeuralOrProvider(importlib.abc.MetaPathFinder):\n    def find_spec(self,fullname,path=None,target=None):\n        if fullname.split('.')[0] in {'torch','tensorflow','jax','cupy','casformer','cas_cjt','boto3','botocore'}:\n            raise RuntimeError('COLD_SOURCE_CHECK_FORBIDDEN_IMPORT:'+fullname)\nsys.meta_path.insert(0,NoNeuralOrProvider())\nwrapper=json.loads(Path(sys.argv[1]).read_bytes())\nmanifest=wrapper['launch_manifest']\nsource=sys.argv[2]\nassert manifest['source_sha']==source\n\nfrom tools import inspect_cloud_packet_v3 as inspector\ninspector._configure(manifest,source)\nrecord,spec=inspector._experiment_spec(manifest)\nloaded=inspector._audit_code_hashes()\nprint(json.dumps({'status':'COLD_INSPECTOR_SOURCE_CHECK_PASSED','source_sha':source,\n 'experiment':record,'preimport_git_binding':inspector._IMPORT_GUARD.git_binding,\n 'loaded_code_sha256':loaded,'boundary':'Source/config loading only; no result packet supplied.'},sort_keys=True))\n",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v3_source_001\\source.receipt.json",
+        "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T00:25:00.821484+00:00",
+      "returncode": 0,
+      "started_utc": "2026-09-06T00:24:43.826959+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "b9cbd57b1ef66fa8aa4eb69bff131dd50df5dede10cf21be7758ce530fbc5bd2",
+      "timed_out": false
+    },
+    "launcher": {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-c",
+        "\nimport importlib.abc,json,sys\nfrom pathlib import Path\nclass NoNeuralOrProvider(importlib.abc.MetaPathFinder):\n    def find_spec(self,fullname,path=None,target=None):\n        if fullname.split('.')[0] in {'torch','tensorflow','jax','cupy','casformer','cas_cjt','boto3','botocore'}:\n            raise RuntimeError('COLD_SOURCE_CHECK_FORBIDDEN_IMPORT:'+fullname)\nsys.meta_path.insert(0,NoNeuralOrProvider())\nwrapper=json.loads(Path(sys.argv[1]).read_bytes())\nmanifest=wrapper['launch_manifest']\nsource=sys.argv[2]\nassert manifest['source_sha']==source\n\nfrom aws import launch_v3 as launch\npreimport=launch.verify_cli_source_before_helper_import(source)\nplan=json.loads(Path('aws/launch_plan.json').read_bytes())\nchecked=launch.validate_archive(Path(wrapper['archive']),wrapper['archive_sha256'],source,plan)\nassert checked==manifest\nlaunch.validate_approval('400.00',plan)\nall_sources=launch.verify_launcher_identity(manifest)\nprint(json.dumps({'status':'COLD_LAUNCH_SOURCE_CHECK_PASSED','preimport_helper_files':len(preimport),\n 'packaged_source_files':len(all_sources),'source_sha':source,'provider_calls':0,\n 'boundary':'Read-only helper and archive validation; execute() was not called.'},sort_keys=True))\n",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v3_source_001\\source.receipt.json",
+        "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T00:24:43.826730+00:00",
+      "returncode": 0,
+      "started_utc": "2026-09-06T00:24:22.288720+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d9a5928968994a4d5e8e0222068530c5b8eeb77efa914c9abf915ccd2fe30670",
+      "timed_out": false
+    },
+    "stored_auditor": {
+      "command": [
+        "C:\\Python314\\python.exe",
+        "-B",
+        "-c",
+        "\nimport importlib.abc,json,sys\nfrom pathlib import Path\nclass NoNeuralOrProvider(importlib.abc.MetaPathFinder):\n    def find_spec(self,fullname,path=None,target=None):\n        if fullname.split('.')[0] in {'torch','tensorflow','jax','cupy','casformer','cas_cjt','boto3','botocore'}:\n            raise RuntimeError('COLD_SOURCE_CHECK_FORBIDDEN_IMPORT:'+fullname)\nsys.meta_path.insert(0,NoNeuralOrProvider())\nwrapper=json.loads(Path(sys.argv[1]).read_bytes())\nmanifest=wrapper['launch_manifest']\nsource=sys.argv[2]\nassert manifest['source_sha']==source\n\nfrom tools import audit_stored_packet_v3 as auditor\nauditor._configure(manifest,source)\nvalidator,schema=auditor.protected_schema()\nprint(json.dumps({'status':'COLD_STORED_AUDITOR_SOURCE_CHECK_PASSED','source_sha':source,\n 'schema':schema,'preimport_git_binding':auditor.outer._IMPORT_GUARD.git_binding,\n 'loaded_code_sha256':auditor._code_hashes(),\n 'boundary':'Source and published schema only; no stored traces or result packet supplied.'},sort_keys=True))\n",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_learning_v3_source_001\\source.receipt.json",
+        "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "finished_utc": "2026-09-06T00:25:19.052867+00:00",
+      "returncode": 0,
+      "started_utc": "2026-09-06T00:25:00.821785+00:00",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "d076a50a3964c381999724caea09917170b9ddac0bb49c48506b1d6b4d913321",
+      "timed_out": false
+    }
+  },
+  "gpu_execution": false,
+  "harness_sha256": "d5d139bf268bbf86bf92cb0dede458a834de636ab48d1e1a3f4550ff03dbea35",
+  "neural_imports_blocked": true,
+  "provider_calls": 0,
+  "provider_imports_blocked": true,
+  "schema": "cas-meta2-v3-cold-source-checks/1",
+  "source_archive_sha256": "f45df65ff54e3396bc0c66baeb704deb43c3f2a572b6459b9dad253f4183dcd2",
+  "source_receipt_sha256": "82bf0c0f3b6f7e93f579356c854e95e65a4bb9eaa695d82e0aea9f8ecd3138a6",
+  "source_receipt_unchanged": true,
+  "source_sha": "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70",
+  "status": "PASSED"
+}

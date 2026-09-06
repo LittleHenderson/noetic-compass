@@ -1,0 +1,20 @@
+{
+  "boundary": "Read-only live provider/log observation. Not a final held-out outcome, complete packet audit or cleanup receipt.",
+  "completed_run_verified": false,
+  "ec2_request_id": "2c233658-fe7a-4db9-90d4-2e732f590d26",
+  "instance_id": "i-0ce0176a017bbfced",
+  "instance_state": "shutting-down",
+  "instance_type": "g7.2xlarge",
+  "job": "cas-meta2-20260906002616-34a51f16",
+  "latest_development_measurement": null,
+  "latest_training_epoch": null,
+  "learning_accepted": false,
+  "log_bytes": 24209,
+  "log_last_modified": "2026-09-06T01:51:26+00:00",
+  "log_sha256": "59d9838616dfd6eb087a05b2a8febd28b1ada9d446fe4777e4feee4295612700",
+  "observed_utc": "2026-09-06T01:51:43.456312+00:00",
+  "recent_nontraining_events": [],
+  "s3_request_id": "6QBFDK9WJ60CANH3",
+  "schema": "cas-meta2-live-observation/0.1",
+  "source_sha": "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70"
+}
