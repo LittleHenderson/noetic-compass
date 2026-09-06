@@ -21,6 +21,23 @@ it must not be described as a fresh learning evaluation.
 The code remains nested to avoid changing the old top-level source inventories
 used to replay completed experiments. No accepted executor or checkpoint changes.
 
+## Training-data adapter
+
+`data.prepare_training_bundle` runs in the parent process. It checks an
+externally supplied manifest digest, verifies all dataset bytes, repeats the
+private structural checks, and writes a separate training-input directory.
+That directory contains training labels, validation labels, public test inputs,
+and the pinned manifest. It contains no private test file.
+
+`data.load_training_bundle` is the trainer entry. It requires the manifest
+digest, seed, counts, and exclusions from the caller; rejects unexpected files;
+checks actual depth counts; fits text tokens on training problems only; and
+does not read or hash private targets or parse test problems into programs.
+The manifest's private-file hash is only a reference for later evaluation.
+This directory separation is not an operating-system access-control sandbox.
+The future launcher must keep private files outside the trainer's mounted inputs
+if OS-level isolation is required.
+
 ## Remaining GPU integration
 
 This is not yet a training launch package. Do not pass these files unchanged
