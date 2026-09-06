@@ -1,0 +1,24 @@
+test_actual_pinned_receipt_and_render (__main__.Curves.test_actual_pinned_receipt_and_render) ... ok
+test_boolean_numerator_refused (__main__.Curves.test_boolean_numerator_refused) ... ok
+test_checkpoint_hash_mutation_refused (__main__.Curves.test_checkpoint_hash_mutation_refused) ... ok
+test_checkpoint_metric_copy_refused (__main__.Curves.test_checkpoint_metric_copy_refused) ... ok
+test_csv_missing_row_refused (__main__.Curves.test_csv_missing_row_refused) ... ok
+test_csv_numeric_mutation_refused (__main__.Curves.test_csv_numeric_mutation_refused) ... ok
+test_duplicate_epoch_refused (__main__.Curves.test_duplicate_epoch_refused) ... ok
+test_final_selection_history_mismatch_refused (__main__.Curves.test_final_selection_history_mismatch_refused) ... ok
+test_full_synthetic_coverage_and_render (__main__.Curves.test_full_synthetic_coverage_and_render) ... ok
+test_joint_score_cannot_exceed_components (__main__.Curves.test_joint_score_cannot_exceed_components) ... ok
+test_markdown_numeric_cell_mutation_refused (__main__.Curves.test_markdown_numeric_cell_mutation_refused) ... ok
+test_missing_epoch_refused (__main__.Curves.test_missing_epoch_refused) ... ok
+test_native_metric_claim_refused (__main__.Curves.test_native_metric_claim_refused) ... ok
+test_no_test_depth_two_invented (__main__.Curves.test_no_test_depth_two_invented) ... ok
+test_overall_recount_refused (__main__.Curves.test_overall_recount_refused) ... ok
+test_selected_is_not_final_epoch (__main__.Curves.test_selected_is_not_final_epoch) ... ok
+test_unrecorded_interpolation_refused (__main__.Curves.test_unrecorded_interpolation_refused) ... ok
+test_wrong_probe_denominator_refused (__main__.Curves.test_wrong_probe_denominator_refused) ... ok
+test_wrong_validation_denominator_refused (__main__.Curves.test_wrong_validation_denominator_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 19 tests in 0.024s
+
+OK

@@ -1,0 +1,481 @@
+{
+  "boundary": "Presentation of the pinned recorded-action recount only. No additional learning, native task, arithmetic, or capability claim. Historic best-so-far flags are distinct from final selected checkpoints.",
+  "campaign_completed": false,
+  "checkpoint_map": {
+    "cas": {
+      "final": {
+        "bytes": 2666977,
+        "epoch": 200,
+        "family": "cas",
+        "optimizer_steps": 11200,
+        "path": "cas_final_epoch_0200.pt",
+        "sha256": "bf709539d8a462fe73909553659ad046305e75428a15d80e83124bc28ee84b46",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 200,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 32,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 26,
+                "native_execution_performed": false,
+                "program_correct": 26,
+                "total": 32,
+                "valid_programs": 32
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 21,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 21
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 16,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 16
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 69,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 26,
+              "native_execution_performed": false,
+              "program_correct": 26,
+              "total": 96,
+              "valid_programs": 69
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.9239411157024794,
+          "teacher_forced_token_correct": 7155,
+          "token_cross_entropy": 0.470090984312956,
+          "tokens": 7744
+        }
+      },
+      "initial": {
+        "bytes": 1117577,
+        "epoch": 0,
+        "family": "cas",
+        "optimizer_steps": 0,
+        "path": "cas_initial_epoch_0000.pt",
+        "sha256": "ad8c80bf3d3ed7111e118957066ac3f0ec0509681fa2aa00e44d1592403b43fd",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 0,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 96,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.053460743801652895,
+          "teacher_forced_token_correct": 414,
+          "token_cross_entropy": 3.867930956123289,
+          "tokens": 7744
+        }
+      },
+      "selected": {
+        "bytes": 2666977,
+        "epoch": 200,
+        "family": "cas",
+        "optimizer_steps": 11200,
+        "path": "cas_selected_epoch_0200.pt",
+        "sha256": "bf709539d8a462fe73909553659ad046305e75428a15d80e83124bc28ee84b46",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 200,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 32,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 26,
+                "native_execution_performed": false,
+                "program_correct": 26,
+                "total": 32,
+                "valid_programs": 32
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 21,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 21
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 16,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 16
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 69,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 26,
+              "native_execution_performed": false,
+              "program_correct": 26,
+              "total": 96,
+              "valid_programs": 69
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.9239411157024794,
+          "teacher_forced_token_correct": 7155,
+          "token_cross_entropy": 0.470090984312956,
+          "tokens": 7744
+        }
+      }
+    },
+    "generic": {
+      "final": {
+        "bytes": 2626593,
+        "epoch": 200,
+        "family": "generic",
+        "optimizer_steps": 11200,
+        "path": "generic_final_epoch_0200.pt",
+        "sha256": "6e2f330d42b93f55102243b7597624a126f12dbbbd89f6ceffd3445b53748061",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 200,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 32,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 22,
+                "native_execution_performed": false,
+                "program_correct": 22,
+                "total": 32,
+                "valid_programs": 32
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 20,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 20
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 11,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 11
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 63,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 22,
+              "native_execution_performed": false,
+              "program_correct": 22,
+              "total": 96,
+              "valid_programs": 63
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.9338842975206612,
+          "teacher_forced_token_correct": 7232,
+          "token_cross_entropy": 0.40830940057423487,
+          "tokens": 7744
+        }
+      },
+      "initial": {
+        "bytes": 1104425,
+        "epoch": 0,
+        "family": "generic",
+        "optimizer_steps": 0,
+        "path": "generic_initial_epoch_0000.pt",
+        "sha256": "20669d0470a583ab172bbb06451c0b6bcbbf190ea10b3e725e7a73c5c046b051",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 0,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 0,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 0
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 0,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 0,
+              "native_execution_performed": false,
+              "program_correct": 0,
+              "total": 96,
+              "valid_programs": 0
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.05630165289256198,
+          "teacher_forced_token_correct": 436,
+          "token_cross_entropy": 3.863979875548812,
+          "tokens": 7744
+        }
+      },
+      "selected": {
+        "bytes": 2626593,
+        "epoch": 180,
+        "family": "generic",
+        "optimizer_steps": 10080,
+        "path": "generic_selected_epoch_0180.pt",
+        "sha256": "53e2acdd4635d843210a7aa0a5b194e395f57c0b7f71ca59b1a64dbeae4ca532",
+        "validation": {
+          "boundary": "Unweighted teacher-forced validation NLL; not open-generation task correctness.",
+          "epoch": 180,
+          "generation": {
+            "boundary": "Development program/binding match, not native task correctness. Caller must keep test data out.",
+            "by_depth": {
+              "1": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 32,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 26,
+                "native_execution_performed": false,
+                "program_correct": 26,
+                "total": 32,
+                "valid_programs": 32
+              },
+              "2": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 22,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 22
+              },
+              "3": {
+                "all_cases_in_denominator": true,
+                "binding_correct": 6,
+                "boundary": "Freely generated exact program and binding, not native task outcome.",
+                "joint_correct": 0,
+                "native_execution_performed": false,
+                "program_correct": 0,
+                "total": 32,
+                "valid_programs": 6
+              }
+            },
+            "expected_depths": [
+              1,
+              2,
+              3
+            ],
+            "overall": {
+              "all_cases_in_denominator": true,
+              "binding_correct": 60,
+              "boundary": "Freely generated exact program and binding, not native task outcome.",
+              "joint_correct": 26,
+              "native_execution_performed": false,
+              "program_correct": 26,
+              "total": 96,
+              "valid_programs": 60
+            },
+            "schema": "cas-meta2-depth-selection/3"
+          },
+          "teacher_forced_token_accuracy": 0.9346590909090909,
+          "teacher_forced_token_correct": 7238,
+          "token_cross_entropy": 0.4004021400262502,
+          "tokens": 7744
+        }
+      }
+    }
+  },
+  "checks": {
+    "all_rendered_tables_and_csv_fields_match_receipt": true,
+    "checkpoint_csv_fields_checked": 60,
+    "checkpoint_csv_rows": 6,
+    "curve_csv_fields_checked": 1980,
+    "curve_csv_rows": 132,
+    "family_epoch_measurements": 44,
+    "markdown_data_cells_checked": 708,
+    "measured_epochs_per_family": 22
+  },
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "records/prototype_v7_learning_curve_001/build.py",
+    "--receipt",
+    "records/prototype_v7_training_recount_001/receipt_001.json",
+    "--receipt-sha256",
+    "452705ca332f9cf8b42c8815c3c08f031ec73ba4fc443a51797679acddc62d76",
+    "--output",
+    "records/prototype_v7_learning_curve_001/run_001"
+  ],
+  "completed": true,
+  "completed_training_epochs": 200,
+  "finished_utc": "2026-09-06T11:38:25.893980+00:00",
+  "graph_recomputation": false,
+  "helper_sha256": "732456f953d87fd494dc31358a1758677b63c16bea4c83506ff97caacfb2baec",
+  "input_receipt": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_training_recount_001\\receipt_001.json",
+  "input_receipt_sha256": "452705ca332f9cf8b42c8815c3c08f031ec73ba4fc443a51797679acddc62d76",
+  "input_rechecked_after_render": true,
+  "job": "cas-meta2-20260906094002-39762c47",
+  "learning_accepted": false,
+  "measured_epochs": [
+    0,
+    1,
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    160,
+    170,
+    180,
+    190,
+    200
+  ],
+  "model_or_tensor_loads": false,
+  "native_task_scores_included": false,
+  "neural_execution": false,
+  "output_files_sha256": {
+    "checkpoints.csv": "de387ca32902520a0cd92130a16b8f41c9e889654ba797c43f60b8cd1060f42f",
+    "learning_curve.csv": "977c9141c7d46db90e13447bb4d5e74b45b6a9a42343e36a7065ea3e2f0a248d",
+    "learning_curve.md": "d13f97d76f85070958b3b38db5488f0b691aa4a41236260513c1188984622323"
+  },
+  "packet_sha256": "f28603b7aab07d7d75a06cfa52fb5b802689b8896001fa9f572971c9140c9799",
+  "provider_calls": false,
+  "schema": "cas-meta2-prototype-training-curve-render/7",
+  "source_archive_sha256": "f9bed05bd582e0796e2c4e78ff0f5174e5e1b6a3f447e5c3eab56ad002d473f9",
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "status": "PINNED_TRAINING_CURVES_RENDERED_AND_VERIFIED"
+}

@@ -1,0 +1,17 @@
+{
+  "checks": {
+    "all_rendered_tables_and_csv_fields_match_receipt": true,
+    "checkpoint_csv_fields_checked": 60,
+    "checkpoint_csv_rows": 6,
+    "curve_csv_fields_checked": 1980,
+    "curve_csv_rows": 132,
+    "family_epoch_measurements": 44,
+    "markdown_data_cells_checked": 708,
+    "measured_epochs_per_family": 22
+  },
+  "model_or_provider_calls": false,
+  "render_receipt_sha256": "c697a33ca67a5e9e4ea5972fba78ce94352479fd9e3e40171cd546e5bc97b0c4",
+  "status": "SAVED_CURVES_INDEPENDENT_RENDER_CHECK_PASSED",
+  "training_receipt_sha256": "452705ca332f9cf8b42c8815c3c08f031ec73ba4fc443a51797679acddc62d76",
+  "writes": false
+}

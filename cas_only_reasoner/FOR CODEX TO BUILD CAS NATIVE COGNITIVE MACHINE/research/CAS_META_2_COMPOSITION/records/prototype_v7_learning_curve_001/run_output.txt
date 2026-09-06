@@ -1,0 +1,19 @@
+{
+  "checks": {
+    "all_rendered_tables_and_csv_fields_match_receipt": true,
+    "checkpoint_csv_fields_checked": 60,
+    "checkpoint_csv_rows": 6,
+    "curve_csv_fields_checked": 1980,
+    "curve_csv_rows": 132,
+    "family_epoch_measurements": 44,
+    "markdown_data_cells_checked": 708,
+    "measured_epochs_per_family": 22
+  },
+  "output": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_learning_curve_001\\run_001",
+  "output_files_sha256": {
+    "checkpoints.csv": "de387ca32902520a0cd92130a16b8f41c9e889654ba797c43f60b8cd1060f42f",
+    "learning_curve.csv": "977c9141c7d46db90e13447bb4d5e74b45b6a9a42343e36a7065ea3e2f0a248d",
+    "learning_curve.md": "d13f97d76f85070958b3b38db5488f0b691aa4a41236260513c1188984622323"
+  },
+  "status": "PINNED_TRAINING_CURVES_RENDERED_AND_VERIFIED"
+}
