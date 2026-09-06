@@ -1,0 +1,614 @@
+{
+  "boundary": "Fixed 24-example training probe from an incompletely audited old run. Recounted with preserved scoring code; not independent neural execution, not representative full-training accuracy and not native task correctness.",
+  "checkpoint_loading": false,
+  "completed": true,
+  "curves": {
+    "cas": [
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 0,
+        "joint_correct": 0,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 1,
+        "joint_correct": 0,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 5,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 5,
+        "joint_correct": 5,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 10,
+        "joint_correct": 8,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 7,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 15,
+        "joint_correct": 7,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 20,
+        "joint_correct": 8,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 1,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 1,
+            "total": 8
+          }
+        },
+        "epoch": 25,
+        "joint_correct": 10,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 1,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 2,
+            "total": 8
+          }
+        },
+        "epoch": 30,
+        "joint_correct": 11,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 2,
+            "total": 8
+          }
+        },
+        "epoch": 35,
+        "joint_correct": 10,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 2,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 3,
+            "total": 8
+          }
+        },
+        "epoch": 40,
+        "joint_correct": 13,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 3,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 1,
+            "total": 8
+          }
+        },
+        "epoch": 45,
+        "joint_correct": 12,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 2,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 6,
+            "total": 8
+          }
+        },
+        "epoch": 50,
+        "joint_correct": 16,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 2,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 3,
+            "total": 8
+          }
+        },
+        "epoch": 55,
+        "joint_correct": 13,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 2,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 3,
+            "total": 8
+          }
+        },
+        "epoch": 60,
+        "joint_correct": 13,
+        "total": 24
+      }
+    ],
+    "generic": [
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 0,
+        "joint_correct": 0,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 1,
+        "joint_correct": 0,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 6,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 5,
+        "joint_correct": 6,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 10,
+        "joint_correct": 8,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 7,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 15,
+        "joint_correct": 7,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 0,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 1,
+            "total": 8
+          }
+        },
+        "epoch": 20,
+        "joint_correct": 9,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 7,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 2,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 0,
+            "total": 8
+          }
+        },
+        "epoch": 25,
+        "joint_correct": 9,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 1,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 4,
+            "total": 8
+          }
+        },
+        "epoch": 30,
+        "joint_correct": 13,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 1,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 5,
+            "total": 8
+          }
+        },
+        "epoch": 35,
+        "joint_correct": 14,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 1,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 6,
+            "total": 8
+          }
+        },
+        "epoch": 40,
+        "joint_correct": 15,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 4,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 5,
+            "total": 8
+          }
+        },
+        "epoch": 45,
+        "joint_correct": 17,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 6,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 7,
+            "total": 8
+          }
+        },
+        "epoch": 50,
+        "joint_correct": 21,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 7,
+            "total": 8
+          }
+        },
+        "epoch": 55,
+        "joint_correct": 23,
+        "total": 24
+      },
+      {
+        "by_depth": {
+          "1": {
+            "joint_correct": 8,
+            "total": 8
+          },
+          "2": {
+            "joint_correct": 5,
+            "total": 8
+          },
+          "3": {
+            "joint_correct": 8,
+            "total": 8
+          }
+        },
+        "epoch": 60,
+        "joint_correct": 21,
+        "total": 24
+      }
+    ]
+  },
+  "files": {
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0000.json": "4bb7cd04777306c044b09e4819e7bffc46fbfd4c9a312f42f0847f6068513d27",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0001.json": "0cf43d77a79081c0a5bf005abf26d25d891b7be63bc50d9434efcea5a235ad10",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0005.json": "f735a53af8738612375232a2069683058e9dec8ba5b7da225467b01a77035d1f",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0010.json": "ad38ba04e74e86ca5f3744a80bf508ac8a4d9e08bb6cf156501b432aa4236cc4",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0015.json": "02bbe2bf81bc4de8d80d151537511d3e609a4716d7fd4d5aa5b3586e3afd7417",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0020.json": "3cdefe11c6c92d8d40384904ef874d3d6bc5dabfcbf849d59ae75a8fe924b439",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0025.json": "fd1ff5fcf1a03a6bbcede6966b36bab18d9beac9e88f935161ae6edced803adb",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0030.json": "7ea00ddf97cc236141e9086f0206f8b46560084c440e5322fb5c2ecddf495a11",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0035.json": "f83bfe85a82ef0cb54db4facf507cf109f777705a65564f09d8ffca6ee5cf3f2",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0040.json": "acd0747d81321f80a1a4d5ac08cc5d65eb4d4b3d4563c28a3f3ab80f235c89c5",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0045.json": "61eea89d2c27a6985c0848f929f54b3d0cb5666faaf6b7db0b8f8050e13a56b5",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0050.json": "7bea49c371ddf7371e00ff66f4900e952e9d461a41d28edd2d7ee94f09cbe483",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0055.json": "3927b4b813fe4ac71619273f25fedfcc01301516624349f56d13a7574d2f957c",
+    "cloud_job/campaign/train_probe_predictions/cas_epoch_0060.json": "7d5f42d3712143199262f4cf81e2f47aadef3e04e700ccc2631c6b8f316c7b93",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0000.json": "a2369c37e90a68ba5dcd8b0c7c0bf540423a74b4fd0d280ddaa7c757b82365d6",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0001.json": "b4fb2e432996e5104cbbe7f8759e596d46e4826d5fc352097f9dbd35d036af3c",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0005.json": "4bdd204fb981e53c09ef80048b33436186b179dd805750a333a20e1f69ec21f3",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0010.json": "34225ca211c8365b3f735253f84b535faebd5c987bad0205bb262400864d991b",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0015.json": "c27553c4e2a39d4d7fd6357cfcc18acc28f5c82e4776388e7107dad1e485e3ce",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0020.json": "504182d6ed1470e67a815fa731a335d531daf4c28398d399511aa4c27c07f531",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0025.json": "8ed8c559f039c3aceefa7e242490f712d7484c3dbba9405cd64e025494b09a59",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0030.json": "1d87344b595ec34bc30b673c4bd18b0aa1d8105f481e193c86436bd60792e5ff",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0035.json": "dc4bdb60e1fc22f08836d7658575e84b3b947490f0332e49b8bf39508b3c14b1",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0040.json": "8cd6823ee9c028ede9824554300f7058f608a008b8c9393dc323002d4f1cdea3",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0045.json": "48c2925a053fe91f8ce2f02413b96596671d0946034bf429dba2b79bda325679",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0050.json": "69dd27ce9f3bda7c56afb17a7efe6793887da9938f77e20c7ac7ca843d72a890",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0055.json": "c2e7c7fde53234565ad90a93b00e1df94f4f11c74a19b8c5a9b0fb003b628504",
+    "cloud_job/campaign/train_probe_predictions/generic_epoch_0060.json": "ef20fbc049c24b27f2efd296d2455ca24e47d81d933553d6cc7ea0b834e457d2"
+  },
+  "fresh_evaluation": false,
+  "learning_accepted": false,
+  "neural_execution": false,
+  "new_training": false,
+  "original_partial_packet_sha256": "ebb76793a3897d70563be8cd2a857b0e24c82c4e412d3db66d80ac76345acaf2",
+  "recounted_files": 28,
+  "schema": "cas-meta2-training-probe-diagnosis/0.1",
+  "script_sha256": "3cf052c7fce37e9d328b216c1a6a28fdb8bc6e304f81bb5ade7eca7d9ee60eb8",
+  "source_sha256": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\selection_v2.py": "27a2b183d6c6e8d0a407156e13cac21c3d10d8e7917bba289824255c2d9a3816",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\selection_v3.py": "4f8a1de2e1736d2de4ef0a74e13932b55197a26ce6a059eaa881501ad0b6c913"
+  },
+  "task_ids": [
+    "meta2-v3-7e691fd2a6acfc75-train-00000",
+    "meta2-v3-7e691fd2a6acfc75-train-00001",
+    "meta2-v3-7e691fd2a6acfc75-train-00002",
+    "meta2-v3-7e691fd2a6acfc75-train-00003",
+    "meta2-v3-7e691fd2a6acfc75-train-00004",
+    "meta2-v3-7e691fd2a6acfc75-train-00005",
+    "meta2-v3-7e691fd2a6acfc75-train-00006",
+    "meta2-v3-7e691fd2a6acfc75-train-00007",
+    "meta2-v3-7e691fd2a6acfc75-train-01024",
+    "meta2-v3-7e691fd2a6acfc75-train-01025",
+    "meta2-v3-7e691fd2a6acfc75-train-01026",
+    "meta2-v3-7e691fd2a6acfc75-train-01027",
+    "meta2-v3-7e691fd2a6acfc75-train-01028",
+    "meta2-v3-7e691fd2a6acfc75-train-01029",
+    "meta2-v3-7e691fd2a6acfc75-train-01030",
+    "meta2-v3-7e691fd2a6acfc75-train-01031",
+    "meta2-v3-7e691fd2a6acfc75-train-02048",
+    "meta2-v3-7e691fd2a6acfc75-train-02049",
+    "meta2-v3-7e691fd2a6acfc75-train-02050",
+    "meta2-v3-7e691fd2a6acfc75-train-02051",
+    "meta2-v3-7e691fd2a6acfc75-train-02052",
+    "meta2-v3-7e691fd2a6acfc75-train-02053",
+    "meta2-v3-7e691fd2a6acfc75-train-02054",
+    "meta2-v3-7e691fd2a6acfc75-train-02055"
+  ],
+  "training_data_sha256": "579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359"
+}
