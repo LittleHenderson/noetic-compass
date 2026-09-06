@@ -124,3 +124,8 @@ def test_campaign_requires_matching_launch_profile(monkeypatch):
     monkeypatch.setenv('CAS_META2_EXPERIMENT_PROFILE', 'learning_v3')
     with pytest.raises(RuntimeError, match='LAUNCH_EXPERIMENT_IDENTITY_REQUIRED'):
         campaign.experiment_identity()
+
+
+def test_builder_status_identifies_fit_without_claiming_gpu_execution():
+    import inspect
+    assert 'CAS_META_2_FIT_V5_PINNED_PACKAGE_BUILT_GPU_NOT_RUN' in inspect.getsource(bundle.build)

@@ -143,7 +143,7 @@ def build(output, *, experiment_profile="known_example_fit_v5"):
         for name, expected in manifest["files_sha256"].items():
             if sha256(archive.read(name)).hexdigest() != expected:
                 raise ValueError("ARCHIVE_READBACK_HASH_FAILURE")
-    return {"status": "CAS_META_2_ABLATION_V4_PINNED_PACKAGE_BUILT_GPU_NOT_RUN",
+    return {"status": "CAS_META_2_FIT_V5_PINNED_PACKAGE_BUILT_GPU_NOT_RUN",
             "source_sha": head, "baseline_sha": BASELINE_SHA, "archive": str(output),
             "archive_sha256": sha256(output.read_bytes()).hexdigest(),
             "archive_bytes": output.stat().st_size, "files": len(members),
