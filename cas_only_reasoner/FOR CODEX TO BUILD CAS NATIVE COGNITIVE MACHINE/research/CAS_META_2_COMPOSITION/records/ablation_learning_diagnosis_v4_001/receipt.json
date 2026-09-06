@@ -1,0 +1,219 @@
+{
+  "boundary": "Preserved metadata from an incompletely audited training run and structural counts of an already-exposed test set. Not a fresh evaluation or a causal diagnosis.",
+  "completed": true,
+  "dataset_sha256": {
+    "dataset_manifest.json": "c0ad48a1a1c6834775bf18ee31971d491de3ed804d4f6469c97d4194968a2dce",
+    "test_private.json": "b08ca2f7be8d2ef88988a8a6c15edec087124abdaed788795a795cd541dff65c",
+    "test_public.json": "553413b0ddc4bd877c3a012fe709bd8bd8836d0d1e0fc9058a8e602153140f62",
+    "train.json": "579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359",
+    "validation.json": "badbffa8e54d3cadb8a12d1e7d84d79a055b0c1073f4fe48fa068270cddea249"
+  },
+  "learning_accepted": false,
+  "models": {
+    "cas": {
+      "active_parameters": 183852,
+      "checkpoint_sha256": "4e327e1e8c89b27b78101a877bf9f6cf4debeeb18658e2fc28361c23df70c48f",
+      "generated_overall": {
+        "all_cases_in_denominator": true,
+        "binding_correct": 72,
+        "boundary": "Freely generated exact program and binding, not native task outcome.",
+        "joint_correct": 43,
+        "native_execution_performed": false,
+        "program_correct": 43,
+        "total": 96,
+        "valid_programs": 72
+      },
+      "generated_program_and_binding_by_depth": {
+        "1": {
+          "binding_correct": 32,
+          "joint_correct": 31,
+          "program_correct": 31,
+          "total": 32,
+          "valid_programs": 32
+        },
+        "2": {
+          "binding_correct": 28,
+          "joint_correct": 8,
+          "program_correct": 8,
+          "total": 32,
+          "valid_programs": 28
+        },
+        "3": {
+          "binding_correct": 12,
+          "joint_correct": 4,
+          "program_correct": 4,
+          "total": 32,
+          "valid_programs": 12
+        }
+      },
+      "optimizer_steps": 11520,
+      "selected_epoch": 60,
+      "teacher_forced_token_accuracy": 0.9767576990122022,
+      "token_cross_entropy": 0.06955172557043933
+    },
+    "generic": {
+      "active_parameters": 183892,
+      "checkpoint_sha256": "7f906e974d4509922a1b84a17109acc23ad88af626135820f17fc4c3baf9fb1e",
+      "generated_overall": {
+        "all_cases_in_denominator": true,
+        "binding_correct": 88,
+        "boundary": "Freely generated exact program and binding, not native task outcome.",
+        "joint_correct": 69,
+        "native_execution_performed": false,
+        "program_correct": 69,
+        "total": 96,
+        "valid_programs": 88
+      },
+      "generated_program_and_binding_by_depth": {
+        "1": {
+          "binding_correct": 32,
+          "joint_correct": 32,
+          "program_correct": 32,
+          "total": 32,
+          "valid_programs": 32
+        },
+        "2": {
+          "binding_correct": 30,
+          "joint_correct": 18,
+          "program_correct": 18,
+          "total": 32,
+          "valid_programs": 30
+        },
+        "3": {
+          "binding_correct": 26,
+          "joint_correct": 19,
+          "program_correct": 19,
+          "total": 32,
+          "valid_programs": 26
+        }
+      },
+      "optimizer_steps": 11520,
+      "selected_epoch": 60,
+      "teacher_forced_token_accuracy": 0.9918651946542708,
+      "token_cross_entropy": 0.025302712963044403
+    }
+  },
+  "native_evaluation_performed": false,
+  "neural_execution_performed": false,
+  "schema": "cas-meta2-preserved-learning-diagnosis/0.1",
+  "script_sha256": "010749a8486cbc7d238f0f1778110f63e0a04fc457aa83529cc3da59ebdf2d2c",
+  "structure": {
+    "test": {
+      "depth_and_procedure_counts": [
+        {
+          "depth": 3,
+          "procedures": 4,
+          "tasks": 48
+        },
+        {
+          "depth": 4,
+          "procedures": 4,
+          "tasks": 24
+        }
+      ],
+      "depth_counts": {
+        "3": 48,
+        "4": 24
+      },
+      "procedure_counts": {
+        "4": 72
+      },
+      "tasks": 72
+    },
+    "train": {
+      "depth_and_procedure_counts": [
+        {
+          "depth": 1,
+          "procedures": 1,
+          "tasks": 1024
+        },
+        {
+          "depth": 2,
+          "procedures": 2,
+          "tasks": 90
+        },
+        {
+          "depth": 2,
+          "procedures": 3,
+          "tasks": 421
+        },
+        {
+          "depth": 2,
+          "procedures": 4,
+          "tasks": 513
+        },
+        {
+          "depth": 3,
+          "procedures": 3,
+          "tasks": 438
+        },
+        {
+          "depth": 3,
+          "procedures": 4,
+          "tasks": 586
+        }
+      ],
+      "depth_counts": {
+        "1": 1024,
+        "2": 1024,
+        "3": 1024
+      },
+      "procedure_counts": {
+        "1": 1024,
+        "2": 90,
+        "3": 859,
+        "4": 1099
+      },
+      "tasks": 3072
+    },
+    "validation": {
+      "depth_and_procedure_counts": [
+        {
+          "depth": 1,
+          "procedures": 1,
+          "tasks": 32
+        },
+        {
+          "depth": 2,
+          "procedures": 2,
+          "tasks": 2
+        },
+        {
+          "depth": 2,
+          "procedures": 3,
+          "tasks": 12
+        },
+        {
+          "depth": 2,
+          "procedures": 4,
+          "tasks": 18
+        },
+        {
+          "depth": 3,
+          "procedures": 3,
+          "tasks": 18
+        },
+        {
+          "depth": 3,
+          "procedures": 4,
+          "tasks": 14
+        }
+      ],
+      "depth_counts": {
+        "1": 32,
+        "2": 32,
+        "3": 32
+      },
+      "procedure_counts": {
+        "1": 32,
+        "2": 2,
+        "3": 30,
+        "4": 32
+      },
+      "tasks": 96
+    }
+  },
+  "training_performed": false,
+  "training_receipt_sha256": "63e1032e418f6b72f420312a1d03dd917acdff819248f51af81ca551d2b58236",
+  "validator_sha256": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+}
