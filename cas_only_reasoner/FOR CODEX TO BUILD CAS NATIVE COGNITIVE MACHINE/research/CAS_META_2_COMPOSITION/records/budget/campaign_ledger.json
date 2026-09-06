@@ -55,8 +55,8 @@
       "total_reserved_usd": "4"
     }
   },
-  "previous_state_sha256": "5cc65ea67504d131297bdb89655351c2ce4e1d3408efa672783319a0d07a22b4",
-  "remaining_unreserved_usd": "333.00",
+  "previous_state_sha256": "4b23d2a695908b45ca379540ea7bc1c6feb4886a43ac32ba306bf8f1baeb6f42",
+  "remaining_unreserved_usd": "329.00",
   "reservations": [
     {
       "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
@@ -519,11 +519,63 @@
       "reserved_utc": "2026-09-06T06:47:03.036220+00:00",
       "source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0",
       "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "54101904990bf3945dc1242e80982f05a47853a4fce56f2d9c88e9c9bb6f3bb7",
+      "job": "cas-meta2-20260906082659-383a339d",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 3300,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "fresh_test": false,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "4.00",
+        "predictions_reused_unchanged": true,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_AUTHORIZED_BOUNDED_EVALUATION_RECOVERY_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0",
+        "training_performed": false
+      },
+      "plan_sha256": "31c15c741e2113b10ae27a24fff835683acfa2a05337958c4e7470100f6d6bf7",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T08:26:59.790857+00:00",
+      "source_sha": "cbf13795202094865744f7c0b5efa234451f9208",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
     }
   ],
-  "revision": 9,
+  "revision": 10,
   "schema": "cas-meta-campaign-budget/2",
   "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
-  "total_reserved_usd": "67.00",
-  "updated_utc": "2026-09-06T06:47:03.036329+00:00"
+  "total_reserved_usd": "71.00",
+  "updated_utc": "2026-09-06T08:26:59.790971+00:00"
 }

@@ -1,0 +1,9 @@
+{
+  "absent_before": true,
+  "self_inputs_sha256": {
+    "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_prototype_v7_002/README.md": "8545098c0497cfd7e189a804e98dcbd326d583234a478a35e42bda67e44f1263",
+    "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/clean_source_prototype_v7_002/run.py": "5d408b3069fd40ed95a6a74217e1da9306770691c8e42e1504204018255fba5d"
+  },
+  "source_sha": "4bbb91628ad5b5f7e32d33eb8f7f07fedaa05a3e",
+  "worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-4bbb9162"
+}

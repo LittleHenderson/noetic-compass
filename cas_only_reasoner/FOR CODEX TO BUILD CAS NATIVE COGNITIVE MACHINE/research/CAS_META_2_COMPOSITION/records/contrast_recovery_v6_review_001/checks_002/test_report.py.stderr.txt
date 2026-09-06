@@ -1,0 +1,27 @@
+test_changed_sealed_action_rejected (__main__.ReportTests.test_changed_sealed_action_rejected) ... ok
+test_complete_72_by_five_and_exact_depth_denominators (__main__.ReportTests.test_complete_72_by_five_and_exact_depth_denominators) ... ok
+test_complete_unsuccessful_trajectory_calls_supplied_helper (__main__.ReportTests.test_complete_unsuccessful_trajectory_calls_supplied_helper) ... ok
+test_duplicate_case_and_boolean_index_rejected (__main__.ReportTests.test_duplicate_case_and_boolean_index_rejected) ... ok
+test_extra_committed_run_has_only_run_disagreement (__main__.ReportTests.test_extra_committed_run_has_only_run_disagreement) ... ok
+test_failed_task_stays_in_denominator_and_nulls_stay_unknown (__main__.ReportTests.test_failed_task_stays_in_denominator_and_nulls_stay_unknown) ... ok
+test_inputs_are_not_mutated (__main__.ReportTests.test_inputs_are_not_mutated) ... ok
+test_literal_good_binding_remains_good_when_verifier_unknown (__main__.ReportTests.test_literal_good_binding_remains_good_when_verifier_unknown) ... ok
+test_missing_arm_rejected (__main__.ReportTests.test_missing_arm_rejected) ... ok
+test_missing_task_prediction_or_case_rejected (__main__.ReportTests.test_missing_task_prediction_or_case_rejected) ... ok
+test_named_sites_missing_kind_wrong_input_and_child_are_literal (__main__.ReportTests.test_named_sites_missing_kind_wrong_input_and_child_are_literal) ... ok
+test_no_difference_is_explicitly_unresolved (__main__.ReportTests.test_no_difference_is_explicitly_unresolved) ... ok
+test_partial_compute_counts_cannot_be_negative_bool_or_complete (__main__.ReportTests.test_partial_compute_counts_cannot_be_negative_bool_or_complete) ... ok
+test_partial_matching_short_prefix_has_no_guessed_early_end (__main__.ReportTests.test_partial_matching_short_prefix_has_no_guessed_early_end) ... ok
+test_partial_rows_or_complete_trace_cannot_be_forged (__main__.ReportTests.test_partial_rows_or_complete_trace_cannot_be_forged) ... ok
+test_partial_run_disagreement_is_separate_from_complete_trajectory (__main__.ReportTests.test_partial_run_disagreement_is_separate_from_complete_trajectory) ... ok
+test_post_start_failure_is_not_model_rejection (__main__.ReportTests.test_post_start_failure_is_not_model_rejection) ... ok
+test_rejection_does_not_compare_trajectory (__main__.ReportTests.test_rejection_does_not_compare_trajectory) ... ok
+test_successful_rule_is_prefix_reference_not_direct_reference (__main__.ReportTests.test_successful_rule_is_prefix_reference_not_direct_reference) ... ok
+test_wrong_evaluation_split_rejected (__main__.ReportTests.test_wrong_evaluation_split_rejected) ... ok
+test_wrong_group_distribution_rejected (__main__.ReportTests.test_wrong_group_distribution_rejected) ... ok
+test_wrong_rule_or_reference_rejected (__main__.ReportTests.test_wrong_rule_or_reference_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.314s
+
+OK

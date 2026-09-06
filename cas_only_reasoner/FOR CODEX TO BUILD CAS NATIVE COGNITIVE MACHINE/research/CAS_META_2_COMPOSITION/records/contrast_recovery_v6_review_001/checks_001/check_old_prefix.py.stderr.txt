@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\contrast_recovery_v6_review_001\check_old_prefix.py", line 87, in <module>
+    print(json.dumps(run(),sort_keys=True,indent=2))
+                     ~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\contrast_recovery_v6_review_001\check_old_prefix.py", line 56, in run
+    elif mutation=='trace_payload_hash':db.execute('UPDATE trace_events SET payload_sha256=? WHERE sequence=1',('0'*64,))
+                                        ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: trace_events is immutable

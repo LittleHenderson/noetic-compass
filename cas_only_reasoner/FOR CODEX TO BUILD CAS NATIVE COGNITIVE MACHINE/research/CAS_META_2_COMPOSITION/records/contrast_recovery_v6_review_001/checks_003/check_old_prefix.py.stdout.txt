@@ -1,0 +1,144 @@
+{
+  "admission_sha256": "d479c90f711d417f2f585b87a0b746e250db8db12029df1586a4fbabf3b82420",
+  "completed": true,
+  "negative_tests": [
+    {
+      "message": "PREFIX_ERROR_IDENTITY",
+      "mutation": "error_message",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "PREFIX_TRACE_CHAIN",
+      "mutation": "trace_payload_hash",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "{'accepted_intent_ids': ['intent-state-530a6421e9933aa17b52971e', 'intent-state-1a10af7a2ddf6fdbcbda470b', 'intent-memory-a7ef6856f993423f20eadfd6'], 'artifacts': [{'artifact_id': 'artifact-3fcd261ca4dc2bfb15dc5962', 'byte_length': 32, 'encoding': 'raw-contiguous-v1', 'kind': 'cause-input', 'media_type': 'application/vnd.cas.tensor', 'metadata': {'dtype': 'float32', 'numel': 8, 'shape': [1, 2, 4]}",
+      "mutation": "schema_resealed",
+      "rejected": true,
+      "type": "ValidationError"
+    },
+    {
+      "message": "PREFIX_DOCUMENT_MISSING",
+      "mutation": "missing_commit",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "PREFIX_FINAL_HEAD",
+      "mutation": "head_count",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "PREFIX_DOCUMENT_HASH",
+      "mutation": "state_payload_hash",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "PREFIX_OBSERVATION_BINDING",
+      "mutation": "binding",
+      "rejected": true,
+      "type": "ValueError"
+    },
+    {
+      "message": "PREFIX_ARTIFACT_BINDING",
+      "mutation": "output_artifact",
+      "rejected": true,
+      "type": "ValueError"
+    }
+  ],
+  "neural_execution": false,
+  "new_recovery_packet_checked": false,
+  "packet_sha256": "db52b01670c9864da7eeecac25c36446986c6b0b625f6d1b6310bbfdcad55def",
+  "result": {
+    "boundary": "Stored committed prefix and sealed-program mapping only; no failed-tick tensor decoding, no full call-tree export, no final output, and no independently replayed neural execution.",
+    "committed_native_runs": 7,
+    "committed_prefix_documents_checked": true,
+    "committed_reserved_policy_units": 504,
+    "complete_execution_trace": false,
+    "compute_complete": false,
+    "database_sha256": "53ce598f5daf923c42c750ead06e729b7d16b06c4329f41072d828f59741d400",
+    "document_tables_checked": [
+      "trace_events",
+      "commit_receipts",
+      "published_effects",
+      "causes",
+      "verifier_receipts",
+      "model_versions",
+      "state_versions",
+      "artifacts",
+      "active_head"
+    ],
+    "evidence_sha256": {
+      "failure.json": "6f4477260a9e76f45cb511cce4b94bc465e928d2bfce382b90e3b436b01d7160",
+      "native.db": "53ce598f5daf923c42c750ead06e729b7d16b06c4329f41072d828f59741d400"
+    },
+    "failed_tick_compute": null,
+    "missing_failed_tick_candidate_and_verifier_receipt": true,
+    "next_sealed_run": {
+      "cjt_id": "B",
+      "frame": 3,
+      "input_node": -1,
+      "kind": "RUN",
+      "node": 7
+    },
+    "published_trace_schema_checked": true,
+    "rows": [
+      {
+        "cjt_id": "A",
+        "input_node": -1,
+        "input_sha256": "9b7672f646d9674421c1addb64b241f827366209a05965b8b3af4be9dac596f5",
+        "output_sha256": "509090dabcfc8dd832460c637a9d80ab7b51f89abee46d061fe1c059d46dcc3c"
+      },
+      {
+        "cjt_id": "A",
+        "input_node": -1,
+        "input_sha256": "9b7672f646d9674421c1addb64b241f827366209a05965b8b3af4be9dac596f5",
+        "output_sha256": "32eba53d6b4bcbed46fe0ba213ec5389bfe33c3de59f69eb01ab8ff4c8f96989"
+      },
+      {
+        "cjt_id": "A",
+        "input_node": -1,
+        "input_sha256": "9b7672f646d9674421c1addb64b241f827366209a05965b8b3af4be9dac596f5",
+        "output_sha256": "2d571c151f4d01dd4a640b0b2544620e33b53ee210f8733342f9dda98b618277"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 2,
+        "input_sha256": "2d571c151f4d01dd4a640b0b2544620e33b53ee210f8733342f9dda98b618277",
+        "output_sha256": "a5a16c3c1d8f2baeec5a97624fa1eecfad649cd96028c6398606ca098d5d6413"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 3,
+        "input_sha256": "a5a16c3c1d8f2baeec5a97624fa1eecfad649cd96028c6398606ca098d5d6413",
+        "output_sha256": "90feb6e6ebf0dc6c6299fe33cab30e1fbabd68be5bea07fb2ec0506a7e307e2d"
+      },
+      {
+        "cjt_id": "B",
+        "input_node": 1,
+        "input_sha256": "32eba53d6b4bcbed46fe0ba213ec5389bfe33c3de59f69eb01ab8ff4c8f96989",
+        "output_sha256": "a3ca48be19180c1464f8ceba4324cdffaff72c8ed3baf3ea9e37a0a8ee27b94b"
+      },
+      {
+        "cjt_id": "C",
+        "input_node": 5,
+        "input_sha256": "a3ca48be19180c1464f8ceba4324cdffaff72c8ed3baf3ea9e37a0a8ee27b94b",
+        "output_sha256": "77229a4bd8af1d329e6edb647b670e08f922a0888fa33171877fdb2a128e4b8a"
+      }
+    ],
+    "sealed_program_prefix_checked": true
+  },
+  "schema": "cas-meta2-recovery-review-prefix-regression/6",
+  "schema_identity": {
+    "baseline_sha": "0917267b1354e5d036263eaa6ba9a7197eafb776",
+    "git_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/schemas/neural_cjt_contracts.schema.json",
+    "jsonschema_version": "4.26.0",
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\cas_cjt\\schemas\\neural_cjt_contracts.schema.json",
+    "sha256": "35d304a3c51b0687a63c40c65c52a6cdf7eddcda8c2ee28e2234a0a4d1641969"
+  }
+}

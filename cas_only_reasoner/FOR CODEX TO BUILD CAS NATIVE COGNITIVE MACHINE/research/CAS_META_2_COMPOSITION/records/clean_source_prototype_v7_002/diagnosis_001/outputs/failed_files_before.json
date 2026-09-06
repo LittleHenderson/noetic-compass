@@ -1,0 +1,25 @@
+{
+  "failed_files": [
+    {
+      "bytes": 1817,
+      "exists": true,
+      "mode": "0o100666",
+      "mtime_ns": 1788685661659628000,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v3-daf842cd5ea8\\pytest\\test_simulated_parent_order_an2\\campaign\\campaign_receipt.json",
+      "sha256": "ac720d3ccb9dc12955fc18135c722833c002d4f11794d54053b4756cfe5913e4",
+      "windows_file_attributes": 32
+    },
+    {
+      "bytes": 2005,
+      "exists": true,
+      "mode": "0o100666",
+      "mtime_ns": 1788685661661627800,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v3-daf842cd5ea8\\pytest\\test_simulated_parent_order_an2\\campaign\\campaign_receipt.json.tmp",
+      "sha256": "9d252854163e1892e32e1dfc0f497986e8ae2139cd0bbd8a64b1d731fb1dca1d",
+      "windows_file_attributes": 32
+    }
+  ],
+  "inspection": "Read/stat/hash only; no replacement, permission edit, or deletion.",
+  "onedrive_lock_or_other_owner_identified": false,
+  "path_contains_onedrive": true
+}

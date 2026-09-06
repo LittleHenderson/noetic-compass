@@ -1,0 +1,125 @@
+............F........................................................... [  3%]
+................................................ [  6%]
+.......................................................................... [ 10%]
+................................................................................................. [ 15%]
+...................... [ 16%]
+........................................................................ [ 20%]
+........................................................................ [ 24%]
+.......................................................................................................................... [ 30%]
+............................................................. [ 33%]
+........................................................................ [ 37%]
+........................................................................ [ 41%]
+........................................................................ [ 45%]
+........................................................................ [ 49%]
+........................................................................ [ 53%]
+........................................................................ [ 56%]
+........................................................................ [ 60%]
+........................................................................................................................ [ 67%]
+.................................................................................................................... [ 73%]
+........................................................................ [ 77%]
+........................................................................ [ 80%]
+................................................................ [ 84%]
+........................................................................ [ 88%]
+........................................................................ [ 91%]
+........................................................................ [ 95%]
+........................................................................ [ 99%]
+.........                                                                [100%]
+================================== FAILURES ===================================
+____________ test_simulated_parent_order_and_failures[False-True] _____________
+
+output = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/meta2v3-daf842cd5ea8/pytest/test_simulated_parent_order_an2/campaign')
+
+    def index(output):
+>       if fail_index: raise RuntimeError('simulated unsafe output link')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       RuntimeError: simulated unsafe output link
+
+tests\test_ablation_campaign_v4.py:134: RuntimeError
+
+During handling of the above exception, another exception occurred:
+
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/meta2v3-daf842cd5ea8/pytest/test_simulated_parent_order_an2')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002DD4D062030>
+fail_prediction = False, fail_index = True
+
+    @pytest.mark.parametrize('fail_prediction,fail_index', [(False, False), (True, False), (False, True)])
+    def test_simulated_parent_order_and_failures(tmp_path, monkeypatch, fail_prediction, fail_index):
+        from cas_meta2 import campaign_v3 as frozen
+        calls = []
+        output = tmp_path / 'campaign'
+        monkeypatch.setattr(candidate, 'require_request', lambda *args: None)
+        monkeypatch.setattr(candidate, 'experiment_identity', lambda: {'simulated': True})
+        monkeypatch.setattr(candidate.signal, 'SIGALRM', 14, raising=False)
+        monkeypatch.setattr(candidate.signal, 'getsignal', lambda *args: None)
+        monkeypatch.setattr(candidate.signal, 'signal', lambda *args: None)
+        monkeypatch.setattr(candidate.signal, 'setitimer', lambda *args: None, raising=False)
+        monkeypatch.setattr(candidate.signal, 'ITIMER_REAL', 0, raising=False)
+        def new_output(path):
+            path.mkdir()
+            return path
+        monkeypatch.setattr(frozen, '_new_output', new_output)
+        monkeypatch.setattr(frozen, '_source_identity', lambda: {'mock': 'unchanged'})
+        monkeypatch.setattr(frozen, '_baseline_identity', lambda: {'mock': 'unchanged'})
+        def construct(output, seed, deadline):
+            assert seed == 20260919
+            calls.append('dataset')
+            shutil.copytree(DATA, output / 'dataset')
+            return output / 'dataset'
+        monkeypatch.setattr(frozen, '_construct_data', construct)
+        monkeypatch.setattr(frozen, '_xml_receipt', lambda *args: {'simulated': True})
+        def process(command, directory, deadline, environment=None):
+            name = directory.name
+            calls.append(name)
+            if name == 'gpu_contracts':
+                # Override pyproject's local-only default: addopts = "-m 'not gpu'".
+                pytest_args = command[command.index('pytest') + 1:]
+                assert pytest_args[pytest_args.index('-m') + 1] == 'gpu'
+                assert 'tests/test_predict_viability_v4_gpu.py' in pytest_args
+                assert 'cas_meta2.pytest_no_aliases_v4' in pytest_args
+            if name == 'prediction':
+                saved_prediction(output)
+                if fail_prediction:
+                    raise RuntimeError('simulated child failure after files were written')
+            if name.startswith('evaluate_'):
+                assert (output / 'prediction_gate.json').is_file()
+                mode = name.removeprefix('evaluate_')
+                write_json(output / 'prediction' / mode / 'native_receipt.json',
+                           {'cases': 72, 'arm_verdicts': 360, 'simulated': True})
+            return {'completed': True, 'returncode': 0, 'simulated': True}
+        monkeypatch.setattr(frozen, '_run_process', process)
+        def index(output):
+            if fail_index: raise RuntimeError('simulated unsafe output link')
+            return 'simulated'
+        monkeypatch.setattr(frozen, '_final_payload_index', index)
+        if fail_index:
+            with pytest.raises(RuntimeError, match='unsafe output link'):
+>               candidate.run(ARCHIVE, output, job=JOB)
+
+tests\test_ablation_campaign_v4.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\ablation_campaign_v4.py:197: in run
+    _write(output / 'campaign_receipt.json', record)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/meta2v3-daf842cd5ea8/pytest/test_simulated_parent_order_an2/campaign/campaign_receipt.json')
+value = {'automatic_retry': False, 'baseline_before': {'mock': 'unchanged'}, 'completed': False, 'dataset_sha256': {'dataset_m...1e0fc9058a8e602153140f62', 'train.json': '579a1bfdda64702b4357f57b75c9c9b6e0710a9262c1da41d5aeec1ca1404359', ...}, ...}
+
+    def _write(path, value):
+        path = Path(path)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        temporary = path.with_name(path.name + ".tmp")
+        temporary.write_text(json.dumps(value, sort_keys=True, indent=2, allow_nan=False) + "\n",
+                             encoding="utf-8")
+>       os.replace(temporary, path)
+E       PermissionError: [WinError 5] Access is denied: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v3-daf842cd5ea8\\pytest\\test_simulated_parent_order_an2\\campaign\\campaign_receipt.json.tmp' -> 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v3-daf842cd5ea8\\pytest\\test_simulated_parent_order_an2\\campaign\\campaign_receipt.json'
+
+cas_meta2\campaign_v3.py:74: PermissionError
+============================== warnings summary ===============================
+tests/test_packet.py::test_duplicate_case_alias_and_file_directory_collisions_rejected[names0]
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'a.txt'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED tests/test_ablation_campaign_v4.py::test_simulated_parent_order_and_failures[False-True]
+1 failed, 1884 passed, 11 skipped, 2 deselected, 1 warning, 356 subtests passed in 251.98s (0:04:11)

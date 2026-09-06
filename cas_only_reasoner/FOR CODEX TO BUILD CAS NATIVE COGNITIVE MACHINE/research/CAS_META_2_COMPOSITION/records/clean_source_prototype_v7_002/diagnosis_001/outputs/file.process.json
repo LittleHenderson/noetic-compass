@@ -1,0 +1,24 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\diagnosis_001\\run.py",
+    "--child",
+    "file",
+    "--output",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-4bbb9162\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\diagnosis_001\\file",
+    "--scratch",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v7-retry-82442356ff88"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-4bbb9162\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T09:14:43.000837+00:00",
+  "name": "file",
+  "returncode": 0,
+  "started_utc": "2026-09-06T09:14:40.113460+00:00",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "3b53291d58c0e75530b8759cce91f4701c46a32a1cf2f75d765edba5f6d33baf",
+  "termination_boundary": "subprocess.run kills and waits for its direct child on timeout; independently detached grandchildren are not covered.",
+  "timed_out": false,
+  "timeout_seconds": 180,
+  "wall_seconds": 2.8873788000000786
+}

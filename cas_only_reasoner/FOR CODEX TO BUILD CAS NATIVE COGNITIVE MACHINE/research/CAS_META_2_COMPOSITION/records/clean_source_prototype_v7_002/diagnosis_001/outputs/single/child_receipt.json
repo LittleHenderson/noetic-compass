@@ -1,0 +1,28 @@
+{
+  "canonical_guard_unchanged": true,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-4bbb9162\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "forbidden_modules": [],
+  "mode": "single",
+  "neural_execution": false,
+  "pid": 44680,
+  "provider_calls": false,
+  "pytest_arguments": [
+    "-m",
+    "not gpu",
+    "tests/test_ablation_campaign_v4.py::test_simulated_parent_order_and_failures[False-True]",
+    "-q",
+    "-m",
+    "not gpu",
+    "-p",
+    "no:cacheprovider",
+    "--basetemp=C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v7-retry-c03f1826c0ee\\pytest",
+    "--junitxml=C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\prototype-v7-audit-4bbb9162\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\clean_source_prototype_v7_002\\diagnosis_001\\single\\tests.xml"
+  ],
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "registered_task_generation": false,
+  "returncode": 0,
+  "saved_fixture_only": true,
+  "scratch": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\meta2v7-retry-c03f1826c0ee",
+  "source_sha": "4bbb91628ad5b5f7e32d33eb8f7f07fedaa05a3e",
+  "source_test": "tests/test_ablation_campaign_v4.py::test_simulated_parent_order_and_failures[False-True]"
+}
