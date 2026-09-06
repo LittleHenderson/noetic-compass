@@ -1,0 +1,260 @@
+{
+  "instance_response": {
+    "Reservations": [
+      {
+        "Groups": [],
+        "Instances": [
+          {
+            "AmiLaunchIndex": 0,
+            "Architecture": "x86_64",
+            "BlockDeviceMappings": [
+              {
+                "DeviceName": "/dev/sda1",
+                "Ebs": {
+                  "AttachTime": "2026-09-06 02:59:59+00:00",
+                  "DeleteOnTermination": true,
+                  "EbsCardIndex": 0,
+                  "Status": "attached",
+                  "VolumeId": "vol-0627079e7f796a0ca"
+                }
+              }
+            ],
+            "BootMode": "uefi-preferred",
+            "CapacityReservationSpecification": {
+              "CapacityReservationPreference": "open"
+            },
+            "ClientToken": "cas-meta2-20260906025939-e933c868",
+            "CpuOptions": {
+              "CoreCount": 8,
+              "ThreadsPerCore": 1
+            },
+            "CurrentInstanceBootMode": "uefi",
+            "EbsOptimized": false,
+            "EnaSupport": true,
+            "EnclaveOptions": {
+              "Enabled": false
+            },
+            "HibernationOptions": {
+              "Configured": false
+            },
+            "Hypervisor": "xen",
+            "IamInstanceProfile": {
+              "Arn": "arn:aws:iam::807562639912:instance-profile/cas-meta2-20260906025939-e933c868-worker",
+              "Id": "AIPA3YBT37IUA7YHEMM7B"
+            },
+            "ImageId": "ami-0fbbd0facbc9e3cff",
+            "InstanceId": "i-0b3aca5fdecdec7ac",
+            "InstanceType": "g7.2xlarge",
+            "LaunchTime": "2026-09-06 02:59:58+00:00",
+            "MaintenanceOptions": {
+              "AutoRecovery": "default",
+              "RebootMigration": "default"
+            },
+            "MetadataOptions": {
+              "HttpEndpoint": "enabled",
+              "HttpProtocolIpv6": "disabled",
+              "HttpPutResponseHopLimit": 2,
+              "HttpTokens": "required",
+              "InstanceMetadataTags": "disabled",
+              "State": "applied"
+            },
+            "Monitoring": {
+              "State": "disabled"
+            },
+            "NetworkInterfaces": [
+              {
+                "Association": {
+                  "IpOwnerId": "amazon",
+                  "PublicDnsName": "ec2-44-252-17-118.us-west-2.compute.amazonaws.com",
+                  "PublicIp": "44.252.17.118"
+                },
+                "Attachment": {
+                  "AttachTime": "2026-09-06 02:59:58+00:00",
+                  "AttachmentId": "eni-attach-0919b4966cc32eab6",
+                  "DeleteOnTermination": true,
+                  "DeviceIndex": 0,
+                  "NetworkCardIndex": 0,
+                  "Status": "attached"
+                },
+                "Description": "",
+                "Groups": [
+                  {
+                    "GroupId": "sg-0e223555baa19fb42",
+                    "GroupName": "cas-meta2-20260906025939-e933c868"
+                  }
+                ],
+                "InterfaceType": "interface",
+                "Ipv6Addresses": [],
+                "MacAddress": "0a:25:bf:23:57:8f",
+                "NetworkInterfaceId": "eni-0f269504d28c80121",
+                "Operator": {
+                  "Managed": false
+                },
+                "OwnerId": "807562639912",
+                "PrivateDnsName": "ip-172-31-0-240.us-west-2.compute.internal",
+                "PrivateIpAddress": "172.31.0.240",
+                "PrivateIpAddresses": [
+                  {
+                    "Association": {
+                      "IpOwnerId": "amazon",
+                      "PublicDnsName": "ec2-44-252-17-118.us-west-2.compute.amazonaws.com",
+                      "PublicIp": "44.252.17.118"
+                    },
+                    "Primary": true,
+                    "PrivateDnsName": "ip-172-31-0-240.us-west-2.compute.internal",
+                    "PrivateIpAddress": "172.31.0.240"
+                  }
+                ],
+                "SourceDestCheck": true,
+                "Status": "in-use",
+                "SubnetId": "subnet-0eb3ca4bf5ca98f24",
+                "VpcId": "vpc-0df2f8cc1b9f23838"
+              }
+            ],
+            "NetworkPerformanceOptions": {
+              "BandwidthWeighting": "default"
+            },
+            "Operator": {
+              "HiddenByDefault": false,
+              "Managed": false
+            },
+            "Placement": {
+              "AvailabilityZone": "us-west-2c",
+              "AvailabilityZoneId": "usw2-az3",
+              "GroupName": "",
+              "Tenancy": "default"
+            },
+            "PlatformDetails": "Linux/UNIX",
+            "PrivateDnsName": "ip-172-31-0-240.us-west-2.compute.internal",
+            "PrivateDnsNameOptions": {
+              "EnableResourceNameDnsAAAARecord": false,
+              "EnableResourceNameDnsARecord": false,
+              "HostnameType": "ip-name"
+            },
+            "PrivateIpAddress": "172.31.0.240",
+            "ProductCodes": [],
+            "PublicDnsName": "ec2-44-252-17-118.us-west-2.compute.amazonaws.com",
+            "PublicIpAddress": "44.252.17.118",
+            "RootDeviceName": "/dev/sda1",
+            "RootDeviceType": "ebs",
+            "SecondaryInterfaces": [],
+            "SecurityGroups": [
+              {
+                "GroupId": "sg-0e223555baa19fb42",
+                "GroupName": "cas-meta2-20260906025939-e933c868"
+              }
+            ],
+            "SourceDestCheck": true,
+            "State": {
+              "Code": 16,
+              "Name": "running"
+            },
+            "StateTransitionReason": "",
+            "SubnetId": "subnet-0eb3ca4bf5ca98f24",
+            "Tags": [
+              {
+                "Key": "cas_meta_job",
+                "Value": "cas-meta2-20260906025939-e933c868"
+              }
+            ],
+            "UsageOperation": "RunInstances",
+            "UsageOperationUpdateTime": "2026-09-06 02:59:58+00:00",
+            "VirtualizationType": "hvm",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          }
+        ],
+        "OwnerId": "807562639912",
+        "ReservationId": "r-0165c5f720a79cf7d"
+      }
+    ],
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "cache-control": "no-cache, no-store",
+        "content-length": "5687",
+        "content-type": "text/xml;charset=UTF-8",
+        "date": "Sun, 06 Sep 2026 03:03:02 GMT",
+        "server": "AmazonEC2",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "accept-encoding",
+        "x-amzn-requestid": "69fe0a0c-f933-476e-9149-fcc2e3a8dc4f"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "69fe0a0c-f933-476e-9149-fcc2e3a8dc4f",
+      "RetryAttempts": 0
+    }
+  },
+  "job": "cas-meta2-20260906025939-e933c868",
+  "provider_mutations": 0,
+  "results/bootstrap.log": {
+    "head": {
+      "AcceptRanges": "bytes",
+      "ContentLength": 255,
+      "ContentType": "binary/octet-stream",
+      "ETag": "\"cc966824bcee6833542cea59bcb7094f\"",
+      "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+      "LastModified": "2026-09-06 03:03:04+00:00",
+      "Metadata": {},
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "accept-ranges": "bytes",
+          "content-length": "255",
+          "content-type": "binary/octet-stream",
+          "date": "Sun, 06 Sep 2026 03:03:05 GMT",
+          "etag": "\"cc966824bcee6833542cea59bcb7094f\"",
+          "last-modified": "Sun, 06 Sep 2026 03:03:04 GMT",
+          "server": "AmazonS3",
+          "x-amz-expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+          "x-amz-id-2": "rk8PNkUENqVP2JDM3yvDqnz5Otc0ftdA+25rxdj/+oQxEcO+wLOwTeUQliu076aa517BB4MlkW0=",
+          "x-amz-request-id": "6TDWXE74XM39R769",
+          "x-amz-server-side-encryption": "AES256"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "rk8PNkUENqVP2JDM3yvDqnz5Otc0ftdA+25rxdj/+oQxEcO+wLOwTeUQliu076aa517BB4MlkW0=",
+        "RequestId": "6TDWXE74XM39R769",
+        "RetryAttempts": 0
+      },
+      "ServerSideEncryption": "AES256"
+    },
+    "text": "{\"artifact_bytes\": 290288, \"elapsed_seconds\": 0.0006167888641357422, \"job\": \"cas-meta2-20260906025939-e933c868\", \"stage_log\": \"gpu_contract_tests.log\", \"state\": \"RUNNING\", \"utc\": \"2026-09-06T03:03:03.316699+00:00\"}\nCAMPAIGN STATUS\n\nCURRENT STAGE LOG TAIL\n"
+  },
+  "results/complete.json": {
+    "error": "404"
+  },
+  "schedule_response": {
+    "ActionAfterCompletion": "DELETE",
+    "Arn": "arn:aws:scheduler:us-west-2:807562639912:schedule/default/cas-meta2-20260906025939-e933c868",
+    "CreationDate": "2026-09-05 19:59:59.292000-07:00",
+    "FlexibleTimeWindow": {
+      "Mode": "OFF"
+    },
+    "GroupName": "default",
+    "LastModificationDate": "2026-09-05 19:59:59.292000-07:00",
+    "Name": "cas-meta2-20260906025939-e933c868",
+    "ResponseMetadata": {
+      "HTTPHeaders": {
+        "content-length": "939",
+        "content-type": "application/json",
+        "date": "Sun, 06 Sep 2026 03:03:03 GMT",
+        "x-amzn-requestid": "c92964bc-0e8e-40bb-8899-38c05437b56f"
+      },
+      "HTTPStatusCode": 200,
+      "RequestId": "c92964bc-0e8e-40bb-8899-38c05437b56f",
+      "RetryAttempts": 0
+    },
+    "ScheduleExpression": "at(2026-09-06T04:59:57)",
+    "ScheduleExpressionTimezone": "UTC",
+    "State": "ENABLED",
+    "Target": {
+      "Arn": "arn:aws:scheduler:::aws-sdk:ec2:terminateInstances",
+      "Input": "{\"InstanceIds\": [\"i-0b3aca5fdecdec7ac\"]}",
+      "RetryPolicy": {
+        "MaximumEventAgeInSeconds": 60,
+        "MaximumRetryAttempts": 0
+      },
+      "RoleArn": "arn:aws:iam::807562639912:role/cas-meta2-20260906025939-e933c868-timer"
+    }
+  },
+  "schema": "cas-meta2-live-ablation-observation/0.1",
+  "state": "running",
+  "utc": "2026-09-06T03:03:03.062271+00:00"
+}
