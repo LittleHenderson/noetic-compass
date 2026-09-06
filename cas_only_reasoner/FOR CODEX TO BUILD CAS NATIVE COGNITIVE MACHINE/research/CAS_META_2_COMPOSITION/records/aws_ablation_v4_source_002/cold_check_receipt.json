@@ -1,0 +1,27 @@
+{
+  "archive_sha256": "3230d805b665b91f1191d423342bb591cfb1fd69cd677fbe49206cf50b8729bd",
+  "checker_sha256": "c0af1a5bffe5abf755732f18936629a30a14f9396c112f2af2365f1b91af5711",
+  "completed": true,
+  "experiment": {
+    "entrypoint": "cas_meta2.ablation_campaign_v4",
+    "profile": "decoder_ablation_v4",
+    "spec_path": "research/CAS_META_2_COMPOSITION/EXPERIMENT_ABLATION_V4.json",
+    "spec_sha256": "3d8a0890af70d2fd8dfe7a3b9f42fb279be854f73013194867c34c27e07e2530"
+  },
+  "neural_execution_performed": false,
+  "preimport_files": {
+    "aws/budget.py": "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0",
+    "aws/launch_ablation_v4.py": "f5e7694b354e21d14360742c27efd0a5d572c971542b470d2519a09ee6e82311",
+    "aws/launch_plan.json": "65bc41bf4bffe7a373dd9e8c9faa75561fd2d8940d32fd6d4283dbbb55f6f1f6",
+    "requirements-gpu.txt": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379",
+    "tools/build_launch_bundle_ablation_v4.py": "a1a0b38140ae938545fe9e2866f51403270c0e1317cb15d3f1cdfb5bdd240620",
+    "tools/experiment_profiles_ablation_v4.py": "547db0c2f9aeab19237b23a45b992bad17097ba94174d0e334a57393abbdacc2"
+  },
+  "protected_baseline_files": 316,
+  "provider_calls": 0,
+  "remaining_unreserved_usd": "354.00",
+  "reservation_created": false,
+  "schema": "cas-meta2-ablation-cold-source-check/0.1",
+  "source_files_checked_against_git_and_disk": 495,
+  "source_sha": "9f562c761c7cb84c767673b2fab735cdd031b499"
+}
