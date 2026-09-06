@@ -73,8 +73,22 @@ GPU. The AWS-only end-to-end test is `tests/test_contrast_v6_train_gpu.py`;
 it now covers a real training subprocess, parent gate, checkpoint reloads,
 and nine diagnostic native cases. It must pass on authorized non-T4 CUDA
 hardware before the registered experiment starts. This is not yet a complete
-bounded launch package. Source/archive binding, GPU gates, budget reservation,
-parent orchestration, collection, and cleanup must still be connected.
+cloud-validated launch package. `campaign.py`, `EXPERIMENT_CONTRAST_V6.json`,
+`tools/build_launch_bundle_contrast_v6.py`, and `aws/launch_contrast_v6.py` now
+connect source/archive binding, GPU gates, budget reservation, parent
+orchestration, collection, and cleanup. Their local tests are not evidence that
+AWS capacity, installation, GPU execution, or the complete campaign succeeds.
+
+The registered seed is 2026092601; do not generate its test data locally during
+development. The parent constructs data only after the GPU diagnostic gate.
+The fixed experiment requests 640 training tasks, 96 validation tasks, 72 test
+tasks in 24 matched triplets, and 8,000 optimizer steps per family. The worker
+gets 3,300 seconds, native checks up to 1,800 seconds, and the parent at most
+6,300 seconds. A pre-training remaining-time check reserves native evaluation
+time. The external launcher retains the existing two-hour instance ceiling,
+$7 reservation, $400 total task cap, one non-T4 Blackwell instance, and no
+automatic retry. H100 availability must still be checked against actual quota;
+this registered fallback does not request or select H100 capacity.
 
 This is not yet a training launch package. Do not pass these files unchanged
 to `train_v3.py`: that trainer requires the v3 manifest and equal per-depth
