@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys;from cas_meta2.contrast_v7.native_evaluation import validate_private_child;validate_private_child(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v7\native_evaluation.py", line 159, in validate_private_child
+    c.require(value["job"] == job and t.source_identity() == value["source_sha256"],
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              "V7_NATIVE_COLD_CHILD_IDENTITY")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v6\curriculum.py", line 25, in require
+    raise ValueError(reason)
+ValueError: V7_NATIVE_COLD_CHILD_IDENTITY

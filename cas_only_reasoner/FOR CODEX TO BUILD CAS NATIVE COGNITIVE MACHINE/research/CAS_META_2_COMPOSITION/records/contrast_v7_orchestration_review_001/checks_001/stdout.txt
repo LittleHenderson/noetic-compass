@@ -1,0 +1,26 @@
+.........uu.uuu.uuu...........
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_changed_final_gpu_gate_blocks_completion
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_collection_failure_overrides_otherwise_successful_record
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_embedded_and_stored_native_receipts_must_agree
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_failed_dataset_process_does_not_start_training
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_failed_evaluation_process_does_not_read_native_result
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_failed_gpu_process_does_not_start_dataset
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_failed_training_process_does_not_start_evaluation
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_final_baseline_drift_blocks_completion
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_final_source_drift_stops_completion
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_gpu_gate_rejects_native_case_or_arm_coverage_loss
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_gpu_gate_rejects_wrong_test_skips_and_wrong_command
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_gpu_gate_requires_current_job_source_and_baseline
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_gpu_gate_requires_exactly_one_smoke_and_full_native_counts
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_phase_deadlines_fit_registered_time_allocation
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_phase_sequence_exact_commands_and_actual_counts_before_training
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_reused_training_pid_cannot_satisfy_separate_child_exit
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_setup_overhead_past_480_seconds_stops_before_training
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_training_gate_is_recomputed_before_final_completion
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_training_start_cannot_precede_dataset_exit
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_valid_synthetic_gpu_gate_has_one_test_nine_cases_45_arms
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_wrong_actual_assembly_count_stops_before_training
+PASSED tests/test_contrast_v7_orchestration.py::OrchestrationTests::test_wrong_dataset_child_identity_stops_before_training
+22 passed, 8 subtests passed in 3.18s

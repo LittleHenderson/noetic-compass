@@ -1,0 +1,84 @@
+{
+  "schema": "cas-meta2-prototype-experiment/7",
+  "profile": "prototype_training_v7",
+  "entrypoint": "cas_meta2.contrast_v7.campaign",
+  "registration_state": "PREPARATION_ONLY_GPU_AND_EVALUATION_GATES_PENDING",
+  "purpose": "TRAIN_WITH_EXACT_ORIGINAL_256_PLUS_FRESH_BASE_CURRICULUM",
+  "curriculum_seed": 2026092701,
+  "curriculum": {
+    "train_flat": 128,
+    "train_pairs_per_cell": 64,
+    "validation_flat": 32,
+    "validation_pairs_per_cell": 8,
+    "test_triplets": 24
+  },
+  "training": {
+    "seed": 7,
+    "epochs": 200,
+    "batch_size": 16,
+    "prediction_batch_size": 16,
+    "validation_interval": 10,
+    "max_seconds": 3600
+  },
+  "base_train_count": 640,
+  "original_train_append_count": 256,
+  "train_count": 896,
+  "validation_count": 96,
+  "test_count": 72,
+  "matched_test_triplets": 24,
+  "train_depths": {
+    "1": 128,
+    "2": 384,
+    "3": 384
+  },
+  "validation_depths": {
+    "1": 32,
+    "2": 32,
+    "3": 32
+  },
+  "test_depths": {
+    "3": 48,
+    "4": 24
+  },
+  "optimizer_steps_per_family": 11200,
+  "exclusion_inventory_path": "records/contrast_v7_exclusions_from_failed_v6_001/inventory.json",
+  "exclusion_inventory_sha256": "9f579ea2d593671dfddf16db39aa22563d6b98f7388758d2a2b99539e66ed623",
+  "exclusion_count": 8837,
+  "source_pins_path": "records/contrast_v7_bridge_checks_001/source_pins.json",
+  "source_pins_sha256": "9d66a81fbdc0e4041cd09d460c821f3cf68e244610ed49831324b5accf74084d",
+  "public_loader_path": "records/prototype_training_integration_v7_001/public_data.py",
+  "public_loader_sha256": "5db831d685b2343a16b93cbc3d3c16e53978ebf0e3cf9da8fefd7d10692708b0",
+  "original_tasks_path": "records/contrast_curriculum_v6_probe_001/tasks.json",
+  "original_tasks_sha256": "ed6bb0978d34b549917e1ea1b846091f103577936f846bc01db152b19ddbac46",
+  "original_tasks_training_only": true,
+  "original_graphs_remain_in_fresh_exclusions": true,
+  "gpu_gate": {
+    "status": "PENDING_PRODUCTION_V7_PIPELINE_SMOKE",
+    "test_file": null,
+    "expected_tests": null
+  },
+  "native_evaluation": {
+    "status": "PENDING_VALIDATED_RECOVERY_WORKER",
+    "entrypoint": null
+  },
+  "execution_enabled": false,
+  "training_permitted": false,
+  "local_fresh_data_generation": false,
+  "local_neural_execution": false,
+  "private_test_labels_in_trainer": false,
+  "selection": "unchanged_validation_only_depth_selection_v3",
+  "policies": "unchanged_v3",
+  "loss": "unchanged_v3",
+  "optimizer": "unchanged_v3",
+  "decoder": "unchanged_v3",
+  "arms": [
+    "cas_untrained",
+    "cas_trained",
+    "generic_untrained",
+    "generic_trained",
+    "rule"
+  ],
+  "automatic_retry": false,
+  "automatic_promotion": false,
+  "source_release_accepted": false
+}

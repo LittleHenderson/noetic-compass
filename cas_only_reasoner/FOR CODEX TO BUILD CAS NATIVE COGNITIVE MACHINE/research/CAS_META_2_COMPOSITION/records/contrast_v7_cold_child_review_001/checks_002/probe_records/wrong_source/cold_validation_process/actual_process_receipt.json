@@ -1,0 +1,27 @@
+{
+  "automatic_retry": false,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-c",
+    "import sys;from cas_meta2.contrast_v7.native_evaluation import validate_private_child;validate_private_child(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\runs\\v7cold-c7e1a0ce4597\\wrong_source\\cold_validation_request.json",
+    "7a676a3482518123ea4a10a1df7e32f1ea5cbb8c5fff47077ead4e3ac768a111",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\runs\\v7cold-c7e1a0ce4597\\wrong_source\\cold_dataset_validation.json",
+    "cas-meta2-20000101000000-00000001"
+  ],
+  "completed": false,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T08:34:21.401537+00:00",
+  "group_mechanism": "CREATE_NEW_PROCESS_GROUP",
+  "new_process_group": true,
+  "pid": 18196,
+  "pure_test_platform_adapter": true,
+  "returncode": 1,
+  "schema": "cas-meta2-campaign-subprocess/3",
+  "started_utc": "2026-09-06T08:34:20.842983+00:00",
+  "stderr_sha256": "f56be59ac0a50014c3c5245cba40e18b22f2c0c1f0f4f08de4c51442530cc02f",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "timed_out": false,
+  "wall_seconds": 0.5585603999988962
+}

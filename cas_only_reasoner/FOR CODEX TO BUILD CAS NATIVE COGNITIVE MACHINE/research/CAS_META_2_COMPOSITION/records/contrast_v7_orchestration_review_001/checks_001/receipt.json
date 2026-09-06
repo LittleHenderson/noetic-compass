@@ -1,0 +1,53 @@
+{
+  "boundary": "Synthetic orchestration and saved receipt validation only. Process launch and training/native outcome functions are mocked; no live GPU, provider, dataset construction or model execution. Initial mismatch finding remains preserved separately.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-rA",
+    "-s",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_contrast_v7_orchestration.py",
+    "-p",
+    "no:cacheprovider",
+    "--junitxml",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_v7_orchestration_review_001\\checks_001\\tests.xml"
+  ],
+  "completed": true,
+  "counts": {
+    "entries": 22,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "executable": "C:\\Python314\\python.exe",
+  "execution_readiness_flags_changed_on_disk": false,
+  "existing_environment_not_fresh_install": true,
+  "finished_utc": "2026-09-06T08:45:43.490527+00:00",
+  "gpu_receipts_synthetic": true,
+  "neural_execution": false,
+  "phase_processes_simulated": true,
+  "protected_files": 316,
+  "provider_calls": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "returncode": 0,
+  "selected_source_files": 9,
+  "selected_source_sha256": {
+    "cas_meta2/campaign_v3.py": "f81d146bd3e304f90aad3f4a99a09b46cee09fea991259bafd7a3206ee0e9556",
+    "cas_meta2/contrast_v7/campaign.py": "aeec4c1015862b00b31187ba7678e1a8608ea1082df01544709a8202f2af726f",
+    "cas_meta2/contrast_v7/checks.py": "56518be9711d77a8ee729028e5a0d0fa025aa8e5b6139321205abf7190bdba86",
+    "cas_meta2/contrast_v7/data.py": "73850f1e6b9847468baec09f8f5fef42735d45c2a75a3290d769a8036368aa0e",
+    "cas_meta2/contrast_v7/gpu_preflight.py": "8f76f0fc01776460d25cd8e59c8404e7d863f7771dc7cee35bf23043c7a4bc81",
+    "cas_meta2/contrast_v7/native_evaluation.py": "cba4069c71dac86612a6c82192471af305454f615e572b6f35fa18138477652b",
+    "cas_meta2/contrast_v7/parent.py": "97add004eecada1a8b8228ef0053bfacd6afb8c1e384e1ec440cb00f5d682417",
+    "cas_meta2/contrast_v7/train.py": "16712d8f383da53e98f62f9cfe94e434b370a1b54bda4511286d33aff60a0c43",
+    "tests/test_contrast_v7_orchestration.py": "e5e792d921559aa285d512fbd5bb604308caa27612b4844ad73279fada733bc5"
+  },
+  "source_unchanged": true,
+  "started_utc": "2026-09-06T08:45:39.463378+00:00",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "e5d41d4a517ac71ffda140c66efb458fff18e7ef8474363be80ebfe0486fabad",
+  "tasks_generated": false
+}

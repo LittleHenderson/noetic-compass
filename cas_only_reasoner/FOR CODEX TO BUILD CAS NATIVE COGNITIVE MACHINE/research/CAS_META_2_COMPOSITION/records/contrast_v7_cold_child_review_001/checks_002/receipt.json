@@ -1,0 +1,80 @@
+{
+  "actual_aws": false,
+  "boundary": "Focused pure regression over saved diagnostic data and exact protected wheel file copies, using an explicitly mocked AWS request gate and a real local process-group adapter. Not live AWS, training, a fresh installation or native task execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "-rA",
+    "-s",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_contrast_v7_cold_child.py",
+    "--junitxml",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_v7_cold_child_review_001\\checks_002\\tests.xml",
+    "-p",
+    "no:cacheprovider"
+  ],
+  "completed": true,
+  "counts": {
+    "entries": 14,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "earlier_attempts_retained": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\runs\\v7cold-d74699be4213",
+      "result": "test-helper typo before child launch; no production finding"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\runs\\v7cold-c99de044b6fe",
+      "result": "14 passed; find_spec callable with no package discovery; superseded only by stronger frozen-wheel fixture"
+    }
+  ],
+  "executable": "C:\\Python314\\python.exe",
+  "existing_environment_not_fresh_install": true,
+  "finished_utc": "2026-09-06T08:34:43.886667+00:00",
+  "neural_or_provider_execution": false,
+  "probe_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\runs\\v7cold-c7e1a0ce4597",
+  "probe_receipt_sha256": "9bd6fc006ec5f43b6f97ad5e5e017a696e1ebb59746c397b7d44a1148e53d9e0",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "raw_stdout_sha256": "43c02afe7ff765bb4bb2d553e82cab09f60a83e924efac41de32f43fff7ef699",
+  "returncode": 0,
+  "source_after": {
+    "cas_meta2/campaign_v3.py": "f81d146bd3e304f90aad3f4a99a09b46cee09fea991259bafd7a3206ee0e9556",
+    "cas_meta2/contrast_recovery_v6/source_manifest.json": "897c6a72c7411676c4ad80ac9734b3dbe7a7ac169951f58d2ab2fd6d387ecb37",
+    "cas_meta2/contrast_v7/__init__.py": "c6fcba2eede74ab81023a1c1aa5815b3e6a8944781a2a1050b4833387cfaeca6",
+    "cas_meta2/contrast_v7/campaign.py": "3eee62d13d510d1f530a44fdbeef55d18236934016175ed7d85ff0f2e10f0f1a",
+    "cas_meta2/contrast_v7/checks.py": "56518be9711d77a8ee729028e5a0d0fa025aa8e5b6139321205abf7190bdba86",
+    "cas_meta2/contrast_v7/data.py": "73850f1e6b9847468baec09f8f5fef42735d45c2a75a3290d769a8036368aa0e",
+    "cas_meta2/contrast_v7/evaluation.py": "aaf4ab6f3101b47ce08509e92622250eef90dab2be9ed6cebc4414fa52670e82",
+    "cas_meta2/contrast_v7/gpu_preflight.py": "4c2047caaf9220fbf56650a1273f3e24b5f6b1e5354437a1e3ae9ee811a1bdcf",
+    "cas_meta2/contrast_v7/native_evaluation.py": "cba4069c71dac86612a6c82192471af305454f615e572b6f35fa18138477652b",
+    "cas_meta2/contrast_v7/parent.py": "97add004eecada1a8b8228ef0053bfacd6afb8c1e384e1ec440cb00f5d682417",
+    "cas_meta2/contrast_v7/train.py": "16712d8f383da53e98f62f9cfe94e434b370a1b54bda4511286d33aff60a0c43",
+    "records/contrast_v7_cold_child_review_001/probe.py": "1f81e7c8114c47769ddd3cb8e4ad68ba121d6a85e3b584fc1f0a898ea167d404",
+    "records/contrast_v7_cold_child_review_001/sitecustomize.py": "3769301876e3dd934ee79f32d3e92acacaafd2e724e7f66dc0e8b2754604a8b0",
+    "tests/test_contrast_v7_cold_child.py": "df8938fa4c9c3ed5c8bcc09ad322fcbfe8c269e2c8637fe18b13ab23b35efae2"
+  },
+  "source_before": {
+    "cas_meta2/campaign_v3.py": "f81d146bd3e304f90aad3f4a99a09b46cee09fea991259bafd7a3206ee0e9556",
+    "cas_meta2/contrast_recovery_v6/source_manifest.json": "897c6a72c7411676c4ad80ac9734b3dbe7a7ac169951f58d2ab2fd6d387ecb37",
+    "cas_meta2/contrast_v7/__init__.py": "c6fcba2eede74ab81023a1c1aa5815b3e6a8944781a2a1050b4833387cfaeca6",
+    "cas_meta2/contrast_v7/campaign.py": "3eee62d13d510d1f530a44fdbeef55d18236934016175ed7d85ff0f2e10f0f1a",
+    "cas_meta2/contrast_v7/checks.py": "56518be9711d77a8ee729028e5a0d0fa025aa8e5b6139321205abf7190bdba86",
+    "cas_meta2/contrast_v7/data.py": "73850f1e6b9847468baec09f8f5fef42735d45c2a75a3290d769a8036368aa0e",
+    "cas_meta2/contrast_v7/evaluation.py": "aaf4ab6f3101b47ce08509e92622250eef90dab2be9ed6cebc4414fa52670e82",
+    "cas_meta2/contrast_v7/gpu_preflight.py": "4c2047caaf9220fbf56650a1273f3e24b5f6b1e5354437a1e3ae9ee811a1bdcf",
+    "cas_meta2/contrast_v7/native_evaluation.py": "cba4069c71dac86612a6c82192471af305454f615e572b6f35fa18138477652b",
+    "cas_meta2/contrast_v7/parent.py": "97add004eecada1a8b8228ef0053bfacd6afb8c1e384e1ec440cb00f5d682417",
+    "cas_meta2/contrast_v7/train.py": "16712d8f383da53e98f62f9cfe94e434b370a1b54bda4511286d33aff60a0c43",
+    "records/contrast_v7_cold_child_review_001/probe.py": "1f81e7c8114c47769ddd3cb8e4ad68ba121d6a85e3b584fc1f0a898ea167d404",
+    "records/contrast_v7_cold_child_review_001/sitecustomize.py": "3769301876e3dd934ee79f32d3e92acacaafd2e724e7f66dc0e8b2754604a8b0",
+    "tests/test_contrast_v7_cold_child.py": "df8938fa4c9c3ed5c8bcc09ad322fcbfe8c269e2c8637fe18b13ab23b35efae2"
+  },
+  "source_unchanged": true,
+  "started_utc": "2026-09-06T08:34:10.058483+00:00"
+}

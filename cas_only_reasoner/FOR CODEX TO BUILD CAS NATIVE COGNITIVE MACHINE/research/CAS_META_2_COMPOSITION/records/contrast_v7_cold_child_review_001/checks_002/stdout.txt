@@ -1,0 +1,19 @@
+PURE_COLD_CHILD_RETAINED_OUTPUT=C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\runs\v7cold-c7e1a0ce4597
+..uuu..uuuu..........
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_baseline_find_spec_remains_callable_without_importing_models
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_completed_saved_bundle_validation
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_curriculum_parameters_and_exclusions_are_bound
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_every_negative_request_stops_before_report_read
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_external_manifest_loader_and_source_pin_changes_rejected
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_failed_exit_receipt_not_accepted
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_initial_source_check_precedes_child_private_reads
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_no_neural_provider_or_external_actions
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_private_targets_opened_only_after_seal_in_actual_prepare
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_real_child_exited_before_report_was_consumed
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_request_hash_checked_before_child_private_read
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_request_hash_rechecked_after_exit
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_same_process_identity_not_accepted
+PASSED tests/test_contrast_v7_cold_child.py::ColdChildTests::test_source_and_all_protected_bytes_unchanged
+14 passed, 7 subtests passed in 32.26s

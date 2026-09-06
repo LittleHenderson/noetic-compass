@@ -1,0 +1,21 @@
+{
+  "boundary": "Synthetic gate records only; no GPU, provider, model or generated task.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_contrast_v7_orchestration.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T08:40:35.059087+00:00",
+  "returncode": 1,
+  "source_after": {
+    "campaign": "30255344eb177e06b6104957233a6d0645b6cd051e71987badada48ae6e5020a",
+    "test": "732709d3f50b37fd75ce5728a1ae57f19ac56625860d335b7446da99c65267f1"
+  },
+  "source_before": {
+    "campaign": "30255344eb177e06b6104957233a6d0645b6cd051e71987badada48ae6e5020a",
+    "test": "732709d3f50b37fd75ce5728a1ae57f19ac56625860d335b7446da99c65267f1"
+  },
+  "started_utc": "2026-09-06T08:40:34.338892+00:00"
+}

@@ -1,0 +1,16 @@
+test_embedded_and_stored_native_receipts_must_agree (__main__.OrchestrationTests.test_embedded_and_stored_native_receipts_must_agree) ... FAIL
+test_valid_synthetic_gpu_gate_has_one_test_nine_cases_45_arms (__main__.OrchestrationTests.test_valid_synthetic_gpu_gate_has_one_test_nine_cases_45_arms) ... ok
+
+======================================================================
+FAIL: test_embedded_and_stored_native_receipts_must_agree (__main__.OrchestrationTests.test_embedded_and_stored_native_receipts_must_agree)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\tests\test_contrast_v7_orchestration.py", line 124, in test_embedded_and_stored_native_receipts_must_agree
+    with self.assertRaisesRegex(ValueError, "V7_GPU_NATIVE"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.251s
+
+FAILED (failures=1)

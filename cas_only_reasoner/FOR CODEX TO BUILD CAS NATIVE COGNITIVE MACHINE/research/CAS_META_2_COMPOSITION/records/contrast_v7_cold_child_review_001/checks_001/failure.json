@@ -1,0 +1,9 @@
+{
+  "completed": false,
+  "phase": "pytest process startup",
+  "returncode": 1,
+  "tests_executed": 0,
+  "reason": "C:\\Python314\\python.exe: No module named pytest",
+  "boundary": "The runner used -I, which excludes this environment's user-site pytest. Its subsequent XML read failed because no pytest XML was created. Raw stdout, stderr, and before/after source maps are preserved here. This was a test-runner environment issue, not a production cold-child finding.",
+  "next_attempt": "checks_002 uses the existing pytest environment while the actual regression coordinator and validation children remain fresh processes."
+}

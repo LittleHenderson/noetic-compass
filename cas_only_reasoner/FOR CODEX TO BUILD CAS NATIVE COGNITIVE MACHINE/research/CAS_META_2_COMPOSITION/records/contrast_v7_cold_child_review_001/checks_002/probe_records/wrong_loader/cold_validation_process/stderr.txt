@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import sys;from cas_meta2.contrast_v7.native_evaluation import validate_private_child;validate_private_child(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+                                                                                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v7\native_evaluation.py", line 161, in validate_private_child
+    report = parent.validate_bundle(value["private_data"], expected_sha256=value["expected_sha256"],
+        seed=value["seed"], config=c.Config(**value["config"]).checked(),
+        excluded=frozenset(value["excluded"]), pins=value["pins"],
+        expected_pins_sha256=value["expected_pins_sha256"],
+        expected_loader_sha256=value["expected_loader_sha256"])
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v7\parent.py", line 56, in validate_bundle
+    context = Context(pins, expected_pins_sha256=expected_pins_sha256,
+                      expected_loader_sha256=expected_loader_sha256)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v7\parent.py", line 22, in __init__
+    self.loader = d.public_loader(expected_loader_sha256)
+                  ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v7\data.py", line 48, in public_loader
+    require(digest(read(path)) == expected_loader_sha256, 'V7_PUBLIC_LOADER_BYTES_CHANGED')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\contrast_v6\curriculum.py", line 25, in require
+    raise ValueError(reason)
+ValueError: V7_PUBLIC_LOADER_BYTES_CHANGED
