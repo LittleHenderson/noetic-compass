@@ -60,6 +60,9 @@ def first_difference(actual, expected):
             changed = {k for k in set(av) | set(ev) if av.get(k) != ev.get(k)}
             if 'kind' in changed:
                 tags.append('early_return' if av['kind'] == 'RETURN' else 'operation_kind_difference')
+                return {'position_without_charge_events': i, 'categories': tags,
+                        'candidate': a, 'successful_rule': e,
+                        'note': 'Different operation kinds; kind-specific fields are not compared as separate decisions.'}
             if 'procedure' in changed:
                 tags.append('wrong_child_called' if ev.get('address') != 'entry' else 'wrong_entry_procedure')
             if 'cjt_id' in changed:
@@ -168,7 +171,7 @@ def main():
                          'Not proof of the earliest neural decision, causal root cause, or exhaustive semantic equivalence. '
                          'Charge events excluded. Rejected generations have no executed transition. '
                          'Multiple categories may describe one first divergent event; categories are not forced into one cause.'}
-    with (HERE / 'receipt.json').open('x', encoding='utf-8') as stream:
+    with (HERE / 'receipt_v2.json').open('x', encoding='utf-8') as stream:
         json.dump(report, stream, indent=2, sort_keys=True)
         stream.write('\n')
     print(json.dumps({'self_checks':checks,'case_rows':len(rows),'summaries':summaries},indent=2))
