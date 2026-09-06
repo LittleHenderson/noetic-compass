@@ -1,0 +1,514 @@
+{
+  "archive_files_sha256": {
+    "artifact_collection_receipt.json": "6a2270702ee2f102f5b939128f23f85a2cab5a8bb4214e810193ca8db4ccacf2",
+    "lifecycle/cuda_identity/receipt.json": "d900b94c9dce6d64b61809eab140a9f2df17d71b73937172304831b4f9897428",
+    "lifecycle/cuda_identity/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/cuda_identity/stdout.txt": "47266ad60304fb507bcc6444c9bd587ad994c7d4c8357836671528058da6dbe2",
+    "lifecycle/deadline_limits.json": "33a1d506e52ba87944d36320ad8499bdb44bf8d557d2191cd9a0a4cd0f27e528",
+    "lifecycle/dependency_install.json": "a6b48fd9251ecbacbda775c95ef196f3c343cbf46da9add881ab65d71e47914d",
+    "lifecycle/dependency_install/receipt.json": "61f117800dd95ace430fcd4441b08d4c576f0341dfff347c1ac25d26af86adfc",
+    "lifecycle/dependency_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/dependency_install/stdout.txt": "dfb260ebfeb282db7ac064e1f1e85a9fd08d0e55d500f0e20f670eeb308fa0c2",
+    "lifecycle/instance_identity.json": "5491da10a82c5d5df11dd65de71b8c0f47cb57907a0750ca2a1c0c526b2e3b2e",
+    "lifecycle/permit.json": "8046b4b0697df849d3c3356fcc22dc66958caaa30d2dda92e6d09d0ca0de2528",
+    "lifecycle/pip_freeze/receipt.json": "6021200ac02d8a51a55f11a33706775ae233e498690bd61bd954f36d82d243d2",
+    "lifecycle/pip_freeze/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/pip_freeze/stdout.txt": "6209784e0ed5addcd0851b616e27997be87dd5273c43f4f8683837233e09f304",
+    "lifecycle/remote_config.json": "0878cdd44f124c75b55bb7ab41fb564cb7ff7e74da33155165c92621ff1ec192",
+    "lifecycle/remote_receipt.json": "49ba4876bc6bf71c5fdee6447360145244aad6939bd39637287ff21caeff6333",
+    "lifecycle/source_after.json": "61d5b99d9b4935f9f7fbb679df7d80cc7615bca5b452cd9055856d89e1f82b2d",
+    "lifecycle/source_before.json": "61d5b99d9b4935f9f7fbb679df7d80cc7615bca5b452cd9055856d89e1f82b2d",
+    "lifecycle/torch_install.json": "ede61b39fcf1946fef93756cda2f5a9948fc15e69866329999eb94b87aaae34b",
+    "lifecycle/torch_install/receipt.json": "a85723cdb0d72611dec8a35fca67c85745af33790518af2ec0d1d1ed6468667c",
+    "lifecycle/torch_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/torch_install/stdout.txt": "d162e1644266bdc4c22c93dca24db9af3c4c6348399e8d1d6abd0e3ca56d364f",
+    "lifecycle/transfer_01.json": "b1b1080d039f892c57ae930e1b6ffca3e6aea09111d426ef2d898d2411a3cd47",
+    "lifecycle/transfer_02.json": "6735f16cf6e0017dcb14b836e1113506df60af879620d25cb44ac7b5246cfd94",
+    "lifecycle/venv/receipt.json": "dcd3cfc72afa7099fcee70a788065dac3370bbb9fb6098be121eb339610b9693",
+    "lifecycle/venv/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/venv/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/wheel_install.json": "398f1565a84f627e33cd21acfd8276f09ffa8019dba0c9bf038587257ccaf69b",
+    "lifecycle/wheel_install/receipt.json": "dd2a27077f7dea5f6b5680fb2a43ae123ec2d2538f1731c0d68aa4d3e2c053bb",
+    "lifecycle/wheel_install/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/wheel_install/stdout.txt": "c020e68f34b85efc464f952f26291b644a98a66e4ea5b1d3f5e409e8b1feba75",
+    "lifecycle/worker/receipt.json": "e7ec329f0f127442b162c6361ccf20b98319b5ada95fcdfc62ae74b53181f571",
+    "lifecycle/worker/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "lifecycle/worker/stdout.txt": "c4ddc9e337fa295ea7e38b5f62ff29dc7f41712d52c114d7e0cd6c990e8877ff",
+    "qualification/admission.json": "3cf47f7bb5577258a96ff31119c187bcb4a6343e48a77d4a6470a148bafef197",
+    "qualification/cases/candidates_sealed.json": "7ba89b9c69a6abd6e1a6ffb48940c6fc0b2b58130d744f926adbfed1fdaafa41",
+    "qualification/cases/case_00/candidate_00/composition_events.json": "aab923fcfd1555499c56fab6d6d13175ae1173f658143803bf1d07d352060e98",
+    "qualification/cases/case_00/candidate_00/native.db": "0f647ab7e2a07071d27ec1cb8abfe42a850147c067a4c768b2a4b17e29580bfe",
+    "qualification/cases/case_00/candidate_00/native_kernel_events.json": "62a323f980f44ef5f541341ebec23cbd538da1bcceee9ac6dfd53581415f620f",
+    "qualification/cases/case_00/candidate_00/native_traces.json": "fb281b613e9a5c952dc238a0faf5c75c12ae0626ad1f7d3c9493cb55a54e383e",
+    "qualification/cases/case_00/candidate_00/result.json": "c159ec4bee55ae8e018684ca07bfa7858111ec4060d728cb62dbfb7a04058037",
+    "qualification/cases/case_00/candidate_00_qualification.json": "fd44857e7895b96e6e19305cfda7983aa7917d680659d7a0c5a39fb0ec0f7732",
+    "qualification/cases/case_00/candidate_01/composition_events.json": "7886a1041354f79dbd444602bf97304fffa35be916629aa2011b9c3d8e90cad8",
+    "qualification/cases/case_00/candidate_01/native.db": "c5669f1cbf16162cb986d4e47d4c3a07c5406ebe953af7700b4037891bb5aeaa",
+    "qualification/cases/case_00/candidate_01/native_kernel_events.json": "001286b1ef4049d28c18327326496f2b53c03e8993029d65f1fabd5e74be8532",
+    "qualification/cases/case_00/candidate_01/native_traces.json": "4e2e0a8ab60a976c1b13d7a9ce2bda767ab28911662836adc9a4ebadf98b8020",
+    "qualification/cases/case_00/candidate_01/result.json": "5fa44383e7e524c1aecba1b680d231b979fd4b9e9dcf2f4d270063f69191f872",
+    "qualification/cases/case_00/candidate_01_qualification.json": "d9f9e745234fb133000c57f81db2206d47f8783237f2094b1732a1b0c11d04f1",
+    "qualification/cases/case_00/candidate_02/composition_events.json": "3f2952068cbd86e89b4ee595c08a9aa72fdbe0b48d9ae1b659e64b6ef18bf063",
+    "qualification/cases/case_00/candidate_02/native.db": "4da8b63b7435d08d792df9b6c348b7abcdd87360724e0cda26851536ede3a63c",
+    "qualification/cases/case_00/candidate_02/native_kernel_events.json": "8159d647b5e98ff754a1e6d5d0fe8f1fde081c103217aa445c7bcc11aa9b1e2d",
+    "qualification/cases/case_00/candidate_02/native_traces.json": "dff8e788a5479b9a16b32c0dc3559bb18249b33d6420addfa916ec32c56b58ba",
+    "qualification/cases/case_00/candidate_02/result.json": "43d44d46cb7048f143857ba85ac81a9aed55b7d8b975f41256370d78a7f153e6",
+    "qualification/cases/case_00/candidate_02_qualification.json": "86650bb6dc7f173415ece73d69512937660b08129fd7198fe0177e40ba6d0df8",
+    "qualification/cases/case_00/candidate_03/failure.json": "edf74b4e8325bf8991e3e593db5f2122ca128e7c9da7132fb7658c8f79d4eb9e",
+    "qualification/cases/case_00/candidate_03/native.db": "41e3d9636cc9ffc026a87ca4bae3901cbf58dcff3c17039229c742f8898f14b2",
+    "qualification/cases/case_00/reference/composition_events.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "qualification/cases/case_00/reference/native.db": "0f647ab7e2a07071d27ec1cb8abfe42a850147c067a4c768b2a4b17e29580bfe",
+    "qualification/cases/case_00/reference/native_kernel_events.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "qualification/cases/case_00/reference/native_traces.json": "fb281b613e9a5c952dc238a0faf5c75c12ae0626ad1f7d3c9493cb55a54e383e",
+    "qualification/cases/case_00/reference/result.json": "f083c6d6f68a7268e14a8a2c2d6b9b5db98bed9c23abc9e741f4caa8743baf58",
+    "qualification/cases/case_00/reference_qualification.json": "c776523beea41f8acfdcaabd9586613b5b41281140a6f05404753580d44527ff",
+    "qualification/cases/events/0000.json": "231c64a6d35dff935daba0ae8e2d4c1aa78af55076f2b71e8c6cb0920a6ab83e",
+    "qualification/cases/events/0001.json": "d12975628c8e8669e2c8d56a5f07061dafc4a41b3746449ad308c6725cddd6c1",
+    "qualification/cases/events/0002.json": "a6daa203b3e88a6465fc56c5461550e4ae075b948a03b64a5ef9a5ac69dd95ff",
+    "qualification/cases/events/0003.json": "8b3fac8942204fbdf2e7bcb15b15389b4741207df2b3226efa907caac9d22710",
+    "qualification/cases/events/0004.json": "eb41dea03f3559e96cbf8363b4aefc4cac35939fb380dfa4fd0b50141ece7e6d",
+    "qualification/cases/events/0005.json": "71b632504612a7f67738b4e882beba9a1e18233209a320cd5b9ebeeb226d5598",
+    "qualification/cases/events/0006.json": "518bbe890926f3923732a7b856fa6ecdc53ce9e10de691ed55c725af6725ff5e",
+    "qualification/cases/events/0007.json": "d9ff36cce8310f623b4f0bdb3857ac6cc1095da684c0d2d943dc12fc816265ed",
+    "qualification/cases/events/0008.json": "728d03cf0e4a6e9f86ccba8165701b93e2c47d3f9f201d2a47a018a6732f592c",
+    "qualification/cases/events/0009.json": "92433eb84fe462042f16eb29a5a09acac0493e6373a3c058dec5c8243b2cc865",
+    "qualification/cases/events/0010.json": "14c3fea292eb49ba139e34a4f133eb7815f72a8133d39e99da4bebf8282bd0e6",
+    "qualification/cases/events/0011.json": "75d885ba712911ac59c7e09b7f1ae2ac1feb3dc2244adb92f64447c71f7b9d9b",
+    "qualification/cases/events/0012.json": "c801190611cfd57b5174377784a497034b6d7d5f3230ebc5d89f1a6cca8f5cea",
+    "qualification/cases/events/0013.json": "7d0aa93e3d8cd2c3e408d1f55d37c18c7537a6440b351588f3b324f1b3c0d39c",
+    "qualification/cases/events/0014.json": "af11ff051865e4a721cdf9306a91fef7d8b617cc9646477e05a82865594a70b0",
+    "qualification/cases/events/0015.json": "dcd22df21f06555bf496edf845bbdf23f2544b38eceda4dee9c14d3c544a2639",
+    "qualification/cases/events/0016.json": "57d31fa7d60682249cd581dab417d700fe461a0581eb5e53ce7763debb3286ed",
+    "qualification/cases/events/0017.json": "13c03775c093f8b03e97d10df5bd254e7eedb9f2222fedaf42daed52f0be44aa",
+    "qualification/cases/events/0018.json": "b670bcd7a473bd81245c282e27bb6de752eb68f374e899f820cd9dbb6d24fca4",
+    "qualification/cases/events/0019.json": "398987359f146998cf277dcc5cf317391b51c6fcccebd6d73cfbe4ef24079628",
+    "qualification/cases/events/0020.json": "a4b0d4c890cf63ede663d3786f0993ab7bdd99e4f312267da4bac368390a2d7f",
+    "qualification/cases/events/0021.json": "3d1606887187ed8e0e91f7ee411467a87ac77baae823d9250484d7cf1eb682be",
+    "qualification/cases/events/0022.json": "3376efda7b937ff316d681cc0f3e806be87823221f19bc57e57d5142fcf3b71d",
+    "qualification/cases/events/0023.json": "52d92e67fc2a95c6a46e7d72ba8ffeb58d1944cc03f2d0bf6a5369d2a3cb8be6",
+    "qualification/cases/events/0024.json": "840fe4ab1a960188c489d44be06a8c91943f153531a8a57f0ce410f65956a7bd",
+    "qualification/cases/events/0025.json": "d22017cb1a9d0af392c091c13472ff8a66e47cf5e14662f6200a7701455321b0",
+    "qualification/cases/events/0026.json": "0d7cf05d6248e6384e20f64f896b5af8abc36eafc7ab9fdd78c2acd10b45101a",
+    "qualification/cases/events/0027.json": "a3777aa0bc724a25fbddc9bfdd09a633dad3f65f313cdbdfa2a810d0a6c6e678",
+    "qualification/cases/events/0028.json": "3d14397b288945653029fb19aa46f2c84b2582213f9dee6b6ab7d326da71f76c",
+    "qualification/cases/events/0029.json": "47b60bfc076e2a37c673e346d6bf188eb5aafc8f94481ff4396c2c05e3048ab2",
+    "qualification/cases/events/0030.json": "7bc0e67280886af92a41c9104c4904ed975bf33bd1201d6541bf757fde5e3861",
+    "qualification/cases/qualification_receipt.json": "ac056593d337a425aeeac8a536d52f57cda94607f466b7b065d217463d9ad2c3",
+    "qualification/worker_receipt.json": "7dba9afbb2b68911436df4f937fdfee387bfbec722d51cbfd9c33da415a92f83"
+  },
+  "archive_sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3",
+  "experiment": {
+    "entrypoint": "cas_meta2.child_qualification_gpu_v8",
+    "profile": "one_child_full_task_qualification_v8"
+  },
+  "failure": {
+    "message": "PREFIX_CHILD_PROCESS_FAILED:worker",
+    "traceback": "Traceback (most recent call last):\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 585, in run_remote\n    stage_process(argv, evidence / \"worker\", env=env, cwd=package / PILOT, seconds=1800,\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 105, in stage_process\n    require(code == 0 and failure is None, \"PREFIX_CHILD_PROCESS_FAILED:\" + directory.name)\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 5, in require\n    raise ValueError(reason)\nValueError: PREFIX_CHILD_PROCESS_FAILED:worker\n",
+    "type": "ValueError"
+  },
+  "files": {
+    "lifecycle/cuda_identity/receipt.json": {
+      "bytes": 1143,
+      "sha256": "d900b94c9dce6d64b61809eab140a9f2df17d71b73937172304831b4f9897428"
+    },
+    "lifecycle/cuda_identity/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/cuda_identity/stdout.txt": {
+      "bytes": 176,
+      "sha256": "47266ad60304fb507bcc6444c9bd587ad994c7d4c8357836671528058da6dbe2"
+    },
+    "lifecycle/deadline_limits.json": {
+      "bytes": 199,
+      "sha256": "33a1d506e52ba87944d36320ad8499bdb44bf8d557d2191cd9a0a4cd0f27e528"
+    },
+    "lifecycle/dependency_install.json": {
+      "bytes": 112895,
+      "sha256": "a6b48fd9251ecbacbda775c95ef196f3c343cbf46da9add881ab65d71e47914d"
+    },
+    "lifecycle/dependency_install/receipt.json": {
+      "bytes": 938,
+      "sha256": "61f117800dd95ace430fcd4441b08d4c576f0341dfff347c1ac25d26af86adfc"
+    },
+    "lifecycle/dependency_install/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/dependency_install/stdout.txt": {
+      "bytes": 5115,
+      "sha256": "dfb260ebfeb282db7ac064e1f1e85a9fd08d0e55d500f0e20f670eeb308fa0c2"
+    },
+    "lifecycle/instance_identity.json": {
+      "bytes": 465,
+      "sha256": "5491da10a82c5d5df11dd65de71b8c0f47cb57907a0750ca2a1c0c526b2e3b2e"
+    },
+    "lifecycle/permit.json": {
+      "bytes": 45211,
+      "sha256": "8046b4b0697df849d3c3356fcc22dc66958caaa30d2dda92e6d09d0ca0de2528"
+    },
+    "lifecycle/pip_freeze/receipt.json": {
+      "bytes": 712,
+      "sha256": "6021200ac02d8a51a55f11a33706775ae233e498690bd61bd954f36d82d243d2"
+    },
+    "lifecycle/pip_freeze/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/pip_freeze/stdout.txt": {
+      "bytes": 1414,
+      "sha256": "6209784e0ed5addcd0851b616e27997be87dd5273c43f4f8683837233e09f304"
+    },
+    "lifecycle/remote_config.json": {
+      "bytes": 164542,
+      "sha256": "0878cdd44f124c75b55bb7ab41fb564cb7ff7e74da33155165c92621ff1ec192"
+    },
+    "lifecycle/remote_receipt.json": {
+      "bytes": 1687,
+      "sha256": "49ba4876bc6bf71c5fdee6447360145244aad6939bd39637287ff21caeff6333"
+    },
+    "lifecycle/source_after.json": {
+      "bytes": 177,
+      "sha256": "61d5b99d9b4935f9f7fbb679df7d80cc7615bca5b452cd9055856d89e1f82b2d"
+    },
+    "lifecycle/source_before.json": {
+      "bytes": 177,
+      "sha256": "61d5b99d9b4935f9f7fbb679df7d80cc7615bca5b452cd9055856d89e1f82b2d"
+    },
+    "lifecycle/torch_install.json": {
+      "bytes": 159365,
+      "sha256": "ede61b39fcf1946fef93756cda2f5a9948fc15e69866329999eb94b87aaae34b"
+    },
+    "lifecycle/torch_install/receipt.json": {
+      "bytes": 902,
+      "sha256": "a85723cdb0d72611dec8a35fca67c85745af33790518af2ec0d1d1ed6468667c"
+    },
+    "lifecycle/torch_install/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/torch_install/stdout.txt": {
+      "bytes": 13279,
+      "sha256": "d162e1644266bdc4c22c93dca24db9af3c4c6348399e8d1d6abd0e3ca56d364f"
+    },
+    "lifecycle/transfer_01.json": {
+      "bytes": 499,
+      "sha256": "b1b1080d039f892c57ae930e1b6ffca3e6aea09111d426ef2d898d2411a3cd47"
+    },
+    "lifecycle/transfer_02.json": {
+      "bytes": 497,
+      "sha256": "6735f16cf6e0017dcb14b836e1113506df60af879620d25cb44ac7b5246cfd94"
+    },
+    "lifecycle/venv/receipt.json": {
+      "bytes": 698,
+      "sha256": "dcd3cfc72afa7099fcee70a788065dac3370bbb9fb6098be121eb339610b9693"
+    },
+    "lifecycle/venv/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/venv/stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/wheel_install.json": {
+      "bytes": 16182,
+      "sha256": "398f1565a84f627e33cd21acfd8276f09ffa8019dba0c9bf038587257ccaf69b"
+    },
+    "lifecycle/wheel_install/receipt.json": {
+      "bytes": 1123,
+      "sha256": "dd2a27077f7dea5f6b5680fb2a43ae123ec2d2538f1731c0d68aa4d3e2c053bb"
+    },
+    "lifecycle/wheel_install/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/wheel_install/stdout.txt": {
+      "bytes": 400,
+      "sha256": "c020e68f34b85efc464f952f26291b644a98a66e4ea5b1d3f5e409e8b1feba75"
+    },
+    "lifecycle/worker/receipt.json": {
+      "bytes": 1118,
+      "sha256": "e7ec329f0f127442b162c6361ccf20b98319b5ada95fcdfc62ae74b53181f571"
+    },
+    "lifecycle/worker/stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lifecycle/worker/stdout.txt": {
+      "bytes": 329,
+      "sha256": "c4ddc9e337fa295ea7e38b5f62ff29dc7f41712d52c114d7e0cd6c990e8877ff"
+    },
+    "qualification/admission.json": {
+      "bytes": 3444,
+      "sha256": "3cf47f7bb5577258a96ff31119c187bcb4a6343e48a77d4a6470a148bafef197"
+    },
+    "qualification/cases/candidates_sealed.json": {
+      "bytes": 82408,
+      "sha256": "7ba89b9c69a6abd6e1a6ffb48940c6fc0b2b58130d744f926adbfed1fdaafa41"
+    },
+    "qualification/cases/case_00/candidate_00/composition_events.json": {
+      "bytes": 11617,
+      "sha256": "aab923fcfd1555499c56fab6d6d13175ae1173f658143803bf1d07d352060e98"
+    },
+    "qualification/cases/case_00/candidate_00/native.db": {
+      "bytes": 1310720,
+      "sha256": "0f647ab7e2a07071d27ec1cb8abfe42a850147c067a4c768b2a4b17e29580bfe"
+    },
+    "qualification/cases/case_00/candidate_00/native_kernel_events.json": {
+      "bytes": 12467,
+      "sha256": "62a323f980f44ef5f541341ebec23cbd538da1bcceee9ac6dfd53581415f620f"
+    },
+    "qualification/cases/case_00/candidate_00/native_traces.json": {
+      "bytes": 291276,
+      "sha256": "fb281b613e9a5c952dc238a0faf5c75c12ae0626ad1f7d3c9493cb55a54e383e"
+    },
+    "qualification/cases/case_00/candidate_00/result.json": {
+      "bytes": 6256,
+      "sha256": "c159ec4bee55ae8e018684ca07bfa7858111ec4060d728cb62dbfb7a04058037"
+    },
+    "qualification/cases/case_00/candidate_00_qualification.json": {
+      "bytes": 15096,
+      "sha256": "fd44857e7895b96e6e19305cfda7983aa7917d680659d7a0c5a39fb0ec0f7732"
+    },
+    "qualification/cases/case_00/candidate_01/composition_events.json": {
+      "bytes": 13232,
+      "sha256": "7886a1041354f79dbd444602bf97304fffa35be916629aa2011b9c3d8e90cad8"
+    },
+    "qualification/cases/case_00/candidate_01/native.db": {
+      "bytes": 1519616,
+      "sha256": "c5669f1cbf16162cb986d4e47d4c3a07c5406ebe953af7700b4037891bb5aeaa"
+    },
+    "qualification/cases/case_00/candidate_01/native_kernel_events.json": {
+      "bytes": 14960,
+      "sha256": "001286b1ef4049d28c18327326496f2b53c03e8993029d65f1fabd5e74be8532"
+    },
+    "qualification/cases/case_00/candidate_01/native_traces.json": {
+      "bytes": 352056,
+      "sha256": "4e2e0a8ab60a976c1b13d7a9ce2bda767ab28911662836adc9a4ebadf98b8020"
+    },
+    "qualification/cases/case_00/candidate_01/result.json": {
+      "bytes": 6311,
+      "sha256": "5fa44383e7e524c1aecba1b680d231b979fd4b9e9dcf2f4d270063f69191f872"
+    },
+    "qualification/cases/case_00/candidate_01_qualification.json": {
+      "bytes": 15506,
+      "sha256": "d9f9e745234fb133000c57f81db2206d47f8783237f2094b1732a1b0c11d04f1"
+    },
+    "qualification/cases/case_00/candidate_02/composition_events.json": {
+      "bytes": 11616,
+      "sha256": "3f2952068cbd86e89b4ee595c08a9aa72fdbe0b48d9ae1b659e64b6ef18bf063"
+    },
+    "qualification/cases/case_00/candidate_02/native.db": {
+      "bytes": 1310720,
+      "sha256": "4da8b63b7435d08d792df9b6c348b7abcdd87360724e0cda26851536ede3a63c"
+    },
+    "qualification/cases/case_00/candidate_02/native_kernel_events.json": {
+      "bytes": 12467,
+      "sha256": "8159d647b5e98ff754a1e6d5d0fe8f1fde081c103217aa445c7bcc11aa9b1e2d"
+    },
+    "qualification/cases/case_00/candidate_02/native_traces.json": {
+      "bytes": 291276,
+      "sha256": "dff8e788a5479b9a16b32c0dc3559bb18249b33d6420addfa916ec32c56b58ba"
+    },
+    "qualification/cases/case_00/candidate_02/result.json": {
+      "bytes": 6255,
+      "sha256": "43d44d46cb7048f143857ba85ac81a9aed55b7d8b975f41256370d78a7f153e6"
+    },
+    "qualification/cases/case_00/candidate_02_qualification.json": {
+      "bytes": 15099,
+      "sha256": "86650bb6dc7f173415ece73d69512937660b08129fd7198fe0177e40ba6d0df8"
+    },
+    "qualification/cases/case_00/candidate_03/failure.json": {
+      "bytes": 103,
+      "sha256": "edf74b4e8325bf8991e3e593db5f2122ca128e7c9da7132fb7658c8f79d4eb9e"
+    },
+    "qualification/cases/case_00/candidate_03/native.db": {
+      "bytes": 1523712,
+      "sha256": "41e3d9636cc9ffc026a87ca4bae3901cbf58dcff3c17039229c742f8898f14b2"
+    },
+    "qualification/cases/case_00/reference/composition_events.json": {
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "qualification/cases/case_00/reference/native.db": {
+      "bytes": 1310720,
+      "sha256": "0f647ab7e2a07071d27ec1cb8abfe42a850147c067a4c768b2a4b17e29580bfe"
+    },
+    "qualification/cases/case_00/reference/native_kernel_events.json": {
+      "bytes": 3,
+      "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+    },
+    "qualification/cases/case_00/reference/native_traces.json": {
+      "bytes": 291276,
+      "sha256": "fb281b613e9a5c952dc238a0faf5c75c12ae0626ad1f7d3c9493cb55a54e383e"
+    },
+    "qualification/cases/case_00/reference/result.json": {
+      "bytes": 4470,
+      "sha256": "f083c6d6f68a7268e14a8a2c2d6b9b5db98bed9c23abc9e741f4caa8743baf58"
+    },
+    "qualification/cases/case_00/reference_qualification.json": {
+      "bytes": 9869,
+      "sha256": "c776523beea41f8acfdcaabd9586613b5b41281140a6f05404753580d44527ff"
+    },
+    "qualification/cases/events/0000.json": {
+      "bytes": 142,
+      "sha256": "231c64a6d35dff935daba0ae8e2d4c1aa78af55076f2b71e8c6cb0920a6ab83e"
+    },
+    "qualification/cases/events/0001.json": {
+      "bytes": 118,
+      "sha256": "d12975628c8e8669e2c8d56a5f07061dafc4a41b3746449ad308c6725cddd6c1"
+    },
+    "qualification/cases/events/0002.json": {
+      "bytes": 108,
+      "sha256": "a6daa203b3e88a6465fc56c5461550e4ae075b948a03b64a5ef9a5ac69dd95ff"
+    },
+    "qualification/cases/events/0003.json": {
+      "bytes": 109,
+      "sha256": "8b3fac8942204fbdf2e7bcb15b15389b4741207df2b3226efa907caac9d22710"
+    },
+    "qualification/cases/events/0004.json": {
+      "bytes": 115,
+      "sha256": "eb41dea03f3559e96cbf8363b4aefc4cac35939fb380dfa4fd0b50141ece7e6d"
+    },
+    "qualification/cases/events/0005.json": {
+      "bytes": 116,
+      "sha256": "71b632504612a7f67738b4e882beba9a1e18233209a320cd5b9ebeeb226d5598"
+    },
+    "qualification/cases/events/0006.json": {
+      "bytes": 115,
+      "sha256": "518bbe890926f3923732a7b856fa6ecdc53ce9e10de691ed55c725af6725ff5e"
+    },
+    "qualification/cases/events/0007.json": {
+      "bytes": 116,
+      "sha256": "d9ff36cce8310f623b4f0bdb3857ac6cc1095da684c0d2d943dc12fc816265ed"
+    },
+    "qualification/cases/events/0008.json": {
+      "bytes": 121,
+      "sha256": "728d03cf0e4a6e9f86ccba8165701b93e2c47d3f9f201d2a47a018a6732f592c"
+    },
+    "qualification/cases/events/0009.json": {
+      "bytes": 111,
+      "sha256": "92433eb84fe462042f16eb29a5a09acac0493e6373a3c058dec5c8243b2cc865"
+    },
+    "qualification/cases/events/0010.json": {
+      "bytes": 112,
+      "sha256": "14c3fea292eb49ba139e34a4f133eb7815f72a8133d39e99da4bebf8282bd0e6"
+    },
+    "qualification/cases/events/0011.json": {
+      "bytes": 118,
+      "sha256": "75d885ba712911ac59c7e09b7f1ae2ac1feb3dc2244adb92f64447c71f7b9d9b"
+    },
+    "qualification/cases/events/0012.json": {
+      "bytes": 119,
+      "sha256": "c801190611cfd57b5174377784a497034b6d7d5f3230ebc5d89f1a6cca8f5cea"
+    },
+    "qualification/cases/events/0013.json": {
+      "bytes": 118,
+      "sha256": "7d0aa93e3d8cd2c3e408d1f55d37c18c7537a6440b351588f3b324f1b3c0d39c"
+    },
+    "qualification/cases/events/0014.json": {
+      "bytes": 119,
+      "sha256": "af11ff051865e4a721cdf9306a91fef7d8b617cc9646477e05a82865594a70b0"
+    },
+    "qualification/cases/events/0015.json": {
+      "bytes": 121,
+      "sha256": "dcd22df21f06555bf496edf845bbdf23f2544b38eceda4dee9c14d3c544a2639"
+    },
+    "qualification/cases/events/0016.json": {
+      "bytes": 111,
+      "sha256": "57d31fa7d60682249cd581dab417d700fe461a0581eb5e53ce7763debb3286ed"
+    },
+    "qualification/cases/events/0017.json": {
+      "bytes": 112,
+      "sha256": "13c03775c093f8b03e97d10df5bd254e7eedb9f2222fedaf42daed52f0be44aa"
+    },
+    "qualification/cases/events/0018.json": {
+      "bytes": 118,
+      "sha256": "b670bcd7a473bd81245c282e27bb6de752eb68f374e899f820cd9dbb6d24fca4"
+    },
+    "qualification/cases/events/0019.json": {
+      "bytes": 119,
+      "sha256": "398987359f146998cf277dcc5cf317391b51c6fcccebd6d73cfbe4ef24079628"
+    },
+    "qualification/cases/events/0020.json": {
+      "bytes": 118,
+      "sha256": "a4b0d4c890cf63ede663d3786f0993ab7bdd99e4f312267da4bac368390a2d7f"
+    },
+    "qualification/cases/events/0021.json": {
+      "bytes": 119,
+      "sha256": "3d1606887187ed8e0e91f7ee411467a87ac77baae823d9250484d7cf1eb682be"
+    },
+    "qualification/cases/events/0022.json": {
+      "bytes": 121,
+      "sha256": "3376efda7b937ff316d681cc0f3e806be87823221f19bc57e57d5142fcf3b71d"
+    },
+    "qualification/cases/events/0023.json": {
+      "bytes": 111,
+      "sha256": "52d92e67fc2a95c6a46e7d72ba8ffeb58d1944cc03f2d0bf6a5369d2a3cb8be6"
+    },
+    "qualification/cases/events/0024.json": {
+      "bytes": 112,
+      "sha256": "840fe4ab1a960188c489d44be06a8c91943f153531a8a57f0ce410f65956a7bd"
+    },
+    "qualification/cases/events/0025.json": {
+      "bytes": 118,
+      "sha256": "d22017cb1a9d0af392c091c13472ff8a66e47cf5e14662f6200a7701455321b0"
+    },
+    "qualification/cases/events/0026.json": {
+      "bytes": 119,
+      "sha256": "0d7cf05d6248e6384e20f64f896b5af8abc36eafc7ab9fdd78c2acd10b45101a"
+    },
+    "qualification/cases/events/0027.json": {
+      "bytes": 118,
+      "sha256": "a3777aa0bc724a25fbddc9bfdd09a633dad3f65f313cdbdfa2a810d0a6c6e678"
+    },
+    "qualification/cases/events/0028.json": {
+      "bytes": 119,
+      "sha256": "3d14397b288945653029fb19aa46f2c84b2582213f9dee6b6ab7d326da71f76c"
+    },
+    "qualification/cases/events/0029.json": {
+      "bytes": 121,
+      "sha256": "47b60bfc076e2a37c673e346d6bf188eb5aafc8f94481ff4396c2c05e3048ab2"
+    },
+    "qualification/cases/events/0030.json": {
+      "bytes": 111,
+      "sha256": "7bc0e67280886af92a41c9104c4904ed975bf33bd1201d6541bf757fde5e3861"
+    },
+    "qualification/cases/qualification_receipt.json": {
+      "bytes": 88070,
+      "sha256": "ac056593d337a425aeeac8a536d52f57cda94607f466b7b065d217463d9ad2c3"
+    },
+    "qualification/worker_receipt.json": {
+      "bytes": 103006,
+      "sha256": "7dba9afbb2b68911436df4f937fdfee387bfbec722d51cbfd9c33da415a92f83"
+    }
+  },
+  "finished_utc": "2026-09-06T16:01:17.166559+00:00",
+  "generic_helper_sha256": "e72f5937895d856797e9dae200100b279a39bdbe4850f67b5405a70cb9719f8b",
+  "included_full_file_count": 94,
+  "job": "cas-meta2-20260906155525-195f5ad8",
+  "native_component_success": false,
+  "native_execution_requested": true,
+  "native_qualification_result": null,
+  "neural_training": false,
+  "not_learning_or_generalization": true,
+  "omitted_full_file_count": 0,
+  "original_bytes": 9166498,
+  "original_file_count": 94,
+  "original_member_coverage_verified": true,
+  "parent_member_hashes_verified": 94,
+  "parent_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+  "partial_evidence": false,
+  "qualification_status": "QUALIFICATION_REFUSED_OR_FAILED",
+  "returncode": 1,
+  "schema": "cas-meta2-child-qualification-remote-receipt/8",
+  "smoke_only": false,
+  "source_manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+  "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+  "started_utc": "2026-09-06T15:57:55.447832+00:00",
+  "task_conditioned_correctness": null,
+  "unsafe_paths": [],
+  "worker_process_started": true,
+  "worker_qualification_completed": false
+}

@@ -1,0 +1,29 @@
+{
+  "authority_sha256": "3c7e5dcfd574257aed2a6e855284f5f6183e6ff89272b4ff737fefb803adcf49",
+  "automatic_retries": 0,
+  "capture_source_sha256": "9d92311d10b93aa72738de8b59754193e1f0bb782f2a43a2ae453f05f66472b1",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "aws.launch_child_qualification_v8",
+    "--execute",
+    "--request",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_child_qualification_v8_001\\registration_001\\launch_request.json",
+    "--request-sha256",
+    "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861",
+    "--authority",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_child_qualification_v8_001\\registration_001\\standing_authority.json",
+    "--authority-sha256",
+    "3c7e5dcfd574257aed2a6e855284f5f6183e6ff89272b4ff737fefb803adcf49",
+    "--receipt-dir",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_child_qualification_v8_001\\execution_001",
+    "--profile",
+    "default"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "request_sha256": "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861",
+  "schema": "cas-meta2-child-qualification-parent-capture/8",
+  "started_utc": "2026-09-06T15:56:12.483969+00:00"
+}

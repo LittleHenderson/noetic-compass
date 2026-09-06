@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "records/aws_child_qualification_v8_001/analyze_result.py",
+    "--launch-receipt",
+    "records/aws_child_qualification_v8_001/execution_001/launch_receipt.json",
+    "--launch-receipt-sha256",
+    "2a882e8333f4bf7edd56b0c4ea56748a1334534372fcb654af8a038d4ca0130f",
+    "--request",
+    "records/aws_child_qualification_v8_001/registration_001/launch_request.json",
+    "--request-sha256",
+    "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861",
+    "--source-receipt",
+    "records/child_qualification_v8_001/source_001/receipt.json",
+    "--source-receipt-sha256",
+    "feeb8c3ca718cf9b085c21caa79b4481e0cb3b9dd9e081fc54e12f9ce8ba08e9",
+    "--source-archive",
+    "records/child_qualification_v8_001/source_001/source.zip",
+    "--artifact",
+    "records/aws_child_qualification_v8_001/execution_001/cloud_artifacts.zip",
+    "--post-run-provider-read",
+    "records/aws_child_qualification_v8_001/provider_check_001/receipt.json",
+    "--post-run-provider-read-sha256",
+    "2f29682f9ce28fdeeb70d17e4388757a36cd0922a78512a4a172328fb18ce387",
+    "--output",
+    "records/aws_child_qualification_v8_001/analysis_001"
+  ],
+  "argv_semantics": "Exact invoked argv; no commands rerun except read-only Git source checks.",
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+}

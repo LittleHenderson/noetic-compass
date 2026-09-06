@@ -1,6 +1,6 @@
 # One-child curriculum and native qualification
 
-The curriculum is saved in `dataset_001` and its source package passed the clean-extraction check. Native qualification is not yet recorded here. No model has been trained by this package.
+The curriculum is saved in `dataset_001` and its source package passed the clean-extraction check. Its AWS native qualification **failed**: the R_CR candidate raised `NATIVE_RESULT_NOT_RETURNABLE` in the first development panel. See `records/aws_child_qualification_v8_001/README.md` for the preserved negative result. The curriculum is not qualified for training, and no model has been trained by this package.
 
 ## Declared lesson
 

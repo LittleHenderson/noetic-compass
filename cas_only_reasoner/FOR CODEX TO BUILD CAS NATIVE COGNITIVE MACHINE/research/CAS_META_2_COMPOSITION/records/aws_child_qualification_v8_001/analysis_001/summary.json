@@ -1,0 +1,1804 @@
+{
+  "analysis_postcheck_errors": {},
+  "boundary": "Saved-byte and JSON receipt replay only, not an independent SQLite/native replay. No training, learning, held-out generalization, new Noetic semantics, CAS advantage, or active-caller restoration is established. Public development qualification only. Partial counts are observed lower bounds unless the complete core receipt is present. Fixed-model claims are saved runtime/source identity checks, not a new tensor comparison.",
+  "budget_snapshot": {
+    "boundary": "Recorded launch snapshot only; canonical current ledger is not read or changed.",
+    "ledger_sha256": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c",
+    "no_automatic_refund": true,
+    "remaining_unreserved_usd": "310.00",
+    "reserved_job_usd": "4.00",
+    "revision": 14,
+    "total_reserved_usd": "90.00"
+  },
+  "cases": [
+    {
+      "comparisons": [
+        {
+          "actual_output_correct": true,
+          "all_rows_match_reference": true,
+          "combination": "B_C",
+          "correct_target": true,
+          "final_output_differs_from_reference": false,
+          "final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "four_step_prefix_matches_same_public_reference": true,
+          "reference_final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "required_discrimination_observed": true,
+          "slot": "candidate_00",
+          "task_correct": true
+        },
+        {
+          "actual_output_correct": false,
+          "all_rows_match_reference": false,
+          "combination": "B_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": true,
+          "final_output_sha256": "8c6a15e324dca5f819939c62ea3dc0b9a48e9524dd18fe1ade9123b95c14c4fb",
+          "four_step_prefix_matches_same_public_reference": true,
+          "reference_final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "required_discrimination_observed": true,
+          "slot": "candidate_01",
+          "task_correct": false
+        },
+        {
+          "actual_output_correct": false,
+          "all_rows_match_reference": false,
+          "combination": "R_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": true,
+          "final_output_sha256": "1cb72b6e245d0712fad26e77b000692ea3166838df2df11f837152f26a44efb9",
+          "four_step_prefix_matches_same_public_reference": true,
+          "reference_final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "required_discrimination_observed": true,
+          "slot": "candidate_02",
+          "task_correct": false
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "required_discrimination_observed": null,
+          "slot": "candidate_03",
+          "task_correct": null
+        }
+      ],
+      "executions": [
+        {
+          "attempt_observed": true,
+          "audited_native_ticks": 5,
+          "combination": "B_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": true,
+          "final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "native_database_bytes_present": true,
+          "record_status": "EXECUTED_AND_STORED_AUDITED",
+          "reported_execution_status": "EXECUTED",
+          "reported_native_trace_count": 5,
+          "saved_audit_structure_verified": true,
+          "slot": "reference",
+          "verifier_flags": {
+            "actual_output_correct": true,
+            "binding_correct": true,
+            "dependency_correct": true,
+            "procedure_correct": true,
+            "stored_call_tree_verified": false,
+            "task_correct": true,
+            "trace_valid": true
+          }
+        },
+        {
+          "attempt_observed": true,
+          "audited_native_ticks": 5,
+          "combination": "B_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": true,
+          "final_output_sha256": "1d10c21ec4e7d2e3c328f9f26398e8f81a3f37a2f492e2a47953a30563e7a26f",
+          "native_database_bytes_present": true,
+          "record_status": "EXECUTED_AND_STORED_AUDITED",
+          "reported_execution_status": "EXECUTED",
+          "reported_native_trace_count": 5,
+          "saved_audit_structure_verified": true,
+          "slot": "candidate_00",
+          "verifier_flags": {
+            "actual_output_correct": true,
+            "binding_correct": true,
+            "dependency_correct": true,
+            "procedure_correct": true,
+            "stored_call_tree_verified": true,
+            "task_correct": true,
+            "trace_valid": true
+          }
+        },
+        {
+          "attempt_observed": true,
+          "audited_native_ticks": 6,
+          "combination": "B_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": true,
+          "final_output_sha256": "8c6a15e324dca5f819939c62ea3dc0b9a48e9524dd18fe1ade9123b95c14c4fb",
+          "native_database_bytes_present": true,
+          "record_status": "EXECUTED_AND_STORED_AUDITED",
+          "reported_execution_status": "EXECUTED",
+          "reported_native_trace_count": 6,
+          "saved_audit_structure_verified": true,
+          "slot": "candidate_01",
+          "verifier_flags": {
+            "actual_output_correct": false,
+            "binding_correct": true,
+            "dependency_correct": false,
+            "procedure_correct": false,
+            "stored_call_tree_verified": true,
+            "task_correct": false,
+            "trace_valid": true
+          }
+        },
+        {
+          "attempt_observed": true,
+          "audited_native_ticks": 5,
+          "combination": "R_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": true,
+          "final_output_sha256": "1cb72b6e245d0712fad26e77b000692ea3166838df2df11f837152f26a44efb9",
+          "native_database_bytes_present": true,
+          "record_status": "EXECUTED_AND_STORED_AUDITED",
+          "reported_execution_status": "EXECUTED",
+          "reported_native_trace_count": 5,
+          "saved_audit_structure_verified": true,
+          "slot": "candidate_02",
+          "verifier_flags": {
+            "actual_output_correct": false,
+            "binding_correct": true,
+            "dependency_correct": false,
+            "procedure_correct": false,
+            "stored_call_tree_verified": true,
+            "task_correct": false,
+            "trace_valid": true
+          }
+        },
+        {
+          "attempt_observed": true,
+          "audited_native_ticks": null,
+          "combination": "R_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": true,
+          "record_status": "ATTEMPTED",
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_03",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        }
+      ],
+      "index": 0,
+      "qualified_panel_receipt_present": false,
+      "recorded_status": "REFUSED",
+      "saved_comparison_count": 0,
+      "target_combination": "B_C",
+      "task_id": "child-v8-qualification-00000"
+    },
+    {
+      "comparisons": [
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_00",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_CR",
+          "correct_target": true,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_01",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_02",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_03",
+          "task_correct": null
+        }
+      ],
+      "executions": [
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "reference",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_00",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_01",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_02",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_03",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        }
+      ],
+      "index": 1,
+      "qualified_panel_receipt_present": false,
+      "recorded_status": null,
+      "saved_comparison_count": 0,
+      "target_combination": "B_CR",
+      "task_id": "child-v8-qualification-00001"
+    },
+    {
+      "comparisons": [
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_00",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_01",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_C",
+          "correct_target": true,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_02",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_03",
+          "task_correct": null
+        }
+      ],
+      "executions": [
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "reference",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_00",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_01",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_02",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_03",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        }
+      ],
+      "index": 2,
+      "qualified_panel_receipt_present": false,
+      "recorded_status": null,
+      "saved_comparison_count": 0,
+      "target_combination": "R_C",
+      "task_id": "child-v8-qualification-00002"
+    },
+    {
+      "comparisons": [
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_00",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "B_CR",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_01",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_C",
+          "correct_target": false,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_02",
+          "task_correct": null
+        },
+        {
+          "actual_output_correct": null,
+          "all_rows_match_reference": null,
+          "combination": "R_CR",
+          "correct_target": true,
+          "final_output_differs_from_reference": null,
+          "final_output_sha256": null,
+          "four_step_prefix_matches_same_public_reference": null,
+          "reference_final_output_sha256": null,
+          "required_discrimination_observed": null,
+          "slot": "candidate_03",
+          "task_correct": null
+        }
+      ],
+      "executions": [
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "reference",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_00",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "B_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_01",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_C",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_02",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        },
+        {
+          "attempt_observed": false,
+          "audited_native_ticks": null,
+          "combination": "R_CR",
+          "database_opened_by_analyzer": false,
+          "execution_result_available": false,
+          "final_output_sha256": null,
+          "native_database_bytes_present": false,
+          "record_status": null,
+          "reported_execution_status": null,
+          "reported_native_trace_count": null,
+          "saved_audit_structure_verified": false,
+          "slot": "candidate_03",
+          "verifier_flags": {
+            "actual_output_correct": null,
+            "binding_correct": null,
+            "dependency_correct": null,
+            "procedure_correct": null,
+            "stored_call_tree_verified": null,
+            "task_correct": null,
+            "trace_valid": null
+          }
+        }
+      ],
+      "index": 3,
+      "qualified_panel_receipt_present": false,
+      "recorded_status": null,
+      "saved_comparison_count": 0,
+      "target_combination": "R_CR",
+      "task_id": "child-v8-qualification-00003"
+    }
+  ],
+  "cleanup": {
+    "all_aws_resources_removed": false,
+    "boundary": "Job bucket and any retained result objects are not deleted by this analyzer; seven-day expiration is the recorded lifecycle policy, not proof the future deletion has occurred.",
+    "bucket_retained": true,
+    "cleanup_errors": [],
+    "evidence_level": "Recorded parent provider responses; no fresh provider call by analyzer",
+    "input_delete_response": {
+      "Deleted": [
+        {
+          "Key": "input/source.zip"
+        },
+        {
+          "Key": "input/remote.py"
+        },
+        {
+          "Key": "input/permit.json"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "close",
+          "content-type": "application/xml",
+          "date": "Sun, 06 Sep 2026 16:06:44 GMT",
+          "server": "AmazonS3",
+          "transfer-encoding": "chunked",
+          "x-amz-id-2": "dSOw//K1kxfxADzRxfoayGz1L3TRa2n9srhIz11LxAxy+f4oFFRylnmCd5NXUPmIW0di7LCpmSqhIyXuJ4a3uggTJ7DP64Ru",
+          "x-amz-request-id": "CN6WEVHE4WJSAP2N"
+        },
+        "HTTPStatusCode": 200,
+        "HostId": "dSOw//K1kxfxADzRxfoayGz1L3TRa2n9srhIz11LxAxy+f4oFFRylnmCd5NXUPmIW0di7LCpmSqhIyXuJ4a3uggTJ7DP64Ru",
+        "RequestId": "CN6WEVHE4WJSAP2N",
+        "RetryAttempts": 0
+      }
+    },
+    "remaining_job_volumes": [],
+    "retention": "Dedicated job bucket objects expire after 7 days; local evidence retained.",
+    "stored_result_objects": [
+      {
+        "ChecksumAlgorithm": [
+          "CRC64NVME"
+        ],
+        "ChecksumType": "FULL_OBJECT",
+        "ETag": "\"4df4ce2177ed2e330ad1d04cf436ec5a\"",
+        "Key": "results/artifacts.zip",
+        "LastModified": "2026-09-06T16:01:18+00:00",
+        "Size": 893323,
+        "StorageClass": "STANDARD"
+      },
+      {
+        "ChecksumAlgorithm": [
+          "CRC64NVME"
+        ],
+        "ChecksumType": "FULL_OBJECT",
+        "ETag": "\"109e883d58cfe18c44ad113dffe241a8\"",
+        "Key": "results/bootstrap.log",
+        "LastModified": "2026-09-06T16:01:19+00:00",
+        "Size": 1852,
+        "StorageClass": "STANDARD"
+      },
+      {
+        "ChecksumAlgorithm": [
+          "CRC64NVME"
+        ],
+        "ChecksumType": "FULL_OBJECT",
+        "ETag": "\"0b711aa30a15b01893ea5b435b00e40f\"",
+        "Key": "results/complete.json",
+        "LastModified": "2026-09-06T16:01:19+00:00",
+        "Size": 513,
+        "StorageClass": "STANDARD"
+      }
+    ],
+    "termination_confirmed": true
+  },
+  "core_failure": {
+    "message": "NATIVE_RESULT_NOT_RETURNABLE",
+    "type": "MetaRuntimeError"
+  },
+  "core_receipt_failure": null,
+  "core_status": "REFUSED",
+  "counts": {
+    "available_executed_result_files_or_records": 4,
+    "available_executed_result_native_ticks": 21,
+    "available_result_counts_complete": true,
+    "core_receipt_present": true,
+    "core_reported_counts": {
+      "all_scheduled_executions_completed": false,
+      "attempted_execution_count": 5,
+      "audited_native_ticks": 21,
+      "completed_execution_count": 4,
+      "completed_native_ticks": null,
+      "failed_or_unaudited_attempts": 1,
+      "reported_executed_count": 4,
+      "unattempted_execution_count": 15
+    },
+    "observed_attempted_executions": 5,
+    "planned_complete_executions": 20,
+    "planned_native_ticks": 110,
+    "saved_audited_executions": 4,
+    "saved_audited_native_ticks": 21
+  },
+  "ec2_interval_estimate": {
+    "available": true,
+    "boundary": "EC2-only recorded interval estimate, not an AWS invoice. Uses launch attempt through termination confirmation; excludes EBS, IPv4, storage, transfer, requests and tax.",
+    "end_utc": "2026-09-06T16:06:40.567693+00:00",
+    "hourly_usd": "2.5200000000",
+    "interval_estimate_usd": "0.4249947709000000",
+    "rounded_up_second_estimate_usd": "0.4256000000",
+    "seconds": "607.135387",
+    "start_utc": "2026-09-06T15:56:33.432306+00:00"
+  },
+  "event_count": 31,
+  "evidence_verified": true,
+  "failure_order_boundary": "Inner qualification first, then worker/process/remote/parent; not a fabricated chronological ordering.",
+  "failures": [
+    {
+      "failure": {
+        "message": "NATIVE_RESULT_NOT_RETURNABLE",
+        "type": "MetaRuntimeError"
+      },
+      "scope": "qualification"
+    },
+    {
+      "failure": {
+        "message": "PREFIX_CHILD_PROCESS_FAILED:worker",
+        "traceback": "Traceback (most recent call last):\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 585, in run_remote\n    stage_process(argv, evidence / \"worker\", env=env, cwd=package / PILOT, seconds=1800,\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 105, in stage_process\n    require(code == 0 and failure is None, \"PREFIX_CHILD_PROCESS_FAILED:\" + directory.name)\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 5, in require\n    raise ValueError(reason)\nValueError: PREFIX_CHILD_PROCESS_FAILED:worker\n",
+        "type": "ValueError"
+      },
+      "scope": "remote"
+    }
+  ],
+  "first_recorded_inner_failure": {
+    "failure": {
+      "message": "NATIVE_RESULT_NOT_RETURNABLE",
+      "type": "MetaRuntimeError"
+    },
+    "scope": "qualification"
+  },
+  "full_cloud_member_coverage": true,
+  "last_events": [
+    {
+      "event": "OPERATION_STARTED",
+      "operation": "candidate_02",
+      "utc": "2026-09-06T16:00:37.961268+00:00"
+    },
+    {
+      "event": "OPERATION_RETURNED",
+      "operation": "candidate_02",
+      "utc": "2026-09-06T16:00:58.238195+00:00"
+    },
+    {
+      "event": "OPERATION_STARTED",
+      "operation": "candidate_02_stored",
+      "utc": "2026-09-06T16:00:58.241149+00:00"
+    },
+    {
+      "event": "OPERATION_RETURNED",
+      "operation": "candidate_02_stored",
+      "utc": "2026-09-06T16:00:58.883314+00:00"
+    },
+    {
+      "event": "OPERATION_STARTED",
+      "operation": "candidate_02_verify",
+      "utc": "2026-09-06T16:00:58.886071+00:00"
+    },
+    {
+      "event": "OPERATION_RETURNED",
+      "operation": "candidate_02_verify",
+      "utc": "2026-09-06T16:01:00.171138+00:00"
+    },
+    {
+      "case": 0,
+      "event": "EXECUTION_ATTEMPTED",
+      "slot": "candidate_03",
+      "utc": "2026-09-06T16:01:00.174440+00:00"
+    },
+    {
+      "event": "OPERATION_STARTED",
+      "operation": "candidate_03",
+      "utc": "2026-09-06T16:01:00.177075+00:00"
+    }
+  ],
+  "lifecycle_source_before_after": {
+    "after": {
+      "files_verified": 639,
+      "manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+      "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+    },
+    "before": {
+      "files_verified": 639,
+      "manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+      "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+    },
+    "same": true
+  },
+  "process_receipt": {
+    "argv": [
+      "/opt/cas-meta2-child-qualification/venv/bin/python",
+      "-B",
+      "-m",
+      "cas_meta2.child_qualification_gpu_v8",
+      "--output",
+      "/opt/cas-meta2-child-qualification/package/research/CAS_META_2_COMPOSITION/runs/child_qualification",
+      "--job",
+      "cas-meta2-20260906155525-195f5ad8",
+      "--plan",
+      "/opt/cas-meta2-child-qualification/launch/worker_plan.json",
+      "--plan-sha256",
+      "3e06569e8555c17ed8780e179fa0a95ffb8e661d5e3afe5e73fd86b92a5534f1"
+    ],
+    "cwd": "/opt/cas-meta2-child-qualification/package/research/CAS_META_2_COMPOSITION",
+    "deadline_epoch": 1788713433.432278,
+    "exit_code": 1,
+    "failure": null,
+    "finished_utc": "2026-09-06T16:01:16.843577+00:00",
+    "maximum_seconds": 1800,
+    "outputs": {
+      "stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout.txt": {
+        "bytes": 329,
+        "sha256": "c4ddc9e337fa295ea7e38b5f62ff29dc7f41712d52c114d7e0cd6c990e8877ff"
+      }
+    },
+    "pid": 1869,
+    "started_utc": "2026-09-06T15:59:29.225963+00:00",
+    "wall_seconds": 107.61761495100001
+  },
+  "qualification_passed": false,
+  "raw_worker_outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 329,
+      "sha256": "c4ddc9e337fa295ea7e38b5f62ff29dc7f41712d52c114d7e0cd6c990e8877ff"
+    }
+  },
+  "remote_receipt": {
+    "archive_sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3",
+    "experiment": {
+      "entrypoint": "cas_meta2.child_qualification_gpu_v8",
+      "profile": "one_child_full_task_qualification_v8"
+    },
+    "failure": {
+      "message": "PREFIX_CHILD_PROCESS_FAILED:worker",
+      "traceback": "Traceback (most recent call last):\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 585, in run_remote\n    stage_process(argv, evidence / \"worker\", env=env, cwd=package / PILOT, seconds=1800,\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 105, in stage_process\n    require(code == 0 and failure is None, \"PREFIX_CHILD_PROCESS_FAILED:\" + directory.name)\n  File \"/opt/cas-meta2-child-qualification/remote.py\", line 5, in require\n    raise ValueError(reason)\nValueError: PREFIX_CHILD_PROCESS_FAILED:worker\n",
+      "type": "ValueError"
+    },
+    "finished_utc": "2026-09-06T16:01:17.166559+00:00",
+    "generic_helper_sha256": "e72f5937895d856797e9dae200100b279a39bdbe4850f67b5405a70cb9719f8b",
+    "job": "cas-meta2-20260906155525-195f5ad8",
+    "native_execution_requested": true,
+    "native_qualification_result": null,
+    "neural_training": false,
+    "parent_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+    "returncode": 1,
+    "schema": "cas-meta2-child-qualification-remote-receipt/8",
+    "smoke_only": false,
+    "source_manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+    "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+    "started_utc": "2026-09-06T15:57:55.447832+00:00",
+    "task_conditioned_correctness": null,
+    "worker_process_started": true,
+    "worker_qualification_completed": false
+  },
+  "saved_runtime_identities_match": true,
+  "saved_runtime_identity": {
+    "contracts": {
+      "^6": "6bfc2602cfa2c78669fab832aa3a4c2bfc4193f2a54f1947036c6ae3a80e4168"
+    },
+    "decoders": {
+      "A": "6fa7f8f7dfbd0d0dbd3bf743517f5e2a57e14fbac2d4971cd270a042f6eedc90",
+      "B": "c1d27524687ccc50ddc722b1289b90acd8a26cd7d40a27c9f1915dcee728b204",
+      "C": "7c9ca1c00fb0fdab049d9a37978202da0693edb36c8c94ae0b99dea6aea4d2f1",
+      "R": "23d2e9fb14a0e158fcf02c5a58580a50a8c93d1f2493c141951b554acee5667f"
+    },
+    "model": {
+      "model_digest": "76a9bcbce5ffdec4c2dbc9d8ea9958a268dcebf3775f53dd6058a72086709528",
+      "parameter_bytes_sha256": "7a512eadbd8ef265f03f965a28422112651bdf0c0bd1949d56626ba89f76c3d5"
+    },
+    "software_digest": "4367b9b297261dc321a243baa197c30045d4407dcf4a1edcf28ed631f1abc959",
+    "stored_model_digest": "76a9bcbce5ffdec4c2dbc9d8ea9958a268dcebf3775f53dd6058a72086709528",
+    "topology": {
+      "edges": [
+        {
+          "permitted": true,
+          "source_cjt_id": "A",
+          "target_cjt_id": "B"
+        },
+        {
+          "permitted": true,
+          "source_cjt_id": "B",
+          "target_cjt_id": "C"
+        },
+        {
+          "permitted": true,
+          "source_cjt_id": "C",
+          "target_cjt_id": "R"
+        },
+        {
+          "permitted": true,
+          "source_cjt_id": "R",
+          "target_cjt_id": "C"
+        }
+      ],
+      "nodes": [
+        {
+          "cjt_id": "A",
+          "operation_id": "^6"
+        },
+        {
+          "cjt_id": "B",
+          "operation_id": "^6"
+        },
+        {
+          "cjt_id": "C",
+          "operation_id": "^6"
+        },
+        {
+          "cjt_id": "R",
+          "operation_id": "^6"
+        }
+      ],
+      "schema_version": "cas.neural-cjt.topology/0.2"
+    }
+  },
+  "separately_saved_post_provider_read": {
+    "account_id": "807562639912",
+    "automatic_retries": 0,
+    "boundary": "One read-only provider observation, not an invoice or a native task result. The bucket and result objects remain under the observed lifecycle rule. Object bytes were not downloaded or rehashed by this check; archive length alone is not content identity. No cleanup mutation or launch.",
+    "checks": {
+      "account_identity": true,
+      "inputs_absent": true,
+      "instance_profile_absent": true,
+      "instance_terminated": true,
+      "local_evidence_unchanged": true,
+      "owned_bucket": true,
+      "owned_instance": true,
+      "retained_archive_size_matches_parent": true,
+      "schedule_absent": true,
+      "security_group_absent": true,
+      "seven_day_result_expiry": true,
+      "three_result_objects_only": true,
+      "timer_role_absent": true,
+      "worker_role_absent": true,
+      "zero_job_volumes": true
+    },
+    "command": [
+      "C:\\Python314\\python.exe",
+      "records/aws_child_qualification_v8_001/post_run_provider_read.py"
+    ],
+    "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+    "finished_utc": "2026-09-06T16:07:33.646450+00:00",
+    "input_files": {
+      "execution_001/launch_receipt.json": {
+        "bytes": 74901,
+        "sha256": "2a882e8333f4bf7edd56b0c4ea56748a1334534372fcb654af8a038d4ca0130f"
+      },
+      "execution_001/launch_request.json": {
+        "bytes": 3600,
+        "sha256": "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861"
+      },
+      "registration_001/capture_parent.py": {
+        "bytes": 4449,
+        "sha256": "9d92311d10b93aa72738de8b59754193e1f0bb782f2a43a2ae453f05f66472b1"
+      },
+      "registration_001/launch_request.json": {
+        "bytes": 3600,
+        "sha256": "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861"
+      },
+      "registration_001/parent_process_completion.json": {
+        "bytes": 2519,
+        "sha256": "41a248707ace9116f274830de12d7ef56330caf1f61408dfbf1f104dcad708ea"
+      },
+      "registration_001/parent_process_identity.json": {
+        "bytes": 1372,
+        "sha256": "8f9676323308f2fe3c4eb2857724326c7933d865a2e2b178d5053c284c0b5ec0"
+      },
+      "registration_001/parent_process_start.json": {
+        "bytes": 2111,
+        "sha256": "0ee572493e68df42109f36ab26704d038e389e39617f1916be4491b2e9fcc8d7"
+      },
+      "registration_001/parent_stderr.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "registration_001/parent_stdout.txt": {
+        "bytes": 76392,
+        "sha256": "18b9653710b170e3e3e99a71ed3a9b3bbe594a441bbdb42967a4b95fcf64213b"
+      },
+      "registration_001/registration_receipt.json": {
+        "bytes": 4119,
+        "sha256": "fcf4f468101fa7019b4394b02b04762c7c2aa7ead5b5295b171a46e1d9473fd8"
+      },
+      "registration_001/standing_authority.json": {
+        "bytes": 2021,
+        "sha256": "3c7e5dcfd574257aed2a6e855284f5f6183e6ff89272b4ff737fefb803adcf49"
+      }
+    },
+    "job": "cas-meta2-20260906155525-195f5ad8",
+    "parent_exit_code": 1,
+    "parent_finished_utc": "2026-09-06T16:06:44.303810+00:00",
+    "parent_launch_status": "AWS_CHQ_CONSTRUCTION_FAILED",
+    "parent_result": {
+      "bytes": 893323,
+      "experiment": {
+        "entrypoint": "cas_meta2.child_qualification_gpu_v8",
+        "profile": "one_child_full_task_qualification_v8"
+      },
+      "job": "cas-meta2-20260906155525-195f5ad8",
+      "omitted_full_file_count": 0,
+      "parent_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+      "partial_evidence": false,
+      "returncode": 1,
+      "sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+      "smoke_only": false,
+      "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6"
+    },
+    "parent_source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+    "provider_calls_started": true,
+    "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+    "queries": [
+      {
+        "arguments": {},
+        "finished_utc": "2026-09-06T16:07:31.157439+00:00",
+        "label": "identity",
+        "operation": "get_caller_identity",
+        "outcome": "RETURNED",
+        "response": {
+          "Account": "807562639912",
+          "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator",
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "412",
+              "content-type": "text/xml",
+              "date": "Sun, 06 Sep 2026 16:07:31 GMT",
+              "x-amz-sts-extended-request-id": "MTp1cy13ZXN0LTI6UzoxNzg4NzEwODUxMDIzOlI6NDdRdFBVWlg=",
+              "x-amzn-requestid": "3aa8fe83-e6e3-4db9-bbf1-f41a4111f06f"
+            },
+            "HTTPStatusCode": 200,
+            "RequestId": "3aa8fe83-e6e3-4db9-bbf1-f41a4111f06f",
+            "RetryAttempts": 0
+          },
+          "UserId": "AIDA3YBT37IUN7OWL4UMU"
+        },
+        "service": "sts",
+        "started_utc": "2026-09-06T16:07:30.796780+00:00"
+      },
+      {
+        "arguments": {
+          "InstanceIds": [
+            "i-093f35093d672bcae"
+          ]
+        },
+        "finished_utc": "2026-09-06T16:07:31.588113+00:00",
+        "label": "instance",
+        "operation": "describe_instances",
+        "outcome": "RETURNED",
+        "response": {
+          "Reservations": [
+            {
+              "Groups": [],
+              "Instances": [
+                {
+                  "AmiLaunchIndex": 0,
+                  "Architecture": "x86_64",
+                  "BlockDeviceMappings": [],
+                  "BootMode": "uefi-preferred",
+                  "CapacityReservationSpecification": {
+                    "CapacityReservationPreference": "open"
+                  },
+                  "ClientToken": "cas-meta2-20260906155525-195f5ad8",
+                  "CpuOptions": {
+                    "CoreCount": 8,
+                    "ThreadsPerCore": 1
+                  },
+                  "CurrentInstanceBootMode": "uefi",
+                  "EbsOptimized": false,
+                  "EnaSupport": true,
+                  "EnclaveOptions": {
+                    "Enabled": false
+                  },
+                  "HibernationOptions": {
+                    "Configured": false
+                  },
+                  "Hypervisor": "xen",
+                  "ImageId": "ami-0fbbd0facbc9e3cff",
+                  "InstanceId": "i-093f35093d672bcae",
+                  "InstanceType": "g7.2xlarge",
+                  "LaunchTime": "2026-09-06 15:56:34+00:00",
+                  "MaintenanceOptions": {
+                    "AutoRecovery": "default",
+                    "RebootMigration": "default"
+                  },
+                  "MetadataOptions": {
+                    "HttpEndpoint": "enabled",
+                    "HttpProtocolIpv6": "disabled",
+                    "HttpPutResponseHopLimit": 2,
+                    "HttpTokens": "required",
+                    "InstanceMetadataTags": "disabled",
+                    "State": "pending"
+                  },
+                  "Monitoring": {
+                    "State": "disabled"
+                  },
+                  "NetworkInterfaces": [],
+                  "NetworkPerformanceOptions": {
+                    "BandwidthWeighting": "default"
+                  },
+                  "Operator": {
+                    "HiddenByDefault": false,
+                    "Managed": false
+                  },
+                  "Placement": {
+                    "AvailabilityZone": "us-west-2c",
+                    "AvailabilityZoneId": "usw2-az3",
+                    "GroupName": "",
+                    "Tenancy": "default"
+                  },
+                  "PlatformDetails": "Linux/UNIX",
+                  "PrivateDnsName": "",
+                  "ProductCodes": [],
+                  "PublicDnsName": "",
+                  "RootDeviceName": "/dev/sda1",
+                  "RootDeviceType": "ebs",
+                  "SecondaryInterfaces": [],
+                  "SecurityGroups": [],
+                  "State": {
+                    "Code": 48,
+                    "Name": "terminated"
+                  },
+                  "StateReason": {
+                    "Code": "Client.UserInitiatedShutdown",
+                    "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+                  },
+                  "StateTransitionReason": "User initiated (2026-09-06 16:01:29 GMT)",
+                  "Tags": [
+                    {
+                      "Key": "cas_meta_job",
+                      "Value": "cas-meta2-20260906155525-195f5ad8"
+                    }
+                  ],
+                  "UsageOperation": "RunInstances",
+                  "UsageOperationUpdateTime": "2026-09-06 15:56:34+00:00",
+                  "VirtualizationType": "hvm"
+                }
+              ],
+              "OwnerId": "807562639912",
+              "ReservationId": "r-06958c43c85230149"
+            }
+          ],
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "cache-control": "no-cache, no-store",
+              "content-length": "2819",
+              "content-type": "text/xml;charset=UTF-8",
+              "date": "Sun, 06 Sep 2026 16:07:31 GMT",
+              "server": "AmazonEC2",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "vary": "accept-encoding",
+              "x-amzn-requestid": "80f690b1-cbcb-4f4b-8448-15ce82579482"
+            },
+            "HTTPStatusCode": 200,
+            "RequestId": "80f690b1-cbcb-4f4b-8448-15ce82579482",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "ec2",
+        "started_utc": "2026-09-06T16:07:31.157452+00:00"
+      },
+      {
+        "arguments": {
+          "Filters": [
+            {
+              "Name": "tag:cas_meta_job",
+              "Values": [
+                "cas-meta2-20260906155525-195f5ad8"
+              ]
+            }
+          ]
+        },
+        "finished_utc": "2026-09-06T16:07:31.663188+00:00",
+        "label": "volumes",
+        "operation": "describe_volumes",
+        "outcome": "RETURNED",
+        "response": {
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "cache-control": "no-cache, no-store",
+              "content-length": "210",
+              "content-type": "text/xml;charset=UTF-8",
+              "date": "Sun, 06 Sep 2026 16:07:31 GMT",
+              "server": "AmazonEC2",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "x-amzn-requestid": "1fa7d995-6cbc-4b0a-95c9-770b5ef3d990"
+            },
+            "HTTPStatusCode": 200,
+            "RequestId": "1fa7d995-6cbc-4b0a-95c9-770b5ef3d990",
+            "RetryAttempts": 0
+          },
+          "Volumes": []
+        },
+        "service": "ec2",
+        "started_utc": "2026-09-06T16:07:31.588125+00:00"
+      },
+      {
+        "arguments": {
+          "GroupIds": [
+            "sg-0e0df05cf543290ca"
+          ]
+        },
+        "error": {
+          "code": "InvalidGroup.NotFound",
+          "message": "The security group 'sg-0e0df05cf543290ca' does not exist",
+          "type": "ClientError"
+        },
+        "finished_utc": "2026-09-06T16:07:31.852555+00:00",
+        "label": "security_group",
+        "operation": "describe_security_groups",
+        "outcome": "ERROR",
+        "response": {
+          "Error": {
+            "Code": "InvalidGroup.NotFound",
+            "Message": "The security group 'sg-0e0df05cf543290ca' does not exist"
+          },
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "cache-control": "no-cache, no-store",
+              "connection": "close",
+              "content-type": "text/xml;charset=UTF-8",
+              "date": "Sun, 06 Sep 2026 16:07:31 GMT",
+              "server": "AmazonEC2",
+              "strict-transport-security": "max-age=31536000; includeSubDomains",
+              "transfer-encoding": "chunked",
+              "vary": "accept-encoding",
+              "x-amzn-requestid": "e41d6df6-3379-4c7e-8a02-23a507987c97"
+            },
+            "HTTPStatusCode": 400,
+            "RequestId": "e41d6df6-3379-4c7e-8a02-23a507987c97",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "ec2",
+        "started_utc": "2026-09-06T16:07:31.663204+00:00"
+      },
+      {
+        "arguments": {
+          "RoleName": "cas-meta2-20260906155525-195f5ad8-worker"
+        },
+        "error": {
+          "code": "NoSuchEntity",
+          "message": "The role with name cas-meta2-20260906155525-195f5ad8-worker cannot be found.",
+          "type": "NoSuchEntityException"
+        },
+        "finished_utc": "2026-09-06T16:07:32.428743+00:00",
+        "label": "worker_role",
+        "operation": "get_role",
+        "outcome": "ERROR",
+        "response": {
+          "Error": {
+            "Code": "NoSuchEntity",
+            "Message": "The role with name cas-meta2-20260906155525-195f5ad8-worker cannot be found.",
+            "Type": "Sender"
+          },
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "320",
+              "content-type": "text/xml",
+              "date": "Sun, 06 Sep 2026 16:07:32 GMT",
+              "x-amzn-requestid": "bdfdc530-35e3-41b2-b71c-80a9cb9a2029"
+            },
+            "HTTPStatusCode": 404,
+            "RequestId": "bdfdc530-35e3-41b2-b71c-80a9cb9a2029",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "iam",
+        "started_utc": "2026-09-06T16:07:31.852578+00:00"
+      },
+      {
+        "arguments": {
+          "RoleName": "cas-meta2-20260906155525-195f5ad8-timer"
+        },
+        "error": {
+          "code": "NoSuchEntity",
+          "message": "The role with name cas-meta2-20260906155525-195f5ad8-timer cannot be found.",
+          "type": "NoSuchEntityException"
+        },
+        "finished_utc": "2026-09-06T16:07:32.628563+00:00",
+        "label": "timer_role",
+        "operation": "get_role",
+        "outcome": "ERROR",
+        "response": {
+          "Error": {
+            "Code": "NoSuchEntity",
+            "Message": "The role with name cas-meta2-20260906155525-195f5ad8-timer cannot be found.",
+            "Type": "Sender"
+          },
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "319",
+              "content-type": "text/xml",
+              "date": "Sun, 06 Sep 2026 16:07:32 GMT",
+              "x-amzn-requestid": "1e7a1d8c-5a02-4ce8-a256-c97bd4c81b3d"
+            },
+            "HTTPStatusCode": 404,
+            "RequestId": "1e7a1d8c-5a02-4ce8-a256-c97bd4c81b3d",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "iam",
+        "started_utc": "2026-09-06T16:07:32.428758+00:00"
+      },
+      {
+        "arguments": {
+          "InstanceProfileName": "cas-meta2-20260906155525-195f5ad8-worker"
+        },
+        "error": {
+          "code": "NoSuchEntity",
+          "message": "Instance Profile cas-meta2-20260906155525-195f5ad8-worker cannot be found.",
+          "type": "NoSuchEntityException"
+        },
+        "finished_utc": "2026-09-06T16:07:32.752042+00:00",
+        "label": "instance_profile",
+        "operation": "get_instance_profile",
+        "outcome": "ERROR",
+        "response": {
+          "Error": {
+            "Code": "NoSuchEntity",
+            "Message": "Instance Profile cas-meta2-20260906155525-195f5ad8-worker cannot be found.",
+            "Type": "Sender"
+          },
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "318",
+              "content-type": "text/xml",
+              "date": "Sun, 06 Sep 2026 16:07:32 GMT",
+              "x-amzn-requestid": "9a6a4eb5-99ed-45aa-8ee6-3e7bade29244"
+            },
+            "HTTPStatusCode": 404,
+            "RequestId": "9a6a4eb5-99ed-45aa-8ee6-3e7bade29244",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "iam",
+        "started_utc": "2026-09-06T16:07:32.628575+00:00"
+      },
+      {
+        "arguments": {
+          "GroupName": "default",
+          "Name": "cas-meta2-20260906155525-195f5ad8"
+        },
+        "error": {
+          "code": "ResourceNotFoundException",
+          "message": "Schedule cas-meta2-20260906155525-195f5ad8 does not exist.",
+          "type": "ResourceNotFoundException"
+        },
+        "finished_utc": "2026-09-06T16:07:33.118064+00:00",
+        "label": "schedule",
+        "operation": "get_schedule",
+        "outcome": "ERROR",
+        "response": {
+          "Error": {
+            "Code": "ResourceNotFoundException",
+            "Message": "Schedule cas-meta2-20260906155525-195f5ad8 does not exist."
+          },
+          "Message": "Schedule cas-meta2-20260906155525-195f5ad8 does not exist.",
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "72",
+              "content-type": "application/json",
+              "date": "Sun, 06 Sep 2026 16:07:32 GMT",
+              "x-amzn-errortype": "ResourceNotFoundException:http://internal.amazon.com/coral/com.amazonaws.chronos/",
+              "x-amzn-requestid": "b609d722-3ee0-4566-87b5-3b9eec8b24c4"
+            },
+            "HTTPStatusCode": 404,
+            "RequestId": "b609d722-3ee0-4566-87b5-3b9eec8b24c4",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "scheduler",
+        "started_utc": "2026-09-06T16:07:32.752062+00:00"
+      },
+      {
+        "arguments": {
+          "Bucket": "cas-meta2-20260906155525-195f5ad8-807562639912"
+        },
+        "finished_utc": "2026-09-06T16:07:33.463160+00:00",
+        "label": "bucket_tags",
+        "operation": "get_bucket_tagging",
+        "outcome": "RETURNED",
+        "response": {
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "date": "Sun, 06 Sep 2026 16:07:34 GMT",
+              "server": "AmazonS3",
+              "transfer-encoding": "chunked",
+              "x-amz-id-2": "wrkr85vILhJTrNbUdu8Tps1JJPepYW1ZXv4UXcc03qvnFhbrpaqHKh29fn4P8xR8AGkKgnSm49g=",
+              "x-amz-request-id": "J2X2CN4AGSQ9E65E"
+            },
+            "HTTPStatusCode": 200,
+            "HostId": "wrkr85vILhJTrNbUdu8Tps1JJPepYW1ZXv4UXcc03qvnFhbrpaqHKh29fn4P8xR8AGkKgnSm49g=",
+            "RequestId": "J2X2CN4AGSQ9E65E",
+            "RetryAttempts": 0
+          },
+          "TagSet": [
+            {
+              "Key": "cas_meta_job",
+              "Value": "cas-meta2-20260906155525-195f5ad8"
+            }
+          ]
+        },
+        "service": "s3",
+        "started_utc": "2026-09-06T16:07:33.118075+00:00"
+      },
+      {
+        "arguments": {
+          "Bucket": "cas-meta2-20260906155525-195f5ad8-807562639912",
+          "Prefix": "input/"
+        },
+        "finished_utc": "2026-09-06T16:07:33.498925+00:00",
+        "label": "input_objects",
+        "operation": "list_objects_v2",
+        "outcome": "RETURNED",
+        "response": {
+          "EncodingType": "url",
+          "IsTruncated": false,
+          "KeyCount": 0,
+          "MaxKeys": 1000,
+          "Name": "cas-meta2-20260906155525-195f5ad8-807562639912",
+          "Prefix": "input/",
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-type": "application/xml",
+              "date": "Sun, 06 Sep 2026 16:07:34 GMT",
+              "server": "AmazonS3",
+              "transfer-encoding": "chunked",
+              "x-amz-bucket-region": "us-west-2",
+              "x-amz-id-2": "yofGeY2giltJc5Auoz0wuoGCOuUpFRsZPmP9iGjZKKdBSUGjQS946vl+oUFaurdNRl3iQUBA3PY=",
+              "x-amz-request-id": "J2X1W0ANNFBKFK8X"
+            },
+            "HTTPStatusCode": 200,
+            "HostId": "yofGeY2giltJc5Auoz0wuoGCOuUpFRsZPmP9iGjZKKdBSUGjQS946vl+oUFaurdNRl3iQUBA3PY=",
+            "RequestId": "J2X1W0ANNFBKFK8X",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "s3",
+        "started_utc": "2026-09-06T16:07:33.463172+00:00"
+      },
+      {
+        "arguments": {
+          "Bucket": "cas-meta2-20260906155525-195f5ad8-807562639912",
+          "Prefix": "results/"
+        },
+        "finished_utc": "2026-09-06T16:07:33.541958+00:00",
+        "label": "result_objects",
+        "operation": "list_objects_v2",
+        "outcome": "RETURNED",
+        "response": {
+          "Contents": [
+            {
+              "ChecksumAlgorithm": [
+                "CRC64NVME"
+              ],
+              "ChecksumType": "FULL_OBJECT",
+              "ETag": "\"4df4ce2177ed2e330ad1d04cf436ec5a\"",
+              "Key": "results/artifacts.zip",
+              "LastModified": "2026-09-06 16:01:18+00:00",
+              "Size": 893323,
+              "StorageClass": "STANDARD"
+            },
+            {
+              "ChecksumAlgorithm": [
+                "CRC64NVME"
+              ],
+              "ChecksumType": "FULL_OBJECT",
+              "ETag": "\"109e883d58cfe18c44ad113dffe241a8\"",
+              "Key": "results/bootstrap.log",
+              "LastModified": "2026-09-06 16:01:19+00:00",
+              "Size": 1852,
+              "StorageClass": "STANDARD"
+            },
+            {
+              "ChecksumAlgorithm": [
+                "CRC64NVME"
+              ],
+              "ChecksumType": "FULL_OBJECT",
+              "ETag": "\"0b711aa30a15b01893ea5b435b00e40f\"",
+              "Key": "results/complete.json",
+              "LastModified": "2026-09-06 16:01:19+00:00",
+              "Size": 513,
+              "StorageClass": "STANDARD"
+            }
+          ],
+          "EncodingType": "url",
+          "IsTruncated": false,
+          "KeyCount": 3,
+          "MaxKeys": 1000,
+          "Name": "cas-meta2-20260906155525-195f5ad8-807562639912",
+          "Prefix": "results/",
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-type": "application/xml",
+              "date": "Sun, 06 Sep 2026 16:07:34 GMT",
+              "server": "AmazonS3",
+              "transfer-encoding": "chunked",
+              "x-amz-bucket-region": "us-west-2",
+              "x-amz-id-2": "xSuqj8NW6asPiZU67THZWk2roG/TkvJ9VljBq9nSlDW4m7dA4zaYpjrXVDUlmN/4ZOr121/S8+0=",
+              "x-amz-request-id": "J2X38AK0P59GA46H"
+            },
+            "HTTPStatusCode": 200,
+            "HostId": "xSuqj8NW6asPiZU67THZWk2roG/TkvJ9VljBq9nSlDW4m7dA4zaYpjrXVDUlmN/4ZOr121/S8+0=",
+            "RequestId": "J2X38AK0P59GA46H",
+            "RetryAttempts": 0
+          }
+        },
+        "service": "s3",
+        "started_utc": "2026-09-06T16:07:33.498958+00:00"
+      },
+      {
+        "arguments": {
+          "Bucket": "cas-meta2-20260906155525-195f5ad8-807562639912",
+          "Key": "results/artifacts.zip"
+        },
+        "finished_utc": "2026-09-06T16:07:33.584264+00:00",
+        "label": "retained_archive_metadata",
+        "operation": "head_object",
+        "outcome": "RETURNED",
+        "response": {
+          "AcceptRanges": "bytes",
+          "ContentLength": 893323,
+          "ContentType": "binary/octet-stream",
+          "ETag": "\"4df4ce2177ed2e330ad1d04cf436ec5a\"",
+          "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+          "LastModified": "2026-09-06 16:01:18+00:00",
+          "Metadata": {},
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "accept-ranges": "bytes",
+              "content-length": "893323",
+              "content-type": "binary/octet-stream",
+              "date": "Sun, 06 Sep 2026 16:07:34 GMT",
+              "etag": "\"4df4ce2177ed2e330ad1d04cf436ec5a\"",
+              "last-modified": "Sun, 06 Sep 2026 16:01:18 GMT",
+              "server": "AmazonS3",
+              "x-amz-expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+              "x-amz-id-2": "u3Y6d4Uej6N2TqQXw6rAemCc3VDQScoruvXuqFPvnzcNLHt3IKroZ0ekmS/RP2XlI+cO6BBLXHU=",
+              "x-amz-request-id": "J2XBT2AT4DYWEC79",
+              "x-amz-server-side-encryption": "AES256"
+            },
+            "HTTPStatusCode": 200,
+            "HostId": "u3Y6d4Uej6N2TqQXw6rAemCc3VDQScoruvXuqFPvnzcNLHt3IKroZ0ekmS/RP2XlI+cO6BBLXHU=",
+            "RequestId": "J2XBT2AT4DYWEC79",
+            "RetryAttempts": 0
+          },
+          "ServerSideEncryption": "AES256"
+        },
+        "service": "s3",
+        "started_utc": "2026-09-06T16:07:33.541971+00:00"
+      },
+      {
+        "arguments": {
+          "Bucket": "cas-meta2-20260906155525-195f5ad8-807562639912"
+        },
+        "finished_utc": "2026-09-06T16:07:33.630563+00:00",
+        "label": "bucket_lifecycle",
+        "operation": "get_bucket_lifecycle_configuration",
+        "outcome": "RETURNED",
+        "response": {
+          "ResponseMetadata": {
+            "HTTPHeaders": {
+              "content-length": "378",
+              "date": "Sun, 06 Sep 2026 16:07:34 GMT",
+              "server": "AmazonS3",
+              "x-amz-id-2": "mF/QNM17ES49NNrAbMs1XpZKRf4EN3bWzcIy6IRev7sBCaTKXkSGWRtrmd8Mpc7f1GagS8MIam4=",
+              "x-amz-request-id": "J2X83C35CAGHQMYM",
+              "x-amz-transition-default-minimum-object-size": "all_storage_classes_128K"
+            },
+            "HTTPStatusCode": 200,
+            "HostId": "mF/QNM17ES49NNrAbMs1XpZKRf4EN3bWzcIy6IRev7sBCaTKXkSGWRtrmd8Mpc7f1GagS8MIam4=",
+            "RequestId": "J2X83C35CAGHQMYM",
+            "RetryAttempts": 0
+          },
+          "Rules": [
+            {
+              "AbortIncompleteMultipartUpload": {
+                "DaysAfterInitiation": 1
+              },
+              "Expiration": {
+                "Days": 7
+              },
+              "Filter": {
+                "Prefix": ""
+              },
+              "ID": "job-seven-days",
+              "Status": "Enabled"
+            }
+          ],
+          "TransitionDefaultMinimumObjectSize": "all_storage_classes_128K"
+        },
+        "service": "s3",
+        "started_utc": "2026-09-06T16:07:33.584276+00:00"
+      }
+    ],
+    "read_only": true,
+    "region": "us-west-2",
+    "registration_commit": "a8376f663acc76fa966d9663a9c28a8d61dcba87",
+    "request_sha256": "0b1b73e0b750c3c657eed42686e5aebdcd2b768786f7240134ac4d67899bf861",
+    "resources": {
+      "bucket": "cas-meta2-20260906155525-195f5ad8-807562639912",
+      "cas-meta2-20260906155525-195f5ad8-timer": "arn:aws:iam::807562639912:role/cas-meta2-20260906155525-195f5ad8-timer",
+      "cas-meta2-20260906155525-195f5ad8-worker": "arn:aws:iam::807562639912:role/cas-meta2-20260906155525-195f5ad8-worker",
+      "instance": "i-093f35093d672bcae",
+      "instance_profile": "cas-meta2-20260906155525-195f5ad8-worker",
+      "schedule": "cas-meta2-20260906155525-195f5ad8",
+      "security_group": "sg-0e0df05cf543290ca"
+    },
+    "schema": "cas-meta2-child-qualification-post-run-provider-read/8",
+    "script_sha256": "b28b9d6f1d642b68f277a1dcec6a39ff64a3cc751b70caea9e08171ac02945a9",
+    "source_archive_sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3",
+    "source_manifest_sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d",
+    "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+    "started_utc": "2026-09-06T16:07:29.219907+00:00",
+    "status": "POST_RUN_CLEANUP_CONFIRMED"
+  },
+  "status": "VERIFIED_QUALIFICATION_REFUSAL",
+  "worker_environment": {
+    "ec2": {
+      "accountId": "807562639912",
+      "architecture": "x86_64",
+      "availabilityZone": "us-west-2c",
+      "billingProducts": null,
+      "devpayProductCodes": null,
+      "imageId": "ami-0fbbd0facbc9e3cff",
+      "instanceId": "i-093f35093d672bcae",
+      "instanceType": "g7.2xlarge",
+      "kernelId": null,
+      "marketplaceProductCodes": null,
+      "pendingTime": "2026-09-06T15:56:34Z",
+      "privateIp": "172.31.12.254",
+      "ramdiskId": null,
+      "region": "us-west-2",
+      "version": "2017-09-30"
+    },
+    "executable": "/opt/cas-meta2-child-qualification/venv/bin/python",
+    "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+    "numeric_settings": {
+      "cublas_workspace_config": ":4096:8",
+      "cuda": "12.8",
+      "cudnn_allow_tf32": false,
+      "cudnn_benchmark": false,
+      "cudnn_deterministic": true,
+      "deterministic_algorithms": true,
+      "matmul_allow_tf32": false,
+      "seed": 7,
+      "torch": "2.11.0+cu128"
+    },
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+  },
+  "worker_postchecks": {
+    "reservation": {
+      "ok": true
+    },
+    "source": {
+      "ok": true
+    }
+  },
+  "worker_status": "QUALIFICATION_REFUSED_OR_FAILED",
+  "worker_wall_seconds": 106.21389676699997
+}

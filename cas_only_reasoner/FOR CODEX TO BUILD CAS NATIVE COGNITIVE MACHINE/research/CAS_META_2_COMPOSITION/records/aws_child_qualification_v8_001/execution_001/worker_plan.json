@@ -1,0 +1,80 @@
+{
+  "automatic_retries": 0,
+  "binding": 0,
+  "candidates_per_task": 4,
+  "experiment": {
+    "entrypoint": "cas_meta2.child_qualification_gpu_v8",
+    "profile": "one_child_full_task_qualification_v8"
+  },
+  "instance_id": "i-093f35093d672bcae",
+  "job": "cas-meta2-20260906155525-195f5ad8",
+  "launch_enabled": true,
+  "ledger_snapshot": {
+    "path": "/opt/cas-meta2-child-qualification/launch/ledger_snapshot.json",
+    "sha256": "1dd251d13fdce7c33b320131d0aaa7077a0449b6987c1e91d78a849ec7b58e6c"
+  },
+  "max_cost_usd": "4.00",
+  "max_output_bytes": 536870912,
+  "max_seconds": 1800,
+  "native_execution": true,
+  "planned_complete_executions": 20,
+  "planned_native_ticks": 110,
+  "reservation_receipt": {
+    "path": "/opt/cas-meta2-child-qualification/launch/reservation_receipt.json",
+    "sha256": "8334243d69194811040651cca2b9e1342a2303d96595d471258eaf79483dee90"
+  },
+  "resource_plan": {
+    "account_id": "807562639912",
+    "ami_id": "ami-0fbbd0facbc9e3cff",
+    "ancillary_reserved_usd": "1.00",
+    "artifact_bytes_max": 268435456,
+    "artifact_objects_max": 3,
+    "automatic_retries": 0,
+    "cloud_shutdown_seconds": 3480,
+    "delete_on_termination": true,
+    "download_bytes_max": 268435456,
+    "ebs_encrypted": true,
+    "ebs_gb": 75,
+    "ebs_iops": 3000,
+    "ebs_throughput_mib_per_second": 125,
+    "ebs_type": "gp3",
+    "egress_tcp_ports": [
+      443
+    ],
+    "evidence_expanded_bytes_max": 536870912,
+    "gpu_count": 1,
+    "guest_shutdown_seconds": 3400,
+    "inbound_rules": [],
+    "input_bytes_max": 16777216,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "later_curriculum_execution": false,
+    "local_neural_execution": false,
+    "native_execution": true,
+    "on_demand_hourly_usd_max": "2.52",
+    "per_launch_reserved_cap_usd": "4.00",
+    "region": "us-west-2",
+    "required_gpu_name_contains": "RTX PRO 4500",
+    "runtime_seconds_max": 3600,
+    "s3_read_requests_max": 1000,
+    "s3_retention_days": 7,
+    "s3_write_requests_max": 1000,
+    "scheduler_invocations_max": 1,
+    "training": false,
+    "worker_seconds_max": 1800
+  },
+  "return_child_result": true,
+  "schema": "cas-meta2-child-qualification-plan/8",
+  "seed": 7,
+  "source_archive": {
+    "path": "/opt/cas-meta2-child-qualification/source.zip",
+    "sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3"
+  },
+  "source_manifest": {
+    "path": "/opt/cas-meta2-child-qualification/package/child_qualification_source_manifest.json",
+    "sha256": "a19590941a53a7c3aa0a343501a7330ea5f89e56f10454ad82603eb4c6d0b69d"
+  },
+  "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+  "task_count": 4,
+  "training": false
+}
