@@ -1,0 +1,31 @@
+{
+  "boundary": "Synthetic receipt/count/mapping/rendering tests only. No current learning results or report generated.",
+  "checkpoint_loading": false,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_results_summary_v6_001\\test_summary.py"
+  ],
+  "completed": true,
+  "current_packet_read": false,
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "inputs_sha256": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_results_summary_v6_001\\run_checks.py": "ff0a98d349299addbd69c2ba2c33e316ee1b5920ba4b6b9f4f9e2ae00848aef0",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_results_summary_v6_001\\summary.py": "954c5079f2117eb0b26e25576883be98e7230ffb393fe8fa876759b04eb540de",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\contrast_results_summary_v6_001\\test_summary.py": "6d8f107d4f0970be3373ca29f264321ed7087d1ead19f0d7554eaa23396589cd"
+  },
+  "inputs_unchanged": true,
+  "neural_execution": false,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "provider_calls": false,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "registered_task_generation": false,
+  "returncode": 0,
+  "schema": "cas-meta2-contrast-summary-pure-checks/1",
+  "status": "PURE_SUMMARY_CHECKS_PASSED",
+  "stderr_sha256": "51a30853de0e2a5052ad0d2dbec87087fb252ba5794af1cce87ff0dd99458b6e",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "test_functions": 15,
+  "utc": "2026-09-06T07:26:49.246966+00:00",
+  "wall_seconds": 0.4401600999990478
+}

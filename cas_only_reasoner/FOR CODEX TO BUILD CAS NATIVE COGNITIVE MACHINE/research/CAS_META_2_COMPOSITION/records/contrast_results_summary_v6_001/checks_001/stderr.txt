@@ -1,0 +1,20 @@
+test_actual_split_counts_and_old_prototype_exclusion (__main__.SummaryTests.test_actual_split_counts_and_old_prototype_exclusion) ... ok
+test_all_outcomes_derived_and_trace_not_task_success (__main__.SummaryTests.test_all_outcomes_derived_and_trace_not_task_success) ... ok
+test_audit_denominator_cannot_change (__main__.SummaryTests.test_audit_denominator_cannot_change) ... ok
+test_budget_missing_is_unavailable_not_zero (__main__.SummaryTests.test_budget_missing_is_unavailable_not_zero) ... ok
+test_budget_reserved_not_cost_and_no_refund (__main__.SummaryTests.test_budget_reserved_not_cost_and_no_refund) ... ok
+test_checkpoint_mismatch_or_test_selection_rejected (__main__.SummaryTests.test_checkpoint_mismatch_or_test_selection_rejected) ... ok
+test_duplicate_nonfinite_json_rejected (__main__.SummaryTests.test_duplicate_nonfinite_json_rejected) ... ok
+test_manifest_count_cannot_replace_actual_rows (__main__.SummaryTests.test_manifest_count_cannot_replace_actual_rows) ... ok
+test_markdown_preserves_boundaries_and_attempt_denominators (__main__.SummaryTests.test_markdown_preserves_boundaries_and_attempt_denominators) ... ok
+test_missing_duplicate_and_changed_outcome_rows_rejected (__main__.SummaryTests.test_missing_duplicate_and_changed_outcome_rows_rejected) ... ok
+test_negative_and_nonfinite_budget_rejected (__main__.SummaryTests.test_negative_and_nonfinite_budget_rejected) ... ok
+test_no_neural_provider_imports (__main__.SummaryTests.test_no_neural_provider_imports) ... ok
+test_packet_member_is_bound_to_reviewed_hash (__main__.SummaryTests.test_packet_member_is_bound_to_reviewed_hash) ... ok
+test_three_completed_receipts_bind_same_run (__main__.SummaryTests.test_three_completed_receipts_bind_same_run) ... ok
+test_validation_selection_is_not_native_outcome (__main__.SummaryTests.test_validation_selection_is_not_native_outcome) ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.116s
+
+OK

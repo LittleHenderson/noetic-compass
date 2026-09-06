@@ -1,0 +1,13 @@
+test_existing_origin_cannot_be_replaced (portable_v7_exposure_tests.ExposureTests.test_existing_origin_cannot_be_replaced) ... ok
+test_malformed_graph_refused (portable_v7_exposure_tests.ExposureTests.test_malformed_graph_refused) ... ok
+test_no_receipt_read_without_external_pins (portable_v7_exposure_tests.ExposureTests.test_no_receipt_read_without_external_pins) ... ok
+test_nonfinite_and_duplicate_json_rejected (portable_v7_exposure_tests.ExposureTests.test_nonfinite_and_duplicate_json_rejected) ... ok
+test_origin_count_mismatch_rejected (portable_v7_exposure_tests.ExposureTests.test_origin_count_mismatch_rejected) ... ok
+test_prior_count_mismatch_rejected (portable_v7_exposure_tests.ExposureTests.test_prior_count_mismatch_rejected) ... ok
+test_prior_member_cannot_disappear (portable_v7_exposure_tests.ExposureTests.test_prior_member_cannot_disappear) ... ok
+test_union_preserves_known_and_deduplicates_shared_test_graphs (portable_v7_exposure_tests.ExposureTests.test_union_preserves_known_and_deduplicates_shared_test_graphs) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+OK
