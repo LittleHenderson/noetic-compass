@@ -1,0 +1,13 @@
+{
+  "schema": "cas-meta2-br-readonly-file-stat-observation/8",
+  "command": "python -B -c \"from pathlib import Path; import os,json; from cas_meta2.br_snapshot_v8 import _stat_identity; p=Path('records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_master_and_b_r_copies_mat0/owned/copies/master.sqlite'); before=_stat_identity(p.stat()); s=p.open('rb'); handle=_stat_identity(os.fstat(s.fileno())); s.close(); after=_stat_identity(p.stat()); print(json.dumps({'path':str(p),'path_stat_before':before,'descriptor_fstat':handle,'path_stat_after':after,'differing_fields':{k:[before[k],handle[k]] for k in before if before[k]!=handle[k]}},sort_keys=True,indent=2))\"",
+  "workdir": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "result": {
+    "chunk_id": "951534",
+    "wall_time_seconds": 0.3371292,
+    "exit_code": 0,
+    "original_token_count": 223,
+    "output": "{\r\n  \"descriptor_fstat\": {\r\n    \"bytes\": 1040,\r\n    \"ctime_ns\": 1788702714641918100,\r\n    \"device\": 8957708283509733650,\r\n    \"file_id\": 281474982037008,\r\n    \"links\": 1,\r\n    \"mtime_ns\": 1788702714641918100\r\n  },\r\n  \"differing_fields\": {\r\n    \"ctime_ns\": [\r\n      1788702714640919600,\r\n      1788702714641918100\r\n    ]\r\n  },\r\n  \"path\": \"records\\\\child_call_v8_snapshot_001\\\\checks_001\\\\pytest_tmp\\\\test_master_and_b_r_copies_mat0\\\\owned\\\\copies\\\\master.sqlite\",\r\n  \"path_stat_after\": {\r\n    \"bytes\": 1040,\r\n    \"ctime_ns\": 1788702714640919600,\r\n    \"device\": 8957708283509733650,\r\n    \"file_id\": 281474982037008,\r\n    \"links\": 1,\r\n    \"mtime_ns\": 1788702714641918100\r\n  },\r\n  \"path_stat_before\": {\r\n    \"bytes\": 1040,\r\n    \"ctime_ns\": 1788702714640919600,\r\n    \"device\": 8957708283509733650,\r\n    \"file_id\": 281474982037008,\r\n    \"links\": 1,\r\n    \"mtime_ns\": 1788702714641918100\r\n  }\r\n}\r\n"
+  },
+  "boundary": "Read-only metadata from a retained synthetic test file. No SQLite connection, native or model execution."
+}

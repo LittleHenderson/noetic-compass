@@ -1,0 +1,1198 @@
+FFF.............F..............FFF.FFFF...........................       [100%]
+================================== FAILURES ===================================
+___ test_master_and_b_r_copies_match_bytes_but_have_distinct_physical_files ___
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_master_and_b_r_copies_mat0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_master_and_b_r_copies_mat0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+>               record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+cas_meta2\br_snapshot_v8.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+
+    def test_master_and_b_r_copies_match_bytes_but_have_distinct_physical_files(image):
+        source, expected, output_root, raw = image
+        before = source.stat()
+>       result = run_copy(image)
+                 ^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_master_and_b_r_copies_mat0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_master_and_b_r_copies_mat0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+______ test_changing_one_arm_does_not_change_master_other_arm_or_source _______
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_changing_one_arm_does_not0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_changing_one_arm_does_not0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+>               record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+cas_meta2\br_snapshot_v8.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+
+    def test_changing_one_arm_does_not_change_master_other_arm_or_source(image):
+        source, _, output_root, raw = image
+>       run_copy(image)
+
+tests\test_br_snapshot_v8.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_changing_one_arm_does_not0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_changing_one_arm_does_not0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+_ test_sqlite_header_and_equal_hash_never_become_native_validity_or_runtime_closure _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sqlite_header_and_equal_h0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sqlite_header_and_equal_h0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+>               record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+cas_meta2\br_snapshot_v8.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+
+    def test_sqlite_header_and_equal_hash_never_become_native_validity_or_runtime_closure(image):
+>       result = run_copy(image)
+                 ^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sqlite_header_and_equal_h0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sqlite_header_and_equal_h0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+_____ test_source_without_sqlite_header_is_refused_even_with_correct_hash _____
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+
+    def test_source_without_sqlite_header_is_refused_even_with_correct_hash(image):
+        source = image[0]
+        source.write_bytes(b"not sqlite" * 100)
+        with pytest.raises(b.SnapshotRefused, match="SQLITE_HEADER_REQUIRED"):
+>           run_copy(image, expected_sha256=sha256(source.read_bytes()).hexdigest())
+
+tests\test_br_snapshot_v8.py:113: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:191: in copy_closed_snapshot
+    before = _verified_image(source, expected_sha256, max_bytes)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+
+    def test_source_without_sqlite_header_is_refused_even_with_correct_hash(image):
+        source = image[0]
+        source.write_bytes(b"not sqlite" * 100)
+>       with pytest.raises(b.SnapshotRefused, match="SQLITE_HEADER_REQUIRED"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'SQLITE_HEADER_REQUIRED'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:112: AssertionError
+_________ test_source_metadata_change_without_byte_change_is_rejected _________
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_source_metadata_change_wi0/source.sqlite')
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...N/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_source_metadata_change_wi0/owned/copies/master.sqlite')
+expected = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+maximum = 268435456
+
+    def changing(source, destination, expected, maximum):
+>       record = original(source, destination, expected, maximum)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:206: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB010D150>
+
+    def test_source_metadata_change_without_byte_change_is_rejected(image, monkeypatch):
+        original = b._copy_image
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                info = image[0].stat()
+                os.utime(image[0], ns=(info.st_atime_ns, info.st_mtime_ns + 10_000_000))
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+        with pytest.raises(b.SnapshotRefused, match="ORIGINAL_SOURCE_CHANGED"):
+>           run_copy(image)
+
+tests\test_br_snapshot_v8.py:213: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_source_metadata_change_wi0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_source_metadata_change_wi0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB010D150>
+
+    def test_source_metadata_change_without_byte_change_is_rejected(image, monkeypatch):
+        original = b._copy_image
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                info = image[0].stat()
+                os.utime(image[0], ns=(info.st_atime_ns, info.st_mtime_ns + 10_000_000))
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+>       with pytest.raises(b.SnapshotRefused, match="ORIGINAL_SOURCE_CHANGED"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'ORIGINAL_SOURCE_CHANGED'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:212: AssertionError
+_ test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed[-wal] __
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00C0050>
+suffix = '-wal'
+
+    @pytest.mark.parametrize("suffix", ["-wal", "-shm", "-journal"])
+    def test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed(image, monkeypatch, suffix):
+        original = b._copy_image
+        sidecar = Path(str(image[0]) + suffix)
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                sidecar.write_bytes(b"newly active")
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+        with pytest.raises(b.SnapshotRefused, match="SQLITE_SIDECAR_PRESENT"):
+>           run_copy(image)
+
+tests\test_br_snapshot_v8.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:191: in copy_closed_snapshot
+    before = _verified_image(source, expected_sha256, max_bytes)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00C0050>
+suffix = '-wal'
+
+    @pytest.mark.parametrize("suffix", ["-wal", "-shm", "-journal"])
+    def test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed(image, monkeypatch, suffix):
+        original = b._copy_image
+        sidecar = Path(str(image[0]) + suffix)
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                sidecar.write_bytes(b"newly active")
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+>       with pytest.raises(b.SnapshotRefused, match="SQLITE_SIDECAR_PRESENT"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'SQLITE_SIDECAR_PRESENT'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:227: AssertionError
+_ test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed[-shm] __
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sidecar_appearing_during_1/source.sqlite')
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...N/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sidecar_appearing_during_1/owned/copies/master.sqlite')
+expected = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+maximum = 268435456
+
+    def changing(source, destination, expected, maximum):
+>       record = original(source, destination, expected, maximum)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:222: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00C1350>
+suffix = '-shm'
+
+    @pytest.mark.parametrize("suffix", ["-wal", "-shm", "-journal"])
+    def test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed(image, monkeypatch, suffix):
+        original = b._copy_image
+        sidecar = Path(str(image[0]) + suffix)
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                sidecar.write_bytes(b"newly active")
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+        with pytest.raises(b.SnapshotRefused, match="SQLITE_SIDECAR_PRESENT"):
+>           run_copy(image)
+
+tests\test_br_snapshot_v8.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sidecar_appearing_during_1/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_sidecar_appearing_during_1/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00C1350>
+suffix = '-shm'
+
+    @pytest.mark.parametrize("suffix", ["-wal", "-shm", "-journal"])
+    def test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed(image, monkeypatch, suffix):
+        original = b._copy_image
+        sidecar = Path(str(image[0]) + suffix)
+        def changing(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "master.sqlite":
+                sidecar.write_bytes(b"newly active")
+            return record
+        monkeypatch.setattr(b, "_copy_image", changing)
+>       with pytest.raises(b.SnapshotRefused, match="SQLITE_SIDECAR_PRESENT"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'SQLITE_SIDECAR_PRESENT'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:227: AssertionError
+___ test_copy_corruption_after_initial_verification_is_caught_by_final_pass ___
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_copy_corruption_after_ini0/source.sqlite')
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...N/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_copy_corruption_after_ini0/owned/copies/master.sqlite')
+expected = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+maximum = 268435456
+
+    def corrupting(source, destination, expected, maximum):
+>       record = original(source, destination, expected, maximum)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:236: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00CDC70>
+
+    def test_copy_corruption_after_initial_verification_is_caught_by_final_pass(image, monkeypatch):
+        original = b._copy_image
+        def corrupting(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "B.sqlite":
+                destination.write_bytes(image[3][:-1] + b"z")
+            return record
+        monkeypatch.setattr(b, "_copy_image", corrupting)
+        with pytest.raises(b.SnapshotRefused, match="SQLITE_IMAGE_SHA256_MISMATCH") as error:
+>           run_copy(image)
+
+tests\test_br_snapshot_v8.py:242: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_copy_corruption_after_ini0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_copy_corruption_after_ini0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB00CDC70>
+
+    def test_copy_corruption_after_initial_verification_is_caught_by_final_pass(image, monkeypatch):
+        original = b._copy_image
+        def corrupting(source, destination, expected, maximum):
+            record = original(source, destination, expected, maximum)
+            if destination.name == "B.sqlite":
+                destination.write_bytes(image[3][:-1] + b"z")
+            return record
+        monkeypatch.setattr(b, "_copy_image", corrupting)
+>       with pytest.raises(b.SnapshotRefused, match="SQLITE_IMAGE_SHA256_MISMATCH") as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'SQLITE_IMAGE_SHA256_MISMATCH'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:241: AssertionError
+_ test_partial_write_failure_retains_master_and_partial_arm_without_false_success _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_partial_write_failure_ret0/source.sqlite')
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...N/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_partial_write_failure_ret0/owned/copies/master.sqlite')
+expected = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+maximum = 268435456
+
+    def failing(source, destination, expected, maximum):
+        if destination.name == "B.sqlite":
+            with destination.open("xb") as stream:
+                stream.write(b.SQLITE_HEADER + b"partial")
+            raise OSError("synthetic write interruption")
+>       return original(source, destination, expected, maximum)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:257: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\br_snapshot_v8.py:147: in _copy_image
+    return _verified_image(destination, expected_sha256, maximum)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\br_snapshot_v8.py:95: in _verified_image
+    require(_stat_identity(os.fstat(stream.fileno())) == before, "IMAGE_CHANGED_BEFORE_READ")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, code = 'IMAGE_CHANGED_BEFORE_READ'
+
+    def require(condition, code):
+        if not condition:
+>           raise SnapshotRefused(code)
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:34: SnapshotRefused
+
+The above exception was the direct cause of the following exception:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB0118130>
+
+    def test_partial_write_failure_retains_master_and_partial_arm_without_false_success(image, monkeypatch):
+        original = b._copy_image
+        def failing(source, destination, expected, maximum):
+            if destination.name == "B.sqlite":
+                with destination.open("xb") as stream:
+                    stream.write(b.SQLITE_HEADER + b"partial")
+                raise OSError("synthetic write interruption")
+            return original(source, destination, expected, maximum)
+        monkeypatch.setattr(b, "_copy_image", failing)
+        with pytest.raises(b.SnapshotRefused, match="COPY_IO_OR_VALIDATION_FAILURE:OSError") as error:
+>           run_copy(image)
+
+tests\test_br_snapshot_v8.py:260: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:31: in run_copy
+    return b.copy_closed_snapshot(**arguments)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+source = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/..._2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_partial_write_failure_ret0/source.sqlite')
+expected_sha256 = 'fc0278153f44c8364fd7865efdec4b693a9a4ddf7afa7f3be26a86684c95d273'
+destination = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...A_2_COMPOSITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_partial_write_failure_ret0/owned/copies')
+
+    def copy_closed_snapshot(source, expected_sha256, destination, *, owned_output_root,
+                             source_closed_self_contained, max_bytes=MAX_IMAGE_BYTES):
+        """Retain a master and two independent arm files; return the byte-only receipt.
+    
+    The required source_closed_self_contained=True is a caller assertion, not a
+    conclusion of this function. A failed call leaves all created files in place.
+    The caller must reject every partial/failure output, even if one file hashes.
+    """
+        require(type(expected_sha256) is str and re.fullmatch(r"[0-9a-f]{64}", expected_sha256),
+                "EXPLICIT_LOWERCASE_SHA256_REQUIRED")
+        require(source_closed_self_contained is True, "EXPLICIT_CALLER_CLOSED_SOURCE_ASSERTION_REQUIRED")
+        require(type(max_bytes) is int and 100 <= max_bytes <= MAX_IMAGE_BYTES, "IMAGE_BOUND_REQUIRED")
+        source, output_root, destination = (_unlinked_path(path) for path in (source, owned_output_root, destination))
+        require(output_root.is_dir() and output_root != Path(output_root.anchor), "OWNED_EXISTING_OUTPUT_DIRECTORY_REQUIRED")
+        require(destination != output_root and destination.is_relative_to(output_root)
+                and source != destination and not source.is_relative_to(destination), "NEW_DISTINCT_IN_SCOPE_DESTINATION_REQUIRED")
+        require(not destination.exists(), "DESTINATION_ALREADY_EXISTS")
+        before = _verified_image(source, expected_sha256, max_bytes)
+        receipt = {"schema": SCHEMA, "status": "COPY_IN_PROGRESS_NOT_USABLE", "source": before,
+            "destination": str(destination), "owned_output_root": str(output_root), "max_image_bytes": max_bytes,
+            "caller_assertion": {"source_closed_self_contained": True, "verified_by_utility": False},
+            "copies": {}, "limitations": _limitations(), "partial_files_deleted": False}
+        # Do not create hidden ancestor directories outside the declared new destination.
+        require(destination.parent.is_dir(), "EXISTING_DESTINATION_PARENT_REQUIRED")
+        destination.mkdir(exist_ok=False)
+        receipt_path = destination / "receipt.json"
+        try:
+            all_ids = {(before["stat"]["device"], before["stat"]["file_id"])}
+            for name in COPY_NAMES:
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+                source_for_copy = source if name == "master.sqlite" else destination / "master.sqlite"
+                record = _copy_image(source_for_copy, destination / name, expected_sha256, max_bytes)
+                identity = (record["stat"]["device"], record["stat"]["file_id"])
+                require(identity not in all_ids, "COPY_PHYSICAL_IDENTITY_ALIAS")
+                all_ids.add(identity)
+                receipt["copies"][name] = record
+                require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            # Recheck retained master and both arms after all writes, before success.
+            for name, record in receipt["copies"].items():
+                require(_verified_image(destination / name, expected_sha256, max_bytes) == record,
+                        "RETAINED_COPY_CHANGED:" + name)
+            require(_verified_image(source, expected_sha256, max_bytes) == before, "ORIGINAL_SOURCE_CHANGED")
+            receipt.update(status="BYTE_EQUIVALENT_INDEPENDENT_COPIES", source_unchanged=True,
+                all_four_file_identities_distinct=len(all_ids) == 4,
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            _write_receipt(receipt_path, receipt)
+            return receipt
+        except Exception as error:
+            receipt.update(status="COPY_FAILED_PARTIAL_FILES_RETAINED", source_unchanged=None,
+                all_four_file_identities_distinct=None, failure_type=type(error).__name__, failure=str(error),
+                observed_utc=datetime.now(timezone.utc).isoformat())
+            # Never overwrite a partially written success receipt or any caller file.
+            failure_path = receipt_path if not receipt_path.exists() else destination / "failure_receipt.json"
+            try:
+                _write_receipt(failure_path, receipt)
+                written = str(failure_path)
+            except Exception:
+                written = None  # Disk/permission failure can prevent recording; copies remain.
+            code = error.code if isinstance(error, SnapshotRefused) else "COPY_IO_OR_VALIDATION_FAILURE:" + type(error).__name__
+>           raise SnapshotRefused(code, receipt_path=written) from error
+E           cas_meta2.br_snapshot_v8.SnapshotRefused: IMAGE_CHANGED_BEFORE_READ
+
+cas_meta2\br_snapshot_v8.py:233: SnapshotRefused
+
+During handling of the above exception, another exception occurred:
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB0118130>
+
+    def test_partial_write_failure_retains_master_and_partial_arm_without_false_success(image, monkeypatch):
+        original = b._copy_image
+        def failing(source, destination, expected, maximum):
+            if destination.name == "B.sqlite":
+                with destination.open("xb") as stream:
+                    stream.write(b.SQLITE_HEADER + b"partial")
+                raise OSError("synthetic write interruption")
+            return original(source, destination, expected, maximum)
+        monkeypatch.setattr(b, "_copy_image", failing)
+>       with pytest.raises(b.SnapshotRefused, match="COPY_IO_OR_VALIDATION_FAILURE:OSError") as error:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'COPY_IO_OR_VALIDATION_FAILURE:OSError'
+E         Actual message: 'IMAGE_CHANGED_BEFORE_READ'
+
+tests\test_br_snapshot_v8.py:259: AssertionError
+__ test_receipt_write_failure_retains_every_copy_and_reports_missing_receipt __
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AB0118210>
+
+    def test_receipt_write_failure_retains_every_copy_and_reports_missing_receipt(image, monkeypatch):
+        monkeypatch.setattr(b, "_write_receipt", lambda *a: (_ for _ in ()).throw(OSError("synthetic receipt failure")))
+        with pytest.raises(b.SnapshotRefused) as error:
+            run_copy(image)
+        assert error.value.receipt_path is None
+>       assert all((image[2] / "copies" / name).read_bytes() == image[3] for name in b.COPY_NAMES)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:277: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_br_snapshot_v8.py:277: in <genexpr>
+    assert all((image[2] / "copies" / name).read_bytes() == image[3] for name in b.COPY_NAMES)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:782: in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...SITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_receipt_write_failure_ret0/owned/copies/B.sqlite')
+mode = 'rb', buffering = 0, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_snapshot_001\\checks_001\\pytest_tmp\\test_receipt_write_failure_ret0\\owned\\copies\\B.sqlite'
+
+C:\Python314\Lib\pathlib\__init__.py:776: FileNotFoundError
+______ test_copy_destination_precreated_during_run_is_never_overwritten _______
+
+image = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xeb\xec\xed\xee\xef\xf0\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xfb\xfc\xfd\xfe\xff')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000020AAFE22B60>
+
+    def test_copy_destination_precreated_during_run_is_never_overwritten(image, monkeypatch):
+        original = b._copy_image
+        def racing(source, destination, expected, maximum):
+            if destination.name == "B.sqlite":
+                destination.write_bytes(b"concurrent existing file")
+            return original(source, destination, expected, maximum)
+        monkeypatch.setattr(b, "_copy_image", racing)
+        with pytest.raises(b.SnapshotRefused):
+            run_copy(image)
+>       assert (image[2] / "copies/B.sqlite").read_bytes() == b"concurrent existing file"
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_br_snapshot_v8.py:289: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python314\Lib\pathlib\__init__.py:782: in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...SITION/records/child_call_v8_snapshot_001/checks_001/pytest_tmp/test_copy_destination_precreat0/owned/copies/B.sqlite')
+mode = 'rb', buffering = 0, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_snapshot_001\\checks_001\\pytest_tmp\\test_copy_destination_precreat0\\owned\\copies\\B.sqlite'
+
+C:\Python314\Lib\pathlib\__init__.py:776: FileNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/test_br_snapshot_v8.py::test_master_and_b_r_copies_match_bytes_but_have_distinct_physical_files
+FAILED tests/test_br_snapshot_v8.py::test_changing_one_arm_does_not_change_master_other_arm_or_source
+FAILED tests/test_br_snapshot_v8.py::test_sqlite_header_and_equal_hash_never_become_native_validity_or_runtime_closure
+FAILED tests/test_br_snapshot_v8.py::test_source_without_sqlite_header_is_refused_even_with_correct_hash
+FAILED tests/test_br_snapshot_v8.py::test_source_metadata_change_without_byte_change_is_rejected
+FAILED tests/test_br_snapshot_v8.py::test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed[-wal]
+FAILED tests/test_br_snapshot_v8.py::test_sidecar_appearing_during_copy_blocks_success_and_is_not_removed[-shm]
+FAILED tests/test_br_snapshot_v8.py::test_copy_corruption_after_initial_verification_is_caught_by_final_pass
+FAILED tests/test_br_snapshot_v8.py::test_partial_write_failure_retains_master_and_partial_arm_without_false_success
+FAILED tests/test_br_snapshot_v8.py::test_receipt_write_failure_retains_every_copy_and_reports_missing_receipt
+FAILED tests/test_br_snapshot_v8.py::test_copy_destination_precreated_during_run_is_never_overwritten
+11 failed, 55 passed in 3.03s

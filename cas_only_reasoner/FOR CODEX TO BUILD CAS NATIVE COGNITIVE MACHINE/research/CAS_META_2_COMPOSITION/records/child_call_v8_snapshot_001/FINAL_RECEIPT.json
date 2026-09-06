@@ -1,0 +1,165 @@
+{
+  "schema": "cas-meta2-br-snapshot-preparation-final/8",
+  "status": "PURE_COPY_PREPARATION_VERIFIED_NATIVE_CONSTRUCTION_NOT_EXECUTED",
+  "created_utc": "2026-09-06 13:56:51 UTC",
+  "source_commit": "ae852d8171d51622a8d34c06ca15cd14b2fd6e01",
+  "root_absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "test_runs": [
+    {
+      "path": "records/child_call_v8_snapshot_001/checks_001/receipt.json",
+      "tests_failed": 11,
+      "tests_passed": 55,
+      "exit_code": 1,
+      "summary": "11 failed, 55 passed in 3.03s",
+      "retained": true,
+      "interpretation": "New helper rejected synthetic copies before several intended test assertions; exact tracebacks retained."
+    },
+    {
+      "path": "records/child_call_v8_snapshot_001/checks_002/receipt.json",
+      "tests_failed": 0,
+      "tests_passed": 68,
+      "exit_code": 0,
+      "summary": "68 passed in 3.26s",
+      "counts_by_file": {
+        "test_br_snapshot_v8.py": 41,
+        "test_child_scaffold_v8.py": 25,
+        "test_br_snapshot_capture_v8.py": 2
+      },
+      "reported_skips": 0,
+      "source_unchanged": true,
+      "budget_unchanged": true,
+      "prefix_request_unchanged": true
+    }
+  ],
+  "scope": {
+    "byte_copy_utility": true,
+    "synthetic_fixture": "SQLite header plus filler bytes; no SQLite database connection or native database",
+    "independent_copy_names": [
+      "master.sqlite",
+      "B.sqlite",
+      "R.sqlite"
+    ],
+    "native_validity_proven": false,
+    "runtime_closure_proven": false,
+    "quiescence_proven": false,
+    "caller_stack_restoration_implemented": false,
+    "native_adapter_implemented": false,
+    "native_execution": false,
+    "neural_execution": false,
+    "provider_calls": false,
+    "new_reservation": false,
+    "paid_execution": false,
+    "training": false,
+    "new_model_scores": false,
+    "br_numerical_contrast_proven": false,
+    "task_conditioned_br_curriculum_built": false
+  },
+  "corrections": {
+    "cross_view_timestamp": "Observed Path.stat and os.fstat ctime difference for one unchanged synthetic file; common identity fields checked across views, complete metadata checked before/after within each view.",
+    "postcheck_failure_receipt": "A source/budget/request postcheck exception now writes a failed receipt while retaining child output."
+  },
+  "state_witness_findings": [
+    "Native database contains model/tensor artifact payloads and metadata but not an outer executor stack or remaining allowance.",
+    "META-0 Executor has a separately pinned JSON checkpoint and public restore.",
+    "This META-2 CompositionExecutor has no checkpoint/restore API; a copied native database cannot resume a paused composition parent.",
+    "Future native-only construction must finish the prelude and close all database connections, then restore copies through open_native under equal external controls.",
+    "Both B/R inputs must fit C's unchanged recurrent-state shape; bound artifact digest is distinct from raw payload hash."
+  ],
+  "unchanged_prefix_diagnostic": {
+    "job": "cas-meta2-20260906133828-cff56f29",
+    "parent_source_commit": "39d0ed9b65683504d9335963bf57c7ac6ef1d78f",
+    "worker_source_commit": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+    "launch_request_sha256": "745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf",
+    "explicit_owner_launch_approval_received": false,
+    "br_work_added_to_prefix_job": false
+  },
+  "budget_observation": {
+    "revision": 11,
+    "cap_usd": "400.00",
+    "reserved_usd": "78.00",
+    "unreserved_usd": "322.00",
+    "ledger_sha256": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+    "historical_same_byte_copy": "records/budget/campaign_ledger.json.history/00000011.json"
+  },
+  "source_files": [
+    "cas_meta2/br_snapshot_v8.py",
+    "tests/test_br_snapshot_v8.py",
+    "tests/test_br_snapshot_capture_v8.py",
+    "tools/check_br_snapshot_v8.py",
+    "records/child_call_v8_snapshot_001/BEFORE_STATE_REQUIREMENTS.md",
+    "records/child_call_v8_snapshot_001/README.md"
+  ],
+  "artifacts": [
+    {
+      "sha256": "fe11da6ae0399d58f22093c3a13e2b5faec481d75de260af818a7b98cd0ee5d0",
+      "bytes": 12778,
+      "path": "cas_meta2/br_snapshot_v8.py"
+    },
+    {
+      "sha256": "7ecd15783de57b3ba2778e17275ef8db074f207a5487842f0109a6549409b133",
+      "bytes": 15056,
+      "path": "tests/test_br_snapshot_v8.py"
+    },
+    {
+      "sha256": "be627866d9d38fd956f41b0cc2289c8c368d726abafd6fc4864f068aaf5f4d46",
+      "bytes": 2618,
+      "path": "tests/test_br_snapshot_capture_v8.py"
+    },
+    {
+      "sha256": "4801d72d5492b6e85bf810b16e86d4a3938286ae5cd0e63fad43efb6d5b1b2f7",
+      "bytes": 5401,
+      "path": "tools/check_br_snapshot_v8.py"
+    },
+    {
+      "sha256": "4ae86577bcd43538c0f67dd0cab75e7dbba76e075cc70947ce79ccc6bc9a1ec9",
+      "bytes": 6706,
+      "path": "records/child_call_v8_snapshot_001/BEFORE_STATE_REQUIREMENTS.md"
+    },
+    {
+      "sha256": "14c397488ea06806b3d4bc9f038ea72d4b01413ee797887d534513d8eb868d0b",
+      "bytes": 4735,
+      "path": "records/child_call_v8_snapshot_001/README.md"
+    },
+    {
+      "sha256": "b416c185fd0abc825cd36de9b74488c3835a1e2deecc13679788923956ac2b1e",
+      "bytes": 2204,
+      "path": "records/child_call_v8_snapshot_001/windows_stat_probe_001.json"
+    },
+    {
+      "sha256": "9061af5d989d8f9f9297913b766ef929035be96c9c4ed13256390767623935a7",
+      "bytes": 191053,
+      "path": "records/child_call_v8_snapshot_001/checks_001/receipt.json"
+    },
+    {
+      "sha256": "747a357271b30c84270baeec58278c5361a41447c5ac77d45dc0e3e2022fe8c5",
+      "bytes": 84251,
+      "path": "records/child_call_v8_snapshot_001/checks_001/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_snapshot_001/checks_001/stderr.txt"
+    },
+    {
+      "sha256": "e71d77d417d0d8fe45ec6d30a41c62d34fb25b8b1ce44bd98e88c1678eacb74b",
+      "bytes": 191052,
+      "path": "records/child_call_v8_snapshot_001/checks_002/receipt.json"
+    },
+    {
+      "sha256": "fcedcbb2dd0f18c61e52104631abceb38b3472e833e4f73752e004b5691efd7e",
+      "bytes": 101,
+      "path": "records/child_call_v8_snapshot_001/checks_002/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_snapshot_001/checks_002/stderr.txt"
+    }
+  ],
+  "remaining_work": [
+    "Explicit approval before the existing $4 prefix launch",
+    "Separately scoped AWS restoration adapter and B/R construction execution",
+    "Meaningful legitimate input contrast under unchanged runtime",
+    "Public task-dependent correct-input variation before later training"
+  ]
+}

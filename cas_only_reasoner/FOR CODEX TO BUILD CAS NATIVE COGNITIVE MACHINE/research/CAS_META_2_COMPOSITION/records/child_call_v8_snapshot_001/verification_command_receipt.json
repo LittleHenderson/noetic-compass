@@ -1,0 +1,12 @@
+{
+  "schema": "cas-meta2-br-preparation-verification-command/8",
+  "cmd": "$record=Get-Content -Raw -LiteralPath 'records/child_call_v8_snapshot_001/FINAL_RECEIPT.json' | ConvertFrom-Json; foreach ($item in $record.artifacts) { if ((Get-Item -LiteralPath $item.path).Length -ne $item.bytes -or (Get-FileHash -Algorithm SHA256 -LiteralPath $item.path).Hash.ToLower() -ne $item.sha256) { throw ('Artifact mismatch: '+$item.path) } }; $prefix=git rev-parse --show-prefix; foreach ($p in $record.source_files) { if ((git hash-object --no-filters -- $p) -ne (git rev-parse ($record.source_commit+':'+$prefix+$p))) { throw ('Source commit mismatch: '+$p) } }; $check=Get-Content -Raw -LiteralPath 'records/child_call_v8_snapshot_001/checks_002/receipt.json' | ConvertFrom-Json; foreach ($p in $record.source_files) { if ($p.EndsWith('.py')) { $key='research/CAS_META_2_COMPOSITION/'+$p; $expected=(Get-FileHash -Algorithm SHA256 -LiteralPath $p).Hash.ToLower(); if ($check.source_before.$key -ne $expected -or $check.source_after.$key -ne $expected) { throw ('Tested source mismatch: '+$p) } } }; 'BR_PREPARATION_SOURCE_AND_EVIDENCE_IDENTITIES_VERIFIED'; & './records/child_call_v8_launch_connection_001/verify_receipt.ps1'; if ($LASTEXITCODE -ne 0) { throw 'Prefix preparation evidence changed' }",
+  "workdir": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "result": {
+    "chunk_id": "4bf8ac",
+    "wall_time_seconds": 2.9569900000000002,
+    "exit_code": 0,
+    "original_token_count": 162,
+    "output": "BR_PREPARATION_SOURCE_AND_EVIDENCE_IDENTITIES_VERIFIED\r\n{\r\n  \"files_checked\": 91,\r\n  \"parent_source_sha\": \"39d0ed9b65683504d9335963bf57c7ac6ef1d78f\",\r\n  \"provider_calls\": false,\r\n  \"paid_launch\": false,\r\n  \"boundary\": \"Hashes and existing receipts only. Does not rerun tests or execute the model.\",\r\n  \"observed_utc\": \"2026-09-06T13:56:55.2050198Z\",\r\n  \"status\": \"PREPARATION_EVIDENCE_IDENTITIES_VERIFIED\",\r\n  \"source_files_checked_against_commit\": 15,\r\n  \"final_receipt_sha256\": \"cf8a1e5c44b871a86efd4cd9538390237ee1fca853142d93d62acec82d06ef2b\",\r\n  \"launch_request_sha256\": \"745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf\"\r\n}\r\n"
+  }
+}
