@@ -1,0 +1,52 @@
+Completed 117.7 KiB/117.7 KiB (2.7 MiB/s) with 1 file(s) remainingdownload: s3://cas-meta2-20260906133828-cff56f29-807562639912/input/remote.py to opt/cas-meta2-prefix/remote.py
+/opt/cas-meta2-prefix/remote.py: OK
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T14:05:33+00:00",
+    "ContentLength": 41156,
+    "ETag": "\"e4288cf4ac9bdd42079c4eaa59df3271\"",
+    "ChecksumCRC32": "xrtfuA==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T14:05:18+00:00",
+    "ContentLength": 7952045,
+    "ETag": "\"d8c4d97921fea2412306e74bb15c817a\"",
+    "ChecksumCRC32": "ju4cTw==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+{
+    "AcceptRanges": "bytes",
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "LastModified": "2026-09-06T14:05:19+00:00",
+    "ContentLength": 6570836,
+    "ETag": "\"60b4379af95d6f8463404ac2f2594e63\"",
+    "ChecksumCRC32": "0Xp0Vg==",
+    "ChecksumType": "FULL_OBJECT",
+    "ContentType": "binary/octet-stream",
+    "ServerSideEncryption": "AES256",
+    "Metadata": {}
+}
+{
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "ETag": "\"975079023589f34cafb62019fe93e655\"",
+    "ChecksumCRC64NVME": "AECAqMlrOjA=",
+    "ChecksumType": "FULL_OBJECT",
+    "ServerSideEncryption": "AES256"
+}
+{
+    "Expiration": "expiry-date=\"Mon, 14 Sep 2026 00:00:00 GMT\", rule-id=\"job-seven-days\"",
+    "ETag": "\"5daccec44931cafe29617cd20e34a779\"",
+    "ChecksumCRC64NVME": "bzdHAnl5D/U=",
+    "ChecksumType": "FULL_OBJECT",
+    "ServerSideEncryption": "AES256"
+}

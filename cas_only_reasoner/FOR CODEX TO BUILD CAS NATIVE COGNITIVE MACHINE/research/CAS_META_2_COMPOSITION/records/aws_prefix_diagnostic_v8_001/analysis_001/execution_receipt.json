@@ -1,0 +1,62 @@
+{
+  "schema": "cas-meta2-prefix-offline-analysis-execution/8",
+  "evidence_kind": "Retrospective record of observed tool command outputs; not an automatically captured subprocess transcript.",
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "analyzer_sha256": "b3e771f5ee0b1f101d1c54160573fa17feb47ad69dd4a9a352edda13db280202",
+  "actual_archive_run": {
+    "command": [
+      "python",
+      "-B",
+      "records/aws_prefix_diagnostic_v8_001/analyze_results.py",
+      "--archive",
+      "records/aws_prefix_diagnostic_v8_001/execution_001/cloud_artifacts.zip",
+      "--archive-sha256",
+      "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09",
+      "--output",
+      "records/aws_prefix_diagnostic_v8_001/analysis_001"
+    ],
+    "exit_code": 0,
+    "tool_wall_seconds": 1.746655,
+    "structured_stdout": {
+      "status": "COMPLETE_DIAGNOSTIC_JSON_ANALYZED",
+      "task_rows_analyzed": 480,
+      "diagnostic_hashes_all_verified": true,
+      "archive_sha256": "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09",
+      "output": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_prefix_diagnostic_v8_001/analysis_001"
+    },
+    "input_pin_compared_to": "execution_001/launch_receipt.json result.sha256 before analysis",
+    "output_sha256": {
+      "analysis.json": "644e95e3abaef8b4192fd421f00080706ad1f7b3d9a55e35b7f46e591d6cc571",
+      "report.md": "560eb1b52b8b792affe5358dc07dbf05f1512082305b800d9b0a1c2250c9750d"
+    },
+    "archive_sha256_after": "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09"
+  },
+  "synthetic_checks": {
+    "command": [
+      "python",
+      "-B",
+      "-"
+    ],
+    "shell_transport": "PowerShell literal here-string piped to Python standard input",
+    "stdin_source": "import importlib.util, io, stat\nfrom pathlib import Path\nfrom types import SimpleNamespace\nfrom unittest.mock import patch\nfrom zipfile import ZipFile, ZipInfo\npath=Path('records/aws_prefix_diagnostic_v8_001/analyze_results.py')\nspec=importlib.util.spec_from_file_location('prefix_analysis_check',path)\na=importlib.util.module_from_spec(spec); spec.loader.exec_module(a)\nchecks=0\ndef zipped(entries):\n    out=io.BytesIO()\n    with ZipFile(out,'w') as z:\n        for name,value in entries: z.writestr(name,value)\n    return out.getvalue()\ndef packet(raw):\n    info=SimpleNamespace(st_mode=stat.S_IFREG,st_size=len(raw),st_dev=1,st_ino=2,st_mtime_ns=3)\n    return SimpleNamespace(stat=lambda:info,open=lambda mode:io.BytesIO(raw))\nfor entries,reason in [([('../escape',b'x')],'UNSAFE_ZIP_PATH'),([('A',b'x'),('a',b'y')],'ZIP_DUPLICATE_OR_MEMBER_BOUND')]:\n    with patch.object(a,'no_links',return_value=packet(zipped(entries))):\n        try: a.read_packet('memory')\n        except ValueError as exc: assert reason in str(exc)\n        else: raise AssertionError(reason)\n    checks+=1\nlink=ZipInfo('link'); link.create_system=3; link.external_attr=(stat.S_IFLNK|0o777)<<16\nwith patch.object(a,'no_links',return_value=packet(zipped([(link,b'target')]))):\n    try: a.read_packet('memory')\n    except ValueError as exc: assert 'ZIP_LINK_DIRECTORY_ENCRYPTION_OR_FILE_BOUND' in str(exc)\n    else: raise AssertionError('link accepted')\nchecks+=1\nreceipt={'schema':'cas-meta2-assisted-prefix-diagnostic/8','source_sha':a.WORKER_SHA,'bundle_manifest_sha256':a.BUNDLE_SHA,'neural_training':False,'native_execution':False,'completed':False,'files_sha256':{'cas_initial_train_probe_000.json':'0'*64}}\nmembers={'diagnostic/diagnostic_receipt.json':a.canonical(receipt),'diagnostic/cas_initial_train_probe_000.json':b'NOT VALID JSON'}\nwith patch.object(a,'read_packet',return_value=(members,{})):\n    try: a.analyze('memory')\n    except ValueError as exc: assert 'DIAGNOSTIC_ROW_HASH_MISMATCH' in str(exc),str(exc)\n    else: raise AssertionError('invalid row parsed before hash')\nchecks+=1\nwith patch.object(a,'read_packet',return_value=({'diagnostic/diagnostic_receipt.json':a.canonical(receipt)},{})):\n    result=a.analyze('memory')\n    assert result['status']=='INCOMPLETE_PACKET_DIAGNOSTIC_INDEX_NOT_FULLY_VERIFIABLE' and result['task_rows_analyzed']==0\nchecks+=1\nwith patch.object(a,'read_packet',return_value=({},{})):\n    result=a.analyze('memory'); assert result['status']=='NO_DIAGNOSTIC_RECEIPT' and result['task_rows_analyzed']==0\nchecks+=1\nprint(str(checks)+' in-memory archive/index/failure checks passed; no files written')\n",
+    "exit_code": 0,
+    "tool_wall_seconds": 0.9131805,
+    "stdout": "6 in-memory archive/index/failure checks passed; no files written\n",
+    "checks": [
+      "ZIP parent-path traversal refused",
+      "ZIP case-fold duplicate refused",
+      "ZIP symbolic-link entry refused",
+      "Wrong indexed row hash refused before malformed row JSON is parsed",
+      "Missing indexed row yields zero analyzed rows and incomplete status",
+      "Absent diagnostic receipt yields zero analyzed rows"
+    ]
+  },
+  "boundary": {
+    "tensor_loading": false,
+    "neural_imports": false,
+    "native_execution": false,
+    "AWS_calls": false,
+    "archive_modified": false,
+    "analysis_001_results_modified": false
+  }
+}

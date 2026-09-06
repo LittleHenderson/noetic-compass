@@ -1,0 +1,59 @@
+{
+  "boundary": "Lexical reference differences and selected-role reference-choice mismatches are not native execution failure proof, autonomous task correctness, semantic equivalence, or a new learning result. Procedure names remain exact; only the frozen matcher handles proven producer-address variable renaming.",
+  "bundle_manifest_sha256": "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629",
+  "cloud_archive_bytes": 5522881,
+  "cloud_archive_sha256": "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09",
+  "cohort_sha256": {
+    "train_probe": "a4bd1e0214d75684c23cee8a253794ed0875eeb41cccf75e85b091799e86c7d2",
+    "validation": "b1935fd487ec8f0039e0472649040b2b66fe64dfd7a88a0921c580ad6637791d"
+  },
+  "command": "'C:\\Python314\\python.exe' -B 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prefix_diagnostic_v8_001\\analyze_first_errors.py' --output 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prefix_diagnostic_v8_001\\first_errors_001'",
+  "files": {
+    "grouped_counts.json": {
+      "bytes": 76392,
+      "sha256": "aa03f1a2d4ae7cb6fdc71dda54219bbcdfdd440f07bee985ca4c3ce9f425adea"
+    },
+    "launch_receipt_observed.json": {
+      "bytes": 133007,
+      "sha256": "6d45a371b95b8808eb2961ac73aa3f87430a836aeab2647e72b56ddac65a10c4"
+    },
+    "trajectories.json": {
+      "bytes": 1941395,
+      "sha256": "ecacc02cd0d3153fd81de7cdf44e0f5daa3c4f6e95f2a97e1dca4b2cdda7e997"
+    }
+  },
+  "finished_utc": "2026-09-06T14:19:42.523796+00:00",
+  "forbidden_imports_absent": true,
+  "job": "cas-meta2-20260906133828-cff56f29",
+  "launch_receipt_observed_sha256": "6d45a371b95b8808eb2961ac73aa3f87430a836aeab2647e72b56ddac65a10c4",
+  "neural_tensor_native_provider_execution": false,
+  "pure_source_sha256_after": {
+    "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/diagnostic_v8/__init__.py": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8",
+    "cas_meta2/diagnostic_v8/sites.py": "fad7260f737913e3f217b855c1ab1f098f9f4311982f05d0ee74261c7b4984d0",
+    "cas_meta2/grammar_v3.py": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b",
+    "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+  },
+  "pure_source_sha256_before": {
+    "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/diagnostic_v8/__init__.py": "16aec4fde1e0ea60bc02211b82990a29b2af6913f73fb4343d4672a41884dbf8",
+    "cas_meta2/diagnostic_v8/sites.py": "fad7260f737913e3f217b855c1ab1f098f9f4311982f05d0ee74261c7b4984d0",
+    "cas_meta2/grammar_v3.py": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b",
+    "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637"
+  },
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "reference_selected_site_opportunities": 9088,
+  "schema": "cas-meta2-prefix-first-errors-receipt/1",
+  "script": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\aws_prefix_diagnostic_v8_001\\analyze_first_errors.py",
+  "script_sha256_after": "f744822baa56cba9b6cfec33562b0943a51b1d1635f6d37492a7d838e96a0e24",
+  "script_sha256_before": "f744822baa56cba9b6cfec33562b0943a51b1d1635f6d37492a7d838e96a0e24",
+  "source_archive_sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1",
+  "source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+  "started_utc": "2026-09-06T14:19:36.727490+00:00",
+  "status": "PURE_JSON_REPLAY_COMPLETE",
+  "verified_and_replayed_row_hashes": 480,
+  "verified_collection_files": 510,
+  "working_directory": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION"
+}

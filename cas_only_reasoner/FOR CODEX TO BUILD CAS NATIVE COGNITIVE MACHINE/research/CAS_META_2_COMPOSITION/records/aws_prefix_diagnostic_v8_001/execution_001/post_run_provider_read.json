@@ -1,0 +1,47 @@
+{
+  "checked_utc": "2026-09-06T14:19:32.909548+00:00",
+  "instance_id": "i-0c6b7ad96bd295e99",
+  "instance_response_metadata": {
+    "HTTPHeaders": {
+      "cache-control": "no-cache, no-store",
+      "content-length": "2819",
+      "content-type": "text/xml;charset=UTF-8",
+      "date": "Sun, 06 Sep 2026 14:19:32 GMT",
+      "server": "AmazonEC2",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "vary": "accept-encoding",
+      "x-amzn-requestid": "e862e6ec-3303-4621-952f-8f276b827951"
+    },
+    "HTTPStatusCode": 200,
+    "RequestId": "e862e6ec-3303-4621-952f-8f276b827951",
+    "RetryAttempts": 0
+  },
+  "instance_state": {
+    "Code": 48,
+    "Name": "terminated"
+  },
+  "job": "cas-meta2-20260906133828-cff56f29",
+  "launch_time": "2026-09-06T14:05:31+00:00",
+  "mutating_provider_calls": false,
+  "remaining_volumes": [],
+  "schema": "cas-meta2-prefix-post-run-provider-read/8",
+  "state_reason": {
+    "Code": "Client.UserInitiatedShutdown",
+    "Message": "Client.UserInitiatedShutdown: User initiated shutdown"
+  },
+  "state_transition_reason": "User initiated (2026-09-06 14:09:24 GMT)",
+  "volume_response_metadata": {
+    "HTTPHeaders": {
+      "cache-control": "no-cache, no-store",
+      "content-length": "210",
+      "content-type": "text/xml;charset=UTF-8",
+      "date": "Sun, 06 Sep 2026 14:19:32 GMT",
+      "server": "AmazonEC2",
+      "strict-transport-security": "max-age=31536000; includeSubDomains",
+      "x-amzn-requestid": "b405d932-2b4c-4679-878f-1a5c7e1bf034"
+    },
+    "HTTPStatusCode": 200,
+    "RequestId": "b405d932-2b4c-4679-878f-1a5c7e1bf034",
+    "RetryAttempts": 0
+  }
+}

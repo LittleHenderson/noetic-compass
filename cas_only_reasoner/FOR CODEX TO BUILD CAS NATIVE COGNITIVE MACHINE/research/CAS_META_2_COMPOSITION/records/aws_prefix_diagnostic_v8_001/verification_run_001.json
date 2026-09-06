@@ -1,0 +1,13 @@
+{
+  "schema": "cas-meta2-saved-evidence-verification-run/1",
+  "evidence_kind": "Recorded actual command-tool result",
+  "command": "& 'records/aws_prefix_diagnostic_v8_001/verify_final_receipt.ps1'\ngit diff --check -- 'records/budget/campaign_ledger.json'\ngit diff --stat",
+  "cwd": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "tool_result": {
+    "chunk_id": "4bc2b0",
+    "wall_time_seconds": 0.5572331,
+    "exit_code": 0,
+    "original_token_count": 136,
+    "output": "{\r\n  \"status\": \"SAVED_DIAGNOSTIC_EVIDENCE_VERIFIED\",\r\n  \"checked_files\": 26,\r\n  \"final_receipt_sha256\": \"0668ff2bdcd7d0495c6695db96f19f9ae9278ffc2b7eaaf7b6ec26ed24194fb3\",\r\n  \"job\": \"cas-meta2-20260906133828-cff56f29\",\r\n  \"provider_calls\": false,\r\n  \"neural_execution\": false,\r\n  \"native_execution\": false,\r\n  \"boundary\": \"Saved-byte and recorded-result verification; not a new GPU run or current AWS query.\"\r\n}\r\n .../records/budget/campaign_ledger.json            | 59 ++++++++++++++++++++--\n 1 file changed, 54 insertions(+), 5 deletions(-)\n"
+  }
+}

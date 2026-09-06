@@ -1,0 +1,241 @@
+{
+  "schema": "cas-meta2-prefix-final-validation/8",
+  "status": "AWS_DIAGNOSTIC_FINISHED",
+  "job": "cas-meta2-20260906133828-cff56f29",
+  "parent_source_sha": "39d0ed9b65683504d9335963bf57c7ac6ef1d78f",
+  "worker_source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+  "approval_sha256": "c248c19147281c60ff539a0b42d2e393a3d91dd130bd3f0baa1ed6f3da4c8fcd",
+  "request_sha256": "745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf",
+  "source_archive_sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1",
+  "development_archive_sha256": "1874508d0baad7d6620001505c39f184b3cb091c59de4e96197f309beee0a042",
+  "bundle_manifest_sha256": "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629",
+  "cloud_archive_sha256": "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09",
+  "diagnostic_receipt_sha256": "c668d2fdeef74b512079d0f8df8974e8eddd2f2f230256bddf7e209c30f15455",
+  "result": {
+    "distinct_tasks": 120,
+    "training_probe_tasks": 24,
+    "validation_tasks": 96,
+    "checkpoints": 4,
+    "task_rows_completed": 480,
+    "task_rows_scheduled": 480,
+    "saved_development_action_matches": 480,
+    "reference_opportunities": 9088,
+    "reference_opportunities_each_checkpoint": 2272,
+    "forced_opportunities_each_checkpoint": 360,
+    "nonforced_opportunities_each_checkpoint": 1912,
+    "internal_diagnostic_wall_seconds": 44.708691794,
+    "worker_process_wall_seconds": 45.659185333,
+    "scored_self_generated_sites_after_earlier_prefix_difference": 0
+  },
+  "checks": {
+    "parent_exit_code": 0,
+    "remote_exit_code": 0,
+    "lifecycle_child_exit_codes": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "row_hashes_verified": 480,
+    "collected_files_verified": 510,
+    "source_files_verified": 615,
+    "bundle_files_verified": 15,
+    "summary_groups_recomputed": 144,
+    "trajectory_site_comparisons_replayed": 480,
+    "offline_synthetic_archive_and_index_checks": 6,
+    "frozen_worker_enforced_unchanged_model_and_checkpoint": true,
+    "local_tensor_loading": false
+  },
+  "environment": {
+    "instance_id": "i-0c6b7ad96bd295e99",
+    "instance_type": "g7.2xlarge",
+    "region": "us-west-2",
+    "gpu": "NVIDIA RTX PRO 4500 Blackwell Server Edition",
+    "gpu_count": 1,
+    "python": "3.12.3",
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8"
+  },
+  "budget": {
+    "approved_job_reservation_usd": "4.00",
+    "campaign_cap_usd": "400.00",
+    "ledger_revision": 12,
+    "ledger_sha256": "fe9ccbc2723932105a6588ff420ff5e8647b9b71ef268950db1a9bf235f30c5a",
+    "total_reserved_usd": "82.00",
+    "unreserved_usd": "318.00",
+    "automatic_refund": false,
+    "checked_compute_rate_usd_per_hour": "2.5200000000",
+    "observed_launch_request_to_confirmed_termination_seconds": 535.071185,
+    "rounded_seconds_used_for_compute_estimate": 536,
+    "time_based_compute_estimate_upper_usd": "0.3752000000",
+    "ancillary_charges": "Additional; reservation retained. Original plan reserved $1.00 ancillary within $4.00.",
+    "not_an_aws_invoice": true
+  },
+  "cleanup": {
+    "termination_confirmed": true,
+    "confirmed_utc": "2026-09-06T14:14:25.271138+00:00",
+    "post_run_provider_read_utc": "2026-09-06T14:19:32.909548+00:00",
+    "remaining_tagged_disks": 0,
+    "errors": [],
+    "removed": [
+      "dedicated instance",
+      "temporary disk",
+      "job schedule",
+      "job instance profile",
+      "worker role",
+      "timer role",
+      "security group",
+      "uploaded input objects"
+    ],
+    "retained_local_evidence": true,
+    "aws_result_objects_retained": 3,
+    "aws_lifecycle_rule_days": 7,
+    "recorded_result_expiry": "2026-09-14T00:00:00Z"
+  },
+  "boundaries": {
+    "new_training": false,
+    "native_execution": false,
+    "new_heldout_evaluation": false,
+    "br_snapshot_execution": false,
+    "post_error_recovery_measured": false,
+    "cas_specific_advantage_established": false,
+    "earlier_heldout_cas_result": "0/72 unchanged",
+    "accepted_model_and_executor_changed": false,
+    "no_automatic_merge_or_push": true
+  },
+  "files": [
+    {
+      "path": "analysis_001/analysis.json",
+      "bytes": 1071866,
+      "sha256": "644e95e3abaef8b4192fd421f00080706ad1f7b3d9a55e35b7f46e591d6cc571"
+    },
+    {
+      "path": "analysis_001/execution_receipt.json",
+      "bytes": 5514,
+      "sha256": "cb5c8ce222cfbeffe7e7eeb2653a36adae41bdc61109fa564f08ed02520df239"
+    },
+    {
+      "path": "analysis_001/report.md",
+      "bytes": 19958,
+      "sha256": "560eb1b52b8b792affe5358dc07dbf05f1512082305b800d9b0a1c2250c9750d"
+    },
+    {
+      "path": "analyze_first_errors.py",
+      "bytes": 16614,
+      "sha256": "f744822baa56cba9b6cfec33562b0943a51b1d1635f6d37492a7d838e96a0e24"
+    },
+    {
+      "path": "analyze_results.py",
+      "bytes": 22480,
+      "sha256": "b3e771f5ee0b1f101d1c54160573fa17feb47ad69dd4a9a352edda13db280202"
+    },
+    {
+      "path": "authorization_001/approval_clause_verbatim.txt",
+      "bytes": 26,
+      "sha256": "53e00e0e55783f3a31dcbf5a14a9e1d7bb684003692bcb05cb98541395f35b64"
+    },
+    {
+      "path": "authorization_001/execute_command.ps1",
+      "bytes": 1129,
+      "sha256": "668440e47029a31fd200e94cd7832ef8e55c82f1528777de0fdebd5e89af6f16"
+    },
+    {
+      "path": "authorization_001/owner_approval.json",
+      "bytes": 2021,
+      "sha256": "c248c19147281c60ff539a0b42d2e393a3d91dd130bd3f0baa1ed6f3da4c8fcd"
+    },
+    {
+      "path": "authorization_001/parent_process_completion.json",
+      "bytes": 532,
+      "sha256": "97792be49c53df963179f333089bff41d84eaae0b5d36473023fb0327dc4a078"
+    },
+    {
+      "path": "authorization_001/user_message_full.txt",
+      "bytes": 196,
+      "sha256": "d0b640ec3059ea73d677b632a4bc2f3188bbcd87b231e4362914e219459fc5bb"
+    },
+    {
+      "path": "execution_001/bootstrap.log",
+      "bytes": 2019,
+      "sha256": "48fa402322d48d72bac6312d003990279d8091c5eb801829ae8bbb7aa8e78b56"
+    },
+    {
+      "path": "execution_001/cloud_artifacts.zip",
+      "bytes": 5522881,
+      "sha256": "c3bd5c9d4676f0d498894fb3f78115e85b1fa9ff3b8b64ad4a6c760675d13a09"
+    },
+    {
+      "path": "execution_001/launch_receipt.json",
+      "bytes": 133007,
+      "sha256": "6d45a371b95b8808eb2961ac73aa3f87430a836aeab2647e72b56ddac65a10c4"
+    },
+    {
+      "path": "execution_001/launch_request.json",
+      "bytes": 9842,
+      "sha256": "745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf"
+    },
+    {
+      "path": "execution_001/ledger_snapshot.json",
+      "bytes": 34436,
+      "sha256": "fe9ccbc2723932105a6588ff420ff5e8647b9b71ef268950db1a9bf235f30c5a"
+    },
+    {
+      "path": "execution_001/post_run_provider_read.json",
+      "bytes": 1647,
+      "sha256": "2ea841d250d8bbb86ad3f9f7d9929fb414bae7a8dc9563133c55c79e9f03799f"
+    },
+    {
+      "path": "execution_001/preflight_receipt.json",
+      "bytes": 27408,
+      "sha256": "f1084b41e74040ea78ad856d27340d9e1b6bb4229360a879c55d8db662f6bc6a"
+    },
+    {
+      "path": "execution_001/reservation_receipt.json",
+      "bytes": 2209,
+      "sha256": "013ab806652dd2de60654fdbeab2010ae1307f5ef9d0f9dd0542b496a17668f6"
+    },
+    {
+      "path": "execution_001/worker_plan.json",
+      "bytes": 2462,
+      "sha256": "bc9f63e38fb3f701ffff36be13ad8a7a9af8e4bb127c4b3557f8142f3851615a"
+    },
+    {
+      "path": "first_errors_001/grouped_counts.json",
+      "bytes": 76392,
+      "sha256": "aa03f1a2d4ae7cb6fdc71dda54219bbcdfdd440f07bee985ca4c3ce9f425adea"
+    },
+    {
+      "path": "first_errors_001/launch_receipt_observed.json",
+      "bytes": 133007,
+      "sha256": "6d45a371b95b8808eb2961ac73aa3f87430a836aeab2647e72b56ddac65a10c4"
+    },
+    {
+      "path": "first_errors_001/receipt.json",
+      "bytes": 4688,
+      "sha256": "433a4ec526ce3bb71b250285d6dad1ff00f1e122df4e487956980a984aecb947"
+    },
+    {
+      "path": "first_errors_001/trajectories.json",
+      "bytes": 1941395,
+      "sha256": "ecacc02cd0d3153fd81de7cdf44e0f5daa3c4f6e95f2a97e1dca4b2cdda7e997"
+    },
+    {
+      "path": "INDEPENDENT_READ_CHECK.md",
+      "bytes": 1953,
+      "sha256": "04b0e695ae18caee70578b7832f61eeb0a8b323960207feb88fc0b911d63306c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5631,
+      "sha256": "0fbf6174aff03f2cda7c4e0fe2d83b0704a99cf1fb64a450fb2c497c1b08287e"
+    },
+    {
+      "path": "verify_final_receipt.ps1",
+      "bytes": 1986,
+      "sha256": "40dd1a6c80e1ed76242289c198a446757bd34ddc34995151102ecbfd549c15ca"
+    }
+  ]
+}
