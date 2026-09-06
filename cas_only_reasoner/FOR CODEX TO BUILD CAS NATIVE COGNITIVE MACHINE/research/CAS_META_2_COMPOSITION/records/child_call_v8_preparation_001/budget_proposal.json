@@ -1,0 +1,48 @@
+{
+  "status": "PROPOSAL_VALIDATED_NOT_RESERVED",
+  "checked_utc": "2026-09-06T12:22:54.047088+00:00",
+  "canonical_ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "ledger_sha256": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+  "ledger_revision": 11,
+  "owner_task_cap_usd": "400.00",
+  "total_reserved_usd": "78.00",
+  "remaining_unreserved_usd": "322.00",
+  "history_checked": true,
+  "ledger_unchanged": true,
+  "paid_launch": false,
+  "provider_calls": false,
+  "live_price_verified": false,
+  "plans": [
+    {
+      "instance_count": 1,
+      "instance_type": "g7.2xlarge",
+      "account_id": "807562639912",
+      "region": "us-west-2",
+      "automatic_retries": 0,
+      "on_demand_hourly_usd_max": "2.52",
+      "ancillary_reserved_usd": "1.00",
+      "launch_enabled": false,
+      "stage": "saved_prefix_diagnostic",
+      "runtime_seconds_max": 3600,
+      "proposed_reservation_usd": "4.00",
+      "validated_declared_cost_bound_usd": "3.52"
+    },
+    {
+      "instance_count": 1,
+      "instance_type": "g7.2xlarge",
+      "account_id": "807562639912",
+      "region": "us-west-2",
+      "automatic_retries": 0,
+      "on_demand_hourly_usd_max": "2.52",
+      "ancillary_reserved_usd": "1.00",
+      "launch_enabled": false,
+      "stage": "child_call_candidate",
+      "runtime_seconds_max": 7200,
+      "proposed_reservation_usd": "7.00",
+      "validated_declared_cost_bound_usd": "6.04"
+    }
+  ],
+  "combined_proposed_reservation_usd": "11.00",
+  "remaining_if_both_later_reserved_usd": "311.00",
+  "booking_gate": "Actual source commit, archive digest, full resource bounds, current price check and separate launch approval required; this proposal does not create reservations."
+}
