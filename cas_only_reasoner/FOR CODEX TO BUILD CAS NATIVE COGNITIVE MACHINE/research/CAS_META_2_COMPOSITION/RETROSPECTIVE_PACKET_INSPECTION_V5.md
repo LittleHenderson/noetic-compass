@@ -28,8 +28,10 @@ or semantic-audit acceptance. The receipt is under
 
 Receipt consistency is not a stored semantic audit, neural re-execution, new
 training, fresh held-out performance or learning acceptance. The checker keeps
-those claims false. Complete-run checks must still be exercised on a real
-completed comparison and followed by inspection of the actual stored outcomes.
+those claims false. Complete-run checks passed on the corrected comparison
+in `records/aws_ablation_v4_inspection_002`: 4,773 files, no issues, complete
+inventory verified. The subsequent stored outcome audit also passed in
+`records/aws_ablation_v4_stored_audit_002`, without a positive CAS task result.
 
 For the current corrected run, the source identity is
 `9f562c761c7cb84c767673b2fab735cdd031b499`, source archive SHA-256

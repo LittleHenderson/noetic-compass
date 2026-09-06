@@ -35,14 +35,19 @@ Edition, using PyTorch 2.11.0+cu128 and CUDA 12.8.
 
 These are unchanged checkpoints, no new training, and retrospective cases.
 Neither fresh generalization nor CAS-specific advantage is demonstrated.
-Byte/receipt inspection is complete; stored-outcome audit is pending in
-`../aws_ablation_v4_stored_audit_002/`. Do not treat this document as a passed
-stored-outcome audit until that receipt is checked.
+Byte/receipt inspection and stored-outcome audit are complete. The receipt in
+`../aws_ablation_v4_stored_audit_002/` reports
+`STORED_COMPARISON_AUDIT_PASSED`, with no errors. It checked 4,712 stored
+traces in 421 databases, plus 72 reference executions and 360 arm choices
+for each decoder mode. The recounted task scores match the table above.
+This is frozen stored source replay, not independent neural re-execution.
 
 The first local audit attempt lost its tool session during a host interruption
 and left no final audit receipt. The process was confirmed absent and session
 50080 returned `Unknown process id`. The same read-only audit was restarted
-without relaunching AWS or changing the evidence. Its result remains pending.
+without relaunching AWS or changing the evidence. The replacement audit
+completed at 2026-09-06T05:26:27.620258+00:00. Its receipt SHA-256 is
+`3dc89119685d6c83ee33bc65019f8ea98ad58f6307613d77d1e95ba8e2502580`.
 
 ## Cleanup and budget
 

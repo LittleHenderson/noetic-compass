@@ -37,8 +37,10 @@ baseline files stayed unchanged. The final receipt is under
 
 The actual first failed experiment was also refused before stored-outcome
 acceptance. See `records/ablation_stored_failed_packet_check_v4_001/receipt.json`.
-The full outcome path still needs to be exercised on a completed comparison
-packet.
+The full outcome path has now passed on the completed corrected comparison:
+`records/aws_ablation_v4_stored_audit_002`. It checked 4,712 stored traces in
+421 databases and, per decoder mode, 72 references and 360 arm choices, with
+no errors. CAS task correctness remained 0/72 in both modes.
 
 The result boundary is explicit: stored outcome consistency may be verified,
 but new training, fresh held-out performance and learning acceptance remain
