@@ -1,0 +1,148 @@
+{
+  "action_token_limit": 256,
+  "checker_sha256": "1257b79e5fd0c6abbfe6d78b7dbae5dbe5e62eec28ab31ede661c5a5e1d2abe8",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "records/prototype_v7_representation_check_001/check.py",
+    "--output",
+    "records/prototype_v7_representation_check_001/run_002"
+  ],
+  "completed": true,
+  "finished_utc": "2026-09-06T12:00:17.912164+00:00",
+  "input_files": {
+    "cloud_job/campaign/dataset/test_private.json": {
+      "bytes": 209643,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_review_001\\extracted_001\\cloud_job\\campaign\\dataset\\test_private.json",
+      "sha256": "80543247faf8e693888f460334c9c35f6175e8a2b1130d2ca9c0b53ed61b6c3b"
+    },
+    "cloud_job/campaign/dataset/train.json": {
+      "bytes": 2477712,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_review_001\\extracted_001\\cloud_job\\campaign\\dataset\\train.json",
+      "sha256": "111dfe5f332983a95ca1fa8ce3bc4df44e445586d7de145abd12598023761605"
+    },
+    "cloud_job/campaign/dataset/validation.json": {
+      "bytes": 243342,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_review_001\\extracted_001\\cloud_job\\campaign\\dataset\\validation.json",
+      "sha256": "b1935fd487ec8f0039e0472649040b2b66fe64dfd7a88a0921c580ad6637791d"
+    },
+    "cloud_job/campaign/trainer_input/tokenizer.json": {
+      "bytes": 4948,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\prototype_v7_partial_review_001\\extracted_001\\cloud_job\\campaign\\trainer_input\\tokenizer.json",
+      "sha256": "f041a1ba24e9db97c83c022e304d47996e77ca457f1389722189e95b8c79a4c5"
+    }
+  },
+  "input_token_limit": 1024,
+  "job": "cas-meta2-20260906094002-39762c47",
+  "learning_result": false,
+  "limits": [
+    "Reachability of the correct target does not show that a learned model will select it.",
+    "No numerical logits, gradients, weights, native outputs or root cause were checked.",
+    "The completed prior byte audit supplies packet provenance; this is not another full packet or semantic audit.",
+    "Historical results and the recorded 0/72 CAS native result are unchanged."
+  ],
+  "native_or_provider_execution": false,
+  "neural_imports": false,
+  "new_task_generation": false,
+  "numeric_float32_fidelity_measured": false,
+  "packet_sha256": "f28603b7aab07d7d75a06cfa52fb5b802689b8896001fa9f572971c9140c9799",
+  "post_run_private_targets_read": true,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "receipt_pins": {
+    "records/prototype_v7_partial_native_001/run_001/partial_native_receipt.json": "bc700054e18dad6de9e2516f441adccdfac0a9ace25a39fd0fce6a0879d37f4f",
+    "records/prototype_v7_partial_review_001/extraction_receipt.json": "9bf40771df6dd7f67189d402d6bcfd8e05bd8cd997b71a6825fff21da105ae98",
+    "records/prototype_v7_training_recount_001/receipt_001.json": "452705ca332f9cf8b42c8815c3c08f031ec73ba4fc443a51797679acddc62d76"
+  },
+  "results": {
+    "test": {
+      "codec_round_trips": 72,
+      "complete_target_grammar_paths": 72,
+      "depths": {
+        "3": 48,
+        "4": 24
+      },
+      "exact_copy_span_encodings": 72,
+      "grammar_failures": [],
+      "input_tokens_max": 469,
+      "input_tokens_min": 336,
+      "lossless_public_text_round_trips": 72,
+      "missing_required_copy_symbols": [],
+      "target_scope_orders": {
+        "A,B,C": 288
+      },
+      "target_tokens_max": 115,
+      "target_tokens_min": 87,
+      "tasks": 72,
+      "unseen_positive_target_tokens": []
+    },
+    "train": {
+      "codec_round_trips": 896,
+      "complete_target_grammar_paths": 896,
+      "depths": {
+        "1": 128,
+        "2": 384,
+        "3": 384
+      },
+      "exact_copy_span_encodings": 896,
+      "grammar_failures": [],
+      "input_tokens_max": 469,
+      "input_tokens_min": 170,
+      "lossless_public_text_round_trips": 896,
+      "missing_required_copy_symbols": [],
+      "target_scope_orders": {
+        "A,B,C": 3200
+      },
+      "target_tokens_max": 111,
+      "target_tokens_min": 41,
+      "tasks": 896
+    },
+    "validation": {
+      "codec_round_trips": 96,
+      "complete_target_grammar_paths": 96,
+      "depths": {
+        "1": 32,
+        "2": 32,
+        "3": 32
+      },
+      "exact_copy_span_encodings": 96,
+      "grammar_failures": [],
+      "input_tokens_max": 449,
+      "input_tokens_min": 168,
+      "lossless_public_text_round_trips": 96,
+      "missing_required_copy_symbols": [],
+      "target_scope_orders": {
+        "A,B,C": 288
+      },
+      "target_tokens_max": 107,
+      "target_tokens_min": 41,
+      "tasks": 96,
+      "unseen_positive_target_tokens": []
+    }
+  },
+  "schema": "cas-meta2-v7-saved-representation-check/1",
+  "source_and_inputs_unchanged": true,
+  "source_files_sha256": {
+    "cas_meta2/__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/contrast_v7/data.py": "73850f1e6b9847468baec09f8f5fef42735d45c2a75a3290d769a8036368aa0e",
+    "cas_meta2/contrast_v7/train.py": "16712d8f383da53e98f62f9cfe94e434b370a1b54bda4511286d33aff60a0c43",
+    "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "cas_meta2/features_v3.py": "713fef0b3b04742550cfe11937bb76fe06f1913f91de8c85a56b07bfa4df6dbd",
+    "cas_meta2/grammar_v3.py": "92bb1e400053c83daf0700dd782b9b5014f0da1c36f7e602133f7341cf5a2e7b",
+    "cas_meta2/ir.py": "02f3ce65ef9c3b54901a38abab2d4f9f272268e7c195f7001fb119bf1d384637",
+    "cas_meta2/loss_v3.py": "78cf75fc2c7ddcf637c9ce34755e679bf034da7830ea86643ca0b522df266f71",
+    "cas_meta2/policy.py": "6d5f3cbfc455c65ef9000c5145f8f5b691668fb355339eeebd61e4aa2b8d26d0",
+    "cas_meta2/policy_v3.py": "8a1e03a570df83063c75083b4da67aec6d3fd475730c9c59b4b686cd095baa23",
+    "cas_meta2/selection_v2.py": "27a2b183d6c6e8d0a407156e13cac21c3d10d8e7917bba289824255c2d9a3816",
+    "cas_meta2/selection_v3.py": "4f8a1de2e1736d2de4ef0a74e13932b55197a26ce6a059eaa881501ad0b6c913",
+    "cas_meta2/train_v3.py": "f8d2debb438f5278acaa112bc9a57487ad5ce450289424771a1e405bc767ee95",
+    "records/prototype_training_integration_v7_001/public_data.py": "5db831d685b2343a16b93cbc3d3c16e53978ebf0e3cf9da8fefd7d10692708b0"
+  },
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "started_utc": "2026-09-06T12:00:09.653094+00:00",
+  "status": "SAVED_TARGET_REPRESENTATION_CHECK_PASSED",
+  "target_token_transitions_checked": 98296,
+  "tensor_or_checkpoint_loads": false,
+  "text_numeric_boundary": "Exact public text and symbol spans are checked. Eight-float rows are not a proof of downstream float32 fidelity; no tensors were created.",
+  "total_targets": 1064,
+  "wall_seconds": 8.25900140000158
+}

@@ -1,0 +1,787 @@
+{
+  "arm_groups": [
+    {
+      "mean_seconds": 192.46090065391684,
+      "arm": "cas_trained",
+      "status": "EXECUTED",
+      "max_seconds": 486.0653714990003,
+      "min_seconds": 117.4396209800002,
+      "count": 12,
+      "summed_wall_seconds": 2309.530807847002
+    },
+    {
+      "mean_seconds": 6.788418511000145,
+      "arm": "cas_trained",
+      "status": "POST_ADMISSION_RUNTIME_FAILURE",
+      "max_seconds": 6.788418511000145,
+      "min_seconds": 6.788418511000145,
+      "count": 1,
+      "summed_wall_seconds": 6.788418511000145
+    },
+    {
+      "mean_seconds": 0.04703757548275556,
+      "arm": "cas_trained",
+      "status": "REJECTED",
+      "max_seconds": 0.04806669899971894,
+      "min_seconds": 0.0465175750000526,
+      "count": 58,
+      "summed_wall_seconds": 2.7281793779998225
+    },
+    {
+      "mean_seconds": 0.048476606521112,
+      "arm": "cas_untrained",
+      "status": "REJECTED",
+      "max_seconds": 0.04957936700020582,
+      "min_seconds": 0.04651026900000943,
+      "count": 71,
+      "summed_wall_seconds": 3.4418390629989517
+    },
+    {
+      "mean_seconds": 152.43090981799998,
+      "arm": "generic_trained",
+      "status": "EXECUTED",
+      "max_seconds": 196.0694129579997,
+      "min_seconds": 117.69204743999944,
+      "count": 14,
+      "summed_wall_seconds": 2134.0327374519998
+    },
+    {
+      "mean_seconds": 15.664139748250022,
+      "arm": "generic_trained",
+      "status": "POST_ADMISSION_RUNTIME_FAILURE",
+      "max_seconds": 49.98133885800007,
+      "min_seconds": 2.0780359179998413,
+      "count": 4,
+      "summed_wall_seconds": 62.65655899300009
+    },
+    {
+      "mean_seconds": 0.04690540124518108,
+      "arm": "generic_trained",
+      "status": "REJECTED",
+      "max_seconds": 0.047592165999958524,
+      "min_seconds": 0.04633472300020003,
+      "count": 53,
+      "summed_wall_seconds": 2.4859862659945975
+    },
+    {
+      "mean_seconds": 0.047340548690153555,
+      "arm": "generic_untrained",
+      "status": "REJECTED",
+      "max_seconds": 0.06979681000029814,
+      "min_seconds": 0.04644566500019209,
+      "count": 71,
+      "summed_wall_seconds": 3.3611789570009023
+    },
+    {
+      "mean_seconds": 111.41582949640849,
+      "arm": "rule",
+      "status": "EXECUTED",
+      "max_seconds": 197.40708730999995,
+      "min_seconds": 51.279984628999955,
+      "count": 71,
+      "summed_wall_seconds": 7910.523894245003
+    }
+  ],
+  "case45_selected_candidate_runs": 39,
+  "status": "RECORDED_PARTIAL_TIMING_RECOUNT_PASSED",
+  "case45_candidate_total_seconds": null,
+  "source_files_sha256": {
+    "cas_meta2/contrast_v7/native_evaluation.py": "cba4069c71dac86612a6c82192471af305454f615e572b6f35fa18138477652b",
+    "cas_meta2/contrast_recovery_v6/core.py": "a04f193a74fd46b9d0009930d6692e567a8019b12a8d4211b8de2a0fefdc3ed2"
+  },
+  "source_pool_max_workers": 8,
+  "case_rows": [
+    {
+      "outside_arm_and_reference_seconds": 0.23471731699964948,
+      "summed_arm_seconds": 140.39809106400025,
+      "case_index": 0,
+      "reference_wall_seconds": 30.03337905499984,
+      "case_wall_seconds": 170.66618743599975,
+      "member": "cloud_job/campaign/native/evaluation/case_0000/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23791286100004072,
+      "summed_arm_seconds": 97.47893744299972,
+      "case_index": 1,
+      "reference_wall_seconds": 24.372809880000204,
+      "case_wall_seconds": 122.08966018399997,
+      "member": "cloud_job/campaign/native/evaluation/case_0001/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23646082399955048,
+      "summed_arm_seconds": 99.04370934800045,
+      "case_index": 2,
+      "reference_wall_seconds": 24.457793636000133,
+      "case_wall_seconds": 123.73796380800013,
+      "member": "cloud_job/campaign/native/evaluation/case_0002/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2364313499997479,
+      "summed_arm_seconds": 256.5067315260003,
+      "case_index": 3,
+      "reference_wall_seconds": 27.06151094400002,
+      "case_wall_seconds": 283.80467382000006,
+      "member": "cloud_job/campaign/native/evaluation/case_0003/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23696028800031854,
+      "summed_arm_seconds": 80.6959822519998,
+      "case_index": 4,
+      "reference_wall_seconds": 21.712833062999835,
+      "case_wall_seconds": 102.64577560299995,
+      "member": "cloud_job/campaign/native/evaluation/case_0004/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23783105300026364,
+      "summed_arm_seconds": 239.64246897299972,
+      "case_index": 5,
+      "reference_wall_seconds": 24.484201532000043,
+      "case_wall_seconds": 264.36450155800003,
+      "member": "cloud_job/campaign/native/evaluation/case_0005/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23556766300089294,
+      "summed_arm_seconds": 197.31587460099945,
+      "case_index": 6,
+      "reference_wall_seconds": 38.02734762099999,
+      "case_wall_seconds": 235.57878988500033,
+      "member": "cloud_job/campaign/native/evaluation/case_0006/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23397536499942362,
+      "summed_arm_seconds": 139.0146661910003,
+      "case_index": 7,
+      "reference_wall_seconds": 30.36601429800021,
+      "case_wall_seconds": 169.61465585399992,
+      "member": "cloud_job/campaign/native/evaluation/case_0007/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23524997599952258,
+      "summed_arm_seconds": 98.6164838640002,
+      "case_index": 8,
+      "reference_wall_seconds": 22.865842274999977,
+      "case_wall_seconds": 121.7175761149997,
+      "member": "cloud_job/campaign/native/evaluation/case_0008/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.24130923300026552,
+      "summed_arm_seconds": 355.032804038,
+      "case_index": 9,
+      "reference_wall_seconds": 22.576849304000007,
+      "case_wall_seconds": 377.85096257500027,
+      "member": "cloud_job/campaign/native/evaluation/case_0009/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23646410300034404,
+      "summed_arm_seconds": 165.7510949079997,
+      "case_index": 10,
+      "reference_wall_seconds": 31.963680897999893,
+      "case_wall_seconds": 197.95123990899992,
+      "member": "cloud_job/campaign/native/evaluation/case_0010/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23763232600003903,
+      "summed_arm_seconds": 280.33052339799997,
+      "case_index": 11,
+      "reference_wall_seconds": 25.528836777999913,
+      "case_wall_seconds": 306.0969925019999,
+      "member": "cloud_job/campaign/native/evaluation/case_0011/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2353629340000225,
+      "summed_arm_seconds": 98.060514883,
+      "case_index": 12,
+      "reference_wall_seconds": 22.614722505999907,
+      "case_wall_seconds": 120.91060032299993,
+      "member": "cloud_job/campaign/native/evaluation/case_0012/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2377038609997726,
+      "summed_arm_seconds": 98.04682025500006,
+      "case_index": 13,
+      "reference_wall_seconds": 22.75253209099992,
+      "case_wall_seconds": 121.03705620699975,
+      "member": "cloud_job/campaign/native/evaluation/case_0013/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23436944800005222,
+      "summed_arm_seconds": 197.59513546899962,
+      "case_index": 14,
+      "reference_wall_seconds": 36.45055691100015,
+      "case_wall_seconds": 234.28006182799982,
+      "member": "cloud_job/campaign/native/evaluation/case_0014/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23585934900029315,
+      "summed_arm_seconds": 98.74395652399971,
+      "case_index": 15,
+      "reference_wall_seconds": 22.972825276000094,
+      "case_wall_seconds": 121.9526411490001,
+      "member": "cloud_job/campaign/native/evaluation/case_0015/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23633476099939799,
+      "summed_arm_seconds": 197.4265442140004,
+      "case_index": 16,
+      "reference_wall_seconds": 20.00160026900039,
+      "case_wall_seconds": 217.66447924400018,
+      "member": "cloud_job/campaign/native/evaluation/case_0016/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23437952699941889,
+      "summed_arm_seconds": 80.00357459800034,
+      "case_index": 17,
+      "reference_wall_seconds": 19.674982691999958,
+      "case_wall_seconds": 99.91293681699972,
+      "member": "cloud_job/campaign/native/evaluation/case_0017/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23576489700008096,
+      "summed_arm_seconds": 165.9161968970002,
+      "case_index": 18,
+      "reference_wall_seconds": 32.21158975399976,
+      "case_wall_seconds": 198.36355154800003,
+      "member": "cloud_job/campaign/native/evaluation/case_0018/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23901890299976003,
+      "summed_arm_seconds": 291.3755926919998,
+      "case_index": 19,
+      "reference_wall_seconds": 25.772338678000324,
+      "case_wall_seconds": 317.3869502729999,
+      "member": "cloud_job/campaign/native/evaluation/case_0019/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23449452199974985,
+      "summed_arm_seconds": 166.05894436100016,
+      "case_index": 20,
+      "reference_wall_seconds": 32.49177227400014,
+      "case_wall_seconds": 198.78521115700005,
+      "member": "cloud_job/campaign/native/evaluation/case_0020/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2366952500001389,
+      "summed_arm_seconds": 80.32658294000021,
+      "case_index": 21,
+      "reference_wall_seconds": 20.17178710999997,
+      "case_wall_seconds": 100.73506530000031,
+      "member": "cloud_job/campaign/native/evaluation/case_0021/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23782370200069636,
+      "summed_arm_seconds": 314.0370900169996,
+      "case_index": 22,
+      "reference_wall_seconds": 29.66145240099968,
+      "case_wall_seconds": 343.93636612,
+      "member": "cloud_job/campaign/native/evaluation/case_0022/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2346793230003641,
+      "summed_arm_seconds": 116.31618649099983,
+      "case_index": 23,
+      "reference_wall_seconds": 25.447032168000078,
+      "case_wall_seconds": 141.99789798200027,
+      "member": "cloud_job/campaign/native/evaluation/case_0023/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23779126999988875,
+      "summed_arm_seconds": 239.78844507700023,
+      "case_index": 24,
+      "reference_wall_seconds": 22.652618306000022,
+      "case_wall_seconds": 262.67885465300014,
+      "member": "cloud_job/campaign/native/evaluation/case_0024/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.24337580300061745,
+      "summed_arm_seconds": 335.42409237199945,
+      "case_index": 25,
+      "reference_wall_seconds": 29.023401480999837,
+      "case_wall_seconds": 364.6908696559999,
+      "member": "cloud_job/campaign/native/evaluation/case_0025/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23669537300065713,
+      "summed_arm_seconds": 97.86013834999903,
+      "case_index": 26,
+      "reference_wall_seconds": 23.008087180000075,
+      "case_wall_seconds": 121.10492090299977,
+      "member": "cloud_job/campaign/native/evaluation/case_0026/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23463167899990367,
+      "summed_arm_seconds": 80.48694675099978,
+      "case_index": 27,
+      "reference_wall_seconds": 19.946214641000097,
+      "case_wall_seconds": 100.66779307099978,
+      "member": "cloud_job/campaign/native/evaluation/case_0027/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2363673159998143,
+      "summed_arm_seconds": 80.28907390700033,
+      "case_index": 28,
+      "reference_wall_seconds": 20.153827834999902,
+      "case_wall_seconds": 100.67926905800005,
+      "member": "cloud_job/campaign/native/evaluation/case_0028/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23923917899901426,
+      "summed_arm_seconds": 565.7792173660009,
+      "case_index": 29,
+      "reference_wall_seconds": 19.777626988000065,
+      "case_wall_seconds": 585.796083533,
+      "member": "cloud_job/campaign/native/evaluation/case_0029/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2340463059990725,
+      "summed_arm_seconds": 140.0788929560008,
+      "case_index": 30,
+      "reference_wall_seconds": 28.772509594999974,
+      "case_wall_seconds": 169.08544885699985,
+      "member": "cloud_job/campaign/native/evaluation/case_0030/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23512708599992038,
+      "summed_arm_seconds": 140.19927336599994,
+      "case_index": 31,
+      "reference_wall_seconds": 28.817660239999896,
+      "case_wall_seconds": 169.25206069199976,
+      "member": "cloud_job/campaign/native/evaluation/case_0031/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23406793499952983,
+      "summed_arm_seconds": 147.98885139400045,
+      "case_index": 32,
+      "reference_wall_seconds": 23.19934995499989,
+      "case_wall_seconds": 171.42226928399987,
+      "member": "cloud_job/campaign/native/evaluation/case_0032/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23668047899991507,
+      "summed_arm_seconds": 337.7053715930001,
+      "case_index": 33,
+      "reference_wall_seconds": 29.096552515999974,
+      "case_wall_seconds": 367.038604588,
+      "member": "cloud_job/campaign/native/evaluation/case_0033/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23697251899966432,
+      "summed_arm_seconds": 141.19554061800045,
+      "case_index": 34,
+      "reference_wall_seconds": 29.01475179099998,
+      "case_wall_seconds": 170.4472649280001,
+      "member": "cloud_job/campaign/native/evaluation/case_0034/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23788135699987834,
+      "summed_arm_seconds": 97.98561847600013,
+      "case_index": 35,
+      "reference_wall_seconds": 22.7452041180004,
+      "case_wall_seconds": 120.9687039510004,
+      "member": "cloud_job/campaign/native/evaluation/case_0035/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.25155068200047026,
+      "summed_arm_seconds": 140.11600403299963,
+      "case_index": 36,
+      "reference_wall_seconds": 29.031529837999642,
+      "case_wall_seconds": 169.39908455299974,
+      "member": "cloud_job/campaign/native/evaluation/case_0036/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23759434000066904,
+      "summed_arm_seconds": 298.27263529099946,
+      "case_index": 37,
+      "reference_wall_seconds": 23.100381585000378,
+      "case_wall_seconds": 321.6106112160005,
+      "member": "cloud_job/campaign/native/evaluation/case_0037/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23502509200079658,
+      "summed_arm_seconds": 99.44708643799959,
+      "case_index": 38,
+      "reference_wall_seconds": 23.04852928199989,
+      "case_wall_seconds": 122.73064081200027,
+      "member": "cloud_job/campaign/native/evaluation/case_0038/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23381436399995437,
+      "summed_arm_seconds": 98.0276594740003,
+      "case_index": 39,
+      "reference_wall_seconds": 22.70995399200001,
+      "case_wall_seconds": 120.97142783000027,
+      "member": "cloud_job/campaign/native/evaluation/case_0039/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2345343220013092,
+      "summed_arm_seconds": 140.03005417199847,
+      "case_index": 40,
+      "reference_wall_seconds": 28.90918747600017,
+      "case_wall_seconds": 169.17377596999995,
+      "member": "cloud_job/campaign/native/evaluation/case_0040/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23486254200042822,
+      "summed_arm_seconds": 97.79381259899992,
+      "case_index": 41,
+      "reference_wall_seconds": 22.77928235299987,
+      "case_wall_seconds": 120.80795749400022,
+      "member": "cloud_job/campaign/native/evaluation/case_0041/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.24086055499901704,
+      "summed_arm_seconds": 485.99624572800076,
+      "case_index": 42,
+      "reference_wall_seconds": 25.978766347000146,
+      "case_wall_seconds": 512.2158726299999,
+      "member": "cloud_job/campaign/native/evaluation/case_0042/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23229667500072537,
+      "summed_arm_seconds": 97.75153216599938,
+      "case_index": 43,
+      "reference_wall_seconds": 22.81788274900009,
+      "case_wall_seconds": 120.8017115900002,
+      "member": "cloud_job/campaign/native/evaluation/case_0043/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23796838600082992,
+      "summed_arm_seconds": 306.2200611519993,
+      "case_index": 44,
+      "reference_wall_seconds": 29.00009580099959,
+      "case_wall_seconds": 335.4581253389997,
+      "member": "cloud_job/campaign/native/evaluation/case_0044/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23833984399880137,
+      "summed_arm_seconds": 239.00113168900134,
+      "case_index": 46,
+      "reference_wall_seconds": 22.836755354999696,
+      "case_wall_seconds": 262.07622688799984,
+      "member": "cloud_job/campaign/native/evaluation/case_0046/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2375451019997854,
+      "summed_arm_seconds": 51.59266958900025,
+      "case_index": 47,
+      "reference_wall_seconds": 14.705591249000463,
+      "case_wall_seconds": 66.5358059400005,
+      "member": "cloud_job/campaign/native/evaluation/case_0047/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23948355200082005,
+      "summed_arm_seconds": 315.99430746299913,
+      "case_index": 48,
+      "reference_wall_seconds": 19.83218680600021,
+      "case_wall_seconds": 336.06597782100016,
+      "member": "cloud_job/campaign/native/evaluation/case_0048/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.24006897499930346,
+      "summed_arm_seconds": 261.84278624500075,
+      "case_index": 49,
+      "reference_wall_seconds": 26.16495225899962,
+      "case_wall_seconds": 288.2478074789997,
+      "member": "cloud_job/campaign/native/evaluation/case_0049/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23911150799904135,
+      "summed_arm_seconds": 97.57920395200017,
+      "case_index": 50,
+      "reference_wall_seconds": 22.917704311000307,
+      "case_wall_seconds": 120.73601977099952,
+      "member": "cloud_job/campaign/native/evaluation/case_0050/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23903632500150707,
+      "summed_arm_seconds": 82.00153753799896,
+      "case_index": 51,
+      "reference_wall_seconds": 19.949724688999595,
+      "case_wall_seconds": 102.19029855200006,
+      "member": "cloud_job/campaign/native/evaluation/case_0051/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23866203399938968,
+      "summed_arm_seconds": 141.10954490099994,
+      "case_index": 52,
+      "reference_wall_seconds": 29.14486613200006,
+      "case_wall_seconds": 170.4930730669994,
+      "member": "cloud_job/campaign/native/evaluation/case_0052/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23725449499943352,
+      "summed_arm_seconds": 97.64608888600014,
+      "case_index": 53,
+      "reference_wall_seconds": 22.653845742000158,
+      "case_wall_seconds": 120.53718912299973,
+      "member": "cloud_job/campaign/native/evaluation/case_0053/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23992585699943447,
+      "summed_arm_seconds": 467.5067763450006,
+      "case_index": 54,
+      "reference_wall_seconds": 22.971677296999587,
+      "case_wall_seconds": 490.71837949899964,
+      "member": "cloud_job/campaign/native/evaluation/case_0054/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23542006699972262,
+      "summed_arm_seconds": 79.87810535100016,
+      "case_index": 55,
+      "reference_wall_seconds": 19.688017667000167,
+      "case_wall_seconds": 99.80154308500005,
+      "member": "cloud_job/campaign/native/evaluation/case_0055/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23731074499846727,
+      "summed_arm_seconds": 305.4080761180012,
+      "case_index": 56,
+      "reference_wall_seconds": 19.73144612700071,
+      "case_wall_seconds": 325.37683299000037,
+      "member": "cloud_job/campaign/native/evaluation/case_0056/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2373841930002527,
+      "summed_arm_seconds": 51.47053023099943,
+      "case_index": 57,
+      "reference_wall_seconds": 14.64539763599987,
+      "case_wall_seconds": 66.35331205999955,
+      "member": "cloud_job/campaign/native/evaluation/case_0057/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23707369000112521,
+      "summed_arm_seconds": 262.7680281239982,
+      "case_index": 58,
+      "reference_wall_seconds": 26.163712461000614,
+      "case_wall_seconds": 289.16881427499993,
+      "member": "cloud_job/campaign/native/evaluation/case_0058/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23723059499934607,
+      "summed_arm_seconds": 236.31575486300062,
+      "case_index": 59,
+      "reference_wall_seconds": 22.590892406999956,
+      "case_wall_seconds": 259.1438778649999,
+      "member": "cloud_job/campaign/native/evaluation/case_0059/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2390479100004086,
+      "summed_arm_seconds": 239.52227834400037,
+      "case_index": 60,
+      "reference_wall_seconds": 23.240538909999486,
+      "case_wall_seconds": 263.00186516400026,
+      "member": "cloud_job/campaign/native/evaluation/case_0060/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2371749269987049,
+      "summed_arm_seconds": 194.7261919800012,
+      "case_index": 61,
+      "reference_wall_seconds": 36.05328044399994,
+      "case_wall_seconds": 231.01664735099985,
+      "member": "cloud_job/campaign/native/evaluation/case_0061/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23566367200055538,
+      "summed_arm_seconds": 97.33619696299957,
+      "case_index": 62,
+      "reference_wall_seconds": 22.733933884999715,
+      "case_wall_seconds": 120.30579451999984,
+      "member": "cloud_job/campaign/native/evaluation/case_0062/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23950017599963758,
+      "summed_arm_seconds": 98.613087103,
+      "case_index": 63,
+      "reference_wall_seconds": 22.812424806999843,
+      "case_wall_seconds": 121.66501208599948,
+      "member": "cloud_job/campaign/native/evaluation/case_0063/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2344501779998609,
+      "summed_arm_seconds": 96.31223011200018,
+      "case_index": 64,
+      "reference_wall_seconds": 22.509131149000495,
+      "case_wall_seconds": 119.05581143900054,
+      "member": "cloud_job/campaign/native/evaluation/case_0064/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2377093140003126,
+      "summed_arm_seconds": 118.67640450899944,
+      "case_index": 65,
+      "reference_wall_seconds": 26.009308683999734,
+      "case_wall_seconds": 144.9234225069995,
+      "member": "cloud_job/campaign/native/evaluation/case_0065/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23396787100045913,
+      "summed_arm_seconds": 123.94160119799926,
+      "case_index": 66,
+      "reference_wall_seconds": 26.194961938000233,
+      "case_wall_seconds": 150.37053100699995,
+      "member": "cloud_job/campaign/native/evaluation/case_0066/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23637898900051368,
+      "summed_arm_seconds": 142.04464584499965,
+      "case_index": 67,
+      "reference_wall_seconds": 29.5376346059993,
+      "case_wall_seconds": 171.81865943999946,
+      "member": "cloud_job/campaign/native/evaluation/case_0067/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2337127140008306,
+      "summed_arm_seconds": 51.73119083599977,
+      "case_index": 68,
+      "reference_wall_seconds": 14.582947308999792,
+      "case_wall_seconds": 66.54785085900039,
+      "member": "cloud_job/campaign/native/evaluation/case_0068/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23700588300016534,
+      "summed_arm_seconds": 139.27586413900008,
+      "case_index": 69,
+      "reference_wall_seconds": 28.956809199999952,
+      "case_wall_seconds": 168.4696792220002,
+      "member": "cloud_job/campaign/native/evaluation/case_0069/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.2329537369996615,
+      "summed_arm_seconds": 138.84266537300027,
+      "case_index": 70,
+      "reference_wall_seconds": 28.79941435500041,
+      "case_wall_seconds": 167.87503346500034,
+      "member": "cloud_job/campaign/native/evaluation/case_0070/case_receipt.json"
+    },
+    {
+      "outside_arm_and_reference_seconds": 0.23719061499923555,
+      "summed_arm_seconds": 82.24164278900025,
+      "case_index": 71,
+      "reference_wall_seconds": 19.45455696299996,
+      "case_wall_seconds": 101.93339036699945,
+      "member": "cloud_job/campaign/native/evaluation/case_0071/case_receipt.json"
+    }
+  ],
+  "runtime_root_cause_established": false,
+  "input_member_sha256": {
+    "cloud_job/campaign/native/evaluation/case_0018/case_receipt.json": "79805bd30aeea0c6eddd208f6f6e68b97dbec0415c848e543046231c62a2ea10",
+    "cloud_job/campaign/native/evaluation/case_0065/case_receipt.json": "f8ff2f7f80805f78ba0c08e67319821a1643cd4fae4d09c9ff80c53e88c16a6f",
+    "cloud_job/campaign/native/evaluation/case_0013/case_receipt.json": "db2aada831e9a82722fc3abd250964c6af77a7d11d270b50d9419541a855856e",
+    "cloud_job/campaign/native/evaluation/case_0055/case_receipt.json": "f577c5ef36c0d3927084577e5f020f93f73e0c85a088b580e836d059f423fc42",
+    "cloud_job/campaign/native/evaluation/case_0024/case_receipt.json": "d10d22add0522ca17d3bd9931db6199ed05862c276e25e76020a2633c5692ddf",
+    "cloud_job/campaign/native/evaluation/case_0021/case_receipt.json": "9fea684b74d3e018dea6e5149d0ded1ae8f89d270a2d94d4df257403e15e1fe6",
+    "cloud_job/campaign/native/evaluation/case_0045/cas_trained/case_receipt.json": "cb2b9825a5bb071ab53db6775b178f0f54982c12c098b1f752e974da04d087ad",
+    "cloud_job/campaign/native/evaluation/case_0052/case_receipt.json": "402dd19c086ca4cf2e8f86f4afbfa8903b136bf326b18fbf68c10c2fd6199d2e",
+    "cloud_job/campaign/native/evaluation/case_0016/case_receipt.json": "8dd06b16d9de2c6caa30c2022d22e8c7a7e50f65ccb56c76a46d891491987bd1",
+    "cloud_job/campaign/native/evaluation/case_0008/case_receipt.json": "594671f7c590722ddf95e709ee5525b0ebc51eb500ca509d65b840cba1f26046",
+    "cloud_job/campaign/native/evaluation/case_0070/case_receipt.json": "06d3a9468a4da99e9084233f390ee7c929bb408bc4fe4f1311c0d661c42da888",
+    "cloud_job/campaign/native/evaluation/case_0003/case_receipt.json": "a8c2d8d8f2eb1791d65ce084029d39ca1ad3f83a3c81ae47388e55fd3e1e0be6",
+    "cloud_job/campaign/native/evaluation/case_0058/case_receipt.json": "89f00b1329b45a6a85458dad194f456bf6379ef17ff10fe40a382a828abf5f4a",
+    "cloud_job/campaign/native/evaluation/case_0028/case_receipt.json": "844ac963ede216dc2247183408d80a1096ea428bf6c7b56ab5126ad8733f3766",
+    "cloud_job/campaign/native/evaluation/case_0051/case_receipt.json": "6250ee2cd1a9a5d0b5b7d3f51b13a7b32ba1bb86d01e02e6f46aad7e94d881f5",
+    "cloud_job/campaign/native/evaluation/case_0039/case_receipt.json": "4cb650a9c527332d60a74db01963c195205d7fbedfaa077f010bcb73eb36a0f6",
+    "cloud_job/campaign/native/evaluation/case_0020/case_receipt.json": "d94055a0ec2ba841e5a6e411c233a798990b35e2c659bc519d7ed64bfab4bcac",
+    "cloud_job/campaign/native/evaluation/case_0038/case_receipt.json": "8897153359b5823ef9ee75486c17099615f5e1c7c1a00483027c607c2ec992c0",
+    "cloud_job/campaign/native/evaluation/case_0059/case_receipt.json": "0c01d43bf9a4e4339cb5a59138d3f25f29d0e8ed347aa85cb986f6664cd31f23",
+    "cloud_job/campaign/processes/evaluate/process_receipt.json": "768ea8242a0acfdb7602353541ecf18764b107216e697b70de760072bd7ecf66",
+    "cloud_job/campaign/native/evaluation/case_0005/case_receipt.json": "3a284728aff07086971f1d5756326a4b56227fe51978fd88ee5a9892e5195576",
+    "cloud_job/campaign/native/evaluation/case_0011/case_receipt.json": "8abeb57ba12df5b0b78623610321d2a80063bff81deeef1f24b1156db00722a2",
+    "cloud_job/campaign/native/evaluation/case_0033/case_receipt.json": "b462a3c7931b37f57fc827b947dda01930e19986efb6c87fc958ec6a68e03bcf",
+    "cloud_job/campaign/native/evaluation/case_0048/case_receipt.json": "72a515eb77295e6d9b0f5eca6eee3c9260f1722032bb1ff3dcb12cd7cd4a218b",
+    "cloud_job/campaign/native/evaluation/case_0056/case_receipt.json": "5c82ce05bc9b9fb7c92fbc66d4c655f1a361c0105c46fa71cfaa282ee1d2079d",
+    "cloud_job/campaign/native/evaluation/case_0004/case_receipt.json": "a2115125039fcf5ef86f67403e3aaf2509aa5f9be507e5de624a737b0d459f0d",
+    "cloud_job/campaign/native/evaluation/case_0022/case_receipt.json": "66fe7b93486180e8a54270cfb5bb3858db06f4b653ad7a50dcc4cb2d10d32689",
+    "cloud_job/campaign/native/evaluation/case_0049/case_receipt.json": "2a2984306928c62d2c782f70b5178f370e2c7c7d6bd7019b690122868a2eb03d",
+    "cloud_job/campaign/native/evaluation/case_0061/case_receipt.json": "368ba168e079fc39bf6fba070cc0af015063342e1f2d7b014cbf04f249eecf2e",
+    "cloud_job/campaign/native/evaluation/case_0001/case_receipt.json": "a7be47998e66396a69773928790712f25fd2d263d285949e8c94dfa942ca12b4",
+    "cloud_job/campaign/native/evaluation/case_0019/case_receipt.json": "995bebed10c8dfda2548d1f14e1c29b5daf99d83a475d38765225fcccbf7dcf5",
+    "cloud_job/campaign/native/evaluation/case_0040/case_receipt.json": "9e5e4b86220067a76f7334d40aec8e25aa3fad385aafe2598445257b111f0dfd",
+    "cloud_job/campaign/native/evaluation/case_0000/case_receipt.json": "325015584ffb89506802bb9867fb8d35ae0a4624f6dc96e16bc1d538285c5ebe",
+    "cloud_job/campaign/native/evaluation/case_0015/case_receipt.json": "52974ecb34e308b05047d337b77d2b34676f5e060dda36651736adc935706ea7",
+    "cloud_job/campaign/native/evaluation/case_0045/cas_untrained/case_receipt.json": "4d3f6f0726f4d972895ecf8d29dce5e5aec108ee738dcf2b6f32eafddd416b68",
+    "cloud_job/campaign/native/evaluation/case_0025/case_receipt.json": "194567d546752ba939572b77da2328fb50d7edd01d5ea7445b7f9275ff73456d",
+    "cloud_job/campaign/native/evaluation/case_0060/case_receipt.json": "52b48a631a421aef8feb43e7e9092c07902d241afe71b35eca2917b0cab21d84",
+    "cloud_job/campaign/native/evaluation/case_0017/case_receipt.json": "0f17da2632de4752cff3109737a5eac9f96b143febc130b5573ebec8fc1c5856",
+    "cloud_job/campaign/native/evaluation/case_0030/case_receipt.json": "f58a873df07f26ad789aa221ffde1b07c160fb54fa8ac261669fd2ac58cb2efe",
+    "cloud_job/campaign/native/evaluation/case_0029/case_receipt.json": "e618478b23fa8dda7ecf3e771dcd887ff4e2b3f27400d5bfa6a4865d267dc676",
+    "cloud_job/campaign/native/evaluation/case_0062/case_receipt.json": "33288ef0b3a5f9a427e2e5bafb9dd670445b96f7d57ddc09e851c831e784195e",
+    "cloud_job/campaign/native/evaluation/case_0037/case_receipt.json": "530d10a78419250b15a28c1de3fcc09c63a8c66d1d8dee8895e0493b9c3045e2",
+    "cloud_job/campaign/native/evaluation/case_0012/case_receipt.json": "8ee385902fcedc48b6122cbd8a9ca35c96caaa0bdd265105d71f2ea3070b9958",
+    "cloud_job/campaign/native/evaluation/case_0031/case_receipt.json": "d4e1ef3e7a5c77c9cc3f02ad3a8b485c589a6a64de7c7ce5bd0013d679380cdd",
+    "cloud_job/campaign/native/evaluation/case_0009/case_receipt.json": "6926f451b46cf5a96b2324415f0549834169a565b6a4c91b9110d61778cc5952",
+    "cloud_job/campaign/native/evaluation/case_0047/case_receipt.json": "a429e73618ee4729ea1f2baca6f2807c11f736e3b17295f5dd4396a4aed63fd7",
+    "cloud_job/campaign/native/evaluation/case_0026/case_receipt.json": "c7b3a5022b341933e18d69bf6e62809950d186e528d69dba08bbdf7bf51c1047",
+    "cloud_job/campaign/native/evaluation/case_0027/case_receipt.json": "e6fb88ef38cd084571e46a0c2f9a660fc183957bfbfd1ca1e9db68d88d9606b4",
+    "cloud_job/campaign/native/evaluation/case_0032/case_receipt.json": "74fa08b712ead32d07f6f6e86ced66940904b327cd3845539919a7cb4e7db1ef",
+    "cloud_job/campaign/native/evaluation/case_0053/case_receipt.json": "2ad032c1898d9be46e2da6ac0e88429fe0bb1950b48c4032f3840786244c896f",
+    "cloud_job/campaign/native/evaluation/case_0014/case_receipt.json": "1498301fbe49595db68d9408117a8d42b6269253b2d2d7dbe91bc1e8ea9bf80e",
+    "cloud_job/campaign/native/evaluation/case_0023/case_receipt.json": "cbee2dd803452bc9cb8d1a71342ccd42cd53103a6626adfc30b1539002d7ca65",
+    "cloud_job/campaign/native/evaluation/case_0035/case_receipt.json": "6a06d0085c861eed3df4fa41d1ffefeb5bb5e36637ecef3d7dd520df7bb0229d",
+    "cloud_job/campaign/native/evaluation/case_0064/case_receipt.json": "769660ec6a8b0a06a83252e658008af469163ec4a37741bf2dfc95e726a06feb",
+    "cloud_job/campaign/native/evaluation/case_0044/case_receipt.json": "1a6d518cbc8db0c0dbae1411da14b7f38b12d2ebcbba3d82459d59d1ad8233b4",
+    "cloud_job/campaign/native/evaluation/case_0042/case_receipt.json": "b042b5f6c89d72a06622c010bb5e1f767788eb446a499a87f74d754e2eca03d8",
+    "cloud_job/campaign/native/evaluation/case_0066/case_receipt.json": "f6b1c3911c14bb4b8c4133768d064b0a578ece1cc691b18ab5254e6241b854c0",
+    "cloud_job/campaign/native/evaluation/case_0050/case_receipt.json": "9aee8363747644ea05e1f3dc044b69d8f3fc9d4bfe7c164ce7e311d5c911d5dc",
+    "cloud_job/campaign/native/evaluation/case_0063/case_receipt.json": "b5b6100bf2cadd9fbdf835cb80840a301b4ccb27e648d41f754256682753b9ce",
+    "cloud_job/campaign/native/evaluation/case_0034/case_receipt.json": "f05d21fc10d988af81e79ce3f4afb770e5a81232f76ab319fcd840d6354e92a5",
+    "cloud_job/campaign/native/evaluation/case_0036/case_receipt.json": "c3eb1ae636ee8a6e84b49c25eeb9f4a029a733d2992f823bd568fddc212ca835",
+    "cloud_job/campaign/native/evaluation/case_0010/case_receipt.json": "7967d8346d8b4ceaa325d76b5b5dfbf840749f2dd199ea7e47e55caec2fa25e7",
+    "cloud_job/campaign/native/evaluation/case_0046/case_receipt.json": "862201df23d91181691e5b9cf556a6b092fed752e009027be6d7f58d7ee96633",
+    "cloud_job/campaign/native/evaluation/case_0067/case_receipt.json": "fdbface3acecdf3278511355b10bbcb0c31da6bc66d315473e1a45ea259c8d43",
+    "cloud_job/campaign/native/evaluation/case_0006/case_receipt.json": "388dc52b5ffe34081ae36732b0120fc24202d8b010408e3e0b99540ee8766b7d",
+    "cloud_job/campaign/native/evaluation/case_0054/case_receipt.json": "dcd20a4e8c6752d32a9c7a4d2ddf515665219aea98893d1e792d26fde87f6a9d",
+    "cloud_job/campaign/native/evaluation/case_0041/case_receipt.json": "703c7da2b403c0f992e7a4fda17a5d7d95d97b230db226a9d0eccc2983b7b52d",
+    "cloud_job/campaign/native/evaluation/case_0002/case_receipt.json": "be6647887e7673d23326062e22da0662bb56a9ce546ce51f7a088101d66a6459",
+    "cloud_job/campaign/native/evaluation/case_0068/case_receipt.json": "5e349bb5b8fd21b503c910a1a5bb9bf64c52e87b82b1ad44b2c8b138871071bc",
+    "cloud_job/campaign/native/evaluation/case_0007/case_receipt.json": "817ee725c62eebbcd9084e71c3dca63a62d8d92c6b587f90d88165a525913f98",
+    "cloud_job/campaign/native/evaluation/case_0071/case_receipt.json": "51c2d14da0496c38478c60809752e3ed5dd6cb054482e1ace8dc6c4a1721c5ea",
+    "cloud_job/campaign/native/evaluation/case_0069/case_receipt.json": "d5579586e7f99383801e4f2bba245403172339764fd7c563168c13a48bcf7d81",
+    "cloud_job/campaign/native/evaluation/case_0045/generic_untrained/case_receipt.json": "053a5572de009b090ae31e73781cc5259e3611ba2bb0804be96c6cb52473fbb3",
+    "cloud_job/campaign/native/evaluation/case_0057/case_receipt.json": "ce98d209c557fdf5c5a5e1a7658129e71b366fec70364687ca71aa10f3257c6b",
+    "cloud_job/campaign/native/evaluation/case_0043/case_receipt.json": "d62405859a3c9529e7b5692e3f6b54ca844fcafefa9c40e16ccfbfdf816cf283"
+  },
+  "case45_worker_start_time": null,
+  "recorded_arm_count_in_completed_cases": 355,
+  "case_seconds": {
+    "min": 66.35331205999955,
+    "sum": 14214.512003647002,
+    "mean": 200.2043944175634,
+    "max": 585.796083533
+  },
+  "inputs_rehashed_after": true,
+  "recorded_case_count": 71,
+  "case45_committed_candidate_runs": 37,
+  "boundary": "Recount of recorded elapsed times only. Case workers overlap; summed worker seconds are not elapsed campaign time or billing. Arm times include admission, execution or failure-prefix checking, verification, identity checks and result writes as defined by frozen core.py. No per-tick GPU profile or unfinished arm duration is available. Does not prove a deadlock, exact scheduler timing or hardware bottleneck.",
+  "utc": "2026-09-06T11:59:50.8111325Z",
+  "schema": "cas-meta2-v7-recorded-native-timing/1",
+  "reference_seconds": {
+    "min": 14.582947308999792,
+    "sum": 1762.1394178710002,
+    "mean": 24.818865040436624,
+    "max": 38.02734762099999
+  },
+  "job": "cas-meta2-20260906094002-39762c47",
+  "native_process_wall_seconds": 2700.688235096,
+  "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+  "case45_saved_arms": [
+    {
+      "wall_seconds": 0.04866532200048823,
+      "arm": "cas_untrained",
+      "status": "REJECTED"
+    },
+    {
+      "wall_seconds": 0.04673891200036451,
+      "arm": "cas_trained",
+      "status": "REJECTED"
+    },
+    {
+      "wall_seconds": 0.04735804699976143,
+      "arm": "generic_untrained",
+      "status": "REJECTED"
+    }
+  ],
+  "receipt_pins": {
+    "records/prototype_v7_partial_native_001/run_001/partial_native_receipt.json": "bc700054e18dad6de9e2516f441adccdfac0a9ace25a39fd0fce6a0879d37f4f",
+    "records/prototype_v7_partial_review_001/extraction_receipt.json": "9bf40771df6dd7f67189d402d6bcfd8e05bd8cd997b71a6825fff21da105ae98"
+  },
+  "model_or_provider_work": false,
+  "case45_reference_runs": 11
+}
