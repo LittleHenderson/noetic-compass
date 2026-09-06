@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\prototype_v7_stored_review_001\test_dataset.py", line 11, in <module>
+    import pytest
+ModuleNotFoundError: No module named 'pytest'

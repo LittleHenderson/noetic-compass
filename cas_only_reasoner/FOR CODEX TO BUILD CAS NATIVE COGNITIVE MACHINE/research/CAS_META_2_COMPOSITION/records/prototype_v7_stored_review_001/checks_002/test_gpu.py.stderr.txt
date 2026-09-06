@@ -1,0 +1,34 @@
+test_bad_native_process_exit_rejected (__main__.SmokeEvidenceTests.test_bad_native_process_exit_rejected) ... ok
+test_changed_source_rejected (__main__.SmokeEvidenceTests.test_changed_source_rejected) ... ok
+test_changed_weight_attestation_hash_binding (__main__.SmokeEvidenceTests.test_changed_weight_attestation_hash_binding) ... ok
+test_checkpoint_substitution_rejected (__main__.SmokeEvidenceTests.test_checkpoint_substitution_rejected) ... ok
+test_cold_report_mismatch_rejected (__main__.SmokeEvidenceTests.test_cold_report_mismatch_rejected) ... ok
+test_cold_same_pid_rejected (__main__.SmokeEvidenceTests.test_cold_same_pid_rejected) ... ok
+test_cold_source_request_rejected (__main__.SmokeEvidenceTests.test_cold_source_request_rejected) ... ok
+test_complete_synthetic_smoke_and_explicit_boundaries (__main__.SmokeEvidenceTests.test_complete_synthetic_smoke_and_explicit_boundaries) ... ok
+test_duplicate_changed_tensor_names_rejected (__main__.SmokeEvidenceTests.test_duplicate_changed_tensor_names_rejected) ... ok
+test_duplicate_smoke_rejected (__main__.SmokeEvidenceTests.test_duplicate_smoke_rejected) ... ok
+test_embedded_native_does_not_replace_stored_native (__main__.SmokeEvidenceTests.test_embedded_native_does_not_replace_stored_native) ... ok
+test_foreign_job_rejected (__main__.SmokeEvidenceTests.test_foreign_job_rejected) ... ok
+test_missing_native_case_rejected (__main__.SmokeEvidenceTests.test_missing_native_case_rejected) ... ok
+test_missing_successful_reference_rejected (__main__.SmokeEvidenceTests.test_missing_successful_reference_rejected) ... ok
+test_native_group_denominator_recount (__main__.SmokeEvidenceTests.test_native_group_denominator_recount) ... ok
+test_native_parent_cannot_be_its_worker (__main__.SmokeEvidenceTests.test_native_parent_cannot_be_its_worker) ... ok
+test_overlapping_prepare_and_train_rejected (__main__.SmokeEvidenceTests.test_overlapping_prepare_and_train_rejected) ... ok
+test_private_labels_in_public_export_rejected (__main__.SmokeEvidenceTests.test_private_labels_in_public_export_rejected) ... ok
+test_private_opening_before_seal_rejected (__main__.SmokeEvidenceTests.test_private_opening_before_seal_rejected) ... ok
+test_unaccounted_checkpoint_rejected (__main__.SmokeEvidenceTests.test_unaccounted_checkpoint_rejected) ... ok
+test_worker_pool_cannot_claim_nine_processes (__main__.SmokeEvidenceTests.test_worker_pool_cannot_claim_nine_processes) ... ok
+test_worker_source_changed_rejected (__main__.SmokeEvidenceTests.test_worker_source_changed_rejected) ... ok
+test_wrong_352_split_rejected (__main__.SmokeEvidenceTests.test_wrong_352_split_rejected) ... ok
+test_wrong_gpu_command_rejected (__main__.SmokeEvidenceTests.test_wrong_gpu_command_rejected) ... ok
+test_wrong_native_case_action_rejected (__main__.SmokeEvidenceTests.test_wrong_native_case_action_rejected) ... ok
+test_wrong_training_step_count_rejected (__main__.SmokeEvidenceTests.test_wrong_training_step_count_rejected) ... ok
+test_xml_entity_declaration_rejected (__main__.SmokeEvidenceTests.test_xml_entity_declaration_rejected) ... ok
+test_xml_skip_rejected (__main__.SmokeEvidenceTests.test_xml_skip_rejected) ... ok
+test_zero_tensor_change_rejected (__main__.SmokeEvidenceTests.test_zero_tensor_change_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 3.092s
+
+OK

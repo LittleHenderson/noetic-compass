@@ -1,0 +1,37 @@
+test_abbreviated_external_pin_flag_not_accepted (__main__.CLITests.test_abbreviated_external_pin_flag_not_accepted) ... ok
+test_all_external_pin_and_path_arguments_are_required (__main__.CLITests.test_all_external_pin_and_path_arguments_are_required) ... ok
+test_cli_forwards_external_inputs_without_inventing_pins (__main__.CLITests.test_cli_forwards_external_inputs_without_inventing_pins) ... ok
+test_cli_records_external_pin_failure_without_partial_success (__main__.CLITests.test_cli_records_external_pin_failure_without_partial_success) ... ok
+test_existing_output_rejected_before_any_audit (__main__.CLITests.test_existing_output_rejected_before_any_audit) ... ok
+test_output_outside_owned_records_directory_rejected_before_audit (__main__.CLITests.test_output_outside_owned_records_directory_rejected_before_audit) ... ok
+test_import_scope_restores_hooks_and_paths (__main__.IsolationTests.test_import_scope_restores_hooks_and_paths) ... ok
+test_boolean_returncode_is_not_integer_exit (__main__.MetadataTests.test_boolean_returncode_is_not_integer_exit) ... ok
+test_campaign_completion_flags_are_exact_booleans (__main__.MetadataTests.test_campaign_completion_flags_are_exact_booleans) ... ok
+test_campaign_failure_or_finalization_error_never_complete (__main__.MetadataTests.test_campaign_failure_or_finalization_error_never_complete) ... ok
+test_campaign_job_experiment_schema_stage_must_match (__main__.MetadataTests.test_campaign_job_experiment_schema_stage_must_match) ... ok
+test_campaign_process_coverage_cannot_omit_or_add_phase (__main__.MetadataTests.test_campaign_process_coverage_cannot_omit_or_add_phase) ... ok
+test_collection_and_old_gate_failures_are_fatal (__main__.MetadataTests.test_collection_and_old_gate_failures_are_fatal) ... ok
+test_coordinator_boolean_completion_does_not_accept_integer (__main__.MetadataTests.test_coordinator_boolean_completion_does_not_accept_integer) ... ok
+test_coordinator_command_is_exact_including_manifest_pin (__main__.MetadataTests.test_coordinator_command_is_exact_including_manifest_pin) ... ok
+test_coordinator_hash_coverage_is_exact (__main__.MetadataTests.test_coordinator_hash_coverage_is_exact) ... ok
+test_coordinator_hashes_checked_against_each_member (__main__.MetadataTests.test_coordinator_hashes_checked_against_each_member) ... ok
+test_coordinator_identity_and_completion_must_match (__main__.MetadataTests.test_coordinator_identity_and_completion_must_match) ... ok
+test_declared_main_and_smoke_counts_have_exact_separate_denominators (__main__.MetadataTests.test_declared_main_and_smoke_counts_have_exact_separate_denominators) ... ok
+test_external_job_source_archive_and_baseline_must_match_remote (__main__.MetadataTests.test_external_job_source_archive_and_baseline_must_match_remote) ... ok
+test_final_status_copy_cannot_disagree (__main__.MetadataTests.test_final_status_copy_cannot_disagree) ... ok
+test_full_payload_index_rejects_missing_extra_and_wrong_hash (__main__.MetadataTests.test_full_payload_index_rejects_missing_extra_and_wrong_hash) ... ok
+test_index_cannot_include_itself (__main__.MetadataTests.test_index_cannot_include_itself) ... ok
+test_invalid_external_job_rejected_before_collection (__main__.MetadataTests.test_invalid_external_job_rejected_before_collection) ... ok
+test_more_than_one_smoke_receipt_rejected (__main__.MetadataTests.test_more_than_one_smoke_receipt_rejected) ... ok
+test_new_unindexed_campaign_member_is_not_silently_ignored (__main__.MetadataTests.test_new_unindexed_campaign_member_is_not_silently_ignored) ... ok
+test_no_smoke_receipt_rejected (__main__.MetadataTests.test_no_smoke_receipt_rejected) ... ok
+test_old_four_gpu_contract_gate_gets_exact_command (__main__.MetadataTests.test_old_four_gpu_contract_gate_gets_exact_command) ... ok
+test_partial_failed_or_smoke_collection_rejected (__main__.MetadataTests.test_partial_failed_or_smoke_collection_rejected) ... ok
+test_positive_metadata_preserves_bound_records_and_exact_helper_inputs (__main__.MetadataTests.test_positive_metadata_preserves_bound_records_and_exact_helper_inputs) ... ok
+test_unverified_full_collection_index_rejected (__main__.MetadataTests.test_unverified_full_collection_index_rejected) ... ok
+test_summary_refuses_incomplete_or_nonpassed_result (__main__.SummaryTests.test_summary_refuses_incomplete_or_nonpassed_result) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.334s
+
+OK
