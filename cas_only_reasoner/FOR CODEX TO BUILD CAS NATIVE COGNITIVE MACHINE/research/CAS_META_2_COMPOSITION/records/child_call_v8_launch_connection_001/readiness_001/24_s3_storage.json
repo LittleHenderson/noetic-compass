@@ -1,0 +1,48 @@
+{
+  "finished_utc": "2026-09-06T13:17:40.955708+00:00",
+  "label": "24_s3_storage",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "productFamily",
+        "Type": "TERM_MATCH",
+        "Value": "Storage"
+      },
+      {
+        "Field": "storageClass",
+        "Type": "TERM_MATCH",
+        "Value": "General Purpose"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonS3"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": [
+      "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"volumeType\":\"Annotations\",\"storageClass\":\"General Purpose\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"usagetype\":\"USW2-Annotation-TimedStorage-ByteHrs\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\"},\"sku\":\"B2BY8PAVZ56ZJFAD\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"B2BY8PAVZ56ZJFAD.JRTCKXETXF\":{\"priceDimensions\":{\"B2BY8PAVZ56ZJFAD.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.023 per GB-Mo of Storage in Annotations \",\"appliesTo\":[],\"rateCode\":\"B2BY8PAVZ56ZJFAD.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0230000000\"}}},\"sku\":\"B2BY8PAVZ56ZJFAD\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}",
+      "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"volumeType\":\"Standard\",\"storageClass\":\"General Purpose\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"durability\":\"99.999999999%\",\"usagetype\":\"USW2-TimedStorage-ByteHrs\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"availability\":\"99.99%\",\"operation\":\"\"},\"sku\":\"Z3FQZG73HYSPVABR\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF\":{\"priceDimensions\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.021 per GB - storage used / month over 500 TB\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\",\"beginRange\":\"512000\",\"pricePerUnit\":{\"USD\":\"0.0210000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\":{\"unit\":\"GB-Mo\",\"endRange\":\"51200\",\"description\":\"$0.023 per GB - first 50 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0230000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\":{\"unit\":\"GB-Mo\",\"endRange\":\"512000\",\"description\":\"$0.022 per GB - next 450 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0220000000\"}}},\"sku\":\"Z3FQZG73HYSPVABR\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "8bd8ce14-9a9c-46ad-adcd-57d47861e846",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:17:40.377350+00:00",
+  "status": "OK",
+  "wall_seconds": 0.578363000000536
+}

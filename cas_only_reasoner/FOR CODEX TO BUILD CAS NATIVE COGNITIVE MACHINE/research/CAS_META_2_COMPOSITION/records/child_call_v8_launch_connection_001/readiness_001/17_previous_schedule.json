@@ -1,0 +1,26 @@
+{
+  "error": {
+    "Code": "ResourceNotFoundException",
+    "Message": "Schedule cas-meta2-20260906094002-39762c47 does not exist."
+  },
+  "finished_utc": "2026-09-06T13:17:40.096314+00:00",
+  "label": "17_previous_schedule",
+  "method": "get_schedule",
+  "parameters": {
+    "Name": "cas-meta2-20260906094002-39762c47"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response_metadata": {
+    "HTTPStatusCode": 404,
+    "RequestId": "48fe4e54-76cd-4e9d-b349-20869f89117f",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "scheduler",
+  "started_utc": "2026-09-06T13:17:39.501402+00:00",
+  "status": "AWS_ERROR",
+  "wall_seconds": 0.5949194999993779
+}

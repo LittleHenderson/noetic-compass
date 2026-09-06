@@ -1,0 +1,709 @@
+{
+  "schema": "cas-meta2-prefix-launch-preparation-final/8",
+  "status": "READY_FOR_OWNER_LAUNCH_APPROVAL_NOT_EXECUTED",
+  "created_utc": "2026-09-06 13:40:58 UTC",
+  "root_absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "job": "cas-meta2-20260906133828-cff56f29",
+  "parent_source_sha": "39d0ed9b65683504d9335963bf57c7ac6ef1d78f",
+  "worker_source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+  "previous_evidence_commit": "a1abe5787949b4f9dbdf26798e397472db9464e7",
+  "launch_request_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/launch_request.json",
+  "launch_request_sha256": "745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf",
+  "approval_request_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/APPROVAL_REQUEST.md",
+  "boundaries": {
+    "paid_launch": false,
+    "new_reservation": false,
+    "real_launch_approval_received": false,
+    "neural_execution": false,
+    "native_execution": false,
+    "training": false,
+    "new_learning_result": false,
+    "new_held_out_result": false,
+    "source_worker_changed": false,
+    "accepted_executor_changed": false,
+    "baseline_weights_changed": false,
+    "old_v7_experiment_invoked": false,
+    "automatic_later_training": false,
+    "local_pure_checks": true,
+    "read_only_aws_checks": true,
+    "live_gpu_allocation_proven": false,
+    "live_cuda_loading_proven": false,
+    "live_shutdown_proven": false
+  },
+  "budget_observation": {
+    "campaign_cap_usd": "400.00",
+    "checked_file_sha256": {
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_budget_ledger.json": "3c6f61d7065fef65407dc7ca9405b8a2be8f3d163714014de1f7c4b6e33384d7",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000000.json": "e63e02b00edb57b7faca19006daba98cd14c84da14f074f90307d05ccfee8134",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000001.json": "6d761c2a2481f3715f543e7013fd17628d5d827ad1560625ca2467d05592f504",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000002.json": "c103d0da5a672690f451639d99b0199048f2b0bebe1f128673f7c44ae49a0ee8",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000003.json": "1e3a3d8ca454ea0f5dbf210bc3739f524a777ab92817a075c68d19780a6a5262",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000004.json": "d430a2cf3e2bf7189f2877e75df44b99993893d18c0e05d180b82091ac6a9c04",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000005.json": "292c04bb920d3f3829b717bf7a1f43629b188a9a4180b3c69126fd3c30c883e4",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000006.json": "a4456264c1a98e01ac9f9ac4f643e0de52aa2907f655d55517e7f84e26cebce3",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000007.json": "a784c2a485993558876a15425613000a6bc538f7c8f69850e400b808085b281b",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000008.json": "5cc65ea67504d131297bdb89655351c2ce4e1d3408efa672783319a0d07a22b4",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000009.json": "4b23d2a695908b45ca379540ea7bc1c6feb4886a43ac32ba306bf8f1baeb6f42",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000010.json": "18feee8e8b44366f5a246472b10a73fd383dda47c394243fc8c13fe137665944",
+      "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json.history\\00000011.json": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804"
+    },
+    "contents_unchanged": true,
+    "history_chain_validated": true,
+    "ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+    "ledger_sha256": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+    "new_reservation": false,
+    "remaining_unreserved_usd": "322.00",
+    "revision": 11,
+    "temporary_owned_read_lock_used": true,
+    "total_reserved_usd": "78.00"
+  },
+  "proposed_cost": {
+    "reservation_usd": "4.00",
+    "compute_usd_per_hour": "2.52",
+    "known_resource_estimate_before_tax_usd": "2.569242828761600000000000000",
+    "full_ancillary_allowance_usd": "1.00",
+    "compute_plus_allowance_usd": "3.52",
+    "remaining_if_four_dollars_later_reserved_usd": "318.00",
+    "provider_enforced_account_cap": false,
+    "caveats": [
+      "Prices and ledger are checked again during authorized launch.",
+      "Taxes, support allocation and abnormal shutdown delays are not established by price records.",
+      "No free-tier credit or discount assumed."
+    ]
+  },
+  "resource_plan": {
+    "account_id": "807562639912",
+    "ami_id": "ami-0fbbd0facbc9e3cff",
+    "ancillary_reserved_usd": "1.00",
+    "artifact_bytes_max": 268435456,
+    "artifact_objects_max": 3,
+    "automatic_retries": 0,
+    "cloud_shutdown_seconds": 3480,
+    "delete_on_termination": true,
+    "download_bytes_max": 268435456,
+    "ebs_encrypted": true,
+    "ebs_gb": 75,
+    "ebs_iops": 3000,
+    "ebs_throughput_mib_per_second": 125,
+    "ebs_type": "gp3",
+    "egress_tcp_ports": [
+      443
+    ],
+    "evidence_expanded_bytes_max": 536870912,
+    "gpu_count": 1,
+    "guest_shutdown_seconds": 3400,
+    "inbound_rules": [],
+    "input_bytes_max": 16777216,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "later_curriculum_execution": false,
+    "local_neural_execution": false,
+    "native_execution": false,
+    "on_demand_hourly_usd_max": "2.52",
+    "per_launch_reserved_cap_usd": "4.00",
+    "region": "us-west-2",
+    "required_gpu_name_contains": "RTX PRO 4500",
+    "runtime_seconds_max": 3600,
+    "s3_read_requests_max": 1000,
+    "s3_retention_days": 7,
+    "s3_write_requests_max": 1000,
+    "scheduler_invocations_max": 1,
+    "training": false,
+    "worker_seconds_max": 1800
+  },
+  "panel": {
+    "distinct_tasks": 120,
+    "train_probe": 24,
+    "validation": 96,
+    "train_probe_by_depth": {
+      "1": 8,
+      "2": 8,
+      "3": 8
+    },
+    "validation_by_depth": {
+      "1": 32,
+      "2": 32,
+      "3": 32
+    },
+    "checkpoints": 4,
+    "task_checkpoint_rows": 480,
+    "reference_decisions_per_checkpoint": 2272,
+    "forced_run_input_decisions_per_checkpoint": 360,
+    "multiple_grammatical_choices_per_checkpoint": 1912,
+    "reference_decision_checkpoint_rows": 9088,
+    "boundary": "Existing development panel. No new held-out tasks. Correct-prefix and self-generated-prefix results must remain separate; both accuracy and coverage required."
+  },
+  "test_runs": [
+    {
+      "receipt": "records/child_call_v8_launch_connection_001/checks_001/receipt.json",
+      "stdout": "records/child_call_v8_launch_connection_001/checks_001/stdout.txt",
+      "tests_passed": 80,
+      "subtests_passed": 0,
+      "exact_summary": "80 passed in 2.39s",
+      "exit_code": 0,
+      "scope": "Dedicated parent, remote and handoff contracts; fake provider/process tests."
+    },
+    {
+      "receipt": "records/child_call_v8_preparation_002/checks_001/receipt.json",
+      "stdout": "records/child_call_v8_preparation_002/checks_001/stdout.txt",
+      "tests_passed": 79,
+      "subtests_passed": 0,
+      "exact_summary": "79 passed in 11.53s",
+      "exit_code": 0,
+      "scope": "Pure archive preparation, scaffold, and clean-package-runner tests."
+    },
+    {
+      "receipt": "records/child_call_v8_diagnostic_001/clean_package_003/receipt.json",
+      "stdout": "records/child_call_v8_diagnostic_001/clean_package_003/stdout.txt",
+      "tests_passed": 313,
+      "subtests_passed": 5,
+      "skipped": 0,
+      "exact_summary": "313 passed, 5 subtests passed in 29.53s",
+      "exit_code": 0,
+      "scope": "Frozen ZIP in new extraction with pinned external development and historical regression inputs. Not wheel installation or fully hermetic OS isolation."
+    }
+  ],
+  "earlier_clean_attempts": [
+    {
+      "directory": "records/child_call_v8_diagnostic_001/clean_package_001",
+      "status": "PROCESS_NOT_STARTED",
+      "observed_error": "WinError 267: The directory name is invalid",
+      "cause": "Windows long child working directory",
+      "receipt_missing": true,
+      "boundary": "Observed in this task's original command traceback; not a completed test run."
+    },
+    {
+      "directory": "records/child_call_v8_diagnostic_001/clean_package_002",
+      "status": "INCOMPLETE_SUITE_REPRODUCTION",
+      "tests_passed": 311,
+      "skipped": 2,
+      "subtests_passed": 5,
+      "process_exit_code": 0,
+      "cause": "Two historical regression packets had not yet been staged",
+      "boundary": "Original receipt count fields are null; raw stdout supplies counts. Preserved, not relabeled as complete."
+    }
+  ],
+  "clean_source_input_boundary": {
+    "source_archive_and_development_bundle_separate": true,
+    "required_local_extraction": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_partial_review_001/extracted_001",
+    "required_local_extraction_receipt": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/prototype_v7_partial_review_001/extraction_receipt.json",
+    "required_local_extraction_receipt_sha256": "9bf40771df6dd7f67189d402d6bcfd8e05bd8cd997b71a6825fff21da105ae98",
+    "historical_zip_inputs_local_tests_only": true,
+    "external_data_unchanged_receipt_scope": "Companion extraction receipt plus original and staged historical ZIPs, not every external development file after the test.",
+    "frozen_test_fixture_verifies_required_development_bytes": true,
+    "fully_hermetic": false,
+    "wheel_installation_proven": false
+  },
+  "separate_child_preparation": {
+    "scaffolds": 1,
+    "observations": 3,
+    "choice_tuples": 180,
+    "pure_admitted": 90,
+    "topology_rejected": 72,
+    "observation_return_rejected": 18,
+    "matched_br_pairs": 6,
+    "native_usability": "UNEXECUTED",
+    "numerical_discrimination": "UNPROVEN",
+    "task_conditioned_br_variation": "UNBUILT",
+    "equal_saved_state_protocol": "records/child_call_v8_preparation_002/BR_PROTOCOL.md",
+    "included_in_diagnostic_scope": false
+  },
+  "remaining_gate": "Explicit owner approval of this exact $4 diagnostic.",
+  "launch_time_unknowns": [
+    "AWS GPU allocation",
+    "AWS create permissions",
+    "Pinned installation and checkpoint loading on the actual AMI",
+    "CUDA generation agreement and numerical settings",
+    "Real independent shutdown, output collection and ownership-checked cleanup"
+  ],
+  "source_files": [
+    {
+      "path": "aws/launch_prefix_diagnostic_v8.py",
+      "sha256": "d9853e6cbb41fd5efdd927e217bde35fc98a05bf9d784c500cc82b04ba219e48",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/launch_prefix_diagnostic_v8.py",
+      "bytes": 46024
+    },
+    {
+      "path": "aws/prefix_diagnostic_launch_v8.py",
+      "sha256": "b9cd66fef73acc4492a0a493c1cb93df612e36827f52a56d9f1f5aad03448fcc",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/prefix_diagnostic_launch_v8.py",
+      "bytes": 20986
+    },
+    {
+      "path": "aws/prefix_remote_v8.py",
+      "sha256": "e72f5937895d856797e9dae200100b279a39bdbe4850f67b5405a70cb9719f8b",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/prefix_remote_v8.py",
+      "bytes": 27032
+    },
+    {
+      "path": "cas_meta2/child_scaffold_v8.py",
+      "sha256": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/cas_meta2/child_scaffold_v8.py",
+      "bytes": 16435
+    },
+    {
+      "path": "tests/test_child_scaffold_v8.py",
+      "sha256": "ac69f4470ce20226899346fb71aafdfcc27f04f23a5072ebf46b1698591f3d08",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_child_scaffold_v8.py",
+      "bytes": 10901
+    },
+    {
+      "path": "tests/test_launch_prefix_diagnostic_v8.py",
+      "sha256": "182d008365edc34a669b27afd639689c8577a0acc8633810839bf02907d26b64",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_launch_prefix_diagnostic_v8.py",
+      "bytes": 19969
+    },
+    {
+      "path": "tests/test_prefix_diagnostic_launch_v8.py",
+      "sha256": "cb2655c9f4df39d550c0297d873f5cca327bd4bd20e39fce68f3afdfbf4806f3",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_prefix_diagnostic_launch_v8.py",
+      "bytes": 13063
+    },
+    {
+      "path": "tests/test_prefix_remote_v8.py",
+      "sha256": "95561403d01d8403f84f7e3514b25bb4b398616fbcbb2a5a4a440a82e5ddd64f",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_prefix_remote_v8.py",
+      "bytes": 7721
+    },
+    {
+      "path": "tests/test_prefix_remote_v8_review.py",
+      "sha256": "7b6969ef059a7eccaa10144a829fe297090bb761f4eb3b1f6b0ec60c19131e20",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_prefix_remote_v8_review.py",
+      "bytes": 8191
+    },
+    {
+      "path": "tests/test_verify_prefix_clean_package_v8.py",
+      "sha256": "eeb79117d9bc54fc181d82b6125d012cc2ad5f3a6afa924ba918c1984a307063",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_verify_prefix_clean_package_v8.py",
+      "bytes": 2546
+    },
+    {
+      "path": "tools/check_child_call_preparation_v8.py",
+      "sha256": "7846c3ce82a4a65893b5989ae9b4cf386c386381a0a0c421ccb9c05c87c33db1",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/check_child_call_preparation_v8.py",
+      "bytes": 5720
+    },
+    {
+      "path": "tools/check_prefix_launch_connection_v8.py",
+      "sha256": "029af91fc34773fa62f03836ad208e75c2de0a7b6a2875285cddaa4abb2f31bc",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/check_prefix_launch_connection_v8.py",
+      "bytes": 3830
+    },
+    {
+      "path": "tools/verify_prefix_clean_package_v8.py",
+      "sha256": "e2fc176930d9e4d328f6628857d496d37e79e6e6ace7110b083bc70576af4d04",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/verify_prefix_clean_package_v8.py",
+      "bytes": 11925
+    },
+    {
+      "path": "records/child_call_v8_preparation_002/BR_PROTOCOL.md",
+      "sha256": "121be4b6145f63aba775060f8135714ba682f47c87b53b8b02a9164a4e89c6b8",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_preparation_002/BR_PROTOCOL.md",
+      "bytes": 13638
+    },
+    {
+      "path": "records/child_call_v8_launch_connection_001/README.md",
+      "sha256": "840cbc070d05829b07e5441f80bcfaed9c6db42ab36aabb290cd6b8e9c2c7a48",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/README.md",
+      "bytes": 7724
+    }
+  ],
+  "external_inputs": [
+    {
+      "path": "records/child_call_v8_diagnostic_001/source_001/source.zip",
+      "sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/source_001/source.zip",
+      "bytes": 7952045
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/development_bundle.zip",
+      "sha256": "1874508d0baad7d6620001505c39f184b3cb091c59de4e96197f309beee0a042",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/development_bundle.zip",
+      "bytes": 6570836
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/bundle_001/manifest.json",
+      "sha256": "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/manifest.json",
+      "bytes": 23452
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/bundle_001/checkpoints/cas_initial.pt",
+      "sha256": "ad8c80bf3d3ed7111e118957066ac3f0ec0509681fa2aa00e44d1592403b43fd",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/checkpoints/cas_initial.pt",
+      "bytes": 1117577
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/bundle_001/checkpoints/cas_selected.pt",
+      "sha256": "bf709539d8a462fe73909553659ad046305e75428a15d80e83124bc28ee84b46",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/checkpoints/cas_selected.pt",
+      "bytes": 2666977
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/bundle_001/checkpoints/generic_initial.pt",
+      "sha256": "20669d0470a583ab172bbb06451c0b6bcbbf190ea10b3e725e7a73c5c046b051",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/checkpoints/generic_initial.pt",
+      "bytes": 1104425
+    },
+    {
+      "path": "records/child_call_v8_diagnostic_001/bundle_001/checkpoints/generic_selected.pt",
+      "sha256": "53e2acdd4635d843210a7aa0a5b194e395f57c0b7f71ca59b1a64dbeae4ca532",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_diagnostic_001/bundle_001/checkpoints/generic_selected.pt",
+      "bytes": 2626593
+    },
+    {
+      "path": "records/aws_full_002/cloud_artifacts.zip",
+      "sha256": "e22412583114e50cbf9e60d8b22864bfb4ca76e6ccecedee7a0f72976ec37ae0",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_full_002/cloud_artifacts.zip",
+      "bytes": 62269330
+    },
+    {
+      "path": "records/aws_learning_v2_001/cloud_artifacts.zip",
+      "sha256": "0d1b13aa711685cc488bdfdb981d8682d3d1b02b8e67530a3742add44dd13e93",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_learning_v2_001/cloud_artifacts.zip",
+      "bytes": 59648802
+    },
+    {
+      "path": "records/budget/campaign_ledger.json",
+      "sha256": "13b0e04b5a8679af2a86d63eab619a4e9c2169716cf8186bbb2f067e508be804",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/budget/campaign_ledger.json",
+      "bytes": 32617
+    }
+  ],
+  "evidence_files": [
+    {
+      "sha256": "0de93b341a1958f4d77a5a166c1565b119b95102f1b9be360efef15fd6c7eb5a",
+      "bytes": 766,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/01_identity.json"
+    },
+    {
+      "sha256": "8858333a292780bbc86b840b52ae224fce1bc842f3c8bcd68bfcd75b1241d240",
+      "bytes": 5168,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/02_instance_type.json"
+    },
+    {
+      "sha256": "b83b763923d1faf8aba436aa1a3b3b471bf1821e06bfd510e986bc08b91d297f",
+      "bytes": 2606,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/03_ami.json"
+    },
+    {
+      "sha256": "643c5c4c45d69837425c4feae61c174b3a952180367c6186b1e7921171be1aee",
+      "bytes": 1721,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/04_subnet.json"
+    },
+    {
+      "sha256": "0621c6928d9ec5d3bcd0ae97c6f255be0a5a8495b44a6b91665542129ea43827",
+      "bytes": 1368,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/05_vpc.json"
+    },
+    {
+      "sha256": "a87c8501f6cbabe0019a486082b95c3f01abf0afcca12d5526c4f691bdaa08bf",
+      "bytes": 1724,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/06_routes.json"
+    },
+    {
+      "sha256": "edd8ff322d68c7b5ffc42e4216b81f147ff6b0f92cb10b6f3142591417bdcd51",
+      "bytes": 2652,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/07_network_acl.json"
+    },
+    {
+      "sha256": "955427dc21e0fd7e1510bc46a82f16cab2ecda357dc1a380302ea73ea032d8c6",
+      "bytes": 1128,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/08_internet_gateway.json"
+    },
+    {
+      "sha256": "72004d20d83fa238e5847d8585a9b17adc6e51ca8d1db3ba2e65ff05760a71c4",
+      "bytes": 849,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/09_dns_support.json"
+    },
+    {
+      "sha256": "4cdf5935a32a93f9bc7bfd3cb1ecde08796d9570287d7478124966511d48bf4e",
+      "bytes": 855,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/10_dns_hostnames.json"
+    },
+    {
+      "sha256": "34124444a020af3674873aeafe8d407df02169b21f17d128b9d2b23240609c90",
+      "bytes": 1125,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/11_offering.json"
+    },
+    {
+      "sha256": "326c89b73fdf07fb9ccb2faeb08af7bc51ea1ac3fb8016998dc61affd6c495ec",
+      "bytes": 1593,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/12_gpu_quota.json"
+    },
+    {
+      "sha256": "3481397fe995a4a4993207b72a4b0e8052066fbedf3b319a526fe1b0be7b8648",
+      "bytes": 1042,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/13_tagged_jobs.json"
+    },
+    {
+      "sha256": "7d8b590d11ae8dffffbae8645e87d643353e96adb1abd1e3d30c3dfd3840e303",
+      "bytes": 991,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/14_running_gpu_usage.json"
+    },
+    {
+      "sha256": "71a30d687c6f38d1a4b473305560df613c6c35eaea7aa9918cc4e8733c7a2d03",
+      "bytes": 785,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/15_previous_instance.json"
+    },
+    {
+      "sha256": "4ac6ce062de1bdd7ad835d0a1a2749700cd454c5c270b4f5dbdcfc7bd0a29bc3",
+      "bytes": 853,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/16_previous_volumes.json"
+    },
+    {
+      "sha256": "08e1fdefe45463ea1b5f44bd06ac2b20301c7b94a93e1739664daa3e4bb08d91",
+      "bytes": 855,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/17_previous_schedule.json"
+    },
+    {
+      "sha256": "a2ce1443583b5aaa6d3bb1d29f658d42f17244c72306934e97aacac69b064b86",
+      "bytes": 886,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/18_previous_worker_role.json"
+    },
+    {
+      "sha256": "d2a3bf1f9d808d3315b5d852a626b39f2866df1ef6cdd243f2e00077fb988a6f",
+      "bytes": 883,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/19_previous_timer_role.json"
+    },
+    {
+      "sha256": "6ae9d1a98c69cc5555d5f5866477694ce2abfd1c881facf6327d2a2ccbd5dd98",
+      "bytes": 903,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/20_previous_profile.json"
+    },
+    {
+      "sha256": "72f0994af2605b420f1c6b5f035cbd057da712b478018d1cd0516945436c6300",
+      "bytes": 3746,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/21_compute_price.json"
+    },
+    {
+      "sha256": "ea168649fa47682bd0d048b33e471e41a25ad821acc35bb78cf409afbe66b281",
+      "bytes": 2331,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/22_ebs_price.json"
+    },
+    {
+      "sha256": "bd8a0bd0a4af28c60e6f6b494aa03ba91ed10436744239af6fc837c7cb409e5b",
+      "bytes": 2099,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/23_ipv4_price.json"
+    },
+    {
+      "sha256": "254a5a96d0297f99853755aaa90f405deed43f7cf890cd983894e152cd444b5e",
+      "bytes": 3867,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/24_s3_storage.json"
+    },
+    {
+      "sha256": "b105a58269918231c3018ec2571a8ea753ac8b4ba34c2d1399834dfeb08bf092",
+      "bytes": 2106,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/25_s3_requests_tier1.json"
+    },
+    {
+      "sha256": "c6b9774b87cdbd9901c4e95905f77d0cc86fd85c3889bd85e574023c127ad74a",
+      "bytes": 2095,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/26_s3_requests_tier2.json"
+    },
+    {
+      "sha256": "51bbd77da1ad44aa6cf19b714bcc163aa394d61d32502384dd55b72720702844",
+      "bytes": 1072,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/27_s3_transfer.json"
+    },
+    {
+      "sha256": "c8452ff568359b416559bdbb580fd172a4b7339ecf98334e2fc73bdc5a0aaa13",
+      "bytes": 775,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/28_identity_followup.json"
+    },
+    {
+      "sha256": "539d9f1dfd0ea566f22c4e4daf820885b40d62f4e91ff1bf1902dfcc81c576cf",
+      "bytes": 3206,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/29_internet_transfer.json"
+    },
+    {
+      "sha256": "2d17a4ee954eaa439a17af52799c128489e3640b15e047af8e55216dc1f70c6d",
+      "bytes": 1182,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/30_ec2_internet_transfer.json"
+    },
+    {
+      "sha256": "d396332de299af571a4ffc0913f57dd1eec6e4a599e8c6448ef06e7b2fbb6ab0",
+      "bytes": 1066,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/31_scheduler_price.json"
+    },
+    {
+      "sha256": "a21d8641d6dc4ef4fd035f2a7d471b7cec691b38a2d77e09ebca06b80ebd80e2",
+      "bytes": 1213,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/capture_receipt.json"
+    },
+    {
+      "sha256": "62408f89afd83227b8a947de958d90d90e745cf78ea13b3820de1efc4921706e",
+      "bytes": 1518,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/capture.py"
+    },
+    {
+      "sha256": "0e21fbc8e0fd0e45bda79a6467d34e447bceb5033bf3ae245fab553c73a253a6",
+      "bytes": 6274,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/execution_receipt.json"
+    },
+    {
+      "sha256": "41c74347c82d7dc432226ba783d0ff10980571fbeb726134ff483673f1af653a",
+      "bytes": 10543,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/probe.py"
+    },
+    {
+      "sha256": "7efe533a9fe4846a386acf51a06d552179ca0b4d8650883765c5ad7df7bb9460",
+      "bytes": 14367,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/readiness_summary.json"
+    },
+    {
+      "sha256": "466b3b54ac476ebca4e1af94ff6f50fc86af95de563b9b9cd8bdcf82263d5ee7",
+      "bytes": 4329,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/README.md"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/stderr.txt"
+    },
+    {
+      "sha256": "979a0631af8fd80eec9955c4e85d077faf1fcb1ae0d662282f6db31c41212bc3",
+      "bytes": 5112,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/stdout.txt"
+    },
+    {
+      "sha256": "0f22aa978be93a4a20de0cf0320efbabed0dfdaadd748822347e676e308800cd",
+      "bytes": 10577,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/summarize.py"
+    },
+    {
+      "sha256": "01e0c9a047da7926a93f48828fe0bdd42db46cb134ae2005ee1fff94b0689c35",
+      "bytes": 567,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/SUPPLEMENT_IMPORT_FAILURE.md"
+    },
+    {
+      "sha256": "9eda37694deb910a508a15a62553307446fe2398be38a6529ea0324500ef7109",
+      "bytes": 1155,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/supplement_receipt.json"
+    },
+    {
+      "sha256": "995344613849def7dcb57b626e91592d395d71ad2e728ad103f554b875258438",
+      "bytes": 2155,
+      "path": "records/child_call_v8_launch_connection_001/readiness_001/supplement.py"
+    },
+    {
+      "sha256": "b74aee83892c00e7f3887c6760f08ff0c761df55b034a20f6f7b0548e99fdbd6",
+      "bytes": 2583,
+      "path": "records/child_call_v8_launch_preflight_001/preparation_001/command_receipt.json"
+    },
+    {
+      "sha256": "1527bda69aaaeb87509bccbdfef516d5f27e5de254af791289e986181bc03671",
+      "bytes": 2604,
+      "path": "records/child_call_v8_launch_preflight_001/preparation_001/command_template.json"
+    },
+    {
+      "sha256": "876fa242165cc21faaa7fbe8b7206cf20ffd0289a42a00be5348109c67dd2fd6",
+      "bytes": 112118,
+      "path": "records/child_call_v8_launch_preflight_001/preparation_001/preparation.json"
+    },
+    {
+      "sha256": "eb89c8cb004bd4216a834ece1c8692b0266d5976c6483012a88b43ba9739b9ba",
+      "bytes": 1312,
+      "path": "records/child_call_v8_launch_preflight_001/preparation_001/worker_plan_draft.json"
+    },
+    {
+      "sha256": "6c3a14018f23f69d71e387a1e77216a4e60aa8dbe6ed48a656afe872b748ce26",
+      "bytes": 1137,
+      "path": "records/child_call_v8_preparation_002/enumeration_001/command_receipt.json"
+    },
+    {
+      "sha256": "b77bd5f3795c549f42a60085861a6b87f6ee603e0e7ba4a7c3ebc5dee8b311ca",
+      "bytes": 767154,
+      "path": "records/child_call_v8_preparation_002/enumeration_001/enumeration.json"
+    },
+    {
+      "sha256": "7f8e9e076345de26963b970ebf714f9e481c43973367feb6378fc4326f6165e4",
+      "bytes": 2515,
+      "path": "records/child_call_v8_preparation_002/enumeration_001/receipt.json"
+    },
+    {
+      "sha256": "9a35a4b257b3879db69f061d44d29f14184ddf1099612536dec1db339a5ab059",
+      "bytes": 190065,
+      "path": "records/child_call_v8_launch_connection_001/checks_001/receipt.json"
+    },
+    {
+      "sha256": "ce335956f82158d6dff4813a3e2b7281a12f81647709dc374fedbf9cabddd9d6",
+      "bytes": 182,
+      "path": "records/child_call_v8_launch_connection_001/checks_001/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_launch_connection_001/checks_001/stderr.txt"
+    },
+    {
+      "sha256": "85924c938984bad11f13a2cf7cb632021d05182b612280003aa4f65070782ae7",
+      "bytes": 189746,
+      "path": "records/child_call_v8_preparation_002/checks_001/receipt.json"
+    },
+    {
+      "sha256": "52361fb76beac5c75f13870dd940a088edbb21dd336239bf52ce787b04e791aa",
+      "bytes": 183,
+      "path": "records/child_call_v8_preparation_002/checks_001/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_preparation_002/checks_001/stderr.txt"
+    },
+    {
+      "sha256": "3ef8e2a12140674d5c8a58f05acf202d1bba56ce1c95ffbe7afccc605a01216e",
+      "bytes": 190383,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_002/receipt.json"
+    },
+    {
+      "sha256": "da2e6ed8f5ac0252e85fba85e015ec96205d3d3b9b39e14127a5d8d46d02d6cf",
+      "bytes": 452,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_002/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_002/stderr.txt"
+    },
+    {
+      "sha256": "453d255e66376b619f54ab1f0bcba42af169821a723bd15844ed7bfbbdce22a6",
+      "bytes": 192446,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_003/receipt.json"
+    },
+    {
+      "sha256": "f17972f2a04fe47fe2f32a6e47a6def8cb218640977aacb04b470cd49b784ec9",
+      "bytes": 441,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_003/stdout.txt"
+    },
+    {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "path": "records/child_call_v8_diagnostic_001/clean_package_003/stderr.txt"
+    },
+    {
+      "sha256": "745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf",
+      "bytes": 9842,
+      "path": "records/child_call_v8_launch_connection_001/launch_request.json"
+    },
+    {
+      "sha256": "a323ec2152d86bded850833318dde922b2a9d74ff0e9c34826d39ec608d883f6",
+      "bytes": 12465,
+      "path": "records/child_call_v8_launch_connection_001/request_command_receipt.json"
+    },
+    {
+      "path": "records/child_call_v8_launch_connection_001/APPROVAL_REQUEST.md",
+      "sha256": "8d6b7e9eb4b69c24e62577c1f618a7841029cd6e6bf4ce7d50620bc5d9e62652",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/APPROVAL_REQUEST.md",
+      "bytes": 6949
+    },
+    {
+      "path": "records/child_call_v8_launch_connection_001/verify_receipt.ps1",
+      "sha256": "ff66e321d22d951da9a8f8e7f1d64ea6cd03d989af399759e87bc5238bec9c3a",
+      "absolute_path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/child_call_v8_launch_connection_001/verify_receipt.ps1",
+      "bytes": 2927
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.557262+00:00",
+  "label": "14_running_gpu_usage",
+  "method": "describe_instances",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "instance-type",
+        "Values": [
+          "g*",
+          "vt*"
+        ]
+      },
+      {
+        "Name": "instance-state-name",
+        "Values": [
+          "pending",
+          "running"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Instances": [],
+    "NextToken": null
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "e7fa5cd7-fd9d-4f6c-b98b-93c8b28eb766",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.473732+00:00",
+  "status": "OK",
+  "wall_seconds": 0.08352979999835952
+}

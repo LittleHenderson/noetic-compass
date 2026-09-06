@@ -1,0 +1,27 @@
+{
+  "error": {
+    "Code": "NoSuchEntity",
+    "Message": "The role with name cas-meta2-20260906094002-39762c47-timer cannot be found.",
+    "Type": "Sender"
+  },
+  "finished_utc": "2026-09-06T13:17:40.400598+00:00",
+  "label": "19_previous_timer_role",
+  "method": "get_role",
+  "parameters": {
+    "RoleName": "cas-meta2-20260906094002-39762c47-timer"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response_metadata": {
+    "HTTPStatusCode": 404,
+    "RequestId": "7af923cf-6939-4360-9fe9-d8c9b71c01b5",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "iam",
+  "started_utc": "2026-09-06T13:17:39.551428+00:00",
+  "status": "AWS_ERROR",
+  "wall_seconds": 0.8491708000001381
+}

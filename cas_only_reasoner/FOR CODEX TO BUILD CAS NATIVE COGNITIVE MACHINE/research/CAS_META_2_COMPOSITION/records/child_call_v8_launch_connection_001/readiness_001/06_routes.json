@@ -1,0 +1,64 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.346640+00:00",
+  "label": "06_routes",
+  "method": "describe_route_tables",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "vpc-id",
+        "Values": [
+          "vpc-0df2f8cc1b9f23838"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "RouteTables": [
+      {
+        "Associations": [
+          {
+            "AssociationState": {
+              "State": "associated"
+            },
+            "Main": true,
+            "RouteTableAssociationId": "rtbassoc-03c61f37a815604a8",
+            "RouteTableId": "rtb-0675e087f07dba3c3"
+          }
+        ],
+        "OwnerId": "807562639912",
+        "PropagatingVgws": [],
+        "RouteTableId": "rtb-0675e087f07dba3c3",
+        "Routes": [
+          {
+            "DestinationCidrBlock": "172.31.0.0/16",
+            "GatewayId": "local",
+            "Origin": "CreateRouteTable",
+            "State": "active"
+          },
+          {
+            "DestinationCidrBlock": "0.0.0.0/0",
+            "GatewayId": "igw-0a37a4259ed7e1992",
+            "Origin": "CreateRoute",
+            "State": "active"
+          }
+        ],
+        "Tags": [],
+        "VpcId": "vpc-0df2f8cc1b9f23838"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "2d83a74f-bdfb-4e1a-a6fb-b231d80945b7",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.720211+00:00",
+  "status": "OK",
+  "wall_seconds": 0.6264288000020315
+}

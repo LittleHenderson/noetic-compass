@@ -1,0 +1,29 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.476573+00:00",
+  "label": "09_dns_support",
+  "method": "describe_vpc_attribute",
+  "parameters": {
+    "Attribute": "enableDnsSupport",
+    "VpcId": "vpc-0df2f8cc1b9f23838"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "EnableDnsSupport": {
+      "Value": true
+    },
+    "VpcId": "vpc-0df2f8cc1b9f23838"
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "cb03e1b0-94ef-4876-ac78-556340b6f6d0",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.347444+00:00",
+  "status": "OK",
+  "wall_seconds": 0.12913180000032298
+}

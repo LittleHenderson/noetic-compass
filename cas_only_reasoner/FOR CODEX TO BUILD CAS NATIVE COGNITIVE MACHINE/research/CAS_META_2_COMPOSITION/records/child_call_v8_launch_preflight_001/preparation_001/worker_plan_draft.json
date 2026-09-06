@@ -1,0 +1,48 @@
+{
+  "batch_size": 16,
+  "bundle_manifest_sha256": "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629",
+  "checkpoints": [
+    "cas_initial",
+    "cas_selected",
+    "generic_initial",
+    "generic_selected"
+  ],
+  "draft_only": true,
+  "instance_id": null,
+  "job": null,
+  "launch_enabled": false,
+  "ledger_snapshot": null,
+  "max_cost_usd": "4.00",
+  "max_seconds": 1800,
+  "missing_fields_must_come_from_real_parent_execution": [
+    "job",
+    "instance_id",
+    "source_manifest.path",
+    "source_archive.path",
+    "reservation_receipt",
+    "ledger_snapshot"
+  ],
+  "reservation_receipt": null,
+  "resource_plan": {
+    "account_id": "807562639912",
+    "ancillary_reserved_usd": "1.00",
+    "automatic_retries": 0,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "on_demand_hourly_usd_max": "2.52",
+    "region": "us-west-2",
+    "runtime_seconds_max": 3600
+  },
+  "schema": "cas-meta2-prefix-diagnostic-plan/8",
+  "seed": 7,
+  "source_archive": {
+    "path": null,
+    "sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1"
+  },
+  "source_manifest": {
+    "path": null,
+    "sha256": "10f3283e5dcb3045dac2131e021d3ca383c35ae8b34c9e439e7fc82ff58cdd9c"
+  },
+  "source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+  "tasks_per_checkpoint": 120
+}

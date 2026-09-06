@@ -1,0 +1,28 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.550825+00:00",
+  "label": "15_previous_instance",
+  "method": "describe_instances",
+  "parameters": {
+    "InstanceIds": [
+      "i-0cba54498bb3a3745"
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Instances": [],
+    "NextToken": null
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "998cbc0f-7355-4eea-bb9e-31913ee90b60",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.477201+00:00",
+  "status": "OK",
+  "wall_seconds": 0.07362719999946421
+}

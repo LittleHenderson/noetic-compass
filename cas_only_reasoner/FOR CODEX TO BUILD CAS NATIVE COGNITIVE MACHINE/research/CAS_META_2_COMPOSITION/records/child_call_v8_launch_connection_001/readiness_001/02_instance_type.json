@@ -1,0 +1,179 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.330479+00:00",
+  "label": "02_instance_type",
+  "method": "describe_instance_types",
+  "parameters": {
+    "InstanceTypes": [
+      "g7.2xlarge"
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "InstanceTypes": [
+      {
+        "AutoRecoverySupported": false,
+        "BareMetal": false,
+        "BurstablePerformanceSupported": false,
+        "CurrentGeneration": true,
+        "DedicatedHostsSupported": false,
+        "EbsInfo": {
+          "AttachmentLimitType": "dedicated",
+          "EbsOptimizedInfo": {
+            "BaselineBandwidthInMbps": 4000,
+            "BaselineIops": 16000,
+            "BaselineThroughputInMBps": 500.0,
+            "MaximumBandwidthInMbps": 8000,
+            "MaximumIops": 32000,
+            "MaximumThroughputInMBps": 1000.0
+          },
+          "EbsOptimizedSupport": "default",
+          "EncryptionSupport": "supported",
+          "MaximumEbsAttachments": 32,
+          "NvmeSupport": "required"
+        },
+        "FreeTierEligible": false,
+        "GpuInfo": {
+          "Gpus": [
+            {
+              "Count": 1,
+              "GpuPartitionSize": 1.0,
+              "LogicalGpuCount": 1,
+              "Manufacturer": "NVIDIA",
+              "MemoryInfo": {
+                "SizeInMiB": 32768
+              },
+              "Name": "RTX PRO 4500",
+              "Workloads": [
+                "graphics",
+                "ml-ai"
+              ]
+            }
+          ],
+          "TotalGpuMemoryInMiB": 32768
+        },
+        "HibernationSupported": false,
+        "Hypervisor": "nitro",
+        "InstanceStorageInfo": {
+          "Disks": [
+            {
+              "Count": 1,
+              "SizeInGB": 440,
+              "Type": "ssd"
+            }
+          ],
+          "EncryptionSupport": "required",
+          "NvmeSupport": "required",
+          "TotalSizeInGB": 440
+        },
+        "InstanceStorageSupported": true,
+        "InstanceType": "g7.2xlarge",
+        "MemoryInfo": {
+          "SizeInMiB": 32768
+        },
+        "NetworkInfo": {
+          "ConnectionTrackingConfiguration": {
+            "DefaultTcpEstablishedTimeout": 350,
+            "DefaultUdpStreamTimeout": 180,
+            "DefaultUdpTimeout": 30
+          },
+          "DefaultNetworkCardIndex": 0,
+          "EfaSupported": false,
+          "EnaSrdSupported": false,
+          "EnaSupport": "required",
+          "EncryptionInTransitSupported": true,
+          "FlexibleEnaQueuesSupport": "supported",
+          "Ipv4AddressesPerInterface": 64,
+          "Ipv4AddressesPerSecondaryInterface": 0,
+          "Ipv6AddressesPerInterface": 64,
+          "Ipv6Supported": true,
+          "MaximumNetworkCards": 1,
+          "MaximumNetworkInterfaces": 4,
+          "NetworkCards": [
+            {
+              "AdditionalFlexibleNetworkInterfaces": 0,
+              "BaselineBandwidthInGbps": 40.0,
+              "DefaultEnaQueueCountPerInterface": 8,
+              "MaximumEnaQueueCount": 32,
+              "MaximumEnaQueueCountPerInterface": 8,
+              "MaximumNetworkInterfaces": 4,
+              "NetworkCardIndex": 0,
+              "NetworkPerformance": "Up to 60 Gigabit",
+              "PeakBandwidthInGbps": 60.0
+            }
+          ],
+          "NetworkPerformance": "Up to 60 Gigabit",
+          "SecondaryNetworkSupported": false
+        },
+        "NitroEnclavesSupport": "supported",
+        "NitroTpmInfo": {
+          "SupportedVersions": [
+            "2.0"
+          ]
+        },
+        "NitroTpmSupport": "supported",
+        "PhcSupport": "unsupported",
+        "PlacementGroupInfo": {
+          "SupportedStrategies": [
+            "cluster",
+            "partition",
+            "spread"
+          ]
+        },
+        "ProcessorInfo": {
+          "Manufacturer": "Intel",
+          "SupportedArchitectures": [
+            "x86_64"
+          ],
+          "SustainedClockSpeedInGhz": 3.9
+        },
+        "RebootMigrationSupport": "unsupported",
+        "SupportedBootModes": [
+          "legacy-bios",
+          "uefi"
+        ],
+        "SupportedInRegion": true,
+        "SupportedRootDeviceTypes": [
+          "ebs"
+        ],
+        "SupportedUsageClasses": [
+          "on-demand",
+          "spot"
+        ],
+        "SupportedVirtualizationTypes": [
+          "hvm"
+        ],
+        "VCpuInfo": {
+          "DefaultCores": 8,
+          "DefaultThreadsPerCore": 1,
+          "DefaultVCpus": 8,
+          "ValidCores": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          "ValidThreadsPerCore": [
+            1
+          ]
+        }
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "d884bf43-a094-4a80-99f5-133a52eeb121",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.714645+00:00",
+  "status": "OK",
+  "wall_seconds": 0.6158369000004313
+}

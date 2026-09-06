@@ -1,0 +1,20 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_launch_connection_001\\readiness_001\\supplement.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "finished_utc": "2026-09-06T13:19:19.006117+00:00",
+  "provider_mutations": 0,
+  "query_status": {
+    "28_identity_followup": "OK",
+    "29_internet_transfer": "OK",
+    "30_ec2_internet_transfer": "OK",
+    "31_scheduler_price": "OK"
+  },
+  "schema": "cas-meta2-readonly-pricing-followup/8",
+  "script_sha256": "995344613849def7dcb57b626e91592d395d71ad2e728ad103f554b875258438",
+  "source_probe_sha256": "41c74347c82d7dc432226ba783d0ff10980571fbeb726134ff483673f1af653a",
+  "started_utc": "2026-09-06T13:19:17.503558+00:00"
+}

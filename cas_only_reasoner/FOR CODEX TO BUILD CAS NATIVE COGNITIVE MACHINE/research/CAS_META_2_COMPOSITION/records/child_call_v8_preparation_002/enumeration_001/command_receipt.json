@@ -1,0 +1,11 @@
+{
+  "cmd": "python -B -m cas_meta2.child_scaffold_v8 --output records/child_call_v8_preparation_002/enumeration_001",
+  "workdir": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "result": {
+    "chunk_id": "51289d",
+    "wall_time_seconds": 0.797026,
+    "exit_code": 0,
+    "original_token_count": 143,
+    "output": "{\"candidate_count\": 180, \"controlled_input_pairs\": 6, \"counts\": {\"PURE_ADMISSION_PASSED\": 90, \"RETURN_OR_PUBLIC_ADMISSION_REJECTED\": 18, \"TOPOLOGY_REJECTED\": 72}, \"native_execution\": \"UNEXECUTED\", \"receipt\": \"C:\\\\Users\\\\wakil\\\\OneDrive\\\\Desktop\\\\tksCAS\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\_worktrees\\\\meta1\\\\cas_only_reasoner\\\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\\\research\\\\CAS_META_2_COMPOSITION\\\\records\\\\child_call_v8_preparation_002\\\\enumeration_001\\\\receipt.json\", \"status\": \"PURE_ENUMERATION_PREPARED_NATIVE_GATE_OPEN\"}\r\n"
+  }
+}

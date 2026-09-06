@@ -1,0 +1,43 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.541865+00:00",
+  "label": "13_tagged_jobs",
+  "method": "describe_instances",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "tag-key",
+        "Values": [
+          "cas_meta_job"
+        ]
+      },
+      {
+        "Name": "instance-state-name",
+        "Values": [
+          "pending",
+          "running",
+          "stopping",
+          "stopped",
+          "shutting-down"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Instances": [],
+    "NextToken": null
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "fa6e5637-f088-494b-8234-08dc6478839c",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.409677+00:00",
+  "status": "OK",
+  "wall_seconds": 0.13219109999772627
+}

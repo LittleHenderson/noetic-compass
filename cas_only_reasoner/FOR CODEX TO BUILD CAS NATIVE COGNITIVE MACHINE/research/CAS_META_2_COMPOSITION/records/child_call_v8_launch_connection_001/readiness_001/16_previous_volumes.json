@@ -1,0 +1,32 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.612079+00:00",
+  "label": "16_previous_volumes",
+  "method": "describe_volumes",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "tag:cas_meta_job",
+        "Values": [
+          "cas-meta2-20260906094002-39762c47"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Volumes": []
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "9f251da3-c625-4401-8fed-1d12e74638c5",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.487899+00:00",
+  "status": "OK",
+  "wall_seconds": 0.12418239999897196
+}

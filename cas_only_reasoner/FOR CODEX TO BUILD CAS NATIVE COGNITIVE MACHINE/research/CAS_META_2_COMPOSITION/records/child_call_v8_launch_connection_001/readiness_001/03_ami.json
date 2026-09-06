@@ -1,0 +1,77 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.362773+00:00",
+  "label": "03_ami",
+  "method": "describe_images",
+  "parameters": {
+    "ImageIds": [
+      "ami-0fbbd0facbc9e3cff"
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Images": [
+      {
+        "Architecture": "x86_64",
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sda1",
+            "Ebs": {
+              "DeleteOnTermination": true,
+              "Encrypted": false,
+              "Iops": 3000,
+              "SnapshotId": "snap-0f7c1eb40403fe3fc",
+              "Throughput": 125,
+              "VolumeSize": 75,
+              "VolumeType": "gp3"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdb",
+            "VirtualName": "ephemeral0"
+          },
+          {
+            "DeviceName": "/dev/sdc",
+            "VirtualName": "ephemeral1"
+          }
+        ],
+        "BootMode": "uefi-preferred",
+        "CreationDate": "2026-08-21T14:48:09.000Z",
+        "DeprecationTime": "2028-08-21T14:48:09.000Z",
+        "Description": "Supported EC2 instances: G4dn, G5, G6, Gr6, G6e, G7, G7e, P4d, P4de, P5, P5e, P5en, P6-B200, P6-B300. Release notes: https://aws.amazon.com/releasenotes/aws-deep-learning-base-gpu-ami-ubuntu-24-04/",
+        "EnaSupport": true,
+        "FreeTierEligible": true,
+        "Hypervisor": "xen",
+        "ImageId": "ami-0fbbd0facbc9e3cff",
+        "ImageLocation": "amazon/Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+        "ImageOwnerAlias": "amazon",
+        "ImageType": "machine",
+        "ImdsSupport": "v2.0",
+        "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+        "OwnerId": "898082745236",
+        "PlatformDetails": "Linux/UNIX",
+        "Public": true,
+        "RootDeviceName": "/dev/sda1",
+        "RootDeviceType": "ebs",
+        "SourceImageId": "ami-072c9da68195bbe78",
+        "SourceImageRegion": "us-east-1",
+        "SriovNetSupport": "simple",
+        "State": "available",
+        "UsageOperation": "RunInstances",
+        "VirtualizationType": "hvm"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "5e82bac0-1e79-4463-af84-315824ee8589",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.717180+00:00",
+  "status": "OK",
+  "wall_seconds": 0.6455929999974614
+}

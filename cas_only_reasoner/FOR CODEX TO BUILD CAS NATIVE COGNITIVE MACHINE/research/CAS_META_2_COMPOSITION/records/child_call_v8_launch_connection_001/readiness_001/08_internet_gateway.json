@@ -1,0 +1,44 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.406043+00:00",
+  "label": "08_internet_gateway",
+  "method": "describe_internet_gateways",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "attachment.vpc-id",
+        "Values": [
+          "vpc-0df2f8cc1b9f23838"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "InternetGateways": [
+      {
+        "Attachments": [
+          {
+            "State": "available",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          }
+        ],
+        "InternetGatewayId": "igw-0a37a4259ed7e1992",
+        "OwnerId": "807562639912",
+        "Tags": []
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "b5bc3d51-da9a-45a4-a97d-fb28ee09c996",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.331320+00:00",
+  "status": "OK",
+  "wall_seconds": 0.0747274000023026
+}

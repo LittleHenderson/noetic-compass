@@ -1,0 +1,45 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.409049+00:00",
+  "label": "11_offering",
+  "method": "describe_instance_type_offerings",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "instance-type",
+        "Values": [
+          "g7.2xlarge"
+        ]
+      },
+      {
+        "Name": "location",
+        "Values": [
+          "us-west-2c"
+        ]
+      }
+    ],
+    "LocationType": "availability-zone"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "InstanceTypeOfferings": [
+      {
+        "InstanceType": "g7.2xlarge",
+        "Location": "us-west-2c",
+        "LocationType": "availability-zone"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "f636d761-0919-4db2-b15b-acadd3b00f21",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:39.363656+00:00",
+  "status": "OK",
+  "wall_seconds": 0.04538889999821549
+}

@@ -1,0 +1,42 @@
+{
+  "finished_utc": "2026-09-06T13:17:40.505511+00:00",
+  "label": "25_s3_requests_tier1",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "usagetype",
+        "Type": "TERM_MATCH",
+        "Value": "USW2-Requests-Tier1"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonS3"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": [
+      "{\"product\":{\"productFamily\":\"API Request\",\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"groupDescription\":\"PUT/COPY/POST or LIST requests\",\"usagetype\":\"USW2-Requests-Tier1\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\",\"group\":\"S3-API-Tier1\"},\"sku\":\"D4PMUVH6F64HK2D6\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF\":{\"priceDimensions\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Requests\",\"endRange\":\"Inf\",\"description\":\"$0.005 per 1,000 PUT, COPY, POST, or LIST requests\",\"appliesTo\":[],\"rateCode\":\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0000050000\"}}},\"sku\":\"D4PMUVH6F64HK2D6\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "1a899338-c4c4-4cbe-bdb7-e5776b7766cf",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:17:40.384883+00:00",
+  "status": "OK",
+  "wall_seconds": 0.12061809999795514
+}

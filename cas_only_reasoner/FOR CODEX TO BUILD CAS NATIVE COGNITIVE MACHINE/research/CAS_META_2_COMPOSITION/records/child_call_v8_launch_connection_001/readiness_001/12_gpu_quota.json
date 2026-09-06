@@ -1,0 +1,49 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.820629+00:00",
+  "label": "12_gpu_quota",
+  "method": "get_service_quota",
+  "parameters": {
+    "QuotaCode": "L-DB2E81BA",
+    "ServiceCode": "ec2"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Quota": {
+      "Adjustable": true,
+      "Description": "Maximum number of vCPUs assigned to the Running On-Demand G and VT instances.",
+      "GlobalQuota": false,
+      "QuotaAppliedAtLevel": "ACCOUNT",
+      "QuotaArn": "arn:aws:servicequotas:us-west-2:807562639912:ec2/L-DB2E81BA",
+      "QuotaCode": "L-DB2E81BA",
+      "QuotaName": "Running On-Demand G and VT instances",
+      "ServiceCode": "ec2",
+      "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+      "Unit": "None",
+      "UsageMetric": {
+        "MetricDimensions": {
+          "Class": "G/OnDemand",
+          "Resource": "vCPU",
+          "Service": "EC2",
+          "Type": "Resource"
+        },
+        "MetricName": "ResourceCount",
+        "MetricNamespace": "AWS/Usage",
+        "MetricStatisticRecommendation": "Maximum"
+      },
+      "Value": 8.0
+    }
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "78d0d574-7385-4e1b-b3f9-214b75e7497f",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "service-quotas",
+  "started_utc": "2026-09-06T13:17:39.406966+00:00",
+  "status": "OK",
+  "wall_seconds": 0.41366329999800655
+}

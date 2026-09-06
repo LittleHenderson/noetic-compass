@@ -1,0 +1,48 @@
+{
+  "boundary": "Pure structural enumeration only. Native acceptance, numerical contrast, task correctness, and learned skill are UNEXECUTED.",
+  "candidate_count": 180,
+  "controlled_input_pairs": 6,
+  "counts": {
+    "PURE_ADMISSION_PASSED": 90,
+    "RETURN_OR_PUBLIC_ADMISSION_REJECTED": 18,
+    "TOPOLOGY_REJECTED": 72
+  },
+  "files": {
+    "enumeration.json": {
+      "bytes": 767154,
+      "sha256": "b77bd5f3795c549f42a60085861a6b87f6ee603e0e7ba4a7c3ebc5dee8b311ca"
+    }
+  },
+  "finished_utc": "2026-09-06T13:26:40.610385+00:00",
+  "native_execution": "UNEXECUTED",
+  "neural_execution": false,
+  "output_directory": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_preparation_002\\enumeration_001",
+  "provider_calls": false,
+  "schema": "cas-meta2-one-child-scaffold-preparation/8",
+  "self_sha256_after": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b",
+  "self_sha256_before": "4ca4f80dc173d3567cd7cb32a146299c4fc9b5b8e2db797a0d6612ac5aa1570b",
+  "source_sha256_after": {
+    "CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/fixture.py": "0038db2ed122e7d1ccb312771e0ea14388ee8564d3ffaa9a9f6c7316c6eb1735",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/runtime.py": "5eda27339d0d216d5359116617c6dc8c9f99c376d6cfa6be386845b59ec00187",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/verifier.py": "c1604059580a553e131233ecdbb5b1de8439edbba03865f7985a71b0dfdfb736",
+    "CAS_META_2_COMPOSITION/cas_meta2/native.py": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+  },
+  "source_sha256_before": {
+    "CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/fixture.py": "0038db2ed122e7d1ccb312771e0ea14388ee8564d3ffaa9a9f6c7316c6eb1735",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/runtime.py": "5eda27339d0d216d5359116617c6dc8c9f99c376d6cfa6be386845b59ec00187",
+    "CAS_CJT_TRANSFORMER_v0_2/cas_cjt/verifier.py": "c1604059580a553e131233ecdbb5b1de8439edbba03865f7985a71b0dfdfb736",
+    "CAS_META_2_COMPOSITION/cas_meta2/native.py": "16131d98dcbd76d274a1c083e9bc5f100cadfbbba7dfcdb38282c23946c20512"
+  },
+  "started_utc": "2026-09-06T13:26:40.203220+00:00",
+  "static_action_token_range": [
+    49,
+    53
+  ],
+  "static_native_run_counts": [
+    5,
+    6
+  ],
+  "status": "PURE_ENUMERATION_PREPARED_NATIVE_GATE_OPEN",
+  "training_allowed_by_this_preparation": false,
+  "wall_seconds": 0.4071555000009539
+}

@@ -1,0 +1,24 @@
+{
+  "finished_utc": "2026-09-06T13:19:18.220617+00:00",
+  "label": "28_identity_followup",
+  "method": "get_caller_identity",
+  "parameters": {},
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Account": "807562639912",
+    "Arn": "arn:aws:iam::807562639912:user/cas-g5-operator"
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "925cbd84-02fb-42cb-9827-7739485cc0c5",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "sts",
+  "started_utc": "2026-09-06T13:19:17.901297+00:00",
+  "status": "OK",
+  "wall_seconds": 0.3193170000013197
+}

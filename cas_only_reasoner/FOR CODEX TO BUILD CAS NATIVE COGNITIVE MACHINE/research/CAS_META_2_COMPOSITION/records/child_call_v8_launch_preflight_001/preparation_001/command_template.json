@@ -1,0 +1,72 @@
+{
+  "argv": [
+    "python",
+    "-B",
+    "-m",
+    "cas_meta2.diagnostic_v8.gpu",
+    "--bundle",
+    {
+      "slot": "remote_bundle_directory"
+    },
+    "--output",
+    {
+      "slot": "new_worker_output_directory"
+    },
+    "--job",
+    {
+      "slot": "reserved_unique_job"
+    },
+    "--manifest-sha256",
+    "b4d7970ca59c07342942584e4752ad8c129c3125e25ecc241e3d76c9ddd1c629",
+    "--plan",
+    {
+      "slot": "sealed_enabled_worker_plan_path"
+    },
+    "--plan-sha256",
+    {
+      "slot": "sealed_enabled_worker_plan_sha256"
+    }
+  ],
+  "cwd": {
+    "slot": "extracted_package_root",
+    "suffix": "research/CAS_META_2_COMPOSITION"
+  },
+  "environment_required_later": {
+    "CAS_META2_AWS_JOB_ID": {
+      "slot": "reserved_unique_job"
+    },
+    "CAS_META2_RUN_PREFIX_DIAGNOSTIC": "1"
+  },
+  "installs_required_later": {
+    "cuda_runtime": "12.8",
+    "python_allowed_versions": [
+      "3.11",
+      "3.12"
+    ],
+    "requirements_member": "research/CAS_META_2_COMPOSITION/requirements-gpu.txt",
+    "resolved_environment_receipt_required": true,
+    "torch": "2.11.0+cu128",
+    "torch_index": "https://download.pytorch.org/whl/cu128",
+    "wheel_members": [
+      "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+      "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl"
+    ]
+  },
+  "kind": "NON_EXECUTABLE_TYPED_ARGUMENT_TEMPLATE",
+  "local_execution_permitted": false,
+  "path_constraints": {
+    "ledger_snapshot": "Linux absolute path to the real reserved ledger snapshot, with its exact SHA-256.",
+    "new_worker_output_directory": "Nonexistent child at a Linux absolute path below extracted research/CAS_META_2_COMPOSITION/runs; not runs itself.",
+    "python_package_roots": [
+      "research/CAS_META_2_COMPOSITION",
+      "research/CAS_META_1_LEARNED_SELECTION",
+      "research/CASFORMER_v0_3_META_LOGIC_WIP"
+    ],
+    "remote_bundle_directory": "Linux absolute directory containing the extracted bundle_001/ contents, not the ZIP path.",
+    "reservation_receipt": "Linux absolute path to the real parent reservation receipt, with its exact SHA-256.",
+    "sealed_enabled_worker_plan_path": "Linux absolute path; seal only after the actual instance identity exists.",
+    "source_archive": "Linux absolute path. Retain the exact source ZIP through the worker's final source_closure check.",
+    "source_manifest": "Linux absolute path; prefix_source_manifest.json must remain at extracted package root."
+  },
+  "shell_command_generated": false
+}

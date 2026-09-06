@@ -1,0 +1,40 @@
+{
+  "finished_utc": "2026-09-06T13:17:41.009594+00:00",
+  "label": "27_s3_transfer",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "usagetype",
+        "Type": "TERM_MATCH",
+        "Value": "USW2-DataTransfer-Out-Bytes"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonS3"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": []
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "b07d648e-8025-4dc8-8574-aaa50ae653e1",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:17:40.401420+00:00",
+  "status": "OK",
+  "wall_seconds": 0.6081782000001112
+}

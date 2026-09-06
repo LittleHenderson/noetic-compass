@@ -1,0 +1,49 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.472894+00:00",
+  "label": "05_vpc",
+  "method": "describe_vpcs",
+  "parameters": {
+    "VpcIds": [
+      "vpc-0df2f8cc1b9f23838"
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Vpcs": [
+      {
+        "BlockPublicAccessStates": {
+          "InternetGatewayBlockMode": "off"
+        },
+        "CidrBlock": "172.31.0.0/16",
+        "CidrBlockAssociationSet": [
+          {
+            "AssociationId": "vpc-cidr-assoc-00256a6c2c6ab7c8f",
+            "CidrBlock": "172.31.0.0/16",
+            "CidrBlockState": {
+              "State": "associated"
+            }
+          }
+        ],
+        "DhcpOptionsId": "dopt-0a4f42e359a976bbb",
+        "InstanceTenancy": "default",
+        "IsDefault": true,
+        "OwnerId": "807562639912",
+        "State": "available",
+        "VpcId": "vpc-0df2f8cc1b9f23838"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "79b8a595-7837-4220-9905-1ecafec7e1b7",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.719247+00:00",
+  "status": "OK",
+  "wall_seconds": 0.7536522999980662
+}

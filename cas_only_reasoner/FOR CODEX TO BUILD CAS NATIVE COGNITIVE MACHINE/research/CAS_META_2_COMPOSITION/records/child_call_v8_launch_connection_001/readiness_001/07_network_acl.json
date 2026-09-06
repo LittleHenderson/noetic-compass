@@ -1,0 +1,92 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.356266+00:00",
+  "label": "07_network_acl",
+  "method": "describe_network_acls",
+  "parameters": {
+    "Filters": [
+      {
+        "Name": "association.subnet-id",
+        "Values": [
+          "subnet-0eb3ca4bf5ca98f24"
+        ]
+      }
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "NetworkAcls": [
+      {
+        "Associations": [
+          {
+            "NetworkAclAssociationId": "aclassoc-0c44fcc4268cb1b0a",
+            "NetworkAclId": "acl-0b07a4ef3f649fa07",
+            "SubnetId": "subnet-0567d22d8a5fb9b72"
+          },
+          {
+            "NetworkAclAssociationId": "aclassoc-0ac344ad74174aeb9",
+            "NetworkAclId": "acl-0b07a4ef3f649fa07",
+            "SubnetId": "subnet-0bb8fa82c2a7177b3"
+          },
+          {
+            "NetworkAclAssociationId": "aclassoc-0bc8c9eee1762e711",
+            "NetworkAclId": "acl-0b07a4ef3f649fa07",
+            "SubnetId": "subnet-0eb3ca4bf5ca98f24"
+          },
+          {
+            "NetworkAclAssociationId": "aclassoc-0d1770ab0bd8827aa",
+            "NetworkAclId": "acl-0b07a4ef3f649fa07",
+            "SubnetId": "subnet-02deacfa16bdaa4f4"
+          }
+        ],
+        "Entries": [
+          {
+            "CidrBlock": "0.0.0.0/0",
+            "Egress": true,
+            "Protocol": "-1",
+            "RuleAction": "allow",
+            "RuleNumber": 100
+          },
+          {
+            "CidrBlock": "0.0.0.0/0",
+            "Egress": true,
+            "Protocol": "-1",
+            "RuleAction": "deny",
+            "RuleNumber": 32767
+          },
+          {
+            "CidrBlock": "0.0.0.0/0",
+            "Egress": false,
+            "Protocol": "-1",
+            "RuleAction": "allow",
+            "RuleNumber": 100
+          },
+          {
+            "CidrBlock": "0.0.0.0/0",
+            "Egress": false,
+            "Protocol": "-1",
+            "RuleAction": "deny",
+            "RuleNumber": 32767
+          }
+        ],
+        "IsDefault": true,
+        "NetworkAclId": "acl-0b07a4ef3f649fa07",
+        "OwnerId": "807562639912",
+        "Tags": [],
+        "VpcId": "vpc-0df2f8cc1b9f23838"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "6d739626-a9fd-4bb2-8740-39536a1913c6",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.721464+00:00",
+  "status": "OK",
+  "wall_seconds": 0.6348007999986294
+}

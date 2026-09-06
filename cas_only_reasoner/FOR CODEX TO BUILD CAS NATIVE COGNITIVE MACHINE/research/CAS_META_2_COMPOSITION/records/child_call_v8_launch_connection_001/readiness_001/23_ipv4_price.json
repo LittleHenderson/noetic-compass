@@ -1,0 +1,42 @@
+{
+  "finished_utc": "2026-09-06T13:17:40.620996+00:00",
+  "label": "23_ipv4_price",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "usagetype",
+        "Type": "TERM_MATCH",
+        "Value": "USW2-PublicIPv4:InUseAddress"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonVPC"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": [
+      "{\"product\":{\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonVPC\",\"groupDescription\":\"Hourly charge for In-use Public IPv4 Addresses\",\"usagetype\":\"USW2-PublicIPv4:InUseAddress\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Virtual Private Cloud\",\"operation\":\"\",\"group\":\"VPCPublicIPv4Address\"},\"sku\":\"NBHXEKTE88TJDDQF\"},\"serviceCode\":\"AmazonVPC\",\"terms\":{\"OnDemand\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF\":{\"priceDimensions\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$0.005 per In-use public IPv4 address per hour\",\"appliesTo\":[],\"rateCode\":\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0050000000\"}}},\"sku\":\"NBHXEKTE88TJDDQF\",\"effectiveDate\":\"2026-07-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092232\",\"publicationDate\":\"2026-08-31T09:22:32Z\"}"
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "b221b148-f918-46f0-a833-37c2b9935862",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:17:40.097385+00:00",
+  "status": "OK",
+  "wall_seconds": 0.5236089000027278
+}

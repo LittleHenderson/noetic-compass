@@ -1,0 +1,54 @@
+{
+  "finished_utc": "2026-09-06T13:17:39.500626+00:00",
+  "label": "04_subnet",
+  "method": "describe_subnets",
+  "parameters": {
+    "SubnetIds": [
+      "subnet-0eb3ca4bf5ca98f24"
+    ]
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response": {
+    "Subnets": [
+      {
+        "AssignIpv6AddressOnCreation": false,
+        "AvailabilityZone": "us-west-2c",
+        "AvailabilityZoneId": "usw2-az3",
+        "AvailableIpAddressCount": 4090,
+        "BlockPublicAccessStates": {
+          "InternetGatewayBlockMode": "off"
+        },
+        "CidrBlock": "172.31.0.0/20",
+        "DefaultForAz": true,
+        "EnableDns64": false,
+        "Ipv6CidrBlockAssociationSet": [],
+        "Ipv6Native": false,
+        "MapCustomerOwnedIpOnLaunch": false,
+        "MapPublicIpOnLaunch": true,
+        "OwnerId": "807562639912",
+        "PrivateDnsNameOptionsOnLaunch": {
+          "EnableResourceNameDnsAAAARecord": false,
+          "EnableResourceNameDnsARecord": false,
+          "HostnameType": "ip-name"
+        },
+        "State": "available",
+        "SubnetArn": "arn:aws:ec2:us-west-2:807562639912:subnet/subnet-0eb3ca4bf5ca98f24",
+        "SubnetId": "subnet-0eb3ca4bf5ca98f24",
+        "VpcId": "vpc-0df2f8cc1b9f23838"
+      }
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "51944be7-23c5-4978-b396-66638bae8a43",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "ec2",
+  "started_utc": "2026-09-06T13:17:38.718266+00:00",
+  "status": "OK",
+  "wall_seconds": 0.7823582999990322
+}

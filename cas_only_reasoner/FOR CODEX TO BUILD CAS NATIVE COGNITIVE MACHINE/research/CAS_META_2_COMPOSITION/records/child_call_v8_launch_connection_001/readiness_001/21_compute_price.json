@@ -1,0 +1,72 @@
+{
+  "finished_utc": "2026-09-06T13:17:40.384324+00:00",
+  "label": "21_compute_price",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "instanceType",
+        "Type": "TERM_MATCH",
+        "Value": "g7.2xlarge"
+      },
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "operatingSystem",
+        "Type": "TERM_MATCH",
+        "Value": "Linux"
+      },
+      {
+        "Field": "tenancy",
+        "Type": "TERM_MATCH",
+        "Value": "Shared"
+      },
+      {
+        "Field": "preInstalledSw",
+        "Type": "TERM_MATCH",
+        "Value": "NA"
+      },
+      {
+        "Field": "capacitystatus",
+        "Type": "TERM_MATCH",
+        "Value": "Used"
+      },
+      {
+        "Field": "marketoption",
+        "Type": "TERM_MATCH",
+        "Value": "OnDemand"
+      },
+      {
+        "Field": "operation",
+        "Type": "TERM_MATCH",
+        "Value": "RunInstances"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonEC2"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": [
+      "{\"product\":{\"productFamily\":\"Compute Instance\",\"attributes\":{\"enhancedNetworkingSupported\":\"Yes\",\"intelTurboAvailable\":\"Yes\",\"memory\":\"32.0 GiB\",\"dedicatedEbsThroughput\":\"Up to 8000 Mbps\",\"vcpu\":\"8\",\"classicnetworkingsupport\":\"false\",\"capacitystatus\":\"Used\",\"locationType\":\"AWS Region\",\"storage\":\"1x440 GB NVMe SSD\",\"instanceFamily\":\"GPU instance\",\"operatingSystem\":\"Linux\",\"intelAvx2Available\":\"Yes\",\"instanceFamilyCategory\":\"Accelerated Computing\",\"regionCode\":\"us-west-2\",\"physicalProcessor\":\"Intel Xeon Scalable (Granite Rapids)\",\"clockSpeed\":\"3.9 GHz\",\"ecu\":\"NA\",\"networkPerformance\":\"Up to 60 Gigabit\",\"servicename\":\"Amazon Elastic Compute Cloud\",\"gpuMemory\":\"32 GB\",\"dedicatedEbsThroughputDescription\":\"4000 Mbps\",\"vpcnetworkingsupport\":\"true\",\"instanceType\":\"g7.2xlarge\",\"tenancy\":\"Shared\",\"usagetype\":\"USW2-BoxUsage:g7.2xlarge\",\"normalizationSizeFactor\":\"1\",\"gpu\":\"1\",\"intelAvxAvailable\":\"Yes\",\"processorFeatures\":\"Intel AMX; Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo\",\"servicecode\":\"AmazonEC2\",\"licenseModel\":\"No License required\",\"currentGeneration\":\"Yes\",\"preInstalledSw\":\"NA\",\"location\":\"US West (Oregon)\",\"processorArchitecture\":\"64-bit\",\"marketoption\":\"OnDemand\",\"operation\":\"RunInstances\",\"availabilityzone\":\"NA\"},\"sku\":\"DA5FVRBHTKBSVJWJ\"},\"serviceCode\":\"AmazonEC2\",\"terms\":{\"OnDemand\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF\":{\"priceDimensions\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$2.52 per On Demand Linux g7.2xlarge Instance Hour\",\"appliesTo\":[],\"rateCode\":\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"2.5200000000\"}}},\"sku\":\"DA5FVRBHTKBSVJWJ\",\"effectiveDate\":\"2026-09-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260904231117\",\"publicationDate\":\"2026-09-04T23:11:17Z\"}"
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "2882e00f-aa3d-40f0-89a8-fb7fb1bb6251",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:17:39.612948+00:00",
+  "status": "OK",
+  "wall_seconds": 0.7713760000006005
+}

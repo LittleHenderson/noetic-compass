@@ -1,0 +1,27 @@
+{
+  "error": {
+    "Code": "NoSuchEntity",
+    "Message": "Instance Profile cas-meta2-20260906094002-39762c47-worker cannot be found.",
+    "Type": "Sender"
+  },
+  "finished_utc": "2026-09-06T13:17:40.386203+00:00",
+  "label": "20_previous_profile",
+  "method": "get_instance_profile",
+  "parameters": {
+    "InstanceProfileName": "cas-meta2-20260906094002-39762c47-worker"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response_metadata": {
+    "HTTPStatusCode": 404,
+    "RequestId": "4519697a-c005-4728-83a1-08585cd612ec",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "iam",
+  "started_utc": "2026-09-06T13:17:39.558096+00:00",
+  "status": "AWS_ERROR",
+  "wall_seconds": 0.8280987999969511
+}

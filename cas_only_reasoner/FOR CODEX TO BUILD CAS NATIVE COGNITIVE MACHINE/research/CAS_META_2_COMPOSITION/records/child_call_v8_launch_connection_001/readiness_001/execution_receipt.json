@@ -1,0 +1,168 @@
+{
+  "account": "807562639912",
+  "boto3": "1.43.87",
+  "botocore": "1.43.87",
+  "boundaries": [
+    "Read access is not proof of provisioning permissions.",
+    "Instance-type offering and quota are not an allocation/capacity guarantee.",
+    "No paid run, no GPU test, no quota request, no resource creation or deletion.",
+    "Prices are current informational published list prices, not an invoice or provider-enforced spend cap."
+  ],
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\child_call_v8_launch_connection_001\\readiness_001\\probe.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "files": {
+    "01_identity.json": {
+      "bytes": 766,
+      "sha256": "0de93b341a1958f4d77a5a166c1565b119b95102f1b9be360efef15fd6c7eb5a"
+    },
+    "02_instance_type.json": {
+      "bytes": 5168,
+      "sha256": "8858333a292780bbc86b840b52ae224fce1bc842f3c8bcd68bfcd75b1241d240"
+    },
+    "03_ami.json": {
+      "bytes": 2606,
+      "sha256": "b83b763923d1faf8aba436aa1a3b3b471bf1821e06bfd510e986bc08b91d297f"
+    },
+    "04_subnet.json": {
+      "bytes": 1721,
+      "sha256": "643c5c4c45d69837425c4feae61c174b3a952180367c6186b1e7921171be1aee"
+    },
+    "05_vpc.json": {
+      "bytes": 1368,
+      "sha256": "0621c6928d9ec5d3bcd0ae97c6f255be0a5a8495b44a6b91665542129ea43827"
+    },
+    "06_routes.json": {
+      "bytes": 1724,
+      "sha256": "a87c8501f6cbabe0019a486082b95c3f01abf0afcca12d5526c4f691bdaa08bf"
+    },
+    "07_network_acl.json": {
+      "bytes": 2652,
+      "sha256": "edd8ff322d68c7b5ffc42e4216b81f147ff6b0f92cb10b6f3142591417bdcd51"
+    },
+    "08_internet_gateway.json": {
+      "bytes": 1128,
+      "sha256": "955427dc21e0fd7e1510bc46a82f16cab2ecda357dc1a380302ea73ea032d8c6"
+    },
+    "09_dns_support.json": {
+      "bytes": 849,
+      "sha256": "72004d20d83fa238e5847d8585a9b17adc6e51ca8d1db3ba2e65ff05760a71c4"
+    },
+    "10_dns_hostnames.json": {
+      "bytes": 855,
+      "sha256": "4cdf5935a32a93f9bc7bfd3cb1ecde08796d9570287d7478124966511d48bf4e"
+    },
+    "11_offering.json": {
+      "bytes": 1125,
+      "sha256": "34124444a020af3674873aeafe8d407df02169b21f17d128b9d2b23240609c90"
+    },
+    "12_gpu_quota.json": {
+      "bytes": 1593,
+      "sha256": "326c89b73fdf07fb9ccb2faeb08af7bc51ea1ac3fb8016998dc61affd6c495ec"
+    },
+    "13_tagged_jobs.json": {
+      "bytes": 1042,
+      "sha256": "3481397fe995a4a4993207b72a4b0e8052066fbedf3b319a526fe1b0be7b8648"
+    },
+    "14_running_gpu_usage.json": {
+      "bytes": 991,
+      "sha256": "7d8b590d11ae8dffffbae8645e87d643353e96adb1abd1e3d30c3dfd3840e303"
+    },
+    "15_previous_instance.json": {
+      "bytes": 785,
+      "sha256": "71a30d687c6f38d1a4b473305560df613c6c35eaea7aa9918cc4e8733c7a2d03"
+    },
+    "16_previous_volumes.json": {
+      "bytes": 853,
+      "sha256": "4ac6ce062de1bdd7ad835d0a1a2749700cd454c5c270b4f5dbdcfc7bd0a29bc3"
+    },
+    "17_previous_schedule.json": {
+      "bytes": 855,
+      "sha256": "08e1fdefe45463ea1b5f44bd06ac2b20301c7b94a93e1739664daa3e4bb08d91"
+    },
+    "18_previous_worker_role.json": {
+      "bytes": 886,
+      "sha256": "a2ce1443583b5aaa6d3bb1d29f658d42f17244c72306934e97aacac69b064b86"
+    },
+    "19_previous_timer_role.json": {
+      "bytes": 883,
+      "sha256": "d2a3bf1f9d808d3315b5d852a626b39f2866df1ef6cdd243f2e00077fb988a6f"
+    },
+    "20_previous_profile.json": {
+      "bytes": 903,
+      "sha256": "6ae9d1a98c69cc5555d5f5866477694ce2abfd1c881facf6327d2a2ccbd5dd98"
+    },
+    "21_compute_price.json": {
+      "bytes": 3746,
+      "sha256": "72f0994af2605b420f1c6b5f035cbd057da712b478018d1cd0516945436c6300"
+    },
+    "22_ebs_price.json": {
+      "bytes": 2331,
+      "sha256": "ea168649fa47682bd0d048b33e471e41a25ad821acc35bb78cf409afbe66b281"
+    },
+    "23_ipv4_price.json": {
+      "bytes": 2099,
+      "sha256": "bd8a0bd0a4af28c60e6f6b494aa03ba91ed10436744239af6fc837c7cb409e5b"
+    },
+    "24_s3_storage.json": {
+      "bytes": 3867,
+      "sha256": "254a5a96d0297f99853755aaa90f405deed43f7cf890cd983894e152cd444b5e"
+    },
+    "25_s3_requests_tier1.json": {
+      "bytes": 2106,
+      "sha256": "b105a58269918231c3018ec2571a8ea753ac8b4ba34c2d1399834dfeb08bf092"
+    },
+    "26_s3_requests_tier2.json": {
+      "bytes": 2095,
+      "sha256": "c6b9774b87cdbd9901c4e95905f77d0cc86fd85c3889bd85e574023c127ad74a"
+    },
+    "27_s3_transfer.json": {
+      "bytes": 1072,
+      "sha256": "51bbd77da1ad44aa6cf19b714bcc163aa394d61d32502384dd55b72720702844"
+    }
+  },
+  "finished_utc": "2026-09-06T13:17:41.010873+00:00",
+  "profile": "default",
+  "provider_mutations": 0,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "query_status": {
+    "01_identity": "OK",
+    "02_instance_type": "OK",
+    "03_ami": "OK",
+    "04_subnet": "OK",
+    "05_vpc": "OK",
+    "06_routes": "OK",
+    "07_network_acl": "OK",
+    "08_internet_gateway": "OK",
+    "09_dns_support": "OK",
+    "10_dns_hostnames": "OK",
+    "11_offering": "OK",
+    "12_gpu_quota": "OK",
+    "13_tagged_jobs": "OK",
+    "14_running_gpu_usage": "OK",
+    "15_previous_instance": "OK",
+    "16_previous_volumes": "OK",
+    "17_previous_schedule": "AWS_ERROR",
+    "18_previous_worker_role": "AWS_ERROR",
+    "19_previous_timer_role": "AWS_ERROR",
+    "20_previous_profile": "AWS_ERROR",
+    "21_compute_price": "OK",
+    "22_ebs_price": "OK",
+    "23_ipv4_price": "OK",
+    "24_s3_storage": "OK",
+    "25_s3_requests_tier1": "OK",
+    "26_s3_requests_tier2": "OK",
+    "27_s3_transfer": "OK"
+  },
+  "region": "us-west-2",
+  "reservation_created": false,
+  "schema": "cas-meta2-readonly-readiness-execution/8",
+  "script_sha256": "41c74347c82d7dc432226ba783d0ff10980571fbeb726134ff483673f1af653a",
+  "started_utc": "2026-09-06T13:17:37.379407+00:00",
+  "status": "READONLY_QUERIES_COMPLETED",
+  "wall_seconds": 3.6314663999983168,
+  "worker_launched": false
+}

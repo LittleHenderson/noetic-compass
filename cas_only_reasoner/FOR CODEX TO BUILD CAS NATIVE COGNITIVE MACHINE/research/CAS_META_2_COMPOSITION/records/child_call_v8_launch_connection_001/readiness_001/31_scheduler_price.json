@@ -1,0 +1,40 @@
+{
+  "finished_utc": "2026-09-06T13:19:19.004988+00:00",
+  "label": "31_scheduler_price",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "location",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "group",
+        "Type": "TERM_MATCH",
+        "Value": "SchedulerInvocation"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AWSEvents"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": []
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "26820772-6c01-440c-908f-0e1b3889e06b",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:19:18.902950+00:00",
+  "status": "OK",
+  "wall_seconds": 0.10203980000005686
+}

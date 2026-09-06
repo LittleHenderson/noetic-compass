@@ -1,0 +1,45 @@
+{
+  "finished_utc": "2026-09-06T13:19:18.902041+00:00",
+  "label": "30_ec2_internet_transfer",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "fromLocation",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "toLocation",
+        "Type": "TERM_MATCH",
+        "Value": "External"
+      },
+      {
+        "Field": "transferType",
+        "Type": "TERM_MATCH",
+        "Value": "AWS Outbound"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AmazonEC2"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": []
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "7a59b706-a6c7-4cb9-ac5c-ec3008ecc2f6",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:19:18.782132+00:00",
+  "status": "OK",
+  "wall_seconds": 0.11990590000277734
+}

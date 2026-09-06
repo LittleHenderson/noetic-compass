@@ -1,0 +1,12 @@
+{
+  "schema": "cas-meta2-prefix-final-verification-command/8",
+  "cmd": "& './records/child_call_v8_launch_connection_001/verify_receipt.ps1'",
+  "workdir": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "result": {
+    "chunk_id": "c8431a",
+    "wall_time_seconds": 1.7600727,
+    "exit_code": 0,
+    "original_token_count": 148,
+    "output": "{\r\n  \"boundary\": \"Hashes and existing receipts only. Does not rerun tests or execute the model.\",\r\n  \"status\": \"PREPARATION_EVIDENCE_IDENTITIES_VERIFIED\",\r\n  \"files_checked\": 91,\r\n  \"parent_source_sha\": \"39d0ed9b65683504d9335963bf57c7ac6ef1d78f\",\r\n  \"paid_launch\": false,\r\n  \"final_receipt_sha256\": \"cf8a1e5c44b871a86efd4cd9538390237ee1fca853142d93d62acec82d06ef2b\",\r\n  \"observed_utc\": \"2026-09-06T13:41:00.6281703Z\",\r\n  \"source_files_checked_against_commit\": 15,\r\n  \"provider_calls\": false,\r\n  \"launch_request_sha256\": \"745b45d437e0b17adacc71f6f945a47f8cf6767c1209f637cbadc9a2380a8cbf\"\r\n}\r\n"
+  }
+}

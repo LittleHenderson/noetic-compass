@@ -1,0 +1,27 @@
+{
+  "error": {
+    "Code": "NoSuchEntity",
+    "Message": "The role with name cas-meta2-20260906094002-39762c47-worker cannot be found.",
+    "Type": "Sender"
+  },
+  "finished_utc": "2026-09-06T13:17:40.376507+00:00",
+  "label": "18_previous_worker_role",
+  "method": "get_role",
+  "parameters": {
+    "RoleName": "cas-meta2-20260906094002-39762c47-worker"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "response_metadata": {
+    "HTTPStatusCode": 404,
+    "RequestId": "c802ba2b-1ce2-4df0-b286-8701d01b2ba9",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "iam",
+  "started_utc": "2026-09-06T13:17:39.542605+00:00",
+  "status": "AWS_ERROR",
+  "wall_seconds": 0.8339016999998421
+}

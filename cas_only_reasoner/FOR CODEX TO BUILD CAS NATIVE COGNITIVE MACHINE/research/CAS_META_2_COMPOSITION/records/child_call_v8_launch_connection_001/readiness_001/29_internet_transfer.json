@@ -1,0 +1,47 @@
+{
+  "finished_utc": "2026-09-06T13:19:18.778823+00:00",
+  "label": "29_internet_transfer",
+  "method": "get_products",
+  "parameters": {
+    "Filters": [
+      {
+        "Field": "fromLocation",
+        "Type": "TERM_MATCH",
+        "Value": "US West (Oregon)"
+      },
+      {
+        "Field": "toLocation",
+        "Type": "TERM_MATCH",
+        "Value": "External"
+      },
+      {
+        "Field": "transferType",
+        "Type": "TERM_MATCH",
+        "Value": "AWS Outbound"
+      }
+    ],
+    "FormatVersion": "aws_v1",
+    "MaxResults": 100,
+    "ServiceCode": "AWSDataTransfer"
+  },
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-east-1",
+  "response": {
+    "FormatVersion": "aws_v1",
+    "PriceList": [
+      "{\"product\":{\"productFamily\":\"Data Transfer\",\"attributes\":{\"fromLocationType\":\"AWS Region\",\"toRegionCode\":\"\",\"servicecode\":\"AWSDataTransfer\",\"usagetype\":\"USW2-DataTransfer-Out-Bytes\",\"fromRegionCode\":\"us-west-2\",\"transferType\":\"AWS Outbound\",\"servicename\":\"AWS Data Transfer\",\"fromLocation\":\"US West (Oregon)\",\"toLocationType\":\"Other\",\"toLocation\":\"External\",\"operation\":\"\"},\"sku\":\"5M4327XEUKBBTWAT\"},\"serviceCode\":\"AWSDataTransfer\",\"terms\":{\"OnDemand\":{\"5M4327XEUKBBTWAT.JRTCKXETXF\":{\"priceDimensions\":{\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\":{\"unit\":\"GB\",\"endRange\":\"Inf\",\"description\":\"$0.050 per GB - greater than 150 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\",\"beginRange\":\"153600\",\"pricePerUnit\":{\"USD\":\"0.0500000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\":{\"unit\":\"GB\",\"endRange\":\"51200\",\"description\":\"$0.085 per GB - next 40 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\",\"beginRange\":\"10240\",\"pricePerUnit\":{\"USD\":\"0.0850000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\":{\"unit\":\"GB\",\"endRange\":\"10240\",\"description\":\"$0.090 per GB - first 10 TB / month data transfer out beyond the global free tier\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0900000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\":{\"unit\":\"GB\",\"endRange\":\"153600\",\"description\":\"$0.070 per GB - next 100 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0700000000\"}}},\"sku\":\"5M4327XEUKBBTWAT\",\"effectiveDate\":\"2026-06-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831121448\",\"publicationDate\":\"2026-08-31T12:14:48Z\"}"
+    ]
+  },
+  "response_metadata": {
+    "HTTPStatusCode": 200,
+    "RequestId": "256a9f7e-5e13-4c32-9bcb-804a7d494172",
+    "RetryAttempts": 0
+  },
+  "sanitization": "HTTP headers and signing data omitted; instance responses restricted to scoped state/resource fields.",
+  "schema": "cas-meta2-readonly-provider-query/8",
+  "service": "pricing",
+  "started_utc": "2026-09-06T13:19:18.221361+00:00",
+  "status": "OK",
+  "wall_seconds": 0.5574639000005845
+}
