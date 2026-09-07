@@ -231,18 +231,19 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_017`.
-The guarded capture passed **394 tests and 24 subtests** covering data,
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_018`.
+The guarded capture passed **396 tests and 24 subtests** covering data,
 packaging, trainer admission, adjudication (with the F5 attestation
 amendment), the publication-packet verifier, the resource plan, the source
 package builder, the remote worker, the launch lifecycle, the AWS provider
-adapter (two-phase reservation; cleanup deletes `results/*` before the bucket;
-half-hardened buckets are never memoized), the canonical budget integration,
-and the automatic test-point layer. It also confirmed unchanged tested source
-hashes and an unchanged campaign ledger. These are preparation checks, not a
-neural training result. Earlier local captures `checks_001` through
-`checks_016` are preserved and are not deleted; `checks_017` is the receipt
-bound with this source state.
+adapter (two-phase reservation; completed instance bootstrap: venv, pinned
+torch cu128, frozen wheels, real artifacts.zip/complete.json hashes; cleanup
+deletes `results/*` before the bucket; half-hardened buckets are never
+memoized), the canonical budget integration, and the automatic test-point
+layer. It also confirmed unchanged tested source hashes and an unchanged
+campaign ledger. These are preparation checks, not a neural training result.
+Earlier local captures `checks_001` through `checks_017` are preserved and are
+not deleted; `checks_018` is the receipt bound with this source state.
 
 The automatic test-point layer (`tools/condition_skill_v9_test_points.py`,
 design in `TEST_POINT_DESIGN_2026-09-07.md`) observes and reports only: the

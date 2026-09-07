@@ -4,6 +4,19 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9: instance bootstrap completed (Lane E)
+
+The paid-run bootstrap inside the provider now: creates/discovers the venv
+(CAS_META2_VENV_PYTHON or python3.12/3.11/3), installs torch 2.11.0 from the
+frozen cu128 index, both frozen wheels with --no-deps, and
+requirements-gpu.txt — all fail-closed with pip --report receipts — then runs
+the v9 remote orchestrate with the venv python and uploads a real
+results/artifacts.zip plus results/complete.json with genuine sha256/bytes,
+including the REMOTE_FAILED path. No placeholder hashes remain. The frozen
+torch index is byte-identical across every repo launcher. Guarded merged
+capture: **396 passed, 24 subtests passed** (`checks_018`). Ledger unchanged;
+no reservation, no run, no neural work yet.
+
 ## 2026-09-07 - Condition-skill v9: owner sign-offs recorded, F5 amended, provider re-audit closed
 
 Per the owner's rulings (recorded 2026-09-07): the freeze and single-run
