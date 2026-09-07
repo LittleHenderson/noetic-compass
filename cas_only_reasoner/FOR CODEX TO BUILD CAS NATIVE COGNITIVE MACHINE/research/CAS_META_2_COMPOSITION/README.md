@@ -15,7 +15,7 @@ independent outer provider attestation; and a strict publication-packet
 builder/verifier binds every changed file to exact Git bytes. The dataset
 partitions remain byte-identical to the earlier manifest revision
 `edaf3d6b…`; only the manifest was re-bound to the corrected builder sources.
-The guarded pure capture passed 178 tests; it ran no neural, SQLite, or
+The guarded pure capture passed 179 tests; it ran no neural, SQLite, or
 provider work and left the campaign ledger unchanged. A pre-run owner metric
 amendment (per-bit baseline 0.50, trained-beats-untrained gates, explicit
 denominators) is bound in `OWNER_METRIC_AMENDMENT.json`; the earlier wording is

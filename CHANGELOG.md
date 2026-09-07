@@ -19,7 +19,7 @@ Monorepo-level log. Subprojects keep their own changelogs
   verdict. Old wording preserved in history; no threshold changes after scores.
 - Launcher module one landed: `aws/condition_skill_v9_resource_plan.py` freezes
   the resource plan and validates the inert launch-request contract.
-- Guarded pure capture: **178 passed** (`records/condition_skill_v9_001/checks_008`).
+- Guarded pure capture: **179 passed** (`records/condition_skill_v9_001/checks_009`).
   No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
 
 No training result, native admission, repair, caller return, reservation, or

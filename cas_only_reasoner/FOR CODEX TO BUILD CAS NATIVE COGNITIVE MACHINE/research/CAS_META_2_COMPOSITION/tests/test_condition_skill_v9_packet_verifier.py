@@ -192,6 +192,23 @@ def test_empty_file_bytes_are_bound_exactly(bound):
     assert report["status"] == "PACKET_EXACT"
 
 
+def test_build_and_verify_exclude_self_path(bound):
+    self_path = ("cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/"
+                 "research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/publication_packet.json")
+    fake = FakeGit(dict(bound), changed=[GOOD_PATH, SECOND_PATH, self_path])
+    fake.blobs[self_path] = b"stale-self-bytes"
+    built, packet_raw = verify.build_packet(Path("unused"), GOOD_COMMIT, None,
+                                            self_path=self_path,
+                                            git_bytes_fn=fake.bytes_fn,
+                                            git_blob_fn=fake.blob_fn,
+                                            git_changed_fn=fake.changed_fn)
+    assert [item["path"] for item in built["files"]] == sorted([GOOD_PATH, SECOND_PATH])
+    report = verify.verify_packet(Path("unused"), packet_raw, "HEAD", self_path=self_path,
+                                  git_bytes_fn=fake.bytes_fn, git_blob_fn=fake.blob_fn,
+                                  git_changed_fn=fake.changed_fn, git_ancestor_fn=fake.ancestor_fn)
+    assert report["status"] == "PACKET_EXACT"
+
+
 def test_build_and_verify_with_base_commit_range(bound):
     fake = FakeGit(dict(bound), changed=[GOOD_PATH, SECOND_PATH, "CHANGELOG.md"])
     fake.blobs["CHANGELOG.md"] = b"campaign-log-bytes"

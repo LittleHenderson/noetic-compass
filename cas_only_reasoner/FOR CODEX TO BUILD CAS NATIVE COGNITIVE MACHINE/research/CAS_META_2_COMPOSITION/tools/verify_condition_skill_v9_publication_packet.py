@@ -135,14 +135,20 @@ def git_is_ancestor(root, commit, head):
     return code == 0
 
 
-def build_packet(root, commit, base=None, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
-                 git_changed_fn=git_changed_paths):
+def _relative(root, path):
+    return Path(path).absolute().relative_to(Path(root).absolute()).as_posix()
+
+
+def build_packet(root, commit, base=None, self_path=None, *, git_bytes_fn=git_bytes,
+                 git_blob_fn=git_blob, git_changed_fn=git_changed_paths):
     require(type(commit) is str and re.fullmatch(r"[a-f0-9]{40}", commit) is not None,
             "SOURCE_COMMIT_REQUIRED")
     if base is not None:
         require(type(base) is str and re.fullmatch(r"[a-f0-9]{40}", base) is not None,
                 "BASE_COMMIT_REQUIRED")
     changed = git_changed_fn(root, commit, base)
+    if self_path is not None:
+        changed = [path for path in changed if path != self_path]
     require(bool(changed), "SOURCE_COMMIT_HAS_NO_PATHS")
     require(all(_path_allowed(path) for path in changed),
             "PACKET_COVERAGE_OUTSIDE_ALLOWED_PREFIX")
@@ -164,8 +170,9 @@ def build_packet(root, commit, base=None, *, git_bytes_fn=git_bytes, git_blob_fn
     return packet, raw
 
 
-def verify_packet(root, packet_raw, head, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
-                  git_changed_fn=git_changed_paths, git_ancestor_fn=git_is_ancestor):
+def verify_packet(root, packet_raw, head, self_path=None, *, git_bytes_fn=git_bytes,
+                  git_blob_fn=git_blob, git_changed_fn=git_changed_paths,
+                  git_ancestor_fn=git_is_ancestor):
     packet = validate_structure(strict_load(packet_raw))
     commit = packet["source_commit"]
     base = packet.get("base_commit")
@@ -173,6 +180,8 @@ def verify_packet(root, packet_raw, head, *, git_bytes_fn=git_bytes, git_blob_fn
     if base is not None:
         require(git_ancestor_fn(root, base, commit), "BASE_COMMIT_NOT_ANCESTOR_OF_SOURCE")
     changed = git_changed_fn(root, commit, base)
+    if self_path is not None:
+        changed = [path for path in changed if path != self_path]
     require(sorted(changed) == [entry["path"] for entry in packet["files"]],
             "PACKET_COVERAGE_MISMATCH")
     checked = []
@@ -200,7 +209,9 @@ def main():
     root = Path(__file__).resolve().parents[1]
     if arguments.build:
         require(arguments.output, "OUTPUT_PATH_REQUIRED")
-        packet, raw = build_packet(root, arguments.build, arguments.__dict__.get("from"))
+        self_path = _relative(root, arguments.output)
+        packet, raw = build_packet(root, arguments.build, arguments.__dict__.get("from"),
+                                   self_path=self_path)
         output = Path(arguments.output).absolute()
         require(not output.exists(), "PACKET_OUTPUT_MUST_BE_FRESH")
         output.parent.mkdir(parents=True, exist_ok=True)
@@ -215,7 +226,7 @@ def main():
     require(arguments.verify, "BUILD_OR_VERIFY_REQUIRED")
     packet_path = Path(arguments.verify).absolute()
     raw = packet_path.read_bytes()
-    report = verify_packet(root, raw, arguments.head)
+    report = verify_packet(root, raw, arguments.head, self_path=_relative(root, packet_path))
     print(json.dumps(report, sort_keys=True))
     return 0
 
