@@ -221,17 +221,26 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_015`.
-The guarded capture passed **378 tests and 24 subtests** covering data,
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_016`.
+The guarded capture passed **392 tests and 24 subtests** covering data,
 packaging, trainer admission, adjudication, the publication-packet verifier,
 the resource plan, the source package builder, the remote worker, the launch
 lifecycle, the AWS provider adapter (with its two-phase reservation: canonical
-ledger append first, AWS-side record after, no refund or retry), and the
-canonical budget integration. It also confirmed unchanged tested source
-hashes and an unchanged campaign ledger. These are preparation checks, not a
-neural training result. Earlier local captures `checks_001` through
-`checks_014` are preserved and are not deleted; `checks_015` is the receipt
-bound with this source state.
+ledger append first, AWS-side record after, no refund or retry), the canonical
+budget integration, and the automatic test-point layer (identity report,
+per-transition failure record, development scorecard). It also confirmed
+unchanged tested source hashes and an unchanged campaign ledger. These are
+preparation checks, not a neural training result. Earlier local captures
+`checks_001` through `checks_015` are preserved and are not deleted;
+`checks_016` is the receipt bound with this source state.
+
+The automatic test-point layer (`tools/condition_skill_v9_test_points.py`,
+design in `TEST_POINT_DESIGN_2026-09-07.md`) observes and reports only: the
+startup identity report, the per-transition failure record (the saved-repair
+C tick 7 report: L0 produced vs L2 required, verifier refused, R tick 8 not
+reached, repair open, caller not restored), and the development scorecard
+(NO_RUN until a trainer result.json exists). "Not reached" is never reported
+as "failed".
 
 An independent read-only audit of the adapter is preserved in
 `records/condition_skill_v9_001/audit_001/` (0 critical, 1 major, 6 minor,
