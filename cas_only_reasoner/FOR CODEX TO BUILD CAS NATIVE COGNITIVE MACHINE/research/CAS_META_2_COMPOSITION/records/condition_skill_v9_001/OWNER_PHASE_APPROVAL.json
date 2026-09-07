@@ -1,0 +1,70 @@
+{
+  "schema": "cas-meta2-condition-skill-owner-phase-approval/9",
+  "recorded_utc": "2026-09-07T14:05:00Z",
+  "owner_answer_raw": "yes i approve ...what else do you need from me?",
+  "owner_decisions": {
+    "approval_scope": "Adapter now AND authorize the $4 run",
+    "approval_scope_detail": "Authorize building the guarded AWS launch adapter (package builder, remote worker, launcher, pure tests) with zero provider calls, AND pre-authorize exactly one paid training run. The paid run still executes only after the launcher is built, independently audited, and preregistered.",
+    "budget_scope": "$400 campaign ledger",
+    "budget_scope_detail": "Register the single $4.00 reservation against the $400 campaign ledger (revision 16: $98.00 reserved, $302.00 unreserved). The registration record must name both the task scope and the campaign scope."
+  },
+  "bound_state": {
+    "source_commit": "9bfbeb2787149927d22854d40ea080d9911766cf",
+    "binding_commit": "d56fb2af260e7c009c5d3825cb2d1390d3d70003",
+    "protocol_sha256": "f5e860b36b229d7f5899bee7fb305e3302d40b419e318a97d0f7eecd7095dbeb",
+    "owner_256_record_ruling_sha256": "3d73fc3a1efc5dbe57c4c434e0164fe0358ecd2155ede2e23c6af9248a11a14b",
+    "trainer_sha256": "a1dada39bc917b6ecf2d171648d81fb43dcbf79ccb686c7baa6ee58777dcb923",
+    "dataset_manifest_sha256": "6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd",
+    "publication_packet_sha256": "c69f7158ec093656cef0dbdc3d86dc2bb0d4a498fe56ed20b302b838a73e57d7"
+  },
+  "frozen_resource_plan": {
+    "account": "807562639912",
+    "region": "us-west-2",
+    "ami": "ami-0fbbd0facbc9e3cff",
+    "instance_type": "g7.2xlarge",
+    "gpu_name_contains": "RTX PRO 4500",
+    "t4_rejected": true,
+    "visible_gpu_count": 1,
+    "torch_version": "2.11.0+cu128",
+    "cuda_version": "12.8",
+    "worker_seconds_max": 600,
+    "trainer_output_bytes_max": 33554432,
+    "instance_seconds_max": 3600,
+    "guest_shutdown_seconds": 3400,
+    "cloud_schedule_seconds": 3480,
+    "automatic_retries": 0,
+    "reservation_usd": "4.00",
+    "seed": 7,
+    "training": true,
+    "native_execution": false
+  },
+  "authorized": {
+    "adapter_development": true,
+    "paid_run_preauthorized": true,
+    "paid_run_count": 1,
+    "any_second_run_or_retry": false,
+    "target_or_dataset_changes_after_freeze": false,
+    "t4_or_cpu_or_non_aws_neural_execution": false,
+    "claim_promotion_without_artifact_and_fresh_audit": false
+  },
+  "paid_run_execution_gates": [
+    "launcher pure gates all pass with an unchanged campaign ledger",
+    "fresh third-party audit of the launcher, package, and worker",
+    "preregistration freeze: no further changes to trainer, dataset, or adjudication after this record",
+    "single reservation of exactly $4.00 created once through the pinned budget helper under the campaign lock",
+    "registration names both task scope (condition_skill_v9) and campaign scope ($400 campaign ledger)",
+    "explicit execute flags with exact request and standing-authority paths and hashes",
+    "exact source and archive identity checks with git -c core.autocrlf=false",
+    "provider identity attested outside the trainer execution guard (IMDSv2, GPU name, torch/CUDA, one instance)",
+    "zero automatic retries; failure is a recorded failed launch, not authority to rerun",
+    "cleanup gates: instance terminated, volumes deleted, inputs deleted, results allowlisted, schedule and roles removed"
+  ],
+  "not_covered": [
+    "native admission or installation into the accepted runtime database",
+    "repair or complete caller return",
+    "persistent Bias updates",
+    "composition (0/72 unchanged)",
+    "CAS advantage over the matched control",
+    "any claim of a complete cognitive machine"
+  ]
+}
