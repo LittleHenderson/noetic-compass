@@ -106,27 +106,181 @@ class _Writer:
 
 
 def summarize(rows):
-    """Pure reporting of scored records; NO_EFFECT is wrong for both bits."""
+    """Pure reporting of scored records; NO_EFFECT is wrong for both bits.
+
+    The first wrong bit is derived here from target and prediction alone. When
+    every row also carries equality_conditions and unit_margin_conditions,
+    equality and unit-margin slice reports are included; otherwise the slice
+    keys are omitted entirely.
+    """
     require(bool(rows), "EMPTY_SCORE_ROWS")
     confusion = [[0] * 5 for _ in range(4)]  # final column is NO_EFFECT
     bit_correct = [0, 0]
+    first_wrong = [0, 0, 0]  # bit 1 first wrong, bit 2 first wrong, correct
+    equality = {"cases": 0, "correct": 0}
+    unit_margin = {"cases": 0, "correct": 0}
+    sliced = all({"equality_conditions", "unit_margin_conditions"}.issubset(row) for row in rows)
     for row in rows:
         target, predicted = row["target"], row["prediction"]
         require(type(target) is int and 0 <= target <= 3 and
                 type(predicted) is int and -1 <= predicted <= 3, "SCORE_CLASS_RANGE")
         confusion[target][predicted if predicted >= 0 else 4] += 1
+        correct = predicted == target
         for bit in (0, 1):
             bit_correct[bit] += predicted >= 0 and ((predicted >> (1 - bit)) & 1) == ((target >> (1 - bit)) & 1)
+        if correct:
+            first_wrong[2] += 1
+        elif predicted < 0 or ((predicted >> 1) & 1) != ((target >> 1) & 1):
+            first_wrong[0] += 1  # bit 1 wrong, or both bits wrong via NO_EFFECT
+        else:
+            first_wrong[1] += 1
+        if sliced:
+            require(type(row["equality_conditions"]) is int and 0 <= row["equality_conditions"] <= 2
+                    and type(row["unit_margin_conditions"]) is int
+                    and 0 <= row["unit_margin_conditions"] <= 2, "SCORE_MARGIN_RANGE")
+            if row["equality_conditions"]:
+                equality["cases"] += 1
+                equality["correct"] += correct
+            if row["unit_margin_conditions"]:
+                unit_margin["cases"] += 1
+                unit_margin["correct"] += correct
     totals = [sum(row) for row in confusion]
     require(all(totals), "MACRO_REQUIRES_ALL_FOUR_CLASSES")
     correct = sum(confusion[index][index] for index in range(4))
-    return {"cases": len(rows), "correct": correct, "accuracy": correct / len(rows),
-            "macro_accuracy": sum(confusion[i][i] / totals[i] for i in range(4)) / 4,
-            "cross_entropy": sum(row["negative_log_likelihood"] for row in rows) / len(rows),
-            "class_counts": totals, "confusion_columns": ["L0", "L1", "L2", "L3", "NO_EFFECT"],
-            "confusion": confusion, "bit_accuracy": [count / len(rows) for count in bit_correct],
-            "no_effect_count": sum(row[4] for row in confusion),
-            "error_task_ids": [row["task_id"] for row in rows if row["prediction"] != row["target"]]}
+    result = {"cases": len(rows), "correct": correct, "accuracy": correct / len(rows),
+              "macro_accuracy": sum(confusion[i][i] / totals[i] for i in range(4)) / 4,
+              "cross_entropy": sum(row["negative_log_likelihood"] for row in rows) / len(rows),
+              "class_counts": totals, "confusion_columns": ["L0", "L1", "L2", "L3", "NO_EFFECT"],
+              "confusion": confusion, "bit_accuracy": [count / len(rows) for count in bit_correct],
+              "no_effect_count": sum(row[4] for row in confusion),
+              "first_wrong_bit": {"bit_1_count": first_wrong[0], "bit_2_count": first_wrong[1],
+                                  "none_count": first_wrong[2],
+                                  "bit_1_fraction": first_wrong[0] / len(rows),
+                                  "bit_2_fraction": first_wrong[1] / len(rows)},
+              "error_task_ids": [row["task_id"] for row in rows if row["prediction"] != row["target"]]}
+    if sliced:
+        result["equality_slice"] = {**equality,
+            "accuracy": equality["correct"] / equality["cases"] if equality["cases"] else None}
+        result["unit_margin_slice"] = {**unit_margin,
+            "accuracy": unit_margin["correct"] / unit_margin["cases"] if unit_margin["cases"] else None}
+    return result
+
+
+ADJUDICATION = {
+    "schema": "cas-meta2-condition-skill-adjudication/9",
+    "claim_scope": "offline_candidate_learning_only_no_native_admission",
+    "status_vocabulary": ["PASS", "FAIL", "EVIDENCE_INCOMPLETE"],
+    "not_claimed": ["native admission", "repair", "complete caller return",
+                    "persistent Bias", "composition", "CAS advantage over the matched control"],
+}
+
+PROVIDER_ATTESTATION_KEYS = {
+    "account": "807562639912", "region": "us-west-2", "ami": "ami-0fbbd0facbc9e3cff",
+    "instance_type": "g7.2xlarge", "gpu_name_contains": "RTX PRO 4500",
+    "t4_rejected": True, "visible_gpu_count": 1, "torch_version": "2.11.0+cu128",
+    "cuda_version": "12.8", "actual_cuda_operation": True, "automatic_retries": 0,
+    "reservation_usd": "4.00",
+}
+
+CONTROL_NAMES = ("physical_row_reverse", "slot_reassignment", "direction_1_reverse",
+                 "direction_2_reverse", "threshold_1_crossing", "threshold_2_crossing")
+
+
+def adjudicate(report, provider_attestation=None):
+    """Deterministic frozen gate program; never reads private targets itself.
+
+    PASS requires every gate with complete evidence to pass plus a matching
+    independent outer provider attestation. Missing evidence yields
+    EVIDENCE_INCOMPLETE, never PASS and never FAIL. PASS claims offline
+    candidate learning only; it does not claim native admission, repair, caller
+    return, persistent Bias, composition, or a CAS advantage over the matched
+    control. The trainer-side call has no provider attestation, so the trainer
+    verdict is EVIDENCE_INCOMPLETE by design until the outer launcher receipt
+    supplies the attestation and re-adjudicates.
+    """
+    require(type(report) is dict, "ADJUDICATION_REPORT_OBJECT_REQUIRED")
+    gates = {}
+
+    def gate(name, passed, actual, required):
+        gates[name] = {"passed": bool(passed), "actual": actual, "required": required}
+
+    def field(container, *path):
+        try:
+            value = container
+            for part in path:
+                value = value[part]
+            return value
+        except (KeyError, IndexError, TypeError):
+            return None
+
+    gate("experiment_status",
+         field(report, "status") == "COMPLETED_OFFLINE_CANDIDATE_EXPERIMENT",
+         field(report, "status"), "COMPLETED_OFFLINE_CANDIDATE_EXPERIMENT")
+    gate("selection_sealed", field(report, "selection_sealed") is True,
+         field(report, "selection_sealed"), True)
+    gate("test_targets_parsed", field(report, "test_targets_parsed") is True,
+         field(report, "test_targets_parsed"), True)
+    before, after = field(report, "source_before"), field(report, "source_after")
+    source_ok = (before is not None and before == after
+                 and {"baseline", "installed_wheels", "candidate_sources"}.issubset(before))
+    gate("source_byte_pins", source_ok, None if before is None else before == after,
+         "unchanged source identity with baseline, wheels and candidate pins")
+    for split in ("validation", "test_instances", "test_direction_pair"):
+        base = field(report, "baselines", split) or {}
+        cases = field(base, "cases")
+        constant = field(base, "constant_correct")
+        oracle = field(base, "oracle_correct")
+        constant_accuracy = constant / cases if cases else None
+        oracle_accuracy = oracle / cases if cases else None
+        gate("constant_baseline_" + split, constant_accuracy is not None and constant_accuracy == 0.25,
+             constant_accuracy, 0.25)
+        gate("oracle_" + split, oracle_accuracy is not None and oracle_accuracy == 1.0,
+             oracle_accuracy, 1.0)
+    for family in FAMILIES:
+        for split in TEST_SPLITS:
+            metrics = field(report, "metrics", family + ".trained", split) or {}
+            accuracy = field(metrics, "accuracy")
+            gate(family + "_trained_" + split + "_accuracy",
+                 accuracy is not None and accuracy > 0.25, accuracy, "> 0.25")
+            bits = field(metrics, "bit_accuracy") or [None, None]
+            for index, bit in enumerate(bits):
+                gate(family + "_trained_" + split + "_bit" + str(index),
+                     bit is not None and bit > 0.25, bit, "> 0.25")
+    for family in FAMILIES:
+        for split in TEST_SPLITS:
+            for control in CONTROL_NAMES:
+                summary = field(report, "controls", family + ".trained", split + "." + control) or {}
+                joint = field(summary, "joint_accuracy")
+                gate(family + "_trained_" + split + "_" + control + "_joint",
+                     joint is not None and joint == 1.0, joint, 1.0)
+    for family in FAMILIES:
+        gate(family + "_fixed_steps", field(report, "training_steps", family) == 2400,
+             field(report, "training_steps", family), 2400)
+    if provider_attestation is None:
+        gate("provider_attestation", False, None, "independent outer provider launch receipt")
+    elif type(provider_attestation) is not dict:
+        gate("provider_attestation", False, type(provider_attestation).__name__,
+             "independent outer provider launch receipt")
+    else:
+        mismatches = {key: (provider_attestation.get(key), expected)
+                      for key, expected in PROVIDER_ATTESTATION_KEYS.items()
+                      if provider_attestation.get(key) != expected}
+        job = str(provider_attestation.get("job", ""))
+        if re.fullmatch(r"cas-meta2-\d{14}-[a-f0-9]{8}", job) is None:
+            mismatches["job"] = (provider_attestation.get("job"),
+                                 "cas-meta2-<14 digits>-<8 hex lowercase>")
+        gate("provider_attestation", not mismatches, mismatches or provider_attestation,
+             "independent outer provider launch receipt")
+    if any(entry["passed"] is False and entry["actual"] is None for entry in gates.values()):
+        status = "EVIDENCE_INCOMPLETE"
+    elif all(entry["passed"] for entry in gates.values()):
+        status = "PASS"
+    else:
+        status = "FAIL"
+    return {"schema": ADJUDICATION["schema"], "status": status,
+            "claim_scope": ADJUDICATION["claim_scope"],
+            "status_vocabulary": ADJUDICATION["status_vocabulary"],
+            "gates": gates, "not_claimed": ADJUDICATION["not_claimed"]}
 
 
 def run(output, dataset, config=None):
@@ -134,8 +288,11 @@ def run(output, dataset, config=None):
 
     Selection: validation macro accuracy, then lower CE, then earliest epoch.
     The candidate pool is epochs 1..100; epoch zero is a separate baseline.
-    Both selected checkpoints and their receipt precede all test parsing. Blind
-    test predictions are saved before any private targets or test oracle calls.
+    Before the sealed boundary the learner reads only train.json and
+    validation.json: private test targets are never read or hashed. Blind test
+    predictions are saved first, and private targets are opened only afterwards
+    by the evaluation stage. The embedded adjudicator returns
+    EVIDENCE_INCOMPLETE until the outer provider receipt re-adjudicates.
     """
     cfg = validate_config(config)
     guard = execution_guard()  # must precede heavy imports and output creation
@@ -323,8 +480,10 @@ def run(output, dataset, config=None):
                                        "symbol": "NO_EFFECT" if prediction < 0 else "L" + str(prediction)})
             return result
 
-        def score(predictions, targets):
+        def score(predictions, targets, publics=None):
             require(len(predictions) == len(targets) and bool(targets), "SCORE_LENGTH")
+            if publics is not None:
+                require(len(publics) == len(targets), "SCORE_PUBLIC_LENGTH")
             result = []
             for start in range(0, len(predictions), cfg["batch_size"]):
                 deadline()
@@ -335,6 +494,9 @@ def run(output, dataset, config=None):
                 for row, target, loss in zip(rows, gold, losses):
                     result.append({**row, "target": target, "negative_log_likelihood": loss,
                                    "correct": row["prediction"] == target})
+            if publics is not None:
+                for row, public in zip(result, publics):
+                    row.update(data.condition_margins(public))
             return result
 
         train_publics = [task["public"] for task in train_tasks]
@@ -412,7 +574,8 @@ def run(output, dataset, config=None):
             "test_public_parsed": False, "test_targets_parsed": False, "claims": CLAIMS})
         progress["selection_sealed"] = True
 
-        # No private targets or test oracle calls above this boundary.
+        # No private targets or test oracle calls above this boundary. The
+        # learner has read only train/validation partitions so far.
         public_bundle = read_partitions(dataset, tuple(split + ".public.json" for split in TEST_SPLITS),
                                         expected_manifest_sha256=manifest_sha)
         progress["test_public_parsed"] = True
@@ -447,9 +610,10 @@ def run(output, dataset, config=None):
             for stage, states in (("untrained", initial_states), ("trained", best_states)):
                 key, model = family + "." + stage, models[family]
                 model.load_state_dict(states[family], strict=True)
-                scored = {split: score(predictions[key][split], test_targets[split]) for split in TEST_SPLITS}
-                scored["train_probe"] = score(predict(model, probe_publics), probe_targets)
-                scored["validation"] = score(predict(model, validation_publics), validation_targets)
+                scored = {split: score(predictions[key][split], test_targets[split], test_publics[split])
+                          for split in TEST_SPLITS}
+                scored["train_probe"] = score(predict(model, probe_publics), probe_targets, probe_publics)
+                scored["validation"] = score(predict(model, validation_publics), validation_targets, validation_publics)
                 writer.json(key + ".predictions.json", scored)
                 summaries[key] = {split: summarize(rows) for split, rows in scored.items()}
                 control_rows = []
@@ -492,7 +656,8 @@ def run(output, dataset, config=None):
                                         "constant_selection": "training-only majority, lowest-index tie"}
         source_after = source_identity()
         require(source_after == source_before, "SOURCE_BYTES_CHANGED_DURING_RUN")
-        # All files remain pinned even after the final score was computed.
+        # The manifest and training partition stay pinned after the final score;
+        # private target partitions were pinned immediately before parsing.
         read_partitions(dataset, ("train.json",), expected_manifest_sha256=manifest_sha)
         for family, model in models.items():
             require(state_identity(model.state_dict()) == state_identity(best_states[family]), "INFERENCE_MUTATED_SELECTED_STATE")
@@ -506,6 +671,9 @@ def run(output, dataset, config=None):
                   "matching": matching, "cuda_forward_audit": audits,
                   "source_before": source_before, "source_after": source_after,
                   "claims": CLAIMS, "files": dict(writer.files), "output_bytes_before_result": writer.used}
+        # Trainer-side verdict is EVIDENCE_INCOMPLETE by design: the independent
+        # outer provider receipt must re-adjudicate with its attestation.
+        report["adjudication"] = adjudicate(report)
         writer.json("result.json", report, final=True)
         return report
     except Exception as error:

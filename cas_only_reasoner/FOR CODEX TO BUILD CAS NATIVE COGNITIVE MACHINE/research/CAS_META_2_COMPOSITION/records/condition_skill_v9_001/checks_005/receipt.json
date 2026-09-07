@@ -1,0 +1,58 @@
+{
+  "after": {
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "1cb36520367541d2031d3c3ca9902f424dcdb77f06c5af74850a478bea5d852e",
+    "cas_meta2/condition_skill_v9/data.py": "78b138c4c8dba04a78d4513efc3ed4928f10850e4dcbaacac0e690a0fae45e0d",
+    "cas_meta2/condition_skill_v9/train.py": "a1dada39bc917b6ecf2d171648d81fb43dcbf79ccb686c7baa6ee58777dcb923",
+    "tests/test_condition_skill_v9_bundle.py": "5842a953480b0680016a6397f71f7b691072fecdf8afb86c4a31dcf5aa4c7b06",
+    "tests/test_condition_skill_v9_data.py": "08bc3abf46a5cceeb11a324f683e2956654e6522ed57e64e2ee54000de3673e2",
+    "tests/test_condition_skill_v9_packet_verifier.py": "af42b6556586fe19dc7ca56f58ed8425df8421f113673a1fe3d71803f52d0cb2",
+    "tests/test_condition_skill_v9_train_boundary.py": "9e89ce46a151423acbfb7e0aed4a1eecfd8720b9a025619f36a55afd236978fc",
+    "tools/check_condition_skill_v9.py": "3e4deda95e703fa78c2178ceffd2ab0bc6e7cd2b7501695b909be87dde351ba8",
+    "tools/verify_condition_skill_v9_publication_packet.py": "c411b7d69c2736129d1f68186f6712bb7008dfe9d18e6354117158dcec8a9e5c"
+  },
+  "before": {
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "1cb36520367541d2031d3c3ca9902f424dcdb77f06c5af74850a478bea5d852e",
+    "cas_meta2/condition_skill_v9/data.py": "78b138c4c8dba04a78d4513efc3ed4928f10850e4dcbaacac0e690a0fae45e0d",
+    "cas_meta2/condition_skill_v9/train.py": "a1dada39bc917b6ecf2d171648d81fb43dcbf79ccb686c7baa6ee58777dcb923",
+    "tests/test_condition_skill_v9_bundle.py": "5842a953480b0680016a6397f71f7b691072fecdf8afb86c4a31dcf5aa4c7b06",
+    "tests/test_condition_skill_v9_data.py": "08bc3abf46a5cceeb11a324f683e2956654e6522ed57e64e2ee54000de3673e2",
+    "tests/test_condition_skill_v9_packet_verifier.py": "af42b6556586fe19dc7ca56f58ed8425df8421f113673a1fe3d71803f52d0cb2",
+    "tests/test_condition_skill_v9_train_boundary.py": "9e89ce46a151423acbfb7e0aed4a1eecfd8720b9a025619f36a55afd236978fc",
+    "tools/check_condition_skill_v9.py": "3e4deda95e703fa78c2178ceffd2ab0bc6e7cd2b7501695b909be87dde351ba8",
+    "tools/verify_condition_skill_v9_publication_packet.py": "c411b7d69c2736129d1f68186f6712bb7008dfe9d18e6354117158dcec8a9e5c"
+  },
+  "boundary": "Pure curriculum, packaging and trainer admission tests only. No neural, SQLite or provider execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_condition_skill_v9.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\condition_skill_v9_001\\checks_005",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-07T13:43:06.309655+00:00",
+  "ledger_after": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "ledger_before": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 264,
+      "sha256": "dd625e046c77cf8c6335fd1b0c09ed0dbf4f8c559e7c3771afb9989ca7d0821b"
+    }
+  },
+  "pid": 35152,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-condition-skill-pure-tests/9",
+  "started_utc": "2026-09-07T13:42:58.988412+00:00",
+  "timed_out": false,
+  "unchanged": true,
+  "wall_seconds": 7.321360499990988
+}
