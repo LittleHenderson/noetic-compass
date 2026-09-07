@@ -337,20 +337,26 @@ class ConditionSkillV9Provider:
         return self.job + "-" + plan.RESOURCE_PLAN["account"]
 
     def _ensure_bucket(self, s3, tags=None):
-        """Create and harden the job bucket exactly once (idempotent for launch)."""
+        """Create and harden the job bucket; never memoize a half-hardened one."""
         tags = tags or [{"Key": "cas_meta_job", "Value": self.job}]
         bucket = self._bucket_name()
         if self._resources.get("bucket") == bucket:
             return bucket
         s3.create_bucket(Bucket=bucket,
                          CreateBucketConfiguration={"LocationConstraint": plan.RESOURCE_PLAN["region"]})
+        try:
+            s3.put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": tags})
+            s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
+                "BlockPublicAcls": True, "IgnorePublicAcls": True,
+                "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
+            s3.put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
+                "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
+        except Exception:
+            # A half-hardened bucket must not be treated as ready: forget it so
+            # later calls re-attempt hardening instead of silently skipping it.
+            self._resources.pop("bucket", None)
+            raise
         self._resources["bucket"] = bucket
-        s3.put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": tags})
-        s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
-            "BlockPublicAcls": True, "IgnorePublicAcls": True,
-            "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
-        s3.put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
-            "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
         return bucket
 
     def _record_aws_side_reservation(self, receipt):
@@ -724,12 +730,17 @@ class ConditionSkillV9Provider:
         bucket = self._resources.get("bucket")
         if bucket is not None and s3 is not None:
             try:
+                # results/* must be deleted too, or delete_bucket fails on a
+                # non-empty bucket and every successful run ends incomplete.
                 s3.delete_objects(Bucket=bucket, Delete={"Objects": [
                     {"Key": "input/source.zip"}, {"Key": "input/remote.py"},
                     {"Key": "input/permit.json"},
                     {"Key": "reservation/reservation_receipt.json"},
-                    {"Key": "reservation/ledger_snapshot.json"}]})
+                    {"Key": "reservation/ledger_snapshot.json"},
+                    {"Key": "results/complete.json"},
+                    {"Key": "results/artifacts.zip"}]})
                 status["inputs_deleted"] = True
+                status["results_deleted"] = True
             except Exception as error:  # noqa: BLE001
                 failures.append("INPUT_DELETION_FAILED:" + str(error))
                 status["inputs_deleted"] = False

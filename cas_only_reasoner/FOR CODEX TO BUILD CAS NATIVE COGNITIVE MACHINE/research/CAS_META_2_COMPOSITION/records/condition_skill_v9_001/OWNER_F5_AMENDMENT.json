@@ -1,0 +1,42 @@
+{
+  "schema": "cas-meta2-condition-skill-owner-pre-run-f5-amendment/9",
+  "recorded_utc": "2026-09-07T22:40:00Z",
+  "nature": "pre_run_attestation_key_amendment",
+  "made_before_any_training_run": true,
+  "old_version_preserved": true,
+  "owner_ruling_quote": "Amend now (owner-approved pre-run amendment): add \"instance_count\": 1 to PROVIDER_ATTESTATION_KEYS so re-adjudication enforces the single-instance bound.",
+  "source_finding": "audit_001 F5 and audit_002 F5: instance_count absent from the frozen attestation key set; re-adjudication accepted any/absent instance_count while launcher preflight alone enforced single-instance.",
+  "changes": [
+    {
+      "file": "cas_meta2/condition_skill_v9/train.py",
+      "before": "PROVIDER_ATTESTATION_KEYS without instance_count",
+      "after": "PROVIDER_ATTESTATION_KEYS includes \"instance_count\": 1"
+    },
+    {
+      "file": "tests/test_condition_skill_v9_train_boundary.py",
+      "after": "attestation rejection test now includes an instance_count=2 FAIL case"
+    },
+    {
+      "file": "aws/condition_skill_v9_provider.py",
+      "after": "cleanup() deletes results/* before delete_bucket (audit_002 N1); _ensure_bucket no longer memoizes a half-hardened bucket (audit_002 N2)"
+    }
+  ],
+  "bound_state_before": {
+    "trainer_sha256": "bfbd3989c2d8d42b322efcd67ecfc766af61846f2a759187518bc0ef16af486e",
+    "protocol_sha256": "e17a8ff60603b44b7d5601a5828a1ecbb1500ee7b58b767b98ca7ab643795de8"
+  },
+  "bound_state_after": {
+    "trainer_sha256": "4d4ab00ab39ece46f267144edec382d45304af1a07d5b7f88857d048eacc9efe",
+    "protocol_sha256": "e4b2b77e264e1853d467139456acbf7a7eb1e26e3d5224c97f4941e8d7cb3bc3"
+  },
+  "owner_signoff_records": {
+    "freeze": "recorded per owner instruction 2026-09-07 (preregistration_v9_001.md 8.1)",
+    "f5": "amend_now (preregistration_v9_001.md 8.2)",
+    "run_authorization": "recorded per owner instruction 2026-09-07 (preregistration_v9_001.md 8.3); execution still requires an environment able to approve and launch"
+  },
+  "prohibited_after_this_amendment": [
+    "any threshold or gate change after training scores exist",
+    "presenting a per-bit result above 0.25 as above binary chance",
+    "re-running a failed paid launch as a retry"
+  ]
+}

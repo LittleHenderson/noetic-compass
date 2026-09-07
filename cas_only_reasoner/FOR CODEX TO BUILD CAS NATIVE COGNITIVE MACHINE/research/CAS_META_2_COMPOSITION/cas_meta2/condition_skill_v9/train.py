@@ -192,7 +192,7 @@ METRIC_DEFINITIONS = {
 
 PROVIDER_ATTESTATION_KEYS = {
     "account": "807562639912", "region": "us-west-2", "ami": "ami-0fbbd0facbc9e3cff",
-    "instance_type": "g7.2xlarge", "gpu_name_contains": "RTX PRO 4500",
+    "instance_type": "g7.2xlarge", "instance_count": 1, "gpu_name_contains": "RTX PRO 4500",
     "t4_rejected": True, "visible_gpu_count": 1, "torch_version": "2.11.0+cu128",
     "cuda_version": "12.8", "actual_cuda_operation": True, "automatic_retries": 0,
     "reservation_usd": "4.00",
@@ -328,7 +328,9 @@ def adjudicate(report, provider_attestation=None):
                                                "are never erased by the combined verdict"),
             "pre_run_amendment": ("per-bit gates require > 0.5 (binary chance), never > 0.25; "
                                   "trained-beats-untrained gates added; bound by "
-                                  "OWNER_METRIC_AMENDMENT.json before any run"),
+                                  "OWNER_METRIC_AMENDMENT.json before any run; "
+                                  "instance_count added to the provider attestation keys "
+                                  "by OWNER_F5_AMENDMENT.json before any run"),
             "gates": gates, "not_claimed": ADJUDICATION["not_claimed"]}
 
 
