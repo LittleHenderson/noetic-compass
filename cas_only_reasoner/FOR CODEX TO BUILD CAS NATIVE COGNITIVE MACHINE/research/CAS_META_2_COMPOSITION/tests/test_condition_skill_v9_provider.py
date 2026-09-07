@@ -135,6 +135,10 @@ class FakeEC2:
         self.calls.append(("authorize_security_group_egress", kwargs))
         return {}
 
+    def delete_security_group(self, **kwargs):
+        self.calls.append(("delete_security_group", kwargs))
+        return {}
+
     def run_instances(self, **kwargs):
         self.calls.append(("run_instances", kwargs))
         return {"Instances": [{"InstanceId": INSTANCE}]}
@@ -708,3 +712,76 @@ def test_collect_requires_wait_result(tmp_path, monkeypatch):
     built.launch(JOB, valid_permit(receipt, facts))
     with pytest.raises(ValueError, match="CONDITION_SKILL_V9_COLLECT_REQUIRES_RESULT"):
         built.collect(JOB)
+
+
+# --------------------------------------------------------------------------- #
+# rendered remote driver / user-data bootstrap
+# --------------------------------------------------------------------------- #
+def test_render_remote_driver_installs_venv_and_uploads_real_artifacts(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    built._resources["bucket"] = built._bucket_name()
+    driver = built._render_remote({})
+    compile(driver, "<remote>", "exec")
+    # venv creation + CAS_META2_VENV_PYTHON discovery over discovered binaries
+    assert "CAS_META2_VENV_PYTHON" in driver
+    assert "'-m', 'venv'" in driver
+    assert "'python3.12'" in driver and "'python3.11'" in driver and "'python3'" in driver
+    # frozen torch cu128 install from the pinned index
+    assert "'torch==2.11.0'" in driver
+    assert "'--index-url', TORCH_INDEX" in driver
+    assert "'https://download.pytorch.org/whl/cu128'" in driver
+    # the two frozen wheels shipped in the package
+    assert "'casformer_reference-0.1.0-py3-none-any.whl'" in driver
+    assert "'cas_neural_cjt-0.2.0-py3-none-any.whl'" in driver
+    assert "'research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist'" in driver
+    # requirements-gpu.txt install path
+    assert "'-r', str(REQUIREMENTS)" in driver
+    # artifacts.zip built with a real sha256, then complete.json with real sha256/bytes
+    assert "hashlib.sha256(artifacts).hexdigest()" in driver
+    assert "artifacts = make_artifacts()" in driver
+    assert "Key='results/artifacts.zip'" in driver
+    assert "Key='results/complete.json'" in driver
+    # failure path still uploads complete.json and attempts artifacts.zip
+    assert "except BaseException as error:" in driver
+    assert "'message': str(error)[:2000]" in driver
+    assert "complete['failure'] = failure" in driver
+    # no placeholder sha256 remains
+    assert "'sha256': ''" not in driver
+
+
+def test_user_data_within_bound_and_contains_hash_checks(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    text = built._user_data(built._bucket_name(), "d" * 64)
+    assert len(text.encode("utf-8")) <= 16384
+    assert "sha256sum -c -" in text
+    assert ARCHIVE_SHA in text
+
+
+def test_cleanup_treats_absent_schedule_as_clean(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+
+    def absent_schedule(**kwargs):
+        raise FakeClientError("ResourceNotFoundException")
+
+    stack.scheduler.delete_schedule = absent_schedule
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is True
+    assert cleaned["schedule_removed"] is True
+    assert cleaned.get("schedule_was_absent") is True
+    assert cleaned["failures"] == []
+
+
+def test_cleanup_deletes_security_group(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    cleaned = built.cleanup(JOB)
+    assert cleaned["security_group_deleted"] is True
+    deleted = [call for call in stack.ec2.calls if call[0] == "delete_security_group"]
+    assert deleted

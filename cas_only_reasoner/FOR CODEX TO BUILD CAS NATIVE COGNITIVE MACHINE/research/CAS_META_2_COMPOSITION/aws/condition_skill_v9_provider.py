@@ -417,11 +417,15 @@ class ConditionSkillV9Provider:
     def _render_remote(self, permit):
         """Render a self-contained remote driver script with the bound config.
 
-        The driver downloads source.zip and permit.json, extracts the package,
-        and invokes the shipped ``aws.condition_skill_v9_remote`` module with
-        the frozen dataset/output layout. It is a first-pass bootstrap: the
-        integrator must still confirm the pinned AMI ships the required
-        Python/CUDA venv and AWS CLI this script assumes.
+        The driver extracts the package, creates (or discovers) the isolated task
+        venv at ``WORKER_ROOT/venv``, installs the frozen torch cu128 build, the
+        two frozen trainer wheels, and the pinned requirements (each fail-closed),
+        then runs ``aws.condition_skill_v9_remote.orchestrate`` with the venv
+        Python. Afterwards it packages the allowlisted trainer evidence into
+        ``results/artifacts.zip`` and uploads ``results/complete.json`` with the
+        real artifact sha256/bytes so ``wait()``/``collect()`` can verify the run.
+        The driver imports only stdlib until after the install step; boto3 is
+        imported only for the final S3 uploads (instance-role creds via IMDSv2).
         """
         config = {"schema": REMOTE_CONFIG_SCHEMA, "job": self.job,
                   "bucket": self._resources["bucket"], "region": self.region,
@@ -430,35 +434,112 @@ class ConditionSkillV9Provider:
                   "manifest_sha256": self.manifest_sha256,
                   "dataset_manifest_sha256": self.dataset_manifest_sha256,
                   "resource_plan": plan.RESOURCE_PLAN, "permit": permit}
-        driver = (
-            "CONFIG = " + repr(config) + "\n"
-            "import json, os, sys, zipfile\n"
-            "from pathlib import Path\n"
-            "ROOT = Path('/opt/cas-meta2-condition-skill-v9')\n"
-            "pkg = ROOT / 'package'\n"
-            "if not pkg.exists():\n"
-            "    pkg.mkdir(parents=True)\n"
-            "with zipfile.ZipFile(ROOT / 'source.zip') as z:\n"
-            "    z.extractall(pkg)\n"
-            "pilot = pkg / 'research/CAS_META_2_COMPOSITION'\n"
-            "sys.path.insert(0, str(pilot))\n"
-            "from aws.condition_skill_v9_remote import orchestrate\n"
-            "out = pilot / 'runs' / CONFIG['job']\n"
-            "data = pilot / 'records/condition_skill_v9_001/dataset_001'\n"
-            "python = os.environ.get('CAS_META2_VENV_PYTHON', sys.executable)\n"
-            "receipt = orchestrate(str(ROOT / 'source.zip'), str(pkg), str(out), str(data),\n"
-            "    CONFIG['job'], expected_sha256=CONFIG['archive_sha256'],\n"
-            "    expected_source_sha=CONFIG['source_sha'],\n"
-            "    expected_manifest_sha256=CONFIG['manifest_sha256'],\n"
-            "    python_executable=python, timeout=600)\n"
-            "import boto3\n"
-            "s3 = boto3.client('s3', region_name=CONFIG['region'])\n"
-            "s3.put_object(Bucket=CONFIG['bucket'], Key='results/complete.json',\n"
-            "    Body=json.dumps({'job': CONFIG['job'], 'status': receipt['status'],\n"
-            "        'sha256': '', 'bytes': 0, 'experiment': CONFIG['resource_plan']['experiment'],\n"
-            "        'returncode': 0 if receipt['status'] == 'REMOTE_FINISHED' else 1}))\n"
-        )
-        return driver
+        driver_lines = [
+            "CONFIG = " + repr(config),
+            "import hashlib",
+            "import json",
+            "import os",
+            "import shutil",
+            "import subprocess",
+            "import sys",
+            "import zipfile",
+            "from pathlib import Path",
+            "ROOT = Path('/opt/cas-meta2-condition-skill-v9')",
+            "pkg = ROOT / 'package'",
+            "if not pkg.exists():",
+            "    pkg.mkdir(parents=True)",
+            "with zipfile.ZipFile(ROOT / 'source.zip') as z:",
+            "    z.extractall(pkg)",
+            "pilot = pkg / 'research/CAS_META_2_COMPOSITION'",
+            "sys.path.insert(0, str(pilot))",
+            "out = pilot / 'runs' / CONFIG['job']",
+            "data = pilot / 'records/condition_skill_v9_001/dataset_001'",
+            "evidence = out.parent / (out.name + '.evidence')",
+            "# Frozen CUDA 12.8 index, mirrored from aws/launch.py launch_plan.json",
+            "# torch_index_url; the same pin used by every v8 remote install.",
+            "TORCH_INDEX = 'https://download.pytorch.org/whl/cu128'",
+            "WHEEL_DIR = 'research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist'",
+            "WHEELS = [pkg / WHEEL_DIR / 'casformer_reference-0.1.0-py3-none-any.whl',",
+            "          pkg / WHEEL_DIR / 'cas_neural_cjt-0.2.0-py3-none-any.whl']",
+            "REQUIREMENTS = pilot / 'requirements-gpu.txt'",
+            "",
+            "def run_checked(argv):",
+            "    subprocess.run(argv, check=True)",
+            "",
+            "orchestrate = None",
+            "allowed_trainer_output = None",
+            "failure = None",
+            "receipt = None",
+            "python = os.environ.get('CAS_META2_VENV_PYTHON')",
+            "try:",
+            "    from aws.condition_skill_v9_remote import orchestrate, allowed_trainer_output",
+            "    if not python:",
+            "        venv = ROOT / 'venv'",
+            "        venv_py = venv / 'bin' / 'python'",
+            "        if not venv_py.exists():",
+            "            base = next((c for c in ('python3.12', 'python3.11', 'python3') if shutil.which(c)), None)",
+            "            if base is None:",
+            "                raise SystemExit('SUPPORTED_PYTHON_REQUIRED')",
+            "            run_checked([base, '-m', 'venv', str(venv)])",
+            "        python = str(venv_py)",
+            "    run_checked([python, '-m', 'pip', 'install', '--disable-pip-version-check',",
+            "                 'torch==2.11.0', '--index-url', TORCH_INDEX,",
+            "                 '--report', str(ROOT / 'torch_install.json')])",
+            "    run_checked([python, '-m', 'pip', 'install', '--disable-pip-version-check',",
+            "                 '--no-deps', str(WHEELS[0]), str(WHEELS[1]),",
+            "                 '--report', str(ROOT / 'wheel_install.json')])",
+            "    # requirements-gpu.txt pins numpy/jsonschema/pytest and carries no torch pin",
+            "    # (torch is installed above from the cu128 index), so it is installed verbatim.",
+            "    run_checked([python, '-m', 'pip', 'install', '--disable-pip-version-check',",
+            "                 '-r', str(REQUIREMENTS),",
+            "                 '--report', str(ROOT / 'dependency_install.json')])",
+            "    receipt = orchestrate(str(ROOT / 'source.zip'), str(pkg), str(out), str(data),",
+            "        CONFIG['job'], expected_sha256=CONFIG['archive_sha256'],",
+            "        expected_source_sha=CONFIG['source_sha'],",
+            "        expected_manifest_sha256=CONFIG['manifest_sha256'],",
+            "        python_executable=python, timeout=600)",
+            "except BaseException as error:",
+            "    failure = {'type': type(error).__name__, 'message': str(error)[:2000]}",
+            "",
+            "def make_artifacts():",
+            "    names = []",
+            "    seen = set()",
+            "    for directory in (evidence, out):",
+            "        if not directory.is_dir():",
+            "            continue",
+            "        for name in sorted(os.listdir(str(directory))):",
+            "            path = directory / name",
+            "            if not path.is_file():",
+            "                continue",
+            "            if allowed_trainer_output is not None and not allowed_trainer_output(name):",
+            "                continue",
+            "            if name in seen:",
+            "                continue",
+            "            seen.add(name)",
+            "            names.append((name, path))",
+            "    target = ROOT / 'artifacts.zip'",
+            "    with zipfile.ZipFile(str(target), 'w', compression=zipfile.ZIP_DEFLATED) as zf:",
+            "        for name, path in names:",
+            "            zf.write(str(path), arcname=name)",
+            "    return target.read_bytes()",
+            "",
+            "status = 'REMOTE_FAILED' if failure is not None else receipt.get('status', 'REMOTE_FAILED')",
+            "artifacts = make_artifacts()",
+            "artifact_sha = hashlib.sha256(artifacts).hexdigest()",
+            "artifact_bytes = len(artifacts)",
+            "import boto3",
+            "s3 = boto3.client('s3', region_name=CONFIG['region'])",
+            "s3.put_object(Bucket=CONFIG['bucket'], Key='results/artifacts.zip', Body=artifacts)",
+            "complete = {'job': CONFIG['job'], 'status': status,",
+            "            'sha256': artifact_sha, 'bytes': artifact_bytes,",
+            "            'experiment': CONFIG['resource_plan']['experiment'],",
+            "            'returncode': 0 if status == 'REMOTE_FINISHED' else 1}",
+            "if failure is not None:",
+            "    complete['failure'] = failure",
+            "s3.put_object(Bucket=CONFIG['bucket'], Key='results/complete.json',",
+            "              Body=json.dumps(complete))",
+        ]
+        return "\n".join(driver_lines)
 
     def _user_data(self, bucket, remote_sha256):
         frozen = plan.RESOURCE_PLAN
@@ -758,11 +839,39 @@ class ConditionSkillV9Provider:
             try:
                 scheduler.delete_schedule(Name=self.job)
                 status["schedule_removed"] = True
+            except self._client_error as error:
+                code = getattr(error, "response", {}).get("Error", {}).get("Code")
+                if code == "ResourceNotFoundException":
+                    # Already absent: clean, not a failure. Record it honestly.
+                    status["schedule_removed"] = True
+                    status["schedule_was_absent"] = True
+                else:
+                    failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
+                    status["schedule_removed"] = False
             except Exception as error:  # noqa: BLE001
                 failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
                 status["schedule_removed"] = False
         else:
             status["schedule_removed"] = True
+
+        security_group = self._resources.get("security_group")
+        if security_group is not None and ec2 is not None:
+            try:
+                ec2.delete_security_group(GroupId=security_group)
+                status["security_group_deleted"] = True
+            except self._client_error as error:
+                code = getattr(error, "response", {}).get("Error", {}).get("Code")
+                if code in ("InvalidGroup.NotFound", "InvalidSecurityGroupID.NotFound"):
+                    status["security_group_deleted"] = True
+                    status["security_group_was_absent"] = True
+                else:
+                    failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
+                    status["security_group_deleted"] = False
+            except Exception as error:  # noqa: BLE001
+                failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
+                status["security_group_deleted"] = False
+        else:
+            status["security_group_deleted"] = True
 
         if iam is not None:
             for role in (self.job + "-worker", self.job + "-timer"):
