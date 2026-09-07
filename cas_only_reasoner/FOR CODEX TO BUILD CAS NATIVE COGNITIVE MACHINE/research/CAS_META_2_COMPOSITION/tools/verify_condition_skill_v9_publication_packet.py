@@ -128,11 +128,38 @@ def git_changed_paths(root, commit, base=None):
 
 
 def git_is_ancestor(root, commit, head):
-    try:
-        code, _ = _run_git(["-c", "core.autocrlf=false", "merge-base", "--is-ancestor", commit, head], root)
-    except ValueError:
+    """True when commit is an ancestor of head.
+
+    Exit code 1 is a verified non-ancestor result; any other failure is a Git
+    error and must be distinguished, never silently treated as non-ancestor.
+    """
+    code, _ = _run_git_status(["-c", "core.autocrlf=false", "merge-base", "--is-ancestor",
+                               commit, head], root)
+    if code == 0:
+        return True
+    if code == 1:
         return False
-    return code == 0
+    raise ValueError("PACKET_GIT_ANCESTRY_CHECK_FAILED")
+
+
+def _run_git_status(args, cwd):
+    # Like _run_git but returns the process exit code instead of raising, so
+    # callers can distinguish "verified false" (exit 1) from Git errors.
+    handle_out, out_path = tempfile.mkstemp(prefix="cas_v9_packet_out_")
+    os.close(handle_out)
+    handle_err, err_path = tempfile.mkstemp(prefix="cas_v9_packet_err_")
+    os.close(handle_err)
+    try:
+        with open(out_path, "wb") as out, open(err_path, "wb") as err:
+            process = subprocess.run(["git"] + args, cwd=str(cwd), stdout=out, stderr=err,
+                                     creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        return process.returncode, Path(out_path).read_bytes()
+    finally:
+        for path in (out_path, err_path):
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
 
 
 def _repo_path(root, path):
@@ -177,6 +204,7 @@ def build_packet(root, commit, base=None, self_path=None, *, git_bytes_fn=git_by
 def verify_packet(root, packet_raw, head, self_path=None, *, git_bytes_fn=git_bytes,
                   git_blob_fn=git_blob, git_changed_fn=git_changed_paths,
                   git_ancestor_fn=git_is_ancestor):
+    require(b"\r" not in packet_raw, "PACKET_CRLF_REJECTED")
     packet = validate_structure(strict_load(packet_raw))
     commit = packet["source_commit"]
     base = packet.get("base_commit")

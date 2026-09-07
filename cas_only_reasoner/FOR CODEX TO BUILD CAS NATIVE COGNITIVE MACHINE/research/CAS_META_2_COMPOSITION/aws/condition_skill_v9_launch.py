@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "cas-meta2-condition-skill-v9-launch/9"
 AUTHORITY_SCHEMA = "cas-meta2-condition-skill-v9-authority/9"
 LEDGER_PATH = ROOT / "records/budget/campaign_ledger.json"
+OWNER_APPROVAL_PATH = ROOT / "records/condition_skill_v9_001/OWNER_PHASE_APPROVAL.json"
 RESERVATION_USD = "4.00"
 CAMPAIGN_CAP_USD = "400.00"
 
@@ -178,6 +179,13 @@ def validate_reserved_transition(before, after, receipt, request):
 
 
 def validate_preflight(facts):
+    """Pre-launch AWS-visible identity facts only.
+
+    torch_version, cuda_version, and actual_cuda_operation are worker-side
+    facts that cannot exist before launch; they are collected by the provider
+    into the outer receipt and enforced by the adjudicator's provider
+    attestation after the run, never before the reservation.
+    """
     frozen = plan.RESOURCE_PLAN
     require(type(facts) is dict, "PREFLIGHT_FACTS_REQUIRED")
     require(facts.get("account") == frozen["account"], "PREFLIGHT_ACCOUNT")
@@ -186,6 +194,7 @@ def validate_preflight(facts):
     require(facts.get("instance_type") == frozen["instance_type"], "PREFLIGHT_INSTANCE_TYPE")
     require(facts.get("instance_count") == 1, "PREFLIGHT_INSTANCE_COUNT")
     require(facts.get("gpu_name_contains") == frozen["gpu_name_contains"], "PREFLIGHT_GPU_NAME")
+    require(facts.get("visible_gpu_count") == 1, "PREFLIGHT_VISIBLE_GPU_COUNT")
     require(facts.get("t4_rejected") is True, "PREFLIGHT_T4")
     require(facts.get("rate_ceiling_usd") == frozen["on_demand_rate_ceiling_usd"],
             "PREFLIGHT_RATE_CEILING")
@@ -194,9 +203,16 @@ def validate_preflight(facts):
 
 
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
-    """One-shot paid execution with injected provider; never retries."""
+    """One-shot paid execution with injected provider; never retries.
+
+    The provider.calls list is advisory instrumentation for tests; the
+    authoritative exactly-once guard is the canonical ledger transition
+    (validate_reserved_transition) plus the job-in-ledger refusal.
+    """
     validate_request(request)
     validate_authority(authority)
+    require(authority["owner_approval_record_sha256"] ==
+            digest(OWNER_APPROVAL_PATH.read_bytes()), "OWNER_APPROVAL_RECORD_MISMATCH")
     require(authority["job"] == request["job"], "REQUEST_AUTHORITY_JOB_MISMATCH")
     require(authority["source_sha"] == request["source_sha"], "REQUEST_AUTHORITY_SOURCE_MISMATCH")
     for key in ("archive_sha256", "manifest_sha256", "dataset_manifest_sha256"):
@@ -253,6 +269,7 @@ def main(argv=None):
     parser.add_argument("--authority")
     parser.add_argument("--authority-sha256")
     parser.add_argument("--receipt-dir")
+    parser.add_argument("--profile", default="default")
     arguments = parser.parse_args(argv)
     if not arguments.execute:
         print(json.dumps(plan_only(), sort_keys=True))

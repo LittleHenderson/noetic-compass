@@ -242,6 +242,13 @@ def validate_timeout(timeout):
 
 def run_trainer(package_dir, output_dir, dataset_dir, job, *, python_executable, popen=subprocess.Popen,
                 kill_tree=_kill_tree, timeout=WORKER_SECONDS_MAX):
+    """Single trainer run; log files have no write-side cap.
+
+    The stdout/stderr logs grow unbounded until the independent wall-clock
+    kill at WORKER_SECONDS_MAX, which together with the instance's EBS volume
+    and scheduled termination is the only log bound. Collection reads at most
+    LOG_BYTES_MAX per log and records the truncation honestly.
+    """
     config = validate_timeout(timeout)
     command, environment, cwd = trainer_command(package_dir, output_dir, dataset_dir, job,
                                                 python_executable=python_executable)
