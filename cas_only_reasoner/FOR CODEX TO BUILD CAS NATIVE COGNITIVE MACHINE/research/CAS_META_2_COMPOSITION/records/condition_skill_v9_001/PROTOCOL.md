@@ -221,15 +221,17 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_014`.
-The guarded capture passed **375 tests and 24 subtests** covering data,
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_015`.
+The guarded capture passed **378 tests and 24 subtests** covering data,
 packaging, trainer admission, adjudication, the publication-packet verifier,
 the resource plan, the source package builder, the remote worker, the launch
-lifecycle, the AWS provider adapter, and the canonical budget integration. It
-also confirmed unchanged tested source hashes and an unchanged campaign
-ledger. These are preparation checks, not a neural training result. Earlier
-local captures `checks_001` through `checks_013` are preserved and are not
-deleted; `checks_014` is the receipt bound with this source state.
+lifecycle, the AWS provider adapter (with its two-phase reservation: canonical
+ledger append first, AWS-side record after, no refund or retry), and the
+canonical budget integration. It also confirmed unchanged tested source
+hashes and an unchanged campaign ledger. These are preparation checks, not a
+neural training result. Earlier local captures `checks_001` through
+`checks_014` are preserved and are not deleted; `checks_015` is the receipt
+bound with this source state.
 
 An independent read-only audit of the adapter is preserved in
 `records/condition_skill_v9_001/audit_001/` (0 critical, 1 major, 6 minor,

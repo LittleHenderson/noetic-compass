@@ -462,6 +462,7 @@ def test_reserve_is_exactly_once(tmp_path, monkeypatch):
     assert receipt["reservation"]["status"] == budget.STATUS
     assert receipt["reservation"]["job"] == JOB
     assert receipt["reservation"]["reserved_usd"] == "4.00"
+    assert receipt["aws_side_reservation"]["status"] == "RECORDED"
     with pytest.raises(ValueError, match="CONDITION_SKILL_V9_RESERVATION_ALREADY_ATTEMPTED"):
         built.reserve("4.00")
 
@@ -492,6 +493,46 @@ def test_reserve_records_call_and_updates_private_ledger(tmp_path, monkeypatch):
     state = budget.read_ledger(ledger)
     assert state["reservations"][-1]["job"] == JOB
     assert state["reservations"][-1]["status"] == budget.STATUS
+
+
+def test_reserve_records_aws_side_reservation_after_ledger(tmp_path, monkeypatch):
+    stack = FakeStack()
+    ledger = make_ledger(tmp_path)
+    built = build_provider(stack, tmp_path, monkeypatch, ledger_path=ledger)
+    receipt = built.reserve("4.00")
+    # Phase 2 record exists in the job bucket and is bound to the ledger entry.
+    assert receipt["aws_side_reservation"]["status"] == "RECORDED"
+    assert "reservation/reservation_receipt.json" in stack.s3.objects
+    assert "reservation/ledger_snapshot.json" in stack.s3.objects
+    stored = json.loads(stack.s3.objects["reservation/reservation_receipt.json"].decode())
+    assert stored["reservation"]["job"] == JOB
+    assert stored["reservation"]["status"] == budget.STATUS
+
+
+def test_reserve_reports_aws_side_failure_without_refund_or_retry(tmp_path, monkeypatch):
+    stack = FakeStack()
+    ledger = make_ledger(tmp_path)
+    built = build_provider(stack, tmp_path, monkeypatch, ledger_path=ledger)
+    stack.s3.put_object = lambda **kw: (_ for _ in ()).throw(RuntimeError("s3-down"))
+    receipt = built.reserve("4.00")
+    # The ledger append already happened and must not be refunded or retried.
+    assert receipt["reservation"]["status"] == budget.STATUS
+    assert budget.read_ledger(ledger)["reservations"][-1]["job"] == JOB
+    # The AWS-side failure is reported, not swallowed and not raised.
+    assert receipt["aws_side_reservation"]["status"] == "FAILED"
+    assert "s3-down" in receipt["aws_side_reservation"]["failure"]
+    assert built.calls == ["reserve"]
+
+
+def test_provider_never_imports_other_reservation_owners():
+    tree = ast.parse(Path(provider.__file__).read_text(encoding="utf-8"))
+    for node in tree.body:
+        if isinstance(node, ast.Import):
+            for alias in node.names:
+                assert "launch_child_qualification_v8" not in alias.name
+        elif isinstance(node, ast.ImportFrom):
+            module = node.module or ""
+            assert "launch_child_qualification_v8" not in module
 
 
 # --------------------------------------------------------------------------- #
