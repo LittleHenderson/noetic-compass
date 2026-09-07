@@ -23,7 +23,9 @@ merged by the integrator:
   rejection at verify, log-cap documentation, reproduction-tool tracking,
   git-error vs non-ancestor distinction). F5 (trainer attestation key set)
   is deliberately deferred pending an owner-approved pre-run amendment.
-- Guarded merged capture: **375 passed, 24 subtests passed** (`checks_014`).
+- Guarded merged capture: **378 passed, 24 subtests passed** (`checks_015`),
+  including the two-phase reservation refinement: canonical ledger append
+  first under the budget lock, AWS-side record after, no refund or retry.
   Ledger unchanged; no reservation, no run, no neural work.
 
 ## 2026-09-07 - Condition-skill v9 adapter integrated with the real ledger and wheels

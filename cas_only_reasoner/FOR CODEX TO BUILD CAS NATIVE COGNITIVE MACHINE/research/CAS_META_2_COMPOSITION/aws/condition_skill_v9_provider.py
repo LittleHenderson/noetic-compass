@@ -7,6 +7,16 @@ the shared campaign ledger. The v9 provider reserves exactly once, through the
 canonical helper ``aws.budget.reserve_budget``, and the v9 launch lifecycle
 (``aws.condition_skill_v9_launch``) is the only caller of this provider.
 
+``reserve()`` is a strict two-phase operation. Phase 1 appends the canonical
+campaign-ledger entry through ``aws.budget`` under its lock and is the first
+and authoritative step; Phase 2 records the reservation on the AWS side
+(on-demand: a receipt object in the job bucket, never an EC2 capacity
+reservation) and only runs after the append succeeded. If the AWS-side step
+fails, the append-only history already recorded the attempt, so there is no
+refund and no retry: the failure is reported in the returned receipt.
+``reserve()`` never delegates to another lifecycle entrypoint that owns its own
+reservation (for example ``launch_child_qualification_v8._run_authorized``).
+
 The AWS SDK (boto3/botocore) is imported LAZILY, only inside ``build()`` and
 the client construction path. The guarded pure checker and every test inject a
 fake client stack (by monkeypatching the module's import helper ``_import_boto3``
@@ -297,17 +307,76 @@ class ConditionSkillV9Provider:
     # reservation (the only paid mutation before launch; exactly once)
     # ------------------------------------------------------------------ #
     def reserve(self, amount):
+        """Two-phase reservation: canonical ledger append FIRST, AWS-side after.
+
+        Phase 1 appends the campaign-ledger entry through ``aws.budget`` under
+        its lock. It is the single source of truth and must precede any AWS-side
+        step; it refuses a duplicate job id itself
+        (JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY). Phase 2 records the
+        reservation on the AWS side (on-demand: a receipt object in the job
+        bucket, never an EC2 capacity reservation). If Phase 2 fails, the
+        append-only history already recorded the attempt, so there is no refund
+        and no retry: the failure is reported in the returned receipt. This
+        method never delegates to another lifecycle entrypoint that owns its own
+        reservation (e.g. launch_child_qualification_v8._run_authorized).
+        """
         self.calls.append("reserve")
         require(not self._reserved, "CONDITION_SKILL_V9_RESERVATION_ALREADY_ATTEMPTED")
         require(type(amount) is str and amount == plan.RESOURCE_PLAN["reservation_usd"],
                 "CONDITION_SKILL_V9_RESERVATION_AMOUNT_FROZEN")
-        # The canonical helper refuses duplicate job IDs itself
-        # (JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY); this provider guard makes the
-        # reservation exactly-once on a single provider instance too.
+        # Phase 1: canonical ledger append (first, under aws/budget.py's lock).
+        # This also refuses a job that already has a ledger reservation.
         receipt = self.budget.reserve_budget(self.job, self.source_sha, self.archive_sha256,
                                              amount, self.reservation_plan(), self.ledger_path)
         self._reserved = True
-        return receipt
+        # Phase 2: AWS-side reservation record, only after the append succeeded.
+        # A failure here is reported, never refunded or retried.
+        return {**receipt, "aws_side_reservation": self._record_aws_side_reservation(receipt)}
+
+    def _bucket_name(self):
+        return self.job + "-" + plan.RESOURCE_PLAN["account"]
+
+    def _ensure_bucket(self, s3, tags=None):
+        """Create and harden the job bucket exactly once (idempotent for launch)."""
+        tags = tags or [{"Key": "cas_meta_job", "Value": self.job}]
+        bucket = self._bucket_name()
+        if self._resources.get("bucket") == bucket:
+            return bucket
+        s3.create_bucket(Bucket=bucket,
+                         CreateBucketConfiguration={"LocationConstraint": plan.RESOURCE_PLAN["region"]})
+        self._resources["bucket"] = bucket
+        s3.put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": tags})
+        s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
+            "BlockPublicAcls": True, "IgnorePublicAcls": True,
+            "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
+        s3.put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
+            "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
+        return bucket
+
+    def _record_aws_side_reservation(self, receipt):
+        """Persist the reservation receipt + ledger snapshot to the job bucket.
+
+        This is the AWS-side reservation record, created strictly after the
+        canonical ledger append. On-demand pilot: no EC2 capacity reservation
+        is created. Any failure is returned as a status dict (never raised), so
+        the append-only ledger entry is never refunded or retried.
+        """
+        s3 = self.clients.get("s3")
+        if s3 is None:
+            return {"status": "NOT_RECORDED", "reason": "NO_S3_CLIENT"}
+        bucket = self._bucket_name()
+        try:
+            self._ensure_bucket(s3)
+            s3.put_object(Bucket=bucket, Key="reservation/reservation_receipt.json",
+                          Body=canonical(receipt))
+            snapshot = budget.validate_state(budget.decoded(Path(self.ledger_path).read_bytes()))
+            s3.put_object(Bucket=bucket, Key="reservation/ledger_snapshot.json",
+                          Body=canonical(snapshot))
+            return {"status": "RECORDED", "bucket": bucket,
+                    "key": "reservation/reservation_receipt.json"}
+        except Exception as error:  # noqa: BLE001 - report, never refund/retry
+            return {"status": "FAILED", "bucket": bucket,
+                    "failure": type(error).__name__ + ":" + str(error)[:2000]}
 
     # ------------------------------------------------------------------ #
     # launch
@@ -449,15 +518,7 @@ class ConditionSkillV9Provider:
         raw = self._source_bytes()
         require(0 < len(raw) <= 24 * 1024**2, "CONDITION_SKILL_V9_SOURCE_ARCHIVE_BOUND")
 
-        s3.create_bucket(Bucket=bucket,
-                         CreateBucketConfiguration={"LocationConstraint": frozen["region"]})
-        self._resources["bucket"] = bucket
-        s3.put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": tags})
-        s3.put_public_access_block(Bucket=bucket, PublicAccessBlockConfiguration={
-            "BlockPublicAcls": True, "IgnorePublicAcls": True,
-            "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
-        s3.put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
-            "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
+        self._ensure_bucket(s3, tags)
         s3.put_object(Bucket=bucket, Key="input/source.zip", Body=raw)
         remote = self._render_remote(permit).encode("utf-8")
         s3.put_object(Bucket=bucket, Key="input/remote.py", Body=remote)
@@ -665,7 +726,9 @@ class ConditionSkillV9Provider:
             try:
                 s3.delete_objects(Bucket=bucket, Delete={"Objects": [
                     {"Key": "input/source.zip"}, {"Key": "input/remote.py"},
-                    {"Key": "input/permit.json"}]})
+                    {"Key": "input/permit.json"},
+                    {"Key": "reservation/reservation_receipt.json"},
+                    {"Key": "reservation/ledger_snapshot.json"}]})
                 status["inputs_deleted"] = True
             except Exception as error:  # noqa: BLE001
                 failures.append("INPUT_DELETION_FAILED:" + str(error))
