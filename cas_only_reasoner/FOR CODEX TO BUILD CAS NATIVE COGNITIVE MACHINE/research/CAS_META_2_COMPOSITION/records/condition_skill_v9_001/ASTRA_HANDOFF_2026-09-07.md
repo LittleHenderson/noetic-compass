@@ -55,6 +55,13 @@ trained > untrained, six evaluation controls at joint accuracy 1.0, exactly
 4. Adapter module 2: source package builder that reads exact git objects at a
    pinned commit, carries the candidate + dataset + baseline closure, enforces
    member/size/hash bounds, and verifies zip readback (9 tests passing).
+5. Adapter module 3: remote worker (bounded safe extraction, manifest rehash,
+   one trainer run with explicit flags and an independent process-group kill,
+   allowlisted result collection with a 32 MiB bound, failure recorded without
+   retry) - 11 tests passing.
+   Next: launch lifecycle (inert plan, explicit request/authority, budget
+   lock, provider identity), then one guarded re-capture and packet re-bind,
+   then the independent audit.
 
 ## Questions for you (please answer concretely)
 
