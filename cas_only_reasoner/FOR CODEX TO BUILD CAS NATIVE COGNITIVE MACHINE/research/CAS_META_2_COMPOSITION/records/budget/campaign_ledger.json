@@ -55,8 +55,8 @@
       "total_reserved_usd": "4"
     }
   },
-  "previous_state_sha256": "36c66d77bb9b3fe785177ff9d2344ddb0c033c0c55fe52e9e6026b26d59cdad5",
-  "remaining_unreserved_usd": "302.00",
+  "previous_state_sha256": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "remaining_unreserved_usd": "298.00",
   "reservations": [
     {
       "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
@@ -876,11 +876,86 @@
       "reserved_utc": "2026-09-06T16:57:17.191726+00:00",
       "source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc",
       "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "87a557aece2d6035aefa5133423243700273d2d55c00a84b5d037e4cbe5ec371",
+      "job": "cas-meta2-20260907155404-80e827c9",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "condition_skill_v9": {
+          "account": "807562639912",
+          "ami": "ami-0fbbd0facbc9e3cff",
+          "automatic_retries": 0,
+          "budget": {
+            "campaign_cap_usd": "400.00",
+            "campaign_ledger_revision": 16,
+            "campaign_reserved_usd": "98.00",
+            "campaign_scope": "cas-meta2-composition-campaign",
+            "campaign_unreserved_usd": "302.00",
+            "task_scope": "condition_skill_v9"
+          },
+          "cloud_schedule_seconds": 3480,
+          "cuda_version": "12.8",
+          "dataset_manifest_sha256": "6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd",
+          "ebs": {
+            "delete_on_termination": true,
+            "encrypted": true,
+            "iops": 3000,
+            "size_gib": 75,
+            "throughput_mib_s": 125
+          },
+          "evidence_boundary": "The learner reads only train/validation before sealing; private targets are opened only after the blind prediction receipt is hash-bound.",
+          "experiment": {
+            "entrypoint": "cas_meta2.condition_skill_v9.train",
+            "profile": "condition_skill_v9"
+          },
+          "gpu_name_contains": "RTX PRO 4500",
+          "guest_shutdown_seconds": 3400,
+          "instance_count": 1,
+          "instance_seconds_max": 3600,
+          "instance_type": "g7.2xlarge",
+          "max_native_calls": 0,
+          "native_execution": false,
+          "network": {
+            "egress_tcp_443_only": true,
+            "inbound_rules": 0
+          },
+          "on_demand_rate_ceiling_usd": "2.52",
+          "python_versions": [
+            "3.11",
+            "3.12"
+          ],
+          "region": "us-west-2",
+          "reservation_usd": "4.00",
+          "schema": "cas-meta2-condition-skill-v9-resource-plan/9",
+          "seed": 7,
+          "t4_rejected": true,
+          "torch_version": "2.11.0+cu128",
+          "trainer_output_bytes_max": 33554432,
+          "training": true,
+          "visible_gpu_count": 1,
+          "worker_seconds_max": 600
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "condition_skill_v9"
+      },
+      "plan_sha256": "e5c3cd8025a773988333018fd0defa7286da45aee411e4384eb73b0f6b67688f",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-07T22:54:56.545941+00:00",
+      "source_sha": "331f2746d75cdad369cb549784e3ce77c0ff6173",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
     }
   ],
-  "revision": 16,
+  "revision": 17,
   "schema": "cas-meta-campaign-budget/2",
   "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
-  "total_reserved_usd": "98.00",
-  "updated_utc": "2026-09-06T16:57:17.192007+00:00"
+  "total_reserved_usd": "102.00",
+  "updated_utc": "2026-09-07T22:54:56.546088+00:00"
 }

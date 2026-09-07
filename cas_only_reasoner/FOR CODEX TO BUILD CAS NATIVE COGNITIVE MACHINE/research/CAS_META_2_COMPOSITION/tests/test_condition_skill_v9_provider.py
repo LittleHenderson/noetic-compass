@@ -135,6 +135,10 @@ class FakeEC2:
         self.calls.append(("authorize_security_group_egress", kwargs))
         return {}
 
+    def delete_security_group(self, **kwargs):
+        self.calls.append(("delete_security_group", kwargs))
+        return {}
+
     def run_instances(self, **kwargs):
         self.calls.append(("run_instances", kwargs))
         return {"Instances": [{"InstanceId": INSTANCE}]}
@@ -753,3 +757,31 @@ def test_user_data_within_bound_and_contains_hash_checks(tmp_path, monkeypatch):
     assert len(text.encode("utf-8")) <= 16384
     assert "sha256sum -c -" in text
     assert ARCHIVE_SHA in text
+
+
+def test_cleanup_treats_absent_schedule_as_clean(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+
+    def absent_schedule(**kwargs):
+        raise FakeClientError("ResourceNotFoundException")
+
+    stack.scheduler.delete_schedule = absent_schedule
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is True
+    assert cleaned["schedule_removed"] is True
+    assert cleaned.get("schedule_was_absent") is True
+    assert cleaned["failures"] == []
+
+
+def test_cleanup_deletes_security_group(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    cleaned = built.cleanup(JOB)
+    assert cleaned["security_group_deleted"] is True
+    deleted = [call for call in stack.ec2.calls if call[0] == "delete_security_group"]
+    assert deleted

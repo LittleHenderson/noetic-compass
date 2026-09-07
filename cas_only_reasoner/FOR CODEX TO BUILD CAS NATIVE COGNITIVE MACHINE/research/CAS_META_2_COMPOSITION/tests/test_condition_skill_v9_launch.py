@@ -221,7 +221,7 @@ def test_execute_requires_provider(ledger):
         launch.execute(valid_request(), valid_authority(), None, ledger_path=ledger)
 
 
-def test_execute_requires_cleanup_complete(ledger):
+def test_execute_records_incomplete_cleanup_instead_of_raising(ledger):
     provider = FakeProvider(ledger)
     original = provider.cleanup
 
@@ -230,8 +230,10 @@ def test_execute_requires_cleanup_complete(ledger):
         return {"complete": False, "failures": ["volume-left-behind"]}
 
     provider.cleanup = broken
-    with pytest.raises(ValueError, match="CLEANUP_INCOMPLETE_BLOCKS_RESULT"):
-        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    result = launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert result["status"] == "AWS_CONDITION_SKILL_V9_FAILED"
+    assert result["cleanup"]["complete"] is False
+    assert result["cleanup_incomplete_reason"] == ["volume-left-behind"]
 
 
 def test_execute_rejects_second_reservation(ledger):

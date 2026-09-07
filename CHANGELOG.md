@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9: first paid run FAILED at launch, recorded honestly
+
+The first paid run (`cas-meta2-20260907155404-80e827c9`, source freeze
+`331f2746`) executed with the owner's authorization. Preflight passed; the
+single `$4.00` reservation was appended (ledger revision 16 → 17:
+`$102.00` reserved, `$298.00` unreserved, no refund by policy); the launch did
+not complete and the instance was terminated and confirmed with the bucket
+emptied and deleted. The exact launch error was lost because `execute()` raised
+on incomplete cleanup before persisting its result — that defect and two
+cleanup defects (already-absent schedule treated as failure; security group
+never deleted) are now fixed, and the result is persisted on every exit.
+Recovery of the same job (not a retry) removed every straggler, including
+security group `sg-0a00c1e60f1b9ab6d`. No training results exist; the
+development scorecard remains NO_RUN. **No retry was attempted.** A new run
+requires the owner to authorize a new job and reservation. Guarded capture:
+**398 passed, 24 subtests passed** (`checks_019`). Evidence:
+`records/condition_skill_v9_001/execution_001/RESULT.md`.
+
 ## 2026-09-07 - Condition-skill v9: instance bootstrap completed (Lane E)
 
 The paid-run bootstrap inside the provider now: creates/discovers the venv

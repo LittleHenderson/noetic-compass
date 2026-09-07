@@ -839,11 +839,39 @@ class ConditionSkillV9Provider:
             try:
                 scheduler.delete_schedule(Name=self.job)
                 status["schedule_removed"] = True
+            except self._client_error as error:
+                code = getattr(error, "response", {}).get("Error", {}).get("Code")
+                if code == "ResourceNotFoundException":
+                    # Already absent: clean, not a failure. Record it honestly.
+                    status["schedule_removed"] = True
+                    status["schedule_was_absent"] = True
+                else:
+                    failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
+                    status["schedule_removed"] = False
             except Exception as error:  # noqa: BLE001
                 failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
                 status["schedule_removed"] = False
         else:
             status["schedule_removed"] = True
+
+        security_group = self._resources.get("security_group")
+        if security_group is not None and ec2 is not None:
+            try:
+                ec2.delete_security_group(GroupId=security_group)
+                status["security_group_deleted"] = True
+            except self._client_error as error:
+                code = getattr(error, "response", {}).get("Error", {}).get("Code")
+                if code in ("InvalidGroup.NotFound", "InvalidSecurityGroupID.NotFound"):
+                    status["security_group_deleted"] = True
+                    status["security_group_was_absent"] = True
+                else:
+                    failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
+                    status["security_group_deleted"] = False
+            except Exception as error:  # noqa: BLE001
+                failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
+                status["security_group_deleted"] = False
+        else:
+            status["security_group_deleted"] = True
 
         if iam is not None:
             for role in (self.job + "-worker", self.job + "-timer"):

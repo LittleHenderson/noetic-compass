@@ -257,7 +257,12 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
               "claims": {"native_admission": False, "repair_proved": False,
                          "caller_return_proved": False, "composition_proved": False,
                          "cas_advantage_claimed": False}}
-    require(cleanup.get("complete") is True, "CLEANUP_INCOMPLETE_BLOCKS_RESULT")
+    # Evidence on every exit: an incomplete cleanup fails the result but is
+    # recorded, never raised away — raising here previously destroyed the
+    # launch outcome and cleanup details entirely.
+    if not cleanup.get("complete"):
+        result["status"] = "AWS_CONDITION_SKILL_V9_FAILED"
+        result["cleanup_incomplete_reason"] = cleanup.get("failures")
     return result
 
 

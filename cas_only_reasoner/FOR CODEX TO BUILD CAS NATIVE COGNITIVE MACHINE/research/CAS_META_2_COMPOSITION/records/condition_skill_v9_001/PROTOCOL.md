@@ -231,19 +231,27 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_018`.
-The guarded capture passed **396 tests and 24 subtests** covering data,
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_019`.
+The guarded capture passed **398 tests and 24 subtests** covering data,
 packaging, trainer admission, adjudication (with the F5 attestation
 amendment), the publication-packet verifier, the resource plan, the source
-package builder, the remote worker, the launch lifecycle, the AWS provider
-adapter (two-phase reservation; completed instance bootstrap: venv, pinned
-torch cu128, frozen wheels, real artifacts.zip/complete.json hashes; cleanup
-deletes `results/*` before the bucket; half-hardened buckets are never
-memoized), the canonical budget integration, and the automatic test-point
-layer. It also confirmed unchanged tested source hashes and an unchanged
-campaign ledger. These are preparation checks, not a neural training result.
-Earlier local captures `checks_001` through `checks_017` are preserved and are
-not deleted; `checks_018` is the receipt bound with this source state.
+package builder, the remote worker, the launch lifecycle (evidence persisted
+on every exit; incomplete cleanup fails the result without destroying it),
+the AWS provider adapter (two-phase reservation; completed instance
+bootstrap; cleanup handles already-absent schedule/security-group and deletes
+the security group), the canonical budget integration, and the automatic
+test-point layer. It also confirmed unchanged tested source hashes. These are
+preparation checks, not a neural training result. Earlier local captures
+`checks_001` through `checks_018` are preserved and are not deleted;
+`checks_019` is the receipt bound with this source state.
+
+The first paid run (job `cas-meta2-20260907155404-80e827c9`) was executed,
+failed at launch, and is recorded honestly in
+`records/condition_skill_v9_001/execution_001/RESULT.md`. The single `$4.00`
+reservation is committed without refund (ledger revision 17: `$102.00`
+reserved, `$298.00` unreserved). No training results exist; no retry was
+attempted. Any new run requires the owner to authorize a new job and
+reservation.
 
 The automatic test-point layer (`tools/condition_skill_v9_test_points.py`,
 design in `TEST_POINT_DESIGN_2026-09-07.md`) observes and reports only: the

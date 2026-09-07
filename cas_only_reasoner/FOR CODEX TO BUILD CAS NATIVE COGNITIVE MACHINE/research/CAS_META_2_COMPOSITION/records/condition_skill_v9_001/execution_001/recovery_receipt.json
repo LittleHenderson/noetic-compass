@@ -1,0 +1,31 @@
+{
+  "bucket": "cas-meta2-20260907155404-80e827c9-807562639912",
+  "cleanup": {
+    "bucket_deleted": true,
+    "complete": false,
+    "failures": [
+      "SCHEDULE_REMOVAL_FAILED:An error occurred (ResourceNotFoundException) when calling the DeleteSchedule operation: Schedule cas-meta2-20260907155404-80e827c9 does not exist."
+    ],
+    "inputs_deleted": true,
+    "instance_terminated": true,
+    "instance_termination_confirmed": true,
+    "roles_removed": true,
+    "schedule_removed": false,
+    "volumes_deleted": true
+  },
+  "instances": {
+    "ids": [],
+    "states": []
+  },
+  "job": "cas-meta2-20260907155404-80e827c9",
+  "ledger": "revision 17, reserved 102.00 (checked separately)",
+  "recovered_utc": "2026-09-07T22:55:53.478192+00:00",
+  "s3_keys": null,
+  "s3_keys_after_cleanup": null,
+  "s3_list_error": "NoSuchBucket:An error occurred (NoSuchBucket) when calling the ListObjectsV2 operation: The specified bucket does not exist",
+  "sweep": {
+    "security_group_deleted": true,
+    "security_groups_remaining": []
+  },
+  "sweep_utc": "2026-09-07T23:00:23.317258+00:00"
+}

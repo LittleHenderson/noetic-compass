@@ -1,0 +1,13 @@
+................................................ [ 12%]
+........................................................................ [ 30%]
+........................................................................ [ 48%]
+........................................................................ [ 66%]
+........................................................................ [ 84%]
+..............................................................           [100%]
+============================== warnings summary ===============================
+tests/test_condition_skill_v9_remote.py::test_extract_archive_rejects_duplicate_and_symlink_members
+  C:\Python314\Lib\zipfile\__init__.py:1708: UserWarning: Duplicate name: 'a.txt'
+    return self._open_to_write(zinfo, force_zip64=force_zip64)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+398 passed, 1 warning, 24 subtests passed in 34.89s

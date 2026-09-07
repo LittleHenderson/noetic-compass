@@ -1,0 +1,15 @@
+{
+  "schema": "cas-meta2-condition-skill-v9-launch-request/9",
+  "job": "cas-meta2-20260907155404-80e827c9",
+  "source_sha": "331f2746d75cdad369cb549784e3ce77c0ff6173",
+  "archive_sha256": "87a557aece2d6035aefa5133423243700273d2d55c00a84b5d037e4cbe5ec371",
+  "manifest_sha256": "bb356c0b347c3c849038bc253027350535206ae1cb5a42ce7365d2040757ea03",
+  "dataset_manifest_sha256": "6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd",
+  "seed": 7,
+  "training": true,
+  "native_execution": false,
+  "automatic_retries": 0,
+  "reservation_usd": "4.00",
+  "launch_authorized": false,
+  "new_reservation": false
+}
