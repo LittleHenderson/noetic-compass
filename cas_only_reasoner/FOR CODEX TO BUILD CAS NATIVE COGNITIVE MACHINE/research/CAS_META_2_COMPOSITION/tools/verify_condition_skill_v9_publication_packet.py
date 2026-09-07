@@ -135,8 +135,12 @@ def git_is_ancestor(root, commit, head):
     return code == 0
 
 
-def _relative(root, path):
-    return Path(path).absolute().relative_to(Path(root).absolute()).as_posix()
+def _repo_path(root, path):
+    code, raw = _run_git(["-c", "core.autocrlf=false", "rev-parse", "--show-prefix"], root)
+    require(code == 0, "GIT_PREFIX_FAILED")
+    prefix = raw.decode("utf-8").strip()
+    relative = Path(path).absolute().relative_to(Path(root).absolute()).as_posix()
+    return prefix + relative
 
 
 def build_packet(root, commit, base=None, self_path=None, *, git_bytes_fn=git_bytes,
@@ -209,7 +213,7 @@ def main():
     root = Path(__file__).resolve().parents[1]
     if arguments.build:
         require(arguments.output, "OUTPUT_PATH_REQUIRED")
-        self_path = _relative(root, arguments.output)
+        self_path = _repo_path(root, arguments.output)
         packet, raw = build_packet(root, arguments.build, arguments.__dict__.get("from"),
                                    self_path=self_path)
         output = Path(arguments.output).absolute()
@@ -226,7 +230,7 @@ def main():
     require(arguments.verify, "BUILD_OR_VERIFY_REQUIRED")
     packet_path = Path(arguments.verify).absolute()
     raw = packet_path.read_bytes()
-    report = verify_packet(root, raw, arguments.head, self_path=_relative(root, packet_path))
+    report = verify_packet(root, raw, arguments.head, self_path=_repo_path(root, packet_path))
     print(json.dumps(report, sort_keys=True))
     return 0
 
