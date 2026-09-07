@@ -265,6 +265,8 @@ def test_adjudicator_rejects_mismatched_or_malformed_attestation():
     assert train.adjudicate(passing_report(), "not-a-dict")["status"] == "FAIL"
     missing_job = {**train.PROVIDER_ATTESTATION_KEYS, "job": "wrong"}
     assert train.adjudicate(passing_report(), missing_job)["status"] == "FAIL"
+    double_instance = {**provider_attestation(), "instance_count": 2}
+    assert train.adjudicate(passing_report(), double_instance)["status"] == "FAIL"
 
 
 @pytest.fixture

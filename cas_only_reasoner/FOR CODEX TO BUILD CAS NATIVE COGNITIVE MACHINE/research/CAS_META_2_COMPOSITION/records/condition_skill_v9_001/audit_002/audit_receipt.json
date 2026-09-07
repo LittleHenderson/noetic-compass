@@ -1,0 +1,45 @@
+{
+  "schema": "cas-meta2-condition-skill-v9-provider-audit/1",
+  "recorded_utc": "2026-09-07T22:22:05Z",
+  "status": "ADVISORY_ONLY",
+  "auditor": "Lane B (independent, read-only, second pass)",
+  "follows": "records/condition_skill_v9_001/audit_001/",
+  "severity_counts": {
+    "CRITICAL": 0,
+    "MAJOR": 1,
+    "MINOR": 2,
+    "INFO": 5
+  },
+  "recheck_verdicts": {
+    "F1": "RESOLVED",
+    "F2": "RESOLVED",
+    "F3": "RESOLVED",
+    "F5": "STILL_OPEN"
+  },
+  "files_reviewed": [
+    "records/condition_skill_v9_001/audit_001/AUDIT.md",
+    "aws/condition_skill_v9_provider.py",
+    "aws/condition_skill_v9_launch.py",
+    "aws/budget.py",
+    "aws/condition_skill_v9_resource_plan.py",
+    "cas_meta2/condition_skill_v9/train.py",
+    "records/condition_skill_v9_001/preregistration_v9_001.md",
+    "tests/test_condition_skill_v9_provider.py",
+    "tests/test_condition_skill_v9_launch.py"
+  ],
+  "findings": [
+    {"id": "F1", "severity": "INFO", "title": "reserve() appends ledger first, AWS-side after, no refund/retry, never delegates", "verdict": "RESOLVED"},
+    {"id": "F2", "severity": "INFO", "title": "preflight() returns all validate_preflight facts including visible_gpu_count", "verdict": "RESOLVED"},
+    {"id": "F3", "severity": "INFO", "title": "provider.calls contract implemented; ledger transition remains authoritative", "verdict": "RESOLVED"},
+    {"id": "F5", "severity": "MINOR", "title": "attestation key set still omits instance_count", "verdict": "STILL_OPEN"},
+    {"id": "N1", "severity": "MAJOR", "title": "cleanup() omits results/* objects so delete_bucket fails and every successful run aborts with CLEANUP_INCOMPLETE_BLOCKS_RESULT"},
+    {"id": "N2", "severity": "MINOR", "title": "_ensure_bucket memoizes a half-hardened bucket"},
+    {"id": "N3", "severity": "INFO", "title": "AMI OwnerId is a hardcoded magic value, not a frozen-plan constant"},
+    {"id": "N4", "severity": "INFO", "title": "Phase-2 AWS-side reservation failure is non-blocking by design"}
+  ],
+  "drift_observed": [
+    "aws/condition_skill_v9_launch.py now checks visible_gpu_count (audit_001 F2 suggestion implemented) and cross-checks owner_approval_record_sha256 (audit_001 F4 suggestion implemented); last commit c5522f45",
+    "aws/condition_skill_v9_provider.py and tests/test_condition_skill_v9_provider.py are now present (provider landed in commit f87b7d75)"
+  ],
+  "no_execution": ["pytest not run", "no AWS/provider call", "no reservation", "no commit", "no push"]
+}

@@ -654,6 +654,53 @@ def test_cleanup_is_call_safe_before_launch(tmp_path, monkeypatch):
     assert cleaned["instance_terminated"] is True
 
 
+def test_cleanup_deletes_results_before_bucket(tmp_path, monkeypatch):
+    # A real S3 refuses to delete a non-empty bucket. The cleanup must request
+    # deletion of results/* keys, or every successful run would end incomplete.
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+
+    deleted_keys = []
+
+    def tracking_delete_objects(**kwargs):
+        deleted_keys.extend(item["Key"] for item in kwargs["Delete"]["Objects"])
+        return {}
+
+    def strict_delete_bucket(**kwargs):
+        remaining = set(stack.s3.objects) - set(deleted_keys)
+        if remaining:
+            raise FakeClientError("BucketNotEmpty")
+        return {}
+
+    stack.s3.delete_objects = tracking_delete_objects
+    stack.s3.delete_bucket = strict_delete_bucket
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is True
+    assert "results/complete.json" in deleted_keys
+    assert "results/artifacts.zip" in deleted_keys
+    assert cleaned["results_deleted"] is True
+    assert cleaned["bucket_deleted"] is True
+
+
+def test_ensure_bucket_does_not_memoize_half_hardened(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+
+    def broken_tagging(**kwargs):
+        raise FakeClientError("AccessDenied")
+
+    stack.s3.put_bucket_tagging = broken_tagging
+    with pytest.raises(FakeClientError):
+        built._ensure_bucket(stack.s3)
+    assert built._resources.get("bucket") is None
+    # After the failure is repaired, a later call succeeds and memoizes.
+    stack.s3.put_bucket_tagging = lambda **kwargs: {}
+    assert built._ensure_bucket(stack.s3) == built._bucket_name()
+    assert built._resources.get("bucket") == built._bucket_name()
+
+
 def test_collect_requires_wait_result(tmp_path, monkeypatch):
     stack = FakeStack()
     built = build_provider(stack, tmp_path, monkeypatch)

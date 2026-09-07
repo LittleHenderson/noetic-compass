@@ -148,7 +148,8 @@ receipt supplies its attestation and re-adjudicates.
 - exactly 2,400 steps per family;
 - a matching independent provider attestation: account `807562639912`, region
   `us-west-2`, AMI `ami-0fbbd0facbc9e3cff`, one `g7.2xlarge` whose GPU name
-  contains `RTX PRO 4500`, no T4, one visible GPU, torch `2.11.0+cu128`, CUDA
+  contains `RTX PRO 4500` (with `instance_count: 1` in the attestation per
+  the F5 amendment below), no T4, one visible GPU, torch `2.11.0+cu128`, CUDA
   `12.8`, an actual CUDA operation, zero automatic retries, the `$4.00`
   reservation, and a well-formed job label.
 
@@ -173,6 +174,15 @@ and protocol revisions remain preserved in history (commits `9bfbeb27` and
 earlier); nothing was silently rewritten. This amendment is bound by
 `OWNER_METRIC_AMENDMENT.json` and happened before any training run. No
 threshold changes are permitted after scores exist.
+
+### Pre-run F5 amendment
+
+The independent audit found `instance_count` missing from the frozen provider
+attestation keys, so re-adjudication alone did not enforce the single-instance
+bound (launcher preflight did). Per the owner's pre-run ruling ("Amend now"),
+`"instance_count": 1` was added to `PROVIDER_ATTESTATION_KEYS`. The earlier
+key set is preserved in history; this amendment is bound by
+`OWNER_F5_AMENDMENT.json` and happened before any training run.
 
 Evaluation-only controls: physical row reversal, slot reassignment, reversal of
 each requested comparison, and crossing each value across its limit. At equality,
@@ -221,18 +231,18 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_016`.
-The guarded capture passed **392 tests and 24 subtests** covering data,
-packaging, trainer admission, adjudication, the publication-packet verifier,
-the resource plan, the source package builder, the remote worker, the launch
-lifecycle, the AWS provider adapter (with its two-phase reservation: canonical
-ledger append first, AWS-side record after, no refund or retry), the canonical
-budget integration, and the automatic test-point layer (identity report,
-per-transition failure record, development scorecard). It also confirmed
-unchanged tested source hashes and an unchanged campaign ledger. These are
-preparation checks, not a neural training result. Earlier local captures
-`checks_001` through `checks_015` are preserved and are not deleted;
-`checks_016` is the receipt bound with this source state.
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_017`.
+The guarded capture passed **394 tests and 24 subtests** covering data,
+packaging, trainer admission, adjudication (with the F5 attestation
+amendment), the publication-packet verifier, the resource plan, the source
+package builder, the remote worker, the launch lifecycle, the AWS provider
+adapter (two-phase reservation; cleanup deletes `results/*` before the bucket;
+half-hardened buckets are never memoized), the canonical budget integration,
+and the automatic test-point layer. It also confirmed unchanged tested source
+hashes and an unchanged campaign ledger. These are preparation checks, not a
+neural training result. Earlier local captures `checks_001` through
+`checks_016` are preserved and are not deleted; `checks_017` is the receipt
+bound with this source state.
 
 The automatic test-point layer (`tools/condition_skill_v9_test_points.py`,
 design in `TEST_POINT_DESIGN_2026-09-07.md`) observes and reports only: the

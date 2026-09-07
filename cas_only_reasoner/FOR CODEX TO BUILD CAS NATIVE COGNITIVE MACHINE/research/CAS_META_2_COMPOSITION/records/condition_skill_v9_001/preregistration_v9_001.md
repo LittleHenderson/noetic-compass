@@ -127,6 +127,7 @@ reported separately and are never erased by the combined verdict.
 | `region` | `us-west-2` |
 | `ami` | `ami-0fbbd0facbc9e3cff` |
 | `instance_type` | `g7.2xlarge` |
+| `instance_count` | `1` (added by the owner-approved pre-run F5 amendment) |
 | `gpu_name_contains` | `RTX PRO 4500` |
 | `t4_rejected` | `true` |
 | `visible_gpu_count` | `1` |
@@ -138,22 +139,14 @@ reported separately and are never erased by the combined verdict.
 
 plus a well-formed job label matching `cas-meta2-\d{14}-[a-f0-9]{8}`.
 
-### F5 open question (explicit open gate)
+### F5 open question — RESOLVED by owner ruling (2026-09-07)
 
-`instance_count` is **not** in the frozen attestation key set. The protocol and
-owner approval both state "one `g7.2xlarge`", and the launcher preflight
-enforces `instance_count == 1`, but `adjudicate` compares only the fixed key
-set above, so re-adjudication would accept an attestation that does not itself
-carry `instance_count`. Any change to `PROVIDER_ATTESTATION_KEYS` (for example,
-adding `"instance_count": 1`) requires a new owner-approved pre-run amendment
-before the run.
-
-**This is an open gate, not a resolved item.** Until the owner rules, the run
-may either (a) proceed with the adjudicator exactly as frozen (key set
-unchanged — `instance_count` then is enforced by launcher preflight but not by
-re-adjudication), or (b) wait. Resolving it by amending the key set is itself
-an owner-approved pre-run amendment. The three options are carried into the
-sign-off section at the bottom.
+The owner ruled **"Amend now"**: `"instance_count": 1` was added to
+`PROVIDER_ATTESTATION_KEYS` as a documented pre-run amendment, so
+re-adjudication now enforces the single-instance bound alongside launcher
+preflight. The earlier key set is preserved in history. The amendment is bound
+by `OWNER_F5_AMENDMENT.json` (old trainer `bfbd3989…` → new trainer
+`4d4ab00a…`). No longer an open gate.
 
 ---
 
@@ -271,20 +264,26 @@ the time of that earlier approval and remains preserved history).
 
 ### 8.1 Proceed to freeze
 
-- [ ] I approve proceeding to freeze: no further changes to the trainer, data
+- [x] I approve proceeding to freeze: no further changes to the trainer, data
       builder, dataset, adjudicator, or protocol after this record.
+      (Recorded 2026-09-07 per the owner's direct instruction; the F5
+      attestation amendment above is part of the frozen state.)
 
 ### 8.2 F5 ruling — `instance_count` and the attestation key set
 
-- [ ] Amend now (owner-approved pre-run amendment): add `"instance_count": 1`
+- [x] Amend now (owner-approved pre-run amendment): add `"instance_count": 1`
       to `PROVIDER_ATTESTATION_KEYS` so re-adjudication enforces the
-      single-instance bound.
+      single-instance bound. (Recorded 2026-09-07; bound by
+      `OWNER_F5_AMENDMENT.json`.)
 - [ ] Run as frozen: proceed with the adjudicator's current key set unchanged
       (`instance_count` remains enforced by launcher preflight only).
 - [ ] Wait: hold the run until the F5 question is ruled.
 
 ### 8.3 Authorize the single paid run
 
-- [ ] I authorize exactly one paid training run under the frozen resource plan
+- [x] I authorize exactly one paid training run under the frozen resource plan
       and execution gates above (one `$4.00` reservation, zero automatic
-      retries).
+      retries). (Recorded 2026-09-07 per the owner's direct instruction;
+      execution still requires an environment able to approve and launch, and
+      the hash-bound request/authority pair generated at the final source
+      freeze.)

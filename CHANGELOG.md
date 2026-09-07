@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9: owner sign-offs recorded, F5 amended, provider re-audit closed
+
+Per the owner's rulings (recorded 2026-09-07): the freeze and single-run
+sign-offs are ticked in `preregistration_v9_001.md` (8.1 and 8.3), and F5 was
+ruled **Amend now** — `"instance_count": 1` added to the frozen provider
+attestation keys, bound by `OWNER_F5_AMENDMENT.json` (old trainer `bfbd3989…`
+→ new trainer `4d4ab00a…`), so re-adjudication now enforces the
+single-instance bound. The second-pass provider audit (audit_002) found F1/F2/F3
+resolved and two new items, both fixed by the integrator: cleanup now deletes
+`results/*` before deleting the bucket (a successful run could otherwise end
+`CLEANUP_INCOMPLETE_BLOCKS_RESULT`), and `_ensure_bucket` no longer memoizes a
+half-hardened bucket. Guarded merged capture: **394 passed, 24 subtests
+passed** (`checks_017`). Ledger unchanged; no reservation, no run, no neural
+work. Execution still requires an environment able to approve and launch.
+
 ## 2026-09-07 - Condition-skill v9: automatic test-point layer landed
 
 Per the owner's directive (`TEST_POINT_DESIGN_2026-09-07.md`), Lane D built the
