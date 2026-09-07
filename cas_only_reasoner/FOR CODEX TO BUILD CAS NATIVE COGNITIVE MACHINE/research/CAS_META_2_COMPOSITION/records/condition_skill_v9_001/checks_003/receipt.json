@@ -1,0 +1,54 @@
+{
+  "after": {
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "eebfda1eafa2412d87bd15fd98c36e1411c2509e00978e878c2e47f570d80ffd",
+    "cas_meta2/condition_skill_v9/data.py": "700461d9b2ebf09b9a21d1aec5b64f9add825acb26bd5022541e942f5968b158",
+    "cas_meta2/condition_skill_v9/train.py": "41badcff23d5bf0852d016b0b3a201c728be535f4b0c34b7c0d8dc89e99a62ef",
+    "tests/test_condition_skill_v9_bundle.py": "96c12f64a3d310ca274b4fb8ff2aa3128fd35c8e7a9e994c3a6f62f5e064d9cf",
+    "tests/test_condition_skill_v9_data.py": "c04d0d6bc7828d171b6f39cf99b38ec0e5aa999596349a08003aaf3530197d41",
+    "tests/test_condition_skill_v9_train_boundary.py": "24bc3c8a3c6ee1ab0f81b704fcc5bf8077d48ffbb6b8f43972399f284624837e",
+    "tools/check_condition_skill_v9.py": "8d5dc66f4009c8a43a5edbd8bf12124d6154b53176813f452f0f72b523dd6518"
+  },
+  "before": {
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "eebfda1eafa2412d87bd15fd98c36e1411c2509e00978e878c2e47f570d80ffd",
+    "cas_meta2/condition_skill_v9/data.py": "700461d9b2ebf09b9a21d1aec5b64f9add825acb26bd5022541e942f5968b158",
+    "cas_meta2/condition_skill_v9/train.py": "41badcff23d5bf0852d016b0b3a201c728be535f4b0c34b7c0d8dc89e99a62ef",
+    "tests/test_condition_skill_v9_bundle.py": "96c12f64a3d310ca274b4fb8ff2aa3128fd35c8e7a9e994c3a6f62f5e064d9cf",
+    "tests/test_condition_skill_v9_data.py": "c04d0d6bc7828d171b6f39cf99b38ec0e5aa999596349a08003aaf3530197d41",
+    "tests/test_condition_skill_v9_train_boundary.py": "24bc3c8a3c6ee1ab0f81b704fcc5bf8077d48ffbb6b8f43972399f284624837e",
+    "tools/check_condition_skill_v9.py": "8d5dc66f4009c8a43a5edbd8bf12124d6154b53176813f452f0f72b523dd6518"
+  },
+  "boundary": "Pure curriculum, packaging and trainer admission tests only. No neural, SQLite or provider execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_condition_skill_v9.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\condition_skill_v9_001\\checks_003",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-07T12:28:12.352874+00:00",
+  "ledger_after": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "ledger_before": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 183,
+      "sha256": "c03155d07c152845aff48d5d7f1310107ed28672a18d3f0be9a023b6b459471e"
+    }
+  },
+  "pid": 35588,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-condition-skill-pure-tests/9",
+  "started_utc": "2026-09-07T12:28:04.727478+00:00",
+  "timed_out": false,
+  "unchanged": true,
+  "wall_seconds": 7.625429499996244
+}
