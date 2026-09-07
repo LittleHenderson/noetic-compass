@@ -15,15 +15,21 @@ independent outer provider attestation; and a strict publication-packet
 builder/verifier binds every changed file to exact Git bytes. The dataset
 partitions remain byte-identical to the earlier manifest revision
 `edaf3d6b…`; only the manifest was re-bound to the corrected builder sources.
-The guarded pure capture passed 179 tests; it ran no neural, SQLite, or
+The guarded pure capture passed 222 tests; it ran no neural, SQLite, or
 provider work and left the campaign ledger unchanged. A pre-run owner metric
 amendment (per-bit baseline 0.50, trained-beats-untrained gates, explicit
 denominators) is bound in `OWNER_METRIC_AMENDMENT.json`; the earlier wording is
 preserved in history. The owner's phase approval authorized building the AWS
 launch adapter and pre-authorized the single `$4` run under the `$400`
-campaign ledger (`OWNER_PHASE_APPROVAL.json`). The adapter's first module, the
-frozen resource plan and launch-request contract, is in
-`aws/condition_skill_v9_resource_plan.py`. No training result,
+campaign ledger (`OWNER_PHASE_APPROVAL.json`). The adapter is complete as pure
+code: the frozen resource plan and launch-request contract
+(`aws/condition_skill_v9_resource_plan.py`), the source package builder from
+exact git bytes (`aws/condition_skill_v9_package.py`), the remote worker with
+bounded extraction and a single trainer run (`aws/condition_skill_v9_remote.py`),
+and the launch lifecycle with an inert plan, one-shot reservation under the
+campaign lock, and cleanup on every exit (`aws/condition_skill_v9_launch.py`).
+The paid path stays inert until the separate AWS provider adapter exists and
+the request/authority pair is hash-bound. No training result,
 native repair, caller return, reservation, or launch is claimed. See
 `records/condition_skill_v9_001/PROTOCOL.md`. The owner separately ruled that
 the historical 256 practice records may enter a future affected protocol only

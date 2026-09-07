@@ -1,0 +1,74 @@
+{
+  "after": {
+    "aws/condition_skill_v9_launch.py": "cdf892e89e66eeac65496ecd04b2383fd707a609f6cdcdcbab08f8829a072311",
+    "aws/condition_skill_v9_package.py": "186e3fa740c1fab7dc2c186749e0e967a6deeff997e778da1cc042c226837ec5",
+    "aws/condition_skill_v9_remote.py": "c44ebcfb8d75eaba968bb558488f86150895b7ac6752701185c6eb03c23a87d8",
+    "aws/condition_skill_v9_resource_plan.py": "a73768b77306aceedf1e7e9a330e49dd191dd5a790240ffa6fab90c37769e4ab",
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "1cb36520367541d2031d3c3ca9902f424dcdb77f06c5af74850a478bea5d852e",
+    "cas_meta2/condition_skill_v9/data.py": "78b138c4c8dba04a78d4513efc3ed4928f10850e4dcbaacac0e690a0fae45e0d",
+    "cas_meta2/condition_skill_v9/train.py": "bfbd3989c2d8d42b322efcd67ecfc766af61846f2a759187518bc0ef16af486e",
+    "tests/test_condition_skill_v9_bundle.py": "5842a953480b0680016a6397f71f7b691072fecdf8afb86c4a31dcf5aa4c7b06",
+    "tests/test_condition_skill_v9_data.py": "08bc3abf46a5cceeb11a324f683e2956654e6522ed57e64e2ee54000de3673e2",
+    "tests/test_condition_skill_v9_launch.py": "315872eaa162907c75f08cb454ea928b4371bd7d28779c47245ec107d8c9fc3c",
+    "tests/test_condition_skill_v9_package.py": "5652fbde369d210998c378cef072b24a6f19f43e789b59a7002d2750b38e2a0a",
+    "tests/test_condition_skill_v9_packet_verifier.py": "2c303e3080345a9a96e75655ff87684b3f6b65f7535b0a02cdfdb4ff146f3193",
+    "tests/test_condition_skill_v9_remote.py": "7f8892f3c3865f7ef02faba84f7400e754ff68cf87812fe1cb432c3e36dcfc4f",
+    "tests/test_condition_skill_v9_resource_plan.py": "8674bf4d8d2f6cacad435505b5b86301c2c3ae6ec5d2177dab9cb2ac5e09ecdf",
+    "tests/test_condition_skill_v9_train_boundary.py": "e4ca8c782eeb59d2762f08b73f3656a032fc1ec22677a2c87ee58b38f48d4255",
+    "tools/check_condition_skill_v9.py": "58d160ac5b7a7e1f919590045ad5875b8cac8c22e7d9f9b6b78229e4b52ec0ab",
+    "tools/verify_condition_skill_v9_publication_packet.py": "fbb7671bfa83e4bd051ffe4fa28db3a6ead35b97fc3f15b576cf17e56e1971db"
+  },
+  "before": {
+    "aws/condition_skill_v9_launch.py": "cdf892e89e66eeac65496ecd04b2383fd707a609f6cdcdcbab08f8829a072311",
+    "aws/condition_skill_v9_package.py": "186e3fa740c1fab7dc2c186749e0e967a6deeff997e778da1cc042c226837ec5",
+    "aws/condition_skill_v9_remote.py": "c44ebcfb8d75eaba968bb558488f86150895b7ac6752701185c6eb03c23a87d8",
+    "aws/condition_skill_v9_resource_plan.py": "a73768b77306aceedf1e7e9a330e49dd191dd5a790240ffa6fab90c37769e4ab",
+    "cas_meta2/condition_skill_v9/__init__.py": "74d8d2304a98638cad4cce67089cf83327639fff4afd086738d5d39cb175a5ce",
+    "cas_meta2/condition_skill_v9/bundle.py": "1cb36520367541d2031d3c3ca9902f424dcdb77f06c5af74850a478bea5d852e",
+    "cas_meta2/condition_skill_v9/data.py": "78b138c4c8dba04a78d4513efc3ed4928f10850e4dcbaacac0e690a0fae45e0d",
+    "cas_meta2/condition_skill_v9/train.py": "bfbd3989c2d8d42b322efcd67ecfc766af61846f2a759187518bc0ef16af486e",
+    "tests/test_condition_skill_v9_bundle.py": "5842a953480b0680016a6397f71f7b691072fecdf8afb86c4a31dcf5aa4c7b06",
+    "tests/test_condition_skill_v9_data.py": "08bc3abf46a5cceeb11a324f683e2956654e6522ed57e64e2ee54000de3673e2",
+    "tests/test_condition_skill_v9_launch.py": "315872eaa162907c75f08cb454ea928b4371bd7d28779c47245ec107d8c9fc3c",
+    "tests/test_condition_skill_v9_package.py": "5652fbde369d210998c378cef072b24a6f19f43e789b59a7002d2750b38e2a0a",
+    "tests/test_condition_skill_v9_packet_verifier.py": "2c303e3080345a9a96e75655ff87684b3f6b65f7535b0a02cdfdb4ff146f3193",
+    "tests/test_condition_skill_v9_remote.py": "7f8892f3c3865f7ef02faba84f7400e754ff68cf87812fe1cb432c3e36dcfc4f",
+    "tests/test_condition_skill_v9_resource_plan.py": "8674bf4d8d2f6cacad435505b5b86301c2c3ae6ec5d2177dab9cb2ac5e09ecdf",
+    "tests/test_condition_skill_v9_train_boundary.py": "e4ca8c782eeb59d2762f08b73f3656a032fc1ec22677a2c87ee58b38f48d4255",
+    "tools/check_condition_skill_v9.py": "58d160ac5b7a7e1f919590045ad5875b8cac8c22e7d9f9b6b78229e4b52ec0ab",
+    "tools/verify_condition_skill_v9_publication_packet.py": "fbb7671bfa83e4bd051ffe4fa28db3a6ead35b97fc3f15b576cf17e56e1971db"
+  },
+  "boundary": "Pure curriculum, packaging and trainer admission tests only. No neural, SQLite or provider execution.",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_condition_skill_v9.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\condition_skill_v9_001\\checks_011",
+    "C:\\Users\\wakil\\AppData\\Roaming\\Python\\Python314\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-07T16:46:53.670849+00:00",
+  "ledger_after": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "ledger_before": "6cf5b0b2d337d1487d2c711f074c3b2b13bcbae8c5ede68ca5f5f13bf6d48f32",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 760,
+      "sha256": "3470533baa82bd48fbfef31ff1f36a8118acf2a3e006ad10829c1f49001cf650"
+    }
+  },
+  "pid": 32264,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "schema": "cas-meta2-condition-skill-pure-tests/9",
+  "started_utc": "2026-09-07T16:46:47.275601+00:00",
+  "timed_out": false,
+  "unchanged": true,
+  "wall_seconds": 6.395260099999973
+}

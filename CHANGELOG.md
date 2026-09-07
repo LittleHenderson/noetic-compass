@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9 launch adapter complete as pure code
+
+The dedicated v9 launch adapter is finished and guarded: frozen resource plan
+and inert launch-request contract; source package builder from exact git
+objects with member/size/hash bounds and zip readback; remote worker with
+bounded safe extraction, manifest rehash, one trainer run under an independent
+600-second process-group kill, allowlisted result collection with a 32 MiB
+bound, and failure recorded without retry; launch lifecycle with an inert
+plan by default, hash-bound request plus separate standing authority, one-shot
+$4.00 reservation under the campaign ledger after read-only preflight, and
+cleanup on every exit. The paid path remains inert until the separate AWS
+provider adapter exists and the request/authority pair is hash-bound.
+Guarded pure capture: **222 passed** (`records/condition_skill_v9_001/checks_011`).
+No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
+
 ## 2026-09-07 - Condition-skill v9 metric amendment and launcher start
 
 - Owner phase approval recorded and published (`OWNER_PHASE_APPROVAL.json`):

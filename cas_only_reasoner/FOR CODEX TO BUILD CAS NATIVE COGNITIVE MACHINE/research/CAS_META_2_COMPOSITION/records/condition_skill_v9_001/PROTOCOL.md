@@ -221,13 +221,19 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_010`.
-The guarded capture passed **179 tests**. It also confirmed unchanged tested
-source hashes and an unchanged campaign ledger. These are data, packaging,
-trainer-admission, adjudication, packet-verifier and resource-plan checks, not
-a neural training result. Earlier local captures `checks_001` through
-`checks_009` are preserved and are not deleted; `checks_010` is the receipt
-bound with this source state.
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_011`.
+The guarded capture passed **222 tests** covering data, packaging, trainer
+admission, adjudication, the publication-packet verifier, the resource plan,
+the source package builder, the remote worker, and the launch lifecycle. It
+also confirmed unchanged tested source hashes and an unchanged campaign
+ledger. These are preparation checks, not a neural training result. Earlier
+local captures `checks_001` through `checks_010` are preserved and are not
+deleted; `checks_011` is the receipt bound with this source state.
+
+The launch adapter's paid path remains inert until the separate AWS provider
+adapter exists, the exact request/authority pair is hash-bound, and the owner
+approval gates are met. The protocol still creates no reservation and starts
+no job.
 
 ## Publication packet
 
