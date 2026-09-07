@@ -2,16 +2,34 @@
   "base_commit": "d8b636936e6f97058d8f185f857c15cfea97386b",
   "files": [
     {
-      "bytes": 242043,
-      "git_blob": "6ad7e63d626316a441ac0f1a4f741df6add45101",
+      "bytes": 243027,
+      "git_blob": "de55c6f90101690133b0e55c01681f0ff628d17b",
       "path": "CHANGELOG.md",
-      "sha256": "f4c71baa252471f4f77339c2fb235020343833368f9301bc5cd05e020882f025"
+      "sha256": "737bc1961450e88c2c78ba78d63a57d8e56682944c46a3750e776ec8882a914d"
     },
     {
-      "bytes": 11647,
-      "git_blob": "0036992d9e62aae0dfb4d9a3a0a4f4184a89126a",
+      "bytes": 12118,
+      "git_blob": "783c8024324f6c1c3626291194bede1ed6a2c80e",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/README.md",
-      "sha256": "ffd8bde350b8972ec766ca712b5bdfcc3b33af26b95744ec998f7ee1f570e2b4"
+      "sha256": "e7f52624fb415388f0aa70cdec6db52b0ed3de61e28e767f54a75fb13cfe3aeb"
+    },
+    {
+      "bytes": 11141,
+      "git_blob": "115820c9be22b0091f5d7f71fdc5d82d71a8a76f",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/condition_skill_v9_launch.py",
+      "sha256": "cdf892e89e66eeac65496ecd04b2383fd707a609f6cdcdcbab08f8829a072311"
+    },
+    {
+      "bytes": 14008,
+      "git_blob": "aa3c4c918c04293af33b71eb4556c768487560c0",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/condition_skill_v9_package.py",
+      "sha256": "186e3fa740c1fab7dc2c186749e0e967a6deeff997e778da1cc042c226837ec5"
+    },
+    {
+      "bytes": 11836,
+      "git_blob": "4e22a1cb59f29a12c857d32dc866dde8aa6db1b5",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/condition_skill_v9_remote.py",
+      "sha256": "c44ebcfb8d75eaba968bb558488f86150895b7ac6752701185c6eb03c23a87d8"
     },
     {
       "bytes": 4560,
@@ -38,10 +56,22 @@
       "sha256": "bfbd3989c2d8d42b322efcd67ecfc766af61846f2a759187518bc0ef16af486e"
     },
     {
+      "bytes": 2530,
+      "git_blob": "e2ca628e241af279b314012141e00d70d6d2c1fb",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/ASTRA_BROWSER_TASK.md",
+      "sha256": "745932112ba1b61b28c5b3d25d4b7117d7b5d4a989d418d1beed5cf9830bbd8b"
+    },
+    {
+      "bytes": 5613,
+      "git_blob": "5afdf234d44808eb3ab96ac9575cd1ef8c183dbb",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/ASTRA_HANDOFF_2026-09-07.md",
+      "sha256": "ce4f087ad9110190aef1eb4631de5f0c2c447b686f43412df76400c043eeb6e5"
+    },
+    {
       "bytes": 3151,
-      "git_blob": "4129585ad4ecccd3931aeb16c2ba3a092793a355",
+      "git_blob": "268c50bc4f5ec6f4d048071408b0b90a3fab0daa",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/OWNER_METRIC_AMENDMENT.json",
-      "sha256": "cbbfbd9beec055b76ddfb018057f1b00f894b993f053aa3f7d7e3da3c4f8a62b"
+      "sha256": "0b6cff5f75a442c0d181bdf99de668410ffef21674c55543ffe28141eb6bbb63"
     },
     {
       "bytes": 3747,
@@ -50,10 +80,10 @@
       "sha256": "84820d323dd666cd520e66022dcefd09ea11be7890235b9512d7b09cc3ffde6f"
     },
     {
-      "bytes": 12943,
-      "git_blob": "91832c280a7c11d3f5a2a103d92eb59775c807a9",
+      "bytes": 13295,
+      "git_blob": "4e9939961b18d3c3fa0a2ad9c2ee19070a3bd1ed",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/PROTOCOL.md",
-      "sha256": "53fdd592767b65ed96d5ffbd0f21406f1bd3bc8e407c8f6204e18f231a1474e1"
+      "sha256": "29696355df9be57107bb8e5d6efa7cfddc5101702eb087eba248593f3ace7ba2"
     },
     {
       "bytes": 4341,
@@ -182,6 +212,24 @@
       "sha256": "71f5b20b9fbc32b089ca4e070f88879b0cd402fb98ed6b340cc88d59e126655e"
     },
     {
+      "bytes": 6173,
+      "git_blob": "34e4a399f34190006bb3d6dc8202af42d0e5c3a3",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_011/receipt.json",
+      "sha256": "087b5ea80469eac3f2d9717e1f1045d9a49b08b9d363389ccb91869ba1f4c287"
+    },
+    {
+      "bytes": 0,
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_011/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 760,
+      "git_blob": "df87e181e447da361606d6cb6cf8072f300c2dc6",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_011/stdout.txt",
+      "sha256": "3470533baa82bd48fbfef31ff1f36a8118acf2a3e006ad10829c1f49001cf650"
+    },
+    {
       "bytes": 5559,
       "git_blob": "0f0da90f220e79c1ba8329ca10659b0776bb00fd",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/dataset_001/manifest.json",
@@ -200,10 +248,28 @@
       "sha256": "08bc3abf46a5cceeb11a324f683e2956654e6522ed57e64e2ee54000de3673e2"
     },
     {
+      "bytes": 9244,
+      "git_blob": "7989b5dfe26bf81626201fa92d8d185eaab31b34",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_launch.py",
+      "sha256": "315872eaa162907c75f08cb454ea928b4371bd7d28779c47245ec107d8c9fc3c"
+    },
+    {
+      "bytes": 7786,
+      "git_blob": "ace7566845ccdac448a53c7ebd39bc45a15aebfc",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_package.py",
+      "sha256": "5652fbde369d210998c378cef072b24a6f19f43e789b59a7002d2750b38e2a0a"
+    },
+    {
       "bytes": 11103,
       "git_blob": "c5cbf5823353e42a0bb645c1a942f43c7e0a683b",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_packet_verifier.py",
       "sha256": "2c303e3080345a9a96e75655ff87684b3f6b65f7535b0a02cdfdb4ff146f3193"
+    },
+    {
+      "bytes": 11630,
+      "git_blob": "371fb5f028faf73f026b6320e716d4d85cb95625",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_remote.py",
+      "sha256": "7f8892f3c3865f7ef02faba84f7400e754ff68cf87812fe1cb432c3e36dcfc4f"
     },
     {
       "bytes": 4752,
@@ -218,10 +284,10 @@
       "sha256": "e4ca8c782eeb59d2762f08b73f3656a032fc1ec22677a2c87ee58b38f48d4255"
     },
     {
-      "bytes": 4867,
-      "git_blob": "6a4a61b4d94cfe48f112194b793879b31f55dd15",
+      "bytes": 5122,
+      "git_blob": "0855b31fa42636cbe5a4beb373af3c58f8472f20",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tools/check_condition_skill_v9.py",
-      "sha256": "92ff854c0b366224a0270cb1dd6807d02789aa12aca62e4d1026d51957b02896"
+      "sha256": "58d160ac5b7a7e1f919590045ad5875b8cac8c22e7d9f9b6b78229e4b52ec0ab"
     },
     {
       "bytes": 10357,
@@ -231,5 +297,5 @@
     }
   ],
   "schema": "cas-meta2-condition-skill-publication-packet/9",
-  "source_commit": "6b0b5296d583814ca15bbd05d53cf3e41da00de7"
+  "source_commit": "5e9d29221d4d2e4af93f060bbabb976ec33546ea"
 }
