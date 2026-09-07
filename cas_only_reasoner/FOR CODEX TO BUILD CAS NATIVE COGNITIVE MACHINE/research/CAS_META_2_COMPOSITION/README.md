@@ -2,6 +2,18 @@
 
 This is a separate experimental candidate, not a replacement for the accepted CAS-META-0 runtime or the completed CAS-META-1 pilot.
 
+Preparation update (2026-09-07 UTC): after the unchanged saved-state AWS repair
+failed at C tick 7, a separate input-dependent two-condition candidate was
+specified and checked. Its new curriculum has 1,536 training, 384 validation,
+384 fresh-instance test, and 384 withheld-direction-pair test tasks. The guarded
+pure capture passed 107 tests; it ran no neural, SQLite, or provider work and
+left the campaign ledger unchanged. No training result, native repair, caller
+return, reservation, or launch is claimed. See
+`records/condition_skill_v9_001/PROTOCOL.md`. The owner separately ruled that
+the historical 256 practice records may enter a future affected protocol only
+as deduplicated training/practice data with sealed, disjoint validation and test
+data; this candidate does not append them automatically.
+
 The next measured skill is to turn a bounded problem into a new nested CJT program with named intermediate values, then execute it through unchanged native CJT APIs. The candidate must emit operations, calls, and bindings, not just select a prepared whole program.
 
 Launch-candidate update (2026-09-06 UTC): the separate third learning candidate now
@@ -13,6 +25,15 @@ The new campaign, launch profile and audit tools passed integration checks.
 `LEARNING_V3.md` lists the remaining pinned-source and cloud-run gates.
 The successful receipt is `records/local_learning_v3_004/receipt.json`;
 the earlier timeout and test-runner failure are preserved separately.
+
+The saved-state repair diagnostic is now complete and negative. On AWS CUDA,
+C tick 7 produced L0 against its frozen authored L2 target, so the verifier
+refused the call before commit; R tick 8 did not run. The original six traces,
+database bytes, weights, decoder, and source remained unchanged. This implicates
+the first repair-child junction before continuation, but it does not establish
+why C failed or test complete caller return. Do not rerun the one-shot paid
+entrypoint. The evidence is bound in commit `4f11fd91` and
+`records/aws_saved_repair_v8_001/RESULT.md`.
 
 The v2 stored-result diagnostic has independently checked all 1,778 traces and
 360 sealed choices, without waiving the original full-acceptance failure.
