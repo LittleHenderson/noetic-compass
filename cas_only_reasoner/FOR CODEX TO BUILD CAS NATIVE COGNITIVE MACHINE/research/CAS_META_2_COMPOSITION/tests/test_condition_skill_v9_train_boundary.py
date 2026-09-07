@@ -155,8 +155,10 @@ def test_summarize_refuses_empty_missing_class_and_bad_values():
 def passing_report():
     metrics = {}
     for family in train.FAMILIES:
+        metrics[family + ".untrained"] = {
+            split: {"accuracy": 0.2, "bit_accuracy": [0.5, 0.5]} for split in train.TEST_SPLITS}
         metrics[family + ".trained"] = {
-            split: {"accuracy": 0.5, "bit_accuracy": [0.5, 0.5]} for split in train.TEST_SPLITS}
+            split: {"accuracy": 0.6, "bit_accuracy": [0.8, 0.8]} for split in train.TEST_SPLITS}
     controls = {}
     for family in train.FAMILIES:
         controls[family + ".trained"] = {
@@ -196,14 +198,42 @@ def test_adjudicator_passes_complete_evidence_and_matching_attestation():
     assert all(gate["passed"] for gate in verdict["gates"].values())
 
 
+def test_adjudicator_reports_baselines_denominators_and_family_rows():
+    verdict = train.adjudicate(passing_report(), provider_attestation())
+    definitions = verdict["metric_definitions"]
+    assert definitions["joint_accuracy"]["baseline"] == 0.25
+    assert definitions["bit_accuracy"]["baseline"] == 0.5
+    assert definitions["bit_accuracy"]["denominator"] == (
+        "all attempted rows; NO_EFFECT is wrong for both bits")
+    assert verdict["families"]["cas"]["all_passed"] is True
+    assert verdict["families"]["generic_attention"]["all_passed"] is True
+    assert "cas_trained_test_instances_accuracy" in verdict["families"]["cas"]["gates"]
+    assert verdict["initial_vs_trained"]["cas.test_instances"] == {
+        "untrained_accuracy": 0.2, "trained_accuracy": 0.6, "improved": True}
+    assert "combined campaign" in verdict["overall_verdict_is_conjunction"]
+    assert "never erased" in verdict["overall_verdict_is_conjunction"]
+
+
+def test_adjudicator_keeps_family_rows_when_campaign_fails():
+    report = passing_report()
+    report["metrics"]["generic_attention.trained"]["test_instances"]["accuracy"] = 0.2
+    verdict = train.adjudicate(report, provider_attestation())
+    assert verdict["status"] == "FAIL"
+    assert verdict["families"]["cas"]["all_passed"] is True
+    assert verdict["families"]["generic_attention"]["all_passed"] is False
+    assert verdict["initial_vs_trained"]["cas.test_instances"]["improved"] is True
+
+
 @pytest.mark.parametrize("tamper,gate_name", [
     (lambda r: r.update(status="FAILED"), "experiment_status"),
     (lambda r: r.update(selection_sealed=False), "selection_sealed"),
     (lambda r: r.update(test_targets_parsed=False), "test_targets_parsed"),
     (lambda r: r["metrics"]["cas.trained"]["test_instances"].update(accuracy=0.20),
      "cas_trained_test_instances_accuracy"),
-    (lambda r: r["metrics"]["generic_attention.trained"]["test_direction_pair"].update(bit_accuracy=[0.4, 0.2]),
+    (lambda r: r["metrics"]["generic_attention.trained"]["test_direction_pair"].update(bit_accuracy=[0.6, 0.45]),
      "generic_attention_trained_test_direction_pair_bit1"),
+    (lambda r: r["metrics"]["cas.untrained"]["test_instances"].update(accuracy=0.9),
+     "cas_trained_beats_untrained_test_instances"),
     (lambda r: r["controls"]["cas.trained"]["test_instances.direction_1_reverse"].update(joint_accuracy=0.5),
      "cas_trained_test_instances_direction_1_reverse_joint"),
     (lambda r: r["baselines"]["validation"].update(constant_correct=97),
