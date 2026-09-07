@@ -174,6 +174,22 @@ ADJUDICATION = {
                     "persistent Bias", "composition", "CAS advantage over the matched control"],
 }
 
+JOINT_BASELINE = 0.25   # balanced four-class constant predictor on attempted rows
+PER_BIT_BASELINE = 0.5  # chance for one binary decision on attempted rows
+
+METRIC_DEFINITIONS = {
+    "joint_accuracy": {
+        "denominator": "all attempted rows, including NO_EFFECT rows",
+        "baseline": JOINT_BASELINE,
+        "baseline_meaning": "balanced four-class constant predictor",
+    },
+    "bit_accuracy": {
+        "denominator": "all attempted rows; NO_EFFECT is wrong for both bits",
+        "baseline": PER_BIT_BASELINE,
+        "baseline_meaning": "chance for one ordinary binary decision",
+    },
+}
+
 PROVIDER_ATTESTATION_KEYS = {
     "account": "807562639912", "region": "us-west-2", "ami": "ami-0fbbd0facbc9e3cff",
     "instance_type": "g7.2xlarge", "gpu_name_contains": "RTX PRO 4500",
@@ -197,9 +213,17 @@ def adjudicate(report, provider_attestation=None):
     control. The trainer-side call has no provider attestation, so the trainer
     verdict is EVIDENCE_INCOMPLETE by design until the outer launcher receipt
     supplies the attestation and re-adjudicates.
+
+    Baselines: joint accuracy is compared against the balanced four-class
+    constant predictor (0.25). Each bit is compared against ordinary binary
+    chance (0.5), never against 0.25. Trained joint accuracy must also exceed
+    untrained joint accuracy on both test splits. The overall verdict is a
+    conjunction over all gates; per-family gate rows are reported separately
+    and are never erased by the combined verdict.
     """
     require(type(report) is dict, "ADJUDICATION_REPORT_OBJECT_REQUIRED")
     gates = {}
+    initial_vs_trained = {}
 
     def gate(name, passed, actual, required):
         gates[name] = {"passed": bool(passed), "actual": actual, "required": required}
@@ -232,20 +256,30 @@ def adjudicate(report, provider_attestation=None):
         oracle = field(base, "oracle_correct")
         constant_accuracy = constant / cases if cases else None
         oracle_accuracy = oracle / cases if cases else None
-        gate("constant_baseline_" + split, constant_accuracy is not None and constant_accuracy == 0.25,
-             constant_accuracy, 0.25)
+        gate("constant_baseline_" + split, constant_accuracy is not None and constant_accuracy == JOINT_BASELINE,
+             constant_accuracy, JOINT_BASELINE)
         gate("oracle_" + split, oracle_accuracy is not None and oracle_accuracy == 1.0,
              oracle_accuracy, 1.0)
     for family in FAMILIES:
         for split in TEST_SPLITS:
             metrics = field(report, "metrics", family + ".trained", split) or {}
+            untrained = field(report, "metrics", family + ".untrained", split) or {}
             accuracy = field(metrics, "accuracy")
+            untrained_accuracy = field(untrained, "accuracy")
             gate(family + "_trained_" + split + "_accuracy",
-                 accuracy is not None and accuracy > 0.25, accuracy, "> 0.25")
+                 accuracy is not None and accuracy > JOINT_BASELINE, accuracy, "> " + str(JOINT_BASELINE))
+            gate(family + "_trained_beats_untrained_" + split,
+                 accuracy is not None and untrained_accuracy is not None and accuracy > untrained_accuracy,
+                 {"untrained": untrained_accuracy, "trained": accuracy},
+                 "trained joint accuracy strictly above untrained joint accuracy")
             bits = field(metrics, "bit_accuracy") or [None, None]
             for index, bit in enumerate(bits):
                 gate(family + "_trained_" + split + "_bit" + str(index),
-                     bit is not None and bit > 0.25, bit, "> 0.25")
+                     bit is not None and bit > PER_BIT_BASELINE, bit, "> " + str(PER_BIT_BASELINE))
+            initial_vs_trained[family + "." + split] = {
+                "untrained_accuracy": untrained_accuracy, "trained_accuracy": accuracy,
+                "improved": accuracy is not None and untrained_accuracy is not None
+                            and accuracy > untrained_accuracy}
     for family in FAMILIES:
         for split in TEST_SPLITS:
             for control in CONTROL_NAMES:
@@ -271,6 +305,12 @@ def adjudicate(report, provider_attestation=None):
                                  "cas-meta2-<14 digits>-<8 hex lowercase>")
         gate("provider_attestation", not mismatches, mismatches or provider_attestation,
              "independent outer provider launch receipt")
+    families = {}
+    for family in FAMILIES:
+        family_gates = {name: entry["passed"] for name, entry in sorted(gates.items())
+                        if name.startswith(family + "_")}
+        families[family] = {"gates": family_gates,
+                            "all_passed": all(family_gates.values())}
     if any(entry["passed"] is False and entry["actual"] is None for entry in gates.values()):
         status = "EVIDENCE_INCOMPLETE"
     elif all(entry["passed"] for entry in gates.values()):
@@ -280,6 +320,15 @@ def adjudicate(report, provider_attestation=None):
     return {"schema": ADJUDICATION["schema"], "status": status,
             "claim_scope": ADJUDICATION["claim_scope"],
             "status_vocabulary": ADJUDICATION["status_vocabulary"],
+            "metric_definitions": METRIC_DEFINITIONS,
+            "initial_vs_trained": initial_vs_trained,
+            "families": families,
+            "overall_verdict_is_conjunction": ("PASS/FAIL applies to the combined campaign; "
+                                               "per-family gate rows are reported separately and "
+                                               "are never erased by the combined verdict"),
+            "pre_run_amendment": ("per-bit gates require > 0.5 (binary chance), never > 0.25; "
+                                  "trained-beats-untrained gates added; bound by "
+                                  "OWNER_METRIC_AMENDMENT.json before any run"),
             "gates": gates, "not_claimed": ADJUDICATION["not_claimed"]}
 
 

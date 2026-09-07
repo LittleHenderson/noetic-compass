@@ -121,6 +121,14 @@ does. The vocabulary is `PASS`, `FAIL`, `EVIDENCE_INCOMPLETE`. The trainer-side
 verdict is `EVIDENCE_INCOMPLETE` by design until the independent outer provider
 receipt supplies its attestation and re-adjudicates.
 
+### Metric definitions, denominators, and baselines
+
+- **Joint accuracy** denominator: all attempted rows, including `NO_EFFECT`
+  rows. Baseline: `0.25`, the balanced four-class constant predictor.
+- **Per-bit accuracy** denominator: all attempted rows; `NO_EFFECT` is wrong
+  for both bits. Baseline: `0.5`, chance for one ordinary binary decision.
+  Per-bit gates are never compared against `0.25`.
+
 `PASS` requires all of the following, evaluated programmatically:
 
 - experiment status `COMPLETED_OFFLINE_CANDIDATE_EXPERIMENT`, selection sealed,
@@ -128,8 +136,11 @@ receipt supplies its attestation and re-adjudicates.
 - unchanged source identity with baseline, installed-wheel and candidate pins;
 - constant baseline exactly `0.25` on validation and both test splits;
 - integer rule exactly `1.0` on validation and both test splits;
-- trained CAS and trained generic accuracy strictly above `0.25` on both test
-  splits, and both per-bit accuracies strictly above `0.25`;
+- trained CAS and trained generic joint accuracy strictly above `0.25` on both
+  test splits, and both per-bit accuracies strictly above `0.5`;
+- trained joint accuracy strictly above untrained joint accuracy on both test
+  splits, for each family (improvement through training, kept separate from
+  exceeding the constant baseline);
 - every evaluation control (row reversal, slot reassignment, both direction
   reversals, both threshold crossings) with joint accuracy exactly `1.0` for
   each trained family on each test split — both original and transformed
@@ -141,9 +152,27 @@ receipt supplies its attestation and re-adjudicates.
   `12.8`, an actual CUDA operation, zero automatic retries, the `$4.00`
   reservation, and a well-formed job label.
 
+The overall verdict is a conjunction over all gates. Per-family gate rows,
+initial-versus-trained observations, and every failed or missing gate are
+reported separately and are never erased by the combined verdict. Both
+families passing does not establish a CAS advantage; it establishes that both
+met the registered criteria. Missing provider attestation prevents final
+acceptance without turning recorded predictions into incorrect predictions.
+
 `PASS` claims offline candidate learning only. It does not claim native
 admission, repair, complete caller return, persistent Bias, composition, or a
 CAS advantage over the matched control.
+
+### Pre-run metric amendment
+
+The earlier published wording required "both per-bit accuracies strictly above
+0.25". Per the owner's pre-run clarification, per-bit gates now require
+strictly above `0.5` (the binary baseline), trained-beats-untrained gates were
+added, and denominators/baselines are defined above. The earlier adjudicator
+and protocol revisions remain preserved in history (commits `9bfbeb27` and
+earlier); nothing was silently rewritten. This amendment is bound by
+`OWNER_METRIC_AMENDMENT.json` and happened before any training run. No
+threshold changes are permitted after scores exist.
 
 Evaluation-only controls: physical row reversal, slot reassignment, reversal of
 each requested comparison, and crossing each value across its limit. At equality,
@@ -192,13 +221,13 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_007`.
-The guarded capture passed **155 tests**. It also confirmed unchanged tested
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_010`.
+The guarded capture passed **179 tests**. It also confirmed unchanged tested
 source hashes and an unchanged campaign ledger. These are data, packaging,
-trainer-admission, adjudication and packet-verifier checks, not a neural
-training result. Earlier local captures `checks_001` through `checks_006` are
-preserved and are not deleted; `checks_007` is the receipt bound with this
-source state.
+trainer-admission, adjudication, packet-verifier and resource-plan checks, not
+a neural training result. Earlier local captures `checks_001` through
+`checks_009` are preserved and are not deleted; `checks_010` is the receipt
+bound with this source state.
 
 ## Publication packet
 

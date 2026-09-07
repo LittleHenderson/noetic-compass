@@ -1,0 +1,52 @@
+{
+  "schema": "cas-meta2-condition-skill-owner-pre-run-amendment/9",
+  "recorded_utc": "2026-09-07T14:35:00Z",
+  "nature": "pre_run_metric_clarification",
+  "made_before_any_training_run": true,
+  "old_version_preserved": true,
+  "owner_clarification_quote": "For an ordinary two-bit task, joint accuracy and individual-bit accuracy have different baselines. Guessing the complete answer: 25% correct. Guessing one binary bit: 50% correct. Consequently, 'each bit exceeds 25%' does not establish that either individual bit was learned above its binary baseline. Define the denominator and appropriate baseline for joint accuracy and each bit. State exactly what passing the existing gate licenses.",
+  "changes": [
+    {
+      "gate": "per-bit trained accuracy",
+      "before": "strictly above 0.25 on both bits, both test splits, both families",
+      "after": "strictly above 0.50 on both bits, both test splits, both families",
+      "reason": "0.25 is the joint four-class baseline; ordinary binary chance is 0.50"
+    },
+    {
+      "gate": "trained-beats-untrained",
+      "before": "absent (initial-versus-trained reported but not gated)",
+      "after": "trained joint accuracy strictly above untrained joint accuracy on both test splits, both families",
+      "reason": "improvement through training is a separate observation from exceeding the constant baseline"
+    },
+    {
+      "gate": "denominators and baselines",
+      "before": "undefined in the published wording",
+      "after": "joint: all attempted rows including NO_EFFECT, baseline 0.25; per-bit: all attempted rows with NO_EFFECT wrong for both bits, baseline 0.50"
+    },
+    {
+      "gate": "family separation",
+      "before": "flat gate list",
+      "after": "verdict also reports per-family gate rows and initial-versus-trained observations; the overall verdict remains a conjunction and never erases family rows"
+    }
+  ],
+  "bound_state_before": {
+    "trainer_sha256": "a1dada39bc917b6ecf2d171648d81fb43dcbf79ccb686c7baa6ee58777dcb923",
+    "protocol_sha256": "f5e860b36b229d7f5899bee7fb305e3302d40b419e318a97d0f7eecd7095dbeb"
+  },
+  "bound_state_after": {
+    "trainer_sha256": "bfbd3989c2d8d42b322efcd67ecfc766af61846f2a759187518bc0ef16af486e",
+    "protocol_sha256": "e17a8ff60603b44b7d5601a5828a1ecbb1500ee7b58b767b98ca7ab643795de8"
+  },
+  "checks": {
+    "guarded_pure_capture": "records/condition_skill_v9_001/checks_010",
+    "passed": 179,
+    "campaign_ledger_unchanged": true
+  },
+  "prohibited_after_this_amendment": [
+    "any threshold or gate change after training scores exist",
+    "presenting a per-bit result above 0.25 as above binary chance",
+    "erasing per-family outcomes with the combined campaign verdict",
+    "reopening unrelated CASformer architecture work"
+  ],
+  "what_passing_licenses": "offline candidate learning of the declared input-dependent condition skill on the held-out cases, under the registered controls, with both binary decisions above binary chance and improvement through training, for each family separately; nothing about native admission, repair, caller return, persistent Bias, composition, or CAS superiority."
+}

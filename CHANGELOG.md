@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9 metric amendment and launcher start
+
+- Owner phase approval recorded and published (`OWNER_PHASE_APPROVAL.json`):
+  build the dedicated AWS launch adapter, and pre-authorize one `$4`
+  `g7.2xlarge` training run under the `$400` campaign ledger, with ten
+  execution gates. The paid run still requires the adapter, an independent
+  audit, a source freeze, and a reservation.
+- Pre-run metric amendment (`OWNER_METRIC_AMENDMENT.json`): per-bit trained
+  accuracy gates now require strictly above `0.5` (binary chance), never
+  `0.25`; trained-beats-untrained gates added; joint baseline `0.25`, per-bit
+  baseline `0.5`, denominators defined; per-family gate rows and
+  initial-versus-trained observations reported separately from the combined
+  verdict. Old wording preserved in history; no threshold changes after scores.
+- Launcher module one landed: `aws/condition_skill_v9_resource_plan.py` freezes
+  the resource plan and validates the inert launch-request contract.
+- Guarded pure capture: **179 passed** (`records/condition_skill_v9_001/checks_010`).
+  No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
+
+No training result, native admission, repair, caller return, reservation, or
+launch is claimed. The 0/48, 0/24 and 0/72 held-out results are untouched.
+
 ## 2026-09-07 - Condition-skill v9 corrected against independent audit
 
 The input-dependent two-condition learning candidate froze its dataset and pure
