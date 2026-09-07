@@ -20,7 +20,8 @@ started, it reports back instead of overwriting.
 | A — AWS provider adapter | `aws/condition_skill_v9_provider.py`, `tests/test_condition_skill_v9_provider.py` | active |
 | B — independent adapter audit | `records/condition_skill_v9_001/audit_001/**` only | active |
 | C — preregistration freeze docs | `records/condition_skill_v9_001/preregistration_v9_*.md` only | open |
-| D — automatic test-point layer | `tools/condition_skill_v9_test_points.py`, `tests/test_condition_skill_v9_test_points.py` | active |
+| D — automatic test-point layer | `tools/condition_skill_v9_test_points.py`, `tests/test_condition_skill_v9_test_points.py` | complete |
+| E — instance bootstrap completion | `aws/condition_skill_v9_provider.py`, `tests/test_condition_skill_v9_provider.py` | active |
 | I — integrator | branch commits, `publication_packet.json`, `tools/check_condition_skill_v9.py`, `CHANGELOG.md`, `README.md`, packet branch pushes | active |
 
 ## Rules
