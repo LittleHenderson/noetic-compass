@@ -344,6 +344,12 @@
       "sha256": "6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd"
     },
     {
+      "bytes": 13523,
+      "git_blob": "f6fc1389dc0ad05b84d5bd21a1699fabd947aa46",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/preregistration_v9_001.md",
+      "sha256": "7a9dfaa55ede767a11513afeaeb5110dd682ad49295959fbb1a08104f46b82e7"
+    },
+    {
       "bytes": 6495,
       "git_blob": "e7f62cf9729d23fc3360fcf7628f9242e00bb644",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_bundle.py",
@@ -429,5 +435,5 @@
     }
   ],
   "schema": "cas-meta2-condition-skill-publication-packet/9",
-  "source_commit": "c4c2373b5337ebbe617b825cb89d99a8d999f62b"
+  "source_commit": "a9341ed99c30175558e064bf2bf7fc7771a8a9a9"
 }
