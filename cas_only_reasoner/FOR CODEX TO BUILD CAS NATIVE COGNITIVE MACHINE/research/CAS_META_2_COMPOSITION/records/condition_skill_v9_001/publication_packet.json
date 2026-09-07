@@ -2,10 +2,10 @@
   "base_commit": "d8b636936e6f97058d8f185f857c15cfea97386b",
   "files": [
     {
-      "bytes": 245353,
-      "git_blob": "1df35295da6b79c5a47dfba8c2cec918a5110fe2",
+      "bytes": 245501,
+      "git_blob": "60a7a140084b93837de172f560565b75b43b8bb1",
       "path": "CHANGELOG.md",
-      "sha256": "86aaba5d62f95bee47b7f7ff10dce0db12117701ef8d867d9e3313fc63eecef4"
+      "sha256": "06efb2e586f7f108aa419fc276cd71ac23a48a8c5080c25b063eb3f48b51f564"
     },
     {
       "bytes": 12118,
@@ -26,10 +26,10 @@
       "sha256": "6f2425b51523ed4c303bdc32d71dae4129ba70d2aefd24d041cda115698f9a94"
     },
     {
-      "bytes": 39835,
-      "git_blob": "51435644c4911f3888be4aa93dca63d32bf9c1ee",
+      "bytes": 43489,
+      "git_blob": "42ca1c973d91d3382bee79973ceb9302a0f3f2bd",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/aws/condition_skill_v9_provider.py",
-      "sha256": "0958191b78df75c05b9ecadd9ed9952b9130cadcf4e02757d5de3256c93bb60b"
+      "sha256": "dbea8ca4477684829cd599f46c090a4ef44c79b5ee4d4fc8bc19295a43596c35"
     },
     {
       "bytes": 20601,
@@ -98,10 +98,10 @@
       "sha256": "84820d323dd666cd520e66022dcefd09ea11be7890235b9512d7b09cc3ffde6f"
     },
     {
-      "bytes": 13790,
-      "git_blob": "e61bfc64defdbf2b7cd7db68982104f3b0b05b0f",
+      "bytes": 13897,
+      "git_blob": "47e7097c2a6fed5982b9ef5b76851b48060b5f67",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/PROTOCOL.md",
-      "sha256": "66be72894595498112c5dc2774c73abd7b13da5e3cf1ae6a1ddced92250ad1f0"
+      "sha256": "e29798a8588e372890af92c4c6000f1a4b9ba7c236c6cb18a79fb0b8332f00d8"
     },
     {
       "bytes": 18584,
@@ -296,6 +296,24 @@
       "sha256": "3cb46063039a8c8e97fd01d69d4bb18b61712c056430de50bb460318be20b409"
     },
     {
+      "bytes": 7267,
+      "git_blob": "19b1f084feab0c1b5706b6c6614cb64fce40c166",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_015/receipt.json",
+      "sha256": "0af39e4c8bafc0a29190f00380ea16aab6226bba63092467682107b31ebea25e"
+    },
+    {
+      "bytes": 0,
+      "git_blob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_015/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 919,
+      "git_blob": "54e4c575998187e76e6f93f50dcff26a9d195864",
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/checks_015/stdout.txt",
+      "sha256": "96e6d5916fae84787caf557e6a876cacdc3d1ce97cdc3b5aea73d94ecf49a611"
+    },
+    {
       "bytes": 5559,
       "git_blob": "0f0da90f220e79c1ba8329ca10659b0776bb00fd",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/condition_skill_v9_001/dataset_001/manifest.json",
@@ -332,10 +350,10 @@
       "sha256": "d20b2043ef824ad04dcb524c65ff09782215426bdbd6e9e06d0764208d3bf3b7"
     },
     {
-      "bytes": 24692,
-      "git_blob": "941e29f02f23fa1b8e0f89e73f850c2efafef448",
+      "bytes": 26763,
+      "git_blob": "51dc7c16fc0ff8273e1c3922199be87fbcc57568",
       "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/tests/test_condition_skill_v9_provider.py",
-      "sha256": "9780fc6c3cbd391737a369b83078fa702000769afe356b0c5f2e188058341939"
+      "sha256": "1136ccea92f112e42a8963f6c9049a1a38da400bdfca3ddd8312097ee832e40b"
     },
     {
       "bytes": 22132,
@@ -375,5 +393,5 @@
     }
   ],
   "schema": "cas-meta2-condition-skill-publication-packet/9",
-  "source_commit": "4c291e4bdaad477b5a61cc2f0e2b7fe4c1026ff7"
+  "source_commit": "f87b7d7579d02033418714dc103bbe1003c6a553"
 }
