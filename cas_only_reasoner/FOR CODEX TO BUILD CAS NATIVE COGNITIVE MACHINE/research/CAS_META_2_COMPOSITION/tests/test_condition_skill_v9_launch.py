@@ -63,7 +63,8 @@ def valid_authority():
         "automatic_retries": 0, "reservation_usd": "4.00",
         "task_scope": "condition_skill_v9",
         "campaign_scope": "cas-meta2-composition-campaign",
-        "owner_approval_record_sha256": "d" * 64,
+        "owner_approval_record_sha256":
+            launch.digest(launch.OWNER_APPROVAL_PATH.read_bytes()),
     }
 
 
@@ -78,7 +79,8 @@ class FakeProvider:
         return {"account": plan.RESOURCE_PLAN["account"], "region": plan.RESOURCE_PLAN["region"],
                 "ami": plan.RESOURCE_PLAN["ami"], "instance_type": plan.RESOURCE_PLAN["instance_type"],
                 "instance_count": 1, "gpu_name_contains": plan.RESOURCE_PLAN["gpu_name_contains"],
-                "t4_rejected": True, "rate_ceiling_usd": plan.RESOURCE_PLAN["on_demand_rate_ceiling_usd"],
+                "visible_gpu_count": 1, "t4_rejected": True,
+                "rate_ceiling_usd": plan.RESOURCE_PLAN["on_demand_rate_ceiling_usd"],
                 "conflicting_resources": []}
 
     def reserve(self, amount):
@@ -165,17 +167,26 @@ def test_validate_preflight_rejects_mismatches():
     facts = {"account": plan.RESOURCE_PLAN["account"], "region": plan.RESOURCE_PLAN["region"],
              "ami": plan.RESOURCE_PLAN["ami"], "instance_type": plan.RESOURCE_PLAN["instance_type"],
              "instance_count": 1, "gpu_name_contains": plan.RESOURCE_PLAN["gpu_name_contains"],
-             "t4_rejected": True, "rate_ceiling_usd": plan.RESOURCE_PLAN["on_demand_rate_ceiling_usd"],
+             "visible_gpu_count": 1, "t4_rejected": True,
+             "rate_ceiling_usd": plan.RESOURCE_PLAN["on_demand_rate_ceiling_usd"],
              "conflicting_resources": []}
     assert launch.validate_preflight(facts) == facts
     for key, value, reason in [("account", "0", "PREFLIGHT_ACCOUNT"),
                                ("instance_type", "t3.micro", "PREFLIGHT_INSTANCE_TYPE"),
+                               ("visible_gpu_count", 2, "PREFLIGHT_VISIBLE_GPU_COUNT"),
                                ("t4_rejected", False, "PREFLIGHT_T4"),
                                ("conflicting_resources", ["old-instance"], "PREFLIGHT_CONFLICTING_RESOURCES")]:
         broken = dict(facts)
         broken[key] = value
         with pytest.raises(ValueError, match=reason):
             launch.validate_preflight(broken)
+
+
+def test_execute_rejects_authority_not_bound_to_owner_approval(ledger):
+    authority = valid_authority()
+    authority["owner_approval_record_sha256"] = "d" * 64
+    with pytest.raises(ValueError, match="OWNER_APPROVAL_RECORD_MISMATCH"):
+        launch.execute(valid_request(), authority, FakeProvider(ledger), ledger_path=ledger)
 
 
 def test_execute_end_to_end_success(ledger):

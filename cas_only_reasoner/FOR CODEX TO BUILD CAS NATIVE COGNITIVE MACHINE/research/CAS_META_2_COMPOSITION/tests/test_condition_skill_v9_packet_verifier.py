@@ -163,6 +163,24 @@ def test_verify_rejects_non_ancestor_source(bound):
         verify_with(bound, fake)
 
 
+def test_verify_rejects_crlf_packet(bound, fake):
+    payload = raw(packet(bound)).replace(b"\n", b"\r\n")
+    with pytest.raises(ValueError, match="PACKET_CRLF_REJECTED"):
+        verify.verify_packet(Path("unused"), payload, "HEAD",
+                             git_bytes_fn=fake.bytes_fn, git_blob_fn=fake.blob_fn,
+                             git_changed_fn=fake.changed_fn, git_ancestor_fn=fake.ancestor_fn)
+
+
+def test_git_is_ancestor_distinguishes_git_error(monkeypatch):
+    monkeypatch.setattr(verify, "_run_git_status", lambda args, cwd: (0, b""))
+    assert verify.git_is_ancestor(Path("unused"), "a" * 40, "b" * 40) is True
+    monkeypatch.setattr(verify, "_run_git_status", lambda args, cwd: (1, b""))
+    assert verify.git_is_ancestor(Path("unused"), "a" * 40, "b" * 40) is False
+    monkeypatch.setattr(verify, "_run_git_status", lambda args, cwd: (2, b"boom"))
+    with pytest.raises(ValueError, match="PACKET_GIT_ANCESTRY_CHECK_FAILED"):
+        verify.git_is_ancestor(Path("unused"), "a" * 40, "b" * 40)
+
+
 def test_build_packet_emits_lf_only_sorted_exact(bound, fake):
     built, packet_raw = verify.build_packet(Path("unused"), GOOD_COMMIT,
                                             git_bytes_fn=fake.bytes_fn,

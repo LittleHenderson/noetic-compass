@@ -221,19 +221,27 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_011`.
-The guarded capture passed **222 tests** covering data, packaging, trainer
-admission, adjudication, the publication-packet verifier, the resource plan,
-the source package builder, the remote worker, and the launch lifecycle. It
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_014`.
+The guarded capture passed **375 tests and 24 subtests** covering data,
+packaging, trainer admission, adjudication, the publication-packet verifier,
+the resource plan, the source package builder, the remote worker, the launch
+lifecycle, the AWS provider adapter, and the canonical budget integration. It
 also confirmed unchanged tested source hashes and an unchanged campaign
 ledger. These are preparation checks, not a neural training result. Earlier
-local captures `checks_001` through `checks_010` are preserved and are not
-deleted; `checks_011` is the receipt bound with this source state.
+local captures `checks_001` through `checks_013` are preserved and are not
+deleted; `checks_014` is the receipt bound with this source state.
 
-The launch adapter's paid path remains inert until the separate AWS provider
-adapter exists, the exact request/authority pair is hash-bound, and the owner
-approval gates are met. The protocol still creates no reservation and starts
-no job.
+An independent read-only audit of the adapter is preserved in
+`records/condition_skill_v9_001/audit_001/` (0 critical, 1 major, 6 minor,
+7 info). The major reservation-ordering constraint was folded into the
+provider contract (ledger append first, then the AWS-side step, exactly
+once); the minor findings were resolved by the integrator except the frozen
+trainer's attestation key set, which requires an owner-approved pre-run
+amendment before any change.
+
+The launch adapter's paid path remains inert until the exact request and
+authority pair is hash-bound and the owner approval gates are met. The
+protocol still creates no reservation and starts no job.
 
 ## Publication packet
 

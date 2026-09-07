@@ -22,7 +22,7 @@ META1_SOURCE = package.META1 + "cas_meta1/baseline.py"
 BASELINE_EXTRA = "research/CASFORMER_v0_1/README.md"
 BASELINE_CJT = "research/CAS_CJT_TRANSFORMER_v0_2/schemas/runtime.json"
 BASELINE_META0 = "research/CASFORMER_v0_3_META_LOGIC_WIP/cas_meta/__init__.py"
-REAL_COMMIT = "b777584792ac6a5fede4c97ac072d4d1313fe8c9"
+REAL_COMMIT = "c5522f45e68bf89f01b18c825d572d1a09662e94"
 
 
 def baseline_manifest_bytes(paths, blobs):
