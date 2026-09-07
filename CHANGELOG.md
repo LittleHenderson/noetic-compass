@@ -38,7 +38,7 @@ three are corrected in the CNCM worktree on `codex/cas-meta-2-composition`:
   byte-identical to the revision bound at commit `bc3cdc4b` (manifest
   `edaf3d6b…`); only the embedded builder-source hashes changed (new manifest
   `6b19020c…`).
-- Guarded pure capture: **154 passed** (`records/condition_skill_v9_001/checks_006`).
+- Guarded pure capture: **155 passed** (`records/condition_skill_v9_001/checks_007`).
   No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
 
 No training result, native admission, repair, caller return, reservation, or

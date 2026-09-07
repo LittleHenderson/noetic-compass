@@ -96,7 +96,7 @@ def test_strict_load_rejects_nonfinite_json():
     (lambda p: p["files"][0].update(path="../escape.py"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(path="elsewhere/file.py"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(path="docs/somewhere.md"), "PACKET_ENTRY_PATH"),
-    (lambda p: p["files"][0].update(bytes=0), "PACKET_ENTRY_BYTES"),
+    (lambda p: p["files"][0].update(bytes=-1), "PACKET_ENTRY_BYTES"),
     (lambda p: p["files"][0].update(sha256="zz"), "PACKET_ENTRY_SHA256"),
     (lambda p: p["files"][0].update(git_blob="zz"), "PACKET_ENTRY_BLOB"),
     (lambda p: p["files"][0].update(extra=1), "PACKET_ENTRY_FIELDS"),
@@ -174,6 +174,22 @@ def test_build_packet_emits_lf_only_sorted_exact(bound, fake):
     assert [item["path"] for item in parsed["files"]] == sorted([GOOD_PATH, SECOND_PATH])
     for item in parsed["files"]:
         assert item["sha256"] == sha256(dict(bound)[item["path"]]).hexdigest()
+
+
+def test_empty_file_bytes_are_bound_exactly(bound):
+    fake = FakeGit(dict(bound))
+    fake.blobs[SECOND_PATH] = b""
+    built, packet_raw = verify.build_packet(Path("unused"), GOOD_COMMIT,
+                                            git_bytes_fn=fake.bytes_fn,
+                                            git_blob_fn=fake.blob_fn,
+                                            git_changed_fn=fake.changed_fn)
+    empty = [item for item in built["files"] if item["path"] == SECOND_PATH][0]
+    assert empty["bytes"] == 0
+    assert empty["sha256"] == ("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+    report = verify.verify_packet(Path("unused"), packet_raw, "HEAD",
+                                  git_bytes_fn=fake.bytes_fn, git_blob_fn=fake.blob_fn,
+                                  git_changed_fn=fake.changed_fn, git_ancestor_fn=fake.ancestor_fn)
+    assert report["status"] == "PACKET_EXACT"
 
 
 def test_build_and_verify_with_base_commit_range(bound):

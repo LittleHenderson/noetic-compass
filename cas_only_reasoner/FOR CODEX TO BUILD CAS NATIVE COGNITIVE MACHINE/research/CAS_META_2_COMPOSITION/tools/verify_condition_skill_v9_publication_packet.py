@@ -71,7 +71,7 @@ def validate_structure(packet):
                 and path == path.replace("//", "/")
                 and all(part not in ("", ".", "..") for part in path.split("/")),
                 "PACKET_ENTRY_PATH")
-        require(type(entry["bytes"]) is int and entry["bytes"] > 0, "PACKET_ENTRY_BYTES")
+        require(type(entry["bytes"]) is int and entry["bytes"] >= 0, "PACKET_ENTRY_BYTES")
         require(type(entry["sha256"]) is str
                 and re.fullmatch(r"[a-f0-9]{64}", entry["sha256"]) is not None,
                 "PACKET_ENTRY_SHA256")
@@ -149,7 +149,6 @@ def build_packet(root, commit, base=None, *, git_bytes_fn=git_bytes, git_blob_fn
     entries = []
     for path in changed:
         raw = git_bytes_fn(root, commit, path)
-        require(bool(raw), "EMPTY_GIT_OBJECT:" + path)
         blob = git_blob_fn(root, commit, path).strip()
         require(re.fullmatch(rb"[a-f0-9]{40}", blob) is not None, "PACKET_BLOB_SHAPE:" + path)
         entries.append({"path": path, "bytes": len(raw),

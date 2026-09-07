@@ -15,7 +15,7 @@ independent outer provider attestation; and a strict publication-packet
 builder/verifier binds every changed file to exact Git bytes. The dataset
 partitions remain byte-identical to the earlier manifest revision
 `edaf3d6b…`; only the manifest was re-bound to the corrected builder sources.
-The guarded pure capture passed 154 tests; it ran no neural, SQLite, or
+The guarded pure capture passed 155 tests; it ran no neural, SQLite, or
 provider work and left the campaign ledger unchanged. No training result,
 native repair, caller return, reservation, or launch is claimed. See
 `records/condition_skill_v9_001/PROTOCOL.md`. The owner separately ruled that
