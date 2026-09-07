@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9: parallel lanes merged, adapter audited
+
+Parallel-agent lanes (established in `AGENT_LANE_BOARD.md`) completed and were
+merged by the integrator:
+
+- **Lane A (provider adapter):** `aws/condition_skill_v9_provider.py` — lazy
+  boto3 behind the injected interface; the single owner of the v9 reservation
+  path; reserves exactly once through the canonical budget helper (ledger
+  append first, then the AWS-side step) and is not wired to any lifecycle
+  entrypoint that owns its own reservation; single instance with
+  `ClientToken=job` and IMDSv2 required; call-safe cleanup records every
+  failure; 26 pure tests.
+- **Lane B (independent audit):** `records/condition_skill_v9_001/audit_001/`
+  — 0 critical, 1 major, 6 minor, 7 info. Major: reservation ordering is now a
+  pinned provider contract. Minor findings resolved by the integrator
+  (visible_gpu_count preflight, owner-approval record cross-check, CRLF
+  rejection at verify, log-cap documentation, reproduction-tool tracking,
+  git-error vs non-ancestor distinction). F5 (trainer attestation key set)
+  is deliberately deferred pending an owner-approved pre-run amendment.
+- Guarded merged capture: **375 passed, 24 subtests passed** (`checks_014`).
+  Ledger unchanged; no reservation, no run, no neural work.
+
 ## 2026-09-07 - Condition-skill v9 adapter integrated with the real ledger and wheels
 
 A parallel agent's handoff (`records/condition_skill_v9_001/INTEGRATION_CORRECTION_2026-09-07.md`)
