@@ -5,10 +5,19 @@ This is a separate experimental candidate, not a replacement for the accepted CA
 Preparation update (2026-09-07 UTC): after the unchanged saved-state AWS repair
 failed at C tick 7, a separate input-dependent two-condition candidate was
 specified and checked. Its new curriculum has 1,536 training, 384 validation,
-384 fresh-instance test, and 384 withheld-direction-pair test tasks. The guarded
-pure capture passed 107 tests; it ran no neural, SQLite, or provider work and
-left the campaign ledger unchanged. No training result, native repair, caller
-return, reservation, or launch is claimed. See
+384 fresh-instance test, and 384 withheld-direction-pair test tasks. The
+candidate was then corrected against a fresh read-only audit: the learner now
+reads only train/validation before the sealed boundary and never touches
+private test targets there; reporting includes first-wrong-bit and
+equality/unit-margin slices; a frozen deterministic adjudicator
+(`PASS`/`FAIL`/`EVIDENCE_INCOMPLETE`) assigns the claim status and requires an
+independent outer provider attestation; and a strict publication-packet
+builder/verifier binds every changed file to exact Git bytes. The dataset
+partitions remain byte-identical to the earlier manifest revision
+`edaf3d6b…`; only the manifest was re-bound to the corrected builder sources.
+The guarded pure capture passed 149 tests; it ran no neural, SQLite, or
+provider work and left the campaign ledger unchanged. No training result,
+native repair, caller return, reservation, or launch is claimed. See
 `records/condition_skill_v9_001/PROTOCOL.md`. The owner separately ruled that
 the historical 256 practice records may enter a future affected protocol only
 as deduplicated training/practice data with sealed, disjoint validation and test

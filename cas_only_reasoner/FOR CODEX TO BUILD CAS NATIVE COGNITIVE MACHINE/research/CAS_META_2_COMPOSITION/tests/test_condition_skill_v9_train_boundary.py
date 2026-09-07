@@ -90,6 +90,11 @@ def score_row(task, target, prediction, loss=1.0):
             "negative_log_likelihood": loss}
 
 
+def sliced_row(task, target, prediction, equality=0, unit_margin=0):
+    return {**score_row(task, target, prediction),
+            "equality_conditions": equality, "unit_margin_conditions": unit_margin}
+
+
 def test_summarize_counts_classes_bits_and_no_effect():
     rows = [score_row("a", 0, 0, 0.1), score_row("b", 1, -1, 0.2),
             score_row("c", 2, 3, 0.3), score_row("d", 3, 3, 0.4)]
@@ -102,6 +107,36 @@ def test_summarize_counts_classes_bits_and_no_effect():
     assert result["no_effect_count"] == 1
     assert result["bit_accuracy"] == [0.75, 0.5]
     assert result["error_task_ids"] == ["b", "c"]
+    assert result["first_wrong_bit"] == {"bit_1_count": 1, "bit_2_count": 1, "none_count": 2,
+                                         "bit_1_fraction": 0.25, "bit_2_fraction": 0.25}
+    assert "equality_slice" not in result and "unit_margin_slice" not in result
+
+
+def test_summarize_first_wrong_bit_uses_bit_order_and_no_effect():
+    # NO_EFFECT is wrong on both bits, so bit 1 is reported first.
+    rows = [score_row("ok", 0, 0), score_row("bit1", 1, 3), score_row("bit2", 2, 3),
+            score_row("dead", 3, -1)]
+    result = train.summarize(rows)
+    assert result["first_wrong_bit"] == {"bit_1_count": 2, "bit_2_count": 1, "none_count": 1,
+                                         "bit_1_fraction": 0.5, "bit_2_fraction": 0.25}
+
+
+def test_summarize_emits_margin_slices_when_rows_carry_them():
+    rows = [sliced_row("eq-ok", 0, 0, equality=1), sliced_row("eq-bad", 1, 0, equality=2),
+            sliced_row("unit-ok", 2, 2, unit_margin=1), sliced_row("unit-bad", 3, 2, unit_margin=1)]
+    result = train.summarize(rows)
+    assert result["equality_slice"] == {"cases": 2, "correct": 1, "accuracy": 0.5}
+    assert result["unit_margin_slice"] == {"cases": 2, "correct": 1, "accuracy": 0.5}
+
+
+def test_summarize_rejects_bad_margin_fields():
+    rows = [sliced_row(str(i), i, i) for i in range(4)]
+    for key, value in (("equality_conditions", 3), ("unit_margin_conditions", -1),
+                       ("equality_conditions", "1")):
+        broken = deepcopy(rows)
+        broken[0][key] = value
+        with pytest.raises(ValueError, match="SCORE_MARGIN_RANGE"):
+            train.summarize(broken)
 
 
 def test_summarize_refuses_empty_missing_class_and_bad_values():
@@ -115,6 +150,91 @@ def test_summarize_refuses_empty_missing_class_and_bad_values():
         broken[0][key] = value
         with pytest.raises(ValueError, match="SCORE_CLASS_RANGE"):
             train.summarize(broken)
+
+
+def passing_report():
+    metrics = {}
+    for family in train.FAMILIES:
+        metrics[family + ".trained"] = {
+            split: {"accuracy": 0.5, "bit_accuracy": [0.5, 0.5]} for split in train.TEST_SPLITS}
+    controls = {}
+    for family in train.FAMILIES:
+        controls[family + ".trained"] = {
+            split + "." + control: {"joint_accuracy": 1.0}
+            for split in train.TEST_SPLITS for control in train.CONTROL_NAMES}
+    return {
+        "status": "COMPLETED_OFFLINE_CANDIDATE_EXPERIMENT",
+        "selection_sealed": True, "test_targets_parsed": True,
+        "source_before": {"baseline": {}, "installed_wheels": {}, "candidate_sources": {}},
+        "source_after": {"baseline": {}, "installed_wheels": {}, "candidate_sources": {}},
+        "baselines": {split: {"cases": 384, "constant_correct": 96, "oracle_correct": 384}
+                      for split in ("validation", "test_instances", "test_direction_pair")},
+        "metrics": metrics, "controls": controls,
+        "training_steps": {"cas": 2400, "generic_attention": 2400},
+    }
+
+
+def provider_attestation():
+    return {**train.PROVIDER_ATTESTATION_KEYS, "job": "cas-meta2-20260907123456-abcdef12"}
+
+
+def test_adjudication_vocabulary_is_frozen():
+    assert train.ADJUDICATION["status_vocabulary"] == ["PASS", "FAIL", "EVIDENCE_INCOMPLETE"]
+    assert train.ADJUDICATION["claim_scope"] == "offline_candidate_learning_only_no_native_admission"
+
+
+def test_adjudicator_without_provider_attestation_is_evidence_incomplete():
+    verdict = train.adjudicate(passing_report())
+    assert verdict["status"] == "EVIDENCE_INCOMPLETE"
+    gate = verdict["gates"]["provider_attestation"]
+    assert gate["passed"] is False and gate["actual"] is None
+
+
+def test_adjudicator_passes_complete_evidence_and_matching_attestation():
+    verdict = train.adjudicate(passing_report(), provider_attestation())
+    assert verdict["status"] == "PASS"
+    assert all(gate["passed"] for gate in verdict["gates"].values())
+
+
+@pytest.mark.parametrize("tamper,gate_name", [
+    (lambda r: r.update(status="FAILED"), "experiment_status"),
+    (lambda r: r.update(selection_sealed=False), "selection_sealed"),
+    (lambda r: r.update(test_targets_parsed=False), "test_targets_parsed"),
+    (lambda r: r["metrics"]["cas.trained"]["test_instances"].update(accuracy=0.20),
+     "cas_trained_test_instances_accuracy"),
+    (lambda r: r["metrics"]["generic_attention.trained"]["test_direction_pair"].update(bit_accuracy=[0.4, 0.2]),
+     "generic_attention_trained_test_direction_pair_bit1"),
+    (lambda r: r["controls"]["cas.trained"]["test_instances.direction_1_reverse"].update(joint_accuracy=0.5),
+     "cas_trained_test_instances_direction_1_reverse_joint"),
+    (lambda r: r["baselines"]["validation"].update(constant_correct=97),
+     "constant_baseline_validation"),
+    (lambda r: r["baselines"]["test_direction_pair"].update(oracle_correct=383),
+     "oracle_test_direction_pair"),
+    (lambda r: r.update(training_steps={"cas": 2399, "generic_attention": 2400}),
+     "cas_fixed_steps"),
+    (lambda r: r["source_after"].update(candidate_sources={"extra": "changed"}), "source_byte_pins"),
+])
+def test_adjudicator_fails_each_broken_gate(tamper, gate_name):
+    report = passing_report()
+    tamper(report)
+    verdict = train.adjudicate(report, provider_attestation())
+    assert verdict["status"] == "FAIL"
+    assert verdict["gates"][gate_name]["passed"] is False
+
+
+def test_adjudicator_marks_missing_evidence_incomplete_not_failed():
+    report = passing_report()
+    report.pop("metrics")
+    verdict = train.adjudicate(report, provider_attestation())
+    assert verdict["status"] == "EVIDENCE_INCOMPLETE"
+
+
+def test_adjudicator_rejects_mismatched_or_malformed_attestation():
+    bad = {**provider_attestation(), "account": "000000000000"}
+    assert train.adjudicate(passing_report(), bad)["status"] == "FAIL"
+    assert train.adjudicate(passing_report(), "not-a-dict")["status"] == "FAIL"
+    missing_job = {**train.PROVIDER_ATTESTATION_KEYS, "job": "wrong"}
+    assert train.adjudicate(passing_report(), missing_job)["status"] == "FAIL"
 
 
 @pytest.fixture

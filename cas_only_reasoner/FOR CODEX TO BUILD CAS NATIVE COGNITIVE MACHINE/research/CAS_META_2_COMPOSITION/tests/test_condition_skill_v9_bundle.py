@@ -80,15 +80,57 @@ def test_manifest_pin_change_is_rejected(packaged):
         bundle.inspect(packaged[0], expected_manifest_sha256="0" * 64)
 
 
-def test_payload_change_is_rejected_without_parsing(packaged, monkeypatch):
+def test_learner_boundary_never_reads_unrequested_partitions(packaged, monkeypatch):
     root, receipt = packaged
     original = bundle.read_bytes
+    read_names = []
+
+    def guarded(path):
+        name = str(path).replace("\\", "/").rsplit("/", 1)[-1]
+        read_names.append(name)
+        assert name in ("manifest.json", "data.py", "bundle.py", "train.json", "validation.json"), \
+            "LEARNER_READ_UNREQUESTED_PARTITION:" + name
+        return original(path)
+
+    monkeypatch.setattr(bundle, "read_bytes", guarded)
+    result = bundle.read_partitions(root, ["train.json", "validation.json"], receipt["manifest_sha256"])
+    assert set(result["partitions"]) == {"train.json", "validation.json"}
+    assert not any(name.endswith(".targets.json") for name in read_names)
+    assert not any(name.endswith(".public.json") for name in read_names)
+
+
+def test_requested_partition_corruption_is_rejected(packaged, monkeypatch):
+    root, receipt = packaged
+    original = bundle.read_bytes
+
     def changed(path):
         raw = original(path)
-        return raw + b" " if str(path).endswith("test_instances.targets.json") else raw
+        return raw + b" " if str(path).endswith("train.json") else raw
+
     monkeypatch.setattr(bundle, "read_bytes", changed)
-    with pytest.raises(ValueError, match="DATASET_FILE_CHANGED"):
+    with pytest.raises(ValueError, match="PARTITION_CHANGED_AFTER_INSPECTION"):
         bundle.read_partitions(root, ["train.json"], receipt["manifest_sha256"])
+
+
+def test_inspect_structure_never_reads_partition_files(packaged, monkeypatch):
+    root, _ = packaged
+    original = bundle.read_bytes
+
+    def guarded(path):
+        name = str(path).replace("\\", "/").rsplit("/", 1)[-1]
+        assert name not in bundle.FILES, "INSPECT_STRUCTURE_READ_PARTITION:" + name
+        return original(path)
+
+    monkeypatch.setattr(bundle, "read_bytes", guarded)
+    manifest, pin = bundle.inspect_structure(root)
+    assert pin == sha256((root / "manifest.json").read_bytes()).hexdigest()
+    assert set(manifest["files"]) == set(bundle.FILES)
+
+
+def test_inspect_hashes_every_file_without_parsing(packaged):
+    manifest, pin = bundle.inspect(packaged[0])
+    assert pin == packaged[1]["manifest_sha256"]
+    assert set(manifest["files"]) == set(bundle.FILES)
 
 
 @pytest.mark.parametrize("names", [[], ["../train.json"], ["train.json", "train.json"], "train.json"])

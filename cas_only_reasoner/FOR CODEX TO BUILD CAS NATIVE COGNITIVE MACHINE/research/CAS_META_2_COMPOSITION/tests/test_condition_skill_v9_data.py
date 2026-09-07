@@ -126,6 +126,18 @@ def test_features_have_only_raw_numeric_inputs_and_explicit_public_query():
                for row in item["conditions"])
 
 
+def test_condition_margins_count_equality_and_unit_margin_separately():
+    item = public(value1=7, limit1=7, direction1="at_least",
+                  value2=6, limit2=7, direction2="at_most")
+    assert data.condition_margins(item) == {"equality_conditions": 1,
+                                            "unit_margin_conditions": 1}
+    item = public(value1=7, limit1=7, direction1="at_least",
+                  value2=7, limit2=7, direction2="at_most")
+    assert data.condition_margins(item) == {"equality_conditions": 2,
+                                            "unit_margin_conditions": 0}
+    assert set(data.condition_margins(item)) == {"equality_conditions", "unit_margin_conditions"}
+
+
 def test_oracle_never_uses_feature_encoder(monkeypatch):
     monkeypatch.setattr(data, "features", lambda _: (_ for _ in ()).throw(AssertionError("ENCODER_USED")))
     assert data.oracle(public())["bits"] == [1, 0]

@@ -15,7 +15,9 @@ RECORDS = ROOT / "records/condition_skill_v9_001"
 FILES = ("cas_meta2/condition_skill_v9/__init__.py", "cas_meta2/condition_skill_v9/data.py",
     "cas_meta2/condition_skill_v9/bundle.py", "cas_meta2/condition_skill_v9/train.py",
     "tests/test_condition_skill_v9_data.py", "tests/test_condition_skill_v9_bundle.py",
-    "tests/test_condition_skill_v9_train_boundary.py", "tools/check_condition_skill_v9.py")
+    "tests/test_condition_skill_v9_train_boundary.py",
+    "tests/test_condition_skill_v9_packet_verifier.py",
+    "tools/check_condition_skill_v9.py", "tools/verify_condition_skill_v9_publication_packet.py")
 FORBIDDEN = frozenset(("sqlite3", "_sqlite3", "torch", "numpy", "casformer", "cas_cjt",
                        "cas_meta", "boto3", "botocore", "tensorflow", "jax"))
 

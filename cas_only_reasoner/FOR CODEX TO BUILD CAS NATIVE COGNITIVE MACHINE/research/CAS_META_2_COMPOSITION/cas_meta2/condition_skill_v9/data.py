@@ -120,6 +120,20 @@ def oracle(public):
     return {"class_index": index, "symbol": "L" + str(index), "bits": bits}
 
 
+def condition_margins(public):
+    """Pure per-condition margin classes for equality/unit-margin reporting.
+
+    Equality (value == limit) and one-unit margin (|value - limit| == 1) are
+    counted separately, matching the curriculum's reporting cells. This derives
+    nothing from any model output or private target.
+    """
+    validate_public(public)
+    return {"equality_conditions": sum(row["value"] == row["limit"]
+                                       for row in public["conditions"]),
+            "unit_margin_conditions": sum(abs(row["value"] - row["limit"]) == 1
+                                          for row in public["conditions"])}
+
+
 def direction_pair(public):
     validate_public(public)
     return tuple(row["direction"] for row in

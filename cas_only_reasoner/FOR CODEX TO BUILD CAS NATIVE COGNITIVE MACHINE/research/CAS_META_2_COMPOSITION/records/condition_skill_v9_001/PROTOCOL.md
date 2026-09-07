@@ -44,7 +44,13 @@ known input-normalization ambiguity; it does not establish neural learnability.
 
 Dataset: `dataset_001/manifest.json`.
 Manifest SHA256:
-`edaf3d6b4850aee0cae991a875dc899dec0ff9689aca1b7c23a6edfbce78eb09`.
+`6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd`.
+
+The manifest was re-bound to the corrected builder sources. All six partition
+files are byte-identical to the earlier manifest revision
+`edaf3d6b4850aee0cae991a875dc899dec0ff9689aca1b7c23a6edfbce78eb09` bound at
+commit `bc3cdc4b`; only the embedded builder-source hashes changed. The earlier
+manifest revision is preserved in history and is not normalized or deleted.
 
 | Split | Tasks | Atomic families | Each class |
 | --- | ---: | ---: | ---: |
@@ -85,13 +91,59 @@ The fixed intended schedule is 100 epochs, batch size 64, AdamW learning rate
 0.003 and weight decay 0. Each family gets 2,400 optimizer steps, 4,800 total.
 Choose each checkpoint by validation macro-accuracy, then validation cross-
 entropy, keeping the earliest exact tie. Freeze both choices before test
-prediction. Save base test predictions before opening private test targets.
+prediction.
+
+### Sealed target boundary
+
+The learner stage reads only `train.json` and `validation.json` before the
+sealed boundary. It never reads or hashes private test target files there:
+`bundle.inspect_structure` validates the manifest declaration and builder-source
+pins without touching any partition, and `read_partitions` reads only the
+partitions it is explicitly given. Hash-reading private files is byte integrity
+only and is never the boundary that proves targets stayed unopened.
+
+Blind test predictions are saved with a hash-bound selection receipt first.
+Only then does the evaluation stage open the public test files, save blind
+predictions, and finally open the private target files for scoring. Each
+partition is hash-checked against the frozen manifest immediately before it is
+parsed.
 
 Report untrained/trained CAS, untrained/trained generic, the integer rule and
 constant predictors. Include both-bits correctness, each bit's correctness,
 class counts, first wrong bit, equality/unit-margin slices, actual attempted
 denominators, checkpoint identities and compute used. Exact-zero neural Effects
 mean `NO_EFFECT`, not a free L0 answer.
+
+## Deterministic adjudication
+
+A frozen gate program (`train.adjudicate`) assigns the claim status; prose never
+does. The vocabulary is `PASS`, `FAIL`, `EVIDENCE_INCOMPLETE`. The trainer-side
+verdict is `EVIDENCE_INCOMPLETE` by design until the independent outer provider
+receipt supplies its attestation and re-adjudicates.
+
+`PASS` requires all of the following, evaluated programmatically:
+
+- experiment status `COMPLETED_OFFLINE_CANDIDATE_EXPERIMENT`, selection sealed,
+  test targets parsed;
+- unchanged source identity with baseline, installed-wheel and candidate pins;
+- constant baseline exactly `0.25` on validation and both test splits;
+- integer rule exactly `1.0` on validation and both test splits;
+- trained CAS and trained generic accuracy strictly above `0.25` on both test
+  splits, and both per-bit accuracies strictly above `0.25`;
+- every evaluation control (row reversal, slot reassignment, both direction
+  reversals, both threshold crossings) with joint accuracy exactly `1.0` for
+  each trained family on each test split — both original and transformed
+  answers correct, never invariance alone;
+- exactly 2,400 steps per family;
+- a matching independent provider attestation: account `807562639912`, region
+  `us-west-2`, AMI `ami-0fbbd0facbc9e3cff`, one `g7.2xlarge` whose GPU name
+  contains `RTX PRO 4500`, no T4, one visible GPU, torch `2.11.0+cu128`, CUDA
+  `12.8`, an actual CUDA operation, zero automatic retries, the `$4.00`
+  reservation, and a well-formed job label.
+
+`PASS` claims offline candidate learning only. It does not claim native
+admission, repair, complete caller return, persistent Bias, composition, or a
+CAS advantage over the matched control.
 
 Evaluation-only controls: physical row reversal, slot reassignment, reversal of
 each requested comparison, and crossing each value across its limit. At equality,
@@ -140,7 +192,20 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_002`.
-The guarded capture passed **107 tests**. It also confirmed unchanged tested
-source hashes and an unchanged campaign ledger. These are data, packaging and
-trainer-admission checks, not a neural training result.
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_004`.
+The guarded capture passed **149 tests**. It also confirmed unchanged tested
+source hashes and an unchanged campaign ledger. These are data, packaging,
+trainer-admission, adjudication and packet-verifier checks, not a neural
+training result. Earlier local captures `checks_001` and `checks_002` are
+preserved and are not deleted; `checks_004` is the receipt bound with this
+source state.
+
+## Publication packet
+
+`publication_packet.json` is byte-bound evidence generated and re-verified by
+`tools/verify_condition_skill_v9_publication_packet.py`. The verifier checks
+strict duplicate-key JSON, schema/type/path safety, exact changed-file coverage
+of the bound source commit, source-commit ancestry, and byte-count/SHA-256/
+Git-blob identity for every bound file. Packet bytes are LF-only by
+construction; earlier packet revisions (including the CRLF revision bound at
+commit `d8b63693`) are preserved in history and are never normalized.

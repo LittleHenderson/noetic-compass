@@ -4,6 +4,44 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9 corrected against independent audit
+
+The input-dependent two-condition learning candidate froze its dataset and pure
+checks, and a read-only audit then found three material pre-freeze defects. All
+three are corrected in the CNCM worktree on `codex/cas-meta-2-composition`:
+
+- **Sealed target boundary repaired.** The learner previously hashed every
+  dataset partition (including private test targets) before checkpoint
+  selection. `bundle.inspect_structure` now validates only the manifest
+  declaration and builder-source pins without reading any partition, and
+  `read_partitions` reads only the partitions it is given. The trainer's
+  pre-seal stage reads only train/validation; private targets are opened only
+  after the blind prediction receipt is hash-bound.
+- **Required reporting added.** `train.summarize` now emits the first wrong bit
+  (bit order respected; NO_EFFECT counts as bit 1 wrong) and equality/unit-
+  margin slice reports when scored rows carry margin fields.
+- **Deterministic adjudicator added.** `train.adjudicate` assigns
+  `PASS`/`FAIL`/`EVIDENCE_INCOMPLETE` from frozen gates: completion status,
+  sealed selection, unchanged source pins, constant baseline exactly 0.25,
+  integer rule exactly 1.0, trained CAS and generic strictly above 0.25 on both
+  test splits with both bits above 0.25, all six evaluation controls at joint
+  accuracy 1.0 per family per split, exactly 2,400 steps per family, and a
+  matching independent provider attestation. The trainer-side verdict is
+  EVIDENCE_INCOMPLETE by design until the outer provider receipt re-adjudicates.
+- **Publication packet verifier added.** `tools/verify_condition_skill_v9_publication_packet.py`
+  builds and re-verifies the byte-bound packet: strict duplicate-key JSON,
+  schema/type/path safety, exact changed-file coverage, source-commit ancestry,
+  and byte-count/SHA-256/Git-blob identity per file. Packet bytes are LF-only.
+- **Dataset re-manifested, partitions unchanged.** All six partition files are
+  byte-identical to the revision bound at commit `bc3cdc4b` (manifest
+  `edaf3d6b…`); only the embedded builder-source hashes changed (new manifest
+  `6b19020c…`).
+- Guarded pure capture: **149 passed** (`records/condition_skill_v9_001/checks_004`).
+  No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
+
+No training result, native admission, repair, caller return, reservation, or
+launch is claimed. The 0/48, 0/24 and 0/72 held-out results are untouched.
+
 ## 2026-09-04 - CASformer v0.2 source freeze
 
 - Accepted the GLM execution audit as `CAS_CJT_TRANSFORMER_V0_2_CODE_AUDIT_PARTIAL`.

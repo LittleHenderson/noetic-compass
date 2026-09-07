@@ -103,13 +103,17 @@ def build(output, *, seed=9):
             "counts": counts, "learning_measured": False}
 
 
-def inspect(dataset, *, expected_manifest_sha256=None):
-    """Hash every file, but do not parse any task or target file."""
+def inspect_structure(dataset):
+    """Validate the manifest declaration and builder-source pins only.
+
+    This reads manifest.json and hashes the two builder source files. It never
+    reads, hashes, or opens any partition file, so calling it cannot leak
+    private test targets into a learner.
+    """
     dataset = safe(dataset)
     require(dataset.is_dir(), "DATASET_DIRECTORY_REQUIRED")
     raw = read_bytes(dataset / "manifest.json")
     pin = sha256(raw).hexdigest()
-    require(expected_manifest_sha256 is None or pin == expected_manifest_sha256, "DATASET_MANIFEST_CHANGED")
     manifest = decoded(raw)
     require(manifest.get("schema") == SCHEMA and type(manifest.get("seed")) is int
             and manifest["seed"] == 9 and manifest.get("counts") == EXPECTED_COUNTS,
@@ -118,6 +122,19 @@ def inspect(dataset, *, expected_manifest_sha256=None):
     require(manifest.get("data_source_sha256") == sha256(read_bytes(Path(data.__file__))).hexdigest()
             and manifest.get("bundle_source_sha256") == sha256(read_bytes(__file__)).hexdigest(),
             "DATASET_BUILDER_SOURCE_CHANGED")
+    return manifest, pin
+
+
+def inspect(dataset, *, expected_manifest_sha256=None):
+    """Hash every file, but do not parse any task or target file.
+
+    Hash-reading private files is byte integrity only and must never be used as
+    the boundary that proves targets stayed unopened. Learners use
+    inspect_structure and keep private-file reads outside their pre-seal stage.
+    """
+    manifest, pin = inspect_structure(dataset)
+    require(expected_manifest_sha256 is None or pin == expected_manifest_sha256,
+            "DATASET_MANIFEST_CHANGED")
     for name, item in manifest["files"].items():
         payload = read_bytes(dataset / name)
         require(type(item) is dict and set(item) == {"bytes", "sha256"}
@@ -127,14 +144,23 @@ def inspect(dataset, *, expected_manifest_sha256=None):
 
 
 def read_partitions(dataset, names, expected_manifest_sha256=None):
-    """Parse only explicitly requested partitions; private files stay opaque."""
+    """Parse only explicitly requested partitions; unrequested files stay unread.
+
+    Only the manifest declaration and builder-source pins are checked beyond the
+    requested files. A learner that requests only train/validation therefore
+    never reads private test target bytes before its sealed boundary. Unrequested
+    partition integrity is checked when those files are actually requested.
+    """
     require(type(names) in (list, tuple) and names and len(set(names)) == len(names)
             and set(names).issubset(FILES), "EXPLICIT_DATASET_PARTITIONS_REQUIRED")
-    manifest, pin = inspect(dataset, expected_manifest_sha256=expected_manifest_sha256)
+    manifest, pin = inspect_structure(dataset)
+    require(expected_manifest_sha256 is None or pin == expected_manifest_sha256,
+            "DATASET_MANIFEST_CHANGED")
     partitions = {}
     for name in names:
         payload = read_bytes(safe(dataset) / name)
-        require(sha256(payload).hexdigest() == manifest["files"][name]["sha256"], "PARTITION_CHANGED_AFTER_INSPECTION")
+        require(sha256(payload).hexdigest() == manifest["files"][name]["sha256"],
+                "PARTITION_CHANGED_AFTER_INSPECTION")
         rows = decoded(payload)
         split = name.split(".")[0]
         require(type(rows) is list and len(rows) == EXPECTED_COUNTS[split], "PARTITION_COUNT_CHANGED")
