@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9 adapter integrated with the real ledger and wheels
+
+A parallel agent's handoff (`records/condition_skill_v9_001/INTEGRATION_CORRECTION_2026-09-07.md`)
+was reviewed and merged. It corrected real integration defects in the
+preparation code without touching the trainer, dataset, checkpoint rule, or
+adjudicator: the launch reader now uses the canonical budget validator and the
+real ledger field names (`owner_task_cap_usd`, `total_reserved_usd`,
+`remaining_unreserved_usd`) with exact decimal strings; the package builder
+uses the correct repository git prefix, binds the 316-file frozen baseline
+manifest and ships the two frozen wheels; the remote worker places outputs
+where the real trainer requires, preserves failure receipts, and proves neural
+imports come from installed wheels. A second reservation for the same job is
+refused before provider callbacks. Merged guarded capture: **346 passed, 24
+subtests passed** (`checks_013`). Ledger unchanged; no reservation, no run.
+
 ## 2026-09-07 - Condition-skill v9 launch adapter complete as pure code
 
 The dedicated v9 launch adapter is finished and guarded: frozen resource plan

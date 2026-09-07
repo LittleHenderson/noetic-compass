@@ -3,6 +3,7 @@
 The provider is injected as a fake; no AWS, network, tensor, database, or
 provider work occurs. Ledger files are temporary copies.
 """
+import copy
 import json
 from pathlib import Path
 
@@ -10,15 +11,35 @@ import pytest
 
 from aws import condition_skill_v9_launch as launch
 from aws import condition_skill_v9_resource_plan as plan
+from aws import budget
 
 
 JOB = "cas-meta2-20260907160000-abcdef12"
 
 
-def write_ledger(tmp_path, reserved="98.00", unreserved="302.00", cap="400.00"):
+def budget_plan():
+    return launch.reservation_plan()
+
+
+def write_ledger(tmp_path, reserved="98.00", unreserved=None, cap="400.00"):
+    """Use the real budget writer, only against this test's private directory."""
     path = tmp_path / "campaign_ledger.json"
-    path.write_text(json.dumps({"revision": 16, "cap_usd": cap,
-                                "reserved_usd": reserved, "unreserved_usd": unreserved}))
+    prior = tmp_path / "prior.json"
+    approval = tmp_path / "approval.json"
+    prior.write_bytes((launch.ROOT.parent / "CAS_META_1_LEARNED_SELECTION" /
+                       "records/aws_budget_ledger.json").read_bytes())
+    approval.write_bytes((launch.ROOT / "records/budget/OWNER_APPROVAL_SOURCE.json").read_bytes())
+    initial = budget.initialize_ledger(prior, approval, path)
+    extra = budget.amount(reserved) - budget.amount(initial["total_reserved_usd"])
+    if extra:
+        budget.reserve_budget("cas-meta2-fixture-earlier", "a" * 40, "b" * 64,
+                              str(extra), budget_plan(), path)
+    if cap != "400.00" or unreserved is not None:
+        state = budget.decoded(path.read_bytes())
+        state["owner_task_cap_usd"] = cap
+        if unreserved is not None:
+            state["remaining_unreserved_usd"] = unreserved
+        path.write_bytes(budget.encoded(state))
     return path
 
 
@@ -62,11 +83,8 @@ class FakeProvider:
 
     def reserve(self, amount):
         self.calls.append("reserve")
-        ledger = json.loads(self.ledger_path.read_text())
-        ledger["reserved_usd"] = "102.00"
-        ledger["unreserved_usd"] = "298.00"
-        self.ledger_path.write_text(json.dumps(ledger))
-        return {"status": "RESERVED_NO_AUTOMATIC_REFUND", "amount_usd": amount}
+        return budget.reserve_budget(JOB, "a" * 40, "b" * 64, amount,
+                                     budget_plan(), self.ledger_path)
 
     def launch(self, job, permit):
         self.calls.append("launch")
@@ -127,8 +145,9 @@ def test_authority_rejects_mutations(mutate, reason):
 
 def test_read_ledger_and_reservation_scope(ledger):
     document = launch.read_ledger(ledger)
-    assert document["ledger"]["revision"] == 16
-    assert launch.validate_reservation_scope(document)["amount"] == 4.00
+    assert document["ledger"]["schema"] == budget.SCHEMA
+    assert document["ledger"]["total_reserved_usd"] == "98.00"
+    assert launch.validate_reservation_scope(document)["amount"] == "4.00"
 
 
 def test_reservation_scope_rejects_over_budget(tmp_path):
@@ -138,7 +157,7 @@ def test_reservation_scope_rejects_over_budget(tmp_path):
 
 
 def test_read_ledger_rejects_changed_cap(tmp_path):
-    with pytest.raises(ValueError, match="LEDGER_CAP_CHANGED"):
+    with pytest.raises(ValueError, match="INVALID_CAMPAIGN_LEDGER"):
         launch.read_ledger(write_ledger(tmp_path, cap="300.00"))
 
 
@@ -163,9 +182,9 @@ def test_execute_end_to_end_success(ledger):
     provider = FakeProvider(ledger)
     result = launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
     assert result["status"] == "AWS_CONDITION_SKILL_V9_FINISHED"
-    assert result["reservation"]["status"] == "RESERVED_NO_AUTOMATIC_REFUND"
+    assert result["reservation"]["reservation"]["status"] == "RESERVED_NO_AUTOMATIC_REFUND"
     assert result["cleanup"]["complete"] is True
-    assert result["ledger_after"]["ledger"]["reserved_usd"] == "102.00"
+    assert result["ledger_after"]["ledger"]["total_reserved_usd"] == "102.00"
     assert provider.calls == ["reserve", "launch", "wait", "collect", "cleanup"]
     assert result["claims"]["composition_proved"] is False
 
@@ -216,3 +235,139 @@ def test_execute_rejects_second_reservation(ledger):
     provider.reserve = double
     with pytest.raises(ValueError, match="RESERVATION_MUST_BE_FIRST_AND_SINGLE"):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+
+
+def test_read_actual_campaign_ledger_is_read_only():
+    before = launch.LEDGER_PATH.read_bytes()
+    document = launch.read_ledger()
+    assert document["ledger"] == budget.validate_state(budget.decoded(before))
+    assert document["ledger_sha256"] == budget.digest(before)
+    assert launch.LEDGER_PATH.read_bytes() == before
+    assert launch.validate_reservation_scope(document)["campaign_cap"] == "400.00"
+
+
+def test_old_fabricated_short_ledger_cannot_authorize_spending(tmp_path):
+    path = tmp_path / "short.json"
+    path.write_text(json.dumps({"revision": 16, "cap_usd": "400.00",
+                               "reserved_usd": "98.00", "unreserved_usd": "302.00"}))
+    provider = FakeProvider(path)
+    with pytest.raises(ValueError, match="INVALID_CAMPAIGN_LEDGER"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=path)
+    assert provider.calls == []
+
+
+def test_inconsistent_totals_cannot_reach_provider(tmp_path):
+    path = write_ledger(tmp_path, unreserved="303.00")
+    provider = FakeProvider(path)
+    with pytest.raises(ValueError, match="INCONSISTENT_CAMPAIGN_TOTALS"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=path)
+    assert provider.calls == []
+
+
+@pytest.mark.parametrize("raw,reason", [
+    (b'{"revision":1,"revision":2}', "DUPLICATE_JSON_KEY"),
+    (b'{"total_reserved_usd":NaN}', "NONFINITE_JSON"),
+])
+def test_read_ledger_rejects_ambiguous_json(tmp_path, raw, reason):
+    path = tmp_path / "bad.json"
+    path.write_bytes(raw)
+    with pytest.raises(ValueError, match=reason):
+        launch.read_ledger(path)
+
+
+@pytest.mark.parametrize("amount", ["NaN", "Infinity", "-4", "4e0", 4, True, None, "4.001"])
+def test_reservation_amount_uses_exact_decimal_strings(ledger, amount):
+    with pytest.raises(ValueError):
+        launch.validate_reservation_scope(launch.read_ledger(ledger), amount)
+
+
+def test_same_job_cannot_run_twice(ledger):
+    provider = FakeProvider(ledger)
+    launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    before, calls = ledger.read_bytes(), list(provider.calls)
+    with pytest.raises(ValueError, match="JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert ledger.read_bytes() == before
+    assert provider.calls == calls
+
+
+@pytest.mark.parametrize("mutate,reason", [
+    (lambda r: r.update(ledger_sha256="0" * 64), "RESERVATION_RECEIPT_HASH_MISMATCH"),
+    (lambda r: r.update(revision=999), "RESERVATION_RECEIPT_FIELD:revision"),
+    (lambda r: r.update(total_reserved_usd="98.00"), "RESERVATION_RECEIPT_FIELD:total_reserved_usd"),
+    (lambda r: r.update(remaining_unreserved_usd="302.00"), "RESERVATION_RECEIPT_FIELD:remaining_unreserved_usd"),
+    (lambda r: r.update(ledger_path="another-ledger.json"), "RESERVATION_RECEIPT_PATH_MISMATCH"),
+    (lambda r: r["reservation"].update(job="cas-meta2-not-this-job"), "RESERVATION_RECEIPT_ENTRY_MISMATCH"),
+])
+def test_changed_receipt_cannot_reach_launch(ledger, mutate, reason):
+    provider = FakeProvider(ledger)
+    real = provider.reserve
+    def reserve(amount):
+        receipt = copy.deepcopy(real(amount))
+        mutate(receipt)
+        return receipt
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match=reason):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert provider.calls == ["reserve"]
+    assert budget.read_ledger(ledger)["total_reserved_usd"] == "102.00"
+
+
+def test_wrong_job_reservation_cannot_reach_launch(ledger):
+    provider = FakeProvider(ledger)
+    def reserve(amount):
+        provider.calls.append("reserve")
+        return budget.reserve_budget("cas-meta2-other-job", "a" * 40, "b" * 64,
+                                     amount, budget_plan(), ledger)
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match="RESERVATION_IDENTITY_MISMATCH:job"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert provider.calls == ["reserve"]
+
+
+def test_no_ledger_update_cannot_reach_launch(ledger):
+    provider = FakeProvider(ledger)
+    def reserve(amount):
+        provider.calls.append("reserve")
+        return {"reservation": {"reserved_usd": amount}}
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match="RESERVATION_REVISION_MISMATCH"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert provider.calls == ["reserve"]
+
+
+@pytest.mark.parametrize("change", [
+    {"runtime_seconds_max": 1800}, {"instance_type": "g6e.2xlarge"},
+    {"task_scope": "some-other-task"}, {"campaign_scope": "some-other-campaign"},
+])
+def test_other_valid_budget_plan_cannot_authorize_this_job(ledger, change):
+    provider = FakeProvider(ledger)
+    def reserve(amount):
+        provider.calls.append("reserve")
+        return budget.reserve_budget(JOB, "a" * 40, "b" * 64, amount,
+                                     {**budget_plan(), **change}, ledger)
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match="RESERVATION_RESOURCE_PLAN_MISMATCH"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert provider.calls == ["reserve"]
+
+
+@pytest.mark.parametrize("source,archive,reason", [
+    ("c" * 40, "b" * 64, "source_sha"), ("a" * 40, "c" * 64, "archive_sha256"),
+])
+def test_other_source_reservation_cannot_reach_launch(ledger, source, archive, reason):
+    provider = FakeProvider(ledger)
+    def reserve(amount):
+        provider.calls.append("reserve")
+        return budget.reserve_budget(JOB, source, archive, amount, budget_plan(), ledger)
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match="RESERVATION_IDENTITY_MISMATCH:" + reason):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert provider.calls == ["reserve"]
+
+
+def test_reservation_plan_is_detached_and_cost_bounded():
+    snapshot = launch.reservation_plan()
+    assert budget.validate_plan(snapshot, "4.00") == budget.amount("4.00")
+    snapshot["condition_skill_v9"]["worker_seconds_max"] = 999
+    assert launch.reservation_plan()["condition_skill_v9"]["worker_seconds_max"] == 600

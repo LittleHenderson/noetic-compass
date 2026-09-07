@@ -21,6 +21,7 @@ import time
 from hashlib import sha256
 
 from aws import condition_skill_v9_resource_plan as plan
+from aws import budget
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "cas-meta2-condition-skill-v9-launch/9"
@@ -98,28 +99,82 @@ def plan_only(request=None, authority=None):
 
 
 def read_ledger(path=LEDGER_PATH):
+    """Read a validated canonical snapshot without creating a lock or reservation.
+
+    This is a preflight observation, not the spending transaction. The real
+    reservation must still use budget.reserve_budget(), which locks and checks
+    the full append-only history again. Never translate a fabricated short
+    ledger into campaign authority.
+    """
     path = Path(path)
     raw = path.read_bytes()
-    ledger = json.loads(raw)
-    require(type(ledger.get("revision")) is int and ledger["revision"] >= 1,
-            "LEDGER_REVISION_REQUIRED")
-    for key in ("cap_usd", "reserved_usd", "unreserved_usd"):
-        require(type(ledger.get(key)) is str and float(ledger[key]) >= 0,
-                "LEDGER_FIELD:" + key)
-    require(float(ledger["cap_usd"]) == float(CAMPAIGN_CAP_USD), "LEDGER_CAP_CHANGED")
-    return {"ledger": ledger, "ledger_sha256": sha256(raw).hexdigest()}
+    ledger = budget.validate_state(budget.decoded(raw))
+    return {"ledger": ledger, "ledger_sha256": sha256(raw).hexdigest(),
+            "ledger_path": str(path.resolve())}
+
+
+def reservation_plan():
+    """Exact task/resource binding for the canonical budget helper."""
+    frozen = json.loads(canonical(scope()))
+    return {"instance_count": frozen["instance_count"],
+            "runtime_seconds_max": frozen["instance_seconds_max"],
+            "instance_type": frozen["instance_type"], "account_id": frozen["account"],
+            "region": frozen["region"], "automatic_retries": frozen["automatic_retries"],
+            "on_demand_hourly_usd_max": frozen["on_demand_rate_ceiling_usd"],
+            "ancillary_reserved_usd": "1.48", "task_scope": "condition_skill_v9",
+            "campaign_scope": "cas-meta2-composition-campaign", "condition_skill_v9": frozen}
 
 
 def validate_reservation_scope(ledger_document, amount=RESERVATION_USD):
     ledger = ledger_document["ledger"]
-    amount = float(amount)
-    reserved, unreserved, cap = (float(ledger["reserved_usd"]),
-                                 float(ledger["unreserved_usd"]), float(ledger["cap_usd"]))
-    require(amount == float(RESERVATION_USD), "RESERVATION_AMOUNT_FROZEN")
+    amount = budget.amount(amount, positive=True)
+    reserved, unreserved, cap = (budget.amount(ledger["total_reserved_usd"]),
+                                 budget.amount(ledger["remaining_unreserved_usd"]),
+                                 budget.amount(ledger["owner_task_cap_usd"]))
+    require(cap == budget.amount(CAMPAIGN_CAP_USD), "LEDGER_CAP_CHANGED")
+    require(reserved + unreserved == cap, "INCONSISTENT_CAMPAIGN_TOTALS")
+    require(amount == budget.amount(RESERVATION_USD), "RESERVATION_AMOUNT_FROZEN")
     require(unreserved >= amount and reserved + amount <= cap,
             "RESERVATION_OUTSIDE_CAMPAIGN_BUDGET")
-    return {"amount": amount, "reserved_before": reserved, "unreserved_before": unreserved,
-            "campaign_cap": cap}
+    return {"amount": str(amount), "reserved_before": str(reserved),
+            "unreserved_before": str(unreserved), "campaign_cap": str(cap)}
+
+
+def validate_reserved_transition(before, after, receipt, request):
+    """Bind the canonical helper receipt to exactly one new $4 reservation."""
+    prior, current = before["ledger"], after["ledger"]
+    require(current["revision"] == prior["revision"] + 1,
+            "RESERVATION_REVISION_MISMATCH")
+    require(current["reservations"][:-1] == prior["reservations"],
+            "RESERVATION_NOT_APPEND_ONLY")
+    require(current["previous_state_sha256"] == budget.digest(budget.encoded(prior)),
+            "RESERVATION_PREDECESSOR_MISMATCH")
+    for key in ("approval", "predecessor", "owner_task_cap_usd", "scope", "no_automatic_refund"):
+        require(current.get(key) == prior.get(key), "RESERVATION_CONTEXT_CHANGED:" + key)
+    entry = current["reservations"][-1]
+    for key in ("job", "source_sha", "archive_sha256"):
+        require(entry[key] == request[key], "RESERVATION_IDENTITY_MISMATCH:" + key)
+    require(entry["status"] == budget.STATUS, "RESERVATION_STATUS_REQUIRED")
+    require(entry["plan"] == reservation_plan() and
+            entry["plan_sha256"] == budget.digest(budget.encoded(reservation_plan())),
+            "RESERVATION_RESOURCE_PLAN_MISMATCH")
+    amount = budget.amount(RESERVATION_USD)
+    require(budget.amount(entry["reserved_usd"]) == amount,
+            "RESERVATION_AMOUNT_FROZEN")
+    require(budget.amount(current["total_reserved_usd"]) ==
+            budget.amount(prior["total_reserved_usd"]) + amount and
+            budget.amount(current["remaining_unreserved_usd"]) ==
+            budget.amount(prior["remaining_unreserved_usd"]) - amount,
+            "RESERVATION_TOTAL_DELTA_MISMATCH")
+    require(type(receipt) is dict and receipt.get("reservation") == entry,
+            "RESERVATION_RECEIPT_ENTRY_MISMATCH")
+    require(receipt.get("ledger_sha256") == after["ledger_sha256"],
+            "RESERVATION_RECEIPT_HASH_MISMATCH")
+    require(receipt.get("ledger_path") == after["ledger_path"] == before["ledger_path"],
+            "RESERVATION_RECEIPT_PATH_MISMATCH")
+    for key in ("revision", "total_reserved_usd", "remaining_unreserved_usd"):
+        require(receipt.get(key) == current[key], "RESERVATION_RECEIPT_FIELD:" + key)
+    return receipt
 
 
 def validate_preflight(facts):
@@ -150,15 +205,15 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
     started = time.monotonic()
     ledger_before = read_ledger(ledger_path)
     reservation_scope = validate_reservation_scope(ledger_before)
+    require(not any(entry["job"] == request["job"] for entry in
+                    ledger_before["ledger"]["reservations"]),
+            "JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY")
     preflight = validate_preflight(provider.preflight())
     provider.calls.clear()
     reservation = provider.reserve(RESERVATION_USD)
     require(provider.calls == ["reserve"], "RESERVATION_MUST_BE_FIRST_AND_SINGLE")
-    require(reservation.get("status") == "RESERVED_NO_AUTOMATIC_REFUND",
-            "RESERVATION_STATUS_REQUIRED")
     ledger_after = read_ledger(ledger_path)
-    require(ledger_after["ledger"]["reserved_usd"] != ledger_before["ledger"]["reserved_usd"],
-            "LEDGER_NOT_UPDATED_AFTER_RESERVATION")
+    validate_reserved_transition(ledger_before, ledger_after, reservation, request)
     permit = {"job": request["job"], "source_sha": request["source_sha"],
               "archive_sha256": request["archive_sha256"],
               "manifest_sha256": request["manifest_sha256"],
