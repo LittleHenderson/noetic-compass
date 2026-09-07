@@ -14,6 +14,7 @@ import tools.verify_condition_skill_v9_publication_packet as verify
 
 
 GOOD_COMMIT = "a" * 40
+GOOD_BASE = "c" * 40
 GOOD_BLOB = "b" * 40
 GOOD_PATH = ("cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/"
              "research/CAS_META_2_COMPOSITION/cas_meta2/condition_skill_v9/data.py")
@@ -50,12 +51,12 @@ class FakeGit:
         assert commit == GOOD_COMMIT
         return GOOD_BLOB.encode("ascii")
 
-    def changed_fn(self, root, commit):
+    def changed_fn(self, root, commit, base=None):
         assert commit == GOOD_COMMIT
         return list(self.changed)
 
     def ancestor_fn(self, root, commit, head):
-        assert commit == GOOD_COMMIT
+        assert commit == GOOD_COMMIT or commit == GOOD_BASE
         return self.ancestor
 
 
@@ -89,6 +90,7 @@ def test_strict_load_rejects_nonfinite_json():
     (lambda p: p.pop("schema"), "PACKET_SCHEMA"),
     (lambda p: p.update(schema="cas-meta2-other/1"), "PACKET_SCHEMA"),
     (lambda p: p.update(source_commit="abc"), "PACKET_SOURCE_COMMIT"),
+    (lambda p: p.update(base_commit="zz"), "PACKET_BASE_COMMIT"),
     (lambda p: p.update(files=[]), "PACKET_FILES"),
     (lambda p: p["files"][0].update(path="C:\\absolute\\path"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(path="../escape.py"), "PACKET_ENTRY_PATH"),
@@ -172,3 +174,35 @@ def test_build_packet_emits_lf_only_sorted_exact(bound, fake):
     assert [item["path"] for item in parsed["files"]] == sorted([GOOD_PATH, SECOND_PATH])
     for item in parsed["files"]:
         assert item["sha256"] == sha256(dict(bound)[item["path"]]).hexdigest()
+
+
+def test_build_and_verify_with_base_commit_range(bound):
+    fake = FakeGit(dict(bound), changed=[GOOD_PATH, SECOND_PATH, "CHANGELOG.md"])
+    fake.blobs["CHANGELOG.md"] = b"campaign-log-bytes"
+    built, packet_raw = verify.build_packet(Path("unused"), GOOD_COMMIT, GOOD_BASE,
+                                            git_bytes_fn=fake.bytes_fn,
+                                            git_blob_fn=fake.blob_fn,
+                                            git_changed_fn=fake.changed_fn)
+    assert built["base_commit"] == GOOD_BASE
+    assert [item["path"] for item in built["files"]] == sorted(["CHANGELOG.md", GOOD_PATH, SECOND_PATH])
+    report = verify.verify_packet(Path("unused"), packet_raw, "HEAD",
+                                  git_bytes_fn=fake.bytes_fn, git_blob_fn=fake.blob_fn,
+                                  git_changed_fn=fake.changed_fn, git_ancestor_fn=fake.ancestor_fn)
+    assert report["status"] == "PACKET_EXACT"
+    assert report["source_commit"] == GOOD_COMMIT
+
+
+def test_verify_rejects_range_packet_without_base_when_changed_fake_differs(bound):
+    # A range packet lists the union; verifying it with a fake that only knows
+    # the single-commit set must raise a coverage mismatch.
+    fake = FakeGit(dict(bound), changed=[GOOD_PATH, SECOND_PATH, "CHANGELOG.md"])
+    fake.blobs["CHANGELOG.md"] = b"campaign-log-bytes"
+    built, packet_raw = verify.build_packet(Path("unused"), GOOD_COMMIT, GOOD_BASE,
+                                            git_bytes_fn=fake.bytes_fn,
+                                            git_blob_fn=fake.blob_fn,
+                                            git_changed_fn=fake.changed_fn)
+    single = FakeGit(dict(bound), changed=[GOOD_PATH, SECOND_PATH])
+    with pytest.raises(ValueError, match="PACKET_COVERAGE_MISMATCH"):
+        verify.verify_packet(Path("unused"), packet_raw, "HEAD",
+                             git_bytes_fn=single.bytes_fn, git_blob_fn=single.blob_fn,
+                             git_changed_fn=single.changed_fn, git_ancestor_fn=single.ancestor_fn)

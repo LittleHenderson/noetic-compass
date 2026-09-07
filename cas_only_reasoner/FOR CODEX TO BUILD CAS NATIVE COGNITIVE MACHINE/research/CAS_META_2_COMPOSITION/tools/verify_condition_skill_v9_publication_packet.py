@@ -56,6 +56,9 @@ def validate_structure(packet):
     require(type(packet.get("source_commit")) is str
             and re.fullmatch(r"[a-f0-9]{40}", packet["source_commit"]) is not None,
             "PACKET_SOURCE_COMMIT")
+    base = packet.get("base_commit")
+    require(base is None or (type(base) is str and re.fullmatch(r"[a-f0-9]{40}", base) is not None),
+            "PACKET_BASE_COMMIT")
     files = packet.get("files")
     require(type(files) is list and files, "PACKET_FILES")
     paths = []
@@ -116,9 +119,10 @@ def git_blob(root, commit, path):
     return raw
 
 
-def git_changed_paths(root, commit):
-    code, raw = _run_git(["-c", "core.autocrlf=false", "diff-tree",
-                          "--no-commit-id", "--name-only", "-r", commit], root)
+def git_changed_paths(root, commit, base=None):
+    args = ["-c", "core.autocrlf=false", "diff-tree", "--no-commit-id", "--name-only", "-r"]
+    args += [commit] if base is None else [base, commit]
+    code, raw = _run_git(args, root)
     require(code == 0, "GIT_DIFF_TREE_FAILED")
     return [line for line in raw.decode("utf-8").splitlines() if line]
 
@@ -131,11 +135,14 @@ def git_is_ancestor(root, commit, head):
     return code == 0
 
 
-def build_packet(root, commit, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
+def build_packet(root, commit, base=None, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
                  git_changed_fn=git_changed_paths):
     require(type(commit) is str and re.fullmatch(r"[a-f0-9]{40}", commit) is not None,
             "SOURCE_COMMIT_REQUIRED")
-    changed = git_changed_fn(root, commit)
+    if base is not None:
+        require(type(base) is str and re.fullmatch(r"[a-f0-9]{40}", base) is not None,
+                "BASE_COMMIT_REQUIRED")
+    changed = git_changed_fn(root, commit, base)
     require(bool(changed), "SOURCE_COMMIT_HAS_NO_PATHS")
     require(all(_path_allowed(path) for path in changed),
             "PACKET_COVERAGE_OUTSIDE_ALLOWED_PREFIX")
@@ -150,6 +157,8 @@ def build_packet(root, commit, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
                         "git_blob": blob.decode("ascii")})
     entries.sort(key=lambda entry: entry["path"])
     packet = {"schema": SCHEMA, "source_commit": commit, "files": entries}
+    if base is not None:
+        packet["base_commit"] = base
     validate_structure(packet)
     raw = (json.dumps(packet, indent=2, sort_keys=True, ensure_ascii=True) + "\n").encode("utf-8")
     require(b"\r" not in raw, "PACKET_CRLF_REJECTED")
@@ -160,8 +169,11 @@ def verify_packet(root, packet_raw, head, *, git_bytes_fn=git_bytes, git_blob_fn
                   git_changed_fn=git_changed_paths, git_ancestor_fn=git_is_ancestor):
     packet = validate_structure(strict_load(packet_raw))
     commit = packet["source_commit"]
+    base = packet.get("base_commit")
     require(git_ancestor_fn(root, commit, head), "SOURCE_COMMIT_NOT_ANCESTOR_OF_HEAD")
-    changed = git_changed_fn(root, commit)
+    if base is not None:
+        require(git_ancestor_fn(root, base, commit), "BASE_COMMIT_NOT_ANCESTOR_OF_SOURCE")
+    changed = git_changed_fn(root, commit, base)
     require(sorted(changed) == [entry["path"] for entry in packet["files"]],
             "PACKET_COVERAGE_MISMATCH")
     checked = []
@@ -181,6 +193,7 @@ def verify_packet(root, packet_raw, head, *, git_bytes_fn=git_bytes, git_blob_fn
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--build")
+    parser.add_argument("--from")
     parser.add_argument("--output")
     parser.add_argument("--verify")
     parser.add_argument("--head", default="HEAD")
@@ -188,7 +201,7 @@ def main():
     root = Path(__file__).resolve().parents[1]
     if arguments.build:
         require(arguments.output, "OUTPUT_PATH_REQUIRED")
-        packet, raw = build_packet(root, arguments.build)
+        packet, raw = build_packet(root, arguments.build, arguments.__dict__.get("from"))
         output = Path(arguments.output).absolute()
         require(not output.exists(), "PACKET_OUTPUT_MUST_BE_FRESH")
         output.parent.mkdir(parents=True, exist_ok=True)
