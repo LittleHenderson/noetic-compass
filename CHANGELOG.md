@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-07 - Condition-skill v9: automatic test-point layer landed
+
+Per the owner's directive (`TEST_POINT_DESIGN_2026-09-07.md`), Lane D built the
+smallest useful automatic test-point layer: `tools/condition_skill_v9_test_points.py`
+plus 14 pure tests. Three outputs, all read-only and never touching a dataset
+partition: the startup identity report (OK / MISMATCH / MISSING / NOT_REACHED
+per frozen file, with incompleteness never reported as failure), the
+per-transition failure record (on the real saved-repair evidence: C tick 7
+produced L0 vs the fixture's L2, verifier refused, R tick 8 not reached,
+repair open, caller not restored, first observed failed check named), and the
+development scorecard (NO_RUN until a trainer result.json exists; malformed
+input is MALFORMED, never a fake pass). The three committed files the packet
+does not rebind are now pinned by the layer itself. Guarded merged capture:
+**392 passed, 24 subtests passed** (`checks_016`). Ledger unchanged; no
+reservation, no run, no neural work.
+
 ## 2026-09-07 - Condition-skill v9: parallel lanes merged, adapter audited
 
 Parallel-agent lanes (established in `AGENT_LANE_BOARD.md`) completed and were

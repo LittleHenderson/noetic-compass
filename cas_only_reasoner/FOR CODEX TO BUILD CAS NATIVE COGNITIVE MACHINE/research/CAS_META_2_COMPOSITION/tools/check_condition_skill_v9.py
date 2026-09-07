@@ -18,6 +18,7 @@ FILES = ("cas_meta2/condition_skill_v9/__init__.py", "cas_meta2/condition_skill_
     "aws/condition_skill_v9_remote.py", "aws/condition_skill_v9_launch.py",
     "aws/condition_skill_v9_provider.py", "aws/budget.py", "tests/test_budget.py",
     "tools/check_condition_skill_v9_package_reproduction.py",
+    "tools/condition_skill_v9_test_points.py",
     "tests/test_condition_skill_v9_data.py", "tests/test_condition_skill_v9_bundle.py",
     "tests/test_condition_skill_v9_train_boundary.py",
     "tests/test_condition_skill_v9_packet_verifier.py",
@@ -26,6 +27,7 @@ FILES = ("cas_meta2/condition_skill_v9/__init__.py", "cas_meta2/condition_skill_
     "tests/test_condition_skill_v9_remote.py",
     "tests/test_condition_skill_v9_launch.py",
     "tests/test_condition_skill_v9_provider.py",
+    "tests/test_condition_skill_v9_test_points.py",
     "tools/check_condition_skill_v9.py", "tools/verify_condition_skill_v9_publication_packet.py")
 FORBIDDEN = frozenset(("sqlite3", "_sqlite3", "torch", "numpy", "casformer", "cas_cjt",
                        "cas_meta", "boto3", "botocore", "tensorflow", "jax"))
