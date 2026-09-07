@@ -93,6 +93,7 @@ def test_strict_load_rejects_nonfinite_json():
     (lambda p: p["files"][0].update(path="C:\\absolute\\path"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(path="../escape.py"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(path="elsewhere/file.py"), "PACKET_ENTRY_PATH"),
+    (lambda p: p["files"][0].update(path="docs/somewhere.md"), "PACKET_ENTRY_PATH"),
     (lambda p: p["files"][0].update(bytes=0), "PACKET_ENTRY_BYTES"),
     (lambda p: p["files"][0].update(sha256="zz"), "PACKET_ENTRY_SHA256"),
     (lambda p: p["files"][0].update(git_blob="zz"), "PACKET_ENTRY_BLOB"),
@@ -111,6 +112,13 @@ def test_validate_structure_rejects_unsorted_paths(bound):
     candidate["files"] = list(reversed(candidate["files"]))
     with pytest.raises(ValueError, match="PACKET_PATHS_NOT_SORTED"):
         verify.validate_structure(candidate)
+
+
+def test_monorepo_changelog_is_explicitly_allowed(bound):
+    allowed = packet(bound)
+    allowed["files"].append(entry("CHANGELOG.md", b"campaign-log-bytes"))
+    allowed["files"].sort(key=lambda item: item["path"])
+    assert verify.validate_structure(allowed)["source_commit"] == GOOD_COMMIT
 
 
 def test_verify_exact_packet_passes(bound, fake):

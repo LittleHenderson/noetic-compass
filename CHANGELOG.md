@@ -31,12 +31,13 @@ three are corrected in the CNCM worktree on `codex/cas-meta-2-composition`:
 - **Publication packet verifier added.** `tools/verify_condition_skill_v9_publication_packet.py`
   builds and re-verifies the byte-bound packet: strict duplicate-key JSON,
   schema/type/path safety, exact changed-file coverage, source-commit ancestry,
-  and byte-count/SHA-256/Git-blob identity per file. Packet bytes are LF-only.
+  and byte-count/SHA-256/Git-blob identity per file. Packet bytes are LF-only;
+  the monorepo `CHANGELOG.md` is an explicitly allowed bound path.
 - **Dataset re-manifested, partitions unchanged.** All six partition files are
   byte-identical to the revision bound at commit `bc3cdc4b` (manifest
   `edaf3d6b…`); only the embedded builder-source hashes changed (new manifest
   `6b19020c…`).
-- Guarded pure capture: **149 passed** (`records/condition_skill_v9_001/checks_004`).
+- Guarded pure capture: **151 passed** (`records/condition_skill_v9_001/checks_005`).
   No neural, SQLite, or provider work ran; the campaign ledger is unchanged.
 
 No training result, native admission, repair, caller return, reservation, or

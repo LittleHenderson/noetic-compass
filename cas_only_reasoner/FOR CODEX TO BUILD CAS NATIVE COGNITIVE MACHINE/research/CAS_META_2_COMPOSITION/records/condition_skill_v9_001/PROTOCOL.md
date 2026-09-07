@@ -192,12 +192,12 @@ It writes JSON only. The output parent must already exist; existing data is neve
 overwritten. Model and provider imports are unnecessary for this step.
 
 Pure preparation checks:
-`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_004`.
-The guarded capture passed **149 tests**. It also confirmed unchanged tested
+`python -B tools/check_condition_skill_v9.py records/condition_skill_v9_001/checks_005`.
+The guarded capture passed **151 tests**. It also confirmed unchanged tested
 source hashes and an unchanged campaign ledger. These are data, packaging,
 trainer-admission, adjudication and packet-verifier checks, not a neural
-training result. Earlier local captures `checks_001` and `checks_002` are
-preserved and are not deleted; `checks_004` is the receipt bound with this
+training result. Earlier local captures `checks_001` through `checks_004` are
+preserved and are not deleted; `checks_005` is the receipt bound with this
 source state.
 
 ## Publication packet

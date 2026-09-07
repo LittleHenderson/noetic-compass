@@ -26,6 +26,11 @@ import tempfile
 SCHEMA = "cas-meta2-condition-skill-publication-packet/9"
 REPORT_SCHEMA = "cas-meta2-condition-skill-publication-verification/9"
 ALLOWED_PREFIX = "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/"
+EXPLICITLY_ALLOWED_PATHS = ("CHANGELOG.md",)
+
+
+def _path_allowed(path):
+    return path.startswith(ALLOWED_PREFIX) or path in EXPLICITLY_ALLOWED_PATHS
 
 
 def require(condition, code):
@@ -58,7 +63,7 @@ def validate_structure(packet):
         require(type(entry) is dict and set(entry) == {"path", "bytes", "sha256", "git_blob"},
                 "PACKET_ENTRY_FIELDS")
         path = entry["path"]
-        require(type(path) is str and path.startswith(ALLOWED_PREFIX)
+        require(type(path) is str and _path_allowed(path)
                 and not path.startswith("/") and "\\" not in path
                 and path == path.replace("//", "/")
                 and all(part not in ("", ".", "..") for part in path.split("/")),
@@ -132,7 +137,7 @@ def build_packet(root, commit, *, git_bytes_fn=git_bytes, git_blob_fn=git_blob,
             "SOURCE_COMMIT_REQUIRED")
     changed = git_changed_fn(root, commit)
     require(bool(changed), "SOURCE_COMMIT_HAS_NO_PATHS")
-    require(all(path.startswith(ALLOWED_PREFIX) for path in changed),
+    require(all(_path_allowed(path) for path in changed),
             "PACKET_COVERAGE_OUTSIDE_ALLOWED_PREFIX")
     entries = []
     for path in changed:
