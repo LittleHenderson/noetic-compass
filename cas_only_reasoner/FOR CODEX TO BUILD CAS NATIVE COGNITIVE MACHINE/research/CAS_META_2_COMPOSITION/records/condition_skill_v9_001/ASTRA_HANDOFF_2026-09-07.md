@@ -46,7 +46,7 @@ trained > untrained, six evaluation controls at joint accuracy 1.0, exactly
 ## Progress so far (all pure, no neural work, no reservation yet)
 
 1. Dataset, protocol, trainer, and frozen adjudicator are committed, tested
-   (179 guarded pure tests), and published byte-identically.
+   (222 guarded pure tests), and published byte-identically.
 2. Owner approvals are recorded as executable files: adapter build + single
    $4 run pre-authorized; budget scope = $400 campaign ledger; pre-run metric
    amendment (per-bit baseline corrected from 0.25 to 0.50).
@@ -59,9 +59,14 @@ trained > untrained, six evaluation controls at joint accuracy 1.0, exactly
    one trainer run with explicit flags and an independent process-group kill,
    allowlisted result collection with a 32 MiB bound, failure recorded without
    retry) - 11 tests passing.
-   Next: launch lifecycle (inert plan, explicit request/authority, budget
-   lock, provider identity), then one guarded re-capture and packet re-bind,
-   then the independent audit.
+6. Adapter module 4: launch lifecycle (inert plan by default; hash-bound
+   request plus separate standing authority; one-shot $4.00 reservation under
+   the campaign ledger after read-only preflight; provider identity outside
+   the trainer; cleanup on every exit) - 23 tests passing.
+   Guarded re-capture over the whole adapter: 222 passed (checks_011).
+   Remaining before any paid run: the separate AWS provider adapter (real
+   boto3 calls, still absent by design), the independent audit, the source
+   freeze, and the hash-bound request/authority pair.
 
 ## Questions for you (please answer concretely)
 

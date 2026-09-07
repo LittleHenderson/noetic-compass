@@ -38,8 +38,8 @@
     "protocol_sha256": "e17a8ff60603b44b7d5601a5828a1ecbb1500ee7b58b767b98ca7ab643795de8"
   },
   "checks": {
-    "guarded_pure_capture": "records/condition_skill_v9_001/checks_010",
-    "passed": 179,
+    "guarded_pure_capture": "records/condition_skill_v9_001/checks_011",
+    "passed": 222,
     "campaign_ledger_unchanged": true
   },
   "prohibited_after_this_amendment": [

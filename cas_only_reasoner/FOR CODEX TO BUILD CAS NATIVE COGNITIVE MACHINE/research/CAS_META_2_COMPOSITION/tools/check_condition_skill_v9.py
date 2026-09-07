@@ -14,11 +14,15 @@ ROOT = Path(__file__).resolve().parents[1]
 RECORDS = ROOT / "records/condition_skill_v9_001"
 FILES = ("cas_meta2/condition_skill_v9/__init__.py", "cas_meta2/condition_skill_v9/data.py",
     "cas_meta2/condition_skill_v9/bundle.py", "cas_meta2/condition_skill_v9/train.py",
-    "aws/condition_skill_v9_resource_plan.py",
+    "aws/condition_skill_v9_resource_plan.py", "aws/condition_skill_v9_package.py",
+    "aws/condition_skill_v9_remote.py", "aws/condition_skill_v9_launch.py",
     "tests/test_condition_skill_v9_data.py", "tests/test_condition_skill_v9_bundle.py",
     "tests/test_condition_skill_v9_train_boundary.py",
     "tests/test_condition_skill_v9_packet_verifier.py",
     "tests/test_condition_skill_v9_resource_plan.py",
+    "tests/test_condition_skill_v9_package.py",
+    "tests/test_condition_skill_v9_remote.py",
+    "tests/test_condition_skill_v9_launch.py",
     "tools/check_condition_skill_v9.py", "tools/verify_condition_skill_v9_publication_packet.py")
 FORBIDDEN = frozenset(("sqlite3", "_sqlite3", "torch", "numpy", "casformer", "cas_cjt",
                        "cas_meta", "boto3", "botocore", "tensorflow", "jax"))
