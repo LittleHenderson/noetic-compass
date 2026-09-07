@@ -16,6 +16,8 @@ FILES = ("cas_meta2/condition_skill_v9/__init__.py", "cas_meta2/condition_skill_
     "cas_meta2/condition_skill_v9/bundle.py", "cas_meta2/condition_skill_v9/train.py",
     "aws/condition_skill_v9_resource_plan.py", "aws/condition_skill_v9_package.py",
     "aws/condition_skill_v9_remote.py", "aws/condition_skill_v9_launch.py",
+    "aws/budget.py", "tests/test_budget.py",
+    "tools/check_condition_skill_v9_package_reproduction.py",
     "tests/test_condition_skill_v9_data.py", "tests/test_condition_skill_v9_bundle.py",
     "tests/test_condition_skill_v9_train_boundary.py",
     "tests/test_condition_skill_v9_packet_verifier.py",
