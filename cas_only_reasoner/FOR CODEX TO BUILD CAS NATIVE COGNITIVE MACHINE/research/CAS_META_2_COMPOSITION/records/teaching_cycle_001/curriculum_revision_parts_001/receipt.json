@@ -1,0 +1,64 @@
+{
+  "schema": "cas-teaching-curriculum-revision/1",
+  "curriculum_version": "parts_supervised_v1",
+  "status": "DESIGN_ONLY",
+  "no_run_authorized": true,
+  "claim": "no run authorized",
+  "utc_timestamp": "2026-09-08T17:05:56Z",
+  "target_task": "directly supervised parts-and-whole teaching for the input-binding task",
+  "outputs": [
+    "records/teaching_cycle_001/curriculum_revision_parts_001/REVISION.md",
+    "records/teaching_cycle_001/curriculum_revision_parts_001/receipt.json"
+  ],
+  "files_reviewed": [
+    "cas_meta2/teaching_cycle/lesson_contract.py",
+    "cas_meta2/teaching_cycle/guided_application.py",
+    "cas_meta2/teaching_cycle/binding_diagnostic.py",
+    "cas_meta2/teaching_cycle/worker.py",
+    "cas_meta2/teaching_cycle/controller.py",
+    "cas_meta2/teaching_cycle/data.py",
+    "cas_meta2/teaching_cycle/gpu_adapter.py",
+    "cas_meta2/codec.py",
+    "records/teaching_cycle_001/CONTINUATION_002_README.md",
+    "records/teaching_cycle_001/RESULT.md"
+  ],
+  "stage_to_target_mapping": {
+    "name_function": "per-candidate color match (3 binary) + final slot",
+    "context": "per-candidate shape match (3 binary) + final slot",
+    "analogy": "per-candidate both match (3 binary) + final slot",
+    "mapping": "per-candidate color match AND shape match (6 binary) + final slot",
+    "decomposition": "full parts table: color + shape + both match (9 binary) + final slot",
+    "recomposition": "per-candidate both match (3 binary) AND final slot",
+    "reinforcement": "full parts table (9 binary) + final slot, across changed-detail views"
+  },
+  "worked_example": {
+    "request": "green triangle",
+    "choices": [
+      {"slot": 0, "tag": "blue triangle"},
+      {"slot": 1, "tag": "green square"},
+      {"slot": 2, "tag": "green triangle"}
+    ],
+    "color_match": [0, 1, 0],
+    "shape_match": [1, 0, 1],
+    "both_match": [0, 0, 1],
+    "final_slot": 2
+  },
+  "practice_frequency_per_aligned_cycle": {
+    "parts_practice_items": 7,
+    "complete_decision_practice_items": 1,
+    "total_practice_items": 8,
+    "timing": "one parts-practice item after each of the seven stages; one complete-decision item after reinforcement",
+    "identical_assistance_both_families": true
+  },
+  "changed_detail_generators": [
+    "requested_tag_change (binding_diagnostic.py _case_variants)",
+    "slot_permutation (binding_diagnostic.py _case_variants)"
+  ],
+  "boundary": {
+    "negative_results_preserved": true,
+    "no_claim_promotion": true,
+    "generalization_sealed_only": true,
+    "eventual_run_needs_own_authorization_and_reservation": true,
+    "frozen_campaign_unchanged": true
+  }
+}
