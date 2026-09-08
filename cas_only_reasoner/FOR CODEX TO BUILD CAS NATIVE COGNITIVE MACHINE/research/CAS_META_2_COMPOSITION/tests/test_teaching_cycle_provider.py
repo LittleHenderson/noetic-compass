@@ -181,7 +181,8 @@ def setup(tmp_path, monkeypatch):
     provider = subject.TeachingCycleProvider(clients={name: cloud.client(name) for name in ("sts", "s3", "ec2", "iam", "scheduler")},
         source_archive=subject.ROOT / "records/teaching_cycle_001/bundle_002/training.zip", guest_driver=driver,
         pricing_receipt_path=pricing, ledger_path=ledger, clock=lambda: now[0],
-        sleeper=lambda seconds: now.__setitem__(0, now[0] + seconds), budget_module=SimpleNamespace(reserve_budget=reserve), observer=observer)
+        sleeper=lambda seconds: now.__setitem__(0, now[0] + seconds), budget_module=SimpleNamespace(reserve_budget=reserve),
+        observer=observer, monotonic_clock=lambda: now[0])
     return provider, context, cloud, reservations, now
 
 
@@ -370,7 +371,7 @@ def test_terminal_instance_stops_wait_and_preserves_bootstrap_failure(setup):
     cloud.objects["results/bootstrap_failure.log"] = b"simulated setup failure\n"
     with pytest.raises(RuntimeError, match="GUEST_EXIT_WITHOUT_COMPLETE:terminated"):
         provider.wait_training(context, 6300)
-    assert now[0] == 1000.0
+    assert now[0] == 1120.0  # Only the prelaunch IAM settling elapsed; no long dead-guest polling.
     assert (Path(context["receipt_dir"]) / "bootstrap_failure.log").read_bytes() == b"simulated setup failure\n"
     assert "results/bootstrap_failure.log" in cloud.objects
 
@@ -543,3 +544,51 @@ def test_hourly_rate_removes_only_insignificant_trailing_zeroes(raw, expected):
 def test_quote_normalization_never_rounds_or_relaxes_the_ceiling(raw, error):
     with pytest.raises(ValueError, match=error):
         subject.normalize_hourly_rate(raw, "2.52")
+
+
+def test_iam_settling_waits_120_seconds_in_bounded_injected_steps_before_one_launch(setup):
+    provider, context, cloud, _, now = setup
+    sleeps = []
+    def sleep(seconds):
+        assert not any(method == "run_instances" for _, method, _ in cloud.calls)
+        sleeps.append(seconds)
+        now[0] += seconds
+    provider.sleep = sleep
+    start(setup)
+    assert sleeps == [30, 30, 30, 30]
+    receipt = context["launch"]["iam_readback"]
+    assert receipt["settling_elapsed_seconds"] == 120
+    assert receipt["settling_started_unix"] == 1000 and receipt["settling_finished_unix"] == 1120
+    assert receipt["ec2_propagation_proved"] is False
+    run_index = next(index for index, (_, method, _) in enumerate(cloud.calls) if method == "run_instances")
+    preceding = cloud.calls[:run_index]
+    assert sum(method == "get_role" for _, method, _ in preceding) == 4
+    assert sum(method == "get_instance_profile" for _, method, _ in preceding) == 2
+    with pytest.raises(ValueError, match="ONE_RESERVED_LAUNCH_ONLY"):
+        provider.launch(context)
+    assert sum(method == "run_instances" for _, method, _ in cloud.calls) == 1
+
+
+@pytest.mark.parametrize("change", ["profile_arn", "worker_arn", "timer_arn", "attached_role", "deadline"])
+def test_changed_final_iam_identity_or_exhausted_deadline_cannot_reach_run_instances(setup, change):
+    provider, context, cloud, _, now = setup
+    def sleep(seconds):
+        now[0] += seconds
+        if now[0] < 1120:
+            return
+        if change == "profile_arn":
+            cloud.profiles[JOB + "-worker"]["Arn"] = "wrong-profile"
+        elif change in ("worker_arn", "timer_arn"):
+            cloud.roles[JOB + ("-worker" if change == "worker_arn" else "-timer")]["Arn"] = "wrong-role"
+        elif change == "attached_role":
+            cloud.profiles[JOB + "-worker"]["Roles"] = []
+        else:
+            now[0] = context["deadline_unix"]
+    provider.sleep = sleep
+    provider.preflight(context)
+    provider.reserve(context)
+    with pytest.raises(ValueError, match="IAM_SETTLE_(FINAL_IDENTITY|SHARED_DEADLINE)"):
+        provider.launch(context)
+    assert not any(method == "run_instances" for _, method, _ in cloud.calls)
+    with pytest.raises(ValueError, match="ONE_RESERVED_LAUNCH_ONLY"):
+        provider.launch(context)

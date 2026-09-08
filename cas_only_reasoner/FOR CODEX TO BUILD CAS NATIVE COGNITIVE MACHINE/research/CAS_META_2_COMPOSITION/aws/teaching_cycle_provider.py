@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from hashlib import sha256
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -169,11 +170,12 @@ class _CountedClient:
 class TeachingCycleProvider(generic.ConditionSkillV9Provider):
     def __init__(self, *, clients, source_archive, guest_driver, pricing_receipt_path,
                  ledger_path, clock=time.time, sleeper=time.sleep, budget_module=budget,
-                 client_error=None, observer=checks.observe):
+                 client_error=None, observer=checks.observe, monotonic_clock=time.monotonic):
         self.raw_clients = clients
         self.source_archive_path, self.guest_driver_path = source_archive, guest_driver
         self.pricing_receipt_path, self.teaching_ledger_path = pricing_receipt_path, ledger_path
         self.now, self.sleep, self.observer = clock, sleeper, observer
+        self.monotonic = monotonic_clock
         # All AWS errors carry a code; generic helpers rethrow unknown errors.
         # Exception keeps pure imports independent of the lazy botocore SDK.
         self.teaching_budget, self.teaching_error = budget_module, client_error or Exception
@@ -283,6 +285,35 @@ class TeachingCycleProvider(generic.ConditionSkillV9Provider):
             "bindings": context["bindings"], "resource_plan": context["resource_plan"],
             "bucket": self._bucket_name(), "prefix": "",
             "launch_started_unix": int(context["started_unix"]), "deadline_unix": int(context["deadline_unix"])}
+
+    def _wait_for_iam(self, worker, timer, worker_arn, timer_arn, profile_arn):
+        first = super()._wait_for_iam(worker, timer, worker_arn, timer_arn, profile_arn)
+        started, started_unix = self.monotonic(), self.now()
+        require(type(started) in (int, float) and math.isfinite(started), "IAM_SETTLE_CLOCK")
+        deadline = self._context_value["deadline_unix"]
+        self._event("iam_settling", "STARTED", required_seconds=120, first_readback=first,
+                    ec2_propagation_proved=False)
+        while True:
+            elapsed = self.monotonic() - started
+            require(math.isfinite(elapsed) and elapsed >= 0, "IAM_SETTLE_CLOCK")
+            require(self.now() < deadline, "IAM_SETTLE_SHARED_DEADLINE")
+            remaining = 120 - elapsed
+            if remaining <= 0:
+                break
+            require(deadline - self.now() > remaining, "IAM_SETTLE_SHARED_DEADLINE")
+            self.sleep(min(30, remaining))
+        iam = self.clients["iam"]
+        roles = [iam.get_role(RoleName=name)["Role"] for name in (worker, timer)]
+        profile = iam.get_instance_profile(InstanceProfileName=worker)["InstanceProfile"]
+        attached = [role.get("Arn") for role in profile.get("Roles", [])]
+        require([role.get("Arn") for role in roles] == [worker_arn, timer_arn]
+                and profile.get("Arn") == profile_arn and attached == [worker_arn], "IAM_SETTLE_FINAL_IDENTITY")
+        receipt = {**first, "settling_seconds_required": 120, "settling_elapsed_seconds": self.monotonic() - started,
+            "settling_started_unix": started_unix, "settling_finished_unix": self.now(),
+            "final_profile_arn": profile["Arn"], "final_attached_role_arns": attached,
+            "final_role_arns": [role["Arn"] for role in roles], "ec2_propagation_proved": False}
+        self._event("iam_settling", "DELAY_AND_FINAL_READBACK_COMPLETED", receipt=receipt)
+        return receipt
 
     def launch(self, context):
         resource = self._context(context)
