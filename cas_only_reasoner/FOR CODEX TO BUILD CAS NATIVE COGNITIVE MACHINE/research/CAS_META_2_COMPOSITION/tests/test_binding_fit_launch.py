@@ -4,6 +4,7 @@ Fake git objects and fake client stacks only; no AWS, network, tensor, or
 provider work occurs. Ledger files are temporary copies initialized from the
 real predecessor/approval evidence (read-only).
 """
+import io
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -247,6 +248,10 @@ def test_worker_script_text(fake_git):
     assert "results/result.json" in text
     assert "results/result.json.sha256" in text
     assert "put_object" in text
+    # inner runner output is captured so the original error is preserved
+    assert "capture_output=True" in text
+    assert "INNER_RUNNER_EXIT_" in text
+    assert "inner.stderr or inner.stdout" in text
     # no template placeholders
     assert "{job}" not in text
     assert "{bucket}" not in text
@@ -529,3 +534,51 @@ def test_await_instance_profile_times_out(tmp_path):
     with pytest.raises(ValueError, match="BINDING_FIT_IAM_PROFILE_PROPAGATION_TIMEOUT"):
         provider._await_instance_profile(clients["iam"], profile_name, profile_name,
                                          timeout=0.05, settle=0.0, poll_interval=0.01)
+
+
+def test_collect_writes_training_result_names(tmp_path):
+    """collect() must write training_result.json, never result.json: execute()
+    writes its own lifecycle summary to result.json in the same directory."""
+    ledger_path = tmp_path / "ledger.json"
+    clients, _ = fake_clients()
+    raw = b'{"status": "REMOTE_FINISHED"}'
+    sidecar = launch.digest(raw).encode("utf-8") + b"\n"
+    clients["s3"] = SimpleNamespace(get_object=lambda **k: {"Body": io.BytesIO(sidecar)})
+    provider = make_provider(ledger_path, clients)
+    provider._resources["bucket"] = "job-bucket"
+    provider._instance_id = "i-0123456789abcdef0"
+    provider._result_raw = raw
+    (tmp_path / "evidence").mkdir()
+    provider.configure_evidence(tmp_path / "evidence")
+    collected = provider.collect(JOB)
+    assert collected["result_sha256"] == launch.digest(raw)
+    assert (tmp_path / "evidence" / "training_result.json").is_file()
+    assert (tmp_path / "evidence" / "training_result.json.sha256").is_file()
+    assert not (tmp_path / "evidence" / "result.json").exists()
+
+
+def test_await_terminated_waits(tmp_path):
+    ledger_path = tmp_path / "ledger.json"
+    clients, _ = fake_clients()
+    state = {"calls": 0}
+
+    def describe(**kwargs):
+        state["calls"] += 1
+        name = "running" if state["calls"] < 3 else "terminated"
+        return {"Reservations": [{"Instances": [{"State": {"Name": name}}]}]}
+
+    clients["ec2"] = SimpleNamespace(describe_instances=describe)
+    provider = make_provider(ledger_path, clients)
+    pending = provider._await_terminated(clients["ec2"], ["i-0123456789abcdef0"],
+                                         timeout=5.0, poll_interval=0.01)
+    assert pending == []
+    assert state["calls"] == 3
+
+
+def test_await_terminated_treats_absent_as_terminated(tmp_path):
+    ledger_path = tmp_path / "ledger.json"
+    clients, _ = fake_clients()  # describe_instances raises InvalidInstanceID.NotFound
+    provider = make_provider(ledger_path, clients)
+    pending = provider._await_terminated(clients["ec2"], ["i-0123456789abcdef0"],
+                                         timeout=1.0, poll_interval=0.01)
+    assert pending == []

@@ -517,7 +517,12 @@ def render_worker():
         "                     '-r', str(root / REQUIREMENTS)])",
         "        runner = root / '_inner_runner.py'",
         "        runner.write_text(INNER_RUNNER)",
-        "        run_checked([python, '-B', str(runner), str(root)])",
+        "        inner = subprocess.run([python, '-B', str(runner), str(root)],",
+        "                             capture_output=True, text=True,",
+        "                             timeout=MAX_WALL_SECONDS + 1200)",
+        "        if inner.returncode != 0:",
+        "            detail = (inner.stderr or inner.stdout or '')[-1800:]",
+        "            raise SystemExit('INNER_RUNNER_EXIT_' + str(inner.returncode) + '\\n' + detail)",
         "        raw = (results / 'result.json').read_bytes()",
         "        sidecar = (results / 'result.json.sha256').read_text().strip()",
         "        if hashlib.sha256(raw).hexdigest() != sidecar:",
@@ -999,6 +1004,32 @@ class BindingFitProvider:
                     "BINDING_FIT_IAM_PROFILE_PROPAGATION_TIMEOUT")
             time.sleep(poll_interval)
 
+    def _await_terminated(self, ec2, instance_ids, timeout=300.0, poll_interval=5.0):
+        """Wait (bounded) for instance termination before security-group deletion.
+
+        ``delete_security_group`` fails with ``DependencyViolation`` while any
+        instance is still shutting down. Already-absent instances count as
+        terminated; this never raises — the caller records whatever is still
+        pending after the deadline.
+        """
+        pending = list(instance_ids)
+        deadline = time.monotonic() + timeout
+        while pending and time.monotonic() < deadline:
+            for instance_id in list(pending):
+                try:
+                    current = ec2.describe_instances(InstanceIds=[instance_id]
+                                                     )["Reservations"][0]["Instances"][0]
+                    if current.get("State", {}).get("Name") == "terminated":
+                        pending.remove(instance_id)
+                except self._client_error as error:
+                    if self._error_code(error) == "InvalidInstanceID.NotFound":
+                        pending.remove(instance_id)
+                except Exception:
+                    pass
+            if pending:
+                time.sleep(poll_interval)
+        return pending
+
     def launch(self, job, permit):
         self.calls.append("launch")
         require(job == self.job, "BINDING_FIT_LAUNCH_JOB_MISMATCH")
@@ -1157,8 +1188,11 @@ class BindingFitProvider:
         sidecar = self._read_body(response["Body"], 4096).strip()
         require(sidecar.decode("utf-8", "replace") == digest(self._result_raw),
                 "BINDING_FIT_RESULT_SHA_MISMATCH")
-        result_path = write_evidence(self._evidence / "result.json", self._result_raw)
-        sidecar_path = write_evidence(self._evidence / "result.json.sha256", sidecar)
+        # Named training_result.json deliberately: execute() writes its own
+        # lifecycle summary to result.json in the same evidence directory, and
+        # the two must never collide (attempt 003 crashed exactly there).
+        result_path = write_evidence(self._evidence / "training_result.json", self._result_raw)
+        sidecar_path = write_evidence(self._evidence / "training_result.json.sha256", sidecar)
         return {"result": result_path, "sha256": sidecar_path,
                 "result_sha256": digest(self._result_raw)}
 
@@ -1193,7 +1227,13 @@ class BindingFitProvider:
                 failed("INSTANCE_TERMINATION_FAILED", error)
                 status["instances"][instance_id] = "UNKNOWN"
 
-        # security group deletion (already-absent tolerated)
+        # security group deletion (already-absent tolerated). Deleting a group
+        # still referenced by a shutting-down instance fails with
+        # DependencyViolation, so wait (bounded) for termination first.
+        remaining = self._await_terminated(ec2, [
+            instance_id for instance_id in self._instance_ids
+            if status["instances"].get(instance_id) != "CONFIRMED_ABSENT"])
+        status["instances_termination_pending"] = remaining
         try:
             groups = ec2.describe_security_groups(Filters=[{"Name": "group-name",
                                                             "Values": [self.job]}])

@@ -163,7 +163,7 @@ import, or output mutation.
 
 ## Tests
 
-`tests/test_binding_fit_launch.py` — 40 pure tests with fake client stacks and
+`tests/test_binding_fit_launch.py` — 43 pure tests with fake client stacks and
 fake git objects: plan-only inertness, request/authority validation (including
 the frozen-budget match), package build + zip readback + `launch_enabled:false`,
 worker-script text, budget single-reservation refusal, cleanup already-absent
@@ -173,8 +173,11 @@ tolerance, security-group deletion, cleanup detach ordering
 verification wait (`test_await_instance_profile_waits_until_role_visible`,
 `test_await_instance_profile_times_out`), the explicit owner-record binding
 (`test_execute_binds_provided_owner_record`,
-`test_execute_owner_record_mismatch_raises`), and evidence persistence on
-cleanup failure. No real tensor or provider library is imported.
+`test_execute_owner_record_mismatch_raises`), the collected-result naming
+(`test_collect_writes_training_result_names`), the bounded termination wait
+(`test_await_terminated_waits`, `test_await_terminated_treats_absent_as_terminated`),
+and evidence persistence on cleanup failure. No real tensor or provider
+library is imported.
 
 ## Attempt log
 
@@ -182,4 +185,4 @@ cleanup failure. No real tensor or provider library is imported.
 |---|---|---|
 | 001 | `cas-meta2-teaching-binding-20260908120635-035f9ac7` | REFUSED_AT_PREFLIGHT, `$0.00` spent — `AccessDeniedException` on `pricing.get_products` issued from `us-west-2`. See `PREFLIGHT_REFUSAL_ATTEMPT_001.md`. |
 | 002 | `cas-meta2-teaching-binding-20260908191109-dcf939ab` | AWS_BINDING_FIT_FAILED — preflight and the `$4.00` reservation succeeded, then `RunInstances` refused the just-created instance-profile ARN (IAM eventual consistency; no verification wait existed) and cleanup hit `DeleteConflict` on the role/profile. Adapter fixed (bounded verified wait before the single launch attempt; cleanup detach + inline-policy removal). IAM leftovers remediated and verified absent. See `ATTEMPT_002_LAUNCH_FAILURE.md`. |
-| 003 | `cas-meta2-teaching-binding-20260908203112-fb18899f` | owner-authorized new job (`OWNER_AUTHORIZATION_003.json`, bound request sha `4cf78769…`); inputs registered in `launch_inputs_003/` (same frozen package identities as attempts 001/002; corrected launcher). |
+| 003 | `cas-meta2-teaching-binding-20260908203112-fb18899f` | AWS_BINDING_FIT_FAILED — launch + bootstrap succeeded, then the worker's inner runner (`mode.launch`) exited 1 and the original inner error was not preserved (worker ran it with inherited output; the bootstrap log died with the instance). Lifecycle write then collided with the collected result name. Fixed: worker captures inner stdout/stderr into the failure report; `collect()` writes `training_result.json`; cleanup waits for termination before SG deletion. Leftover SG remediated and verified absent. See `ATTEMPT_003_RECOVERY.md`. |
