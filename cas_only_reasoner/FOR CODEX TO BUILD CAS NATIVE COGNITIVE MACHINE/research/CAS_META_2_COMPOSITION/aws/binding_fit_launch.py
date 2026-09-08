@@ -977,6 +977,28 @@ class BindingFitProvider:
         require(subnets, "BINDING_FIT_DEFAULT_SUBNET_REQUIRED")
         return vpc_id, subnets[0]["SubnetId"]
 
+    def _await_instance_profile(self, iam, profile_name, role_name, *,
+                                timeout=120.0, settle=15.0, poll_interval=2.0):
+        """Wait (bounded, verified) until IAM reports the role attached.
+
+        IAM is eventually consistent: EC2 ``RunInstances`` rejects the ARN of a
+        just-created instance profile with ``InvalidParameterValue``. This is a
+        verification wait before the single launch attempt, never a retry of
+        ``RunInstances`` itself. Each poll is recorded as provider evidence.
+        """
+        deadline = time.monotonic() + timeout
+        while True:
+            observed = self._effect("verify_instance_profile", iam.get_instance_profile,
+                                    InstanceProfileName=profile_name)
+            roles = [item.get("RoleName") for item in
+                     observed.get("InstanceProfile", {}).get("Roles", [])]
+            if role_name in roles:
+                time.sleep(settle)
+                return observed
+            require(time.monotonic() < deadline,
+                    "BINDING_FIT_IAM_PROFILE_PROPAGATION_TIMEOUT")
+            time.sleep(poll_interval)
+
     def launch(self, job, permit):
         self.calls.append("launch")
         require(job == self.job, "BINDING_FIT_LAUNCH_JOB_MISMATCH")
@@ -1027,6 +1049,10 @@ class BindingFitProvider:
                 + ":instance-profile/" + worker_role, "BINDING_FIT_PROFILE_ARN")
         self._effect("add_role_to_instance_profile", iam.add_role_to_instance_profile,
                      InstanceProfileName=worker_role, RoleName=worker_role)
+        # IAM is eventually consistent; EC2 RunInstances rejects the ARN of a
+        # profile created moments ago. Verify propagation once, bounded, before
+        # the single launch attempt (attempt 002 failed exactly here).
+        self._await_instance_profile(iam, worker_role, worker_role)
 
         _, subnet_id = self._default_network(ec2)
         group = self._effect("create_security_group", ec2.create_security_group, GroupName=self.job,
@@ -1194,8 +1220,29 @@ class BindingFitProvider:
             failed("SCHEDULE_REMOVAL_FAILED", error)
             status["schedule_removed"] = False
 
-        # roles + instance profile removal (already-absent tolerated)
+        # roles + instance profile removal (already-absent tolerated). Order
+        # matters: detach the role from the profile and drop the inline policy
+        # before either delete, or IAM answers DeleteConflict.
         profile_name = self.job + "-worker"
+        try:
+            iam.remove_role_from_instance_profile(InstanceProfileName=profile_name,
+                                                  RoleName=profile_name)
+        except self._client_error as error:
+            if self._error_code(error) != "NoSuchEntity":
+                failed("ROLE_DETACH_FAILED", error)
+                status["roles_removed"] = False
+        except Exception as error:
+            failed("ROLE_DETACH_FAILED", error)
+            status["roles_removed"] = False
+        try:
+            iam.delete_role_policy(RoleName=profile_name, PolicyName="job-only")
+        except self._client_error as error:
+            if self._error_code(error) != "NoSuchEntity":
+                failed("ROLE_POLICY_REMOVAL_FAILED", error)
+                status["roles_removed"] = False
+        except Exception as error:
+            failed("ROLE_POLICY_REMOVAL_FAILED", error)
+            status["roles_removed"] = False
         for role_name in (profile_name, self.job + "-timer"):
             try:
                 iam.get_role(RoleName=role_name)

@@ -384,7 +384,9 @@ def fake_clients(sg_groups=()):
     )
     scheduler = SimpleNamespace(get_schedule=raiser("ResourceNotFoundException"))
     iam = SimpleNamespace(get_role=raiser("NoSuchEntity"),
-                          get_instance_profile=raiser("NoSuchEntity"))
+                          get_instance_profile=raiser("NoSuchEntity"),
+                          remove_role_from_instance_profile=raiser("NoSuchEntity"),
+                          delete_role_policy=raiser("NoSuchEntity"))
     s3 = SimpleNamespace(list_objects_v2=raiser("NoSuchBucket"))
     clients = {"ec2": ec2, "s3": s3, "iam": iam, "scheduler": scheduler}
     return clients, deleted_groups
@@ -436,3 +438,69 @@ def test_cleanup_records_failure_instead_of_raising(tmp_path):
     assert status["complete"] is False
     assert status["bucket_deleted"] is False
     assert any("EVIDENCE_CLEANUP_FAILED" in failure for failure in status["failures"])
+
+
+def test_cleanup_detaches_role_before_deleting(tmp_path):
+    """IAM answers DeleteConflict unless the role is detached first, so
+    cleanup must order remove_role_from_instance_profile and delete_role_policy
+    ahead of delete_role/delete_instance_profile."""
+    ledger_path = tmp_path / "ledger.json"
+    calls = []
+    clients, _ = fake_clients()
+
+    def present(**kwargs):
+        return {}
+
+    def record(op):
+        def _record(**kwargs):
+            calls.append((op, kwargs))
+        return _record
+
+    clients["iam"] = SimpleNamespace(
+        get_role=present, get_instance_profile=present,
+        remove_role_from_instance_profile=record("remove_role_from_instance_profile"),
+        delete_role_policy=record("delete_role_policy"),
+        delete_role=record("delete_role"), delete_instance_profile=record("delete_instance_profile"))
+    provider = make_provider(ledger_path, clients)
+    provider._resources["bucket"] = "job-bucket"
+    status = provider.cleanup(JOB)
+    assert [call[0] for call in calls] == [
+        "remove_role_from_instance_profile", "delete_role_policy",
+        "delete_role", "delete_role", "delete_instance_profile"]
+    assert status["complete"] is True
+    assert status["roles_removed"] is True
+
+
+def test_await_instance_profile_waits_until_role_visible(tmp_path):
+    ledger_path = tmp_path / "ledger.json"
+    clients, _ = fake_clients()
+    profile_name = JOB + "-worker"
+    state = {"calls": 0}
+
+    def get_instance_profile(**kwargs):
+        state["calls"] += 1
+        roles = [{"RoleName": profile_name}] if state["calls"] >= 3 else []
+        return {"InstanceProfile": {"Roles": roles}}
+
+    clients["iam"] = SimpleNamespace(get_instance_profile=get_instance_profile)
+    provider = make_provider(ledger_path, clients)
+    (tmp_path / "evidence").mkdir()
+    provider.configure_evidence(tmp_path / "evidence")
+    observed = provider._await_instance_profile(clients["iam"], profile_name, profile_name,
+                                                timeout=5.0, settle=0.0, poll_interval=0.01)
+    assert observed["InstanceProfile"]["Roles"][0]["RoleName"] == profile_name
+    assert state["calls"] == 3
+
+
+def test_await_instance_profile_times_out(tmp_path):
+    ledger_path = tmp_path / "ledger.json"
+    clients, _ = fake_clients()
+    profile_name = JOB + "-worker"
+    clients["iam"] = SimpleNamespace(
+        get_instance_profile=lambda **kwargs: {"InstanceProfile": {"Roles": []}})
+    provider = make_provider(ledger_path, clients)
+    (tmp_path / "evidence").mkdir()
+    provider.configure_evidence(tmp_path / "evidence")
+    with pytest.raises(ValueError, match="BINDING_FIT_IAM_PROFILE_PROPAGATION_TIMEOUT"):
+        provider._await_instance_profile(clients["iam"], profile_name, profile_name,
+                                         timeout=0.05, settle=0.0, poll_interval=0.01)

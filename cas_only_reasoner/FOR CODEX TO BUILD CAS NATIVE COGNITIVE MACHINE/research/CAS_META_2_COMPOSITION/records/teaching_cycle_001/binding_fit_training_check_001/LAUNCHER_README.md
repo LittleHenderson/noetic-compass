@@ -163,17 +163,20 @@ import, or output mutation.
 
 ## Tests
 
-`tests/test_binding_fit_launch.py` — 35 pure tests with fake client stacks and
+`tests/test_binding_fit_launch.py` — 38 pure tests with fake client stacks and
 fake git objects: plan-only inertness, request/authority validation (including
 the frozen-budget match), package build + zip readback + `launch_enabled:false`,
 worker-script text, budget single-reservation refusal, cleanup already-absent
-tolerance and security-group deletion, the pricing-client region check
-(`test_build_prices_client_from_us_east_1`), and evidence persistence on
-cleanup failure. No real tensor or provider library is imported.
+tolerance, security-group deletion, cleanup detach ordering
+(`test_cleanup_detaches_role_before_deleting`), the pricing-client region check
+(`test_build_prices_client_from_us_east_1`), the bounded IAM profile
+verification wait (`test_await_instance_profile_waits_until_role_visible`,
+`test_await_instance_profile_times_out`), and evidence persistence on cleanup
+failure. No real tensor or provider library is imported.
 
 ## Attempt log
 
 | Attempt | Job | Outcome |
 |---|---|---|
 | 001 | `cas-meta2-teaching-binding-20260908120635-035f9ac7` | REFUSED_AT_PREFLIGHT, `$0.00` spent — `AccessDeniedException` on `pricing.get_products` issued from `us-west-2`. See `PREFLIGHT_REFUSAL_ATTEMPT_001.md`. |
-| 002 | `cas-meta2-teaching-binding-20260908191109-dcf939ab` | inputs registered in `launch_inputs_002/` (same `source_sha`/`archive_sha256`/`manifest_sha256` as attempt 001; pricing client now built in `us-east-1`). |
+| 002 | `cas-meta2-teaching-binding-20260908191109-dcf939ab` | AWS_BINDING_FIT_FAILED — preflight and the `$4.00` reservation succeeded, then `RunInstances` refused the just-created instance-profile ARN (IAM eventual consistency; no verification wait existed) and cleanup hit `DeleteConflict` on the role/profile. Adapter fixed (bounded verified wait before the single launch attempt; cleanup detach + inline-policy removal). IAM leftovers remediated and verified absent. See `ATTEMPT_002_LAUNCH_FAILURE.md`. |
