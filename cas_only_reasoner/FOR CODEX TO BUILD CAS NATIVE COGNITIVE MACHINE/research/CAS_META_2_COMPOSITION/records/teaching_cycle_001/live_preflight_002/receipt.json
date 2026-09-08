@@ -1,0 +1,489 @@
+{
+  "account_id": "807562639912",
+  "ami": "ami-0fbbd0facbc9e3cff",
+  "capacity_guaranteed": false,
+  "command": [
+    "C:\\Python314\\python.exe",
+    "aws/teaching_cycle_preflight.py",
+    "--output",
+    "records/teaching_cycle_001/live_preflight_002"
+  ],
+  "conflicting_resources": [],
+  "cost_worksheet": {
+    "conditions": [
+      "At most 7200 instance seconds and one public IPv4 address.",
+      "75 GiB gp3 at included 3000 IOPS / 125 MiB/s, deleted with instance.",
+      "At most 2048 shared S3 calls; no workload or download retries.",
+      "One <=2.5GiB result archive plus bounded control files, <3GB total stored/outbound.",
+      "Same-region S3 traffic; no NAT gateway, snapshots or extra volumes.",
+      "Seven-day S3 expiration policy, conservatively costed for one full month.",
+      "Actual fees, taxes, service failures and timing must be reconciled afterward."
+    ],
+    "cost_components_usd": {
+      "compute_7200_seconds": "5.0400000000",
+      "ebs_75_gib_7200_seconds": "0.01785714285714285714285714286",
+      "internet_egress_3gb": "0.2700000000",
+      "one_ipv4_7200_seconds": "0.0100000000",
+      "other_allowance": "1.00",
+      "s3_2048_calls_highest_tier": "0.0102400000",
+      "s3_3gb_full_month_conservative": "0.0690000000"
+    },
+    "estimated_bound_usd": "6.417097142857142857142857143",
+    "free_tier_or_credit_assumed": false,
+    "is_invoice": false,
+    "rates_usd": {
+      "compute": "2.5200000000",
+      "ebs": "0.0800000000",
+      "egress": "0.0900000000",
+      "ipv4": "0.0050000000",
+      "s3_get": "4.000E-7",
+      "s3_put": "0.0000050000",
+      "s3_storage": "0.0230000000"
+    },
+    "remaining_buffer_usd": "1.582902857142857142857142857",
+    "reservation_usd": "8.00"
+  },
+  "gpu_name": "RTX PRO 4500",
+  "iam_propagation_proved": false,
+  "instance_type": "g7.2xlarge",
+  "observations": {
+    "active_observation_request_id": "24624cdc-3dda-4f9f-b538-e2be38dd30ea",
+    "identity_request_id": "21115c6d-da1e-489b-a39d-ddcd4aa9e5be",
+    "image": {
+      "Images": [
+        {
+          "Architecture": "x86_64",
+          "BlockDeviceMappings": [
+            {
+              "DeviceName": "/dev/sda1",
+              "Ebs": {
+                "DeleteOnTermination": true,
+                "Encrypted": false,
+                "Iops": 3000,
+                "SnapshotId": "snap-0f7c1eb40403fe3fc",
+                "Throughput": 125,
+                "VolumeSize": 75,
+                "VolumeType": "gp3"
+              }
+            },
+            {
+              "DeviceName": "/dev/sdb",
+              "VirtualName": "ephemeral0"
+            },
+            {
+              "DeviceName": "/dev/sdc",
+              "VirtualName": "ephemeral1"
+            }
+          ],
+          "BootMode": "uefi-preferred",
+          "CreationDate": "2026-08-21T14:48:09.000Z",
+          "DeprecationTime": "2028-08-21T14:48:09.000Z",
+          "Description": "Supported EC2 instances: G4dn, G5, G6, Gr6, G6e, G7, G7e, P4d, P4de, P5, P5e, P5en, P6-B200, P6-B300. Release notes: https://aws.amazon.com/releasenotes/aws-deep-learning-base-gpu-ami-ubuntu-24-04/",
+          "EnaSupport": true,
+          "FreeTierEligible": true,
+          "Hypervisor": "xen",
+          "ImageId": "ami-0fbbd0facbc9e3cff",
+          "ImageLocation": "amazon/Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+          "ImageOwnerAlias": "amazon",
+          "ImageType": "machine",
+          "ImdsSupport": "v2.0",
+          "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+          "OwnerId": "898082745236",
+          "PlatformDetails": "Linux/UNIX",
+          "Public": true,
+          "RootDeviceName": "/dev/sda1",
+          "RootDeviceType": "ebs",
+          "SourceImageId": "ami-072c9da68195bbe78",
+          "SourceImageRegion": "us-east-1",
+          "SriovNetSupport": "simple",
+          "State": "available",
+          "UsageOperation": "RunInstances",
+          "VirtualizationType": "hvm"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-length": "2005",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Tue, 08 Sep 2026 05:16:00 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "x-amzn-requestid": "b19785f4-a33b-4d64-bee1-d70aafc5031f"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "b19785f4-a33b-4d64-bee1-d70aafc5031f",
+        "RetryAttempts": 0
+      }
+    },
+    "instance_type": {
+      "InstanceTypes": [
+        {
+          "AutoRecoverySupported": false,
+          "BareMetal": false,
+          "BurstablePerformanceSupported": false,
+          "CurrentGeneration": true,
+          "DedicatedHostsSupported": false,
+          "EbsInfo": {
+            "AttachmentLimitType": "dedicated",
+            "EbsOptimizedInfo": {
+              "BaselineBandwidthInMbps": 4000,
+              "BaselineIops": 16000,
+              "BaselineThroughputInMBps": 500.0,
+              "MaximumBandwidthInMbps": 8000,
+              "MaximumIops": 32000,
+              "MaximumThroughputInMBps": 1000.0
+            },
+            "EbsOptimizedSupport": "default",
+            "EncryptionSupport": "supported",
+            "MaximumEbsAttachments": 32,
+            "NvmeSupport": "required"
+          },
+          "FreeTierEligible": false,
+          "GpuInfo": {
+            "Gpus": [
+              {
+                "Count": 1,
+                "GpuPartitionSize": 1.0,
+                "LogicalGpuCount": 1,
+                "Manufacturer": "NVIDIA",
+                "MemoryInfo": {
+                  "SizeInMiB": 32768
+                },
+                "Name": "RTX PRO 4500",
+                "Workloads": [
+                  "graphics",
+                  "ml-ai"
+                ]
+              }
+            ],
+            "TotalGpuMemoryInMiB": 32768
+          },
+          "HibernationSupported": false,
+          "Hypervisor": "nitro",
+          "InstanceStorageInfo": {
+            "Disks": [
+              {
+                "Count": 1,
+                "SizeInGB": 440,
+                "Type": "ssd"
+              }
+            ],
+            "EncryptionSupport": "required",
+            "NvmeSupport": "required",
+            "TotalSizeInGB": 440
+          },
+          "InstanceStorageSupported": true,
+          "InstanceType": "g7.2xlarge",
+          "MemoryInfo": {
+            "SizeInMiB": 32768
+          },
+          "NetworkInfo": {
+            "ConnectionTrackingConfiguration": {
+              "DefaultTcpEstablishedTimeout": 350,
+              "DefaultUdpStreamTimeout": 180,
+              "DefaultUdpTimeout": 30
+            },
+            "DefaultNetworkCardIndex": 0,
+            "EfaSupported": false,
+            "EnaSrdSupported": false,
+            "EnaSupport": "required",
+            "EncryptionInTransitSupported": true,
+            "FlexibleEnaQueuesSupport": "supported",
+            "Ipv4AddressesPerInterface": 64,
+            "Ipv4AddressesPerSecondaryInterface": 0,
+            "Ipv6AddressesPerInterface": 64,
+            "Ipv6Supported": true,
+            "MaximumNetworkCards": 1,
+            "MaximumNetworkInterfaces": 4,
+            "NetworkCards": [
+              {
+                "AdditionalFlexibleNetworkInterfaces": 0,
+                "BaselineBandwidthInGbps": 40.0,
+                "DefaultEnaQueueCountPerInterface": 8,
+                "MaximumEnaQueueCount": 32,
+                "MaximumEnaQueueCountPerInterface": 8,
+                "MaximumNetworkInterfaces": 4,
+                "NetworkCardIndex": 0,
+                "NetworkPerformance": "Up to 60 Gigabit",
+                "PeakBandwidthInGbps": 60.0
+              }
+            ],
+            "NetworkPerformance": "Up to 60 Gigabit",
+            "SecondaryNetworkSupported": false
+          },
+          "NitroEnclavesSupport": "supported",
+          "NitroTpmInfo": {
+            "SupportedVersions": [
+              "2.0"
+            ]
+          },
+          "NitroTpmSupport": "supported",
+          "PhcSupport": "unsupported",
+          "PlacementGroupInfo": {
+            "SupportedStrategies": [
+              "cluster",
+              "partition",
+              "spread"
+            ]
+          },
+          "ProcessorInfo": {
+            "Manufacturer": "Intel",
+            "SupportedArchitectures": [
+              "x86_64"
+            ],
+            "SustainedClockSpeedInGhz": 3.9
+          },
+          "RebootMigrationSupport": "unsupported",
+          "SupportedBootModes": [
+            "legacy-bios",
+            "uefi"
+          ],
+          "SupportedInRegion": true,
+          "SupportedRootDeviceTypes": [
+            "ebs"
+          ],
+          "SupportedUsageClasses": [
+            "on-demand",
+            "spot"
+          ],
+          "SupportedVirtualizationTypes": [
+            "hvm"
+          ],
+          "VCpuInfo": {
+            "DefaultCores": 8,
+            "DefaultThreadsPerCore": 1,
+            "DefaultVCpus": 8,
+            "ValidCores": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "ValidThreadsPerCore": [
+              1
+            ]
+          }
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Tue, 08 Sep 2026 05:16:00 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-amzn-requestid": "45d6d6ae-43ad-4e0c-942a-832e3d88fae8"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "45d6d6ae-43ad-4e0c-942a-832e3d88fae8",
+        "RetryAttempts": 0
+      }
+    },
+    "offerings": {
+      "InstanceTypeOfferings": [
+        {
+          "InstanceType": "g7.2xlarge",
+          "Location": "us-west-2",
+          "LocationType": "region"
+        }
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "cache-control": "no-cache, no-store",
+          "content-type": "text/xml;charset=UTF-8",
+          "date": "Tue, 08 Sep 2026 05:16:01 GMT",
+          "server": "AmazonEC2",
+          "strict-transport-security": "max-age=31536000; includeSubDomains",
+          "transfer-encoding": "chunked",
+          "vary": "accept-encoding",
+          "x-amzn-requestid": "e7d04393-3442-40bf-ae7d-342a652730f6"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "e7d04393-3442-40bf-ae7d-342a652730f6",
+        "RetryAttempts": 0
+      }
+    },
+    "quota": {
+      "Quota": {
+        "Adjustable": true,
+        "Description": "Maximum number of vCPUs assigned to the Running On-Demand G and VT instances.",
+        "GlobalQuota": false,
+        "QuotaAppliedAtLevel": "ACCOUNT",
+        "QuotaArn": "arn:aws:servicequotas:us-west-2:807562639912:ec2/L-DB2E81BA",
+        "QuotaCode": "L-DB2E81BA",
+        "QuotaName": "Running On-Demand G and VT instances",
+        "ServiceCode": "ec2",
+        "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+        "Unit": "None",
+        "UsageMetric": {
+          "MetricDimensions": {
+            "Class": "G/OnDemand",
+            "Resource": "vCPU",
+            "Service": "EC2",
+            "Type": "Resource"
+          },
+          "MetricName": "ResourceCount",
+          "MetricNamespace": "AWS/Usage",
+          "MetricStatisticRecommendation": "Maximum"
+        },
+        "Value": 8.0
+      },
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "639",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:01 GMT",
+          "x-amzn-requestid": "315cee06-3726-44e0-9d71-6c856a43a6c5"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "315cee06-3726-44e0-9d71-6c856a43a6c5",
+        "RetryAttempts": 0
+      }
+    }
+  },
+  "observed_utc": "2026-09-08T05:16:03.118352+00:00",
+  "raw_prices": {
+    "compute": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"Compute Instance\",\"attributes\":{\"enhancedNetworkingSupported\":\"Yes\",\"intelTurboAvailable\":\"Yes\",\"memory\":\"32.0 GiB\",\"dedicatedEbsThroughput\":\"Up to 8000 Mbps\",\"vcpu\":\"8\",\"classicnetworkingsupport\":\"false\",\"capacitystatus\":\"Used\",\"locationType\":\"AWS Region\",\"storage\":\"1x440 GB NVMe SSD\",\"instanceFamily\":\"GPU instance\",\"operatingSystem\":\"Linux\",\"intelAvx2Available\":\"Yes\",\"instanceFamilyCategory\":\"Accelerated Computing\",\"regionCode\":\"us-west-2\",\"physicalProcessor\":\"Intel Xeon Scalable (Granite Rapids)\",\"clockSpeed\":\"3.9 GHz\",\"ecu\":\"NA\",\"networkPerformance\":\"Up to 60 Gigabit\",\"servicename\":\"Amazon Elastic Compute Cloud\",\"gpuMemory\":\"32 GB\",\"dedicatedEbsThroughputDescription\":\"4000 Mbps\",\"vpcnetworkingsupport\":\"true\",\"instanceType\":\"g7.2xlarge\",\"tenancy\":\"Shared\",\"usagetype\":\"USW2-BoxUsage:g7.2xlarge\",\"normalizationSizeFactor\":\"1\",\"gpu\":\"1\",\"intelAvxAvailable\":\"Yes\",\"processorFeatures\":\"Intel AMX; Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo\",\"servicecode\":\"AmazonEC2\",\"licenseModel\":\"No License required\",\"currentGeneration\":\"Yes\",\"preInstalledSw\":\"NA\",\"location\":\"US West (Oregon)\",\"processorArchitecture\":\"64-bit\",\"marketoption\":\"OnDemand\",\"operation\":\"RunInstances\",\"availabilityzone\":\"NA\"},\"sku\":\"DA5FVRBHTKBSVJWJ\"},\"serviceCode\":\"AmazonEC2\",\"terms\":{\"OnDemand\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF\":{\"priceDimensions\":{\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$2.52 per On Demand Linux g7.2xlarge Instance Hour\",\"appliesTo\":[],\"rateCode\":\"DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"2.5200000000\"}}},\"sku\":\"DA5FVRBHTKBSVJWJ\",\"effectiveDate\":\"2026-09-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260904231117\",\"publicationDate\":\"2026-09-04T23:11:17Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "2078",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "dace426a-4868-40bc-ada8-2a82f02cb0a1"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "dace426a-4868-40bc-ada8-2a82f02cb0a1",
+        "RetryAttempts": 0
+      }
+    },
+    "ebs": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"maxThroughputvolume\":\"2000 MiB/s\",\"volumeType\":\"General Purpose\",\"maxIopsvolume\":\"80000\",\"usagetype\":\"USW2-EBS:VolumeUsage.gp3\",\"locationType\":\"AWS Region\",\"maxVolumeSize\":\"64 TiB\",\"storageMedia\":\"SSD-backed\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonEC2\",\"volumeApiName\":\"gp3\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Elastic Compute Cloud\",\"operation\":\"\"},\"sku\":\"BB8UJWJ4XPFJB95G\"},\"serviceCode\":\"AmazonEC2\",\"terms\":{\"OnDemand\":{\"BB8UJWJ4XPFJB95G.JRTCKXETXF\":{\"priceDimensions\":{\"BB8UJWJ4XPFJB95G.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.08 per GB-month of General Purpose (gp3) provisioned storage - US West (Oregon)\",\"appliesTo\":[],\"rateCode\":\"BB8UJWJ4XPFJB95G.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0800000000\"}}},\"sku\":\"BB8UJWJ4XPFJB95G\",\"effectiveDate\":\"2026-09-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260904231117\",\"publicationDate\":\"2026-09-04T23:11:17Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "1201",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "35a2138f-df1d-4048-affd-041320ae775b"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "35a2138f-df1d-4048-affd-041320ae775b",
+        "RetryAttempts": 0
+      }
+    },
+    "egress": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"Data Transfer\",\"attributes\":{\"fromLocationType\":\"AWS Region\",\"toRegionCode\":\"\",\"servicecode\":\"AWSDataTransfer\",\"usagetype\":\"USW2-DataTransfer-Out-Bytes\",\"fromRegionCode\":\"us-west-2\",\"transferType\":\"AWS Outbound\",\"servicename\":\"AWS Data Transfer\",\"fromLocation\":\"US West (Oregon)\",\"toLocationType\":\"Other\",\"toLocation\":\"External\",\"operation\":\"\"},\"sku\":\"5M4327XEUKBBTWAT\"},\"serviceCode\":\"AWSDataTransfer\",\"terms\":{\"OnDemand\":{\"5M4327XEUKBBTWAT.JRTCKXETXF\":{\"priceDimensions\":{\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\":{\"unit\":\"GB\",\"endRange\":\"Inf\",\"description\":\"$0.050 per GB - greater than 150 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.GPHXDESFBB\",\"beginRange\":\"153600\",\"pricePerUnit\":{\"USD\":\"0.0500000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\":{\"unit\":\"GB\",\"endRange\":\"51200\",\"description\":\"$0.085 per GB - next 40 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.VF6T3GAUKQ\",\"beginRange\":\"10240\",\"pricePerUnit\":{\"USD\":\"0.0850000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\":{\"unit\":\"GB\",\"endRange\":\"10240\",\"description\":\"$0.090 per GB - first 10 TB / month data transfer out beyond the global free tier\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.Q3Z75P77EN\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0900000000\"}},\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\":{\"unit\":\"GB\",\"endRange\":\"153600\",\"description\":\"$0.070 per GB - next 100 TB / month data transfer out\",\"appliesTo\":[],\"rateCode\":\"5M4327XEUKBBTWAT.JRTCKXETXF.N9EW5UVVPA\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0700000000\"}}},\"sku\":\"5M4327XEUKBBTWAT\",\"effectiveDate\":\"2026-06-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831121448\",\"publicationDate\":\"2026-08-31T12:14:48Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "2052",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:03 GMT",
+          "x-amzn-requestid": "d288e524-a964-432b-8e01-7512a0b6cec1"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "d288e524-a964-432b-8e01-7512a0b6cec1",
+        "RetryAttempts": 0
+      }
+    },
+    "ipv4": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonVPC\",\"groupDescription\":\"Hourly charge for In-use Public IPv4 Addresses\",\"usagetype\":\"USW2-PublicIPv4:InUseAddress\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Virtual Private Cloud\",\"operation\":\"\",\"group\":\"VPCPublicIPv4Address\"},\"sku\":\"NBHXEKTE88TJDDQF\"},\"serviceCode\":\"AmazonVPC\",\"terms\":{\"OnDemand\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF\":{\"priceDimensions\":{\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Hrs\",\"endRange\":\"Inf\",\"description\":\"$0.005 per In-use public IPv4 address per hour\",\"appliesTo\":[],\"rateCode\":\"NBHXEKTE88TJDDQF.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0050000000\"}}},\"sku\":\"NBHXEKTE88TJDDQF\",\"effectiveDate\":\"2026-07-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092232\",\"publicationDate\":\"2026-08-31T09:22:32Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "1055",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "fda037cd-f958-4086-b22f-5162f0455d2c"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "fda037cd-f958-4086-b22f-5162f0455d2c",
+        "RetryAttempts": 0
+      }
+    },
+    "s3_get": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"API Request\",\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"groupDescription\":\"GET and all other requests\",\"usagetype\":\"USW2-Requests-Tier2\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\",\"group\":\"S3-API-Tier2\"},\"sku\":\"E77AQEM2DC4VV3FC\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"E77AQEM2DC4VV3FC.JRTCKXETXF\":{\"priceDimensions\":{\"E77AQEM2DC4VV3FC.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Requests\",\"endRange\":\"Inf\",\"description\":\"$0.004 per 10,000 GET and all other requests\",\"appliesTo\":[],\"rateCode\":\"E77AQEM2DC4VV3FC.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0000004000\"}}},\"sku\":\"E77AQEM2DC4VV3FC\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "1054",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "40a37a83-2856-4724-a8d5-eba7af12d9a8"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "40a37a83-2856-4724-a8d5-eba7af12d9a8",
+        "RetryAttempts": 0
+      }
+    },
+    "s3_put": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"API Request\",\"attributes\":{\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"groupDescription\":\"PUT/COPY/POST or LIST requests\",\"usagetype\":\"USW2-Requests-Tier1\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"operation\":\"\",\"group\":\"S3-API-Tier1\"},\"sku\":\"D4PMUVH6F64HK2D6\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF\":{\"priceDimensions\":{\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\":{\"unit\":\"Requests\",\"endRange\":\"Inf\",\"description\":\"$0.005 per 1,000 PUT, COPY, POST, or LIST requests\",\"appliesTo\":[],\"rateCode\":\"D4PMUVH6F64HK2D6.JRTCKXETXF.6YS6EN2CT7\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0000050000\"}}},\"sku\":\"D4PMUVH6F64HK2D6\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "1064",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "4bdbc377-4aeb-4df4-91ae-7280ff260791"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "4bdbc377-4aeb-4df4-91ae-7280ff260791",
+        "RetryAttempts": 0
+      }
+    },
+    "s3_storage": {
+      "FormatVersion": "aws_v1",
+      "PriceList": [
+        "{\"product\":{\"productFamily\":\"Storage\",\"attributes\":{\"volumeType\":\"Standard\",\"storageClass\":\"General Purpose\",\"regionCode\":\"us-west-2\",\"servicecode\":\"AmazonS3\",\"durability\":\"99.999999999%\",\"usagetype\":\"USW2-TimedStorage-ByteHrs\",\"locationType\":\"AWS Region\",\"location\":\"US West (Oregon)\",\"servicename\":\"Amazon Simple Storage Service\",\"availability\":\"99.99%\",\"operation\":\"\"},\"sku\":\"Z3FQZG73HYSPVABR\"},\"serviceCode\":\"AmazonS3\",\"terms\":{\"OnDemand\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF\":{\"priceDimensions\":{\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\":{\"unit\":\"GB-Mo\",\"endRange\":\"Inf\",\"description\":\"$0.021 per GB - storage used / month over 500 TB\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PXJDJ3YRG3\",\"beginRange\":\"512000\",\"pricePerUnit\":{\"USD\":\"0.0210000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\":{\"unit\":\"GB-Mo\",\"endRange\":\"51200\",\"description\":\"$0.023 per GB - first 50 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.PGHJ3S3EYE\",\"beginRange\":\"0\",\"pricePerUnit\":{\"USD\":\"0.0230000000\"}},\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\":{\"unit\":\"GB-Mo\",\"endRange\":\"512000\",\"description\":\"$0.022 per GB - next 450 TB / month of storage used\",\"appliesTo\":[],\"rateCode\":\"Z3FQZG73HYSPVABR.JRTCKXETXF.D42MF2PVJS\",\"beginRange\":\"51200\",\"pricePerUnit\":{\"USD\":\"0.0220000000\"}}},\"sku\":\"Z3FQZG73HYSPVABR\",\"effectiveDate\":\"2026-08-01T00:00:00Z\",\"offerTermCode\":\"JRTCKXETXF\",\"termAttributes\":{}}}},\"version\":\"20260831092225\",\"publicationDate\":\"2026-08-31T09:22:25Z\"}"
+      ],
+      "ResponseMetadata": {
+        "HTTPHeaders": {
+          "connection": "keep-alive",
+          "content-length": "1708",
+          "content-type": "application/x-amz-json-1.1",
+          "date": "Tue, 08 Sep 2026 05:16:02 GMT",
+          "x-amzn-requestid": "a9914393-e378-4daa-b2a7-c082b143b619"
+        },
+        "HTTPStatusCode": 200,
+        "RequestId": "a9914393-e378-4daa-b2a7-c082b143b619",
+        "RetryAttempts": 0
+      }
+    }
+  },
+  "read_only": true,
+  "region": "us-west-2",
+  "reservation_created": false,
+  "runtime_cuda_proved": false,
+  "schema": "cas-teaching-live-preflight/1",
+  "shutdown_schedule_proved": false,
+  "source_sha256": "75c343345e6e15c843a0713c16786d2533e87c97366e9ce4520a7fca8e499d7d",
+  "visible_gpu_count": 1
+}

@@ -1,0 +1,1 @@
+{"cleanup_scope":"CURRENT_ATTEMPT_ONLY_NO_EFFECTS","cloud_copy_deleted":false,"cloud_copy_retained":false,"cloud_copy_state":"NOT_CREATED","complete":true,"compute_closed":true,"instance_state":"NOT_CREATED","instance_terminated":false,"provider_cleanup_calls":0,"result_downloaded_bytes":0,"s3_attempts":0,"schedule_state":"NOT_CREATED_BY_THIS_ATTEMPT","schedules_removed":true}
