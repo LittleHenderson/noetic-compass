@@ -13,6 +13,7 @@ import json
 from hashlib import sha256
 from pathlib import Path
 import sys
+import types
 import zipfile
 
 import pytest
@@ -87,6 +88,13 @@ class FakeEC2:
         self.vpc_id = "vpc-0123456789abcdef0"
         self.subnet_id = "subnet-0123456789abcdef0"
         self.terminate_raises = None
+        self.launched = False
+        self.groups = []
+
+    def instance(self):
+        return {"InstanceId": INSTANCE, "ClientToken": JOB,
+                "Tags": [{"Key": "cas_meta_job", "Value": JOB}],
+                "State": {"Name": "terminated" if self.terminated_called else self.instance_state}}
 
     def describe_images(self, **kwargs):
         self.calls.append(("describe_images", kwargs))
@@ -109,11 +117,19 @@ class FakeEC2:
     def describe_instances(self, **kwargs):
         self.calls.append(("describe_instances", kwargs))
         if "Filters" in kwargs:
+            if any(f["Name"] == "client-token" for f in kwargs["Filters"]):
+                return {"Reservations": [{"Instances": [self.instance()]}] if self.launched else []}
             return {"Reservations": [{"Instances": [{"InstanceId": iid}
                                                     for iid in self.conflicts]}] if self.conflicts else []}
-        state = "terminated" if self.terminated_called else self.instance_state
-        return {"Reservations": [{"Instances": [{"InstanceId": INSTANCE,
-                                                 "State": {"Name": state}}]}]}
+        return {"Reservations": [{"Instances": [self.instance()]}]}
+
+    def describe_volumes(self, **kwargs):
+        self.calls.append(("describe_volumes", kwargs))
+        return {"Volumes": []}
+
+    def describe_security_groups(self, **kwargs):
+        self.calls.append(("describe_security_groups", kwargs))
+        return {"SecurityGroups": list(self.groups)}
 
     def describe_vpcs(self, **kwargs):
         self.calls.append(("describe_vpcs", kwargs))
@@ -125,6 +141,8 @@ class FakeEC2:
 
     def create_security_group(self, **kwargs):
         self.calls.append(("create_security_group", kwargs))
+        self.groups = [{"GroupId": "sg-0123456789abcdef0", "GroupName": JOB,
+                        "Tags": [{"Key": "cas_meta_job", "Value": JOB}]}]
         return {"GroupId": "sg-0123456789abcdef0"}
 
     def revoke_security_group_egress(self, **kwargs):
@@ -137,11 +155,14 @@ class FakeEC2:
 
     def delete_security_group(self, **kwargs):
         self.calls.append(("delete_security_group", kwargs))
+        self.groups = []
         return {}
 
     def run_instances(self, **kwargs):
         self.calls.append(("run_instances", kwargs))
-        return {"Instances": [{"InstanceId": INSTANCE}]}
+        assert kwargs["IamInstanceProfile"] == {"Arn": "arn:aws:iam::807562639912:instance-profile/" + JOB + "-worker"}
+        self.launched = True
+        return {"Instances": [self.instance()]}
 
     def terminate_instances(self, **kwargs):
         self.calls.append(("terminate_instances", kwargs))
@@ -154,33 +175,59 @@ class FakeEC2:
 class FakeIAM:
     def __init__(self):
         self.calls = []
+        self.roles = {}
+        self.profiles = {}
 
     def _record(self, name, kwargs):
         self.calls.append((name, kwargs))
         return {}
 
     def create_role(self, **kwargs):
-        return self._record("create_role", kwargs)
+        self._record("create_role", kwargs)
+        name = kwargs["RoleName"]
+        self.roles[name] = {"Arn": "arn:aws:iam::807562639912:role/" + name, "RoleName": name,
+                            "AssumeRolePolicyDocument": json.loads(kwargs["AssumeRolePolicyDocument"])}
+        return {"Role": dict(self.roles[name])}
+
+    def get_role(self, **kwargs):
+        self._record("get_role", kwargs)
+        if kwargs["RoleName"] not in self.roles:
+            raise FakeClientError("NoSuchEntity")
+        return {"Role": dict(self.roles[kwargs["RoleName"]])}
 
     def put_role_policy(self, **kwargs):
         return self._record("put_role_policy", kwargs)
 
     def create_instance_profile(self, **kwargs):
-        return self._record("create_instance_profile", kwargs)
+        self._record("create_instance_profile", kwargs)
+        name = kwargs["InstanceProfileName"]
+        self.profiles[name] = {"Arn": "arn:aws:iam::807562639912:instance-profile/" + name,
+                               "InstanceProfileName": name, "Roles": []}
+        return {"InstanceProfile": dict(self.profiles[name])}
+
+    def get_instance_profile(self, **kwargs):
+        self._record("get_instance_profile", kwargs)
+        if kwargs["InstanceProfileName"] not in self.profiles:
+            raise FakeClientError("NoSuchEntity")
+        return {"InstanceProfile": dict(self.profiles[kwargs["InstanceProfileName"]])}
 
     def add_role_to_instance_profile(self, **kwargs):
+        self.profiles[kwargs["InstanceProfileName"]]["Roles"] = [dict(self.roles[kwargs["RoleName"]])]
         return self._record("add_role_to_instance_profile", kwargs)
 
     def remove_role_from_instance_profile(self, **kwargs):
+        self.profiles[kwargs["InstanceProfileName"]]["Roles"] = []
         return self._record("remove_role_from_instance_profile", kwargs)
 
     def delete_instance_profile(self, **kwargs):
+        self.profiles.pop(kwargs["InstanceProfileName"], None)
         return self._record("delete_instance_profile", kwargs)
 
     def delete_role_policy(self, **kwargs):
         return self._record("delete_role_policy", kwargs)
 
     def delete_role(self, **kwargs):
+        self.roles.pop(kwargs["RoleName"], None)
         return self._record("delete_role", kwargs)
 
 
@@ -190,9 +237,12 @@ class FakeS3:
         self.objects = {}
         self.head_lengths = {}
         self.missing = set()
+        self.exists = False
+        self.lifecycle = None
 
     def create_bucket(self, **kwargs):
         self.calls.append(("create_bucket", kwargs))
+        self.exists = True
         return {}
 
     def put_bucket_tagging(self, **kwargs):
@@ -206,6 +256,18 @@ class FakeS3:
     def put_bucket_encryption(self, **kwargs):
         self.calls.append(("put_bucket_encryption", kwargs))
         return {}
+
+    def put_bucket_lifecycle_configuration(self, **kwargs):
+        self.lifecycle = kwargs["LifecycleConfiguration"]
+        return {}
+
+    def get_bucket_lifecycle_configuration(self, **kwargs):
+        return self.lifecycle or {}
+
+    def list_objects_v2(self, **kwargs):
+        if not self.exists:
+            raise FakeClientError("NoSuchBucket")
+        return {"IsTruncated": False, "Contents": [{"Key": key} for key in sorted(self.objects)]}
 
     def put_object(self, **kwargs):
         self.calls.append(("put_object", kwargs))
@@ -226,23 +288,39 @@ class FakeS3:
 
     def delete_objects(self, **kwargs):
         self.calls.append(("delete_objects", kwargs))
+        for item in kwargs["Delete"]["Objects"]:
+            self.objects.pop(item["Key"], None)
         return {}
 
     def delete_bucket(self, **kwargs):
         self.calls.append(("delete_bucket", kwargs))
+        if self.objects:
+            raise FakeClientError("BucketNotEmpty")
+        self.exists = False
         return {}
 
 
 class FakeScheduler:
     def __init__(self):
         self.calls = []
+        self.schedule = None
 
     def create_schedule(self, **kwargs):
         self.calls.append(("create_schedule", kwargs))
+        assert kwargs["Target"]["RoleArn"] == "arn:aws:iam::807562639912:role/" + JOB + "-timer"
+        self.schedule = {**kwargs, "State": "ENABLED",
+                         "Arn": "arn:aws:scheduler:us-west-2:807562639912:schedule/default/" + JOB}
         return {}
+
+    def get_schedule(self, **kwargs):
+        self.calls.append(("get_schedule", kwargs))
+        if self.schedule is None:
+            raise FakeClientError("ResourceNotFoundException")
+        return dict(self.schedule)
 
     def delete_schedule(self, **kwargs):
         self.calls.append(("delete_schedule", kwargs))
+        self.schedule = None
         return {}
 
 
@@ -321,7 +399,11 @@ def build_provider(stack, tmp_path, monkeypatch, **overrides):
                   dataset_manifest_sha256=plan.DATASET_MANIFEST_SHA256,
                   ledger_path=make_ledger(tmp_path), source_archive=SOURCE_BYTES)
     kwargs.update(overrides)
-    return provider.build(args, **kwargs)
+    built = provider.build(args, **kwargs)
+    evidence = tmp_path / "evidence"
+    evidence.mkdir()
+    built.configure_evidence(evidence)
+    return built
 
 
 def make_artifacts():
@@ -562,7 +644,8 @@ def test_full_call_sequence_and_shapes(tmp_path, monkeypatch):
     assert waited == {"worker_status": "REMOTE_FINISHED"}
     expected = {name: {"sha256": sha256(raw).hexdigest(), "bytes": len(raw)}
                 for name, raw in members.items()}
-    assert collected == expected
+    assert collected["files"] == expected
+    assert Path(collected["archive"]["path"]).read_bytes() == artifacts
     assert cleaned["complete"] is True
     assert cleaned["failures"] == []
     assert cleaned["instance_terminated"] is True
@@ -645,7 +728,7 @@ def test_cleanup_records_every_failure(tmp_path, monkeypatch):
     cleaned = built.cleanup(JOB)
     assert cleaned["complete"] is False
     assert any("INSTANCE_TERMINATION_FAILED" in failure for failure in cleaned["failures"])
-    assert any("INPUT_DELETION_FAILED" in failure for failure in cleaned["failures"])
+    assert any("EVIDENCE_CLEANUP_FAILED" in failure for failure in cleaned["failures"])
     assert cleaned["instance_terminated"] is False
 
 
@@ -655,7 +738,8 @@ def test_cleanup_is_call_safe_before_launch(tmp_path, monkeypatch):
     cleaned = built.cleanup(JOB)
     assert cleaned["complete"] is True
     assert cleaned["failures"] == []
-    assert cleaned["instance_terminated"] is True
+    assert cleaned["instance_terminated"] is False
+    assert cleaned["instance_state"] == "NOT_CREATED"
 
 
 def test_cleanup_deletes_results_before_bucket(tmp_path, monkeypatch):
@@ -665,21 +749,27 @@ def test_cleanup_deletes_results_before_bucket(tmp_path, monkeypatch):
     built = build_provider(stack, tmp_path, monkeypatch)
     facts, receipt = ready(built)
     built.launch(JOB, valid_permit(receipt, facts))
+    artifacts, _ = make_artifacts()
+    load_worker_result(stack, artifacts)
 
     deleted_keys = []
+    original_delete = stack.s3.delete_objects
+    original_bucket_delete = stack.s3.delete_bucket
 
     def tracking_delete_objects(**kwargs):
         deleted_keys.extend(item["Key"] for item in kwargs["Delete"]["Objects"])
-        return {}
+        return original_delete(**kwargs)
 
     def strict_delete_bucket(**kwargs):
         remaining = set(stack.s3.objects) - set(deleted_keys)
         if remaining:
             raise FakeClientError("BucketNotEmpty")
-        return {}
+        return original_bucket_delete(**kwargs)
 
     stack.s3.delete_objects = tracking_delete_objects
     stack.s3.delete_bucket = strict_delete_bucket
+    built.wait(JOB, timeout=1)
+    built.collect(JOB)
     cleaned = built.cleanup(JOB)
     assert cleaned["complete"] is True
     assert "results/complete.json" in deleted_keys
@@ -698,7 +788,8 @@ def test_ensure_bucket_does_not_memoize_half_hardened(tmp_path, monkeypatch):
     stack.s3.put_bucket_tagging = broken_tagging
     with pytest.raises(FakeClientError):
         built._ensure_bucket(stack.s3)
-    assert built._resources.get("bucket") is None
+    assert built._resources["bucket"] == built._bucket_name()
+    assert built._bucket_ready is False
     # After the failure is repaired, a later call succeeds and memoizes.
     stack.s3.put_bucket_tagging = lambda **kwargs: {}
     assert built._ensure_bucket(stack.s3) == built._bucket_name()
@@ -769,10 +860,11 @@ def test_cleanup_treats_absent_schedule_as_clean(tmp_path, monkeypatch):
         raise FakeClientError("ResourceNotFoundException")
 
     stack.scheduler.delete_schedule = absent_schedule
+    stack.scheduler.schedule = None
     cleaned = built.cleanup(JOB)
     assert cleaned["complete"] is True
     assert cleaned["schedule_removed"] is True
-    assert cleaned.get("schedule_was_absent") is True
+    assert cleaned["schedule_state"] == "CONFIRMED_ABSENT"
     assert cleaned["failures"] == []
 
 
@@ -785,3 +877,270 @@ def test_cleanup_deletes_security_group(tmp_path, monkeypatch):
     assert cleaned["security_group_deleted"] is True
     deleted = [call for call in stack.ec2.calls if call[0] == "delete_security_group"]
     assert deleted
+
+
+def test_iam_readback_is_bounded_and_precedes_instance_request(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    original = stack.iam.get_instance_profile
+    reads = []
+    def delayed(**kwargs):
+        result = original(**kwargs)
+        reads.append(result)
+        if len(reads) < 3:
+            result["InstanceProfile"]["Roles"] = []
+        return result
+    stack.iam.get_instance_profile = delayed
+    monkeypatch.setattr(provider.time, "sleep", lambda seconds: None)
+    original_run = stack.ec2.run_instances
+    def run(**kwargs):
+        assert len(reads) == 3
+        return original_run(**kwargs)
+    stack.ec2.run_instances = run
+    result = built.launch(JOB, valid_permit(receipt, facts))
+    assert result["iam_readback"]["attempts"] == 3
+    assert result["iam_readback"]["ec2_propagation_proved"] is False
+
+
+def test_unready_profile_never_reaches_run_instances(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    original = stack.iam.get_instance_profile
+    def unready(**kwargs):
+        result = original(**kwargs)
+        result["InstanceProfile"]["Roles"] = []
+        return result
+    stack.iam.get_instance_profile = unready
+    monkeypatch.setattr(provider.time, "sleep", lambda seconds: None)
+    with pytest.raises(ValueError, match="IAM_READBACK_TIMEOUT"):
+        built.launch(JOB, valid_permit(receipt, facts))
+    assert not any(name == "run_instances" for name, _ in stack.ec2.calls)
+    assert "input/permit.json" not in stack.s3.objects
+    with pytest.raises(ValueError, match="SINGLE_LAUNCH_ONLY"):
+        built.launch(JOB, valid_permit(receipt, facts))
+
+
+def test_schedule_is_confirmed_before_any_permit_is_released(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    original = stack.scheduler.get_schedule
+    observed = []
+    def confirm(**kwargs):
+        assert "input/permit.json" not in stack.s3.objects
+        assert "'permit':" not in stack.s3.objects["input/remote.py"].decode()
+        observed.append(True)
+        return original(**kwargs)
+    stack.scheduler.get_schedule = confirm
+    result = built.launch(JOB, valid_permit(receipt, facts))
+    assert observed == [True]
+    released = json.loads(stack.s3.objects["input/permit.json"])
+    assert released["worker_release"]["schedule_confirmed"] is True
+    assert released["worker_release"]["instance_id"] == INSTANCE
+    assert result["shutdown_schedule"]["Target"]["RoleArn"].startswith("arn:aws:iam::")
+
+
+@pytest.mark.parametrize("failure", ["create", "readback"])
+def test_schedule_failure_never_releases_worker(tmp_path, monkeypatch, failure):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    if failure == "create":
+        stack.scheduler.create_schedule = lambda **kw: (_ for _ in ()).throw(FakeClientError("AccessDeniedException"))
+    else:
+        stack.scheduler.get_schedule = lambda **kw: {"State": "DISABLED"}
+    with pytest.raises((ValueError, FakeClientError)):
+        built.launch(JOB, valid_permit(receipt, facts))
+    assert "input/permit.json" not in stack.s3.objects
+    assert built._instance_ids == [INSTANCE]
+
+
+def test_rejected_instance_request_is_not_reported_as_terminated(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    calls = []
+    def rejected(**kwargs):
+        calls.append(kwargs)
+        raise FakeClientError("InvalidParameterValue", "Invalid IAM Instance Profile name")
+    stack.ec2.run_instances = rejected
+    with pytest.raises(FakeClientError):
+        built.launch(JOB, valid_permit(receipt, facts))
+    with pytest.raises(ValueError, match="SINGLE_LAUNCH_ONLY"):
+        built.launch(JOB, valid_permit(receipt, facts))
+    cleaned = built.cleanup(JOB)
+    assert len(calls) == 1
+    assert cleaned["instance_state"] == "REJECTED_NO_INSTANCE_OBSERVED"
+    assert cleaned["instance_terminated"] is False
+    assert cleaned["instance_ids"] == []
+    assert cleaned["complete"] is True
+
+
+@pytest.mark.parametrize("actually_created", [True, False])
+def test_ambiguous_request_uses_discovery_not_second_launch(tmp_path, monkeypatch, actually_created):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    calls = []
+    def lost_response(**kwargs):
+        calls.append(kwargs)
+        stack.ec2.launched = actually_created
+        raise TimeoutError("response lost")
+    stack.ec2.run_instances = lost_response
+    with pytest.raises(TimeoutError):
+        built.launch(JOB, valid_permit(receipt, facts))
+    cleaned = built.cleanup(JOB)
+    assert len(calls) == 1
+    assert calls[0]["ClientToken"] == JOB
+    assert cleaned["complete"] is actually_created
+    if actually_created:
+        assert cleaned["instance_ids"] == [INSTANCE]
+        assert stack.ec2.terminated_called is True
+    else:
+        assert cleaned["instance_state"] == "UNKNOWN"
+        assert cleaned["roles_removed"] is False
+        assert cleaned["schedule_state"] == "RETAINED_FOR_UNKNOWN_COMPUTE"
+
+
+def test_failed_local_archive_write_preserves_cloud_results(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    raw, _ = make_artifacts()
+    load_worker_result(stack, raw)
+    built.wait(JOB, timeout=1)
+    original = launch.write_evidence
+    def no_space(path, raw):
+        if Path(path).name == "cloud_artifacts.zip":
+            raise OSError("disk full")
+        return original(path, raw)
+    monkeypatch.setattr(launch, "write_evidence", no_space)
+    with pytest.raises(OSError, match="disk full"):
+        built.collect(JOB)
+    cleaned = built.cleanup(JOB)
+    assert stack.s3.objects["results/artifacts.zip"] == raw
+    assert cleaned["results_deleted"] is False
+    assert cleaned["bucket_state"] == "RETAINED_BOUNDED_EVIDENCE"
+    assert cleaned["retention_days"] == 7
+
+
+def test_changed_local_archive_cannot_authorize_cloud_deletion(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    raw, _ = make_artifacts()
+    load_worker_result(stack, raw)
+    built.wait(JOB, timeout=1)
+    collected = built.collect(JOB)
+    Path(collected["archive"]["path"]).write_bytes(b"changed")
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is False
+    assert cleaned["results_deleted"] is False
+    assert stack.s3.objects["results/artifacts.zip"] == raw
+
+
+def test_iam_cleanup_denial_is_not_reported_as_removed(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    stack.iam.delete_role = lambda **kw: (_ for _ in ()).throw(FakeClientError("AccessDenied"))
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is False
+    assert cleaned["roles_removed"] is False
+    assert any("ROLE_REMOVAL_FAILED" in failure for failure in cleaned["failures"])
+
+
+def test_remaining_volumes_are_observed_not_inferred(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    stack.ec2.describe_volumes = lambda **kw: {"Volumes": [{"VolumeId": "vol-test"}]}
+    monkeypatch.setattr(provider.time, "sleep", lambda seconds: None)
+    cleaned = built.cleanup(JOB)
+    assert cleaned["volumes_deleted"] is False
+    assert cleaned["complete"] is False
+
+
+def test_generated_bootstrap_executes_with_fakes_and_fresh_real_extractor(tmp_path, monkeypatch):
+    """Run the generated script, not just compile it; installs/AWS are fakes."""
+    import builtins
+    monkeypatch.delenv("CAS_META2_VENV_PYTHON", raising=False)
+    from aws import condition_skill_v9_remote as remote
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    built._resources["bucket"] = built._bucket_name()
+    root = tmp_path / "guest"
+    root.mkdir()
+    with zipfile.ZipFile(root / "source.zip", "w") as archive:
+        archive.writestr("research/CAS_META_2_COMPOSITION/marker.txt", "fixture")
+    release = {"job": JOB, "source_sha": SOURCE_SHA, "archive_sha256": ARCHIVE_SHA,
+               "manifest_sha256": MANIFEST_SHA, "dataset_manifest_sha256": plan.DATASET_MANIFEST_SHA256,
+               "worker_release": {"instance_id": INSTANCE, "schedule_confirmed": True,
+                                  "deadline_epoch": provider.time.time() + 1800}}
+    (root / "permit.json").write_text(json.dumps(release))
+    installs, executions, uploads = [], [], {}
+    def install(argv, check):
+        assert check is True
+        installs.append(argv)
+        if argv[1:3] == ["-m", "venv"]:
+            venv = Path(argv[3])
+            (venv / "bin").mkdir(parents=True)
+            (venv / "bin/python").write_bytes(b"fake interpreter, never executed")
+            (venv / "pyvenv.cfg").write_text("include-system-site-packages = false\n")
+    def orchestrate(archive, destination, output, dataset, job, **kwargs):
+        assert not Path(destination).exists()
+        # This is the unchanged real extraction and venv-boundary code. The
+        # old bootstrap fails here because it already populated destination.
+        remote.venv_python(destination, kwargs["python_executable"])
+        remote.extract_archive(archive, destination)
+        executions.append(job)
+        Path(output).mkdir(parents=True)
+        (Path(output) / "result.json").write_text('{"status":"fixture-only"}')
+        return {"status": "REMOTE_FINISHED"}
+    sdk = types.SimpleNamespace(client=lambda *args, **kwargs: types.SimpleNamespace(
+        put_object=lambda **kwargs: uploads.update({kwargs["Key"]: kwargs["Body"]})))
+    real_import = builtins.__import__
+    def fake_import(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "boto3":
+            return sdk
+        if name == "subprocess":
+            return types.SimpleNamespace(run=install)
+        if name == "shutil":
+            return types.SimpleNamespace(which=lambda command: "/fake/" + command)
+        if name == "aws.condition_skill_v9_remote":
+            return types.SimpleNamespace(orchestrate=orchestrate,
+                allowed_trainer_output=lambda name: name == "result.json")
+        return real_import(name, globals, locals, fromlist, level)
+    source = built._render_remote({"must_not_embed": "released before schedule"})
+    source = source.replace("ROOT = Path('/opt/cas-meta2-condition-skill-v9')", "ROOT = Path(" + repr(str(root)) + ")")
+    old_path = list(sys.path)
+    try:
+        exec(compile(source, "<generated-bootstrap-fake-services>", "exec"),
+             {"__builtins__": {**vars(builtins), "__import__": fake_import}})
+    finally:
+        sys.path[:] = old_path
+    assert len(installs) == 4 and executions == [JOB]
+    complete = json.loads(uploads["results/complete.json"])
+    assert complete["status"] == "REMOTE_FINISHED"
+    assert complete["sha256"] == sha256(uploads["results/artifacts.zip"]).hexdigest()
+    with zipfile.ZipFile(io.BytesIO(uploads["results/artifacts.zip"])) as zipped:
+        assert zipped.read("result.json") == b'{"status":"fixture-only"}'
+    assert "boto3" not in sys.modules
+
+
+def test_source_copy_is_preserved_and_checked_before_cloud_input_deletion(tmp_path, monkeypatch):
+    stack = FakeStack()
+    built = build_provider(stack, tmp_path, monkeypatch)
+    facts, receipt = ready(built)
+    built.launch(JOB, valid_permit(receipt, facts))
+    saved = Path(built._source_copy["path"])
+    assert saved.read_bytes() == SOURCE_BYTES
+    saved.write_bytes(b"changed after launch")
+    cleaned = built.cleanup(JOB)
+    assert cleaned["complete"] is False
+    assert stack.s3.objects["input/source.zip"] == SOURCE_BYTES
+    assert cleaned["inputs_deleted"] is False

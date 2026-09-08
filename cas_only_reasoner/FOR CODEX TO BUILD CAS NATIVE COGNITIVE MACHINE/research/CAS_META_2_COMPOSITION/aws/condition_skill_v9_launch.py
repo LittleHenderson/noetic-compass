@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 import re
 import time
@@ -44,6 +45,38 @@ def canonical(value):
 
 def digest(raw):
     return sha256(raw).hexdigest()
+
+
+def evidence_directory(path):
+    """Reject linked ancestors before writing durable task-local evidence."""
+    path = Path(path).absolute()
+    require(".." not in path.parts, "EVIDENCE_PATH_PARENT_COMPONENT")
+    for ancestor in (path, *path.parents):
+        require(not ancestor.is_symlink() and not getattr(ancestor, "is_junction", lambda: False)(),
+                "EVIDENCE_LINKED_PATH")
+    return path
+
+
+def write_evidence(path, raw):
+    """Create once, flush to disk, and read back the exact bytes before return."""
+    path = evidence_directory(path)
+    require(type(raw) is bytes and len(raw) <= 256 * 1024**2,
+            "EVIDENCE_BYTES_BOUND")
+    with path.open("xb") as stream:
+        stream.write(raw)
+        stream.flush()
+        os.fsync(stream.fileno())
+    require(path.stat().st_nlink == 1 and path.read_bytes() == raw,
+            "EVIDENCE_READBACK_MISMATCH")
+    return {"path": str(path), "sha256": digest(raw), "bytes": len(raw)}
+
+
+def prepare_evidence(path):
+    path = evidence_directory(path)
+    require(not path.exists() and path.parent.is_dir(),
+            "FRESH_RECEIPT_DIRECTORY_REQUIRED")
+    path.mkdir()
+    return path
 
 
 def scope():
@@ -202,7 +235,8 @@ def validate_preflight(facts):
     return facts
 
 
-def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
+def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None,
+            receipt_dir=None):
     """One-shot paid execution with injected provider; never retries.
 
     The provider.calls list is advisory instrumentation for tests; the
@@ -224,35 +258,66 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
     require(not any(entry["job"] == request["job"] for entry in
                     ledger_before["ledger"]["reservations"]),
             "JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY")
-    preflight = validate_preflight(provider.preflight())
-    provider.calls.clear()
-    reservation = provider.reserve(RESERVATION_USD)
-    require(provider.calls == ["reserve"], "RESERVATION_MUST_BE_FIRST_AND_SINGLE")
-    ledger_after = read_ledger(ledger_path)
-    validate_reserved_transition(ledger_before, ledger_after, reservation, request)
-    permit = {"job": request["job"], "source_sha": request["source_sha"],
-              "archive_sha256": request["archive_sha256"],
-              "manifest_sha256": request["manifest_sha256"],
-              "dataset_manifest_sha256": request["dataset_manifest_sha256"],
-              "reservation": reservation, "preflight": preflight,
-              "resource_plan": scope()}
-    cleanup = None
+    # Establish the evidence sink before reservation or any provider mutation.
+    # This is a transport correction, not a change to the frozen experiment.
+    directory = prepare_evidence(receipt_dir if receipt_dir is not None else
+        Path(ledger_path).parent / ("condition_skill_v9_" + request["job"]))
+    write_evidence(directory / "intent.json", canonical({
+        "schema": SCHEMA, "request": request, "authority": authority,
+        "ledger_before": ledger_before, "automatic_retries": 0}))
+    provider.configure_evidence(directory)
     try:
-        launch = provider.launch(request["job"], permit)
+        preflight = validate_preflight(provider.preflight())
+    except Exception as error:
+        write_evidence(directory / "failure.json", canonical({"stage": "preflight",
+            "exception_type": type(error).__name__, "exception": str(error)[:2000]}))
+        raise
+    write_evidence(directory / "preflight.json", canonical(preflight))
+    provider.calls.clear()
+    reservation, ledger_after, launched, collected = None, None, None, None
+    reservation_valid, reservation_error = False, None
+    try:
+        reservation = provider.reserve(RESERVATION_USD)
+        require(provider.calls == ["reserve"], "RESERVATION_MUST_BE_FIRST_AND_SINGLE")
+        ledger_after = read_ledger(ledger_path)
+        validate_reserved_transition(ledger_before, ledger_after, reservation, request)
+        require(reservation.get("aws_side_reservation", {}).get("status") == "RECORDED",
+                "AWS_RESERVATION_RECORD_REQUIRED")
+        write_evidence(directory / "reservation.json", canonical(reservation))
+        reservation_valid = True
+        permit = {"job": request["job"], "source_sha": request["source_sha"],
+                  "archive_sha256": request["archive_sha256"],
+                  "manifest_sha256": request["manifest_sha256"],
+                  "dataset_manifest_sha256": request["dataset_manifest_sha256"],
+                  "reservation": reservation, "preflight": preflight,
+                  "resource_plan": scope()}
+        launched = provider.launch(request["job"], permit)
+        write_evidence(directory / "launch.json", canonical(launched))
         outcome = provider.wait(request["job"], timeout=plan.RESOURCE_PLAN["instance_seconds_max"])
         collected = provider.collect(request["job"])
         status = "AWS_CONDITION_SKILL_V9_FINISHED" if outcome.get("worker_status") == "REMOTE_FINISHED" else "AWS_CONDITION_SKILL_V9_FAILED"
-    except Exception as error:
+    except BaseException as error:
         status = "AWS_CONDITION_SKILL_V9_LAUNCH_FAILED"
         outcome = {"exception_type": type(error).__name__, "exception": str(error)[:2000]}
-        collected = None
+        if not reservation_valid:
+            reservation_error = error
+        # An independent immutable record survives even a later cleanup error.
+        try:
+            write_evidence(directory / "failure.json", canonical(outcome))
+        except Exception as record_error:
+            outcome["failure_record_error"] = type(record_error).__name__ + ":" + str(record_error)[:1000]
     finally:
-        cleanup = provider.cleanup(request["job"])
+        try:
+            cleanup = provider.cleanup(request["job"])
+        except BaseException as error:
+            cleanup = {"complete": False, "failures": [
+                "CLEANUP_EXCEPTION:" + type(error).__name__ + ":" + str(error)[:2000]]}
     result = {"schema": SCHEMA, "status": status, "job": request["job"],
               "request": request, "authority": authority,
               "ledger_before": ledger_before, "ledger_after": ledger_after,
               "reservation_scope": reservation_scope, "reservation": reservation,
-              "preflight": preflight, "outcome": outcome, "collected": collected,
+              "preflight": preflight, "launch": launched, "outcome": outcome,
+              "collected": collected, "receipt_dir": str(directory),
               "cleanup": cleanup, "elapsed_seconds": time.monotonic() - started,
               "claims": {"native_admission": False, "repair_proved": False,
                          "caller_return_proved": False, "composition_proved": False,
@@ -263,6 +328,9 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, now=None):
     if not cleanup.get("complete"):
         result["status"] = "AWS_CONDITION_SKILL_V9_FAILED"
         result["cleanup_incomplete_reason"] = cleanup.get("failures")
+    write_evidence(directory / "result.json", canonical(result))
+    if reservation_error is not None:
+        raise reservation_error
     return result
 
 
@@ -290,14 +358,8 @@ def main(argv=None):
     authority = json.loads(authority_raw)
     from aws import condition_skill_v9_provider  # noqa: F401  (separate admitted adapter)
     provider = condition_skill_v9_provider.build(arguments)
-    result = execute(request, authority, provider)
-    receipt_dir = Path(arguments.receipt_dir)
-    require(not receipt_dir.exists() and receipt_dir.parent.is_dir(),
-            "FRESH_RECEIPT_DIRECTORY_REQUIRED")
-    receipt_dir.mkdir()
-    with (receipt_dir / "result.json").open("xb") as stream:
-        stream.write(canonical(result))
-    print(json.dumps({"status": result["status"], "receipt_dir": str(receipt_dir)}, sort_keys=True))
+    result = execute(request, authority, provider, receipt_dir=arguments.receipt_dir)
+    print(json.dumps({"status": result["status"], "receipt_dir": result["receipt_dir"]}, sort_keys=True))
     return 0 if result["status"] == "AWS_CONDITION_SKILL_V9_FINISHED" else 1
 
 

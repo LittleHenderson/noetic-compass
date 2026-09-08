@@ -24,7 +24,8 @@ or passing ``boto3_module=``/``clients=``) and never import the real SDK.
 
 Cleanup is call-safe: it is safe to call ``cleanup()`` before, during, or after
 a launch, and it records every failure instead of raising mid-way. There are no
-automatic retries anywhere; the single registered instance uses
+automatic workload retries; bounded read-only readiness observations are not
+new workload attempts. The single registered instance uses
 ``ClientToken=job``. The provider records what it observes in the launch-side
 receipt (the returned ``InstanceId`` plus ``ClientToken=job`` and the IMDSv2
 ``HttpTokens: required`` request); it does not claim to prove in-guest identity
@@ -56,6 +57,9 @@ HEX64 = re.compile(r"[a-f0-9]{64}\Z")
 INSTANCE_ID = re.compile(r"i-[0-9a-f]{17}\Z")
 VCPU_QUOTA_CODE = "L-DB2E81BA"
 WORKER_ROOT = "/opt/cas-meta2-condition-skill-v9"
+IAM_READY_ATTEMPTS = 16
+OBSERVATION_DELAY_SECONDS = 2
+RESULT_RETENTION_DAYS = 7
 
 
 def require(condition, code):
@@ -214,9 +218,112 @@ class ConditionSkillV9Provider:
         self.calls = []
         self._reserved = False
         self._launch_attempted = False
+        self._launch_called = False
         self._instance_id = None
         self._result = None
         self._resources = {}
+        self._evidence = None
+        self._event_number = 0
+        self._result_raw = None
+        self._durable_results = False
+        self._durable_files = {}
+        self._source_copy = None
+        self._bucket_ready = False
+        self._run_state = "NOT_ATTEMPTED"
+        self._instance_ids = []
+
+    def configure_evidence(self, directory):
+        """Must be configured before side effects; no in-memory-only paid run."""
+        directory = self.launch_module.evidence_directory(directory)
+        require(directory.is_dir() and self._evidence is None,
+                "CONDITION_SKILL_V9_FRESH_EVIDENCE_REQUIRED")
+        self._evidence = directory
+        self._event("provider_configured", "OBSERVED")
+
+    def _event(self, operation, state, **details):
+        require(self._evidence is not None, "CONDITION_SKILL_V9_EVIDENCE_REQUIRED")
+        self._event_number += 1
+        return self.launch_module.write_evidence(
+            self._evidence / ("provider_%04d.json" % self._event_number),
+            canonical({"schema": SCHEMA, "job": self.job, "source_sha": self.source_sha,
+                       "operation": operation, "state": state,
+                       "observed_utc": datetime.now(timezone.utc).isoformat(),
+                       "resources": dict(self._resources), **details}))
+
+    def _effect(self, operation, callback, **arguments):
+        # Intents do not copy user data, credentials, or arbitrary SDK bodies.
+        self._event(operation, "REQUESTED")
+        try:
+            result = callback(**arguments)
+        except BaseException as error:
+            self._event(operation, "FAILED", error=type(error).__name__ + ":" + str(error)[:2000])
+            raise
+        self._event(operation, "RETURNED",
+                    request_id=result.get("ResponseMetadata", {}).get("RequestId"))
+        return result
+
+    @staticmethod
+    def _error_code(error):
+        return getattr(error, "response", {}).get("Error", {}).get("Code")
+
+    def _wait_for_iam(self, worker, timer, worker_arn, timer_arn, profile_arn):
+        """Bounded IAM readback, explicitly not proof of EC2 propagation."""
+        iam = self.clients["iam"]
+        deadline = time.monotonic() + 60
+        for attempt in range(IAM_READY_ATTEMPTS):
+            try:
+                roles = [iam.get_role(RoleName=name)["Role"] for name in (worker, timer)]
+                profile = iam.get_instance_profile(InstanceProfileName=worker)["InstanceProfile"]
+                require([role.get("Arn") for role in roles] == [worker_arn, timer_arn]
+                        and profile.get("Arn") == profile_arn,
+                        "CONDITION_SKILL_V9_IAM_READBACK_IDENTITY")
+                attached = [role.get("Arn") for role in profile.get("Roles", [])]
+                ready = attached == [worker_arn]
+                self._event("iam_readback", "OBSERVED", attempt=attempt + 1,
+                            profile_arn=profile_arn, attached_roles=attached, ready=ready,
+                            ec2_propagation_proved=False)
+                if ready:
+                    return {"profile_arn": profile_arn, "worker_role_arn": worker_arn,
+                            "timer_role_arn": timer_arn, "attempts": attempt + 1,
+                            "ec2_propagation_proved": False}
+            except self._client_error as error:
+                if self._error_code(error) != "NoSuchEntity":
+                    raise
+                self._event("iam_readback", "NOT_READY", attempt=attempt + 1,
+                            error_code="NoSuchEntity")
+            if time.monotonic() >= deadline:
+                break
+            time.sleep(OBSERVATION_DELAY_SECONDS)
+        raise ValueError("CONDITION_SKILL_V9_IAM_READBACK_TIMEOUT")
+
+    def _discover_instances(self):
+        """Recover one ambiguous request by its stable token AND exact job tag."""
+        arguments = {"Filters": [
+            {"Name": "client-token", "Values": [self.job]},
+            {"Name": "tag:cas_meta_job", "Values": [self.job]}]}
+        instances = []
+        tokens = set()
+        while True:
+            response = self.clients["ec2"].describe_instances(**arguments)
+            for reservation in response.get("Reservations", []):
+                for instance in reservation.get("Instances", []):
+                    require(instance.get("ClientToken") == self.job and
+                            {t["Key"]: t["Value"] for t in instance.get("Tags", [])}.get("cas_meta_job") == self.job,
+                            "CONDITION_SKILL_V9_RECOVERY_IDENTITY")
+                    require(bool(INSTANCE_ID.fullmatch(instance.get("InstanceId", ""))),
+                            "CONDITION_SKILL_V9_RECOVERY_INSTANCE_ID")
+                    instances.append(instance)
+            if not response.get("NextToken"):
+                break
+            require(response["NextToken"] not in tokens and len(tokens) < 32,
+                    "CONDITION_SKILL_V9_RECOVERY_PAGINATION")
+            tokens.add(response["NextToken"])
+            arguments["NextToken"] = response["NextToken"]
+            require(len(instances) <= 100, "CONDITION_SKILL_V9_RECOVERY_BOUND")
+        self._instance_ids = sorted(set(self._instance_ids + [i["InstanceId"] for i in instances]))
+        self._event("instance_recovery", "OBSERVED", instance_ids=self._instance_ids,
+                    states={i["InstanceId"]: i.get("State", {}).get("Name") for i in instances})
+        return instances
 
     def reservation_plan(self):
         """Exact task/resource binding for the canonical budget helper."""
@@ -321,6 +428,7 @@ class ConditionSkillV9Provider:
         reservation (e.g. launch_child_qualification_v8._run_authorized).
         """
         self.calls.append("reserve")
+        self._event("budget_reservation", "REQUESTED", amount=amount)
         require(not self._reserved, "CONDITION_SKILL_V9_RESERVATION_ALREADY_ATTEMPTED")
         require(type(amount) is str and amount == plan.RESOURCE_PLAN["reservation_usd"],
                 "CONDITION_SKILL_V9_RESERVATION_AMOUNT_FROZEN")
@@ -340,9 +448,11 @@ class ConditionSkillV9Provider:
         """Create and harden the job bucket; never memoize a half-hardened one."""
         tags = tags or [{"Key": "cas_meta_job", "Value": self.job}]
         bucket = self._bucket_name()
-        if self._resources.get("bucket") == bucket:
+        if self._bucket_ready:
             return bucket
-        s3.create_bucket(Bucket=bucket,
+        if "bucket" not in self._resources:
+            self._resources["bucket"] = bucket
+            self._effect("create_bucket", s3.create_bucket, Bucket=bucket,
                          CreateBucketConfiguration={"LocationConstraint": plan.RESOURCE_PLAN["region"]})
         try:
             s3.put_bucket_tagging(Bucket=bucket, Tagging={"TagSet": tags})
@@ -351,12 +461,22 @@ class ConditionSkillV9Provider:
                 "BlockPublicPolicy": True, "RestrictPublicBuckets": True})
             s3.put_bucket_encryption(Bucket=bucket, ServerSideEncryptionConfiguration={
                 "Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]})
+            # Failed collection keeps bounded cloud evidence instead of deleting
+            # the only copy of a checkpoint. This does not authorize a new run.
+            lifecycle = {"Rules": [{"ID": "bounded-job-evidence", "Status": "Enabled",
+                "Filter": {"Prefix": ""}, "Expiration": {"Days": RESULT_RETENTION_DAYS},
+                "AbortIncompleteMultipartUpload": {"DaysAfterInitiation": 1}}]}
+            s3.put_bucket_lifecycle_configuration(Bucket=bucket, LifecycleConfiguration=lifecycle)
+            observed = s3.get_bucket_lifecycle_configuration(Bucket=bucket)
+            require(observed.get("Rules") == lifecycle["Rules"],
+                    "CONDITION_SKILL_V9_RETENTION_READBACK")
         except Exception:
             # A half-hardened bucket must not be treated as ready: forget it so
             # later calls re-attempt hardening instead of silently skipping it.
-            self._resources.pop("bucket", None)
+            self._bucket_ready = False
             raise
         self._resources["bucket"] = bucket
+        self._bucket_ready = True
         return bucket
 
     def _record_aws_side_reservation(self, receipt):
@@ -433,7 +553,7 @@ class ConditionSkillV9Provider:
                   "source_sha": self.source_sha, "archive_sha256": self.archive_sha256,
                   "manifest_sha256": self.manifest_sha256,
                   "dataset_manifest_sha256": self.dataset_manifest_sha256,
-                  "resource_plan": plan.RESOURCE_PLAN, "permit": permit}
+                  "resource_plan": plan.RESOURCE_PLAN}
         driver_lines = [
             "CONFIG = " + repr(config),
             "import hashlib",
@@ -443,15 +563,30 @@ class ConditionSkillV9Provider:
             "import subprocess",
             "import sys",
             "import zipfile",
+            "import time",
             "from pathlib import Path",
             "ROOT = Path('/opt/cas-meta2-condition-skill-v9')",
+            "# The release is deliberately absent from CONFIG and the source package.",
+            "release = json.loads((ROOT / 'permit.json').read_bytes())",
+            "for key in ('job', 'source_sha', 'archive_sha256', 'manifest_sha256', 'dataset_manifest_sha256'):",
+            "    if release.get(key) != CONFIG[key]: raise ValueError('WORKER_RELEASE_IDENTITY')",
+            "gate = release.get('worker_release', {})",
+            "if gate.get('schedule_confirmed') is not True or not gate.get('instance_id'):",
+            "    raise ValueError('WORKER_RELEASE_REQUIRES_CONFIRMED_SCHEDULE')",
+            "if gate.get('deadline_epoch', 0) - time.time() < 900:",
+            "    raise ValueError('WORKER_RELEASE_DEADLINE_TOO_CLOSE')",
             "pkg = ROOT / 'package'",
-            "if not pkg.exists():",
-            "    pkg.mkdir(parents=True)",
+            "bootstrap = ROOT / 'bootstrap'",
+            "bootstrap.mkdir()",
             "with zipfile.ZipFile(ROOT / 'source.zip') as z:",
-            "    z.extractall(pkg)",
+            "    if len(z.infolist()) > 4096: raise ValueError('BOOTSTRAP_MEMBER_BOUND')",
+            "    for member in z.infolist():",
+            "        parts = member.filename.split('/')",
+            "        if member.is_dir() or any(p in ('', '.', '..') for p in parts) or ':' in member.filename or '\\\\' in member.filename:",
+            "            raise ValueError('BOOTSTRAP_MEMBER_PATH')",
+            "    z.extractall(bootstrap)",
             "pilot = pkg / 'research/CAS_META_2_COMPOSITION'",
-            "sys.path.insert(0, str(pilot))",
+            "sys.path.insert(0, str(bootstrap / 'research/CAS_META_2_COMPOSITION'))",
             "out = pilot / 'runs' / CONFIG['job']",
             "data = pilot / 'records/condition_skill_v9_001/dataset_001'",
             "evidence = out.parent / (out.name + '.evidence')",
@@ -459,9 +594,9 @@ class ConditionSkillV9Provider:
             "# torch_index_url; the same pin used by every v8 remote install.",
             "TORCH_INDEX = 'https://download.pytorch.org/whl/cu128'",
             "WHEEL_DIR = 'research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist'",
-            "WHEELS = [pkg / WHEEL_DIR / 'casformer_reference-0.1.0-py3-none-any.whl',",
-            "          pkg / WHEEL_DIR / 'cas_neural_cjt-0.2.0-py3-none-any.whl']",
-            "REQUIREMENTS = pilot / 'requirements-gpu.txt'",
+            "WHEELS = [bootstrap / WHEEL_DIR / 'casformer_reference-0.1.0-py3-none-any.whl',",
+            "          bootstrap / WHEEL_DIR / 'cas_neural_cjt-0.2.0-py3-none-any.whl']",
+            "REQUIREMENTS = bootstrap / 'research/CAS_META_2_COMPOSITION/requirements-gpu.txt'",
             "",
             "def run_checked(argv):",
             "    subprocess.run(argv, check=True)",
@@ -493,6 +628,8 @@ class ConditionSkillV9Provider:
             "    run_checked([python, '-m', 'pip', 'install', '--disable-pip-version-check',",
             "                 '-r', str(REQUIREMENTS),",
             "                 '--report', str(ROOT / 'dependency_install.json')])",
+            "    if gate['deadline_epoch'] - time.time() < 900:",
+            "        raise ValueError('WORKER_RELEASE_DEADLINE_TOO_CLOSE_AFTER_INSTALL')",
             "    receipt = orchestrate(str(ROOT / 'source.zip'), str(pkg), str(out), str(data),",
             "        CONFIG['job'], expected_sha256=CONFIG['archive_sha256'],",
             "        expected_source_sha=CONFIG['source_sha'],",
@@ -563,9 +700,13 @@ class ConditionSkillV9Provider:
             + frozen["region"],
             "echo '" + remote_sha256 + "  " + WORKER_ROOT
             + "/remote.py' | sha256sum -c -",
-            "timeout 120 aws s3api get-object --bucket " + bucket
+            "RELEASE_DEADLINE=$(( $(date +%s) + 180 ))",
+            "until timeout 10 aws s3api get-object --bucket " + bucket
             + " --key input/permit.json " + WORKER_ROOT + "/permit.json --region "
-            + frozen["region"],
+            + frozen["region"] + "; do",
+            "  test $(date +%s) -lt $RELEASE_DEADLINE || { echo WORKER_RELEASE_TIMEOUT; exit 1; }",
+            "  sleep 2",
+            "done",
             "PY=''",
             "for p in python3.12 python3.11 python3; do",
             "  if command -v \"$p\" >/dev/null 2>&1; then PY=\"$p\"; break; fi",
@@ -592,8 +733,9 @@ class ConditionSkillV9Provider:
         self.calls.append("launch")
         require(job == self.job, "CONDITION_SKILL_V9_LAUNCH_JOB_MISMATCH")
         require(self._reserved, "CONDITION_SKILL_V9_LAUNCH_REQUIRES_RESERVATION")
-        require(not self._launch_attempted, "CONDITION_SKILL_V9_SINGLE_LAUNCH_ONLY")
+        require(not self._launch_called, "CONDITION_SKILL_V9_SINGLE_LAUNCH_ONLY")
         self._validate_permit(permit)
+        self._launch_called = True
         frozen = plan.RESOURCE_PLAN
         ec2, s3, iam, scheduler = (self.clients[name] for name in
                                    ("ec2", "s3", "iam", "scheduler"))
@@ -604,60 +746,78 @@ class ConditionSkillV9Provider:
 
         raw = self._source_bytes()
         require(0 < len(raw) <= 24 * 1024**2, "CONDITION_SKILL_V9_SOURCE_ARCHIVE_BOUND")
+        self._source_copy = self.launch_module.write_evidence(self._evidence / "source.zip", raw)
+        self._event("source_archive_copy", "DURABLE_VERIFIED", archive=self._source_copy)
 
         self._ensure_bucket(s3, tags)
-        s3.put_object(Bucket=bucket, Key="input/source.zip", Body=raw)
+        self._effect("upload_source", s3.put_object, Bucket=bucket, Key="input/source.zip", Body=raw)
         remote = self._render_remote(permit).encode("utf-8")
-        s3.put_object(Bucket=bucket, Key="input/remote.py", Body=remote)
-        s3.put_object(Bucket=bucket, Key="input/permit.json", Body=canonical(permit))
+        self._effect("upload_bootstrap", s3.put_object, Bucket=bucket, Key="input/remote.py", Body=remote)
 
         def create_role(name, service, statements):
             trust = {"Version": "2012-10-17", "Statement": [
                 {"Effect": "Allow", "Principal": {"Service": service},
                  "Action": "sts:AssumeRole"}]}
-            iam.create_role(RoleName=name, AssumeRolePolicyDocument=json.dumps(trust),
-                            Tags=tags)
-            iam.put_role_policy(RoleName=name, PolicyName="job-only",
+            self._resources[name.rsplit("-", 1)[-1] + "_role"] = name
+            response = self._effect("create_role", iam.create_role, RoleName=name,
+                                   AssumeRolePolicyDocument=json.dumps(trust), Tags=tags)
+            arn = response.get("Role", {}).get("Arn")
+            require(arn == "arn:aws:iam::" + frozen["account"] + ":role/" + name,
+                    "CONDITION_SKILL_V9_ROLE_ARN")
+            self._effect("put_role_policy", iam.put_role_policy, RoleName=name, PolicyName="job-only",
                                 PolicyDocument=json.dumps({"Version": "2012-10-17",
                                                            "Statement": statements}))
-            return name
+            return arn
 
-        create_role(worker_role, "ec2.amazonaws.com", [
+        worker_arn = create_role(worker_role, "ec2.amazonaws.com", [
             {"Effect": "Allow", "Action": ["s3:GetObject"],
              "Resource": ["arn:aws:s3:::" + bucket + "/input/source.zip",
                           "arn:aws:s3:::" + bucket + "/input/remote.py",
                           "arn:aws:s3:::" + bucket + "/input/permit.json"]},
             {"Effect": "Allow", "Action": ["s3:PutObject"],
              "Resource": ["arn:aws:s3:::" + bucket + "/results/*"]}])
-        iam.create_instance_profile(InstanceProfileName=worker_role, Tags=tags)
-        iam.add_role_to_instance_profile(InstanceProfileName=worker_role,
+        self._resources["instance_profile"] = worker_role
+        profile = self._effect("create_instance_profile", iam.create_instance_profile,
+                               InstanceProfileName=worker_role, Tags=tags)["InstanceProfile"]
+        profile_arn = profile.get("Arn")
+        require(profile_arn == "arn:aws:iam::" + frozen["account"] + ":instance-profile/" + worker_role,
+                "CONDITION_SKILL_V9_PROFILE_ARN")
+        self._effect("add_role_to_instance_profile", iam.add_role_to_instance_profile,
+                     InstanceProfileName=worker_role,
                                          RoleName=worker_role)
-        create_role(timer_role, "scheduler.amazonaws.com", [
+        timer_arn = create_role(timer_role, "scheduler.amazonaws.com", [
             {"Effect": "Allow", "Action": "ec2:TerminateInstances",
              "Resource": "arn:aws:ec2:" + frozen["region"] + ":" + frozen["account"]
              + ":instance/*",
              "Condition": {"StringEquals": {"ec2:ResourceTag/cas_meta_job": self.job}}}])
+        iam_readback = self._wait_for_iam(worker_role, timer_role, worker_arn, timer_arn, profile_arn)
 
         _, subnet_id = self._default_network(ec2)
-        sg = ec2.create_security_group(GroupName=self.job,
+        group = self._effect("create_security_group", ec2.create_security_group, GroupName=self.job,
                                        Description="CAS condition-skill v9 outbound HTTPS only",
                                        VpcId=ec2.describe_vpcs(Filters=[
                                            {"Name": "isDefault", "Values": ["true"]}]
                                        )["Vpcs"][0]["VpcId"],
                                        TagSpecifications=[{"ResourceType": "security-group",
-                                                           "Tags": tags}])["GroupId"]
-        ec2.revoke_security_group_egress(GroupId=sg, IpPermissions=[
+                                                           "Tags": tags}])
+        sg = group["GroupId"]
+        self._resources["security_group"] = sg
+        self._effect("revoke_security_group_egress", ec2.revoke_security_group_egress, GroupId=sg, IpPermissions=[
             {"IpProtocol": "-1", "IpRanges": [{"CidrIp": "0.0.0.0/0"}]}])
-        ec2.authorize_security_group_egress(GroupId=sg, IpPermissions=[
+        self._effect("authorize_security_group_egress", ec2.authorize_security_group_egress, GroupId=sg, IpPermissions=[
             {"IpProtocol": "tcp", "FromPort": 443, "ToPort": 443,
              "IpRanges": [{"CidrIp": "0.0.0.0/0"}]}])
         self._resources["security_group"] = sg
 
         bootstrap = self._user_data(bucket, digest(remote))
-        launched = ec2.run_instances(
+        self._launch_attempted = True
+        self._run_state = "REQUESTED_UNKNOWN"
+        launch_started = datetime.now(timezone.utc)
+        try:
+            launched = self._effect("run_instances", ec2.run_instances,
             ImageId=frozen["ami"], InstanceType=frozen["instance_type"],
             MinCount=1, MaxCount=1, ClientToken=self.job,
-            IamInstanceProfile={"Name": worker_role},
+            IamInstanceProfile={"Arn": profile_arn},
             InstanceInitiatedShutdownBehavior="terminate",
             MetadataOptions={"HttpTokens": "required", "HttpEndpoint": "enabled"},
             NetworkInterfaces=[{"DeviceIndex": 0, "SubnetId": subnet_id, "Groups": [sg],
@@ -671,31 +831,66 @@ class ConditionSkillV9Provider:
             TagSpecifications=[{"ResourceType": "instance", "Tags": tags},
                                {"ResourceType": "volume", "Tags": tags}],
             UserData=bootstrap)
+        except BaseException as error:
+            if self._error_code(error) in ("InvalidParameterValue", "InvalidParameterCombination",
+                    "UnauthorizedOperation", "AuthFailure", "InsufficientInstanceCapacity",
+                    "InstanceLimitExceeded", "Unsupported"):
+                self._run_state = "REJECTED"
+            # Never issue RunInstances again, including after transport timeout.
+            # Discovery is read-only and keeps an unresolved response explicit.
+            try:
+                self._discover_instances()
+            except Exception as recovery_error:
+                self._event("instance_recovery", "FAILED", error=str(recovery_error)[:2000])
+            raise
         require(len(launched.get("Instances", [])) == 1,
                 "CONDITION_SKILL_V9_ONE_INSTANCE_RESPONSE_REQUIRED")
         self._instance_id = launched["Instances"][0]["InstanceId"]
         require(type(self._instance_id) is str and bool(INSTANCE_ID.fullmatch(self._instance_id)),
                 "CONDITION_SKILL_V9_REAL_INSTANCE_ID_REQUIRED")
         self._resources["instance"] = self._instance_id
-        self._launch_attempted = True
+        self._instance_ids = [self._instance_id]
+        self._run_state = "INSTANCE_OBSERVED"
+        self._event("instance_identity", "OBSERVED", instance_id=self._instance_id,
+                    client_token=self.job)
 
-        cloud_deadline = datetime.now(timezone.utc) + timedelta(
+        cloud_deadline = launch_started + timedelta(
             seconds=frozen["cloud_schedule_seconds"])
         target = {"Arn": "arn:aws:scheduler:::aws-sdk:ec2:terminateInstances",
-                  "RoleArn": timer_role,
+                  "RoleArn": timer_arn,
                   "Input": json.dumps({"InstanceIds": [self._instance_id]}),
                   "RetryPolicy": {"MaximumRetryAttempts": 0,
                                   "MaximumEventAgeInSeconds": 60}}
         expression = "at(" + cloud_deadline.strftime("%Y-%m-%dT%H:%M:%S") + ")"
-        scheduler.create_schedule(Name=self.job, ScheduleExpression=expression,
+        self._resources["schedule"] = self.job
+        self._effect("create_schedule", scheduler.create_schedule,
+                                  Name=self.job, ScheduleExpression=expression,
                                   ScheduleExpressionTimezone="UTC",
                                   FlexibleTimeWindow={"Mode": "OFF"}, Target=target,
                                   ActionAfterCompletion="DELETE")
-        self._resources["schedule"] = self.job
+        response = scheduler.get_schedule(Name=self.job)
+        observed = {key: response.get(key) for key in ("Arn", "State", "Target",
+            "ScheduleExpression", "ScheduleExpressionTimezone", "FlexibleTimeWindow", "ActionAfterCompletion")}
+        require(observed.get("Arn") == "arn:aws:scheduler:" + self.region + ":" + frozen["account"]
+                + ":schedule/default/" + self.job
+                and observed.get("State") == "ENABLED" and observed.get("Target") == target
+                and observed.get("ScheduleExpression") == expression
+                and observed.get("ScheduleExpressionTimezone") == "UTC"
+                and observed.get("FlexibleTimeWindow") == {"Mode": "OFF"}
+                and observed.get("ActionAfterCompletion") == "DELETE",
+                "CONDITION_SKILL_V9_SCHEDULE_READBACK")
+        self._event("shutdown_schedule", "CONFIRMED", schedule=observed)
+        released = {**permit, "worker_release": {"instance_id": self._instance_id,
+                    "schedule_confirmed": True, "schedule_arn": observed.get("Arn"),
+                    "schedule_sha256": digest(canonical(observed)),
+                    "deadline_epoch": int(cloud_deadline.timestamp())}}
+        self._effect("release_worker", s3.put_object, Bucket=bucket,
+                     Key="input/permit.json", Body=canonical(released))
 
         return {"job": self.job, "instance_id": self._instance_id,
                 "client_token": self.job, "imdsv2_required": True,
-                "permit": permit, "bucket": bucket, "launch_attempted": True,
+                "permit": released, "iam_readback": iam_readback,
+                "shutdown_schedule": observed, "bucket": bucket, "launch_attempted": True,
                 "automatic_retries": 0,
                 "identity_note": ("Launch-side receipt records the observed InstanceId "
                                   "and ClientToken=job with IMDSv2 HttpTokens=required; "
@@ -737,6 +932,7 @@ class ConditionSkillV9Provider:
                         ("REMOTE_FINISHED", "REMOTE_FAILED"),
                         "CONDITION_SKILL_V9_RESULT_STATUS")
                 self._result = result
+                self._result_raw = raw
                 return {"worker_status": result["status"]}
             except self._client_error as error:
                 code = getattr(error, "response", {}).get("Error", {}).get("Code")
@@ -768,135 +964,245 @@ class ConditionSkillV9Provider:
         response = s3.get_object(Bucket=bucket, Key="results/artifacts.zip")
         raw = self._read_body(response["Body"], result["bytes"])
         require(digest(raw) == result["sha256"], "CONDITION_SKILL_V9_ARTIFACT_HASH_MISMATCH")
-        return _parse_artifacts(raw)
+        archive = self.launch_module.write_evidence(self._evidence / "cloud_artifacts.zip", raw)
+        completion = self.launch_module.write_evidence(self._evidence / "cloud_complete.json",
+                                self._result_raw if self._result_raw is not None else canonical(result))
+        self._event("cloud_artifact_copy", "DURABLE_VERIFIED", archive=archive, completion=completion)
+        self._durable_files = {"cloud_artifacts.zip": archive, "cloud_complete.json": completion}
+        self._durable_results = True
+        return {"archive": archive, "completion": completion, "files": _parse_artifacts(raw)}
 
     # ------------------------------------------------------------------ #
     # cleanup (call-safe; records every failure)
     # ------------------------------------------------------------------ #
     def cleanup(self, job):
+        """Record observations; retain uncollected results under seven-day expiry.
+
+        A missing local instance id is not proof an instance was terminated.
+        Ambiguous RunInstances responses are discovered by stable token and tag,
+        never by issuing another launch. Unknown compute keeps its shutdown
+        schedule and supporting roles instead of dismantling its only backstop.
+        """
         self.calls.append("cleanup")
         require(job == self.job, "CONDITION_SKILL_V9_CLEANUP_JOB_MISMATCH")
-        failures = []
-        status = {}
-        ec2 = self.clients.get("ec2")
-        s3 = self.clients.get("s3")
-        iam = self.clients.get("iam")
-        scheduler = self.clients.get("scheduler")
+        failures, status = [], {"instance_ids": [], "instances": {}}
+        ec2, s3, iam, scheduler = (self.clients.get(name) for name in ("ec2", "s3", "iam", "scheduler"))
 
-        instance_id = self._instance_id or self._resources.get("instance")
-        if instance_id is None:
-            status["instance_terminated"] = True
-            status["instance_termination_confirmed"] = True
-        else:
+        def failed(label, error):
+            failures.append(label + ":" + type(error).__name__ + ":" + str(error)[:1500])
+
+        def observe(label, callback, absent):
             try:
-                ec2.terminate_instances(InstanceIds=[instance_id])
+                value = callback()
+                return value, False
+            except self._client_error as error:
+                if self._error_code(error) in absent:
+                    return None, True
+                raise
+
+        def confirm_absent(label, callback, absent, empty=lambda value: False):
+            for attempt in range(16):
+                value, missing = observe(label, callback, absent)
+                if missing or empty(value):
+                    return "CONFIRMED_ABSENT"
+                if attempt != 15:
+                    time.sleep(OBSERVATION_DELAY_SECONDS)
+            raise ValueError(label + "_ABSENCE_UNCONFIRMED")
+
+        try:
+            self._event("cleanup", "REQUESTED", launch_state=self._run_state)
+        except Exception as error:
+            failed("CLEANUP_JOURNAL_FAILED", error)
+        if self._launch_attempted and not self._instance_ids:
+            try:
+                self._discover_instances()
+            except Exception as error:
+                failed("INSTANCE_DISCOVERY_FAILED", error)
+        status["instance_ids"] = list(self._instance_ids)
+        compute_closed = not self._instance_ids and self._run_state in ("NOT_ATTEMPTED", "REJECTED")
+        if compute_closed:
+            status["instance_state"] = "NOT_CREATED" if not self._launch_attempted else "REJECTED_NO_INSTANCE_OBSERVED"
+        elif not self._instance_ids:
+            status["instance_state"] = "UNKNOWN"
+            failures.append("AMBIGUOUS_RUN_INSTANCES_UNRESOLVED")
+        for instance_id in self._instance_ids:
+            try:
+                current = ec2.describe_instances(InstanceIds=[instance_id])["Reservations"][0]["Instances"][0]
+                require(current.get("ClientToken") == self.job and
+                        {t["Key"]: t["Value"] for t in current.get("Tags", [])}.get("cas_meta_job") == self.job,
+                        "CONDITION_SKILL_V9_CLEANUP_INSTANCE_IDENTITY")
+                if current.get("State", {}).get("Name") != "terminated":
+                    ec2.terminate_instances(InstanceIds=[instance_id])
                 confirmed = False
-                deadline = time.monotonic() + 120
-                while time.monotonic() < deadline:
-                    current = ec2.describe_instances(InstanceIds=[instance_id]
-                                                     )["Reservations"][0]["Instances"][0]
+                for attempt in range(60):
+                    current = ec2.describe_instances(InstanceIds=[instance_id])["Reservations"][0]["Instances"][0]
                     if current.get("State", {}).get("Name") == "terminated":
                         confirmed = True
                         break
-                    time.sleep(2)
-                status["instance_terminated"] = True
-                status["instance_termination_confirmed"] = confirmed
-                if not confirmed:
-                    failures.append("INSTANCE_TERMINATION_UNCONFIRMED:" + instance_id)
-            except Exception as error:  # noqa: BLE001 - cleanup must record, not raise
-                failures.append("INSTANCE_TERMINATION_FAILED:" + str(error))
-                status["instance_terminated"] = False
-                status["instance_termination_confirmed"] = False
+                    time.sleep(OBSERVATION_DELAY_SECONDS)
+                require(confirmed, "INSTANCE_TERMINATION_UNCONFIRMED")
+                status["instances"][instance_id] = "CONFIRMED_TERMINATED"
+            except Exception as error:
+                failed("INSTANCE_TERMINATION_FAILED", error)
+                status["instances"][instance_id] = "UNKNOWN"
+        if self._instance_ids:
+            compute_closed = all(value == "CONFIRMED_TERMINATED" for value in status["instances"].values())
+            status["instance_state"] = "CONFIRMED_TERMINATED" if compute_closed else "UNKNOWN"
+        status["instance_terminated"] = bool(self._instance_ids) and compute_closed
+        status["instance_termination_confirmed"] = status["instance_terminated"]
+        status["compute_closed"] = compute_closed
+
+        try:
+            require(compute_closed, "COMPUTE_STILL_UNRESOLVED")
+            status["volume_state"] = confirm_absent("VOLUMES",
+                lambda: ec2.describe_volumes(Filters=[{"Name": "tag:cas_meta_job", "Values": [self.job]}]),
+                (), empty=lambda value: value.get("Volumes") == [] and not value.get("NextToken"))
+        except Exception as error:
+            failed("VOLUME_DELETION_UNCONFIRMED", error)
+            status["volume_state"] = "UNKNOWN"
+        # This boolean means observed absent, not inferred from an instance flag.
+        status["volumes_deleted"] = status["volume_state"] == "CONFIRMED_ABSENT"
+
+        if compute_closed:
+            try:
+                _, missing = observe("schedule", lambda: scheduler.get_schedule(Name=self.job),
+                                     ("ResourceNotFoundException",))
+                if not missing:
+                    scheduler.delete_schedule(Name=self.job)
+                status["schedule_state"] = confirm_absent("SCHEDULE",
+                    lambda: scheduler.get_schedule(Name=self.job), ("ResourceNotFoundException",))
+            except Exception as error:
+                failed("SCHEDULE_REMOVAL_FAILED", error)
+                status["schedule_state"] = "UNKNOWN"
+        else:
+            status["schedule_state"] = "RETAINED_FOR_UNKNOWN_COMPUTE"
+        status["schedule_removed"] = status["schedule_state"] == "CONFIRMED_ABSENT"
+
+        # Roles and the profile are named before their create request, so partial
+        # setup is discoverable even when the create response was lost.
+        status["iam_resources"] = {}
+        if compute_closed:
+            profile_name = self.job + "-worker"
+            try:
+                profile, missing = observe("profile",
+                    lambda: iam.get_instance_profile(InstanceProfileName=profile_name), ("NoSuchEntity",))
+                if not missing:
+                    roles = profile["InstanceProfile"].get("Roles", [])
+                    require(all(role.get("RoleName") == profile_name for role in roles),
+                            "UNEXPECTED_PROFILE_ROLE")
+                    for role in roles:
+                        iam.remove_role_from_instance_profile(InstanceProfileName=profile_name,
+                                                             RoleName=role["RoleName"])
+                    iam.delete_instance_profile(InstanceProfileName=profile_name)
+                status["iam_resources"][profile_name + "/profile"] = confirm_absent("PROFILE",
+                    lambda: iam.get_instance_profile(InstanceProfileName=profile_name), ("NoSuchEntity",))
+            except Exception as error:
+                failed("INSTANCE_PROFILE_REMOVAL_FAILED", error)
+                status["iam_resources"][profile_name + "/profile"] = "UNKNOWN"
+            for role_name in (self.job + "-worker", self.job + "-timer"):
+                try:
+                    _, missing = observe("role", lambda: iam.get_role(RoleName=role_name), ("NoSuchEntity",))
+                    if not missing:
+                        observe("role_policy", lambda: iam.delete_role_policy(
+                            RoleName=role_name, PolicyName="job-only"), ("NoSuchEntity",))
+                        iam.delete_role(RoleName=role_name)
+                    status["iam_resources"][role_name] = confirm_absent("ROLE",
+                        lambda: iam.get_role(RoleName=role_name), ("NoSuchEntity",))
+                except Exception as error:
+                    failed("ROLE_REMOVAL_FAILED", error)
+                    status["iam_resources"][role_name] = "UNKNOWN"
+        else:
+            status["iam_resources"]["state"] = "RETAINED_FOR_UNKNOWN_COMPUTE"
+        status["roles_removed"] = bool(status["iam_resources"]) and all(
+            value == "CONFIRMED_ABSENT" for value in status["iam_resources"].values())
+
+        group = self._resources.get("security_group")
+        try:
+            require(compute_closed, "COMPUTE_STILL_UNRESOLVED")
+            groups = ec2.describe_security_groups(Filters=[{"Name": "group-name", "Values": [self.job]}])
+            require(not groups.get("NextToken"), "SECURITY_GROUP_OBSERVATION_TRUNCATED")
+            for candidate in groups.get("SecurityGroups", []):
+                require(candidate.get("GroupName") == self.job and
+                        {t["Key"]: t["Value"] for t in candidate.get("Tags", [])}.get("cas_meta_job") == self.job,
+                        "SECURITY_GROUP_OWNERSHIP")
+                ec2.delete_security_group(GroupId=candidate["GroupId"])
+            status["security_group_state"] = confirm_absent("SECURITY_GROUP",
+                lambda: ec2.describe_security_groups(Filters=[{"Name": "group-name", "Values": [self.job]}]),
+                ("InvalidGroup.NotFound", "InvalidSecurityGroupID.NotFound"),
+                empty=lambda value: value.get("SecurityGroups") == [] and not value.get("NextToken"))
+        except Exception as error:
+            failed("SECURITY_GROUP_DELETION_FAILED", error)
+            status["security_group_state"] = "UNKNOWN"
+        status["security_group_deleted"] = status["security_group_state"] == "CONFIRMED_ABSENT"
 
         bucket = self._resources.get("bucket")
-        if bucket is not None and s3 is not None:
-            try:
-                # results/* must be deleted too, or delete_bucket fails on a
-                # non-empty bucket and every successful run ends incomplete.
-                s3.delete_objects(Bucket=bucket, Delete={"Objects": [
-                    {"Key": "input/source.zip"}, {"Key": "input/remote.py"},
-                    {"Key": "input/permit.json"},
-                    {"Key": "reservation/reservation_receipt.json"},
-                    {"Key": "reservation/ledger_snapshot.json"},
-                    {"Key": "results/complete.json"},
-                    {"Key": "results/artifacts.zip"}]})
-                status["inputs_deleted"] = True
-                status["results_deleted"] = True
-            except Exception as error:  # noqa: BLE001
-                failures.append("INPUT_DELETION_FAILED:" + str(error))
-                status["inputs_deleted"] = False
-            try:
-                s3.delete_bucket(Bucket=bucket)
-                status["bucket_deleted"] = True
-            except Exception as error:  # noqa: BLE001
-                failures.append("BUCKET_DELETION_FAILED:" + str(error))
-                status["bucket_deleted"] = False
+        status["results_deleted"] = False
+        status["bucket_deleted"] = False
+        status["inputs_deleted"] = False
+        if bucket is None:
+            status["bucket_state"] = "NOT_CREATED"
         else:
-            status["inputs_deleted"] = True
-            status["bucket_deleted"] = True
-
-        if scheduler is not None:
             try:
-                scheduler.delete_schedule(Name=self.job)
-                status["schedule_removed"] = True
-            except self._client_error as error:
-                code = getattr(error, "response", {}).get("Error", {}).get("Code")
-                if code == "ResourceNotFoundException":
-                    # Already absent: clean, not a failure. Record it honestly.
-                    status["schedule_removed"] = True
-                    status["schedule_was_absent"] = True
+                listing, missing = observe("bucket", lambda: s3.list_objects_v2(Bucket=bucket),
+                                           ("NoSuchBucket", "404"))
+                if missing:
+                    status["bucket_state"] = "CONFIRMED_ABSENT"
+                    status["inputs_deleted"] = True
                 else:
-                    failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
-                    status["schedule_removed"] = False
-            except Exception as error:  # noqa: BLE001
-                failures.append("SCHEDULE_REMOVAL_FAILED:" + str(error))
-                status["schedule_removed"] = False
-        else:
-            status["schedule_removed"] = True
-
-        security_group = self._resources.get("security_group")
-        if security_group is not None and ec2 is not None:
-            try:
-                ec2.delete_security_group(GroupId=security_group)
-                status["security_group_deleted"] = True
-            except self._client_error as error:
-                code = getattr(error, "response", {}).get("Error", {}).get("Code")
-                if code in ("InvalidGroup.NotFound", "InvalidSecurityGroupID.NotFound"):
-                    status["security_group_deleted"] = True
-                    status["security_group_was_absent"] = True
-                else:
-                    failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
-                    status["security_group_deleted"] = False
-            except Exception as error:  # noqa: BLE001
-                failures.append("SECURITY_GROUP_DELETION_FAILED:" + str(error))
-                status["security_group_deleted"] = False
-        else:
-            status["security_group_deleted"] = True
-
-        if iam is not None:
-            for role in (self.job + "-worker", self.job + "-timer"):
-                try:
-                    iam.remove_role_from_instance_profile(InstanceProfileName=role,
-                                                         RoleName=role)
-                except Exception:  # noqa: BLE001 - instance profile may not exist
-                    pass
-                try:
-                    iam.delete_instance_profile(InstanceProfileName=role)
-                except Exception:  # noqa: BLE001
-                    pass
-                try:
-                    iam.delete_role_policy(RoleName=role, PolicyName="job-only")
-                    iam.delete_role(RoleName=role)
-                except Exception:  # noqa: BLE001
-                    pass
-            status["roles_removed"] = True
-
-        status["volumes_deleted"] = status.get("instance_termination_confirmed", False)
-        if not status.get("volumes_deleted"):
-            failures.append("VOLUME_DELETION_UNCONFIRMED")
-        complete = not failures
-        return {"complete": complete, "failures": failures, **status}
-
+                    require(not listing.get("IsTruncated") and not listing.get("NextContinuationToken"),
+                            "BUCKET_CONTENTS_TRUNCATED")
+                    keys = [item["Key"] for item in listing.get("Contents", [])]
+                    require(len(keys) <= 100, "BUCKET_CONTENTS_BOUND")
+                    if "input/source.zip" in keys:
+                        require(self._source_copy is not None, "LOCAL_SOURCE_COPY_REQUIRED")
+                        source_path = self.launch_module.evidence_directory(self._source_copy["path"])
+                        require(source_path.stat().st_nlink == 1 and
+                                digest(source_path.read_bytes()) == self._source_copy["sha256"],
+                                "LOCAL_SOURCE_CHANGED_BEFORE_CLOUD_DELETE")
+                    disposable = [key for key in keys if key.startswith(("input/", "reservation/"))]
+                    # Recheck local copies immediately before deleting any result.
+                    if self._durable_results:
+                        for filename in ("cloud_artifacts.zip", "cloud_complete.json"):
+                            expected = self._durable_files[filename]
+                            path = self.launch_module.evidence_directory(expected["path"])
+                            require(path.stat().st_nlink == 1 and path.stat().st_size == expected["bytes"]
+                                    and digest(path.read_bytes()) == expected["sha256"],
+                                    "LOCAL_EVIDENCE_CHANGED_BEFORE_CLOUD_DELETE")
+                        disposable += [key for key in keys if key in ("results/artifacts.zip", "results/complete.json")]
+                    if disposable:
+                        deleted = s3.delete_objects(Bucket=bucket, Delete={"Objects": [
+                            {"Key": key} for key in disposable]})
+                        require(not deleted.get("Errors"), "S3_PARTIAL_DELETION_FAILED")
+                    status["inputs_deleted"] = True
+                    status["results_deleted"] = self._durable_results and any(
+                        key.startswith("results/") for key in disposable)
+                    remaining = s3.list_objects_v2(Bucket=bucket)
+                    require(not remaining.get("IsTruncated"), "BUCKET_RECHECK_TRUNCATED")
+                    if not remaining.get("Contents") and compute_closed:
+                        s3.delete_bucket(Bucket=bucket)
+                        confirm_absent("BUCKET", lambda: s3.list_objects_v2(Bucket=bucket), ("NoSuchBucket", "404"))
+                        status["bucket_deleted"] = True
+                        status["bucket_state"] = "CONFIRMED_ABSENT"
+                    else:
+                        policy = s3.get_bucket_lifecycle_configuration(Bucket=bucket)
+                        require(any(rule.get("Status") == "Enabled" and rule.get("Filter") == {"Prefix": ""}
+                                    and rule.get("Expiration") == {"Days": RESULT_RETENTION_DAYS}
+                                    for rule in policy.get("Rules", [])), "RESULT_RETENTION_UNCONFIRMED")
+                        status["bucket_state"] = "RETAINED_BOUNDED_EVIDENCE"
+                        status["retained_bucket"] = bucket
+                        status["retention_days"] = RESULT_RETENTION_DAYS
+                        status["retained_keys"] = [item["Key"] for item in remaining.get("Contents", [])]
+            except Exception as error:
+                failed("EVIDENCE_CLEANUP_FAILED", error)
+                status["bucket_state"] = "UNKNOWN_PRESERVED"
+        status["complete"] = not failures and compute_closed
+        status["failures"] = failures
+        try:
+            self._event("cleanup", "OBSERVED", cleanup=status)
+        except Exception as error:
+            failed("CLEANUP_JOURNAL_FAILED", error)
+            status["complete"] = False
+        return status
 
 def _parse_artifacts(raw):
     """Parse the collected artifacts zip into {name: {sha256, bytes}} objects.

@@ -74,6 +74,9 @@ class FakeProvider:
         self.fail_wait = fail_wait
         self.calls = []
 
+    def configure_evidence(self, directory):
+        self.evidence = directory
+
     def preflight(self):
         self.calls.append("preflight")
         return {"account": plan.RESOURCE_PLAN["account"], "region": plan.RESOURCE_PLAN["region"],
@@ -84,9 +87,11 @@ class FakeProvider:
                 "conflicting_resources": []}
 
     def reserve(self, amount):
+        assert (self.evidence / "intent.json").is_file()
         self.calls.append("reserve")
-        return budget.reserve_budget(JOB, "a" * 40, "b" * 64, amount,
-                                     budget_plan(), self.ledger_path)
+        receipt = budget.reserve_budget(JOB, "a" * 40, "b" * 64, amount,
+                                        budget_plan(), self.ledger_path)
+        return {**receipt, "aws_side_reservation": {"status": "RECORDED"}}
 
     def launch(self, job, permit):
         self.calls.append("launch")
@@ -322,7 +327,7 @@ def test_changed_receipt_cannot_reach_launch(ledger, mutate, reason):
     provider.reserve = reserve
     with pytest.raises(ValueError, match=reason):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
-    assert provider.calls == ["reserve"]
+    assert provider.calls == ["reserve", "cleanup"]
     assert budget.read_ledger(ledger)["total_reserved_usd"] == "102.00"
 
 
@@ -335,7 +340,7 @@ def test_wrong_job_reservation_cannot_reach_launch(ledger):
     provider.reserve = reserve
     with pytest.raises(ValueError, match="RESERVATION_IDENTITY_MISMATCH:job"):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
-    assert provider.calls == ["reserve"]
+    assert provider.calls == ["reserve", "cleanup"]
 
 
 def test_no_ledger_update_cannot_reach_launch(ledger):
@@ -346,7 +351,7 @@ def test_no_ledger_update_cannot_reach_launch(ledger):
     provider.reserve = reserve
     with pytest.raises(ValueError, match="RESERVATION_REVISION_MISMATCH"):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
-    assert provider.calls == ["reserve"]
+    assert provider.calls == ["reserve", "cleanup"]
 
 
 @pytest.mark.parametrize("change", [
@@ -362,7 +367,7 @@ def test_other_valid_budget_plan_cannot_authorize_this_job(ledger, change):
     provider.reserve = reserve
     with pytest.raises(ValueError, match="RESERVATION_RESOURCE_PLAN_MISMATCH"):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
-    assert provider.calls == ["reserve"]
+    assert provider.calls == ["reserve", "cleanup"]
 
 
 @pytest.mark.parametrize("source,archive,reason", [
@@ -376,7 +381,7 @@ def test_other_source_reservation_cannot_reach_launch(ledger, source, archive, r
     provider.reserve = reserve
     with pytest.raises(ValueError, match="RESERVATION_IDENTITY_MISMATCH:" + reason):
         launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
-    assert provider.calls == ["reserve"]
+    assert provider.calls == ["reserve", "cleanup"]
 
 
 def test_reservation_plan_is_detached_and_cost_bounded():
@@ -384,3 +389,66 @@ def test_reservation_plan_is_detached_and_cost_bounded():
     assert budget.validate_plan(snapshot, "4.00") == budget.amount("4.00")
     snapshot["condition_skill_v9"]["worker_seconds_max"] = 999
     assert launch.reservation_plan()["condition_skill_v9"]["worker_seconds_max"] == 600
+
+
+def test_existing_receipt_directory_blocks_before_provider_or_reservation(ledger):
+    directory = ledger.parent / "already-present"
+    directory.mkdir()
+    before = ledger.read_bytes()
+    provider = FakeProvider(ledger)
+    with pytest.raises(ValueError, match="FRESH_RECEIPT_DIRECTORY_REQUIRED"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger,
+                       receipt_dir=directory)
+    assert ledger.read_bytes() == before
+    assert provider.calls == []
+
+
+def test_launch_identity_and_raw_error_survive_cleanup_exception(ledger):
+    provider = FakeProvider(ledger, fail_wait=True)
+    provider.cleanup = lambda job: (_ for _ in ()).throw(RuntimeError("cleanup also failed"))
+    result = launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    directory = Path(result["receipt_dir"])
+    saved = json.loads((directory / "result.json").read_bytes())
+    assert saved["launch"]["job"] == JOB
+    assert saved["outcome"]["exception"] == "INSTANCE_DIED"
+    assert "cleanup also failed" in saved["cleanup"]["failures"][0]
+    assert json.loads((directory / "failure.json").read_bytes())["exception"] == "INSTANCE_DIED"
+    assert (directory / "intent.json").is_file()
+    assert (directory / "reservation.json").is_file()
+
+
+def test_failed_reservation_record_is_durable_and_never_launches(ledger):
+    provider = FakeProvider(ledger)
+    original = provider.reserve
+    def failed(amount):
+        receipt = original(amount)
+        receipt["aws_side_reservation"] = {"status": "FAILED", "failure": "fixture S3 denial"}
+        return receipt
+    provider.reserve = failed
+    with pytest.raises(ValueError, match="AWS_RESERVATION_RECORD_REQUIRED"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    directory = ledger.parent / ("condition_skill_v9_" + JOB)
+    result = json.loads((directory / "result.json").read_bytes())
+    assert result["reservation"]["aws_side_reservation"]["failure"] == "fixture S3 denial"
+    assert result["launch"] is None
+    assert provider.calls == ["reserve", "cleanup"]
+    assert launch.read_ledger(ledger)["ledger"]["total_reserved_usd"] == "102.00"
+
+
+def test_evidence_write_failure_prevents_reservation(ledger, monkeypatch):
+    provider = FakeProvider(ledger)
+    before = ledger.read_bytes()
+    monkeypatch.setattr(launch, "write_evidence", lambda *args: (_ for _ in ()).throw(OSError("disk full")))
+    with pytest.raises(OSError, match="disk full"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert ledger.read_bytes() == before
+    assert provider.calls == []
+
+
+def test_keyboard_interrupt_after_launch_is_recorded_and_cleaned(ledger):
+    provider = FakeProvider(ledger)
+    provider.wait = lambda *args, **kwargs: (_ for _ in ()).throw(KeyboardInterrupt("stop"))
+    result = launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger)
+    assert result["outcome"]["exception_type"] == "KeyboardInterrupt"
+    assert result["cleanup"]["complete"] is True
+    assert json.loads((Path(result["receipt_dir"]) / "result.json").read_bytes()) == result
