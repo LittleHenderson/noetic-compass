@@ -1,0 +1,6 @@
+{
+  "aws_execution": false,
+  "forbidden_modules_loaded": [],
+  "network_functions_blocked": true,
+  "pytest_exit": 0
+}

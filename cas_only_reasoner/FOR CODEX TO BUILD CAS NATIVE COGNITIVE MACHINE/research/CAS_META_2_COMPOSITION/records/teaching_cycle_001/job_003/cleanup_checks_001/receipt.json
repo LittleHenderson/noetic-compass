@@ -1,0 +1,32 @@
+{
+  "aws_execution": false,
+  "boundary": "Fake SDK and existing provider cleanup only; no live cleanup or training.",
+  "elapsed_seconds": 6.2189999999973224,
+  "exit_code": 0,
+  "outputs": {
+    "child_receipt.json": "879bd514e8b2117505408e5bcf9cfb6e859800f6dda25203ba4aeb5e89de1bd5",
+    "stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.txt": "e2a40ea6bf36bc6888844914fcd8e0360fb616b547e89b590205ac33d7c6022e"
+  },
+  "source_after": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_teaching_job003_cleanup.py": {
+      "bytes": 12834,
+      "sha256": "de34c660451f030a962b545bf02e43610d75e629b47e00503c3e67cd133391b9"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\recover_teaching_job003_cleanup.py": {
+      "bytes": 19621,
+      "sha256": "0da31256f5ebe5cf3577c26c1f010c942d578f2e042647cbeb043054d5a19a25"
+    }
+  },
+  "source_before": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_teaching_job003_cleanup.py": {
+      "bytes": 12834,
+      "sha256": "de34c660451f030a962b545bf02e43610d75e629b47e00503c3e67cd133391b9"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\recover_teaching_job003_cleanup.py": {
+      "bytes": 19621,
+      "sha256": "0da31256f5ebe5cf3577c26c1f010c942d578f2e042647cbeb043054d5a19a25"
+    }
+  },
+  "source_unchanged": true
+}

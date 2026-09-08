@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\job_003\\cleanup_checks_001\\run_checks.py",
+    "--child"
+  ],
+  "cwd": "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312",
+  "environment": {
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+    "PYTHONIOENCODING": "utf-8"
+  },
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "source_before": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_teaching_job003_cleanup.py": {
+      "bytes": 12834,
+      "sha256": "de34c660451f030a962b545bf02e43610d75e629b47e00503c3e67cd133391b9"
+    },
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\recover_teaching_job003_cleanup.py": {
+      "bytes": 19621,
+      "sha256": "0da31256f5ebe5cf3577c26c1f010c942d578f2e042647cbeb043054d5a19a25"
+    }
+  },
+  "wrapper_sha256": "e7a866e1f34a893d8701396d8cce9c049d8e7cc6e55a46381d499b68a81f03e8"
+}
