@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_teaching_continuation.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\continuation_checks_001",
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+  ],
+  "tests": [
+    "tests/test_teaching_cycle_plan.py",
+    "tests/test_teaching_cycle_preflight.py",
+    "tests/test_teaching_cycle_bootstrap.py",
+    "tests/test_teaching_cycle_remote.py",
+    "tests/test_teaching_cycle_launch.py",
+    "tests/test_teaching_cycle_provider.py",
+    "tests/test_teaching_cycle_launch_tools.py",
+    "tests/test_teaching_cycle_collected_evaluation.py",
+    "tests/test_teaching_cycle_continuation_inspection.py"
+  ]
+}
