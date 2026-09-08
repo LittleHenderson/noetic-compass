@@ -1,0 +1,69 @@
+{
+  "after": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/condition_skill_v9/train.py": "4d4ab00ab39ece46f267144edec382d45304af1a07d5b7f88857d048eacc9efe",
+    "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "cas_meta2/policy.py": "6d5f3cbfc455c65ef9000c5145f8f5b691668fb355339eeebd61e4aa2b8d26d0",
+    "cas_meta2/teaching_cycle/__init__.py": "d227e110bc609fbfeadc46b5211cc81247873aed667d15c006647d48e62a3f93",
+    "cas_meta2/teaching_cycle/controller.py": "8911fbd7cfb6fb1e3e018d297abd3cc048a776109fe17f1b2c5a88c704e4b63a",
+    "cas_meta2/teaching_cycle/data.py": "35b3e684327e3089fbffd7c5fd4ff95d8f0ce8c5c45a875b285660694191a07f",
+    "cas_meta2/teaching_cycle/gpu_adapter.py": "4d53039df0e36eb5c66291fc204abc317f8cccbd2d09c71d48fab471786f6605",
+    "records/budget/campaign_ledger.json": "83fd87829a34a559ae901b553a851d79ec27359601230561afffb55955df2b92",
+    "records/condition_skill_v9_001/PROTOCOL.md": "25f22e465983982c826ccebff02c53e55e36abe8719d62b98ddfea25d90775cf",
+    "records/teaching_cycle_001/PROTOCOL.md": "f18934549a371a5dee6dc7a13eac97c60b953b46bddf9abad6e4f22cd2fafab1",
+    "tests/test_teaching_cycle_controller.py": "c38aa5648ab0af475746531e4ac70abe58c84c542d45c56b087e7410b4bd5bae",
+    "tests/test_teaching_cycle_data.py": "604ea6682102721d3a6c5ab828f12031ee90b247328737e110ed302ab9c87049",
+    "tests/test_teaching_cycle_gpu_boundary.py": "c3ed8f89398a030e800dce6fc02798e7c0a8db6078c876393f24e236c400ecb9",
+    "tests/test_teaching_cycle_preparation.py": "02066aa412f7e8346282448c69e26420dbbc241b79dc41c935feb2951ad2474a",
+    "tools/check_teaching_cycle.py": "9cd23951c37a34b142b23ac48fcb0c84342b2e378ce9221068b3140f92999207",
+    "tools/prepare_teaching_cycle.py": "27dc09860a5a7e69fccdc7dc19dcf70a2169b87ef18361044de575dec0e08403"
+  },
+  "before": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/condition_skill_v9/train.py": "4d4ab00ab39ece46f267144edec382d45304af1a07d5b7f88857d048eacc9efe",
+    "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "cas_meta2/policy.py": "6d5f3cbfc455c65ef9000c5145f8f5b691668fb355339eeebd61e4aa2b8d26d0",
+    "cas_meta2/teaching_cycle/__init__.py": "d227e110bc609fbfeadc46b5211cc81247873aed667d15c006647d48e62a3f93",
+    "cas_meta2/teaching_cycle/controller.py": "8911fbd7cfb6fb1e3e018d297abd3cc048a776109fe17f1b2c5a88c704e4b63a",
+    "cas_meta2/teaching_cycle/data.py": "35b3e684327e3089fbffd7c5fd4ff95d8f0ce8c5c45a875b285660694191a07f",
+    "cas_meta2/teaching_cycle/gpu_adapter.py": "4d53039df0e36eb5c66291fc204abc317f8cccbd2d09c71d48fab471786f6605",
+    "records/budget/campaign_ledger.json": "83fd87829a34a559ae901b553a851d79ec27359601230561afffb55955df2b92",
+    "records/condition_skill_v9_001/PROTOCOL.md": "25f22e465983982c826ccebff02c53e55e36abe8719d62b98ddfea25d90775cf",
+    "records/teaching_cycle_001/PROTOCOL.md": "f18934549a371a5dee6dc7a13eac97c60b953b46bddf9abad6e4f22cd2fafab1",
+    "tests/test_teaching_cycle_controller.py": "c38aa5648ab0af475746531e4ac70abe58c84c542d45c56b087e7410b4bd5bae",
+    "tests/test_teaching_cycle_data.py": "604ea6682102721d3a6c5ab828f12031ee90b247328737e110ed302ab9c87049",
+    "tests/test_teaching_cycle_gpu_boundary.py": "c3ed8f89398a030e800dce6fc02798e7c0a8db6078c876393f24e236c400ecb9",
+    "tests/test_teaching_cycle_preparation.py": "02066aa412f7e8346282448c69e26420dbbc241b79dc41c935feb2951ad2474a",
+    "tools/check_teaching_cycle.py": "9cd23951c37a34b142b23ac48fcb0c84342b2e378ce9221068b3140f92999207",
+    "tools/prepare_teaching_cycle.py": "27dc09860a5a7e69fccdc7dc19dcf70a2169b87ef18361044de575dec0e08403"
+  },
+  "boundary": "Pure preparation and static CUDA-adapter checks. No training, SQLite or provider execution.",
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_teaching_cycle.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\checks_003",
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "exit_code": 0,
+  "finished_utc": "2026-09-08T03:19:17.197020+00:00",
+  "outputs": {
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 102,
+      "sha256": "951662e60fc2ba43cca289d2bc674b72c1f11fd7a6bb9539cf7c2343bb10203c"
+    }
+  },
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "schema": "cas-teaching-pure-check/1",
+  "started_utc": "2026-09-08T03:18:50.787524+00:00",
+  "timed_out": false,
+  "unchanged": true,
+  "wall_seconds": 26.422000000005937
+}

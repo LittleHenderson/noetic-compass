@@ -1,0 +1,109 @@
+{
+  "artifacts": {
+    "evaluation_public/test_context.json": {
+      "bytes": 69405,
+      "sha256": "80fb7b3be89a16bb37fb2c9eccb6eb0b36751ad5e41dd1104f35233ce959957b"
+    },
+    "evaluation_public/test_fresh.json": {
+      "bytes": 69306,
+      "sha256": "557ffa0a0f08c597cb47d12d3987ab2a13182daec36bdf7213a0ccf394de6901"
+    },
+    "evaluation_public/test_names.json": {
+      "bytes": 69177,
+      "sha256": "f8bb87bb4be47c13a9eb654365dfda5f567e0fa5b7a7969c12606d40625e4c57"
+    },
+    "evaluator_private/test_context.json": {
+      "bytes": 20670,
+      "sha256": "0d35e022903e9a30ca86effe803665685609b743a4c169cbc4e5f1de1051b3ef"
+    },
+    "evaluator_private/test_fresh.json": {
+      "bytes": 20605,
+      "sha256": "a81c76b08c96449fff3dabc9b20f3adb8d46cefe316a90176afa9885b5e7619e"
+    },
+    "evaluator_private/test_names.json": {
+      "bytes": 20557,
+      "sha256": "c5fb91833585c6fca28265ec2001f8c2484b171b5a97c9ea29327402cf5e7333"
+    },
+    "sample_aligned_cycle.json": {
+      "bytes": 16847,
+      "sha256": "e76e8a0f11c23415067a7fe89f31ca64ff5fb8e6541bbc08c8940408cc95c0c6"
+    },
+    "teaching/development.json": {
+      "bytes": 77396,
+      "sha256": "f12851d848f10b69abc8db73b380ec002972ba2dbc651acb2e08924fb34efd16"
+    },
+    "teaching/tokenizer.json": {
+      "bytes": 9028,
+      "sha256": "b6034ff560f5b379c6dfba27207dd41123355b205469f9e07ef48d1c161afcf9"
+    },
+    "teaching/train.json": {
+      "bytes": 308022,
+      "sha256": "e51015ba0ee3ac05ed8526f51a468d48641d5df4f0c33c3a96f989d04ebb54c5"
+    }
+  },
+  "binding_distribution": {
+    "development": {
+      "0": 22,
+      "1": 21,
+      "2": 21
+    },
+    "test_context": {
+      "0": 22,
+      "1": 21,
+      "2": 21
+    },
+    "test_fresh": {
+      "0": 22,
+      "1": 21,
+      "2": 21
+    },
+    "test_names": {
+      "0": 22,
+      "1": 21,
+      "2": 21
+    },
+    "train": {
+      "0": 86,
+      "1": 85,
+      "2": 85
+    }
+  },
+  "boundary": "Preparation only. Private targets must be excluded from the future training worker; directory separation is not access enforcement.",
+  "counts": {
+    "development": 64,
+    "test_context": 64,
+    "test_fresh": 64,
+    "test_names": 64,
+    "train": 256
+  },
+  "dataset_sha256": "8ea6e0c333a9dee5067e4bbc134c01bfe85352184046fb3b788a77152ec601f3",
+  "delivered_neural_cycles": 0,
+  "evaluation_targets": {
+    "development": "Fresh numeric instances; readiness/checkpoint selection, not mastery.",
+    "test_context": "Unseen irrelevant context combinations made from known words.",
+    "test_fresh": "Fresh numeric instances of familiar task forms, tags and contexts.",
+    "test_names": "Unseen color-plus-shape tag combinations made from known words.",
+    "train": "Teaching only; known tags and context combinations."
+  },
+  "maximum_unassisted_input_tokens": 54,
+  "new_paid_reservations": 0,
+  "optimizer_steps": 0,
+  "parent_commit": "19edf7f985227269fb158d128152ecff9fa7b043",
+  "planned_maximum_blocks_per_arm": 4096,
+  "planned_minimum_complete_cycles_per_aligned_arm": 1024,
+  "planned_minimum_stage_presentations_per_arm": 7168,
+  "schema": "cas-teaching-preparation/1",
+  "source_files_sha256": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "cas_meta2/policy.py": "6d5f3cbfc455c65ef9000c5145f8f5b691668fb355339eeebd61e4aa2b8d26d0",
+    "cas_meta2/teaching_cycle/__init__.py": "d227e110bc609fbfeadc46b5211cc81247873aed667d15c006647d48e62a3f93",
+    "cas_meta2/teaching_cycle/controller.py": "8911fbd7cfb6fb1e3e018d297abd3cc048a776109fe17f1b2c5a88c704e4b63a",
+    "cas_meta2/teaching_cycle/data.py": "35b3e684327e3089fbffd7c5fd4ff95d8f0ce8c5c45a875b285660694191a07f",
+    "cas_meta2/teaching_cycle/gpu_adapter.py": "4d53039df0e36eb5c66291fc204abc317f8cccbd2d09c71d48fab471786f6605",
+    "records/teaching_cycle_001/PROTOCOL.md": "f18934549a371a5dee6dc7a13eac97c60b953b46bddf9abad6e4f22cd2fafab1",
+    "tools/prepare_teaching_cycle.py": "27dc09860a5a7e69fccdc7dc19dcf70a2169b87ef18361044de575dec0e08403"
+  },
+  "status": "PREPARED_NOT_TRAINED",
+  "tokenizer_training_rows_are_not_delivered_lessons": 11008
+}

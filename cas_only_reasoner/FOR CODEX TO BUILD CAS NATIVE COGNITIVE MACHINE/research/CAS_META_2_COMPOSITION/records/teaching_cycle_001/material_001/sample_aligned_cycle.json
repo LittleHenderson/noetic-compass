@@ -1,0 +1,548 @@
+[
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Input binding assigns the required source to child A's argument. Name the source and its role. Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "name_function",
+    "stage_index": 0,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. The workplace may change without changing the source. A changed requested tag can change the source. Which change matters? Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument. Changing workplace keeps this binding. Changing the request to violet star instead requires slot 0."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "context",
+    "stage_index": 1,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. An addressed parcel must reach its destination. Likewise the named observation must reach child A's argument. What is shared? Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "analogy",
+    "stage_index": 2,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Technical, context, analogy: argument, receiver, destination; observation, marked container, marked parcel; binding, delivery, arrival. Keep each role matched one to one. Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument. One-to-one source map: green triangle = marked container = marked parcel."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "mapping",
+    "stage_index": 3,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Guided Noetic ^6: separate request, sources, slots and argument. Which dependency breaks if the named source is removed or another is substituted? Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument. Removing the named source leaves no valid binding. A different tag breaks the request-to-source link. The eight values are payload; the slot identifies its location."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "decomposition",
+    "stage_index": 4,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Rebuild the process: read the request, locate the marked source, connect its slot to the argument, then call the fixed child. Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "recomposition",
+    "stage_index": 5,
+    "target_binding": 1
+  },
+  {
+    "alignment": [
+      {
+        "analogy": "parcel destination",
+        "context": "workplace receiver",
+        "role": "receiver",
+        "technical": "child A argument"
+      },
+      {
+        "analogy": "parcel marked green triangle",
+        "context": "container marked green triangle",
+        "role": "source",
+        "technical": "green triangle"
+      },
+      {
+        "analogy": "addressed parcel reaches destination",
+        "context": "marked container reaches receiver",
+        "role": "connection",
+        "technical": "slot 1 supplies argument"
+      }
+    ],
+    "assistance": "full",
+    "curriculum": "aligned",
+    "delivery_kind": "seven_stage_cycle",
+    "family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "violet star",
+          "values": [
+            -0.360107421875,
+            0.07666015625,
+            -0.0941162109375,
+            -0.317626953125,
+            -0.112548828125,
+            -0.932861328125,
+            -0.9010009765625,
+            0.8388671875
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "green triangle",
+          "values": [
+            -0.406005859375,
+            0.291015625,
+            -0.7379150390625,
+            -0.397705078125,
+            -0.492431640625,
+            -0.0240478515625,
+            -0.4503173828125,
+            -0.227783203125
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "amber circle",
+          "values": [
+            -0.1114501953125,
+            -0.8123779296875,
+            -0.55908203125,
+            0.8526611328125,
+            0.8236083984375,
+            -0.587646484375,
+            -0.2889404296875,
+            -0.4239501953125
+          ]
+        }
+      ],
+      "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. The common rule is unchanged: the intended operation receives the required source in the required role. Repeat this connection across the views. Worked answer: BIND1. The tag green triangle is at slot 1; that slot supplies the argument."
+    },
+    "schema": "cas-meta2-teaching-cycle-data/1",
+    "split": "train",
+    "stage": "reinforcement",
+    "stage_index": 6,
+    "target_binding": 1
+  }
+]
