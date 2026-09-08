@@ -4,6 +4,37 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-08 - Teaching binding-fit attempt 003: launch and bootstrap worked; worker failed; error preservation fixed
+
+The owner authorized one new binding training-fit job
+(`cas-meta2-teaching-binding-20260908203112-fb18899f`, request sha
+`4cf78769…`, bound by `OWNER_AUTHORIZATION_003.json`, sha `09032ecc…`), with
+the frozen 48-step / 600-second budget, the frozen package, and the corrected
+launcher. Preflight, the single `$4.00` reservation (ledger 22 → 23: `$142.00`
+reserved, `$258.00` unreserved, no refund), and the launch
+(`i-0dd72858329273a9b`, IAM readiness check passed on the first poll) all
+succeeded, as did the worker bootstrap (venv + torch 2.11.0 cu128 + wheels).
+Then the inner runner (`mode.launch`) exited 1, and the original inner error
+was NOT preserved — the worker had run it with inherited output, so the
+traceback died with the instance. A second defect crashed the lifecycle
+summary write (`collect()` and `execute()` both wrote `result.json`), and the
+SG deletion raced the shutdown (`DependencyViolation`); that leftover group was
+remediated and verified absent.
+
+- **Fixed** (`d031ba61`): the rendered worker now captures the inner runner's
+  stdout/stderr (`INNER_RUNNER_EXIT_<code>` + last 1800 chars) into the failure
+  report; `collect()` writes `training_result.json`; cleanup waits bounded
+  (300 s) for termination before SG deletion. Launcher suite: 43 tests.
+- **Deliverables:** before/after training loss and binding accuracy for CAS and
+  generic — NOT AVAILABLE (0 optimizer updates completed; no checkpoints). The
+  most plausible inner cause (unconfirmed, error lost) is the fail-closed
+  `TEACHING_GPU:CUDA_REQUIRED_NO_CPU_FALLBACK` guard.
+- **Note:** the rendered worker changed, so any future authorized run requires
+  a new package build with new identities. **No retry was attempted.** Claims:
+  `training_fit_claimed: false`, `composition_claimed: false`,
+  `final_targets_read: false`; frozen negatives `0/72` untouched. Evidence:
+  `ATTEMPT_003_RECOVERY.md` and the attempt-003 receipt directory.
+
 ## 2026-09-08 - Teaching binding-fit check: attempt 001 refused at preflight ($0), attempt 002 failed at RunInstances ($4 reserved, no retry)
 
 The owner-authorized training-fit check for the teaching campaign
