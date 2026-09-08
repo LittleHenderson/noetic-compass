@@ -326,6 +326,40 @@ def test_execute_persists_evidence_when_cleanup_raises(ledger):
     assert (Path(result["receipt_dir"]) / "reservation.json").is_file()
 
 
+def test_build_prices_client_from_us_east_1(tmp_path):
+    """The Price List API only serves us-east-1; all other clients stay us-west-2."""
+    ledger_path = tmp_path / "ledger.json"
+    created = []
+
+    class FakeConfig:
+        def __init__(self, **kwargs):
+            self.kwargs = kwargs
+
+    class FakeSession:
+        def __init__(self, profile_name, region_name):
+            self.profile_name = profile_name
+            self.region_name = region_name
+            self.calls = []
+            created.append(self)
+
+        def client(self, name, config=None, region_name=None):
+            self.calls.append((name, region_name))
+            return SimpleNamespace()
+
+    fake_module = SimpleNamespace(Config=FakeConfig, ClientError=FakeClientError,
+                                  Session=FakeSession)
+    arguments = SimpleNamespace(profile="binding_fit_training")
+    launch.build(arguments, fake_module, job=JOB, source_sha="a" * 40,
+                 archive_sha256="b" * 64, manifest_sha256="c" * 64,
+                 ledger_path=ledger_path, client_error=FakeClientError)
+    assert len(created) == 1
+    assert created[0].profile_name == "binding_fit_training"
+    assert created[0].region_name == "us-west-2"
+    assert created[0].calls == [
+        ("sts", None), ("ec2", None), ("iam", None), ("s3", None),
+        ("scheduler", None), ("pricing", "us-east-1")]
+
+
 # --------------------------------------------------------------------------- #
 # provider cleanup with fake client stacks
 # --------------------------------------------------------------------------- #

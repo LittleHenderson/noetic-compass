@@ -163,9 +163,17 @@ import, or output mutation.
 
 ## Tests
 
-`tests/test_binding_fit_launch.py` — 34 pure tests with fake client stacks and
+`tests/test_binding_fit_launch.py` — 35 pure tests with fake client stacks and
 fake git objects: plan-only inertness, request/authority validation (including
 the frozen-budget match), package build + zip readback + `launch_enabled:false`,
 worker-script text, budget single-reservation refusal, cleanup already-absent
-tolerance and security-group deletion, and evidence persistence on cleanup
-failure. No real tensor or provider library is imported.
+tolerance and security-group deletion, the pricing-client region check
+(`test_build_prices_client_from_us_east_1`), and evidence persistence on
+cleanup failure. No real tensor or provider library is imported.
+
+## Attempt log
+
+| Attempt | Job | Outcome |
+|---|---|---|
+| 001 | `cas-meta2-teaching-binding-20260908120635-035f9ac7` | REFUSED_AT_PREFLIGHT, `$0.00` spent — `AccessDeniedException` on `pricing.get_products` issued from `us-west-2`. See `PREFLIGHT_REFUSAL_ATTEMPT_001.md`. |
+| 002 | `cas-meta2-teaching-binding-20260908191109-dcf939ab` | inputs registered in `launch_inputs_002/` (same `source_sha`/`archive_sha256`/`manifest_sha256` as attempt 001; pricing client now built in `us-east-1`). |

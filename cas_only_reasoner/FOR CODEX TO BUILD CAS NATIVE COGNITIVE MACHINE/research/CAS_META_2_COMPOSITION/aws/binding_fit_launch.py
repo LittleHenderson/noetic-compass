@@ -737,7 +737,10 @@ def build(arguments, boto3_module=None, *, job=None, source_sha=None, archive_sh
         config = Config(connect_timeout=5, read_timeout=10, retries={"max_attempts": 0})
         session = boto3_module.Session(profile_name=profile, region_name=RESOURCE_PLAN["region"])
         clients = {name: session.client(name, config=config)
-                   for name in ("sts", "ec2", "iam", "s3", "scheduler", "pricing")}
+                   for name in ("sts", "ec2", "iam", "s3", "scheduler")}
+        # The AWS Price List API only serves its bulk endpoint from us-east-1
+        # (and ap-south-1); a us-west-2 pricing client gets AccessDenied.
+        clients["pricing"] = session.client("pricing", region_name="us-east-1", config=config)
     return BindingFitProvider(job=identity["job"], source_sha=identity["source_sha"],
                               archive_sha256=identity["archive_sha256"],
                               manifest_sha256=identity["manifest_sha256"],
