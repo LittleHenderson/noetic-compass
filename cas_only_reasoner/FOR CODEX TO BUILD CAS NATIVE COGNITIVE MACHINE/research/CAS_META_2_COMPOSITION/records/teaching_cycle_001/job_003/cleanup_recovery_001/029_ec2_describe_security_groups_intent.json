@@ -1,0 +1,1 @@
+{"arguments":{"Filters":[{"Name":"group-name","Values":["cas-meta2-teaching-20260908052915-8b5df59c"]}]},"method":"describe_security_groups","service":"ec2"}

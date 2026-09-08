@@ -36,3 +36,21 @@ SHA256 `a47ced1ca072041306f8e4a47f2efb03ec97d5690659b14ab19cd0e19141ef6d`.
 The retained latest checkpoint file hashes and committed counts are in that
 receipt. The actual GPU restore, optimizer restore, tokenizer/tensor geometry
 check and continuation launch are explicitly unexecuted.
+
+## One-shot supplemental AWS cleanup (already executed; do not rerun)
+
+Unlike the two pure inspection commands above, this command used the existing
+SDK-capable Python 3.14.0 environment, boto3/botocore 1.43.87, and live AWS.
+The tool was committed at `6c993db1bdc459dc58ee7629a51e3ba7470200b0` before
+execution. It only closes this already-terminated job's temporary resources.
+Its fixed output path deliberately refuses a second execution.
+
+```powershell
+& 'C:/Python314/python.exe' -B tools/recover_teaching_job003_cleanup.py --output records/teaching_cycle_001/job_003/cleanup_recovery_001 --profile default
+```
+
+Result: `CLEANUP_CLOSED_RESULTS_RETAINED`, exit 0. Supplemental result SHA256
+`9a1516b871820125bc914bef3c8fef899b532b49e56b80e641067f880a895500`.
+Tool SHA256 `0da31256f5ebe5cf3577c26c1f010c942d578f2e042647cbeb043054d5a19a25`.
+The original failed cleanup receipt was not overwritten. No workload was
+launched or retried; no model, ledger or S3 result object was changed.

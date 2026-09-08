@@ -1,0 +1,390 @@
+{
+  "schema": "cas-teaching-job003-cleanup-binding/1",
+  "job": "cas-meta2-teaching-20260908052915-8b5df59c",
+  "cleanup_source_commit": "6c993db1bdc459dc58ee7629a51e3ba7470200b0",
+  "cleanup_tool_sha256": "0da31256f5ebe5cf3577c26c1f010c942d578f2e042647cbeb043054d5a19a25",
+  "original_parent_sha256": "c12347f65d38dc883221b9f9ddb48099574c851acc858d6d6444a0eaa2295b76",
+  "test_receipt_sha256": "a34d493a541cd42acaef9b40de19cb9761bd64acb3ef52a563ce3682809a376d",
+  "cleanup_result_sha256": "9a1516b871820125bc914bef3c8fef899b532b49e56b80e641067f880a895500",
+  "command": [
+    "C:/Python314/python.exe",
+    "-B",
+    "tools/recover_teaching_job003_cleanup.py",
+    "--output",
+    "records/teaching_cycle_001/job_003/cleanup_recovery_001",
+    "--profile",
+    "default"
+  ],
+  "exit_code": 0,
+  "working_directory": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION",
+  "status": "CLEANUP_CLOSED_RESULTS_RETAINED",
+  "files": [
+    {
+      "name": "001_sts_get_caller_identity_intent.json",
+      "bytes": 64,
+      "sha256": "9e28739d66e18c9d705907a1c5ee01c7d6ef813a5b5d6e5a688a9792f330c8df"
+    },
+    {
+      "name": "001_sts_get_caller_identity_result.json",
+      "bytes": 488,
+      "sha256": "239ffe21b24415123f21315a8b51cb327dbb0a61da80eaecb0e00cf18873b22b"
+    },
+    {
+      "name": "002_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "6cb0ae5ffd26d9f12ddb3c008e7886518145ef453fd3d08de1b75e58e882e689"
+    },
+    {
+      "name": "002_ec2_describe_instances_result.json",
+      "bytes": 2283,
+      "sha256": "533bf17a2184f741e1eb00924fc4c2e154c1b8a992b3a0f3cff23129ee46eb13"
+    },
+    {
+      "name": "003_ec2_describe_volumes_intent.json",
+      "bytes": 156,
+      "sha256": "7449eaa2dbf3b091b2063627a835312f47734b1ba91061f236c95436f873b009"
+    },
+    {
+      "name": "003_ec2_describe_volumes_result.json",
+      "bytes": 439,
+      "sha256": "1f5bdd520ce7bf78cf023b9479644d0d5d2cd080d96cdd7850ed63245f58f73a"
+    },
+    {
+      "name": "004_ec2_describe_security_groups_intent.json",
+      "bytes": 158,
+      "sha256": "4d193567dd12b484da366904b0854e08eeecd0073456093c6ee9a722fae4fae0"
+    },
+    {
+      "name": "004_ec2_describe_security_groups_result.json",
+      "bytes": 996,
+      "sha256": "9f3baf17ae14837ca93871713ba8e269a5bfe461906f1b245144ba62080c5ace"
+    },
+    {
+      "name": "005_scheduler_get_schedule_intent.json",
+      "bytes": 114,
+      "sha256": "448cacf7afb44b66c84ae91efdafa08ae8f58fb4638538035dbf4c2e7352de67"
+    },
+    {
+      "name": "005_scheduler_get_schedule_result.json",
+      "bytes": 1044,
+      "sha256": "d41df77195ac4a32f8640b6526caa7c0474414d4033685985072f441adeba2d5"
+    },
+    {
+      "name": "006_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "0ba7329d4e8820624f1f20a9c8e921eaba8039f1a6d8c16179c2cf98b6e22697"
+    },
+    {
+      "name": "006_iam_get_instance_profile_result.json",
+      "bytes": 1069,
+      "sha256": "35ab12b2d87f5b0a8b3380af15cc1a1946e0dcbff5c1c4ae82863dde0a19a912"
+    },
+    {
+      "name": "007_iam_get_role_intent.json",
+      "bytes": 115,
+      "sha256": "465992eb9c7f8727a1c700b021988fd86a26eae28cba18510450630422a64381"
+    },
+    {
+      "name": "007_iam_get_role_result.json",
+      "bytes": 882,
+      "sha256": "38471b49c311f5709e0aad6b5fa5fbcf876c805fd22e978547b0258bafbc03b4"
+    },
+    {
+      "name": "008_iam_get_role_intent.json",
+      "bytes": 114,
+      "sha256": "3325a9ecf807201979a36d8d66b5459ddd590ad42209a4d73b6c2602a7812414"
+    },
+    {
+      "name": "008_iam_get_role_result.json",
+      "bytes": 823,
+      "sha256": "315b3c732ca9083f53a071f8d5da42508341bfef13fd1a967e028aa0d0340a45"
+    },
+    {
+      "name": "009_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "fcc929e62b9e068fb07aa7aff9aff1ff4d393fde0ac96456aa200dca1a32585e"
+    },
+    {
+      "name": "009_s3_list_objects_v2_result.json",
+      "bytes": 1608,
+      "sha256": "7baf4ee948870474ee5a4e01cfae3b4feeaff431226f42ee8b12cc5c91c8b499"
+    },
+    {
+      "name": "010_s3_get_bucket_lifecycle_configuration_intent.json",
+      "bytes": 144,
+      "sha256": "83fc24f24d833a746f3974f5bf3773d8f3ab0a42e6df54e8e6f719af7ca2966f"
+    },
+    {
+      "name": "010_s3_get_bucket_lifecycle_configuration_result.json",
+      "bytes": 765,
+      "sha256": "b160da72df36bd814644b90df198473457fc1ef7f02dce974022033e00fa6350"
+    },
+    {
+      "name": "011_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "6cb0ae5ffd26d9f12ddb3c008e7886518145ef453fd3d08de1b75e58e882e689"
+    },
+    {
+      "name": "011_ec2_describe_instances_result.json",
+      "bytes": 2283,
+      "sha256": "24819b4b69dad935786b3df5023a8da9209880dbfddd6c3675d9c95a0ce9d642"
+    },
+    {
+      "name": "012_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "6cb0ae5ffd26d9f12ddb3c008e7886518145ef453fd3d08de1b75e58e882e689"
+    },
+    {
+      "name": "012_ec2_describe_instances_result.json",
+      "bytes": 2283,
+      "sha256": "0d0cf05a4e9c5846036cb66b9467696bd7920122082b1459f5fe367cd85c7ffd"
+    },
+    {
+      "name": "013_ec2_describe_volumes_intent.json",
+      "bytes": 156,
+      "sha256": "7449eaa2dbf3b091b2063627a835312f47734b1ba91061f236c95436f873b009"
+    },
+    {
+      "name": "013_ec2_describe_volumes_result.json",
+      "bytes": 439,
+      "sha256": "819adc302998841301026f20c8a5de1999e6ad864bb28b18091b01db9555aa82"
+    },
+    {
+      "name": "014_scheduler_get_schedule_intent.json",
+      "bytes": 114,
+      "sha256": "448cacf7afb44b66c84ae91efdafa08ae8f58fb4638538035dbf4c2e7352de67"
+    },
+    {
+      "name": "014_scheduler_get_schedule_result.json",
+      "bytes": 1044,
+      "sha256": "c61a892d10a5a04f7ceeeeb6932522c2c588a332318a6e9170ce6d30ecac2423"
+    },
+    {
+      "name": "015_scheduler_delete_schedule_intent.json",
+      "bytes": 117,
+      "sha256": "a09ea0d6db37bd63182002adb111634046993f43bbcd87588b4806a8ef085f63"
+    },
+    {
+      "name": "015_scheduler_delete_schedule_result.json",
+      "bytes": 294,
+      "sha256": "cb16641dabccff041b65d19202cca3c800cc05729caf93876b031e770b816ec4"
+    },
+    {
+      "name": "016_scheduler_get_schedule_error.json",
+      "bytes": 238,
+      "sha256": "5ea038018605c69d92b21b2b26607f4381226a51c08294eccdd682520b532c83"
+    },
+    {
+      "name": "016_scheduler_get_schedule_intent.json",
+      "bytes": 114,
+      "sha256": "448cacf7afb44b66c84ae91efdafa08ae8f58fb4638538035dbf4c2e7352de67"
+    },
+    {
+      "name": "017_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "0ba7329d4e8820624f1f20a9c8e921eaba8039f1a6d8c16179c2cf98b6e22697"
+    },
+    {
+      "name": "017_iam_get_instance_profile_result.json",
+      "bytes": 1069,
+      "sha256": "3783d71b79477f335137f4f038dcda9a6cbeafebfdbae481032cf3ae2d04df1b"
+    },
+    {
+      "name": "018_iam_remove_role_from_instance_profile_intent.json",
+      "bytes": 214,
+      "sha256": "710f1b124f9e576da09a998d2a3536ad11ce0e7d7eac88aaffd9a5a4f615dfd5"
+    },
+    {
+      "name": "018_iam_remove_role_from_instance_profile_result.json",
+      "bytes": 288,
+      "sha256": "294e4efc4a52cb5f145d0c17d7e6ff75db7cf1c23d9cba021d687cd41d430491"
+    },
+    {
+      "name": "019_iam_delete_instance_profile_intent.json",
+      "bytes": 141,
+      "sha256": "041e43d2bae714c0699c90b7b86488074bcdde5bd6833c5e191d9226322220f9"
+    },
+    {
+      "name": "019_iam_delete_instance_profile_result.json",
+      "bytes": 288,
+      "sha256": "983f5234ad762a924bd6f198652da79532fe2e9ea1cf4cd9484c10ce7b848cf3"
+    },
+    {
+      "name": "020_iam_get_instance_profile_error.json",
+      "bytes": 231,
+      "sha256": "fd8a11aedb2cb78fe7efa100705024b5051cf458fd7450e58cabc0685b73b365"
+    },
+    {
+      "name": "020_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "0ba7329d4e8820624f1f20a9c8e921eaba8039f1a6d8c16179c2cf98b6e22697"
+    },
+    {
+      "name": "021_iam_get_role_intent.json",
+      "bytes": 115,
+      "sha256": "465992eb9c7f8727a1c700b021988fd86a26eae28cba18510450630422a64381"
+    },
+    {
+      "name": "021_iam_get_role_result.json",
+      "bytes": 882,
+      "sha256": "0a8c7596a2ee7c740abac196e7aeeda470c827fcfa0f23c334ea3e0c24ec0c3f"
+    },
+    {
+      "name": "022_iam_delete_role_policy_intent.json",
+      "bytes": 149,
+      "sha256": "e69c1b04928ae7a7bcb49d9f00b467c51f33c9064f5b67a6a59b864ac0541668"
+    },
+    {
+      "name": "022_iam_delete_role_policy_result.json",
+      "bytes": 288,
+      "sha256": "1b99492d67c5bc06f89adb92062b19d32ecbbbf2f0442d1d66a287e88d7f8d67"
+    },
+    {
+      "name": "023_iam_delete_role_intent.json",
+      "bytes": 118,
+      "sha256": "7e6214e7ce2959ad2ea5818406c4b098d487868b5151029a83d514770c0d25ab"
+    },
+    {
+      "name": "023_iam_delete_role_result.json",
+      "bytes": 288,
+      "sha256": "1ecd3f1f5b0745f8065322cc6f5f9f60b0fa7d0652e688f7e51f60a85e14274f"
+    },
+    {
+      "name": "024_iam_get_role_error.json",
+      "bytes": 222,
+      "sha256": "65dca1febdec924ff467f6821323fdba588968c2c30acebfcf60f8613e676da5"
+    },
+    {
+      "name": "024_iam_get_role_intent.json",
+      "bytes": 115,
+      "sha256": "465992eb9c7f8727a1c700b021988fd86a26eae28cba18510450630422a64381"
+    },
+    {
+      "name": "025_iam_get_role_intent.json",
+      "bytes": 114,
+      "sha256": "3325a9ecf807201979a36d8d66b5459ddd590ad42209a4d73b6c2602a7812414"
+    },
+    {
+      "name": "025_iam_get_role_result.json",
+      "bytes": 823,
+      "sha256": "508982a5b458149672b3bd3eb2941cd56dfee65251c3af90e72a863ec70797d8"
+    },
+    {
+      "name": "026_iam_delete_role_policy_intent.json",
+      "bytes": 148,
+      "sha256": "6ae2a51634df687bb95632674eeafd59c2d25df081089eed3da2e36ea3046592"
+    },
+    {
+      "name": "026_iam_delete_role_policy_result.json",
+      "bytes": 288,
+      "sha256": "4dc20de09d3c9700c252d44efd1f30199f360c11733f09a5889de3b29ba09fd5"
+    },
+    {
+      "name": "027_iam_delete_role_intent.json",
+      "bytes": 117,
+      "sha256": "5417664d5b95988b43470dea3e6c94528beb15f4a1e1106aa4d56339c3c6317c"
+    },
+    {
+      "name": "027_iam_delete_role_result.json",
+      "bytes": 288,
+      "sha256": "1a4e788d4673dfe6d1662ab130910ae84625ada443cecbc759a29254ed05838d"
+    },
+    {
+      "name": "028_iam_get_role_error.json",
+      "bytes": 221,
+      "sha256": "36fe31071eb824f75fa5ec3ca700a6a8051a6ea351bbbf88c3f42bec86d9c8ed"
+    },
+    {
+      "name": "028_iam_get_role_intent.json",
+      "bytes": 114,
+      "sha256": "3325a9ecf807201979a36d8d66b5459ddd590ad42209a4d73b6c2602a7812414"
+    },
+    {
+      "name": "029_ec2_describe_security_groups_intent.json",
+      "bytes": 158,
+      "sha256": "4d193567dd12b484da366904b0854e08eeecd0073456093c6ee9a722fae4fae0"
+    },
+    {
+      "name": "029_ec2_describe_security_groups_result.json",
+      "bytes": 996,
+      "sha256": "68c4c2900f677d3f2e18a94b4ddae221ea16b40ec17d6689d3f14fb768e3aa38"
+    },
+    {
+      "name": "030_ec2_delete_security_group_intent.json",
+      "bytes": 98,
+      "sha256": "f7e05ad26969879bccce555abacda7735bbcb3517e8326f619caf692f4bab50a"
+    },
+    {
+      "name": "030_ec2_delete_security_group_result.json",
+      "bytes": 473,
+      "sha256": "69adff83686673c895fd785fe5d0dd43938e067deee40f344da6b6742fb5b3b2"
+    },
+    {
+      "name": "031_ec2_describe_security_groups_intent.json",
+      "bytes": 158,
+      "sha256": "4d193567dd12b484da366904b0854e08eeecd0073456093c6ee9a722fae4fae0"
+    },
+    {
+      "name": "031_ec2_describe_security_groups_result.json",
+      "bytes": 446,
+      "sha256": "7965e38fc45b8af586c585943e565174336420a33797ce7bbcddfe565b89d703"
+    },
+    {
+      "name": "032_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "fcc929e62b9e068fb07aa7aff9aff1ff4d393fde0ac96456aa200dca1a32585e"
+    },
+    {
+      "name": "032_s3_list_objects_v2_result.json",
+      "bytes": 1608,
+      "sha256": "860f512ad30bd4cef52fba4c26bc4f53f34d5170af0fa5c89e1ca711c37e6119"
+    },
+    {
+      "name": "033_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "fcc929e62b9e068fb07aa7aff9aff1ff4d393fde0ac96456aa200dca1a32585e"
+    },
+    {
+      "name": "033_s3_list_objects_v2_result.json",
+      "bytes": 1608,
+      "sha256": "38563dcf8d39900731d266fafe3d292580e1d54f88a2ed92b6504c35c5cb3ca1"
+    },
+    {
+      "name": "034_s3_get_bucket_lifecycle_configuration_intent.json",
+      "bytes": 144,
+      "sha256": "83fc24f24d833a746f3974f5bf3773d8f3ab0a42e6df54e8e6f719af7ca2966f"
+    },
+    {
+      "name": "034_s3_get_bucket_lifecycle_configuration_result.json",
+      "bytes": 765,
+      "sha256": "194ada0641ecd374e2b716501952bdd3e5255c027f491c56056730d04bf367cb"
+    },
+    {
+      "name": "admission.json",
+      "bytes": 455,
+      "sha256": "2cf01f3a31404c551e2b763ca058c231e2ac92c7bf52de6150033f559fd6590f"
+    },
+    {
+      "name": "intent.json",
+      "bytes": 2829,
+      "sha256": "3bce8e11adfaf29fcba4886ed770f93d83f1def9e471dcd5bc6731fa4317d622"
+    },
+    {
+      "name": "result.json",
+      "bytes": 1812,
+      "sha256": "9a1516b871820125bc914bef3c8fef899b532b49e56b80e641067f880a895500"
+    },
+    {
+      "name": "teaching_provider_0001.json",
+      "bytes": 785,
+      "sha256": "27891ac2d7a62d54c80bc1d57040e6c8b97edaed9dc0493fe3cdfe37f3df8b45"
+    },
+    {
+      "name": "teaching_provider_0002.json",
+      "bytes": 1804,
+      "sha256": "e42b0954a4747edb406ffc2d692d44f18c4ed064477ade261dfc5a86ed110ee0"
+    }
+  ],
+  "inventory_boundary": "All 73 original files in cleanup_recovery_001 immediately after execution, before this binding manifest was created. The binding file does not hash itself.",
+  "evidence_boundary": "Live cleanup and retained result inventory only. No new training, workload retry, tensor restore, native execution or learning claim."
+}

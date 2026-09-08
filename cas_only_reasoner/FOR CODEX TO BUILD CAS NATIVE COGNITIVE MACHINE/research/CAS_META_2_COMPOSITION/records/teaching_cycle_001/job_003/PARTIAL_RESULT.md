@@ -28,11 +28,31 @@ reason `Client.InstanceInitiatedShutdown`, request ID
 `a52d3e33-74fe-4835-ad88-04952766a82e`. This compact direct-call output is in the
 task transcript, not a claimed retained full raw API response.
 
-Remaining job-resource cleanup is being checked separately. Empty instance
-block-device mappings alone are not proof of volume deletion. The original
-cleanup kept the schedule and IAM resources while compute state was unknown.
-The dedicated bucket's four result objects remain under its seven-day lifecycle
-policy; that policy is not an exact deletion-time guarantee.
+Supplemental cleanup is now closed. The pinned cleanup-only tool at commit
+`6c993db1bdc459dc58ee7629a51e3ba7470200b0` first confirmed the exact account,
+terminated instance, absent tagged volumes and remaining resource identities.
+It then removed the job-only schedule, IAM roles/profile and security group,
+and read back their absence. It issued no termination or S3-write request and
+did not rerun the launch lifecycle. All four result objects were retained.
+The dedicated bucket remains under its seven-day lifecycle policy; that policy
+is not an exact deletion-time guarantee.
+
+Supplemental `cleanup_recovery_001/result.json` status is
+`CLEANUP_CLOSED_RESULTS_RETAINED`, SHA256
+`9a1516b871820125bc914bef3c8fef899b532b49e56b80e641067f880a895500`.
+The original parent result and canonical ledger are byte-unchanged. Recovery
+used 34 SDK calls (29 control, 5 S3), continuing the original counters to 365
+control calls and 512 parent S3 calls, without resetting downloaded bytes.
+The earlier direct read-only EC2 checks were separate transcript observations,
+not included in the supervisor's control-call counter.
+
+Before execution, 37 fake-only cleanup tests passed in 5.76 seconds, with
+unchanged source hashes and network/forbidden imports blocked. Their receipt
+is `cleanup_checks_001/receipt.json`, SHA256
+`a34d493a541cd42acaef9b40de19cb9761bd64acb3ef52a563ce3682809a376d`.
+The real cleanup used Python 3.14.0 and boto3/botocore 1.43.87, not the isolated
+Python 3.12 environment used for pure tests. Its exact command and environment
+are retained in the supplemental intent; per-call requests/responses are saved.
 
 ## Actual work saved
 
