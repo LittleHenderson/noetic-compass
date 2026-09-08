@@ -53,6 +53,28 @@ No first CUDA-update receipt, training completion, held-out prediction or
 learning result had been observed at the time of this progress record.
 The launch supervisor remains active; its durable records are in `job_003/launch`.
 
+### Update: first CUDA training event received
+
+At 2026-09-08 05:35:46.927 UTC the parent received and validated
+`job_003/launch/first_update.json`. It reports the first `cas.aligned` optimizer
+update on `cuda:0`, GPU `NVIDIA RTX PRO 4500 Blackwell Server Edition`, batch 32.
+The event reports a CUDA-synchronized step interval of 3.4216366139999934 seconds;
+this excludes caller journal writes, later checkpoints and provider overhead.
+One first-step timing is not a measured sustained training rate.
+
+The before/after model-state manifest digests differ. These are state digests,
+not hashes of independently downloaded checkpoint files. Accepted weights are
+reported unchanged. The raw marker SHA256 is
+`833f0ea75dabe8d06bb9dbc4bce6cb3a33419f7c8682993001370408b0447491`;
+its exact nested optimizer-event SHA256 is
+`d7c49250c5dce498d7b0fe5f8b3b8417314a5d694a2c5dfb93268a7fa6fa3e89`.
+The parent observation is preserved in `launch/teaching_provider_0038.json`.
+
+This is `WORKER_REPORTED_FIRST_CUDA_UPDATE`, not independent learning proof.
+The same live parent session continues to wait for training and collection.
+No full allocation, held-out improvement, native execution or mastery has yet
+been demonstrated by this event.
+
 ## Budget and learning boundaries
 
 Canonical ledger revision 19: $118 reserved, $282 unreserved, $400 inclusive
