@@ -1,0 +1,331 @@
+[
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Input binding assigns the required source to child A's argument. Name the source and its role. Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. The workplace may change without changing the source. A changed requested tag can change the source. Which change matters? Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. An addressed parcel must reach its destination. Likewise the named observation must reach child A's argument. What is shared? Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Technical, context, analogy: argument, receiver, destination; observation, marked container, marked parcel; binding, delivery, arrival. Keep each role matched one to one. Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Guided Noetic ^6: separate request, sources, slots and argument. Which dependency breaks if the named source is removed or another is substituted? Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. Rebuild the process: read the request, locate the marked source, connect its slot to the argument, then call the fixed child. Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  },
+  {
+    "observations": [
+      {
+        "slot": 0,
+        "tag": "violet star",
+        "values": [
+          -0.360107421875,
+          0.07666015625,
+          -0.0941162109375,
+          -0.317626953125,
+          -0.112548828125,
+          -0.932861328125,
+          -0.9010009765625,
+          0.8388671875
+        ]
+      },
+      {
+        "slot": 1,
+        "tag": "green triangle",
+        "values": [
+          -0.406005859375,
+          0.291015625,
+          -0.7379150390625,
+          -0.397705078125,
+          -0.492431640625,
+          -0.0240478515625,
+          -0.4503173828125,
+          -0.227783203125
+        ]
+      },
+      {
+        "slot": 2,
+        "tag": "amber circle",
+        "values": [
+          -0.1114501953125,
+          -0.8123779296875,
+          -0.55908203125,
+          0.8526611328125,
+          0.8236083984375,
+          -0.587646484375,
+          -0.2889404296875,
+          -0.4239501953125
+        ]
+      }
+    ],
+    "problem": "In the school workshop. Choose the observation that supplies child A's argument. Requested source: green triangle. The common rule is unchanged: the intended operation receives the required source in the required role. Repeat this connection across the views. Worked demonstration, separate from practice. Demonstration slot 0: green triangle. Demonstration slot 1: amber circle. Demonstration slot 2: violet star. Demonstration request: green triangle. Worked demonstration answer: BIND0. Match the request tag to its marked source; that demonstration slot supplies A's argument. Removing that source leaves no valid choice; substituting another tag breaks the match. Changing workplace alone changes nothing. End demonstration. Apply the same rule to the actual observations, whose slot order can differ. Your training target concerns those actual observations."
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "archive_sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+  "boundary": "Committed-byte package and clean extracted imports only; no CUDA or provider execution.",
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\build_teaching_bundle.py",
+    "--child",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\bundle_002\\extracted",
+    "--manifest-sha256",
+    "975296defc543e234d4bd09fcf9e46a25dc42792e4cf6aed5ad35332de3167a9"
+  ],
+  "cwd": "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312",
+  "exit_code": 0,
+  "launch_exception": null,
+  "manifest_sha256": "975296defc543e234d4bd09fcf9e46a25dc42792e4cf6aed5ad35332de3167a9",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "source_commit": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_sha256": "49dda61f60300e870314d0ae20e3fc69028d8ef82ecee318a080ce70ef09eb38"
+}

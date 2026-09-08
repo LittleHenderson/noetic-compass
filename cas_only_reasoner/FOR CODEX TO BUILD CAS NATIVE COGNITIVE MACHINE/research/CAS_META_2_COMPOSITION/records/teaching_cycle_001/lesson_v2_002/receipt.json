@@ -1,0 +1,83 @@
+{
+  "artifacts": {
+    "LESSON.md": {
+      "bytes": 14378,
+      "sha256": "01c5dfba479409cc0e199feb25211fef85cc3403061075cde1143009d6873d5c"
+    },
+    "lesson.json": {
+      "bytes": 27126,
+      "sha256": "59572fb8f266e451a38192a7881d260900614e350a7506cf24b5c8ae49320432"
+    },
+    "student_public.json": {
+      "bytes": 12899,
+      "sha256": "91479563e44a8bf18f75404e849a77ea377dc9da11d2a5888b478c4f2b4fa84d"
+    }
+  },
+  "boundary": "Pure lesson export only. No neural, NumPy, SQLite, network or provider execution.",
+  "case_canonical_sha256": "9c823e4ddf62290b35b7e4f3229b8c80799d1e1e42ce096f758cfcc24753d7fc",
+  "case_family_id": "074a2eaeb97386541b9f0ca445afc383201dd211b00e976fe315fd6c5219bad5",
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "tools/export_teaching_cycle_lesson.py",
+    "records/teaching_cycle_001/lesson_v2_002"
+  ],
+  "committed_training_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/material_001/teaching/train.json",
+  "created_utc": "2026-09-08T04:13:34.087830+00:00",
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "delivered_neural_cycles": 0,
+  "full_stages_exported": 7,
+  "lesson_canonical_sha256": "1d08086d612b91d290aca05c02c7f1de6f0bc6329c333ec51f005c39bb4e303a",
+  "network_and_sqlite_audit_guard": true,
+  "optimizer_steps": 0,
+  "public_input_tokens_by_stage": {
+    "analogy": 284,
+    "context": 282,
+    "decomposition": 291,
+    "mapping": 296,
+    "name_function": 277,
+    "recomposition": 288,
+    "reinforcement": 288
+  },
+  "pure_import_guard": [
+    "_sqlite3",
+    "boto3",
+    "botocore",
+    "cas_cjt",
+    "cas_meta",
+    "casformer",
+    "jax",
+    "numpy",
+    "sqlite3",
+    "tensorflow",
+    "torch"
+  ],
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "records_canonical_sha256": "e5fecd72a70e0659b0366d5c4d6f45ece1d5198f51065ff72a324030be7703d9",
+  "repository_head": "2a4791d6d0fddd04b23882248c679c03e0fbe92f",
+  "schema": "cas-teaching-lesson-export-receipt/2",
+  "selected_training_index": 0,
+  "selection_rule": "first demo binding different from practice binding",
+  "source_files_sha256": {
+    "cas_meta2/codec.py": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030",
+    "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+    "cas_meta2/policy.py": "6d5f3cbfc455c65ef9000c5145f8f5b691668fb355339eeebd61e4aa2b8d26d0",
+    "cas_meta2/teaching_cycle/gpu_adapter.py": "d1b01b62c9236d8deb6ee53d9fc409fffac204f34dc5937071ab0544a718bea2",
+    "cas_meta2/teaching_cycle/guided_application.py": "9a44171495f15c32878f293d759284b046aed99adce331ccb2c55613bd8de584",
+    "cas_meta2/teaching_cycle/lesson_contract.py": "30a44e221d9f58d2106f24179710d92e5375d080f33477b5cddbd86adc50776d",
+    "tools/export_teaching_cycle_lesson.py": "400091b7efd833a7d7e0e8a655353fd6abbd4bce84230d05f38e50ab29e518e1"
+  },
+  "source_unchanged_during_export": true,
+  "stage_canonical_sha256": {
+    "analogy": "3f63a9a95480310b03e5bf24cdbf884d9a2efe0259b3a69c1ef8a5d2b83a844c",
+    "context": "1e98ebf80fd13ff8cecbf860ad8700993efeb1ab3820f33517796654165c8695",
+    "decomposition": "b28bd23259d31ffdc265dcab5b3997c27bdda858ce27650443df1c136316083e",
+    "mapping": "fcbaa3ac1ab0e086b01a82c01c36b4e7847b0fb5bc3c560bcca5dea2cb6e9d45",
+    "name_function": "79615e97e97e72c07f7956acf7893ee3988e7572a0fcb67acd16e0120414858a",
+    "recomposition": "007032cc7c0db8142e889ae69cf802ca2bd46a6a21489f5613e441b3bf6858e0",
+    "reinforcement": "21645918fa9808b5ce9005a9b3705d1b8362b5a3173304466120898b8a7afb4c"
+  },
+  "status": "EXPORTED_NOT_TRAINED",
+  "student_public_canonical_sha256": "ba38ef69e9ba245de62f251fdc3a9414bf0c37b647e4ecf0bf165efb4b7e7f68",
+  "tokenizer_canonical_sha256": "d4a219e9a91516f6174e103533bd4266ab7880692a77d601634c4f018bc8bec4",
+  "training_file_sha256": "e51015ba0ee3ac05ed8526f51a468d48641d5df4f0c33c3a96f989d04ebb54c5"
+}

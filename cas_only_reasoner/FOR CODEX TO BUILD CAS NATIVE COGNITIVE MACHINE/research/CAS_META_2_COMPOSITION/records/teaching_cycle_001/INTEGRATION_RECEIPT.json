@@ -1,0 +1,82 @@
+{
+  "schema": "cas-teaching-integration-evidence/2",
+  "status": "CAS_TEACHING_V2_INTEGRATED_NOT_TRAINED",
+  "source_commit": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+  "worker_source_map_sha256": "60340b5865c674cc5558a27da6524928ec0db7042163b1ef031591ad7794555e",
+  "actual_neural_cycles_delivered": 0,
+  "actual_neural_optimizer_steps": 0,
+  "new_neural_candidate_checkpoint": null,
+  "checks": {
+    "teaching": {
+      "path": "checks_006/receipt.json",
+      "sha256": "1ea7783c0e83512986ec3abc5e6fcce1c6049f79eee941ae6ce030e3ad580d31",
+      "tests_passed": 352,
+      "warnings": 1,
+      "pytest_wall_seconds": 198.02,
+      "exit_code": 0,
+      "unchanged": true,
+      "timed_out": false
+    },
+    "launch_transport": {
+      "path": "../condition_skill_v9_001/launch_repair_integrated_001/receipt.json",
+      "sha256": "5ae016079bcccd9fc5181d59ed865c78f8e8bb457a3a89f1ef214725d589d669",
+      "tests_passed": 417,
+      "subtests_passed": 24,
+      "warnings": 1,
+      "pytest_wall_seconds": 72.41,
+      "real_provider_calls": 0
+    },
+    "boundary": "Pure and simulated checks; no neural, SQLite or provider execution."
+  },
+  "bundle": {
+    "archive": "bundle_002/training.zip",
+    "bytes": 142163,
+    "member_count": 17,
+    "sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+    "manifest_sha256": "975296defc543e234d4bd09fcf9e46a25dc42792e4cf6aed5ad35332de3167a9",
+    "receipt_sha256": "3fff39d5acf329e169c918c5895c69971aa7e6e3c048d3151324447e090a76d9",
+    "clean_check_sha256": "ed1a3294039c7e33e03cd8c64a53be3149387103c9e8e36bdd4e509f0f7cc58c",
+    "clean_exit_code": 0,
+    "tested_repository_worker_file_hashes_match": 13,
+    "training_cases": 256,
+    "development_cases": 64,
+    "final_data_in_training_bundle": false
+  },
+  "lesson": {
+    "path": "lesson_v2_002/LESSON.md",
+    "receipt_sha256": "4f7897261fa72b76d7dd8dad685c2827ea7149fc02bc11715a569fd862278d3d",
+    "full_record_canonical_sha256": "1d08086d612b91d290aca05c02c7f1de6f0bc6329c333ec51f005c39bb4e303a",
+    "stages": 7,
+    "delivered_to_neural_student": false
+  },
+  "budget": {
+    "ledger_sha256": "83fd87829a34a559ae901b553a851d79ec27359601230561afffb55955df2b92",
+    "revision": 17,
+    "reserved_usd": "102.00",
+    "unreserved_usd": "298.00",
+    "cap_usd": "400.00",
+    "proposal_sha256": "7672e0a3ba2b5911c5510d569351e1191dd5c0ce3cd63569893083c81d10a243",
+    "proposed_new_reservation_usd_max": "8.00",
+    "new_reservation_created": false,
+    "new_paid_execution": false,
+    "v9_authorization_reused": false
+  },
+  "material_receipt_sha256": "32cfb9183d389a880df49bf35dbda518cfcf277ddaf704d42abb169f9704a256",
+  "open": [
+    "teaching-specific AWS launch connection and live preflight",
+    "actual CUDA teaching and held-out predictions",
+    "actual neural fresh-process restart comparison",
+    "actual native call input bytes and independent native A output correctness",
+    "retention after declared intervening learning"
+  ],
+  "claims": {
+    "learning_proved": false,
+    "mastery_proved": false,
+    "CAS_advantage_proved": false,
+    "native_execution_proved": false,
+    "retention_proved": false,
+    "language_capability_proved": false,
+    "general_reasoning_proved": false,
+    "CNCM_complete": false
+  }
+}
