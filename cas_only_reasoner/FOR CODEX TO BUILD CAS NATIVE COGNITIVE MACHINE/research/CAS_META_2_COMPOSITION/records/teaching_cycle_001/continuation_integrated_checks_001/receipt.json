@@ -1,0 +1,45 @@
+{
+  "actual_gpu_restore": "UNEXECUTED",
+  "artifacts": {
+    "inputs_after.json": {
+      "bytes": 16717,
+      "sha256": "e5c7e2f570d780136bbc276c07b3b6ae65d12d5e9a5312645d81d040f2beb994"
+    },
+    "inputs_before.json": {
+      "bytes": 16717,
+      "sha256": "e5c7e2f570d780136bbc276c07b3b6ae65d12d5e9a5312645d81d040f2beb994"
+    },
+    "invocation.json": {
+      "bytes": 2423,
+      "sha256": "09e165397acab99d828989373867cb7860f4a874cd943f3db06018f0b358e72c"
+    },
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 357,
+      "sha256": "1107ab258bb39025e95960f5e003a04cf1d0cd304679cbd4e2f37ac7928660c4"
+    }
+  },
+  "boundary": "Pure and simulated tests only; not live restore, training or cloud readiness.",
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "new_reservation": false,
+  "provider_execution": "UNEXECUTED",
+  "pytest_summary": "257 passed in 178.84s (0:02:58)",
+  "schema": "cas-teaching-continuation-guarded-checks/1",
+  "test_files": [
+    "tests/test_teaching_continuation_evaluation.py",
+    "tests/test_teaching_continuation_launch.py",
+    "tests/test_teaching_continuation_package.py",
+    "tests/test_teaching_continuation_plan.py",
+    "tests/test_teaching_continuation_preflight.py",
+    "tests/test_teaching_continuation_provider.py",
+    "tests/test_teaching_continuation_remote.py",
+    "tests/test_teaching_continuation_tools.py",
+    "tests/test_teaching_cycle_restore_probe.py"
+  ],
+  "timed_out": false,
+  "wall_seconds": 179.43799999999464
+}

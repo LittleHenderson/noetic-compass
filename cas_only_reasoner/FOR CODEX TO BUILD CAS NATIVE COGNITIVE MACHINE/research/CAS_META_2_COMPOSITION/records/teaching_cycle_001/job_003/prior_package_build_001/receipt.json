@@ -1,0 +1,48 @@
+{
+  "boundary": "Pure JSON/hash/ZIP and structural replay only. No tensors, AWS, budget writes or final targets.",
+  "child_pid": 69860,
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\job_003\\prior_package_build_001\\capture.py",
+    "--child"
+  ],
+  "exit_code": 0,
+  "finished_utc": "2026-09-08T07:34:49.628250+00:00",
+  "inputs_unchanged": true,
+  "outputs": {
+    "after.json": {
+      "bytes": 7361,
+      "sha256": "c1588fa4f5e4b833e2eda8f0bd5e01d8b957f31f19a9d15d86185db5d90f3cec"
+    },
+    "before.json": {
+      "bytes": 7361,
+      "sha256": "c1588fa4f5e4b833e2eda8f0bd5e01d8b957f31f19a9d15d86185db5d90f3cec"
+    },
+    "capture.py": {
+      "bytes": 5641,
+      "sha256": "f60a4a043fe74f4fa3a7a2e481a03703cce0a41d86c4be43c6afdd5760bddde1"
+    },
+    "environment.json": {
+      "bytes": 552,
+      "sha256": "7665075ef4f9c892b9fa2842ff5c9b279b3039f5534adfe2f9ef3bf1984e7d8a"
+    },
+    "invocation.json": {
+      "bytes": 2856,
+      "sha256": "f7c11272495c31e1e2073ea98b13d11d93da296505052bbc0a3cc6b076bc166c"
+    },
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 1406,
+      "sha256": "60aa6fba91a4f6f574df8ea9f9e67ba5d3f657c84d303aea1a712d1f14fb9b68"
+    }
+  },
+  "schema": "cas-teaching-prior-build-capture/1",
+  "started_utc": "2026-09-08T07:31:08.610310+00:00",
+  "timed_out": false,
+  "wall_seconds": 221.01499999999942
+}

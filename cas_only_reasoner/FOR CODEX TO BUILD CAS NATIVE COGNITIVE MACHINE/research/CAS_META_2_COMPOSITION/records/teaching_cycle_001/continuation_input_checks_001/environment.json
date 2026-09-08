@@ -1,0 +1,22 @@
+{
+  "child_filesystem_writes_forbidden": true,
+  "dont_write_bytecode": true,
+  "executable": "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "forbidden_import_roots": [
+    "_sqlite3",
+    "boto3",
+    "botocore",
+    "cas_cjt",
+    "cas_meta",
+    "casformer",
+    "jax",
+    "numpy",
+    "sqlite3",
+    "tensorflow",
+    "torch"
+  ],
+  "isolated": 1,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "working_directory": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION"
+}
