@@ -4,6 +4,42 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-08 - Teaching binding-fit check: attempt 001 refused at preflight ($0), attempt 002 failed at RunInstances ($4 reserved, no retry)
+
+The owner-authorized training-fit check for the teaching campaign
+(`records/teaching_cycle_001/binding_fit_training_check_001/`, source freeze
+`31e78792`, archive `ddf39e5e…`) built its launcher and ran twice, and both
+outcomes are recorded honestly.
+
+- **Attempt 001** (`cas-meta2-teaching-binding-20260908120635-035f9ac7`,
+  request sha `7910b607…`): refused at preflight with `AccessDeniedException`
+  on `pricing.get_products` — the AWS Price List API only serves `us-east-1`,
+  and the pricing client had been built with the frozen `us-west-2` session
+  region. **$0.00 spent, no reservation.** Fix committed with a regression
+  test (`test_build_prices_client_from_us_east_1`; launcher suite 35).
+- **Attempt 002** (`cas-meta2-teaching-binding-20260908191109-dcf939ab`,
+  request sha `cdcfcfb1…`): preflight passed (live confirmation of the fix);
+  the single `$4.00` reservation was appended (ledger revision 21 → 22:
+  `$138.00` reserved, `$262.00` unreserved, no refund by policy); then
+  `RunInstances` refused the just-created instance-profile ARN
+  (`InvalidParameterValue`, IAM eventual consistency — no verification wait
+  existed) and cleanup hit `DeleteConflict` on the role/profile because it
+  lacked the detach and inline-policy steps. No instance ever launched; no
+  training results exist.
+- **Fixes committed** (`73b66079`): `_await_instance_profile` — a bounded,
+  verified wait (120 s timeout, 2 s poll, 15 s settle) between the
+  `add_role_to_instance_profile` and the single `RunInstances` attempt, every
+  poll recorded as evidence; cleanup now detaches the role and drops the
+  inline `job-only` policy before deleting role/profile. Three new tests
+  (launcher suite 38). Live IAM leftovers (role, inline policy, instance
+  profile) were remediated and verified absent.
+- **No retry was attempted.** The `$4.00` reservation stands. A corrected run
+  — new job id, new request/authority, new `$4.00` reservation — requires a
+  new owner authorization; the standing authorization bound a single
+  reservation, which is now consumed. Evidence:
+  `PREFLIGHT_REFUSAL_ATTEMPT_001.md`, `ATTEMPT_002_LAUNCH_FAILURE.md`, and the
+  attempt-002 receipt directory (24 provider events).
+
 ## 2026-09-07 - Condition-skill v9: first paid run FAILED at launch, recorded honestly
 
 The first paid run (`cas-meta2-20260907155404-80e827c9`, source freeze
