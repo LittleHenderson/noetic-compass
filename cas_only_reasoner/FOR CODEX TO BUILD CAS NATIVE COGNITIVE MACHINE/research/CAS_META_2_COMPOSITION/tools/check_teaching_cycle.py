@@ -18,7 +18,7 @@ FILES = ["cas_meta2/teaching_cycle/" + name for name in
           "evaluation.py")]
 FILES += ["tests/test_teaching_cycle_" + name + ".py" for name in
           ("data", "controller", "gpu_boundary", "preparation", "lesson_boundary", "guided_application",
-           "journal", "runner", "package", "worker", "evaluation", "compute")]
+           "journal", "runner", "package", "worker", "evaluation", "compute", "build_tool")]
 FILES += ["tools/check_teaching_cycle.py", "tools/prepare_teaching_cycle.py",
           "tools/export_teaching_cycle_lesson.py", "tools/build_teaching_bundle.py",
           "tools/score_teaching_cycle.py", "records/teaching_cycle_001/INTEGRATION_V2.md",

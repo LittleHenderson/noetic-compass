@@ -64,21 +64,32 @@ def main(argv=None):
     extract_bundle(output / "training.zip", extracted, receipt["archive_sha256"], receipt["manifest_sha256"])
     command = [sys.executable, "-I", "-B", str(Path(__file__).resolve()), "--child", str(extracted),
                "--manifest-sha256", receipt["manifest_sha256"]]
-    process = subprocess.run(command, cwd=extracted, capture_output=True, timeout=120,
-                             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
-    for name, raw in (("clean_stdout.txt", process.stdout), ("clean_stderr.txt", process.stderr)):
+    # Windows can read long paths while CreateProcess still rejects a deep cwd.
+    # -I excludes cwd from imports; the child adds only the verified bundle path.
+    child_cwd = Path(sys.executable).resolve().parent
+    failure = None
+    try:
+        process = subprocess.run(command, cwd=child_cwd, capture_output=True, timeout=120,
+                                 creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+        code, stdout, stderr = process.returncode, process.stdout, process.stderr
+    except (OSError, subprocess.TimeoutExpired) as error:
+        code = 124 if isinstance(error, subprocess.TimeoutExpired) else 2
+        stdout = getattr(error, "stdout", None) or b""
+        stderr = getattr(error, "stderr", None) or b""
+        failure = {"type": type(error).__name__, "message": str(error)}
+    for name, raw in (("clean_stdout.txt", stdout), ("clean_stderr.txt", stderr)):
         with (output / name).open("xb") as stream:
             stream.write(raw)
-    result = {"command": command, "exit_code": process.returncode,
+    result = {"command": command, "cwd": str(child_cwd), "exit_code": code, "launch_exception": failure,
         "archive_sha256": receipt["archive_sha256"], "manifest_sha256": receipt["manifest_sha256"],
         "source_commit": args.source_sha, "python": sys.version,
-        "stdout_sha256": sha256(process.stdout).hexdigest(), "stderr_sha256": sha256(process.stderr).hexdigest(),
+        "stdout_sha256": sha256(stdout).hexdigest(), "stderr_sha256": sha256(stderr).hexdigest(),
         "boundary": "Committed-byte package and clean extracted imports only; no CUDA or provider execution."}
     with (output / "clean_check.json").open("x", encoding="utf-8") as stream:
         json.dump(result, stream, sort_keys=True, indent=2)
         stream.write("\n")
     print(json.dumps(result))
-    return process.returncode
+    return code
 
 
 if __name__ == "__main__":
