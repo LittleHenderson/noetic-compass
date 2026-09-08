@@ -509,3 +509,37 @@ def test_invalid_first_update_does_not_claim_training_or_change_final_gates(setu
     cloud.objects["results/train_ready.json"] = b'{"ready":true}\n'
     cloud.objects["results/train/campaign_summary.json"] = b'{"campaign":true}\n'
     assert set(provider.wait_training(context, 20)) == {"ready", "campaign"}
+
+
+def test_live_ten_decimal_quote_survives_actual_parent_gate_without_changing_raw_data(setup):
+    from aws import teaching_cycle_launch as parent
+    provider, context, _, reservations, _ = setup
+    facts = {"read_only": True, "account_id": "807562639912", "region": "us-west-2", "instance_type": "g7.2xlarge",
+        "conflicting_resources": [], "cost_worksheet": {"rates_usd": {"compute": "2.5200000000"},
+        "estimated_bound_usd": "6.417097142857142857142857143"}, "raw_prices": {"compute": "untouched raw AWS response"}}
+    original = deepcopy(facts)
+    provider.observer = lambda _: facts
+    result = provider.preflight(context)
+    assert result["rate_hourly_usd"] == "2.52" and result["rate_hourly_usd_raw"] == "2.5200000000"
+    assert result["cost_worksheet"] == original["cost_worksheet"] and result["raw_prices"] == original["raw_prices"]
+    assert facts == original
+    parent._preflight(result, context)  # The unchanged strict budget.amount path.
+    assert reservations == []
+
+
+@pytest.mark.parametrize("raw,expected", [("2.5200000000", "2.52"), ("2.52000000", "2.52"),
+    ("2.5000000000", "2.5"), ("2.0000000000", "2"), ("2", "2"), ("2.5199999900", "2.51999999")])
+def test_hourly_rate_removes_only_insignificant_trailing_zeroes(raw, expected):
+    from decimal import Decimal
+    assert subject.normalize_hourly_rate(raw, "2.52") == expected
+    assert Decimal(raw) == Decimal(expected)
+
+
+@pytest.mark.parametrize("raw,error", [("2.5200000001", "HOURLY_RATE_ABOVE_CEILING"),
+    ("2.5199999999", "HOURLY_RATE_EXACT_PRECISION_UNSUPPORTED"),
+    ("2.52000000000000000000000000000000000000000001", "HOURLY_RATE_ABOVE_CEILING"),
+    ("0.0000000000", "HOURLY_RATE_INVALID"), ("NaN", "HOURLY_RATE_FORMAT"),
+    ("Infinity", "HOURLY_RATE_FORMAT"), ("-2.52", "HOURLY_RATE_FORMAT"), (2.52, "HOURLY_RATE_FORMAT")])
+def test_quote_normalization_never_rounds_or_relaxes_the_ceiling(raw, error):
+    with pytest.raises(ValueError, match=error):
+        subject.normalize_hourly_rate(raw, "2.52")

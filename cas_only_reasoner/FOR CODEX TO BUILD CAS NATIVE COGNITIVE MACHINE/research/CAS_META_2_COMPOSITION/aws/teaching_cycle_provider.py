@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 from datetime import datetime, timezone
+from decimal import Decimal
 from hashlib import sha256
 import json
 import os
@@ -88,6 +89,17 @@ class _Evidence:
 def source_dependencies():
     """Exact local source map, including imports of reused generic helpers."""
     return {name: sha256(local_bytes(ROOT / name)).hexdigest() for name in DEPENDENCIES}
+
+
+def normalize_hourly_rate(raw, ceiling):
+    """Remove insignificant zeroes only; never round a quote into acceptance."""
+    require(type(raw) is str and 0 < len(raw) <= 64 and re.fullmatch(r"\d+(?:\.\d+)?", raw), "HOURLY_RATE_FORMAT")
+    value = Decimal(raw)
+    require(value.is_finite() and value > 0, "HOURLY_RATE_INVALID")
+    require(value <= Decimal(ceiling), "HOURLY_RATE_ABOVE_CEILING")
+    exact = raw.rstrip("0").rstrip(".") if "." in raw else raw
+    require(re.fullmatch(r"\d+(?:\.\d{1,8})?", exact), "HOURLY_RATE_EXACT_PRECISION_UNSUPPORTED")
+    return exact
 
 
 def validate_first_update(envelope, context):
@@ -223,9 +235,12 @@ class TeachingCycleProvider(generic.ConditionSkillV9Provider):
         self._context(context)
         self._check_pins(context)  # No AWS before all local identities match.
         facts = self.observer(self.clients)
+        raw_rate = facts["cost_worksheet"]["rates_usd"]["compute"]
+        exact_rate = normalize_hourly_rate(raw_rate, context["resource_plan"]["on_demand_hourly_usd_max"])
         self._preflight_passed = True
         return {**facts, "instance_count": 1, "t4_rejected": True,
-            "rate_hourly_usd": facts["cost_worksheet"]["rates_usd"]["compute"],
+            "rate_hourly_usd": exact_rate, "rate_hourly_usd_raw": raw_rate,
+            "rate_normalization": "INSIGNIFICANT_TRAILING_ZERO_REMOVAL_ONLY_NO_ROUNDING",
             "pricing_receipt_sha256": context["bindings"]["pricing_receipt_sha256"],
             "shutdown_capability_verified": False, "shutdown_verification_stage": "BEFORE_WORKER_RELEASE",
             "pinned_pricing_and_fresh_observation_are_distinct": True}
