@@ -3,7 +3,8 @@ import pytest
 
 from cas_meta2.codec import canonical_sha256
 from cas_meta2.teaching_cycle.controller import Allocation, ExposureLedger, TeachingError
-from cas_meta2.teaching_cycle.data import build_dataset, make_cycle
+from cas_meta2.teaching_cycle.data import build_dataset
+from cas_meta2.teaching_cycle.guided_application import make_cycle
 
 
 @pytest.fixture(scope="module")

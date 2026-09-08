@@ -60,7 +60,7 @@ class ExposureLedger:
                  allocation=None, execution_mode="cuda"):
         self.allocation = allocation or Allocation()
         self.allocation.validate()
-        from .data import make_cycle, make_public
+        from .guided_application import make_cycle, make_public
         require(type(train_cases) is list and len(train_cases) >= self.allocation.minimum_unique_families,
                 "TRAINING_VARIETY_ALLOCATION_INVALID")
         self.train_cases = {}
@@ -106,7 +106,7 @@ class ExposureLedger:
 
     def record_batch(self, cycle_ids, records, receipt):
         """Validate everything first: a bad batch must not partly advance state."""
-        from .data import STAGES
+        from .guided_application import STAGES
         require(type(records) is list and records and len(records) == len(cycle_ids)
                 and len(set(cycle_ids)) == len(cycle_ids), "BATCH_INVALID")
         require(all(type(key) is str and key for key in cycle_ids), "CYCLE_ID_INVALID")

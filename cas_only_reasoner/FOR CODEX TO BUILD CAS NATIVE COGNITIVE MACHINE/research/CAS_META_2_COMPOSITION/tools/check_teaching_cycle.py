@@ -13,10 +13,15 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 RECORDS = ROOT / "records/teaching_cycle_001"
 FILES = ["cas_meta2/teaching_cycle/" + name for name in
-         ("__init__.py", "data.py", "controller.py", "gpu_adapter.py")]
+         ("__init__.py", "data.py", "lesson_contract.py", "guided_application.py", "controller.py",
+          "gpu_adapter.py", "journal.py", "runner.py", "worker_contract.py", "package.py", "worker.py",
+          "evaluation.py")]
 FILES += ["tests/test_teaching_cycle_" + name + ".py" for name in
-          ("data", "controller", "gpu_boundary", "preparation")]
+          ("data", "controller", "gpu_boundary", "preparation", "lesson_boundary", "guided_application",
+           "journal", "runner", "package", "worker", "evaluation", "compute")]
 FILES += ["tools/check_teaching_cycle.py", "tools/prepare_teaching_cycle.py",
+          "tools/export_teaching_cycle_lesson.py", "tools/build_teaching_bundle.py",
+          "tools/score_teaching_cycle.py", "records/teaching_cycle_001/INTEGRATION_V2.md",
           "records/teaching_cycle_001/PROTOCOL.md", "cas_meta2/policy.py", "cas_meta2/features_v2.py",
           "cas_meta2/codec.py", "records/budget/campaign_ledger.json",
           "cas_meta2/condition_skill_v9/train.py", "records/condition_skill_v9_001/PROTOCOL.md"]
@@ -67,7 +72,7 @@ def main(destination):
                                    creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
         timed_out = False
         try:
-            code = process.wait(timeout=180)
+            code = process.wait(timeout=300)
         except subprocess.TimeoutExpired:
             timed_out = True
             process.kill()
@@ -76,7 +81,7 @@ def main(destination):
         "python": sys.version, "exit_code": code, "timed_out": timed_out,
         "started_utc": started, "finished_utc": datetime.now(timezone.utc).isoformat(),
         "wall_seconds": time.monotonic() - timer, "before": before, "after": hashes(),
-        "boundary": "Pure preparation and static CUDA-adapter checks. No training, SQLite or provider execution.",
+        "boundary": "Pure preparation, synthetic orchestration/evaluation, journal and static CUDA-adapter checks. No training, SQLite or provider execution.",
         "outputs": {name: {"bytes": (output / name).stat().st_size,
             "sha256": sha256((output / name).read_bytes()).hexdigest()} for name in ("stdout.txt", "stderr.txt")}}
     receipt["unchanged"] = receipt["before"] == receipt["after"]

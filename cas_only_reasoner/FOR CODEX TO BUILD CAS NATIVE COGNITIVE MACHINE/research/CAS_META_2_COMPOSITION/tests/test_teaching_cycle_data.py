@@ -1,5 +1,7 @@
 """Pure finite-curriculum checks, not model training or native execution."""
 from copy import deepcopy
+from hashlib import sha256
+import json
 
 import pytest
 
@@ -124,9 +126,12 @@ def test_guidance_fading_removes_worked_answer(dataset, assistance):
 def test_known_name_components_unseen_combinations_and_lossless_limits(dataset):
     assert set(TRAIN_TAGS).isdisjoint(NEW_TAGS)
     assert set(" ".join(NEW_TAGS).split()) <= set(" ".join(TRAIN_TAGS).split())
-    tokenizer = fit_tokenizer(dataset)
+    # The worker needs registered train cases only, not the generator or final splits.
+    tokenizer = fit_tokenizer({"splits": {"train": dataset["splits"]["train"]}})
     assert tokenizer.max_length == 512
     assert "[UNK]" not in tokenizer.vocabulary
+    payload = (json.dumps(tokenizer.to_dict(), sort_keys=True, indent=2, allow_nan=False) + "\n").encode()
+    assert sha256(payload).hexdigest() == "b6034ff560f5b379c6dfba27207dd41123355b205469f9e07ef48d1c161afcf9"
     for cases in dataset["splits"].values():
         for case in cases:
             public = make_public(case)

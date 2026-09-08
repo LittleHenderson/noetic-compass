@@ -8,6 +8,7 @@ import pytest
 
 from cas_meta2.teaching_cycle import gpu_adapter as adapter
 from cas_meta2.teaching_cycle import data
+from cas_meta2.teaching_cycle.guided_application import make_cycle
 
 SOURCE = Path(adapter.__file__).read_text(encoding="utf-8")
 TREE = ast.parse(SOURCE)
@@ -83,7 +84,7 @@ def test_non_training_records_rejected_without_neural_execution(records):
 def test_only_valid_integer_binding_target_is_consumed():
     case = data.build_dataset()["splits"]["train"][0]
     registry, _ = adapter.validate_training_plan([case])
-    record = data.make_cycle(case)[0]
+    record = make_cycle(case)[0]
     assert adapter.validate_records([record], registry) == ([record["public"]], [case["target_binding"]])
     for target in (True, -1, 3, "0"):
         with pytest.raises(ValueError, match="BINDING_TARGET_INVALID"):
@@ -93,7 +94,7 @@ def test_only_valid_integer_binding_target_is_consumed():
 def test_training_plan_is_closed_to_forged_family_target_and_stage():
     case = data.build_dataset()["splits"]["train"][0]
     registry, identities = adapter.validate_training_plan([case])
-    record = data.make_cycle(case)[0]
+    record = make_cycle(case)[0]
     assert len(registry) == 42
     assert set(identities) == {"training_cases_sha256", "record_registry_sha256"}
     for patch in ({"family_id": "forged"}, {"stage": "pretend"},
@@ -108,7 +109,7 @@ def test_relabeling_held_out_case_does_not_add_it_to_training_registry():
     held_out = deepcopy(dataset["splits"]["test_fresh"][0])
     held_out["split"] = "train"
     with pytest.raises(ValueError, match="RECORD_OUTSIDE_TRAINING_PLAN"):
-        adapter.validate_records(data.make_cycle(held_out)[:1], registry)
+        adapter.validate_records(make_cycle(held_out)[:1], registry)
 
 
 def test_duplicate_nontrain_and_noncanonical_cases_rejected():
@@ -127,7 +128,7 @@ def test_registry_is_deepcopied_and_binds_whole_record():
     original = deepcopy(case)
     registry, identities = adapter.validate_training_plan([case])
     case["observations"][0]["values"][0] = 999
-    assert adapter.validate_records(data.make_cycle(original)[:1], registry)
+    assert adapter.validate_records(make_cycle(original)[:1], registry)
     assert adapter.validate_training_plan([original])[1] == identities
 
 
@@ -137,3 +138,24 @@ def test_checkpoint_and_builder_bind_training_plan():
     assert [arg.arg for arg in build.args.args] == ["training_cases"]
     constructor = next(n for n in ast.walk(TREE) if isinstance(n, ast.FunctionDef) and n.name == "__init__")
     assert "training_cases" in [arg.arg for arg in constructor.args.kwonlyargs]
+    assert "training_plan_sha256" in [arg.arg for arg in constructor.args.kwonlyargs]
+
+
+def test_initial_plan_is_checked_against_external_pin():
+    dataset = data.build_dataset()
+    cases = dataset["splits"]["train"][:1]
+    pin = adapter.canonical_sha256(cases)
+    assert adapter.validate_training_plan(cases, pin)
+    relabeled = {**dataset["splits"]["test_fresh"][0], "split": "train"}
+    with pytest.raises(ValueError, match="TRAINING_PLAN_PIN_MISMATCH"):
+        adapter.validate_training_plan([relabeled], pin)
+    with pytest.raises(ValueError, match="TRAINING_PLAN_PIN_INVALID"):
+        adapter.validate_training_plan(cases, "0" * 64)
+
+
+def test_worker_adapter_and_controller_do_not_import_teacher_generator():
+    for path in (Path(adapter.__file__), Path(adapter.__file__).with_name("controller.py")):
+        tree = ast.parse(path.read_text())
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ImportFrom):
+                assert node.module != "data"
