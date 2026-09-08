@@ -1,0 +1,30 @@
+{
+  "schema": "cas-teaching-binding-fit-authorization-request/1",
+  "recorded_utc": "2026-09-08T17:30:00Z",
+  "status": "DESIGN_ONLY_NO_LAUNCH",
+  "launch_authorized": false,
+  "question": "Can this CAS/generic binding learning path acquire the compact task on short task-only inputs?",
+  "scope": {
+    "cases": 24,
+    "case_balance": "8 per binding slot, drawn from known teaching families",
+    "presentation": "short task-only inputs, no explanatory guidance",
+    "families": ["cas", "generic_attention"],
+    "updates": "actual optimizer updates through teaching_cycle/gpu_adapter.py identity-checked path",
+    "loss_and_accuracy": "recorded before and after, per family",
+    "final_targets": "never read; training answer supplies the correction",
+    "telemetry": "reuse existing gate/binding instrumentation; no new monitoring framework"
+  },
+  "budget": {
+    "declared_optimizer_steps": "to be fixed at freeze, small (single-digit per example scale)",
+    "wall_seconds": "to be fixed at freeze",
+    "reservation": "separate, owner-authorized, single, no automatic refund or retry"
+  },
+  "explicitly_excluded": [
+    "forward-only inspection masquerading as training fit",
+    "silent inclusion in the frozen teaching allocation",
+    "reading sealed final evaluation targets",
+    "any accepted-model modification",
+    "automatic launch of the parts-supervised curriculum revision"
+  ],
+  "not_covered": ["generalization", "native admission", "repair", "caller return", "composition claims"]
+}

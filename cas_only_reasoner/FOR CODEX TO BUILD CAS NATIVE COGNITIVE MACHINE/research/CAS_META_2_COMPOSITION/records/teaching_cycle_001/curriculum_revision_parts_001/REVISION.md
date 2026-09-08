@@ -326,3 +326,28 @@ additional, separately authorized-by-itself design, not a change to them.
 - `cas_meta2/codec.py` (`BINDING_TOKEN_IDS`)
 - `records/teaching_cycle_001/CONTINUATION_002_README.md`
 - `records/teaching_cycle_001/RESULT.md`
+
+## 9. Data-contrast addendum (2026-09-08, after exact counts)
+
+Counted per candidate over `data.build_dataset(seed=20260908)` (see
+`binding_fit_training_check_001/MODE_AND_DATA_CORRECTION.md`): in every
+permitted teaching case (train 256, development 64, test_fresh 64,
+test_context 64) the candidates are exactly one both-match and two
+neither-match - zero color-only and zero shape-only candidates. The three
+parts columns are therefore identical in all teaching data, and parts
+supervision there would reinforce one signal three times rather than teach
+three separable skills.
+
+Two documented options, neither altering the live campaign:
+
+(a) NARROW: describe the lesson as redundant reinforcement of the binding
+signal, not as separable part learning.
+
+(b) VERSIONED CONTRAST FAMILIES: propose new, separately versioned and checked
+teaching families whose distractors share exactly one attribute with the
+request (request `green triangle` with distractors `green square` and `blue
+triangle`), so color-only and shape-only candidates occur during teaching.
+This is a new documented curriculum change requiring its own authorization.
+
+The advisor's illustrative distractors correspond to option (b). This revision
+keeps both options explicit and selects neither without an owner ruling.
