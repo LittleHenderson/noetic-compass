@@ -1,0 +1,1 @@
+{"arguments":{"Filters":[{"Name":"client-token","Values":["cas-meta2-teaching-20260908080138-5518e287"]}]},"method":"describe_instances","service":"ec2"}

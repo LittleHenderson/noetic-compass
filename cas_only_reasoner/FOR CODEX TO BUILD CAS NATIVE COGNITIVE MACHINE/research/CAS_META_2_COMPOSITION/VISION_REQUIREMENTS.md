@@ -71,3 +71,97 @@ remaining pinned-source and training/evaluation gates; pure tests are not a lear
 5. Continue toward all other ledger rows within the remaining total budget. Do not mark the ultimate goal complete because a bounded stage passed.
 
 The separate 12-hour campaign plan was not found in the scoped CNCM research/documents/roadmap/spec search or returned recent task history as of this record. Its absence does not cancel the owner's campaign request or ultimate scope. No prior campaign start time or completed phase is invented here.
+
+## 2026-09-08 teaching continuation update
+
+The phase notes above retain their historical evidence boundaries; they are not
+the current launch status. The full V01-V18 requirements remain open.
+
+For V06 and V07, repeated input-binding teaching has run on four candidate
+copies. The original job003 stopped at its deadline after 1,587 of 3,584 planned
+updates. Its latest recorded development scores were CAS aligned 21/64, CAS
+ordinary 21/64, generic aligned 42/64 and generic ordinary 46/64. These are
+worker-recorded development results, not final held-out scores. CAS's nearly
+constant slot choice remains a negative, not an established explanation of its
+cause. See `records/teaching_cycle_001/job_003/BINDING_DIAGNOSIS.md`.
+
+Continuation source `a4b1af8519bd8def6e8cbb16f6d14ef72d99fa6b` preserves the
+original worker, four candidate identities, model/optimizer states, teaching
+cursors and sixteen-epoch allocation. The new AWS job
+`cas-meta2-teaching-20260908080138-5518e287` restored all four candidates on an
+RTX PRO 4500 Blackwell in 155.05006252200002 seconds. The parent then released
+training and observed CAS aligned advancing from 411 to 412 updates, starting
+from the exact restored model digest. This is actual restore plus first-update
+evidence; it is not yet measured post-restart retention or improved accuracy.
+The source and raw receipts are bound in
+`records/teaching_cycle_001/continuation_001/RESTORE_AND_FIRST_UPDATE.md`.
+
+The four-way comparison is still running at that recorded milestone. The
+final-test boundary is unchanged. A separate, inactive forward diagnostic has
+been prepared to test requested-tag sensitivity, slot permutations and guidance
+effects using training/development inputs only. Its actual plan has 96 variants
+per arm derived from four source cases; 92 combined pure/fake tests passed with
+two recorded Python deprecation warnings. See
+`records/teaching_cycle_001/BINDING_DIAGNOSTIC_PREPARATION.md`. Those tests are not
+GPU observations and do not prove a cause of the CAS plateau. Separate launch
+integration and actual diagnostic execution remain open.
+
+Nothing in this continuation demonstrates V03/V04 unfamiliar nested-program
+composition, V08 learning during a suspended native call, general language,
+CAS-specific advantage or the complete CNCM. Previously recorded familiar
+program and held-out composition results remain separate evidence. The new
+reservation brings the canonical ledger to revision 20: $126 reserved and
+$274 unreserved within the inclusive $400 cap; those numbers are not an invoice.
+
+## 2026-09-08 continuation 001 partial result and next slice
+
+The earlier first-update milestone is historical. This slice stopped at its
+training deadline and saved 1,539 additional updates: 3,126 of the original
+3,584 total, leaving 458. Three candidates completed 14 epochs; generic ordinary
+completed 13 epochs plus 46 of 56 updates in epoch 14. The unchanged outer
+evaluator exited 0 with `PARTIAL_EXPOSURE_ONLY`; private final targets were not
+opened. All 3,278 original prior-package members remained byte-identical.
+
+At the latest common completed epoch, 13, recorded input-binding correctness
+was CAS aligned 23/64, CAS ordinary 18/64, generic aligned 42/64 and generic
+ordinary 48/64. CAS's subsequent epoch-14 scores were 20/64 and 24/64. These are
+development predictions recounted from saved records, not independent model
+reruns or final evaluation. No reliable benefit for CAS or advantage for its
+aligned teaching cycle has been established. The next diagnostic must explain
+the measured input-position bias without guessing at its cause.
+
+Supplemental AWS cleanup now confirms the job's compute is absent, all
+temporary control/network resources are absent, and six result objects remain
+unchanged. This is not a fresh termination receipt. The original parent failure
+and first supplemental refusal remain preserved. See
+`records/teaching_cycle_001/continuation_001/PARTIAL_TRAINING_REVIEW.md`,
+`evaluation_001/evaluation.json` and `cleanup_recovery_002/result.json` in that
+same continuation directory. The ledger remains revision 20: $126 reserved,
+$274 unreserved; no refund or new reservation was made during cleanup.
+
+The next source revision prepares the latest checkpoints, optimizer states,
+cursors and full histories for the remaining 458 updates. It retains both
+prior summary files and will write a separate `train_continued_002` summary.
+The neural bundle, data, four-arm comparison, seed, sixteen-epoch allocation,
+checkpoint selection and final scoring stay unchanged. The transport's restore
+allowance increases from 180 to 900 seconds for the larger saved history,
+inside the same 7,200-second total lifetime and proposed $8 reservation. This
+is a bounded timing allowance, not a measured guarantee or a new learning
+allocation. Source review, actual package verification, a new source freeze,
+fresh provider/ledger checks and reservation must precede any new GPU launch.
+
+The initial 360-second proposal was revised after code review confirmed that
+restore replays the unchanged controller's growing history, with repeated
+scans. Old observed restore time was 155.05006252200002 seconds for 1,587
+updates. For 3,126 updates, simple linear and per-arm quadratic estimates are
+about 305 and 601 seconds; a scan-dominated estimate is about 738 seconds.
+Those estimates motivate a 900-second allowance, not a timing guarantee.
+The local structural inspector has now exited 0 and confirmed 6,441 retained
+payload files / 189,306,349 bytes and unchanged prior-history prefixes.
+Its receipt is `continuation_001/continuation_inspection_002.json`, SHA-256
+`e21c3ad7aa7cd2b2c278f5eff11a215ed4fb785beb16154d07413c7a1544d6db`.
+That inspection did not load model tensors or prove the next GPU restore.
+
+The complete V01-V18 destination remains open. Input binding is a prerequisite
+skill, not a replacement for native learned composition, teaching within a
+suspended caller, durable qualified skills, or the rest of the owner's vision.

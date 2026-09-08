@@ -1,0 +1,37 @@
+{
+  "actual_gpu_restore": "UNEXECUTED",
+  "artifacts": {
+    "inputs_after.json": {
+      "bytes": 20216,
+      "sha256": "95ca04d0691cf80fda8f23c32be30c3b332abcf755a8e6eef6742e3da15e57d7"
+    },
+    "inputs_before.json": {
+      "bytes": 20216,
+      "sha256": "95ca04d0691cf80fda8f23c32be30c3b332abcf755a8e6eef6742e3da15e57d7"
+    },
+    "invocation.json": {
+      "bytes": 2033,
+      "sha256": "a99f9bff6eae3ecf3066265ead4b01f483ebecae73f579554a9c7dee78b8ff0e"
+    },
+    "stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stdout.txt": {
+      "bytes": 183,
+      "sha256": "6d368715e560baf051f8514b1a323f7f50cbbc066810013746de323ef7386845"
+    }
+  },
+  "boundary": "Pure and simulated tests only; not live restore, training or cloud readiness.",
+  "exit_code": 0,
+  "inputs_unchanged": true,
+  "new_reservation": false,
+  "provider_execution": "UNEXECUTED",
+  "pytest_summary": "83 passed in 49.55s",
+  "schema": "cas-teaching-continuation-guarded-checks/1",
+  "test_files": [
+    "tests/test_teaching_continuation_absent_cleanup.py"
+  ],
+  "timed_out": false,
+  "wall_seconds": 50.25
+}

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "C:\\Users\\wakil\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-I",
+    "-B",
+    "-c",
+    "\nimport sys, os, importlib.abc\nbanned = frozenset(('torch','numpy','sqlite3','_sqlite3','casformer','cas_cjt','cas_meta',\n                    'boto3','botocore','tensorflow','jax'))\nassert not banned.intersection(sys.modules)\nclass Guard(importlib.abc.MetaPathFinder):\n    def find_spec(self, fullname, path=None, target=None):\n        if fullname.split('.')[0] in banned:\n            raise RuntimeError('FORBIDDEN_IMPORT:' + fullname)\nsys.meta_path.insert(0, Guard())\ndef audit(event, args):\n    if event.startswith('socket.') or event == 'sqlite3.connect':\n        raise RuntimeError('FORBIDDEN_OPERATION:' + event)\nsys.addaudithook(audit)\nos.environ['PYTEST_DISABLE_PLUGIN_AUTOLOAD'] = '1'\nsys.path.insert(0, os.getcwd())\nimport pytest\nresult = pytest.main(sys.argv[1:])\nassert not banned.intersection(sys.modules)\nraise SystemExit(result)\n",
+    "-q",
+    "-p",
+    "no:cacheprovider",
+    "--noconftest",
+    "--override-ini",
+    "addopts=",
+    "--basetemp",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\continuation_001\\absent_cleanup_checks_003\\pytest_tmp",
+    "tests/test_teaching_continuation_absent_cleanup.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "environment": {
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "observed_utc": "2026-09-08T13:02:15.715436+00:00",
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "timeout_seconds": 900
+}

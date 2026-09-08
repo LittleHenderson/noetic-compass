@@ -1,0 +1,1 @@
+{"arguments":{"PolicyName":"job-only","RoleName":"cas-meta2-teaching-20260908080138-5518e287-worker"},"method":"get_role_policy","service":"iam"}

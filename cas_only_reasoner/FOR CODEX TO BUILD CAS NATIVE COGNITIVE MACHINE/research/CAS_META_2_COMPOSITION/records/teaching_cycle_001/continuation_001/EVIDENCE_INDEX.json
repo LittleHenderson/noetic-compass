@@ -1,0 +1,1121 @@
+{
+  "schema": "cas-teaching-continuation-evidence-index/1",
+  "job": "cas-meta2-teaching-20260908080138-5518e287",
+  "logical_run_id": "cas-meta2-teaching-20260908052915-8b5df59c",
+  "transport_source_commit": "a4b1af8519bd8def6e8cbb16f6d14ef72d99fa6b",
+  "neural_source_commit": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+  "evaluation_status": "PARTIAL_EXPOSURE_ONLY",
+  "cleanup_status": "CLEANUP_CLOSED_RESULTS_RETAINED",
+  "private_targets_opened": false,
+  "final_score": null,
+  "files": [
+    {
+      "path": "records/teaching_cycle_001/continuation_001/continuation_inspection_002.json",
+      "bytes": 85342,
+      "sha256": "e21c3ad7aa7cd2b2c278f5eff11a215ed4fb785beb16154d07413c7a1544d6db"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json.history/00000020.json",
+      "bytes": 55222,
+      "sha256": "8fdd6fc6ab2917890d59a2c8ed17354704af99c53800fa35e200e423e329e431"
+    },
+    {
+      "path": "records/budget/campaign_ledger.json",
+      "bytes": 55222,
+      "sha256": "8fdd6fc6ab2917890d59a2c8ed17354704af99c53800fa35e200e423e329e431"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/inputs_after.json",
+      "bytes": 20216,
+      "sha256": "95ca04d0691cf80fda8f23c32be30c3b332abcf755a8e6eef6742e3da15e57d7"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/inputs_before.json",
+      "bytes": 20216,
+      "sha256": "95ca04d0691cf80fda8f23c32be30c3b332abcf755a8e6eef6742e3da15e57d7"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/invocation.json",
+      "bytes": 2033,
+      "sha256": "a99f9bff6eae3ecf3066265ead4b01f483ebecae73f579554a9c7dee78b8ff0e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/receipt.json",
+      "bytes": 1170,
+      "sha256": "1c8555bebf79cc250b6605454a1bdd902c79de984507e4e33da767c3bc612b31"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/absent_cleanup_checks_003/stdout.txt",
+      "bytes": 183,
+      "sha256": "6d368715e560baf051f8514b1a323f7f50cbbc066810013746de323ef7386845"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/authority.json",
+      "bytes": 3388,
+      "sha256": "637482e436da4f6050cc8acbfaf1cec45e1bc60aa88474a5a7753733dfd0e905"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/001_sts_get_caller_identity_intent.json",
+      "bytes": 64,
+      "sha256": "9e28739d66e18c9d705907a1c5ee01c7d6ef813a5b5d6e5a688a9792f330c8df"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/001_sts_get_caller_identity_result.json",
+      "bytes": 488,
+      "sha256": "e230d40ad58cd3b18995e8773f96dab927179dcf1fc3c2c1dd5a918335648ff2"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/002_ec2_describe_instances_error.json",
+      "bytes": 85,
+      "sha256": "04de56e753840d64e7e80676ff910ed2e0eaf4e689bc04583cc7263bc0367cf9"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/002_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "5b8b21d8cfac7a32df5e7aff70b778a33044f19c2606be63b20701ed2fd91e82"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/002_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "b482a3089a65120d0cea7a05ed86556c5d99d6a9aace7a1d7054ed76bfd4de3d"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/intent.json",
+      "bytes": 2938,
+      "sha256": "b80af4e1f9f26cfe4fd7587d914f1c99ad434772614addb0cc2a43b9a43c967f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_001/result.json",
+      "bytes": 670,
+      "sha256": "49afeaa7bbfea89036e875336f22c65e7442a26f5fa3768875516d782d949a2e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/001_sts_get_caller_identity_intent.json",
+      "bytes": 64,
+      "sha256": "9e28739d66e18c9d705907a1c5ee01c7d6ef813a5b5d6e5a688a9792f330c8df"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/001_sts_get_caller_identity_result.json",
+      "bytes": 488,
+      "sha256": "2aa13ffec2f2310ab5f282060864334cfb4d5d94f6492e28aa4cc81fafcf1d79"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/002_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "5b8b21d8cfac7a32df5e7aff70b778a33044f19c2606be63b20701ed2fd91e82"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/002_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "867a99f1c4ade29772c35dd3343057896d5a2f195c104d6a01d3992e67926a68"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/003_ec2_describe_instances_intent.json",
+      "bytes": 158,
+      "sha256": "939e2c3cdb3d48a56403df5325f080955d99f8941d1db819a7af71ec0cffcba4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/003_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "e66217cb9faaee4f4577dbeceab32724d0f9d2e4199be45671a5b7bbb3f0707e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/004_ec2_describe_instances_intent.json",
+      "bytes": 154,
+      "sha256": "93e1a380d27c91351a9f9d92f5f62dbd690381774cd0c2d86db2c655031efb57"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/004_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "ed3fd6d26a64f2dd6d20266e148aa720040c4a4221c57c346feaa20152415d89"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/005_ec2_describe_volumes_intent.json",
+      "bytes": 156,
+      "sha256": "08b7e796e539d2a24f2acb5fadec54cd87970921884ea9959268435f7df1a5e1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/005_ec2_describe_volumes_result.json",
+      "bytes": 439,
+      "sha256": "7f80c07450ac924c2db19e5b0c4258d47a0efe418eb392b5aef4feb54ec44a66"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/006_ec2_describe_security_groups_intent.json",
+      "bytes": 158,
+      "sha256": "86fd58aea5b70d994892aba910fdeddbd0262ee48b6cd7c6d967596d44c06739"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/006_ec2_describe_security_groups_result.json",
+      "bytes": 996,
+      "sha256": "0ad0ad705ae3c329f08a894041b02068eacd00215f2e75dfca8cd67fdfda6b3a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/007_scheduler_get_schedule_error.json",
+      "bytes": 839,
+      "sha256": "a986af286776843c8d83f3bb0c768193db7925cd91b4fb6596ab349458c53d8e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/007_scheduler_get_schedule_intent.json",
+      "bytes": 114,
+      "sha256": "7bb4408af6d65d66aded5d9c4a5c9bcbb8acb74efa330a10ded8b77df74ba5d5"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/008_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "a6f626a8ef68eb8dbbef31fabb253fb16a15885fa02888322c9466f1bd24c975"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/008_iam_get_instance_profile_result.json",
+      "bytes": 1069,
+      "sha256": "b28633189974f93486e769f73f7c34151f08ec5fa85745f5107199eccf5cf190"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/009_iam_get_role_intent.json",
+      "bytes": 115,
+      "sha256": "a45b28a64514f4fc2112df152063cc07489991d52f5c49ce802346934507580a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/009_iam_get_role_result.json",
+      "bytes": 882,
+      "sha256": "45443502199fc68328a2a16469784eff710babe18b7d187e379db06464b36a1b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/010_iam_list_role_policies_intent.json",
+      "bytes": 125,
+      "sha256": "c652854291b28695f58f79013b6564011dbaff40627da0843bdb4d4ec0bbb6df"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/010_iam_list_role_policies_result.json",
+      "bytes": 335,
+      "sha256": "d7d71f368d1d9f54b90c23ba80ef424277e4a8e624039b45cc0f5ac28e491850"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/011_iam_list_attached_role_policies_intent.json",
+      "bytes": 134,
+      "sha256": "3f5d3e3393e0cbe0185ceb6424314f031b836027accc939231b94e4933c9680a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/011_iam_list_attached_role_policies_result.json",
+      "bytes": 330,
+      "sha256": "fbd31f4a8ea39f62c83dba9afd212abcbd21693410982a274b44fa41c31cd95f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/012_iam_list_instance_profiles_for_role_intent.json",
+      "bytes": 138,
+      "sha256": "15a66fa0e0224bc44c20cbef6e4a40b5f4456acf6bcb3679c19e514ac7ac6b2f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/012_iam_list_instance_profiles_for_role_result.json",
+      "bytes": 1007,
+      "sha256": "53c01fb919088a1d65e3308b195b6c771f15e57cc00d5e37ff703a633daf97b1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/013_iam_get_role_policy_intent.json",
+      "bytes": 146,
+      "sha256": "729fa45ef4d7aedf14a197dbdb6127f02239d29cd2e8560c318239400f28f0fc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/013_iam_get_role_policy_result.json",
+      "bytes": 1877,
+      "sha256": "47699c649e8e7fb964b92cf8293cd24b40829d9663d8436e872f4a6a22fb5361"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/014_iam_get_role_intent.json",
+      "bytes": 114,
+      "sha256": "06e472e863010b9cb766ebd520b439af1fa6bdb3cc52153083386b178b9d2ac4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/014_iam_get_role_result.json",
+      "bytes": 886,
+      "sha256": "d1333c79ef0044a46df0fc6b1ea5ddb1277476e4f87edaad926dc7c74261fbdc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/015_iam_list_role_policies_intent.json",
+      "bytes": 124,
+      "sha256": "9fbd2e950c051568b61125d41a4ffa4b0c1ebe36b34d81dc638eafd97b02da37"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/015_iam_list_role_policies_result.json",
+      "bytes": 335,
+      "sha256": "400ca74e869ab82cedcdde9899727c81d93c9a1a8e383c0ae51a0658ae3b7adc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/016_iam_list_attached_role_policies_intent.json",
+      "bytes": 133,
+      "sha256": "ac7d19d736caa1fc5f09de59e751d99cb7ac48504e7cf7150be577f8412e8ace"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/016_iam_list_attached_role_policies_result.json",
+      "bytes": 330,
+      "sha256": "e732015e17f42b1482a52fa1b1be3ad56f921b2a7ea6d17b2dbc2ede8e2fdb0d"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/017_iam_list_instance_profiles_for_role_intent.json",
+      "bytes": 137,
+      "sha256": "9bc25320b72f790598515db93db614ec05ab5b97be400f7a2a18f0149df87c40"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/017_iam_list_instance_profiles_for_role_result.json",
+      "bytes": 330,
+      "sha256": "276f7ae896ca3885bdf04734f2ea1af18a784facc4c45e7e64adf79b580a1c5e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/018_iam_get_role_policy_intent.json",
+      "bytes": 145,
+      "sha256": "7e3de76cc2cf59c252705b1d5fc3b0b4d4b9cb4bad687149c7e0c24a3e97d249"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/018_iam_get_role_policy_result.json",
+      "bytes": 649,
+      "sha256": "aee0a0333d94305240a2ef52df89d650e8b423583c694603bd7ba70ce13efec8"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/019_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "7aa1dd459affcaadff9932d91cb28b14eeaa2c4341306ecdfb2139acca257802"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/019_s3_list_objects_v2_result.json",
+      "bytes": 2045,
+      "sha256": "806dc47722465d6ac6ec345b750de4493cd4f88ca2ea54d882ad326c49f38adc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/020_s3_get_bucket_lifecycle_configuration_intent.json",
+      "bytes": 144,
+      "sha256": "711baae2d7b5a9a56ed4dd976797d0ca809a0ffed481b0753de3af836b9c49a8"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/020_s3_get_bucket_lifecycle_configuration_result.json",
+      "bytes": 725,
+      "sha256": "252fc17f91b8db5cd967f8f359e23fcbc676077980ed6b4d304e9cf0acfc7366"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/021_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "7aa1dd459affcaadff9932d91cb28b14eeaa2c4341306ecdfb2139acca257802"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/021_s3_list_objects_v2_result.json",
+      "bytes": 2045,
+      "sha256": "fd0abf7c039f50d76f8c57762d00aad47a24df937667ba93d20f6e872617e3d6"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/022_s3_get_bucket_lifecycle_configuration_intent.json",
+      "bytes": 144,
+      "sha256": "711baae2d7b5a9a56ed4dd976797d0ca809a0ffed481b0753de3af836b9c49a8"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/022_s3_get_bucket_lifecycle_configuration_result.json",
+      "bytes": 725,
+      "sha256": "022bb0996f5206b1add4abdd2939e333586e66f2747e6dd86a49a018a6273cfa"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/023_scheduler_get_schedule_error.json",
+      "bytes": 839,
+      "sha256": "e8a9da3e979360a9dc6eb4c63fe73ffb3a77fb3517960643fda90b078fd224db"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/023_scheduler_get_schedule_intent.json",
+      "bytes": 114,
+      "sha256": "7bb4408af6d65d66aded5d9c4a5c9bcbb8acb74efa330a10ded8b77df74ba5d5"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/024_iam_remove_role_from_instance_profile_intent.json",
+      "bytes": 214,
+      "sha256": "aef943901064bc1b2d1b350cdc89465a10643bd078fb4f24d1cb4e9f46364000"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/024_iam_remove_role_from_instance_profile_result.json",
+      "bytes": 288,
+      "sha256": "0b141ca75d1cb42c47216de7a62fe5392751de760b0ec07c246593ad613db9d3"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/025_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "a6f626a8ef68eb8dbbef31fabb253fb16a15885fa02888322c9466f1bd24c975"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/025_iam_get_instance_profile_result.json",
+      "bytes": 675,
+      "sha256": "f5686333846b2c31be2a4fbd3256f25f813814e625a1ea503bb47a61a74e513f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/026_iam_delete_instance_profile_intent.json",
+      "bytes": 141,
+      "sha256": "f6a5b21a64b16c35c98915cd19bf7fd9935a422c348db83775e651cf94b0fe1c"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/026_iam_delete_instance_profile_result.json",
+      "bytes": 288,
+      "sha256": "bb12c5acb8533c46c33ec99a2a4aa66bfed3bf025ec3e28c14488d33593cf130"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/027_iam_get_instance_profile_error.json",
+      "bytes": 661,
+      "sha256": "583d11cc25ad7473ad8c74e7c04b397711af4f81ef83e68dd8db6b53664123ce"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/027_iam_get_instance_profile_intent.json",
+      "bytes": 138,
+      "sha256": "a6f626a8ef68eb8dbbef31fabb253fb16a15885fa02888322c9466f1bd24c975"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/028_iam_delete_role_policy_intent.json",
+      "bytes": 149,
+      "sha256": "f6d5b2ac1828cd062fdb1788256e21d9cd0f1a24cc916dd787ba89f0996271c1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/028_iam_delete_role_policy_result.json",
+      "bytes": 288,
+      "sha256": "d084193a6628432e44983a073605ff61a7673b1b2df1922095a209a50083e63f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/029_iam_get_role_policy_error.json",
+      "bytes": 592,
+      "sha256": "bb94077839fb095a4e1a04af8f22b23dbfdd0bb5911eeff4b98f96719788c803"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/029_iam_get_role_policy_intent.json",
+      "bytes": 146,
+      "sha256": "729fa45ef4d7aedf14a197dbdb6127f02239d29cd2e8560c318239400f28f0fc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/030_iam_list_role_policies_intent.json",
+      "bytes": 125,
+      "sha256": "c652854291b28695f58f79013b6564011dbaff40627da0843bdb4d4ec0bbb6df"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/030_iam_list_role_policies_result.json",
+      "bytes": 325,
+      "sha256": "9a37344c4413496a31187d02e0d73b6e127cf0b5aeef8e497cbafe8f54ef6d6e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/031_iam_list_attached_role_policies_intent.json",
+      "bytes": 134,
+      "sha256": "3f5d3e3393e0cbe0185ceb6424314f031b836027accc939231b94e4933c9680a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/031_iam_list_attached_role_policies_result.json",
+      "bytes": 330,
+      "sha256": "77f16e06e042c2bad0ef0a81585a67e825efe62d70375ac66ccf6b853ed34d7d"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/032_iam_list_instance_profiles_for_role_intent.json",
+      "bytes": 138,
+      "sha256": "15a66fa0e0224bc44c20cbef6e4a40b5f4456acf6bcb3679c19e514ac7ac6b2f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/032_iam_list_instance_profiles_for_role_result.json",
+      "bytes": 330,
+      "sha256": "f4246366e3416b549acaf4b5cfc4606241d9c5b1a6087f7c3e5fe3116869d16e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/033_iam_delete_role_intent.json",
+      "bytes": 118,
+      "sha256": "cd972d3b0d304c4a7b73d724c90b63d23861b420de753cb7dee72987f88306af"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/033_iam_delete_role_result.json",
+      "bytes": 288,
+      "sha256": "00d795ff3c6b87b97a5eb19fae46cbee7f0bf9b3811696614b9e1bdc2f67b0dd"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/034_iam_get_role_error.json",
+      "bytes": 654,
+      "sha256": "cd3c5e0a56e9cb4f709b3910805a943c24079c999b5041b80d730a0f551d9049"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/034_iam_get_role_intent.json",
+      "bytes": 115,
+      "sha256": "a45b28a64514f4fc2112df152063cc07489991d52f5c49ce802346934507580a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/035_iam_delete_role_policy_intent.json",
+      "bytes": 148,
+      "sha256": "d3bc74202632777803912363fb1efaf81d25c02cd5ee1c3ed45c5341ac896c9b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/035_iam_delete_role_policy_result.json",
+      "bytes": 288,
+      "sha256": "e7dec2a2a8d9ac7b38b882ba3aef9d78c15cf861af41f22494fec11b3c79ab3b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/036_iam_get_role_policy_error.json",
+      "bytes": 592,
+      "sha256": "7be279198260a8b1fc9cf9f44cda67f58a6610000c0db06989687c05ea335d51"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/036_iam_get_role_policy_intent.json",
+      "bytes": 145,
+      "sha256": "7e3de76cc2cf59c252705b1d5fc3b0b4d4b9cb4bad687149c7e0c24a3e97d249"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/037_iam_list_role_policies_intent.json",
+      "bytes": 124,
+      "sha256": "9fbd2e950c051568b61125d41a4ffa4b0c1ebe36b34d81dc638eafd97b02da37"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/037_iam_list_role_policies_result.json",
+      "bytes": 325,
+      "sha256": "bfbe7ed90d14191e9a06f26b40fcfbb967191f9c93d101d204155c02b89dc9e5"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/038_iam_list_attached_role_policies_intent.json",
+      "bytes": 133,
+      "sha256": "ac7d19d736caa1fc5f09de59e751d99cb7ac48504e7cf7150be577f8412e8ace"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/038_iam_list_attached_role_policies_result.json",
+      "bytes": 330,
+      "sha256": "f45ec7615a5ad06c7dbe7dc81678c69097625354b97135615e3d45f64def9c1b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/039_iam_list_instance_profiles_for_role_intent.json",
+      "bytes": 137,
+      "sha256": "9bc25320b72f790598515db93db614ec05ab5b97be400f7a2a18f0149df87c40"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/039_iam_list_instance_profiles_for_role_result.json",
+      "bytes": 330,
+      "sha256": "8a80eb7d44140318c1a937da2fc1dfd43590abd97ac5267a717223524fe284b5"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/040_iam_delete_role_intent.json",
+      "bytes": 117,
+      "sha256": "fdfe3229f9e36314b783e6c4fb55681b213e915bb024571fb7a935e993bbdd9e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/040_iam_delete_role_result.json",
+      "bytes": 288,
+      "sha256": "e6710b69e7d29ebff262c3d7a3c61b48fb1b333118cacc90343e4aca3a5940e1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/041_iam_get_role_error.json",
+      "bytes": 652,
+      "sha256": "329312fe2ee2733a03106c0d2de9e21e772c0834db3b627fde8c6aa395692bcb"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/041_iam_get_role_intent.json",
+      "bytes": 114,
+      "sha256": "06e472e863010b9cb766ebd520b439af1fa6bdb3cc52153083386b178b9d2ac4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/042_ec2_delete_security_group_intent.json",
+      "bytes": 98,
+      "sha256": "1a59e2a790f5901d819b82ef28952b13233357bc08ba4e9025baf1b6afee5d85"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/042_ec2_delete_security_group_result.json",
+      "bytes": 473,
+      "sha256": "1fe3e746ffed0b2fc845903b39541252e5c1ee65bf6fbb94c143337e0329e18c"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/043_ec2_describe_security_groups_intent.json",
+      "bytes": 158,
+      "sha256": "86fd58aea5b70d994892aba910fdeddbd0262ee48b6cd7c6d967596d44c06739"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/043_ec2_describe_security_groups_result.json",
+      "bytes": 446,
+      "sha256": "481537324b7f5b8a910b84ea145466ce084d6a9b21a082101412e5e2d4ce3dce"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/044_ec2_describe_instances_intent.json",
+      "bytes": 100,
+      "sha256": "5b8b21d8cfac7a32df5e7aff70b778a33044f19c2606be63b20701ed2fd91e82"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/044_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "e8090f5d2993407eadde0d927a63c2d2caa8fe14d8541470531ee0c18febfa83"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/045_ec2_describe_instances_intent.json",
+      "bytes": 158,
+      "sha256": "939e2c3cdb3d48a56403df5325f080955d99f8941d1db819a7af71ec0cffcba4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/045_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "db31a10ffa97c829910d13e54aad08d5d3ba2e2dae198e91d2a88a7945f56af4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/046_ec2_describe_instances_intent.json",
+      "bytes": 154,
+      "sha256": "93e1a380d27c91351a9f9d92f5f62dbd690381774cd0c2d86db2c655031efb57"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/046_ec2_describe_instances_result.json",
+      "bytes": 444,
+      "sha256": "8f583cba9c365bbbd7c67770e199287407bd89d7fc40d05e7627ab85113c0384"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/047_ec2_describe_volumes_intent.json",
+      "bytes": 156,
+      "sha256": "08b7e796e539d2a24f2acb5fadec54cd87970921884ea9959268435f7df1a5e1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/047_ec2_describe_volumes_result.json",
+      "bytes": 439,
+      "sha256": "2a803e9b4fc4a18a138ef260767a743a81b6e0360791ed3eb44bce14a8ffd92b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/048_s3_list_objects_v2_intent.json",
+      "bytes": 125,
+      "sha256": "7aa1dd459affcaadff9932d91cb28b14eeaa2c4341306ecdfb2139acca257802"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/048_s3_list_objects_v2_result.json",
+      "bytes": 2045,
+      "sha256": "f9658f845ce4b181d17612ad857e1c39a3bba18107596a7a6724ec5b8ca51742"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/049_s3_get_bucket_lifecycle_configuration_intent.json",
+      "bytes": 144,
+      "sha256": "711baae2d7b5a9a56ed4dd976797d0ca809a0ffed481b0753de3af836b9c49a8"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/049_s3_get_bucket_lifecycle_configuration_result.json",
+      "bytes": 725,
+      "sha256": "3ad9706d12eb66372ff58339c15fadddb38374022d4ca34f56fa78ad47708166"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/admission.json",
+      "bytes": 4756,
+      "sha256": "3e7a6425437fe010d80d9a1aa41097fbd5117e052f4468de048c1f2805adc7e2"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/intent.json",
+      "bytes": 3429,
+      "sha256": "8be7434ad93ef3c4455327ed92de4ab1ef8cf2e775fc5bee51092adf5beda06f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/cleanup_recovery_002/result.json",
+      "bytes": 1811,
+      "sha256": "4e49318d473776359a2c2097a180604e1d72e56aa1e4555569d7d6a3e06efc63"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/evaluation_001/evaluation.json",
+      "bytes": 102308,
+      "sha256": "cd2d7cce4a3b75385d8f8348d6628b5edc43bcb18a10134f82f62567bc04ba05"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/evaluation_001/extracted/train_continued_001/campaign_summary.json",
+      "bytes": 113480,
+      "sha256": "2cb6f5659a0377695b00e49f5a45d9edff6f87db6fe648927c4719d26a15d33b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/evaluation_001/extracted/train/campaign_summary.json",
+      "bytes": 100259,
+      "sha256": "26b23bb5f23ca875375797db155e8520b947bf0b4eada71e596a9ec7493e195f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/001_preflight_intent.json",
+      "bytes": 122,
+      "sha256": "f14d659c74c34ac0ea524cd8c2201f11950e92b0aa34cb5f2788a19a79ae212e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/001_preflight_result.json",
+      "bytes": 21695,
+      "sha256": "2da7f6a10f9bc30ba64258b884e7d814205a5e10455c44c669401d3d188d0214"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/002_reserve_intent.json",
+      "bytes": 120,
+      "sha256": "c78dd538a0f7e833cb69f4093f9b2fa7db890b178ced74c3d082f53eee9c8a96"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/002_reserve_result.json",
+      "bytes": 3666,
+      "sha256": "f4f0a3c21811fa5fd0ce679d3aa83900ce1e1f142992fe409e332f57fddd8b66"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/003_launch_intent.json",
+      "bytes": 119,
+      "sha256": "66ee765944b8f4c5b30ce37715e8ff603533d0a8dab6fc8ee5eaa07f402cc32b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/003_launch_result.json",
+      "bytes": 1456,
+      "sha256": "28be66f9cec219dd9b48a5f8a2af72cfe0b8af64ef0b3d6723b9d25e69609dc2"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/004_wait_restore_intent.json",
+      "bytes": 152,
+      "sha256": "0f847187f6b6b28d4e32ffe7ae35a76624787803318e33f7c8836979764b1ca0"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/004_wait_restore_result.json",
+      "bytes": 11209,
+      "sha256": "675b35278130e04000ef75a57108dc7d3daedd40137c0079a499aaa92964c346"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/005_release_training_intent.json",
+      "bytes": 844,
+      "sha256": "3777385b84aac6a55c840babe894b446f9139dc0cb37ba290d098704781440cf"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/005_release_training_result.json",
+      "bytes": 194,
+      "sha256": "4f4ca9e03f1f5f97309ca0e03b3543e8eb8f820ac61bd44d91517330e07bea06"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/006_wait_training_intent.json",
+      "bytes": 151,
+      "sha256": "098eaa43b9f1f719715b32693e59a9348d4326e24ffb424173aaae7544403e63"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/006_wait_training_result.json",
+      "bytes": 4522,
+      "sha256": "38cf429eb2a33bad36026e56d74f03a698bb35ae3fe18921a3094cdad16b0680"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/007_collect_intent.json",
+      "bytes": 456,
+      "sha256": "b33de5e60080ddd8495c9838d35e8d4fca36f6b886a34eed5e3ffd795a2ac494"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/007_collect_result.json",
+      "bytes": 4989,
+      "sha256": "9b40e4c4200ed0e19e5a4698c71664a09eb7500486a47748fc3d2f094e693801"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/008_cleanup_intent.json",
+      "bytes": 145,
+      "sha256": "5f3b7d10d3744177bc5bf0067a4409b18f70f15fc3c420b67cee6d83b3bdfc42"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/008_cleanup_result.json",
+      "bytes": 1450,
+      "sha256": "15f8ea9601dbff433aa009053787f01d1cf911952771538b47989ddb12319925"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/failure.json",
+      "bytes": 88,
+      "sha256": "fb146dceb5d7ac3bdde7db501f22ec6541e769f186121d1b8a53fecffe097a04"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/guest_config.json",
+      "bytes": 6094,
+      "sha256": "87031d9f28ae196c34161df75fb8808188fb27b29e0319c2fac9c004a722a43f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/intent.json",
+      "bytes": 21097,
+      "sha256": "4f612339c04fc3dcc0ccf8d3dc8fa932133c9609948cd3827259611f867a4220"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/ledger_after.json",
+      "bytes": 44154,
+      "sha256": "8ac30621c02f1f4a0fa1d9ff3c29074492e29a84ce4c19d42131598be55029e6"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/ledger_before.json",
+      "bytes": 41112,
+      "sha256": "bc55dec6254f3b2bf6e546209a76552bc4f57f9cc6de332038735976e2a32638"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/local_partial_archive_verified.json",
+      "bytes": 575,
+      "sha256": "a85d122d6a90df6de0fc7169bda906c55669fa97c1f1acf006e57effba3122ac"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/new_update.json",
+      "bytes": 13271,
+      "sha256": "a592c1c0ca33356a1e814f14b1cebc3a32add23d45c2b7a9d34df17a5b312478"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/partial_collected/complete.json",
+      "bytes": 4079,
+      "sha256": "aac9bfe609b3c9d04c0ad83f8fb209bcf7da12f1c79529e02c39b4f162db7d84"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/prior_state_manifest.json",
+      "bytes": 514421,
+      "sha256": "a4fc5dd2c6d19be9740cd57a89d036725d6eaf994f0d6011239fb92cdfc6aa7b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/result.json",
+      "bytes": 10479,
+      "sha256": "ffb42912a72759a2c440571bcd929c397a8cc653b3d288d3a758221d52e4d86d"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/source.zip",
+      "bytes": 142163,
+      "sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0001.json",
+      "bytes": 439,
+      "sha256": "a2e75f613675e06fe78dcd58f94855e4e616875c691e08639b0c4fcfd588e8ec"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0002.json",
+      "bytes": 484,
+      "sha256": "bca65adae2f5c625df9bad780792229b7d76245c5597fd4feea807b101650bc2"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0003.json",
+      "bytes": 515,
+      "sha256": "a1d5a7bc6b7b892fc6594057c1580e102b2fcd7af46b2f4b1040a72742414ae2"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0004.json",
+      "bytes": 483,
+      "sha256": "a247be02dc2c26d62215c2a6b249b4dcd56db83d5e0686d6a5d8222bbbda7532"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0005.json",
+      "bytes": 514,
+      "sha256": "f017302ebe35576c3e6a0367efdc87aab8b83668548d7a9b6e211f1dd0416130"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0006.json",
+      "bytes": 482,
+      "sha256": "e8a8ccffd6c1bf507a269bd12249b9c0defcfe8ffe364e9e928dae94bd773855"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0007.json",
+      "bytes": 515,
+      "sha256": "8775bbab1244a3f6469e433b92e2b61ab305d3003199222e9e076a954f38fb5a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0008.json",
+      "bytes": 484,
+      "sha256": "312dcf1ee1798ae7a48fce45e1b23a3ca9673ae093f106774997a92f61fcd464"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0009.json",
+      "bytes": 515,
+      "sha256": "dd568014a55b6db275ccee96b189a5770be2e72d923aa4fc8de9df7c95687ebc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0010.json",
+      "bytes": 499,
+      "sha256": "e8c57481fcd2a332fd2342024df2f7429b148128d60dbd05c150c65902e5e819"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0011.json",
+      "bytes": 530,
+      "sha256": "897cad68c6551a22f3333b3b1b8e267c4bb60339c1a25f3e18c3402f94b2908e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0012.json",
+      "bytes": 499,
+      "sha256": "cc966e642cf40161fcb6c643bd5950526a2e9f2ff2fe262026a54147225e9277"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0013.json",
+      "bytes": 530,
+      "sha256": "62d359c2b6bff352b0351fa2327818d64a4fa3cd295d86c496c45fae7b40d780"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0014.json",
+      "bytes": 499,
+      "sha256": "ec92340ac4ed45f57ca61fd159c0759dc360f74892f1fa05393e810605d515cb"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0015.json",
+      "bytes": 530,
+      "sha256": "6fc93107820bd7e6eaffc7fff0577d5f0565569ad122558e836e38d06fff1838"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0016.json",
+      "bytes": 499,
+      "sha256": "f50c936d82068c8dbb2d632a684550cf383495a54fdd2c15899447f88a9e6301"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0017.json",
+      "bytes": 530,
+      "sha256": "c957999166f02d6d6b59d19aba4f9f9e17257abd20bb08f028f916c4e0791a3f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0018.json",
+      "bytes": 489,
+      "sha256": "9c728c5c8dd49533666a591e888419e7932f41e94c8f651f6b6eb745332896c7"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0019.json",
+      "bytes": 521,
+      "sha256": "22e9e82bbf9b22d30615e764f009af45dccc6cb6f84775388b4edd8bbb2e8e5f"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0020.json",
+      "bytes": 549,
+      "sha256": "9e6e524de9114c91653abd2e312d88265c52416c40ad8576088f2ea12333b93a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0021.json",
+      "bytes": 599,
+      "sha256": "34a4ac3e2c5f3324dcd1db4a78fa405a7badbb4ea85852c80fcb8286cf9479be"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0022.json",
+      "bytes": 553,
+      "sha256": "dc1a0eaaa6f34bc27a497f3da765e133301e575056bca7753dbc1d6a669c7512"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0023.json",
+      "bytes": 604,
+      "sha256": "3a7322387f9827db5036a9863fcecc955baa400853922724492bb0ae26d1f643"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0024.json",
+      "bytes": 632,
+      "sha256": "352f135a3509faca0191b54fcef6706c55f4d7957ae811e588b69e7b1732766e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0025.json",
+      "bytes": 681,
+      "sha256": "0c86aa58aec967de70323f05dc974f553abb35cee6b965360631fcb18a7fb61d"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0026.json",
+      "bytes": 623,
+      "sha256": "e985495bed75e7a055f50d47f0d3de3cdc90397821766560e232d743b82dd208"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0027.json",
+      "bytes": 674,
+      "sha256": "5147fe36cb3da26ed41c7504db5107aaebe5a62bd1043f57accc227e01a3bc49"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0028.json",
+      "bytes": 684,
+      "sha256": "b31a67cd967d9943dd27288276b2ec92ef6e5a5b7eb8ad659a11520e1d7cc084"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0029.json",
+      "bytes": 734,
+      "sha256": "60a099190cb1074dbe2964e1ff99d5c9cde5152cfa238b9d8253989ffd80ff5c"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0030.json",
+      "bytes": 688,
+      "sha256": "715feff79061317cee02538833001e9a9bd43ea2171891a951bb3bfa31e581b8"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0031.json",
+      "bytes": 738,
+      "sha256": "ddeb86861cc85611f68f8c8c374e585e6524ffcaa8a3d7008bf729277259199c"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0032.json",
+      "bytes": 951,
+      "sha256": "f90d0cebc9eeb08c116d12c38d2c0accd7180b58ba8ea2a3b1d4c40945ea8fa1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0033.json",
+      "bytes": 1109,
+      "sha256": "78515193ad627716e81793b4bbf3727ffb928ec3301e789edfce414f5c197a4b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0034.json",
+      "bytes": 1651,
+      "sha256": "1aeab045c96aa3181854f41fdf400d8e43226ad23e6146eb0794801808707cae"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0035.json",
+      "bytes": 694,
+      "sha256": "9d611622ce2d8c8cf81c3245cc29a5f4a25fc319b10ad0c51fe8bf6a91fc1c2a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0036.json",
+      "bytes": 745,
+      "sha256": "2f7dc40c57acab1e893e5d5d6e27944947dc41b79e5de44262c26bf97c7c4857"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0037.json",
+      "bytes": 734,
+      "sha256": "b60d6c14a00496051cc0ea182200b9c39d2095f86b0baf99317d8f96d33f2ded"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0038.json",
+      "bytes": 785,
+      "sha256": "1be4ca4b14a5f27d21e29447bbf50d00d39c38c98837bbeac4f1e5f395387fbd"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0039.json",
+      "bytes": 723,
+      "sha256": "149e8cd3c4488536d6adbdf71e376952c0a536aa35d78cb4d6550d856d59be3a"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0040.json",
+      "bytes": 775,
+      "sha256": "941c0ed8df816bb08f1e9db13484fd7da5015481d0aa60ad15350ec12a4cefb4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0041.json",
+      "bytes": 726,
+      "sha256": "55037347f111a067397f6f44fbffa4b87236db6d7643950a9ec94cf889e0c4ae"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0042.json",
+      "bytes": 777,
+      "sha256": "fed610bd35d8b2af102e4e4b58496eb4e2e7367fe4e7fb820df0c6214a4e781e"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0043.json",
+      "bytes": 826,
+      "sha256": "d154a30913c705b4fa191bab13c909e13017fad91ada64148a4342daf4c67fd1"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0044.json",
+      "bytes": 876,
+      "sha256": "45309103136541a83b90aa70b90a29b528d10259a6b72e50719fc3d944990c71"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0045.json",
+      "bytes": 1398,
+      "sha256": "aa6f08761fc32ac3cbdfc4bf88ceaed1d570477f6f7f8aeb98e6ed17aef7fbe9"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0046.json",
+      "bytes": 840,
+      "sha256": "90195571a81351665123d13e2010538063bd02f7ffdcca465612df3aca3f3c22"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0047.json",
+      "bytes": 869,
+      "sha256": "29e0c3344e6937b8df5cadfb9ac44432aa2f7f5704cc9663b2e62b65956836bc"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0048.json",
+      "bytes": 836,
+      "sha256": "648e4dba2149c1daa03f0d0760d81024de112ddb888e8d5bd56abb7b92093da0"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0049.json",
+      "bytes": 867,
+      "sha256": "34b03d6c8e6bf3959417127457efcb5116624a12fa5f5c441e1c25d18ee34479"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0050.json",
+      "bytes": 1449,
+      "sha256": "99d10a034e39805b470fc25bea97977356ea1eb99e38f4a20fc2e6c86ef00b80"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0051.json",
+      "bytes": 854,
+      "sha256": "f385db1e3096cca94a8c60aa8563744d637d6a94c5a009b762ef8301150d2ba5"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/teaching_provider_0052.json",
+      "bytes": 1955,
+      "sha256": "e6fe634480cc71a6592caacceb33fe0b76332c3102fb898c80ff74f6ae95d664"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/launch/train_release.json",
+      "bytes": 706,
+      "sha256": "71a0a40208600163c905fffd5775544993d6186aff6c65e39d5152de7d6bd4db"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/PARTIAL_TRAINING_REVIEW.md",
+      "bytes": 12904,
+      "sha256": "e9723f1305da7d27755b6c2c68f35a061bbbe4d4dd7fccfebd3a18ce4099e933"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/provider_sources.json",
+      "bytes": 3480,
+      "sha256": "05d64f690017c38941afc1a11556b5d465c04182315382e64e4f441a6aba25e4"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/public.json",
+      "bytes": 122296,
+      "sha256": "6f04fb7452cf9f7bb9bd89750f4d5e858f927f1426973729a9c320bdeb356e67"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/receipt.json",
+      "bytes": 9443,
+      "sha256": "f47e40ae3f72aca8b77824cce6dc2498e66261c7274a440a478573c2e3d656c3"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/request.json",
+      "bytes": 6288,
+      "sha256": "ae3ed677ad4ff1091d4477355e2f371d57543ece45c187d0e8c5a283b4d7d15b"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/RESTORE_AND_FIRST_UPDATE.md",
+      "bytes": 5318,
+      "sha256": "d28fed5d58ed94d885eb8bbe45b274af6a6dcfe5bf7f99886c71a2e127c5e1ea"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_001/standing_authority.json",
+      "bytes": 2267,
+      "sha256": "dd321729c80b0d5919f99a97d0a452c9b819eed5e3a244526eb91ba32a7f00a7"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/inputs_after.json",
+      "bytes": 17679,
+      "sha256": "b0537a4bdb4bc3580bf77cc52243b4622e2b014ab144b918f33377d270d63365"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/inputs_before.json",
+      "bytes": 17679,
+      "sha256": "b0537a4bdb4bc3580bf77cc52243b4622e2b014ab144b918f33377d270d63365"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/invocation.json",
+      "bytes": 2023,
+      "sha256": "7d24b257f16e51f5a243c3400ce58bf81b23ca27ccf4044fa5bc31fdb8539d89"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/receipt.json",
+      "bytes": 1185,
+      "sha256": "18e4694fc2fe4d41ca2032961b97ca94530f7f17a4b55e951b139c1876a15ea0"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "records/teaching_cycle_001/continuation_cleanup_checks_001/stdout.txt",
+      "bytes": 102,
+      "sha256": "32b960000271a6771c6d8597856ffb3b7c9ccc56f75d31deb892f9598bc2d4b8"
+    },
+    {
+      "path": "tests/test_teaching_continuation_absent_cleanup.py",
+      "bytes": 17765,
+      "sha256": "1f88271ec9759eab63425d87a804e1ba03891a125ad894ad30eb5226e053f4e6"
+    },
+    {
+      "path": "tests/test_teaching_continuation_cleanup_recovery.py",
+      "bytes": 13523,
+      "sha256": "0337b14f402ac2b6530a5f7c6ad57217ca2e9b5b5ebe0c7081ade6311fee9d66"
+    },
+    {
+      "path": "tools/recover_teaching_continuation001_absent_cleanup.py",
+      "bytes": 21710,
+      "sha256": "0aab4e38ade30a55803c62eef542effda942cbef6608ab1358e16d4942fead6d"
+    },
+    {
+      "path": "tools/recover_teaching_continuation001_cleanup.py",
+      "bytes": 21186,
+      "sha256": "05acae6c6b3507a36e2a94b3a14640ebd211461416c922117987f900110c3aa8"
+    },
+    {
+      "path": "VISION_REQUIREMENTS.md",
+      "bytes": 16439,
+      "sha256": "ff0e01166c9787a5650b297a9a61c873b853b3af8dc10d81b638ed1c500e09ec"
+    }
+  ],
+  "large_artifact": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/meta1/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/continuation_001/launch/partial_collected/artifacts.zip",
+    "bytes": 201729956,
+    "sha256": "43795d51cdc1fba4c70b0d7c0cd27f4beaedbb7dbfbf1c89dc358946f069cd38",
+    "included_in_this_evidence_commit": false,
+    "cloud_copy": {
+      "bucket": "cas-meta2-teaching-20260908080138-5518e287-807562639912",
+      "key": "results/artifacts.zip",
+      "retention_policy_days": 7,
+      "exact_deletion_deadline": false
+    }
+  },
+  "boundary": "Index binds local evidence and source identities, not a final learning score. Full checkpoint inspection additionally requires the retained large artifact at its exact recorded digest; this evidence commit alone is not a self-contained checkpoint package."
+}
