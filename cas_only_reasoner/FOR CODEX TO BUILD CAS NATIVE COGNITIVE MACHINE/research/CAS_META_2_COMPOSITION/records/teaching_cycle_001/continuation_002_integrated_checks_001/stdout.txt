@@ -1,0 +1,24 @@
+........................................................................ [ 22%]
+........................................................................ [ 45%]
+................................F....................................... [ 68%]
+........................................................................ [ 91%]
+............................                                             [100%]
+================================== FAILURES ===================================
+______________ test_exact_900_second_restore_receipt_is_admitted ______________
+
+prepared = {'arguments': {'authority_envelope': {'bytes': 3394, 'key': 'local/continuation_authority.json', 'raw_utf8': '{"automa...ec9cafa4017', ...}, ...}, 'ledger': <test_teaching_continuation_second_launch.FakeLedger object at 0x000002150CF862D0>}
+
+    def test_exact_900_second_restore_receipt_is_admitted(prepared):
+        provider = FakeProvider(prepared["ledger"], change="restore_at_limit")
+        result = run(prepared, provider)
+>       assert result["status"] == "TEACHING_CONTINUATION_COLLECTED_NOT_SCORED", result["failure"]
+E       AssertionError: {'exception_type': 'LaunchError', 'reason': 'TEACHING_LAUNCH:COMPLETE_RECEIPT_MISMATCH'}
+E       assert 'TEACHING_CON...ATION_BLOCKED' == 'TEACHING_CON...ED_NOT_SCORED'
+E         
+E         - TEACHING_CONTINUATION_COLLECTED_NOT_SCORED
+E         + TEACHING_CONTINUATION_BLOCKED
+
+tests\test_teaching_continuation_second_launch.py:249: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_teaching_continuation_second_launch.py::test_exact_900_second_restore_receipt_is_admitted
+1 failed, 315 passed in 268.79s (0:04:28)
