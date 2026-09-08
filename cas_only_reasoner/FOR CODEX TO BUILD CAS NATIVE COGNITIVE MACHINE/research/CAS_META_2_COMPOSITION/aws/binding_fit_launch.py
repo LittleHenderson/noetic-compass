@@ -1294,10 +1294,13 @@ class BindingFitProvider:
 # --------------------------------------------------------------------------- #
 # launch lifecycle (plan-only by default; evidence on every exit)
 # --------------------------------------------------------------------------- #
-def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_dir=None):
+def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_dir=None,
+            owner_authorization_path=None):
     validate_request(request)
     validate_authority(authority)
-    require(authority["owner_authorization_sha256"] == digest(OWNER_AUTHORIZATION_PATH.read_bytes()),
+    owner_path = (Path(owner_authorization_path) if owner_authorization_path is not None
+                  else OWNER_AUTHORIZATION_PATH)
+    require(authority["owner_authorization_sha256"] == digest(owner_path.read_bytes()),
             "OWNER_AUTHORIZATION_RECORD_MISMATCH")
     require(authority["job"] == request["job"], "REQUEST_AUTHORITY_JOB_MISMATCH")
     require(authority["source_sha"] == request["source_sha"], "REQUEST_AUTHORITY_SOURCE_MISMATCH")
@@ -1385,6 +1388,7 @@ def main(argv=None):
     parser.add_argument("--authority")
     parser.add_argument("--authority-sha256")
     parser.add_argument("--receipt-dir")
+    parser.add_argument("--owner-authorization")
     parser.add_argument("--profile", default="default")
     arguments = parser.parse_args(argv)
     if not arguments.execute:
@@ -1400,7 +1404,8 @@ def main(argv=None):
     request = validate_request(json.loads(request_raw))
     authority = validate_authority(json.loads(authority_raw))
     provider = build(arguments)
-    result = execute(request, authority, provider, receipt_dir=arguments.receipt_dir)
+    result = execute(request, authority, provider, receipt_dir=arguments.receipt_dir,
+                     owner_authorization_path=arguments.owner_authorization)
     print(json.dumps({"status": result["status"], "receipt_dir": result["receipt_dir"]}, sort_keys=True))
     return 0 if result["status"] == "AWS_BINDING_FIT_FINISHED" else 1
 

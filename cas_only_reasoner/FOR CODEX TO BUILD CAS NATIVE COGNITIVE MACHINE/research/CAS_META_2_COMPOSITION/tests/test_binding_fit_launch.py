@@ -326,6 +326,31 @@ def test_execute_persists_evidence_when_cleanup_raises(ledger):
     assert (Path(result["receipt_dir"]) / "reservation.json").is_file()
 
 
+def test_execute_binds_provided_owner_record(ledger, tmp_path):
+    """A later authorization record can be supplied explicitly; the authority
+    must bind that exact file's digest."""
+    provider = FakeProvider(ledger)
+    alt_record = tmp_path / "OWNER_AUTHORIZATION_003.json"
+    alt_record.write_text('{"owner": "attempt-003"}\n')
+    authority = valid_authority()
+    authority["owner_authorization_sha256"] = launch.digest(alt_record.read_bytes())
+    result = launch.execute(valid_request(), authority, provider, ledger_path=ledger,
+                            owner_authorization_path=alt_record)
+    assert result["status"] == "AWS_BINDING_FIT_FINISHED"
+
+
+def test_execute_owner_record_mismatch_raises(ledger, tmp_path):
+    """Binding the default record digest against a different supplied record
+    must refuse loudly before any provider call."""
+    provider = FakeProvider(ledger)
+    alt_record = tmp_path / "OWNER_AUTHORIZATION_003.json"
+    alt_record.write_text('{"owner": "attempt-003"}\n')
+    with pytest.raises(ValueError, match="OWNER_AUTHORIZATION_RECORD_MISMATCH"):
+        launch.execute(valid_request(), valid_authority(), provider, ledger_path=ledger,
+                       owner_authorization_path=alt_record)
+    assert provider.calls == []
+
+
 def test_build_prices_client_from_us_east_1(tmp_path):
     """The Price List API only serves us-east-1; all other clients stay us-west-2."""
     ledger_path = tmp_path / "ledger.json"

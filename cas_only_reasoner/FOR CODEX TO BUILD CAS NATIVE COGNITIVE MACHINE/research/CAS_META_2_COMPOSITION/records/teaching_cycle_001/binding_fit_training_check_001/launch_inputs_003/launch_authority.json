@@ -1,0 +1,12 @@
+{
+  "schema": "cas-teaching-binding-fit-launch-authority/1",
+  "job": "cas-meta2-teaching-binding-20260908203112-fb18899f",
+  "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+  "archive_sha256": "ddf39e5ea481c74b7f14ff866969dabb814ef83fa288e657af93d5b3520e55e9",
+  "manifest_sha256": "bfb6379457ce699e43e8bca1c51357e743169ae42cfd26d328717893b2e6a94f",
+  "owner_authorization_sha256": "09032ecc684f9eb734e757b05d09e9467dcd535ea3cf77caec47d2d5ee475deb",
+  "learning_rate": 0.003,
+  "max_optimizer_steps": 48,
+  "max_wall_seconds": 600.0,
+  "reservation_usd": "4.00"
+}

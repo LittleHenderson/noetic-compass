@@ -1,0 +1,34 @@
+{
+  "schema": "cas-teaching-binding-fit-owner-authorization/2",
+  "recorded_utc": "2026-09-08T20:35:00Z",
+  "owner_instruction_raw": "I authorize one new binding training-fit job with one new $4 reservation, preserving the registered 48-step allocation, 600-second worker limit, task, data, model definitions, and scoring. Bind the request to the frozen training package and the corrected launcher. Use the bounded readiness checks, single launch attempt, existing shutdown protection, and verified cleanup. No automatic retry or additional experiment. Return before/after training loss and binding accuracy for CAS and generic separately, actual completed updates, checkpoint identities, and execution/cleanup outcomes. Preserve the original error if any stage fails. Do not change the architecture, add a new teaching method, or access protected final-test answers during this diagnostic.",
+  "authorization": {
+    "training_fit_run": "AUTHORIZED_BY_OWNER",
+    "bound_request_sha256": "4cf78769276cc4b2035957af7f230f1bc03c3a4b24cb826a33edf23131a53957",
+    "request_path": "records/teaching_cycle_001/binding_fit_training_check_001/launch_inputs_003/launch_request.json",
+    "job": "cas-meta2-teaching-binding-20260908203112-fb18899f",
+    "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+    "archive_sha256": "ddf39e5ea481c74b7f14ff866969dabb814ef83fa288e657af93d5b3520e55e9",
+    "manifest_sha256": "bfb6379457ce699e43e8bca1c51357e743169ae42cfd26d328717893b2e6a94f",
+    "corrected_launcher": "aws/binding_fit_launch.py at commit 73b66079 (pricing client us-east-1; bounded verified IAM profile readiness wait; cleanup detach + inline-policy order)",
+    "prior_records": {
+      "first_authorization_sha256": "372c23e8d255290acd1d49853394d913119dfe71899f6c966cafbf54edb4480f",
+      "attempt_001": "PREFLIGHT_REFUSAL_ATTEMPT_001.md",
+      "attempt_002": "ATTEMPT_002_LAUNCH_FAILURE.md"
+    }
+  },
+  "execution_gates": [
+    "frozen budget unchanged: max_optimizer_steps 48, max_wall_seconds 600.0, learning_rate 0.003, reservation_usd \"4.00\"",
+    "single launch attempt through the corrected launcher; bounded readiness checks; automatic_retries 0",
+    "one new budget reservation exactly once through the canonical budget helper; no refund",
+    "existing shutdown protection and verified cleanup on every exit",
+    "no architecture change, no new teaching method, no protected final-test access during this diagnostic",
+    "report before/after training loss and binding accuracy for CAS and generic separately, actual completed updates, checkpoint identities, and execution/cleanup outcomes; preserve the original error if any stage fails"
+  ],
+  "explicitly_not_authorized": [
+    "automatic retry of this or any prior job",
+    "any additional experiment beyond this single training-fit run",
+    "modification of task, data, model definitions, or scoring",
+    "reading protected final-test answers during the diagnostic"
+  ]
+}
