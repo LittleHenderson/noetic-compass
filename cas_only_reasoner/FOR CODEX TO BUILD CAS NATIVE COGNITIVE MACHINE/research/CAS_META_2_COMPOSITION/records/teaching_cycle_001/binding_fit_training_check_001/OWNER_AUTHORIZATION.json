@@ -1,0 +1,24 @@
+{
+  "schema": "cas-teaching-binding-fit-owner-authorization/1",
+  "recorded_utc": "2026-09-08T17:45:00Z",
+  "owner_instruction_raw": "authorize the training-fit check's run, and rule on the contrast-family option.",
+  "authorization": {
+    "training_fit_run": "AUTHORIZED_BY_OWNER",
+    "bound_request_sha256": "de618bccd25f6591b19935db23c933c6e1f2482e9a0b145dc1bdb3c9404c77ba",
+    "request_path": "records/teaching_cycle_001/binding_fit_training_check_001/AUTHORIZATION_REQUEST.json"
+  },
+  "execution_gates": [
+    "the small training-fit mode must be built first, reusing teaching_cycle/gpu_adapter.py identity-checked backward/step path and controller step accounting; it must not edit live-campaign files",
+    "the mode must pass its own pure tests with injected tensors and fakes",
+    "exact budget (optimizer steps and wall seconds) frozen before launch",
+    "single owner-authorized AWS reservation through the canonical budget helper; no automatic refund or retry",
+    "no final-target reading; the training answer supplies the correction",
+    "evidence preserved on every exit; the live teaching campaign and its ledger remain untouched"
+  ],
+  "explicitly_not_authorized": [
+    "forward-only inspection as a substitute for training fit",
+    "silent inclusion in the frozen teaching allocation",
+    "automatic launch of the parts-supervised curriculum revision",
+    "any accepted-model modification"
+  ]
+}
