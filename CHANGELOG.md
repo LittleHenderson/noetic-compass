@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 attempt 006: candidate module ran on CUDA; preserved error #5 (device placement)
+
+Attempt 006 (`cas-meta2-teaching-graph-20260909052323-cb2ebc76`, `$4.00`
+reserved, ledger 28 → 29: `$166.00` reserved, `$234.00` unreserved) reached
+the deepest stage yet: the candidate `^6` module was constructed, the lesson
+reached it, and the forward executed on `cuda:0` — the preserved error is a
+real torch execution error (frozen encoder projection on CPU vs module on
+CUDA). **This confirms CUDA is live on the instance for the candidate
+module.** Clean lifecycle, zero leftovers.
+
+- **Fixed** (`7d9d43ee`, package members): the encoder projection is built ON
+  the module's device; regression test asserts the `device` parameter and
+  `device=device` construction. **New corrected package** (`39c768e8`,
+  `package_007/`): source `7d9d43ee…`, archive `60b75b72…`, manifest
+  `5999b053…`.
+- A corrected re-attempt needs a new job, a new `$4.00` reservation, and a new
+  owner record binding the NEW identities. **No retry was attempted.**
+  Evidence: `training_mode_001/ATTEMPT_GRAPH_006_FAILURE.md` + receipt.
+- Binding-fit attempt-004 request still pending; attempt 003's lost error
+  remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6: bounded wheel compatibility review complete (attempt 006 NOT registered)
 
 Per the owner's directive, no launch and no registration. A static,
