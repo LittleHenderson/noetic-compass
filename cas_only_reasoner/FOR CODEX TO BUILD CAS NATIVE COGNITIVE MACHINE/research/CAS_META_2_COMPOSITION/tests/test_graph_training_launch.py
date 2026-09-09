@@ -136,11 +136,14 @@ def test_worker_script_preserves_inner_errors_and_runs_both_arms():
 def test_worker_uses_separate_per_arm_module_copies():
     """Correction 002: the framing comparison needs one candidate copy per
     arm from the SAME initial weights with separate optimizer state, never
-    two sequential phases on one shared module."""
+    two sequential phases on one shared module. The worker must record both
+    initial checkpoint identities and fail closed if they differ."""
     text = launch.render_worker()
     assert "frameworks[arm] = build_graph_training_framework" in text
     assert "state_dict()" in text and "load_state_dict" in text
     assert "framework = frameworks[arm]" in text
+    assert "initial_checkpoints" in text
+    assert "INITIAL_WEIGHTS_NOT_IDENTICAL" in text
     assert text.count("for arm in ('cas', 'generic'):") >= 2
 
 

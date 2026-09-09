@@ -1,75 +1,102 @@
-# Graph-first ^6 — representation correction 002 (PREPARED, NOT LAUNCHED)
+# Graph-first ^6 — representation correction 002 (PREPARED, NOT LAUNCHED — second revision)
 
-Owner-directed, 2026-09-09. No reservation, no launch, no GPU work was made
-for anything in this document. Attempt 011 is preserved with a narrowed
-interpretation (`ATTEMPT_GRAPH_011_RESULT.md`).
+Owner-directed, 2026-09-09 (two review rounds). No reservation, no launch, no
+GPU work was made for anything in this document. Attempt 011 is preserved
+with a narrowed interpretation (`ATTEMPT_GRAPH_011_RESULT.md`).
+
+## Corrected claims (per the owner's mathematical review — these REPLACE the
+first revision's wording)
+
+1. **FIND_SHARED_PART's flatness is NOT explained by answer length — and its
+   representation may still be collapsed.** Its options are each 2 tokens
+   (`[OBS]` + one tag token): equal length, and sum = 2 × mean (proportional,
+   not equal). Equal lengths do not rule out projected-vector collapse: the
+   earlier GPU diagnostic measured near-parallel option vectors and
+   near-identical scores, and a token-count inspection does not overturn
+   those numerical observations. The distinct tag vectors must be measured
+   before any blame moves to the ^6 module.
+2. **Removing an exactly common contribution cannot, by itself, change which
+   answer wins.** For scores `s_i = hᵀ o_i` with the SAME vector `c` removed
+   from every option, `s'_i = hᵀ(o_i − c) = s_i − hᵀc`: every score loses
+   the same amount, so softmax probabilities, the loss, and the task
+   gradient to the module are unchanged in exact arithmetic.
+3. **The implementation is per-occurrence and count-respecting.** The
+   correction removes EVERY occurrence of any token present in all three
+   options. Because shared tokens occur with DIFFERENT counts per option
+   (framing tokens appear once per part), the vector removed from one option
+   is NOT the same as the vector removed from another. The removal can
+   therefore change score differences only through those count differences,
+   and the remaining options can still contain different token counts — the
+   count effect has not automatically disappeared. Any finite-precision
+   benefit (large common contributions removed before summation) is a
+   HYPOTHESIS to be measured, not an automatic recovery of information.
+
+**The prepared change is therefore described as: a candidate removal of
+shared contributions, whose effect on actual score differences and gradients
+remains unmeasured.**
 
 ## What the inspection measured (pure, train+practice records only)
 
 Tool `tools/graph_training_representation_inspection.py`; evidence
-`training_mode_001/representation_inspection_001/inspection.json`. Uses the
-REAL tokenizer and the REAL public-record encoding; no sealed splits, no
-answers consulted.
+`training_mode_001/representation_inspection_001/inspection.json` (sha
+`3a04dd98…`). REAL tokenizer, REAL public-record encoding; no sealed splits,
+no answers consulted.
 
-| Op | Option token counts | Length spread (median) | Shared by all 3 (median) | Content-unique tokens per option (median) |
+| Op | Option token counts | Length spread (median) | Shared by all 3 (median) | Unique-to-one tokens per option (median) |
 |---|---|---|---|---|
 | LIST_PARTS | 6–21 | **10.0** | 5.5 | 0.5 |
 | FIND_SHARED_PART | 2–2 (always equal) | 0.0 | 1.0 (`[OBS]`) | 1.0 |
 | REACHED_VIA | 2–4 | 2.0 | 1.0 (`[OBS]`) | 1.0 |
 
-Decoded samples show why: LIST_PARTS options are `str(list)` renders —
-`['idea2', 'idea3']` — so every part costs five framing tokens
-(`[ ' , space ' ]`) on top of its name. Sum-pooled differences are therefore
-dominated by token count (the owner's "different amounts of text"), and
-FIND_SHARED_PART options are `[OBS]` + one tag token each — content-only,
-equal-length — yet still exactly ln 3. So FIND_SHARED_PART's flatness is NOT
-a representation artifact; it is an unmeasured module-output question.
-Problem-side sensitivity (graph-valid synthetic edits): a connector retarget
-changes exactly 2 of ~62 problem tokens; a node-content change adds exactly
-1 token — the change IS present in the problem sequence, diluted to ~1/62 in
-the mean-pooled module input.
+LIST_PARTS options are `str(list)` renders, so every part costs five framing
+tokens on top of its name — sum-pooled differences are dominated by token
+count. FIND_SHARED_PART tags are single units; that only establishes equal
+length, NOT distinct projected vectors. Problem-side sensitivity (valid
+synthetic edits): a connector retarget changes exactly 2 of ~62 problem
+tokens; a node-content change adds 1 token — presence at the token level does
+NOT establish how much numerical change survives averaging.
 
 ## Prepared corrections (code + tests committed; nothing launched)
 
-**A. Content-only option vectors** (`real_framework.GraphLearner`,
-`adapter` docs): each option vector now sums ONLY the tokens NOT shared by
-all three options. A component present in every option adds the same value
-to every score and cancels exactly in the softmax; removing it removes the
-count artifact (median spread 10 → 0 for LIST_PARTS framing tokens) and
-leaves the part names as the signal. FIND_SHARED_PART is unchanged by
-construction (only `[OBS]` was shared). Fail-closed: an option with no
-content raises `OPTION_CONTENT_REQUIRED`.
+**A. Candidate shared-contribution removal** (`real_framework.GraphLearner`,
+per-occurrence, count-respecting, fail-closed `OPTION_CONTENT_REQUIRED`).
+Claim status per section above: candidate; effect on decisions unmeasured.
 
-**B. Matched framing comparison** (`aws/graph_training_launch.py`
-worker): one candidate copy PER arm, built from the same initial weights
-(second module's state cloned from the first), with separate optimizer
-state. The future framing comparison is two matched starts, not two
-sequential phases.
+**B. Matched framing comparison** (`aws/graph_training_launch.py` worker):
+one candidate copy PER arm, second module's state cloned from the first,
+separate optimizer state; the worker records both initial checkpoint
+identities, fails closed if they differ (`INITIAL_WEIGHTS_NOT_IDENTICAL`),
+and each arm's containment report verifies its own module only. Training one
+copy leaves the other untouched by construction.
 
-**C. Module-output measurement** (`cas_meta2/graph_teaching/diagnostic.py`):
-per-record module output norm + pairwise cosines across the first few
-records — the measurement FIND_SHARED_PART needs. Measurement-only; no
-optimizer step.
+**C. Extended diagnostic** (`cas_meta2/graph_teaching/diagnostic.py`,
+measurement-only, zero updates) now reports, per arm, on the SAME examples
+and SAME fixed weights:
 
-Test-locked: 95 graph tests pass (content-exclusion behavior, empty-content
-fail-closed, per-arm module copies in the rendered worker, module-output
-measurement).
+| Measurement | What it should establish |
+|---|---|
+| individual tag vectors BEFORE pooling (norms + pairwise cosines) | do different part names already map to nearly the same numbers? |
+| OLD (sum over every occurrence) vs CORRECTED (shared removed) option vectors — actual score spreads, argmax, and cosines for BOTH | does the removal change actual score differences, or only cosine statistics? |
+| graph-edit response: valid synthetic edits → SAME lessons framing → encoded → mean-pooled → module — output norm/cosine/difference + score sets and argmax under both | does a changed relationship survive encoding and change the output and the decision? |
+| answer-score differences + alternative-target gradients (existing) | can corrective feedback distinguish which answer should be preferred? |
+| module-output norms + pairwise cosines (existing) | is the module output nearly constant across records? |
+
+The useful quantity is not "vectors look less parallel" — it is whether the
+numerical difference between two part names survives into a different
+possible decision and a different corrective signal. Both are measured
+together.
 
 ## Explicitly NOT done
 
 - `initial_saturation=100.0` is NOT touched. Saturation of the module's two
   tanh stages remains an UNMEASURED HYPOTHESIS.
 - No teaching-allowance increase (64 steps / 600 s per condition unchanged).
+- The training pilot stays PENDING regardless of the diagnostic outcome.
 - No new reservation, no launch, no package build for this correction.
 
-## Proposed next steps (each needs its own authorization)
+## Proposed next step (needs owner authorization)
 
-1. **One GPU diagnostic run** (measurement-only, the existing ln(3)
-   diagnostic launcher, one new `$4.00` reservation) on the correction-002
-   pipeline: per-record scores, option geometry, and module-output norms/
-   cosines — answers whether FIND_SHARED_PART's identical scores come from a
-   near-constant module output (measured) and whether the content-only
-   options now produce content-driven score differences.
-2. **Then, if the diagnostic supports it:** one bounded training pilot with
-   corrections A + B (per-arm module copies), same frozen budget, fresh
-   evaluation framing — a new owner-signed record and reservation.
+**Step 1 only:** one GPU diagnostic run (measurement-only, the existing ln(3)
+diagnostic launcher, one new `$4.00` reservation) on the correction-002
+pipeline, reporting the comparison table above for both arms. The training
+pilot decision comes only after these findings are returned.

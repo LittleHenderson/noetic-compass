@@ -39,11 +39,13 @@ module input:
    **Amendment 2026-09-09 (representation correction 002, owner-directed,
    PREPARED not launched):** the pure inspection measured that sum-pooled
    differences are dominated by token count (LIST_PARTS length spread median
-   10 tokens vs 0.5 content-unique tokens per option), so the option vectors
-   now sum ONLY the tokens NOT shared by all three options (content-only).
-   A component present in every option cancels exactly in the softmax;
-   removing it removes the count artifact. FIND_SHARED_PART is unchanged by
-   this rule. Fail-closed: `OPTION_CONTENT_REQUIRED`. See
+   10 tokens vs 0.5 unique-to-one tokens per option). The prepared change
+   sums ONLY the tokens NOT shared by all three options, per occurrence
+   (count-respecting). Per the owner's mathematical review: removing an
+   IDENTICAL vector from every option only shifts every score equally
+   (softmax-invariant), so the removal changes decisions only through count
+   differences; any finite-precision benefit is a hypothesis to be measured.
+   Fail-closed: `OPTION_CONTENT_REQUIRED`. See
    `REPRESENTATION_CORRECTION_002.md`.
 
 ## 2. What the module is and what it predicts

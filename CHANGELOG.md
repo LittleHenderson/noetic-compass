@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: correction 002 revised per owner's math; extended zero-update diagnostic (still no launch)
+
+Owner's second review corrected two claims, now fixed in the records:
+(a) FIND_SHARED_PART's flatness is NOT ruled out by equal 2-token lengths
+(sum = 2 × mean, proportional not equal; projected vectors may still be
+collapsed — the earlier GPU observation stands until tag vectors are
+measured); (b) removing an IDENTICAL vector from every option shifts every
+score equally — softmax, loss, and gradients unchanged in exact arithmetic.
+The prepared removal is per-occurrence and count-respecting, so it changes
+decisions only through count differences; finite-precision benefit is a
+hypothesis. The extended diagnostic now reports, per arm, on the same
+examples and fixed weights with ZERO updates: individual tag vectors before
+pooling (norms + pairwise cosines), OLD vs CORRECTED option vectors with
+actual score spreads and argmax for BOTH, graph-edit response (valid
+synthetic edits → same lessons framing → encoded → pooled → module: output
+norm/cosine/difference + score sets + argmax), plus the existing
+answer-score/gradient and module-output measurements. The training worker
+records both arms' initial checkpoint identities and fails closed
+(`INITIAL_WEIGHTS_NOT_IDENTICAL`) if the cloned copies differ; training
+pilot stays pending. 98 graph tests pass. No reservation, no launch, no
+saturation change, no allowance change.
+
 ## 2026-09-09 - Graph-first ^6: owner review narrows attempt 011; pure inspection + prepared correction 002 (no launch)
 
 Owner review accepted the attempt-011 computations but narrowed their

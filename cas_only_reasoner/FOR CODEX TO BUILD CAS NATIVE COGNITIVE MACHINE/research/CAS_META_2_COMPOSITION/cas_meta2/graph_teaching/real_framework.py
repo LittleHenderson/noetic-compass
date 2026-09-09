@@ -148,12 +148,20 @@ class GraphLearner:
     tokens unique to an option), because the shared framing tokens are added
     once per part. Sum = count × mean, so count differences never canceled.
     The correction: option vectors now sum ONLY the tokens that are NOT
-    shared by all three options. Any component present in every option adds
-    the same value to every score and cancels exactly in the softmax;
-    removing it leaves content-only vectors. FIND_SHARED_PART options
-    ([OBS] + one tag token each) are UNCHANGED by this correction — its
-    flatness is expected to persist and is measured by the module-output
-    diagnostic instead."""
+    shared by all three options. Semantics, per the owner's mathematical
+    review: in exact arithmetic, removing an IDENTICAL vector from every
+    option shifts every score by the same amount and leaves softmax
+    probabilities, loss, and gradients unchanged. This removal is
+    PER-OCCURRENCE and therefore count-respecting — the vector removed from
+    an option differs from another option's whenever shared tokens occur
+    with different counts, so it can change score differences only through
+    those count differences; any finite-precision benefit (large common
+    contributions removed before summation) is a HYPOTHESIS to be measured,
+    not an automatic recovery of information. FIND_SHARED_PART options
+    ([OBS] + one tag token each) have EQUAL length — equal length does not
+    rule out projected-vector collapse (sum = 2 × mean), so its flatness is
+    not explained by answer length; the distinct tag vectors and the module
+    output are measured by the diagnostic instead."""
 
     def __init__(self, torch, framework, public_tasks, device, learning_rate):
         self.torch = torch
@@ -189,7 +197,8 @@ class GraphLearner:
         return stacked.sum(dim=0)
 
     def _content_ids(self, slot_ids):
-        """Correction 002: tokens NOT shared by all three options (content only)."""
+        """Correction 002: per-occurrence removal of tokens shared by all
+        three options (count-respecting; NOT an identical-vector shift)."""
         sequences = [slot_ids[slot] for slot in (0, 1, 2)]
         shared = set(sequences[0]) & set(sequences[1]) & set(sequences[2])
         content = [[token_id for token_id in sequence if token_id not in shared]

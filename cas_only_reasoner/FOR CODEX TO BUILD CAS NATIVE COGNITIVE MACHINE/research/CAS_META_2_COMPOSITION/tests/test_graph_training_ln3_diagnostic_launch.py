@@ -85,6 +85,7 @@ def test_worker_script_is_measurement_only_and_runs_both_arms():
     assert "gpu_adapter._cuda()" in text
     assert "adapter.public_records" in text
     assert "trainer.training_records(20260909)" in text
+    assert "records=records, arm=arm" in text
     assert "optimizer_steps_taken': 0" in text or "optimizer_steps_taken\": 0" in text
     # NO optimizer step call may appear anywhere in the rendered worker.
     assert ".step(" not in text

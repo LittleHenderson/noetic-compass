@@ -84,12 +84,15 @@ re-checked against code and the recorded bytes:
    to an option: median 0.5), and sum = token-count × mean. The observed
    movement is therefore consistent with a token-count signal — "different
    amounts of text" — not demonstrated "different contents."
-3. **FIND_SHARED_PART is content-only and still flat.** Its three options are
-   each 2 tokens (`[OBS]` + one tag token), equal length, sum == mean, so its
-   exact ln 3 before and after is NOT a representation artifact. Its next
-   measurement is the module's output geometry (norm + pairwise cosines,
-   prepared in the diagnostic) — the saturation reading stays an UNMEASURED
-   HYPOTHESIS; `initial_saturation=100.0` is NOT being changed.
+3. **FIND_SHARED_PART's flatness is not explained by answer length — and its
+   representation may still be collapsed.** Its three options are each 2
+   tokens (`[OBS]` + one tag token): equal length, and sum = 2 × mean, not
+   equal. Equal lengths do NOT rule out projected-vector collapse — the
+   earlier GPU diagnostic measured near-parallel option vectors and
+   near-identical scores, and a token-count inspection does not overturn
+   those numerical observations. The distinct tag vectors must be checked
+   before any blame moves to the module. The saturation reading stays an
+   UNMEASURED HYPOTHESIS; `initial_saturation=100.0` is NOT being changed.
 4. **Sealed evaluation is a repeat diagnostic on previously examined splits**
    (3/12 vs attempt 010's ≈ 4/12), not fresh evidence; the small counts
    establish no exact underlying chance level.

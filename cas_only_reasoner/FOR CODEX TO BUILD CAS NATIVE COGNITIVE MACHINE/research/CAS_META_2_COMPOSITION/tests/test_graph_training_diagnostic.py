@@ -6,6 +6,7 @@ consumed — and locks the fix: the forward is recomputed inside the per-target
 loop, so each backward consumes its own graph.
 """
 import inspect
+from types import SimpleNamespace
 
 import pytest
 
@@ -181,6 +182,207 @@ def test_module_output_measurement_reports_norms_and_cosines():
     assert rows["pairwise_cosines_first_records"] == 3
     assert rows["pairwise_cosines"] == pytest.approx([1.0, 1.0, 1.0])
     assert rows["output_norm_stats"] == {"min": 3.0, "max": 3.0, "median": 3.0}
+
+
+def test_tag_vectors_measured_before_pooling():
+    """The diagnostic must measure individual tag embeddings BEFORE pooling
+    (do different part names map to nearly the same numbers?)."""
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+    class TagTorch:
+        class linalg:
+            @staticmethod
+            def vector_norm(tensor):
+                return FakeTensor(abs(tensor.values[0]))
+
+        @staticmethod
+        def dot(a, b):
+            return FakeTensor(a.values[0] * b.values[0])
+
+    class TagEncoder:
+        vocabulary = ("[OBS]", "wheel", "frame", "pedal")
+        embeddings = {1: [1.0, 0.0], 2: [0.0, 1.0], 3: [1.0, 1.0]}
+
+        def encode(self, public):
+            return [], {0: [1], 1: [2], 2: [3]}
+
+        def embed(self, token_id):
+            return Vector(self.embeddings[token_id])
+
+    class TagLearner:
+        def __init__(self):
+            codec = TagEncoder()
+            self.framework = SimpleNamespace(
+                encoder={"tokenizer": codec, "encode": codec.encode,
+                         "embed": codec.embed})
+            self.torch = TagTorch
+            self.tasks = [{"record_id": "r", "op": "FIND_SHARED_PART",
+                           "public": {}, "encoded_correct_index": 0}]
+
+    rows = diagnostic.measure_tag_vectors(TagLearner())
+    assert [row["tag"] for row in rows["tag_rows"]] == ["wheel", "frame", "pedal"]
+    assert rows["tags_measured"] == 3
+    assert len(rows["pairwise_cosines"]) == 3
+
+
+def test_representation_comparison_reports_both_score_sets():
+    """OLD vs CORRECTED option vectors on the same fixed weights: the
+    measurement reports actual score spreads for BOTH, not only cosines."""
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+        def unsqueeze(self, dim):  # noqa: A002 - torch API shape
+            return self
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def sum(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+        def mean(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors) / len(self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+    class RepTorch:
+        class linalg:
+            @staticmethod
+            def vector_norm(tensor):
+                return FakeTensor(abs(tensor.values[0]))
+
+        @staticmethod
+        def dot(a, b):
+            return FakeTensor(sum(x * y for x, y in zip(a.values, b.values)))
+
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+    class RepModule:
+        def __call__(self, value):
+            return [Vector([2.0, 0.5])]
+
+    class RepEncoder:
+        embeddings = {"a": [1.0, 0.0], "b": [0.0, 1.0], "s": [1.0, 1.0]}
+
+        def encode(self, public):
+            # "s" shared by all three with DIFFERENT occurrence counts
+            return [], {0: ["a", "s"], 1: ["b", "s"], 2: ["a", "b", "s", "s"]}
+
+        def embed(self, token_id):
+            return Vector(self.embeddings[token_id])
+
+    class RepLearner:
+        def __init__(self):
+            self.torch = RepTorch
+            codec = RepEncoder()
+            self.framework = SimpleNamespace(
+                encoder={"encode": codec.encode, "embed": codec.embed})
+            self.module = RepModule()
+            self.tasks = [{"record_id": "r", "op": "LIST_PARTS",
+                           "public": {}, "encoded_correct_index": 0}]
+            self._problem_vectors = [Vector([1.0, 1.0])]
+            self._option_vectors = [[Vector([1.0, 0.0]), Vector([0.0, 1.0]),
+                                     Vector([1.0, 1.0])]]
+
+        def _sum(self, sequence):
+            return self.torch.stack([self.framework.encoder["embed"](item)
+                                     for item in sequence]).sum(dim=0)
+
+    rows = diagnostic.measure_representation_comparison(RepLearner())
+    row = rows[0]
+    # old: v.(a+s)=4.5, v.(b+s)=3.0, v.(a+b+2s)=7.5 -> spread 4.5
+    assert row["scores_old"] == [4.5, 3.0, 7.5] and row["spread_old"] == 4.5
+    # new: v.a=2.0, v.b=0.5, v.(a+b)=2.5 -> spread 2.0 (removal changes scores)
+    assert row["scores_new"] == [2.0, 0.5, 2.5] and row["spread_new"] == 2.0
+    assert row["argmax_old"] == 2 and row["argmax_new"] == 2
+    assert len(row["option_pair_cosines_old"]) == 3
+    assert len(row["option_pair_cosines_new"]) == 3
+
+
+def test_graph_edit_response_measures_output_and_decision():
+    """A relevant graph change must be followed through encoding, pooling,
+    and the module: output difference and the decision under both scores."""
+    from cas_meta2.graph_teaching import adapter, lessons
+
+    record = next(row for row in lessons.build_dataset(seed=20260909)["train"]
+                  if row["family"] == "whole_part" and row["op"] == "LIST_PARTS")
+
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+        def unsqueeze(self, dim):  # noqa: A002 - torch API shape
+            return self
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def mean(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors) / len(self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+    class EditTorch:
+        class linalg:
+            @staticmethod
+            def vector_norm(tensor):
+                return FakeTensor(abs(tensor.values[0]))
+
+        @staticmethod
+        def dot(a, b):
+            return FakeTensor(a.values[0] * b.values[0])
+
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+    class EditModule:
+        def __call__(self, value):
+            return [Vector([value.values[0] * 2.0])]
+
+    class EditEncoder:
+        def __init__(self, baseline_problem):
+            self.baseline_problem = baseline_problem
+
+        def encode(self, public):
+            edited = public["problem"] != self.baseline_problem
+            return ([2] if edited else [1]), {0: ["a"], 1: ["b"], 2: ["c"]}
+
+        def embed(self, token_id):
+            return Vector([float(token_id)])
+
+    class EditLearner:
+        def __init__(self, baseline_problem):
+            self.torch = EditTorch
+            codec = EditEncoder(baseline_problem)
+            self.framework = SimpleNamespace(
+                encoder={"encode": codec.encode, "embed": codec.embed})
+            self.module = EditModule()
+            self._index = {record["record_id"]: 0}
+            self.tasks = [{"record_id": record["record_id"], "op": "LIST_PARTS",
+                           "public": {}, "encoded_correct_index": 0}]
+            self._problem_vectors = [Vector([1.0])]
+            self._option_vectors = [[Vector([3.0]), Vector([4.0]), Vector([5.0])]]
+
+        def _mean(self, token_ids):
+            return self.torch.stack([self.framework.encoder["embed"](item)
+                                     for item in token_ids]).mean(dim=0)
+
+    baseline_problem = adapter.public_records(record, "cas")["public"]["problem"]
+    rows = diagnostic.measure_graph_edit_response(EditLearner(baseline_problem),
+                                                  [record], "cas")
+    assert [row["edit"] for row in rows] == ["connector_retarget", "node_contents"]
+    for row in rows:
+        assert row["output_norm_edited"] == 4.0 and row["output_norm_baseline"] == 2.0
+        assert row["output_difference_norm"] == 2.0
+        assert row["scores_baseline"] == [6.0, 8.0, 10.0]
+        assert row["scores_edited"] == [12.0, 16.0, 20.0]
 
 
 def test_require_rejects_missing_run_id_or_learner():
