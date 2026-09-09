@@ -1,0 +1,39 @@
+{
+  "schema": "cas-graph-training-owner-authorization/2",
+  "recorded_utc": "2026-09-09T02:20:00Z",
+  "owner_instruction_raw": "GO",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "authorization_context": "Corrected re-attempt authorized by the owner after the honest report of attempt 001 (job cas-meta2-teaching-graph-20260909011302-e654ae56), which was destroyed in flight by a launcher-side error-class defect. The launcher fix (real botocore ClientError wiring) is outside the package, so the package identities are identical to the ones the owner originally authorized.",
+    "bound_request_sha256": "9516bc88ea702feb4373f364769ce82969f60e13cc84c0d21c01c0ae9e952e46",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_002/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909021717-7891f672",
+    "source_sha": "fec6349211fa3d67e612314f9280879dcd87dd53",
+    "archive_sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a",
+    "manifest_sha256": "e435e411c955f5ea7cc15dad33da28b14f1e80c9a41a2bca4b1e21f658bd9bc7",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_002/",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 4fd22968 (ClientError wiring + 4 regression tests)"
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test are sealed and read only by the post-training evaluator with predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "reading protected final-test answers of any other task",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
