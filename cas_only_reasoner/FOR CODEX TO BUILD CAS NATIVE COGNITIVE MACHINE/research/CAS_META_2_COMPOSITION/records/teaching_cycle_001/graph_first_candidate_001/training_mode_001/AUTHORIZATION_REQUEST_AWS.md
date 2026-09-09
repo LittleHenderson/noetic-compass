@@ -1,63 +1,63 @@
-# Targeted ^6 specialist — precise AWS authorization request (NOT LAUNCHED, NOT RESERVED)
+# Targeted ^6 specialist — REPLACEMENT AWS authorization request (NOT LAUNCHED, NOT RESERVED)
 
-Status: **AWAITING_OWNER_AUTHORIZATION.** The finished package exists; no
-launch has occurred and no reservation has been made. The owner's signed
-record must bind the exact identities below.
+Status: **AWAITING_OWNER_APPROVAL.** One corrected replacement job is
+registered; no reservation has been made and nothing has been launched. The
+owner's signed record must bind the identities below.
 
-## Package identities (finished, byte-fixed)
+## What this replacement fixes (established, evidence-backed)
+
+| Prior attempt | Stopped by | Class |
+|---|---|---|
+| graph 001 | result-wait mishandled "not available yet" | launcher error handling — nothing about learning |
+| graph 002 | missing `CAS_META2_RUN_TEACHING_CYCLE=1` | startup permission switch — nothing about learning |
+| graph 003 | `fit_train` received a tuple instead of a list | package encoder contract — nothing about learning |
+
+Binding-fit attempt 003's lost error remains **UNKNOWN** (hypothesis-only).
+
+## Environment wiring — PROVEN to reach the child process
+
+A non-neural probe executed the VERBATIM export lines of the rendered
+bootstrap in a real shell and ran a real child process that recorded what it
+actually observed:
+
+- `training_mode_001/checks_003/env_probe.json` (sha256
+  `d6af9f74633e542a114103b15193d8f4e8418718909a562e046b39f2f46291ee`):
+  `child_observed = {"CAS_META2_RUN_TEACHING_CYCLE": "1"}` with
+  `aws_calls: 0`, `model_execution: false`.
+- Regression test
+  `tests/test_graph_training_launch.py::test_user_data_env_reaches_the_child_process`
+  locks the same proof (launcher suite now 17).
+
+## Replacement job identity (inert until signed)
 
 | Field | Value |
 |---|---|
-| source_sha (freeze commit) | `ce1a3882c57400bb72a810c056c4baf978b72db6` |
-| archive_sha256 | `52151c8bb00b45e5e442fd52246d15515c98fe6b2bc745237a4c08992206f580` |
-| manifest_sha256 | `0b2801752dcf4dd46e858485584dd52130b76fdc951c33a597f60c294831d2b4` |
-| package | `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_001/source.zip` (356,470 bytes, 30 members) |
-| proposed job | `cas-meta2-teaching-graph-20260909011302-e654ae56` |
+| proposed job | `cas-meta2-teaching-graph-20260909030210-e1408e1a` |
+| launch request sha256 | `fdb7cb6e5bf68b4672c970986a3ba5e04dd92a0112c6ac728da148785c78a7bf` |
+| training package (UNCHANGED from corrected package_003) | source `27f5efffb0f53acfa495fa74ff639ae23d08bec1` / archive `a4c07dda808615a250379f962db04aa9b9b1bbc4832f5dd686bfbfd6673605ae` / manifest `1f554acf769fc612ed0b8de8300d40728afc53beda122ea0033bd526b4aec1ec` |
+| corrected launcher | `aws/graph_training_launch.py` at commit `65fa6b46` (ClientError wiring `4fd22968`; enable export + 600 s termination wait `7eec3604`; child-process env probe test) |
 
-The package contains: the graph-teaching package (graph, reference, lessons,
-adapter, real_framework, trainer), the frozen encoder path (public tokenizer +
-fixed projection), the corrected worker (both conditions, original-inner-error
-capture, evidence on failure), and the two frozen wheels. Execution uses
-`aws/graph_training_launch.py`, which carries every binding-fit execution fix
-(us-east-1 pricing client, bounded IAM propagation wait, cleanup detach and
-inline-policy order, bounded termination wait before security-group deletion,
-training_result naming, owner-record binding).
+## Preserved limits and protections (unchanged)
 
-## What the run does (per ADAPTER_SPEC.md)
+- Per condition: 64 optimizer steps, 600.0 wall seconds, lr 0.003; totals 128
+  steps / 1200 s in ONE job; conditions `prompt_framing_only`.
+- Data: train 48 + practice 16 (whole-part); validation 16 + test 16 sealed,
+  predictions recorded before answers.
+- One `$4.00` reservation, no refund, no automatic retry; bounded readiness
+  checks; error capture preserving the original error; shutdown protection
+  (600 s termination wait); verified cleanup on every exit; containment
+  report naming any parameter change outside `operation:^6`.
 
-Graph + structured request → candidate `^6` decompose module → frozen
-dot-product readout → option prediction → checker-derived correction →
-AdamW updates to `operation:^6` parameters ONLY → digest-verified containment
-report → sealed-split evaluation with predictions recorded before answers.
+## Ledger arithmetic (exact, current)
 
-## Budget (resolved: per condition AND totals, one job)
+Campaign ledger is at revision 26: `total_reserved_usd = 154.00`,
+`remaining_unreserved_usd = 246.00` (cap `400.00`). A separately approved
+`$4.00` replacement reservation would move it to `158.00` reserved /
+`242.00` unreserved. These are campaign reservations, not AWS invoices.
 
-| Scope | Value |
-|---|---|
-| per condition (cas, generic) | 64 optimizer steps, 600.0 wall seconds, lr 0.003 |
-| totals, one job | 128 optimizer steps, 1200.0 wall seconds |
-| conditions | `prompt_framing_only` — same graphs, options, and answers; framing differs. NOT an architecture comparison |
-| instance | one `g7.2xlarge` (`RTX PRO 4500`), account `807562639912`, `us-west-2`, AMI `ami-0fbbd0facbc9e3cff`, torch `2.11.0+cu128` |
-| reservation | ONE new `4.00` USD reservation, no refund, no automatic retry |
-| data | train 48 + practice 16 (whole-part); validation 16 + test 16 sealed, post-training only |
+## Next substantive result required
 
-## Deliverables on completion
-
-Per-arm and total: before/after per-op training loss, per-op lesson exposure
-(records and updates), actual completed updates, checkpoint identities,
-containment report (forbidden changes named), execution/cleanup outcomes, and
-the sealed-split evaluation (validation/test predictions sealed before
-answers). Original errors preserved on any failure.
-
-## Explicitly not authorized
-
-- No automatic retry; no second reservation; no modification of accepted
-  models, trainers, the ledger, frozen negatives, or sealed splits.
-- No promotion of the binding-fit CUDA hypothesis (stays hypothesis-only).
-- No reading of protected final-test answers of any other task.
-
-## Signing procedure
-
-The owner's signed record must bind this document's sha256 and the identities
-above. Until that record exists and is committed, the launch request stays
-`launch_authorized: false` and nothing runs.
+Actual lesson exposure per operation, actual completed optimizer updates,
+before/after per-op losses, checkpoint identities, the containment report,
+sealed-split evaluation — or an intact preserved error naming the next
+failed stage. No automatic reservation or launch will occur.
