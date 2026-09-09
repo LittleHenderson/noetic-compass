@@ -1,0 +1,48 @@
+{
+  "authorization": {
+    "archive_sha256": "bce8325bcf12996b52917214ad65dad50b77802d79d09f996afc88d853ebc9b4",
+    "authorization_context": "Competence run 002 \u2014 REPLACEMENT for run 001, which the in-job stage-1 gate stopped BEFORE any training (the fail-and-stop rule, working as designed). The gate's two defects are fixed and test-locked (129 graph tests): the gate now checks the REGISTERED quantity \u2014 distinguishable module INPUTS (same-token rewiring > 10x the reorder input baseline) \u2014 while module output differences are REPORTED, not gated; and a stage-1 failure returns a complete result with the preserved stage-1 measurements and outcome STAGE1_CHECK_FAILED, never a bare exception. Everything else is UNCHANGED from COMPETENCE_RUN_001.md: ONE job runs the whole fixed sequence, single arm (cas framing), no two-arm comparison. STAGE 1: relationship input check + forward/backward sanity (zero optimizer steps). STAGE 2: bounded training on the familiar train+practice whole-part examples \u2014 64 optimizer steps / 600 s, lr 0.003, learning curve every 8 steps, digest containment (operation:^6 only). STAGE 3 (only if mean after-loss < mean before-loss - 0.02): sealed validation/test evaluation with predictions before answers, plus familiar-example accuracy, reported separately. The deliverable is exactly one of LEARNED_AND_TRANSFERRED (criterion met AND sealed >= 6/12), LEARNED_NO_TRANSFER (criterion met, sealed < 6/12), DID_NOT_FIT (criterion not met), or STAGE1_CHECK_FAILED (preserved numbers) \u2014 computed by a deterministic rule. No silent mid-run patches, no unlimited retries, no spending beyond this single job; the training pilot beyond this run stays pending.",
+    "bound_request_sha256": "c587173bf058f4dfa32f5cee71b27c545c3e25c1ad1aee7b24fc365164cf1d7a",
+    "competence_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-competence-20260909195309-68ac4845",
+    "launcher": "aws/graph_training_competence_launch.py at commit 4489889c9813260d76a376f234765015cacca5ae",
+    "manifest_sha256": "14c0a4929f3b0cb7d2cacd44a40502540a11e48fbeedb63e40616ea4f683228e",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_package_002/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_launch_002/launch_request.json",
+    "source_sha": "17a310ec76bce4342ec89bae8f797b64e16f1fd2"
+  },
+  "execution_gates": [
+    "single launch attempt through the competence launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "stage 3 reads sealed splits ONLY after the registered fit criterion is met; predictions recorded before answers",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change beyond the declared 64 steps / 600 s",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T19:53:09.968919+00:00",
+  "run_bounds": {
+    "arms": [
+      "cas"
+    ],
+    "automatic_retries": 0,
+    "data": {
+      "familiar": "train+practice whole-part",
+      "fresh": "sealed validation+test"
+    },
+    "jobs": 1,
+    "per_run": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "4.00"
+  },
+  "schema": "cas-graph-training-competence-owner-authorization/1"
+}
