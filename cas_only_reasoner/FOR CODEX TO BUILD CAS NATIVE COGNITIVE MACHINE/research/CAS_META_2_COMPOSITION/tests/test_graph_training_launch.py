@@ -122,6 +122,8 @@ def test_worker_script_preserves_inner_errors_and_runs_both_arms():
     assert "INNER_RUNNER_EXIT_" in text
     assert "torch==2.11.0" in text
     assert "evaluate_sealed" in text
+    assert "from cas_meta2.teaching_cycle import gpu_adapter" in text
+    assert "gpu_adapter._cuda()" in text
     assert "{job}" not in text and "{{" not in text
 
 
