@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 paid attempt 001: launched, then destroyed by a launcher defect (recorded honestly)
+
+The owner-authorized paid run (`cas-meta2-teaching-graph-20260909011302-e654ae56`,
+archive `e6c87689…`) succeeded through preflight, the single `$4.00`
+reservation (ledger 23 → 24: `$146.00` reserved, `$254.00` unreserved), and
+the launch (`i-0b8e902eab4019ff9`). Then a `NoSuchKey` result poll escaped the
+wait loop because the provider was wired with the default fake error class
+instead of `botocore`'s `ClientError`; the finally-cleanup terminated the
+instance and deleted the bucket while the worker was still bootstrapping. No
+training result exists. The account was verified clean afterward (instance
+terminated, no security groups, roles/profiles absent, bucket `404`).
+
+- **Fixed** (`4fd22968`): `main()` wires `ClientError`; four regression tests
+  (launcher suite 14). The package identities are unchanged (the launcher is
+  not a package member), so a corrected re-attempt needs only a NEW job id, a
+  new `$4.00` reservation, and a new owner record.
+- **No retry was attempted.** Evidence: `training_mode_001/ATTEMPT_GRAPH_001_FAILURE.md`
+  and the attempt receipt directory (26 provider events).
+- Binding-fit attempt-004 request still pending; attempt 003 CUDA hypothesis
+  stays hypothesis-only.
+
 ## 2026-09-09 - Graph-first ^6: real adapter chain and finished package (review milestone; no launch)
 
 Per the review mandate, the graph→^6 connection is implemented with candidate
