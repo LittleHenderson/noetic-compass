@@ -4,6 +4,31 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CONFIRMATION_001 attempt 002 FINISHED — **FRESH_TRANSFER_NOT_CONFIRMED (0 of 3)**
+
+Attempt 002 (`cas-meta2-graph6conf-20260910023000-a387d882`, owner GO, one new
+`$6.00` reservation, ledger 46 → 47: `$242.00` reserved / `$158.00` unreserved,
+result sha `8a313f3d…`, elapsed 574.9 s, instance `i-0c5c7705128fd938e`
+terminated, cleanup complete, hygiene re-checked independently) ran the
+pre-registered job: three independently initialized learners (seeds
+`20260913/14/15`, shared frozen encoder identity `116f3677…`, initial
+checkpoints distinct), 192/192 updates, all three reported, containment limited
+to `left/merge/right.weight`. **Familiar learning replicated 3/3** (fit margins
+`0.4940`, `0.5148`, `0.5340`; practice accuracy `9/30→23/30`, `4/30→22/30`,
+`9/30→23/30`). **Fresh 90-case panel: 29→34 (37.78 %), 27→36 (40.00 %),
+17→36 (40.00 %)** — paired `+5.56 %`, `+10.00 %`, `+21.11 %`; family-clustered
+95 % CI lows `−8.89 %`, `−5.56 %`, `+8.89 %`; McNemar p `0.5327`, `0.2327`,
+`0.0013`. The registered rule (margin ≥ +10 % **and** CI low > 0 **and**
+absolute ≥ 50 % **and** no per-op regression with ≥ 2 gains ≥ +10 %) was met by
+**0 of 3** candidates: the binding condition for all three is the 50 % absolute
+level; two also failed the interval and margin; candidate 20260915 met three of
+four. Weakest fresh operation is `LIST_PARTS` (`6/30`, `10/30`, `7/30` after
+training — at or below the 1/3 chance level) versus `FIND_SHARED_PART`
+(`14/30`, `15/30`, `15/30`) and `REACHED_VIA` (`14/30`, `11/30`, `14/30`). No
+transfer claim is licensed; run 005's `7/12` remains a single-seed result on the
+previously examined 12-case panel. Record:
+`ATTEMPT_GRAPH6_CONFIRMATION_002_RESULT.md`.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CONFIRMATION_001 attempt 001 **FAILED** (my bug, preserved error) — replacement prepared
 
 Owner GO executed one job (`cas-meta2-graph6conf-20260910013000-e485b07c`, one new
