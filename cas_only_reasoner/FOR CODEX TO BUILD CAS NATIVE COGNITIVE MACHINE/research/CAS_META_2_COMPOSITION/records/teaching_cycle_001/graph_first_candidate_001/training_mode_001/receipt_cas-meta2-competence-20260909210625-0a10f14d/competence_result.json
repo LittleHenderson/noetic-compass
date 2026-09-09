@@ -1,0 +1,565 @@
+{
+  "arm": "cas",
+  "claims": {
+    "answer_edges_present": false,
+    "sealed_splits_read": false,
+    "specialist_claimed": false,
+    "two_arm_comparison_claimed": false
+  },
+  "fit_criterion": {
+    "margin": 0.5339535005390644,
+    "met": true,
+    "rule": "mean(after) < mean(before) - 0.02",
+    "threshold": 0.02
+  },
+  "job": "cas-meta2-competence-20260909210625-0a10f14d",
+  "outcome": "LEARNED_AND_TRANSFERRED",
+  "run_id": "cas-meta2-competence-20260909210625-0a10f14d",
+  "schema": "cas-graph-training-competence-result/1",
+  "stage1": {
+    "forward_backward": {
+      "per_target_loss": [
+        1.1528946161270142,
+        1.1382025480270386,
+        1.0109200477600098
+      ],
+      "per_target_max_gradient_norm": [
+        2.162424087524414,
+        1.2613780498504639,
+        1.9404010772705078
+      ],
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+    },
+    "relationship_check": [
+      {
+        "connection_list_reorder": {
+          "input_difference": 0.0,
+          "output_difference": 0.0
+        },
+        "connector_rewire_same_tokens": {
+          "input_difference": 1.7630531513759884,
+          "output_difference": 0.5771734831789466
+        },
+        "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+      },
+      {
+        "connection_list_reorder": {
+          "input_difference": 0.0,
+          "output_difference": 0.0
+        },
+        "connector_rewire_same_tokens": {
+          "input_difference": 1.7630528056115535,
+          "output_difference": 0.5771733060186522
+        },
+        "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+      }
+    ]
+  },
+  "stage2": {
+    "budget": {
+      "per_arm": {
+        "learning_rate": 0.003,
+        "max_optimizer_steps": 64,
+        "max_wall_seconds": 600.0
+      },
+      "total": {
+        "arms": 2,
+        "optimizer_steps": 128,
+        "wall_seconds": 1200.0
+      }
+    },
+    "claims": {
+      "answer_edges_present": false,
+      "sealed_splits_read": false,
+      "specialist_claimed": false
+    },
+    "condition": {
+      "arm": "cas",
+      "kind": "prompt_framing_only",
+      "note": "Both conditions share the same graphs, options, and reference answers; only the prompt framing differs. This is not the CASformer-vs-generic-network comparison."
+    },
+    "containment": {
+      "contained": true,
+      "forbidden_changes": [],
+      "permitted_changes": [
+        "left.weight",
+        "merge.weight",
+        "right.weight"
+      ],
+      "total_changed": 3
+    },
+    "run_id": "cas-meta2-competence-20260909210625-0a10f14d.train",
+    "schema": "cas-meta2-graph-teaching-training/1",
+    "scope": {
+      "allowed": [
+        "left.weight",
+        "merge.weight",
+        "right.weight"
+      ],
+      "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+      "frozen": [],
+      "role": "operation:^6"
+    },
+    "seed": 20260909,
+    "target": {
+      "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+      "plasticity_role": "operation:^6"
+    },
+    "training": {
+      "after_loss": {
+        "FIND_SHARED_PART": {
+          "total": 0.23778395615518094
+        },
+        "LIST_PARTS": {
+          "total": 0.6742571633309126
+        },
+        "REACHED_VIA": {
+          "total": 0.7811747074127198
+        }
+      },
+      "automatic_retries": 0,
+      "before_loss": {
+        "FIND_SHARED_PART": {
+          "total": 1.059303057193756
+        },
+        "LIST_PARTS": {
+          "total": 1.0817894220352173
+        },
+        "REACHED_VIA": {
+          "total": 1.1539838492870331
+        }
+      },
+      "checkpoint_identity": "cb008721b92144b4e0ef52e86c2c449415935110747aca18ff23229c05240e50",
+      "completed_updates": 64,
+      "history": [
+        [
+          0,
+          1.0983587761720022
+        ],
+        [
+          8,
+          0.8628435229261716
+        ],
+        [
+          16,
+          0.7865742777784664
+        ],
+        [
+          24,
+          0.7250066029528778
+        ],
+        [
+          32,
+          0.6559203164031108
+        ],
+        [
+          40,
+          0.6300363026559354
+        ],
+        [
+          48,
+          0.618185435111324
+        ],
+        [
+          56,
+          0.5502253618091345
+        ],
+        [
+          64,
+          0.5644052756329377
+        ]
+      ],
+      "lesson_exposure": {
+        "boundary": "An optimizer step is a single correction on one record, not a complete teaching cycle.",
+        "records_by_op": {
+          "FIND_SHARED_PART": 10,
+          "LIST_PARTS": 10,
+          "REACHED_VIA": 10
+        },
+        "updates_by_op": {
+          "FIND_SHARED_PART": 22,
+          "LIST_PARTS": 22,
+          "REACHED_VIA": 20
+        }
+      }
+    }
+  },
+  "stage3": {
+    "familiar": {
+      "attempted": 30,
+      "correct": 24,
+      "predictions": [
+        {
+          "correct": [
+            "idea2",
+            "idea3",
+            "idea6"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea2",
+            "idea3",
+            "idea6"
+          ],
+          "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+        },
+        {
+          "correct": [
+            "idea17",
+            "idea18"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea17",
+            "idea18"
+          ],
+          "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+        },
+        {
+          "correct": "none",
+          "op": "FIND_SHARED_PART",
+          "predicted": "none",
+          "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+        },
+        {
+          "correct": "none",
+          "op": "FIND_SHARED_PART",
+          "predicted": "none",
+          "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f"
+        },
+        {
+          "correct": "direct",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+        },
+        {
+          "correct": "absent",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e"
+        },
+        {
+          "correct": [
+            "idea1",
+            "idea17"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea18",
+            "idea6"
+          ],
+          "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3"
+        },
+        {
+          "correct": [
+            "idea18",
+            "idea6"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea18",
+            "idea6"
+          ],
+          "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc"
+        },
+        {
+          "correct": "idea18",
+          "op": "FIND_SHARED_PART",
+          "predicted": "idea18",
+          "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d"
+        },
+        {
+          "correct": "idea18",
+          "op": "FIND_SHARED_PART",
+          "predicted": "idea18",
+          "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0"
+        },
+        {
+          "correct": "direct",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a"
+        },
+        {
+          "correct": "absent",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4"
+        },
+        {
+          "correct": [
+            "idea17",
+            "idea2"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea17",
+            "idea2"
+          ],
+          "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c"
+        },
+        {
+          "correct": [
+            "idea1",
+            "idea18",
+            "idea4"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea1",
+            "idea18",
+            "idea4"
+          ],
+          "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7"
+        },
+        {
+          "correct": "idea18",
+          "op": "FIND_SHARED_PART",
+          "predicted": "idea18",
+          "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf"
+        },
+        {
+          "correct": "none",
+          "op": "FIND_SHARED_PART",
+          "predicted": "none",
+          "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc"
+        },
+        {
+          "correct": "direct",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53"
+        },
+        {
+          "correct": "absent",
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c"
+        },
+        {
+          "correct": [
+            "alpha_17",
+            "delta_4",
+            "epsilon_5"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "alpha_17",
+            "delta_4",
+            "epsilon_5"
+          ],
+          "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703"
+        },
+        {
+          "correct": [
+            "alpha_1",
+            "alpha_19",
+            "zeta_6"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "alpha_1",
+            "alpha_19",
+            "zeta_6"
+          ],
+          "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc"
+        },
+        {
+          "correct": "alpha_1",
+          "op": "FIND_SHARED_PART",
+          "predicted": "alpha_1",
+          "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5"
+        },
+        {
+          "correct": "alpha_1",
+          "op": "FIND_SHARED_PART",
+          "predicted": "alpha_1",
+          "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9"
+        },
+        {
+          "correct": "direct",
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5"
+        },
+        {
+          "correct": "via:alpha_1",
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd"
+        },
+        {
+          "correct": [
+            "A7",
+            "A8",
+            "B"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "A7",
+            "A8",
+            "B"
+          ],
+          "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f"
+        },
+        {
+          "correct": [
+            "A9",
+            "F"
+          ],
+          "op": "LIST_PARTS",
+          "predicted": [
+            "A9",
+            "F"
+          ],
+          "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b"
+        },
+        {
+          "correct": "B",
+          "op": "FIND_SHARED_PART",
+          "predicted": "B",
+          "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7"
+        },
+        {
+          "correct": "B",
+          "op": "FIND_SHARED_PART",
+          "predicted": "B",
+          "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c"
+        },
+        {
+          "correct": "direct",
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d"
+        },
+        {
+          "correct": "absent",
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a"
+        }
+      ]
+    },
+    "ran": true,
+    "sealed": {
+      "boundary": "post-training sealed-split evaluation only; predictions sealed before answers were consulted",
+      "per_split_op": {
+        "test:FIND_SHARED_PART": {
+          "attempted": 1,
+          "correct": 1
+        },
+        "test:LIST_PARTS": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "test:REACHED_VIA": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "validation:FIND_SHARED_PART": {
+          "attempted": 2,
+          "correct": 2
+        },
+        "validation:LIST_PARTS": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "validation:REACHED_VIA": {
+          "attempted": 3,
+          "correct": 1
+        }
+      },
+      "sealed_predictions": [
+        {
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea17",
+            "idea3"
+          ],
+          "record_id": "e8387a304f0c410531b94d38f0c31c968d950822a4ae21967045dc6e9e15a7c4",
+          "split": "validation"
+        },
+        {
+          "op": "LIST_PARTS",
+          "predicted": [
+            "idea4",
+            "idea5"
+          ],
+          "record_id": "ee7343b74e066b2828d6a21da1e6ac00ed5152ead4d67adbec591562522d079e",
+          "split": "validation"
+        },
+        {
+          "op": "FIND_SHARED_PART",
+          "predicted": "none",
+          "record_id": "955fd6765158d566ce089e56dc7fea38ece0046f6397a10145de06751ea551a2",
+          "split": "validation"
+        },
+        {
+          "op": "FIND_SHARED_PART",
+          "predicted": "idea3",
+          "record_id": "57f3eaf6a7b13140b35645462685f8d14dd6e7ec2e423e85bc7fe24c50d47df8",
+          "split": "validation"
+        },
+        {
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "464acfd10572ed5427030cfaa927db4282d554b8ada889c1e62bfdda3d19e389",
+          "split": "validation"
+        },
+        {
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "3d2457c6fce0f5fc43d3e65c3db685eccc01508ce6357ab7fdace2289fc9d538",
+          "split": "validation"
+        },
+        {
+          "op": "REACHED_VIA",
+          "predicted": "absent",
+          "record_id": "af41e8c98ac0bc8f3471876ddb7812a31968d7e1477fa4a0a415d0974bb15935",
+          "split": "validation"
+        },
+        {
+          "op": "LIST_PARTS",
+          "predicted": [
+            "A8",
+            "F"
+          ],
+          "record_id": "fbe0f88dc51b1f4f0835442e8aeb0c248b210a387c283baaf73b1b07f0e5158d",
+          "split": "test"
+        },
+        {
+          "op": "LIST_PARTS",
+          "predicted": [
+            "A",
+            "A9",
+            "E"
+          ],
+          "record_id": "c89dbce8c6522048931756f028c2309daea3ea0c52d563555f79c89251b0c09f",
+          "split": "test"
+        },
+        {
+          "op": "FIND_SHARED_PART",
+          "predicted": "none",
+          "record_id": "f868a1581de9afd751d1c5e348ec4bb628fed29639ca2a495310c7ab2b5dce73",
+          "split": "test"
+        },
+        {
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "3b9868a3bb62d2e52cbf5c7cc3e88696532d3156c283ef0b8a44f088d2915dce",
+          "split": "test"
+        },
+        {
+          "op": "REACHED_VIA",
+          "predicted": "direct",
+          "record_id": "e5258f94a340e50dd3bd7681fdf9712b15e96c9ba7013047e04e998424c82070",
+          "split": "test"
+        }
+      ],
+      "training_path_never_reads_sealed": true
+    },
+    "sealed_total_attempted": 12,
+    "sealed_total_correct": 7
+  }
+}

@@ -4,6 +4,25 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 005 FINISHED — **LEARNED_AND_TRANSFERRED**
+
+Competence run 005 (`cas-meta2-competence-20260909210625-0a10f14d`, owner GO,
+new `$4.00` reservation, ledger 44 → 45: `$230.00` reserved, `$170.00`
+unreserved, result sha `ab085d68…`, cleanup complete, elapsed 554.8 s) ran
+the whole fixed single-arm sequence in ONE job and returned the registered
+outcome **LEARNED_AND_TRANSFERRED**. Stage 1 (real numbers): same-token
+rewiring input difference `1.7631` vs reorder `0.0`; module OUTPUT difference
+`0.5772` — the relationship distinction survives and the module responds;
+sanity gradients 1.26–2.16. Stage 2: 64 updates, learning curve `1.09836 →
+0.86284 → 0.78657 → 0.72501 → 0.65592 → 0.63004 → 0.61819 → 0.55023 →
+0.56441`; per-op before→after: LIST_PARTS `1.0818→0.6743`,
+FIND_SHARED_PART `1.0593→0.2378`, REACHED_VIA `1.1540→0.7812`; fit
+criterion MET with margin `0.5340` (threshold 0.02); containment held (only
+`left/merge/right.weight`); familiar accuracy 24/30. Stage 3 (sealed,
+predictions before answers): **7/12** (chance ≈ 4/12). Honest scope: one
+seed, one arm, small counts; the two-framing comparison remains postponed
+and unclaimed. Record: `ATTEMPT_COMPETENCE_005_RESULT.md`.
+
 ## 2026-09-09 - Graph-first ^6: competence run 004 — FIT CRITERION MET; sealed-path empty-content crash fixed
 
 Run 004 (`cas-meta2-competence-20260909202533-7cb622f8`, owner GO, new
