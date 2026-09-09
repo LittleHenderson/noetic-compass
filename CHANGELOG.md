@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: complete device-placement review green (attempt 007 NOT registered)
+
+Per the owner's directive, attempt 006 is preserved as a device-mismatch
+failure inside the real ^6 forward — not a completed forward and not a
+learning result. The compatibility review tool was extended to cover the
+COMPLETE device path and run against `package_007/source.zip` (`61e562ff`):
+frozen projection on device with seed preserved, cached vectors follow the
+projection's device, module moved before optimizer construction, both target
+tensors device-placed (2/2), same-device readout, prediction uses the trained
+forward, checkpoint detaches to CPU, framework built before learner;
+`unplaced_tensor_sites: []`. Evidence `compat_review_002/` (sha `f8e35cbc…`).
+Frozen values, `operation:^6` scope, curriculum, and budgets unchanged;
+GPU-only uncertainty (forward numerics, finite loss, gradient flow) stated.
+Replacement request updated (`AUTHORIZATION_REQUEST_AWS.md`, package_007,
+job to be minted at approval). Ledger unchanged at revision 29.
+
 ## 2026-09-09 - Graph-first ^6 attempt 006: candidate module ran on CUDA; preserved error #5 (device placement)
 
 Attempt 006 (`cas-meta2-teaching-graph-20260909052323-cb2ebc76`, `$4.00`
