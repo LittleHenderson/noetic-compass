@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 33, in <module>\n    raw = (json.dumps({'schema': 'cas-graph-training-result/1', 'job': job,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 238, in dumps\n    **kw).encode(obj)\n          ^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/encoder.py\", line 202, in encode\n    chunks = list(chunks)\n             ^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/encoder.py\", line 432, in _iterencode\n    yield from _iterencode_dict(o, _current_indent_level)\n  File \"/usr/lib/python3.12/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/usr/lib/python3.12/json/encoder.py\", line 326, in _iterencode_list\n    yield from chunks\n  File \"/usr/lib/python3.12/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/usr/lib/python3.12/json/encoder.py\", line 406, in _iterencode_dict\n    yield from chunks\n  File \"/usr/lib/python3.12/json/encoder.py\", line 377, in _iterencode_dict\n    raise TypeError(f'keys must be str, int, float, bool or None, '\nTypeError: keys must be str, int, float, bool or None, not tuple\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909071727-23c7cca1",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
