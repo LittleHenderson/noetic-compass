@@ -4,6 +4,30 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: real adapter chain and finished package (review milestone; no launch)
+
+Per the review mandate, the graph→^6 connection is implemented with candidate
+copies only (`ce1a3882`, `22a9e015`): exact module input (graph + question
+tokens), candidate decompose module (`_DecomposeTransform`, never the accepted
+model), frozen dot-product readout, checker-derived per-op scoring, AdamW over
+`operation:^6` (the REAL contract role from `make_operation_contract("^6")`;
+`bias_update_head` stays frozen), digest-verified containment. Conditions are
+labeled `prompt_framing_only`; budget resolved as 64 steps / 600 s per
+condition, totals 128 / 1200 s in ONE job with ONE `$4.00` reservation;
+per-op lesson exposure is reported; sealed predictions are recorded before
+answers. `aws/graph_training_launch.py` carries every binding-fit execution
+fix and runs both conditions sequentially.
+
+- Finished package at freeze `ce1a3882c57400bb72a810c056c4baf978b72db6`:
+  archive `52151c8b…`, manifest `0b280175…`, 356,470 bytes, 30 members.
+- Full suite **137 passed, 24 subtests passed** (receipt sha `9a2ab5ac…`,
+  `training_mode_001/checks_002/`).
+- Precise authorization request: `training_mode_001/AUTHORIZATION_REQUEST_AWS.md`
+  (job `cas-meta2-teaching-graph-20260909011302-e654ae56`) — **NOT launched,
+  NOT reserved**; adapter spec: `training_mode_001/ADAPTER_SPEC.md`.
+- Binding-fit attempt-004 request still pending; attempt 003 CUDA hypothesis
+  stays hypothesis-only; ledger untouched.
+
 ## 2026-09-09 - Graph-first targeted ^6 trainer mode: pure-tested; AWS run request prepared (not launched)
 
 The owner-directed trainer mode exists and is pure-tested (`b2fc91e1`):
