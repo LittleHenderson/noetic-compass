@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 paid attempt 003: clean lifecycle; preserved error #2 (tokenizer list contract)
+
+Attempt 003 (`cas-meta2-teaching-graph-20260909024008-f27c195e`, `$4.00`
+reserved, ledger 25 → 26: `$154.00` reserved, `$246.00` unreserved) ran a
+fully clean lifecycle — launch, wait, collect, and cleanup with **zero
+leftovers** — and the worker's **original inner error was preserved verbatim
+again**: `PolicyContractError: LOSSLESS_TRAIN_INPUT_INVALID` (the frozen
+tokenizer's `fit_train` requires a `list`; the encoder passed a `tuple`).
+The error-capture path is now proven repeatedly, and each paid attempt peels
+exactly one real defect.
+
+- **Fixed** (`27f5efff`, a package member): `fit_train(list(texts), ...)` with
+  a source-level regression test. **New corrected package** (`c0e26e9a`,
+  `package_003/`): source `27f5efff…`, archive `a4c07dda…`, manifest
+  `1f554acf…`.
+- A corrected re-attempt needs a new job, a new `$4.00` reservation, and a new
+  owner record binding the NEW identities. **No retry was attempted.**
+  Evidence: `training_mode_001/ATTEMPT_GRAPH_003_FAILURE.md` + receipt.
+- Binding-fit attempt-004 request still pending; attempt 003's lost error
+  remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6 paid attempt 002: lifecycle worked; original inner error PRESERVED (explicit-enable gate)
 
 The corrected attempt (`cas-meta2-teaching-graph-20260909021717-7891f672`,
