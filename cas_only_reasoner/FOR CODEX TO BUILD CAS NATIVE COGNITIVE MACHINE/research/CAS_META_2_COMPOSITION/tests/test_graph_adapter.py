@@ -79,3 +79,12 @@ def test_real_framework_module_import_is_lazy():
     from cas_meta2.graph_teaching import real_framework
     assert not hasattr(real_framework, "torch")
     assert "cas_cjt" not in real_framework.__dict__
+
+
+def test_encoder_passes_a_list_to_fit_train():
+    """Attempt 003's preserved error: fit_train rejects tuples
+    (LOSSLESS_TRAIN_INPUT_INVALID). The encoder must pass a list."""
+    import inspect
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.build_encoder)
+    assert "fit_train(list(texts)" in source

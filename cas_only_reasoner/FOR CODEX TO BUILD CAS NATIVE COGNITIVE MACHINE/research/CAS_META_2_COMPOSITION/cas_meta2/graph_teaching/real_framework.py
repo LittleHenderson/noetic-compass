@@ -87,7 +87,9 @@ def build_encoder(torch, texts, d_model, seed):
     """Frozen encoder: the campaign's public tokenizer over the lesson prompts
     plus a fixed seeded projection. Nothing here learns."""
     from cas_meta2.features_v2 import LosslessPublicTokenizer
-    tokenizer = LosslessPublicTokenizer.fit_train(tuple(texts),
+    # fit_train's public contract requires a list (attempt 003's preserved
+    # error: LOSSLESS_TRAIN_INPUT_INVALID when given a tuple).
+    tokenizer = LosslessPublicTokenizer.fit_train(list(texts),
                                                   max_length=FROZEN_ENCODER_MAX_LENGTH)
     vocabulary = tuple(tokenizer.vocabulary)
     index = {token: position for position, token in enumerate(vocabulary)}
