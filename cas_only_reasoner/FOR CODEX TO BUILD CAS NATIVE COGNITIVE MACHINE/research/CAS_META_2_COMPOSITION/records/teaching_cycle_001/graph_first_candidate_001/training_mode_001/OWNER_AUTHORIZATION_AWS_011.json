@@ -1,0 +1,56 @@
+{
+  "authorization": {
+    "archive_sha256": "f2ef785bd093c2555d3094d7e368d774b94fad67bfece73d94406e4528c926a0",
+    "authorization_context": "The owner pasted the attempt-002 ln(3) diagnostic result record and instructed: implement it if true, else the agent's call. The record is TRUE (re-verified before acting: collected result sha f685506f matches the byte file, launcher status AWS_GRAPH_TRAINING_LN3_DIAGNOSTIC_FINISHED, cleanup complete, ledger 34->35). The follow-up the record names is therefore implemented as representation follow-up 001 (REPRESENTATION_FOLLOW_UP_001.md): EXACTLY ONE variable changes - option-slot aggregation in the frozen readout goes from mean-pooling (measured to collapse every option onto one direction, pairwise cosines ~1.0 within 4e-8, scores = float32 noise, loss = ln 3) to sum-pooling. The module input (problem mean-pooling), the registered ^6 decompose candidate, config, contract, lessons, scoring, seeds, budgets, sealed splits, and evaluation boundaries are all UNCHANGED from attempt 010. A learned readout inside the plasticity group was ruled out (would add parameters outside the registered operation:^6/bias_update_head contract). Preregistered outcomes: (A) losses move below ln 3 and sealed accuracy moves above chance -> the representation was the blocker; (B) flat losses persist -> the distinction reaches the readout but the module cannot use it in the allowance, and the next measured suspect is the module's operating point - a separate, separately authorizable step. This run is the same bounded training pilot: 64 optimizer steps / 600 s per framing condition (totals 128 / 1200 s), one job, one new $4.00 reservation, no automatic retry, sealed evaluation with predictions recorded before answers.",
+    "bound_request_sha256": "5adc103b06557897a149adea398f830e7dd5fdc59cca93770fb9caf44bab62bd",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 7d9d43ee591e13127e59cbaf3b2f545bfca9073f",
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-teaching-graph-20260909095712-4ca46fce",
+    "manifest_sha256": "4b77518d1f3c70a846e8ee1a954dc0d6e4d4e2c1da12f23e64376660b4b26c3a",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_011/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_011/launch_request.json",
+    "source_sha": "c985d2f4a44c73a6f007c3ee4a5ad1676e438bba"
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test sealed, predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any additional experiment beyond this single training job (the separate binding-fit attempt-004 request remains pending)",
+    "any further representation or architecture change beyond follow-up 001's single sum-pooling variable",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ],
+  "owner_instruction_raw": "IF THE FOLLOWING IS TRUE IMPLEMENT IT IF NOT IT'S YOUR CALL",
+  "recorded_utc": "2026-09-09T09:57:12.064157+00:00",
+  "run_bounds": {
+    "automatic_retries": 0,
+    "conditions_kind": "prompt_framing_only",
+    "data": {
+      "practice": 16,
+      "test_sealed": 16,
+      "train": 48,
+      "validation_sealed": 16
+    },
+    "jobs": 1,
+    "per_condition": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "4.00",
+    "totals": {
+      "arms": [
+        "cas",
+        "generic"
+      ],
+      "total_optimizer_steps": 128,
+      "total_wall_seconds": 1200.0
+    }
+  },
+  "schema": "cas-graph-training-owner-authorization/11"
+}
