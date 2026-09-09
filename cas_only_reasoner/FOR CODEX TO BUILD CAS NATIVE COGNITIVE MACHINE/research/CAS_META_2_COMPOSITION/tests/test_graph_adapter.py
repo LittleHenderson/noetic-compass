@@ -81,6 +81,23 @@ def test_real_framework_module_import_is_lazy():
     assert "cas_cjt" not in real_framework.__dict__
 
 
+def test_config_import_comes_from_the_reference_wheel():
+    """Attempt 005's preserved error: CASformerConfig is not in cas_cjt.types;
+    it is exported by the casformer reference wheel."""
+    import inspect
+    import zipfile
+    from pathlib import Path
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.build_graph_training_framework)
+    assert "from casformer import CASformerConfig" in source
+    wheel = (Path(__file__).resolve().parents[2] / "CAS_CJT_TRANSFORMER_v0_2"
+             / "artifacts/release_reproduction/dist"
+             / "casformer_reference-0.1.0-py3-none-any.whl")
+    with zipfile.ZipFile(wheel) as archive:
+        init = archive.read("casformer/__init__.py").decode("utf-8")
+    assert "CASformerConfig" in init
+
+
 def test_encoder_passes_a_list_to_fit_train():
     """Attempt 003's preserved error: fit_train rejects tuples
     (LOSSLESS_TRAIN_INPUT_INVALID). The encoder must pass a list."""

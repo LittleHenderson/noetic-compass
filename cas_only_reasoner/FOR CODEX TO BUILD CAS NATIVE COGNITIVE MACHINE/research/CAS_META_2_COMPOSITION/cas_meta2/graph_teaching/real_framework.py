@@ -60,9 +60,9 @@ def build_graph_training_framework(torch, device, *, seed, encoder=None):
     """Lazy real construction; candidate copies only; encoder hook fail-closed."""
     require(encoder is not None, "ENCODER_HOOK_NOT_BUILT")
     try:
+        from casformer import CASformerConfig  # the reference wheel, not cas_cjt
         from cas_cjt.neural import RegisteredOperationBank, DECOMPOSE
         from cas_cjt.neural import OPERATION_REGISTRATIONS
-        from cas_cjt.types import CASformerConfig
         from cas_cjt.state import make_operation_contract
     except Exception as error:  # noqa: BLE001 - explicit failure, never fallback
         raise ValueError("CAS_CJT_IMPORT_UNRESOLVED:" + str(error)[:200]) from error
@@ -70,7 +70,10 @@ def build_graph_training_framework(torch, device, *, seed, encoder=None):
     require(contract.contract_id == TARGET_CONTRACT_ID, "DECOMPOSE_CONTRACT_ID_CHANGED")
     require(TARGET_PLASTICITY_ROLE in contract.plasticity_groups,
             "DECOMPOSE_PLASTICITY_ROLE_NOT_ADMITTED")
-    config = CASformerConfig()  # candidate config copy; accepted model untouched
+    config = CASformerConfig(d_model=encoder["d_model"], num_heads=2,
+                             num_relations=4, num_layers=1, dropout=0.0,
+                             attention_dropout=0.0, initial_cutoff=0.01,
+                             initial_saturation=100.0)  # candidate config copy
     bank = RegisteredOperationBank(config)
     module = bank.modules_by_operation[DECOMPOSE]
     module.to(device)
@@ -119,7 +122,7 @@ def build_encoder(torch, publics, d_model, seed):
 
     return {"encode": encode, "embed": embed, "tokenizer": tokenizer,
             "vocabulary_size": len(vocabulary), "projection_frozen": True,
-            "max_length": FROZEN_ENCODER_MAX_LENGTH}
+            "max_length": FROZEN_ENCODER_MAX_LENGTH, "d_model": d_model}
 
 
 class GraphLearner:
