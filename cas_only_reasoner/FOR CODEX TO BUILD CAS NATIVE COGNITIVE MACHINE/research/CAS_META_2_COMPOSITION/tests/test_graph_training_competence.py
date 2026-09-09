@@ -13,6 +13,11 @@ def test_fit_criterion_is_a_registered_deterministic_rule():
     assert met["met"] is True and met["margin"] == pytest.approx(0.1)
     not_met = competence.fit_criterion({"a": 1.0}, {"a": 0.99})
     assert not_met["met"] is False and not_met["margin"] == pytest.approx(0.01)
+    # the REAL trainer returns per-op {"total": float} dicts (run 003's
+    # preserved crash was int + dict summation here)
+    met_dict = competence.fit_criterion({"a": {"total": 1.0}, "b": {"total": 1.1}},
+                                        {"a": {"total": 0.9}, "b": {"total": 0.9}})
+    assert met_dict["met"] is True and met_dict["margin"] == pytest.approx(0.15)
 
 
 def test_outcome_is_one_of_the_three_registered_sentences():

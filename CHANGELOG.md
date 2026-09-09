@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 003 — normalized encoder PASSED the gate; training ran; serialization crash fixed
+
+Run 003 (`cas-meta2-competence-20260909201205-f0da3fa3`, owner GO, new
+`$4.00` reservation, ledger 42 → 43: `$222.00` reserved, `$178.00`
+unreserved, result sha `8c42c9dd…`, cleanup complete, elapsed 553.5 s): the
+unit-normalized relationship encoder PASSED the stage-1 gate on the GPU
+(rewire now distinguishable beyond the reorder baseline; forward/backward
+sanity passed), and stage 2 TRAINED to completion (64 steps) — then the
+result crashed in `fit_criterion` summing per-op `{"total": float}` dicts as
+ints. One-line fix with the shared `_loss_total` extraction; the pure test
+covers the dict shape; 130 graph tests pass. The training numbers were lost
+in the crash; the replacement re-runs the whole fixed sequence and needs a
+new owner GO + new `$4.00` reservation. Record:
+`ATTEMPT_COMPETENCE_003_FAILURE.md`.
+
 ## 2026-09-09 - Graph-first ^6: competence run 002 gate stop measured the numerical drowning; bound lines now unit-normalized
 
 Run 002 (`cas-meta2-competence-20260909195309-68ac4845`, owner GO, new

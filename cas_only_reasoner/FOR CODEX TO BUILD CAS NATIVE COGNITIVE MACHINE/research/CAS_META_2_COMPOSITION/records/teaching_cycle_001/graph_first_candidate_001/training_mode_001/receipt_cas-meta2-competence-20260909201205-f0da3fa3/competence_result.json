@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\n/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py:170: UserWarning: No PYTORCH_KERNEL_CACHE_PATH or HOME environment variable set! This disables kernel caching. (Triggered internally at /pytorch/aten/src/ATen/native/cuda/jit_utils.cpp:1489.)\n  for token_id in segment]).prod(dim=0)\nTraceback (most recent call last):\n  File \"/opt/cas-competence/package/_inner_runner.py\", line 20, in <module>\n    report = competence.launch(run_id=job, torch=torch, framework=framework,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/competence.py\", line 158, in launch\n    criterion = fit_criterion(training[\"training\"][\"before_loss\"],\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/competence.py\", line 39, in fit_criterion\n    margin = mean(before_loss.values()) - mean(after_loss.values())\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/competence.py\", line 35, in mean\n    return sum(values) / max(1, len(values))\n           ^^^^^^^^^^^\nTypeError: unsupported operand type(s) for +: 'int' and 'dict'\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-competence-20260909201205-f0da3fa3",
+  "schema": "cas-graph-training-competence-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}

@@ -35,8 +35,15 @@ def mean(values):
     return sum(values) / max(1, len(values))
 
 
+def _loss_total(value):
+    """Per-op losses are {"total": float} dicts in the real trainer; accept
+    plain floats as well (test fakes)."""
+    return value if isinstance(value, (int, float)) else value["total"]
+
+
 def fit_criterion(before_loss, after_loss):
-    margin = mean(before_loss.values()) - mean(after_loss.values())
+    margin = (mean([_loss_total(value) for value in before_loss.values()])
+              - mean([_loss_total(value) for value in after_loss.values()]))
     return {"met": margin > FIT_MARGIN, "margin": margin,
             "threshold": FIT_MARGIN,
             "rule": "mean(after) < mean(before) - 0.02"}
