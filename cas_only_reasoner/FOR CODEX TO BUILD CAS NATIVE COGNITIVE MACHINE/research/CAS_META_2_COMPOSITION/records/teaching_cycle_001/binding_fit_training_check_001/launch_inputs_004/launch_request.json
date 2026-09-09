@@ -1,0 +1,8 @@
+{
+  "schema": "cas-teaching-binding-fit-launch-request/1",
+  "job": "cas-meta2-teaching-binding-20260909000105-9e8f0937",
+  "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+  "archive_sha256": "98712cae5ed31bff5740481127116dd4711cde207937b343c847b5561be1df01",
+  "manifest_sha256": "7560e33869b823e4bd03bf7d5dea6af2cf259caab052e970f59c2888e830e197",
+  "launch_authorized": false
+}

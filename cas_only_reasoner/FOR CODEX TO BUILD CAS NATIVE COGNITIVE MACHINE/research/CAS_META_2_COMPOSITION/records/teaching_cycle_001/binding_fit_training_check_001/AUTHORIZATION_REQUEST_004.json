@@ -1,0 +1,44 @@
+{
+  "schema": "cas-teaching-binding-fit-owner-authorization-request/1",
+  "recorded_utc": "2026-09-09T00:05:00Z",
+  "status": "AWAITING_OWNER_AUTHORIZATION_NO_LAUNCH_NO_RESERVATION",
+  "job": "cas-meta2-teaching-binding-20260909000105-9e8f0937",
+  "bindings": {
+    "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+    "archive_sha256": "98712cae5ed31bff5740481127116dd4711cde207937b343c847b5561be1df01",
+    "manifest_sha256": "7560e33869b823e4bd03bf7d5dea6af2cf259caab052e970f59c2888e830e197",
+    "package_receipt": "records/teaching_cycle_001/binding_fit_training_check_001/package_002/receipt.json",
+    "launch_request_sha256": "fc358d6f2306b28eb1dd29c67d4dba1456ea427bd48900d7f5f1030dd6d1b806",
+    "launch_request_path": "records/teaching_cycle_001/binding_fit_training_check_001/launch_inputs_004/launch_request.json",
+    "corrected_launcher": "aws/binding_fit_launch.py at commit d031ba61"
+  },
+  "unchanged_from_previous_authorization": [
+    "neural task and entrypoint: cas_meta2.binding_fit_training.mode.launch (source freeze 31e787923390cfdfc83d2326b48e606da0fa71a1)",
+    "candidate definitions, data, model definitions, and scoring (cas_meta2/binding_fit_training and cas_meta2/teaching_cycle files, same git objects)",
+    "registered training budget: max_optimizer_steps 48, max_wall_seconds 600.0, learning_rate 0.003",
+    "reservation amount: 4.00 USD, exactly once, no refund",
+    "resource plan: account 807562639912, us-west-2, ami-0fbbd0facbc9e3cff, g7.2xlarge, one instance, RTX PRO 4500, automatic_retries 0",
+    "single launch attempt with bounded readiness checks and verified cleanup"
+  ],
+  "changed_since_attempt_003": [
+    "rendered worker now captures the inner runner's stdout/stderr and preserves the original inner error in the failure report (attempt 003 lost it)",
+    "collect() writes training_result.json so the lifecycle summary can never collide (attempt 003 crashed on the collision)",
+    "cleanup waits bounded (300 s) for instance termination before security-group deletion (attempt 003 left one group)",
+    "the package identities above are therefore NEW (built from the corrected launcher's renderer); the neural source is byte-identical to attempts 001-003"
+  ],
+  "demonstrated_correction": {
+    "test_file": "tests/test_binding_fit_worker_execution.py",
+    "coverage": [
+      "the actual exported worker text run with a real, deliberately failing, non-neural child process preserves the child's original error verbatim (INNER_RUNNER_EXIT_1 + marked RuntimeError traceback)",
+      "with a second reporting-stage failure (upload client raises), the original child error still survives in results/result.json",
+      "the launcher wait/collect path carries the original child error into training_result.json"
+    ],
+    "environment_comparison": "records/teaching_cycle_001/binding_fit_training_check_001/ENVIRONMENT_COMPARISON.md",
+    "tests_passed": "84 passed, 24 subtests passed (binding_fit_launch 43 + worker_execution 3 + budget)"
+  },
+  "execution_gates": [
+    "launch_authorized remains false until the owner signs a new authorization record bound to launch_request_sha256 fc358d6f2306b28eb1dd29c67d4dba1456ea427bd48900d7f5f1030dd6d1b806",
+    "no launch and no reservation have been performed for this job",
+    "frozen negatives (0/72 learned composition) and all prior attempt records are preserved untouched"
+  ]
+}

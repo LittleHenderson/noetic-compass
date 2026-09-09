@@ -179,6 +179,13 @@ verification wait (`test_await_instance_profile_waits_until_role_visible`,
 and evidence persistence on cleanup failure. No real tensor or provider
 library is imported.
 
+`tests/test_binding_fit_worker_execution.py` — 3 tests that execute the ACTUAL
+rendered worker text with a real, deliberately failing, NON-NEURAL child
+process: (1) the original child error is preserved verbatim in the failure
+report; (2) a second reporting-stage failure leaves the original child error
+intact on disk; (3) the launcher wait/collect path carries it into
+`training_result.json`. Combined suite: 84 passed, 24 subtests passed.
+
 ## Attempt log
 
 | Attempt | Job | Outcome |
@@ -186,3 +193,4 @@ library is imported.
 | 001 | `cas-meta2-teaching-binding-20260908120635-035f9ac7` | REFUSED_AT_PREFLIGHT, `$0.00` spent — `AccessDeniedException` on `pricing.get_products` issued from `us-west-2`. See `PREFLIGHT_REFUSAL_ATTEMPT_001.md`. |
 | 002 | `cas-meta2-teaching-binding-20260908191109-dcf939ab` | AWS_BINDING_FIT_FAILED — preflight and the `$4.00` reservation succeeded, then `RunInstances` refused the just-created instance-profile ARN (IAM eventual consistency; no verification wait existed) and cleanup hit `DeleteConflict` on the role/profile. Adapter fixed (bounded verified wait before the single launch attempt; cleanup detach + inline-policy removal). IAM leftovers remediated and verified absent. See `ATTEMPT_002_LAUNCH_FAILURE.md`. |
 | 003 | `cas-meta2-teaching-binding-20260908203112-fb18899f` | AWS_BINDING_FIT_FAILED — launch + bootstrap succeeded, then the worker's inner runner (`mode.launch`) exited 1 and the original inner error was not preserved (worker ran it with inherited output; the bootstrap log died with the instance). Lifecycle write then collided with the collected result name. Fixed: worker captures inner stdout/stderr into the failure report; `collect()` writes `training_result.json`; cleanup waits for termination before SG deletion. Leftover SG remediated and verified absent. See `ATTEMPT_003_RECOVERY.md`. |
+| 004 | `cas-meta2-teaching-binding-20260909000105-9e8f0937` | NOT LAUNCHED, NOT RESERVED — corrected package built to `package_002/` (archive `98712cae…`, manifest `7560e338…`); inert request registered in `launch_inputs_004/` (sha `fc358d6f…`); authorization requested in `AUTHORIZATION_REQUEST_004.json`. Error preservation demonstrated by `tests/test_binding_fit_worker_execution.py`; environment comparison in `ENVIRONMENT_COMPARISON.md`. |
