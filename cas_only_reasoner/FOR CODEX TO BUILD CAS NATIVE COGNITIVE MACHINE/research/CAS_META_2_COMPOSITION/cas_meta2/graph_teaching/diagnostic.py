@@ -69,16 +69,20 @@ def measure_option_geometry(learner):
 def measure_gradient_test(learner, position):
     """Same example, three alternative targets, NO optimizer step.
 
-    Returns per-target loss and per-matrix gradient norms. Weight decay is
+    Returns per-target loss and per-matrix gradient norms. The forward is
+    recomputed INSIDE the per-target loop so each backward consumes its own
+    graph (attempt 001's preserved error was a second backward through an
+    already-freed graph). The module forward is deterministic (dropout 0.0),
+    so the three recomputations return identical scores. Weight decay is
     0.0 in the learner, so any parameter movement in the recorded pilot came
     from these task gradients.
     """
     task = learner.tasks[position]
-    scores = learner.forward(position)
     module = learner.module
     results = []
     for target in (0, 1, 2):
         module.zero_grad()
+        scores = learner.forward(position)  # fresh graph per target
         loss = learner.torch.nn.functional.cross_entropy(
             scores.unsqueeze(0),
             learner.torch.tensor([target], device=learner.device))
