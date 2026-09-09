@@ -1,0 +1,12 @@
+{
+  "schema": "cas-graph-training-launch-authority/1",
+  "job": "cas-meta2-teaching-graph-20260909040850-e4a39dea",
+  "source_sha": "32d19fa2aaa058e624a31f230f95e7193dd7ab71",
+  "archive_sha256": "863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4",
+  "manifest_sha256": "dac94d10ac5447a36f57bc7c03c55d8ef30b1e3fc43d1e7c9281e0f3452647ca",
+  "owner_authorization_sha256": "0ab92492a67f9d6e0e5ed15928b819fb171ee2963f1c1d6ed6683fe86649e70d",
+  "learning_rate": 0.003,
+  "max_optimizer_steps": 64,
+  "max_wall_seconds": 600.0,
+  "reservation_usd": "4.00"
+}

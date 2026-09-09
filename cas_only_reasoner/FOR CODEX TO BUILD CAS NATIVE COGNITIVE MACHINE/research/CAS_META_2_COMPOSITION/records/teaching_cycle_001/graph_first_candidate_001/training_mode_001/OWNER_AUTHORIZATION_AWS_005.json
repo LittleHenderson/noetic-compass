@@ -1,0 +1,46 @@
+{
+  "schema": "cas-graph-training-owner-authorization/5",
+  "recorded_utc": "2026-09-09T04:15:00Z",
+  "owner_instruction_raw": "I authorize one new graph-first ^6 training job using package_005, bound to the full source, archive, and manifest identities in the attached authorization request, the preparation-evidence hash, and the actual corrected launcher identity. Authorize one new $4.00 reservation, with 64 optimizer steps and 600 seconds per condition, totals 128 steps and 1,200 seconds, under the existing resource and shutdown limits. No automatic retries or additional experiments. Train only candidate copies within operation:^6. Preserve the accepted model, graph lessons, scoring, protected evaluation boundaries, error capture, and cleanup requirements. Return actual lesson exposure by operation, completed updates, before/after losses and registered evaluation results, checkpoint identities, and the parameter-containment report. Keep execution, evidence collection, and cleanup outcomes separate. Report the preparation checks precisely: variable answer positions are demonstrated; universal absence of shortcuts is not. Padding was not exercised in this connected probe. This approval does not authorize the separate binding-fit experiment.",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "bound_request_sha256": "2edc441b00851c576bb1e70730d2532a25227cece3f172bef9afea7f1ca66538",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_005/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909040850-e4a39dea",
+    "source_sha": "32d19fa2aaa058e624a31f230f95e7193dd7ab71",
+    "archive_sha256": "863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4",
+    "manifest_sha256": "dac94d10ac5447a36f57bc7c03c55d8ef30b1e3fc43d1e7c9281e0f3452647ca",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_005/",
+    "preparation_evidence_sha256": "df9fd0c7fb3367f51acff67210157dad820bfe022c8c1423d349d00d7dae8616",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 238af1b519b9fc821236e6b2473079938b333b39"
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "preparation_check_reporting": {
+    "variable_answer_positions_demonstrated": true,
+    "universal_absence_of_shortcuts": "NOT demonstrated",
+    "padding_exercised_in_connected_probe": false
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test sealed, predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "the first scheduled training update must record that encoding, forward, loss, backward, and the permitted update were actually reached",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the separate binding-fit experiment (attempt 004 request remains pending)",
+    "any additional experiment beyond this single training job",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
