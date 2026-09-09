@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 paid attempt 002: lifecycle worked; original inner error PRESERVED (explicit-enable gate)
+
+The corrected attempt (`cas-meta2-teaching-graph-20260909021717-7891f672`,
+`$4.00` reserved, ledger 24 → 25: `$150.00` reserved, `$250.00` unreserved)
+ran the full lifecycle successfully — the attempt-001 wait/collect defect is
+gone — and the worker's **original inner error was preserved verbatim for the
+first time**: `ValueError: TEACHING_GPU:EXPLICIT_ENABLE_REQUIRED`. The
+teaching-cycle GPU guard requires `CAS_META2_RUN_TEACHING_CYCLE=1`, which the
+bootstrap did not export; the run never reached CUDA or training. The
+error-capture machinery itself worked exactly as the review demanded.
+
+- **Fixed** (`7eec3604`, all outside the package): bootstrap now exports the
+  explicit enable flag; termination wait 300 s → 600 s (one leftover SG from
+  the slow shutdown was remediated and verified absent). Launcher suite now 16.
+- Package identities unchanged (`fec63492…` / `e6c87689…` / `e435e411…`); a
+  corrected re-attempt needs a new job, a new `$4.00` reservation, and a new
+  owner record. **No retry was attempted.** Evidence:
+  `training_mode_001/ATTEMPT_GRAPH_002_FAILURE.md` + receipt directory.
+- Binding-fit attempt 003's lost error remains UNKNOWN; the same guard class
+  existing there is not promoted beyond hypothesis. Attempt-004 request still
+  pending.
+
 ## 2026-09-09 - Graph-first ^6 paid attempt 001: launched, then destroyed by a launcher defect (recorded honestly)
 
 The owner-authorized paid run (`cas-meta2-teaching-graph-20260909011302-e654ae56`,
