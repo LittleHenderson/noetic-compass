@@ -1,0 +1,40 @@
+{
+  "schema": "cas-graph-training-owner-authorization/1",
+  "recorded_utc": "2026-09-09T02:15:00Z",
+  "owner_instruction_raw": "YOU HAVE AUTHORIZATION: This update closes the missing connection: the agent reports that your graph lessons are now wired into a trainable copy of the actual ^6 'decompose' module. The package is built. It has not been launched or trained yet.",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "bound_request_sha256": "b7d7e6b74dc2cd890fe07bf955d4e8f8f173ec702afc386232059f0e3428543d",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_001/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909011302-e654ae56",
+    "source_sha": "fec6349211fa3d67e612314f9280879dcd87dd53",
+    "archive_sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a",
+    "manifest_sha256": "e435e411c955f5ea7cc15dad33da28b14f1e80c9a41a2bca4b1e21f658bd9bc7",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_002/"
+  },
+  "pre_launch_correction": {
+    "recorded": "Before the first attempt, with NOTHING reserved and NO launch performed, the finished package's rendered worker was found to call _cuda() without importing gpu_adapter. The renderer was corrected (commit fec6349211fa3d67e612314f9280879dcd87dd53) and the package was rebuilt to package_002 with the identities bound above. This is a pre-launch correction of a launch-adapter defect, not a retry: the earlier identities (package_001, source ce1a3882, archive 52151c8b) were never launched and never reserved."
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test are sealed and read only by the post-training evaluator with predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "reading protected final-test answers of any other task",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
