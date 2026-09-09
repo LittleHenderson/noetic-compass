@@ -1,0 +1,53 @@
+{
+  "authorization": {
+    "archive_sha256": "507ace06661ecb16d1a149d1dfa7d43754290689f7c0ec0f24056123a34d17e3",
+    "authorization_context": "Replacement attempt authorized after attempt 001 preserved the backward-through-freed-graph spec bug. The fix (forward recomputed per target) is committed at 51f12c61 with fake-torch regression tests that reproduce the failure; 90 graph tests pass. This run measures per-record scores/spread, option geometry, and the alternative-target gradient test on BOTH prompt-framing arms; it takes NO optimizer step and fails closed if any weight changed. Bound decision rules (from LN3_DIAGNOSTIC.md): (1) equal scores with distinct option vectors -> the fixed readout/projection loses the distinction; (2) near-parallel option vectors -> projection/pooling erases distinctions before the readout; (3) differing per-target losses with ~0 gradient norms -> the corrective signal does not reach the module; (4) usefully different gradient norms -> the machinery can express a preference and the flat pilot points to the allowance or optimization dynamics. The result is a measurement; no learning or capability claim follows from it alone.",
+    "bound_request_sha256": "d7823d544d5a15f0cb9220bc19174d8376ccd6f8fc58e6c48e0f62c2607e89e3",
+    "graph_training_ln3_diagnostic_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-ln3-diagnostic-20260909085756-95693cd8",
+    "launcher": "aws/graph_training_ln3_diagnostic_launch.py at commit 68c9fc7a4c0983ffba9bcafa47f8c59a1c0d1fc2",
+    "manifest_sha256": "310595ca40be9de7a6378e846eb93ffae00ca8dacbaf7b407e36129f951b09c1",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_package_002/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_launch_002/launch_request.json",
+    "source_sha": "51f12c612429eb1004f0fd4b0f358e04c2914722"
+  },
+  "execution_gates": [
+    "single launch attempt through the diagnostic launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "measurement only: no optimizer step anywhere; worker records checkpoint identity before and after each arm and fails closed if any weight changed",
+    "the accepted model, graph lessons, scoring, protected evaluation boundaries, and frozen negatives (0/72) stay untouched; sealed splits are not consulted",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any larger training run or additional experiment beyond this single measurement job",
+    "any optimizer step or weight update in the diagnostic worker",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any learning or capability claim from this diagnostic's measurements alone"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T08:57:56.269046+00:00",
+  "run_bounds": {
+    "automatic_retries": 0,
+    "conditions_kind": "prompt_framing_only",
+    "data": {
+      "practice": 16,
+      "sealed_not_read": true,
+      "train": 48
+    },
+    "jobs": 1,
+    "measurement": {
+      "learning_rate_constructor_only": 0.003,
+      "max_wall_seconds": 1200.0,
+      "optimizer_steps_permitted": 0
+    },
+    "reservation_usd": "4.00",
+    "totals": {
+      "arms": [
+        "cas",
+        "generic"
+      ]
+    }
+  },
+  "schema": "cas-graph-training-ln3-diagnostic-owner-authorization/1"
+}

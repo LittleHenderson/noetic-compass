@@ -1,10 +1,12 @@
-# Graph-first ^6 — ln(3) neural diagnostic — REPLACEMENT request (NOT REGISTERED, NOT RESERVED)
+# Graph-first ^6 — ln(3) neural diagnostic — REPLACEMENT request (AUTHORIZED, REGISTERED)
 
-Status: **AWAITING_OWNER_APPROVAL.** Attempt 001
-(`cas-meta2-ln3-diagnostic-20260909084139-f6f49be5`) is preserved as a
-spec-bug failure (`ATTEMPT_LN3_001_FAILURE.md`). The fix is committed and
-test-locked; a source-only replacement package is BUILT but NOT launched. No
-new reservation, no launch, no automatic retry.
+Status: **AUTHORIZED_BY_OWNER / REGISTERED.** The owner's instruction **"GO"**
+(recorded `2026-09-09T08:57:56Z`) authorized the replacement. Job id
+`cas-meta2-ln3-diagnostic-20260909085756-95693cd8`; owner record
+`OWNER_AUTHORIZATION_AWS_LN3_002.json` (sha `b856257b…`); launch inputs
+`ln3_diagnostic_launch_002/` (request sha `d7823d54…`, authority sha
+`f3c36c94…`). One new `$4.00` reservation, exactly once, no refund, no
+automatic retry.
 
 ## What failed, and the fix (no machinery finding)
 
