@@ -1,0 +1,426 @@
+{
+  "arms": [
+    {
+      "arm": "cas",
+      "report": {
+        "budget": {
+          "per_arm": {
+            "learning_rate": 0.003,
+            "max_optimizer_steps": 64,
+            "max_wall_seconds": 600.0
+          },
+          "total": {
+            "arms": 2,
+            "optimizer_steps": 128,
+            "wall_seconds": 1200.0
+          }
+        },
+        "claims": {
+          "answer_edges_present": false,
+          "sealed_splits_read": false,
+          "specialist_claimed": false
+        },
+        "condition": {
+          "arm": "cas",
+          "kind": "prompt_framing_only",
+          "note": "Both conditions share the same graphs, options, and reference answers; only the prompt framing differs. This is not the CASformer-vs-generic-network comparison."
+        },
+        "containment": {
+          "contained": true,
+          "forbidden_changes": [],
+          "permitted_changes": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "total_changed": 3
+        },
+        "run_id": "cas-meta2-teaching-graph-20260909073316-0390037d.cas",
+        "schema": "cas-meta2-graph-teaching-training/1",
+        "scope": {
+          "allowed": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+          "frozen": [],
+          "role": "operation:^6"
+        },
+        "seed": 20260909,
+        "target": {
+          "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+          "plasticity_role": "operation:^6"
+        },
+        "training": {
+          "after_loss": {
+            "FIND_SHARED_PART": {
+              "total": 1.0986123085021973
+            },
+            "LIST_PARTS": {
+              "total": 1.0986123085021973
+            },
+            "REACHED_VIA": {
+              "total": 1.0986123085021973
+            }
+          },
+          "automatic_retries": 0,
+          "before_loss": {
+            "FIND_SHARED_PART": {
+              "total": 1.0986123085021973
+            },
+            "LIST_PARTS": {
+              "total": 1.0986123085021973
+            },
+            "REACHED_VIA": {
+              "total": 1.0986123085021973
+            }
+          },
+          "checkpoint_identity": "690f6b613f3b6498d4241b1656d105382a29de735ce556430fa84883282b5010",
+          "completed_updates": 64,
+          "lesson_exposure": {
+            "boundary": "An optimizer step is a single correction on one record, not a complete teaching cycle.",
+            "records_by_op": {
+              "FIND_SHARED_PART": 10,
+              "LIST_PARTS": 10,
+              "REACHED_VIA": 10
+            },
+            "updates_by_op": {
+              "FIND_SHARED_PART": 22,
+              "LIST_PARTS": 22,
+              "REACHED_VIA": 20
+            }
+          }
+        }
+      },
+      "sealed": {
+        "boundary": "post-training sealed-split evaluation only; predictions sealed before answers were consulted",
+        "per_split_op": {
+          "test:FIND_SHARED_PART": {
+            "attempted": 1,
+            "correct": 0
+          },
+          "test:LIST_PARTS": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "test:REACHED_VIA": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "validation:FIND_SHARED_PART": {
+            "attempted": 2,
+            "correct": 0
+          },
+          "validation:LIST_PARTS": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "validation:REACHED_VIA": {
+            "attempted": 3,
+            "correct": 1
+          }
+        },
+        "sealed_predictions": [
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "idea17",
+              "idea3"
+            ],
+            "record_id": "e8387a304f0c410531b94d38f0c31c968d950822a4ae21967045dc6e9e15a7c4",
+            "split": "validation"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "idea4",
+              "idea5"
+            ],
+            "record_id": "ee7343b74e066b2828d6a21da1e6ac00ed5152ead4d67adbec591562522d079e",
+            "split": "validation"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "idea17",
+            "record_id": "955fd6765158d566ce089e56dc7fea38ece0046f6397a10145de06751ea551a2",
+            "split": "validation"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "idea1",
+            "record_id": "57f3eaf6a7b13140b35645462685f8d14dd6e7ec2e423e85bc7fe24c50d47df8",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "direct",
+            "record_id": "464acfd10572ed5427030cfaa927db4282d554b8ada889c1e62bfdda3d19e389",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "absent",
+            "record_id": "3d2457c6fce0f5fc43d3e65c3db685eccc01508ce6357ab7fdace2289fc9d538",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "via:idea17",
+            "record_id": "af41e8c98ac0bc8f3471876ddb7812a31968d7e1477fa4a0a415d0974bb15935",
+            "split": "validation"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "A8",
+              "F"
+            ],
+            "record_id": "fbe0f88dc51b1f4f0835442e8aeb0c248b210a387c283baaf73b1b07f0e5158d",
+            "split": "test"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "A7"
+            ],
+            "record_id": "c89dbce8c6522048931756f028c2309daea3ea0c52d563555f79c89251b0c09f",
+            "split": "test"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "A7",
+            "record_id": "f868a1581de9afd751d1c5e348ec4bb628fed29639ca2a495310c7ab2b5dce73",
+            "split": "test"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "direct",
+            "record_id": "3b9868a3bb62d2e52cbf5c7cc3e88696532d3156c283ef0b8a44f088d2915dce",
+            "split": "test"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "via:A7",
+            "record_id": "e5258f94a340e50dd3bd7681fdf9712b15e96c9ba7013047e04e998424c82070",
+            "split": "test"
+          }
+        ],
+        "training_path_never_reads_sealed": true
+      }
+    },
+    {
+      "arm": "generic",
+      "report": {
+        "budget": {
+          "per_arm": {
+            "learning_rate": 0.003,
+            "max_optimizer_steps": 64,
+            "max_wall_seconds": 600.0
+          },
+          "total": {
+            "arms": 2,
+            "optimizer_steps": 128,
+            "wall_seconds": 1200.0
+          }
+        },
+        "claims": {
+          "answer_edges_present": false,
+          "sealed_splits_read": false,
+          "specialist_claimed": false
+        },
+        "condition": {
+          "arm": "generic",
+          "kind": "prompt_framing_only",
+          "note": "Both conditions share the same graphs, options, and reference answers; only the prompt framing differs. This is not the CASformer-vs-generic-network comparison."
+        },
+        "containment": {
+          "contained": true,
+          "forbidden_changes": [],
+          "permitted_changes": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "total_changed": 3
+        },
+        "run_id": "cas-meta2-teaching-graph-20260909073316-0390037d.generic",
+        "schema": "cas-meta2-graph-teaching-training/1",
+        "scope": {
+          "allowed": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+          "frozen": [],
+          "role": "operation:^6"
+        },
+        "seed": 20260909,
+        "target": {
+          "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+          "plasticity_role": "operation:^6"
+        },
+        "training": {
+          "after_loss": {
+            "FIND_SHARED_PART": {
+              "total": 1.0986123085021973
+            },
+            "LIST_PARTS": {
+              "total": 1.0986123085021973
+            },
+            "REACHED_VIA": {
+              "total": 1.0986123085021973
+            }
+          },
+          "automatic_retries": 0,
+          "before_loss": {
+            "FIND_SHARED_PART": {
+              "total": 1.0986123085021973
+            },
+            "LIST_PARTS": {
+              "total": 1.0986122965812684
+            },
+            "REACHED_VIA": {
+              "total": 1.0986123085021973
+            }
+          },
+          "checkpoint_identity": "24b7c186f976b1ea5721dfd3945499091db09ffbc3cc734395b85a75e086ed52",
+          "completed_updates": 64,
+          "lesson_exposure": {
+            "boundary": "An optimizer step is a single correction on one record, not a complete teaching cycle.",
+            "records_by_op": {
+              "FIND_SHARED_PART": 10,
+              "LIST_PARTS": 10,
+              "REACHED_VIA": 10
+            },
+            "updates_by_op": {
+              "FIND_SHARED_PART": 22,
+              "LIST_PARTS": 22,
+              "REACHED_VIA": 20
+            }
+          }
+        }
+      },
+      "sealed": {
+        "boundary": "post-training sealed-split evaluation only; predictions sealed before answers were consulted",
+        "per_split_op": {
+          "test:FIND_SHARED_PART": {
+            "attempted": 1,
+            "correct": 0
+          },
+          "test:LIST_PARTS": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "test:REACHED_VIA": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "validation:FIND_SHARED_PART": {
+            "attempted": 2,
+            "correct": 0
+          },
+          "validation:LIST_PARTS": {
+            "attempted": 2,
+            "correct": 1
+          },
+          "validation:REACHED_VIA": {
+            "attempted": 3,
+            "correct": 1
+          }
+        },
+        "sealed_predictions": [
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "idea1",
+              "idea17",
+              "idea3",
+              "idea6"
+            ],
+            "record_id": "e8387a304f0c410531b94d38f0c31c968d950822a4ae21967045dc6e9e15a7c4",
+            "split": "validation"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "idea4",
+              "idea5"
+            ],
+            "record_id": "ee7343b74e066b2828d6a21da1e6ac00ed5152ead4d67adbec591562522d079e",
+            "split": "validation"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "idea17",
+            "record_id": "955fd6765158d566ce089e56dc7fea38ece0046f6397a10145de06751ea551a2",
+            "split": "validation"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "idea1",
+            "record_id": "57f3eaf6a7b13140b35645462685f8d14dd6e7ec2e423e85bc7fe24c50d47df8",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "direct",
+            "record_id": "464acfd10572ed5427030cfaa927db4282d554b8ada889c1e62bfdda3d19e389",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "absent",
+            "record_id": "3d2457c6fce0f5fc43d3e65c3db685eccc01508ce6357ab7fdace2289fc9d538",
+            "split": "validation"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "via:idea17",
+            "record_id": "af41e8c98ac0bc8f3471876ddb7812a31968d7e1477fa4a0a415d0974bb15935",
+            "split": "validation"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "A8",
+              "F"
+            ],
+            "record_id": "fbe0f88dc51b1f4f0835442e8aeb0c248b210a387c283baaf73b1b07f0e5158d",
+            "split": "test"
+          },
+          {
+            "op": "LIST_PARTS",
+            "predicted": [
+              "A7"
+            ],
+            "record_id": "c89dbce8c6522048931756f028c2309daea3ea0c52d563555f79c89251b0c09f",
+            "split": "test"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "predicted": "A7",
+            "record_id": "f868a1581de9afd751d1c5e348ec4bb628fed29639ca2a495310c7ab2b5dce73",
+            "split": "test"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "direct",
+            "record_id": "3b9868a3bb62d2e52cbf5c7cc3e88696532d3156c283ef0b8a44f088d2915dce",
+            "split": "test"
+          },
+          {
+            "op": "REACHED_VIA",
+            "predicted": "via:A7",
+            "record_id": "e5258f94a340e50dd3bd7681fdf9712b15e96c9ba7013047e04e998424c82070",
+            "split": "test"
+          }
+        ],
+        "training_path_never_reads_sealed": true
+      }
+    }
+  ],
+  "job": "cas-meta2-teaching-graph-20260909073316-0390037d",
+  "schema": "cas-graph-training-result/1"
+}
