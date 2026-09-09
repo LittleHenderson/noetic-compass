@@ -61,6 +61,18 @@ module input:
    indexed directly with a bounds guard. This was the earliest stage where
    content became indistinguishable — before any pooling or the module.
 
+   **Amendment 2026-09-09 (relationship encoder 001, owner-directed,
+   PREPARED not launched):** the problem vector is no longer mean-pooled.
+   Each complete `node` line and `rel` line is bound into ONE joint vector
+   by a fixed elementwise (Hadamard) product over the line's token rows;
+   the bound lines are summed and the non-structural framing/request tokens
+   are mean-pooled on top. Complete source-relationship-target pairings and
+   node-contents associations survive; independent role sums are NOT used.
+   The module interface (one d_model vector in/out), the repaired token
+   lookup, the option path, the learning scope, and the teaching allowance
+   are unchanged; no trainable components were added. See
+   `RELATIONSHIP_ENCODER_001.md`.
+
 ## 2. What the module is and what it predicts
 
 - The module is a CANDIDATE copy of the registered decompose transform

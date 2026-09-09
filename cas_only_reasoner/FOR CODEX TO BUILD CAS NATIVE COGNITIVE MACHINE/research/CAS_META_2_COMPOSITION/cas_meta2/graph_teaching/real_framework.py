@@ -94,7 +94,7 @@ def build_encoder(torch, publics, d_model, seed, device):
     DEVICE the module lives on (attempt 006's preserved error was a CPU/CUDA
     device mismatch exactly here). Nothing here learns.
     """
-    from cas_meta2.features_v2 import LosslessPublicTokenizer
+    from cas_meta2.features_v2 import LosslessPublicTokenizer, _word_token
     tokenizer = LosslessPublicTokenizer.fit_train(list(publics),
                                                   max_length=FROZEN_ENCODER_MAX_LENGTH)
     vocabulary = tuple(tokenizer.vocabulary)
@@ -131,8 +131,51 @@ def build_encoder(torch, publics, d_model, seed, device):
         require(set(slot_ids) == {0, 1, 2}, "PUBLIC_SLOT_ENCODING_INCOMPLETE")
         return problem_ids, slot_ids
 
-    return {"encode": encode, "embed": embed, "tokenizer": tokenizer,
+    # Relationship-preserving problem encoder (owner-directed 2026-09-09).
+    # Attempt 006's same-token rewiring contrast measured that mean-pooling
+    # over the problem tokens is a BAG OF WORDS: which part belongs to which
+    # idea does not survive. The rule below binds each complete connection
+    # and each node's contents into ONE joint vector BEFORE aggregation, via
+    # a fixed elementwise (Hadamard) product over the segment's rows — a
+    # joint, role-sensitive combination, NOT independent role sums. Nothing
+    # here learns and nothing computes the task's answer.
+    node_id = vocabulary.index(_word_token("node"))
+    rel_id = vocabulary.index(_word_token("rel"))
+    newline_id = vocabulary.index(_word_token("\n"))
+
+    def encode_problem(public):
+        encoded = tokenizer.encode_public(public)
+        problem_ids = [token_id for token_id, kind in zip(encoded["ids"], encoded["kinds"])
+                       if kind == 0]
+        # LINE-based segmentation: "node"/"rel" open a structural segment; the
+        # newline closes it. Framing/request tokens (outside structural
+        # lines) go to rest, so the question is NEVER bound into a segment.
+        segments = []   # each: [marker, ...] token ids of one node / one rel line
+        rest = []
+        current = None
+        for token_id in problem_ids:
+            if token_id == newline_id:
+                current = None
+            elif token_id in (node_id, rel_id):
+                current = [token_id]
+                segments.append(current)
+            elif current is not None:
+                current.append(token_id)
+            else:
+                rest.append(token_id)
+        require(segments, "PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED")
+        bound = [torch.stack([embed(token_id) for token_id in segment]).prod(dim=0)
+                 for segment in segments]
+        vector = torch.stack(bound).sum(dim=0)
+        if rest:
+            vector = vector + torch.stack([embed(token_id)
+                                           for token_id in rest]).mean(dim=0)
+        return vector
+
+    return {"encode": encode, "embed": embed, "encode_problem": encode_problem,
+            "tokenizer": tokenizer,
             "vocabulary_size": len(vocabulary), "projection_frozen": True,
+            "structural_problem_binding": True,
             "max_length": FROZEN_ENCODER_MAX_LENGTH, "d_model": d_model}
 
 
@@ -172,7 +215,19 @@ class GraphLearner:
     ([OBS] + one tag token each) have EQUAL length — equal length does not
     rule out projected-vector collapse (sum = 2 × mean), so its flatness is
     not explained by answer length; the distinct tag vectors and the module
-    output are measured by the diagnostic instead."""
+    output are measured by the diagnostic instead.
+
+    Relationship encoder 001 (owner-directed 2026-09-09, PREPARED not
+    launched): the PROBLEM vector is now built by the structural encoder
+    (``encoder["encode_problem"]``): each complete node line and each
+    complete relation line is bound into ONE joint vector by a fixed
+    elementwise (Hadamard) product over its token rows, the bound segment
+    vectors are summed, and the non-structural tokens (framing/request) are
+    mean-pooled on top. Complete source-relationship-target pairings and
+    node-contents associations survive; independent role sums are NOT used.
+    The module interface (one d_model vector in, one out), the repaired
+    token lookup, the option path, the learning scope, and the teaching
+    allowance are UNCHANGED. See RELATIONSHIP_ENCODER_001.md."""
 
     def __init__(self, torch, framework, public_tasks, device, learning_rate):
         self.torch = torch
@@ -187,18 +242,13 @@ class GraphLearner:
         self._problem_vectors = []
         self._option_vectors = []
         for task in public_tasks:
-            problem_ids, slot_ids = framework.encoder["encode"](task["public"])
-            self._problem_vectors.append(self._mean(problem_ids))
+            _problem_ids, slot_ids = framework.encoder["encode"](task["public"])
+            self._problem_vectors.append(
+                framework.encoder["encode_problem"](task["public"]))
             content = self._content_ids(slot_ids)
             zero = self.torch.zeros_like(self._problem_vectors[-1])
             self._option_vectors.append([self._sum(item) if item else zero
                                          for item in content])
-
-    def _mean(self, token_ids):
-        vectors = [self.framework.encoder["embed"](token_id) for token_id in token_ids]
-        require(vectors, "PROBLEM_EMBEDDING_REQUIRED")
-        stacked = self.torch.stack(vectors)
-        return stacked.mean(dim=0)
 
     def _sum(self, token_ids):
         """Follow-up 001: options are summed, NOT averaged, so the frozen
@@ -268,8 +318,9 @@ class GraphLearner:
                 int(self.torch.argmax(scores).item())]
         # sealed-split path: encode the public record on demand (attempt 008's
         # preserved error: the training index does not contain sealed records)
-        problem_ids, slot_ids = self.framework.encoder["encode"](task_input["public"])
-        value = self.module(self._mean(problem_ids).unsqueeze(0))[0]
+        _problem_ids, slot_ids = self.framework.encoder["encode"](task_input["public"])
+        value = self.module(
+            self.framework.encoder["encode_problem"](task_input["public"]).unsqueeze(0))[0]
         content = self._content_ids(slot_ids)
         scores = self.torch.stack([self.torch.dot(value, self._sum(item))
                                    for item in content])

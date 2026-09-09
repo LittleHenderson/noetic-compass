@@ -179,8 +179,9 @@ def _graph_edits(record):
     """Valid synthetic graph edits (no answers involved): (a) retarget one
     contains connector; (b) append one node field; (c) a SAME-TOKEN-COUNT
     rewiring — swap the sources of two contains connectors, preserving the
-    problem token multiset exactly while changing the relationships (the
-    preserved-vocabulary vs preserved-relationships contrast)."""
+    problem token multiset exactly while changing the relationships; (d) a
+    connection-list REORDER — same graph, same multiset, different written
+    order (the equivalence control for the rewiring contrast)."""
     edits = []
     edited = json.loads(json.dumps(record["graph"]))
     contains = [relation for relation in edited["relations"]
@@ -213,20 +214,24 @@ def _graph_edits(record):
         contains[i]["source"], contains[j]["source"] = (
             contains[j]["source"], contains[i]["source"])
         edits.append(("connector_rewire_same_tokens", edited))
+    edited = json.loads(json.dumps(record["graph"]))
+    edited["relations"].reverse()
+    edits.append(("connection_list_reorder", edited))
     return edits
 
 
 def measure_graph_edit_response(learner, records, arm, limit=3):
     """Relevant graph changes: rebuild the PUBLIC problem text through the
-    SAME lessons framing, encode, mean-pool, and run the module. Reports
-    whether the changed relationship survives encoding and changes the
-    module output and the decision — for both representations, zero updates."""
+    SAME lessons framing, encode with the RELATIONSHIP-PRESERVING problem
+    encoder, and run the module. Reports whether the changed relationship
+    survives encoding and changes the module output and the decision — for
+    both representations, zero updates."""
     torch = learner.torch
     rows = []
     for record in [row for row in records if row["op"] == "LIST_PARTS"][:limit]:
         baseline_public = adapter.public_records(record, arm)["public"]
         baseline_ids, _ = learner.framework.encoder["encode"](baseline_public)
-        baseline_vector = learner._mean(baseline_ids)
+        baseline_vector = learner.framework.encoder["encode_problem"](baseline_public)
         value = learner.module(baseline_vector.unsqueeze(0))[0]
         position = learner._index[record["record_id"]]
         options = learner._option_vectors[position]
@@ -237,7 +242,7 @@ def measure_graph_edit_response(learner, records, arm, limit=3):
                     record["question"], arm)[:8192],
                 "observations": baseline_public["observations"]}
             edited_ids, _ = learner.framework.encoder["encode"](edited_public)
-            edited_vector = learner._mean(edited_ids)
+            edited_vector = learner.framework.encoder["encode_problem"](edited_public)
             changed = learner.module(edited_vector.unsqueeze(0))[0]
             norm_value = float(torch.linalg.vector_norm(value).item())
             norm_changed = float(torch.linalg.vector_norm(changed).item())
@@ -262,6 +267,26 @@ def measure_graph_edit_response(learner, records, arm, limit=3):
                 "argmax_baseline": baseline_scores.index(max(baseline_scores)),
                 "argmax_edited": edited_scores.index(max(edited_scores)),
             })
+    return rows
+
+
+def check_target_independence(records, arm):
+    """Pure check (no torch): changing the PRIVATE corrective target leaves
+    the PUBLIC record byte-identical — the learner's encoded input cannot
+    depend on the answer. The public contract has no target field; this
+    verifies it end to end on permitted training/practice records."""
+    rows = []
+    for record in records:
+        baseline = adapter.public_records(record, arm)["public"]
+        alternatives = [option for option in record["options"]
+                        if option != record["correct"]]
+        if not alternatives:
+            continue
+        altered = dict(record)
+        altered["correct"] = alternatives[0]
+        changed = adapter.public_records(altered, arm)["public"]
+        rows.append({"record_id": record["record_id"],
+                     "public_unchanged": baseline == changed})
     return rows
 
 
@@ -310,6 +335,8 @@ def launch(*, run_id, learner, records=None, arm="cas"):
               "tag_vectors": measure_tag_vectors(learner),
               "representation_comparison": measure_representation_comparison(learner),
               "graph_edit_response": (measure_graph_edit_response(learner, records, arm)
+                                      if records else []),
+              "target_independence": (check_target_independence(records, arm)
                                       if records else []),
               "gradient_test": [measure_gradient_test(learner, position)
                                 for position in range(min(3, len(learner.tasks)))],

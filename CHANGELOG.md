@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: relationship encoder 001 prepared (option 2; training still pending)
+
+Per the owner's directive, attempt 006 is preserved as evidence that token
+identity and corrective signals now survive, while same-token rewiring
+remained invisible under mean-pooling. Prepared (NOT launched): a
+relationship-preserving problem encoder — line-wise segmentation on the
+node/rel markers (newline closes a line), each complete line bound into ONE
+joint vector by a fixed Hadamard product over its token rows, bound lines
+summed, non-structural framing/request tokens mean-pooled on top. Joint
+role-sensitive binding, not independent role sums; no answer computation;
+module interface, repaired lookup, option path, learning scope, and
+allowance unchanged; no trainable components. Verified purely with the real
+tokenizer at the vector level: same-multiset rewiring → DIFFERENT vector;
+connection-list reorder → IDENTICAL vector. Diagnostic extended with the
+reorder contrast and a pure target-independence check
+(`check_target_independence`). 109 graph tests pass. Records:
+`RELATIONSHIP_ENCODER_001.md`, ADAPTER_SPEC amendment.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 006 FINISHED — lookup repair measured working; relationships do not survive mean-pooling
 
 Attempt 006 (`cas-meta2-ln3-diagnostic-20260909183759-cce57ffb`, owner GO,

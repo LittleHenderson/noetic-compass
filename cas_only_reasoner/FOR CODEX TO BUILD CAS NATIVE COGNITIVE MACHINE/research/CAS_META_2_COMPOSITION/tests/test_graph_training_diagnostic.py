@@ -354,6 +354,10 @@ def test_graph_edit_response_measures_output_and_decision():
             edited = public["problem"] != self.baseline_problem
             return ([2] if edited else [1]), {0: ["a"], 1: ["b"], 2: ["c"]}
 
+        def encode_problem(self, public):
+            edited = public["problem"] != self.baseline_problem
+            return Vector([2.0 if edited else 1.0])
+
         def embed(self, token_id):
             return Vector([float(token_id)])
 
@@ -362,7 +366,8 @@ def test_graph_edit_response_measures_output_and_decision():
             self.torch = EditTorch
             codec = EditEncoder(baseline_problem)
             self.framework = SimpleNamespace(
-                encoder={"encode": codec.encode, "embed": codec.embed})
+                encoder={"encode": codec.encode, "embed": codec.embed,
+                         "encode_problem": codec.encode_problem})
             self.module = EditModule()
             self._index = {record["record_id"]: 0}
             self.tasks = [{"record_id": record["record_id"], "op": "LIST_PARTS",
@@ -370,15 +375,12 @@ def test_graph_edit_response_measures_output_and_decision():
             self._problem_vectors = [Vector([1.0])]
             self._option_vectors = [[Vector([3.0]), Vector([4.0]), Vector([5.0])]]
 
-        def _mean(self, token_ids):
-            return self.torch.stack([self.framework.encoder["embed"](item)
-                                     for item in token_ids]).mean(dim=0)
-
     baseline_problem = adapter.public_records(record, "cas")["public"]["problem"]
     rows = diagnostic.measure_graph_edit_response(EditLearner(baseline_problem),
                                                   [record], "cas")
     assert [row["edit"] for row in rows] == ["connector_retarget", "node_contents",
-                                             "connector_rewire_same_tokens"]
+                                             "connector_rewire_same_tokens",
+                                             "connection_list_reorder"]
     for row in rows:
         assert row["output_norm_edited"] == 4.0 and row["output_norm_baseline"] == 2.0
         assert row["output_difference_norm"] == 2.0

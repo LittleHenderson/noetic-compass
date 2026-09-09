@@ -99,10 +99,12 @@ def test_learner_options_content_only_and_problem_stays_mean():
 
     encoder = Encoder()
     framework = SimpleNamespace(
-        encoder={"encode": encoder.encode, "embed": encoder.embed}, module=Module())
+        encoder={"encode": encoder.encode, "embed": encoder.embed,
+                 "encode_problem": lambda public: Vector([0.5, 1.0])},
+        module=Module())
     learner = real_framework.GraphLearner(
         Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
-    assert learner._problem_vectors[0].values == [0.5, 1.0]  # mean, unchanged
+    assert learner._problem_vectors[0].values == [0.5, 1.0]  # structural path
     assert learner._option_vectors[0][0].values == [1.0, 1.0]  # o1 only, NOT s
     assert learner._option_vectors[0][1].values == [2.0, 2.0]  # o2 only, NOT s
     assert learner._option_vectors[0][2].values == [3.0, 3.0]  # o1+o2, NOT s
@@ -162,7 +164,9 @@ def test_learner_empty_content_option_becomes_zero_vector():
 
     encoder = Encoder()
     framework = SimpleNamespace(
-        encoder={"encode": encoder.encode, "embed": encoder.embed}, module=Module())
+        encoder={"encode": encoder.encode, "embed": encoder.embed,
+                 "encode_problem": lambda public: Vector([1.0, 1.0])},
+        module=Module())
     learner = real_framework.GraphLearner(
         Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
     assert learner._option_vectors[0][0].values == [0.0, 0.0]  # empty -> zero
@@ -172,16 +176,131 @@ def test_learner_empty_content_option_becomes_zero_vector():
 
 def test_learner_sealed_predict_path_uses_content_only_options():
     """The sealed-split predict path must use the same content-only option
-    vectors as training (one representation everywhere)."""
+    vectors and the same structural problem encoder as training (one
+    representation everywhere)."""
     import inspect
     from cas_meta2.graph_teaching import real_framework
     source = inspect.getsource(real_framework.GraphLearner)
-    assert 'self._problem_vectors.append(self._mean(problem_ids))' in source
+    assert 'framework.encoder["encode_problem"](task["public"])' in source
+    assert 'self._mean(' not in source  # the bag-of-words path is gone
     assert 'content = self._content_ids(slot_ids)' in source
     assert 'self._sum(item) if item else zero' in source
     assert 'content = self._content_ids(slot_ids)' in inspect.getsource(
         real_framework.GraphLearner.predict)
-    assert 'stacked.sum(dim=0)' in source and 'stacked.mean(dim=0)' in source
+    assert 'stacked.sum(dim=0)' in source
+
+
+def test_structural_problem_encoder_preserves_pairings_not_order():
+    """The relationship-preserving encoder, verified at the VECTOR level with
+    the REAL tokenizer: a same-token-multiset REWIRING must produce a
+    DIFFERENT problem vector, while a connection-list REORDER (same graph)
+    must produce the IDENTICAL vector in exact fake arithmetic. Independent
+    role sums would fail this test."""
+    from cas_meta2.graph_teaching import real_framework
+    from cas_meta2.features_v2 import LosslessPublicTokenizer
+
+    def public(problem):
+        return {"problem": problem, "observations": [
+            {"slot": 0, "tag": "wheel", "values": [0.0] * 8},
+            {"slot": 1, "tag": "handle", "values": [0.0] * 8},
+            {"slot": 2, "tag": "none", "values": [0.0] * 8}]}
+
+    lines_a = ["node Bicycle kind=thing", "node Cart kind=thing",
+               "node wheel kind=thing", "node handle kind=thing",
+               "rel Bicycle contains wheel common=constituent,wheel",
+               "rel Cart contains handle common=constituent,handle"]
+    lines_b = ["node Bicycle kind=thing", "node Cart kind=thing",
+               "node wheel kind=thing", "node handle kind=thing",
+               "rel Bicycle contains handle common=constituent,handle",
+               "rel Cart contains wheel common=constituent,wheel"]
+    problem_a = "\n".join(lines_a) + "\nquestion\n"
+    problem_b = "\n".join(lines_b) + "\nquestion\n"
+    problem_reordered = "\n".join(lines_a[:4] + [lines_a[5], lines_a[4]]) + "\nquestion\n"
+    publics = [public(text) for text in (problem_a, problem_b, problem_reordered)]
+    tokenizer = LosslessPublicTokenizer.fit_train(publics, max_length=1024)
+    vocabulary_size = len(tuple(tokenizer.vocabulary))
+
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+        def __add__(self, other):
+            return Vector([a + b for a, b in zip(self.values, other.values)])
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def prod(self, dim=0):
+            result = [1.0] * len(self.vectors[0].values)
+            for vector in self.vectors:
+                result = [r * v for r, v in zip(result, vector.values)]
+            return Vector(result)
+
+        def sum(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+        def mean(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors) / len(self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+    class Projection:
+        def __init__(self, size):
+            self.size = size
+
+        def __len__(self):
+            return self.size
+
+        def __getitem__(self, key):
+            if type(key) is not int or not (0 <= key < self.size):
+                raise IndexError(key)
+            return Vector([float(key)])  # distinct id -> distinct row
+
+        def __truediv__(self, other):
+            return self
+
+        def requires_grad_(self, flag):
+            return self
+
+    class Generator:
+        def __init__(self, device=None):
+            pass
+
+        def manual_seed(self, seed):
+            return self
+
+    class Torch:
+        @staticmethod
+        def randn(shape, generator=None, device=None):
+            return Projection(shape[0])
+
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+    Torch.Generator = Generator
+    encoder = real_framework.build_encoder(Torch, publics, d_model=64,
+                                           seed=20260909, device="cuda:0")
+    vector_a = encoder["encode_problem"](publics[0])
+    vector_b = encoder["encode_problem"](publics[1])
+    vector_reordered = encoder["encode_problem"](publics[2])
+    # same multiset, different pairings -> DIFFERENT vectors
+    assert vector_a.values != vector_b.values
+    # same graph, reordered connection list -> IDENTICAL vector (exact fakes)
+    assert vector_a.values == vector_reordered.values
+    assert vocabulary_size > 4
+
+
+def test_target_independence_is_verified_end_to_end():
+    """Changing the private corrective target leaves the public record (and
+    therefore the encoded input) byte-identical — verified on real
+    training/practice records."""
+    from cas_meta2.graph_teaching import diagnostic
+    records = [record for record in lessons.build_dataset(seed=20260909)["train"]
+               if record["family"] == "whole_part"][:6]
+    rows = diagnostic.check_target_independence(records, "cas")
+    assert rows and all(row["public_unchanged"] for row in rows)
 
 
 def test_readout_predict_and_score_agree():
