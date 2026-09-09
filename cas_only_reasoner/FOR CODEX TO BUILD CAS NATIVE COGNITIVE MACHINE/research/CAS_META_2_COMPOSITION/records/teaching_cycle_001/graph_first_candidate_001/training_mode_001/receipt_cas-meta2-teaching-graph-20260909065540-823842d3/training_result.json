@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 30, in <module>\n    sealed = trainer.evaluate_sealed(learner_factory(framework.module),\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/trainer.py\", line 243, in evaluate_sealed\n    \"predicted\": learner.predict(prediction_input(task))}\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 197, in predict\n    position = self._position(task_input)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 158, in _position\n    return self._index[task[\"record_id\"]]\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\nKeyError: 'e8387a304f0c410531b94d38f0c31c968d950822a4ae21967045dc6e9e15a7c4'\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909065540-823842d3",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
