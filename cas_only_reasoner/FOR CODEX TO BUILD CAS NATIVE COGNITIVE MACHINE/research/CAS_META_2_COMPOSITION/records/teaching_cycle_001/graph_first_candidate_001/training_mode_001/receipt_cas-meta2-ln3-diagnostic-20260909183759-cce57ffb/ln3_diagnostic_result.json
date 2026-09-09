@@ -1,0 +1,4481 @@
+{
+  "arms": [
+    {
+      "arm": "cas",
+      "checkpoint_after": "95f3513d62a5e3470cb6f199781f94bc10dab24956b4ce2712a4e31f8c47e60e",
+      "checkpoint_before": "95f3513d62a5e3470cb6f199781f94bc10dab24956b4ce2712a4e31f8c47e60e",
+      "report": {
+        "boundary": "measurement only; no optimizer step was taken; weights unchanged by this diagnostic",
+        "gradient_test": [
+          {
+            "op": "LIST_PARTS",
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "results": [
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.12589627504348755,
+                  "merge.weight": 0.24598821997642517,
+                  "right.weight": 0.09896517544984818
+                },
+                "loss": 1.0888919830322266,
+                "target": 0
+              },
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.07854296267032623,
+                  "merge.weight": 0.14561624825000763,
+                  "right.weight": 0.059863846749067307
+                },
+                "loss": 1.1111341714859009,
+                "target": 1
+              },
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.12665683031082153,
+                  "merge.weight": 0.23916159570217133,
+                  "right.weight": 0.09594570845365524
+                },
+                "loss": 1.0959398746490479,
+                "target": 2
+              }
+            ]
+          },
+          {
+            "op": "LIST_PARTS",
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "results": [
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.13550041615962982,
+                  "merge.weight": 0.29235613346099854,
+                  "right.weight": 0.12861432135105133
+                },
+                "loss": 1.1147099733352661,
+                "target": 0
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.18387332558631897,
+                  "merge.weight": 0.37694647908210754,
+                  "right.weight": 0.14779320359230042
+                },
+                "loss": 1.109009861946106,
+                "target": 1
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.1979323774576187,
+                  "merge.weight": 0.377690851688385,
+                  "right.weight": 0.15171796083450317
+                },
+                "loss": 1.0726401805877686,
+                "target": 2
+              }
+            ]
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "results": [
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.16024073958396912,
+                  "merge.weight": 0.2848423421382904,
+                  "right.weight": 0.1353204846382141
+                },
+                "loss": 1.0939304828643799,
+                "target": 0
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.11318492889404297,
+                  "merge.weight": 0.22103077173233032,
+                  "right.weight": 0.10001049190759659
+                },
+                "loss": 1.1162467002868652,
+                "target": 1
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.15175773203372955,
+                  "merge.weight": 0.26293084025382996,
+                  "right.weight": 0.1087488904595375
+                },
+                "loss": 1.0859062671661377,
+                "target": 2
+              }
+            ]
+          }
+        ],
+        "graph_edit_response": [
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "connector_retarget",
+            "output_cosine": 0.9999241537686239,
+            "output_difference_norm": 0.001519517940185363,
+            "output_norm_baseline": 0.12314706295728683,
+            "output_norm_edited": 0.12323033809661865,
+            "problem_token_count_after": 300,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": false,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.02224215865135193,
+              -0.007047886028885841
+            ],
+            "scores_edited": [
+              0.0,
+              -0.022240426391363144,
+              -0.007258995436131954
+            ]
+          },
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "node_contents",
+            "output_cosine": 0.9989977600139366,
+            "output_difference_norm": 0.006916949499555279,
+            "output_norm_baseline": 0.12314706295728683,
+            "output_norm_edited": 0.11884499341249466,
+            "problem_token_count_after": 314,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": false,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.02224215865135193,
+              -0.007047886028885841
+            ],
+            "scores_edited": [
+              0.0,
+              -0.021088529378175735,
+              -0.006606068462133408
+            ]
+          },
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 0.9999999032783984,
+            "output_difference_norm": 5.414429397647569e-05,
+            "output_norm_baseline": 0.12314706295728683,
+            "output_norm_edited": 0.12314705550670624,
+            "problem_token_count_after": 300,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": true,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.02224215865135193,
+              -0.007047886028885841
+            ],
+            "scores_edited": [
+              0.0,
+              -0.022242160513997078,
+              -0.007047886028885841
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_retarget",
+            "output_cosine": 0.9999244208037263,
+            "output_difference_norm": 0.0015193972179803478,
+            "output_norm_baseline": 0.1233234852552414,
+            "output_norm_edited": 0.1234128400683403,
+            "problem_token_count_after": 300,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": false,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.02051606960594654,
+              -0.014815930277109146,
+              0.02155369706451893
+            ],
+            "scores_edited": [
+              -0.020813006907701492,
+              -0.01487469021230936,
+              0.021426811814308167
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "node_contents",
+            "output_cosine": 0.9990016206012712,
+            "output_difference_norm": 0.006913281742064848,
+            "output_norm_baseline": 0.1233234852552414,
+            "output_norm_edited": 0.11902417242527008,
+            "problem_token_count_after": 314,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": false,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.02051606960594654,
+              -0.014815930277109146,
+              0.02155369706451893
+            ],
+            "scores_edited": [
+              -0.02039092406630516,
+              -0.014456747099757195,
+              0.02054911106824875
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 1.0000000631325825,
+            "output_difference_norm": 0.0,
+            "output_norm_baseline": 0.1233234852552414,
+            "output_norm_edited": 0.1233234852552414,
+            "problem_token_count_after": 300,
+            "problem_token_count_before": 300,
+            "problem_token_multiset_equal": true,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.02051606960594654,
+              -0.014815930277109146,
+              0.02155369706451893
+            ],
+            "scores_edited": [
+              -0.02051607146859169,
+              -0.014815930277109146,
+              0.021553698927164078
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_retarget",
+            "output_cosine": 0.9999215088281153,
+            "output_difference_norm": 0.001563589322457178,
+            "output_norm_baseline": 0.12411206215620041,
+            "output_norm_edited": 0.12426597625017166,
+            "problem_token_count_after": 279,
+            "problem_token_count_before": 279,
+            "problem_token_multiset_equal": false,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.026266738772392273,
+              -0.002786211669445038,
+              0.015510541386902332
+            ],
+            "scores_edited": [
+              -0.026614174246788025,
+              -0.0030418727546930313,
+              0.0154701117426157
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "node_contents",
+            "output_cosine": 0.9988671666612755,
+            "output_difference_norm": 0.007391709768305322,
+            "output_norm_baseline": 0.12411206215620041,
+            "output_norm_edited": 0.11952655017375946,
+            "problem_token_count_after": 293,
+            "problem_token_count_before": 279,
+            "problem_token_multiset_equal": false,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.026266738772392273,
+              -0.002786211669445038,
+              0.015510541386902332
+            ],
+            "scores_edited": [
+              -0.025361165404319763,
+              -0.0025392593815922737,
+              0.01473261509090662
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 0.9999999047612587,
+            "output_difference_norm": 5.4148663905725945e-05,
+            "output_norm_baseline": 0.12411206215620041,
+            "output_norm_edited": 0.12411206215620041,
+            "problem_token_count_after": 279,
+            "problem_token_count_before": 279,
+            "problem_token_multiset_equal": true,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.026266738772392273,
+              -0.002786211669445038,
+              0.015510541386902332
+            ],
+            "scores_edited": [
+              -0.026266727596521378,
+              -0.002786205615848303,
+              0.015510546043515205
+            ]
+          }
+        ],
+        "module_outputs": {
+          "output_norm_stats": {
+            "max": 0.12478708475828171,
+            "median": 0.12361467629671097,
+            "min": 0.1193140298128128
+          },
+          "pairwise_cosines": [
+            0.9999425054289087,
+            0.9993490098424795,
+            0.9993490098424795,
+            0.9988882222567161,
+            0.9990598815082549,
+            0.9981446944505329,
+            0.9981438166169646,
+            0.9993457825094252,
+            0.9993457825094252,
+            0.9990115619355209,
+            0.9991566793862683,
+            0.9983829612124725,
+            0.9983899877070095,
+            0.9999999715640182,
+            0.9992893457435915,
+            0.9993577799769087,
+            0.9968544230807143,
+            0.9970223721753799,
+            0.9992893457435915,
+            0.9993577799769087,
+            0.9968544230807143,
+            0.9970223721753799,
+            0.9999408400851083,
+            0.9970945040750071,
+            0.997202776892916,
+            0.9972192918358855,
+            0.9973243535535024,
+            0.9999377594719067
+          ],
+          "pairwise_cosines_first_records": 8,
+          "per_record": [
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12314706295728683,
+              "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.1233234852552414,
+              "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12307728081941605,
+              "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12307728081941605,
+              "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12379244714975357,
+              "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12324836105108261,
+              "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12411206215620041,
+              "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12408100813627243,
+              "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1237599328160286,
+              "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1237599328160286,
+              "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12411186844110489,
+              "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12445473670959473,
+              "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12330566346645355,
+              "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12313224375247955,
+              "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12281686812639236,
+              "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1232886090874672,
+              "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12364541739225388,
+              "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12361467629671097,
+              "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11949454993009567,
+              "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11957604438066483,
+              "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1193140298128128,
+              "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1193140298128128,
+              "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.1196967363357544,
+              "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11974435299634933,
+              "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12478708475828171,
+              "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12409951537847519,
+              "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12426804006099701,
+              "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12426804006099701,
+              "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12476450949907303,
+              "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12447188794612885,
+              "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a"
+            }
+          ]
+        },
+        "option_geometry": [
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.0,
+              0.7482424106163524
+            ],
+            "problem_option_cosines": [
+              0.0,
+              0.04853001008393717,
+              0.13688313453412754
+            ],
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.556006728434833,
+              0.635013271778878,
+              0.10925387289069878
+            ],
+            "problem_option_cosines": [
+              0.6002321631773752,
+              0.23005929966646457,
+              0.519573514055802
+            ],
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.04406175892765733,
+              0.23559490403630537,
+              0.15474080411659868
+            ],
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.04406175892765733,
+              0.23559490403630537,
+              0.15474080411659868
+            ],
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.010561078417398109,
+              0.0347693430870048,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.0748818851466715,
+              -0.1708238144672188,
+              0.09631232141583373
+            ],
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.010561078417398109,
+              -0.0007577811602167367,
+              0.0347693430870048
+            ],
+            "problem_option_cosines": [
+              -0.1701300990785335,
+              0.0701388558876239,
+              0.09585022098755529
+            ],
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.6656567005350413,
+              0.17123442596743318,
+              0.5746596362388062
+            ],
+            "problem_option_cosines": [
+              0.5450927220830584,
+              0.6267948043848776,
+              0.1711792538812545
+            ],
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.0,
+              0.9267375386307923
+            ],
+            "problem_option_cosines": [
+              0.0,
+              0.578416500918673,
+              0.6549780051360411
+            ],
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.07595203793028647,
+              -0.0050961614447707785,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.07395068957758542,
+              0.17286861534242814,
+              0.22996455168415733
+            ],
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "problem_option_cosines": [
+              0.17286861534242814,
+              0.07395068957758542,
+              0.22996455168415733
+            ],
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.10076837600458152,
+              -0.0007577811602167367,
+              -0.02044997627353873
+            ],
+            "problem_option_cosines": [
+              -0.16522570829314592,
+              -0.17358133489549107,
+              0.09997097573761031
+            ],
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.10076837600458152,
+              -0.02044997627353873,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              -0.1790391579016889,
+              -0.16703743909477733,
+              0.10130571750273559
+            ],
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.7745204465804733,
+              0.5504460135243624,
+              0.18298490894670888
+            ],
+            "problem_option_cosines": [
+              0.5920868059966078,
+              0.6421034879971883,
+              0.2216465345438993
+            ],
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.7455965050648911,
+              0.0
+            ],
+            "problem_option_cosines": [
+              0.011085467264316836,
+              0.0,
+              0.15680095109541162
+            ],
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "problem_option_cosines": [
+              0.16256192222746843,
+              0.07543999239933978,
+              0.22753604734602514
+            ],
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.11652112631594001,
+              0.08677899384806259,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.04010084162892757,
+              0.1634167482987152,
+              0.22567745108846105
+            ],
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              -0.0007577811602167367,
+              0.0347693430870048,
+              0.010561078417398109
+            ],
+            "problem_option_cosines": [
+              0.10867698530370352,
+              -0.1696143330442227,
+              0.07042583569477644
+            ],
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              -0.0007577811602167367,
+              0.010561078417398109,
+              0.0347693430870048
+            ],
+            "problem_option_cosines": [
+              -0.16903971992398176,
+              0.10835347646912206,
+              0.06590447152434063
+            ],
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              -0.041329422207169765,
+              -0.033363247424237394,
+              0.7939490155944963
+            ],
+            "problem_option_cosines": [
+              0.09045774543604862,
+              -0.13854418070229688,
+              -0.06923531949161395
+            ],
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.0,
+              0.6208175952137867
+            ],
+            "problem_option_cosines": [
+              0.0,
+              -0.019943364705165303,
+              -0.023019232599707586
+            ],
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.06365910580502782,
+              -0.0077574007630031114,
+              -0.021998458040004356
+            ],
+            "problem_option_cosines": [
+              0.10198756778156229,
+              -0.01798580105029421,
+              0.04651584916705156
+            ],
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.0077574007630031114,
+              -0.021998458040004356,
+              -0.06365910580502782
+            ],
+            "problem_option_cosines": [
+              0.04651584916705156,
+              0.10198756778156229,
+              -0.01798580105029421
+            ],
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.059187281721288426,
+              0.05601275121942034,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.019238503990578963,
+              -0.16580121309363105,
+              0.09432565042415342
+            ],
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              -0.0007577811602167367,
+              0.059187281721288426,
+              0.05601275121942034
+            ],
+            "problem_option_cosines": [
+              -0.1659264945772803,
+              0.09274655319341774,
+              0.014909332893505165
+            ],
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.71137100501726,
+              0.0,
+              0.0
+            ],
+            "problem_option_cosines": [
+              -0.1812049095010714,
+              -0.07145119612068145,
+              0.0
+            ],
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.4758269752985046,
+              0.4872294603974747,
+              0.06398848556481856
+            ],
+            "problem_option_cosines": [
+              0.6094021778007048,
+              0.5643715545821829,
+              0.10715712729216066
+            ],
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.008249659166976803,
+              0.06629728219614794,
+              0.06891070570566192
+            ],
+            "problem_option_cosines": [
+              0.014052857803017042,
+              -0.17218713909457614,
+              0.09599801409650811
+            ],
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.06629728219614794,
+              0.06891070570566192,
+              0.008249659166976803
+            ],
+            "problem_option_cosines": [
+              0.09599801409650811,
+              0.014052857803017042,
+              -0.17218713909457614
+            ],
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.02604005128388845,
+              -0.0007577811602167367,
+              0.042089148870720836
+            ],
+            "problem_option_cosines": [
+              -0.16070996751170263,
+              0.032751407768610165,
+              0.09750246718792767
+            ],
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.042089148870720836,
+              0.02604005128388845,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.028537470946839408,
+              0.09799135939684221,
+              -0.15990859465374757
+            ],
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a"
+          }
+        ],
+        "representation_comparison": [
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.0,
+              0.7482424106163524
+            ],
+            "option_pair_cosines_old": [
+              0.9707951904095004,
+              0.9428913439049352,
+              0.9875068702319911
+            ],
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_new": [
+              0.0,
+              -0.02224215865135193,
+              -0.007047886028885841
+            ],
+            "scores_old": [
+              -0.1065155491232872,
+              -0.1650862991809845,
+              -0.18622060120105743
+            ],
+            "spread_new": 0.02224215865135193,
+            "spread_old": 0.07970505207777023
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.556006728434833,
+              0.635013271778878,
+              0.10925387289069878
+            ],
+            "option_pair_cosines_old": [
+              0.9070348664716801,
+              0.921624908914629,
+              0.8125192792071398
+            ],
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_new": [
+              -0.02051606960594654,
+              -0.014815930277109146,
+              0.02155369706451893
+            ],
+            "scores_old": [
+              -0.10825301706790924,
+              -0.07135147601366043,
+              -0.06618325412273407
+            ],
+            "spread_new": 0.04206976667046547,
+            "spread_old": 0.04206976294517517
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.5202031116512726,
+              0.40770220195971696,
+              0.5624724573682063
+            ],
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "scores_new": [
+              0.0073645953088998795,
+              -0.014951605349779129,
+              0.015388836152851582
+            ],
+            "scores_old": [
+              -0.006705347448587418,
+              -0.029021549969911575,
+              0.001318891067057848
+            ],
+            "spread_new": 0.03034044150263071,
+            "spread_old": 0.030340441036969423
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.5202031116512726,
+              0.40770220195971696,
+              0.5624724573682063
+            ],
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+            "scores_new": [
+              0.0073645953088998795,
+              -0.014951605349779129,
+              0.015388836152851582
+            ],
+            "scores_old": [
+              -0.006705347448587418,
+              -0.029021549969911575,
+              0.001318891067057848
+            ],
+            "spread_new": 0.03034044150263071,
+            "spread_old": 0.030340441036969423
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.010561078417398109,
+              0.0347693430870048,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.2819396981756115,
+              0.2770255789910182,
+              0.38663747995349146
+            ],
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd",
+            "scores_new": [
+              0.01680302619934082,
+              -0.011100786738097668,
+              0.01945352554321289
+            ],
+            "scores_old": [
+              0.0034173745661973953,
+              -0.024486439302563667,
+              0.006067872047424316
+            ],
+            "spread_new": 0.03055431228131056,
+            "spread_old": 0.030554311349987984
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.010561078417398109,
+              -0.0007577811602167367,
+              0.0347693430870048
+            ],
+            "option_pair_cosines_old": [
+              0.2819396981756115,
+              0.38663747995349146,
+              0.2770255789910182
+            ],
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e",
+            "scores_new": [
+              -0.010977216064929962,
+              0.01695479080080986,
+              0.019334357231855392
+            ],
+            "scores_old": [
+              -0.024272959679365158,
+              0.0036590564996004105,
+              0.006038617342710495
+            ],
+            "spread_new": 0.030311573296785355,
+            "spread_old": 0.030311577022075653
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.6656567005350413,
+              0.17123442596743318,
+              0.5746596362388062
+            ],
+            "option_pair_cosines_old": [
+              0.9289271927427546,
+              0.8575724001876976,
+              0.9013052648873482
+            ],
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_new": [
+              -0.026266738772392273,
+              -0.002786211669445038,
+              0.015510541386902332
+            ],
+            "scores_old": [
+              -0.11115233600139618,
+              -0.08767179399728775,
+              -0.03858358412981033
+            ],
+            "spread_new": 0.041777280159294605,
+            "spread_old": 0.07256875187158585
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.0,
+              0.9267375386307923
+            ],
+            "option_pair_cosines_old": [
+              0.8820243045988363,
+              0.7900239588502745,
+              0.9710031429871181
+            ],
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc",
+            "scores_new": [
+              0.0,
+              -0.02498481795191765,
+              -0.013251947239041328
+            ],
+            "scores_old": [
+              -0.055640384554862976,
+              -0.11125076562166214,
+              -0.13014346361160278
+            ],
+            "spread_new": 0.02498481795191765,
+            "spread_old": 0.07450307905673981
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.07595203793028647,
+              -0.0050961614447707785,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.607107707392819,
+              0.5883794458379419,
+              0.5624724573682063
+            ],
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d",
+            "scores_new": [
+              -0.001596454530954361,
+              0.01568830944597721,
+              -0.014768876135349274
+            ],
+            "scores_old": [
+              -0.01575062796473503,
+              0.0015341350808739662,
+              -0.028923049569129944
+            ],
+            "spread_new": 0.030457185581326485,
+            "spread_old": 0.03045718465000391
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "option_pair_cosines_old": [
+              0.607107707392819,
+              0.5624724573682063,
+              0.5883794458379419
+            ],
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0",
+            "scores_new": [
+              0.01568830944597721,
+              -0.001596454530954361,
+              -0.014768876135349274
+            ],
+            "scores_old": [
+              0.0015341350808739662,
+              -0.01575062796473503,
+              -0.028923049569129944
+            ],
+            "spread_new": 0.030457185581326485,
+            "spread_old": 0.03045718465000391
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.10076837600458152,
+              -0.0007577811602167367,
+              -0.02044997627353873
+            ],
+            "option_pair_cosines_old": [
+              0.36916546281954404,
+              0.38663747995349146,
+              0.2642760667474436
+            ],
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a",
+            "scores_new": [
+              -0.011551744304597378,
+              0.017156876623630524,
+              0.01786614954471588
+            ],
+            "scores_old": [
+              -0.024941198527812958,
+              0.003767421469092369,
+              0.004476693458855152
+            ],
+            "spread_new": 0.02941789384931326,
+            "spread_old": 0.02941789198666811
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.10076837600458152,
+              -0.02044997627353873,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.36916546281954404,
+              0.2642760667474436,
+              0.38663747995349146
+            ],
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4",
+            "scores_new": [
+              0.017122045159339905,
+              -0.011372118256986141,
+              0.01786123774945736
+            ],
+            "scores_old": [
+              0.003930884413421154,
+              -0.024563273414969444,
+              0.004670080728828907
+            ],
+            "spread_new": 0.0292333560064435,
+            "spread_old": 0.02923335414379835
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.7745204465804733,
+              0.5504460135243624,
+              0.18298490894670888
+            ],
+            "option_pair_cosines_old": [
+              0.9400446291866413,
+              0.9036219548528489,
+              0.7832055918215883
+            ],
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c",
+            "scores_new": [
+              -0.01782466284930706,
+              0.021479986608028412,
+              -0.01452312245965004
+            ],
+            "scores_old": [
+              -0.10567460209131241,
+              -0.09847323596477509,
+              -0.07026978582143784
+            ],
+            "spread_new": 0.03930464945733547,
+            "spread_old": 0.03540481626987457
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.7455965050648911,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.9747609103274744,
+              0.9919771491731396,
+              0.958993012731425
+            ],
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7",
+            "scores_new": [
+              0.015513714402914047,
+              0.0,
+              0.0009154328145086765
+            ],
+            "scores_old": [
+              -0.0990220308303833,
+              -0.07713396847248077,
+              -0.1510220766067505
+            ],
+            "spread_new": 0.015513714402914047,
+            "spread_old": 0.07388810813426971
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "option_pair_cosines_old": [
+              0.607107707392819,
+              0.5624724573682063,
+              0.5883794458379419
+            ],
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf",
+            "scores_new": [
+              0.015956878662109375,
+              0.0003954768180847168,
+              -0.014706010930240154
+            ],
+            "scores_old": [
+              0.003288355888798833,
+              -0.012273045256733894,
+              -0.02737453579902649
+            ],
+            "spread_new": 0.03066288959234953,
+            "spread_old": 0.030662891687825322
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.11652112631594001,
+              0.08677899384806259,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.40770220195971696,
+              0.5202031116512726,
+              0.5624724573682063
+            ],
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc",
+            "scores_new": [
+              0.0062811062671244144,
+              0.016134506091475487,
+              -0.015053275041282177
+            ],
+            "scores_old": [
+              -0.006362575106322765,
+              0.003490822622552514,
+              -0.02769695781171322
+            ],
+            "spread_new": 0.031187781132757664,
+            "spread_old": 0.031187780434265733
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              -0.0007577811602167367,
+              0.0347693430870048,
+              0.010561078417398109
+            ],
+            "option_pair_cosines_old": [
+              0.38663747995349146,
+              0.2770255789910182,
+              0.2819396981756115
+            ],
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53",
+            "scores_new": [
+              0.01936374232172966,
+              -0.012568917125463486,
+              0.01718720979988575
+            ],
+            "scores_old": [
+              0.007056591100990772,
+              -0.024876071140170097,
+              0.004880060441792011
+            ],
+            "spread_new": 0.031932659447193146,
+            "spread_old": 0.03193266224116087
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              -0.0007577811602167367,
+              0.010561078417398109,
+              0.0347693430870048
+            ],
+            "option_pair_cosines_old": [
+              0.38663747995349146,
+              0.2819396981756115,
+              0.2770255789910182
+            ],
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c",
+            "scores_new": [
+              -0.012439122423529625,
+              0.019189996644854546,
+              0.01693597249686718
+            ],
+            "scores_old": [
+              -0.02463371306657791,
+              0.006995408330112696,
+              0.00474138418212533
+            ],
+            "spread_new": 0.03162911906838417,
+            "spread_old": 0.03162912139669061
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              -0.041329422207169765,
+              -0.033363247424237394,
+              0.7939490155944963
+            ],
+            "option_pair_cosines_old": [
+              0.9150872897751334,
+              0.9404172486518485,
+              0.972932018205279
+            ],
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703",
+            "scores_new": [
+              -0.015634864568710327,
+              -0.0017251363024115562,
+              -0.008867733180522919
+            ],
+            "scores_old": [
+              -0.13662560284137726,
+              -0.08921010047197342,
+              -0.12985846400260925
+            ],
+            "spread_new": 0.013909728266298771,
+            "spread_old": 0.04741550236940384
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 0,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.0,
+              0.6208175952137867
+            ],
+            "option_pair_cosines_old": [
+              0.9822821379805778,
+              0.9614700821387747,
+              0.987742754865348
+            ],
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc",
+            "scores_new": [
+              0.0,
+              0.011129887774586678,
+              0.024214530363678932
+            ],
+            "scores_old": [
+              -0.11525310575962067,
+              -0.1381039321422577,
+              -0.15900005400180817
+            ],
+            "spread_new": 0.024214530363678932,
+            "spread_old": 0.0437469482421875
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.06365910580502782,
+              -0.0077574007630031114,
+              -0.021998458040004356
+            ],
+            "option_pair_cosines_old": [
+              0.40966543310889486,
+              0.42375212691299147,
+              0.45015204430908906
+            ],
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5",
+            "scores_new": [
+              -0.011802173219621181,
+              0.012739932164549828,
+              -0.008513734675943851
+            ],
+            "scores_old": [
+              -0.024659831076860428,
+              -0.00011772289872169495,
+              -0.02137138694524765
+            ],
+            "spread_new": 0.02454210538417101,
+            "spread_old": 0.024542108178138733
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.0077574007630031114,
+              -0.021998458040004356,
+              -0.06365910580502782
+            ],
+            "option_pair_cosines_old": [
+              0.42375212691299147,
+              0.45015204430908906,
+              0.40966543310889486
+            ],
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9",
+            "scores_new": [
+              -0.008513734675943851,
+              -0.011802173219621181,
+              0.012739932164549828
+            ],
+            "scores_old": [
+              -0.02137138694524765,
+              -0.024659831076860428,
+              -0.00011772289872169495
+            ],
+            "spread_new": 0.02454210538417101,
+            "spread_old": 0.024542108178138733
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.059187281721288426,
+              0.05601275121942034,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.25875800185936476,
+              0.23608786234758175,
+              0.38663747995349146
+            ],
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5",
+            "scores_new": [
+              0.016230903565883636,
+              -0.010567331686615944,
+              0.018720479682087898
+            ],
+            "scores_old": [
+              0.00379103422164917,
+              -0.02300719916820526,
+              0.006280612666159868
+            ],
+            "spread_new": 0.029287811368703842,
+            "spread_old": 0.02928781183436513
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              -0.0007577811602167367,
+              0.059187281721288426,
+              0.05601275121942034
+            ],
+            "option_pair_cosines_old": [
+              0.38663747995349146,
+              0.25875800185936476,
+              0.23608786234758175
+            ],
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd",
+            "scores_new": [
+              -0.010655011981725693,
+              0.01883738487958908,
+              0.01648472249507904
+            ],
+            "scores_old": [
+              -0.023127831518650055,
+              0.006364563945680857,
+              0.004011902958154678
+            ],
+            "spread_new": 0.029492396861314774,
+            "spread_old": 0.02949239546433091
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.71137100501726,
+              0.0,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.9902801770602506,
+              0.9776102475126622,
+              0.9620233546797506
+            ],
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f",
+            "scores_new": [
+              -0.008338666521012783,
+              0.0017040185630321503,
+              0.0
+            ],
+            "scores_old": [
+              -0.11664911359548569,
+              -0.1455969214439392,
+              -0.06932001560926437
+            ],
+            "spread_new": 0.010042685084044933,
+            "spread_old": 0.07627690583467484
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.4758269752985046,
+              0.4872294603974747,
+              0.06398848556481856
+            ],
+            "option_pair_cosines_old": [
+              0.8915183844385515,
+              0.9032986906573653,
+              0.829794936296791
+            ],
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b",
+            "scores_new": [
+              0.02209656685590744,
+              0.0069257719442248344,
+              0.0099155493080616
+            ],
+            "scores_old": [
+              -0.06635627150535583,
+              -0.08152708411216736,
+              -0.04790044575929642
+            ],
+            "spread_new": 0.015170794911682606,
+            "spread_old": 0.03362663835287094
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.008249659166976803,
+              0.06629728219614794,
+              0.06891070570566192
+            ],
+            "option_pair_cosines_old": [
+              0.4991878508773992,
+              0.47620104327956997,
+              0.5112785516698329
+            ],
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7",
+            "scores_new": [
+              0.023375777527689934,
+              -0.00862408708781004,
+              0.004645324312150478
+            ],
+            "scores_old": [
+              0.00817069225013256,
+              -0.023829173296689987,
+              -0.010559760965406895
+            ],
+            "spread_new": 0.03199986461549997,
+            "spread_old": 0.03199986554682255
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.06629728219614794,
+              0.06891070570566192,
+              0.008249659166976803
+            ],
+            "option_pair_cosines_old": [
+              0.47620104327956997,
+              0.5112785516698329,
+              0.4991878508773992
+            ],
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c",
+            "scores_new": [
+              0.004645324312150478,
+              0.023375777527689934,
+              -0.00862408708781004
+            ],
+            "scores_old": [
+              -0.010559760965406895,
+              0.00817069225013256,
+              -0.023829173296689987
+            ],
+            "spread_new": 0.03199986461549997,
+            "spread_old": 0.03199986554682255
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.02604005128388845,
+              -0.0007577811602167367,
+              0.042089148870720836
+            ],
+            "option_pair_cosines_old": [
+              0.30691031346763764,
+              0.38663747995349146,
+              0.2992514904927365
+            ],
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d",
+            "scores_new": [
+              -0.011936964467167854,
+              0.023892510682344437,
+              0.01748308539390564
+            ],
+            "scores_old": [
+              -0.02662433683872223,
+              0.009205136448144913,
+              0.0027957092970609665
+            ],
+            "spread_new": 0.03582947514951229,
+            "spread_old": 0.03582947328686714
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.042089148870720836,
+              0.02604005128388845,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.2992514904927365,
+              0.30691031346763764,
+              0.38663747995349146
+            ],
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a",
+            "scores_new": [
+              0.023195527493953705,
+              0.017031634226441383,
+              -0.011529374867677689
+            ],
+            "scores_old": [
+              0.00842396542429924,
+              0.002260067965835333,
+              -0.026300936937332153
+            ],
+            "spread_new": 0.03472490236163139,
+            "spread_old": 0.03472490236163139
+          }
+        ],
+        "run_id": "cas-meta2-ln3-diagnostic-20260909183759-cce57ffb.cas",
+        "schema": "cas-graph-training-ln3-neural-diagnostic/1",
+        "scores": [
+          {
+            "correct_score": -0.02224215865135193,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores": [
+              0.0,
+              -0.02224215865135193,
+              -0.007047886028885841
+            ],
+            "spread": 0.02224215865135193
+          },
+          {
+            "correct_score": -0.02051606960594654,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores": [
+              -0.02051606960594654,
+              -0.014815930277109146,
+              0.02155369706451893
+            ],
+            "spread": 0.04206976667046547
+          },
+          {
+            "correct_score": 0.0073645953088998795,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "scores": [
+              0.0073645953088998795,
+              -0.014951605349779129,
+              0.015388836152851582
+            ],
+            "spread": 0.030340440571308136
+          },
+          {
+            "correct_score": 0.0073645953088998795,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+            "scores": [
+              0.0073645953088998795,
+              -0.014951605349779129,
+              0.015388836152851582
+            ],
+            "spread": 0.030340440571308136
+          },
+          {
+            "correct_score": -0.011100786738097668,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd",
+            "scores": [
+              0.01680302619934082,
+              -0.011100786738097668,
+              0.01945352554321289
+            ],
+            "spread": 0.030554313212633133
+          },
+          {
+            "correct_score": 0.019334357231855392,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e",
+            "scores": [
+              -0.010977216064929962,
+              0.01695479080080986,
+              0.019334357231855392
+            ],
+            "spread": 0.030311573296785355
+          },
+          {
+            "correct_score": -0.002786211669445038,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores": [
+              -0.026266738772392273,
+              -0.002786211669445038,
+              0.015510541386902332
+            ],
+            "spread": 0.04177727922797203
+          },
+          {
+            "correct_score": -0.02498481795191765,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc",
+            "scores": [
+              0.0,
+              -0.02498481795191765,
+              -0.013251947239041328
+            ],
+            "spread": 0.02498481795191765
+          },
+          {
+            "correct_score": -0.001596454530954361,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d",
+            "scores": [
+              -0.001596454530954361,
+              0.01568830944597721,
+              -0.014768876135349274
+            ],
+            "spread": 0.030457185581326485
+          },
+          {
+            "correct_score": -0.001596454530954361,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0",
+            "scores": [
+              0.01568830944597721,
+              -0.001596454530954361,
+              -0.014768876135349274
+            ],
+            "spread": 0.030457185581326485
+          },
+          {
+            "correct_score": -0.011551744304597378,
+            "correct_slot": 0,
+            "op": "REACHED_VIA",
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a",
+            "scores": [
+              -0.011551744304597378,
+              0.017156876623630524,
+              0.01786614954471588
+            ],
+            "spread": 0.029417894780635834
+          },
+          {
+            "correct_score": 0.01786123774945736,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4",
+            "scores": [
+              0.017122045159339905,
+              -0.011372118256986141,
+              0.01786123774945736
+            ],
+            "spread": 0.029233355075120926
+          },
+          {
+            "correct_score": -0.01782466284930706,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c",
+            "scores": [
+              -0.01782466284930706,
+              0.021479986608028412,
+              -0.01452312245965004
+            ],
+            "spread": 0.03930465131998062
+          },
+          {
+            "correct_score": 0.015513714402914047,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7",
+            "scores": [
+              0.015513714402914047,
+              0.0,
+              0.0009154328145086765
+            ],
+            "spread": 0.015513714402914047
+          },
+          {
+            "correct_score": 0.0003954768180847168,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf",
+            "scores": [
+              0.015956878662109375,
+              0.0003954768180847168,
+              -0.014706010930240154
+            ],
+            "spread": 0.030662890523672104
+          },
+          {
+            "correct_score": 0.0062811062671244144,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc",
+            "scores": [
+              0.0062811062671244144,
+              0.016134506091475487,
+              -0.015053275041282177
+            ],
+            "spread": 0.03118778020143509
+          },
+          {
+            "correct_score": -0.012568917125463486,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53",
+            "scores": [
+              0.01936374232172966,
+              -0.012568917125463486,
+              0.01718720979988575
+            ],
+            "spread": 0.031932659447193146
+          },
+          {
+            "correct_score": 0.019189996644854546,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c",
+            "scores": [
+              -0.012439122423529625,
+              0.019189996644854546,
+              0.01693597249686718
+            ],
+            "spread": 0.03162911906838417
+          },
+          {
+            "correct_score": -0.008867733180522919,
+            "correct_slot": 2,
+            "op": "LIST_PARTS",
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703",
+            "scores": [
+              -0.015634864568710327,
+              -0.0017251363024115562,
+              -0.008867733180522919
+            ],
+            "spread": 0.013909728266298771
+          },
+          {
+            "correct_score": 0.011129887774586678,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc",
+            "scores": [
+              0.0,
+              0.011129887774586678,
+              0.024214530363678932
+            ],
+            "spread": 0.024214530363678932
+          },
+          {
+            "correct_score": -0.011802173219621181,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5",
+            "scores": [
+              -0.011802173219621181,
+              0.012739932164549828,
+              -0.008513734675943851
+            ],
+            "spread": 0.024542104452848434
+          },
+          {
+            "correct_score": -0.011802173219621181,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9",
+            "scores": [
+              -0.008513734675943851,
+              -0.011802173219621181,
+              0.012739932164549828
+            ],
+            "spread": 0.024542104452848434
+          },
+          {
+            "correct_score": -0.010567331686615944,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5",
+            "scores": [
+              0.016230903565883636,
+              -0.010567331686615944,
+              0.018720479682087898
+            ],
+            "spread": 0.029287811368703842
+          },
+          {
+            "correct_score": 0.01648472249507904,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd",
+            "scores": [
+              -0.010655011981725693,
+              0.01883738487958908,
+              0.01648472249507904
+            ],
+            "spread": 0.029492396861314774
+          },
+          {
+            "correct_score": -0.008338666521012783,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f",
+            "scores": [
+              -0.008338666521012783,
+              0.0017040185630321503,
+              0.0
+            ],
+            "spread": 0.010042685084044933
+          },
+          {
+            "correct_score": 0.02209656685590744,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b",
+            "scores": [
+              0.02209656685590744,
+              0.0069257719442248344,
+              0.0099155493080616
+            ],
+            "spread": 0.015170794911682606
+          },
+          {
+            "correct_score": -0.00862408708781004,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7",
+            "scores": [
+              0.023375777527689934,
+              -0.00862408708781004,
+              0.004645324312150478
+            ],
+            "spread": 0.0319998636841774
+          },
+          {
+            "correct_score": -0.00862408708781004,
+            "correct_slot": 2,
+            "op": "FIND_SHARED_PART",
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c",
+            "scores": [
+              0.004645324312150478,
+              0.023375777527689934,
+              -0.00862408708781004
+            ],
+            "spread": 0.0319998636841774
+          },
+          {
+            "correct_score": -0.011936964467167854,
+            "correct_slot": 0,
+            "op": "REACHED_VIA",
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d",
+            "scores": [
+              -0.011936964467167854,
+              0.023892510682344437,
+              0.01748308539390564
+            ],
+            "spread": 0.03582947701215744
+          },
+          {
+            "correct_score": 0.017031634226441383,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a",
+            "scores": [
+              0.023195527493953705,
+              0.017031634226441383,
+              -0.011529374867677689
+            ],
+            "spread": 0.03472490236163139
+          }
+        ],
+        "tag_vectors": {
+          "pairwise_cosines": [
+            -0.04402767375387928,
+            -0.12439775078929259,
+            0.16530372049746242,
+            0.26374258056438077,
+            -0.0688506283328206,
+            0.045705929644249375,
+            0.0011274674748375068,
+            -0.008778583769422744,
+            0.04500975328608954,
+            0.04482430647750014,
+            -0.14187999907509358,
+            0.08384082165731677,
+            -0.0817824824739035,
+            -0.08118646713239419,
+            0.15273042053409017,
+            0.1274077337910697,
+            0.15976702850406727,
+            -0.004432817590720956,
+            -0.04772179970857317,
+            0.010168185907998634,
+            -0.20107397584953535,
+            -0.09514265608222927,
+            0.09411381927898166,
+            -0.07390459905021399,
+            0.1681429893796439,
+            -0.06331408830263316,
+            0.046221514740499944,
+            0.07007452642106671,
+            0.05047187720402235,
+            0.09446593365574932,
+            -0.20758642707819608,
+            0.009065086455635328,
+            0.012512634874564338,
+            0.1739195468633632,
+            0.20893890603875848,
+            0.03348962109834502,
+            0.009758963953083812,
+            -0.10308710126395428,
+            0.02076811556275076,
+            0.1582986792904665,
+            -0.3074094322476685,
+            0.1435928043755415,
+            0.06609240638554835,
+            0.17297691746559096,
+            0.08645266088897202
+          ],
+          "tag_rows": [
+            {
+              "norm": 0.9618467688560486,
+              "tag": "[WORD:5b]"
+            },
+            {
+              "norm": 0.9534399509429932,
+              "tag": "[WORD:27]"
+            },
+            {
+              "norm": 0.8950823545455933,
+              "tag": "[WORD:6964656132]"
+            },
+            {
+              "norm": 0.9399780631065369,
+              "tag": "[WORD:2c]"
+            },
+            {
+              "norm": 1.0337014198303223,
+              "tag": "[WORD:20]"
+            },
+            {
+              "norm": 1.0243723392486572,
+              "tag": "[WORD:6964656133]"
+            },
+            {
+              "norm": 0.9227727651596069,
+              "tag": "[WORD:5d]"
+            },
+            {
+              "norm": 1.073289394378662,
+              "tag": "[WORD:6964656136]"
+            },
+            {
+              "norm": 1.0132172107696533,
+              "tag": "[WORD:6964656131]"
+            },
+            {
+              "norm": 0.8894291520118713,
+              "tag": "[WORD:696465613137]"
+            }
+          ],
+          "tags_measured": 10
+        }
+      }
+    },
+    {
+      "arm": "generic",
+      "checkpoint_after": "95f3513d62a5e3470cb6f199781f94bc10dab24956b4ce2712a4e31f8c47e60e",
+      "checkpoint_before": "95f3513d62a5e3470cb6f199781f94bc10dab24956b4ce2712a4e31f8c47e60e",
+      "report": {
+        "boundary": "measurement only; no optimizer step was taken; weights unchanged by this diagnostic",
+        "gradient_test": [
+          {
+            "op": "LIST_PARTS",
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "results": [
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.12355531752109528,
+                  "merge.weight": 0.2386099100112915,
+                  "right.weight": 0.09711364656686783
+                },
+                "loss": 1.0893476009368896,
+                "target": 0
+              },
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.07709076255559921,
+                  "merge.weight": 0.14125773310661316,
+                  "right.weight": 0.058742985129356384
+                },
+                "loss": 1.1125532388687134,
+                "target": 1
+              },
+              {
+                "correct_target": 1,
+                "gradient_norms": {
+                  "left.weight": 0.1241370365023613,
+                  "merge.weight": 0.23166941106319427,
+                  "right.weight": 0.09402013570070267
+                },
+                "loss": 1.0940862894058228,
+                "target": 2
+              }
+            ]
+          },
+          {
+            "op": "LIST_PARTS",
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "results": [
+              {
+                "correct_target": 2,
+                "gradient_norms": {
+                  "left.weight": 0.1804027557373047,
+                  "merge.weight": 0.3658399283885956,
+                  "right.weight": 0.14499659836292267
+                },
+                "loss": 1.1118967533111572,
+                "target": 0
+              },
+              {
+                "correct_target": 2,
+                "gradient_norms": {
+                  "left.weight": 0.1936837136745453,
+                  "merge.weight": 0.3656143546104431,
+                  "right.weight": 0.14847254753112793
+                },
+                "loss": 1.070961356163025,
+                "target": 1
+              },
+              {
+                "correct_target": 2,
+                "gradient_norms": {
+                  "left.weight": 0.13270607590675354,
+                  "merge.weight": 0.28319478034973145,
+                  "right.weight": 0.12594109773635864
+                },
+                "loss": 1.1135637760162354,
+                "target": 2
+              }
+            ]
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "results": [
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.15733565390110016,
+                  "merge.weight": 0.2768186628818512,
+                  "right.weight": 0.13285794854164124
+                },
+                "loss": 1.096714973449707,
+                "target": 0
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.11092077195644379,
+                  "merge.weight": 0.2143842726945877,
+                  "right.weight": 0.09796953201293945
+                },
+                "loss": 1.1156357526779175,
+                "target": 1
+              },
+              {
+                "correct_target": 0,
+                "gradient_norms": {
+                  "left.weight": 0.14857228100299835,
+                  "merge.weight": 0.25479742884635925,
+                  "right.weight": 0.10644938796758652
+                },
+                "loss": 1.0837430953979492,
+                "target": 2
+              }
+            ]
+          }
+        ],
+        "graph_edit_response": [
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "connector_retarget",
+            "output_cosine": 0.999824086586511,
+            "output_difference_norm": 0.002257073497623335,
+            "output_norm_baseline": 0.11926735937595367,
+            "output_norm_edited": 0.11954669654369354,
+            "problem_token_count_after": 202,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": false,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.023205582052469254,
+              -0.004738670773804188
+            ],
+            "scores_edited": [
+              0.0,
+              -0.023203006014227867,
+              -0.005052248947322369
+            ]
+          },
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "node_contents",
+            "output_cosine": 0.9976025183847715,
+            "output_difference_norm": 0.010254674495034033,
+            "output_norm_baseline": 0.11926735937595367,
+            "output_norm_edited": 0.11289592832326889,
+            "problem_token_count_after": 216,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": false,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.023205582052469254,
+              -0.004738670773804188
+            ],
+            "scores_edited": [
+              0.0,
+              -0.021465973928570747,
+              -0.0042455196380615234
+            ]
+          },
+          {
+            "argmax_baseline": 0,
+            "argmax_edited": 0,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 0.9999999633625684,
+            "output_difference_norm": 3.225388610606372e-05,
+            "output_norm_baseline": 0.11926735937595367,
+            "output_norm_edited": 0.11926735937595367,
+            "problem_token_count_after": 202,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": true,
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_baseline": [
+              0.0,
+              -0.023205582052469254,
+              -0.004738670773804188
+            ],
+            "scores_edited": [
+              0.0,
+              -0.023205576464533806,
+              -0.004738667979836464
+            ]
+          },
+          {
+            "argmax_baseline": 1,
+            "argmax_edited": 1,
+            "edit": "connector_retarget",
+            "output_cosine": 0.9998250415783598,
+            "output_difference_norm": 0.0022569385229136876,
+            "output_norm_baseline": 0.11948594450950623,
+            "output_norm_edited": 0.11977886408567429,
+            "problem_token_count_after": 202,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": false,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.012973371893167496,
+              0.027961984276771545,
+              -0.014640433713793755
+            ],
+            "scores_edited": [
+              -0.013060781173408031,
+              0.027773603796958923,
+              -0.015081658028066158
+            ]
+          },
+          {
+            "argmax_baseline": 1,
+            "argmax_edited": 1,
+            "edit": "node_contents",
+            "output_cosine": 0.9976144718803037,
+            "output_difference_norm": 0.010244441414416145,
+            "output_norm_baseline": 0.11948594450950623,
+            "output_norm_edited": 0.11312521994113922,
+            "problem_token_count_after": 216,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": false,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.012973371893167496,
+              0.027961984276771545,
+              -0.014640433713793755
+            ],
+            "scores_edited": [
+              -0.012570101767778397,
+              0.02608710527420044,
+              -0.014838408678770065
+            ]
+          },
+          {
+            "argmax_baseline": 1,
+            "argmax_edited": 1,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 1.0000000055433096,
+            "output_difference_norm": 0.0,
+            "output_norm_baseline": 0.11948594450950623,
+            "output_norm_edited": 0.11948594450950623,
+            "problem_token_count_after": 202,
+            "problem_token_count_before": 202,
+            "problem_token_multiset_equal": true,
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_baseline": [
+              -0.012973371893167496,
+              0.027961984276771545,
+              -0.014640433713793755
+            ],
+            "scores_edited": [
+              -0.012973371893167496,
+              0.027961980551481247,
+              -0.014640441164374352
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_retarget",
+            "output_cosine": 0.9997970725171855,
+            "output_difference_norm": 0.002408944565976062,
+            "output_norm_baseline": 0.119151271879673,
+            "output_norm_edited": 0.11933121830224991,
+            "problem_token_count_after": 181,
+            "problem_token_count_before": 181,
+            "problem_token_multiset_equal": false,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.021933307871222496,
+              -5.147792398929596e-05,
+              0.019334914162755013
+            ],
+            "scores_edited": [
+              -0.02246883697807789,
+              -0.0004456639289855957,
+              0.019272595643997192
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "node_contents",
+            "output_cosine": 0.9970339771728526,
+            "output_difference_norm": 0.011271699352504458,
+            "output_norm_baseline": 0.119151271879673,
+            "output_norm_edited": 0.11224357783794403,
+            "problem_token_count_after": 195,
+            "problem_token_count_before": 181,
+            "problem_token_multiset_equal": false,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.021933307871222496,
+              -5.147792398929596e-05,
+              0.019334914162755013
+            ],
+            "scores_edited": [
+              -0.02088310942053795,
+              0.00012464169412851334,
+              0.01789192110300064
+            ]
+          },
+          {
+            "argmax_baseline": 2,
+            "argmax_edited": 2,
+            "edit": "connector_rewire_same_tokens",
+            "output_cosine": 0.9999999898950751,
+            "output_difference_norm": 1.6879566180927912e-05,
+            "output_norm_baseline": 0.119151271879673,
+            "output_norm_edited": 0.119151271879673,
+            "problem_token_count_after": 181,
+            "problem_token_count_before": 181,
+            "problem_token_multiset_equal": true,
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_baseline": [
+              -0.021933307871222496,
+              -5.147792398929596e-05,
+              0.019334914162755013
+            ],
+            "scores_edited": [
+              -0.021933309733867645,
+              -5.1478855311870575e-05,
+              0.019334914162755013
+            ]
+          }
+        ],
+        "module_outputs": {
+          "output_norm_stats": {
+            "max": 0.12147478759288788,
+            "median": 0.11937367171049118,
+            "min": 0.11498357355594635
+          },
+          "pairwise_cosines": [
+            0.9998639959903076,
+            0.9984980599049466,
+            0.9984980599049466,
+            0.9971220156931633,
+            0.9975400722745454,
+            0.9964058674278771,
+            0.9964789480887939,
+            0.9984982215339623,
+            0.9984982215339623,
+            0.9974416895552319,
+            0.9977968134198123,
+            0.996969834695902,
+            0.9970634970220053,
+            0.9999998171264787,
+            0.9981281901713931,
+            0.9983122693133288,
+            0.9935963187500052,
+            0.9940951033457924,
+            0.9981281901713931,
+            0.9983122693133288,
+            0.9935963187500052,
+            0.9940951033457924,
+            0.9998669100622055,
+            0.9938562117645364,
+            0.9942349508862893,
+            0.9941214557351898,
+            0.9944893051822924,
+            0.9998398203489042
+          ],
+          "pairwise_cosines_first_records": 8,
+          "per_record": [
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11926735937595367,
+              "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11948594450950623,
+              "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11933154612779617,
+              "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11933154612779617,
+              "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.1200036033987999,
+              "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11921782046556473,
+              "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.119151271879673,
+              "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11901959776878357,
+              "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11877236515283585,
+              "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11877236515283585,
+              "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11901923269033432,
+              "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11951465904712677,
+              "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11995752155780792,
+              "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11972973495721817,
+              "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11937367171049118,
+              "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.1198902577161789,
+              "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12015197426080704,
+              "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11999193578958511,
+              "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11520066112279892,
+              "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.11524887382984161,
+              "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11498357355594635,
+              "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.11498357355594635,
+              "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11523286253213882,
+              "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.11527873575687408,
+              "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12147478759288788,
+              "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f"
+            },
+            {
+              "op": "LIST_PARTS",
+              "output_norm": 0.12050417065620422,
+              "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12085913866758347,
+              "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7"
+            },
+            {
+              "op": "FIND_SHARED_PART",
+              "output_norm": 0.12085913866758347,
+              "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12109250575304031,
+              "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d"
+            },
+            {
+              "op": "REACHED_VIA",
+              "output_norm": 0.12052977085113525,
+              "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a"
+            }
+          ]
+        },
+        "option_geometry": [
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.0,
+              0.7482424106163524
+            ],
+            "problem_option_cosines": [
+              0.0,
+              0.06104993499604536,
+              0.11164237851826513
+            ],
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.10925387289069878,
+              0.556006728434833,
+              0.635013271778878
+            ],
+            "problem_option_cosines": [
+              0.23600304231551444,
+              0.4103032104459292,
+              0.5232999926980989
+            ],
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.027123776790271583,
+              0.24447706058520446,
+              0.10519671038060292
+            ],
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.08677899384806259,
+              0.08645266088897202,
+              -0.11652112631594001
+            ],
+            "problem_option_cosines": [
+              0.24447706058520446,
+              0.027123776790271583,
+              0.10519671038060292
+            ],
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.0347693430870048,
+              0.010561078417398109,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.09496028054734937,
+              0.13239406874810636,
+              -0.16538814950850875
+            ],
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.0347693430870048,
+              0.010561078417398109,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.08797668634256808,
+              0.13188644267142638,
+              -0.16431013744818646
+            ],
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.6656567005350413,
+              0.17123442596743318,
+              0.5746596362388062
+            ],
+            "problem_option_cosines": [
+              0.47702700639633877,
+              0.5273434365574703,
+              0.12472147069120101
+            ],
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.9267375386307923,
+              0.0,
+              0.0
+            ],
+            "problem_option_cosines": [
+              0.48263072553334185,
+              0.5382279670424863,
+              0.0
+            ],
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.07595203793028647,
+              -0.0050961614447707785,
+              0.08645266088897202
+            ],
+            "problem_option_cosines": [
+              0.11286732018303429,
+              0.12900412199694042,
+              0.23932171493334134
+            ],
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.0050961614447707785,
+              0.08645266088897202,
+              0.07595203793028647
+            ],
+            "problem_option_cosines": [
+              0.23932171493334134,
+              0.11286732018303429,
+              0.12900412199694042
+            ],
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.10076837600458152,
+              -0.0007577811602167367,
+              -0.02044997627353873
+            ],
+            "problem_option_cosines": [
+              -0.1576119941379551,
+              -0.14964105064103628,
+              0.1436337120338461
+            ],
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.10076837600458152,
+              -0.02044997627353873,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              -0.15825621068066012,
+              -0.16047796235993464,
+              0.1455730287114231
+            ],
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.5504460135243624,
+              0.18298490894670888,
+              0.7745204465804733
+            ],
+            "problem_option_cosines": [
+              0.22256025578994829,
+              0.5179492916418749,
+              0.5420215327049633
+            ],
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.7455965050648911,
+              0.0
+            ],
+            "problem_option_cosines": [
+              0.052137594336267766,
+              0.0,
+              0.18921064314743244
+            ],
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "problem_option_cosines": [
+              0.11678703358045908,
+              0.10951857233103704,
+              0.2318033769418051
+            ],
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.08645266088897202,
+              0.08677899384806259,
+              -0.11652112631594001
+            ],
+            "problem_option_cosines": [
+              0.22909177026276725,
+              0.11819632807783491,
+              0.021211068757876345
+            ],
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              -0.0007577811602167367,
+              0.0347693430870048,
+              0.010561078417398109
+            ],
+            "problem_option_cosines": [
+              0.15017729505661484,
+              -0.16323230194366165,
+              0.08798136150737122
+            ],
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.0347693430870048,
+              -0.0007577811602167367,
+              0.010561078417398109
+            ],
+            "problem_option_cosines": [
+              0.14982040155679238,
+              0.08131738102980335,
+              -0.16235909622755224
+            ],
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              -0.041329422207169765,
+              -0.033363247424237394,
+              0.7939490155944963
+            ],
+            "problem_option_cosines": [
+              0.11622256338122484,
+              -0.17030005509508392,
+              -0.11167233793446653
+            ],
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.6208175952137867,
+              0.0,
+              0.0
+            ],
+            "problem_option_cosines": [
+              0.005214510858674767,
+              -0.03816408182671936,
+              0.0
+            ],
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.0077574007630031114,
+              -0.06365910580502782,
+              -0.021998458040004356
+            ],
+            "problem_option_cosines": [
+              0.10714445849884986,
+              0.08116971923259247,
+              -0.06000321233588424
+            ],
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              -0.06365910580502782,
+              -0.0077574007630031114,
+              -0.021998458040004356
+            ],
+            "problem_option_cosines": [
+              0.10714445849884986,
+              -0.06000321233588424,
+              0.08116971923259247
+            ],
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.05601275121942034,
+              0.059187281721288426,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.038534352989632675,
+              0.12485750893786181,
+              -0.15801064083041053
+            ],
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.059187281721288426,
+              0.05601275121942034,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.032386410289167215,
+              -0.15825714714888203,
+              0.12269671834818667
+            ],
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.0,
+              0.71137100501726,
+              0.0
+            ],
+            "problem_option_cosines": [
+              -0.026425215082789267,
+              0.0,
+              -0.15595117128740155
+            ],
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f"
+          },
+          {
+            "op": "LIST_PARTS",
+            "option_pair_cosines": [
+              0.06398848556481856,
+              0.4758269752985046,
+              0.4872294603974747
+            ],
+            "problem_option_cosines": [
+              0.4827758888763766,
+              0.1410725102710704,
+              0.5728182639300844
+            ],
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.06629728219614794,
+              0.008249659166976803,
+              0.06891070570566192
+            ],
+            "problem_option_cosines": [
+              0.02308558412404303,
+              0.09941948551621506,
+              -0.1432892548863
+            ],
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7"
+          },
+          {
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines": [
+              0.008249659166976803,
+              0.06891070570566192,
+              0.06629728219614794
+            ],
+            "problem_option_cosines": [
+              -0.1432892548863,
+              0.02308558412404303,
+              0.09941948551621506
+            ],
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.042089148870720836,
+              0.02604005128388845,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.06624098643354934,
+              0.1345847487882089,
+              -0.1501611981537614
+            ],
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d"
+          },
+          {
+            "op": "REACHED_VIA",
+            "option_pair_cosines": [
+              0.02604005128388845,
+              0.042089148870720836,
+              -0.0007577811602167367
+            ],
+            "problem_option_cosines": [
+              0.060001648849073795,
+              -0.1489883165454309,
+              0.13541494025050663
+            ],
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a"
+          }
+        ],
+        "representation_comparison": [
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.0,
+              0.7482424106163524
+            ],
+            "option_pair_cosines_old": [
+              0.9707951904095004,
+              0.9428913439049352,
+              0.9875068702319911
+            ],
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores_new": [
+              0.0,
+              -0.023205582052469254,
+              -0.004738670773804188
+            ],
+            "scores_old": [
+              -0.10357904434204102,
+              -0.16232463717460632,
+              -0.17939776182174683
+            ],
+            "spread_new": 0.023205582052469254,
+            "spread_old": 0.07581871747970581
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.10925387289069878,
+              0.556006728434833,
+              0.635013271778878
+            ],
+            "option_pair_cosines_old": [
+              0.8125192792071398,
+              0.9070348664716801,
+              0.921624908914629
+            ],
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores_new": [
+              -0.012973371893167496,
+              0.027961984276771545,
+              -0.014640433713793755
+            ],
+            "scores_old": [
+              -0.06886983662843704,
+              -0.054728418588638306,
+              -0.09733083844184875
+            ],
+            "spread_new": 0.0426024179905653,
+            "spread_old": 0.04260241985321045
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.08677899384806259,
+              -0.11652112631594001,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.5202031116512726,
+              0.40770220195971696,
+              0.5624724573682063
+            ],
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "scores_new": [
+              0.00570269487798214,
+              -0.013218112289905548,
+              0.018674524500966072
+            ],
+            "scores_old": [
+              -0.005105149000883102,
+              -0.024025963619351387,
+              0.007866673171520233
+            ],
+            "spread_new": 0.03189263679087162,
+            "spread_old": 0.03189263679087162
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.08677899384806259,
+              0.08645266088897202,
+              -0.11652112631594001
+            ],
+            "option_pair_cosines_old": [
+              0.5202031116512726,
+              0.5624724573682063,
+              0.40770220195971696
+            ],
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+            "scores_new": [
+              -0.013218112289905548,
+              0.00570269487798214,
+              0.018674524500966072
+            ],
+            "scores_old": [
+              -0.024025963619351387,
+              -0.005105149000883102,
+              0.007866673171520233
+            ],
+            "spread_new": 0.03189263679087162,
+            "spread_old": 0.03189263679087162
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.0347693430870048,
+              0.010561078417398109,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.2770255789910182,
+              0.2819396981756115,
+              0.38663747995349146
+            ],
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd",
+            "scores_new": [
+              0.01449899934232235,
+              0.02750067226588726,
+              -0.0138269467279315
+            ],
+            "scores_old": [
+              0.004534446634352207,
+              0.017536116763949394,
+              -0.023791499435901642
+            ],
+            "spread_new": 0.04132761899381876,
+            "spread_old": 0.041327616199851036
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.0347693430870048,
+              0.010561078417398109,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.2770255789910182,
+              0.2819396981756115,
+              0.38663747995349146
+            ],
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e",
+            "scores_new": [
+              0.014719313010573387,
+              0.02732773870229721,
+              -0.013647687621414661
+            ],
+            "scores_old": [
+              0.004885328002274036,
+              0.017493752762675285,
+              -0.023481670767068863
+            ],
+            "spread_new": 0.04097542632371187,
+            "spread_old": 0.04097542352974415
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.6656567005350413,
+              0.17123442596743318,
+              0.5746596362388062
+            ],
+            "option_pair_cosines_old": [
+              0.9289271927427546,
+              0.8575724001876976,
+              0.9013052648873482
+            ],
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores_new": [
+              -0.021933307871222496,
+              -5.147792398929596e-05,
+              0.019334914162755013
+            ],
+            "scores_old": [
+              -0.09964151680469513,
+              -0.07775969058275223,
+              -0.03272358700633049
+            ],
+            "spread_new": 0.04126822203397751,
+            "spread_old": 0.06691792979836464
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.9267375386307923,
+              0.0,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.9710031429871181,
+              0.8820243045988363,
+              0.7900239588502745
+            ],
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc",
+            "scores_new": [
+              -0.028807375580072403,
+              -0.016557862982153893,
+              0.0
+            ],
+            "scores_old": [
+              -0.09979287534952164,
+              -0.11293713748455048,
+              -0.04559171199798584
+            ],
+            "spread_new": 0.028807375580072403,
+            "spread_old": 0.06734542548656464
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.07595203793028647,
+              -0.0050961614447707785,
+              0.08645266088897202
+            ],
+            "option_pair_cosines_old": [
+              0.607107707392819,
+              0.5883794458379419,
+              0.5624724573682063
+            ],
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d",
+            "scores_new": [
+              0.0061745112761855125,
+              0.019503571093082428,
+              -0.012742002494633198
+            ],
+            "scores_old": [
+              -0.00439341738820076,
+              0.00893564522266388,
+              -0.02330993115901947
+            ],
+            "spread_new": 0.032245573587715626,
+            "spread_old": 0.03224557638168335
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.0050961614447707785,
+              0.08645266088897202,
+              0.07595203793028647
+            ],
+            "option_pair_cosines_old": [
+              0.5883794458379419,
+              0.5624724573682063,
+              0.607107707392819
+            ],
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0",
+            "scores_new": [
+              -0.012742002494633198,
+              0.0061745112761855125,
+              0.019503571093082428
+            ],
+            "scores_old": [
+              -0.02330993115901947,
+              -0.00439341738820076,
+              0.00893564522266388
+            ],
+            "spread_new": 0.032245573587715626,
+            "spread_old": 0.03224557638168335
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.10076837600458152,
+              -0.0007577811602167367,
+              -0.02044997627353873
+            ],
+            "option_pair_cosines_old": [
+              0.36916546281954404,
+              0.38663747995349146,
+              0.2642760667474436
+            ],
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a",
+            "scores_new": [
+              -0.014795980416238308,
+              0.013620950281620026,
+              0.025982361286878586
+            ],
+            "scores_old": [
+              -0.024399321526288986,
+              0.004017604514956474,
+              0.016379019245505333
+            ],
+            "spread_new": 0.040778341703116894,
+            "spread_old": 0.04077834077179432
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.10076837600458152,
+              -0.02044997627353873,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.36916546281954404,
+              0.2642760667474436,
+              0.38663747995349146
+            ],
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4",
+            "scores_new": [
+              0.013568749651312828,
+              -0.014526509679853916,
+              0.02597505785524845
+            ],
+            "scores_old": [
+              0.0042628757655620575,
+              -0.02383238449692726,
+              0.01666918396949768
+            ],
+            "spread_new": 0.04050156753510237,
+            "spread_old": 0.04050156846642494
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 0,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.5504460135243624,
+              0.18298490894670888,
+              0.7745204465804733
+            ],
+            "option_pair_cosines_old": [
+              0.9036219548528489,
+              0.7832055918215883,
+              0.9400446291866413
+            ],
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c",
+            "scores_new": [
+              -0.012585297226905823,
+              -0.018329977989196777,
+              0.020229319110512733
+            ],
+            "scores_old": [
+              -0.06733319163322449,
+              -0.10130591690540314,
+              -0.09097465127706528
+            ],
+            "spread_new": 0.03855929709970951,
+            "spread_old": 0.03397272527217865
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.7455965050648911,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.9747609103274744,
+              0.9919771491731396,
+              0.958993012731425
+            ],
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7",
+            "scores_new": [
+              0.009907218627631664,
+              0.0,
+              -0.002788782585412264
+            ],
+            "scores_old": [
+              -0.09178367257118225,
+              -0.0645519345998764,
+              -0.14161863923072815
+            ],
+            "spread_new": 0.012696001213043928,
+            "spread_old": 0.07706670463085175
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.07595203793028647,
+              0.08645266088897202,
+              -0.0050961614447707785
+            ],
+            "option_pair_cosines_old": [
+              0.607107707392819,
+              0.5624724573682063,
+              0.5883794458379419
+            ],
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf",
+            "scores_new": [
+              0.019427824765443802,
+              0.008133984170854092,
+              -0.012898467481136322
+            ],
+            "scores_old": [
+              0.010592315346002579,
+              -0.0007015257142484188,
+              -0.021733980625867844
+            ],
+            "spread_new": 0.032326292246580124,
+            "spread_old": 0.03232629597187042
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.08645266088897202,
+              0.08677899384806259,
+              -0.11652112631594001
+            ],
+            "option_pair_cosines_old": [
+              0.5624724573682063,
+              0.5202031116512726,
+              0.40770220195971696
+            ],
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc",
+            "scores_new": [
+              -0.013406419195234776,
+              0.01968759298324585,
+              0.004157646093517542
+            ],
+            "scores_old": [
+              -0.022205617278814316,
+              0.010888397693634033,
+              -0.004641549661755562
+            ],
+            "spread_new": 0.033094012178480625,
+            "spread_old": 0.03309401497244835
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              -0.0007577811602167367,
+              0.0347693430870048,
+              0.010561078417398109
+            ],
+            "option_pair_cosines_old": [
+              0.38663747995349146,
+              0.2770255789910182,
+              0.2819396981756115
+            ],
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53",
+            "scores_new": [
+              0.02719016931951046,
+              -0.015882015228271484,
+              0.015105064958333969
+            ],
+            "scores_old": [
+              0.018703250214457512,
+              -0.02436893619596958,
+              0.006618146784603596
+            ],
+            "spread_new": 0.043072184547781944,
+            "spread_old": 0.043072186410427094
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.0347693430870048,
+              -0.0007577811602167367,
+              0.010561078417398109
+            ],
+            "option_pair_cosines_old": [
+              0.2770255789910182,
+              0.38663747995349146,
+              0.2819396981756115
+            ],
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c",
+            "scores_new": [
+              0.026939719915390015,
+              0.014742639847099781,
+              -0.01569502428174019
+            ],
+            "scores_old": [
+              0.01861508935689926,
+              0.0064180102199316025,
+              -0.02401965670287609
+            ],
+            "spread_new": 0.0426347441971302,
+            "spread_old": 0.04263474605977535
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              -0.041329422207169765,
+              -0.033363247424237394,
+              0.7939490155944963
+            ],
+            "option_pair_cosines_old": [
+              0.9150872897751334,
+              0.9404172486518485,
+              0.972932018205279
+            ],
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703",
+            "scores_new": [
+              -0.016612675040960312,
+              -0.00166265107691288,
+              -0.0035824310034513474
+            ],
+            "scores_old": [
+              -0.1322959065437317,
+              -0.08568866550922394,
+              -0.11926567554473877
+            ],
+            "spread_new": 0.014950023964047432,
+            "spread_old": 0.04660724103450775
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 2,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.6208175952137867,
+              0.0,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.987742754865348,
+              0.9822821379805778,
+              0.9614700821387747
+            ],
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc",
+            "scores_new": [
+              0.0093165822327137,
+              0.021434398368000984,
+              0.0
+            ],
+            "scores_old": [
+              -0.13438881933689117,
+              -0.15460067987442017,
+              -0.11137573421001434
+            ],
+            "spread_new": 0.021434398368000984,
+            "spread_old": 0.04322494566440582
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.0077574007630031114,
+              -0.06365910580502782,
+              -0.021998458040004356
+            ],
+            "option_pair_cosines_old": [
+              0.42375212691299147,
+              0.40966543310889486,
+              0.45015204430908906
+            ],
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5",
+            "scores_new": [
+              -0.00842275284230709,
+              -0.009282003156840801,
+              0.011653243564069271
+            ],
+            "scores_old": [
+              -0.017985031008720398,
+              -0.018844280391931534,
+              0.002090965397655964
+            ],
+            "spread_new": 0.020935246720910072,
+            "spread_old": 0.020935245789587498
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              -0.06365910580502782,
+              -0.0077574007630031114,
+              -0.021998458040004356
+            ],
+            "option_pair_cosines_old": [
+              0.40966543310889486,
+              0.42375212691299147,
+              0.45015204430908906
+            ],
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9",
+            "scores_new": [
+              -0.00842275284230709,
+              0.011653243564069271,
+              -0.009282003156840801
+            ],
+            "scores_old": [
+              -0.017985031008720398,
+              0.002090965397655964,
+              -0.018844280391931534
+            ],
+            "spread_new": 0.020935246720910072,
+            "spread_old": 0.020935245789587498
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.05601275121942034,
+              0.059187281721288426,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.23608786234758175,
+              0.25875800185936476,
+              0.38663747995349146
+            ],
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5",
+            "scores_new": [
+              0.014600235037505627,
+              0.025390328839421272,
+              -0.012714846059679985
+            ],
+            "scores_old": [
+              0.00548778660595417,
+              0.01627788320183754,
+              -0.02182728797197342
+            ],
+            "spread_new": 0.03810517489910126,
+            "spread_old": 0.03810517117381096
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.059187281721288426,
+              0.05601275121942034,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.25875800185936476,
+              0.23608786234758175,
+              0.38663747995349146
+            ],
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd",
+            "scores_new": [
+              0.014953145757317543,
+              -0.01283690333366394,
+              0.025552960112690926
+            ],
+            "scores_old": [
+              0.005794880911707878,
+              -0.021995168179273605,
+              0.01639469340443611
+            ],
+            "spread_new": 0.038389863446354866,
+            "spread_old": 0.03838986158370972
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.0,
+              0.71137100501726,
+              0.0
+            ],
+            "option_pair_cosines_old": [
+              0.9620233546797506,
+              0.9902801770602506,
+              0.9776102475126622
+            ],
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f",
+            "scores_new": [
+              -0.0015123207122087479,
+              0.0,
+              -0.009879669174551964
+            ],
+            "scores_old": [
+              -0.1524728536605835,
+              -0.07196811586618423,
+              -0.12134398519992828
+            ],
+            "spread_new": 0.009879669174551964,
+            "spread_old": 0.08050473779439926
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 1,
+            "op": "LIST_PARTS",
+            "option_pair_cosines_new": [
+              0.06398848556481856,
+              0.4758269752985046,
+              0.4872294603974747
+            ],
+            "option_pair_cosines_old": [
+              0.829794936296791,
+              0.8915183844385515,
+              0.9032986906573653
+            ],
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b",
+            "scores_new": [
+              -0.0008957337122410536,
+              0.0081784687936306,
+              0.02127206325531006
+            ],
+            "scores_old": [
+              -0.08465457707643509,
+              -0.04962184280157089,
+              -0.06248676776885986
+            ],
+            "spread_new": 0.022167796967551112,
+            "spread_old": 0.0350327342748642
+          },
+          {
+            "argmax_new": 0,
+            "argmax_old": 0,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.06629728219614794,
+              0.008249659166976803,
+              0.06891070570566192
+            ],
+            "option_pair_cosines_old": [
+              0.47620104327956997,
+              0.4991878508773992,
+              0.5112785516698329
+            ],
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7",
+            "scores_new": [
+              0.01896839588880539,
+              0.0072001125663518906,
+              -0.010263335891067982
+            ],
+            "scores_old": [
+              0.00648808479309082,
+              -0.005280197132378817,
+              -0.022743646055459976
+            ],
+            "spread_new": 0.02923173177987337,
+            "spread_old": 0.029231730848550797
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "FIND_SHARED_PART",
+            "option_pair_cosines_new": [
+              0.008249659166976803,
+              0.06891070570566192,
+              0.06629728219614794
+            ],
+            "option_pair_cosines_old": [
+              0.4991878508773992,
+              0.5112785516698329,
+              0.47620104327956997
+            ],
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c",
+            "scores_new": [
+              -0.010263335891067982,
+              0.01896839588880539,
+              0.0072001125663518906
+            ],
+            "scores_old": [
+              -0.022743646055459976,
+              0.00648808479309082,
+              -0.005280197132378817
+            ],
+            "spread_new": 0.02923173177987337,
+            "spread_old": 0.029231730848550797
+          },
+          {
+            "argmax_new": 1,
+            "argmax_old": 1,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.042089148870720836,
+              0.02604005128388845,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.2992514904927365,
+              0.30691031346763764,
+              0.38663747995349146
+            ],
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d",
+            "scores_new": [
+              0.02435673028230667,
+              0.024639150127768517,
+              -0.015040753409266472
+            ],
+            "scores_old": [
+              0.012502565048635006,
+              0.012784991413354874,
+              -0.026894917711615562
+            ],
+            "spread_new": 0.03967990353703499,
+            "spread_old": 0.039679909124970436
+          },
+          {
+            "argmax_new": 2,
+            "argmax_old": 2,
+            "op": "REACHED_VIA",
+            "option_pair_cosines_new": [
+              0.02604005128388845,
+              0.042089148870720836,
+              -0.0007577811602167367
+            ],
+            "option_pair_cosines_old": [
+              0.30691031346763764,
+              0.2992514904927365,
+              0.38663747995349146
+            ],
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a",
+            "scores_new": [
+              0.02334482967853546,
+              -0.014449115842580795,
+              0.023983728140592575
+            ],
+            "scores_old": [
+              0.01136849820613861,
+              -0.026425445452332497,
+              0.012007399462163448
+            ],
+            "spread_new": 0.03843284398317337,
+            "spread_old": 0.038432844914495945
+          }
+        ],
+        "run_id": "cas-meta2-ln3-diagnostic-20260909183759-cce57ffb.generic",
+        "schema": "cas-graph-training-ln3-neural-diagnostic/1",
+        "scores": [
+          {
+            "correct_score": -0.023205582052469254,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+            "scores": [
+              0.0,
+              -0.023205582052469254,
+              -0.004738670773804188
+            ],
+            "spread": 0.023205582052469254
+          },
+          {
+            "correct_score": -0.014640433713793755,
+            "correct_slot": 2,
+            "op": "LIST_PARTS",
+            "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+            "scores": [
+              -0.012973371893167496,
+              0.027961984276771545,
+              -0.014640433713793755
+            ],
+            "spread": 0.04260241985321045
+          },
+          {
+            "correct_score": 0.00570269487798214,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+            "scores": [
+              0.00570269487798214,
+              -0.013218112289905548,
+              0.018674524500966072
+            ],
+            "spread": 0.03189263492822647
+          },
+          {
+            "correct_score": 0.00570269487798214,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+            "scores": [
+              -0.013218112289905548,
+              0.00570269487798214,
+              0.018674524500966072
+            ],
+            "spread": 0.03189263492822647
+          },
+          {
+            "correct_score": -0.0138269467279315,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd",
+            "scores": [
+              0.01449899934232235,
+              0.02750067226588726,
+              -0.0138269467279315
+            ],
+            "spread": 0.041327618062496185
+          },
+          {
+            "correct_score": 0.02732773870229721,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "43b5d35aafcfb7a408a1ef57a503eda304a98b2c0d0c7ec4d920d7db9667552e",
+            "scores": [
+              0.014719313010573387,
+              0.02732773870229721,
+              -0.013647687621414661
+            ],
+            "spread": 0.0409754253923893
+          },
+          {
+            "correct_score": -5.147792398929596e-05,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+            "scores": [
+              -0.021933307871222496,
+              -5.147792398929596e-05,
+              0.019334914162755013
+            ],
+            "spread": 0.04126822203397751
+          },
+          {
+            "correct_score": -0.028807375580072403,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "f5804076237aa331d358548b4c8e5d1a17eb463c9b5859b40e68f405572ee3fc",
+            "scores": [
+              -0.028807375580072403,
+              -0.016557862982153893,
+              0.0
+            ],
+            "spread": 0.028807375580072403
+          },
+          {
+            "correct_score": 0.0061745112761855125,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "22c64e2c71c5a950dc294e4acf33f4d7e1d42d061082d49587abbbff2d0f767d",
+            "scores": [
+              0.0061745112761855125,
+              0.019503571093082428,
+              -0.012742002494633198
+            ],
+            "spread": 0.03224557265639305
+          },
+          {
+            "correct_score": 0.0061745112761855125,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "929afd382336ffa3a8cea1952d84177318d09f25b3dc9a0aae24d93df0e6faa0",
+            "scores": [
+              -0.012742002494633198,
+              0.0061745112761855125,
+              0.019503571093082428
+            ],
+            "spread": 0.03224557265639305
+          },
+          {
+            "correct_score": -0.014795980416238308,
+            "correct_slot": 0,
+            "op": "REACHED_VIA",
+            "record_id": "64ffefe1cb425ea7ac2629ebf124ffeb5b248ce3b10fb98d2a6d4effea922a2a",
+            "scores": [
+              -0.014795980416238308,
+              0.013620950281620026,
+              0.025982361286878586
+            ],
+            "spread": 0.04077834263443947
+          },
+          {
+            "correct_score": 0.02597505785524845,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "6a3cebeec50c13f22a6cd547fc378e0b25e42da14b8cfe60a628589783d03aa4",
+            "scores": [
+              0.013568749651312828,
+              -0.014526509679853916,
+              0.02597505785524845
+            ],
+            "spread": 0.04050156846642494
+          },
+          {
+            "correct_score": -0.018329977989196777,
+            "correct_slot": 1,
+            "op": "LIST_PARTS",
+            "record_id": "eaca9450ef2d27f2d1b906c6e6ad8610fc85dcdfde21b6428cbabaa6fa25456c",
+            "scores": [
+              -0.012585297226905823,
+              -0.018329977989196777,
+              0.020229319110512733
+            ],
+            "spread": 0.03855929523706436
+          },
+          {
+            "correct_score": 0.009907218627631664,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "fc2f849bcdd0ede00975f38397276fcd7c749e562257ca4bfc3880d5ba5136e7",
+            "scores": [
+              0.009907218627631664,
+              0.0,
+              -0.002788782585412264
+            ],
+            "spread": 0.012696001678705215
+          },
+          {
+            "correct_score": 0.008133984170854092,
+            "correct_slot": 1,
+            "op": "FIND_SHARED_PART",
+            "record_id": "ada57ae189b392ed9da6de157c9fc7fc5b00c3e31aba01e81a9e8352e7ad6edf",
+            "scores": [
+              0.019427824765443802,
+              0.008133984170854092,
+              -0.012898467481136322
+            ],
+            "spread": 0.032326292246580124
+          },
+          {
+            "correct_score": 0.004157646093517542,
+            "correct_slot": 2,
+            "op": "FIND_SHARED_PART",
+            "record_id": "e9fa6ed102d0099e5d6d1c69351e9f92351ccfef8e49134eae66c33d0aed25fc",
+            "scores": [
+              -0.013406419195234776,
+              0.01968759298324585,
+              0.004157646093517542
+            ],
+            "spread": 0.03309401124715805
+          },
+          {
+            "correct_score": -0.015882015228271484,
+            "correct_slot": 1,
+            "op": "REACHED_VIA",
+            "record_id": "09856784a57955171367cfd060a39f7e2e9086375e3c65fde7bffe2c32c55d53",
+            "scores": [
+              0.02719016931951046,
+              -0.015882015228271484,
+              0.015105064958333969
+            ],
+            "spread": 0.043072186410427094
+          },
+          {
+            "correct_score": 0.026939719915390015,
+            "correct_slot": 0,
+            "op": "REACHED_VIA",
+            "record_id": "85c2ba7b41c79eb7a2fe3e955d16de394b84b572905bbfe86091df8a519f972c",
+            "scores": [
+              0.026939719915390015,
+              0.014742639847099781,
+              -0.01569502428174019
+            ],
+            "spread": 0.0426347441971302
+          },
+          {
+            "correct_score": -0.0035824310034513474,
+            "correct_slot": 2,
+            "op": "LIST_PARTS",
+            "record_id": "98b83c276a6dbf1ebc3f1c6d84924b4c662b6b9d0d650a3e22c20abfb597c703",
+            "scores": [
+              -0.016612675040960312,
+              -0.00166265107691288,
+              -0.0035824310034513474
+            ],
+            "spread": 0.014950023964047432
+          },
+          {
+            "correct_score": 0.0093165822327137,
+            "correct_slot": 0,
+            "op": "LIST_PARTS",
+            "record_id": "acdeacf294779f860a4240abad53e8b29e9206068c33a7c6a81809a3f784befc",
+            "scores": [
+              0.0093165822327137,
+              0.021434398368000984,
+              0.0
+            ],
+            "spread": 0.021434398368000984
+          },
+          {
+            "correct_score": -0.00842275284230709,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "af1a9e1c4b93e391609ecbbcfb71b29b52b10365b53434f2a88b09184b4759a5",
+            "scores": [
+              -0.00842275284230709,
+              -0.009282003156840801,
+              0.011653243564069271
+            ],
+            "spread": 0.020935246720910072
+          },
+          {
+            "correct_score": -0.00842275284230709,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "3cd3c0153a7ee057efdf1af1d45ad05c98bfed74b53970d8b3a81ee8691252d9",
+            "scores": [
+              -0.00842275284230709,
+              0.011653243564069271,
+              -0.009282003156840801
+            ],
+            "spread": 0.020935246720910072
+          },
+          {
+            "correct_score": -0.012714846059679985,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "94ccd152406aefa7b36b2f26526ddbef19cee13510eff3272d8f8e29133be2e5",
+            "scores": [
+              0.014600235037505627,
+              0.025390328839421272,
+              -0.012714846059679985
+            ],
+            "spread": 0.03810517489910126
+          },
+          {
+            "correct_score": 0.014953145757317543,
+            "correct_slot": 0,
+            "op": "REACHED_VIA",
+            "record_id": "fd174d57d17bb1462dbe3ed818c3afa632875cba371ca6cf61c2ab22a13c60bd",
+            "scores": [
+              0.014953145757317543,
+              -0.01283690333366394,
+              0.025552960112690926
+            ],
+            "spread": 0.03838986158370972
+          },
+          {
+            "correct_score": -0.009879669174551964,
+            "correct_slot": 2,
+            "op": "LIST_PARTS",
+            "record_id": "c083e4d5b17bfebcf60c42061ff178523660c1c757c47c0a632bb85872d84b4f",
+            "scores": [
+              -0.0015123207122087479,
+              0.0,
+              -0.009879669174551964
+            ],
+            "spread": 0.009879669174551964
+          },
+          {
+            "correct_score": 0.02127206325531006,
+            "correct_slot": 2,
+            "op": "LIST_PARTS",
+            "record_id": "03c7b22ab3d1b3ee942674160bef268738c7ab63d82e6de7702549340edf680b",
+            "scores": [
+              -0.0008957337122410536,
+              0.0081784687936306,
+              0.02127206325531006
+            ],
+            "spread": 0.02216779626905918
+          },
+          {
+            "correct_score": -0.010263335891067982,
+            "correct_slot": 2,
+            "op": "FIND_SHARED_PART",
+            "record_id": "0c069e4b7b2e3df0f2374399f2417d8c2a29b09b14578c31a7d77416b36d0bd7",
+            "scores": [
+              0.01896839588880539,
+              0.0072001125663518906,
+              -0.010263335891067982
+            ],
+            "spread": 0.029231730848550797
+          },
+          {
+            "correct_score": -0.010263335891067982,
+            "correct_slot": 0,
+            "op": "FIND_SHARED_PART",
+            "record_id": "7c7d4bf13417cdc1d380a3a9e64c23b5ab1da28b1c5f71acf84712298652e71c",
+            "scores": [
+              -0.010263335891067982,
+              0.01896839588880539,
+              0.0072001125663518906
+            ],
+            "spread": 0.029231730848550797
+          },
+          {
+            "correct_score": -0.015040753409266472,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "75e2a1ff124b9659175cb7fc65cd09cc4665664d7f3fb0dad6bb5d8bf6fa486d",
+            "scores": [
+              0.02435673028230667,
+              0.024639150127768517,
+              -0.015040753409266472
+            ],
+            "spread": 0.03967990353703499
+          },
+          {
+            "correct_score": 0.023983728140592575,
+            "correct_slot": 2,
+            "op": "REACHED_VIA",
+            "record_id": "7591dc271ccf14eb52da256de237ad96a4204846fb2a039f5daf11860995a13a",
+            "scores": [
+              0.02334482967853546,
+              -0.014449115842580795,
+              0.023983728140592575
+            ],
+            "spread": 0.03843284398317337
+          }
+        ],
+        "tag_vectors": {
+          "pairwise_cosines": [
+            -0.04402767375387928,
+            -0.12439775078929259,
+            0.16530372049746242,
+            0.26374258056438077,
+            -0.0688506283328206,
+            0.045705929644249375,
+            0.0011274674748375068,
+            -0.008778583769422744,
+            0.04500975328608954,
+            0.04482430647750014,
+            -0.14187999907509358,
+            0.08384082165731677,
+            -0.0817824824739035,
+            -0.08118646713239419,
+            0.15273042053409017,
+            0.1274077337910697,
+            0.15976702850406727,
+            -0.004432817590720956,
+            -0.04772179970857317,
+            0.010168185907998634,
+            -0.20107397584953535,
+            -0.09514265608222927,
+            0.09411381927898166,
+            -0.07390459905021399,
+            0.1681429893796439,
+            -0.06331408830263316,
+            0.046221514740499944,
+            0.07007452642106671,
+            0.05047187720402235,
+            0.09446593365574932,
+            -0.20758642707819608,
+            0.009065086455635328,
+            0.012512634874564338,
+            0.1739195468633632,
+            0.20893890603875848,
+            0.03348962109834502,
+            0.009758963953083812,
+            -0.10308710126395428,
+            0.02076811556275076,
+            0.1582986792904665,
+            -0.3074094322476685,
+            0.1435928043755415,
+            0.06609240638554835,
+            0.17297691746559096,
+            0.08645266088897202
+          ],
+          "tag_rows": [
+            {
+              "norm": 0.9618467688560486,
+              "tag": "[WORD:5b]"
+            },
+            {
+              "norm": 0.9534399509429932,
+              "tag": "[WORD:27]"
+            },
+            {
+              "norm": 0.8950823545455933,
+              "tag": "[WORD:6964656132]"
+            },
+            {
+              "norm": 0.9399780631065369,
+              "tag": "[WORD:2c]"
+            },
+            {
+              "norm": 1.0337014198303223,
+              "tag": "[WORD:20]"
+            },
+            {
+              "norm": 1.0243723392486572,
+              "tag": "[WORD:6964656133]"
+            },
+            {
+              "norm": 0.9227727651596069,
+              "tag": "[WORD:5d]"
+            },
+            {
+              "norm": 1.073289394378662,
+              "tag": "[WORD:6964656136]"
+            },
+            {
+              "norm": 1.0132172107696533,
+              "tag": "[WORD:6964656131]"
+            },
+            {
+              "norm": 0.8894291520118713,
+              "tag": "[WORD:696465613137]"
+            }
+          ],
+          "tags_measured": 10
+        }
+      }
+    }
+  ],
+  "job": "cas-meta2-ln3-diagnostic-20260909183759-cce57ffb",
+  "optimizer_steps_taken": 0,
+  "schema": "cas-graph-training-ln3-diagnostic-result/1"
+}

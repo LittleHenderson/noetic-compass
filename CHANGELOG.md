@@ -4,6 +4,25 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 006 FINISHED — lookup repair measured working; relationships do not survive mean-pooling
+
+Attempt 006 (`cas-meta2-ln3-diagnostic-20260909183759-cce57ffb`, owner GO,
+new `$4.00` reservation, ledger 39 → 40: `$210.00` reserved, `$190.00`
+unreserved, result sha `6c7469e8…`, zero-update, cleanup complete). With the
+lookup repair, distinct part names reach DISTINCT rows (tag cosines mean
+0.024, range −0.31…0.26; norms vary 0.89–1.07), options are distinct
+directions (cosines mean 0.124), zero-score-tie records fall 10/30 → 0/30,
+the content-only correction now CHANGES DECISIONS (5/30 and 4/30, was 0/30),
+graph changes move the module output ~10–50× the old noise floor (median
+1.5e-3…2.3e-3, max 1.1e-2), and corrective gradients are substantial (≤0.38)
+and target-dependent — distinctions and corrective signals now SURVIVE. The
+new same-token rewiring contrast measured the next boundary: with the token
+multiset preserved exactly, the output moves only ~5e-5 (one row exactly
+0.0) — the problem representation is a BAG OF WORDS; which part belongs to
+which idea does not survive mean-pooling. Training pilot still pending;
+problem-side representation change is a separate authorizable step. Record:
+`ATTEMPT_LN3_006_RESULT.md`.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 005 FINISHED — the encoder embed lookup is the measured root cause
 
 Attempt 005 (`cas-meta2-ln3-diagnostic-20260909175351-5f425cf9`, owner GO,
