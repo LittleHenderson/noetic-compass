@@ -1,0 +1,48 @@
+{
+  "authorization": {
+    "archive_sha256": "71e72bae410ca3d90c57f067f2fa8507326fbcb24346f7166b4d343b0524b66d",
+    "authorization_context": "Competence run 001 per COMPETENCE_RUN_001.md: ONE bounded development job runs the whole fixed sequence with no separate launches between stages and no two-arm comparison. Single arm (cas framing). STAGE 1 (zero optimizer steps): same-token relationship rewiring must exceed 10x the connection-list-reorder baseline, and the forward/backward sanity must show finite losses with nonzero gradients; failure stops the job with preserved numbers. STAGE 2: bounded training on the familiar train+practice whole-part examples - 64 optimizer steps / 600 s, lr 0.003, learning curve every 8 steps, digest containment (operation:^6 only). STAGE 3 (only if the registered fit criterion is met: mean after-loss < mean before-loss - 0.02): sealed validation/test evaluation with predictions recorded before answers, plus familiar-example accuracy, reported separately. The deliverable is exactly one of LEARNED_AND_TRANSFERRED (criterion met AND sealed >= 6/12), LEARNED_NO_TRANSFER (criterion met, sealed < 6/12), or DID_NOT_FIT (criterion not met; actual losses, predictions, and the measured limitation reported regardless), computed by a deterministic rule. The relationship-preserving problem encoder (option 2), the repaired token lookup, the option path, and the learning scope are as prepared and test-locked (128 graph tests). No silent mid-run patches, no unlimited retries, no spending beyond this single job; the training pilot beyond this run stays pending.",
+    "bound_request_sha256": "2005e95380f5a6e99d36450fc3797fd4267479e77bc2945476903bc753f646d8",
+    "competence_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-competence-20260909193638-98f993ab",
+    "launcher": "aws/graph_training_competence_launch.py at commit 4489889c9813260d76a376f234765015cacca5ae",
+    "manifest_sha256": "5c329419531bd695c6bc781de1ec94c52490b6def6cb26d7bd2df3fbed69ff2f",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_package_001/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_launch_001/launch_request.json",
+    "source_sha": "4489889c9813260d76a376f234765015cacca5ae"
+  },
+  "execution_gates": [
+    "single launch attempt through the competence launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "stage 3 reads sealed splits ONLY after the registered fit criterion is met; predictions recorded before answers",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change beyond the declared 64 steps / 600 s",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T19:36:38.125840+00:00",
+  "run_bounds": {
+    "arms": [
+      "cas"
+    ],
+    "automatic_retries": 0,
+    "data": {
+      "familiar": "train+practice whole-part",
+      "fresh": "sealed validation+test"
+    },
+    "jobs": 1,
+    "per_run": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "4.00"
+  },
+  "schema": "cas-graph-training-competence-owner-authorization/1"
+}
