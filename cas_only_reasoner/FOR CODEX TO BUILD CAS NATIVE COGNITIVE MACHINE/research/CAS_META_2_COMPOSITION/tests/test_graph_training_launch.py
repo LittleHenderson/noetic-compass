@@ -133,6 +133,17 @@ def test_worker_script_preserves_inner_errors_and_runs_both_arms():
     assert "{job}" not in text and "{{" not in text
 
 
+def test_worker_uses_separate_per_arm_module_copies():
+    """Correction 002: the framing comparison needs one candidate copy per
+    arm from the SAME initial weights with separate optimizer state, never
+    two sequential phases on one shared module."""
+    text = launch.render_worker()
+    assert "frameworks[arm] = build_graph_training_framework" in text
+    assert "state_dict()" in text and "load_state_dict" in text
+    assert "framework = frameworks[arm]" in text
+    assert text.count("for arm in ('cas', 'generic'):") >= 2
+
+
 def test_package_build_zip_readback_and_manifest(tmp_path, monkeypatch):
     real_root = launch.ROOT
     fake_git = FakeGit(real_root)

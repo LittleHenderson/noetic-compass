@@ -4,6 +4,34 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: owner review narrows attempt 011; pure inspection + prepared correction 002 (no launch)
+
+Owner review accepted the attempt-011 computations but narrowed their
+meaning: the two framing conditions ran SEQUENTIALLY on one shared module
+(checkpoints `01157267…` vs `cc93fe47…`; generic before-losses ≈ cas
+after-losses) — sequential training phases, NOT a matched framing
+comparison; nonuniform/moving losses do NOT establish option-content
+recovery (sum = count × mean); the sealed 3/12 reuses previously examined
+splits (repeat diagnostic, not fresh evidence); saturation stays an
+unmeasured hypothesis. Pure inspection (new tool
+`tools/graph_training_representation_inspection.py`, evidence
+`representation_inspection_001/`, sha `3a04dd98…`, train+practice only,
+graph-valid synthetic edits): LIST_PARTS options ALWAYS differ in encoded
+length (median spread 10 tokens vs 0.5 content-unique tokens per option) —
+the movement is consistent with a token-count signal; FIND_SHARED_PART
+options are each 2 tokens (`[OBS]`+tag), content-only, equal-length, yet
+still exactly ln 3 — its flatness is NOT a representation artifact; a
+connector retarget changes exactly 2 of ~62 problem tokens (present but
+diluted ~1/62). Prepared correction 002, test-locked (95 graph tests), NOT
+launched: (A) content-only option vectors — sum only the tokens NOT shared
+by all three options (count artifact removed; fail-closed
+`OPTION_CONTENT_REQUIRED`); (B) per-arm candidate copies from the same
+initial weights with separate optimizers in the training worker (matched
+framing comparison); (C) diagnostic now records per-record module-output
+norms + pairwise cosines (FIND_SHARED_PART's missing measurement). No
+saturation config change, no allowance increase, no reservation.
+`REPRESENTATION_CORRECTION_002.md`; attempt-011 record amended in place.
+
 ## 2026-09-09 - Graph-first ^6: representation follow-up 001 / attempt 011 FINISHED — exact-ln(3) regime broken for 2 of 3 ops; sealed accuracy still chance
 
 Owner instruction ("IF THE FOLLOWING IS TRUE IMPLEMENT IT IF NOT IT'S YOUR

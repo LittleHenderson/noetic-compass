@@ -4,6 +4,7 @@ No torch, no cas_cjt: verifies exactly what enters the module, what it
 predicts, how each operation is scored, and that nothing in the input carries
 the answer.
 """
+import pytest
 from types import SimpleNamespace
 
 from cas_meta2.graph_teaching import adapter, lessons, trainer
@@ -44,10 +45,10 @@ def test_option_vector_is_a_sum_embedding():
     assert vector == [1.0, 2.0]
 
 
-def test_learner_options_sum_pooled_and_problem_stays_mean():
-    """Behavioral lock for follow-up 001: GraphLearner builds the module input
-    (problem) with MEAN pooling exactly as in attempt 010, and the frozen
-    readout side (options) with SUM pooling."""
+def test_learner_options_content_only_and_problem_stays_mean():
+    """Behavioral lock for correction 002: option vectors sum ONLY the tokens
+    NOT shared by all three options (content), so shared-component count
+    artifacts cancel; the module input (problem) stays mean-pooled."""
     from cas_meta2.graph_teaching import real_framework
 
     class Vector:
@@ -82,10 +83,12 @@ def test_learner_options_sum_pooled_and_problem_stays_mean():
 
     class Encoder:
         embeddings = {"p1": [1.0, 0.0], "p2": [0.0, 2.0], "o1": [1.0, 1.0],
-                      "o2": [2.0, 2.0], "o3": [3.0, 3.0]}
+                      "o2": [2.0, 2.0], "o3": [3.0, 3.0], "s": [9.0, 9.0]}
 
         def encode(self, public):
-            return ["p1", "p2"], {0: ["o1"], 1: ["o2", "o3"], 2: ["o1", "o2"]}
+            # "s" is shared by ALL THREE options and must be excluded
+            return ["p1", "p2"], {0: ["o1", "s"], 1: ["o2", "s"],
+                                  2: ["o1", "o2", "s"]}
 
         def embed(self, token_id):
             return Vector(self.embeddings[token_id])
@@ -96,20 +99,70 @@ def test_learner_options_sum_pooled_and_problem_stays_mean():
     learner = real_framework.GraphLearner(
         Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
     assert learner._problem_vectors[0].values == [0.5, 1.0]  # mean, unchanged
-    assert learner._option_vectors[0][0].values == [1.0, 1.0]  # sum of o1
-    assert learner._option_vectors[0][1].values == [5.0, 5.0]  # sum o2+o3
-    assert learner._option_vectors[0][2].values == [3.0, 3.0]  # sum o1+o2
+    assert learner._option_vectors[0][0].values == [1.0, 1.0]  # o1 only, NOT s
+    assert learner._option_vectors[0][1].values == [2.0, 2.0]  # o2 only, NOT s
+    assert learner._option_vectors[0][2].values == [3.0, 3.0]  # o1+o2, NOT s
 
 
-def test_learner_sealed_predict_path_uses_sum_pooled_options():
-    """The sealed-split predict path must use the same sum-pooled option
+def test_learner_rejects_options_with_no_content():
+    """Correction 002 fail-closed: an option whose tokens are ALL shared by
+    the other two has no content and must be rejected, never silently zero."""
+    from cas_meta2.graph_teaching import real_framework
+
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def mean(self, dim=0):
+            return Vector([0.0])
+
+        def sum(self, dim=0):
+            return Vector([0.0])
+
+    class Torch:
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+        class optim:
+            class AdamW:
+                def __init__(self, params, lr=0.001, weight_decay=0.0):
+                    pass
+
+    class Module:
+        def parameters(self):
+            return []
+
+    class Encoder:
+        def encode(self, public):
+            return ["p1"], {0: ["s"], 1: ["s"], 2: ["s"]}
+
+        def embed(self, token_id):
+            return Vector([1.0])
+
+    encoder = Encoder()
+    framework = SimpleNamespace(
+        encoder={"encode": encoder.encode, "embed": encoder.embed}, module=Module())
+    with pytest.raises(ValueError, match="OPTION_CONTENT_REQUIRED"):
+        real_framework.GraphLearner(
+            Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
+
+
+def test_learner_sealed_predict_path_uses_content_only_options():
+    """The sealed-split predict path must use the same content-only option
     vectors as training (one representation everywhere)."""
     import inspect
     from cas_meta2.graph_teaching import real_framework
     source = inspect.getsource(real_framework.GraphLearner)
     assert 'self._problem_vectors.append(self._mean(problem_ids))' in source
-    assert 'self._option_vectors.append([self._sum(slot_ids[slot])' in source
-    assert 'self.torch.dot(value, self._sum(slot_ids[slot]))' in source
+    assert 'content = self._content_ids(slot_ids)' in source
+    assert 'self._option_vectors.append([self._sum(item) for item in content])' in source
+    assert 'content = self._content_ids(slot_ids)' in inspect.getsource(
+        real_framework.GraphLearner.predict)
     assert 'stacked.sum(dim=0)' in source and 'stacked.mean(dim=0)' in source
 
 

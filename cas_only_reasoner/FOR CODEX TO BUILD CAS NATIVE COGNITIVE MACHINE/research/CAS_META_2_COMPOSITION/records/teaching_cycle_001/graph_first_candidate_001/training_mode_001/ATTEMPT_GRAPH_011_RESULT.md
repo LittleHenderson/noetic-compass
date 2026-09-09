@@ -60,3 +60,40 @@ module). Attempt 010's chance reference was ≈ 4/12; 3/12 is chance-level.
 
 Frozen negatives `0/72`, accepted models, sealed splits, and the attempt-010
 record are untouched.
+
+## Owner-directed reinterpretation (2026-09-09) — the record above is narrowed, not retracted
+
+The owner reviewed the report and ruled the following; each point was
+re-checked against code and the recorded bytes:
+
+1. **The two conditions are sequential training phases, NOT a matched framing
+   comparison.** The worker builds ONE module and runs both arms on it:
+   cas trains 64 updates, then generic continues on the same module. The
+   checkpoints demonstrate no reset (cas `01157267…`, generic `cc93fe47…`),
+   and generic's before-losses nearly equal cas's after-losses
+   (LIST_PARTS `1.0805925727` vs `1.0805925846`). The per-arm loss table
+   above is therefore one trajectory in two stages; it cannot separate the
+   generic framing's effect from cas's prior training. A future framing
+   comparison must use two candidate copies from the same initial weights
+   with separate optimizer state (prepared; see
+   `REPRESENTATION_CORRECTION_002.md`).
+2. **Nonuniform or moving losses do NOT establish content recovery.** The
+   inspection (`tools/graph_training_representation_inspection.py`, evidence
+   `representation_inspection_001/`) measured that LIST_PARTS options ALWAYS
+   differ in encoded length (median spread 10 tokens; content tokens unique
+   to an option: median 0.5), and sum = token-count × mean. The observed
+   movement is therefore consistent with a token-count signal — "different
+   amounts of text" — not demonstrated "different contents."
+3. **FIND_SHARED_PART is content-only and still flat.** Its three options are
+   each 2 tokens (`[OBS]` + one tag token), equal length, sum == mean, so its
+   exact ln 3 before and after is NOT a representation artifact. Its next
+   measurement is the module's output geometry (norm + pairwise cosines,
+   prepared in the diagnostic) — the saturation reading stays an UNMEASURED
+   HYPOTHESIS; `initial_saturation=100.0` is NOT being changed.
+4. **Sealed evaluation is a repeat diagnostic on previously examined splits**
+   (3/12 vs attempt 010's ≈ 4/12), not fresh evidence; the small counts
+   establish no exact underlying chance level.
+
+The computations above stand as recorded; only their interpretation is
+narrowed.
+

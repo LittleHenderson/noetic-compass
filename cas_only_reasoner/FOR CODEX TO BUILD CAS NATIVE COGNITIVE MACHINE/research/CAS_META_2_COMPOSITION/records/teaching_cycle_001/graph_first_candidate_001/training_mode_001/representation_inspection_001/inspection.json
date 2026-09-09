@@ -1,0 +1,251 @@
+{
+  "arms": [
+    "cas",
+    "generic"
+  ],
+  "boundary": "pure token-id inspection over train+practice records only; no sealed splits, no answers consulted for correction design, no torch, no GPU",
+  "length_spread_median_all": 2.0,
+  "per_op": {
+    "FIND_SHARED_PART": {
+      "all_three_equal_length": 20,
+      "median_distinct_spread": 0.0,
+      "median_length_spread": 0.0,
+      "median_problem_token_count": 262.5,
+      "median_shared_all_three": 1.0,
+      "median_unique_tokens_per_option": 1.0,
+      "option_token_count_range": [
+        2,
+        2
+      ],
+      "records": 20,
+      "same_length_different_content_pairs_total": 60
+    },
+    "LIST_PARTS": {
+      "all_three_equal_length": 0,
+      "median_distinct_spread": 2.5,
+      "median_length_spread": 10.0,
+      "median_problem_token_count": 257.5,
+      "median_shared_all_three": 5.5,
+      "median_unique_tokens_per_option": 0.5,
+      "option_token_count_range": [
+        6,
+        21
+      ],
+      "records": 20,
+      "same_length_different_content_pairs_total": 8
+    },
+    "REACHED_VIA": {
+      "all_three_equal_length": 0,
+      "median_distinct_spread": 2.0,
+      "median_length_spread": 2.0,
+      "median_problem_token_count": 272.5,
+      "median_shared_all_three": 1.0,
+      "median_unique_tokens_per_option": 1.0,
+      "option_token_count_range": [
+        2,
+        4
+      ],
+      "records": 20,
+      "same_length_different_content_pairs_total": 20
+    }
+  },
+  "records": 60,
+  "records_with_equal_length_options": 20,
+  "same_length_different_content_pairs_total": 88,
+  "samples": [
+    {
+      "op": "LIST_PARTS",
+      "option_tags": [
+        "['idea2', 'idea3']",
+        "['idea2', 'idea3', 'idea6']",
+        "['idea1', 'idea2', 'idea3', 'idea6']"
+      ],
+      "option_token_sequences": [
+        [
+          "[OBS]",
+          "[WORD:5b]",
+          "[WORD:27]",
+          "[WORD:6964656132]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656133]",
+          "[WORD:27]",
+          "[WORD:5d]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:5b]",
+          "[WORD:27]",
+          "[WORD:6964656132]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656133]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656136]",
+          "[WORD:27]",
+          "[WORD:5d]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:5b]",
+          "[WORD:27]",
+          "[WORD:6964656131]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656132]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656133]",
+          "[WORD:27]",
+          "[WORD:2c]",
+          "[WORD:20]",
+          "[WORD:27]",
+          "[WORD:6964656136]",
+          "[WORD:27]",
+          "[WORD:5d]"
+        ]
+      ],
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+    },
+    {
+      "op": "FIND_SHARED_PART",
+      "option_tags": [
+        "none",
+        "idea17",
+        "idea1"
+      ],
+      "option_token_sequences": [
+        [
+          "[OBS]",
+          "[WORD:6e6f6e65]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:696465613137]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:6964656131]"
+        ]
+      ],
+      "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7"
+    },
+    {
+      "op": "REACHED_VIA",
+      "option_tags": [
+        "via:idea17",
+        "direct",
+        "absent"
+      ],
+      "option_token_sequences": [
+        [
+          "[OBS]",
+          "[WORD:766961]",
+          "[WORD:3a]",
+          "[WORD:696465613137]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:646972656374]"
+        ],
+        [
+          "[OBS]",
+          "[WORD:616273656e74]"
+        ]
+      ],
+      "record_id": "d93157512aab2cc9297fd8fd5baa5a294e64fb6bee959afa92677a3b87c9b0bd"
+    }
+  ],
+  "schema": "cas-graph-training-representation-inspection/1",
+  "sensitivity": [
+    {
+      "change_present": true,
+      "edit": "connector_retarget",
+      "problem_tokens_after": 62,
+      "problem_tokens_before": 62,
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+      "tokens_added": {
+        "common=constituent,idea4": 1,
+        "idea4": 1
+      },
+      "tokens_removed": {
+        "common=constituent,idea1": 1,
+        "idea1": 1
+      }
+    },
+    {
+      "change_present": true,
+      "edit": "node_contents",
+      "problem_tokens_after": 63,
+      "problem_tokens_before": 62,
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+      "tokens_added": {
+        "edited=marker": 1
+      },
+      "tokens_removed": {}
+    },
+    {
+      "change_present": true,
+      "edit": "connector_retarget",
+      "problem_tokens_after": 62,
+      "problem_tokens_before": 62,
+      "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+      "tokens_added": {
+        "common=constituent,idea4": 1,
+        "idea4": 1
+      },
+      "tokens_removed": {
+        "common=constituent,idea1": 1,
+        "idea1": 1
+      }
+    },
+    {
+      "change_present": true,
+      "edit": "node_contents",
+      "problem_tokens_after": 63,
+      "problem_tokens_before": 62,
+      "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+      "tokens_added": {
+        "edited=marker": 1
+      },
+      "tokens_removed": {}
+    },
+    {
+      "change_present": true,
+      "edit": "connector_retarget",
+      "problem_tokens_after": 54,
+      "problem_tokens_before": 54,
+      "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+      "tokens_added": {
+        "common=constituent,idea4": 1,
+        "idea4": 1
+      },
+      "tokens_removed": {
+        "common=constituent,idea18": 1,
+        "idea18": 1
+      }
+    },
+    {
+      "change_present": true,
+      "edit": "node_contents",
+      "problem_tokens_after": 55,
+      "problem_tokens_before": 54,
+      "record_id": "ca0799a086ae9016ad631f405dce8101750beffc06c92ef91333139da40671c3",
+      "tokens_added": {
+        "edited=marker": 1
+      },
+      "tokens_removed": {}
+    }
+  ]
+}

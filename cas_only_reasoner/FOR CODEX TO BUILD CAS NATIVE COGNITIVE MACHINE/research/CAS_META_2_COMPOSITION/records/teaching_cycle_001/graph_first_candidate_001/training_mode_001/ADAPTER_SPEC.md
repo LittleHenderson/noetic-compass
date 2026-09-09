@@ -36,6 +36,16 @@ module input:
    softmax-shift-invariant, so it cannot hurt the decision. See
    `REPRESENTATION_FOLLOW_UP_001.md`.
 
+   **Amendment 2026-09-09 (representation correction 002, owner-directed,
+   PREPARED not launched):** the pure inspection measured that sum-pooled
+   differences are dominated by token count (LIST_PARTS length spread median
+   10 tokens vs 0.5 content-unique tokens per option), so the option vectors
+   now sum ONLY the tokens NOT shared by all three options (content-only).
+   A component present in every option cancels exactly in the softmax;
+   removing it removes the count artifact. FIND_SHARED_PART is unchanged by
+   this rule. Fail-closed: `OPTION_CONTENT_REQUIRED`. See
+   `REPRESENTATION_CORRECTION_002.md`.
+
 ## 2. What the module is and what it predicts
 
 - The module is a CANDIDATE copy of the registered decompose transform

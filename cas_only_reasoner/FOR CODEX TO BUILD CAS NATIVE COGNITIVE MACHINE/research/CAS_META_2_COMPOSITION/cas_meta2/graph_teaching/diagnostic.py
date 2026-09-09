@@ -11,6 +11,9 @@ measures the quantities the non-neural diagnostic cannot:
   3. a same-example, alternative-target gradient test: loss values and
      per-matrix gradient norms (left.weight, merge.weight, right.weight) for
      each of the three targets, WITHOUT any optimizer step.
+  4. per-record module OUTPUT vectors: norm per record and pairwise cosines
+     across the first few records (correction 002's FIND_SHARED_PART residual
+     question — near-constant output is measured, not assumed).
 
 No weights are updated. Results are returned as a JSON-safe report for the
 authorized run's evidence path.
@@ -66,6 +69,33 @@ def measure_option_geometry(learner):
     return rows
 
 
+def measure_module_outputs(learner):
+    """Per-record module output vector: norm per record and pairwise cosines
+    across the first few records (the near-constant-output hypothesis behind
+    FIND_SHARED_PART's residual flatness — measured, not assumed)."""
+    torch = learner.torch
+    vectors = []
+    for position in range(len(learner.tasks)):
+        value = learner.module(learner._problem_vectors[position].unsqueeze(0))[0]
+        vectors.append(value)
+    norms = [float(torch.linalg.vector_norm(value).item()) for value in vectors]
+    per_record = [{"record_id": learner.tasks[position]["record_id"],
+                   "op": learner.tasks[position]["op"],
+                   "output_norm": norms[position]}
+                  for position in range(len(learner.tasks))]
+    limit = min(8, len(vectors))
+    cosines = []
+    for i in range(limit):
+        for j in range(i + 1, limit):
+            dot = float(torch.dot(vectors[i], vectors[j]).item())
+            cosines.append(dot / (norms[i] * norms[j] + 1e-12))
+    return {"per_record": per_record,
+            "pairwise_cosines_first_records": limit,
+            "pairwise_cosines": cosines,
+            "output_norm_stats": {"min": min(norms), "max": max(norms),
+                                  "median": sorted(norms)[len(norms) // 2]}}
+
+
 def measure_gradient_test(learner, position):
     """Same example, three alternative targets, NO optimizer step.
 
@@ -106,6 +136,7 @@ def launch(*, run_id, learner):
     report = {"schema": DIAGNOSTIC_SCHEMA, "run_id": run_id,
               "scores": measure_scores(learner),
               "option_geometry": measure_option_geometry(learner),
+              "module_outputs": measure_module_outputs(learner),
               "gradient_test": [measure_gradient_test(learner, position)
                                 for position in range(min(3, len(learner.tasks)))],
               "boundary": ("measurement only; no optimizer step was taken; "

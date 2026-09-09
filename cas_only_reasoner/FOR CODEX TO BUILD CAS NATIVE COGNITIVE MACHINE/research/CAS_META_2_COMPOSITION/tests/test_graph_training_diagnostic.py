@@ -136,6 +136,51 @@ def test_launch_boundary_is_measurement_only_with_fakes():
     source = inspect.getsource(diagnostic.launch)
     assert "no optimizer step was taken" in source
     assert "DIAGNOSTIC_SCHEMA" in source
+    assert '"module_outputs": measure_module_outputs(learner)' in source
+
+
+def test_module_output_measurement_reports_norms_and_cosines():
+    """Correction 002: the diagnostic must record per-record module output
+    norms and pairwise cosines (the near-constant-output question), measured
+    without any optimizer step."""
+    class OutputTensor:
+        def __init__(self, value):
+            self.value = value
+
+        def item(self):
+            return self.value
+
+        def unsqueeze(self, dim):  # noqa: A002 - torch API shape
+            return self
+
+    class OutputModule:
+        def __call__(self, value):
+            return [OutputTensor(3.0)]
+
+    class OutputTorch:
+        class linalg:
+            @staticmethod
+            def vector_norm(tensor):
+                return tensor
+
+        @staticmethod
+        def dot(a, b):
+            return OutputTensor(a.value * b.value)
+
+    class OutputLearner:
+        def __init__(self):
+            self.module = OutputModule()
+            self.torch = OutputTorch
+            self.tasks = [{"record_id": "r%d" % index, "op": "LIST_PARTS",
+                           "encoded_correct_index": 0} for index in range(3)]
+            self._problem_vectors = [OutputTensor(1.0) for _ in range(3)]
+
+    learner = OutputLearner()
+    rows = diagnostic.measure_module_outputs(learner)
+    assert [row["output_norm"] for row in rows["per_record"]] == [3.0, 3.0, 3.0]
+    assert rows["pairwise_cosines_first_records"] == 3
+    assert rows["pairwise_cosines"] == pytest.approx([1.0, 1.0, 1.0])
+    assert rows["output_norm_stats"] == {"min": 3.0, "max": 3.0, "median": 3.0}
 
 
 def test_require_rejects_missing_run_id_or_learner():

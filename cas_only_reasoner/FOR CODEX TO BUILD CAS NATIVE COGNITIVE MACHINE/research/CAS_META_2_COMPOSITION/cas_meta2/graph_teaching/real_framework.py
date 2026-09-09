@@ -138,7 +138,22 @@ class GraphLearner:
     keeps each option's distinct tokens (and their count) in the vector, so
     the frozen readout can tell the options apart. The PROBLEM side (module
     input) is UNCHANGED: still mean-pooled, exactly as in attempt 010 — one
-    variable at a time."""
+    variable at a time.
+
+    Representation correction 002 (owner-directed 2026-09-09, PREPARED not
+    launched): the pure inspection
+    (tools/graph_training_representation_inspection.py) measured that
+    sum-pooled differences are DOMINATED BY TOKEN COUNT — e.g. LIST_PARTS
+    options always differ in length (median spread 10 tokens, vs ~0.5 content
+    tokens unique to an option), because the shared framing tokens are added
+    once per part. Sum = count × mean, so count differences never canceled.
+    The correction: option vectors now sum ONLY the tokens that are NOT
+    shared by all three options. Any component present in every option adds
+    the same value to every score and cancels exactly in the softmax;
+    removing it leaves content-only vectors. FIND_SHARED_PART options
+    ([OBS] + one tag token each) are UNCHANGED by this correction — its
+    flatness is expected to persist and is measured by the module-output
+    diagnostic instead."""
 
     def __init__(self, torch, framework, public_tasks, device, learning_rate):
         self.torch = torch
@@ -155,8 +170,8 @@ class GraphLearner:
         for task in public_tasks:
             problem_ids, slot_ids = framework.encoder["encode"](task["public"])
             self._problem_vectors.append(self._mean(problem_ids))
-            self._option_vectors.append([self._sum(slot_ids[slot])
-                                         for slot in (0, 1, 2)])
+            content = self._content_ids(slot_ids)
+            self._option_vectors.append([self._sum(item) for item in content])
 
     def _mean(self, token_ids):
         vectors = [self.framework.encoder["embed"](token_id) for token_id in token_ids]
@@ -172,6 +187,15 @@ class GraphLearner:
         require(vectors, "OPTION_EMBEDDING_REQUIRED")
         stacked = self.torch.stack(vectors)
         return stacked.sum(dim=0)
+
+    def _content_ids(self, slot_ids):
+        """Correction 002: tokens NOT shared by all three options (content only)."""
+        sequences = [slot_ids[slot] for slot in (0, 1, 2)]
+        shared = set(sequences[0]) & set(sequences[1]) & set(sequences[2])
+        content = [[token_id for token_id in sequence if token_id not in shared]
+                   for sequence in sequences]
+        require(all(content), "OPTION_CONTENT_REQUIRED")
+        return content
 
     def _position(self, task):
         return self._index[task["record_id"]]
@@ -222,6 +246,7 @@ class GraphLearner:
         # preserved error: the training index does not contain sealed records)
         problem_ids, slot_ids = self.framework.encoder["encode"](task_input["public"])
         value = self.module(self._mean(problem_ids).unsqueeze(0))[0]
-        scores = self.torch.stack([self.torch.dot(value, self._sum(slot_ids[slot]))
-                                   for slot in (0, 1, 2)])
+        content = self._content_ids(slot_ids)
+        scores = self.torch.stack([self.torch.dot(value, self._sum(item))
+                                   for item in content])
         return task_input["encoded_options"][int(self.torch.argmax(scores).item())]
