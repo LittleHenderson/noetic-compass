@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 attempt 010: FIRST COMPLETED TRAINING RESULT (machinery proven; no learning in the bounded pilot)
+
+Attempt 010 (`cas-meta2-teaching-graph-20260909073316-0390037d`, `$4.00`
+reserved, ledger 32 → 33: `$182.00` reserved, `$218.00` unreserved) finished
+end to end: 64 registered updates per framing condition (128 total), digest
+containment HELD (only `left.weight`/`merge.weight`/`right.weight` —
+exactly `operation:^6` — changed; zero forbidden changes), checkpoint
+identities recorded (`690f6b61…`, `24b7c186…`), lesson exposure 10 records
+and 22/22/20 updates per op per arm, sealed evaluation run with predictions
+sealed before answers. **Honest outcome: losses flat at ln 3 before and after
+(no measurable learning in 64 updates); sealed accuracy at chance (≈ 4/12).**
+This proves the training machinery, not learning; it does not disprove
+repeated graph teaching. Claims stay `specialist_claimed: false`; frozen
+negatives `0/72` untouched. Evidence: `training_mode_001/ATTEMPT_GRAPH_010_RESULT.md`
++ receipt. Binding-fit attempt-004 request still pending; attempt 003's lost
+error remains UNKNOWN.
+
 ## 2026-09-09 - Graph-first ^6 attempt 009: TRAINING + SEALED EVALUATION COMPLETED; serialization seam fixed (preserved)
 
 Attempt 009 (`cas-meta2-teaching-graph-20260909071727-23c7cca1`, `$4.00`
