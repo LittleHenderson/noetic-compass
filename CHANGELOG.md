@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) neural diagnostic registered and run — attempt 001 failed on a preserved spec bug; fix test-locked; replacement pending
+
+Per the owner's instruction ("register it"), the prepared measurement-only
+neural diagnostic was registered with a fresh job id
+(`cas-meta2-ln3-diagnostic-20260909084139-f6f49be5`), an owner-signed record
+binding the package identities (`68c9fc7a`), one new `$4.00` reservation
+(ledger 33 → 34: `$186.00` reserved, `$214.00` unreserved), and a new
+fail-closed launcher (`aws/graph_training_ln3_diagnostic_launch.py`, pure
+tests, measurement-only worker: `optimizer_steps_permitted: 0`). The run
+reached CUDA and completed the cas arm's scores + option-geometry
+measurements, then the gradient test raised `RuntimeError: Trying to backward
+through the graph a second time` — a bug in the PREPARED diagnostic spec
+(one forward shared by three backwards), not a machinery finding. The
+original error is preserved (`ATTEMPT_LN3_001_FAILURE.md`, result sha
+`db6cc8c9…`), `optimizer_steps_taken: 0`, cleanup with zero leftovers. Fix:
+forward recomputed per target inside the loop (`51f12c61`) with fake-torch
+regression tests that reproduce the freed-graph failure; 90 graph tests
+passing. Replacement package `ln3_diagnostic_package_002` built (NOT
+launched); the replacement awaits a new owner authorization + one new
+`$4.00` reservation (`AUTHORIZATION_REQUEST_LN3_AWS_002.md`). The measured
+scores/geometry/gradient verdict remains OPEN.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) flat-loss investigation (measured parts + prepared authorized diagnostic)
 
 Per the owner's directive, attempt 010 stays a completed execution with no
