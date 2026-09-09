@@ -1,0 +1,58 @@
+{
+  "authorization": {
+    "archive_sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+    "authorization_context": "GRAPH6_CONFIRMATION_001 attempt 002 - REPLACEMENT for attempt 001, which failed in the first candidate's before-loss pass with KeyError because the new confirmation code passed the learner-init seed to trainer.launch(seed=...), and that argument selects the TEACHING DATASET. Fixed before this registration: the trainer always receives the frozen dataset seed 20260909, a fail-closed TRAINING_DATASET_SEED_CHANGED guard rejects any other dataset seed, the candidate record reports training_dataset_seed, and two regression tests pin it (195 graph tests pass). The pre-registered design is UNCHANGED: preserved baseline (same encoder seed 20260909 and one shared projection, same tokenizer fitted on the 30 train+practice records only, same registered ^6 module and operation:^6 scope, same teaching records and order, same optimizer settings); THREE INDEPENDENTLY INITIALIZED candidate learners (seeds 20260913, 20260914, 20260915; only module+optimizer initialization varies) with 64 updates each (192 total); the SAME pre-registered fresh panel of 30 families / 90 cases (30 per operation; reach 10 direct / 10 via / 10 absent) measured BEFORE and AFTER training with answers sealed until predictions are recorded; the same label-invariant exclusion of teaching records and the previously examined dataset. Pre-registered rule: fit unchanged (mean after-loss < mean before-loss - 0.02); a candidate passes fresh transfer iff paired margin >= +0.10 AND family-clustered 95% bootstrap lower bound > 0 AND absolute fresh accuracy >= 0.50 AND no operation regresses with at least two operations gaining >= +0.10; verdict FRESH_TRANSFER_CONFIRMED iff at least 2 of 3 candidates pass; uncertainty = 10,000-resample family-clustered percentile bootstrap (seed 20260921) plus exact McNemar. Old 6/12 threshold not reused. Baseline row mode A: the run-005 checkpoint is reported UNAVAILABLE (only digest cb008721b92144b4e0ef52e86c2c449415935110747aca18ff23229c05240e50 survived; the wheel builds the module bank unseeded). ONE job, one new reservation, zero automatic retries, verified cleanup, original errors preserved, every scheduled candidate reported.",
+    "baseline_mode": "none",
+    "bound_request_sha256": "9894741f9e7cf1ee39ae9753bbbc8ec2ce7badb087945579333c7eff982c7410",
+    "job": "cas-meta2-graph6conf-20260910023000-a387d882",
+    "launcher": "aws/graph_training_graph6_confirmation_launch.py at commit a387d882250b526301d580face0bd11361f37941",
+    "learner_seeds": [20260913, 20260914, 20260915],
+    "manifest_sha256": "773875ae7c39fc9ed2cf425758c0a949946f1274a20fc0c05fd29b1a65810a63",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_package_002/",
+    "panel_seed": 20260920,
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_launch_002/launch_request.json",
+    "source_sha": "a387d882250b526301d580face0bd11361f37941",
+    "total_optimizer_steps": 192
+  },
+  "execution_gates": [
+    "single launch attempt through the graph6 confirmation launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "the trainer always receives the frozen dataset seed; TRAINING_DATASET_SEED_CHANGED fails closed on any other dataset seed",
+    "the fresh panel never enters tokenizer fitting, training, or checkpoint selection; answers are sealed until the registered predictions are recorded",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "all three scheduled candidates are reported; none is dropped for looking bad",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any architecture, representation, encoder, option-path or allowance change beyond the declared 64 updates / 600 s per candidate",
+    "the baseline reproduction candidate (mode B) - not authorized by this GO",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-10T02:30:00.000000+00:00",
+  "run_bounds": {
+    "arms": ["cas"],
+    "automatic_retries": 0,
+    "baseline_mode": "none",
+    "candidates": 3,
+    "data": {
+      "familiar": "train+practice whole-part (30 records, frozen dataset seed 20260909)",
+      "fresh": "pre-registered panel: 30 families / 90 cases, excluded from training and tokenizer fitting"
+    },
+    "encoder_seed": 20260909,
+    "jobs": 1,
+    "learner_seeds": [20260913, 20260914, 20260915],
+    "panel_seed": 20260920,
+    "per_candidate": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "6.00",
+    "total_optimizer_steps": 192
+  },
+  "schema": "cas-graph-training-graph6-confirmation-owner-authorization/1"
+}
