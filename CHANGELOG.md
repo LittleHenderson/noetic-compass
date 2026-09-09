@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) flat-loss investigation (measured parts + prepared authorized diagnostic)
+
+Per the owner's directive, attempt 010 stays a completed execution with no
+measured learning improvement, and no larger training run is proposed. The
+non-neural diagnostic (`tools/graph_training_ln3_diagnostic.py`,
+`cce7e885`, evidence `ln3_diagnostic_001/`, sha `c7311c8d…`) MEASURED: all 60
+training+practice arm-records have three distinct option tag strings AND
+three distinct token-id sequences (the input-level collapse mechanism is
+excluded); `eval_loss` recomputes from the live module; AdamW weight decay is
+`0.0` (movement came from task gradients, not decay). The prepared
+measurement-only neural diagnostic (`cas_meta2/graph_teaching/diagnostic.py`,
+no optimizer step, torch-lazy, 69 graph tests passing) awaits a separately
+authorized AWS job: per-record three scores and spread, option geometry
+cosines, and a same-example alternative-target gradient test with per-matrix
+norms. Decision rules recorded in `training_mode_001/LN3_DIAGNOSTIC.md`.
+Ledger unchanged at revision 33.
+
 ## 2026-09-09 - Graph-first ^6 attempt 010: FIRST COMPLETED TRAINING RESULT (machinery proven; no learning in the bounded pilot)
 
 Attempt 010 (`cas-meta2-teaching-graph-20260909073316-0390037d`, `$4.00`
