@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: bounded wheel compatibility review complete (attempt 006 NOT registered)
+
+Per the owner's directive, no launch and no registration. A static,
+ast-based compatibility review (`tools/graph_training_wheel_compat_review.py`,
+`2f13d180`) inspected `package_006/source.zip` and its embedded frozen wheels
+— no code executed, no tensors, no AWS. ALL checks pass: `CASformerConfig`
+exported from the casformer wheel with every used constructor field declared;
+`RegisteredOperationBank`/`DECOMPOSE`/`OPERATION_REGISTRATIONS` in cas_cjt
+with the module dict keyed by `DECOMPOSE`; `make_operation_contract`'s
+plasticity expression resolves to the real `operation:^6` role;
+`gpu_adapter._cuda` returns `(torch, device)`. Effective configuration
+recorded with provenance (all values newly specified; integration-test
+pattern, not an optimization claim). GPU-only uncertainties listed
+explicitly. Evidence: `training_mode_001/compat_review_001/` (sha
+`e5ba4d68…`). Replacement request updated (`AUTHORIZATION_REQUEST_AWS.md`,
+package_006 identities, job to be minted at approval). Ledger unchanged at
+revision 28.
+
 ## 2026-09-09 - Graph-first ^6 approved job attempt 005: preparation path PASSED; preserved error #4 (config import module)
 
 The owner-approved job (`cas-meta2-teaching-graph-20260909040850-e4a39dea`,
