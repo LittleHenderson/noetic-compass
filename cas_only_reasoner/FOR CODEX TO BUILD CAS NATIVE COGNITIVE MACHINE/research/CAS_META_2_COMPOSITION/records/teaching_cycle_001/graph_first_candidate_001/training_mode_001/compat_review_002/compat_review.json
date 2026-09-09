@@ -1,0 +1,96 @@
+{
+  "boundary": {
+    "aws_calls": 0,
+    "executed_code": false,
+    "neural_modules_created": false,
+    "tensors_created": false
+  },
+  "effective_configuration": {
+    "attention_dropout": 0.0,
+    "d_model": 64,
+    "dropout": 0.0,
+    "initial_cutoff": 0.01,
+    "initial_saturation": 100.0,
+    "note": "All values newly specified for this candidate (attempt-005 fix); previously the default constructor was used. These match the repo integration-test construction pattern, not an optimization claim.",
+    "num_heads": 2,
+    "num_layers": 1,
+    "num_relations": 4
+  },
+  "findings": {
+    "cas_cjt": {
+      "DECOMPOSE_defined": true,
+      "DECOMPOSE_value": "'^6'",
+      "OPERATION_REGISTRATIONS": true,
+      "RegisteredOperationBank": true,
+      "contract_plasticity_expression_operation_scoped": true,
+      "make_operation_contract": true,
+      "modules_by_operation_keyed_by": "DECOMPOSE"
+    },
+    "casformer_config": {
+      "class_defined_in": "casformer/core.py",
+      "declared_fields": [
+        "attention_dropout",
+        "beta_max",
+        "d_ff",
+        "d_model",
+        "dropout",
+        "initial_beta",
+        "initial_cutoff",
+        "initial_saturation",
+        "linear_weight_mode",
+        "minimum_total_resistance",
+        "minimum_weight_resistance",
+        "num_heads",
+        "num_layers",
+        "num_relations",
+        "reference_drive",
+        "reference_resistance"
+      ],
+      "exported_from_init": true
+    },
+    "config_compatibility": {
+      "missing_from_declared": [],
+      "used_fields": [
+        "d_model",
+        "num_heads",
+        "num_relations",
+        "num_layers",
+        "dropout",
+        "attention_dropout",
+        "initial_cutoff",
+        "initial_saturation"
+      ]
+    },
+    "device_placement": {
+      "checkpoint_detach_cpu_ok": true,
+      "device_placed_target_calls": 2,
+      "framework_built_before_learner": true,
+      "module_moved_to_device": true,
+      "optimizer_after_module_move": true,
+      "prediction_uses_trained_forward": true,
+      "projection_on_device": true,
+      "projection_seed_preserved": true,
+      "readout_same_device_ops": true,
+      "targets_on_device": true,
+      "tensor_call_sites": 2,
+      "unplaced_tensor_sites": []
+    },
+    "gpu_adapter": {
+      "_cuda_return_names": [
+        "torch",
+        "device"
+      ]
+    }
+  },
+  "gpu_only_uncertainties": [
+    "torch.cuda availability and the _DecomposeTransform forward numerics are not statically verifiable and remain GPU-only",
+    "DifferentialConductanceLinear parameter names/shapes are runtime-determined (verify in the first scheduled update's containment report)",
+    "the exact loss values and gradient flow are runtime-determined",
+    "the registered operation contract object's digest fields are runtime-determined"
+  ],
+  "package": {
+    "archive_sha256": "60b75b727f44ae2b6f71c4fe9043e353af99436d3b2c4dcbe57a75be0040e069",
+    "bytes": 357930
+  },
+  "schema": "cas-graph-training-compat-review/1"
+}

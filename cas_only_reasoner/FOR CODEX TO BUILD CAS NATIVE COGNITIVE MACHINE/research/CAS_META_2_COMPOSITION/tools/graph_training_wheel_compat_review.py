@@ -153,6 +153,39 @@ def review(package_zip):
                                   "dropout", "attention_dropout", "initial_cutoff",
                                   "initial_saturation"]
         declared = set(findings["casformer_config"]["declared_fields"] or [])
+
+        # 5. device placement across the complete corrected path (attempt-006
+        # review): every tensor-creation site in the real framework is listed
+        # with its placement; frozen values must stay on the module's device
+        # and the optimizer must be built after module.to(device).
+        framework_src = source_of(package, "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py")
+        trainer_src = source_of(package, "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/trainer.py")
+        placement = {
+            "projection_on_device": "device=device" in framework_src,
+            "projection_seed_preserved": "manual_seed(seed)" in framework_src
+            and "generator=generator" in framework_src,
+            "module_moved_to_device": "module.to(device)" in framework_src,
+            "optimizer_after_module_move": ("module.to(device)" in framework_src
+                                            and "AdamW(self.module.parameters()" in framework_src),
+            "targets_on_device": "device=self.device" in framework_src,
+            "readout_same_device_ops": ("self.torch.dot(value, vector)" in framework_src
+                                        and "self.torch.stack" in framework_src),
+            "checkpoint_detach_cpu_ok": "parameter.detach().cpu().numpy()" in framework_src,
+            "prediction_uses_trained_forward": "self.forward(position)" in framework_src,
+            "framework_built_before_learner": ("build_graph_training_framework" in trainer_src
+                                               and "build_encoder" in trainer_src),
+        }
+        # every torch.tensor(...) call must carry device=self.device somewhere
+        # in the same call (the kwarg may sit on the next source line)
+        tensor_calls = framework_src.count("torch.tensor(")
+        placed_targets = framework_src.count("device=self.device")
+        placement["unplaced_tensor_sites"] = (
+            [] if tensor_calls == placed_targets else
+            [line.strip() for line in framework_src.splitlines()
+             if "torch.tensor(" in line])
+        placement["tensor_call_sites"] = tensor_calls
+        placement["device_placed_target_calls"] = placed_targets
+        findings["device_placement"] = placement
         missing_fields = [field for field in expected_config_fields if field not in declared]
         findings["config_compatibility"] = {
             "used_fields": expected_config_fields,

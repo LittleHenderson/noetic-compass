@@ -1,63 +1,53 @@
 # Targeted ^6 specialist — replacement authorization request (NOT REGISTERED, NOT RESERVED)
 
-Status: **AWAITING_OWNER_APPROVAL.** Per the owner's directive, attempt 006 is
-NOT registered and NOT reserved. A bounded source-level compatibility review
-of the exported package against the exact frozen wheels has been completed
-before any further paid attempt.
+Status: **AWAITING_OWNER_APPROVAL.** Attempt 006 is preserved as a
+device-mismatch failure inside the real ^6 forward path — NOT a completed
+forward pass and NOT a learning result. A complete device-placement review of
+the corrected package has been completed; no launch and no reservation.
 
-## Compatibility review (static, no execution)
+## Device-placement review (static, no execution)
 
-`tools/graph_training_wheel_compat_review.py` inspected `package_006/source.zip`
-and its embedded frozen wheels with the ast module — no code executed, no
-neural module created, no tensors, no AWS calls. Evidence:
-`training_mode_001/compat_review_001/compat_review.json`, sha256
-`e5ba4d6865da7511739d7532f0d49bf7b08d93ddd498ebd2e20cadbbf1114c16`.
-
+The existing review tool was extended and run against `package_007/source.zip`
+(evidence `training_mode_001/compat_review_002/compat_review.json`, sha256
+`f8e35cbc23585364ad9763be1003d01861c4f8755b1a1f51a420b9ee14a0f996`).
 All checks pass:
 
-| Connection | Result |
+| Placement site | Result |
 |---|---|
-| `CASformerConfig` export | present in `casformer/__init__.py`; class defined in `casformer/core.py` |
-| Constructor fields | all 8 used fields declared: `d_model`, `num_heads`, `num_relations`, `num_layers`, `dropout`, `attention_dropout`, `initial_cutoff`, `initial_saturation` (missing: none) |
-| `RegisteredOperationBank` / `DECOMPOSE` / `OPERATION_REGISTRATIONS` | all present in `cas_cjt/neural.py`; `DECOMPOSE = '^6'`; the module dict is keyed by `DECOMPOSE` |
-| `make_operation_contract` | present; plasticity expression is `"operation:{operation_id}"` → the real role `operation:^6` matches the trainer's target |
-| `gpu_adapter._cuda` | returns `(torch, device)` as the caller expects |
+| frozen encoder projection | built `device=device`; same seed + generator preserved (no silent regeneration) |
+| cached problem/option vectors | derived from the on-device projection via `torch.stack` (device follows inputs) |
+| module parameters | `module.to(device)` before anything else |
+| optimizer | `AdamW` constructed AFTER the module move (per the PyTorch guidance) |
+| training targets | both `torch.tensor` call sites carry `device=self.device` (2/2) |
+| readout | dot products on same-device vectors |
+| prediction path | uses the same trained forward; argmax `.item()` |
+| checkpoint | `detach().cpu()` for digesting (correct, stays off-GPU) |
+| construction order | framework (module) built before the learner |
 
-## Effective configuration (recorded, with provenance)
+`unplaced_tensor_sites: []`. Frozen numerical values and the permitted
+learning scope (`operation:^6`) are unchanged. The graph curriculum, targets,
+scoring, and budgets are unchanged.
 
-```text
-d_model = 64, num_heads = 2, num_relations = 4, num_layers = 1,
-dropout = 0.0, attention_dropout = 0.0,
-initial_cutoff = 0.01, initial_saturation = 100.0
-```
-
-All values are NEWLY SPECIFIED for this candidate (the attempt-005 fix
-replaced the default constructor). They match the repo integration-test
-construction pattern; they are NOT an optimization claim for learning.
-
-## Remaining GPU-only uncertainties (explicit)
-
-- torch.cuda availability and the `_DecomposeTransform` forward numerics.
-- `DifferentialConductanceLinear` parameter names/shapes (runtime-determined;
-  the first scheduled update's containment report must confirm only
-  `operation:^6` parameters changed).
-- Actual loss values and gradient flow.
+Remaining GPU-only uncertainty (explicit): actual forward numerics, finite
+loss values, and gradient flow — verifiable only on the authorized run.
 
 ## Package identities for the replacement (built; NOT launched)
 
 | Field | Value |
 |---|---|
-| source_sha | `88f36b2f603db4d5fff20a2f6380242f8ea15619` |
-| archive_sha256 | `d57ee62838c36b09cb75b171bbd9a017a40f2f8c6d981027a4dc45856f02d209` |
-| manifest_sha256 | `71ef77e5451621e4d2001e95824c34898ede214c6ef3e592017aa095d824dcb9` |
-| package | `training_mode_001/package_006/` |
-| launcher | `aws/graph_training_launch.py` (ClientError wiring; enable export proven in the child process; 600 s termination wait) |
+| source_sha | `7d9d43ee591e13127e59cbaf3b2f545bfca9073f` |
+| archive_sha256 | `60b75b727f44ae2b6f71c4fe9043e353af99436d3b2c4dcbe57a75be0040e069` |
+| manifest_sha256 | `5999b053deb6a0dcb807485b276db1ed8f2f628746c2126ea1f25d94440cd570` |
+| package | `training_mode_001/package_007/` |
+| launcher | `aws/graph_training_launch.py` (ClientError wiring; enable export proven; 600 s termination wait) |
 
 Job id: to be minted in the signed record at approval. Preserved limits:
 64 steps / 600 s per condition (totals 128 / 1200), one job, one `$4.00`
 reservation, no retries, sealed splits, error capture, verified cleanup,
-containment report. The first scheduled update must record
-constructed → forward → three scores → finite loss → backward → permitted
-update, inside the registered allowance. Ledger (exact): revision 28,
-`$162.00` reserved / `$238.00` unreserved; a `$4.00` replacement would leave
-`$166.00` / `$234.00`. No automatic reservation or launch.
+containment report. The next job must record the first scheduled
+forward → three scores → finite loss → backward → permitted update inside the
+existing allowance; if it succeeds, the registered lessons continue; if it
+fails, the original error is preserved and the job stops under the existing
+policy. Ledger (exact): revision 29, `$166.00` reserved / `$234.00`
+unreserved; a `$4.00` replacement would leave `$170.00` / `$230.00`.
+No automatic reservation or launch.
