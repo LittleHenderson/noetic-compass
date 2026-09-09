@@ -1,63 +1,76 @@
-# Targeted ^6 specialist — REPLACEMENT AWS authorization request (NOT LAUNCHED, NOT RESERVED)
+# Targeted ^6 specialist — replacement authorization request (NOT REGISTERED, NOT RESERVED)
 
-Status: **AWAITING_OWNER_APPROVAL.** One corrected replacement job is
-registered; no reservation has been made and nothing has been launched. The
-owner's signed record must bind the identities below.
+Status: **AWAITING_OWNER_APPROVAL.** Per the owner's directive, attempt 005 is
+NOT registered and NOT reserved; no job id has been minted. The complete
+non-neural preparation path has been demonstrated from the exported package
+before any further paid attempt.
 
-## What this replacement fixes (established, evidence-backed)
+## Connected preparation path — demonstrated from the exported package
 
-| Prior attempt | Stopped by | Class |
-|---|---|---|
-| graph 001 | result-wait mishandled "not available yet" | launcher error handling — nothing about learning |
-| graph 002 | missing `CAS_META2_RUN_TEACHING_CYCLE=1` | startup permission switch — nothing about learning |
-| graph 003 | `fit_train` received a tuple instead of a list | package encoder contract — nothing about learning |
+The probe `tools/graph_training_preparation_probe.py` extracted
+`package_005/source.zip` and ran, with imports from the extracted package
+ONLY, the exact sequence:
 
-Binding-fit attempt 003's lost error remains **UNKNOWN** (hypothesis-only).
+```
+permitted training/practice graph records
+    -> adapter.public_records (frozen public records; validator inside)
+    -> cas_meta2.codec.validate_public (frozen public validator)
+    -> features_v2.LosslessPublicTokenizer.fit_train (tokenizer fitting)
+    -> tokenizer.encode_public (actual encoded output)
+```
 
-## Environment wiring — PROVEN to reach the child process
+Results (evidence `preparation_evidence_001/preparation_evidence.json`, sha256
+`df9fd0c7fb3367f51acff67210157dad820bfe022c8c1423d349d00d7dae8616`):
 
-A non-neural probe executed the VERBATIM export lines of the rendered
-bootstrap in a real shell and ran a real child process that recorded what it
-actually observed:
+- 60 records encoded: 10 per operation × 2 framing conditions, all three ops.
+- Correct-position distribution across records: `{0: 23, 1: 21, 2: 16}` —
+  the private target is NOT identifiable by slot.
+- Target independence: with the public exercise fixed, swapping the private
+  target leaves the encoded input identical (the encoder never consults the
+  answer).
+- Graph facts needed to solve the question remain in the model's input (the
+  problem text carries the full graph rendering).
+- Choice meanings (three-slot interface preserves the lessons): LIST_PARTS =
+  one COMPLETE sorted list of direct constituents; FIND_SHARED_PART = ONE
+  shared constituent or 'none'; REACHED_VIA = the COMPLETE reach label.
+- Padding: literal `none_of_the_above`, position varies with the shuffle, and
+  it never collides with lesson options.
+- Boundary: `aws_calls: 0`, `model_execution: false`,
+  `protected_splits_read: false`, no neural module created.
 
-- `training_mode_001/checks_003/env_probe.json` (sha256
-  `d6af9f74633e542a114103b15193d8f4e8418718909a562e046b39f2f46291ee`):
-  `child_observed = {"CAS_META2_RUN_TEACHING_CYCLE": "1"}` with
-  `aws_calls: 0`, `model_execution: false`.
-- Regression test
-  `tests/test_graph_training_launch.py::test_user_data_env_reaches_the_child_process`
-  locks the same proof (launcher suite now 17).
+Locking tests (suite 66 passed in the graph packages): correct-position
+variance, encoded-input invariance to the private target, padding, frozen
+contract satisfaction, graph-facts-in-input.
 
-## Replacement job identity (inert until signed)
+## Package identities for the replacement (built; NOT launched)
 
 | Field | Value |
 |---|---|
-| proposed job | `cas-meta2-teaching-graph-20260909030210-e1408e1a` |
-| launch request sha256 | `fdb7cb6e5bf68b4672c970986a3ba5e04dd92a0112c6ac728da148785c78a7bf` |
-| training package (UNCHANGED from corrected package_003) | source `27f5efffb0f53acfa495fa74ff639ae23d08bec1` / archive `a4c07dda808615a250379f962db04aa9b9b1bbc4832f5dd686bfbfd6673605ae` / manifest `1f554acf769fc612ed0b8de8300d40728afc53beda122ea0033bd526b4aec1ec` |
-| corrected launcher | `aws/graph_training_launch.py` at commit `65fa6b46` (ClientError wiring `4fd22968`; enable export + 600 s termination wait `7eec3604`; child-process env probe test) |
+| source_sha | `32d19fa2aaa058e624a31f230f95e7193dd7ab71` |
+| archive_sha256 | `863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4` |
+| manifest_sha256 | `dac94d10ac5447a36f57bc7c03c55d8ef30b1e3fc43d1e7c9281e0f3452647ca` |
+| package | `training_mode_001/package_005/` (357,790 bytes, 30 members) |
+| launcher | `aws/graph_training_launch.py` (ClientError wiring; enable export PROVEN in the child process; 600 s termination wait) |
+
+Job id: **to be minted in the signed record at approval** — per the owner's
+directive, nothing is registered yet.
 
 ## Preserved limits and protections (unchanged)
 
-- Per condition: 64 optimizer steps, 600.0 wall seconds, lr 0.003; totals 128
-  steps / 1200 s in ONE job; conditions `prompt_framing_only`.
-- Data: train 48 + practice 16 (whole-part); validation 16 + test 16 sealed,
-  predictions recorded before answers.
-- One `$4.00` reservation, no refund, no automatic retry; bounded readiness
-  checks; error capture preserving the original error; shutdown protection
-  (600 s termination wait); verified cleanup on every exit; containment
-  report naming any parameter change outside `operation:^6`.
+Per condition: 64 optimizer steps, 600.0 wall seconds, lr 0.003; totals 128
+steps / 1200 s in ONE job; conditions `prompt_framing_only`; train 48 +
+practice 16 whole-part records; validation/test sealed with predictions
+recorded before answers; one `$4.00` reservation, no refund, no retries;
+error capture; shutdown protection; verified cleanup; containment report
+naming any parameter change outside `operation:^6`; the first scheduled
+training update's early record will confirm encoding → forward → loss →
+backward → permitted update, counted inside the existing allowance.
 
-## Ledger arithmetic (exact, current)
+Ledger (exact, current): revision 27, `$158.00` reserved / `$242.00`
+unreserved; a `$4.00` replacement would leave `$162.00` / `$238.00`.
 
-Campaign ledger is at revision 26: `total_reserved_usd = 154.00`,
-`remaining_unreserved_usd = 246.00` (cap `400.00`). A separately approved
-`$4.00` replacement reservation would move it to `158.00` reserved /
-`242.00` unreserved. These are campaign reservations, not AWS invoices.
+## Next GPU execution requires owner approval
 
-## Next substantive result required
-
-Actual lesson exposure per operation, actual completed optimizer updates,
-before/after per-op losses, checkpoint identities, the containment report,
-sealed-split evaluation — or an intact preserved error naming the next
-failed stage. No automatic reservation or launch will occur.
+No automatic reservation or launch. On approval, the signed record will mint
+the job, bind these identities and the preparation evidence, and one launch
+will occur.

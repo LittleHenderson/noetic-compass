@@ -1,0 +1,114 @@
+{
+  "boundary": {
+    "aws_calls": 0,
+    "model_execution": false,
+    "neural_modules_created": false,
+    "protected_splits_read": false
+  },
+  "choice_meanings": {
+    "FIND_SHARED_PART": "ONE shared constituent or 'none'",
+    "LIST_PARTS": "one COMPLETE sorted list of direct constituents",
+    "REACHED_VIA": "the COMPLETE reach label (direct | via:<constituent> | absent)"
+  },
+  "connected_path": [
+    "training_records",
+    "public_records",
+    "validate_public",
+    "fit_train",
+    "encode_public"
+  ],
+  "correct_position_distribution": {
+    "0": 23,
+    "1": 21,
+    "2": 16
+  },
+  "example_per_op": {
+    "FIND_SHARED_PART": {
+      "arm": "cas",
+      "correct_slot": 0,
+      "graph": "node idea3 kind=idea",
+      "op": "FIND_SHARED_PART",
+      "public_choices": [
+        "none",
+        "idea17",
+        "idea1"
+      ],
+      "question": "node idea3 kind=idea\nnode idea17 kind=idea\nnode idea6 kind=idea\nnode idea4 kind=idea\nnode idea1 kind=idea\nnode idea5 kind=idea\nnode idea18 kind=idea\nnode idea19 kind=idea\nnode idea2 kind=idea\nrel idea6 --contains--> idea1\nrel idea6 --contains--> idea5\nrel idea19 --contains--> idea3\nrel idea19 --contains--> idea6\nrel idea19 --contains--> idea2\nrel idea4 --contains--> idea17\nrel idea4 --contains--> idea18\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nFIND_SHARED_PART(idea19, idea4): which constituent idea do they share?\n",
+      "separate_target": "none"
+    },
+    "LIST_PARTS": {
+      "arm": "cas",
+      "correct_slot": 1,
+      "graph": "node idea3 kind=idea",
+      "op": "LIST_PARTS",
+      "public_choices": [
+        [
+          "idea2",
+          "idea3"
+        ],
+        [
+          "idea2",
+          "idea3",
+          "idea6"
+        ],
+        [
+          "idea1",
+          "idea2",
+          "idea3",
+          "idea6"
+        ]
+      ],
+      "question": "node idea3 kind=idea\nnode idea17 kind=idea\nnode idea6 kind=idea\nnode idea4 kind=idea\nnode idea1 kind=idea\nnode idea5 kind=idea\nnode idea18 kind=idea\nnode idea19 kind=idea\nnode idea2 kind=idea\nrel idea6 --contains--> idea1\nrel idea6 --contains--> idea5\nrel idea19 --contains--> idea3\nrel idea19 --contains--> idea6\nrel idea19 --contains--> idea2\nrel idea4 --contains--> idea17\nrel idea4 --contains--> idea18\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nLIST_PARTS(idea19): what does it directly contain?\n",
+      "separate_target": [
+        "idea2",
+        "idea3",
+        "idea6"
+      ]
+    },
+    "REACHED_VIA": {
+      "arm": "cas",
+      "correct_slot": 1,
+      "graph": "node idea3 kind=idea",
+      "op": "REACHED_VIA",
+      "public_choices": [
+        "via:idea17",
+        "direct",
+        "absent"
+      ],
+      "question": "node idea3 kind=idea\nnode idea17 kind=idea\nnode idea6 kind=idea\nnode idea4 kind=idea\nnode idea1 kind=idea\nnode idea5 kind=idea\nnode idea18 kind=idea\nnode idea19 kind=idea\nnode idea2 kind=idea\nrel idea6 --contains--> idea1\nrel idea6 --contains--> idea5\nrel idea19 --contains--> idea3\nrel idea19 --contains--> idea6\nrel idea19 --contains--> idea2\nrel idea4 --contains--> idea17\nrel idea4 --contains--> idea18\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nREACHED_VIA(idea17, idea4): is it directly inside, reached through another constituent, or absent?\n",
+      "separate_target": "direct"
+    }
+  },
+  "graph_facts_in_problem_input": true,
+  "package": {
+    "archive_bytes": 357790,
+    "archive_sha256": "863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4",
+    "source_sha": null
+  },
+  "padding": {
+    "pad_token": "none_of_the_above",
+    "usage_count": 0
+  },
+  "per_arm_op": {
+    "cas": {
+      "FIND_SHARED_PART": 10,
+      "LIST_PARTS": 10,
+      "REACHED_VIA": 10
+    },
+    "generic": {
+      "FIND_SHARED_PART": 10,
+      "LIST_PARTS": 10,
+      "REACHED_VIA": 10
+    }
+  },
+  "schema": "cas-graph-training-preparation-evidence/1",
+  "target_independence": {
+    "swapped_target_encoded_inputs_identical": true
+  },
+  "tokenizer": {
+    "encoded_records": 60,
+    "fit_examples": 60,
+    "max_encoded_sequence_length": 386,
+    "vocabulary_size": 374
+  }
+}
