@@ -256,6 +256,22 @@ def test_main_passes_the_real_client_error_class():
     assert "client_error=ClientError" in source
 
 
+def test_user_data_explicitly_enables_the_teaching_cycle_gate():
+    """Attempt 002's preserved error was TEACHING_GPU:EXPLICIT_ENABLE_REQUIRED:
+    the bootstrap must export CAS_META2_RUN_TEACHING_CYCLE=1."""
+    provider = make_provider("ledger.json", fake_clients())
+    text = provider._user_data("job-bucket")
+    assert "export CAS_META2_RUN_TEACHING_CYCLE=1" in text
+    assert "PYTHONDONTWRITEBYTECODE" in text
+    assert launch.WORKER_NAME in text
+
+
+def test_termination_wait_timeout_covers_slow_shutdown():
+    import inspect
+    source = inspect.getsource(launch.GraphTrainingProvider._await_terminated)
+    assert "timeout=600.0" in source
+
+
 class FakeProvider:
     def __init__(self, ledger_path):
         self.ledger_path = ledger_path

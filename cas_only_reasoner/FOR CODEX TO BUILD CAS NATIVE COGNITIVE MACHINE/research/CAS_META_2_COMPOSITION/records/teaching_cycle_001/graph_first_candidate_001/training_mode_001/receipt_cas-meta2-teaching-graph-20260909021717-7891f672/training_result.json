@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 15, in <module>\n    torch, device = gpu_adapter._cuda()\n                    ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/teaching_cycle/gpu_adapter.py\", line 43, in _cuda\n    execution_guard()\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/teaching_cycle/gpu_adapter.py\", line 39, in execution_guard\n    require(os.environ.get(\"CAS_META2_RUN_TEACHING_CYCLE\") == \"1\", \"EXPLICIT_ENABLE_REQUIRED\")\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/teaching_cycle/gpu_adapter.py\", line 29, in require\n    raise ValueError(\"TEACHING_GPU:\" + reason)\nValueError: TEACHING_GPU:EXPLICIT_ENABLE_REQUIRED\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909021717-7891f672",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}

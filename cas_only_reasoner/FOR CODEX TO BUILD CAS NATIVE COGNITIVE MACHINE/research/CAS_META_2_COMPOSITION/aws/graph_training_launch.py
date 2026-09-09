@@ -647,6 +647,34 @@ class GraphTrainingProvider:
                     "GRAPH_TRAINING_IAM_PROFILE_PROPAGATION_TIMEOUT")
             time.sleep(poll_interval)
 
+    def _user_data(self, bucket):
+        """Bootstrap: explicitly enables the teaching-cycle GPU gate (the run
+        is owner-authorized teaching execution), preserves logs, and runs the
+        worker. The worker captures the original inner error on failure."""
+        return "\n".join([
+            "#!/bin/bash", "set -eu", "umask 077",
+            "export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''",
+            "export CAS_META2_RUN_TEACHING_CYCLE=1",
+            "mkdir -p /opt/cas-graph-training/package",
+            "exec > /opt/cas-graph-training/bootstrap.log 2>&1",
+            "timeout 120 aws s3api get-object --bucket " + bucket
+            + " --key input/source.zip /opt/cas-graph-training/package/source.zip --region "
+            + self.region,
+            "echo '" + self.archive_sha256 + "  /opt/cas-graph-training/package/source.zip' | sha256sum -c -",
+            "cd /opt/cas-graph-training/package",
+            "unzip -q source.zip",
+            "timeout 120 aws s3api get-object --bucket " + bucket
+            + " --key input/config.json /opt/cas-graph-training/package/config.json --region "
+            + self.region,
+            "PY=''",
+            "for p in python3.12 python3.11 python3; do",
+            "  if command -v \"$p\" >/dev/null 2>&1; then PY=\"$p\"; break; fi",
+            "done",
+            "test -n \"$PY\" || { echo SUPPORTED_PYTHON_REQUIRED; exit 1; }",
+            "\"$PY\" -B /opt/cas-graph-training/package/" + WORKER_NAME,
+            "",
+        ])
+
     def launch(self, job, permit):
         self.calls.append("launch")
         require(job == self.job and self._reserved and not self._launch_called,
@@ -716,28 +744,7 @@ class GraphTrainingProvider:
                      GroupId=sg, IpPermissions=[{"IpProtocol": "tcp", "FromPort": 443,
                                                  "ToPort": 443,
                                                  "IpRanges": [{"CidrIp": "0.0.0.0/0"}]}])
-        bootstrap = "\n".join([
-            "#!/bin/bash", "set -eu", "umask 077",
-            "export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''",
-            "mkdir -p /opt/cas-graph-training/package",
-            "exec > /opt/cas-graph-training/bootstrap.log 2>&1",
-            "timeout 120 aws s3api get-object --bucket " + bucket
-            + " --key input/source.zip /opt/cas-graph-training/package/source.zip --region "
-            + self.region,
-            "echo '" + self.archive_sha256 + "  /opt/cas-graph-training/package/source.zip' | sha256sum -c -",
-            "cd /opt/cas-graph-training/package",
-            "unzip -q source.zip",
-            "timeout 120 aws s3api get-object --bucket " + bucket
-            + " --key input/config.json /opt/cas-graph-training/package/config.json --region "
-            + self.region,
-            "PY=''",
-            "for p in python3.12 python3.11 python3; do",
-            "  if command -v \"$p\" >/dev/null 2>&1; then PY=\"$p\"; break; fi",
-            "done",
-            "test -n \"$PY\" || { echo SUPPORTED_PYTHON_REQUIRED; exit 1; }",
-            "\"$PY\" -B /opt/cas-graph-training/package/" + WORKER_NAME,
-            "",
-        ])
+        bootstrap = self._user_data(bucket)
         launched = self._effect("run_instances", ec2.run_instances,
             ImageId=frozen["ami"], InstanceType=frozen["instance_type"],
             MinCount=1, MaxCount=1, ClientToken=self.job,
@@ -828,7 +835,7 @@ class GraphTrainingProvider:
                 "sha256": str(self._evidence / "training_result.json.sha256"),
                 "result_sha256": digest(self._result_raw)}
 
-    def _await_terminated(self, ec2, instance_ids, timeout=300.0, poll_interval=5.0):
+    def _await_terminated(self, ec2, instance_ids, timeout=600.0, poll_interval=5.0):
         pending = list(instance_ids)
         deadline = time.monotonic() + timeout
         while pending and time.monotonic() < deadline:
