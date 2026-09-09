@@ -256,9 +256,9 @@ def test_evaluate_sealed_reads_only_sealed_splits():
     learner = FakeLearner(model, arm="generic", learning_rate=0.003, answers=answers)
     metrics = trainer.evaluate_sealed(learner, seed=20260909)
     assert set(metrics["per_split_op"]) == {
-        ("validation", "LIST_PARTS"), ("validation", "FIND_SHARED_PART"),
-        ("validation", "REACHED_VIA"), ("test", "LIST_PARTS"),
-        ("test", "FIND_SHARED_PART"), ("test", "REACHED_VIA")}
+        "validation:LIST_PARTS", "validation:FIND_SHARED_PART",
+        "validation:REACHED_VIA", "test:LIST_PARTS",
+        "test:FIND_SHARED_PART", "test:REACHED_VIA"}
     for bucket in metrics["per_split_op"].values():
         assert bucket["correct"] == bucket["attempted"]
     # the seal: every recorded prediction is answer-free and precedes scoring

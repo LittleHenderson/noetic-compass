@@ -247,7 +247,7 @@ def evaluate_sealed(learner, seed=20260909, splits=SEALED_SPLITS):
               for split, task in tasks]
     metrics = {}
     for (split, task), prediction in zip(tasks, sealed):
-        key = (split, task["op"])
+        key = split + ":" + task["op"]  # str key: json-serializable
         bucket = metrics.setdefault(key, {"attempted": 0, "correct": 0})
         bucket["attempted"] += 1
         if prediction["predicted"] == task["correct"]:
