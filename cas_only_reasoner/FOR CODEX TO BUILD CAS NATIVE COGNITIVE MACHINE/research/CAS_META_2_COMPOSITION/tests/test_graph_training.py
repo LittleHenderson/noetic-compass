@@ -165,6 +165,22 @@ def test_run_training_bounds_steps_and_reports_losses():
     assert training["automatic_retries"] == 0
 
 
+def test_run_training_records_the_learning_curve_when_asked():
+    """The competence run needs the learning curve: history_every records the
+    mean loss at step 0 and every N steps, ending at the final step."""
+    records = trainer.training_records(20260909)
+    learner = FakeLearner(FakeModel(), arm="cas", learning_rate=0.003)
+    budget = trainer.TrainingBudget(max_optimizer_steps=8, max_wall_seconds=60.0)
+    training = trainer.run_training(learner, records, "cas", budget, history_every=4)
+    expected = training["before_loss"]["LIST_PARTS"]["total"]
+    assert training["history"] == [[0, expected], [4, expected], [8, expected]]
+    plain = trainer.run_training(FakeLearner(FakeModel(), arm="cas", learning_rate=0.003),
+                                 records, "cas",
+                                 trainer.TrainingBudget(max_optimizer_steps=2,
+                                                        max_wall_seconds=60.0))
+    assert "history" not in plain
+
+
 def test_training_records_are_train_practice_whole_part_only():
     records = trainer.training_records(20260909)
     dataset = lessons.build_dataset(seed=20260909)

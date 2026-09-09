@@ -276,7 +276,7 @@ def render_worker():
         "                            learning_rate=0.003, max_optimizer_steps=64,",
         "                            max_wall_seconds=600.0)",
         "    sealed = trainer.evaluate_sealed(learner_factory(framework.module),",
-        "                                     seed=20260909)",
+        "                                     seed=20260909, arm=arm)",
         "    arms.append({'arm': arm, 'report': report, 'sealed': sealed})",
         "raw = (json.dumps({'schema': 'cas-graph-training-result/1', 'job': job,",
         "                   'arms': arms, 'initial_checkpoints': initial_checkpoints},",

@@ -119,34 +119,54 @@ def make_task(record, arm):
             "reference": record["reference"]}
 
 
-def run_training(learner, records, arm, budget, wall_clock=time.monotonic):
+def run_training(learner, records, arm, budget, wall_clock=time.monotonic,
+                 history_every=None):
     """Bounded updates with before/after per-op losses and lesson exposure.
 
     Lesson exposure reports how many records and how many updates each
     operation actually received — an optimizer step is NOT a complete
-    teaching cycle, and the report says so explicitly.
+    teaching cycle, and the report says so explicitly. ``history_every``
+    (optional, default None = no history) records the mean loss every N
+    steps for the learning curve: [[step, mean_loss], ...] including step 0
+    (before) and the final step when reached.
     """
+    def _loss_total(value):
+        return value if isinstance(value, (int, float)) else value["total"]
+
     tasks = [make_task(record, arm) for record in records]
     ops = sorted({task["op"] for task in tasks})
     before = {op: learner.eval_loss(op, tasks) for op in ops}
     completed = 0
     updates_by_op = {op: 0 for op in ops}
+    history = []
+    if history_every:
+        history.append([0, sum(_loss_total(value) for value in before.values())
+                        / max(1, len(before))])
     deadline = wall_clock() + budget.max_wall_seconds
     while completed < budget.max_optimizer_steps and wall_clock() < deadline:
         task = tasks[completed % len(tasks)]
         learner.step(task)
         updates_by_op[task["op"]] += 1
         completed += 1
+        if history_every and (completed % history_every == 0
+                              or completed == budget.max_optimizer_steps):
+            current = {op: learner.eval_loss(op, tasks) for op in ops}
+            history.append([completed,
+                            sum(_loss_total(value) for value in current.values())
+                            / max(1, len(current))])
     after = {op: learner.eval_loss(op, tasks) for op in ops}
     exposure = {"records_by_op": {op: sum(1 for task in tasks if task["op"] == op)
                                   for op in ops},
                 "updates_by_op": updates_by_op,
                 "boundary": ("An optimizer step is a single correction on one "
                              "record, not a complete teaching cycle.")}
-    return {"before_loss": before, "after_loss": after,
-            "completed_updates": completed, "lesson_exposure": exposure,
-            "checkpoint_identity": learner.checkpoint_identity(),
-            "automatic_retries": 0}
+    report = {"before_loss": before, "after_loss": after,
+              "completed_updates": completed, "lesson_exposure": exposure,
+              "checkpoint_identity": learner.checkpoint_identity(),
+              "automatic_retries": 0}
+    if history_every:
+        report["history"] = history
+    return report
 
 
 def real_framework():
@@ -175,7 +195,7 @@ def real_framework():
 def launch(*, run_id, arm, seed=20260909, framework=None, model=None,
            learner_factory=None, learning_rate=FROZEN_LEARNING_RATE,
            max_optimizer_steps=FROZEN_MAX_OPTIMIZER_STEPS,
-           max_wall_seconds=FROZEN_MAX_WALL_SECONDS):
+           max_wall_seconds=FROZEN_MAX_WALL_SECONDS, history_every=None):
     """Run the targeted training exactly once; report scope + containment."""
     require(type(run_id) is str and run_id, "RUN_ID_REQUIRED")
     require(arm in ("cas", "generic"), "ARM_UNKNOWN")
@@ -193,7 +213,8 @@ def launch(*, run_id, arm, seed=20260909, framework=None, model=None,
     before = parameter_snapshot(framework, model)
     scope = scope_parameters(framework, model)
     learner = learner_factory(model, arm=arm, learning_rate=budget.learning_rate)
-    training = run_training(learner, records, arm, budget)
+    training = run_training(learner, records, arm, budget,
+                            history_every=history_every)
     after = parameter_snapshot(framework, model)
     report = {"schema": MODE_SCHEMA, "run_id": run_id,
               "condition": {"arm": arm, "kind": CONDITION_KIND,
@@ -226,22 +247,26 @@ def prediction_input(task):
     return {key: value for key, value in task.items() if key != "correct"}
 
 
-def evaluate_sealed(learner, seed=20260909, splits=SEALED_SPLITS):
+def evaluate_sealed(learner, seed=20260909, splits=SEALED_SPLITS, arm="generic"):
     """Post-training evaluator: reads ONLY the sealed validation/test splits.
 
     Predictions are recorded (sealed) BEFORE the answers are consulted; each
     sealed prediction record contains no answer field. Tasks are the SAME
     public-record kind the learner consumes (attempt 008's preserved error:
-    make_task inputs lacked the learner's 'public' encoding).
+    make_task inputs lacked the learner's 'public' encoding). ``arm`` selects
+    the public option ordering the LEARNER was trained on (the deterministic
+    shuffle depends on the arm) — a cas-trained learner must be evaluated
+    with cas-ordered publics.
     """
     from .adapter import public_records
+    require(arm in ("cas", "generic"), "ARM_UNKNOWN")
     dataset = lessons.build_dataset(seed=seed)
     tasks = []
     for split in splits:
         for record in dataset[split]:
             if record["family"] != "whole_part" or record["op"] not in WHOLE_PART_OPS:
                 continue
-            tasks.append((split, public_records(record, arm="generic")))
+            tasks.append((split, public_records(record, arm=arm)))
     sealed = [{"record_id": task["record_id"], "split": split, "op": task["op"],
                "predicted": learner.predict(prediction_input(task))}
               for split, task in tasks]

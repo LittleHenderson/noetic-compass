@@ -4,6 +4,26 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 001 prepared — ONE complete learning experiment (awaiting GO)
+
+Per the owner's process review, the fragmented micro-diagnostic cycle is
+replaced by ONE owner-approved bounded development job with a fixed in-job
+sequence (single arm, cas framing; two-arm comparison postponed): stage 1
+checks (same-token rewiring must exceed 10× the reorder baseline; forward/
+backward sanity, zero optimizer steps), stage 2 bounded training (64 steps /
+600 s, lr 0.003, learning curve every 8 steps, digest containment), stage 3
+sealed fresh-example evaluation ONLY if the registered fit criterion is met
+(mean after-loss < mean before-loss − 0.02), with familiar-example accuracy
+reported separately. The deliverable is exactly one of the three registered
+outcomes (LEARNED_AND_TRANSFERRED / LEARNED_NO_TRANSFER / DID_NOT_FIT),
+computed by a deterministic rule. New module
+`cas_meta2/graph_teaching/competence.py`, new launcher
+`aws/graph_training_competence_launch.py` (single arm, all execution fixes),
+trainer learning-curve history, and evaluate_sealed now takes the learner's
+arm (cas-trained learners were previously evaluated with generic-ordered
+publics — fixed). 128 graph tests pass. Preregistration:
+`COMPETENCE_RUN_001.md`. No reservation, no launch.
+
 ## 2026-09-09 - Graph-first ^6: relationship encoder 001 prepared (option 2; training still pending)
 
 Per the owner's directive, attempt 006 is preserved as evidence that token
