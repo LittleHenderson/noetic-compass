@@ -34,7 +34,13 @@ reproduction mode whose digest is checked. New fail-closed launcher
 budget: 192 updates, 1,800 s worker ceiling, 5,400 s instance ceiling, one new
 `$6.00` reservation, zero retries). 43 new pure tests; 193 graph tests pass. No
 reservation, no owner record, no AWS call. Record:
-`GRAPH6_CONFIRMATION_001.md`.
+`GRAPH6_CONFIRMATION_001.md`. Source package built (source-only,
+`launch_enabled:false`, 34 members, source sha `e485b07c…`, archive sha256
+`b3d7d1be…`, manifest sha256 `b30c4260…`); packaged worker byte-checked against
+`render_worker()`. Request: `AUTHORIZATION_REQUEST_GRAPH6_CONFIRMATION_001_AWS.md`
+— one job, one new `$6.00` reservation (ledger 45 → 46), awaiting owner GO plus
+two decisions (baseline row A/B, and confirmation of the preregistered transfer
+rule).
 
 ## 2026-09-09 - Graph-first ^6: confirmation run 001 PREPARED (frozen candidate, predeclared seeds) — **NOT LAUNCHED**
 
