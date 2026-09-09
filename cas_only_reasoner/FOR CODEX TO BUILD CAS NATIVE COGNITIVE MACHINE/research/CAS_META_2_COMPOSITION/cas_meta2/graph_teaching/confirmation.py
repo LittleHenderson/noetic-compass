@@ -346,11 +346,21 @@ def run_candidate(*, run_id, learner_seed, framework, torch, device, tasks, case
         return learner_factory(model, arm=arm, learning_rate=learning_rate)
 
     training = trainer_module.launch(
-        run_id=run_id + ".train", arm=FROZEN_ARM, seed=learner_seed,
+        # ``seed`` here selects the TEACHING DATASET inside trainer.launch
+        # (``training_records(seed)``), so it MUST stay the frozen dataset seed.
+        # GRAPH6_CONFIRMATION_001 attempt 001's preserved error: this argument
+        # was set to the learner-init seed, so the trainer generated a different
+        # dataset than the one the learner's index was built from and died with
+        # ``KeyError: <record_id>`` in the first before-loss pass. The learner
+        # initialization seed is applied by the caller with torch.manual_seed
+        # before the framework is built; it never reaches this argument.
+        run_id=run_id + ".train", arm=FROZEN_ARM, seed=FROZEN_ENCODER_SEED,
         framework=framework, model=framework.module,
         learner_factory=scoped_learner_factory, learning_rate=learning_rate,
         max_optimizer_steps=max_optimizer_steps,
         max_wall_seconds=max_wall_seconds, history_every=history_every)
+    require(training.get("seed", FROZEN_ENCODER_SEED) == FROZEN_ENCODER_SEED,
+            "TRAINING_DATASET_SEED_CHANGED")
     # The trainer trains its own learner object over the SAME module; rebuild the
     # prediction learner over the trained module so the measured checkpoint and
     # the measured predictions cannot drift apart.
@@ -362,6 +372,7 @@ def run_candidate(*, run_id, learner_seed, framework, torch, device, tasks, case
     return {"schema": CANDIDATE_SCHEMA, "run_id": run_id,
             "learner_seed": learner_seed, "arm": FROZEN_ARM,
             "encoder_seed": FROZEN_ENCODER_SEED,
+            "training_dataset_seed": FROZEN_ENCODER_SEED,
             "encoder_identity": encoder_identity_value,
             "initial_checkpoint_identity": initial_identity,
             "trained_checkpoint_identity": trained.checkpoint_identity(),

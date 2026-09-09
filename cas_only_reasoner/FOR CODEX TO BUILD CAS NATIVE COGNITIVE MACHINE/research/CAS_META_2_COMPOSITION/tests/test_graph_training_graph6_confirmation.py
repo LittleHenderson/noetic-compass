@@ -168,7 +168,7 @@ class FakeTrainer:
     def launch(self, **kwargs):
         self.calls.append(kwargs)
         kwargs["model"]["state"] = "trained"
-        return {"schema": "fake", "training": {
+        return {"schema": "fake", "seed": kwargs["seed"], "training": {
                     "before_loss": {"LIST_PARTS": {"total": 1.0}},
                     "after_loss": {"LIST_PARTS": {"total": 0.5}},
                     "completed_updates": kwargs["max_optimizer_steps"],
@@ -219,9 +219,53 @@ def test_run_candidate_measures_before_and_after_and_records_identities(panel):
     assert candidate["completed_updates"] == 64
     assert candidate["transfer"]["passed"] is True
     assert candidate["encoder_identity"] == "encoder-id"
+    assert candidate["training_dataset_seed"] == confirmation.FROZEN_ENCODER_SEED
 
 
 LEARNER_SEED = confirmation.LEARNER_SEEDS[0]
+
+
+def test_run_candidate_never_changes_the_teaching_dataset(panel):
+    """Attempt 001's preserved error: the learner-init seed was passed to
+    ``trainer.launch(seed=...)``, which selects the DATASET, so the trainer
+    generated different records than the learner's index and died with
+    ``KeyError: <record_id>`` in the first before-loss pass. The trainer must
+    always receive the frozen dataset seed, and a trainer that reports another
+    dataset seed must be rejected loudly."""
+    cases, answers = _cases_and_answers(panel)
+    records = trainer.training_records(20260909)
+    from cas_meta2.graph_teaching import adapter
+    tasks = [adapter.public_records(record, confirmation.FROZEN_ARM) for record in records]
+    answers.update({task["record_id"]: task["encoded_options"][task["encoded_correct_index"]]
+                    for task in tasks})
+    trainer_module = FakeTrainer()
+    confirmation.run_candidate(
+        run_id="test.seed1", learner_seed=LEARNER_SEED, framework=_fake_framework(),
+        torch=None, device=None, tasks=tasks, cases=cases,
+        learner_factory=_fake_learner_factory(answers, []),
+        trainer_module=trainer_module, encoder_identity_value="encoder-id")
+    assert trainer_module.calls[0]["seed"] == confirmation.FROZEN_ENCODER_SEED
+    assert trainer_module.calls[0]["seed"] != LEARNER_SEED
+
+    class WrongDatasetTrainer(FakeTrainer):
+        def launch(self, **kwargs):
+            report = super().launch(**kwargs)
+            report["seed"] = kwargs["seed"] + 1
+            return report
+
+    with pytest.raises(ValueError, match="TRAINING_DATASET_SEED_CHANGED"):
+        confirmation.run_candidate(
+            run_id="test.seed1", learner_seed=LEARNER_SEED, framework=_fake_framework(),
+            torch=None, device=None, tasks=tasks, cases=cases,
+            learner_factory=_fake_learner_factory(answers, []),
+            trainer_module=WrongDatasetTrainer(), encoder_identity_value="encoder-id")
+
+
+def test_teaching_records_are_the_frozen_dataset_not_the_learner_seed():
+    frozen = {record["record_id"] for record in trainer.training_records(20260909)}
+    for seed in confirmation.LEARNER_SEEDS:
+        other = {record["record_id"] for record in trainer.training_records(seed)}
+        assert other != frozen
 
 
 def test_launch_varies_only_the_learner_initialization(panel, monkeypatch):
