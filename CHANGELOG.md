@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 attempt 009: TRAINING + SEALED EVALUATION COMPLETED; serialization seam fixed (preserved)
+
+Attempt 009 (`cas-meta2-teaching-graph-20260909071727-23c7cca1`, `$4.00`
+reserved, ledger 31 → 32: `$178.00` reserved, `$222.00` unreserved)
+completed the registered training loop AND the post-training sealed
+evaluation; the only failure was final-report serialization
+(`TypeError: keys must be str... not tuple` from tuple metric keys). Fixed
+(`a8e0ad13`, package member): metrics keys are now `"<split>:<op>"`. **New
+corrected package** (`4f90113a`, `package_010/`): source `a8e0ad13…`, archive
+`81ff2321…`, manifest `7e385260…`. A corrected re-attempt needs a new job, a
+new `$4.00` reservation, and a new owner record binding the NEW identities.
+**No retry was attempted.** Evidence:
+`training_mode_001/ATTEMPT_GRAPH_009_FAILURE.md` + receipt. Binding-fit
+attempt-004 request still pending; attempt 003's lost error remains UNKNOWN.
+
 ## 2026-09-09 - Graph-first ^6 attempt 008: TRAINING COMPLETED; sealed-eval seam fixed (preserved)
 
 Attempt 008 (`cas-meta2-teaching-graph-20260909065540-823842d3`, `$4.00`
