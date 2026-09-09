@@ -1,0 +1,54 @@
+{
+  "authorization": {
+    "archive_sha256": "17db81542b39a280b4dfc26d76c488e6b4e0c744d08a945991a795d2d4934dd6",
+    "authorization_context": "REPLACEMENT for attempt 003, which failed at the AWS layer ~30 s after launch (transient InvalidInstanceID.NotFound on DescribeInstances; the instance was actually running and has been terminated in a bounded hygiene pass). The measurement content is UNCHANGED: the SAME package identities as attempt 003 (source f4b14508, archive 17db8154, manifest 0239d08d) \u2014 the extended zero-update diagnostic on the correction-002 pipeline: per-arm (1) individual tag vectors before pooling, (2) OLD vs CORRECTED option-vector score spreads/argmax/cosines on the same fixed weights, (3) graph-edit response through encoding -> pooling -> module, (4) answer-score differences and alternative-target gradients, (5) module-output norms + pairwise cosines. The launcher now includes the visibility fixes (wait tolerates transient ec2 NotFound and keeps polling; cleanup retries describe within a bounded 60 s window before concluding absence) committed at eac74033 with 6 regression tests; 104 graph tests pass. Findings only: the training pilot remains PENDING; no saturation change, no allowance change, no learning or capability claim follows.",
+    "bound_request_sha256": "2d88e4a888e7d1dfa1c831b262257040680c3b1af20775279a9bbc570f8bfc92",
+    "graph_training_ln3_diagnostic_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7",
+    "launcher": "aws/graph_training_ln3_diagnostic_launch.py at commit eac740332b344481780c9b93736ccc7aa6b87c15",
+    "manifest_sha256": "0239d08ddc09ecb6303141ef0c79659b02528a70eb00630f4d3b3f7997efdb64",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_package_003/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_launch_004/launch_request.json",
+    "source_sha": "f4b1450854ac0a1be4df792d406fa505519440b8"
+  },
+  "execution_gates": [
+    "single launch attempt through the fixed diagnostic launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "measurement only: no optimizer step anywhere; worker records checkpoint identity before and after each arm and fails closed if any weight changed",
+    "the accepted model, graph lessons, scoring, protected evaluation boundaries, and frozen negatives (0/72) stay untouched; sealed splits are not consulted",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the training pilot or any larger experiment beyond this single measurement job",
+    "any optimizer step or weight update in the diagnostic worker",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any learning or capability claim from this diagnostic's measurements alone"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T17:32:43.802995+00:00",
+  "run_bounds": {
+    "automatic_retries": 0,
+    "conditions_kind": "prompt_framing_only",
+    "data": {
+      "practice": 16,
+      "sealed_not_read": true,
+      "train": 48
+    },
+    "jobs": 1,
+    "measurement": {
+      "learning_rate_constructor_only": 0.003,
+      "max_wall_seconds": 1200.0,
+      "optimizer_steps_permitted": 0
+    },
+    "reservation_usd": "4.00",
+    "totals": {
+      "arms": [
+        "cas",
+        "generic"
+      ]
+    }
+  },
+  "schema": "cas-graph-training-ln3-diagnostic-owner-authorization/1"
+}
