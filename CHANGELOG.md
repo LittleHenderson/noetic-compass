@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: connected preparation path proven from the exported package (attempt 005 NOT registered)
+
+Per the owner's directive, no attempt 005 registration or reservation
+occurred. The complete non-neural preparation sequence was demonstrated FROM
+the exported package (`984bca19`): permitted records → `public_records` →
+frozen validator → tokenizer fit → `encode_public`, 60 records (10 per op × 2
+conditions). Evidence (`preparation_evidence_001/`, sha `df9fd0c7…`):
+correct-position distribution `{0:23, 1:21, 2:16}` (no slot shortcut),
+swapped-target encoded inputs identical (no answer consultation at encoding),
+graph facts present in the input, zero AWS/model calls. The public choices
+are now unmarked three-slot exercises with a separate target
+(`32d19fa2`); the option set is fixed by the public content, never by the
+answer. Suite: 66 passed in the graph packages.
+
+- **Package built, NOT launched** (`package_005/`): source `32d19fa2…`,
+  archive `863cc79c…`, manifest `dac94d10…`. Replacement request:
+  `training_mode_001/AUTHORIZATION_REQUEST_AWS.md` — job to be minted only in
+  the signed record at approval. Ledger unchanged at revision 27.
+- Binding-fit attempt-004 request still pending; attempt 003's lost error
+  remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6 approved job: clean lifecycle; preserved error #3 (public-record contract)
 
 The owner-approved job (`cas-meta2-teaching-graph-20260909030210-e1408e1a`,
