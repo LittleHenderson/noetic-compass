@@ -1,0 +1,39 @@
+{
+  "schema": "cas-graph-training-owner-authorization/4",
+  "recorded_utc": "2026-09-09T03:15:00Z",
+  "owner_instruction_raw": "OWNER APPROVAL: one graph-first, targeted ^6 training job. I authorize job cas-meta2-teaching-graph-20260909030210-e1408e1a, with one new $4.00 reservation. Bind this approval through the existing authorization mechanism to the complete digests in request fdb7cb6e\u2026, the current package_003 identities, and corrected launcher 65fa6b46. Do not substitute the older package identities. Preserve 64 optimizer steps and 600 seconds per condition, with totals of 128 steps and 1,200 seconds, within the registered single-job resource and shutdown limits. No automatic retries or second reservation. Train only the declared candidate ^6 parameter group. Keep accepted models, graph lessons, scoring rules, and protected evaluation boundaries unchanged. Return actual lesson exposure and completed updates, before/after per-operation training losses, the registered evaluation results, checkpoint identities, parameter-containment results, and separate execution and cleanup outcomes. Preserve the original error and any completed progress if a stage fails. This approval does not authorize the pending binding-fit attempt 004 or any additional experiment.",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "bound_request_sha256": "fdb7cb6e5bf68b4672c970986a3ba5e04dd92a0112c6ac728da148785c78a7bf",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_004/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909030210-e1408e1a",
+    "source_sha": "27f5efffb0f53acfa495fa74ff639ae23d08bec1",
+    "archive_sha256": "a4c07dda808615a250379f962db04aa9b9b1bbc4832f5dd686bfbfd6673605ae",
+    "manifest_sha256": "1f554acf769fc612ed0b8de8300d40728afc53beda122ea0033bd526b4aec1ec",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_003/",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 65fa6b46"
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher (65fa6b46); bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry; no second reservation",
+    "training uses train + practice whole-part records only; validation/test sealed, predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the pending binding-fit attempt 004",
+    "any additional experiment beyond this single training job",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
