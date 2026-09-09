@@ -4,6 +4,30 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first targeted ^6 trainer mode: pure-tested; AWS run request prepared (not launched)
+
+The owner-directed trainer mode exists and is pure-tested (`b2fc91e1`):
+`cas_meta2/graph_teaching/trainer.py`. Targets the registered
+`cas.cjt.operation.^6.decompose/0.2` module with ONLY the `operator.^6`
+plasticity group trainable; every other parameter is frozen and
+digest-snapshotted before/after with a containment report that names any
+forbidden change. Frozen budget: lr `0.003`, `64` optimizer steps, `600.0`
+wall seconds. Training reads train+practice whole-part records only;
+`evaluate_sealed()` reads only validation/test post-training. CAS and generic
+arms share graphs and answers; only framing differs. The real framework hook
+fails closed with `GRAPH_TRAINING_FRAMEWORK_HOOK_NOT_BUILT` until the
+authorized AWS adapter build.
+
+- Tests: 12 new; full suite **116 passed, 24 subtests passed** (receipt sha
+  `0cc529b2`, `training_mode_001/checks_001/`).
+- AWS run request registered (NOT launched, NOT reserved):
+  `AUTHORIZATION_REQUEST_AWS.md`, job
+  `cas-meta2-teaching-graph-20260909011302-e654ae56`, one future `$4.00`
+  reservation; adapter build is the funded next step, gated on the owner's
+  signed record. Results record: `training_mode_001/RESULTS.md`.
+- Binding-fit attempt-004 authorization request remains awaiting owner
+  signature; attempt 003's CUDA hypothesis stays hypothesis-only.
+
 ## 2026-09-09 - Graph-first teaching candidate landed (pure phase; no training yet)
 
 Owner-directed graph-first candidate, `cas_meta2/graph_teaching/` (`0a8bc7c0`),
