@@ -264,6 +264,82 @@ def test_wait_propagates_non_missing_errors(tmp_path):
         provider.wait(JOB, timeout=5, poll_interval=0.01)
 
 
+def test_wait_tolerates_transient_instance_invisibility(tmp_path):
+    """Attempt 003's preserved error: DescribeInstances answered
+    InvalidInstanceID.NotFound right after RunInstances while the instance
+    WAS running. wait() must keep polling, not abort."""
+    clients = fake_clients()
+    state = {"describes": 0}
+
+    def get_object(**kwargs):
+        raise FakeClientError("NoSuchKey")
+
+    def describe_instances(**kwargs):
+        state["describes"] += 1
+        if state["describes"] <= 2:
+            raise FakeClientError("InvalidInstanceID.NotFound")
+        return {"Reservations": [{"Instances": [{"State": {"Name": "running"}}]}]}
+
+    clients["s3"] = SimpleNamespace(get_object=get_object)
+    clients["ec2"] = SimpleNamespace(describe_instances=describe_instances)
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_id = "i-0123456789abcdef0"
+    provider._resources["bucket"] = "job-bucket"
+    outcome = provider.wait(JOB, timeout=30, poll_interval=0.01)
+    assert outcome["worker_status"] == "REMOTE_TIMED_OUT"  # no crash, kept polling
+    assert state["describes"] >= 3
+
+
+def test_cleanup_retries_transient_invisibility_then_terminates(tmp_path):
+    """Cleanup must NOT conclude a live instance absent on a transient
+    NotFound; it retries and terminates when the instance becomes visible."""
+    clients = fake_clients()
+    state = {"describes": 0, "terminated": []}
+
+    def describe_instances(**kwargs):
+        if state["terminated"]:
+            return {"Reservations": [{"Instances": [{"State": {"Name": "terminated"}}]}]}
+        state["describes"] += 1
+        if state["describes"] <= 2:
+            raise FakeClientError("InvalidInstanceID.NotFound")
+        return {"Reservations": [{"Instances": [{"State": {"Name": "running"}}]}]}
+
+    clients["ec2"] = SimpleNamespace(
+        describe_instances=describe_instances,
+        terminate_instances=lambda **k: state["terminated"].append(k["InstanceIds"][0]),
+        describe_security_groups=lambda **k: {"SecurityGroups": [], "NextToken": None},
+        delete_security_group=lambda GroupId: None)
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_ids = ["i-0123456789abcdef0"]
+    provider._visibility_window = 60.0
+    provider._visibility_interval = 0.01
+    provider._resources["bucket"] = "job-bucket"
+    status = provider.cleanup(JOB)
+    assert status["instances"]["i-0123456789abcdef0"] == "CONFIRMED_TERMINATED"
+    assert state["terminated"] == ["i-0123456789abcdef0"]
+    assert status["complete"] is True
+
+
+def test_cleanup_concludes_absence_only_after_retry_window(tmp_path):
+    """Absence is concluded only after the bounded retry window; a live
+    instance that stays invisible is reported as absent-after-retry with the
+    window recorded, never silently skipped."""
+    clients = fake_clients()
+    clients["ec2"] = SimpleNamespace(
+        describe_instances=lambda **k: (_ for _ in ()).throw(
+            FakeClientError("InvalidInstanceID.NotFound")),
+        describe_security_groups=lambda **k: {"SecurityGroups": [], "NextToken": None},
+        delete_security_group=lambda GroupId: None)
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_ids = ["i-0123456789abcdef0"]
+    provider._visibility_window = 0.05
+    provider._visibility_interval = 0.01
+    provider._resources["bucket"] = "job-bucket"
+    status = provider.cleanup(JOB)
+    assert status["instances"]["i-0123456789abcdef0"] == "CONFIRMED_ABSENT_AFTER_RETRY"
+    assert status["complete"] is True
+
+
 def test_main_passes_the_real_client_error_class():
     import inspect
     source = inspect.getsource(launch.main)

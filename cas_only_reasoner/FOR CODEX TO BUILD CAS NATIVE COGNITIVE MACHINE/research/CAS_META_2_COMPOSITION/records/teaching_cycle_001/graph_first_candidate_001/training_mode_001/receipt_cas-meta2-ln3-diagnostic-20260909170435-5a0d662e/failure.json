@@ -1,0 +1,1 @@
+{"exception":"An error occurred (InvalidInstanceID.NotFound) when calling the DescribeInstances operation: The instance ID 'i-0c644583d35ab7987' does not exist","exception_type":"ClientError"}

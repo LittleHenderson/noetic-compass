@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 003 failed on transient EC2 visibility; live instance terminated; launchers fixed
+
+Owner GO authorized step 1 (measurement-only extended diagnostic, new
+`$4.00` reservation, ledger 36 → 37: `$198.00` reserved, `$202.00`
+unreserved). The run aborted ~30 s after launch BEFORE the worker started:
+`InvalidInstanceID.NotFound` on DescribeInstances for
+`i-0c644583d35ab7987` — a transient EC2 visibility error; a bounded hygiene
+pass measured the instance RUNNING and terminated it (SG `sg-0d7b6e96…`
+deleted; bucket/IAM verified absent). Root cause: `wait()` did not tolerate
+ec2 NotFound on the state poll, and `cleanup()` concluded CONFIRMED_ABSENT
+and skipped termination. Both launchers fixed (tolerate + keep polling;
+bounded 60 s visibility retry before concluding absence) with 6 new
+regression tests; 104 graph tests pass. Preserved in
+`ATTEMPT_LN3_003_FAILURE.md`. Measurements still outstanding; a replacement
+run needs a NEW owner authorization + NEW `$4.00` reservation (no automatic
+retry).
+
 ## 2026-09-09 - Graph-first ^6: correction 002 revised per owner's math; extended zero-update diagnostic (still no launch)
 
 Owner's second review corrected two claims, now fixed in the records:

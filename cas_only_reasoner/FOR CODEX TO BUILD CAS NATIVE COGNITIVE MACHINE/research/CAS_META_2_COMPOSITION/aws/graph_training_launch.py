@@ -538,6 +538,8 @@ class GraphTrainingProvider:
         self._evidence = None
         self._result = None
         self._result_raw = None
+        self._visibility_window = 60.0
+        self._visibility_interval = 5.0
 
     def configure_evidence(self, directory):
         directory = evidence_directory(directory)
@@ -834,8 +836,17 @@ class GraphTrainingProvider:
             except self._client_error as error:
                 if self._error_code(error) not in ("NoSuchKey", "404"):
                     raise
-            current = ec2.describe_instances(InstanceIds=[self._instance_id]
-                                             )["Reservations"][0]["Instances"][0]
+            try:
+                current = ec2.describe_instances(InstanceIds=[self._instance_id]
+                                                 )["Reservations"][0]["Instances"][0]
+            except self._client_error as error:
+                if self._error_code(error) == "InvalidInstanceID.NotFound":
+                    # Transient EC2 visibility right after RunInstances (the
+                    # ln3 attempt-003 preserved error); the S3 result is the
+                    # authoritative completion signal. Keep polling.
+                    time.sleep(poll_interval)
+                    continue
+                raise
             if current.get("State", {}).get("Name") in ("terminated", "shutting-down"):
                 return {"worker_status": "REMOTE_FAILED", "instance_state":
                         current.get("State", {}).get("Name")}
@@ -877,6 +888,23 @@ class GraphTrainingProvider:
                 time.sleep(poll_interval)
         return pending
 
+    def _describe_with_retry(self, ec2, instance_id):
+        """Bounded retry for transient EC2 invisibility (the ln3 attempt-003
+        preserved error: a freshly launched instance briefly answered
+        InvalidInstanceID.NotFound while actually running). Returns the
+        instance, or None only after the retry window concludes absence."""
+        deadline = time.monotonic() + self._visibility_window
+        while True:
+            try:
+                return ec2.describe_instances(InstanceIds=[instance_id]
+                                              )["Reservations"][0]["Instances"][0]
+            except self._client_error as error:
+                if self._error_code(error) != "InvalidInstanceID.NotFound":
+                    raise
+                if time.monotonic() >= deadline:
+                    return None
+                time.sleep(self._visibility_interval)
+
     def cleanup(self, job):
         self.calls.append("cleanup")
         require(job == self.job, "GRAPH_TRAINING_CLEANUP_JOB_MISMATCH")
@@ -893,17 +921,17 @@ class GraphTrainingProvider:
 
         for instance_id in self._instance_ids:
             try:
-                current = ec2.describe_instances(InstanceIds=[instance_id]
-                                                 )["Reservations"][0]["Instances"][0]
-                if current.get("State", {}).get("Name") != "terminated":
-                    ec2.terminate_instances(InstanceIds=[instance_id])
-                status["instances"][instance_id] = "CONFIRMED_TERMINATED"
-            except self._client_error as error:
-                if self._error_code(error) == "InvalidInstanceID.NotFound":
-                    status["instances"][instance_id] = "CONFIRMED_ABSENT"
+                current = self._describe_with_retry(ec2, instance_id)
+                if current is None:
+                    # absent only AFTER the bounded retry window
+                    status["instances"][instance_id] = "CONFIRMED_ABSENT_AFTER_RETRY"
                 else:
-                    failed("INSTANCE_TERMINATION_FAILED", error)
-                    status["instances"][instance_id] = "UNKNOWN"
+                    if current.get("State", {}).get("Name") != "terminated":
+                        ec2.terminate_instances(InstanceIds=[instance_id])
+                    status["instances"][instance_id] = "CONFIRMED_TERMINATED"
+            except self._client_error as error:
+                failed("INSTANCE_TERMINATION_FAILED", error)
+                status["instances"][instance_id] = "UNKNOWN"
             except Exception as error:
                 failed("INSTANCE_TERMINATION_FAILED", error)
                 status["instances"][instance_id] = "UNKNOWN"

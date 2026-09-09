@@ -65,6 +65,10 @@ def main(argv=None):
             if row["scores"].index(max(row["scores"])) == row["correct_slot"])
         all_scores = [value for row in rows for value in row["scores"]]
         tie_records = sum(1 for row in rows if row["spread"] == 0.0)
+        module = measurements.get("module_outputs", {})
+        tags = measurements.get("tag_vectors", {})
+        comparison = measurements.get("representation_comparison", [])
+        edits = measurements.get("graph_edit_response", [])
         report["arms"][name] = {
             "checkpoint_unchanged": arm["checkpoint_before"] == arm["checkpoint_after"],
             "records": len(rows),
@@ -78,6 +82,37 @@ def main(argv=None):
             "all_score_values": stats(all_scores),
             "option_pair_cosines": stats(pair_cosines),
             "problem_option_cosines": stats(problem_option_cosines),
+            "module_output_norms": stats([row["output_norm"]
+                                          for row in module.get("per_record", [])]),
+            "module_output_pairwise_cosines": stats(module.get("pairwise_cosines", [])),
+            "tag_norms": stats([row["norm"] for row in tags.get("tag_rows", [])]),
+            "tag_pairwise_cosines": stats(tags.get("pairwise_cosines", [])),
+            "tag_sample": tags.get("tag_rows", [])[:8],
+            "representation_comparison": {
+                "records": len(comparison),
+                "spread_old": stats([row["spread_old"] for row in comparison]),
+                "spread_new": stats([row["spread_new"] for row in comparison]),
+                "argmax_changed_old_to_new": sum(
+                    1 for row in comparison if row["argmax_old"] != row["argmax_new"]),
+                "score_differences_changed": sum(
+                    1 for row in comparison if row["spread_old"] != row["spread_new"]),
+                "option_pair_cosines_old": stats(
+                    [value for row in comparison
+                     for value in row["option_pair_cosines_old"]]),
+                "option_pair_cosines_new": stats(
+                    [value for row in comparison
+                     for value in row["option_pair_cosines_new"]]),
+                "sample": comparison[0] if comparison else None,
+            },
+            "graph_edit_response": {
+                "edits": len(edits),
+                "output_difference_norms": stats(
+                    [row["output_difference_norm"] for row in edits]),
+                "output_cosines": stats([row["output_cosine"] for row in edits]),
+                "decision_changes": sum(
+                    1 for row in edits if row["argmax_baseline"] != row["argmax_edited"]),
+                "sample": edits[0] if edits else None,
+            },
             "per_target_loss": {target: stats(values)
                                 for target, values in per_target_losses.items()},
             "gradient_norms_by_matrix": {matrix: stats(values)
