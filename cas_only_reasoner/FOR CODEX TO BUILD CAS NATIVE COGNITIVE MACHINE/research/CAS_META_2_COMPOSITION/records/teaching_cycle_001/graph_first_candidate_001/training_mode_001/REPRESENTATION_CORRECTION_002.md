@@ -1,8 +1,21 @@
-# Graph-first ^6 — representation correction 002 (PREPARED, NOT LAUNCHED — second revision)
+# Graph-first ^6 — representation correction 002 (PREPARED — with the MEASURED root cause, attempt 005)
 
-Owner-directed, 2026-09-09 (two review rounds). No reservation, no launch, no
-GPU work was made for anything in this document. Attempt 011 is preserved
-with a narrowed interpretation (`ATTEMPT_GRAPH_011_RESULT.md`).
+Owner-directed, 2026-09-09 (three review rounds + one completed measurement).
+No reservation or launch was made for anything in this document.
+`ATTEMPT_LN3_005_RESULT.md` (result sha `c6822f24…`) MEASURED the earliest
+stage where content becomes indistinguishable — before any pooling, before
+the module:
+
+> **The frozen encoder's embed lookup returned ONE vector for every token.**
+> `embed(token_id)` indexed the projection through a string-keyed token map
+> with INTEGER ids, so every token fell back to row 0. Measured: 10 distinct
+> tag tokens (different part names included) all have norm
+> `0.9902205467224121` and pairwise cosines `0.9999999675` — the identical
+> vector. Fixed (ids are vocabulary positions; bounds guard), test-locked.
+
+Everything below remains valid as the SPEC for re-measuring the corrected
+pipeline (the count-vs-content question becomes real only now that distinct
+tokens map to distinct frozen rows).
 
 ## Corrected claims (per the owner's mathematical review — these REPLACE the
 first revision's wording)

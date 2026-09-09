@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 005 FINISHED — the encoder embed lookup is the measured root cause
+
+Attempt 005 (`cas-meta2-ln3-diagnostic-20260909175351-5f425cf9`, owner GO,
+new `$4.00` reservation, ledger 38 → 39: `$206.00` reserved, `$194.00`
+unreserved, result sha `c6822f24…`, zero-update measurement, cleanup
+complete) MEASURED the earliest stage where content becomes
+indistinguishable: the frozen encoder's `embed(token_id)` indexed the
+projection through a string-keyed token map with INTEGER ids, so EVERY
+token embedded as row 0 — 10 distinct tag tokens (different part names
+included) all have norm `0.9902205467224121` and pairwise cosines
+`0.9999999675` (the identical vector). This one bug explains the whole
+chain: attempt 002's collapse, attempt 011's length-only movement
+("different amounts of text", as the owner hypothesized), FIND_SHARED's
+exact ln 3, correction 002 changing magnitudes but 0/30 decisions, and
+graph edits changing nothing that survives encoding (output difference
+≤ `1.5e-4`, 0/6 decision changes). Fixed: ids ARE vocabulary positions;
+`projection[token_id]` with a bounds guard; source-locked test; 105 graph
+tests pass. The module's capacity on DISTINCT inputs remains unmeasured;
+saturation stays a hypothesis; training pilot stays pending. Records:
+`ATTEMPT_LN3_005_RESULT.md`, `REPRESENTATION_CORRECTION_002.md`,
+`ADAPTER_SPEC.md`. A re-run of this same diagnostic with the fixed encoder
+needs a new owner authorization + one new `$4.00` reservation.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 004 failed on the empty-content guard; strict-subset options measured; zero-vector fix
 
 Replacement authorized by the owner (GO; `OWNER_AUTHORIZATION_AWS_LN3_004.json`,

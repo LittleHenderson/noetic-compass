@@ -51,6 +51,15 @@ module input:
    common shift (attempt 004's preserved crash on this case is now fixed and
    test-locked). See `REPRESENTATION_CORRECTION_002.md`.
 
+   **Amendment 2026-09-09 (embed lookup fix, MEASURED by attempt 005):** the
+   frozen encoder's `embed(token_id)` previously indexed the projection
+   through a string-keyed token map with INTEGER ids, so every token
+   embedded as row 0 — all tag vectors were the identical vector (norm
+   `0.9902205467224121`, pairwise cosines `0.9999999675`, measured for
+   distinct part names). Fixed: ids ARE vocabulary positions; the row is
+   indexed directly with a bounds guard. This was the earliest stage where
+   content became indistinguishable — before any pooling or the module.
+
 ## 2. What the module is and what it predicts
 
 - The module is a CANDIDATE copy of the registered decompose transform

@@ -98,7 +98,6 @@ def build_encoder(torch, publics, d_model, seed, device):
     tokenizer = LosslessPublicTokenizer.fit_train(list(publics),
                                                   max_length=FROZEN_ENCODER_MAX_LENGTH)
     vocabulary = tuple(tokenizer.vocabulary)
-    index = {token: position for position, token in enumerate(vocabulary)}
     generator = torch.Generator(device=device).manual_seed(seed)
     projection = torch.randn((len(vocabulary), d_model), generator=generator,
                              device=device)
@@ -106,7 +105,16 @@ def build_encoder(torch, publics, d_model, seed, device):
     projection.requires_grad_(False)
 
     def embed(token_id):
-        return projection[index.get(token_id, 0)]
+        # Attempt 005's MEASURED root cause: the previous string-keyed lookup
+        # (index.get(token_id, 0)) received INTEGER token ids while the index
+        # maps token STRINGS to positions, so every token silently embedded as
+        # projection[0] — all tag vectors were the identical vector (norm
+        # 0.9902205467224121 for every tag; every pairwise cosine ≈ 1.0 to
+        # within 3.2e-8). Token ids ARE vocabulary positions; index the
+        # projection row directly, with a bounds guard for safety.
+        if not (0 <= token_id < len(projection)):
+            token_id = 0
+        return projection[token_id]
 
     def encode(public):
         encoded = tokenizer.encode_public(public)

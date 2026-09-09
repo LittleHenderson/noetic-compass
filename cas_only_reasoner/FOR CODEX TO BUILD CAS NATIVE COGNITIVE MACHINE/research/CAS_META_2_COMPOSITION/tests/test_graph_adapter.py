@@ -242,6 +242,21 @@ def test_config_import_comes_from_the_reference_wheel():
     assert "CASformerConfig" in init
 
 
+def test_encoder_embed_indexes_projection_rows_by_token_id():
+    """Attempt 005's measured root cause: the embed lookup used a string-keyed
+    token index with integer token ids, so EVERY token embedded as
+    projection[0] — all tag vectors were the identical vector (norm
+    0.9902205467224121 for every tag; pairwise cosines ~1.0 to 3.2e-8). Token
+    ids ARE vocabulary positions; the lookup must index the projection row
+    directly, never through a string index."""
+    import inspect
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.build_encoder)
+    assert "projection[index.get(" not in source
+    assert "return projection[token_id]" in source
+    assert "0 <= token_id < len(projection)" in source
+
+
 def test_encoder_passes_a_list_to_fit_train():
     """Attempt 003's preserved error: fit_train rejects tuples
     (LOSSLESS_TRAIN_INPUT_INVALID). The encoder must pass a list. Attempt
