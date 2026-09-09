@@ -377,12 +377,16 @@ def test_graph_edit_response_measures_output_and_decision():
     baseline_problem = adapter.public_records(record, "cas")["public"]["problem"]
     rows = diagnostic.measure_graph_edit_response(EditLearner(baseline_problem),
                                                   [record], "cas")
-    assert [row["edit"] for row in rows] == ["connector_retarget", "node_contents"]
+    assert [row["edit"] for row in rows] == ["connector_retarget", "node_contents",
+                                             "connector_rewire_same_tokens"]
     for row in rows:
         assert row["output_norm_edited"] == 4.0 and row["output_norm_baseline"] == 2.0
         assert row["output_difference_norm"] == 2.0
         assert row["scores_baseline"] == [6.0, 8.0, 10.0]
         assert row["scores_edited"] == [12.0, 16.0, 20.0]
+        assert row["problem_token_count_before"] == 1
+        assert row["problem_token_count_after"] == 1
+        assert "problem_token_multiset_equal" in row
 
 
 def test_require_rejects_missing_run_id_or_learner():

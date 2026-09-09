@@ -255,6 +255,86 @@ def test_encoder_embed_indexes_projection_rows_by_token_id():
     assert "projection[index.get(" not in source
     assert "return projection[token_id]" in source
     assert "0 <= token_id < len(projection)" in source
+    assert "ENCODER_TOKEN_ID_OUT_OF_RANGE" in source
+
+
+def test_encoder_embed_rejects_invalid_internal_ids_explicitly():
+    """Invalid internal ids are REJECTED explicitly, never silently mapped to
+    row 0 (the silent fallback WAS attempt 005's measured collapse). There is
+    no legitimate unknown token at runtime: the lossless tokenizer's byte
+    fallback keeps every unit in-vocabulary."""
+    import inspect
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.build_encoder)
+    assert "ENCODER_TOKEN_ID_OUT_OF_RANGE" in source
+    assert "require(type(token_id) is int" in source
+
+
+def test_encoder_embed_tokenizer_to_row_path_is_positional():
+    """The ACTUAL tokenizer-to-row path, verified purely: the REAL tokenizer
+    encodes public records to INTEGER ids that are vocabulary positions, and
+    the repaired embed maps each id to its own projection row — distinct ids
+    reach distinct rows, ids are in-bounds, and out-of-range ids raise."""
+    from cas_meta2.graph_teaching import adapter, lessons, real_framework
+    from cas_meta2.features_v2 import LosslessPublicTokenizer
+
+    records = [record for record in lessons.build_dataset(seed=20260909)["train"]
+               if record["family"] == "whole_part"][:8]
+    publics = [adapter.public_records(record, arm)["public"]
+               for record in records for arm in ("cas", "generic")]
+    tokenizer = LosslessPublicTokenizer.fit_train(list(publics), max_length=1024)
+    vocabulary_size = len(tuple(tokenizer.vocabulary))
+
+    class Row:
+        def __init__(self, position):
+            self.position = position
+
+    class Projection:
+        def __init__(self, size):
+            self.size = size
+
+        def __len__(self):
+            return self.size
+
+        def __getitem__(self, key):
+            if type(key) is not int or not (0 <= key < self.size):
+                raise IndexError(key)
+            return Row(key)
+
+        def __truediv__(self, other):
+            return self
+
+        def requires_grad_(self, flag):
+            return self
+
+    class Generator:
+        def __init__(self, device=None):
+            pass
+
+        def manual_seed(self, seed):
+            return self
+
+    class Torch:
+        @staticmethod
+        def randn(shape, generator=None, device=None):
+            return Projection(shape[0])
+
+    Torch.Generator = Generator
+
+    encoder = real_framework.build_encoder(Torch, publics, d_model=64,
+                                           seed=20260909, device="cuda:0")
+    public = publics[0]
+    problem_ids, slot_ids = encoder["encode"](public)
+    ids = problem_ids + [item for slot in (0, 1, 2) for item in slot_ids[slot]]
+    assert ids and all(type(token_id) is int and 0 <= token_id < vocabulary_size
+                       for token_id in ids)
+    rows = {token_id: encoder["embed"](token_id).position for token_id in ids}
+    assert rows == {token_id: token_id for token_id in ids}  # positional lookup
+    assert len(set(ids)) > 1  # distinct tokens really reach distinct rows
+    with pytest.raises(ValueError, match="ENCODER_TOKEN_ID_OUT_OF_RANGE"):
+        encoder["embed"](vocabulary_size + 10)
+    with pytest.raises(ValueError, match="ENCODER_TOKEN_ID_OUT_OF_RANGE"):
+        encoder["embed"]("not-an-id")
 
 
 def test_encoder_passes_a_list_to_fit_train():

@@ -100,3 +100,16 @@ re-checked against code and the recorded bytes:
 The computations above stand as recorded; only their interpretation is
 narrowed.
 
+## Amendment 2026-09-09 (attempt 005): the ORIGINAL collapse was a lookup defect, not pooling
+
+Attempt 005's neural diagnostic (`ATTEMPT_LN3_005_RESULT.md`) measured that
+the original pre-pooling collapse — including the one reported in attempt
+002 and the "different amounts of text" movement of this attempt — was
+caused by the frozen encoder's embed lookup returning ONE vector for every
+token (integer ids through a string-keyed index fell back to row 0). The
+integer-versus-string lookup created the original collapse before pooling;
+mean-pooling and the sum-pooling count effects measured here were
+downstream of it. The wording above attributing the collapse to
+mean-pooling itself is superseded by that measurement.
+
+

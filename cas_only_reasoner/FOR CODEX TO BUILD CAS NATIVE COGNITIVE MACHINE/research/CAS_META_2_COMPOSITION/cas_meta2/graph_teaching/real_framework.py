@@ -111,9 +111,12 @@ def build_encoder(torch, publics, d_model, seed, device):
         # projection[0] — all tag vectors were the identical vector (norm
         # 0.9902205467224121 for every tag; every pairwise cosine ≈ 1.0 to
         # within 3.2e-8). Token ids ARE vocabulary positions; index the
-        # projection row directly, with a bounds guard for safety.
-        if not (0 <= token_id < len(projection)):
-            token_id = 0
+        # projection row directly. Invalid internal ids are REJECTED
+        # explicitly — never silently mapped to row 0. There is no legitimate
+        # unknown token at runtime: the lossless tokenizer's byte fallback
+        # guarantees every unit is in-vocabulary.
+        require(type(token_id) is int and 0 <= token_id < len(projection),
+                "ENCODER_TOKEN_ID_OUT_OF_RANGE")
         return projection[token_id]
 
     def encode(public):
@@ -139,14 +142,14 @@ class GraphLearner:
     slots, AdamW over the module parameters only (all operation:^6).
 
     Representation follow-up 001 (owner-authorized 2026-09-09): the OPTION
-    slots are now SUM-pooled instead of mean-pooled. Attempt 002's neural
-    diagnostic measured that mean-pooling collapsed every option vector onto
-    one direction (all pairwise cosines ≈ 1.0 to within 4e-8), which made the
-    three scores equal to float32 noise and the loss exactly ln 3. Sum-pooling
-    keeps each option's distinct tokens (and their count) in the vector, so
-    the frozen readout can tell the options apart. The PROBLEM side (module
-    input) is UNCHANGED: still mean-pooled, exactly as in attempt 010 — one
-    variable at a time.
+    slots are SUM-pooled instead of mean-pooled. ATTEMPT 005's measurement
+    later located the ORIGINAL collapse BEFORE pooling: the embed lookup
+    returned one vector for every token (integer ids through a string-keyed
+    index), so every option vector was a count-scaled copy of the same row.
+    With the lookup repaired, the sum-vs-mean choice is downstream and stays
+    as follow-up 001 prepared it. The PROBLEM side (module input) is
+    UNCHANGED: still mean-pooled, exactly as in attempt 010 — one variable
+    at a time.
 
     Representation correction 002 (owner-directed 2026-09-09, PREPARED not
     launched): the pure inspection

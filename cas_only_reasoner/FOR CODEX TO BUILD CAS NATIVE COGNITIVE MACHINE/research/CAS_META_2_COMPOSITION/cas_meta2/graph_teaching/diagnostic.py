@@ -176,8 +176,11 @@ def measure_representation_comparison(learner):
 
 
 def _graph_edits(record):
-    """Valid synthetic graph edits (no answers involved): retarget one
-    contains connector; append one node field."""
+    """Valid synthetic graph edits (no answers involved): (a) retarget one
+    contains connector; (b) append one node field; (c) a SAME-TOKEN-COUNT
+    rewiring — swap the sources of two contains connectors, preserving the
+    problem token multiset exactly while changing the relationships (the
+    preserved-vocabulary vs preserved-relationships contrast)."""
     edits = []
     edited = json.loads(json.dumps(record["graph"]))
     contains = [relation for relation in edited["relations"]
@@ -194,6 +197,22 @@ def _graph_edits(record):
     edited = json.loads(json.dumps(record["graph"]))
     edited["nodes"][0]["fields"].append(["edited", "marker"])
     edits.append(("node_contents", edited))
+    edited = json.loads(json.dumps(record["graph"]))
+    contains = [relation for relation in edited["relations"]
+                if relation["kind"] == "contains"]
+    existing = {(relation["kind"], relation["source"], relation["target"])
+                for relation in edited["relations"]}
+    pairs = [(i, j) for i in range(len(contains)) for j in range(i + 1, len(contains))
+             if contains[i]["source"] != contains[j]["source"]
+             and (contains[i]["kind"], contains[j]["source"], contains[i]["target"])
+             not in existing
+             and (contains[i]["kind"], contains[i]["source"], contains[j]["target"])
+             not in existing]
+    if pairs:
+        i, j = pairs[0]
+        contains[i]["source"], contains[j]["source"] = (
+            contains[j]["source"], contains[i]["source"])
+        edits.append(("connector_rewire_same_tokens", edited))
     return edits
 
 
@@ -231,6 +250,9 @@ def measure_graph_edit_response(learner, records, arm, limit=3):
                              for option in options]
             rows.append({
                 "record_id": record["record_id"], "edit": edit_kind,
+                "problem_token_count_before": len(baseline_ids),
+                "problem_token_count_after": len(edited_ids),
+                "problem_token_multiset_equal": sorted(baseline_ids) == sorted(edited_ids),
                 "output_norm_baseline": norm_value,
                 "output_norm_edited": norm_changed,
                 "output_cosine": _cosine(learner, value, changed),

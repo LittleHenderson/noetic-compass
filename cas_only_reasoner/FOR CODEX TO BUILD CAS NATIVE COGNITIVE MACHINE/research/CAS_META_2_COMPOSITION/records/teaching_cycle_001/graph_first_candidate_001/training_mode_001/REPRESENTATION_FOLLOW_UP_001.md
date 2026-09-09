@@ -62,3 +62,14 @@ See `ATTEMPT_GRAPH_011_RESULT.md` (result sha `e4a0d61d…`, ledger 35 → 36).
 - Next measured suspects (each separately authorizable): the
   FIND_SHARED_PART residual collapse, the 64-step allowance, and the module's
   operating point.
+
+## Amendment 2026-09-09 (attempt 005): the original collapse was the embed lookup
+
+Attempt 005's neural diagnostic (`ATTEMPT_LN3_005_RESULT.md`) measured the
+root cause of the ORIGINAL collapse and of this attempt's length-driven
+movement: the frozen encoder's embed lookup returned ONE vector for every
+token (integer ids through a string-keyed index). The integer-versus-string
+lookup created the collapse BEFORE pooling; mean-pooling and the
+sum-pooled count effects were downstream of it. This record's earlier
+attribution of the collapse to mean-pooling is superseded; the sum-pooling
+change itself is preserved as prepared.

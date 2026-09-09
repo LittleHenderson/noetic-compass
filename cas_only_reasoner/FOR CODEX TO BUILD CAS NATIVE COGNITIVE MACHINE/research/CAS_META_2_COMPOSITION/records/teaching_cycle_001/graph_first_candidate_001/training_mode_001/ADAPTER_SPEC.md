@@ -28,13 +28,14 @@ module input:
 
    **Amendment 2026-09-09 (representation follow-up 001, owner-authorized):**
    the OPTION embeddings are now SUM-pooled instead of mean-pooled (module
-   input stays mean-pooled, exactly as attempt 010). Reason: attempt 002's
-   neural diagnostic MEASURED that mean-pooling collapsed every option vector
-   onto one direction (pairwise cosines ≈ 1.0 to within 4e-8), so the three
-   scores were float32 noise and the loss was exactly ln 3. Sum-pooling keeps
-   each option's distinct tokens and their count; a common additive part is
-   softmax-shift-invariant, so it cannot hurt the decision. See
-   `REPRESENTATION_FOLLOW_UP_001.md`.
+   input stays mean-pooled, exactly as attempt 010). ATTEMPT 005's
+   measurement located the ORIGINAL collapse BEFORE pooling: the embed
+   lookup returned one vector for every token (integer ids through a
+   string-keyed index), so every option vector was a count-scaled copy of
+   the same row — the collapse was a lookup defect, not an intrinsic
+   property of mean-pooling. With the lookup repaired, the sum-vs-mean
+   choice is downstream and stays as follow-up 001 prepared it. See
+   `REPRESENTATION_FOLLOW_UP_001.md` and `ATTEMPT_LN3_005_RESULT.md`.
 
    **Amendment 2026-09-09 (representation correction 002, owner-directed,
    PREPARED not launched):** the pure inspection measured that sum-pooled
