@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 approved job: clean lifecycle; preserved error #3 (public-record contract)
+
+The owner-approved job (`cas-meta2-teaching-graph-20260909030210-e1408e1a`,
+`$4.00` reserved, ledger 26 → 27: `$158.00` reserved, `$242.00` unreserved)
+ran a fully clean lifecycle with zero leftovers, and the worker's **original
+inner error was preserved verbatim for the third time**:
+`PolicyContractError: PUBLIC_INPUT_FIELDS_INVALID` — the frozen public codec
+accepts only `{problem, observations}` records with exactly three slots, and
+the encoder passed raw text.
+
+- **Fixed** (`238af1b5`, package members): `adapter.public_records` builds the
+  exact frozen public records (correct option + distractors, literal `none`
+  padding); the real encoder fits the campaign tokenizer on them and the
+  learner consumes `encode_public` with the frozen three-slot readout.
+  Regression-tested over every whole-part record (suite 101 passed, 24
+  subtests). **New corrected package** (`121e3a7d`, `package_004/`): source
+  `238af1b5…`, archive `53af40ad…`, manifest `a90323c8…`.
+- A corrected re-attempt needs a new job, a new `$4.00` reservation, and a new
+  owner record binding the NEW identities. **No retry was attempted.**
+  Evidence: `training_mode_001/ATTEMPT_GRAPH_004_FAILURE.md` + receipt.
+- Binding-fit attempt-004 request still pending; attempt 003's lost error
+  remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6: env wiring PROVEN in the child process; replacement request placed (not launched)
 
 Per the owner's directive, before any replacement launch the actual
