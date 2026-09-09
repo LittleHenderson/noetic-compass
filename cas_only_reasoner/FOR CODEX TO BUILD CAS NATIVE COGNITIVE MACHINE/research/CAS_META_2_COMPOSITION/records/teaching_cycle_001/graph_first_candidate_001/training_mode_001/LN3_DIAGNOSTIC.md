@@ -52,20 +52,23 @@ Decision rules for the authorized run (to be bound in the signed record):
   preference and the flat ln(3) pilot result points to the small allowance or
   optimization dynamics — a measured answer, not an inference.
 
-## Attempt status (2026-09-09)
+## Attempt status (2026-09-09) — MEASURED VERDICT
 
 - Attempt 001 (`cas-meta2-ln3-diagnostic-20260909084139-f6f49be5`) FAILED with
-  a preserved spec bug: the gradient test backwarded a second time through a
-  freed graph (`RuntimeError: Trying to backward through the graph a second
-  time`). See `ATTEMPT_LN3_001_FAILURE.md`. Ledger 33 → 34; the reservation
-  stands; no automatic retry.
-- The fix (forward recomputed per target, one fresh graph per backward) is
-  committed at `51f12c61` with regression tests; all 90 graph tests pass. The
-  replacement package (`ln3_diagnostic_package_002`) is built but NOT
-  launched; the replacement awaits a new owner authorization and one new
-  `$4.00` reservation (`AUTHORIZATION_REQUEST_LN3_AWS_002.md`).
-- The measured scores/geometry/gradient verdict is still OPEN — no neural
-  measurement has been produced yet.
+  a preserved spec bug (second backward through a freed graph); fix committed
+  at `51f12c61` with regression tests. See `ATTEMPT_LN3_001_FAILURE.md`.
+- Attempt 002 (`cas-meta2-ln3-diagnostic-20260909085756-95693cd8`) FINISHED.
+  See `ATTEMPT_LN3_002_RESULT.md` (result sha `f685506f…`; ledger 34 → 35).
+- **Measured verdict: decision rule 2 is TRUE.** The frozen projection +
+  mean-pooling collapses all option vectors to near-parallel directions
+  (pairwise cosines ≈ 1.0 to within 4e-8) for every record in both arms;
+  scores are equal to float32 noise (spread ≤ 5.6e-9), losses are exactly
+  ln 3 for every target, parameter gradients sit at the noise floor
+  (≤ 8.0e-8), and argmax is at chance (12/30, 10/30). The flat pilot losses
+  are a measured property of the input stage, not of the ^6 module's
+  capacity — but whether a non-collapsing representation would let the
+  module learn remains an OPEN question and needs a new owner-authorized
+  experiment.
 
 ## Constraints preserved
 

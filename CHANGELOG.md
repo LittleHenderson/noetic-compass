@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) neural diagnostic attempt 002 FINISHED — the option-collapse is MEASURED
+
+Replacement authorized by the owner ("GO"; `OWNER_AUTHORIZATION_AWS_LN3_002.json`,
+new `$4.00` reservation, ledger 34 → 35: `$190.00` reserved, `$210.00`
+unreserved). Job `cas-meta2-ln3-diagnostic-20260909085756-95693cd8` finished
+(`AWS_GRAPH_TRAINING_LN3_DIAGNOSTIC_FINISHED`, result sha `f685506f…`,
+elapsed 547.2 s, zero-leftover cleanup, `optimizer_steps_taken: 0`,
+checkpoint unchanged). MEASURED on both framing arms (30 records each, 10
+per op): all option pair cosines ≈ 1.0 (min `0.9999999675`) — the frozen
+projection + mean-pooling collapses the option vectors (and the problem
+vector) onto one direction BEFORE the readout (decision rule 2 TRUE); scores
+equal to float32 noise (spread ≤ `5.6e-9`, median `0.0`); per-target losses
+exactly float32 ln 3; parameter gradients at the noise floor
+(`1.7e-8`…`8.0e-8`); argmax at chance (12/30, 10/30 vs 10). The repeated
+ln(3) flat losses are a measured property of the INPUT STAGE, not of the ^6
+module's capacity; attempt 010's digest-level weight movement is consistent
+(AdamW converts noise gradients into O(lr) sign updates that leave uniform
+scores unchanged). No learning claim; a non-collapsing representation is a
+new, separately authorizable experiment. Records:
+`ATTEMPT_LN3_002_RESULT.md`, `LN3_DIAGNOSTIC.md`, analysis tool
+`tools/graph_training_ln3_result_analysis.py`.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) neural diagnostic registered and run — attempt 001 failed on a preserved spec bug; fix test-locked; replacement pending
 
 Per the owner's instruction ("register it"), the prepared measurement-only
