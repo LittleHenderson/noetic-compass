@@ -1,0 +1,48 @@
+{
+  "authorization": {
+    "archive_sha256": "82bcaf6c6d8eec5904381c6eb684645358aa89f16be276f116b3d1c5c2b8c55d",
+    "authorization_context": "Competence run 003 \u2014 REPLACEMENT for run 002, whose stage-1 gate stopped BEFORE any training and RETURNED the preserved measurements proving the remaining defect: the raw Hadamard-bound lines were ~8 orders of magnitude smaller than the pooled framing text, so in float32 the relationship distinctions sat below the noise floor of the summed module input. The fix (one documented change to the encoding rule, no learned parameters): each bound line is now UNIT-NORMALIZED after the product, so every structural line contributes at O(1) scale and the structure dominates the input. The rule amendment is in RELATIONSHIP_ENCODER_001.md; the structural test verifies the rewire-vs-reorder contrast on balanced fake rows; 129 graph tests pass. Everything else is UNCHANGED from COMPETENCE_RUN_001.md: ONE job runs the whole fixed sequence, single arm (cas framing), no two-arm comparison. STAGE 1 (zero optimizer steps): input-level relationship gate (rewire > 10x reorder input baseline) + forward/backward sanity; failure returns STAGE1_CHECK_FAILED with preserved numbers. STAGE 2: bounded training on the familiar train+practice whole-part examples \u2014 64 optimizer steps / 600 s, lr 0.003, learning curve every 8 steps, digest containment (operation:^6 only). STAGE 3 (only if mean after-loss < mean before-loss - 0.02): sealed validation/test evaluation with predictions before answers, plus familiar-example accuracy, reported separately. Deliverable: exactly one of LEARNED_AND_TRANSFERRED / LEARNED_NO_TRANSFER / DID_NOT_FIT / STAGE1_CHECK_FAILED, computed by a deterministic rule. No silent mid-run patches, no unlimited retries, no spending beyond this single job; the training pilot beyond this run stays pending.",
+    "bound_request_sha256": "1425002149790c2d818e8903dd3b8ef1b4f0612801d2a99ac1993b6f340cfc0a",
+    "competence_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-competence-20260909201205-f0da3fa3",
+    "launcher": "aws/graph_training_competence_launch.py at commit 4489889c9813260d76a376f234765015cacca5ae",
+    "manifest_sha256": "950d9cf209cff0fe85fe684c6767e1d8345657e1f3ba9fc22f2173282487a3bb",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_package_003/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_launch_003/launch_request.json",
+    "source_sha": "f5d30db8ac965ab6e94d24b6e898b89a6d2ae7ab"
+  },
+  "execution_gates": [
+    "single launch attempt through the competence launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "stage 3 reads sealed splits ONLY after the registered fit criterion is met; predictions recorded before answers",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change beyond the declared 64 steps / 600 s",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T20:12:05.039297+00:00",
+  "run_bounds": {
+    "arms": [
+      "cas"
+    ],
+    "automatic_retries": 0,
+    "data": {
+      "familiar": "train+practice whole-part",
+      "fresh": "sealed validation+test"
+    },
+    "jobs": 1,
+    "per_run": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "4.00"
+  },
+  "schema": "cas-graph-training-competence-owner-authorization/1"
+}
