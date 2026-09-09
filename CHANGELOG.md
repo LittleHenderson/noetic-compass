@@ -4,6 +4,25 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 002 gate stop measured the numerical drowning; bound lines now unit-normalized
+
+Run 002 (`cas-meta2-competence-20260909195309-68ac4845`, owner GO, new
+`$4.00` reservation, ledger 41 → 42: `$218.00` reserved, `$182.00`
+unreserved, result sha `99d45ea9…`, cleanup complete) stopped at stage 1
+BEFORE training, this time RETURNING the preserved numbers: the
+forward/backward sanity PASSED (losses finite, gradients 0.14–0.24), but the
+same-token rewiring produced NO distinguishable module input beyond the
+reorder (0.0 and 1.9e-4 — pure cancellation noise). Measured cause: the raw
+Hadamard products (~7–13 token rows) are ~8 orders of magnitude smaller than
+the mean-pooled framing text, so in float32 the relationship distinctions
+sit below the noise floor of the summed vector. Fix (documented in
+`RELATIONSHIP_ENCODER_001.md`): each bound line is now UNIT-NORMALIZED
+after the product (fixed computation, no learned parameters) so the
+structure dominates the input; the structural test verifies the
+rewire-vs-reorder contrast on balanced fake rows. 129 graph tests pass. No
+training ran; replacement needs a new owner GO + new `$4.00` reservation.
+Record: `ATTEMPT_COMPETENCE_002_FAILURE.md`.
+
 ## 2026-09-09 - Graph-first ^6: competence run 001 stage-1 gate stopped the job as designed; gate defects fixed
 
 Attempt 001 (`cas-meta2-competence-20260909193638-98f993ab`, owner GO, new

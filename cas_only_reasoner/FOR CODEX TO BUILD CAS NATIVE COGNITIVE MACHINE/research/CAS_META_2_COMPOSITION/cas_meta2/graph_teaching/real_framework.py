@@ -164,8 +164,22 @@ def build_encoder(torch, publics, d_model, seed, device):
             else:
                 rest.append(token_id)
         require(segments, "PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED")
-        bound = [torch.stack([embed(token_id) for token_id in segment]).prod(dim=0)
-                 for segment in segments]
+        bound = []
+        for segment in segments:
+            vector = torch.stack([embed(token_id)
+                                  for token_id in segment]).prod(dim=0)
+            # Unit-normalize each bound line (fixed computation, no learned
+            # parameters). Competence run 002's preserved measurement: the raw
+            # Hadamard products are ~8 orders of magnitude smaller than the
+            # pooled framing text, so in float32 the relationship distinctions
+            # were below the noise floor once summed with the rest — the
+            # module could not receive them. Normalization brings each bound
+            # line to O(1) scale so the structure dominates the input.
+            norm = torch.linalg.vector_norm(vector)
+            scale = norm.item()
+            if scale > 1e-12:
+                vector = vector / scale
+            bound.append(vector)
         vector = torch.stack(bound).sum(dim=0)
         if rest:
             vector = vector + torch.stack([embed(token_id)

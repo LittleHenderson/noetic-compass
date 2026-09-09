@@ -227,6 +227,16 @@ def test_structural_problem_encoder_preserves_pairings_not_order():
         def __add__(self, other):
             return Vector([a + b for a, b in zip(self.values, other.values)])
 
+        def __truediv__(self, scalar):
+            return Vector([value / scalar for value in self.values])
+
+    class Norm:
+        def __init__(self, value):
+            self.value = value
+
+        def item(self):
+            return self.value
+
     class Stack:
         def __init__(self, vectors):
             self.vectors = vectors
@@ -255,7 +265,12 @@ def test_structural_problem_encoder_preserves_pairings_not_order():
         def __getitem__(self, key):
             if type(key) is not int or not (0 <= key < self.size):
                 raise IndexError(key)
-            return Vector([float(key)])  # distinct id -> distinct row
+            # distinct id -> distinct 2-D row with BALANCED component scales
+            # (collision-free for distinct keys below 97*89; unbalanced fake
+            # rows make every Hadamard product near-parallel and the sums
+            # near-identical, which does not model the real balanced rows)
+            return Vector([float((key * 31) % 97) - 48.0,
+                           float((key * 57) % 89) - 44.0])
 
         def __truediv__(self, other):
             return self
@@ -271,6 +286,11 @@ def test_structural_problem_encoder_preserves_pairings_not_order():
             return self
 
     class Torch:
+        class linalg:
+            @staticmethod
+            def vector_norm(tensor):
+                return Norm(sum(value * value for value in tensor.values) ** 0.5)
+
         @staticmethod
         def randn(shape, generator=None, device=None):
             return Projection(shape[0])
@@ -285,10 +305,17 @@ def test_structural_problem_encoder_preserves_pairings_not_order():
     vector_a = encoder["encode_problem"](publics[0])
     vector_b = encoder["encode_problem"](publics[1])
     vector_reordered = encoder["encode_problem"](publics[2])
-    # same multiset, different pairings -> DIFFERENT vectors
-    assert vector_a.values != vector_b.values
-    # same graph, reordered connection list -> IDENTICAL vector (exact fakes)
-    assert vector_a.values == vector_reordered.values
+
+    def distance(left, right):
+        return max(abs(a - b) for a, b in zip(left.values, right.values))
+
+    rewire_distance = distance(vector_a, vector_b)
+    reorder_distance = distance(vector_a, vector_reordered)
+    # same multiset, different pairings -> LARGE difference
+    assert rewire_distance > 0.1
+    # same graph, reordered connection list -> equivalent within tolerance
+    assert reorder_distance < 1e-9
+    assert rewire_distance > 1000 * reorder_distance
     assert vocabulary_size > 4
 
 

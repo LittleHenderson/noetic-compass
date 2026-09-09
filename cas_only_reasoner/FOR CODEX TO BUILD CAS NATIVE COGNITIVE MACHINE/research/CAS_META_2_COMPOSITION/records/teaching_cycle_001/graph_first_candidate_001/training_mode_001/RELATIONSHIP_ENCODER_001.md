@@ -32,7 +32,15 @@ are UNCHANGED.
    `node ⊙ label ⊙ kind=… ⊙ fields…`. This is a joint, role-sensitive
    combination — NOT independent role sums (summing all sources and all
    targets separately loses which source connects to which target).
-4. `problem vector = Σ bound(line) over structural lines + mean(rest)`.
+4. `problem vector = Σ bound(line) over structural lines + mean(rest)`,
+   with each bound line UNIT-NORMALIZED (norm scaled to 1; fixed
+   computation, no learned parameters). **Amendment 2026-09-09 (measured by
+   competence run 002):** without normalization the raw Hadamard products
+   (~7–13 token rows) are ~8 orders of magnitude smaller than the pooled
+   framing text, so in float32 the relationship distinctions sat below the
+   noise floor of the summed vector — the stage-1 gate measured the rewire
+   producing NO distinguishable input beyond the reorder. Normalization
+   brings every structural line to O(1) scale so the structure dominates.
 
 The encoder's job ends at preserving the supplied facts — it does not
 determine parts, compute shared intersections, or solve routes.

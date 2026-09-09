@@ -1,0 +1,55 @@
+{
+  "arm": "cas",
+  "claims": {
+    "answer_edges_present": false,
+    "sealed_splits_read": false,
+    "specialist_claimed": false,
+    "two_arm_comparison_claimed": false
+  },
+  "fit_criterion": null,
+  "job": "cas-meta2-competence-20260909195309-68ac4845",
+  "outcome": "STAGE1_CHECK_FAILED",
+  "run_id": "cas-meta2-competence-20260909195309-68ac4845",
+  "schema": "cas-graph-training-competence-result/1",
+  "stage1": {
+    "forward_backward": {
+      "per_target_loss": [
+        1.0888477563858032,
+        1.1030129194259644,
+        1.1040483713150024
+      ],
+      "per_target_max_gradient_norm": [
+        0.23507879674434662,
+        0.14092135429382324,
+        0.23242297768592834
+      ],
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+    },
+    "relationship_check": [
+      {
+        "connection_list_reorder": {
+          "input_difference": 0.0,
+          "output_difference": 0.0
+        },
+        "connector_rewire_same_tokens": {
+          "input_difference": 0.0,
+          "output_difference": 0.0
+        },
+        "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224"
+      },
+      {
+        "connection_list_reorder": {
+          "input_difference": 0.00019048197659853817,
+          "output_difference": 0.0
+        },
+        "connector_rewire_same_tokens": {
+          "input_difference": 0.00019048197659853817,
+          "output_difference": 0.0
+        },
+        "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0"
+      }
+    ]
+  },
+  "stage2": null,
+  "stage3": null
+}
