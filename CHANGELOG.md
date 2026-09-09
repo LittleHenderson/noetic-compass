@@ -4,6 +4,23 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 attempt 008: TRAINING COMPLETED; sealed-eval seam fixed (preserved)
+
+Attempt 008 (`cas-meta2-teaching-graph-20260909065540-823842d3`, `$4.00`
+reserved, ledger 30 → 31: `$174.00` reserved, `$226.00` unreserved) reached
+and COMPLETED the registered training loop for the first time — the preserved
+failure is a seam defect in the post-training sealed evaluation
+(`KeyError` on a sealed record id: the evaluator built make_task inputs while
+the learner consumes public-record tasks). Fixed (`838c6f7a`, package
+members): `evaluate_sealed` builds `adapter.public_records` tasks and
+`GraphLearner.predict` encodes sealed records on demand. **New corrected
+package** (`1d67b4d5`, `package_009/`): source `838c6f7a…`, archive
+`35365047…`, manifest `181b1799…`. A corrected re-attempt needs a new job, a
+new `$4.00` reservation, and a new owner record binding the NEW identities.
+**No retry was attempted.** Evidence:
+`training_mode_001/ATTEMPT_GRAPH_008_FAILURE.md` + receipt. Binding-fit
+attempt-004 request still pending; attempt 003's lost error remains UNKNOWN.
+
 ## 2026-09-09 - Graph-first ^6 attempt 007: preserved error #6 (CUDA generator for CUDA tensors)
 
 Attempt 007 (`cas-meta2-teaching-graph-20260909054806-78ffe06a`, `$4.00`
