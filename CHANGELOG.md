@@ -4,6 +4,22 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 004 — FIT CRITERION MET; sealed-path empty-content crash fixed
+
+Run 004 (`cas-meta2-competence-20260909202533-7cb622f8`, owner GO, new
+`$4.00` reservation, ledger 43 → 44: `$226.00` reserved, `$174.00`
+unreserved, result sha `f06da038…`, cleanup complete, elapsed 552.2 s):
+stage 1 passed, stage 2 trained, and the REGISTERED FIT CRITERION WAS MET
+(mean after-loss < mean before-loss − 0.02) — the first positive learning
+signal on the familiar examples in this investigation — then stage 3
+crashed on a sealed record whose option is a strict subset: the SEALED
+predict path lacked the zero-vector fallback training already has
+(`OPTION_EMBEDDING_REQUIRED`). Fixed with `zeros_like(value)` plus a
+behavioral regression test; 130 graph tests pass. The training/criterion
+numbers were lost in the crash; the replacement re-runs the whole sequence
+and needs a new owner GO + new `$4.00` reservation. Record:
+`ATTEMPT_COMPETENCE_004_FAILURE.md`.
+
 ## 2026-09-09 - Graph-first ^6: competence run 003 — normalized encoder PASSED the gate; training ran; serialization crash fixed
 
 Run 003 (`cas-meta2-competence-20260909201205-f0da3fa3`, owner GO, new

@@ -330,6 +330,92 @@ def test_target_independence_is_verified_end_to_end():
     assert rows and all(row["public_unchanged"] for row in rows)
 
 
+def test_learner_sealed_predict_handles_empty_content_option():
+    """Competence run 004's preserved crash: the sealed predict path must use
+    the SAME zero-vector fallback for all-shared options as training."""
+    from cas_meta2.graph_teaching import real_framework
+
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+        def unsqueeze(self, dim):  # noqa: A002 - torch API shape
+            return self
+
+    class Norm:
+        def __init__(self, value):
+            self.value = value
+
+        def item(self):
+            return self.value
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def sum(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+    class Torch:
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+        @staticmethod
+        def zeros_like(vector):
+            return Vector([0.0] * len(vector.values))
+
+        @staticmethod
+        def dot(a, b):
+            return Norm(sum(x * y for x, y in zip(a.values, b.values)))
+
+        @staticmethod
+        def argmax(tensors):
+            vectors = getattr(tensors, "vectors", tensors)
+            best = max(range(len(vectors)), key=lambda index: vectors[index].value)
+            return Norm(float(best))
+
+        class optim:
+            class AdamW:
+                def __init__(self, params, lr=0.001, weight_decay=0.0):
+                    pass
+
+    class Module:
+        def __init__(self):
+            self._params = []
+
+        def parameters(self):
+            return self._params
+
+        def __call__(self, value):
+            return [Vector([1.0, 1.0])]
+
+    class Encoder:
+        embeddings = {"a": [1.0, 0.0], "b": [0.0, 1.0], "c": [1.0, 1.0],
+                      "s": [9.0, 9.0]}
+
+        def encode(self, public):
+            # option 0 = [a, s] is all-shared -> empty content
+            return [], {0: ["a", "s"], 1: ["a", "b", "s"], 2: ["a", "c", "s"]}
+
+        def encode_problem(self, public):
+            return Vector([1.0, 1.0])
+
+        def embed(self, token_id):
+            return Vector(self.embeddings[token_id])
+
+    encoder = Encoder()
+    module = Module()
+    framework = SimpleNamespace(
+        encoder={"encode": encoder.encode, "embed": encoder.embed,
+                 "encode_problem": encoder.encode_problem}, module=module)
+    learner = real_framework.GraphLearner(Torch, framework, [], "cuda:0", 0.003)
+    task = {"record_id": "sealed1", "public": {},
+            "encoded_options": ["o0", "o1", "o2"]}
+    assert learner.predict(task) in task["encoded_options"]  # no crash, zero fallback
+
+
 def test_readout_predict_and_score_agree():
     prediction = [1.0, 0.0, 0.0]
     options = [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]

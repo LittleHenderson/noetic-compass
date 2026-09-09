@@ -336,6 +336,10 @@ class GraphLearner:
         value = self.module(
             self.framework.encoder["encode_problem"](task_input["public"]).unsqueeze(0))[0]
         content = self._content_ids(slot_ids)
-        scores = self.torch.stack([self.torch.dot(value, self._sum(item))
+        # Same empty-content rule as training: a strict-subset option is the
+        # ZERO vector (competence run 004's preserved crash: a sealed record
+        # had an all-shared option and the sealed path lacked the fallback).
+        zero = self.torch.zeros_like(value)
+        scores = self.torch.stack([self.torch.dot(value, self._sum(item) if item else zero)
                                    for item in content])
         return task_input["encoded_options"][int(self.torch.argmax(scores).item())]
