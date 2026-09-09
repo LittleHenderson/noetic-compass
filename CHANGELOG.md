@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CONFIRMATION_001 attempt 001 **FAILED** (my bug, preserved error) — replacement prepared
+
+Owner GO executed one job (`cas-meta2-graph6conf-20260910013000-e485b07c`, one new
+`$6.00` reservation, ledger 45 → 46: `$236.00` reserved / `$164.00` unreserved).
+It failed after 549.2 s in the FIRST candidate's before-loss pass with
+`KeyError: '26da6b16…'`. Cleanup verified complete (instance
+`i-0f40206d59d6b8b7a` terminated, bucket deleted) and confirmed independently
+(0 active job-tagged instances, 0 graph6 buckets, 0 leftover security groups).
+No measurement was produced. **Root cause is mine, not the frozen machinery:**
+`trainer.launch(seed=…)` selects the TEACHING DATASET, and `run_candidate` passed
+the candidate's learner-init seed, so the trainer generated a different dataset
+than the learner's index. Fixed: the frozen dataset seed is passed, a fail-closed
+`TRAINING_DATASET_SEED_CHANGED` guard rejects any other dataset seed, the
+candidate record now carries `training_dataset_seed`, and two regression tests
+pin it. Record: `ATTEMPT_GRAPH6_CONFIRMATION_001_FAILURE.md`. A replacement
+(identical pre-registered design, fixed source) requires a new owner GO and a new
+reservation; none is registered.
+
 ## 2026-09-09 - Graph-first ^6: GRAPH6_CONFIRMATION_001 PREPARED (3 learners, fresh 90-case panel) — **NOT LAUNCHED**
 
 Owner-directed replacement of the earlier two-step confirmation idea: ONE
