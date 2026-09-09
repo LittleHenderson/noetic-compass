@@ -4,6 +4,38 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: GRAPH6_CONFIRMATION_001 PREPARED (3 learners, fresh 90-case panel) — **NOT LAUNCHED**
+
+Owner-directed replacement of the earlier two-step confirmation idea: ONE
+combined job. Frozen candidate preserved (encoder seed `20260909`, tokenizer
+fitted on the 30 train+practice records only, `operation:^6` scope, 64 updates
+per candidate, lr `0.003`, 600 s per candidate). New measurement: three
+INDEPENDENTLY initialized learners (seeds `20260913/14/15`, module+optimizer
+init only — the encoder projection is built once and shared), 192 updates total,
+each measured on the SAME pre-registered fresh panel before and after training
+with answers sealed until predictions are recorded. Fresh panel
+(`cas_meta2/graph_teaching/fresh_panel.py`, evidence
+`GRAPH6_FRESH_PANEL_001.json` sha256 `c7876508…`, `neural_work:false`):
+**30 families / 90 cases**, 30 per operation, reach coverage 10 direct / 10 via /
+10 absent, 30 distinct family patterns, 56 distinct case patterns, content
+digest `d1076de3…`; exclusion is label-invariant (0 id overlap AND 0 signature
+overlap with the 42 previously examined whole-part records / 31 used
+signatures), so trivially renamed duplicates are rejected. Pre-registered rule
+(declared before execution): fit unchanged (>0.02 loss reduction); fresh
+transfer requires paired margin ≥ +0.10 with a family-clustered 95 % bootstrap
+lower bound > 0, absolute ≥ 0.50, no per-operation regression and ≥ 2 operations
+gaining ≥ +0.10; `FRESH_TRANSFER_CONFIRMED` iff ≥ 2 of 3 candidates pass; the old
+6/12 pilot threshold is NOT reused. **Measured finding reported to the owner: the
+run-005 checkpoint was never persisted** (only digest `cb008721…`; the wheel's
+`RegisteredOperationBank` builds its Linear layers with no seed), so the
+preserved-checkpoint row is reported `UNAVAILABLE`, with an optional declared
+reproduction mode whose digest is checked. New fail-closed launcher
+`aws/graph_training_graph6_confirmation_launch.py` (plan-only default; total
+budget: 192 updates, 1,800 s worker ceiling, 5,400 s instance ceiling, one new
+`$6.00` reservation, zero retries). 43 new pure tests; 193 graph tests pass. No
+reservation, no owner record, no AWS call. Record:
+`GRAPH6_CONFIRMATION_001.md`.
+
 ## 2026-09-09 - Graph-first ^6: confirmation run 001 PREPARED (frozen candidate, predeclared seeds) — **NOT LAUNCHED**
 
 Per the owner's recommendation ("freeze this successful candidate and confirm
