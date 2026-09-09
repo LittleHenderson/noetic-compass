@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 65, in build_graph_training_framework\n    from cas_cjt.types import CASformerConfig\nImportError: cannot import name 'CASformerConfig' from 'cas_cjt.types' (/opt/cas-graph-training/package/venv/lib/python3.12/site-packages/cas_cjt/types.py)\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 18, in <module>\n    framework = build_graph_training_framework(torch, device, seed=20260909,\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 68, in build_graph_training_framework\n    raise ValueError(\"CAS_CJT_IMPORT_UNRESOLVED:\" + str(error)[:200]) from error\nValueError: CAS_CJT_IMPORT_UNRESOLVED:cannot import name 'CASformerConfig' from 'cas_cjt.types' (/opt/cas-graph-training/package/venv/lib/python3.12/site-packages/cas_cjt/types.py)\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909040850-e4a39dea",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
