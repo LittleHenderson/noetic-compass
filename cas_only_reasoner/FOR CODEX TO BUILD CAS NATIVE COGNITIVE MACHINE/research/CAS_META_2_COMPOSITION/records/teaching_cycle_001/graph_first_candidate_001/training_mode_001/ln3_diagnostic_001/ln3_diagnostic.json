@@ -1,0 +1,177 @@
+{
+  "boundary": {
+    "aws_calls": 0,
+    "neural_modules_created": false,
+    "torch_executed": false,
+    "weights_untouched": true
+  },
+  "distinct_tags": {
+    "count": 60,
+    "of": 60
+  },
+  "distinct_token_id_sequences": {
+    "count": 60,
+    "of": 60
+  },
+  "examples": [
+    {
+      "arm": "cas",
+      "correct_slot": 1,
+      "id_sequence_lengths": [
+        11,
+        16,
+        21
+      ],
+      "id_sequences_distinct": true,
+      "op": "LIST_PARTS",
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+      "tags": [
+        "['idea2', 'idea3']",
+        "['idea2', 'idea3', 'idea6']",
+        "['idea1', 'idea2', 'idea3', 'idea6']"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "generic",
+      "correct_slot": 1,
+      "id_sequence_lengths": [
+        11,
+        16,
+        21
+      ],
+      "id_sequences_distinct": true,
+      "op": "LIST_PARTS",
+      "record_id": "7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224",
+      "tags": [
+        "['idea2', 'idea3']",
+        "['idea2', 'idea3', 'idea6']",
+        "['idea1', 'idea2', 'idea3', 'idea6']"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "cas",
+      "correct_slot": 0,
+      "id_sequence_lengths": [
+        11,
+        6,
+        11
+      ],
+      "id_sequences_distinct": true,
+      "op": "LIST_PARTS",
+      "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+      "tags": [
+        "['idea17', 'idea18']",
+        "['idea17']",
+        "['idea1', 'idea5']"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "generic",
+      "correct_slot": 2,
+      "id_sequence_lengths": [
+        6,
+        11,
+        11
+      ],
+      "id_sequences_distinct": true,
+      "op": "LIST_PARTS",
+      "record_id": "7ccc35af11328e5b37a10f24bee880bbc42fb6704a7328d706c1040b367029f0",
+      "tags": [
+        "['idea17']",
+        "['idea1', 'idea5']",
+        "['idea17', 'idea18']"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "cas",
+      "correct_slot": 0,
+      "id_sequence_lengths": [
+        2,
+        2,
+        2
+      ],
+      "id_sequences_distinct": true,
+      "op": "FIND_SHARED_PART",
+      "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+      "tags": [
+        "none",
+        "idea17",
+        "idea1"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "generic",
+      "correct_slot": 0,
+      "id_sequence_lengths": [
+        2,
+        2,
+        2
+      ],
+      "id_sequences_distinct": true,
+      "op": "FIND_SHARED_PART",
+      "record_id": "6ca01c49012bbbad40abad02051b15f25b6227d222fd9034995d1cfe83f958c7",
+      "tags": [
+        "none",
+        "idea17",
+        "idea1"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "cas",
+      "correct_slot": 0,
+      "id_sequence_lengths": [
+        2,
+        2,
+        2
+      ],
+      "id_sequences_distinct": true,
+      "op": "FIND_SHARED_PART",
+      "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+      "tags": [
+        "none",
+        "idea17",
+        "idea1"
+      ],
+      "tags_distinct": true
+    },
+    {
+      "arm": "generic",
+      "correct_slot": 1,
+      "id_sequence_lengths": [
+        2,
+        2,
+        2
+      ],
+      "id_sequences_distinct": true,
+      "op": "FIND_SHARED_PART",
+      "record_id": "e41473b58af69115050b11531ee7d8eefe89049ad11719d1ee1b871c6d911f8f",
+      "tags": [
+        "idea17",
+        "none",
+        "idea1"
+      ],
+      "tags_distinct": true
+    }
+  ],
+  "option_id_sequence_lengths": {
+    "max": 21,
+    "mean": 5.833333333333333,
+    "min": 2
+  },
+  "package_archive_sha256": "81ff23213f00066b3252918acab07ca833945d5d9968c67fbb73740fa6cafef0",
+  "per_arm_record_count": 60,
+  "schema": "cas-graph-training-ln3-diagnostic/1",
+  "source_checks": {
+    "adamw_weight_decay_value": "weight_decay=0.0",
+    "adamw_weight_decay_zero_in_source": true,
+    "before_and_after_share_eval_path": true,
+    "cross_entropy_used": true,
+    "eval_loss_recomputes_from_live_module": true
+  }
+}

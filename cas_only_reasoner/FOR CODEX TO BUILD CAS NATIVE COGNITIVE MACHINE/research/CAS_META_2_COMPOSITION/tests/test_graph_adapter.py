@@ -124,6 +124,19 @@ def test_learner_predict_encodes_sealed_records_on_demand():
     assert 'task_input["encoded_options"]' in source
 
 
+def test_ln3_diagnostic_measures_without_updating():
+    """The prepared neural diagnostic must be measurement-only: no optimizer
+    step, no weight changes, torch imported lazily."""
+    import inspect
+    import sys
+    from cas_meta2.graph_teaching import diagnostic
+    assert "torch" not in diagnostic.__dict__
+    source = inspect.getsource(diagnostic)
+    assert "measure_gradient_test" in source
+    assert "no optimizer step was taken" in source
+    assert "optimizer.step" not in source
+
+
 def test_public_records_satisfy_the_frozen_codec_contract():
     """Attempt 004's preserved error: PUBLIC_INPUT_FIELDS_INVALID. Every
     whole-part record must encode as problem + exactly three observations
