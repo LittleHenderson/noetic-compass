@@ -1,0 +1,15 @@
+{
+  "aws_calls": 0,
+  "bash": "C:\\Program Files\\Git\\bin\\bash.exe",
+  "child_observed": {
+    "CAS_META2_RUN_TEACHING_CYCLE": "1"
+  },
+  "model_execution": false,
+  "non_neural": true,
+  "python_probe": "C:/Python314/python.exe",
+  "rendered_export_lines": [
+    "export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''",
+    "export CAS_META2_RUN_TEACHING_CYCLE=1"
+  ],
+  "schema": "cas-graph-training-env-probe/1"
+}

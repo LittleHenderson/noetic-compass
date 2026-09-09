@@ -1,6 +1,11 @@
 """Pure tests for the graph-training AWS launcher: fake git objects and fake
 client stacks only. No AWS, network, tensor, or provider work."""
 import json
+import os
+import shutil
+import subprocess
+import sys
+
 import pytest
 from pathlib import Path
 from types import SimpleNamespace
@@ -270,6 +275,43 @@ def test_termination_wait_timeout_covers_slow_shutdown():
     import inspect
     source = inspect.getsource(launch.GraphTrainingProvider._await_terminated)
     assert "timeout=600.0" in source
+
+
+def test_user_data_env_reaches_the_child_process(tmp_path):
+    """Owner-requested check: a NON-NEURAL child invoked through the actual
+    rendered bootstrap environment/command lines observes
+    CAS_META2_RUN_TEACHING_CYCLE=1 — not merely that the export line exists
+    in the script. No AWS calls, no model execution."""
+    provider = make_provider("ledger.json", fake_clients())
+    rendered = provider._user_data("probe-bucket")
+    export_lines = [line for line in rendered.splitlines()
+                    if line.startswith("export ")]
+    assert any("CAS_META2_RUN_TEACHING_CYCLE=1" in line for line in export_lines)
+    bash = Path(r"C:\Program Files\Git\bin\bash.exe")
+    if not bash.exists():
+        found = shutil.which("bash")
+        if not found:
+            pytest.skip("no bash shell available for the child-process probe")
+        bash = Path(found)
+    python = str(Path(sys.executable).resolve()).replace("\\", "/")
+    probe_code = ("import json, os; print(json.dumps({'CAS_META2_RUN_TEACHING_CYCLE':"
+                  " os.environ.get('CAS_META2_RUN_TEACHING_CYCLE')}))")
+    script = "\n".join(export_lines) + "\n\"$PYTHON_PROBE\" -B -c " + repr(probe_code) + "\n"
+    result = subprocess.run([str(bash), "-c", script], capture_output=True,
+                            text=True, timeout=120,
+                            env={**os.environ, "PYTHON_PROBE": python})
+    assert result.returncode == 0, result.stderr
+    observed = json.loads(result.stdout.strip().splitlines()[-1])
+    assert observed["CAS_META2_RUN_TEACHING_CYCLE"] == "1"
+    evidence_dir = os.environ.get("CAS_GRAPH_PROBE_EVIDENCE")
+    if evidence_dir:
+        record = {"schema": "cas-graph-training-env-probe/1",
+                  "rendered_export_lines": export_lines,
+                  "child_observed": observed, "bash": str(bash),
+                  "python_probe": python, "non_neural": True,
+                  "aws_calls": 0, "model_execution": False}
+        raw = (json.dumps(record, sort_keys=True, indent=2) + "\n").encode("utf-8")
+        Path(evidence_dir, "env_probe.json").write_bytes(raw)
 
 
 class FakeProvider:
