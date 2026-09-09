@@ -194,7 +194,15 @@ class GraphLearner:
         return digest.hexdigest()
 
     def predict(self, task_input):
-        position = self._position(task_input)
-        scores = self.forward(position)
-        return self.tasks[position]["encoded_options"][
-            int(self.torch.argmax(scores).item())]
+        if task_input["record_id"] in self._index:
+            position = self._position(task_input)
+            scores = self.forward(position)
+            return self.tasks[position]["encoded_options"][
+                int(self.torch.argmax(scores).item())]
+        # sealed-split path: encode the public record on demand (attempt 008's
+        # preserved error: the training index does not contain sealed records)
+        problem_ids, slot_ids = self.framework.encoder["encode"](task_input["public"])
+        value = self.module(self._mean(problem_ids).unsqueeze(0))[0]
+        scores = self.torch.stack([self.torch.dot(value, self._mean(slot_ids[slot]))
+                                   for slot in (0, 1, 2)])
+        return task_input["encoded_options"][int(self.torch.argmax(scores).item())]

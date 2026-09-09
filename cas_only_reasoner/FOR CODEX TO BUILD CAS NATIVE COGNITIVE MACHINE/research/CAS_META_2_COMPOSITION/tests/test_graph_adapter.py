@@ -113,6 +113,17 @@ def test_encoder_passes_a_list_to_fit_train():
     assert "torch.Generator(device=device)" in source
 
 
+def test_learner_predict_encodes_sealed_records_on_demand():
+    """Attempt 008's preserved error: the training index does not contain
+    sealed-split records; predict must encode them on demand from the public
+    record."""
+    import inspect
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.GraphLearner.predict)
+    assert 'self.framework.encoder["encode"](task_input["public"])' in source
+    assert 'task_input["encoded_options"]' in source
+
+
 def test_public_records_satisfy_the_frozen_codec_contract():
     """Attempt 004's preserved error: PUBLIC_INPUT_FIELDS_INVALID. Every
     whole-part record must encode as problem + exactly three observations

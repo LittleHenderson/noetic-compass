@@ -230,15 +230,18 @@ def evaluate_sealed(learner, seed=20260909, splits=SEALED_SPLITS):
     """Post-training evaluator: reads ONLY the sealed validation/test splits.
 
     Predictions are recorded (sealed) BEFORE the answers are consulted; each
-    sealed prediction record contains no answer field.
+    sealed prediction record contains no answer field. Tasks are the SAME
+    public-record kind the learner consumes (attempt 008's preserved error:
+    make_task inputs lacked the learner's 'public' encoding).
     """
+    from .adapter import public_records
     dataset = lessons.build_dataset(seed=seed)
     tasks = []
     for split in splits:
         for record in dataset[split]:
             if record["family"] != "whole_part" or record["op"] not in WHOLE_PART_OPS:
                 continue
-            tasks.append((split, make_task(record, arm="generic")))
+            tasks.append((split, public_records(record, arm="generic")))
     sealed = [{"record_id": task["record_id"], "split": split, "op": task["op"],
                "predicted": learner.predict(prediction_input(task))}
               for split, task in tasks]

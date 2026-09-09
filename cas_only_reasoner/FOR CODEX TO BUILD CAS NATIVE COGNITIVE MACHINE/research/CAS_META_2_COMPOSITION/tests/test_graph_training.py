@@ -88,7 +88,8 @@ class FakeLearner:
 
     def predict(self, task_input):
         assert "correct" not in task_input  # inference input is answer-free
-        return self.answers.get(task_input["record_id"], task_input["options"][0])
+        options = task_input.get("options") or task_input.get("encoded_options")
+        return self.answers.get(task_input["record_id"], options[0])
 
 
 def launch_args(seed=20260909, **kwargs):
