@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: env wiring PROVEN in the child process; replacement request placed (not launched)
+
+Per the owner's directive, before any replacement launch the actual
+environment wiring was proven: a non-neural child invoked through the
+VERBATIM export lines of the rendered bootstrap (real shell, real child)
+observed `CAS_META2_RUN_TEACHING_CYCLE = "1"` — evidence
+`training_mode_001/checks_003/env_probe.json` (sha `d6af9f74…`,
+`aws_calls: 0`, `model_execution: false`) and the locking test
+`test_user_data_env_reaches_the_child_process` (launcher suite 17,
+`65fa6b46`).
+
+- Replacement job registered (`8ab51610`): `cas-meta2-teaching-graph-20260909030210-e1408e1a`,
+  request sha `fdb7cb6e…`; binds the UNCHANGED corrected package_003
+  (source `27f5efff…`, archive `a4c07dda…`, manifest `1f554acf…`) and the
+  corrected launcher (`65fa6b46`). Preserved limits, error capture, shutdown
+  protection, and cleanup checks unchanged. **Not launched, not reserved.**
+- Ledger (exact): revision 26, `$154.00` reserved / `$246.00` unreserved; a
+  `$4.00` replacement would leave `$158.00` / `$242.00`.
+- Request: `training_mode_001/AUTHORIZATION_REQUEST_AWS.md`. Binding-fit
+  attempt-004 request still pending; attempt 003's lost error remains
+  UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6 paid attempt 003: clean lifecycle; preserved error #2 (tokenizer list contract)
 
 Attempt 003 (`cas-meta2-teaching-graph-20260909024008-f27c195e`, `$4.00`
