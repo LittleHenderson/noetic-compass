@@ -161,10 +161,14 @@ def evaluate_panel(learner, cases, *, arm=FROZEN_ARM):
 
 
 def practice_accuracy(learner, tasks):
+    """Familiar-example accuracy. The prediction uses the same answer-free view
+    as the sealed fresh panel (the real learner ignores answer fields either
+    way, so this matches competence run 005's familiar measurement while never
+    handing the answer to the model)."""
     attempted = correct = 0
     rows = []
     for task in tasks:
-        predicted = learner.predict(task)
+        predicted = learner.predict(sealed_input(task))
         expected = task["encoded_options"][task["encoded_correct_index"]]
         attempted += 1
         correct += int(predicted == expected)
