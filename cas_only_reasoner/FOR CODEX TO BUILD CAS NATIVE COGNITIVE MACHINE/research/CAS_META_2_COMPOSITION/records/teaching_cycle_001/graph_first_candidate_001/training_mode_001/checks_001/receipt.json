@@ -1,0 +1,8 @@
+{
+  "file": "pytest_output.txt",
+  "schema": "cas-meta2-graph-teaching-checks-receipt/1",
+  "recorded_utc": "2026-09-09T01:13:49.2701215Z",
+  "command": "python -B -m pytest tests/test_graph_training.py tests/test_graph_teaching.py tests/test_binding_fit_launch.py tests/test_binding_fit_worker_execution.py tests/test_budget.py -q",
+  "bytes": 179,
+  "sha256": "0cc529b240da26b07fb66544eab333389e2a45db0b3d0427a7164af49941623e"
+}
