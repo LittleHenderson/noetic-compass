@@ -1,0 +1,54 @@
+{
+  "authorization": {
+    "archive_sha256": "17db81542b39a280b4dfc26d76c488e6b4e0c744d08a945991a795d2d4934dd6",
+    "authorization_context": "Step 1 only, per the owner's two review rounds: a measurement-only diagnostic run on the correction-002 pipeline (candidate shared-contribution removal, per-occurrence and count-respecting; FIND_SHARED_PART equal lengths do NOT rule out projected-vector collapse). The extended diagnostic reports, per arm, on the SAME training+practice examples and SAME fixed weights with ZERO optimizer steps: (1) individual tag vectors BEFORE pooling (norms + pairwise cosines); (2) OLD (sum over every occurrence) vs CORRECTED (shared-by-all-three removed) option vectors - actual score spreads, argmax, and cosines for BOTH; (3) graph-edit response - valid synthetic edits -> same lessons framing -> encoded -> mean-pooled -> module - output norm/cosine/difference and score sets + argmax; (4) answer-score differences and alternative-target gradients; (5) module output norms + pairwise cosines. Findings only: the training pilot remains PENDING regardless of the outcome; no saturation change, no allowance change, no learning or capability claim follows from these measurements.",
+    "bound_request_sha256": "2427e1b650111b5638ea166170455e586c2a6cc22dda24dccbefc919f052e1a4",
+    "graph_training_ln3_diagnostic_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-ln3-diagnostic-20260909170435-5a0d662e",
+    "launcher": "aws/graph_training_ln3_diagnostic_launch.py at commit 68c9fc7a4c0983ffba9bcafa47f8c59a1c0d1fc2",
+    "manifest_sha256": "0239d08ddc09ecb6303141ef0c79659b02528a70eb00630f4d3b3f7997efdb64",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_package_003/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/ln3_diagnostic_launch_003/launch_request.json",
+    "source_sha": "f4b1450854ac0a1be4df792d406fa505519440b8"
+  },
+  "execution_gates": [
+    "single launch attempt through the diagnostic launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "measurement only: no optimizer step anywhere; worker records checkpoint identity before and after each arm and fails closed if any weight changed",
+    "the accepted model, graph lessons, scoring, protected evaluation boundaries, and frozen negatives (0/72) stay untouched; sealed splits are not consulted",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the training pilot or any larger experiment beyond this single measurement job",
+    "any optimizer step or weight update in the diagnostic worker",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any learning or capability claim from this diagnostic's measurements alone"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-09T17:04:35.862853+00:00",
+  "run_bounds": {
+    "automatic_retries": 0,
+    "conditions_kind": "prompt_framing_only",
+    "data": {
+      "practice": 16,
+      "sealed_not_read": true,
+      "train": 48
+    },
+    "jobs": 1,
+    "measurement": {
+      "learning_rate_constructor_only": 0.003,
+      "max_wall_seconds": 1200.0,
+      "optimizer_steps_permitted": 0
+    },
+    "reservation_usd": "4.00",
+    "totals": {
+      "arms": [
+        "cas",
+        "generic"
+      ]
+    }
+  },
+  "schema": "cas-graph-training-ln3-diagnostic-owner-authorization/1"
+}
