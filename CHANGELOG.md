@@ -4,6 +4,28 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 approved job attempt 005: preparation path PASSED; preserved error #4 (config import module)
+
+The owner-approved job (`cas-meta2-teaching-graph-20260909040850-e4a39dea`,
+`$4.00` reserved, ledger 27 → 28: `$162.00` reserved, `$238.00` unreserved)
+ran a clean lifecycle, and the worker **passed the entire preparation path**
+(records → public adapter → frozen validator → tokenizer fit → encode) before
+failing at candidate-module construction. Preserved error:
+`ImportError: cannot import name 'CASformerConfig' from 'cas_cjt.types'` — the
+config class is exported by the casformer reference wheel.
+
+- **Fixed** (`88f36b2f`, package member): `from casformer import
+  CASformerConfig` + candidate config fields matching the repo integration
+  tests; regression test reads the frozen wheel and confirms the export. Suite
+  67 passed in the graph packages. **New corrected package** (`f1914fef`,
+  `package_006/`): source `88f36b2f…`, archive `d57ee628…`, manifest
+  `71ef77e5…`.
+- A corrected re-attempt needs a new job, a new `$4.00` reservation, and a new
+  owner record binding the NEW identities. **No retry was attempted.**
+  Evidence: `training_mode_001/ATTEMPT_GRAPH_005_FAILURE.md` + receipt.
+- Binding-fit attempt-004 request still pending; attempt 003's lost error
+  remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6: connected preparation path proven from the exported package (attempt 005 NOT registered)
 
 Per the owner's directive, no attempt 005 registration or reservation
