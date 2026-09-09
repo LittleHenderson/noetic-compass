@@ -128,7 +128,17 @@ def build_encoder(torch, publics, d_model, seed, device):
 class GraphLearner:
     """Real learner over the public-record encoding: module forward on the
     problem tokens, frozen dot-product readout over the three encoded option
-    slots, AdamW over the module parameters only (all operation:^6)."""
+    slots, AdamW over the module parameters only (all operation:^6).
+
+    Representation follow-up 001 (owner-authorized 2026-09-09): the OPTION
+    slots are now SUM-pooled instead of mean-pooled. Attempt 002's neural
+    diagnostic measured that mean-pooling collapsed every option vector onto
+    one direction (all pairwise cosines ≈ 1.0 to within 4e-8), which made the
+    three scores equal to float32 noise and the loss exactly ln 3. Sum-pooling
+    keeps each option's distinct tokens (and their count) in the vector, so
+    the frozen readout can tell the options apart. The PROBLEM side (module
+    input) is UNCHANGED: still mean-pooled, exactly as in attempt 010 — one
+    variable at a time."""
 
     def __init__(self, torch, framework, public_tasks, device, learning_rate):
         self.torch = torch
@@ -145,7 +155,7 @@ class GraphLearner:
         for task in public_tasks:
             problem_ids, slot_ids = framework.encoder["encode"](task["public"])
             self._problem_vectors.append(self._mean(problem_ids))
-            self._option_vectors.append([self._mean(slot_ids[slot])
+            self._option_vectors.append([self._sum(slot_ids[slot])
                                          for slot in (0, 1, 2)])
 
     def _mean(self, token_ids):
@@ -153,6 +163,15 @@ class GraphLearner:
         require(vectors, "PROBLEM_EMBEDDING_REQUIRED")
         stacked = self.torch.stack(vectors)
         return stacked.mean(dim=0)
+
+    def _sum(self, token_ids):
+        """Follow-up 001: options are summed, NOT averaged, so the frozen
+        readout sees each option's distinct tokens instead of one collapsed
+        direction (the measured ln(3) mechanism)."""
+        vectors = [self.framework.encoder["embed"](token_id) for token_id in token_ids]
+        require(vectors, "OPTION_EMBEDDING_REQUIRED")
+        stacked = self.torch.stack(vectors)
+        return stacked.sum(dim=0)
 
     def _position(self, task):
         return self._index[task["record_id"]]
@@ -203,6 +222,6 @@ class GraphLearner:
         # preserved error: the training index does not contain sealed records)
         problem_ids, slot_ids = self.framework.encoder["encode"](task_input["public"])
         value = self.module(self._mean(problem_ids).unsqueeze(0))[0]
-        scores = self.torch.stack([self.torch.dot(value, self._mean(slot_ids[slot]))
+        scores = self.torch.stack([self.torch.dot(value, self._sum(slot_ids[slot]))
                                    for slot in (0, 1, 2)])
         return task_input["encoded_options"][int(self.torch.argmax(scores).item())]

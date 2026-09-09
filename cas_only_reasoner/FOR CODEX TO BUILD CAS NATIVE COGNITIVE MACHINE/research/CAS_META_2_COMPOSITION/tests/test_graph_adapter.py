@@ -4,6 +4,8 @@ No torch, no cas_cjt: verifies exactly what enters the module, what it
 predicts, how each operation is scored, and that nothing in the input carries
 the answer.
 """
+from types import SimpleNamespace
+
 from cas_meta2.graph_teaching import adapter, lessons, trainer
 from cas_meta2.graph_teaching.graph import Graph
 
@@ -34,10 +36,81 @@ def test_build_task_carries_options_and_correct_index():
         assert all(not token.startswith("answer") for token in task["tokens"])
 
 
-def test_option_vector_is_a_mean_embedding():
+def test_option_vector_is_a_sum_embedding():
+    """Follow-up 001: options are SUM-pooled (the measured ln(3) mechanism was
+    mean-pooling collapsing all options onto one direction)."""
     embedder = {"a": [1.0, 0.0], "b": [0.0, 2.0]}
     vector = adapter.option_vector(["a", "b"], embedder.get)
-    assert vector == [0.5, 1.0]
+    assert vector == [1.0, 2.0]
+
+
+def test_learner_options_sum_pooled_and_problem_stays_mean():
+    """Behavioral lock for follow-up 001: GraphLearner builds the module input
+    (problem) with MEAN pooling exactly as in attempt 010, and the frozen
+    readout side (options) with SUM pooling."""
+    from cas_meta2.graph_teaching import real_framework
+
+    class Vector:
+        def __init__(self, values):
+            self.values = [float(value) for value in values]
+
+    class Stack:
+        def __init__(self, vectors):
+            self.vectors = vectors
+
+        def mean(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors) / len(self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+        def sum(self, dim=0):
+            return Vector([sum(v.values[i] for v in self.vectors)
+                           for i in range(len(self.vectors[0].values))])
+
+    class Torch:
+        @staticmethod
+        def stack(vectors):
+            return Stack(vectors)
+
+        class optim:
+            class AdamW:
+                def __init__(self, params, lr=0.001, weight_decay=0.0):
+                    pass
+
+    class Module:
+        def parameters(self):
+            return []
+
+    class Encoder:
+        embeddings = {"p1": [1.0, 0.0], "p2": [0.0, 2.0], "o1": [1.0, 1.0],
+                      "o2": [2.0, 2.0], "o3": [3.0, 3.0]}
+
+        def encode(self, public):
+            return ["p1", "p2"], {0: ["o1"], 1: ["o2", "o3"], 2: ["o1", "o2"]}
+
+        def embed(self, token_id):
+            return Vector(self.embeddings[token_id])
+
+    encoder = Encoder()
+    framework = SimpleNamespace(
+        encoder={"encode": encoder.encode, "embed": encoder.embed}, module=Module())
+    learner = real_framework.GraphLearner(
+        Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
+    assert learner._problem_vectors[0].values == [0.5, 1.0]  # mean, unchanged
+    assert learner._option_vectors[0][0].values == [1.0, 1.0]  # sum of o1
+    assert learner._option_vectors[0][1].values == [5.0, 5.0]  # sum o2+o3
+    assert learner._option_vectors[0][2].values == [3.0, 3.0]  # sum o1+o2
+
+
+def test_learner_sealed_predict_path_uses_sum_pooled_options():
+    """The sealed-split predict path must use the same sum-pooled option
+    vectors as training (one representation everywhere)."""
+    import inspect
+    from cas_meta2.graph_teaching import real_framework
+    source = inspect.getsource(real_framework.GraphLearner)
+    assert 'self._problem_vectors.append(self._mean(problem_ids))' in source
+    assert 'self._option_vectors.append([self._sum(slot_ids[slot])' in source
+    assert 'self.torch.dot(value, self._sum(slot_ids[slot]))' in source
+    assert 'stacked.sum(dim=0)' in source and 'stacked.mean(dim=0)' in source
 
 
 def test_readout_predict_and_score_agree():

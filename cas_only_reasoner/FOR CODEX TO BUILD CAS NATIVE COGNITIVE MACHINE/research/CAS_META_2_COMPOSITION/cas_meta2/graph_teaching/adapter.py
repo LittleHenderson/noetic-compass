@@ -102,13 +102,20 @@ def build_task(record, arm):
 
 
 def option_vector(tokens_for_option, embedder):
-    """Frozen readout support: mean embedding of one option's tokens."""
+    """Frozen readout support: SUM embedding of one option's tokens.
+
+    Follow-up 001 (owner-authorized 2026-09-09): options are SUM-pooled, not
+    mean-pooled. Mean-pooling was measured (attempt 002's neural diagnostic)
+    to collapse every option onto one direction (pairwise cosines ≈ 1.0 to
+    within 4e-8), making the scores float32 noise and the loss exactly ln 3.
+    Sum-pooling keeps each option's distinct tokens and their count in the
+    vector.
+    """
     vectors = [embedder(token) for token in tokens_for_option]
     require(vectors, "OPTION_EMBEDDING_REQUIRED")
     size = len(vectors[0])
-    mean = [sum(vector[dim] for vector in vectors) / len(vectors)
-            for dim in range(size)]
-    return mean
+    total = [sum(vector[dim] for vector in vectors) for dim in range(size)]
+    return total
 
 
 def readout(prediction_vector, option_vectors):

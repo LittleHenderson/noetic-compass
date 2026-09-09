@@ -26,6 +26,16 @@ module input:
    generic conditions — the conditions differ only in the prompt framing, and
    the module input tokens are the same structural encoding.
 
+   **Amendment 2026-09-09 (representation follow-up 001, owner-authorized):**
+   the OPTION embeddings are now SUM-pooled instead of mean-pooled (module
+   input stays mean-pooled, exactly as attempt 010). Reason: attempt 002's
+   neural diagnostic MEASURED that mean-pooling collapsed every option vector
+   onto one direction (pairwise cosines ≈ 1.0 to within 4e-8), so the three
+   scores were float32 noise and the loss was exactly ln 3. Sum-pooling keeps
+   each option's distinct tokens and their count; a common additive part is
+   softmax-shift-invariant, so it cannot hurt the decision. See
+   `REPRESENTATION_FOLLOW_UP_001.md`.
+
 ## 2. What the module is and what it predicts
 
 - The module is a CANDIDATE copy of the registered decompose transform
