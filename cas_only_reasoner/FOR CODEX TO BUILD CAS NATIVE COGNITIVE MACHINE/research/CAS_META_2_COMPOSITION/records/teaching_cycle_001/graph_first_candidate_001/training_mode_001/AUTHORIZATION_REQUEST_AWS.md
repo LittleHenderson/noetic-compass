@@ -1,46 +1,63 @@
-# Targeted ^6 specialist — AWS training-run authorization request (NOT LAUNCHED)
+# Targeted ^6 specialist — precise AWS authorization request (NOT LAUNCHED, NOT RESERVED)
 
-Status: **AWAITING_OWNER_AUTHORIZATION. No launch, no reservation, no neural
-run has occurred.** This document is the executable authorization request the
-owner may sign for the first graph-first training run.
+Status: **AWAITING_OWNER_AUTHORIZATION.** The finished package exists; no
+launch has occurred and no reservation has been made. The owner's signed
+record must bind the exact identities below.
 
-## Proposed job identity (inert until signed)
+## Package identities (finished, byte-fixed)
 
 | Field | Value |
 |---|---|
-| job | `cas-meta2-teaching-graph-20260909011302-e654ae56` |
-| arm | both `cas` and `generic` (two separate runs share the same job id suffix policy of prior campaigns; to be finalized in the signed authority) |
-| entrypoint | `cas_meta2.graph_teaching.trainer.launch` |
-| target module | `cas.cjt.operation.^6.decompose/0.2` |
-| permitted plasticity | `operator.^6` only; everything else frozen |
-| frozen budget | learning_rate `0.003`, max_optimizer_steps `64`, max_wall_seconds `600.0` |
-| reservation | one new `4.00` USD reservation, no refund, no automatic retry |
-| resource plan | to be frozen in the AWS adapter build: account `807562639912`, `us-west-2`, `ami-0fbbd0facbc9e3cff`, `g7.2xlarge`, one instance, `RTX PRO 4500`, torch `2.11.0+cu128` |
-| training data | `dataset_001` train (48) + practice (16), whole-part ops only |
-| sealed data | `dataset_001` validation (16) + test (16) — post-training evaluation only |
+| source_sha (freeze commit) | `ce1a3882c57400bb72a810c056c4baf978b72db6` |
+| archive_sha256 | `52151c8bb00b45e5e442fd52246d15515c98fe6b2bc745237a4c08992206f580` |
+| manifest_sha256 | `0b2801752dcf4dd46e858485584dd52130b76fdc951c33a597f60c294831d2b4` |
+| package | `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_001/source.zip` (356,470 bytes, 30 members) |
+| proposed job | `cas-meta2-teaching-graph-20260909011302-e654ae56` |
 
-## What the signed authorization would pay for (build-first, then run)
+The package contains: the graph-teaching package (graph, reference, lessons,
+adapter, real_framework, trainer), the frozen encoder path (public tokenizer +
+fixed projection), the corrected worker (both conditions, original-inner-error
+capture, evidence on failure), and the two frozen wheels. Execution uses
+`aws/graph_training_launch.py`, which carries every binding-fit execution fix
+(us-east-1 pricing client, bounded IAM propagation wait, cleanup detach and
+inline-policy order, bounded termination wait before security-group deletion,
+training_result naming, owner-record binding).
 
-1. AWS adapter build: `gpu_adapter.build_graph_training_framework` (real
-   torch/CUDA, real decompose module, real plasticity resolution) + learner
-   factory + package + launch lifecycle, all pure-tested before any paid run.
-2. Exactly one launch attempt with bounded readiness checks, evidence capture
-   preserving the original error on any failure, and verified cleanup.
-3. Post-run deliverables: before/after per-op training loss and per-arm
-   metrics, actual completed updates, checkpoint identities, containment
-   report (forbidden parameter changes named), execution/cleanup outcomes, and
-   the sealed-split evaluation through `evaluate_sealed`.
+## What the run does (per ADAPTER_SPEC.md)
+
+Graph + structured request → candidate `^6` decompose module → frozen
+dot-product readout → option prediction → checker-derived correction →
+AdamW updates to `operation:^6` parameters ONLY → digest-verified containment
+report → sealed-split evaluation with predictions recorded before answers.
+
+## Budget (resolved: per condition AND totals, one job)
+
+| Scope | Value |
+|---|---|
+| per condition (cas, generic) | 64 optimizer steps, 600.0 wall seconds, lr 0.003 |
+| totals, one job | 128 optimizer steps, 1200.0 wall seconds |
+| conditions | `prompt_framing_only` — same graphs, options, and answers; framing differs. NOT an architecture comparison |
+| instance | one `g7.2xlarge` (`RTX PRO 4500`), account `807562639912`, `us-west-2`, AMI `ami-0fbbd0facbc9e3cff`, torch `2.11.0+cu128` |
+| reservation | ONE new `4.00` USD reservation, no refund, no automatic retry |
+| data | train 48 + practice 16 (whole-part); validation 16 + test 16 sealed, post-training only |
+
+## Deliverables on completion
+
+Per-arm and total: before/after per-op training loss, per-op lesson exposure
+(records and updates), actual completed updates, checkpoint identities,
+containment report (forbidden changes named), execution/cleanup outcomes, and
+the sealed-split evaluation (validation/test predictions sealed before
+answers). Original errors preserved on any failure.
 
 ## Explicitly not authorized
 
-- No automatic retry, no second reservation, no change to accepted models,
-  trainers, the ledger, frozen negatives, or the sealed splits.
-- No promotion of the CUDA hypothesis for binding-fit attempt 003 (remains
-  hypothesis-only).
+- No automatic retry; no second reservation; no modification of accepted
+  models, trainers, the ledger, frozen negatives, or sealed splits.
+- No promotion of the binding-fit CUDA hypothesis (stays hypothesis-only).
 - No reading of protected final-test answers of any other task.
 
-## Signing procedure (same as prior campaigns)
+## Signing procedure
 
-The owner's signed record will bind this document's sha256 and the launch
-request built from the frozen package identities at adapter-build time. Until
-that record exists, nothing runs.
+The owner's signed record must bind this document's sha256 and the identities
+above. Until that record exists and is committed, the launch request stays
+`launch_authorized: false` and nothing runs.
