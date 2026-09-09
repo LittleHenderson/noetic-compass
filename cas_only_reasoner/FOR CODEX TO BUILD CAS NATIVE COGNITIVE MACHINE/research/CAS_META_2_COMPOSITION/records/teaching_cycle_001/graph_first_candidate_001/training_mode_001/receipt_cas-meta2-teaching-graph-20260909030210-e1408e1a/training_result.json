@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 16, in <module>\n    encoder = build_encoder(torch, texts, d_model=64, seed=20260909)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 92, in build_encoder\n    tokenizer = LosslessPublicTokenizer.fit_train(list(texts),\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 113, in fit_train\n    _validated(public)\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 75, in _validated\n    validate_public(public)\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/codec.py\", line 45, in validate_public\n    raise PolicyContractError(\"PUBLIC_INPUT_FIELDS_INVALID\")\ncas_meta2.codec.PolicyContractError: PUBLIC_INPUT_FIELDS_INVALID\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909030210-e1408e1a",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
