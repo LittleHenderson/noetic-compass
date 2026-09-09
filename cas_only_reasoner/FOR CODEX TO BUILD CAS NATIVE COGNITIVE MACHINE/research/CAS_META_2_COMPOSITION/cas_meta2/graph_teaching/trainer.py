@@ -23,14 +23,15 @@ from hashlib import sha256
 
 from . import lessons, reference
 from .graph import canonical, digest, require
+from .real_framework import (TARGET_CONTRACT_ID, TARGET_PLASTICITY_ROLE)
 
 MODE_SCHEMA = "cas-meta2-graph-teaching-training/1"
-TARGET_CONTRACT_ID = "cas.cjt.operation.^6.decompose/0.2"
-TARGET_PLASTICITY_ROLE = "operator.^6"
+CONDITION_KIND = "prompt_framing_only"  # not a CASformer-vs-generic architecture comparison
 
 FROZEN_LEARNING_RATE = 0.003
 FROZEN_MAX_OPTIMIZER_STEPS = 64
 FROZEN_MAX_WALL_SECONDS = 600.0
+TOTAL_ARMS = 2  # cas + generic; budget below is PER ARM
 
 WHOLE_PART_OPS = frozenset(lessons.WHOLE_PART_OPS)
 TRAIN_SPLITS = ("train", "practice")
@@ -119,18 +120,31 @@ def make_task(record, arm):
 
 
 def run_training(learner, records, arm, budget, wall_clock=time.monotonic):
-    """Bounded updates with before/after per-op losses. Never reads sealed splits."""
+    """Bounded updates with before/after per-op losses and lesson exposure.
+
+    Lesson exposure reports how many records and how many updates each
+    operation actually received — an optimizer step is NOT a complete
+    teaching cycle, and the report says so explicitly.
+    """
     tasks = [make_task(record, arm) for record in records]
     ops = sorted({task["op"] for task in tasks})
     before = {op: learner.eval_loss(op, tasks) for op in ops}
     completed = 0
+    updates_by_op = {op: 0 for op in ops}
     deadline = wall_clock() + budget.max_wall_seconds
     while completed < budget.max_optimizer_steps and wall_clock() < deadline:
-        learner.step(tasks[completed % len(tasks)])
+        task = tasks[completed % len(tasks)]
+        learner.step(task)
+        updates_by_op[task["op"]] += 1
         completed += 1
     after = {op: learner.eval_loss(op, tasks) for op in ops}
+    exposure = {"records_by_op": {op: sum(1 for task in tasks if task["op"] == op)
+                                  for op in ops},
+                "updates_by_op": updates_by_op,
+                "boundary": ("An optimizer step is a single correction on one "
+                             "record, not a complete teaching cycle.")}
     return {"before_loss": before, "after_loss": after,
-            "completed_updates": completed,
+            "completed_updates": completed, "lesson_exposure": exposure,
             "checkpoint_identity": learner.checkpoint_identity(),
             "automatic_retries": 0}
 
@@ -139,16 +153,23 @@ def real_framework():
     """Lazy, GPU-fail-closed construction for the AWS path only.
 
     Imports torch through the teaching gpu_adapter (CUDA required, exactly one
-    visible GPU) and the cas_cjt governed-learning machinery. The
-    ``build_graph_training_framework`` hook is the authorized next build step
-    (see the AWS authorization request); until it exists this fails closed
-    with an explicit code, never with a silent fallback.
+    visible GPU), fits the frozen public tokenizer on the lesson prompts, and
+    builds the candidate decompose module through
+    ``real_framework.build_graph_training_framework``. Fails closed with an
+    explicit code at every missing piece — never a silent fallback.
     """
     from ..teaching_cycle import gpu_adapter  # noqa: F401  (imports torch)
+    from .real_framework import build_encoder, build_graph_training_framework
     torch, device = gpu_adapter._cuda()
-    require(hasattr(gpu_adapter, "build_graph_training_framework"),
-            "GRAPH_TRAINING_FRAMEWORK_HOOK_NOT_BUILT")
-    return gpu_adapter.build_graph_training_framework(torch=torch, device=device)
+    records = training_records(20260909)
+    texts = []
+    for record in records:
+        for arm in ("cas", "generic"):
+            texts.append(record["framings"][arm])
+    encoder = build_encoder(torch, texts, d_model=64, seed=20260909)
+    framework = build_graph_training_framework(torch, device, seed=20260909,
+                                               encoder=encoder)
+    return framework, records
 
 
 def launch(*, run_id, arm, seed=20260909, framework=None, model=None,
@@ -162,45 +183,73 @@ def launch(*, run_id, arm, seed=20260909, framework=None, model=None,
                             max_optimizer_steps=max_optimizer_steps,
                             max_wall_seconds=max_wall_seconds).validate()
     if framework is None or model is None:
-        framework = real_framework()
+        framework, real_records = real_framework()
         model = framework.build_decompose_model(seed=seed)
+        records_override = real_records
+    else:
+        records_override = None
     require(learner_factory is not None, "LEARNER_FACTORY_REQUIRED")
-    records = training_records(seed)
+    records = records_override if records_override is not None else training_records(seed)
     before = parameter_snapshot(framework, model)
     scope = scope_parameters(framework, model)
     learner = learner_factory(model, arm=arm, learning_rate=budget.learning_rate)
     training = run_training(learner, records, arm, budget)
     after = parameter_snapshot(framework, model)
-    report = {"schema": MODE_SCHEMA, "run_id": run_id, "arm": arm, "seed": seed,
+    report = {"schema": MODE_SCHEMA, "run_id": run_id,
+              "condition": {"arm": arm, "kind": CONDITION_KIND,
+                            "note": ("Both conditions share the same graphs, "
+                                     "options, and reference answers; only the "
+                                     "prompt framing differs. This is not the "
+                                     "CASformer-vs-generic-network comparison.")},
+              "seed": seed,
               "target": {"contract_id": TARGET_CONTRACT_ID,
                          "plasticity_role": TARGET_PLASTICITY_ROLE},
               "scope": scope, "containment": containment_report(before, after,
                                                                 scope["allowed"]),
               "training": training, "budget": {
-                  "learning_rate": budget.learning_rate,
-                  "max_optimizer_steps": budget.max_optimizer_steps,
-                  "max_wall_seconds": budget.max_wall_seconds},
+                  "per_arm": {"learning_rate": budget.learning_rate,
+                              "max_optimizer_steps": budget.max_optimizer_steps,
+                              "max_wall_seconds": budget.max_wall_seconds},
+                  "total": {"arms": TOTAL_ARMS,
+                            "optimizer_steps": TOTAL_ARMS * budget.max_optimizer_steps,
+                            "wall_seconds": TOTAL_ARMS * budget.max_wall_seconds}},
               "claims": {"specialist_claimed": False,
                          "sealed_splits_read": False,
                          "answer_edges_present": False}}
     return report
 
 
+def prediction_input(task):
+    """Answer-free module input: the prediction is made BEFORE any answer is
+    available to the module. The checker may supply corrections during
+    teaching, never during inference."""
+    return {key: value for key, value in task.items() if key != "correct"}
+
+
 def evaluate_sealed(learner, seed=20260909, splits=SEALED_SPLITS):
-    """Post-training evaluator: reads ONLY the sealed validation/test splits."""
+    """Post-training evaluator: reads ONLY the sealed validation/test splits.
+
+    Predictions are recorded (sealed) BEFORE the answers are consulted; each
+    sealed prediction record contains no answer field.
+    """
     dataset = lessons.build_dataset(seed=seed)
-    metrics = {}
+    tasks = []
     for split in splits:
         for record in dataset[split]:
             if record["family"] != "whole_part" or record["op"] not in WHOLE_PART_OPS:
                 continue
-            task = make_task(record, arm="generic")
-            correct = learner.predict(task) == task["correct"]
-            key = (split, task["op"])
-            bucket = metrics.setdefault(key, {"attempted": 0, "correct": 0})
-            bucket["attempted"] += 1
-            if correct:
-                bucket["correct"] += 1
-    return {"per_split_op": metrics,
-            "boundary": "post-training sealed-split evaluation only",
+            tasks.append((split, make_task(record, arm="generic")))
+    sealed = [{"record_id": task["record_id"], "split": split, "op": task["op"],
+               "predicted": learner.predict(prediction_input(task))}
+              for split, task in tasks]
+    metrics = {}
+    for (split, task), prediction in zip(tasks, sealed):
+        key = (split, task["op"])
+        bucket = metrics.setdefault(key, {"attempted": 0, "correct": 0})
+        bucket["attempted"] += 1
+        if prediction["predicted"] == task["correct"]:
+            bucket["correct"] += 1
+    return {"sealed_predictions": sealed, "per_split_op": metrics,
+            "boundary": ("post-training sealed-split evaluation only; predictions "
+                         "sealed before answers were consulted"),
             "training_path_never_reads_sealed": True}

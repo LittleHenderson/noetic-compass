@@ -64,11 +64,12 @@ class FakeFramework:
 
 
 class FakeLearner:
-    def __init__(self, model, arm, learning_rate, touch_frozen=False):
+    def __init__(self, model, arm, learning_rate, touch_frozen=False, answers=None):
         self.model = model
         self.arm = arm
         self.learning_rate = learning_rate
         self.touch_frozen = touch_frozen
+        self.answers = answers or {}
         self.steps = 0
 
     def eval_loss(self, op, tasks):
@@ -85,8 +86,9 @@ class FakeLearner:
         return digest(canonical({name: param.value
                                  for name, param in self.model.parameters.items()}))
 
-    def predict(self, task):
-        return task["correct"]
+    def predict(self, task_input):
+        assert "correct" not in task_input  # inference input is answer-free
+        return self.answers.get(task_input["record_id"], task_input["options"][0])
 
 
 def launch_args(seed=20260909, **kwargs):
@@ -179,16 +181,46 @@ def test_training_records_are_train_practice_whole_part_only():
 def test_launch_reports_scope_containment_and_honest_claims():
     report = trainer.launch(**launch_args())
     assert report["schema"] == trainer.MODE_SCHEMA
-    assert report["arm"] == "cas"
+    assert report["condition"]["arm"] == "cas"
+    assert report["condition"]["kind"] == "prompt_framing_only"
     assert report["target"]["contract_id"] == trainer.TARGET_CONTRACT_ID
+    assert report["target"]["plasticity_role"] == "operation:^6"
     assert report["scope"]["allowed"] == ["b"]
     assert report["containment"]["contained"] is True
     assert report["containment"]["permitted_changes"] == ["b"]
     assert report["training"]["completed_updates"] == 64
+    assert report["budget"]["per_arm"]["max_optimizer_steps"] == 64
+    assert report["budget"]["total"] == {"arms": 2, "optimizer_steps": 128,
+                                         "wall_seconds": 1200.0}
     assert report["claims"] == {"specialist_claimed": False,
                                 "sealed_splits_read": False,
                                 "answer_edges_present": False}
-    assert report["budget"]["max_optimizer_steps"] == 64
+
+
+def test_real_target_matches_the_real_contract():
+    assert trainer.TARGET_CONTRACT_ID == "cas.cjt.operation.^6.decompose/0.2"
+    assert trainer.TARGET_PLASTICITY_ROLE == "operation:^6"
+
+
+def test_lesson_exposure_counts_records_and_updates_per_op():
+    records = trainer.training_records(20260909)
+    framework = FakeFramework()
+    model = FakeModel()
+    learner = FakeLearner(model, arm="cas", learning_rate=0.003)
+    budget = trainer.TrainingBudget(max_optimizer_steps=7, max_wall_seconds=60.0)
+    training = trainer.run_training(learner, records, "cas", budget)
+    exposure = training["lesson_exposure"]
+    assert sum(exposure["records_by_op"].values()) == len(records)
+    assert sum(exposure["updates_by_op"].values()) == 7
+    assert exposure["boundary"]  # an optimizer step is not a teaching cycle
+
+
+def test_prediction_input_is_answer_free():
+    records = trainer.training_records(20260909)
+    task = trainer.make_task(records[0], arm="generic")
+    task_input = trainer.prediction_input(task)
+    assert "correct" not in task_input
+    assert task_input["record_id"] == task["record_id"]
 
 
 def test_launch_flags_any_forbidden_parameter_change():
@@ -215,9 +247,12 @@ def test_arm_framing_controls_the_task_prompt():
 
 
 def test_evaluate_sealed_reads_only_sealed_splits():
+    dataset = lessons.build_dataset(seed=20260909)
+    answers = {record["record_id"]: record["correct"] for split in ("validation", "test")
+               for record in dataset[split] if record["family"] == "whole_part"}
     framework = FakeFramework()
     model = FakeModel()
-    learner = FakeLearner(model, arm="generic", learning_rate=0.003)
+    learner = FakeLearner(model, arm="generic", learning_rate=0.003, answers=answers)
     metrics = trainer.evaluate_sealed(learner, seed=20260909)
     assert set(metrics["per_split_op"]) == {
         ("validation", "LIST_PARTS"), ("validation", "FIND_SHARED_PART"),
@@ -225,6 +260,10 @@ def test_evaluate_sealed_reads_only_sealed_splits():
         ("test", "FIND_SHARED_PART"), ("test", "REACHED_VIA")}
     for bucket in metrics["per_split_op"].values():
         assert bucket["correct"] == bucket["attempted"]
+    # the seal: every recorded prediction is answer-free and precedes scoring
+    for prediction in metrics["sealed_predictions"]:
+        assert "correct" not in prediction
+        assert set(prediction) == {"record_id", "split", "op", "predicted"}
 
 
 def test_trainer_module_imports_nothing_heavy():
