@@ -1,0 +1,57 @@
+{
+  "authorization": {
+    "archive_sha256": "b3d7d1be6c811f856ceb859db461752e6f90135d5e7e4240eecb06e98e0f8c50",
+    "authorization_context": "GRAPH6_CONFIRMATION_001 - the owner's combined confirmation job, executed exactly as pre-registered. Preserved baseline: the SAME encoder (seed 20260909, one shared projection), the SAME tokenizer fitted on the 30 train+practice records only, the SAME registered ^6 module and operation:^6 plasticity scope, the SAME teaching records and teaching order, the SAME optimizer settings. New measurement: THREE INDEPENDENTLY INITIALIZED candidate learners (seeds 20260913, 20260914, 20260915; only the module+optimizer initialization varies) with 64 updates each (192 total), each measured on the SAME pre-registered fresh panel of 30 graph families / 90 cases (one question per operation; reach coverage 10 direct / 10 via / 10 absent) BEFORE and AFTER training with answers sealed until the predictions are recorded. The panel excludes the teaching records and the whole previously examined dataset by exact id AND label-invariant signature, so trivially renamed duplicates are rejected. Pre-registered rule: fit unchanged (mean after-loss < mean before-loss - 0.02); a candidate passes fresh transfer only if the paired margin is >= +0.10 with a family-clustered 95% bootstrap lower bound > 0, absolute fresh accuracy >= 0.50, no operation regresses and at least two operations gain >= +0.10; verdict FRESH_TRANSFER_CONFIRMED iff at least 2 of 3 candidates pass. Uncertainty: 10,000-resample family-clustered percentile bootstrap (seed 20260921) plus exact McNemar on discordant cases. The old 6/12 pilot threshold is NOT reused. Baseline row mode A (default): the preserved run-005 checkpoint is reported UNAVAILABLE because run 005 persisted only the parameter digest cb008721b92144b4e0ef52e86c2c449415935110747aca18ff23229c05240e50 and the wheel constructs the module bank without a seed, so the weights are not reproducible; the trained-vs-untrained comparison on the new panel is unaffected. ONE job, one new reservation, zero automatic retries, verified cleanup, original errors preserved, every scheduled candidate reported.",
+    "baseline_mode": "none",
+    "bound_request_sha256": "b8f75ffe3cbf6ae785c7bf144bd652674d4503797106583b50336453cd4b0c29",
+    "job": "cas-meta2-graph6conf-20260910013000-e485b07c",
+    "launcher": "aws/graph_training_graph6_confirmation_launch.py at commit e485b07c3fbdc1fd3231bfdc9638635119660e5a",
+    "learner_seeds": [20260913, 20260914, 20260915],
+    "manifest_sha256": "b30c4260d6502715496f1ffb1497422fae4b031315480e892b1dd91806d6a538",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_package_001/",
+    "panel_seed": 20260920,
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_launch_001/launch_request.json",
+    "source_sha": "e485b07c3fbdc1fd3231bfdc9638635119660e5a",
+    "total_optimizer_steps": 192
+  },
+  "execution_gates": [
+    "single launch attempt through the graph6 confirmation launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "the fresh panel never enters tokenizer fitting, training, or checkpoint selection; answers are sealed until the registered predictions are recorded",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "all three scheduled candidates are reported; none is dropped for looking bad",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any architecture, representation, encoder, option-path or allowance change beyond the declared 64 updates / 600 s per candidate",
+    "the baseline reproduction candidate (mode B) - not authorized by this GO",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GO",
+  "recorded_utc": "2026-09-10T01:30:00.000000+00:00",
+  "run_bounds": {
+    "arms": ["cas"],
+    "automatic_retries": 0,
+    "baseline_mode": "none",
+    "candidates": 3,
+    "data": {
+      "familiar": "train+practice whole-part (30 records)",
+      "fresh": "pre-registered panel: 30 families / 90 cases, excluded from training and tokenizer fitting"
+    },
+    "encoder_seed": 20260909,
+    "jobs": 1,
+    "learner_seeds": [20260913, 20260914, 20260915],
+    "panel_seed": 20260920,
+    "per_candidate": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "6.00",
+    "total_optimizer_steps": 192
+  },
+  "schema": "cas-graph-training-graph6-confirmation-owner-authorization/1"
+}
