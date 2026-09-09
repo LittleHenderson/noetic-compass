@@ -4,6 +4,34 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first teaching candidate landed (pure phase; no training yet)
+
+Owner-directed graph-first candidate, `cas_meta2/graph_teaching/` (`0a8bc7c0`),
+pure and deterministic only — no GPU, no AWS, no run, ledger untouched.
+
+- **Owner corrections enforced mechanically:** four pieces (branches ARE
+  connectors; `Graph.outgoing` is the only branch API); a node is an idea box
+  with a label and contents about itself; a connector's information content IS
+  the commonality of its two adjacent nodes (`Relation.content` validated
+  against the recomputed commonality); no limit on a node's connectors or
+  contents; shared constituents are DIRECT parts in common, nested reach is
+  taught separately (REACHED_VIA).
+- **Lessons:** binding (color/shape/value + requires/triggers, one-hop,
+  two-hop, changed-request) and the whole-part ^6 curriculum (LIST_PARTS,
+  FIND_SHARED_PART, REACHED_VIA) over bicycle/cart/wheel-style families with
+  renamed, shuffled labels. Deterministic checker computes every answer; no
+  answer edges; derived connectors never stored; CAS and generic framings
+  share identical graphs and answers.
+- **Sealed dataset:** train 48 / practice 16 / validation 16 / test 16, seed
+  `20260909`, byte receipt in
+  `records/teaching_cycle_001/graph_first_candidate_001/dataset_001/`.
+- **Targeted ^6 specialist plan:** real registry target
+  `cas.cjt.operation.^6.decompose/0.2`, plasticity group `operator.^6`, all
+  else frozen; verification of both the learned skill and update containment.
+  Honest gap list: NO trainer mode exists yet; NO AWS run is authorized.
+- Tests: 20 new; full suite **104 passed, 24 subtests passed**. The binding-fit
+  attempt-004 authorization request remains awaiting owner signature.
+
 ## 2026-09-09 - Teaching binding-fit: error preservation demonstrated; environment compared; attempt-004 authorization request prepared (no launch)
 
 Per the owner's instruction, with attempt 003 preserved and its worker failure
