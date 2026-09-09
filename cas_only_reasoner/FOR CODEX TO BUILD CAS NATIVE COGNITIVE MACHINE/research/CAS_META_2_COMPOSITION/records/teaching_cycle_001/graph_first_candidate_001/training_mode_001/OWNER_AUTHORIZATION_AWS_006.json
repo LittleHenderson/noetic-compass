@@ -1,0 +1,42 @@
+{
+  "schema": "cas-graph-training-owner-authorization/6",
+  "recorded_utc": "2026-09-09T05:30:00Z",
+  "owner_instruction_raw": "proceed straight to registering attempt 006",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "authorization_context": "Attempt 006 registered per the owner's directive, after the bounded wheel compatibility review (all checks passed) and the preparation-path demonstration. Package_006 identities and the corrected launcher are bound below; the compat-review evidence hash is bound as well.",
+    "bound_request_sha256": "873eb5b9f713b650761b418e662efc0caa58ccf1b53554b4beecf60d5bc37aca",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_006/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909052323-cb2ebc76",
+    "source_sha": "88f36b2f603db4d5fff20a2f6380242f8ea15619",
+    "archive_sha256": "d57ee62838c36b09cb75b171bbd9a017a40f2f8c6d981027a4dc45856f02d209",
+    "manifest_sha256": "71ef77e5451621e4d2001e95824c34898ede214c6ef3e592017aa095d824dcb9",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_006/",
+    "compat_review_evidence_sha256": "e5ba4d6865da7511739d7532f0d49bf7b08d93ddd498ebd2e20cadbbf1114c16",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 238af1b519b9fc821236e6b2473079938b333b39"
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test sealed, predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "the first scheduled training update must record that the candidate was constructed, the lesson reached it, three scores were produced, the loss was finite, backward reached the permitted parameters, and the optimizer update completed",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the separate binding-fit experiment (attempt 004 request remains pending)",
+    "any additional experiment beyond this single training job",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
