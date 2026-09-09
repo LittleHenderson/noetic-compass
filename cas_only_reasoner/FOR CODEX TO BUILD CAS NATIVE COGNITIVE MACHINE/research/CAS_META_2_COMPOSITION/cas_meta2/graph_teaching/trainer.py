@@ -165,7 +165,8 @@ def real_framework():
     records = training_records(20260909)
     publics = [public_records(record, arm)["public"]
                for record in records for arm in ("cas", "generic")]
-    encoder = build_encoder(torch, publics, d_model=64, seed=20260909)
+    encoder = build_encoder(torch, publics, d_model=64, seed=20260909,
+                            device=device)
     framework = build_graph_training_framework(torch, device, seed=20260909,
                                                encoder=encoder)
     return framework, records

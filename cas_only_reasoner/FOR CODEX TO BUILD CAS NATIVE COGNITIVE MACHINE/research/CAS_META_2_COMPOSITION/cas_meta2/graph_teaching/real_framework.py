@@ -86,14 +86,13 @@ def build_graph_training_framework(torch, device, *, seed, encoder=None):
 FROZEN_ENCODER_MAX_LENGTH = 1024
 
 
-def build_encoder(torch, publics, d_model, seed):
+def build_encoder(torch, publics, d_model, seed, device):
     """Frozen encoder over the REAL public-record contract.
 
     Fits the campaign's public tokenizer on the public records (problem +
-    three observations each) and provides a fixed seeded projection. The
-    encode step returns the problem token ids and the three per-slot
-    observation token ids exactly as the codec produces them. Nothing here
-    learns.
+    three observations each) and provides a fixed seeded projection ON THE
+    DEVICE the module lives on (attempt 006's preserved error was a CPU/CUDA
+    device mismatch exactly here). Nothing here learns.
     """
     from cas_meta2.features_v2 import LosslessPublicTokenizer
     tokenizer = LosslessPublicTokenizer.fit_train(list(publics),
@@ -101,7 +100,8 @@ def build_encoder(torch, publics, d_model, seed):
     vocabulary = tuple(tokenizer.vocabulary)
     index = {token: position for position, token in enumerate(vocabulary)}
     generator = torch.Generator().manual_seed(seed)
-    projection = torch.randn((len(vocabulary), d_model), generator=generator)
+    projection = torch.randn((len(vocabulary), d_model), generator=generator,
+                             device=device)
     projection = projection / (float(d_model) ** 0.5)
     projection.requires_grad_(False)
 

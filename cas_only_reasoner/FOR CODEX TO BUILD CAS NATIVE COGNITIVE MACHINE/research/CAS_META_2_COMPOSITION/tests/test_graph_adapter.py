@@ -100,11 +100,15 @@ def test_config_import_comes_from_the_reference_wheel():
 
 def test_encoder_passes_a_list_to_fit_train():
     """Attempt 003's preserved error: fit_train rejects tuples
-    (LOSSLESS_TRAIN_INPUT_INVALID). The encoder must pass a list."""
+    (LOSSLESS_TRAIN_INPUT_INVALID). The encoder must pass a list. Attempt
+    006's preserved error: the frozen projection must live on the module's
+    device, never default CPU."""
     import inspect
     from cas_meta2.graph_teaching import real_framework
     source = inspect.getsource(real_framework.build_encoder)
     assert "fit_train(list(publics)" in source
+    assert "device" in inspect.signature(real_framework.build_encoder).parameters
+    assert "device=device" in source
 
 
 def test_public_records_satisfy_the_frozen_codec_contract():
