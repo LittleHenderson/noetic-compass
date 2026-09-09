@@ -4,6 +4,37 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Teaching binding-fit: error preservation demonstrated; environment compared; attempt-004 authorization request prepared (no launch)
+
+Per the owner's instruction, with attempt 003 preserved and its worker failure
+left UNKNOWN (the CUDA idea remains hypothesis-only):
+
+- **Error preservation demonstrated through the actual exported worker**
+  (`9038087f`, `tests/test_binding_fit_worker_execution.py`): the rendered
+  worker text was executed with a real, deliberately failing, non-neural child
+  process; the child's original error is preserved verbatim in the failure
+  report, survives a second simulated reporting failure, and survives the
+  launcher wait/collect path into `training_result.json`. Combined suite:
+  **84 passed, 24 subtests passed**.
+- **Environment comparison** (`ENVIRONMENT_COMPARISON.md`): the recorded
+  successful teaching job 003 used the SAME account, region, AMI
+  (`ami-0fbbd0facbc9e3cff`), `g7.2xlarge`, `RTX PRO 4500` plan, python 3.12 and
+  torch `2.11.0+cu128` stack as this check. Actual differences: job 003
+  retained bootstrap/environment evidence while this check's worker retained
+  none, and NEITHER record contains an independent CUDA observation (job 003's
+  own receipts say `provider_identity_proved: false`). No driver fix is
+  proposed; no environment behavior is guessed.
+- **Corrected package built** to `package_002/`: archive sha
+  `98712cae5ed31bff5740481127116dd4711cde207937b343c847b5561be1df01`, manifest
+  sha `7560e33869b823e4bd03bf7d5dea6af2cf259caab052e970f59c2888e830e197`,
+  neural source unchanged (`31e78792`). New job
+  `cas-meta2-teaching-binding-20260909000105-9e8f0937`, inert request sha
+  `fc358d6f2306b28eb1dd29c67d4dba1456ea427bd48900d7f5f1030dd6d1b806`.
+- **Authorization requested, not granted, nothing launched, nothing
+  reserved**: `AUTHORIZATION_REQUEST_004.json`. Budget, task, candidate
+  definitions, and scoring remain the frozen 48-step / 600-second / `$4.00`
+  allocation. Ledger unchanged at revision 23.
+
 ## 2026-09-08 - Teaching binding-fit attempt 003: launch and bootstrap worked; worker failed; error preservation fixed
 
 The owner authorized one new binding training-fit job
