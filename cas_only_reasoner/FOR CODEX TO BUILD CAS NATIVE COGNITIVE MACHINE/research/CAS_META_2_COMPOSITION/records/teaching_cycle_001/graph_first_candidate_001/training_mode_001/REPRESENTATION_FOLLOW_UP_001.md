@@ -48,3 +48,17 @@ module's operating point is exactly attempt 010's — one variable at a time.
 
 No learning or capability claim is precommitted; the run's containment
 report and sealed evaluation decide the record.
+
+## Measured outcome (attempt 011, `cas-meta2-teaching-graph-20260909095712-4ca46fce`)
+
+See `ATTEMPT_GRAPH_011_RESULT.md` (result sha `e4a0d61d…`, ledger 35 → 36).
+
+- **A (first half) CONFIRMED for 2 of 3 ops:** LIST_PARTS and REACHED_VIA
+  before-losses are no longer exactly ln 3 and move under the same 64-step
+  allowance — the sum-pooled readout now delivers distinct options.
+- **A (second half) NOT confirmed:** sealed accuracy 3/12, chance-level.
+- **Residual:** FIND_SHARED_PART stays exactly at float32 ln 3 before and
+  after in both arms — its options still score identically.
+- Next measured suspects (each separately authorizable): the
+  FIND_SHARED_PART residual collapse, the 64-step allowance, and the module's
+  operating point.

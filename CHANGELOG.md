@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: representation follow-up 001 / attempt 011 FINISHED — exact-ln(3) regime broken for 2 of 3 ops; sealed accuracy still chance
+
+Owner instruction ("IF THE FOLLOWING IS TRUE IMPLEMENT IT IF NOT IT'S YOUR
+CALL" + the attempt-002 record, re-verified TRUE) authorized implementing the
+follow-up the record names: exactly ONE variable changed — option-slot
+aggregation in the frozen readout from mean-pooling to SUM-pooling
+(`c985d2f4`; module input, config, contract, lessons, budgets, sealed splits
+all attempt-010-identical; prereg `REPRESENTATION_FOLLOW_UP_001.md`).
+Attempt 011 (`cas-meta2-teaching-graph-20260909095712-4ca46fce`, new `$4.00`
+reservation, ledger 35 → 36: `$194.00`/`$206.00`, result sha `e4a0d61d…`)
+finished end to end: containment HELD (only `left/merge/right.weight`), 64
+updates per arm. MEASURED: LIST_PARTS before-loss `1.1163` → `1.0806` (cas)
+and REACHED_VIA `1.0885 → 1.1301` (cas) / `1.1301 → 1.1143` (generic) — the
+frozen exact-ln(3) regime is GONE for those two ops (the diagnostic's
+collapse was representation-caused, confirmed by before-losses differing
+from ln 3). But FIND_SHARED_PART remains exactly float32 ln 3 before AND
+after in both arms (its options still score identically — unresolved), and
+sealed accuracy is 3/12 (chance-level; attempt 010 ≈ 4/12). No learning
+claim. Next measured suspects, each separately authorizable: the
+FIND_SHARED_PART residual collapse, the 64-step allowance, and the module's
+operating point. Records: `ATTEMPT_GRAPH_011_RESULT.md`,
+`REPRESENTATION_FOLLOW_UP_001.md`.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) neural diagnostic attempt 002 FINISHED — the option-collapse is MEASURED
 
 Replacement authorized by the owner ("GO"; `OWNER_AUTHORIZATION_AWS_LN3_002.json`,
