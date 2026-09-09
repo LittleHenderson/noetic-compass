@@ -1,0 +1,4065 @@
+[
+  {
+    "correct": "2",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhat is the value of A?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nRead the graph. Answer the request.\nWhat is the value of A?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "READ_VALUE",
+    "options": [
+      "3",
+      "2",
+      "1"
+    ],
+    "question": {
+      "field": "value",
+      "object": "A"
+    },
+    "record_id": "c78694944b717310dc1cfe0b5352e021050819bc2c4de38495801cbd7ce247d4",
+    "reference": {
+      "method": "field_value",
+      "used_relations": [
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "B",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhich object contains value=1?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nRead the graph. Answer the request.\nWhich object contains value=1?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "CONTAINING_NODE",
+    "options": [
+      "C",
+      "A",
+      "B"
+    ],
+    "question": {
+      "field": "value",
+      "value": 1
+    },
+    "record_id": "1c90b6216858726ea9e93fde8978f0d058cd1e931afd5c784c0741bddbb67949",
+    "reference": {
+      "method": "objects_with_field",
+      "used_relations": [
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "has_color",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhich named relation holds between C and the value val_green?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nRead the graph. Answer the request.\nWhich named relation holds between C and the value val_green?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "IDENTIFY_CONNECTION",
+    "options": [
+      "has_value",
+      "has_shape",
+      "contains",
+      "has_color"
+    ],
+    "question": {
+      "source": "C",
+      "target": "val_green"
+    },
+    "record_id": "45da4dd4f4c660cbe8078b9229ff42f7a932448b039f05dd9117ac67c9b6a1ed",
+    "reference": {
+      "method": "relation_kind_between",
+      "used_relations": [
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "A",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request kind=request\nnode request_req0 kind=requirement property=shape value=triangle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request --requires--> request_req0\nrel request --triggers--> B\nrel request --triggers--> C\nrel request --triggers--> A\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nThe request requires shape=triangle. Which object satisfies the request?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request kind=request\nnode request_req0 kind=requirement property=shape value=triangle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request --requires--> request_req0\nrel request --triggers--> B\nrel request --triggers--> C\nrel request --triggers--> A\nRead the graph. Answer the request.\nThe request requires shape=triangle. Which object satisfies the request?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [],
+          "identifier": "request",
+          "kind": "request"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "request_req0",
+          "kind": "requirement"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "requires",
+          "source": "request",
+          "target": "request_req0"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "B"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "B"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "C"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "C"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "A"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "A"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "FOLLOW_ONE_HOP",
+    "options": [
+      "A",
+      "C",
+      "B"
+    ],
+    "question": {
+      "request": "request",
+      "requirements": [
+        [
+          "shape",
+          "triangle"
+        ]
+      ]
+    },
+    "record_id": "6377e1f8b07f928e0cb402dd9322ef44746b2c1e8da5423545d467d0991fb9a5",
+    "reference": {
+      "method": "select_object",
+      "used_relations": [
+        "requires",
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "A",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request kind=request\nnode request_req0 kind=requirement property=color value=red\nnode request_req1 kind=requirement property=shape value=triangle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request --requires--> request_req0\nrel request --requires--> request_req1\nrel request --triggers--> B\nrel request --triggers--> C\nrel request --triggers--> A\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nThe request requires color=red and shape=triangle. Which object satisfies the request?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request kind=request\nnode request_req0 kind=requirement property=color value=red\nnode request_req1 kind=requirement property=shape value=triangle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request --requires--> request_req0\nrel request --requires--> request_req1\nrel request --triggers--> B\nrel request --triggers--> C\nrel request --triggers--> A\nRead the graph. Answer the request.\nThe request requires color=red and shape=triangle. Which object satisfies the request?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [],
+          "identifier": "request",
+          "kind": "request"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "request_req0",
+          "kind": "requirement"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "request_req1",
+          "kind": "requirement"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "requires",
+          "source": "request",
+          "target": "request_req0"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "requires",
+          "source": "request",
+          "target": "request_req1"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "B"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "B"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "C"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "C"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "A"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "A"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "FOLLOW_TWO_HOPS",
+    "options": [
+      "B",
+      "C",
+      "A"
+    ],
+    "question": {
+      "request": "request",
+      "requirements": [
+        [
+          "color",
+          "red"
+        ],
+        [
+          "shape",
+          "triangle"
+        ]
+      ]
+    },
+    "record_id": "2ec12d02f59a336191b9b84395272df189f2a9e8b80d8379ae09c7efa3078dbe",
+    "reference": {
+      "method": "select_object",
+      "used_relations": [
+        "requires",
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "B",
+    "family": "binding",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request_a kind=request\nnode request_a_req0 kind=requirement property=shape value=triangle\nnode request_b kind=request\nnode request_b_req0 kind=requirement property=shape value=circle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request_a --requires--> request_a_req0\nrel request_a --triggers--> B\nrel request_a --triggers--> C\nrel request_a --triggers--> A\nrel request_b --requires--> request_b_req0\nrel request_b --triggers--> B\nrel request_b --triggers--> C\nrel request_b --triggers--> A\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nThe request changes from shape=triangle to shape=circle. Which object is selected now?\nChoose one option.\n",
+      "generic": "node B kind=object color=green shape=circle value=1\nnode val_green kind=property_value field=color value=green\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode C kind=object color=green shape=square value=3\nnode val_square kind=property_value field=shape value=square\nnode val_3 kind=property_value field=value value=3\nnode A kind=object color=red shape=triangle value=2\nnode val_red kind=property_value field=color value=red\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_2 kind=property_value field=value value=2\nnode request_a kind=request\nnode request_a_req0 kind=requirement property=shape value=triangle\nnode request_b kind=request\nnode request_b_req0 kind=requirement property=shape value=circle\nrel B --has_color--> val_green\nrel B --has_shape--> val_circle\nrel B --has_value--> val_1\nrel C --has_color--> val_green\nrel C --has_shape--> val_square\nrel C --has_value--> val_3\nrel A --has_color--> val_red\nrel A --has_shape--> val_triangle\nrel A --has_value--> val_2\nrel request_a --requires--> request_a_req0\nrel request_a --triggers--> B\nrel request_a --triggers--> C\nrel request_a --triggers--> A\nrel request_b --requires--> request_b_req0\nrel request_b --triggers--> B\nrel request_b --triggers--> C\nrel request_b --triggers--> A\nRead the graph. Answer the request.\nThe request changes from shape=triangle to shape=circle. Which object is selected now?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "B",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "C",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "A",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [],
+          "identifier": "request_a",
+          "kind": "request"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "request_a_req0",
+          "kind": "requirement"
+        },
+        {
+          "fields": [],
+          "identifier": "request_b",
+          "kind": "request"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "request_b_req0",
+          "kind": "requirement"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "B",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "B",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "B",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "C",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "C",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "C",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "A",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "A",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "A",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "requires",
+          "source": "request_a",
+          "target": "request_a_req0"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "B"
+          ],
+          "kind": "triggers",
+          "source": "request_a",
+          "target": "B"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "C"
+          ],
+          "kind": "triggers",
+          "source": "request_a",
+          "target": "C"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "A"
+          ],
+          "kind": "triggers",
+          "source": "request_a",
+          "target": "A"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "requires",
+          "source": "request_b",
+          "target": "request_b_req0"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "B"
+          ],
+          "kind": "triggers",
+          "source": "request_b",
+          "target": "B"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "C"
+          ],
+          "kind": "triggers",
+          "source": "request_b",
+          "target": "C"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "A"
+          ],
+          "kind": "triggers",
+          "source": "request_b",
+          "target": "A"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "CHANGE_REQUEST",
+    "options": [
+      "C",
+      "B",
+      "A"
+    ],
+    "question": {
+      "from_requirements": [
+        [
+          "shape",
+          "triangle"
+        ]
+      ],
+      "request_a": "request_a",
+      "request_b": "request_b",
+      "to_requirements": [
+        [
+          "shape",
+          "circle"
+        ]
+      ]
+    },
+    "record_id": "310ed504361a7266a9588cbb5f4cb65f0667a969961332a717bf64be4908df07",
+    "reference": {
+      "method": "select_object",
+      "used_relations": [
+        "requires",
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": [
+      "A7",
+      "A8",
+      "B"
+    ],
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nLIST_PARTS(A): what does it directly contain?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nLIST_PARTS(A): what does it directly contain?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "LIST_PARTS",
+    "options": [
+      [
+        "A7",
+        "A8"
+      ],
+      [
+        "A7",
+        "A8",
+        "A9",
+        "B"
+      ],
+      [
+        "A7",
+        "A8",
+        "B"
+      ],
+      [
+        "A9",
+        "F"
+      ]
+    ],
+    "question": {
+      "idea": "A"
+    },
+    "record_id": "6210534554e81a5acb4f99ce2cf22082e5798197682c51751c88e54ad81c4cc1",
+    "reference": {
+      "method": "direct_parts",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": [
+      "A9",
+      "F"
+    ],
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nLIST_PARTS(B): what does it directly contain?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nLIST_PARTS(B): what does it directly contain?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "LIST_PARTS",
+    "options": [
+      [
+        "C",
+        "E"
+      ],
+      [
+        "A9",
+        "F"
+      ],
+      [
+        "A9"
+      ]
+    ],
+    "question": {
+      "idea": "B"
+    },
+    "record_id": "aff9a19780813512af5e99399d92fd73cee5083f0c13474b350a6eb7469ad959",
+    "reference": {
+      "method": "direct_parts",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "B",
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nFIND_SHARED_PART(A, B): which constituent idea do they share?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nFIND_SHARED_PART(A, B): which constituent idea do they share?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "FIND_SHARED_PART",
+    "options": [
+      "A8",
+      "B",
+      "A7",
+      "A9"
+    ],
+    "question": {
+      "a": "A",
+      "b": "B"
+    },
+    "record_id": "5ac9b8ce89d3b7a226a6f2f432ed4f9678b513c08fd501763c2031c56b35eb74",
+    "reference": {
+      "derived_relation": "shares",
+      "method": "shared_parts",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "B",
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nFIND_SHARED_PART(A, B): which constituent idea do they share?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nFIND_SHARED_PART(A, B): which constituent idea do they share?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "FIND_SHARED_PART",
+    "options": [
+      "A8",
+      "A9",
+      "A7",
+      "B"
+    ],
+    "question": {
+      "a": "A",
+      "b": "B"
+    },
+    "record_id": "7635bbe53fe8a97f50465c8dca385d45e2e870735e89359c1a0eb06057eda186",
+    "reference": {
+      "derived_relation": "shares",
+      "method": "shared_parts",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "direct",
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nREACHED_VIA(C, D): is it directly inside, reached through another constituent, or absent?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nREACHED_VIA(C, D): is it directly inside, reached through another constituent, or absent?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "REACHED_VIA",
+    "options": [
+      "absent",
+      "direct",
+      "via:C",
+      "via:E"
+    ],
+    "question": {
+      "idea": "D",
+      "part": "C"
+    },
+    "record_id": "5c4f3af950bf65424a9bebc9a85fd94bb0270ebf63a7bf46bd048f392398a76b",
+    "reference": {
+      "method": "reach_kind",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "absent",
+    "family": "whole_part",
+    "family_seed": 20261909,
+    "framings": {
+      "cas": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nREACHED_VIA(A7, D): is it directly inside, reached through another constituent, or absent?\nChoose one option.\n",
+      "generic": "node A7 kind=idea\nnode E kind=idea\nnode B kind=idea\nnode D kind=idea\nnode A9 kind=idea\nnode F kind=idea\nnode C kind=idea\nnode A kind=idea\nnode A8 kind=idea\nrel D --contains--> E\nrel B --contains--> A9\nrel B --contains--> F\nrel A --contains--> A7\nrel A --contains--> A8\nrel A --contains--> B\nrel D --contains--> C\nRead the graph. Answer the request.\nREACHED_VIA(A7, D): is it directly inside, reached through another constituent, or absent?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "A7",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "E",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "B",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "D",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A9",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "F",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "C",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "A8",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "E"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "E"
+        },
+        {
+          "content": [
+            "constituent",
+            "A9"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "A9"
+        },
+        {
+          "content": [
+            "constituent",
+            "F"
+          ],
+          "kind": "contains",
+          "source": "B",
+          "target": "F"
+        },
+        {
+          "content": [
+            "constituent",
+            "A7"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A7"
+        },
+        {
+          "content": [
+            "constituent",
+            "A8"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "A8"
+        },
+        {
+          "content": [
+            "constituent",
+            "B"
+          ],
+          "kind": "contains",
+          "source": "A",
+          "target": "B"
+        },
+        {
+          "content": [
+            "constituent",
+            "C"
+          ],
+          "kind": "contains",
+          "source": "D",
+          "target": "C"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "REACHED_VIA",
+    "options": [
+      "via:E",
+      "via:C",
+      "absent",
+      "direct"
+    ],
+    "question": {
+      "idea": "D",
+      "part": "A7"
+    },
+    "record_id": "9c0ff55987754acff51701498956d167d8f408aaedb1a95ea876bf4cca82af70",
+    "reference": {
+      "method": "reach_kind",
+      "used_relations": [
+        "contains"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "green",
+    "family": "binding",
+    "family_seed": 20261910,
+    "framings": {
+      "cas": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhat is the color of obj1?\nChoose one option.\n",
+      "generic": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\nRead the graph. Answer the request.\nWhat is the color of obj1?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "obj1",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "obj2",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "obj3",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj1",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "obj1",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "obj1",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj2",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "obj2",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "obj2",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "obj3",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "obj3",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "obj3",
+          "target": "val_1"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "READ_VALUE",
+    "options": [
+      "green",
+      "red"
+    ],
+    "question": {
+      "field": "color",
+      "object": "obj1"
+    },
+    "record_id": "bdbefff7d3e59c66021f37ab3d31a08a99df0b9091465595024b808c05e0e3f5",
+    "reference": {
+      "method": "field_value",
+      "used_relations": [
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "obj2",
+    "family": "binding",
+    "family_seed": 20261910,
+    "framings": {
+      "cas": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhich object contains value=2?\nChoose one option.\n",
+      "generic": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\nRead the graph. Answer the request.\nWhich object contains value=2?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "obj1",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "obj2",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "obj3",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj1",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "obj1",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "obj1",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj2",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "obj2",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "obj2",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "obj3",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "obj3",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "obj3",
+          "target": "val_1"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "CONTAINING_NODE",
+    "options": [
+      "obj3",
+      "obj2",
+      "obj1"
+    ],
+    "question": {
+      "field": "value",
+      "value": 2
+    },
+    "record_id": "e58886102d2a5f94f5547d560db68240ab54ef603c15abc55ddf7870fbf87665",
+    "reference": {
+      "method": "objects_with_field",
+      "used_relations": [
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "has_color",
+    "family": "binding",
+    "family_seed": 20261910,
+    "framings": {
+      "cas": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nWhich named relation holds between obj3 and the value val_red?\nChoose one option.\n",
+      "generic": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\nRead the graph. Answer the request.\nWhich named relation holds between obj3 and the value val_red?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "obj1",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "obj2",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "obj3",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj1",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "obj1",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "obj1",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj2",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "obj2",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "obj2",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "obj3",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "obj3",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "obj3",
+          "target": "val_1"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "IDENTIFY_CONNECTION",
+    "options": [
+      "has_value",
+      "contains",
+      "has_color",
+      "has_shape"
+    ],
+    "question": {
+      "source": "obj3",
+      "target": "val_red"
+    },
+    "record_id": "e0ed59706c34fe66f75d41ab7b4e6bd121c46fe454d875a304276e76c450b7dc",
+    "reference": {
+      "method": "relation_kind_between",
+      "used_relations": [
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  },
+  {
+    "correct": "obj1",
+    "family": "binding",
+    "family_seed": 20261910,
+    "framings": {
+      "cas": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode request kind=request\nnode request_req0 kind=requirement property=shape value=triangle\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\nrel request --requires--> request_req0\nrel request --triggers--> obj1\nrel request --triggers--> obj2\nrel request --triggers--> obj3\n^8 What brought these ideas into consideration? The request triggers them; triggering is not deduction.\n^6 What is inside each idea? Read its fields and its outgoing connectors; the branch IS the connector.\n^9 What follows from the operation? The selection the checker derives; nothing in the graph marks it.\nThe request requires shape=triangle. Which object satisfies the request?\nChoose one option.\n",
+      "generic": "node obj1 kind=object color=green shape=triangle value=3\nnode val_green kind=property_value field=color value=green\nnode val_triangle kind=property_value field=shape value=triangle\nnode val_3 kind=property_value field=value value=3\nnode obj2 kind=object color=green shape=square value=2\nnode val_square kind=property_value field=shape value=square\nnode val_2 kind=property_value field=value value=2\nnode obj3 kind=object color=red shape=circle value=1\nnode val_red kind=property_value field=color value=red\nnode val_circle kind=property_value field=shape value=circle\nnode val_1 kind=property_value field=value value=1\nnode request kind=request\nnode request_req0 kind=requirement property=shape value=triangle\nrel obj1 --has_color--> val_green\nrel obj1 --has_shape--> val_triangle\nrel obj1 --has_value--> val_3\nrel obj2 --has_color--> val_green\nrel obj2 --has_shape--> val_square\nrel obj2 --has_value--> val_2\nrel obj3 --has_color--> val_red\nrel obj3 --has_shape--> val_circle\nrel obj3 --has_value--> val_1\nrel request --requires--> request_req0\nrel request --triggers--> obj1\nrel request --triggers--> obj2\nrel request --triggers--> obj3\nRead the graph. Answer the request.\nThe request requires shape=triangle. Which object satisfies the request?\nChoose one option.\n"
+    },
+    "graph": {
+      "nodes": [
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "triangle"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "obj1",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "green"
+            ]
+          ],
+          "identifier": "val_green",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "val_triangle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              3
+            ]
+          ],
+          "identifier": "val_3",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "green"
+            ],
+            [
+              "shape",
+              "square"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "obj2",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "square"
+            ]
+          ],
+          "identifier": "val_square",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              2
+            ]
+          ],
+          "identifier": "val_2",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "color",
+              "red"
+            ],
+            [
+              "shape",
+              "circle"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "obj3",
+          "kind": "object"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "color"
+            ],
+            [
+              "value",
+              "red"
+            ]
+          ],
+          "identifier": "val_red",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "shape"
+            ],
+            [
+              "value",
+              "circle"
+            ]
+          ],
+          "identifier": "val_circle",
+          "kind": "property_value"
+        },
+        {
+          "fields": [
+            [
+              "field",
+              "value"
+            ],
+            [
+              "value",
+              1
+            ]
+          ],
+          "identifier": "val_1",
+          "kind": "property_value"
+        },
+        {
+          "fields": [],
+          "identifier": "request",
+          "kind": "request"
+        },
+        {
+          "fields": [
+            [
+              "property",
+              "shape"
+            ],
+            [
+              "value",
+              "triangle"
+            ]
+          ],
+          "identifier": "request_req0",
+          "kind": "requirement"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj1",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "has_shape",
+          "source": "obj1",
+          "target": "val_triangle"
+        },
+        {
+          "content": [
+            "value",
+            3
+          ],
+          "kind": "has_value",
+          "source": "obj1",
+          "target": "val_3"
+        },
+        {
+          "content": [
+            "color",
+            "green"
+          ],
+          "kind": "has_color",
+          "source": "obj2",
+          "target": "val_green"
+        },
+        {
+          "content": [
+            "shape",
+            "square"
+          ],
+          "kind": "has_shape",
+          "source": "obj2",
+          "target": "val_square"
+        },
+        {
+          "content": [
+            "value",
+            2
+          ],
+          "kind": "has_value",
+          "source": "obj2",
+          "target": "val_2"
+        },
+        {
+          "content": [
+            "color",
+            "red"
+          ],
+          "kind": "has_color",
+          "source": "obj3",
+          "target": "val_red"
+        },
+        {
+          "content": [
+            "shape",
+            "circle"
+          ],
+          "kind": "has_shape",
+          "source": "obj3",
+          "target": "val_circle"
+        },
+        {
+          "content": [
+            "value",
+            1
+          ],
+          "kind": "has_value",
+          "source": "obj3",
+          "target": "val_1"
+        },
+        {
+          "content": [
+            "shape",
+            "triangle"
+          ],
+          "kind": "requires",
+          "source": "request",
+          "target": "request_req0"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "obj1"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "obj1"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "obj2"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "obj2"
+        },
+        {
+          "content": [
+            "under_consideration",
+            "obj3"
+          ],
+          "kind": "triggers",
+          "source": "request",
+          "target": "obj3"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "FOLLOW_ONE_HOP",
+    "options": [
+      "obj3",
+      "obj1",
+      "obj2"
+    ],
+    "question": {
+      "request": "request",
+      "requirements": [
+        [
+          "shape",
+          "triangle"
+        ]
+      ]
+    },
+    "record_id": "63736bf8536572950238527a32c9ac16ec57503b489fcbe275e9a5677fde38c6",
+    "reference": {
+      "method": "select_object",
+      "used_relations": [
+        "requires",
+        "has_color",
+        "has_shape",
+        "has_value"
+      ]
+    },
+    "schema": "cas-meta2-graph-teaching-exercise/1",
+    "split": "practice"
+  }
+]

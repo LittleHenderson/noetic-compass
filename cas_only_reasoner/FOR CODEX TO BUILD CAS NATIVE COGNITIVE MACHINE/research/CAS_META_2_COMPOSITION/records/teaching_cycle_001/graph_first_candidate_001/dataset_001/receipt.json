@@ -1,0 +1,28 @@
+{
+  "counts": {
+    "practice": 16,
+    "test": 16,
+    "train": 48,
+    "validation": 16
+  },
+  "files": {
+    "practice.json": {
+      "bytes": 113039,
+      "sha256": "c0fa7d1fd6ecbcb74da3bdbdf85acf0e8ae57f8500e004ca0b0b1876a10c1862"
+    },
+    "test.json": {
+      "bytes": 112701,
+      "sha256": "0519f9491f3553084ee3d376dcbfe3ade2b2f5eb8f68d6b1e77a943fa910ed11"
+    },
+    "train.json": {
+      "bytes": 333138,
+      "sha256": "43d697f159b41c5ca519cc1d58638140acd2a6631ddd69f109455950a384dc5a"
+    },
+    "validation.json": {
+      "bytes": 109814,
+      "sha256": "d2ab77918dd5e4f6891d66f53d7cb123df60fc27cc5b54a73a4635e984e87a5a"
+    }
+  },
+  "schema": "cas-meta2-graph-teaching-dataset-receipt/1",
+  "seed": 20260909
+}
