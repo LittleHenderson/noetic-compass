@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-ln3-diagnostic/package/_inner_runner.py\", line 24, in <module>\n    learner = GraphLearner(torch, framework, tasks, device, learning_rate=0.003)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-ln3-diagnostic/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 181, in __init__\n    content = self._content_ids(slot_ids)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-ln3-diagnostic/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 206, in _content_ids\n    require(all(content), \"OPTION_CONTENT_REQUIRED\")\n  File \"/opt/cas-ln3-diagnostic/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 29, in require\n    raise ValueError(code)\nValueError: OPTION_CONTENT_REQUIRED\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7",
+  "schema": "cas-graph-training-ln3-diagnostic-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}

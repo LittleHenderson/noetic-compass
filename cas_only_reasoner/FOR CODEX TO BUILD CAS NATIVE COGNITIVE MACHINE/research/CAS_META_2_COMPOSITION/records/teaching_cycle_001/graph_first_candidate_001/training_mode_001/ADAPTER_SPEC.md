@@ -45,8 +45,11 @@ module input:
    IDENTICAL vector from every option only shifts every score equally
    (softmax-invariant), so the removal changes decisions only through count
    differences; any finite-precision benefit is a hypothesis to be measured.
-   Fail-closed: `OPTION_CONTENT_REQUIRED`. See
-   `REPRESENTATION_CORRECTION_002.md`.
+   An option whose tokens are ALL shared by the other two (a strict-subset
+   option; 10 of the 60 training+practice records have one) has empty content
+   and is represented by the ZERO vector — its relative score is exactly the
+   common shift (attempt 004's preserved crash on this case is now fixed and
+   test-locked). See `REPRESENTATION_CORRECTION_002.md`.
 
 ## 2. What the module is and what it predicts
 

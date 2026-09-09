@@ -72,6 +72,10 @@ def test_learner_options_content_only_and_problem_stays_mean():
         def stack(vectors):
             return Stack(vectors)
 
+        @staticmethod
+        def zeros_like(vector):
+            return Vector([0.0] * len(vector.values))
+
         class optim:
             class AdamW:
                 def __init__(self, params, lr=0.001, weight_decay=0.0):
@@ -104,9 +108,11 @@ def test_learner_options_content_only_and_problem_stays_mean():
     assert learner._option_vectors[0][2].values == [3.0, 3.0]  # o1+o2, NOT s
 
 
-def test_learner_rejects_options_with_no_content():
-    """Correction 002 fail-closed: an option whose tokens are ALL shared by
-    the other two has no content and must be rejected, never silently zero."""
+def test_learner_empty_content_option_becomes_zero_vector():
+    """Correction 002 edge (attempt 004's preserved error): an option whose
+    tokens are ALL shared by the other two (a strict-subset option) has empty
+    content and is represented by the ZERO vector — its score relative to the
+    common baseline is exactly the common shift. Never a crash."""
     from cas_meta2.graph_teaching import real_framework
 
     class Vector:
@@ -118,15 +124,20 @@ def test_learner_rejects_options_with_no_content():
             self.vectors = vectors
 
         def mean(self, dim=0):
-            return Vector([0.0])
+            return Vector([0.0, 0.0])
 
         def sum(self, dim=0):
-            return Vector([0.0])
+            return Vector([sum(v.values[i] for v in self.vectors)
+                           for i in range(len(self.vectors[0].values))])
 
     class Torch:
         @staticmethod
         def stack(vectors):
             return Stack(vectors)
+
+        @staticmethod
+        def zeros_like(vector):
+            return Vector([0.0] * len(vector.values))
 
         class optim:
             class AdamW:
@@ -138,18 +149,25 @@ def test_learner_rejects_options_with_no_content():
             return []
 
     class Encoder:
+        embeddings = {"p1": [1.0, 0.0], "a": [1.0, 0.0], "b": [0.0, 1.0],
+                      "c": [1.0, 1.0], "s": [9.0, 9.0]}
+
         def encode(self, public):
-            return ["p1"], {0: ["s"], 1: ["s"], 2: ["s"]}
+            # option 0 = [a, s] is a strict subset: a and s both appear in
+            # options 1 and 2 -> after removing {a, s}, its content is empty
+            return ["p1"], {0: ["a", "s"], 1: ["a", "b", "s"], 2: ["a", "c", "s"]}
 
         def embed(self, token_id):
-            return Vector([1.0])
+            return Vector(self.embeddings[token_id])
 
     encoder = Encoder()
     framework = SimpleNamespace(
         encoder={"encode": encoder.encode, "embed": encoder.embed}, module=Module())
-    with pytest.raises(ValueError, match="OPTION_CONTENT_REQUIRED"):
-        real_framework.GraphLearner(
-            Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
+    learner = real_framework.GraphLearner(
+        Torch, framework, [{"record_id": "r1", "public": {}}], "cuda:0", 0.003)
+    assert learner._option_vectors[0][0].values == [0.0, 0.0]  # empty -> zero
+    assert learner._option_vectors[0][1].values == [0.0, 1.0]  # b only
+    assert learner._option_vectors[0][2].values == [1.0, 1.0]  # c only
 
 
 def test_learner_sealed_predict_path_uses_content_only_options():
@@ -160,7 +178,7 @@ def test_learner_sealed_predict_path_uses_content_only_options():
     source = inspect.getsource(real_framework.GraphLearner)
     assert 'self._problem_vectors.append(self._mean(problem_ids))' in source
     assert 'content = self._content_ids(slot_ids)' in source
-    assert 'self._option_vectors.append([self._sum(item) for item in content])' in source
+    assert 'self._sum(item) if item else zero' in source
     assert 'content = self._content_ids(slot_ids)' in inspect.getsource(
         real_framework.GraphLearner.predict)
     assert 'stacked.sum(dim=0)' in source and 'stacked.mean(dim=0)' in source

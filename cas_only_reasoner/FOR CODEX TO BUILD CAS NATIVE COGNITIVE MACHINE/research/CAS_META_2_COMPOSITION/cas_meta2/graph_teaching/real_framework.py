@@ -179,7 +179,9 @@ class GraphLearner:
             problem_ids, slot_ids = framework.encoder["encode"](task["public"])
             self._problem_vectors.append(self._mean(problem_ids))
             content = self._content_ids(slot_ids)
-            self._option_vectors.append([self._sum(item) for item in content])
+            zero = self.torch.zeros_like(self._problem_vectors[-1])
+            self._option_vectors.append([self._sum(item) if item else zero
+                                         for item in content])
 
     def _mean(self, token_ids):
         vectors = [self.framework.encoder["embed"](token_id) for token_id in token_ids]
@@ -198,13 +200,15 @@ class GraphLearner:
 
     def _content_ids(self, slot_ids):
         """Correction 002: per-occurrence removal of tokens shared by all
-        three options (count-respecting; NOT an identical-vector shift)."""
+        three options (count-respecting; NOT an identical-vector shift). An
+        option whose tokens are ALL shared by the other two (a strict subset
+        option — 10 of the 60 training+practice records have one) yields
+        EMPTY content, represented by the zero vector: its score relative to
+        the common baseline is exactly the common shift."""
         sequences = [slot_ids[slot] for slot in (0, 1, 2)]
         shared = set(sequences[0]) & set(sequences[1]) & set(sequences[2])
-        content = [[token_id for token_id in sequence if token_id not in shared]
-                   for sequence in sequences]
-        require(all(content), "OPTION_CONTENT_REQUIRED")
-        return content
+        return [[token_id for token_id in sequence if token_id not in shared]
+                for sequence in sequences]
 
     def _position(self, task):
         return self._index[task["record_id"]]

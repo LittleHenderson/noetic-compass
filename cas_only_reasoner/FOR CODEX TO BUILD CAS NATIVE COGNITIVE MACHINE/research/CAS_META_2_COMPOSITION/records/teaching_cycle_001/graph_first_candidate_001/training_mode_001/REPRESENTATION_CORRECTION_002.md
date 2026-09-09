@@ -59,8 +59,13 @@ NOT establish how much numerical change survives averaging.
 ## Prepared corrections (code + tests committed; nothing launched)
 
 **A. Candidate shared-contribution removal** (`real_framework.GraphLearner`,
-per-occurrence, count-respecting, fail-closed `OPTION_CONTENT_REQUIRED`).
-Claim status per section above: candidate; effect on decisions unmeasured.
+per-occurrence, count-respecting). An option whose tokens are ALL shared by
+the other two (a strict-subset option — measured: 10 of the 60
+training+practice records have one) has empty content and is represented by
+the ZERO vector: its score relative to the common baseline is exactly the
+common shift (attempt 004's preserved crash on this case is fixed and
+test-locked). Claim status per section above: candidate; effect on decisions
+unmeasured.
 
 **B. Matched framing comparison** (`aws/graph_training_launch.py` worker):
 one candidate copy PER arm, second module's state cloned from the first,

@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 004 failed on the empty-content guard; strict-subset options measured; zero-vector fix
+
+Replacement authorized by the owner (GO; `OWNER_AUTHORIZATION_AWS_LN3_004.json`,
+new `$4.00` reservation, ledger 37 → 38: `$202.00` reserved, `$198.00`
+unreserved). The visibility fixes held (cleanup complete, instance
+`i-019d1d579572101ad` confirmed terminated), but the worker raised
+`OPTION_CONTENT_REQUIRED`: the correction-002 guard fired on REAL data —
+measured locally, 10 of the 60 training+practice records have a
+strict-subset option whose tokens are ALL shared by the other two options
+(empty content after removal). Fixed: an empty-content option is now the
+ZERO vector (its relative score is exactly the common shift), test-locked;
+104 graph tests pass. Preserved in `ATTEMPT_LN3_004_FAILURE.md` (result sha
+`70f3ce3c…`). Measurements still outstanding; a replacement needs a NEW
+owner authorization + NEW `$4.00` reservation + rebuilt package.
+
 ## 2026-09-09 - Graph-first ^6: ln(3) diagnostic attempt 003 failed on transient EC2 visibility; live instance terminated; launchers fixed
 
 Owner GO authorized step 1 (measurement-only extended diagnostic, new
