@@ -45,6 +45,7 @@ from __future__ import annotations
 
 import json
 import math
+import random
 
 from .graph import Graph
 from .lessons import EXERCISE_SCHEMA
@@ -147,24 +148,40 @@ def scoring_table():
 def public_records(record, arm):
     """One frozen public record per exercise: problem + EXACTLY 3 observations.
 
-    The campaign's public codec accepts only ``{"problem", "observations"}``
-    with exactly three observations covering slots 0,1,2, tags <=256 chars and
-    8 finite values each (attempt 004's preserved error:
-    PUBLIC_INPUT_FIELDS_INVALID). The correct option is always included as one
-    of the three; distractors follow, padded with a literal 'none' option when
-    fewer exist. The deterministic reference is the option set itself — no
-    answer edge is stored anywhere.
+    Boundary (owner ruling): the public exercise is THREE UNMARKED choices;
+    the learner decides which answers the question. The private target is
+    NEVER used to order, position, mark, or specially encode a choice: the
+    three options are ordered deterministically from the PUBLIC content only
+    (digest of the record id), so changing or removing the private target
+    does not change the encoded input. The separate target is returned as
+    ``encoded_correct_index`` for the checker's corrective feedback during
+    training only.
+
+    Padding uses the literal 'none_of_the_above' option, which never collides
+    with lesson options (part names, 'none', or part lists).
+
+    Choice meanings (the three-slot interface does not change the lessons):
+    LIST_PARTS option = the COMPLETE sorted list of direct constituents;
+    FIND_SHARED_PART option = ONE shared constituent or 'none';
+    REACHED_VIA option = the COMPLETE reach label (direct | via:<constituent>
+    | absent).
     """
     from ..codec import validate_public  # frozen public contract (pure)
+    from .graph import digests
     require(record.get("schema") == EXERCISE_SCHEMA, "TASK_RECORD_SCHEMA")
     require(arm in ("cas", "generic"), "ARM_UNKNOWN")
     options = list(record["options"])
     correct = record["correct"]
     require(options.count(correct) == 1, "TASK_CORRECT_OPTION_MISSING")
-    ordered = [correct] + [option for option in options if option != correct]
-    ordered = ordered[:3]
+    pad = "none_of_the_above"
+    ordered = [option for option in options if option != pad]
+    if len(ordered) > 3:  # never drop the correct option
+        ordered = [correct] + [option for option in ordered if option != correct][:2]
     while len(ordered) < 3:
-        ordered.append("none")
+        ordered.append(pad)
+    # public-content-derived deterministic order; NEVER correct-first
+    seed = int(digests(record["record_id"] + ":" + arm)[:8], 16)
+    random.Random(seed).shuffle(ordered)
     require(len(ordered) == 3 and ordered.count(correct) == 1, "PUBLIC_OPTION_ENCODING")
     observations = [{"slot": index, "tag": str(option)[:256], "values": [0.0] * 8}
                     for index, option in enumerate(ordered)]

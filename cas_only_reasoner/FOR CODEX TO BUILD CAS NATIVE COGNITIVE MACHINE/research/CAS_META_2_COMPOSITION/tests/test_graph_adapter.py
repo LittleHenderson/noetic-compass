@@ -119,5 +119,43 @@ def test_public_records_pad_with_literal_none_option():
     record = dict(base)
     record["options"] = [base["correct"], "distractor-only"]
     task = adapter.public_records(record, arm="generic")
-    assert task["encoded_options"] == [base["correct"], "distractor-only", "none"]
-    assert task["encoded_correct_index"] == 0
+    assert task["encoded_options"].count("none_of_the_above") == 1
+    assert task["encoded_options"].count(base["correct"]) == 1
+    assert task["encoded_correct_index"] == task["encoded_options"].index(base["correct"])
+
+
+def test_correct_position_is_not_a_constant_slot():
+    """The private target must not be identifiable by position: across the
+    records the correct option's slot varies."""
+    dataset = lessons.build_dataset(seed=20260909)
+    records = [record for record in dataset["train"] + dataset["practice"]
+               if record["family"] == "whole_part"]
+    positions = {adapter.public_records(record, arm="generic")["encoded_correct_index"]
+                 for record in records}
+    assert len(positions) >= 2
+
+
+def test_encoded_input_does_not_change_with_the_private_target():
+    """Fixing the public exercise and swapping its private target must leave
+    the encoded input identical: the encoder never consults the answer."""
+    dataset = lessons.build_dataset(seed=20260909)
+    base = next(record for record in dataset["train"]
+                if record["family"] == "whole_part" and len(record["options"]) == 3)
+    a = dict(base)
+    a["correct"] = base["options"][1]
+    b = dict(base)
+    b["correct"] = base["options"][2]
+    task_a = adapter.public_records(a, arm="generic")
+    task_b = adapter.public_records(b, arm="generic")
+    assert task_a["public"] == task_b["public"]          # encoded input identical
+    assert task_a["encoded_correct_index"] != task_b["encoded_correct_index"]  # target differs
+
+
+def test_problem_contains_the_graph_facts():
+    """The graph facts needed to solve the question remain in the model's
+    input: the problem text carries the full graph rendering."""
+    dataset = lessons.build_dataset(seed=20260909)
+    record = next(r for r in dataset["train"] if r["family"] == "whole_part")
+    task = adapter.public_records(record, arm="generic")
+    from cas_meta2.graph_teaching.graph import Graph
+    assert Graph.from_record(record["graph"]).render().rstrip() in task["public"]["problem"]

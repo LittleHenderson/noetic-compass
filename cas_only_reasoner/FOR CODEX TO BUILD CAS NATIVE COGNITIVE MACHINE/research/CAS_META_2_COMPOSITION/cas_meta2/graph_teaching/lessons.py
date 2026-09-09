@@ -124,13 +124,15 @@ def whole_part_family(seed):
 
 
 def _shuffled_options(rng, correct, distractors):
-    """Deterministic unique option list containing exactly one correct entry."""
+    """Deterministic PUBLIC choice list: exactly up to 3 unmarked options
+    (the three-slot interface). The private target is recorded separately and
+    never influences which choices appear."""
     options = [correct]
     for candidate in distractors:
-        if candidate not in options and len(options) < 4:
+        if candidate not in options and len(options) < 3:
             options.append(candidate)
     rng.shuffle(options)
-    require(len(options) >= 2 and options.count(correct) == 1, "OPTIONS_INVALID")
+    require(2 <= len(options) <= 3 and options.count(correct) == 1, "OPTIONS_INVALID")
     return options
 
 
