@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 17, in <module>\n    encoder = build_encoder(torch, publics, d_model=64, seed=20260909,\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 103, in build_encoder\n    projection = torch.randn((len(vocabulary), d_model), generator=generator,\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Expected a 'cuda' device type for generator but found 'cpu'\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909054806-78ffe06a",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
