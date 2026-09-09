@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph-training/package/_inner_runner.py\", line 16, in <module>\n    encoder = build_encoder(torch, texts, d_model=64, seed=20260909)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 90, in build_encoder\n    tokenizer = LosslessPublicTokenizer.fit_train(tuple(texts),\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 108, in fit_train\n    _require(type(train_public) is list and 1 <= len(train_public) <= MAX_TRAIN_EXAMPLES,\n  File \"/opt/cas-graph-training/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 37, in _require\n    raise PolicyContractError(reason)\ncas_meta2.codec.PolicyContractError: LOSSLESS_TRAIN_INPUT_INVALID\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-teaching-graph-20260909024008-f27c195e",
+  "schema": "cas-graph-training-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}
