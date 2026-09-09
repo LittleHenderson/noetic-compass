@@ -1,0 +1,48 @@
+{
+  "authorization": {
+    "archive_sha256": "2f3b027d57bc67e0d763b0b08ff433b53b1cb2d90e2c17ebca2e23004c52eff4",
+    "authorization_context": "Competence run 005 \u2014 REPLACEMENT for run 004, which went the farthest yet: stage 1 passed on the GPU, stage 2 trained, and the REGISTERED FIT CRITERION WAS MET (mean after-loss < mean before-loss - 0.02), then stage 3 crashed on a sealed record whose option is a strict subset because the SEALED predict path lacked the zero-vector fallback training already has. Fixed with zeros_like(value) plus a behavioral regression test; 130 graph tests pass. Everything else is UNCHANGED from COMPETENCE_RUN_001.md: ONE job runs the whole fixed sequence, single arm (cas framing), no two-arm comparison. STAGE 1 (zero optimizer steps): input-level relationship gate + forward/backward sanity; failure returns STAGE1_CHECK_FAILED with preserved numbers. STAGE 2: bounded training on the familiar train+practice whole-part examples \u2014 64 optimizer steps / 600 s, lr 0.003, learning curve every 8 steps, digest containment (operation:^6 only). STAGE 3 (only if the fit criterion is met): sealed validation/test evaluation with predictions recorded before answers, plus familiar-example accuracy, reported separately. Deliverable: exactly one of LEARNED_AND_TRANSFERRED / LEARNED_NO_TRANSFER / DID_NOT_FIT / STAGE1_CHECK_FAILED, computed by a deterministic rule. No silent mid-run patches, no unlimited retries, no spending beyond this single job; the training pilot beyond this run stays pending.",
+    "bound_request_sha256": "98ead74e60057575a1e740c358cbb25b66961d547643d43f8fca0c41921c9553",
+    "competence_run": "AUTHORIZED_BY_OWNER",
+    "job": "cas-meta2-competence-20260909210625-0a10f14d",
+    "launcher": "aws/graph_training_competence_launch.py at commit 4489889c9813260d76a376f234765015cacca5ae",
+    "manifest_sha256": "0dd008e7e189f050c081cae3e114f7eec29d113cbd354396636022f37828a8c5",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_package_005/",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/competence_launch_005/launch_request.json",
+    "source_sha": "52068640b6464867c303b5f7d8b4aacff8c12a8c"
+  },
+  "execution_gates": [
+    "single launch attempt through the competence launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "stage 3 reads sealed splits ONLY after the registered fit criterion is met; predictions recorded before answers",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "any saturation or config change, any allowance change beyond the declared 64 steps / 600 s",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "GOOD JOB YOU DID GREAT....I BELIEVE IN YOU.... GO",
+  "recorded_utc": "2026-09-09T21:06:25.896178+00:00",
+  "run_bounds": {
+    "arms": [
+      "cas"
+    ],
+    "automatic_retries": 0,
+    "data": {
+      "familiar": "train+practice whole-part",
+      "fresh": "sealed validation+test"
+    },
+    "jobs": 1,
+    "per_run": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "reservation_usd": "4.00"
+  },
+  "schema": "cas-graph-training-competence-owner-authorization/1"
+}
