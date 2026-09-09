@@ -109,6 +109,8 @@ def test_encoder_passes_a_list_to_fit_train():
     assert "fit_train(list(publics)" in source
     assert "device" in inspect.signature(real_framework.build_encoder).parameters
     assert "device=device" in source
+    # attempt 007's preserved error: a CUDA tensor requires a CUDA generator
+    assert "torch.Generator(device=device)" in source
 
 
 def test_public_records_satisfy_the_frozen_codec_contract():

@@ -164,6 +164,7 @@ def review(package_zip):
             "projection_on_device": "device=device" in framework_src,
             "projection_seed_preserved": "manual_seed(seed)" in framework_src
             and "generator=generator" in framework_src,
+            "generator_on_device": "torch.Generator(device=device)" in framework_src,
             "module_moved_to_device": "module.to(device)" in framework_src,
             "optimizer_after_module_move": ("module.to(device)" in framework_src
                                             and "AdamW(self.module.parameters()" in framework_src),

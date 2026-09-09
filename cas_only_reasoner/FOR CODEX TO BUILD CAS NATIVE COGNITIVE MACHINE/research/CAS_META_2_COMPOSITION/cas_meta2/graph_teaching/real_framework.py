@@ -99,7 +99,7 @@ def build_encoder(torch, publics, d_model, seed, device):
                                                   max_length=FROZEN_ENCODER_MAX_LENGTH)
     vocabulary = tuple(tokenizer.vocabulary)
     index = {token: position for position, token in enumerate(vocabulary)}
-    generator = torch.Generator().manual_seed(seed)
+    generator = torch.Generator(device=device).manual_seed(seed)
     projection = torch.randn((len(vocabulary), d_model), generator=generator,
                              device=device)
     projection = projection / (float(d_model) ** 0.5)
