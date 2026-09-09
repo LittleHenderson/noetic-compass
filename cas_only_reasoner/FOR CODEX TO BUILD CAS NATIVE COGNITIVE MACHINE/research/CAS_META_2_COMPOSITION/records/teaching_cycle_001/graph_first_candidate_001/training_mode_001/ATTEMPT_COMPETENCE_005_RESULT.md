@@ -80,3 +80,44 @@ three ops. Familiar-example accuracy: **24 / 30**.
   problem encoder with per-line joint binding, unit normalization of bound
   lines (competence run 002's measurement), and the serialization/edge-case
   fixes from competence runs 001/003/004.
+
+## Owner verification and correction (2026-09-09)
+
+The owner independently recomputed the result SHA-256
+(`ab085d68…`, matching the sidecar, the parent receipt, and this report),
+recomputed the mean losses (1.09836 → 0.56441, a 48.6% reduction against a
+registered 0.02 threshold), and counted the stored predictions (24/30
+familiar). The arithmetic supports the registered outcome.
+
+**Correction, verified here independently: the 12 evaluation records are
+NOT a newly untouched panel.** Comparing the saved result files: the
+competence-005 sealed IDs and the attempt-010 sealed IDs overlap **12 of
+12** (identical sets), while they are disjoint from this run's 30 familiar
+IDs (0 overlap). So the correct statement is:
+
+> **Held out from this run's reported training: yes. A newly untouched
+> evaluation panel for the development process: no.**
+
+The registered outcome is unchanged; the strongest accurate summary is:
+
+> **The targeted ^6 module substantially improved on its practice task and
+> met the registered transfer threshold on previously evaluated,
+> non-training examples.**
+
+The 7/12 is encouraging evidence on that panel. Confirming transfer on
+genuinely new material is the next step — recording predictions before
+consulting answers does not erase a panel's earlier use.
+
+Per-operation counts (owner-recomputed from the stored predictions; also
+reproduced here): familiar LIST_PARTS 9/10, FIND_SHARED_PART 10/10,
+REACHED_VIA 5/10; evaluation LIST_PARTS 2/4, FIND_SHARED_PART 3/3,
+REACHED_VIA 2/5. Strongest skill: finding the shared part. Weakest:
+following the connecting route (five of the six familiar mistakes).
+
+**Owner recommendation: freeze this successful candidate and confirm the
+result — do not redesign it.** The next bounded experiment keeps the
+working representation, module, and allowance fixed; uses a small,
+predeclared set of independent seeds; and evaluates on newly generated
+examples that exclude the previously examined panel. No launch is
+authorized by that recommendation; the prepared request follows separately.
+

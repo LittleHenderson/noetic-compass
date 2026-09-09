@@ -25,10 +25,33 @@ from __future__ import annotations
 from .graph import Graph, require
 
 SCHEMA = "cas-graph-training-competence-result/1"
+CONFIRMATION_SCHEMA = "cas-graph-training-confirmation-result/1"
 FIT_MARGIN = 0.02          # mean before-loss - mean after-loss must exceed this
 TRANSFER_THRESHOLD = 6     # sealed combined correct of 12 (chance expectation 4)
 HISTORY_EVERY = 8
 REWIRE_TOLERANCE = 10.0    # rewire difference must exceed 10x the reorder baseline
+
+# Predeclared confirmation design (owner-recommended, frozen candidate):
+# a small set of independent dataset/initialization seeds, evaluated on NEWLY
+# GENERATED examples (fresh dataset seed => fresh sealed panel, excluding the
+# previously examined attempt-010 panel).
+CONFIRM_SEEDS = (20260910, 20260911, 20260912)
+CONFIRM_MIN_SEEDS_FIT = 2        # at least 2 of 3 must meet the fit criterion
+CONFIRM_MIN_SEEDS_TRANSFER = 2   # at least 2 of 3 must reach the transfer threshold
+# The registered transfer bar is ABSOLUTE (6 correct of 12) and stays the
+# primary rule. The frozen lesson generator produces a seed-dependent sealed
+# panel size, so the panel-normalized reading — at least half of that seed's
+# panel, never below the registered 6 — is ALSO reported for every seed. It is
+# a reported number, not a silent reinterpretation: the primary verdict uses
+# the registered absolute rule unless the owner authorizes the normalized
+# reading before launch.
+
+
+def panel_normalized_threshold(attempted):
+    """Conservative comparable bar: at least half of that seed's sealed panel,
+    never below the registered absolute threshold."""
+    require(type(attempted) is int and attempted > 0, "PANEL_SIZE_REQUIRED")
+    return max(TRANSFER_THRESHOLD, -(-attempted // 2))
 
 
 def mean(values):
@@ -72,14 +95,78 @@ def stage1_passes(relationship_check, sanity):
             and max(sanity["per_target_max_gradient_norm"]) > 0.0)
 
 
-def _partial_result(run_id, arm, stage1, outcome_label):
-    return {"schema": SCHEMA, "run_id": run_id, "arm": arm,
+def _partial_result(run_id, arm, stage1, outcome_label, seed=None):
+    return {"schema": SCHEMA, "run_id": run_id, "arm": arm, "seed": seed,
             "stage1": stage1, "stage2": None, "fit_criterion": None,
             "stage3": None, "outcome": outcome_label,
             "claims": {"specialist_claimed": False,
                        "sealed_splits_read": False,
                        "answer_edges_present": False,
                        "two_arm_comparison_claimed": False}}
+
+
+def _sealed_row(run):
+    stage3 = run.get("stage3") or {}
+    correct = stage3.get("sealed_total_correct")
+    attempted = stage3.get("sealed_total_attempted")
+    ran = bool(stage3.get("ran"))
+    normalized_bar = (panel_normalized_threshold(attempted)
+                      if ran and isinstance(attempted, int) and attempted > 0 else None)
+    return {"seed": run["seed"], "outcome": run["outcome"],
+            "margin": (run["fit_criterion"] or {}).get("margin"),
+            "fit_met": bool((run.get("fit_criterion") or {}).get("met")),
+            "sealed_total_correct": correct,
+            "sealed_total_attempted": attempted,
+            "sealed_ran": ran,
+            "registered_threshold": TRANSFER_THRESHOLD,
+            "registered_met": bool(ran and (correct or 0) >= TRANSFER_THRESHOLD),
+            "panel_normalized_threshold": normalized_bar,
+            "panel_normalized_met": bool(ran and normalized_bar is not None
+                                         and (correct or 0) >= normalized_bar),
+            "chance_expectation": (attempted / 3.0 if isinstance(attempted, int)
+                                   and attempted > 0 else None),
+            "familiar_correct": (stage3.get("familiar") or {}).get("correct"),
+            "familiar_attempted": (stage3.get("familiar") or {}).get("attempted")}
+
+
+def confirmation_outcome(runs):
+    """The registered repeat rule for the confirmation experiment: computed
+    deterministically from the per-seed runs. REPLICATED requires at least
+    CONFIRM_MIN_SEEDS_FIT seeds meeting the fit criterion AND at least
+    CONFIRM_MIN_SEEDS_TRANSFER seeds reaching the sealed transfer threshold
+    on the NEWLY generated panel; anything else is NOT_REPLICATED (reported
+    with the per-seed numbers).
+
+    Two readings of the transfer bar are reported because the frozen lesson
+    generator yields a seed-dependent panel size (observed 11, 11 and 13 for
+    the three predeclared seeds versus 12 for the previously examined panel):
+    the REGISTERED absolute rule (>= 6) — which decides the primary verdict —
+    and the conservative panel-normalized reading (>= half of that seed's
+    panel, never below 6). The primary verdict uses the registered rule.
+    """
+    rows = [_sealed_row(run) for run in runs]
+    fit = sum(1 for row in rows if row["fit_met"])
+    transferred = sum(1 for row in rows if row["registered_met"])
+    transferred_normalized = sum(1 for row in rows if row["panel_normalized_met"])
+    replicated = (fit >= CONFIRM_MIN_SEEDS_FIT
+                  and transferred >= CONFIRM_MIN_SEEDS_TRANSFER)
+    replicated_normalized = (fit >= CONFIRM_MIN_SEEDS_FIT
+                             and transferred_normalized >= CONFIRM_MIN_SEEDS_TRANSFER)
+    return {"schema": "cas-graph-training-confirmation-outcome/1",
+            "seeds": [run["seed"] for run in runs],
+            "runs": len(runs),
+            "fit_seeds": fit, "transfer_seeds": transferred,
+            "transfer_seeds_panel_normalized": transferred_normalized,
+            "required_fit_seeds": CONFIRM_MIN_SEEDS_FIT,
+            "required_transfer_seeds": CONFIRM_MIN_SEEDS_TRANSFER,
+            "transfer_threshold": TRANSFER_THRESHOLD,
+            "transfer_rule": "registered absolute: sealed correct >= 6",
+            "secondary_rule": ("panel-normalized reading (reported only): "
+                               "sealed correct >= max(6, ceil(attempted/2))"),
+            "outcome": "REPLICATED" if replicated else "NOT_REPLICATED",
+            "outcome_panel_normalized": ("REPLICATED" if replicated_normalized
+                                         else "NOT_REPLICATED"),
+            "per_seed": rows}
 
 
 def _difference(torch, a, b):
@@ -138,7 +225,7 @@ def launch(*, run_id, torch, framework, records, device, learning_rate,
         # Preserve the measured numbers and STOP — the owner's rule: failure
         # stops the job; nothing is trained on a representation that fails
         # the input-level distinguishability gate.
-        return _partial_result(run_id, arm, stage1, "STAGE1_CHECK_FAILED")
+        return _partial_result(run_id, arm, stage1, "STAGE1_CHECK_FAILED", seed=seed)
 
     # ---- STAGE 2: bounded training on the familiar examples ---------------
     def learner_factory(model, arm=arm, learning_rate=learning_rate):
@@ -180,7 +267,7 @@ def launch(*, run_id, torch, framework, records, device, learning_rate,
         sealed_total_correct = 0
 
     result_outcome = outcome(criterion["met"], stage3["ran"], sealed_total_correct)
-    return {"schema": SCHEMA, "run_id": run_id, "arm": arm,
+    return {"schema": SCHEMA, "run_id": run_id, "arm": arm, "seed": seed,
             "stage1": stage1,
             "stage2": training,
             "fit_criterion": criterion,

@@ -1,0 +1,109 @@
+{
+  "all_sealed_panels_disjoint_from_examined_panel": true,
+  "examined_panel_count": 12,
+  "examined_panel_ids": [
+    "3b9868a3bb62d2e52cbf5c7cc3e88696532d3156c283ef0b8a44f088d2915dce",
+    "3d2457c6fce0f5fc43d3e65c3db685eccc01508ce6357ab7fdace2289fc9d538",
+    "464acfd10572ed5427030cfaa927db4282d554b8ada889c1e62bfdda3d19e389",
+    "57f3eaf6a7b13140b35645462685f8d14dd6e7ec2e423e85bc7fe24c50d47df8",
+    "955fd6765158d566ce089e56dc7fea38ece0046f6397a10145de06751ea551a2",
+    "af41e8c98ac0bc8f3471876ddb7812a31968d7e1477fa4a0a415d0974bb15935",
+    "c89dbce8c6522048931756f028c2309daea3ea0c52d563555f79c89251b0c09f",
+    "e5258f94a340e50dd3bd7681fdf9712b15e96c9ba7013047e04e998424c82070",
+    "e8387a304f0c410531b94d38f0c31c968d950822a4ae21967045dc6e9e15a7c4",
+    "ee7343b74e066b2828d6a21da1e6ac00ed5152ead4d67adbec591562522d079e",
+    "f868a1581de9afd751d1c5e348ec4bb628fed29639ca2a495310c7ab2b5dce73",
+    "fbe0f88dc51b1f4f0835442e8aeb0c248b210a387c283baaf73b1b07f0e5158d"
+  ],
+  "examined_panel_source": "preserved_result:records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-competence-20260909210625-0a10f14d\\competence_result.json",
+  "fit_margin": 0.02,
+  "gpu_used": false,
+  "neural_work": false,
+  "no_familiar_overlap_with_examined_panel": true,
+  "per_seed": [
+    {
+      "familiar_count": 30,
+      "familiar_overlap_with_examined_panel": [],
+      "sealed_count": 11,
+      "sealed_ids": [
+        "ede87eb994e00ea2ead564398fcf16721e6d0635d715ea4652c2397b6a0bebb8",
+        "3ba79fed753a7fb89b0ddfe3fe361a6e42e9d2917c57954b501def8943ba75c1",
+        "34fc63dcedfadcced371fdfe6b34299f879667612fb519e3ca326ebf84af70cd",
+        "026c001e4bed821d264528315141ba0b4f35418636a215337a461e7c2ab33407",
+        "842b584c3db60ec6c056f7a70e6fd5b421817f71cb22bceddaf6fda91831a57b",
+        "5160a47a8f34af84b8470a4d82953b8dde1eb0ad5b8729c1da562ef486186ee5",
+        "1b04f08cf29368b810bf667ee4f5734c55944976127ec30dbe6a0d973a6afe98",
+        "9c7319b42b3959078e1dd3117d7863294b57cffd88f3f89cb7c5931bb676390b",
+        "6506cb3eec74acaa07987e2482d13993a822d8fa66c18b88e381f764ecc1b7a0",
+        "bcf31e80c08629ae1ae402ab7c535c3f3b41785f8aeeac560830ead7c4db0f97",
+        "3fb0532e024c3242e3e8c268e7cebf24f909d25fda2677d3da05021f42ca6eb4"
+      ],
+      "sealed_overlap_with_examined_panel": [],
+      "sealed_per_op": {
+        "FIND_SHARED_PART": 3,
+        "LIST_PARTS": 4,
+        "REACHED_VIA": 4
+      },
+      "seed": 20260910
+    },
+    {
+      "familiar_count": 30,
+      "familiar_overlap_with_examined_panel": [],
+      "sealed_count": 11,
+      "sealed_ids": [
+        "f96dec510a5d5653e0ba785a10a8e5c29774b64bd909e00d1ecd0d9e830eca7c",
+        "ee2b15d04bf40ae6cef739320d884ffe4682081105c18b837c71e2c04eae3206",
+        "69cff81b3d4eb5f544c69c48db783c9b49c30d8b8d9ad53dd1e3788dc846fdce",
+        "aaa659788ffc4145c6b284767702f502bf35949dd0f1b75546f14fa48c220c73",
+        "5cb481cd98ca96e42c74d1f81c7507ff9f31e7661d4dc7d9854ec9350c64c571",
+        "21dd77dc2930ab569bf72c93067c0253e49d0861172ddab2383b2842555d186d",
+        "81b98b204d67e5d4d58726ed54310379bcf9b985ef53d305af6f23958700a626",
+        "3e262cd2dbd90e520db93ca0de243708cfc262d27d7ab5aa58749c96c904114d",
+        "5fae2ca23933adb3af47ba9d6009e9f342444be1225866f3ebf6b35ef02cf219",
+        "42868fbc99595e96ffe43034a122feecdc5eadeba53e3b141c3513063847ef82",
+        "07e43fa1fa771a8b288876e32a05bbe886ce0ef17411f08eb641755f54daeed5"
+      ],
+      "sealed_overlap_with_examined_panel": [],
+      "sealed_per_op": {
+        "FIND_SHARED_PART": 3,
+        "LIST_PARTS": 4,
+        "REACHED_VIA": 4
+      },
+      "seed": 20260911
+    },
+    {
+      "familiar_count": 31,
+      "familiar_overlap_with_examined_panel": [],
+      "sealed_count": 13,
+      "sealed_ids": [
+        "2788482b56a560c86c917656e3b781535749cc0bb54a9915caaf3b546ed09d9f",
+        "65ff659967b0dcdba5be6de61205af768a932f75faf1080d34bacf2e49b8ea90",
+        "1648c4224b2734207ac5e3ad051580f9245a6998fdc63c100254fcb631327cf7",
+        "0062710a40beceee313a50f21a765fb4d31a85136087b88b372c7accff86cb94",
+        "225451623d03a3c4f20960881173463c398f7b6500554e83a3186a6c9dc25c32",
+        "92e5b7b0aebe18f29978a41e0660ac5ccd8633158a37429f26952809acd67897",
+        "763804d44e75a5e139ea932a8b20f489a8efeae64584a2cf22ac91fca012f0c5",
+        "2d1bd72eefd893f008351308e983d7588157063f98cd8140bcf2f9181ca903e8",
+        "952b2da716730d95d003cd1cdece48c5c61bd5fcfc1e8efe5b61cf212b6a0760",
+        "90b0759ada9678857b409393de9630bf1366c338d586b598185dc38789992186",
+        "b9fb5778ca8207627f076697707338307bd2b1dff086215b523a6ce97dd33548",
+        "e6f7d593b7d3ca981509db5817ee2455f111eda81e9300d860f953b1b055061b",
+        "82c84afeb69a1622def82c6b55eaa0424f0d53c3120ff564d8f526b6399a2a56"
+      ],
+      "sealed_overlap_with_examined_panel": [],
+      "sealed_per_op": {
+        "FIND_SHARED_PART": 4,
+        "LIST_PARTS": 4,
+        "REACHED_VIA": 5
+      },
+      "seed": 20260912
+    }
+  ],
+  "predeclared_seeds": [
+    20260910,
+    20260911,
+    20260912
+  ],
+  "schema": "cas-graph-training-confirmation-panel-check/1",
+  "transfer_threshold": 6
+}

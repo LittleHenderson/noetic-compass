@@ -4,6 +4,31 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: confirmation run 001 PREPARED (frozen candidate, predeclared seeds) — **NOT LAUNCHED**
+
+Per the owner's recommendation ("freeze this successful candidate and confirm
+the result, rather than redesign it"), the confirmation experiment is prepared
+and returns for authorization before any reservation or launch. Frozen:
+module, representation, option path, learning scope, and the per-seed
+allowance (`lr 0.003`, 64 optimizer steps, 600 s). New: predeclared seeds
+`(20260910, 20260911, 20260912)` — three independent dataset/encoder/module
+seeds — with the previously examined dataset seed `20260909` excluded by
+construction. Deterministic non-neural evidence
+(`tools/graph_training_confirmation_panel_check.py`, evidence
+`CONFIRMATION_PANEL_CHECK_001.json`, sha256 `926bd471…`): the examined panel
+has 12 sealed ids read from the preserved run-005 result; the three new
+panels have 11, 11 and 13 ids, with **0** sealed-id overlap and **0**
+familiar-id overlap with the examined panel. Declared, not hidden: the frozen
+generator makes panel size seed-dependent, so both the registered absolute
+bar (≥ 6) and a conservative panel-normalized reading (`≥ max(6,
+ceil(attempted/2))`) are computed and reported; the primary verdict uses the
+registered rule unless the owner authorizes the normalized reading. New
+fail-closed launcher `aws/graph_training_confirmation_launch.py` (plan-only
+default; authority binds job, source sha, archive/manifest hashes, owner
+record, frozen budget **and** the predeclared seeds; one `$4.00` reservation;
+zero retries) plus 20 new pure tests (150 graph tests pass). No reservation,
+no owner authorization record, no AWS call. Record: `CONFIRMATION_RUN_001.md`.
+
 ## 2026-09-09 - Graph-first ^6: competence run 005 FINISHED — **LEARNED_AND_TRANSFERRED**
 
 Competence run 005 (`cas-meta2-competence-20260909210625-0a10f14d`, owner GO,
