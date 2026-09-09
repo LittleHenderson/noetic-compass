@@ -1144,6 +1144,7 @@ def main(argv=None):
     authority = validate_authority(json.loads(authority_raw))
     import boto3
     from botocore.config import Config
+    from botocore.exceptions import ClientError
     config = Config(connect_timeout=5, read_timeout=10, retries={"max_attempts": 0})
     session = boto3.Session(profile_name=arguments.profile,
                             region_name=RESOURCE_PLAN["region"])
@@ -1154,6 +1155,7 @@ def main(argv=None):
                                      archive_sha256=request["archive_sha256"],
                                      manifest_sha256=request["manifest_sha256"],
                                      ledger_path=LEDGER_PATH, clients=clients,
+                                     client_error=ClientError,
                                      source_archive=_locate_archive(request["archive_sha256"]))
     result = execute(request, authority, provider, receipt_dir=arguments.receipt_dir,
                      owner_authorization_path=arguments.owner_authorization)

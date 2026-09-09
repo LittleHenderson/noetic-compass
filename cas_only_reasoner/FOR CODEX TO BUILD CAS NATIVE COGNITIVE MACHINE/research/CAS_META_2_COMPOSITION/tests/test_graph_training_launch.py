@@ -197,6 +197,65 @@ def test_provider_preflight_with_fake_clients():
     assert facts["conflicting_resources"] == []
 
 
+def test_wait_tolerates_no_such_key_until_result_appears(tmp_path):
+    """The paid-run defect: a NoSuchKey poll escaped the wait loop because the
+    real botocore ClientError was not the tolerated class. With the correct
+    class wired, NoSuchKey keeps polling and only other codes propagate."""
+    import io
+    clients = fake_clients()
+    state = {"calls": 0}
+
+    def get_object(**kwargs):
+        state["calls"] += 1
+        if state["calls"] < 3:
+            raise FakeClientError("NoSuchKey")
+        raw = b'{"schema": "cas-graph-training-result/1", "job": "x", "status": "OK", "arms": []}'
+        return {"Body": io.BytesIO(raw)}
+
+    clients["s3"] = SimpleNamespace(get_object=get_object)
+    clients["ec2"] = SimpleNamespace(describe_instances=lambda **k: {
+        "Reservations": [{"Instances": [{"State": {"Name": "running"}}]}]})
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_id = "i-0123456789abcdef0"
+    provider._resources["bucket"] = "job-bucket"
+    outcome = provider.wait(JOB, timeout=60, poll_interval=0.01)
+    assert outcome["worker_status"] == "REMOTE_FINISHED"
+    assert state["calls"] == 3
+
+
+def test_wait_propagates_non_missing_errors(tmp_path):
+    clients = fake_clients()
+    clients["s3"] = SimpleNamespace(
+        get_object=lambda **k: (_ for _ in ()).throw(FakeClientError("AccessDenied")))
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_id = "i-0123456789abcdef0"
+    provider._resources["bucket"] = "job-bucket"
+    with pytest.raises(FakeClientError):
+        provider.wait(JOB, timeout=5, poll_interval=0.01)
+
+
+def test_cleanup_tolerates_schedule_and_timer_role_absence(tmp_path):
+    """ResourceNotFoundException on the schedule and NoSuchEntity on the timer
+    role are already-absent, not failures (the paid run mislabeled them only
+    because the real error class was unwired)."""
+    clients = fake_clients()
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._resources["bucket"] = "job-bucket"
+    status = provider.cleanup(JOB)
+    assert status["schedule_removed"] is True
+    assert status["roles_removed"] is True
+    assert status["complete"] is True
+
+
+def test_main_passes_the_real_client_error_class():
+    """The launcher entrypoint must wire botocore's ClientError, not the
+    default fake, so real SDK errors hit the tolerance paths."""
+    import inspect
+    source = inspect.getsource(launch.main)
+    assert "from botocore.exceptions import ClientError" in source
+    assert "client_error=ClientError" in source
+
+
 class FakeProvider:
     def __init__(self, ledger_path):
         self.ledger_path = ledger_path
