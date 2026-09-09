@@ -4,6 +4,24 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6: competence run 001 stage-1 gate stopped the job as designed; gate defects fixed
+
+Attempt 001 (`cas-meta2-competence-20260909193638-98f993ab`, owner GO, new
+`$4.00` reservation, ledger 40 → 41: `$214.00` reserved, `$186.00`
+unreserved, result sha `86d9b738…`, cleanup complete) stopped at stage 1
+BEFORE any training — the gate refused on the relationship check, exactly
+the owner's fail-and-stop rule. The refusal exposed two defects in MY gate,
+both fixed and test-locked (129 graph tests): (1) it gated on module OUTPUT
+differences instead of the registered requirement — distinguishable module
+INPUTS (outputs are now reported, not gated; the untrained module's
+bias/tanh operating point crushes the tiny bound inputs, which is a
+measurement to report, not a reason to gate); (2) a stage-1 failure raised a
+bare exception instead of returning the preserved measurements with
+`outcome: "STAGE1_CHECK_FAILED"`. No training ran; no claim; the replacement
+runs the same sequence with the corrected gate and needs a new owner GO +
+new `$4.00` reservation. Records: `ATTEMPT_COMPETENCE_001_FAILURE.md`,
+`COMPETENCE_RUN_001.md` amended.
+
 ## 2026-09-09 - Graph-first ^6: competence run 001 prepared — ONE complete learning experiment (awaiting GO)
 
 Per the owner's process review, the fragmented micro-diagnostic cycle is

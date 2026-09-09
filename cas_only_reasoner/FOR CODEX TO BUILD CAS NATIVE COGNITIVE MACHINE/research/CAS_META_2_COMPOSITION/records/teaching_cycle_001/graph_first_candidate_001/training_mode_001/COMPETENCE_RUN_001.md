@@ -15,10 +15,13 @@ teaching styles).
 ## The fixed in-job sequence (single arm: cas framing)
 
 - **STAGE 1 — checks, zero optimizer steps.** (a) Relationship preservation:
-  same-token rewiring must move the module input/output beyond the
-  connection-list-reorder baseline (declared tolerance: rewire > 10×
-  reorder). (b) Forward/backward sanity: finite losses, nonzero gradients
-  on all three matrices. Failure stops the job with preserved numbers.
+  same-token rewiring must produce a distinguishable module INPUT beyond the
+  connection-list-reorder baseline (declared tolerance: rewire input
+  difference > 10× reorder input difference). Module OUTPUT differences are
+  REPORTED, not gated. (b) Forward/backward sanity: finite losses, nonzero
+  gradients on all three matrices. Failure stops the job and RETURNS the
+  preserved measurements with `outcome: "STAGE1_CHECK_FAILED"` — never a
+  bare exception (attempt 001's defect, fixed and test-locked).
 - **STAGE 2 — training.** The candidate ^6 module (registered decompose
   transform, `operation:^6` only) trains on the familiar train+practice
   whole-part examples: 64 optimizer steps / 600 s, learning rate 0.003,

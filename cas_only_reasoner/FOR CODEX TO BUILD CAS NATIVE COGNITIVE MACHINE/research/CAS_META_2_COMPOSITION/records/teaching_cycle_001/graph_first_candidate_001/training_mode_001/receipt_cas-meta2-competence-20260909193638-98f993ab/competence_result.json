@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\n/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py:167: UserWarning: No PYTORCH_KERNEL_CACHE_PATH or HOME environment variable set! This disables kernel caching. (Triggered internally at /pytorch/aten/src/ATen/native/cuda/jit_utils.cpp:1489.)\n  bound = [torch.stack([embed(token_id) for token_id in segment]).prod(dim=0)\nTraceback (most recent call last):\n  File \"/opt/cas-competence/package/_inner_runner.py\", line 20, in <module>\n    report = competence.launch(run_id=job, torch=torch, framework=framework,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/competence.py\", line 99, in launch\n    require(rewire > REWIRE_TOLERANCE * max(reorder, 1e-9),\n  File \"/opt/cas-competence/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/graph.py\", line 37, in require\n    raise ValueError(code)\nValueError: RELATIONSHIP_PRESERVATION_CHECK_FAILED:7f5bae88eff82560e93896535d18f1d9b32751e21a6c5f03a6897e4833e18224\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-competence-20260909193638-98f993ab",
+  "schema": "cas-graph-training-competence-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}

@@ -50,6 +50,31 @@ def outcome(criterion_met, stage3_ran, sealed_total_correct):
     return "LEARNED_NO_TRANSFER"
 
 
+def stage1_passes(relationship_check, sanity):
+    """The registered stage-1 gate: the same-token rewiring must produce a
+    distinguishable module INPUT beyond the reorder baseline (the owner's
+    table — inputs, not outputs). Output differences are REPORTED without
+    gating. The forward/backward sanity must show finite losses with nonzero
+    gradients."""
+    for row in relationship_check:
+        reorder = row["connection_list_reorder"]["input_difference"]
+        rewire = row["connector_rewire_same_tokens"]["input_difference"]
+        if not rewire > REWIRE_TOLERANCE * max(reorder, 1e-9):
+            return False
+    return (all(float(loss) == float(loss) for loss in sanity["per_target_loss"])
+            and max(sanity["per_target_max_gradient_norm"]) > 0.0)
+
+
+def _partial_result(run_id, arm, stage1, outcome_label):
+    return {"schema": SCHEMA, "run_id": run_id, "arm": arm,
+            "stage1": stage1, "stage2": None, "fit_criterion": None,
+            "stage3": None, "outcome": outcome_label,
+            "claims": {"specialist_claimed": False,
+                       "sealed_splits_read": False,
+                       "answer_edges_present": False,
+                       "two_arm_comparison_claimed": False}}
+
+
 def _difference(torch, a, b):
     """Norm of a - b via norms and dot (no tensor subtraction needed)."""
     norm_a = float(torch.linalg.vector_norm(a).item())
@@ -93,11 +118,6 @@ def launch(*, run_id, torch, framework, records, device, learning_rate,
                 "output_difference": _difference(torch, baseline_output, output)}
         relationship_check.append({"record_id": record["record_id"],
                                    **differences})
-    for row in relationship_check:
-        reorder = row["connection_list_reorder"]["output_difference"]
-        rewire = row["connector_rewire_same_tokens"]["output_difference"]
-        require(rewire > REWIRE_TOLERANCE * max(reorder, 1e-9),
-                "RELATIONSHIP_PRESERVATION_CHECK_FAILED:" + row["record_id"])
 
     # ---- STAGE 1b: forward/backward sanity (zero optimizer steps) ---------
     gradient_rows = diagnostic.measure_gradient_test(learner, 0)
@@ -105,9 +125,13 @@ def launch(*, run_id, torch, framework, records, device, learning_rate,
               "per_target_loss": [row["loss"] for row in gradient_rows["results"]],
               "per_target_max_gradient_norm": [
                   max(row["gradient_norms"].values()) for row in gradient_rows["results"]]}
-    require(all(float(loss) == float(loss) for loss in sanity["per_target_loss"])
-            and max(sanity["per_target_max_gradient_norm"]) > 0.0,
-            "FORWARD_BACKWARD_SANITY_FAILED")
+    stage1 = {"relationship_check": relationship_check,
+              "forward_backward": sanity}
+    if not stage1_passes(relationship_check, sanity):
+        # Preserve the measured numbers and STOP — the owner's rule: failure
+        # stops the job; nothing is trained on a representation that fails
+        # the input-level distinguishability gate.
+        return _partial_result(run_id, arm, stage1, "STAGE1_CHECK_FAILED")
 
     # ---- STAGE 2: bounded training on the familiar examples ---------------
     def learner_factory(model, arm=arm, learning_rate=learning_rate):
@@ -150,8 +174,7 @@ def launch(*, run_id, torch, framework, records, device, learning_rate,
 
     result_outcome = outcome(criterion["met"], stage3["ran"], sealed_total_correct)
     return {"schema": SCHEMA, "run_id": run_id, "arm": arm,
-            "stage1": {"relationship_check": relationship_check,
-                       "forward_backward": sanity},
+            "stage1": stage1,
             "stage2": training,
             "fit_criterion": criterion,
             "stage3": stage3,

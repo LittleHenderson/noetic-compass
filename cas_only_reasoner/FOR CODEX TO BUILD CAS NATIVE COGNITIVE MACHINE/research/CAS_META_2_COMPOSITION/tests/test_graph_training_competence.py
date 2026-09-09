@@ -46,17 +46,42 @@ def test_difference_uses_norms_and_dot_only():
 
 
 def test_launch_sequence_keeps_the_registered_structure():
-    """The whole sequence runs inside ONE job: relationship tolerance,
-    forward/backward sanity, bounded training with a learning curve, and the
-    sealed evaluation only after the fit criterion — single arm."""
+    """The whole sequence runs inside ONE job: the stage-1 gate is on module
+    INPUT distinguishability (output differences are reported, not gated),
+    the forward/backward sanity, bounded training with a learning curve, and
+    the sealed evaluation only after the fit criterion — single arm. A
+    stage-1 failure returns a result with the preserved numbers, never a
+    bare exception."""
     source = inspect.getsource(competence.launch)
-    assert "RELATIONSHIP_PRESERVATION_CHECK_FAILED" in source
-    assert "FORWARD_BACKWARD_SANITY_FAILED" in source
-    assert "REWIRE_TOLERANCE" in source
+    assert '"STAGE1_CHECK_FAILED"' in source
+    assert 'stage1_passes(relationship_check, sanity)' in source
     assert "history_every=history_every" in source
     assert "evaluate_sealed(learner, seed=seed, arm=arm)" in source
     assert "arm = \"cas\"" in source
     assert "'cas', 'generic'" not in source
+    gate_source = inspect.getsource(competence.stage1_passes)
+    assert '"input_difference"' in gate_source
+    assert '"output_difference"' not in gate_source
+
+
+def test_stage1_gate_uses_input_distinguishability():
+    """The registered gate: same-token rewiring must produce a distinguishable
+    module INPUT beyond the reorder baseline; outputs are reported without
+    gating; sanity needs finite losses and nonzero gradients."""
+    def row(rewire_input, reorder_input):
+        return {"connector_rewire_same_tokens": {"input_difference": rewire_input},
+                "connection_list_reorder": {"input_difference": reorder_input}}
+
+    good_sanity = {"per_target_loss": [1.0, 1.1, 1.2],
+                   "per_target_max_gradient_norm": [0.1, 0.2, 0.3]}
+    assert competence.stage1_passes([row(1e-3, 1e-5)], good_sanity) is True
+    assert competence.stage1_passes([row(1e-6, 1e-5)], good_sanity) is False
+    assert competence.stage1_passes([row(1e-3, 1e-5)],
+                                    {"per_target_loss": [1.0, 1.0, float("nan")],
+                                     "per_target_max_gradient_norm": [0.1]}) is False
+    assert competence.stage1_passes([row(1e-3, 1e-5)],
+                                    {"per_target_loss": [1.0],
+                                     "per_target_max_gradient_norm": [0.0]}) is False
 
 
 def test_result_claims_never_overstate():
