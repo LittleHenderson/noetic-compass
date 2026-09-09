@@ -87,4 +87,37 @@ def test_encoder_passes_a_list_to_fit_train():
     import inspect
     from cas_meta2.graph_teaching import real_framework
     source = inspect.getsource(real_framework.build_encoder)
-    assert "fit_train(list(texts)" in source
+    assert "fit_train(list(publics)" in source
+
+
+def test_public_records_satisfy_the_frozen_codec_contract():
+    """Attempt 004's preserved error: PUBLIC_INPUT_FIELDS_INVALID. Every
+    whole-part record must encode as problem + exactly three observations
+    covering slots 0,1,2, with the correct option included exactly once."""
+    dataset = lessons.build_dataset(seed=20260909)
+    records = [record for record in dataset["train"] + dataset["practice"]
+               if record["family"] == "whole_part"]
+    for record in records:
+        for arm in ("cas", "generic"):
+            task = adapter.public_records(record, arm)
+            public = task["public"]
+            assert set(public) == {"problem", "observations"}
+            assert len(public["problem"]) <= 8192 and public["problem"]
+            observations = public["observations"]
+            assert sorted(item["slot"] for item in observations) == [0, 1, 2]
+            assert all(len(item["tag"]) <= 256 and item["tag"] for item in observations)
+            assert all(len(item["values"]) == 8 for item in observations)
+            assert len(task["encoded_options"]) == 3
+            assert task["encoded_options"].count(task["correct"]) == 1
+            assert task["encoded_options"][task["encoded_correct_index"]] == task["correct"]
+
+
+def test_public_records_pad_with_literal_none_option():
+    dataset = lessons.build_dataset(seed=20260909)
+    base = next(record for record in dataset["train"]
+                if record["family"] == "whole_part")
+    record = dict(base)
+    record["options"] = [base["correct"], "distractor-only"]
+    task = adapter.public_records(record, arm="generic")
+    assert task["encoded_options"] == [base["correct"], "distractor-only", "none"]
+    assert task["encoded_correct_index"] == 0

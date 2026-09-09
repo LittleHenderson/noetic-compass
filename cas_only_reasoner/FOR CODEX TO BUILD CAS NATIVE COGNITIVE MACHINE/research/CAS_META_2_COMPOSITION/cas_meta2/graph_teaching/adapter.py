@@ -142,3 +142,35 @@ def scoring_table():
         "REACHED_VIA": {"target": "direct | via:<constituent> | absent",
                         "scored": "option index over reach options"},
     }
+
+
+def public_records(record, arm):
+    """One frozen public record per exercise: problem + EXACTLY 3 observations.
+
+    The campaign's public codec accepts only ``{"problem", "observations"}``
+    with exactly three observations covering slots 0,1,2, tags <=256 chars and
+    8 finite values each (attempt 004's preserved error:
+    PUBLIC_INPUT_FIELDS_INVALID). The correct option is always included as one
+    of the three; distractors follow, padded with a literal 'none' option when
+    fewer exist. The deterministic reference is the option set itself — no
+    answer edge is stored anywhere.
+    """
+    from ..codec import validate_public  # frozen public contract (pure)
+    require(record.get("schema") == EXERCISE_SCHEMA, "TASK_RECORD_SCHEMA")
+    require(arm in ("cas", "generic"), "ARM_UNKNOWN")
+    options = list(record["options"])
+    correct = record["correct"]
+    require(options.count(correct) == 1, "TASK_CORRECT_OPTION_MISSING")
+    ordered = [correct] + [option for option in options if option != correct]
+    ordered = ordered[:3]
+    while len(ordered) < 3:
+        ordered.append("none")
+    require(len(ordered) == 3 and ordered.count(correct) == 1, "PUBLIC_OPTION_ENCODING")
+    observations = [{"slot": index, "tag": str(option)[:256], "values": [0.0] * 8}
+                    for index, option in enumerate(ordered)]
+    public = {"problem": record["framings"][arm][:8192], "observations": observations}
+    validate_public(public)
+    return {"public": public, "encoded_options": ordered,
+            "encoded_correct_index": ordered.index(correct),
+            "record_id": record["record_id"], "op": record["op"],
+            "correct": correct}

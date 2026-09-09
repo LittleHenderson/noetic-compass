@@ -159,14 +159,13 @@ def real_framework():
     explicit code at every missing piece — never a silent fallback.
     """
     from ..teaching_cycle import gpu_adapter  # noqa: F401  (imports torch)
+    from .adapter import public_records
     from .real_framework import build_encoder, build_graph_training_framework
     torch, device = gpu_adapter._cuda()
     records = training_records(20260909)
-    texts = []
-    for record in records:
-        for arm in ("cas", "generic"):
-            texts.append(record["framings"][arm])
-    encoder = build_encoder(torch, texts, d_model=64, seed=20260909)
+    publics = [public_records(record, arm)["public"]
+               for record in records for arm in ("cas", "generic")]
+    encoder = build_encoder(torch, publics, d_model=64, seed=20260909)
     framework = build_graph_training_framework(torch, device, seed=20260909,
                                                encoder=encoder)
     return framework, records

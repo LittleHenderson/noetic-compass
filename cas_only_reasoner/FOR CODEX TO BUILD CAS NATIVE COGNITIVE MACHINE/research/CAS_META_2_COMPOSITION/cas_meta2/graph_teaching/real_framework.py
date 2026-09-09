@@ -83,13 +83,17 @@ def build_graph_training_framework(torch, device, *, seed, encoder=None):
 FROZEN_ENCODER_MAX_LENGTH = 1024
 
 
-def build_encoder(torch, texts, d_model, seed):
-    """Frozen encoder: the campaign's public tokenizer over the lesson prompts
-    plus a fixed seeded projection. Nothing here learns."""
+def build_encoder(torch, publics, d_model, seed):
+    """Frozen encoder over the REAL public-record contract.
+
+    Fits the campaign's public tokenizer on the public records (problem +
+    three observations each) and provides a fixed seeded projection. The
+    encode step returns the problem token ids and the three per-slot
+    observation token ids exactly as the codec produces them. Nothing here
+    learns.
+    """
     from cas_meta2.features_v2 import LosslessPublicTokenizer
-    # fit_train's public contract requires a list (attempt 003's preserved
-    # error: LOSSLESS_TRAIN_INPUT_INVALID when given a tuple).
-    tokenizer = LosslessPublicTokenizer.fit_train(list(texts),
+    tokenizer = LosslessPublicTokenizer.fit_train(list(publics),
                                                   max_length=FROZEN_ENCODER_MAX_LENGTH)
     vocabulary = tuple(tokenizer.vocabulary)
     index = {token: position for position, token in enumerate(vocabulary)}
@@ -98,53 +102,70 @@ def build_encoder(torch, texts, d_model, seed):
     projection = projection / (float(d_model) ** 0.5)
     projection.requires_grad_(False)
 
-    def embed(token):
-        return projection[index.get(token, 0)]
+    def embed(token_id):
+        return projection[index.get(token_id, 0)]
 
-    return {"embed": embed, "tokenizer": tokenizer,
-            "vocabulary_size": len(vocabulary),
-            "projection_frozen": True,
+    def encode(public):
+        encoded = tokenizer.encode_public(public)
+        problem_ids = [token_id for token_id, kind in zip(encoded["ids"], encoded["kinds"])
+                       if kind == 0]
+        slot_ids = {}
+        for token_id, kind, slot in zip(encoded["ids"], encoded["kinds"],
+                                        encoded["slots"]):
+            if kind == 2 and slot in (1, 2, 3):
+                slot_ids.setdefault(slot - 1, []).append(token_id)
+        require(set(slot_ids) == {0, 1, 2}, "PUBLIC_SLOT_ENCODING_INCOMPLETE")
+        return problem_ids, slot_ids
+
+    return {"encode": encode, "embed": embed, "tokenizer": tokenizer,
+            "vocabulary_size": len(vocabulary), "projection_frozen": True,
             "max_length": FROZEN_ENCODER_MAX_LENGTH}
 
 
 class GraphLearner:
-    """Real learner: module forward + frozen readout + AdamW over the module
-    parameters only (they all belong to operation:^6). Candidate copy only."""
+    """Real learner over the public-record encoding: module forward on the
+    problem tokens, frozen dot-product readout over the three encoded option
+    slots, AdamW over the module parameters only (all operation:^6)."""
 
-    def __init__(self, torch, framework, tasks, device, learning_rate):
+    def __init__(self, torch, framework, public_tasks, device, learning_rate):
         self.torch = torch
         self.framework = framework
         self.device = device
-        self.tasks = tasks
+        self.tasks = public_tasks
         self.module = framework.module
+        self._index = {task["record_id"]: position
+                       for position, task in enumerate(public_tasks)}
         self.optimizer = torch.optim.AdamW(self.module.parameters(),
                                            lr=learning_rate, weight_decay=0.0)
-        self._question_vectors = [self._embed_question(task) for task in tasks]
-        self._option_vectors = [[self._embed_option(option) for option in task["options"]]
-                                for task in tasks]
+        self._problem_vectors = []
+        self._option_vectors = []
+        for task in public_tasks:
+            problem_ids, slot_ids = framework.encoder["encode"](task["public"])
+            self._problem_vectors.append(self._mean(problem_ids))
+            self._option_vectors.append([self._mean(slot_ids[slot])
+                                         for slot in (0, 1, 2)])
 
-    def _embed(self, tokens):
-        vectors = [self.framework.encoder["embed"](token) for token in tokens]
+    def _mean(self, token_ids):
+        vectors = [self.framework.encoder["embed"](token_id) for token_id in token_ids]
+        require(vectors, "PROBLEM_EMBEDDING_REQUIRED")
         stacked = self.torch.stack(vectors)
         return stacked.mean(dim=0)
 
-    def _embed_question(self, task):
-        return self._embed(task["tokens"])
+    def _position(self, task):
+        return self._index[task["record_id"]]
 
-    def _embed_option(self, option):
-        return self._embed([str(option)])
-
-    def forward(self, task_index):
-        value = self.module(self._question_vectors[task_index].unsqueeze(0))[0]
-        scores = [self.torch.dot(value, vector) for vector in
-                  self._option_vectors[task_index]]
+    def forward(self, position):
+        value = self.module(self._problem_vectors[position].unsqueeze(0))[0]
+        scores = [self.torch.dot(value, vector)
+                  for vector in self._option_vectors[position]]
         return self.torch.stack(scores)
 
-    def step(self, task_index):
-        scores = self.forward(task_index)
+    def step(self, task):
+        position = self._position(task)
+        scores = self.forward(position)
         loss = self.torch.nn.functional.cross_entropy(
             scores.unsqueeze(0),
-            self.torch.tensor([self.tasks[task_index]["correct_index"]],
+            self.torch.tensor([self.tasks[position]["encoded_correct_index"]],
                               device=self.device))
         self.optimizer.zero_grad()
         loss.backward()
@@ -152,13 +173,13 @@ class GraphLearner:
         return float(loss.item())
 
     def eval_loss(self, op, tasks):
-        indices = [index for index, task in enumerate(self.tasks) if task["op"] == op]
+        positions = [self._position(task) for task in tasks if task["op"] == op]
         losses = []
-        for index in indices:
-            scores = self.forward(index)
+        for position in positions:
+            scores = self.forward(position)
             losses.append(self.torch.nn.functional.cross_entropy(
                 scores.unsqueeze(0),
-                self.torch.tensor([self.tasks[index]["correct_index"]],
+                self.torch.tensor([self.tasks[position]["encoded_correct_index"]],
                                   device=self.device)).item())
         return {"total": sum(losses) / max(1, len(losses))}
 
@@ -170,7 +191,7 @@ class GraphLearner:
         return digest.hexdigest()
 
     def predict(self, task_input):
-        index = next(i for i, task in enumerate(self.tasks)
-                     if task["record_id"] == task_input["record_id"])
-        scores = self.forward(index)
-        return self.tasks[index]["options"][int(self.torch.argmax(scores).item())]
+        position = self._position(task_input)
+        scores = self.forward(position)
+        return self.tasks[position]["encoded_options"][
+            int(self.torch.argmax(scores).item())]
