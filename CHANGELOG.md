@@ -28,6 +28,13 @@ default; authority binds job, source sha, archive/manifest hashes, owner
 record, frozen budget **and** the predeclared seeds; one `$4.00` reservation;
 zero retries) plus 20 new pure tests (150 graph tests pass). No reservation,
 no owner authorization record, no AWS call. Record: `CONFIRMATION_RUN_001.md`.
+Source package built (source-only, `launch_enabled:false`): `confirmation_package_001/`
+— archive sha256 `59a2432f…`, manifest sha256 `7c1484f7…`, 32 members, source
+sha `08abdf29…`; the packaged worker was byte-checked against
+`render_worker()`. Request: `AUTHORIZATION_REQUEST_CONFIRMATION_001_AWS.md`
+(one job, one `$4.00` reservation, ledger 45 → 46), awaiting owner GO and the
+owner's choice between the registered absolute transfer rule and the
+conservative panel-normalized reading.
 
 ## 2026-09-09 - Graph-first ^6: competence run 005 FINISHED — **LEARNED_AND_TRANSFERRED**
 
