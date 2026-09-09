@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-09 - Graph-first ^6 attempt 007: preserved error #6 (CUDA generator for CUDA tensors)
+
+Attempt 007 (`cas-meta2-teaching-graph-20260909054806-78ffe06a`, `$4.00`
+reserved, ledger 29 → 30: `$170.00` reserved, `$230.00` unreserved) ran a
+clean lifecycle, and the preserved error named the next device rule:
+`torch.randn(..., device=cuda)` requires a CUDA generator. Fixed
+(`71d8e71a`, package member): `torch.Generator(device=device).manual_seed(seed)`;
+regression test and the compat reviewer now check it. **New corrected
+package** (`b87e1ef2`, `package_008/`): source `71d8e71a…`, archive
+`7005cb88…`, manifest `72e18766…`. A corrected re-attempt needs a new job, a
+new `$4.00` reservation, and a new owner record binding the NEW identities.
+**No retry was attempted.** Evidence: `training_mode_001/ATTEMPT_GRAPH_007_FAILURE.md`
++ receipt. Binding-fit attempt-004 request still pending; attempt 003's lost
+error remains UNKNOWN (hypothesis-only).
+
 ## 2026-09-09 - Graph-first ^6: complete device-placement review green (attempt 007 NOT registered)
 
 Per the owner's directive, attempt 006 is preserved as a device-mismatch
