@@ -1,0 +1,40 @@
+{
+  "schema": "cas-graph-training-owner-authorization/9",
+  "recorded_utc": "2026-09-09T07:20:00Z",
+  "owner_instruction_raw": "GO",
+  "authorization": {
+    "graph_training_run": "AUTHORIZED_BY_OWNER",
+    "authorization_context": "Attempt 009 authorized after attempt 008 completed the registered training loop and its sealed-evaluation seam defect was fixed in package_009 and test-locked. The training machinery is proven end-to-end on the GPU; this run should deliver the complete result.",
+    "bound_request_sha256": "5665d2ddd2b8862d637bdf46fdc5a4a8b010eca428b218167aaff3f7ebde0f1c",
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/launch_inputs_009/launch_request.json",
+    "job": "cas-meta2-teaching-graph-20260909071727-23c7cca1",
+    "source_sha": "838c6f7a2190ff3007ba74aa2642248f984338b4",
+    "archive_sha256": "3536504718803e05d82c4cca6dc3b5c7c36d44c644fcfc40db887a601555ba4f",
+    "manifest_sha256": "181b17999712c2b2788cb7a3ff56109213b7652d12a5b228f19fc49143484366",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/package_009/",
+    "corrected_launcher": "aws/graph_training_launch.py at commit 7d9d43ee591e13127e59cbaf3b2f545bfca9073f"
+  },
+  "run_bounds": {
+    "per_condition": {"max_optimizer_steps": 64, "max_wall_seconds": 600.0, "learning_rate": 0.003},
+    "totals": {"arms": ["cas", "generic"], "total_optimizer_steps": 128, "total_wall_seconds": 1200.0},
+    "conditions_kind": "prompt_framing_only",
+    "jobs": 1,
+    "reservation_usd": "4.00",
+    "automatic_retries": 0,
+    "data": {"train": 48, "practice": 16, "validation_sealed": 16, "test_sealed": 16}
+  },
+  "execution_gates": [
+    "single launch attempt through the corrected launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "training uses train + practice whole-part records only; validation/test sealed, predictions recorded before answers are consulted",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the separate binding-fit experiment (attempt 004 request remains pending)",
+    "any additional experiment beyond this single training job",
+    "automatic retry of this or any prior job",
+    "any modification of accepted models, trainers, the ledger, frozen negatives, or sealed splits",
+    "promoting the binding-fit CUDA hypothesis beyond hypothesis"
+  ]
+}
