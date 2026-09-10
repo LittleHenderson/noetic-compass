@@ -71,6 +71,33 @@ def question_record(exercise, index):
             "idea": index.label_of[named["whole_id"]]}
 
 
+def public_problem(bundle, question, view_id):
+    """The learner-visible problem: the graph's own teaching presentation.
+
+    The frozen problem encoder (``real_framework.encode_problem``) is specified
+    over the ``node``/``rel`` lines that ``graph.Graph.render`` produces: it
+    binds each complete node line and each complete relation line into one joint
+    vector, and it fails closed on any other presentation. The cube graph is
+    already a ``Graph`` and already renders in exactly that form, so this uses
+    its rendering instead of restating the same relations as prose.
+
+    This is not decoration. Attempt 006 died here:
+
+        ValueError: tuple.index(x): x not in tuple
+        node_id = vocabulary.index(_word_token("node"))
+
+    The hand-written "Facts:" prose never gave the fitted vocabulary a ``node``
+    token at all, and would then have failed the encoder's
+    ``PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED`` check, so no cube lesson could
+    reach the encoder. The change is syntax only: the same nodes, the same
+    containment branches, the same question. It carries no answer, target,
+    witness or option marking - ``Graph.render`` is documented as structure only,
+    and the three choices still travel as unmarked observations.
+    """
+    return (cube_node.containment_graph(bundle, view_id).render()
+            + _request(question) + "\nChoose one of the three supplied options.\n")
+
+
 def record_from_exercise(bundle, exercise, target, index, view_id, split):
     """One frozen-shape exercise record whose ``correct`` IS the teacher target."""
     graph = cube_node.graph_record(bundle, view_id)
@@ -82,10 +109,7 @@ def record_from_exercise(bundle, exercise, target, index, view_id, split):
     question_key = vt.canonical_question_key(exercise["question"]["operation"],
                                              exercise["question"]["named_arguments"],
                                              exercise["context_id"])
-    prompt = ("Facts:\n" + "\n".join(
-        "%s contains %s" % (relation["source"], relation["target"])
-        for relation in graph["relations"]) + "\n"
-        + _request(question) + "\nChoose one of the three supplied options.\n")
+    prompt = public_problem(bundle, question, view_id)
     core = {"schema": EXERCISE_SCHEMA, "split": split, "op": question["op"],
             "graph": graph, "question": question, "options": options,
             "framings": {"cas": prompt, "generic": prompt},
@@ -129,10 +153,7 @@ def record_from_question(bundle, question, options, correct, view_id, split,
     graph = cube_node.graph_record(bundle, view_id)
     require(any(canonical(option) == canonical(correct) for option in options),
             "VT_CONNECTION_TARGET_NOT_OFFERED")
-    prompt = ("Facts:\n" + "\n".join(
-        "%s contains %s" % (relation["source"], relation["target"])
-        for relation in graph["relations"]) + "\n"
-        + _request(question) + "\nChoose one of the three supplied options.\n")
+    prompt = public_problem(bundle, question, view_id)
     detail = dict(extra or {})
     question_key = detail.pop("question_key", None)
     require(question_key is not None, "VT_RECORD_QUESTION_KEY_REQUIRED")

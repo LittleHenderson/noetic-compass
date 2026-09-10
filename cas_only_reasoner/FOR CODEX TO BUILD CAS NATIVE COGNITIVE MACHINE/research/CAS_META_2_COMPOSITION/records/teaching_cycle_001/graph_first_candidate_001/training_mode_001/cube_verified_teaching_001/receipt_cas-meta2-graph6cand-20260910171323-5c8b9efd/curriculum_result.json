@@ -1,0 +1,11 @@
+{
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 32, in <module>\n    encoder = build_encoder(torch, publics, d_model=64,\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 142, in build_encoder\n    node_id = vocabulary.index(_word_token(\"node\"))\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: tuple.index(x): x not in tuple\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+  "measurements": null,
+  "schema": "cas-graph-training-candidate-result/1",
+  "status": "WORKER_FAILED"
+}

@@ -175,3 +175,56 @@ def test_connection_check_and_dry_run_are_deterministic_and_serializable():
     assert json.dumps(plan, sort_keys=True, allow_nan=False)
     assert plan["correction_point"]["arm"] == "cas"
     assert plan["ordering_mode"] == "declared"
+
+
+def test_the_public_problem_is_the_shape_the_frozen_encoder_parses():
+    """The learner's problem must be the graph's node/rel presentation.
+
+    Attempt 006 died on the instance with
+
+        ValueError: tuple.index(x): x not in tuple
+        node_id = vocabulary.index(_word_token("node"))
+
+    because the records restated their relations as "Facts:" prose. The frozen
+    encoder (``real_framework.build_encoder``) fits its vocabulary on these very
+    publics and then requires a ``node`` token, a ``rel`` token, a newline token,
+    and at least one structural segment per problem - it fails closed on anything
+    else (``PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED``). No torch is needed to check
+    any of that: the tokenizer is pure text.
+    """
+    from cas_meta2.features_v2 import LosslessPublicTokenizer, _word_token
+    from cas_meta2.graph_teaching import candidate_experiment as ce, real_framework
+
+    inputs = ce.build_inputs()
+    publics = [adapter.public_records(record, "cas")["public"]
+               for record in inputs["records"] + inputs["probe"]]
+    assert len(publics) == 52, "8 taught plus the 44-question probe"
+    tokenizer = LosslessPublicTokenizer.fit_train(
+        publics, max_length=real_framework.FROZEN_ENCODER_MAX_LENGTH)
+    vocabulary = tuple(tokenizer.vocabulary)
+    for unit in ("node", "rel", "\n"):
+        assert _word_token(unit) in vocabulary, unit
+    markers = {vocabulary.index(_word_token("node")),
+               vocabulary.index(_word_token("rel"))}
+    newline = vocabulary.index(_word_token("\n"))
+    for index, public in enumerate(publics):
+        lines = public["problem"].splitlines()
+        assert lines[0].startswith("node "), (index, lines[0])
+        assert any(line.startswith("rel ") for line in lines), index
+        encoded = tokenizer.encode_public(public)
+        problem_ids = [token for token, kind in zip(encoded["ids"], encoded["kinds"])
+                       if kind == 0]
+        segments, current = 0, None
+        for token in problem_ids:                      # the encoder's own rule
+            if token == newline:
+                current = None
+            elif token in markers:
+                current = [token]
+                segments += 1
+            elif current is not None:
+                current.append(token)
+        assert segments, ("PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED", index)
+        slots = {slot - 1 for token, kind, slot
+                 in zip(encoded["ids"], encoded["kinds"], encoded["slots"])
+                 if kind == 2 and slot in (1, 2, 3)}
+        assert slots == {0, 1, 2}, (index, slots)
