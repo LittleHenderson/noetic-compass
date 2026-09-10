@@ -194,6 +194,112 @@ def test_preparation_is_dry_and_names_what_a_run_would_need():
     assert preparation["boundary"]["reservation"] == "none"
 
 
+def test_eight_records_hold_seven_distinct_questions_with_the_route_doubled():
+    records = vtr.training_records()
+    taught = cr.taught_questions(records)
+    assert taught["records"] == 8
+    assert taught["distinct_questions"] == 7
+    assert len(taught["taught_more_than_once"]) == 1
+    doubled = taught["taught_more_than_once"][0]
+    assert doubled["key"]["operation"] == "REACHED_VIA"
+    assert doubled["key"]["named_arguments"] == {"idea": "node_001",
+                                                 "part": "node_006"}
+    assert sorted(entry["task_profile"] for entry in doubled["records"]) == [
+        "component-route/0.1", "whole-answer/0.1"]
+    assert "two corrections per block" in taught["double_exposure_note"]
+
+
+def test_probe_membership_comes_from_semantics_not_from_ids():
+    records = vtr.training_records()
+    probe = cr.probe_questions(records=records)
+    assert probe["catalog_questions"] == 51
+    assert probe["distinct_taught_questions"] == 7
+    assert probe["excluded_taught_questions"] == 7
+    assert probe["probe_questions"] == 44
+    assert probe["probe_by_operation"] == {"LIST_PARTS": 5, "FIND_SHARED_PART": 14,
+                                           "REACHED_VIA": 25}
+    assert sum(probe["probe_by_operation"].values()) == 44
+    assert probe["same_set_for_both_conditions"] is True
+    assert probe["additional_exclusions"] == []
+    assert "exercise ids" in probe["membership_rule"]
+    assert set(probe["may_not_be_used_for"]) == {"checkpoint selection",
+                                                "curriculum adjustment",
+                                                "extending training mid-run"}
+    taught = {entry["digest"] for entry in cr.taught_questions(records)["questions"]}
+    excluded = {entry["question_key_digest"] for entry in probe["excluded"]}
+    assert excluded == taught
+    remaining = {entry["question_key_digest"] for entry in probe["questions"]}
+    assert not (remaining & taught)
+    assert len(remaining) == 44
+
+
+def test_the_probe_is_identical_for_both_conditions():
+    records = vtr.training_records()
+    probe = cr.probe_questions(records=records)
+    control = cr.control_schedule(records)
+    control_questions = {record["record_id"] for record in records
+                         if record["cube_verified_teaching"]["task_profile"]
+                         == "whole-answer/0.1"}
+    assert {item["record_id"] for item in control["questions"]} == control_questions
+    taught_all = {entry["digest"] for entry in cr.taught_questions(records)["questions"]}
+    taught_control = {record["cube_verified_teaching"]["question_key_digest"]
+                      for record in records
+                      if record["record_id"] in control_questions}
+    assert taught_control < taught_all, "the control teaches a subset"
+    assert probe["probe_questions"] == 51 - len(taught_all)
+
+
+def test_the_control_schedule_is_frozen_at_22_21_21_before_any_result():
+    records = vtr.training_records()
+    control = cr.control_schedule(records)
+    assert control["condition"] == "final_answer_only"
+    assert control["updates"] == 64
+    assert control["component_corrections"] == 0
+    assert control["whole_answer_corrections"] == 64
+    assert sorted(control["distribution"].values()) == [21, 21, 22]
+    assert sum(control["distribution"].values()) == 64
+    assert len(control["ordering"]) == 64
+    assert control["frozen_before_results"] is True
+    assert control["final_question_exposure"] == {"LIST_PARTS": 22,
+                                                 "FIND_SHARED_PART": 21,
+                                                 "REACHED_VIA": 21}
+    counts = {record_id: control["ordering"].count(record_id)
+              for record_id in control["distribution"]}
+    assert counts == control["distribution"]
+    assert "round-robin" in control["ordering_rule"]
+    assert "not a defect" in control["note"]
+
+
+def test_comparison_semantics_state_the_budget_allocation_question():
+    semantics = cr.comparison_semantics()
+    assert semantics["question"].startswith("at the same number of updates")
+    assert semantics["conditions"] == {
+        "checked_component_teaching": {"component_corrections": 40,
+                                       "whole_answer_corrections": 24},
+        "final_answer_only": {"component_corrections": 0,
+                              "whole_answer_corrections": 64}}
+    assert "does not isolate" in semantics["does_not_show"]
+    assert "did not help" in semantics["negative_result_means"]
+    assert "seven-stage method failed" in semantics["negative_result_does_not_mean"]
+    assert "33.3 percentage points" in semantics["primary_set_size_warning"]
+    matched = cr.matched_comparison_requirements()
+    assert any("same initial state" in item for item in matched["identical"])
+    assert any("encoder" in item for item in matched["identical"])
+    assert matched["separate"] == ["optimizer state", "checkpoint identity",
+                                   "per-condition observation records"]
+    assert "allocation" in matched["may_differ"][0]
+    assert matched["restart_policy"].startswith("zero automatic retries")
+
+
+def test_the_pilot_allowance_is_not_claimed_as_a_proven_minimum():
+    report = cr.schedule_report(vtr.training_records())
+    assert report["allowance_status"] == ("a chosen pilot allowance, not a proven "
+                                          "minimum for learning")
+    assert "CHOSEN PILOT ALLOWANCE" in cr.PROPOSED_SCHEDULE["why_this_many"]
+    assert "not a mathematically necessary number" in \
+        cr.PROPOSED_SCHEDULE["why_this_many"]
+
+
 def test_the_preparation_proposes_an_evaluation_without_inventing_a_result():
     evaluation = cr.proposed_evaluation()
     assert evaluation["primary_question"].startswith("does teaching the smaller")
@@ -205,15 +311,23 @@ def test_the_preparation_proposes_an_evaluation_without_inventing_a_result():
                   for condition in evaluation["conditions"]}
     assert components == {40, 0}
     assert "no worked answer" in evaluation["primary_measure"]
-    probe = evaluation["held_out_probe"]
-    assert probe["available_questions_in_the_scene"] == 51
-    assert probe["taught_questions"] == 8
-    assert probe["candidate_probe_questions"] == 43
-    assert "not transfer to a new graph family" in probe["caveat"]
-    assert any("never selects among the learner's test answers" in rule
-               for rule in evaluation["reporting_rules"])
+    probe = evaluation["probe"]
+    assert probe["catalog_questions"] == 51
+    assert probe["distinct_taught_questions"] == 7
+    assert probe["probe_questions"] == 44
+    assert probe["same_set_for_both_conditions"] is True
+    assert "never transfer to a new graph arrangement" in probe["interpretation"]
+    for rule in ("checkpoint selection", "curriculum adjustment",
+                 "extending training mid-run"):
+        assert rule in probe["may_not_be_used_for"]
+    plan = evaluation["reporting_plan"]
+    assert "all three scores" in plan["taught_whole_answer_questions"]
+    assert "counts by operation" in plan["untaught_probe"]
+    assert "never selects a checkpoint" in plan["checkpoint_rule"]
+    assert evaluation["matched_comparison"]["may_differ"]
     assert "no numerical delivery path" in evaluation["not_measured"][0]
     assert "no reservation" in evaluation["cost_note"]
+    assert "per-condition and combined limits" in evaluation["cost_note"]
 
 
 def test_run_candidate_refuses_without_authorization_and_instrumentation():

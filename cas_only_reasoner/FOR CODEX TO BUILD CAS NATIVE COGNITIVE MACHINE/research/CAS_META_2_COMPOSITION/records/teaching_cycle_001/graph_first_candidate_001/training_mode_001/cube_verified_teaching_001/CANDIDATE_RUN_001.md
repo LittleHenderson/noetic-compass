@@ -63,17 +63,24 @@ step's update identity was not recorded (`CANDIDATE_STEP_ORDER_VIOLATION`).
 | Profile | `cas-cube-component-teaching-schedule/1:8x8` |
 | Structure | 8 blocks; each block = 5 component-route questions, then the 3 whole-answer questions |
 | Component-to-final ratio | **5 : 3** |
-| Repetition minimum | **8 complete blocks** |
+| Repetition | **8 complete blocks** |
 | Update allowance | **64 supervised corrections** |
 | Operation exposure | `REACHED_VIA` 48, `LIST_PARTS` 8, `FIND_SHARED_PART` 8 |
 | Stopping limits | 64 updates, 600 s wall clock, stop on containment failure, stop when the blocks complete, **0 automatic retries** |
 | Budget profile | fits the frozen 64-step profile; **no profile change requested** |
 | Counters | component-teaching blocks 8, component presentations 40, whole-answer presentations 24, seven-stage neural cycles **0** |
 
-**Why 64 updates.** From the block structure (8 × 8), not from the frozen default adopted
-as a principle. Eight blocks give every question eight supervised corrections, which is
-the smallest schedule in which "teach repeatedly" is a counted property rather than a
-slogan. It happens to fit the frozen profile, so no budget-profile change is needed.
+**Eight blocks is a chosen pilot allowance, not a proven minimum.** It is not
+mathematically necessary and it has not been validated as sufficient for learning. It is
+the smallest allowance this desk is willing to defend from the existing frozen budget
+profile, and it fits that profile, so no budget-profile change is needed. Whether eight
+blocks are enough is exactly what the pilot would measure.
+
+**Repetition is per question, not per record.** Eight teaching records hold **seven
+distinct questions**: `REACHED_VIA(Bicycle, Rim)` appears once as a component question and
+once as a whole-answer question, so that route receives **16 corrections across the eight
+blocks** while the other six distinct questions receive 8 each. The repetition is intended
+and is reported rather than hidden.
 
 **What it does not inherit.** The stub's 48/8/8 step allocation, the 64-step frozen
 default as a teaching principle, and the earlier binding experiment's 1,024-cycle
@@ -96,15 +103,28 @@ limit is not an option; a versioned profile would need the owner's approval.
 
 | Item | Proposal |
 |---|---|
-| Conditions | `checked_component_teaching` (5 component + 3 whole-answer per block) versus `final_answer_only` (the 3 whole-answer questions only), **same update allowance** |
-| Component supervision | counted separately: 40 corrections versus 0 |
-| Primary measure | **independent** accuracy on the taught whole-answer questions — no worked answer, no teacher-verified subanswers, no correct prefix |
-| Secondary | component-question accuracy, reported separately; assisted performance during teaching, never merged into the independent figure |
-| Held-out probe | the scene holds 51 askable questions; 8 are taught, leaving 43 candidates for an independent probe — **same authored scene, so this is within-scene generalisation, not transfer to a new graph family** |
-| Reporting rules | prediction recorded before correction; all three scores retained or marked `unavailable`; the teacher checker never selects among the learner's test answers; independent and assisted figures never merged |
-| Not measured | definition, analogy, correspondence, and story content |
-| Owner decisions still needed | how many conditions, their allowance, whether the probe questions are used, whether any budget-profile change is approved |
-| Cost | no reservation or estimate proposed; the frozen profile bounds the candidate at 64 updates and 600 s |
+| Conditions | `checked_component_teaching` (**40** component + **24** whole-answer) versus `final_answer_only` (**0** + **64**), same update allowance |
+| Control schedule | frozen before any result: round-robin over the three whole-answer questions, remainder to the first → **22 / 21 / 21**; exposure `LIST_PARTS` 22, `FIND_SHARED_PART` 21, `REACHED_VIA` 21 |
+| Matched comparison | two candidate copies from the **same initial weights**; same frozen encoder, graph, framing, scoring, seed and limits; **separate** optimizer state and checkpoints; the allocation is the only intended difference |
+| Primary measure | **independent** accuracy on the three taught whole-answer questions — no worked answer, no teacher-verified subanswers, no correct prefix. "Independent" means no worked answer during prediction; it does **not** mean the taught questions became unseen |
+| Reporting | before and after: selected answer, all three scores, and loss for each of the three taught questions; component questions separately; probe by operation |
+| Untaught probe | **44 questions** = 51 catalog − **7 distinct taught** (`REACHED_VIA` 25, `FIND_SHARED_PART` 14, `LIST_PARTS` 5), the **same set for both conditions**, keyed on graph context + operation + named arguments with exercise ids and phase labels ignored, no additional exclusions — **within-scene generalisation only, never transfer to a new graph arrangement** |
+| Probe constraints | it never selects a checkpoint, adjusts the curriculum, or extends training mid-run; the final checkpoint is fixed by the declared schedule |
+| Sample-size warning | three taught questions: one changed answer moves accuracy by 33.3 percentage points, so no single percentage carries the conclusion |
+| Not measured | definition, analogy, correspondence and story content |
+| Owner decisions still needed | condition count, allowance, whether the probe is used, whether any budget-profile change is approved |
+| Cost | see `AUTHORIZATION_REQUEST_001.md`: `$7.00` proposed by reusing the existing resource plan, or `$4.00` with a changed `instance_seconds_max`; **an unspecified cost is not approved** |
+
+**What the comparison can show:** at the same number of updates, is it better to spend some
+practice on the parts of the problem rather than spend every update on the complete
+questions?
+
+**What it cannot show:** it does not isolate the effect of adding component instruction
+while holding final-question practice equal — the control practises the final questions far
+more often. A third condition would be needed, and none is proposed.
+
+**A negative result would mean:** this component-teaching allocation did not help under
+these conditions. It would not mean the complete seven-stage method failed.
 
 ## 5. What the counters say
 
@@ -130,12 +150,18 @@ software rehearsal, not a neural result.**
 
 ## 6. What a real run would still need
 
-1. An owner authorization record naming the run (`owner_go: true`, `run_id`).
-2. A framework, model, and learner factory from the real path, indexed from these records.
-3. A scorer, so the scores are captured rather than recorded as `unavailable`.
-4. A checkpoint writer and verifier.
-5. A decision on the conditions and whether the 43-question probe is used.
+1. An owner authorization record naming the run (`owner_go: true`, `run_id`) — the fields
+   are laid out in `AUTHORIZATION_REQUEST_001.md`.
+2. **An approved launcher binding.** The existing launcher's frozen design block belongs to
+   the curriculum experiment, so this pilot needs its own bound request (two conditions, 64
+   updates each, seed `20260909`, the 44-question probe, its own entrypoint and job
+   pattern). That binding is proposed, not built: the owner asked to reuse the
+   infrastructure rather than add another launcher, so the change is made only after this
+   request is approved.
+3. A framework, model, and learner factory from the real path, indexed from these records.
+4. A scorer, so the scores are captured rather than recorded as `unavailable`.
+5. A checkpoint writer and verifier.
 
-No neural execution, reservation, or paid launch is authorized until that specific run is
-authorized. The fixed architecture, readout, previous results, checkpoints, and the
+No neural execution, reservation, or paid launch is authorized until that specific request
+is approved. The fixed architecture, readout, previous results, checkpoints, and the
 pending zero-update contrast probe are untouched.

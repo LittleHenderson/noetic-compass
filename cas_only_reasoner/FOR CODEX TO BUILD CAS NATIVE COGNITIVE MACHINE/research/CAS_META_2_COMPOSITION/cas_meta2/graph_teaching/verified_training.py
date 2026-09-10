@@ -93,7 +93,16 @@ def record_from_exercise(bundle, exercise, target, index, view_id, split):
                 "expected_choice_id": target["expected_choice_id"],
                 "witness_kind": target["witness"]["kind"],
                 "checker_identity": target["reference_verification"]["checker_identity"],
-                "record_id_basis": "public_projection"}}
+                "record_id_basis": "public_projection",
+                "question_key": vt.canonical_question_key(
+                    exercise["question"]["operation"],
+                    exercise["question"]["named_arguments"],
+                    exercise["context_id"]),
+                "question_key_digest": vt.question_key_digest(
+                    vt.canonical_question_key(
+                        exercise["question"]["operation"],
+                        exercise["question"]["named_arguments"],
+                        exercise["context_id"]))}}
     record = {**core, "record_id": digest(canonical(core)), "correct": correct,
               "reference": reference.derivation_for(
                   question["op"], cube_node.containment_graph(bundle, view_id),

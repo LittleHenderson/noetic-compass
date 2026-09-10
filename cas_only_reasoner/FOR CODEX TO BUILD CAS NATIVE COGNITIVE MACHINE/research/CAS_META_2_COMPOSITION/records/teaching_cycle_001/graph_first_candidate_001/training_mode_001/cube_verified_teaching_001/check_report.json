@@ -2483,40 +2483,97 @@
       "not_the_seven_stage_program": "stages 1, 2, 3, 4 and 6 have no numerical delivery path and stay unimplemented; this is checked component teaching only",
       "ordering_mode": "declared",
       "proposed_evaluation": {
+        "comparison_semantics": {
+          "conditions": {
+            "checked_component_teaching": {
+              "component_corrections": 40,
+              "whole_answer_corrections": 24
+            },
+            "final_answer_only": {
+              "component_corrections": 0,
+              "whole_answer_corrections": 64
+            }
+          },
+          "does_not_show": "it does not isolate the effect of adding component instruction while holding final-question practice equal: the control practises the final questions far more often. A third condition would be needed for that, and none is proposed now",
+          "negative_result_does_not_mean": "the complete seven-stage method failed; several of its presentations have no numerical delivery path yet",
+          "negative_result_means": "this component-teaching allocation did not help under these conditions",
+          "primary_set_size_warning": "the primary set holds three taught whole-answer questions, so one changed answer moves accuracy by 33.3 percentage points; no single percentage carries the conclusion",
+          "question": "at the same number of updates, is it better to spend some practice on the parts of the problem rather than spend every update on the complete questions?"
+        },
         "condition_note": "the two conditions must differ in component supervision only; the update allowance is held equal",
         "conditions": [
           {
             "component_supervision_counted_separately": 40,
             "name": "checked_component_teaching",
             "teaches": "five component-route questions then the three whole-answer questions, per block",
-            "updates": 64
+            "updates": 64,
+            "whole_answer_corrections": 24
           },
           {
             "component_supervision_counted_separately": 0,
+            "final_question_exposure": {
+              "FIND_SHARED_PART": 21,
+              "LIST_PARTS": 22,
+              "REACHED_VIA": 21
+            },
+            "frozen_ordering": "round-robin over the whole-answer questions in their frozen export order; the remainder goes to the first",
             "name": "final_answer_only",
             "teaches": "the three whole-answer questions only, same update allowance",
-            "updates": 64
+            "updates": 64,
+            "whole_answer_corrections": 64
           }
         ],
-        "cost_note": "no reservation or cost estimate is proposed here; the frozen budget profile bounds the candidate at 64 updates and 600 seconds",
-        "held_out_probe": {
-          "available_questions_in_the_scene": 51,
-          "candidate_probe_questions": 43,
-          "caveat": "same authored scene: within-scene generalisation, not transfer to a new graph family",
-          "taught_questions": 8
+        "cost_note": "no reservation or cost estimate is proposed here; the frozen budget profile bounds one condition at 64 updates and 600 seconds. A pilot authorization request must state the per-condition and combined limits, the total reservation, and the collection and cleanup policy",
+        "matched_comparison": {
+          "identical": [
+            "initial weights (two candidate copies from the same initial state)",
+            "the frozen encoder and its fitted tokenizer",
+            "the public exercise set's graph, framing and scoring path",
+            "the update allowance: 64 per condition",
+            "the seed and the stopping limits"
+          ],
+          "may_differ": [
+            "the teaching allocation: 40 component + 24 whole-answer versus 0 + 64"
+          ],
+          "restart_policy": "zero automatic retries; a failed condition is reported",
+          "separate": [
+            "optimizer state",
+            "checkpoint identity",
+            "per-condition observation records"
+          ],
+          "why": "the allocation must be the intended difference; a different starting learner would confound it"
         },
         "not_measured": [
           "definition, analogy, correspondence and story content: no numerical delivery path exists for them"
         ],
-        "primary_measure": "independent accuracy on the taught whole-answer questions: no worked answer, no teacher-verified subanswers, no correct prefix",
+        "primary_measure": "independent accuracy on the taught whole-answer questions: no worked answer, no teacher-verified subanswers, no correct prefix. 'Independent' means no worked answer is supplied during prediction; it does not mean the taught questions have become unseen",
         "primary_question": "does teaching the smaller relationship decisions help the same learner answer the complete whole-part question?",
-        "reporting_rules": [
-          "the learner's own prediction is recorded before any correction",
-          "all three scores or logits are retained, or marked unavailable",
-          "the teacher checker never selects among the learner's test answers",
-          "independent and assisted figures are never merged",
-          "missing measurements are unavailable, never zero"
-        ],
+        "probe": {
+          "additional_exclusions": [],
+          "catalog_questions": 51,
+          "distinct_taught_questions": 7,
+          "excluded_taught_questions": 7,
+          "interpretation": "can the learner answer additional questions about this same graph after practising some of its relationships? Within-scene generalisation only, never transfer to a new graph arrangement",
+          "may_not_be_used_for": [
+            "checkpoint selection",
+            "curriculum adjustment",
+            "extending training mid-run"
+          ],
+          "membership_rule": "catalog minus the union of semantically taught questions, keyed on graph context, operation and named arguments; exercise ids, task-profile labels, phase labels and option order are ignored",
+          "probe_by_operation": {
+            "FIND_SHARED_PART": 14,
+            "LIST_PARTS": 5,
+            "REACHED_VIA": 25
+          },
+          "probe_questions": 44,
+          "same_set_for_both_conditions": true
+        },
+        "reporting_plan": {
+          "checkpoint_rule": "the final checkpoint is fixed by the declared schedule; the probe never selects a checkpoint, adjusts the curriculum, or extends training",
+          "component_questions": "reported separately",
+          "taught_whole_answer_questions": "before and after: the selected answer, all three scores, and the loss for each of the three",
+          "untaught_probe": "counts by operation, same set for both conditions"
+        },
         "requires_owner_decisions": [
           "how many conditions to run and their update allowance",
           "whether the held-out probe questions are used",
@@ -2526,17 +2583,49 @@
         "secondary_measures": [
           "component-question accuracy, reported separately from the complete question",
           "assisted performance during teaching, never mixed into the independent figure"
-        ]
+        ],
+        "taught_question_repetition": {
+          "distinct_questions": 7,
+          "double_exposure_note": "a question taught once per block as a component question and again as a whole-answer question receives two corrections per block; that repetition is intended and is reported rather than hidden",
+          "records": 8,
+          "taught_more_than_once": [
+            {
+              "digest": "0eb5dccf6183dc1706086d5b7f475cf3d8252cc86ad05b2f1585c28e7aef94f1",
+              "key": {
+                "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+                "named_arguments": {
+                  "idea": "node_001",
+                  "part": "node_006"
+                },
+                "operation": "REACHED_VIA"
+              },
+              "records": [
+                {
+                  "exercise_id": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2",
+                  "operation": "REACHED_VIA",
+                  "record_id": "6aa593f052d3da08beea29493e3ffbc092ecc0802bd54e727470d1a0f5a3386d",
+                  "task_profile": "component-route/0.1"
+                },
+                {
+                  "exercise_id": "exercise:b88862309be8bc1f6a36436e2c1db99c59f25021822a80687a37bcb3275bb739",
+                  "operation": "REACHED_VIA",
+                  "record_id": "15f9144c10af3408ce050f60475de92ebbbf76ef8273ddb812bf06cba22c1d45",
+                  "task_profile": "whole-answer/0.1"
+                }
+              ]
+            }
+          ]
+        }
       },
       "record_ids": [
-        "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
-        "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
-        "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
-        "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
-        "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
-        "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
-        "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
-        "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9"
+        "5a9c61c29c4c5ba87f14fb301b435487099b8893339e6fa8e9af05305ca0b312",
+        "dafbe1c139fc4d185765d3668339b0eb5ca557b48b36f27980e7b655a386087b",
+        "639813aa7393d66d1fb81fc636978370e87c3c42b5e739a38ddb3b62efaf1683",
+        "6aa593f052d3da08beea29493e3ffbc092ecc0802bd54e727470d1a0f5a3386d",
+        "e65d8ce3a6e65995dea3f60cef16c96ec8ed28cf3bc48f6ff19cac0c926b3f44",
+        "51b1f0dcb59592f917ff602355af1cb8fcb8c52611932b3bca7d62f8a0900fd4",
+        "0263b76968f467e1d53d3cfa2a941b55bbaaed5c5635f096905ab508cf710dd2",
+        "15f9144c10af3408ce050f60475de92ebbbf76ef8273ddb812bf06cba22c1d45"
       ],
       "records": 8,
       "required_instrumentation": [
@@ -2546,6 +2635,7 @@
         "authorization"
       ],
       "schedule": {
+        "allowance_status": "a chosen pilot allowance, not a proven minimum for learning",
         "blocks": 8,
         "component_to_final_ratio": "5:3",
         "counters_note": "this partial method is counted in component-teaching blocks; it is not a complete seven-stage neural cycle and must not be reported as one",
@@ -3164,7 +3254,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
+              "record_id": "5a9c61c29c4c5ba87f14fb301b435487099b8893339e6fa8e9af05305ca0b312",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
@@ -3174,7 +3264,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
+              "record_id": "dafbe1c139fc4d185765d3668339b0eb5ca557b48b36f27980e7b655a386087b",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
@@ -3184,17 +3274,17 @@
               "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
+              "record_id": "639813aa7393d66d1fb81fc636978370e87c3c42b5e739a38ddb3b62efaf1683",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 1,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
+              "record_id": "6aa593f052d3da08beea29493e3ffbc092ecc0802bd54e727470d1a0f5a3386d",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -3204,7 +3294,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
+              "record_id": "e65d8ce3a6e65995dea3f60cef16c96ec8ed28cf3bc48f6ff19cac0c926b3f44",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
@@ -3214,7 +3304,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "LIST_PARTS",
-              "record_id": "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
+              "record_id": "51b1f0dcb59592f917ff602355af1cb8fcb8c52611932b3bca7d62f8a0900fd4",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": [
                 "Frame",
@@ -3227,10 +3317,10 @@
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 1,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "FIND_SHARED_PART",
-              "record_id": "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
+              "record_id": "0263b76968f467e1d53d3cfa2a941b55bbaaed5c5635f096905ab508cf710dd2",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "Wheel",
               "value_at_encoded_correct_index": "Wheel"
@@ -3240,7 +3330,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9",
+              "record_id": "15f9144c10af3408ce050f60475de92ebbbf76ef8273ddb812bf06cba22c1d45",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -3316,7 +3406,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
+              "record_id": "5a9c61c29c4c5ba87f14fb301b435487099b8893339e6fa8e9af05305ca0b312",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
@@ -3326,7 +3416,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
+              "record_id": "dafbe1c139fc4d185765d3668339b0eb5ca557b48b36f27980e7b655a386087b",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
@@ -3336,17 +3426,17 @@
               "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
+              "record_id": "639813aa7393d66d1fb81fc636978370e87c3c42b5e739a38ddb3b62efaf1683",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 1,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
+              "record_id": "6aa593f052d3da08beea29493e3ffbc092ecc0802bd54e727470d1a0f5a3386d",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -3356,7 +3446,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
+              "record_id": "e65d8ce3a6e65995dea3f60cef16c96ec8ed28cf3bc48f6ff19cac0c926b3f44",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
@@ -3366,7 +3456,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "LIST_PARTS",
-              "record_id": "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
+              "record_id": "51b1f0dcb59592f917ff602355af1cb8fcb8c52611932b3bca7d62f8a0900fd4",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": [
                 "Frame",
@@ -3379,10 +3469,10 @@
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 1,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "FIND_SHARED_PART",
-              "record_id": "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
+              "record_id": "0263b76968f467e1d53d3cfa2a941b55bbaaed5c5635f096905ab508cf710dd2",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "Wheel",
               "value_at_encoded_correct_index": "Wheel"
@@ -3392,7 +3482,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9",
+              "record_id": "15f9144c10af3408ce050f60475de92ebbbf76ef8273ddb812bf06cba22c1d45",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"

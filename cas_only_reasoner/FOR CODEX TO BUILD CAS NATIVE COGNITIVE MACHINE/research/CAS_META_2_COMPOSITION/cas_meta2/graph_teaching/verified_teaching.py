@@ -113,6 +113,49 @@ def _verify_role_bindings():
 _verify_role_bindings()
 
 
+# The task schema's role names and the lesson catalog's role names are different
+# spellings of the same question. Semantic identity ignores exercise ids, task
+# profiles, phase labels and option order, so it is keyed on the graph, the
+# operation, and these canonical roles.
+CATALOG_ROLES = {
+    "LIST_PARTS": {"whole_id": "idea"},
+    "FIND_SHARED_PART": {"first_whole_id": "a", "second_whole_id": "b"},
+    "REACHED_VIA": {"whole_id": "idea", "candidate_id": "part"},
+}
+
+
+def canonical_question_key(operation, named_arguments, context_id=None):
+    """A question's semantic identity: graph context, operation, named arguments.
+
+    Exercise ids, task-profile labels, teaching-phase labels and option order are
+    deliberately excluded, because the same question can be asked twice under
+    different teaching roles.
+    """
+    require(operation in CATALOG_ROLES, "VT_OPERATION_UNSUPPORTED:" + str(operation))
+    roles = CATALOG_ROLES[operation]
+    require(set(named_arguments) == set(roles),
+            "VT_QUESTION_ROLES_MISMATCH:%s:%s"
+            % (operation, sorted(named_arguments)))
+    return {"context_id": context_id, "operation": operation,
+            "named_arguments": {roles[role]: named_arguments[role]
+                                for role in sorted(roles)}}
+
+
+def catalog_question_key(operation, named_arguments, context_id=None):
+    """The same key for a lesson-catalog question, whose roles are already canonical."""
+    require(operation in CATALOG_ROLES, "VT_OPERATION_UNSUPPORTED:" + str(operation))
+    roles = set(CATALOG_ROLES[operation].values())
+    require(set(named_arguments) == roles,
+            "VT_CATALOG_ROLES_MISMATCH:%s:%s" % (operation, sorted(named_arguments)))
+    return {"context_id": context_id, "operation": operation,
+            "named_arguments": {role: named_arguments[role]
+                                for role in sorted(named_arguments)}}
+
+
+def question_key_digest(key):
+    return _public_digest(key)
+
+
 def reference_arguments(operation, named_arguments):
     """Positional arguments in the reference function's own order."""
     require(operation in ROLE_BINDINGS, "VT_OPERATION_UNSUPPORTED:" + str(operation))

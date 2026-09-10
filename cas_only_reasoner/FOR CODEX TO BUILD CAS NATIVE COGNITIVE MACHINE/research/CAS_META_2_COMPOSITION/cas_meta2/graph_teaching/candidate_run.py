@@ -23,7 +23,7 @@ numerical delivery path and stay that way.
 from __future__ import annotations
 
 from .graph import canonical, require
-from . import cube_node, trainer, verified_training as vtr
+from . import cube_node, trainer, verified_teaching as vt, verified_training as vtr
 
 CANDIDATE_SCHEMA = "cas-cube-verified-teaching-candidate-run/1"
 SCHEDULE_SCHEMA = "cas-cube-component-teaching-schedule/1"
@@ -68,10 +68,12 @@ PROPOSED_SCHEDULE = {
         "stop_when_blocks_complete": True,
     },
     "why_this_many": (
-        "eight complete passes give every question eight supervised corrections; "
-        "the update count is the block structure multiplied out (8 x 8), not the "
-        "frozen default adopted as a principle. It happens to fit the frozen "
-        "64-update budget profile, so no budget-profile change is needed"),
+        "eight complete passes give every question eight supervised corrections. "
+        "This is a CHOSEN PILOT ALLOWANCE, not a proven minimum for learning and "
+        "not a mathematically necessary number: it is the smallest allowance this "
+        "desk is willing to defend from the existing frozen budget profile, and it "
+        "happens to fit that profile so no budget-profile change is needed. Whether "
+        "eight blocks are enough is exactly what the pilot would measure"),
     "does_not_inherit": [
         "the stub's 48 / 8 / 8 step allocation",
         "the 64-step frozen default as a teaching principle",
@@ -196,6 +198,8 @@ def schedule_report(records, schedule=None):
         "steps_by_operation": by_op,
         "steps_by_phase": by_phase,
         "minimum_repeated_teaching_blocks": schedule["minimum_repeated_teaching_blocks"],
+        "allowance_status": ("a chosen pilot allowance, not a proven minimum for "
+                            "learning"),
         "stopping_limits": schedule["stopping_limits"],
         "counts": {**schedule["counts"], "scheduled_steps": len(steps)},
         "fits_frozen_budget_profile":
@@ -326,7 +330,192 @@ def prepare_candidate_run(bundle=None, view_id="view_context", ordering_mode="de
     }
 
 
-def proposed_evaluation(bundle=None, view_id="view_context"):
+def taught_questions(records):
+    """The distinct questions the records teach, and any question taught twice.
+
+    Eight teaching records can hold fewer distinct questions: the same route can
+    be asked once as a component question and once as a whole-answer question.
+    Identity ignores exercise ids, task-profile labels, phase labels and option
+    order, so that repetition is visible rather than counted as two questions.
+    """
+    by_key = {}
+    for record in records:
+        key = record["cube_verified_teaching"]["question_key"]
+        digest = record["cube_verified_teaching"]["question_key_digest"]
+        entry = by_key.setdefault(digest, {"key": key, "digest": digest,
+                                           "records": []})
+        entry["records"].append({
+            "record_id": record["record_id"],
+            "exercise_id": record["cube_verified_teaching"]["exercise_id"],
+            "task_profile": record["cube_verified_teaching"]["task_profile"],
+            "operation": record["op"]})
+    doubled = [entry for entry in by_key.values() if len(entry["records"]) > 1]
+    return {
+        "records": len(records),
+        "distinct_questions": len(by_key),
+        "questions": [by_key[digest] for digest in sorted(by_key)],
+        "taught_more_than_once": doubled,
+        "double_exposure_note": (
+            "a question taught once per block as a component question and again as "
+            "a whole-answer question receives two corrections per block; that "
+            "repetition is intended and is reported rather than hidden"),
+    }
+
+
+def probe_questions(bundle=None, records=None, view_id="view_context"):
+    """The within-scene probe: every catalog question not taught in either condition.
+
+    Membership comes from the union of semantically taught questions, so the same
+    set serves both conditions. The control teaches a subset of the same
+    questions, so the union is unchanged by the choice of condition.
+    """
+    if bundle is None:
+        bundle = cube_node.load_bundle()
+    if records is None:
+        records = vtr.training_records(bundle, view_id)
+    labels = cube_node.view_labels(bundle, view_id)
+    node_of = {label: ref for ref, label in labels.items()}
+    taught = {entry["digest"] for entry in taught_questions(records)["questions"]}
+    context_id = records[0]["cube_verified_teaching"]["question_key"]["context_id"]
+    cases = cube_node.answer_cases(bundle, view_id)["cases"]
+    remaining, excluded = [], []
+    for case in cases:
+        named = {role: node_of[value] for role, value in case["question"].items()}
+        key = vt.catalog_question_key(case["op"], named, context_id)
+        entry = {"operation": case["op"],
+                 "named_arguments": key["named_arguments"],
+                 "question_key_digest": vt.question_key_digest(key),
+                 "answer": case["correct"]}
+        if entry["question_key_digest"] in taught:
+            excluded.append(entry)
+        else:
+            remaining.append(entry)
+    by_operation = {}
+    for entry in remaining:
+        by_operation[entry["operation"]] = by_operation.get(entry["operation"], 0) + 1
+    return {
+        "schema": CANDIDATE_SCHEMA,
+        "catalog_questions": len(cases),
+        "distinct_taught_questions": len(taught),
+        "excluded_taught_questions": len(excluded),
+        "probe_questions": len(remaining),
+        "probe_by_operation": by_operation,
+        "membership_rule": ("catalog minus the union of semantically taught "
+                            "questions, keyed on graph context, operation and named "
+                            "arguments; exercise ids, task-profile labels, phase "
+                            "labels and option order are ignored"),
+        "same_set_for_both_conditions": True,
+        "interpretation": ("can the learner answer additional questions about this "
+                           "same graph after practising some of its relationships? "
+                           "Within-scene generalisation only, never transfer to a "
+                           "new graph arrangement"),
+        "may_not_be_used_for": ["checkpoint selection", "curriculum adjustment",
+                                "extending training mid-run"],
+        "additional_exclusions": [],
+        "questions": remaining,
+        "excluded": excluded,
+    }
+
+
+CONTROL_EXTRA_FIRST = True
+
+
+def control_schedule(records, updates=None):
+    """The frozen final-answer-only schedule: 64 updates over three questions.
+
+    The ordering is fixed here, before any result is seen: round-robin over the
+    whole-answer questions in their frozen export order, with the remainder given
+    to the first one. That yields 22 / 21 / 21 and is stated, not chosen later.
+    """
+    updates = updates or PROPOSED_SCHEDULE["updates"]
+    finals = [record for record in records
+              if record["cube_verified_teaching"]["task_profile"]
+              == "whole-answer/0.1"]
+    require(finals, "CANDIDATE_CONTROL_REQUIRES_FINAL_QUESTIONS")
+    counts = {record["record_id"]: updates // len(finals) for record in finals}
+    for record in finals[:updates % len(finals)]:
+        counts[record["record_id"]] += 1
+    order, index = [], 0
+    while sum(1 for record_id in order if record_id) < updates:
+        for record in finals:
+            if order.count(record["record_id"]) < counts[record["record_id"]]:
+                order.append(record["record_id"])
+                index += 1
+    return {
+        "schema": CANDIDATE_SCHEMA,
+        "condition": "final_answer_only",
+        "updates": updates,
+        "component_corrections": 0,
+        "whole_answer_corrections": updates,
+        "questions": [{"record_id": record["record_id"],
+                       "operation": record["op"],
+                       "expected_answer": record["correct"],
+                       "corrections": counts[record["record_id"]]}
+                      for record in finals],
+        "distribution": {record["record_id"]: counts[record["record_id"]]
+                         for record in finals},
+        "ordering": order,
+        "ordering_rule": ("round-robin over the whole-answer questions in their "
+                          "frozen export order; the remainder goes to the first"),
+        "frozen_before_results": True,
+        "final_question_exposure": {
+            record["op"]: counts[record["record_id"]] for record in finals},
+        "note": ("the control practises the three final questions far more often "
+                 "than the component condition does; that is the difference being "
+                 "measured, not a defect"),
+    }
+
+
+def matched_comparison_requirements():
+    """What must be identical for the two conditions, and what may differ."""
+    return {
+        "identical": ["initial weights (two candidate copies from the same initial "
+                      "state)",
+                      "the frozen encoder and its fitted tokenizer",
+                      "the public exercise set's graph, framing and scoring path",
+                      "the update allowance: %d per condition"
+                      % PROPOSED_SCHEDULE["updates"],
+                      "the seed and the stopping limits"],
+        "separate": ["optimizer state", "checkpoint identity",
+                     "per-condition observation records"],
+        "may_differ": ["the teaching allocation: 40 component + 24 whole-answer "
+                       "versus 0 + 64"],
+        "why": ("the allocation must be the intended difference; a different "
+                "starting learner would confound it"),
+        "restart_policy": "zero automatic retries; a failed condition is reported",
+    }
+
+
+def comparison_semantics():
+    """Exactly what the two-condition comparison can and cannot show."""
+    return {
+        "question": ("at the same number of updates, is it better to spend some "
+                     "practice on the parts of the problem rather than spend every "
+                     "update on the complete questions?"),
+        "conditions": {
+            "checked_component_teaching": {"component_corrections": 40,
+                                           "whole_answer_corrections": 24},
+            "final_answer_only": {"component_corrections": 0,
+                                  "whole_answer_corrections": 64},
+        },
+        "does_not_show": ("it does not isolate the effect of adding component "
+                          "instruction while holding final-question practice "
+                          "equal: the control practises the final questions far "
+                          "more often. A third condition would be needed for that, "
+                          "and none is proposed now"),
+        "negative_result_means": ("this component-teaching allocation did not help "
+                                  "under these conditions"),
+        "negative_result_does_not_mean": ("the complete seven-stage method failed; "
+                                          "several of its presentations have no "
+                                          "numerical delivery path yet"),
+        "primary_set_size_warning": ("the primary set holds three taught "
+                                    "whole-answer questions, so one changed answer "
+                                    "moves accuracy by 33.3 percentage points; no "
+                                    "single percentage carries the conclusion"),
+    }
+
+
+def proposed_evaluation(bundle=None, view_id="view_context", records=None):
     """What this candidate could and could not show, and how it would be scored.
 
     The taught set is the whole authored scene, so the honest primary measure is
@@ -336,48 +525,66 @@ def proposed_evaluation(bundle=None, view_id="view_context"):
     """
     if bundle is None:
         bundle = cube_node.load_bundle()
-    cases = cube_node.answer_cases(bundle, view_id)["cases"]
-    taught = 8
+    if records is None:
+        records = vtr.training_records(bundle, view_id)
+    probe = probe_questions(bundle, records, view_id)
+    control = control_schedule(records)
     return {
         "schema": CANDIDATE_SCHEMA,
         "primary_question": ("does teaching the smaller relationship decisions help "
                              "the same learner answer the complete whole-part "
                              "question?"),
+        "comparison_semantics": comparison_semantics(),
+        "matched_comparison": matched_comparison_requirements(),
         "conditions": [
             {"name": "checked_component_teaching",
              "teaches": "five component-route questions then the three whole-answer "
                         "questions, per block",
              "updates": PROPOSED_SCHEDULE["updates"],
              "component_supervision_counted_separately":
-                 PROPOSED_SCHEDULE["counts"]["component_question_presentations"]},
+                 PROPOSED_SCHEDULE["counts"]["component_question_presentations"],
+             "whole_answer_corrections":
+                 PROPOSED_SCHEDULE["counts"]["whole_answer_presentations"]},
             {"name": "final_answer_only",
              "teaches": "the three whole-answer questions only, same update "
                         "allowance",
-             "updates": PROPOSED_SCHEDULE["updates"],
-             "component_supervision_counted_separately": 0},
+             "updates": control["updates"],
+             "component_supervision_counted_separately": 0,
+             "whole_answer_corrections": control["whole_answer_corrections"],
+             "frozen_ordering": control["ordering_rule"],
+             "final_question_exposure": control["final_question_exposure"]},
         ],
         "condition_note": ("the two conditions must differ in component supervision "
                            "only; the update allowance is held equal"),
         "primary_measure": ("independent accuracy on the taught whole-answer "
                             "questions: no worked answer, no teacher-verified "
-                            "subanswers, no correct prefix"),
+                            "subanswers, no correct prefix. 'Independent' means no "
+                            "worked answer is supplied during prediction; it does "
+                            "not mean the taught questions have become unseen"),
         "secondary_measures": [
             "component-question accuracy, reported separately from the complete "
             "question",
             "assisted performance during teaching, never mixed into the independent "
             "figure"],
-        "held_out_probe": {
-            "available_questions_in_the_scene": len(cases),
-            "taught_questions": taught,
-            "candidate_probe_questions": len(cases) - taught,
-            "caveat": ("same authored scene: within-scene generalisation, not "
-                       "transfer to a new graph family")},
-        "reporting_rules": [
-            "the learner's own prediction is recorded before any correction",
-            "all three scores or logits are retained, or marked unavailable",
-            "the teacher checker never selects among the learner's test answers",
-            "independent and assisted figures are never merged",
-            "missing measurements are unavailable, never zero"],
+        "reporting_plan": {
+            "taught_whole_answer_questions": ("before and after: the selected "
+                                              "answer, all three scores, and the "
+                                              "loss for each of the three"),
+            "component_questions": "reported separately",
+            "untaught_probe": "counts by operation, same set for both conditions",
+            "checkpoint_rule": ("the final checkpoint is fixed by the declared "
+                                "schedule; the probe never selects a checkpoint, "
+                                "adjusts the curriculum, or extends training"),
+        },
+        "probe": {key: probe[key] for key in                  ("catalog_questions", "distinct_taught_questions",
+                   "excluded_taught_questions", "probe_questions",
+                   "probe_by_operation", "membership_rule",
+                   "same_set_for_both_conditions", "interpretation",
+                   "may_not_be_used_for", "additional_exclusions")},
+        "taught_question_repetition": {
+            key: taught_questions(records)[key]
+            for key in ("records", "distinct_questions", "taught_more_than_once",
+                        "double_exposure_note")},
         "not_measured": ["definition, analogy, correspondence and story content: no "
                          "numerical delivery path exists for them"],
         "requires_owner_decisions": [
@@ -385,9 +592,12 @@ def proposed_evaluation(bundle=None, view_id="view_context"):
             "whether the held-out probe questions are used",
             "whether any budget-profile change is approved for a larger schedule"],
         "cost_note": ("no reservation or cost estimate is proposed here; the frozen "
-                      "budget profile bounds the candidate at %d updates and %d "
-                      "seconds" % (trainer.FROZEN_MAX_OPTIMIZER_STEPS,
-                                   trainer.FROZEN_MAX_WALL_SECONDS)),
+                      "budget profile bounds one condition at %d updates and %d "
+                      "seconds. A pilot authorization request must state the "
+                      "per-condition and combined limits, the total reservation, and "
+                      "the collection and cleanup policy"
+                      % (trainer.FROZEN_MAX_OPTIMIZER_STEPS,
+                         trainer.FROZEN_MAX_WALL_SECONDS)),
     }
 
 

@@ -11,10 +11,10 @@
       "note": "superseded only in its stub counter name; kept unchanged"
     },
     "check_report.json": {
-      "bytes": 124755,
-      "sha256": "313f567023d691dcad6834060d4a499d836a52e3dd910479b0c1823c214fc17f",
-      "revision": 3,
-      "note": "corrected counters, candidate preparation, and the schedule proposal"
+      "bytes": 130033,
+      "sha256": "993bdfce4bbe0bc510ba7aa7dcdd88ab914c749ef62a54c5313ab89bad57571a",
+      "revision": 4,
+      "note": "corrected counters, candidate preparation, probe membership (44), and the frozen control schedule"
     }
   },
   "field_correction": {
@@ -60,8 +60,41 @@
     {"name": "DESIGN.md", "bytes": 16662, "sha256": "7c7c7977b207a24609cf3e0ae9be7517f249270acfbcdc9635044712f3b6deb3"},
     {"name": "TASK_BINDINGS.md", "bytes": 8602, "sha256": "44474a951555ae7cd4621b5052155949fead55964b14cf89f2890e1ba6fa5f46"},
     {"name": "EXECUTION_CONNECTION.md", "bytes": 6617, "sha256": "b1c995e97e0340733482622dd7b94c8fdfb2246b4d7f4d02f8cef98327437d48"},
-    {"name": "CANDIDATE_RUN_001.md", "bytes": 8272, "sha256": "54db2f9f87f976c941a3e021eb28440c55d83528fd5fbabfc83c5744508a72bb"}
+    {"name": "CANDIDATE_RUN_001.md", "bytes": 10571, "sha256": "d1d499754bea7544bbbd84f55b335711d515012c1eee36cdbe88c578cc36d3b7"},
+    {"name": "AUTHORIZATION_REQUEST_001.md", "bytes": 9036, "sha256": "e42a8eaccb73750b05203eaaefb4f3bf6a66c9ce684a9ddaf1cdf1a8ba74ffd7"}
   ],
+  "question_ledger": {
+    "catalog_questions": 51,
+    "teaching_records": 8,
+    "distinct_taught_questions": 7,
+    "taught_more_than_once": [
+      {"question": "REACHED_VIA(whole=node_001, candidate=node_006)",
+       "roles": ["component-route/0.1", "whole-answer/0.1"],
+       "corrections_across_8_blocks": 16}
+    ],
+    "probe_questions": 44,
+    "probe_by_operation": {"REACHED_VIA": 25, "FIND_SHARED_PART": 14, "LIST_PARTS": 5},
+    "membership_rule": "catalog minus the union of semantically taught questions, keyed on graph context + operation + named arguments",
+    "additional_exclusions": []
+  },
+  "control_schedule": {
+    "condition": "final_answer_only",
+    "updates": 64,
+    "distribution": [22, 21, 21],
+    "exposure": {"LIST_PARTS": 22, "FIND_SHARED_PART": 21, "REACHED_VIA": 21},
+    "frozen_before_results": true,
+    "ordering_rule": "round-robin over the whole-answer questions in their frozen export order; the remainder to the first"
+  },
+  "authorization_request": {
+    "document": "AUTHORIZATION_REQUEST_001.md",
+    "status": "REQUEST ONLY - not approved, not reserved, not launched",
+    "reservation_usd_proposed": "7.00",
+    "reservation_usd_tighter_alternative": "4.00",
+    "per_condition_updates": 64,
+    "combined_updates": 128,
+    "auto_retries": 0,
+    "owner_signature_required": true
+  },
   "candidate_schedule": {
     "profile_id": "cas-cube-component-teaching-schedule/1:8x8",
     "kind": "CHECKED_COMPONENT_TEACHING",
@@ -121,11 +154,19 @@
     "not_used": "trainer.launch: no record-injection parameter; adding one would change registered infrastructure",
     "check_readings": {
       "records": 8,
-      "optimizer_updates": 64,
+      "stub_training_step_calls": 64,
+      "actual_optimizer_updates": 0,
+      "actual_neural_presentations": 0,
       "records_reached": 8,
       "neural_execution": false,
       "torch_imported": false,
-      "learner_is_a_stub": true
+      "learner_is_a_stub": true,
+      "field_correction": {
+        "replaced": "optimizer_updates",
+        "with": ["stub_training_step_calls", "actual_optimizer_updates",
+                 "actual_neural_presentations"],
+        "why": "the earlier summary recorded the stub's step calls as optimizer updates"
+      }
     },
     "execution_enabled": false
   },
