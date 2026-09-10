@@ -1,0 +1,3651 @@
+{
+  "audit_all_questions": {
+    "counts_by_operation": {
+      "FIND_SHARED_PART": 15,
+      "LIST_PARTS": 6,
+      "REACHED_VIA": 30
+    },
+    "mask_scope": "the cubes the question asks about",
+    "prose_labels_excluded_from_matching": [
+      "A",
+      "B",
+      "C",
+      "F"
+    ],
+    "questions": 51,
+    "scope_note": "a cube that is not asked about keeps its faces as teaching context; its fields can only restate the public graph, and the all-cubes number counts exactly those",
+    "unassisted_questions_compiled": 51,
+    "unassisted_questions_refused": [],
+    "unassisted_residual_disclosures_all_cubes": 8,
+    "unassisted_residual_disclosures_asked_cubes": 0,
+    "visibility_version": "82f64945ec46c0382a982fe1fde2d83fcbaa5334ae5736210736ef63cc83ac1e"
+  },
+  "boundary": {
+    "delivered_neural_lessons": 0,
+    "launch": "none",
+    "neural_calls": 0,
+    "optimizer_updates": 0,
+    "reservation": "none",
+    "training": "none",
+    "unchanged": [
+      "the zero-update contrast probe",
+      "the retained checkpoints and the measured negatives",
+      "the accepted models",
+      "every paid-run decision and the reservation allowance"
+    ]
+  },
+  "demonstration_question": {
+    "answer": [
+      "Frame",
+      "Wheel"
+    ],
+    "op": "LIST_PARTS",
+    "question": {
+      "idea": "Bicycle"
+    }
+  },
+  "legacy_ordering": {
+    "action": "old records, datasets, and results are left unchanged",
+    "claim": "this is a reading of the existing data path; it is not evidence that any model used the difference",
+    "distinct_orders": 2,
+    "legacy_record_id_basis": "core_including_correct",
+    "legacy_slot_order_source": "digest(record_id + arm)",
+    "new_rule": "the three public choices are ordered by the frozen public-record extraction: it permutes them with a seed derived from the public record id and the arm, and the record id covers the public projection only, so no slot depends on which choice is correct",
+    "orders": [
+      {
+        "declared_target": [
+          "Frame",
+          "Wheel"
+        ],
+        "encoded_order": [
+          [
+            "Frame",
+            "Wheel"
+          ],
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ]
+        ],
+        "legacy_record_id": "02aed2d7ba16b53ded792186fe23867ba397e3c7a8ac1e32cd63bb96899fa437"
+      },
+      {
+        "declared_target": [
+          "Frame",
+          "Rim",
+          "Wheel"
+        ],
+        "encoded_order": [
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ],
+          [
+            "Frame",
+            "Wheel"
+          ]
+        ],
+        "legacy_record_id": "b1049b85c06a7f26356e9629949b31c65f4b990309113ed9d6c24d764fd272b2"
+      },
+      {
+        "declared_target": [
+          "Frame"
+        ],
+        "encoded_order": [
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ],
+          [
+            "Frame",
+            "Wheel"
+          ]
+        ],
+        "legacy_record_id": "69da5ab66af53bcdabb81f09f10c2d610dc36073813a4d83e964fae225d96b6b"
+      }
+    ],
+    "slot_order_varies_with_target": true
+  },
+  "profile_id": "CUBE_TEACHING_PROFILE_001",
+  "profiles": {
+    "guided": {
+      "assistance_level": "guided",
+      "assisted": true,
+      "boundary": "this preparation performs no optimizer step and delivers no neural lesson; the counters above keep those at zero",
+      "counts": {
+        "assessments": 0,
+        "assistance_states_recorded": 1,
+        "assisted_tasks": 2,
+        "corrective_examples": 2,
+        "delivered_neural_lessons": 0,
+        "distinct_graph_families": 1,
+        "module_inputs": 2,
+        "operation": "LIST_PARTS",
+        "optimizer_updates": 0,
+        "predictions_required": 2,
+        "presentations": 5,
+        "stages": 7,
+        "supervised_tasks": 2,
+        "unassisted_tasks": 0
+      },
+      "decline_reason": "each needs a declared output vocabulary, loss, and training adapter; this profile scores only the three existing operations and presents the rest",
+      "family_id": "illustration_family_01",
+      "new_heads_required": [],
+      "new_task_profiles_required_in_this_profile": [],
+      "operation": "LIST_PARTS",
+      "presentation_only_stages": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "profile_digest": "b3de6e3e68fb39c92c83d687d00300cf682c8f72f1f74945f7e1e3f46259a43d",
+      "profile_id": "CUBE_TEACHING_PROFILE_001",
+      "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+      "question": {
+        "idea": "Bicycle"
+      },
+      "schema": "cas-cube-teaching-profile/1",
+      "scored_operations": [
+        "LIST_PARTS",
+        "FIND_SHARED_PART",
+        "REACHED_VIA"
+      ],
+      "separation": {
+        "guided": "withholds nothing, labels every scored answer assisted",
+        "shared": "the same public exercise and the same three operations",
+        "unassisted": "retains the public graph, withholds the declared decomposition and recomposition fields, delivers no worked answer"
+      },
+      "stages": [
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "core": {
+                  "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory.",
+                  "kind": "concept",
+                  "label": "Bicycle"
+                },
+                "face_1": {
+                  "availability": "populated",
+                  "human_text": "Technical identity within the authored teaching scene.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "canonical_name": "Bicycle",
+                    "definition": "The Bicycle concept as represented in this bounded graph.",
+                    "function": "Participate in the explicit conceptual containment relationships of this scene."
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "anchor the subject, its function, and the requested operation",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 1,
+          "stage_id": "name_and_function",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "core",
+            "face_1"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_2": {
+                  "availability": "populated",
+                  "human_text": "Inspect the contextual presentation and the incident facts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "context_scope": "toy_scene_01",
+                    "fact_refs": [
+                      "branch_01",
+                      "branch_02"
+                    ],
+                    "view_refs": [
+                      "view_context"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "show the idea inside the supplied graph",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 2,
+          "stage_id": "context",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_2"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_3": {
+                  "availability": "populated",
+                  "human_text": "The corresponding role is presented as Kit A in the analogy.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "analogy_limits": [
+                      "No claim of identical physical function.",
+                      "No claim that two physical objects share one physical component.",
+                      "No causal or temporal equivalence follows from the analogy."
+                    ],
+                    "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                    "mapping_refs": [
+                      "mapping_01"
+                    ],
+                    "view_refs": [
+                      "view_analogy"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "guided presentation only in this profile: scoring an analogy needs a separately declared task profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 3,
+          "stage_id": "analogy",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_3"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_4": {
+                  "availability": "populated",
+                  "human_text": "Use the declared cross-view role and relation correspondence.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "mapping_refs": [
+                      "mapping_01"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "the correspondence table is presented, not scored, in this profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 4,
+          "stage_id": "explicit_mapping",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_4"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+            "signal": "cross-entropy over the three public slots against the declared target index",
+            "target_index": 0,
+            "worked_solution": [
+              "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+              "derived by the deterministic reference checker from the stored contains branches only"
+            ]
+          },
+          "kind": "supervised_task",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_5": {
+                  "availability": "populated",
+                  "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "completeness": "complete",
+                    "direct_branch_refs": [
+                      "branch_01",
+                      "branch_02"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": true,
+            "public_record": {
+              "observations": [
+                {
+                  "slot": 0,
+                  "tag": "['Frame', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 1,
+                  "tag": "['Frame', 'Rim', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 2,
+                  "tag": "['Frame']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                }
+              ],
+              "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+            },
+            "tokens": 49,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "the scored question: prediction over three public slots, with the worked answer supplied only when the assistance level allows it",
+          "prediction": {
+            "form": "argmax over the three public option slots",
+            "required": true,
+            "slots": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ]
+          },
+          "scored_task": {
+            "asked_nodes": [
+              "node_001"
+            ],
+            "assistance_level": "guided",
+            "assisted": true,
+            "candidate_set_content_order": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ],
+            "delivery": {
+              "assistance_level": "guided",
+              "delivery_id": "247153c5ced774265824a868abd353920fe6f102f16a95bf69d76ea369ac2c8c",
+              "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46"
+            },
+            "derived_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "encoding": {
+              "encoded_correct_index": 0,
+              "encoded_options": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "encoding_target": "graph_derived_answer",
+              "public": {
+                "observations": [
+                  {
+                    "slot": 0,
+                    "tag": "['Frame', 'Wheel']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "slot": 1,
+                    "tag": "['Frame', 'Rim', 'Wheel']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "slot": 2,
+                    "tag": "['Frame']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                ],
+                "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+              },
+              "token_digest": "119dc1a648dfb6c072e598d798fbfc5661de9303bc44415588dd91d00e9fd5ac",
+              "tokens": 49
+            },
+            "family_id": "illustration_family_01",
+            "identity_basis": "public_projection",
+            "identity_core": {
+              "family_id": "illustration_family_01",
+              "op": "LIST_PARTS",
+              "option_pool_version": "cas-cube-option-pool/1",
+              "options": [
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "view_id": "view_context"
+            },
+            "learner_view": {
+              "choices": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "graph_scope": {
+                "branches": [
+                  {
+                    "branch_id": "branch_01",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Bicycle",
+                    "target": "Wheel"
+                  },
+                  {
+                    "branch_id": "branch_02",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Bicycle",
+                    "target": "Frame"
+                  },
+                  {
+                    "branch_id": "branch_03",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Cart",
+                    "target": "Wheel"
+                  },
+                  {
+                    "branch_id": "branch_04",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Cart",
+                    "target": "Platform"
+                  },
+                  {
+                    "branch_id": "branch_05",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Wheel",
+                    "target": "Rim"
+                  }
+                ],
+                "nodes": [
+                  {
+                    "label": "Bicycle",
+                    "node_ref": "node_001",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Wheel",
+                    "node_ref": "node_002",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Frame",
+                    "node_ref": "node_003",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Cart",
+                    "node_ref": "node_004",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Platform",
+                    "node_ref": "node_005",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Rim",
+                    "node_ref": "node_006",
+                    "revision": 1
+                  }
+                ]
+              },
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "visible_field_paths": [
+                "node_001.core.identity_statement",
+                "node_001.core.kind",
+                "node_001.core.label",
+                "node_001.face_1.availability",
+                "node_001.face_1.human_text",
+                "node_001.face_1.provenance_refs",
+                "node_001.face_1.structured.canonical_name",
+                "node_001.face_1.structured.definition",
+                "node_001.face_1.structured.function",
+                "node_001.face_2.availability",
+                "node_001.face_2.human_text",
+                "node_001.face_2.provenance_refs",
+                "node_001.face_2.structured.context_scope",
+                "node_001.face_2.structured.fact_refs",
+                "node_001.face_2.structured.view_refs",
+                "node_001.face_3.availability",
+                "node_001.face_3.human_text",
+                "node_001.face_3.provenance_refs",
+                "node_001.face_3.structured.analogy_limits",
+                "node_001.face_3.structured.analogy_scope",
+                "node_001.face_3.structured.mapping_refs",
+                "node_001.face_3.structured.view_refs",
+                "node_001.face_4.availability",
+                "node_001.face_4.human_text",
+                "node_001.face_4.provenance_refs",
+                "node_001.face_4.structured.mapping_refs",
+                "node_001.face_5.availability",
+                "node_001.face_5.human_text",
+                "node_001.face_5.provenance_refs",
+                "node_001.face_5.structured.completeness",
+                "node_001.face_5.structured.direct_branch_refs",
+                "node_001.face_6.availability",
+                "node_001.face_6.human_text",
+                "node_001.face_6.provenance_refs",
+                "node_001.face_6.structured.sequence_kind",
+                "node_001.face_6.structured.steps[0].step_id",
+                "node_001.face_6.structured.steps[0].text",
+                "node_001.face_6.structured.steps[0].uses_branch_refs",
+                "node_001.face_6.structured.steps[1].step_id",
+                "node_001.face_6.structured.steps[1].text",
+                "node_001.face_6.structured.steps[1].uses_branch_refs",
+                "node_001.face_6.structured.steps[2].step_id",
+                "node_001.face_6.structured.steps[2].text",
+                "node_001.face_6.structured.steps[2].uses_branch_refs"
+              ],
+              "withheld_field_paths": []
+            },
+            "operation": "LIST_PARTS",
+            "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+            "question": {
+              "idea": "Bicycle"
+            },
+            "record": {
+              "correct": [
+                "Frame",
+                "Wheel"
+              ],
+              "cube": {
+                "assistance_level": "guided",
+                "delivery_id": "247153c5ced774265824a868abd353920fe6f102f16a95bf69d76ea369ac2c8c",
+                "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+                "record_id_basis": "public_projection",
+                "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+                "view_id": "view_context",
+                "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46"
+              },
+              "encoding_target": "graph_derived_answer",
+              "framings": {
+                "cas": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n",
+                "generic": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+              },
+              "graph": {
+                "nodes": [
+                  {
+                    "fields": [],
+                    "identifier": "Bicycle",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Wheel",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Frame",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Cart",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Platform",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Rim",
+                    "kind": "idea"
+                  }
+                ],
+                "relations": [
+                  {
+                    "content": [
+                      "constituent",
+                      "Wheel"
+                    ],
+                    "kind": "contains",
+                    "source": "Bicycle",
+                    "target": "Wheel"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Frame"
+                    ],
+                    "kind": "contains",
+                    "source": "Bicycle",
+                    "target": "Frame"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Wheel"
+                    ],
+                    "kind": "contains",
+                    "source": "Cart",
+                    "target": "Wheel"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Platform"
+                    ],
+                    "kind": "contains",
+                    "source": "Cart",
+                    "target": "Platform"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Rim"
+                    ],
+                    "kind": "contains",
+                    "source": "Wheel",
+                    "target": "Rim"
+                  }
+                ],
+                "schema": "cas-meta2-graph-teaching-graph/1"
+              },
+              "op": "LIST_PARTS",
+              "options": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "record_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "schema": "cas-meta2-graph-teaching-exercise/1",
+              "split": "design_only"
+            },
+            "schema": "cas-cube-lesson/2",
+            "slot_order_rule": "the three public choices are ordered by the frozen public-record extraction: it permutes them with a seed derived from the public record id and the arm, and the record id covers the public projection only, so no slot depends on which choice is correct",
+            "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+            "target": {
+              "corrective_feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+              "declared_correct_choice_index": 0,
+              "delivered": true,
+              "delivery_note": "shown as worked teaching during this lesson",
+              "derived_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "expected_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "target_can_steer_public_view": false,
+              "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "why": "a target that disagrees with the graph-derived answer is refused before any learner-facing object is built",
+              "worked_solution": [
+                "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+                "derived by the deterministic reference checker from the stored contains branches only"
+              ]
+            },
+            "target_digest": "d02b0ac97211b7e8e3cd88ba417b995db929e01e4e23cb280a7cef209f9787dd",
+            "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+            "view_id": "view_context",
+            "visibility": {
+              "disclosures_after_mask": [
+                "node_001.face_2.structured.fact_refs",
+                "node_001.face_5.structured.direct_branch_refs",
+                "node_001.face_6.structured.steps[0].text",
+                "node_001.face_6.structured.steps[0].uses_branch_refs",
+                "node_001.face_6.structured.steps[1].text",
+                "node_001.face_6.structured.steps[1].uses_branch_refs",
+                "node_001.face_6.structured.steps[2].text",
+                "node_001.face_6.structured.steps[2].uses_branch_refs"
+              ],
+              "mask_is_declared": true,
+              "profile": {
+                "assistance_level": "guided",
+                "assisted": true,
+                "note": "withheld fields are the declarations above, expanded over the cubes the question asks about; the pattern is identical for every question of a (task, assistance) pair, so it carries no answer information",
+                "operation": "LIST_PARTS",
+                "profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+                "schema": "cas-cube-visibility/1",
+                "withheld_patterns": []
+              },
+              "visible_field_paths": [
+                "node_001.core.identity_statement",
+                "node_001.core.kind",
+                "node_001.core.label",
+                "node_001.face_1.availability",
+                "node_001.face_1.human_text",
+                "node_001.face_1.provenance_refs",
+                "node_001.face_1.structured.canonical_name",
+                "node_001.face_1.structured.definition",
+                "node_001.face_1.structured.function",
+                "node_001.face_2.availability",
+                "node_001.face_2.human_text",
+                "node_001.face_2.provenance_refs",
+                "node_001.face_2.structured.context_scope",
+                "node_001.face_2.structured.fact_refs",
+                "node_001.face_2.structured.view_refs",
+                "node_001.face_3.availability",
+                "node_001.face_3.human_text",
+                "node_001.face_3.provenance_refs",
+                "node_001.face_3.structured.analogy_limits",
+                "node_001.face_3.structured.analogy_scope",
+                "node_001.face_3.structured.mapping_refs",
+                "node_001.face_3.structured.view_refs",
+                "node_001.face_4.availability",
+                "node_001.face_4.human_text",
+                "node_001.face_4.provenance_refs",
+                "node_001.face_4.structured.mapping_refs",
+                "node_001.face_5.availability",
+                "node_001.face_5.human_text",
+                "node_001.face_5.provenance_refs",
+                "node_001.face_5.structured.completeness",
+                "node_001.face_5.structured.direct_branch_refs",
+                "node_001.face_6.availability",
+                "node_001.face_6.human_text",
+                "node_001.face_6.provenance_refs",
+                "node_001.face_6.structured.sequence_kind",
+                "node_001.face_6.structured.steps[0].step_id",
+                "node_001.face_6.structured.steps[0].text",
+                "node_001.face_6.structured.steps[0].uses_branch_refs",
+                "node_001.face_6.structured.steps[1].step_id",
+                "node_001.face_6.structured.steps[1].text",
+                "node_001.face_6.structured.steps[1].uses_branch_refs",
+                "node_001.face_6.structured.steps[2].step_id",
+                "node_001.face_6.structured.steps[2].text",
+                "node_001.face_6.structured.steps[2].uses_branch_refs"
+              ],
+              "withheld_field_paths": []
+            }
+          },
+          "stage": 5,
+          "stage_id": "guided_decomposition",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": {
+              "containment_check": "trainer.containment_report must show no digest change outside the allowlist",
+              "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+              "excluded": [
+                "the frozen encoder",
+                "the frozen dot-product readout",
+                "any parameter outside the admitted plasticity role"
+              ],
+              "objective": "cross-entropy over the three public slots against the declared target index",
+              "plasticity_role": "operation:^6",
+              "would_update": "the registered module's own parameters only, through the existing trainer allowlist"
+            },
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": true
+          },
+          "visits": [
+            "face_5"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_6": {
+                  "availability": "populated",
+                  "human_text": "An explanatory walk through this node and its declared direct parts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "sequence_kind": "explanatory",
+                    "steps": [
+                      {
+                        "step_id": "step_01",
+                        "text": "Identify the Bicycle concept in this authored scene.",
+                        "uses_branch_refs": []
+                      },
+                      {
+                        "step_id": "step_02",
+                        "text": "Inspect its direct connection to Wheel.",
+                        "uses_branch_refs": [
+                          "branch_01"
+                        ]
+                      },
+                      {
+                        "step_id": "step_03",
+                        "text": "Inspect its direct connection to Frame.",
+                        "uses_branch_refs": [
+                          "branch_02"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "the story is presentation only; scoring a recomposition needs a separately declared task profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 6,
+          "stage_id": "recomposition",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_6"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "correction": {
+            "delivered": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+            "signal": "cross-entropy over the three public slots against the declared target index",
+            "target_index": 0,
+            "worked_solution": [
+              "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+              "derived by the deterministic reference checker from the stored contains branches only"
+            ]
+          },
+          "kind": "supervised_task",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "core": {
+                  "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory.",
+                  "kind": "concept",
+                  "label": "Bicycle"
+                },
+                "face_1": {
+                  "availability": "populated",
+                  "human_text": "Technical identity within the authored teaching scene.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "canonical_name": "Bicycle",
+                    "definition": "The Bicycle concept as represented in this bounded graph.",
+                    "function": "Participate in the explicit conceptual containment relationships of this scene."
+                  }
+                },
+                "face_2": {
+                  "availability": "populated",
+                  "human_text": "Inspect the contextual presentation and the incident facts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "context_scope": "toy_scene_01",
+                    "fact_refs": [
+                      "branch_01",
+                      "branch_02"
+                    ],
+                    "view_refs": [
+                      "view_context"
+                    ]
+                  }
+                },
+                "face_3": {
+                  "availability": "populated",
+                  "human_text": "The corresponding role is presented as Kit A in the analogy.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "analogy_limits": [
+                      "No claim of identical physical function.",
+                      "No claim that two physical objects share one physical component.",
+                      "No causal or temporal equivalence follows from the analogy."
+                    ],
+                    "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                    "mapping_refs": [
+                      "mapping_01"
+                    ],
+                    "view_refs": [
+                      "view_analogy"
+                    ]
+                  }
+                },
+                "face_4": {
+                  "availability": "populated",
+                  "human_text": "Use the declared cross-view role and relation correspondence.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "mapping_refs": [
+                      "mapping_01"
+                    ]
+                  }
+                },
+                "face_5": {
+                  "availability": "populated",
+                  "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "completeness": "complete",
+                    "direct_branch_refs": [
+                      "branch_01",
+                      "branch_02"
+                    ]
+                  }
+                },
+                "face_6": {
+                  "availability": "populated",
+                  "human_text": "An explanatory walk through this node and its declared direct parts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "sequence_kind": "explanatory",
+                    "steps": [
+                      {
+                        "step_id": "step_01",
+                        "text": "Identify the Bicycle concept in this authored scene.",
+                        "uses_branch_refs": []
+                      },
+                      {
+                        "step_id": "step_02",
+                        "text": "Inspect its direct connection to Wheel.",
+                        "uses_branch_refs": [
+                          "branch_01"
+                        ]
+                      },
+                      {
+                        "step_id": "step_03",
+                        "text": "Inspect its direct connection to Frame.",
+                        "uses_branch_refs": [
+                          "branch_02"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": true,
+            "public_record": {
+              "observations": [
+                {
+                  "slot": 0,
+                  "tag": "['Frame', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 1,
+                  "tag": "['Frame', 'Rim', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 2,
+                  "tag": "['Frame']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                }
+              ],
+              "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+            },
+            "tokens": 49,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].step_id",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "withheld_field_paths": []
+          },
+          "note": "repeat the connected lesson with declared variations; the same three operations, no new output contract",
+          "prediction": {
+            "form": "argmax over the three public option slots",
+            "required": true,
+            "slots": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ]
+          },
+          "scored_task": null,
+          "stage": 7,
+          "stage_id": "reinforcement",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": {
+              "containment_check": "trainer.containment_report must show no digest change outside the allowlist",
+              "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+              "excluded": [
+                "the frozen encoder",
+                "the frozen dot-product readout",
+                "any parameter outside the admitted plasticity role"
+              ],
+              "objective": "cross-entropy over the three public slots against the declared target index",
+              "plasticity_role": "operation:^6",
+              "would_update": "the registered module's own parameters only, through the existing trainer allowlist"
+            },
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": true
+          },
+          "visits": [
+            "core",
+            "face_1",
+            "face_2",
+            "face_3",
+            "face_4",
+            "face_5",
+            "face_6"
+          ]
+        }
+      ],
+      "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+      "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+      "unsupported_scorings_declined": [
+        {
+          "candidate": "select the definition/function that matches",
+          "stage": 1
+        },
+        {
+          "candidate": "select the relevant supplied contextual relation",
+          "stage": 2
+        },
+        {
+          "candidate": "select the analogy preserving the relationship",
+          "stage": 3
+        },
+        {
+          "candidate": "select the correct role correspondence",
+          "stage": 4
+        },
+        {
+          "candidate": "select a valid recomposition or explanation",
+          "stage": 6
+        }
+      ],
+      "update_path": {
+        "containment_check": "trainer.containment_report must show no digest change outside the allowlist",
+        "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+        "excluded": [
+          "the frozen encoder",
+          "the frozen dot-product readout",
+          "any parameter outside the admitted plasticity role"
+        ],
+        "objective": "cross-entropy over the three public slots against the declared target index",
+        "plasticity_role": "operation:^6",
+        "would_update": "the registered module's own parameters only, through the existing trainer allowlist"
+      },
+      "view_id": "view_context",
+      "visibility": {
+        "disclosures_after_mask": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "mask_is_declared": true,
+        "profile": {
+          "assistance_level": "guided",
+          "assisted": true,
+          "note": "withheld fields are the declarations above, expanded over the cubes the question asks about; the pattern is identical for every question of a (task, assistance) pair, so it carries no answer information",
+          "operation": "LIST_PARTS",
+          "profile_id": "cas-cube-visibility/1:LIST_PARTS:guided:82f64945ec46",
+          "schema": "cas-cube-visibility/1",
+          "withheld_patterns": []
+        },
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].step_id",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "withheld_field_paths": []
+      }
+    },
+    "unassisted": {
+      "assistance_level": "unassisted",
+      "assisted": false,
+      "boundary": "this preparation performs no optimizer step and delivers no neural lesson; the counters above keep those at zero",
+      "counts": {
+        "assessments": 2,
+        "assistance_states_recorded": 1,
+        "assisted_tasks": 0,
+        "corrective_examples": 0,
+        "delivered_neural_lessons": 0,
+        "distinct_graph_families": 1,
+        "module_inputs": 2,
+        "operation": "LIST_PARTS",
+        "optimizer_updates": 0,
+        "predictions_required": 2,
+        "presentations": 5,
+        "stages": 7,
+        "supervised_tasks": 0,
+        "unassisted_tasks": 2
+      },
+      "decline_reason": "each needs a declared output vocabulary, loss, and training adapter; this profile scores only the three existing operations and presents the rest",
+      "family_id": "illustration_family_01",
+      "new_heads_required": [],
+      "new_task_profiles_required_in_this_profile": [],
+      "operation": "LIST_PARTS",
+      "presentation_only_stages": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "profile_digest": "f0b1b5b5e22db7028ffb0af3cd067bef6068d69884e49047d4655a2d75f33f49",
+      "profile_id": "CUBE_TEACHING_PROFILE_001",
+      "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+      "question": {
+        "idea": "Bicycle"
+      },
+      "schema": "cas-cube-teaching-profile/1",
+      "scored_operations": [
+        "LIST_PARTS",
+        "FIND_SHARED_PART",
+        "REACHED_VIA"
+      ],
+      "separation": {
+        "guided": "withholds nothing, labels every scored answer assisted",
+        "shared": "the same public exercise and the same three operations",
+        "unassisted": "retains the public graph, withholds the declared decomposition and recomposition fields, delivers no worked answer"
+      },
+      "stages": [
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "core": {
+                  "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory.",
+                  "kind": "concept",
+                  "label": "Bicycle"
+                },
+                "face_1": {
+                  "availability": "populated",
+                  "human_text": "Technical identity within the authored teaching scene.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "canonical_name": "Bicycle",
+                    "definition": "The Bicycle concept as represented in this bounded graph.",
+                    "function": "Participate in the explicit conceptual containment relationships of this scene."
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "anchor the subject, its function, and the requested operation",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 1,
+          "stage_id": "name_and_function",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "core",
+            "face_1"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_2": {
+                  "availability": "populated",
+                  "human_text": "Inspect the contextual presentation and the incident facts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "context_scope": "toy_scene_01",
+                    "fact_refs": "[withheld: answer-bearing for this question]",
+                    "view_refs": [
+                      "view_context"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "show the idea inside the supplied graph",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 2,
+          "stage_id": "context",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_2"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_3": {
+                  "availability": "populated",
+                  "human_text": "The corresponding role is presented as Kit A in the analogy.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "analogy_limits": [
+                      "No claim of identical physical function.",
+                      "No claim that two physical objects share one physical component.",
+                      "No causal or temporal equivalence follows from the analogy."
+                    ],
+                    "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                    "mapping_refs": [
+                      "mapping_01"
+                    ],
+                    "view_refs": [
+                      "view_analogy"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "guided presentation only in this profile: scoring an analogy needs a separately declared task profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 3,
+          "stage_id": "analogy",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_3"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_4": {
+                  "availability": "populated",
+                  "human_text": "Use the declared cross-view role and relation correspondence.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "mapping_refs": [
+                      "mapping_01"
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "the correspondence table is presented, not scored, in this profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 4,
+          "stage_id": "explicit_mapping",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_4"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+            "signal": "cross-entropy over the three public slots against the declared target index",
+            "target_index": 0,
+            "worked_solution": [
+              "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+              "derived by the deterministic reference checker from the stored contains branches only"
+            ]
+          },
+          "kind": "assessment",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_5": {
+                  "availability": "populated",
+                  "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "completeness": "complete",
+                    "direct_branch_refs": "[withheld: answer-bearing for this question]"
+                  }
+                }
+              }
+            },
+            "delivered_to_module": true,
+            "public_record": {
+              "observations": [
+                {
+                  "slot": 0,
+                  "tag": "['Frame', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 1,
+                  "tag": "['Frame', 'Rim', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 2,
+                  "tag": "['Frame']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                }
+              ],
+              "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+            },
+            "tokens": 49,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "the scored question: prediction over three public slots, with the worked answer supplied only when the assistance level allows it",
+          "prediction": {
+            "form": "argmax over the three public option slots",
+            "required": true,
+            "slots": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ]
+          },
+          "scored_task": {
+            "asked_nodes": [
+              "node_001"
+            ],
+            "assistance_level": "unassisted",
+            "assisted": false,
+            "candidate_set_content_order": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ],
+            "delivery": {
+              "assistance_level": "unassisted",
+              "delivery_id": "31621f5af61a9079c8925d38e0c5788eb1e2735e356ea190e2d15bf6b11193fc",
+              "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46"
+            },
+            "derived_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "encoding": {
+              "encoded_correct_index": 0,
+              "encoded_options": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "encoding_target": "graph_derived_answer",
+              "public": {
+                "observations": [
+                  {
+                    "slot": 0,
+                    "tag": "['Frame', 'Wheel']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "slot": 1,
+                    "tag": "['Frame', 'Rim', 'Wheel']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  },
+                  {
+                    "slot": 2,
+                    "tag": "['Frame']",
+                    "values": [
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0,
+                      0.0
+                    ]
+                  }
+                ],
+                "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+              },
+              "token_digest": "119dc1a648dfb6c072e598d798fbfc5661de9303bc44415588dd91d00e9fd5ac",
+              "tokens": 49
+            },
+            "family_id": "illustration_family_01",
+            "identity_basis": "public_projection",
+            "identity_core": {
+              "family_id": "illustration_family_01",
+              "op": "LIST_PARTS",
+              "option_pool_version": "cas-cube-option-pool/1",
+              "options": [
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "view_id": "view_context"
+            },
+            "learner_view": {
+              "choices": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "graph_scope": {
+                "branches": [
+                  {
+                    "branch_id": "branch_01",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Bicycle",
+                    "target": "Wheel"
+                  },
+                  {
+                    "branch_id": "branch_02",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Bicycle",
+                    "target": "Frame"
+                  },
+                  {
+                    "branch_id": "branch_03",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Cart",
+                    "target": "Wheel"
+                  },
+                  {
+                    "branch_id": "branch_04",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Cart",
+                    "target": "Platform"
+                  },
+                  {
+                    "branch_id": "branch_05",
+                    "commonality": "constituent",
+                    "predicate": "contains",
+                    "source": "Wheel",
+                    "target": "Rim"
+                  }
+                ],
+                "nodes": [
+                  {
+                    "label": "Bicycle",
+                    "node_ref": "node_001",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Wheel",
+                    "node_ref": "node_002",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Frame",
+                    "node_ref": "node_003",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Cart",
+                    "node_ref": "node_004",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Platform",
+                    "node_ref": "node_005",
+                    "revision": 1
+                  },
+                  {
+                    "label": "Rim",
+                    "node_ref": "node_006",
+                    "revision": 1
+                  }
+                ]
+              },
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "visible_field_paths": [
+                "node_001.core.identity_statement",
+                "node_001.core.kind",
+                "node_001.core.label",
+                "node_001.face_1.availability",
+                "node_001.face_1.human_text",
+                "node_001.face_1.provenance_refs",
+                "node_001.face_1.structured.canonical_name",
+                "node_001.face_1.structured.definition",
+                "node_001.face_1.structured.function",
+                "node_001.face_2.availability",
+                "node_001.face_2.human_text",
+                "node_001.face_2.provenance_refs",
+                "node_001.face_2.structured.context_scope",
+                "node_001.face_2.structured.view_refs",
+                "node_001.face_3.availability",
+                "node_001.face_3.human_text",
+                "node_001.face_3.provenance_refs",
+                "node_001.face_3.structured.analogy_limits",
+                "node_001.face_3.structured.analogy_scope",
+                "node_001.face_3.structured.mapping_refs",
+                "node_001.face_3.structured.view_refs",
+                "node_001.face_4.availability",
+                "node_001.face_4.human_text",
+                "node_001.face_4.provenance_refs",
+                "node_001.face_4.structured.mapping_refs",
+                "node_001.face_5.availability",
+                "node_001.face_5.human_text",
+                "node_001.face_5.provenance_refs",
+                "node_001.face_5.structured.completeness",
+                "node_001.face_6.availability",
+                "node_001.face_6.human_text",
+                "node_001.face_6.provenance_refs",
+                "node_001.face_6.structured.sequence_kind",
+                "node_001.face_6.structured.steps[0].step_id",
+                "node_001.face_6.structured.steps[1].step_id",
+                "node_001.face_6.structured.steps[2].step_id"
+              ],
+              "withheld_field_paths": [
+                "node_001.face_2.structured.fact_refs",
+                "node_001.face_5.structured.direct_branch_refs",
+                "node_001.face_6.structured.steps[0].text",
+                "node_001.face_6.structured.steps[0].uses_branch_refs",
+                "node_001.face_6.structured.steps[1].text",
+                "node_001.face_6.structured.steps[1].uses_branch_refs",
+                "node_001.face_6.structured.steps[2].text",
+                "node_001.face_6.structured.steps[2].uses_branch_refs"
+              ]
+            },
+            "operation": "LIST_PARTS",
+            "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+            "question": {
+              "idea": "Bicycle"
+            },
+            "record": {
+              "correct": [
+                "Frame",
+                "Wheel"
+              ],
+              "cube": {
+                "assistance_level": "unassisted",
+                "delivery_id": "31621f5af61a9079c8925d38e0c5788eb1e2735e356ea190e2d15bf6b11193fc",
+                "public_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+                "record_id_basis": "public_projection",
+                "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+                "view_id": "view_context",
+                "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46"
+              },
+              "encoding_target": "graph_derived_answer",
+              "framings": {
+                "cas": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n",
+                "generic": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+              },
+              "graph": {
+                "nodes": [
+                  {
+                    "fields": [],
+                    "identifier": "Bicycle",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Wheel",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Frame",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Cart",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Platform",
+                    "kind": "idea"
+                  },
+                  {
+                    "fields": [],
+                    "identifier": "Rim",
+                    "kind": "idea"
+                  }
+                ],
+                "relations": [
+                  {
+                    "content": [
+                      "constituent",
+                      "Wheel"
+                    ],
+                    "kind": "contains",
+                    "source": "Bicycle",
+                    "target": "Wheel"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Frame"
+                    ],
+                    "kind": "contains",
+                    "source": "Bicycle",
+                    "target": "Frame"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Wheel"
+                    ],
+                    "kind": "contains",
+                    "source": "Cart",
+                    "target": "Wheel"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Platform"
+                    ],
+                    "kind": "contains",
+                    "source": "Cart",
+                    "target": "Platform"
+                  },
+                  {
+                    "content": [
+                      "constituent",
+                      "Rim"
+                    ],
+                    "kind": "contains",
+                    "source": "Wheel",
+                    "target": "Rim"
+                  }
+                ],
+                "schema": "cas-meta2-graph-teaching-graph/1"
+              },
+              "op": "LIST_PARTS",
+              "options": [
+                [
+                  "Frame",
+                  "Wheel"
+                ],
+                [
+                  "Frame",
+                  "Rim",
+                  "Wheel"
+                ],
+                [
+                  "Frame"
+                ]
+              ],
+              "question": {
+                "idea": "Bicycle"
+              },
+              "record_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "schema": "cas-meta2-graph-teaching-exercise/1",
+              "split": "design_only"
+            },
+            "schema": "cas-cube-lesson/2",
+            "slot_order_rule": "the three public choices are ordered by the frozen public-record extraction: it permutes them with a seed derived from the public record id and the arm, and the record id covers the public projection only, so no slot depends on which choice is correct",
+            "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+            "target": {
+              "corrective_feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+              "declared_correct_choice_index": 0,
+              "delivered": false,
+              "delivery_note": "recorded for scoring only; not delivered to the learner",
+              "derived_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "expected_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "target_can_steer_public_view": false,
+              "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+              "why": "a target that disagrees with the graph-derived answer is refused before any learner-facing object is built",
+              "worked_solution": [
+                "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+                "derived by the deterministic reference checker from the stored contains branches only"
+              ]
+            },
+            "target_digest": "c79720ce9ba2332fa59f065528ac719a7aae57e18e485d8b8ccc0ade579f9d4b",
+            "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+            "view_id": "view_context",
+            "visibility": {
+              "disclosures_after_mask": [],
+              "mask_is_declared": true,
+              "profile": {
+                "assistance_level": "unassisted",
+                "assisted": false,
+                "note": "withheld fields are the declarations above, expanded over the cubes the question asks about; the pattern is identical for every question of a (task, assistance) pair, so it carries no answer information",
+                "operation": "LIST_PARTS",
+                "profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+                "schema": "cas-cube-visibility/1",
+                "withheld_patterns": [
+                  "face_2.structured.fact_refs",
+                  "face_5.structured.direct_branch_refs",
+                  "face_6.structured.steps[*].uses_branch_refs",
+                  "face_6.structured.steps[*].text"
+                ]
+              },
+              "visible_field_paths": [
+                "node_001.core.identity_statement",
+                "node_001.core.kind",
+                "node_001.core.label",
+                "node_001.face_1.availability",
+                "node_001.face_1.human_text",
+                "node_001.face_1.provenance_refs",
+                "node_001.face_1.structured.canonical_name",
+                "node_001.face_1.structured.definition",
+                "node_001.face_1.structured.function",
+                "node_001.face_2.availability",
+                "node_001.face_2.human_text",
+                "node_001.face_2.provenance_refs",
+                "node_001.face_2.structured.context_scope",
+                "node_001.face_2.structured.view_refs",
+                "node_001.face_3.availability",
+                "node_001.face_3.human_text",
+                "node_001.face_3.provenance_refs",
+                "node_001.face_3.structured.analogy_limits",
+                "node_001.face_3.structured.analogy_scope",
+                "node_001.face_3.structured.mapping_refs",
+                "node_001.face_3.structured.view_refs",
+                "node_001.face_4.availability",
+                "node_001.face_4.human_text",
+                "node_001.face_4.provenance_refs",
+                "node_001.face_4.structured.mapping_refs",
+                "node_001.face_5.availability",
+                "node_001.face_5.human_text",
+                "node_001.face_5.provenance_refs",
+                "node_001.face_5.structured.completeness",
+                "node_001.face_6.availability",
+                "node_001.face_6.human_text",
+                "node_001.face_6.provenance_refs",
+                "node_001.face_6.structured.sequence_kind",
+                "node_001.face_6.structured.steps[0].step_id",
+                "node_001.face_6.structured.steps[1].step_id",
+                "node_001.face_6.structured.steps[2].step_id"
+              ],
+              "withheld_field_paths": [
+                "node_001.face_2.structured.fact_refs",
+                "node_001.face_5.structured.direct_branch_refs",
+                "node_001.face_6.structured.steps[0].text",
+                "node_001.face_6.structured.steps[0].uses_branch_refs",
+                "node_001.face_6.structured.steps[1].text",
+                "node_001.face_6.structured.steps[1].uses_branch_refs",
+                "node_001.face_6.structured.steps[2].text",
+                "node_001.face_6.structured.steps[2].uses_branch_refs"
+              ]
+            }
+          },
+          "stage": 5,
+          "stage_id": "guided_decomposition",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_5"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": null,
+            "feedback": null,
+            "signal": null,
+            "target_index": null,
+            "worked_solution": null
+          },
+          "kind": "presentation",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "face_6": {
+                  "availability": "populated",
+                  "human_text": "An explanatory walk through this node and its declared direct parts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "sequence_kind": "explanatory",
+                    "steps": [
+                      {
+                        "step_id": "step_01",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      },
+                      {
+                        "step_id": "step_02",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      },
+                      {
+                        "step_id": "step_03",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": false,
+            "public_record": null,
+            "tokens": 0,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "the story is presentation only; scoring a recomposition needs a separately declared task profile",
+          "prediction": {
+            "form": null,
+            "required": false,
+            "slots": null
+          },
+          "scored_task": null,
+          "stage": 6,
+          "stage_id": "recomposition",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "face_6"
+          ]
+        },
+        {
+          "assistance_level": "unassisted",
+          "correction": {
+            "delivered": false,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+            "signal": "cross-entropy over the three public slots against the declared target index",
+            "target_index": 0,
+            "worked_solution": [
+              "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+              "derived by the deterministic reference checker from the stored contains branches only"
+            ]
+          },
+          "kind": "assessment",
+          "learner_input": {
+            "content_as_delivered": {
+              "node_001": {
+                "core": {
+                  "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory.",
+                  "kind": "concept",
+                  "label": "Bicycle"
+                },
+                "face_1": {
+                  "availability": "populated",
+                  "human_text": "Technical identity within the authored teaching scene.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "canonical_name": "Bicycle",
+                    "definition": "The Bicycle concept as represented in this bounded graph.",
+                    "function": "Participate in the explicit conceptual containment relationships of this scene."
+                  }
+                },
+                "face_2": {
+                  "availability": "populated",
+                  "human_text": "Inspect the contextual presentation and the incident facts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "context_scope": "toy_scene_01",
+                    "fact_refs": "[withheld: answer-bearing for this question]",
+                    "view_refs": [
+                      "view_context"
+                    ]
+                  }
+                },
+                "face_3": {
+                  "availability": "populated",
+                  "human_text": "The corresponding role is presented as Kit A in the analogy.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "analogy_limits": [
+                      "No claim of identical physical function.",
+                      "No claim that two physical objects share one physical component.",
+                      "No causal or temporal equivalence follows from the analogy."
+                    ],
+                    "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                    "mapping_refs": [
+                      "mapping_01"
+                    ],
+                    "view_refs": [
+                      "view_analogy"
+                    ]
+                  }
+                },
+                "face_4": {
+                  "availability": "populated",
+                  "human_text": "Use the declared cross-view role and relation correspondence.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "mapping_refs": [
+                      "mapping_01"
+                    ]
+                  }
+                },
+                "face_5": {
+                  "availability": "populated",
+                  "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "completeness": "complete",
+                    "direct_branch_refs": "[withheld: answer-bearing for this question]"
+                  }
+                },
+                "face_6": {
+                  "availability": "populated",
+                  "human_text": "An explanatory walk through this node and its declared direct parts.",
+                  "provenance_refs": [
+                    "source:authored-toy-scene-01"
+                  ],
+                  "structured": {
+                    "sequence_kind": "explanatory",
+                    "steps": [
+                      {
+                        "step_id": "step_01",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      },
+                      {
+                        "step_id": "step_02",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      },
+                      {
+                        "step_id": "step_03",
+                        "text": "[withheld: answer-bearing for this question]",
+                        "uses_branch_refs": "[withheld: answer-bearing for this question]"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "delivered_to_module": true,
+            "public_record": {
+              "observations": [
+                {
+                  "slot": 0,
+                  "tag": "['Frame', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 1,
+                  "tag": "['Frame', 'Rim', 'Wheel']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "slot": 2,
+                  "tag": "['Frame']",
+                  "values": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                }
+              ],
+              "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+            },
+            "tokens": 49,
+            "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+            "visible_field_paths": [
+              "node_001.core.identity_statement",
+              "node_001.core.kind",
+              "node_001.core.label",
+              "node_001.face_1.availability",
+              "node_001.face_1.human_text",
+              "node_001.face_1.provenance_refs",
+              "node_001.face_1.structured.canonical_name",
+              "node_001.face_1.structured.definition",
+              "node_001.face_1.structured.function",
+              "node_001.face_2.availability",
+              "node_001.face_2.human_text",
+              "node_001.face_2.provenance_refs",
+              "node_001.face_2.structured.context_scope",
+              "node_001.face_2.structured.view_refs",
+              "node_001.face_3.availability",
+              "node_001.face_3.human_text",
+              "node_001.face_3.provenance_refs",
+              "node_001.face_3.structured.analogy_limits",
+              "node_001.face_3.structured.analogy_scope",
+              "node_001.face_3.structured.mapping_refs",
+              "node_001.face_3.structured.view_refs",
+              "node_001.face_4.availability",
+              "node_001.face_4.human_text",
+              "node_001.face_4.provenance_refs",
+              "node_001.face_4.structured.mapping_refs",
+              "node_001.face_5.availability",
+              "node_001.face_5.human_text",
+              "node_001.face_5.provenance_refs",
+              "node_001.face_5.structured.completeness",
+              "node_001.face_6.availability",
+              "node_001.face_6.human_text",
+              "node_001.face_6.provenance_refs",
+              "node_001.face_6.structured.sequence_kind",
+              "node_001.face_6.structured.steps[0].step_id",
+              "node_001.face_6.structured.steps[1].step_id",
+              "node_001.face_6.structured.steps[2].step_id"
+            ],
+            "withheld_field_paths": [
+              "node_001.face_2.structured.fact_refs",
+              "node_001.face_5.structured.direct_branch_refs",
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].text",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ]
+          },
+          "note": "repeat the connected lesson with declared variations; the same three operations, no new output contract",
+          "prediction": {
+            "form": "argmax over the three public option slots",
+            "required": true,
+            "slots": [
+              [
+                "Frame",
+                "Wheel"
+              ],
+              [
+                "Frame",
+                "Rim",
+                "Wheel"
+              ],
+              [
+                "Frame"
+              ]
+            ]
+          },
+          "scored_task": null,
+          "stage": 7,
+          "stage_id": "reinforcement",
+          "update": {
+            "occurs_in_this_preparation": false,
+            "path": null,
+            "reason_not_here": "specification only: no module was constructed and no optimizer step was taken",
+            "would_occur_when_run": false
+          },
+          "visits": [
+            "core",
+            "face_1",
+            "face_2",
+            "face_3",
+            "face_4",
+            "face_5",
+            "face_6"
+          ]
+        }
+      ],
+      "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+      "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+      "unsupported_scorings_declined": [
+        {
+          "candidate": "select the definition/function that matches",
+          "stage": 1
+        },
+        {
+          "candidate": "select the relevant supplied contextual relation",
+          "stage": 2
+        },
+        {
+          "candidate": "select the analogy preserving the relationship",
+          "stage": 3
+        },
+        {
+          "candidate": "select the correct role correspondence",
+          "stage": 4
+        },
+        {
+          "candidate": "select a valid recomposition or explanation",
+          "stage": 6
+        }
+      ],
+      "update_path": {
+        "containment_check": "trainer.containment_report must show no digest change outside the allowlist",
+        "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+        "excluded": [
+          "the frozen encoder",
+          "the frozen dot-product readout",
+          "any parameter outside the admitted plasticity role"
+        ],
+        "objective": "cross-entropy over the three public slots against the declared target index",
+        "plasticity_role": "operation:^6",
+        "would_update": "the registered module's own parameters only, through the existing trainer allowlist"
+      },
+      "view_id": "view_context",
+      "visibility": {
+        "disclosures_after_mask": [],
+        "mask_is_declared": true,
+        "profile": {
+          "assistance_level": "unassisted",
+          "assisted": false,
+          "note": "withheld fields are the declarations above, expanded over the cubes the question asks about; the pattern is identical for every question of a (task, assistance) pair, so it carries no answer information",
+          "operation": "LIST_PARTS",
+          "profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+          "schema": "cas-cube-visibility/1",
+          "withheld_patterns": [
+            "face_2.structured.fact_refs",
+            "face_5.structured.direct_branch_refs",
+            "face_6.structured.steps[*].uses_branch_refs",
+            "face_6.structured.steps[*].text"
+          ]
+        },
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[2].step_id"
+        ],
+        "withheld_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ]
+      }
+    }
+  },
+  "replaces": {
+    "lesson_schema_versions": {
+      "cube_node": "cas-cube-lesson/1",
+      "cube_profile": "cas-cube-lesson/2"
+    },
+    "previous_record": "CUBE_NODE_SCHEMA_001 (data-only handoff, unchanged)",
+    "reason": "visibility is now declared by task and assistance level instead of chosen from the answer, and task identity and slot order are derived from the public exercise only"
+  },
+  "schema": "cas-cube-teaching-profile/1",
+  "scored_operations": [
+    "LIST_PARTS",
+    "FIND_SHARED_PART",
+    "REACHED_VIA"
+  ],
+  "sources": {
+    "canonical_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+    "delivered_copy": {
+      "bytes": 29971,
+      "path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Example_v0.1.json",
+      "present": true,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    "delivered_schema_copy": {
+      "bytes": 25974,
+      "path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Schema_v0.1.md",
+      "present": true,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    "pinned_bundle": {
+      "bytes": 29971,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\cube_node_001\\Cube_Node_Example_v0.1.json",
+      "present": true,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    "pinned_matches_delivered": true,
+    "pinned_schema_document": {
+      "bytes": 25974,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\cube_node_001\\Cube_Node_Schema_v0.1.md",
+      "present": true,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA"
+  },
+  "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+  "target_independence": {
+    "public_case_carries_target": false,
+    "readings": [
+      {
+        "assistance_level": "worked",
+        "digest_equal": {
+          "derived_answer": true,
+          "encoded_public": true,
+          "learner_view": true,
+          "public_id": true,
+          "task_id": true,
+          "tokens": true,
+          "visible_field_paths": true,
+          "withheld_field_paths": true
+        },
+        "disagreeing_targets": [
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\",\"Rim\",\"Wheel\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ]
+          },
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame"
+            ]
+          }
+        ],
+        "disagreeing_targets_refused": true,
+        "disclosures_after_mask": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "identical_under_target_change": true,
+        "mask_is_declared": true
+      },
+      {
+        "assistance_level": "guided",
+        "digest_equal": {
+          "derived_answer": true,
+          "encoded_public": true,
+          "learner_view": true,
+          "public_id": true,
+          "task_id": true,
+          "tokens": true,
+          "visible_field_paths": true,
+          "withheld_field_paths": true
+        },
+        "disagreeing_targets": [
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\",\"Rim\",\"Wheel\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ]
+          },
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame"
+            ]
+          }
+        ],
+        "disagreeing_targets_refused": true,
+        "disclosures_after_mask": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "identical_under_target_change": true,
+        "mask_is_declared": true
+      },
+      {
+        "assistance_level": "hinted",
+        "digest_equal": {
+          "derived_answer": true,
+          "encoded_public": true,
+          "learner_view": true,
+          "public_id": true,
+          "task_id": true,
+          "tokens": true,
+          "visible_field_paths": true,
+          "withheld_field_paths": true
+        },
+        "disagreeing_targets": [
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\",\"Rim\",\"Wheel\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ]
+          },
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame"
+            ]
+          }
+        ],
+        "disagreeing_targets_refused": true,
+        "disclosures_after_mask": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "identical_under_target_change": true,
+        "mask_is_declared": true
+      },
+      {
+        "assistance_level": "unassisted",
+        "digest_equal": {
+          "derived_answer": true,
+          "encoded_public": true,
+          "learner_view": true,
+          "public_id": true,
+          "task_id": true,
+          "tokens": true,
+          "visible_field_paths": true,
+          "withheld_field_paths": true
+        },
+        "disagreeing_targets": [
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\",\"Rim\",\"Wheel\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ]
+          },
+          {
+            "code": "CUBE_DECLARED_TARGET_NOT_THE_DERIVED_ANSWER:b'[\"Frame\"]':b'[\"Frame\",\"Wheel\"]'",
+            "declared_target": [
+              "Frame"
+            ]
+          }
+        ],
+        "disagreeing_targets_refused": true,
+        "disclosures_after_mask": [],
+        "identical_under_target_change": true,
+        "mask_is_declared": true
+      }
+    ],
+    "rule": "public task identity, option slots, mask, and tokens are functions of the public exercise and the declared profile",
+    "slot_order_identical_across_assistance_levels": true,
+    "slot_orders": {
+      "guided": {
+        "digest": "779d9bb86896dddc835917a4a152a5103975748a9de6e29a6ecf584de43ccd82",
+        "order": [
+          [
+            "Frame",
+            "Wheel"
+          ],
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ]
+        ]
+      },
+      "hinted": {
+        "digest": "779d9bb86896dddc835917a4a152a5103975748a9de6e29a6ecf584de43ccd82",
+        "order": [
+          [
+            "Frame",
+            "Wheel"
+          ],
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ]
+        ]
+      },
+      "unassisted": {
+        "digest": "779d9bb86896dddc835917a4a152a5103975748a9de6e29a6ecf584de43ccd82",
+        "order": [
+          [
+            "Frame",
+            "Wheel"
+          ],
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ]
+        ]
+      },
+      "worked": {
+        "digest": "779d9bb86896dddc835917a4a152a5103975748a9de6e29a6ecf584de43ccd82",
+        "order": [
+          [
+            "Frame",
+            "Wheel"
+          ],
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ]
+        ]
+      }
+    },
+    "task_id": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+    "view_id": "view_context"
+  },
+  "update_path": {
+    "containment_check": "trainer.containment_report must show no digest change outside the allowlist",
+    "contract_id": "cas.cjt.operation.^6.decompose/0.2",
+    "excluded": [
+      "the frozen encoder",
+      "the frozen dot-product readout",
+      "any parameter outside the admitted plasticity role"
+    ],
+    "objective": "cross-entropy over the three public slots against the declared target index",
+    "plasticity_role": "operation:^6",
+    "would_update": "the registered module's own parameters only, through the existing trainer allowlist"
+  },
+  "view_id": "view_context"
+}

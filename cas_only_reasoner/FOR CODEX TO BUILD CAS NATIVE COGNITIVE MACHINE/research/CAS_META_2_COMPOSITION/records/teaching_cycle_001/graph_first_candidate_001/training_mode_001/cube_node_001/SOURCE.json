@@ -28,7 +28,23 @@
       "bytes": 80153,
       "sha256": "1df29252dbf3a69f54726ff6f22208f0ad50fc9843f28a5b32fb95ff87226651",
       "reproduces_reading": "python -m tools.graph6_cube_node_check --output <path>",
-      "note": "byte-identical on re-run; the tool refuses to overwrite an existing file"
+      "note": "byte-identical on re-run; the tool refuses to overwrite an existing file",
+      "lesson_schema": "cas-cube-lesson/1"
+    },
+    {
+      "name": "CUBE_TEACHING_PROFILE_001.json",
+      "producer": "tools/graph6_cube_teaching_profile.py",
+      "bytes": 145955,
+      "sha256": "391c1578bbc6ab944ac599528ac41d3e28c1fc3e599dc83466b4e6dc961045b3",
+      "reproduces_reading": "python -m tools.graph6_cube_teaching_profile --output <path>",
+      "note": "byte-identical on re-run; the tool refuses to overwrite an existing file",
+      "lesson_schema": "cas-cube-lesson/2",
+      "changes_over_the_previous_record": [
+        "visibility is declared by task and assistance level instead of chosen from the answer",
+        "task identity and option slots are derived from the public exercise only",
+        "a declared target that disagrees with the graph-derived answer is refused",
+        "the seven-stage lesson states input, prediction, correction, update flag and assistance state per stage"
+      ]
     }
   ],
   "bundle_identity": {
@@ -44,8 +60,11 @@
   },
   "code": [
     "cas_meta2/graph_teaching/cube_node.py",
+    "cas_meta2/graph_teaching/cube_profile.py",
     "tests/test_graph_teaching_cube_node.py",
-    "tools/graph6_cube_node_check.py"
+    "tests/test_graph_teaching_cube_profile.py",
+    "tools/graph6_cube_node_check.py",
+    "tools/graph6_cube_teaching_profile.py"
   ],
   "boundary": {
     "training": "none",
