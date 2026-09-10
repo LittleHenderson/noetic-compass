@@ -90,6 +90,33 @@ def build_report(bundle_path=None, view_id="view_context"):
     return report
 
 
+def verified_teaching_section(bundle_path=None, view_id="view_context"):
+    """CUBE_VERIFIED_TEACHING_001: opt-in so the earlier record stays reproducible."""
+    from cas_meta2.graph_teaching import verified_teaching as vt
+    authored = vt.compile_bundle(cube_node.load_bundle(bundle_path), view_id,
+                                 choice_order="authored_fixture")
+    declared = vt.compile_bundle(cube_node.load_bundle(bundle_path), view_id,
+                                 choice_order="declared")
+    return {
+        "schema_version": vt.SCHEMA,
+        "status": vt.STATUS_READY,
+        "checker_identity": vt.CHECKER_IDENTITY,
+        "authored_fixture_order": authored,
+        "declared_order": {
+            "fixture_comparison": declared["fixture_comparison"],
+            "counts": declared["counts"],
+            "shortcut_report": declared["shortcut_report"],
+            "trace_status": declared["trace_verification"]["status"],
+        },
+        "boundary": {
+            "neural_calls": 0, "optimizer_updates": 0, "delivered_lessons": 0,
+            "aws_calls": 0, "reservations": 0,
+            "note": ("data compilation and deterministic teacher checks only; the "
+                     "simulated transport is not a model prediction"),
+        },
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--bundle", default=None,
@@ -98,13 +125,33 @@ def main(argv=None):
                         help="presentation view used for the lessons")
     parser.add_argument("--output", default=None,
                         help="write the report here (must not already exist)")
+    parser.add_argument("--verified-teaching", action="store_true",
+                        help="add the CUBE_VERIFIED_TEACHING_001 section")
+    parser.add_argument("--artifacts", default=None,
+                        help="write the verified-teaching artifact files here")
     arguments = parser.parse_args(argv)
-    raw = canonical(build_report(arguments.bundle, arguments.view)).encode("utf-8")
+    report = build_report(arguments.bundle, arguments.view)
+    if arguments.verified_teaching or arguments.artifacts:
+        report["verified_teaching"] = verified_teaching_section(arguments.bundle,
+                                                                arguments.view)
+    raw = canonical(report).encode("utf-8")
     if arguments.output:
         path = Path(arguments.output).absolute()
         if not path.exists():
             with path.open("xb") as stream:
                 stream.write(raw)
+    if arguments.artifacts:
+        from cas_meta2.graph_teaching import verified_teaching as vt
+        target = Path(arguments.artifacts).absolute()
+        target.mkdir(parents=True, exist_ok=True)
+        written = []
+        for name, text in vt.artifact_files(
+                report["verified_teaching"]["authored_fixture_order"]).items():
+            destination = target / name
+            if not destination.exists():
+                destination.write_text(text, encoding="utf-8")
+                written.append(name)
+        report["artifacts_written"] = written
     sys.stdout.write(raw.decode("utf-8"))
     sys.stdout.write("sha256: %s\n" % sha256(raw).hexdigest())
     return 0
