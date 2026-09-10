@@ -42,18 +42,51 @@ the unique longest or shortest; `FIND_SHARED_PART` **4/10** offer `none` and
 5 families reorder connections; 4 families rewire a connection. Answer contract,
 ^6 module, encoder, parameter scope and scoring semantics are unchanged.
 
-## One finding you must approve knowingly: the final panel needs a new shape bank
+## One finding you must approve knowingly: the untouched panel was rebuilt (twice)
 
-The frozen generator cannot supply an untouched panel — its structural pattern
-space is already covered: **0 of 2,840 families** in a fresh family-seed region
-could offer a triple whose three cases are all new by label-invariant signature
-(184 distinct patterns in the region, 95 already used). The untouched panel is
-therefore built by `final_panel.py` from a **new twelve-shape bank**: same node
-and relation vocabulary, same three operations, same option contract, same
-deterministic checker; 30 families / 90 cases, reach **10/10/10**, **0 id and 0
-signature overlap** with teaching, the examined panel, and the varied curriculum
-(content digest `60569f69…`). The examined panel's own content digest still
-reproduces exactly (`d1076de3…`), so the earlier run stays auditable.
+**Correction first.** A first draft of this panel proposed twelve "new shapes";
+checked with a label-invariant graph calculation they reduced to **two** distinct
+directed connection patterns (shapes 1,3,4,6,8,9,10,11,12 shared one; 2,5,7 the
+other). Renaming objects is not novelty. The generator was rebuilt to
+**enumerate** arrangements and to prove distinctness.
+
+**The supply finding, narrowed.** How much the FROZEN generator supplies depends
+on the exclusion scope:
+
+| Scope | Families searched | every record unused | ≥1 selected case unused | all three selected cases unused |
+| --- | --- | --- | --- | --- |
+| teaching set only | 2,831 | 409 | 2,664 | 751 |
+| teaching set **and the examined panel** | 2,831 | **0** | 1,756 | 38 |
+
+Eligible questions per operation in the untouched scope: `LIST_PARTS` **4**,
+`FIND_SHARED_PART` **85**, `REACHED_VIA` **7** — but the distinct **arrangements**
+behind them are only **3, 4 and 2**. So the frozen generator offers new
+*instances* of familiar arrangements, not previously unseen ones, and
+`LIST_PARTS` is the binding constraint. Both questions you distinguished are
+therefore answered explicitly: new instances are available; unseen arrangements
+are not.
+
+**The panel now used.** `final_panel.py` enumerates every contains-DAG inside the
+teaching difficulty envelope, drops arrangements isomorphic to a teaching
+template or a curriculum shape, keeps only those supporting all three reach
+questions, and selects **30 pairwise non-isomorphic arrangements** from a
+92-arrangement pool.
+
+| Property | Final panel | Teaching material |
+| --- | --- | --- |
+| Distinct connection patterns | **30** | 4 |
+| Idea nodes | 8 / 9 / 10 → 6 / 11 / 13 families | 8 / 9 / 10 |
+| `contains` connectors | 6 / 7 / 8 → 15 / 10 / 5 | 6 / 7 / 8 / 9 |
+| Direct parts of the asked whole | 2 / 3 → 20 / 10 | 2 / 3 |
+| Max chain depth | 3 | 3 |
+| Vocabulary | 34 labels, **0** outside the teaching words | 34 words |
+| Reach labels | 10 / 10 / 10 | 5 / 1 / 4 |
+
+90 cases, one question per operation, **0** id and **0** signature overlap with
+the teaching dataset, the examined panel and the varied curriculum. The examined
+panel's content digest still reproduces exactly (`d1076de3…`). **No unfamiliar
+vocabulary and no deeper reasoning requirement was added to escape the filter**;
+the panel stays inside the teaching envelope. Same panel for both conditions.
 
 ## Design and budget (one request)
 

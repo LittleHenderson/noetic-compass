@@ -67,26 +67,54 @@ Coverage facts that shaped the curriculum:
   cannot be classified), per-option scores, optimizer state, trained weights,
   per-case timings.
 
-## 3. A finding that changed the panel plan
+## 3. A finding that changed the panel plan (corrected 2026-09-10)
 
-The owner asked for an untouched final panel. A pool check showed the frozen
-generator cannot supply one: its structural pattern space is already covered by
-the teaching set and the examined panel — **0 of 2,840 families** in a fresh
-family-seed region could offer a triple whose three cases are all new by
-label-invariant signature (184 distinct case patterns in the region, 95 already
-used). New instances of the same four templates would only repeat patterns the
-candidate has already been measured on.
+The owner asked for an untouched final panel, and a first draft of this section
+claimed the frozen generator could not supply one ("0 of 2,840 families"). Two
+corrections, both now measured rather than asserted:
 
-The final panel is therefore built by `final_panel.py` from a **new shape bank**:
-twelve topologies that appear in no teaching template and no curriculum family,
-using the same node/relation vocabulary (`idea` nodes, `contains` connectors,
-`constituent` content), the same three operations, the same three-unmarked-option
-contract, and answers computed by the same deterministic checker. Difficulty is
-declared: every shape has ≥3 top-level ideas and ≥1 nested whole; the panel keeps
-the previous panel's balance (30 families, one question per operation, reach
-10 / 10 / 10). Every case is excluded by exact id **and** signature against the
-teaching dataset (seed `20260909`), the examined panel (seed `20260920`), and the
-varied curriculum itself.
+**(a) The finding is narrower than first stated.** Supply depends on the
+exclusion scope, and the two scopes answer different questions:
+
+| Scope | Families searched | every record unused | ≥1 selected case unused | all three selected cases unused |
+| --- | --- | --- | --- | --- |
+| teaching set only (seed `20260909`) | 2,831 | 409 | 2,664 | 751 |
+| teaching set **and the examined panel** | 2,831 | **0** | 1,756 | 38 |
+
+Eligible questions per operation in the untouched scope: `LIST_PARTS` **4**,
+`FIND_SHARED_PART` **85**, `REACHED_VIA` **7**. The **distinct arrangements**
+behind those eligible questions are only **3, 4 and 2** respectively — i.e. at
+most the four teaching templates. So the frozen generator can supply **new
+instances of familiar arrangements**, not previously unseen arrangements, and
+`LIST_PARTS` is the binding constraint. That is the honest, narrowed finding.
+
+**(b) The first replacement draft was not actually new.** Twelve proposed shapes
+were checked with a label-invariant graph calculation and reduced to **two**
+distinct directed connection patterns (shapes 1,3,4,6,8,9,10,11,12 shared one;
+2,5,7 the other) — renaming objects is not novelty. The panel generator was
+therefore rebuilt to **enumerate** arrangements and to prove distinctness.
+
+### The final panel as now built
+
+`final_panel.py` enumerates every contains-DAG inside the teaching difficulty
+envelope, drops arrangements isomorphic to a teaching template or a curriculum
+shape, keeps only those that support all three reach questions, and selects 30
+**pairwise non-isomorphic** arrangements (pool: 92).
+
+| Property | Final panel | Teaching material |
+| --- | --- | --- |
+| Distinct connection patterns | **30** (of a 92-pattern pool) | 4 |
+| Idea nodes | 8 / 9 / 10 → 6 / 11 / 13 families | 8 / 9 / 10 |
+| `contains` connectors | 6 / 7 / 8 → 15 / 10 / 5 | 6 / 7 / 8 / 9 |
+| Direct parts of the asked whole | 2 / 3 → 20 / 10 | 2 / 3 |
+| Maximum chain depth | 3 | 3 |
+| Vocabulary | 34 labels, **0** outside the supported teaching words | 34 words |
+| Reach labels | 10 direct / 10 via / 10 absent | 5 / 1 / 4 |
+
+30 families, 90 cases, one question per operation, **0** id and **0** signature
+overlap with the teaching dataset, the examined panel and the varied curriculum.
+The examined panel's own content digest still reproduces exactly
+(`d1076de3…`). Evidence: `CURRICULUM_002_CHECK.json`.
 
 ## 4. The two curricula (equal budget, same schedule)
 
@@ -109,7 +137,7 @@ varied curriculum itself.
 | Learners | 6 (3 seeds × 2 conditions), separate copies and separate optimizer states |
 | Checkpoints measured | **64** and **256** updates per learner |
 | Total updates | **1,536** |
-| Final panel | untouched, new shape bank, 30 families / 90 cases, reach 10/10/10, 0 id and 0 signature overlap with everything examined |
+| Final panel | untouched, 30 **pairwise non-isomorphic** arrangements / 90 cases, reach 10/10/10, teaching vocabulary only |
 | Wall ceiling | 900 s per learner (declared), 3,600 s worker, 7,200 s instance (2 h) |
 | Sealing | predictions produced from an answer-free input view, correctness computed in a second pass; the record states explicitly that this does not prove event ordering |
 | Reporting | every learner and both checkpoints, including regressions; per-operation breakdown; exposures; containment; checkpoint identities |

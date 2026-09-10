@@ -32,18 +32,45 @@ def test_final_panel_is_deterministic(panel):
         final_panel.final_panel_digest(panel)
 
 
-def test_final_panel_uses_a_new_shape_bank(panel):
-    teaching_shapes = {tuple(sorted(tuple(sorted(parts))
-                                    for parts in template.values()))
-                       for template in lessons.WHOLE_PART_TEMPLATES}
-    curriculum_shapes = {tuple(sorted(tuple(sorted(parts))
-                                      for parts in shape.values()))
-                         for shape in curriculum.BASE_SHAPES}
-    for shape in final_panel.FINAL_SHAPES:
-        signature = tuple(sorted(tuple(sorted(parts)) for parts in shape.values()))
-        assert signature not in teaching_shapes
-        assert signature not in curriculum_shapes
-    assert panel["distinct_shape_patterns"] == 12
+def test_final_panel_uses_thirty_genuinely_distinct_patterns(panel):
+    """Attempt at 'new shapes' by renaming collapsed to two patterns; this test
+    pins the correction: thirty DISTINCT directed connection patterns, none
+    isomorphic to a teaching template or a curriculum shape."""
+    assert panel["distinct_patterns"] == 30
+    assert len({family["pattern_key"] for family in panel["families"]}) == 30
+    banned = {final_panel.digest(final_panel.canonical(key))
+              for key in final_panel.excluded_pattern_keys()}
+    assert not ({family["pattern_key"] for family in panel["families"]} & banned)
+
+
+def test_final_panel_stays_inside_the_teaching_difficulty_envelope(panel):
+    report = final_panel.difficulty_report(panel)
+    assert report["panel"]["nodes"] == {8: 6, 9: 11, 10: 13}
+    assert report["panel"]["relations"] == {6: 15, 7: 10, 8: 5}
+    assert report["panel"]["max_direct_parts"] == {2: 20, 3: 10}
+    assert report["panel"]["max_depth"] == {3: 30}
+    assert report["vocabulary"]["labels_outside_supported_vocabulary"] == []
+    for family in panel["families"]:
+        stats = family["pattern_stats"]
+        assert final_panel.MIN_NODES <= stats["nodes"] <= final_panel.MAX_NODES
+        assert final_panel.MIN_RELATIONS <= stats["relations"] <= final_panel.MAX_RELATIONS
+        assert stats["max_direct_parts"] <= final_panel.MAX_DIRECT_PARTS
+        assert stats["max_depth"] <= final_panel.MAX_DEPTH
+
+
+def test_every_panel_graph_uses_only_supported_vocabulary(panel):
+    supported = set(final_panel.SUPPORTED_VOCABULARY)
+    for case in panel["cases"]:
+        labels = {node["identifier"] for node in case["record"]["graph"]["nodes"]}
+        assert labels <= supported
+
+
+def test_validate_rejects_isomorphic_renamed_patterns(panel):
+    """A panel whose second family is a renamed copy of the first must fail."""
+    tampered = copy.deepcopy(panel)
+    tampered["families"][1]["pattern_key"] = tampered["families"][0]["pattern_key"]
+    with pytest.raises(ValueError, match="FINAL_PANEL_PATTERNS_NOT_DISTINCT"):
+        final_panel.validate_final_panel(tampered)
 
 
 def test_final_panel_excludes_every_used_case_by_id_and_by_signature(panel):

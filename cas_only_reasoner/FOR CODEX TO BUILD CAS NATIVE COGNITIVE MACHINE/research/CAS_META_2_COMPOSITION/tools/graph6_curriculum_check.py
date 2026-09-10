@@ -30,6 +30,94 @@ def canonical(value):
                       allow_nan=False) + "\n"
 
 
+def graph_pattern_key(record):
+    """Label-invariant key of the ARRANGEMENT only (no question, no options)."""
+    node_ids = fresh_panel._structural_ids(record)
+    edges = sorted((relation["kind"], node_ids[relation["source"]],
+                    node_ids[relation["target"]])
+                   for relation in record["graph"]["relations"])
+    return (tuple(sorted(node_ids.values())), tuple(edges))
+
+
+def frozen_generator_supply(probes=fresh_panel.MAX_FAMILY_PROBES):
+    """How much supply the FROZEN lesson generator has, by operation and scope.
+
+    Two scopes are reported, because they answer different questions:
+
+    * `teaching_only` — only the teaching dataset (seed 20260909) is excluded.
+      This is the scope in which the examined panel itself was built.
+    * `teaching_and_examined_panel` — the examined 90-case panel (seed 20260920)
+      is excluded as well. This is the scope that matters for an UNTOUCHED panel.
+
+    For each scope: how many families exist, how many have every record unused,
+    how many have all three SELECTED cases unused, and how many distinct graph
+    patterns sit behind the eligible questions. That last number separates "new
+    examples of familiar arrangements" from "previously unseen arrangements".
+    """
+    scopes = {
+        "teaching_only": fresh_panel.used_index(),
+        "teaching_and_examined_panel": fresh_panel.used_index(
+            fresh_panel.EXCLUDED_DATASET_SEEDS, fresh_panel.EXAMINED_PANEL_SEEDS),
+    }
+    report = {}
+    for scope_name, (used_ids, used_signatures) in scopes.items():
+        per_op = {op: {"distinct": set(), "eligible": set()} for op in fresh_panel.PANEL_OPS}
+        eligible_patterns = {op: set() for op in fresh_panel.PANEL_OPS}
+        families = families_all_new = families_all_records_new = families_any_new = 0
+        for probe in range(1, probes + 1):
+            family_seed = (fresh_panel.PANEL_FAMILY_BASE
+                           + fresh_panel.PANEL_SEED % 1000 + probe)
+            by_op = fresh_panel._family_records(family_seed)
+            if set(by_op) != set(fresh_panel.PANEL_OPS):
+                continue
+            families += 1
+            if not any(fresh_panel.signature_key(record) in used_signatures
+                       for records in by_op.values() for record in records):
+                families_all_records_new += 1
+            selected = [fresh_panel._select_case(op, by_op[op], family_seed)
+                        for op in fresh_panel.PANEL_OPS]
+            new_cases = 0
+            for record in selected:
+                key = fresh_panel.signature_key(record)
+                per_op[record["op"]]["distinct"].add(key)
+                if key not in used_signatures:
+                    per_op[record["op"]]["eligible"].add(key)
+                    eligible_patterns[record["op"]].add(graph_pattern_key(record))
+                    new_cases += 1
+            families_any_new += int(new_cases > 0)
+            families_all_new += int(new_cases == len(fresh_panel.PANEL_OPS))
+        report[scope_name] = {
+            "excluded_case_ids": len(used_ids),
+            "excluded_signatures": len(used_signatures),
+            "families_searched": families,
+            "families_whose_every_record_is_unused": families_all_records_new,
+            "families_with_at_least_one_unused_selected_case": families_any_new,
+            "families_with_all_three_selected_cases_unused": families_all_new,
+            "per_operation": {
+                op: {"distinct_signatures": len(per_op[op]["distinct"]),
+                     "eligible_signatures": len(per_op[op]["eligible"]),
+                     "distinct_ARRANGEMENTS_among_eligible":
+                         len(eligible_patterns[op])}
+                for op in fresh_panel.PANEL_OPS},
+        }
+    return {
+        "searched_family_seed_region": [
+            fresh_panel.PANEL_FAMILY_BASE + fresh_panel.PANEL_SEED % 1000 + 1,
+            fresh_panel.PANEL_FAMILY_BASE + fresh_panel.PANEL_SEED % 1000 + probes],
+        "scopes": report,
+        "narrowed_finding": (
+            "Narrowed to what is demonstrated: (1) excluding only the teaching "
+            "set, the frozen generator still supplies new INSTANCES (many "
+            "families, but only a handful of distinct graph patterns behind the "
+            "eligible questions); (2) excluding the teaching set AND the examined "
+            "panel, it supplies no family whose every record is unused, and the "
+            "eligible questions per operation fall to the counts in "
+            "scopes.teaching_and_examined_panel. The frozen generator therefore "
+            "cannot supply an untouched panel of previously unseen arrangements; "
+            "it can supply new instances of familiar ones."),
+    }
+
+
 def build_report():
     varied = curriculum.varied_records()
     control = curriculum.control_records()
@@ -52,6 +140,7 @@ def build_report():
             "exposure_at_256_updates": curriculum.exposure(control, 256),
             "unchanged": True,
         },
+        "frozen_generator_supply": frozen_generator_supply(),
         "final_panel": {
             "schema": panel["schema"],
             "panel_seed": panel["panel_seed"],
@@ -59,7 +148,8 @@ def build_report():
             "case_count": panel["case_count"],
             "cases_per_op": panel["cases_per_op"],
             "reach_label_counts": panel["reach_label_counts"],
-            "distinct_shape_patterns": panel["distinct_shape_patterns"],
+            "distinct_patterns": panel["distinct_patterns"],
+            "pattern_pool_size": panel["pattern_pool_size"],
             "distinct_family_patterns": panel["distinct_family_patterns"],
             "distinct_case_patterns": panel["distinct_case_patterns"],
             "rejected": panel["rejected"],
@@ -71,6 +161,7 @@ def build_report():
             "overlap_with_used_ids": sorted(panel_ids & used_ids),
             "overlap_with_used_signatures": sorted(panel_signatures & used_signatures),
             "panel_content_digest": final_panel.final_panel_digest(panel),
+            "difficulty_vs_teaching": final_panel.difficulty_report(panel),
             "family_seeds": [family["family_seed"] for family in panel["families"]],
             "case_ids": [case["record_id"] for case in panel["cases"]],
         },

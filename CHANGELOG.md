@@ -20,13 +20,20 @@ identity `f3e56f29…`): 30 records / 10 per op — every `LIST_PARTS` lesson ca
 missing-part AND a foreign-part option, 7/10 have all-equal option lengths, the
 correct list is never the unique longest/shortest; `FIND_SHARED_PART` 4/10 offer
 `none` and 4/10 answer `none` with equal-length options; `REACHED_VIA` 4/3/3.
-**Panel finding:** the frozen generator cannot supply an untouched panel (0 of
-2,840 families in a fresh region offer a fully-new triple), so
-`cas_meta2/graph_teaching/final_panel.py` builds one from a NEW twelve-shape bank
-— 30 families / 90 cases, reach 10/10/10, 0 id and 0 signature overlap with
-teaching, the examined panel and the varied curriculum (content digest
-`60569f69…`). The examined panel's content digest still reproduces exactly
-(`d1076de3…`). **Design** (`curriculum_experiment.py` + `aws/graph_training_curriculum_launch.py`):
+**Panel finding (corrected):** the frozen generator cannot supply an untouched
+panel of unseen arrangements — with the examined panel excluded, 0 of 2,831
+families have every record unused, and the eligible questions per operation
+(`LIST_PARTS` 4, `FIND_SHARED_PART` 85, `REACHED_VIA` 7) sit behind only 3 / 4 / 2
+distinct arrangements, so they are new instances of familiar arrangements. A first
+replacement draft of twelve shapes was checked and reduced to **two** distinct
+connection patterns (renaming is not novelty); `final_panel.py` was rebuilt to
+**enumerate** arrangements and now selects **30 pairwise non-isomorphic**
+arrangements from a 92-arrangement pool, inside the teaching difficulty envelope
+(nodes 8-10, connectors 6-8, direct parts ≤3, depth 3) and using only the 34
+supported teaching words — no unfamiliar vocabulary, no deeper reasoning. Panel
+content digest `11ace422…`; 0 id and 0 signature overlap with teaching, the
+examined panel and the varied curriculum. The examined panel's content digest
+still reproduces exactly (`d1076de3…`). **Design** (`curriculum_experiment.py` + `aws/graph_training_curriculum_launch.py`):
 control vs varied, three paired seeds (matched initial weights, separate
 optimizers), checkpoints at 64 and 256 updates, 6 learners, 1,536 updates, one
 job; REAL checkpoint files (model + optimizer + encoder state) saved, reloaded
