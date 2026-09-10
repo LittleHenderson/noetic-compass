@@ -30,8 +30,14 @@ Supersedes `AUTHORIZATION_REQUEST_001.md` (§8 fields now filled from the built 
 | Job pattern | `cas-meta2-graph6cand-\d{14}-[a-f0-9]{8}` |
 | Proposed job | `cas-meta2-graph6cand-20260910120000-0a55f4b1` |
 | Request record | `candidate_request_001.json` (inert: `launch_authorized: false`) |
-| Authority template | `candidate_authority_TEMPLATE.json` (frozen design, owner hash missing) |
+| Authority template | `candidate_authority_TEMPLATE.json` — the frozen fields plus three annotation keys (`status`, `unfilled`, `note`) |
 | Reused unchanged | resource plan, reservation scope, package builder, staging, delivery, collection verification, cleanup and evidence retention, zero-retry policy |
+
+**Note on the template.** The launcher accepts an authority only with the **exact** field
+set, so the signed authority must be the template with the three annotation keys removed
+and `owner_authorization_sha256` filled. The template as it stands is refused with
+`CANDIDATE_AUTHORITY_FIELDS`; a signed file missing the hash would be refused with
+`CANDIDATE_AUTHORITY_HASH:owner_authorization_sha256`. Both refusals are by design.
 
 ## 3. Data and design (frozen)
 
