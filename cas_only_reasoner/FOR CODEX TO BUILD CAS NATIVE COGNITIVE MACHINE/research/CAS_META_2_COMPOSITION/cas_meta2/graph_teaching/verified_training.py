@@ -79,6 +79,9 @@ def record_from_exercise(bundle, exercise, target, index, view_id, split):
     correct = target["expected_answer"]
     require(any(canonical(option) == canonical(correct) for option in options),
             "VT_CONNECTION_TARGET_NOT_OFFERED")
+    question_key = vt.canonical_question_key(exercise["question"]["operation"],
+                                             exercise["question"]["named_arguments"],
+                                             exercise["context_id"])
     prompt = ("Facts:\n" + "\n".join(
         "%s contains %s" % (relation["source"], relation["target"])
         for relation in graph["relations"]) + "\n"
@@ -94,20 +97,59 @@ def record_from_exercise(bundle, exercise, target, index, view_id, split):
                 "witness_kind": target["witness"]["kind"],
                 "checker_identity": target["reference_verification"]["checker_identity"],
                 "record_id_basis": "public_projection",
-                "question_key": vt.canonical_question_key(
-                    exercise["question"]["operation"],
-                    exercise["question"]["named_arguments"],
-                    exercise["context_id"]),
-                "question_key_digest": vt.question_key_digest(
-                    vt.canonical_question_key(
-                        exercise["question"]["operation"],
-                        exercise["question"]["named_arguments"],
-                        exercise["context_id"]))}}
+                "context_id": exercise["context_id"],
+                "question_key": question_key}}
+    core["cube_verified_teaching"]["question_key_digest"] = vt.question_key_digest(
+        question_key)
     record = {**core, "record_id": digest(canonical(core)), "correct": correct,
               "reference": reference.derivation_for(
                   question["op"], cube_node.containment_graph(bundle, view_id),
                   question)}
     return record
+
+
+def catalog_question(operation, named_arguments, index):
+    """The adapter-ready question dict for a lesson-catalog question."""
+    if operation == "LIST_PARTS":
+        return {"op": operation, "idea": index.label_of[named_arguments["idea"]]}
+    if operation == "FIND_SHARED_PART":
+        return {"op": operation, "a": index.label_of[named_arguments["a"]],
+                "b": index.label_of[named_arguments["b"]]}
+    return {"op": operation, "part": index.label_of[named_arguments["part"]],
+            "idea": index.label_of[named_arguments["idea"]]}
+
+
+def record_from_question(bundle, question, options, correct, view_id, split,
+                         extra=None):
+    """One frozen-shape record from an adapter-ready question, its choices, its answer.
+
+    Shared by the taught records and the untaught probe records so both travel the
+    same encoder path. ``question`` is already in label space.
+    """
+    graph = cube_node.graph_record(bundle, view_id)
+    require(any(canonical(option) == canonical(correct) for option in options),
+            "VT_CONNECTION_TARGET_NOT_OFFERED")
+    prompt = ("Facts:\n" + "\n".join(
+        "%s contains %s" % (relation["source"], relation["target"])
+        for relation in graph["relations"]) + "\n"
+        + _request(question) + "\nChoose one of the three supplied options.\n")
+    detail = dict(extra or {})
+    question_key = detail.pop("question_key", None)
+    require(question_key is not None, "VT_RECORD_QUESTION_KEY_REQUIRED")
+    detail.pop("context_id", None)
+    core = {"schema": EXERCISE_SCHEMA, "split": split, "op": question["op"],
+            "graph": graph, "question": question, "options": list(options),
+            "framings": {"cas": prompt, "generic": prompt},
+            "cube_verified_teaching": {
+                "assistance_level": "NONE",
+                "record_id_basis": "public_projection",
+                "question_key": question_key,
+                "question_key_digest": vt.question_key_digest(question_key),
+                **detail}}
+    return {**core, "record_id": digest(canonical(core)), "correct": correct,
+            "reference": reference.derivation_for(
+                question["op"], cube_node.containment_graph(bundle, view_id),
+                question)}
 
 
 def _request(question):

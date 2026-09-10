@@ -494,18 +494,19 @@ def git_tree_paths(root, commit, directory):
     return checked_names(paths)
 
 
-def resolve_members(root, commit, *, git_bytes_fn=git_bytes, git_paths_fn=git_tree_paths):
+def resolve_members(root, commit, *, git_bytes_fn=git_bytes, git_paths_fn=git_tree_paths,
+                    worker_name=WORKER_NAME, worker_source=None):
     require(type(commit) is str and bool(HEX40.fullmatch(commit)), "PACKAGE_EXACT_COMMIT_REQUIRED")
     names = set(EXPLICIT_FILES)
     for directory in SOURCE_DIRS:
         names.update(git_paths_fn(root, commit, directory))
     names.update(WHEELS)
-    names.add(WORKER_NAME)
+    names.add(worker_name)
     checked_names(names)
+    rendered = (worker_source or render_worker()).encode("utf-8")
     members = {}
     for name in sorted(names):
-        raw = render_worker().encode("utf-8") if name == WORKER_NAME \
-            else git_bytes_fn(root, commit, name)
+        raw = rendered if name == worker_name else git_bytes_fn(root, commit, name)
         require(len(raw) <= MAX_MEMBER_BYTES, "PACKAGE_MEMBER_TOO_LARGE:" + name)
         members[name] = raw
     require(members and len(members) <= MAX_MEMBER_COUNT
@@ -516,11 +517,21 @@ def resolve_members(root, commit, *, git_bytes_fn=git_bytes, git_paths_fn=git_tr
     return members
 
 
-def manifest_for(members, source_sha):
+def manifest_for(members, source_sha, *, worker_name=WORKER_NAME,
+                 experiment=EXPERIMENT, package_schema=PACKAGE_SCHEMA,
+                 design=None):
+    design = design or {
+        "launch_enabled": False, "training": True, "arms": [FROZEN_ARM],
+        "pair_seeds": list(FROZEN_PAIR_SEEDS),
+        "conditions": list(FROZEN_CONDITIONS),
+        "checkpoints": list(FROZEN_CHECKPOINTS),
+        "updates_per_learner": FROZEN_UPDATES_PER_LEARNER,
+        "total_optimizer_steps": FROZEN_TOTAL_UPDATES,
+        "panel_seed": FROZEN_PANEL_SEED}
     return {
-        "schema": PACKAGE_SCHEMA, "source_sha": source_sha,
-        "root_manifest": MANIFEST_NAME, "experiment": EXPERIMENT,
-        "git_path_prefix": GIT_PREFIX, "worker_script": WORKER_NAME,
+        "schema": package_schema, "source_sha": source_sha,
+        "root_manifest": MANIFEST_NAME, "experiment": experiment,
+        "git_path_prefix": GIT_PREFIX, "worker_script": worker_name,
         "wheels": {name: {"sha256": expected, "bytes": len(members[name])}
                    for name, expected in WHEELS.items()},
         "members": sorted(members),
@@ -528,13 +539,7 @@ def manifest_for(members, source_sha):
         "files_bytes": {name: len(raw) for name, raw in sorted(members.items())},
         "member_count": len(members) + 1,
         "expanded_bytes": sum(map(len, members.values())),
-        "launch_enabled": False, "training": True, "arms": [FROZEN_ARM],
-        "pair_seeds": list(FROZEN_PAIR_SEEDS),
-        "conditions": list(FROZEN_CONDITIONS),
-        "checkpoints": list(FROZEN_CHECKPOINTS),
-        "updates_per_learner": FROZEN_UPDATES_PER_LEARNER,
-        "total_optimizer_steps": FROZEN_TOTAL_UPDATES,
-        "panel_seed": FROZEN_PANEL_SEED,
+        **design,
         "reservation_created": False, "automatic_retries": 0,
         "frozen_budget": RESOURCE_PLAN["frozen_budget"],
         "boundary": ("Source package only; launch_enabled:false. The paid run "
@@ -544,14 +549,20 @@ def manifest_for(members, source_sha):
 
 
 def build_package(output, *, source_sha, git_bytes_fn=git_bytes,
-                  git_paths_fn=git_tree_paths):
+                  git_paths_fn=git_tree_paths, worker_name=WORKER_NAME,
+                  worker_source=None, experiment=EXPERIMENT,
+                  package_schema=PACKAGE_SCHEMA, design=None,
+                  receipt_schema="cas-graph-training-curriculum-package-receipt/1"):
     output = Path(output).absolute()
     require(not output.exists() and output.parent.is_dir()
             and output.is_relative_to((ROOT / "records").absolute())
             and output != ROOT / "records", "PACKAGE_NEW_SCOPED_OUTPUT_REQUIRED")
     members = resolve_members(ROOT, source_sha, git_bytes_fn=git_bytes_fn,
-                              git_paths_fn=git_paths_fn)
-    manifest = manifest_for(members, source_sha)
+                              git_paths_fn=git_paths_fn, worker_name=worker_name,
+                              worker_source=worker_source)
+    manifest = manifest_for(members, source_sha, worker_name=worker_name,
+                            experiment=experiment, package_schema=package_schema,
+                            design=design)
     members[MANIFEST_NAME] = canonical(manifest)
     buffer = io.BytesIO()
     with ZipFile(buffer, "w", compression=ZIP_DEFLATED, compresslevel=6) as zipped:
@@ -565,7 +576,7 @@ def build_package(output, *, source_sha, git_bytes_fn=git_bytes,
     output.mkdir()
     with (output / "source.zip").open("xb") as stream:
         stream.write(raw)
-    receipt = {"schema": "cas-graph-training-curriculum-package-receipt/1",
+    receipt = {"schema": receipt_schema,
                "status": "SOURCE_ONLY_NO_LAUNCH",
                "archive": str(output / "source.zip"),
                "archive_sha256": digest(raw), "archive_bytes": len(raw),
@@ -611,6 +622,20 @@ class CurriculumProvider:
         self._result_raw = None
         self._visibility_window = 60.0
         self._visibility_interval = 5.0
+        # Extension points for a versioned candidate binding. The defaults keep
+        # this launcher's own behaviour exactly as it was.
+        self.worker_name = WORKER_NAME
+        self.result_schema = RESULT_SCHEMA
+
+    def _worker_config(self, bucket):
+        """The worker config this experiment uploads; a candidate overrides this."""
+        return {"schema": "cas-graph-training-curriculum-worker-config/1",
+                "job": self.job, "bucket": bucket, "region": self.region,
+                "pair_seeds": list(FROZEN_PAIR_SEEDS),
+                "conditions": list(FROZEN_CONDITIONS),
+                "checkpoints": list(FROZEN_CHECKPOINTS),
+                "updates_per_learner": FROZEN_UPDATES_PER_LEARNER,
+                "panel_seed": FROZEN_PANEL_SEED}
 
     def configure_evidence(self, directory):
         directory = evidence_directory(directory)
@@ -764,7 +789,7 @@ class CurriculumProvider:
             "  if command -v \"$p\" >/dev/null 2>&1; then PY=\"$p\"; break; fi",
             "done",
             "test -n \"$PY\" || { echo SUPPORTED_PYTHON_REQUIRED; exit 1; }",
-            "\"$PY\" -B /opt/cas-graph6curr/package/" + WORKER_NAME,
+            "\"$PY\" -B /opt/cas-graph6curr/package/" + self.worker_name,
             "",
         ])
 
@@ -791,15 +816,8 @@ class CurriculumProvider:
         self._ensure_bucket(s3)
         self._effect("upload_source", s3.put_object, Bucket=bucket,
                      Key="input/source.zip", Body=raw)
-        config = {"schema": "cas-graph-training-curriculum-worker-config/1",
-                  "job": self.job, "bucket": bucket, "region": self.region,
-                  "pair_seeds": list(FROZEN_PAIR_SEEDS),
-                  "conditions": list(FROZEN_CONDITIONS),
-                  "checkpoints": list(FROZEN_CHECKPOINTS),
-                  "updates_per_learner": FROZEN_UPDATES_PER_LEARNER,
-                  "panel_seed": FROZEN_PANEL_SEED}
         self._effect("upload_config", s3.put_object, Bucket=bucket,
-                     Key="input/config.json", Body=canonical(config))
+                     Key="input/config.json", Body=canonical(self._worker_config(bucket)))
         trust = {"Version": "2012-10-17", "Statement": [
             {"Effect": "Allow", "Principal": {"Service": "ec2.amazonaws.com"},
              "Action": "sts:AssumeRole"}]}

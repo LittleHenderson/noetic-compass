@@ -23,7 +23,8 @@ numerical delivery path and stay that way.
 from __future__ import annotations
 
 from .graph import canonical, require
-from . import cube_node, trainer, verified_teaching as vt, verified_training as vtr
+from . import (cube_node, reference, trainer, verified_teaching as vt,
+               verified_training as vtr)
 
 CANDIDATE_SCHEMA = "cas-cube-verified-teaching-candidate-run/1"
 SCHEDULE_SCHEMA = "cas-cube-component-teaching-schedule/1"
@@ -601,6 +602,139 @@ def proposed_evaluation(bundle=None, view_id="view_context", records=None):
     }
 
 
+def _list_options(index, whole_id, answer):
+    """Three part-list choices for any catalog question, with declared fallbacks.
+
+    Preference order: the complete list, one foreign-part substitute, one
+    indirect-part substitute. Where the scene cannot supply one of those (a leaf
+    cube, or an empty answer) the fallback is another whole's list, then a single
+    part. The geometry is reported by ``probe_geometry`` rather than assumed.
+    """
+    direct = set(index.direct_parts(whole_id))
+    reachable = set(reference.transitive_parts(index.graph, index.label_of[whole_id]))
+    part_labels = {index.label_of[branch["target_node_id"]]
+                   for branch in index.context["branches"]
+                   if branch["predicate"] == "contains"}
+    foreign = sorted(label for label in part_labels
+                     if label not in direct and label not in reachable)
+    indirect = sorted(reachable - direct)
+    options = [sorted(answer)]
+    if answer and foreign:
+        options.append(sorted(list(answer)[:-1] + [foreign[0]]))
+    if answer and indirect:
+        options.append(sorted([indirect[0]] + list(answer)[1:]))
+    for node_id in sorted(index.label_of):
+        if len(options) == 3:
+            break
+        candidate = sorted(index.direct_parts(node_id))
+        if canonical(candidate) not in {canonical(item) for item in options}:
+            options.append(candidate)
+    for label in sorted(part_labels):
+        if len(options) == 3:
+            break
+        candidate = [label]
+        if canonical(candidate) not in {canonical(item) for item in options}:
+            options.append(candidate)
+    require(len(options) == 3, "CANDIDATE_LIST_OPTIONS")
+    require(any(canonical(option) == canonical(answer) for option in options),
+            "CANDIDATE_LIST_ANSWER_OFFERED")
+    return options
+
+
+def _shared_options(index, first_id, second_id, answer):
+    """Three choices for a shared-part question, including the 'none' answer."""
+    values = [answer]
+    part_labels = {index.label_of[branch["target_node_id"]]
+                   for branch in index.context["branches"]
+                   if branch["predicate"] == "contains"}
+    pool = (["none"] + sorted(index.direct_parts(first_id))
+            + sorted(index.direct_parts(second_id)) + sorted(part_labels)
+            + sorted(index.label_of.values()))
+    for candidate in pool:
+        if len(values) == 3:
+            break
+        if canonical(candidate) not in {canonical(item) for item in values}:
+            values.append(candidate)
+    require(len(values) == 3, "CANDIDATE_SHARED_OPTIONS")
+    require(any(canonical(option) == canonical(answer) for option in values),
+            "CANDIDATE_SHARED_ANSWER_OFFERED")
+    return values
+
+
+def _options_for(index, operation, named, answer):
+    """Three public choices for any catalog question, including an empty answer."""
+    if operation == "LIST_PARTS":
+        return _list_options(index, named["idea"], answer)
+    if operation == "FIND_SHARED_PART":
+        return _shared_options(index, named["a"], named["b"], answer)
+    return vt.reach_choice_values(index, named["idea"], named["part"], answer)
+
+
+def probe_records(bundle=None, records=None, view_id="view_context",
+                  ordering_mode="declared", report=None):
+    """The 44 untaught questions as records on the same encoder path.
+
+    They are never taught. The run only evaluates them, after the final
+    checkpoint, and the learner answers them through its on-demand encoding path
+    because they sit outside its training index.
+    """
+    if bundle is None:
+        bundle = cube_node.load_bundle()
+    if records is None:
+        records = vtr.training_records(bundle, view_id, ordering_mode, report=report)
+    probe = probe_questions(bundle, records, view_id)
+    index = vt.Index(bundle, vt.lesson_context(bundle, view_id), view_id)
+    context_id = records[0]["cube_verified_teaching"]["question_key"]["context_id"]
+    built = []
+    for entry in probe["questions"]:
+        operation = entry["operation"]
+        named = entry["named_arguments"]
+        answer = entry["answer"]
+        options = _options_for(index, operation, named, answer)
+        built.append(vtr.record_from_question(
+            bundle, vtr.catalog_question(operation, named, index), options, answer,
+            view_id, "candidate_probe",
+            extra={"probe": True, "context_id": context_id,
+                   "question_key": vt.catalog_question_key(operation, named,
+                                                           context_id)}))
+    require(len(built) == probe["probe_questions"], "CANDIDATE_PROBE_RECORD_COUNT")
+    return built
+
+
+def probe_geometry(probe_records_list):
+    """Option geometry of the probe, reported rather than judged."""
+    unequal = []
+    for record in probe_records_list:
+        counts = [len(option) if isinstance(option, list) else 1
+                  for option in record["options"]]
+        if len(set(counts)) != 1:
+            unequal.append({"record_id": record["record_id"], "op": record["op"],
+                            "item_counts": counts,
+                            "answer_is_empty": record["correct"] == []})
+    return {
+        "questions": len(probe_records_list),
+        "equal_item_counts": len(probe_records_list) - len(unequal),
+        "unequal_item_counts": len(unequal),
+        "unequal_because_the_answer_is_empty": sum(
+            1 for item in unequal if item["answer_is_empty"]),
+        "unequal_detail": unequal[:8],
+        "note": ("an empty answer cannot offer equal item counts; the alternative "
+                 "is one foreign part and one indirect part, and the geometry is "
+                 "reported rather than assumed balanced"),
+    }
+
+
+def control_steps(records, updates=None):
+    """The control condition's step list, built from the frozen ordering."""
+    control = control_schedule(records, updates)
+    by_id = {record["record_id"]: record for record in records}
+    width = len(control["questions"])
+    return [{"block": index // width + 1, "phase": "whole-answer",
+             "record_id": record_id, "op": by_id[record_id]["op"],
+             "expected_answer": by_id[record_id]["correct"]}
+            for index, record_id in enumerate(control["ordering"])]
+
+
 class ObservationRecorder:
     """Per-step observations. A missing measurement is 'unavailable', never zero."""
 
@@ -660,8 +794,9 @@ class ObservationRecorder:
 
 def run_candidate(*, framework, model, learner_factory, authorization,
                   bundle=None, view_id="view_context", ordering_mode="declared",
-                  arm="cas", schedule=None, scorer=None, checkpoint_writer=None,
-                  checkpoint_verifier=None, wall_clock=None):
+                  arm="cas", schedule=None, steps=None, scorer=None,
+                  checkpoint_writer=None, checkpoint_verifier=None, wall_clock=None,
+                  before_hook=None, after_hook=None):
     """Run the candidate once, in the declared order. Refuses without authority.
 
     Every dependency is injected: this module imports no torch and constructs no
@@ -685,11 +820,16 @@ def run_candidate(*, framework, model, learner_factory, authorization,
     learner = learner_factory(model, arm=arm, records=records, layout=layout)
     scope = trainer.scope_parameters(framework, model)
     before = trainer.parameter_snapshot(framework, model)
+    # The BEFORE measurement is taken here: after scoping and the before
+    # snapshot, before the first update. A prediction reconstructed later is not
+    # the behaviour the run started from.
+    pre_measurement = before_hook(learner) if before_hook else None
     budget = trainer.TrainingBudget().validate()
     recorder = ObservationRecorder()
     clock = wall_clock or _counter_clock()
     deadline = clock() + budget.max_wall_seconds
-    steps = scheduled_steps(records, schedule)
+    steps = list(steps) if steps is not None else scheduled_steps(records, schedule)
+    require(steps, "CANDIDATE_STEPS_REQUIRED")
 
     for index, step in enumerate(steps):
         # the previous step's update must already be recorded before the next
@@ -713,7 +853,7 @@ def run_candidate(*, framework, model, learner_factory, authorization,
     saved = checkpoint_writer(learner, identity)
     verified = checkpoint_verifier(saved, identity)
     require(verified, "CANDIDATE_CHECKPOINT_NOT_VERIFIED")
-    return {
+    result = {
         "schema": CANDIDATE_SCHEMA,
         "run_id": authorization["run_id"],
         "kind": schedule["kind"],
@@ -725,6 +865,7 @@ def run_candidate(*, framework, model, learner_factory, authorization,
         "scope": scope,
         "containment": containment,
         "checkpoint": {"identity": identity, "saved": saved, "verified": verified},
+        "pre_measurement": pre_measurement,
         "observations": recorder.observations,
         "observation_summary": recorder.summary(),
         "actual_optimizer_updates": len(recorder.updates),
@@ -734,6 +875,10 @@ def run_candidate(*, framework, model, learner_factory, authorization,
                             else "wall-clock limit reached"),
         "sequence": list(EXECUTION_ORDER),
     }
+    # The AFTER measurement is taken here: after the final checkpoint, with no
+    # further update, so the probe can never steer training.
+    result["post_measurement"] = after_hook(learner, result) if after_hook else None
+    return result
 
 
 def _capture(learner, task, scorer):
