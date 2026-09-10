@@ -5,6 +5,11 @@ Every function named here exists in the repository at the path given, and
 `tests/test_graph_teaching_verified_teaching.py::test_task_bindings_name_real_functions_with_the_documented_shapes`
 checks each signature, so this document cannot drift from the code.
 
+**The executable connection is specified in `EXECUTION_CONNECTION.md`**, which names the
+one place where the teacher's target becomes the training correction
+(`GraphLearner.step` → `cross_entropy(scores, encoded_correct_index)`, `real_framework.py`
+lines 297-307) and records the stub-driven check of the real `trainer.run_training` loop.
+
 The chain, per the directive:
 
 ```text

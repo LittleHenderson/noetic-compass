@@ -1,0 +1,30 @@
+{
+  "artifacts": [
+    "public_contexts.jsonl",
+    "public_exercises.jsonl",
+    "teacher_targets.jsonl",
+    "teacher_traces.jsonl",
+    "step_contrasts.jsonl",
+    "cycle_plan.json"
+  ],
+  "boundary": "data only: no neural execution, no training, no reservation; the graded cycle records every stage as compiled and not delivered",
+  "expected_slot_rule": "the position of expected_choice_id in this exercise's final ordered choices",
+  "field_translation": {
+    "public_context_digest": "delivered fixture's ambiguous name; it is the digest of the COMPLETE public exercise, including its exercise_id",
+    "public_exercise_digest": "the same scope under an unambiguous name",
+    "public_graph_digest": "digest of the shared graph context only"
+  },
+  "ordering_mode": "authored_fixture",
+  "ordering_rule": "the delivered fixture's authored choice order, adopted so public identity reproduces; fixture reproduction only",
+  "schema_version": "cas.cube-verified-teaching/0.1",
+  "slot_alignment": {
+    "all_permutations_align": true,
+    "exercises": 8,
+    "permutations_per_exercise": 6,
+    "rule": "expected_slot follows expected_choice_id through all six orderings of three choices"
+  },
+  "slot_distribution_of_expected_answers": {
+    "0": 5,
+    "1": 3
+  }
+}

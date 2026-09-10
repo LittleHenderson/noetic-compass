@@ -189,8 +189,9 @@ def test_contrasts_share_the_public_context_and_never_negate_a_correct_answer():
     assert len(by_exercise) == 8
     for contrasts in by_exercise.values():
         assert len(contrasts) == 2
-        digests = {contrast["public_context_digest"] for contrast in contrasts}
+        digests = {contrast["public_graph_digest"] for contrast in contrasts}
         assert len(digests) == 1
+        assert len({contrast["public_exercise_digest"] for contrast in contrasts}) == 1
         for contrast in contrasts:
             assert contrast["learner_visible"] is False
             assert contrast["reason_status"] == "VALIDATED"
@@ -497,8 +498,8 @@ def test_compiled_bundle_reproduces_the_delivered_fixture_identity():
     assert comparison["exercise_ids_reproduced"] is True
     assert comparison["choice_orders_matching"] == comparison["choice_orders_compared"]
     assert comparison["choice_orders_matching"] == 8
-    assert comparison["public_context_digest_reproduced"] is False
-    assert comparison["unreproduced_authored_values"] == ["public_context_digest"]
+    assert comparison["public_context_digest_reproduced"] is True
+    assert comparison["unreproduced_authored_values"] == []
     declared = vt.compile_bundle(_bundle(), choice_order="declared")
     assert declared["fixture_comparison"]["choice_sets_matching"] == 8
     assert declared["fixture_comparison"]["exercise_ids_reproduced"] is False
@@ -506,6 +507,80 @@ def test_compiled_bundle_reproduces_the_delivered_fixture_identity():
     assert fixture["actual_execution"]["neural_calls"] == 0
     assert fixture["source"]["sha256"] == sha256(
         cube_node.pinned_bundle_path().read_bytes()).hexdigest()
+
+
+def test_public_exercise_digest_reproduces_the_fixture_field_exactly():
+    """The fixture's ambiguous name meant the COMPLETE exercise, not the graph."""
+    fixture = _fixture()
+    exercises = {exercise["exercise_id"]: exercise
+                 for exercise in fixture["public_exercises"]}
+    reproduced = 0
+    for contrast in fixture["private_step_contrasts"]:
+        exercise = exercises[contrast["exercise_id"]]
+        assert vt.public_exercise_digest(exercise) == \
+            contrast["public_context_digest"]
+        reproduced += 1
+    assert reproduced == 16
+    report = _compiled("authored_fixture")
+    comparison = report["fixture_comparison"]
+    assert comparison["public_context_digest_reproduced"] is True
+    assert comparison["public_context_digest_values_reproduced"] == {
+        "reproduced": 16, "considered": 16}
+    assert comparison["unreproduced_authored_values"] == []
+    assert comparison["public_context_digest_scope"] == \
+        "complete public exercise, including exercise_id"
+    for contrast in report["private_step_contrasts"]:
+        exercise = [item for item in report["public_exercises"]
+                    if item["exercise_id"] == contrast["exercise_id"]][0]
+        assert contrast["public_exercise_digest"] == \
+            vt.public_exercise_digest(exercise)
+        assert contrast["public_graph_digest"] == report["public_graph_digest"]
+        assert contrast["public_exercise_digest"] != contrast["public_graph_digest"]
+        assert "public_context_digest" not in contrast
+    assert vt.public_graph_digest(report["public_contexts"][0]) == \
+        report["public_graph_digest"]
+
+
+def test_expected_slot_follows_the_choice_through_all_six_permutations():
+    report = _compiled()
+    summary = report["slot_alignment_summary"]
+    assert summary["exercises"] == 8
+    assert summary["permutations_per_exercise"] == 6
+    assert summary["all_permutations_align"] is True
+    readings = [reading for exercise in report["slot_alignment"]
+                for reading in exercise["readings"]]
+    assert len(readings) == 48
+    for reading in readings:
+        assert reading["resolves_to_expected_choice"] is True
+    assert summary["rule"] == ("expected_slot follows expected_choice_id through all "
+                               "six orderings of three choices")
+    exercise = report["slot_alignment"][0]
+    assert exercise["rule"].startswith("expected_slot is the position of "
+                                       "expected_choice_id")
+
+
+def test_export_manifest_names_one_ordering_mode_per_export():
+    declared = _compiled("declared")
+    authored = _compiled("authored_fixture")
+    declared_manifest = vt.export_manifest(declared, "declared")
+    authored_manifest = vt.export_manifest(authored, "authored_fixture")
+    assert declared_manifest["ordering_mode"] == "declared"
+    assert authored_manifest["ordering_mode"] == "authored_fixture"
+    assert declared_manifest["slot_distribution_of_expected_answers"] == {
+        "0": 2, "1": 3, "2": 3}
+    assert authored_manifest["slot_distribution_of_expected_answers"] == {
+        "0": 5, "1": 3}
+    assert declared["ordering_mode"] == "declared"
+    assert authored["ordering_mode"] == "authored_fixture"
+    assert declared_manifest["slot_alignment"]["all_permutations_align"] is True
+    translation = declared_manifest["field_translation"]
+    assert set(translation) == {"public_context_digest", "public_exercise_digest",
+                                "public_graph_digest"}
+    assert declared_manifest["expected_slot_rule"].startswith(
+        "the position of expected_choice_id")
+    with pytest.raises(ValueError) as error:
+        vt.export_manifest(declared, "invented_mode")
+    assert str(error.value).startswith("VT_ORDERING_MODE_UNKNOWN")
 
 
 def test_verified_targets_carry_a_checker_identity_the_fixture_left_pending():

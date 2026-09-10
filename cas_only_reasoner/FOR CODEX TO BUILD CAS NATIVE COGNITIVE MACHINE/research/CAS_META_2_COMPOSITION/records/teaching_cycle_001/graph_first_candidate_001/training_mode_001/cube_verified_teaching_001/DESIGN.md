@@ -24,9 +24,15 @@ architecture were not changed.
 | File | Role |
 |---|---|
 | `cas_meta2/graph_teaching/verified_teaching.py` | the deterministic teacher, the schema objects, the compiler |
-| `tests/test_graph_teaching_verified_teaching.py` | 23 tests, all passing |
+| `cas_meta2/graph_teaching/verified_training.py` | the candidate-only execution connection and its dry-run plan |
+| `tests/test_graph_teaching_verified_teaching.py` | 23 tests |
+| `tests/test_graph_teaching_verified_training.py` | 12 tests |
 | `tools/graph6_cube_node_check.py` | extended with an opt-in `--verified-teaching` section and an `--artifacts` writer; the default report is unchanged, so the earlier `CUBE_NODE_CHECK.json` still reproduces byte-for-byte |
-| `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/` | `DESIGN.md`, `TASK_BINDINGS.md`, five `.jsonl` records, `cycle_plan.json`, `check_report.json`, `SOURCE.json` |
+| `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/` | `DESIGN.md`, `TASK_BINDINGS.md`, `EXECUTION_CONNECTION.md`, `SOURCE.json`, `check_report.json`, and `exports/<ordering_mode>/` |
+
+Each export directory holds one ordering mode and nothing else: the five `.jsonl`
+records, `cycle_plan.json`, and an `EXPORT_MANIFEST.json` naming the mode, the ordering
+rule, the slot distribution, the slot-alignment summary, and the field translation.
 
 Nothing else was created: no service, no launcher, no second framework.
 
@@ -143,7 +149,7 @@ not trusted:
 | choice sets matching, compared by question | 8 of 8 |
 | `exercise_id` reproduction, authored choice order | **8 of 8** |
 | `exercise_id` reproduction, declared choice order | 2 of 8 (choice order differs on 6) |
-| `public_context_digest` reproduced | **no** |
+| `public_context_digest` reproduced | **16 of 16** (see below) |
 | cycle plan stages and lesson variants | identical |
 
 The identity rule the fixture documents ("SHA-256 of compact sorted-key UTF-8
@@ -153,14 +159,76 @@ JSON") was reverse-engineered from the fixture and confirmed: `context_id`,
 fixture says `ensure_ascii=false`; for this content the two coincide, and a
 versioned translation is declared for non-ASCII content.
 
-**One authored value is not reproduced.** `public_context_digest` is not any
-digest derivable from the public context under the repository canonicalization —
-it was searched across every subset of the context fields and several
-repository-shaped graph records, with no match. It is reported as
-`"unreproduced_authored_values": ["public_context_digest"]` rather than matched by
-inventing a rule.
+### The previously "unreproducible" digest is resolved, and my reading was wrong
 
-## 5. Counts kept apart
+The earlier version of this record reported `public_context_digest` as an
+authored value the compiler could not reproduce, after searching subsets of the
+graph context. **The owner traced it: the field hashes the COMPLETE public
+exercise, including its `exercise_id` — "context" there means the whole decision
+context, not the shared graph.** Re-checked here: **all sixteen values reproduce
+exactly** under `sha256(compact sorted-key UTF-8 JSON of the public exercise)`.
+My earlier search was looking at the wrong scope because the field name was
+ambiguous; that reading is withdrawn, not softened.
+
+The candidate translation therefore carries two unambiguous names, recorded in
+every export manifest:
+
+| Name | Scope | Example |
+|---|---|---|
+| `public_exercise_digest` | the complete public exercise, its own id included | the fixture's 16 values, reproduced |
+| `public_graph_digest` | the shared graph context only (scene, view, nodes, branches) | a different value, e.g. `b14dad05…` for this scene |
+
+The old ambiguous key `public_context_digest` is **not** emitted by the
+compiler. The delivered fixture is preserved unchanged, and the translation is
+recorded in `exports/<mode>/EXPORT_MANIFEST.json` under `field_translation`.
+
+## 5. Ordering mode and slot alignment
+
+Every export names exactly one ordering mode, and the artifacts, the check
+report, and the manifest for that mode are written together:
+
+| Mode | Rule | Answer-slot distribution | Purpose |
+|---|---|---|---|
+| `declared` | the three choices are permuted with a seed over the question and the choice **set**, so no slot depends on which choice is correct | 2 / 3 / 3 across slots 0 / 1 / 2 | the candidate export |
+| `authored_fixture` | the delivered fixture's authored choice order | 5 / 3 / 0 | fixture reproduction only |
+
+The earlier single export mixed these: `DESIGN.md` quoted the declared
+distribution while `teacher_targets.jsonl` had been written in authored order
+(5 / 3 / 0). The owner caught the mismatch. Both modes now have their own
+directory and manifest, so no file can be read under the wrong mode.
+
+`expected_slot` is derived from the position of `expected_choice_id` in that
+exercise's final ordered choices, and `slot_alignment_check` re-derives it
+through **all six orderings of three choices**: 8 exercises × 6 permutations =
+**48 readings, all aligned** (`all_permutations_align: true`).
+
+**A balanced slot count is not what proves target independence.** The evidence
+for that is the boundary reading: `compile_public_exercise` receives a public
+case with no target field at all, and `answer_boundary_check` recompiles the same
+question under several declared targets and requires identical bytes.
+
+## 6. The candidate-only execution connection
+
+`verified_training.py` makes the connection at the one point where a target enters
+the loop, and demonstrates it by driving the **real** `trainer.run_training`
+through a recording stub learner:
+
+```text
+TeacherTarget.expected_answer -> record["correct"]
+  -> adapter.public_records(record, arm)["encoded_correct_index"]
+  -> trainer.make_task(record, arm)["correct"]
+  -> GraphLearner.step: cross_entropy(scores, encoded_correct_index)   [real_framework.py 297-307]
+  -> optimizer.step()   (operation:^6 allowlist only)
+```
+
+Readings: 8 records, 64 updates under the frozen budget, all 8 records reached,
+the corrective targets used are exactly the teacher's five verified answers,
+`neural_execution: false`, `torch_imported: false`, `learner_is_a_stub: true`.
+`EXECUTION_CONNECTION.md` records why the connection enters at `run_training`
+rather than `trainer.launch` (which has no record-injection parameter), and what a
+future authorized run would still need.
+
+## 7. Counts kept apart
 
 ```json
 {"compiled_stages": 7, "presented_stages": 7, "neural_presentations": 0,
@@ -181,37 +249,40 @@ behaviour; it is labelled `SIMULATED`, `is_model_prediction: false`,
 `counts_as_neural_delivery: false`, and its scores read `"unavailable"`, never
 zero.
 
-## 6. Scope evidence
+## 8. Scope evidence
 
-- The module imports `graph`, `cube_node`, `reference`, and (inside one function)
-`cube_profile`. A test asserts it contains no `import torch`, no `boto3`, no
-`gpu_adapter`, and no `real_framework` import.
+- The modules import `graph`, `cube_node`, `reference`, `trainer`, and (inside one
+function) `cube_profile`. Tests assert they contain no `import torch`, no `boto3`,
+no `gpu_adapter`, and no `real_framework` import; the connection check reports
+`torch_imported: false`.
 - The pinned cube bundle and the delivered fixture are read, never written; a
 test re-checks their hashes.
 - `TASK_BINDINGS.md` names repository functions verified from source, and a test
 checks each signature so the document cannot drift from the code.
 
-## 7. Known limits (unchanged from the fixture, plus what this work adds)
+## 9. Known limits (unchanged from the fixture, plus what this work adds)
 
 1. Only an illustrative small scene, not a balanced dataset or held-out panel.
 2. Numeric delivery is unimplemented for stages 1, 2, 3, 4, and 6; their content
    is prepared, not bound.
 3. The story/recomposition task remains unimplemented; stage 6 carries a
    restricted final-list binding proposal only.
-4. The simulated transport is not a model prediction.
+4. The simulated transport and the connection stub are not model predictions.
 5. Shorter component questions do not by themselves fix or disprove a
    list-scoring bias; the list-length/readout hypothesis stays open and the
    prepared contrast probe stays pending.
-6. `public_context_digest` remains unreproduced.
+6. The connection check's 64 updates are the frozen budget running on a stub: not
+   a training result, and not evidence about learning.
 7. Six pre-existing suite errors in two worker/rehearsal files remain (module
    stubbing order, environment-dependent); reported, not weakened.
 
-## 8. Reproach-free reproduction
+## 10. Reproduction
 
 ```
 cd <composition root>
-python -m pytest tests/test_graph_teaching_verified_teaching.py -q     # 23 tests
+python -m pytest tests/test_graph_teaching_verified_teaching.py \
+                 tests/test_graph_teaching_verified_training.py -q   # 35 tests
 python -m tools.graph6_cube_node_check --verified-teaching \
-       --artifacts <new dir> --output <new dir>/check_report.json
-python -m tools.graph6_cube_node_check --output <new path>             # unchanged report
+       --artifacts <new dir> --output <new dir>/check_report.json   # both export modes
+python -m tools.graph6_cube_node_check --output <new path>          # unchanged report
 ```

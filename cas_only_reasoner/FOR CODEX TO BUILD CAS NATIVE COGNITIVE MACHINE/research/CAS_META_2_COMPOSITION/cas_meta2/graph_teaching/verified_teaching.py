@@ -39,6 +39,7 @@ not implemented.
 from __future__ import annotations
 
 import inspect
+import itertools
 import json
 import random
 from hashlib import sha256
@@ -219,6 +220,28 @@ class Index:
 
 def choice_record(value):
     return {"choice_id": "choice:" + _public_digest(value), "value": value}
+
+
+def public_exercise_digest(exercise):
+    """Digest of the COMPLETE public exercise, its own id included.
+
+    This is the scope the delivered fixture meant by its ``public_context_digest``
+    field: "context" there was the whole decision context (graph, question and
+    choices), not the shared graph. All sixteen authored values reproduce under
+    this rule; the earlier reading of the field as a graph digest was wrong and
+    is reported as such.
+    """
+    return _public_digest(exercise)
+
+
+def public_graph_digest(context):
+    """Digest of the shared graph context only: scene, view, nodes, branches.
+
+    A different scope from :func:`public_exercise_digest`, so the two carry
+    different names.
+    """
+    return _public_digest({key: value for key, value in context.items()
+                           if key != "context_id"})
 
 
 def public_exercise(context, task_profile, operation, named_arguments, choice_values,
@@ -595,8 +618,14 @@ def contrast_reason(index, exercise, positive_value, negative_value):
     return None
 
 
-def step_contrasts(index, exercise, target, public_context_digest):
-    """Positive choice against each verified negative, same public context."""
+def step_contrasts(index, exercise, target, public_graph, view_id="view_context"):
+    """Positive choice against each verified negative, same public context.
+
+    Two digests, two names, deliberately: ``public_graph_digest`` is the shared
+    graph scope, and ``public_exercise_digest`` is the complete exercise scope the
+    delivered fixture meant. The older ambiguous name ``public_context_digest``
+    is not emitted; the translation is recorded in the export manifest.
+    """
     derived = reference_answer(index, exercise)
     positive_id = choice_id_for_value(exercise, derived)
     records = []
@@ -609,13 +638,87 @@ def step_contrasts(index, exercise, target, public_context_digest):
             "teacher_target_ref": exercise["exercise_id"],
             "positive_choice_id": positive_id,
             "negative_choice_id": choice["choice_id"],
-            "public_context_digest": public_context_digest,
+            "public_graph_digest": public_graph,
+            "public_exercise_digest": public_exercise_digest(exercise),
             "learner_visible": False,
             "reason_code": reason,
             "reason_status": ("VALIDATED" if reason else "NO_VERIFIED_PREDICATE"),
         }
         records.append(record)
     return records
+
+
+def slot_alignment_check(context, index, exercise, target, view_id="view_context"):
+    """Every permitted permutation must keep the target on its own choice.
+
+    ``expected_slot`` is derived from the position of ``expected_choice_id`` in
+    the exercise's final ordered choices, so it must follow the choices through
+    all six orderings of three. A balanced slot count is not what proves target
+    independence; this alignment check plus the boundary readings are.
+    """
+    values = exercise_choice_values(exercise)
+    answer = target["expected_answer"]
+    readings = []
+    for permutation in itertools.permutations(range(3)):
+        permuted = [values[position] for position in permutation]
+        rebuilt = public_exercise(context, exercise["task_profile"],
+                                  exercise["question"]["operation"],
+                                  exercise["question"]["named_arguments"],
+                                  permuted, view_id)
+        moved = teacher_target(rebuilt, answer, target["worked_explanation"],
+                               target["witness"])
+        slot_choice = rebuilt["choices"][moved["expected_slot"]]
+        readings.append({
+            "permutation": list(permutation),
+            "exercise_id": rebuilt["exercise_id"],
+            "expected_slot": moved["expected_slot"],
+            "expected_choice_id": moved["expected_choice_id"],
+            "resolves_to_expected_choice":
+                slot_choice["choice_id"] == moved["expected_choice_id"]
+                and canonical(slot_choice["value"]) == canonical(answer),
+        })
+    return {"exercise_id": exercise["exercise_id"],
+            "readings": readings,
+            "permutations_checked": len(readings),
+            "all_permutations_align": all(item["resolves_to_expected_choice"]
+                                          for item in readings),
+            "rule": ("expected_slot is the position of expected_choice_id in this "
+                     "exercise's final ordered choices")}
+
+
+def export_manifest(report, ordering_mode):
+    """One explicitly named ordering mode for one export of these artifacts."""
+    require(ordering_mode in ("declared", "authored_fixture"),
+            "VT_ORDERING_MODE_UNKNOWN:" + str(ordering_mode))
+    slots = sorted(target["expected_slot"] for target in report["private_teacher_targets"])
+    distribution = {str(slot): slots.count(slot) for slot in sorted(set(slots))}
+    instruction = ("the three choices are permuted with a seed over the question "
+                   "and the choice SET, so no slot depends on which choice is "
+                   "correct")
+    return {
+        "schema_version": SCHEMA,
+        "ordering_mode": ordering_mode,
+        "ordering_rule": (instruction if ordering_mode == "declared" else
+                          "the delivered fixture's authored choice order, adopted so "
+                          "public identity reproduces; fixture reproduction only"),
+        "slot_distribution_of_expected_answers": distribution,
+        "expected_slot_rule": ("the position of expected_choice_id in this "
+                               "exercise's final ordered choices"),
+        "slot_alignment": report.get("slot_alignment_summary"),
+        "field_translation": {
+            "public_context_digest": ("delivered fixture's ambiguous name; it is the "
+                                      "digest of the COMPLETE public exercise, "
+                                      "including its exercise_id"),
+            "public_exercise_digest": "the same scope under an unambiguous name",
+            "public_graph_digest": "digest of the shared graph context only",
+        },
+        "artifacts": ["public_contexts.jsonl", "public_exercises.jsonl",
+                      "teacher_targets.jsonl", "teacher_traces.jsonl",
+                      "step_contrasts.jsonl", "cycle_plan.json"],
+        "boundary": ("data only: no neural execution, no training, no reservation; "
+                     "the graded cycle records every stage as compiled and not "
+                     "delivered"),
+    }
 
 
 # --------------------------------------------------------------------------
@@ -1107,8 +1210,7 @@ def compile_bundle(bundle=None, view_id="view_context", fixture_path=None,
         fixture = json.loads(Path(fixture_file).read_text(encoding="utf-8"))
     context = lesson_context(bundle, view_id)
     index = Index(bundle, context, view_id)
-    digest_of_context = sha256(canonical(
-        {key: value for key, value in context.items() if key not in ("context_id",)})).hexdigest()
+    graph_digest = public_graph_digest(context)
 
     whole_id = _default_whole(index) if whole_label is None else index.node_of[whole_label]
     require(expectations in ("authored", "derived"),
@@ -1257,7 +1359,12 @@ def compile_bundle(bundle=None, view_id="view_context", fixture_path=None,
     for exercise in ordered_exercises:
         contrasts.extend(step_contrasts(index, exercise,
                                         all_targets[exercise["exercise_id"]],
-                                        digest_of_context))
+                                        graph_digest, view_id))
+
+    slot_alignment = [slot_alignment_check(context, index, exercise,
+                                           all_targets[exercise["exercise_id"]],
+                                           view_id)
+                      for exercise in ordered_exercises]
 
     trace = compile_trace(context, components, list_exercise, "toy-list-trace-001")
     trace_outcome = verify_trace(index, trace,
@@ -1292,6 +1399,17 @@ def compile_bundle(bundle=None, view_id="view_context", fixture_path=None,
         "lesson_variants": variants,
         "practice_variants": practice,
         "cycle_plan": plan,
+        "slot_alignment": slot_alignment,
+        "slot_alignment_summary": {
+            "exercises": len(slot_alignment),
+            "permutations_per_exercise": 6,
+            "all_permutations_align": all(item["all_permutations_align"]
+                                          for item in slot_alignment),
+            "rule": ("expected_slot follows expected_choice_id through all six "
+                     "orderings of three choices"),
+        },
+        "ordering_mode": choice_order,
+        "public_graph_digest": graph_digest,
         "observation_contract": observation_contract(),
         "counts": counts(plan),
         "actual_execution": {"repository_reference_calls": len(components) + 3,
@@ -1381,27 +1499,42 @@ def compare_with_fixture(report, path=None):
         "choice_orders_matching": matching_choice_orders,
         "choice_orders_compared": compared_orders,
         "choice_sets_compared": len(report["public_exercises"]),
+        "public_context_digest_scope": "complete public exercise, including exercise_id",
         "public_context_digest_reproduced": _context_digest_matches(fixture),
-        "unreproduced_authored_values": ["public_context_digest"],
+        "public_context_digest_values_reproduced": _context_digest_count(fixture),
+        "unreproduced_authored_values": [],
+        "field_translation": {
+            "public_context_digest": "delivered fixture's name; the complete public "
+                                     "exercise scope",
+            "public_exercise_digest": "the compiler's name for the same scope",
+            "public_graph_digest": "shared graph scope only, a different value",
+        },
         "note": ("exercises are compared by question, not by id, so the id is "
-                 "evidence rather than a lookup key; the fixture's "
-                 "public_context_digest is not any digest derivable from the public "
-                 "context under the repository canonicalization, so it is reported "
-                 "as an authored value the compiler does not reproduce rather than "
-                 "matched by inventing a rule"),
+                 "evidence rather than a lookup key. The fixture's "
+                 "public_context_digest is the digest of the COMPLETE public "
+                 "exercise including its exercise_id, not of the graph alone; the "
+                 "earlier reading of that ambiguous field as a graph digest was "
+                 "wrong and is corrected here"),
     }
 
 
+def _context_digest_count(fixture):
+    """How many of the fixture's contrast digests reproduce under the right rule."""
+    exercises = {exercise["exercise_id"]: exercise
+                 for exercise in fixture["public_exercises"]}
+    reproduced = 0
+    for contrast in fixture["private_step_contrasts"]:
+        exercise = exercises.get(contrast["exercise_id"])
+        if exercise is not None and \
+                public_exercise_digest(exercise) == contrast.get("public_context_digest"):
+            reproduced += 1
+    return {"reproduced": reproduced,
+            "considered": len(fixture["private_step_contrasts"])}
+
+
 def _context_digest_matches(fixture):
-    wanted = fixture["private_step_contrasts"][0]["public_context_digest"]
-    context = fixture["public_contexts"][0]
-    candidates = [
-        {key: value for key, value in context.items() if key != "context_id"},
-        context,
-        {"nodes": context["nodes"], "branches": context["branches"]},
-    ]
-    return any(sha256(canonical(candidate)).hexdigest() == wanted
-               for candidate in candidates)
+    counts = _context_digest_count(fixture)
+    return counts["reproduced"] == counts["considered"] and counts["considered"] > 0
 
 
 def artifact_files(report):

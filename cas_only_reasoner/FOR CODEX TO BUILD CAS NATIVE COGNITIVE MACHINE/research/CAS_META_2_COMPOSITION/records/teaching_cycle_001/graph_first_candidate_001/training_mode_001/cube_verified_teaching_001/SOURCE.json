@@ -1,8 +1,8 @@
 {
   "record": "cube_verified_teaching_001",
   "status": "TEACHING_DATA_READY_NEURAL_UNTESTED",
-  "completion_statement": "The checked intermediate teaching records, worked traces, public/teacher separation, and task-binding specifications are implemented and tested. No neural lessons were delivered, no weights were updated, and no paid execution was authorized.",
-  "purpose": "CUBE_VERIFIED_TEACHING_001: a deterministic teacher over the existing cube graph, compiled into the existing lesson interfaces.",
+  "completion_statement": "The checked intermediate teaching records, worked traces, public/teacher separation, task-binding specifications, and the candidate-only execution connection are implemented and tested. No neural lessons were delivered, no weights were updated, and no paid execution was authorized.",
+  "revision": "second candidate revision: two artifact-consistency corrections resolved (digest provenance, ordering-mode export) and the execution connection added",
   "pinned_inputs": [
     {
       "name": "Cube_Node_Example_v0.1.json",
@@ -16,7 +16,7 @@
       "location": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Verified_Step_Example_v0.1.json",
       "bytes": 36940,
       "sha256": "dcda4cd6be8dad598e06646adb999250c4491c1719b7922d54473c7c169a8be4",
-      "role": "the delivered authoring fixture the compiler is compared against"
+      "role": "the delivered authoring fixture; preserved unchanged"
     },
     {
       "name": "Cube_Verified_Step_Teaching_v0.1.md",
@@ -28,42 +28,65 @@
   ],
   "code": [
     "cas_meta2/graph_teaching/verified_teaching.py",
+    "cas_meta2/graph_teaching/verified_training.py",
     "tests/test_graph_teaching_verified_teaching.py",
+    "tests/test_graph_teaching_verified_training.py",
     "tools/graph6_cube_node_check.py (extended: --verified-teaching, --artifacts; default report unchanged)"
   ],
-  "generated": [
-    {
-      "name": "check_report.json",
-      "producer": "python -m tools.graph6_cube_node_check --verified-teaching --artifacts <dir> --output <dir>/check_report.json",
-      "bytes": 149032,
-      "sha256": "1ddc194be65a8d57d108b332e381c453daa0fc57eb0e83421b78b2b5fee4094f"
-    },
-    {"name": "public_contexts.jsonl", "bytes": 1175, "sha256": "e2a6cbf8cfe6d2999c8c80b3fee308bcc21532090b17a0eaee86beaf7b6bcbbe"},
-    {"name": "public_exercises.jsonl", "bytes": 6333, "sha256": "62c0b2dcc328eb4a8a4ac3c01aa69bed091e67f13ef12d4a2ff51668cac03733"},
-    {"name": "teacher_targets.jsonl", "bytes": 7606, "sha256": "cc4ab012dedc89f4462697a102c099947f671fd101a33d8deb55f32a34d2b0ba"},
-    {"name": "teacher_traces.jsonl", "bytes": 869, "sha256": "b5737bb3eb7f8ff4321d833a6fdacab02971e0eec6937e73b0cb45d80d902760"},
-    {"name": "step_contrasts.jsonl", "bytes": 9147, "sha256": "fb0c3d3bcce062ff03797bb0b261bf3a40c8c5da3d87506c2e4d2ac194e50156"},
-    {"name": "cycle_plan.json", "bytes": 5738, "sha256": "4c2e4b4b4224df20da354bf923ed829019464c0a73974646253218f4ce7fd1bd"}
+  "documents": [
+    {"name": "DESIGN.md", "bytes": 15514, "sha256": "dd7065c57aa5271b17e80ccebc989c5c8c6fe26653d5f7f9350473c25e9689e2"},
+    {"name": "TASK_BINDINGS.md", "bytes": 8602, "sha256": "44474a951555ae7cd4621b5052155949fead55964b14cf89f2890e1ba6fa5f46"},
+    {"name": "EXECUTION_CONNECTION.md", "bytes": 5934, "sha256": "669b074a6ab083c34fe8e757fcb11c7d01093b8c7a62b07c49050495fecd8432"}
   ],
-  "compiled_counts": {
-    "public_contexts": 1,
-    "public_exercises": 8,
-    "teacher_targets": 8,
-    "step_contrasts": 16,
-    "teacher_traces": 1,
-    "component_corrections": 5,
-    "lesson_variants": 6,
-    "practice_variants": 5,
-    "cycle_stages": 7
-  },
-  "fixture_compatibility": {
-    "counts_identical": true,
-    "context_id_reproduced": true,
-    "choice_sets_matching": "8 of 8",
-    "exercise_ids_reproduced_authored_order": "8 of 8",
-    "exercise_ids_reproduced_declared_order": "2 of 8",
-    "public_context_digest_reproduced": false,
-    "unreproduced_authored_values": ["public_context_digest"]
+  "generated": [
+    {"name": "check_report.json", "bytes": 113609, "sha256": "5e1455958f37de2a7fe17651a176d9925efa9919873eb2895e04f21ff93e545b"},
+    {"name": "exports/declared/EXPORT_MANIFEST.json", "bytes": 1323, "sha256": "daf93e0109ce3d702cd4dc05798eb40ff42307042784dcdaa88fa869bf27b8f7"},
+    {"name": "exports/declared/public_contexts.jsonl", "bytes": 1175, "sha256": "e2a6cbf8cfe6d2999c8c80b3fee308bcc21532090b17a0eaee86beaf7b6bcbbe"},
+    {"name": "exports/declared/public_exercises.jsonl", "bytes": 6333, "sha256": "6df18991223283cf713bf5d6c6e8dfebc4320e0bdc4ca123a925e02c375a394c"},
+    {"name": "exports/declared/teacher_targets.jsonl", "bytes": 7606, "sha256": "c21eaf79c8ab35bcd11be6ff2bd359a4252bf3da5f674ea509fc26599e9d7ebf"},
+    {"name": "exports/declared/teacher_traces.jsonl", "bytes": 869, "sha256": "ba302deb091d030e4008e0f353d2db8715425b95eac5753159ada54bbe4e4de8"},
+    {"name": "exports/declared/step_contrasts.jsonl", "bytes": 10619, "sha256": "d1b4d1a24e1bd6842a79f748ca7d988eadabb0734658f8bbdada6b9ee1322c5f"},
+    {"name": "exports/declared/cycle_plan.json", "bytes": 5738, "sha256": "6d62d204194c03d84576d1745cf489fe1411ccc9b74d8f184389cac451d7568b"},
+    {"name": "exports/authored_fixture/EXPORT_MANIFEST.json", "bytes": 1303, "sha256": "de69d92af96154975dab92692c42b6dcd30f9819a94c86c7bb03d58c20c851fd"},
+    {"name": "exports/authored_fixture/cycle_plan.json", "bytes": 5738, "sha256": "4c2e4b4b4224df20da354bf923ed829019464c0a73974646253218f4ce7fd1bd"}
+  ],
+  "corrections_in_this_revision": [
+    {
+      "item": "digest provenance",
+      "owner_finding": "the original fixture's sixteen public_context_digest values hash the COMPLETE corresponding PublicExercise, exercise_id included; the field name was ambiguous",
+      "resolved": "verified here: 16 of 16 reproduce under that rule",
+      "withdrawn": "the earlier statement that the value was unreproducible; the search was at the wrong scope",
+      "translation": {
+        "public_exercise_digest": "complete public exercise, its own id included",
+        "public_graph_digest": "shared graph context only",
+        "public_context_digest": "not emitted by the compiler; ambiguous legacy name"
+      },
+      "fixture_preserved": true
+    },
+    {
+      "item": "ordering-mode export",
+      "owner_finding": "the uploaded teacher targets had expected-slot counts 5/3/0 while DESIGN.md reported 2/3/3 for declared ordering",
+      "cause": "one export mixed authored-fixture order with a declared-order description",
+      "resolved": "each ordering mode now has its own export directory and EXPORT_MANIFEST.json; declared 2/3/3, authored_fixture 5/3/0",
+      "alignment": "expected_slot re-derived through all six permutations of three choices: 48 readings, all aligned"
+    }
+  ],
+  "execution_connection": {
+    "document": "EXECUTION_CONNECTION.md",
+    "module": "cas_meta2/graph_teaching/verified_training.py",
+    "correction_point": "GraphLearner.step -> cross_entropy(scores, encoded_correct_index), real_framework.py lines 297-307",
+    "index_source": "adapter.public_records(record, arm)['encoded_correct_index'], built from record['correct'] = TeacherTarget.expected_answer",
+    "entry_point": "trainer.run_training(learner, records, arm, budget)",
+    "not_used": "trainer.launch: no record-injection parameter; adding one would change registered infrastructure",
+    "check_readings": {
+      "records": 8,
+      "optimizer_updates": 64,
+      "records_reached": 8,
+      "neural_execution": false,
+      "torch_imported": false,
+      "learner_is_a_stub": true
+    },
+    "execution_enabled": false
   },
   "boundary": {
     "training": "none",
@@ -88,7 +111,7 @@
     ]
   },
   "reproduce": [
-    "python -m pytest tests/test_graph_teaching_verified_teaching.py -q",
+    "python -m pytest tests/test_graph_teaching_verified_teaching.py tests/test_graph_teaching_verified_training.py -q",
     "python -m tools.graph6_cube_node_check --verified-teaching --artifacts <new dir> --output <new dir>/check_report.json",
     "python -m tools.graph6_cube_node_check --output <new path>"
   ]

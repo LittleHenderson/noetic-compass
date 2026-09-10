@@ -93,28 +93,71 @@ def build_report(bundle_path=None, view_id="view_context"):
 def verified_teaching_section(bundle_path=None, view_id="view_context"):
     """CUBE_VERIFIED_TEACHING_001: opt-in so the earlier record stays reproducible."""
     from cas_meta2.graph_teaching import verified_teaching as vt
-    authored = vt.compile_bundle(cube_node.load_bundle(bundle_path), view_id,
-                                 choice_order="authored_fixture")
-    declared = vt.compile_bundle(cube_node.load_bundle(bundle_path), view_id,
-                                 choice_order="declared")
+    from cas_meta2.graph_teaching import verified_training as vtr
+    bundles = {}
+    for mode in ("declared", "authored_fixture"):
+        bundles[mode] = vt.compile_bundle(cube_node.load_bundle(bundle_path), view_id,
+                                          choice_order=mode)
+    declared = bundles["declared"]
     return {
         "schema_version": vt.SCHEMA,
         "status": vt.STATUS_READY,
         "checker_identity": vt.CHECKER_IDENTITY,
-        "authored_fixture_order": authored,
-        "declared_order": {
-            "fixture_comparison": declared["fixture_comparison"],
-            "counts": declared["counts"],
-            "shortcut_report": declared["shortcut_report"],
-            "trace_status": declared["trace_verification"]["status"],
+        "export_modes": {
+            "declared": vt.export_manifest(declared, "declared"),
+            "authored_fixture": vt.export_manifest(bundles["authored_fixture"],
+                                                   "authored_fixture"),
+        },
+        "compiled": {mode: {"ordering_mode": report["ordering_mode"],
+                            "counts": {"public_exercises": len(report["public_exercises"]),
+                                       "teacher_targets": len(report["private_teacher_targets"]),
+                                       "step_contrasts": len(report["private_step_contrasts"]),
+                                       "teacher_traces": len(report["private_teacher_traces"])},
+                            "fixture_comparison": report["fixture_comparison"],
+                            "slot_alignment_summary": report["slot_alignment_summary"],
+                            "counts_of_delivery": report["counts"],
+                            "shortcut_report": report["shortcut_report"],
+                            "trace_status": report["trace_verification"]["status"]}
+                    for mode, report in bundles.items()},
+        "connection": {
+            "check": vtr.connection_check(bundle=None, view_id=view_id,
+                                          ordering_mode="declared"),
+            "dry_run_plan": vtr.dry_run_plan(view_id=view_id,
+                                             ordering_mode="declared"),
         },
         "boundary": {
             "neural_calls": 0, "optimizer_updates": 0, "delivered_lessons": 0,
             "aws_calls": 0, "reservations": 0,
-            "note": ("data compilation and deterministic teacher checks only; the "
-                     "simulated transport is not a model prediction"),
+            "note": ("data compilation, deterministic teacher checks, and a stub "
+                     "walk through the existing trainer loop; the stub is not a "
+                     "model and delivers nothing"),
         },
+        "bundles": bundles,
     }
+
+
+def _write(path, text):
+    if not path.exists():
+        path.write_text(text, encoding="utf-8")
+        return True
+    return False
+
+
+def write_artifact_exports(target, section):
+    """One explicitly named ordering mode per export directory."""
+    from cas_meta2.graph_teaching import verified_teaching as vt
+    written = []
+    for mode, report in section["bundles"].items():
+        directory = Path(target) / "exports" / mode
+        directory.mkdir(parents=True, exist_ok=True)
+        for name, text in vt.artifact_files(report).items():
+            if _write(directory / name, text):
+                written.append("exports/%s/%s" % (mode, name))
+        manifest = json.dumps(section["export_modes"][mode], sort_keys=True,
+                              indent=2, ensure_ascii=True, allow_nan=False) + "\n"
+        if _write(directory / "EXPORT_MANIFEST.json", manifest):
+            written.append("exports/%s/EXPORT_MANIFEST.json" % mode)
+    return written
 
 
 def main(argv=None):
@@ -134,24 +177,19 @@ def main(argv=None):
     if arguments.verified_teaching or arguments.artifacts:
         report["verified_teaching"] = verified_teaching_section(arguments.bundle,
                                                                 arguments.view)
+    if arguments.artifacts:
+        report["artifacts_written"] = write_artifact_exports(
+            Path(arguments.artifacts).absolute(), report["verified_teaching"])
+        report["verified_teaching"].pop("bundles", None)
+        report["verified_teaching"]["bundles_note"] = (
+            "the full per-mode bundles are written to exports/<ordering_mode>/ so "
+            "each export names exactly one ordering mode")
     raw = canonical(report).encode("utf-8")
     if arguments.output:
         path = Path(arguments.output).absolute()
         if not path.exists():
             with path.open("xb") as stream:
                 stream.write(raw)
-    if arguments.artifacts:
-        from cas_meta2.graph_teaching import verified_teaching as vt
-        target = Path(arguments.artifacts).absolute()
-        target.mkdir(parents=True, exist_ok=True)
-        written = []
-        for name, text in vt.artifact_files(
-                report["verified_teaching"]["authored_fixture_order"]).items():
-            destination = target / name
-            if not destination.exists():
-                destination.write_text(text, encoding="utf-8")
-                written.append(name)
-        report["artifacts_written"] = written
     sys.stdout.write(raw.decode("utf-8"))
     sys.stdout.write("sha256: %s\n" % sha256(raw).hexdigest())
     return 0

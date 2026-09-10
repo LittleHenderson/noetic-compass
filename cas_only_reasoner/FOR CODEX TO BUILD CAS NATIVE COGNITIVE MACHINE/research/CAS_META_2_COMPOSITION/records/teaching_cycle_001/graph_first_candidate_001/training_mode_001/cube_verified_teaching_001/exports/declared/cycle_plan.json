@@ -1,0 +1,162 @@
+{
+  "allocation_note": "the guided-repetition minimum and the update budget are not set here; the old 64-update allowance and the earlier 1,024-cycle allocation are not imported",
+  "compiled_cycles": 1,
+  "execution_enabled": false,
+  "family_id": "illustration_family_01",
+  "maximum_optimizer_updates": null,
+  "minimum_complete_guided_cycles_per_family": null,
+  "stages": [
+    {
+      "events": [
+        {
+          "kind": "PREPARED_PRESENTATION",
+          "neural_deliveries": 0,
+          "numeric_delivery_binding": "UNIMPLEMENTED",
+          "source": "pinned_cube_bundle"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_1"
+      ],
+      "name": "name/function",
+      "new_scored_profile_status": "NOT_IMPLEMENTED",
+      "stage": 1,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "kind": "PREPARED_PRESENTATION",
+          "neural_deliveries": 0,
+          "numeric_delivery_binding": "UNIMPLEMENTED",
+          "source": "pinned_cube_bundle"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_2"
+      ],
+      "name": "context",
+      "new_scored_profile_status": "NOT_IMPLEMENTED",
+      "stage": 2,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "kind": "PREPARED_PRESENTATION",
+          "neural_deliveries": 0,
+          "numeric_delivery_binding": "UNIMPLEMENTED",
+          "source": "pinned_cube_bundle"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_3"
+      ],
+      "name": "analogy",
+      "new_scored_profile_status": "NOT_IMPLEMENTED",
+      "stage": 3,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "kind": "PREPARED_PRESENTATION",
+          "neural_deliveries": 0,
+          "numeric_delivery_binding": "UNIMPLEMENTED",
+          "source": "pinned_cube_bundle"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_4"
+      ],
+      "name": "explicit mapping",
+      "new_scored_profile_status": "NOT_IMPLEMENTED",
+      "stage": 4,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:dd652845dc7dbba7123f67a910ba33a0f61ac6ff108fce2635e997941ed51e6d",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:dd652845dc7dbba7123f67a910ba33a0f61ac6ff108fce2635e997941ed51e6d"
+        },
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:5d67c827cb77f68a0b2783401dfe99c6e40717d055517b6af7414f7453bde802",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:5d67c827cb77f68a0b2783401dfe99c6e40717d055517b6af7414f7453bde802"
+        },
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:2fa80b6dd01f3d9bb8092280ef3d444d2d144f6fb562fb8e097e102e4940da05",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:2fa80b6dd01f3d9bb8092280ef3d444d2d144f6fb562fb8e097e102e4940da05"
+        },
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2"
+        },
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:41eae384884026e2c47e796aba13b60f12f87eab697df85d5cc68912b8fa7670",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:41eae384884026e2c47e796aba13b60f12f87eab697df85d5cc68912b8fa7670"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_5"
+      ],
+      "name": "guided decomposition",
+      "new_scored_profile_status": "PROPOSED_BINDING_TO_EXISTING_REACHED_VIA",
+      "stage": 5,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "kind": "DEMONSTRATION",
+          "scored_as_independent": false,
+          "teacher_trace_ref": "toy-list-trace-001"
+        },
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:cdce70a24ba9b6c32a0682f74a59d498638cbde24e49a660fd99a4d446c35e35",
+          "feedback_release": "AFTER_RECORDED_PREDICTION",
+          "kind": "PREDICT_THEN_CORRECT",
+          "teacher_target_ref": "exercise:cdce70a24ba9b6c32a0682f74a59d498638cbde24e49a660fd99a4d446c35e35"
+        }
+      ],
+      "face_refs": [
+        "node_001.face_6"
+      ],
+      "name": "recomposition/story",
+      "new_scored_profile_status": "RESTRICTED_FINAL_LIST_BINDING_PROPOSED; STORY_TASK_UNIMPLEMENTED",
+      "stage": 6,
+      "status": "COMPILED_NOT_DELIVERED"
+    },
+    {
+      "events": [
+        {
+          "execution_status": "NOT_RUN",
+          "exercise_id": "exercise:cdce70a24ba9b6c32a0682f74a59d498638cbde24e49a660fd99a4d446c35e35",
+          "kind": "PLANNED_REPETITION",
+          "note": "Same illustrative family; no new-family or mastery claim."
+        }
+      ],
+      "face_refs": [],
+      "name": "reinforcement",
+      "new_scored_profile_status": "PROPOSED_REUSE_OF_EXISTING_FINAL_GRAPH_TASK",
+      "stage": 7,
+      "status": "COMPILED_NOT_DELIVERED"
+    }
+  ]
+}
