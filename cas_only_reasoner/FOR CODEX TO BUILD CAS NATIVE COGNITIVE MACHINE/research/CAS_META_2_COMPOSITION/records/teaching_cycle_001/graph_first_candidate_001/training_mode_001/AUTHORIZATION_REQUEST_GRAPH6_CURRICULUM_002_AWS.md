@@ -128,16 +128,16 @@ closed on any mismatch.
 
 | Field | Value |
 | --- | --- |
-| source_sha | `310db0dd7428692067a3c67f9117a2642145042f` |
-| archive_sha256 | `4512783483d43111be623894cccbadc5bfe678bfb24eb687ab6d4ab0b1021e06` |
-| archive_bytes | 406219 |
-| manifest_sha256 | `7b18cd2c8d1ae200876d4e282e62e2ced7534670d5d4cd0914706e79dd556dfa` |
+| source_sha | `f8b958ab40481a146a3d515b439cc861028e90de` |
+| archive_sha256 | `c61c125efac2846520e585619b32f63a9ccbcd1da06bd0d847a052fa932e91cb` |
+| archive_bytes | 407819 |
+| manifest_sha256 | `f4c60db2af16e7284cd9e3e135eb497ff8dd6ecabc66a2e1f1fbddab029b9cab` |
 | member_count | 37 |
 | package | `training_mode_001/graph6_curriculum_package_001/` |
-| launch request | `training_mode_001/graph6_curriculum_launch_001/launch_request.json` (sha256 `afc369338ca689cb28a2d3a58d913189aab780a68c7eb207fbeca8e649ce563c`, `launch_authorized: false`) |
-| proposed job | `cas-meta2-graph6curr-20260910043000-310db0dd` |
-| launcher | `aws/graph_training_curriculum_launch.py` at commit `310db0dd` |
-| preregistration | `GRAPH6_CURRICULUM_002.md`; evidence `CURRICULUM_002_CHECK.json` (sha256 `b4bd85480c8bc4fedd35f44bda3dbe6a3e46802a395fbc4524c7a9b5fe4ec214`) |
+| launch request | `training_mode_001/graph6_curriculum_launch_001/launch_request.json` (sha256 `02616ce58cbd1bf1761f0e618ae96374498bf0bee15be2f405c64ce9a3fcaca3`, `launch_authorized: false`) |
+| proposed job | `cas-meta2-graph6curr-20260910050000-f8b958ab` |
+| launcher | `aws/graph_training_curriculum_launch.py` at commit `f8b958ab` |
+| preregistration | `GRAPH6_CURRICULUM_002.md`; evidence `CURRICULUM_002_CHECK.json` (sha256 `bae701cf29710c62b5bef36579e1f5aaaf2d3f1722aee4268d0dc2442bedfe41`) |
 
 Packaged worker byte-checked against `render_worker()`; manifest carries
 `launch_enabled:false`, pair seeds, conditions, checkpoints, 1,536 steps, panel
