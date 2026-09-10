@@ -1,0 +1,52 @@
+{
+  "archive": "source.zip",
+  "boundary": "local development GPU, truncated updates, no provider, no reservation, no measurement",
+  "checkpoint_verified": {
+    "checked_component_teaching": true,
+    "final_answer_only": true
+  },
+  "checkpoints": [
+    "smoke_checkpoint_checked_component_teaching.pt",
+    "smoke_checkpoint_final_answer_only.pt"
+  ],
+  "containment": {
+    "checked_component_teaching": true,
+    "final_answer_only": true
+  },
+  "counters": {
+    "actual_optimizer_updates": 6,
+    "automatic_retries": 0,
+    "neural_presentations": 6,
+    "seven_stage_neural_cycles": 0
+  },
+  "device": "cuda",
+  "encoded_problems": 52,
+  "execution_order": [
+    "BUILD_AND_INDEX_FROM_EXACT_RECORDS",
+    "APPLY_PERMITTED_PARAMETER_SCOPE",
+    "TAKE_BEFORE_SNAPSHOT",
+    "PER_STEP_CAPTURE_PREDICTION",
+    "PER_STEP_APPLY_CHECKED_TARGET",
+    "PER_STEP_PERFORM_PERMITTED_UPDATE",
+    "PER_STEP_RECORD_UPDATE_IDENTITY",
+    "TAKE_AFTER_SNAPSHOT",
+    "COMPUTE_CONTAINMENT",
+    "SAVE_AND_VERIFY_CHECKPOINT",
+    "WRITE_COLLECTED_OBSERVATIONS"
+  ],
+  "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "matched_initial_weights": true,
+  "probe_items_measured": {
+    "checked_component_teaching": 44,
+    "final_answer_only": 44
+  },
+  "probe_questions": 44,
+  "probe_questions_measured": 44,
+  "problem_vector_dim": [
+    64
+  ],
+  "records": 8,
+  "torch": "2.11.0+cu128",
+  "updates_per_condition": 3
+}
+SMOKE ONLY - not a measurement, not claim-bearing, local GPU.
