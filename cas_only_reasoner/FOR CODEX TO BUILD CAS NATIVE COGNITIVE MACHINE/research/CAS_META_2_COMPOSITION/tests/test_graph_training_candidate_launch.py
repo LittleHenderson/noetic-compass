@@ -106,6 +106,108 @@ def test_the_pricing_client_is_built_in_its_own_region():
         in curriculum_source
     assert "profile_name=profile" in source
     assert "RESOURCE_PLAN" in source
+def _signed_authority(**overrides):
+    """The authority with the real owner-record hash, so execute() gets past it."""
+    import hashlib
+    owner = _owner_record()
+    body = _authority(owner_authorization_sha256=hashlib.sha256(
+        owner.read_bytes()).hexdigest(), **overrides)
+    cl.validate_authority(body)
+    return body
+
+
+def test_a_missing_source_archive_is_refused_before_the_reservation():
+    """Regression guard for attempt 003, which spent its $7.00 and then failed.
+
+    The attempt reached launch() without a source archive, so it reserved and then
+    died on CURRICULUM_SOURCE_ARCHIVE_REQUIRED. `execute` now checks the archive -
+    present, readable and hash-matching the request - before it touches the ledger
+    or the budget helper, and this test proves reserve() is never called when the
+    check fails.
+    """
+    request = _request()
+    authority = _signed_authority()
+
+    class RecordingProvider:
+        def __init__(self):
+            self.calls = []
+            self.source_archive = None
+
+        def configure_evidence(self, directory):
+            self.calls.append("configure_evidence")
+
+        def reserve(self, amount):
+            self.calls.append("reserve")
+            raise AssertionError("reserve must not be reached")
+
+        def cleanup(self, job, collection_verified=False):
+            self.calls.append("cleanup")
+            return {"complete": True, "failures": []}
+
+    provider = RecordingProvider()
+    with pytest.raises(ValueError) as error:
+        cl.execute(request, authority, provider,
+                   owner_authorization_path=_owner_record())
+    assert str(error.value).startswith(
+        "CANDIDATE_SOURCE_ARCHIVE_REQUIRED_BEFORE_RESERVATION")
+    assert "reserve" not in provider.calls
+    assert "cleanup" not in provider.calls
+
+
+def test_a_hash_mismatched_source_archive_is_refused_before_the_reservation(tmp_path):
+    request = _request()
+    authority = _signed_authority()
+    archive = tmp_path / "source.zip"
+    archive.write_bytes(b"not the package")
+
+    class Provider:
+        def __init__(self):
+            self.source_archive = archive
+
+        def reserve(self, amount):
+            raise AssertionError("reserve must not be reached")
+
+    with pytest.raises(ValueError) as error:
+        cl.execute(request, authority, Provider(),
+                   owner_authorization_path=_owner_record())
+    assert str(error.value).startswith(
+        "CANDIDATE_SOURCE_ARCHIVE_HASH_BEFORE_RESERVATION")
+
+
+def _owner_record():
+    """The owner authorization record: the authority binds its hash."""
+    return (curriculum.ROOT / "records/teaching_cycle_001/graph_first_candidate_001/"
+            "training_mode_001/OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json")
+
+
+def _request_record():
+    return (curriculum.ROOT / "records/teaching_cycle_001/graph_first_candidate_001/"
+            "training_mode_001/cube_verified_teaching_001/candidate_request_001.json")
+
+
+def test_the_archive_locator_finds_the_built_package_by_hash():
+    import hashlib
+    request = json.loads(_request_record().read_bytes())
+    located = cl._locate_archive(request["archive_sha256"])
+    assert located.is_file() and located.name == "source.zip"
+    assert hashlib.sha256(located.read_bytes()).hexdigest() == request["archive_sha256"]
+    with pytest.raises(ValueError) as error:
+        cl._locate_archive("0" * 64)
+    assert str(error.value).startswith("CANDIDATE_SOURCE_ARCHIVE_NOT_FOUND")
+
+
+def test_the_authority_still_binds_the_owner_record_hash():
+    import hashlib
+    owner = _owner_record()
+    assert owner.is_file()
+    authority = json.loads((curriculum.ROOT / (
+        "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/"
+        "cube_verified_teaching_001/candidate_authority_001.json")).read_bytes())
+    assert authority["owner_authorization_sha256"] == \
+        hashlib.sha256(owner.read_bytes()).hexdigest()
+    cl.validate_authority(authority)
+
+
 def test_the_curriculum_profile_is_preserved_not_overwritten():
     assert curriculum.RESERVATION_USD == cl.RESERVATION_USD
     assert curriculum.JOB_PATTERN != cl.JOB_PATTERN

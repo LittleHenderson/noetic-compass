@@ -29,7 +29,7 @@ from pathlib import Path
 
 from aws.graph_training_curriculum_launch import (  # reused machinery
     HEX40, HEX64, LEDGER_PATH, OWNER_AUTHORIZATION_PATH, RESOURCE_PLAN,
-    RESERVATION_USD, CurriculumProvider, build_package, canonical,
+    RESERVATION_USD, ROOT, CurriculumProvider, build_package, canonical,
     collection_is_verified, digest, prepare_evidence, read_ledger, require, scope,
     validate_preflight, validate_reservation_scope, validate_reserved_transition,
     write_evidence)
@@ -372,6 +372,16 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
     for key in ("archive_sha256", "manifest_sha256"):
         require(authority[key] == request[key], "REQUEST_AUTHORITY_HASH_MISMATCH:" + key)
     require(provider is not None, "PROVIDER_ADAPTER_REQUIRED")
+    # Fail closed BEFORE the reservation. Attempt 003 spent its $7.00 reservation
+    # and then failed inside launch() on a source archive the caller never
+    # supplied; this check makes that impossible to repeat.
+    archive = getattr(provider, "source_archive", None)
+    require(archive is not None, "CANDIDATE_SOURCE_ARCHIVE_REQUIRED_BEFORE_RESERVATION")
+    archive_path = Path(archive)
+    require(archive_path.is_file(),
+            "CANDIDATE_SOURCE_ARCHIVE_MISSING_BEFORE_RESERVATION:" + str(archive_path))
+    require(digest(archive_path.read_bytes()) == request["archive_sha256"],
+            "CANDIDATE_SOURCE_ARCHIVE_HASH_BEFORE_RESERVATION")
     started = time.monotonic()
     ledger_before = read_ledger(ledger_path)
     reservation_scope = validate_reservation_scope(ledger_before)
@@ -491,7 +501,8 @@ def main(argv=None):
         job=request["job"], source_sha=request["source_sha"],
         archive_sha256=request["archive_sha256"],
         manifest_sha256=request["manifest_sha256"], ledger_path=LEDGER_PATH,
-        clients=session_clients)
+        clients=session_clients, client_error=_client_error(),
+        source_archive=_locate_archive(request["archive_sha256"]))
     result = execute(request, authority, provider, ledger_path=LEDGER_PATH,
                      receipt_dir=arguments.receipt_dir,
                      owner_authorization_path=arguments.owner_authorization)
@@ -505,6 +516,31 @@ def main(argv=None):
 # this pilot failed at preflight with KeyError: 'sts' because only three of the
 # five were created; a test now checks this set against the reused source.
 CLIENT_NAMES = ("ec2", "s3", "iam", "sts", "pricing")
+
+
+def _client_error():
+    """The botocore ClientError type, without importing botocore at module level."""
+    from botocore.exceptions import ClientError
+    return ClientError
+
+
+def _locate_archive(archive_sha256):
+    """The built package's own source.zip, found by the hash the request binds.
+
+    The candidate file's own bytes are hashed before it is accepted: some scratch
+    receipts elsewhere in ``records/`` carry synthetic hashes, and a receipt field
+    is not evidence about the file it points at.
+    """
+    for receipt in sorted((ROOT / "records").rglob("receipt.json")):
+        try:
+            document = json.loads(receipt.read_bytes())
+        except (OSError, ValueError):
+            continue
+        if document.get("archive_sha256") == archive_sha256 and document.get("archive"):
+            archive = Path(document["archive"])
+            if archive.is_file() and digest(archive.read_bytes()) == archive_sha256:
+                return archive
+    raise ValueError("CANDIDATE_SOURCE_ARCHIVE_NOT_FOUND")
 
 
 def _clients(profile):
