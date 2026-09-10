@@ -1,0 +1,49 @@
+{
+  "bucket": "cas-meta2-graph6cand-20260910150000-0a55f4b1-807562639912",
+  "objects": [
+    {
+      "bytes": 525,
+      "key": "input/config.json",
+      "path": "remote_input_config.json",
+      "sha256": "b5d43c43389aab0903b50e6093bce2bd1d26a1e03e2e92318c6f58f5e02ee8aa"
+    },
+    {
+      "bytes": 488735,
+      "key": "input/source.zip",
+      "path": "remote_input_source.zip",
+      "sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55"
+    },
+    {
+      "bytes": 80301,
+      "key": "reservation/ledger_snapshot.json",
+      "path": "remote_reservation_ledger_snapshot.json",
+      "sha256": "ed6a19ec2d93b927b62b5f384aa7c335d50d7d534c8db3d3401469e927f7b9b2"
+    },
+    {
+      "bytes": 1718,
+      "key": "reservation/reservation_receipt.json",
+      "path": "remote_reservation_reservation_receipt.json",
+      "sha256": "c124815d9a7573ea934f625b7462afc2d3480f1ef82c52631747f6f45f6ea29b"
+    },
+    {
+      "bytes": 470,
+      "key": "results/failure.json",
+      "path": "remote_results_failure.json",
+      "sha256": "a25b5cbeb229a1d877898dd72b28aabcbeb3fe9fe32fd669d3e9375ee7e3456b"
+    },
+    {
+      "bytes": 448,
+      "key": "results/manifest.json",
+      "path": "remote_results_manifest.json",
+      "sha256": "3a97dda888c2bab63adfa5185e2ce24bcbe80cfab99ddd658164038d935fc6a8"
+    },
+    {
+      "bytes": 616,
+      "key": "results/result_partial.json",
+      "path": "remote_results_result_partial.json",
+      "sha256": "1654ce4284ac61d5d6063ee01b162f87d5e6c547facc2da3a63b1b38fc6d0066"
+    }
+  ],
+  "reason": "attempt ended without verified collection; every object read out before the bucket was deleted",
+  "schema": "cas-candidate-manual-collection/1"
+}

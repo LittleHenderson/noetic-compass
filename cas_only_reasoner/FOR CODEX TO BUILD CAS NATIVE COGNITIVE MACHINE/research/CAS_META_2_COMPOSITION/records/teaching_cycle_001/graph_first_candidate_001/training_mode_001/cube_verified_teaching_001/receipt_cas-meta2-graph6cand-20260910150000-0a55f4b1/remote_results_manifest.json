@@ -1,0 +1,16 @@
+{
+  "artifacts": [
+    {
+      "bytes": 470,
+      "key": "results/failure.json",
+      "sha256": "a25b5cbeb229a1d877898dd72b28aabcbeb3fe9fe32fd669d3e9375ee7e3456b"
+    },
+    {
+      "bytes": 616,
+      "key": "results/result_partial.json",
+      "sha256": "1654ce4284ac61d5d6063ee01b162f87d5e6c547facc2da3a63b1b38fc6d0066"
+    }
+  ],
+  "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+  "schema": "cas-graph-training-candidate-delivery/1"
+}

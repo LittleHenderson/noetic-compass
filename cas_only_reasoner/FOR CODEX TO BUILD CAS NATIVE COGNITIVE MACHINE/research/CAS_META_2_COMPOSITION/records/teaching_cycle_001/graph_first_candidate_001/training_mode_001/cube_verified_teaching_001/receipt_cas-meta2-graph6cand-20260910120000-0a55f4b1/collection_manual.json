@@ -1,0 +1,19 @@
+{
+  "bucket": "cas-meta2-graph6cand-20260910120000-0a55f4b1-807562639912",
+  "objects": [
+    {
+      "bytes": 79050,
+      "key": "reservation/ledger_snapshot.json",
+      "path": "remote_reservation_ledger_snapshot.json",
+      "sha256": "96a07c889734286477cc104dacbb1816d39f760c191a51083757b42b701bf76c"
+    },
+    {
+      "bytes": 1718,
+      "key": "reservation/reservation_receipt.json",
+      "path": "remote_reservation_reservation_receipt.json",
+      "sha256": "88f133e95b2739b6de2147ef50863aa763d3111b01f0784c352006940088d6c4"
+    }
+  ],
+  "reason": "attempt ended without verified collection; every object read out before the bucket was deleted",
+  "schema": "cas-candidate-manual-collection/1"
+}
