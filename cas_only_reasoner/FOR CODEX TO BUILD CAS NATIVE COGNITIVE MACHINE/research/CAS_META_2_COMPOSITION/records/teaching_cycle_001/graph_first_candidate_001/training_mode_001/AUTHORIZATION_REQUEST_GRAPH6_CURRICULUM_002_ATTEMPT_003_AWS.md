@@ -70,15 +70,16 @@ before bucket cleanup; the pre-registered rules with thresholds unchanged.
 
 | Field | Value |
 | --- | --- |
-| source_sha | `c13f9a5ed85e4aa0460414e3c2d1e25585edcaaa` |
-| archive_sha256 | `ae56bc10c13fc17a087fd38c88fe64da45f40d7a8a53f4d52ad5cb50449f601e` |
-| archive_bytes | 409373 |
-| manifest_sha256 | `d2fcc8fba16b99beb68746e6a5c03c0cb7ddf2ec11f6a68f6b5539b091b8fb4f` |
+| source_sha | `75387578f8696dadf184199af5106e2073ba5976` |
+| archive_sha256 | `9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc` |
+| archive_bytes | 409374 |
+| manifest_sha256 | `ec1e9c3ffc2a1c96e30101c0a475181ab04df43019f8393c856b2e23530ddb3b` |
 | member_count | 37 |
 | package | `training_mode_001/graph6_curriculum_package_003/` |
-| launch request | `training_mode_001/graph6_curriculum_launch_003/launch_request.json` (sha256 `ac71b6ff648dba14143fee31b4fecbde66074f455eedc71fbb21c6702dd024f3`, `launch_authorized: false`) |
-| proposed job | `cas-meta2-graph6curr-20260910093000-c13f9a5e` |
-| launcher | `aws/graph_training_curriculum_launch.py` at commit `c13f9a5e` |
+| launch request | `training_mode_001/graph6_curriculum_launch_003/launch_request.json` (sha256 `a9ce55336a95b4f20abbf3727f88936b5d50f8f2c48f7bb5fa8bf14f07f8034e`, `launch_authorized: false`) |
+| proposed job | `cas-meta2-graph6curr-20260910093000-75387578` |
+| launcher | `aws/graph_training_curriculum_launch.py` at commit `75387578` |
+| local verification | **251 graph tests pass**, including a new end-to-end test that EXECUTES the rendered worker inner runner against stubs and asserts the frozen-record encoder fit, the untouched panel build, the launch kwargs, the result+sha256 write and the artifact manifest upload |
 
 ## Budget
 

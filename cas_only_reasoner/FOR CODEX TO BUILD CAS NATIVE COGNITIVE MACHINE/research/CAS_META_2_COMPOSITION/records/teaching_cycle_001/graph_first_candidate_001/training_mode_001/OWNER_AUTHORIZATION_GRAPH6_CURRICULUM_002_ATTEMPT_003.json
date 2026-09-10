@@ -1,0 +1,64 @@
+{
+  "authorization": {
+    "archive_sha256": "9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc",
+    "authorization_context": "GRAPH6_CURRICULUM_002 attempt 003 - REPLACEMENT for attempt 002, which failed after 574.2 s in the FIRST learner's before-loss pass with KeyError because every learner was built over the frozen train+practice lessons while the varied condition trains on the varied curriculum. Fixed before this registration: each learner is built over its OWN condition's lessons with the explicit contract learner_factory(framework, own_tasks); a fail-closed guard LEARNER_INDEX_MISSING_OWN_CONDITION_RECORDS scores the learner's own records BEFORE any training; verify_checkpoint now takes learner_for(framework) so the reload verification predicts with the RELOADED module instead of the trained one; practice accuracy is measured on the frozen records for both conditions with each learner's own-curriculum accuracy reported separately; and a new test EXECUTES the rendered worker inner runner against stubs (251 graph tests pass). The pre-registered design is UNCHANGED: frozen candidate, encoder and tokenizer fitting set, CAS framing, operation:^6 scope; control = the existing 30 lessons, varied = the 30 new relationship lessons (where 'none' is offered in 7 FIND_SHARED_PART lessons - correct in 4, an incorrect distractor in 3, closing the choose-none shortcut); three PAIRED seeds 20260913/20260914/20260915 with matched initial weights verified by equal initial checkpoint identity, separate learner copies and separate optimizer states; a balanced round-robin schedule identical in both conditions; measurements at 64 and 256 updates per learner; six learners; 1536 total updates. Final panel: untouched, 30 pairwise non-isomorphic arrangements selected from a 92-arrangement pool, inside the documented teaching envelope and using only the 34 supported teaching words; 90 cases, one question per operation, reach labels 10/10/10; excluded by exact id AND label-invariant signature against the teaching dataset (seed 20260909), the examined panel (seed 20260920) and the varied curriculum; equal difficulty is NOT claimed. Pre-registered rules: P1 per seed varied-minus-control at 256 updates >= +0.10 with family-clustered 95% bootstrap lower bound > 0; P2 per seed varied at 256 >= 0.50 absolute; P3 repetition effects reported but never gating; verdict VARIED_CURRICULUM_BETTER iff at least 2 of 3 seeds satisfy P1 AND at least 2 satisfy P2, else VARIED_CURRICULUM_NOT_ESTABLISHED; uncertainty = 10,000-resample family-clustered percentile bootstrap (seed 20260926) plus exact McNemar; thresholds NOT lowered. Delivery: REAL checkpoint files (model state_dict, optimizer state, encoder projection and tokenizer vocabulary, step, condition, seed) at initial, 64 and 256 updates, reloaded into a fresh module in-job and verified by parameter identity and re-prediction, loaded under PyTorch's safe weights_only default (never disabled), then collected and sha256-verified BEFORE the bucket is deleted. ONE job, one new $7.00 reservation, zero automatic retries, verified cleanup, every learner and both checkpoints reported including regressions.",
+    "bound_request_sha256": "a9ce55336a95b4f20abbf3727f88936b5d50f8f2c48f7bb5fa8bf14f07f8034e",
+    "conditions": ["control", "varied"],
+    "checkpoints": [64, 256],
+    "job": "cas-meta2-graph6curr-20260910093000-75387578",
+    "launcher": "aws/graph_training_curriculum_launch.py at commit 75387578f8696dadf184199af5106e2073ba5976",
+    "manifest_sha256": "ec1e9c3ffc2a1c96e30101c0a475181ab04df43019f8393c856b2e23530ddb3b",
+    "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_curriculum_package_003/",
+    "pair_seeds": [20260913, 20260914, 20260915],
+    "panel_seed": 20260930,
+    "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_curriculum_launch_003/launch_request.json",
+    "source_sha": "75387578f8696dadf184199af5106e2073ba5976",
+    "total_optimizer_steps": 1536,
+    "updates_per_learner": 256
+  },
+  "execution_gates": [
+    "single launch attempt through the curriculum launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "each learner is built over its own condition's lessons; the fail-closed index guard must pass before any training",
+    "both conditions use the same final panel, the same balanced schedule and the same update allowance; matched initial weights per seed are required",
+    "the final panel never enters tokenizer fitting, training or checkpoint selection; answers are sealed until the registered predictions are recorded",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change",
+    "every learner and both checkpoints are reported; none is dropped for looking bad",
+    "checkpoints must load under PyTorch's safe weights_only default, be reload-verified against the RELOADED module in-job, and be collected with sha256 verification before bucket cleanup",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "the two-arm framing comparison or any experiment beyond this single job",
+    "automatic retry of this or any prior job",
+    "child-call / parent-integration work for this specialist",
+    "any architecture, representation, encoder, option-contract or allowance change beyond the declared 256 updates per learner and 900 s per learner",
+    "any modification of accepted models, trainers, the ledger (beyond this job's reservation), frozen negatives, or sealed splits",
+    "any capability claim beyond the registered outcome sentence and its supporting numbers"
+  ],
+  "owner_instruction_raw": "CONTINUE",
+  "recorded_utc": "2026-09-10T09:30:00.000000+00:00",
+  "run_bounds": {
+    "arm": "cas",
+    "automatic_retries": 0,
+    "checkpoints": [64, 256],
+    "conditions": ["control", "varied"],
+    "data": {
+      "control": "the existing 30 train+practice whole-part lessons, unchanged",
+      "final_panel": "untouched: 30 pairwise non-isomorphic arrangements / 90 cases, reach 10/10/10",
+      "varied": "30 new relationship lessons (10 per operation)"
+    },
+    "encoder_seed": 20260909,
+    "jobs": 1,
+    "learners": 6,
+    "pair_seeds": [20260913, 20260914, 20260915],
+    "panel_seed": 20260930,
+    "per_learner": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 256,
+      "max_wall_seconds": 900.0
+    },
+    "reservation_usd": "7.00",
+    "total_optimizer_steps": 1536
+  },
+  "schema": "cas-graph-training-curriculum-owner-authorization/1"
+}
