@@ -1,0 +1,121 @@
+# GRAPH6_CURRICULUM_002 — authorization request (PACKAGE BUILT; NOT REGISTERED, NOT RESERVED, NOT LAUNCHED)
+
+Status: **AWAITING_OWNER_APPROVAL.** One combined job, one package, one total
+budget. Nothing has been reserved, registered, or launched. The specialist is
+**not** moved into child-call integration.
+
+## What this job tests
+
+Your hypothesis, tested rather than assumed: *the learner needs more varied
+practice that separates the relationship from familiar names, layouts and answer
+patterns.* One job runs **control** (repeat the existing lessons) against
+**varied** (the new relationship lessons) at equal budget, with the same
+architecture, the same frozen encoder, the same CAS framing, and matched starting
+weights within each seed.
+
+## Informed by the read-only error review (existing records only)
+
+`tools/graph6_curriculum_error_review.py` → `CURRICULUM_002_ERROR_REVIEW.json`
+(sha256 `e317c0c74b0dbad59b35aed9b29e09f50f5aa93096a8516de2d087e6115cbc04`).
+Headline numbers re-derived independently and matching:
+
+* Pooled `LIST_PARTS` wrongs **72 before → 67 after**; `missing_part` **36→34**
+  (largest class in every cell), `extra_part` **15→22**, `mixed` 3→0,
+  `wrong_whole` 18→11, padding 0.
+* `FIND_SHARED_PART` correct **30→44**, but `chose_none` **0→0** while `none` is
+  the answer in 21/30 panel cases.
+* `REACHED_VIA` correct **25→39**; `said_direct` **30→11**.
+* Correct option present **361/361** wrong cases; **no** lesson or panel case ever
+  had three equal-length `LIST_PARTS` options; 139 wrong choices split 69
+  longest / 70 shortest.
+* UNAVAILABLE: practice predicted strings (no practice error can be classified),
+  per-option scores, optimizer state, trained weights, per-case timings.
+
+## What the varied curriculum does (identity `f3e56f29…`)
+
+30 records, 10 per operation, same schedule shape as the control:
+every `LIST_PARTS` lesson carries a missing-part **and** a foreign-part option,
+**7 of 10** have all three options the same length, and the correct list is never
+the unique longest or shortest; `FIND_SHARED_PART` **4/10** offer `none` and
+**4/10** answer `none` with equal-length options; `REACHED_VIA` answers
+**4 direct / 3 via / 3 absent**; 8 of 10 families use labels absent from teaching;
+5 families reorder connections; 4 families rewire a connection. Answer contract,
+^6 module, encoder, parameter scope and scoring semantics are unchanged.
+
+## One finding you must approve knowingly: the final panel needs a new shape bank
+
+The frozen generator cannot supply an untouched panel — its structural pattern
+space is already covered: **0 of 2,840 families** in a fresh family-seed region
+could offer a triple whose three cases are all new by label-invariant signature
+(184 distinct patterns in the region, 95 already used). The untouched panel is
+therefore built by `final_panel.py` from a **new twelve-shape bank**: same node
+and relation vocabulary, same three operations, same option contract, same
+deterministic checker; 30 families / 90 cases, reach **10/10/10**, **0 id and 0
+signature overlap** with teaching, the examined panel, and the varied curriculum
+(content digest `60569f69…`). The examined panel's own content digest still
+reproduces exactly (`d1076de3…`), so the earlier run stays auditable.
+
+## Design and budget (one request)
+
+| Item | Value |
+| --- | --- |
+| Conditions | control, varied (3 paired seeds `20260913/14/15`, matched initial weights, separate optimizer states) |
+| Learners | 6; checkpoints measured at **64** and **256** updates each |
+| Total updates | **1,536** |
+| Final panel | untouched, 30 families / 90 cases, reach 10/10/10 |
+| Wall ceiling | 900 s per learner, 3,600 s worker, 7,200 s instance (2 h) |
+| Reservation | one new **`$7.00`** (2 h × `$2.52` + `$1.48` ancillary, rounded up) |
+| Ledger after | revision 47 → 48: `$249.00` reserved / `$151.00` unreserved (cap `$400.00`) |
+| Retries | zero; original errors preserved; verified cleanup |
+
+## Pre-registered decision rules (fixed now)
+
+* **P1 (primary):** per seed, `varied@256 − control@256 ≥ +0.10` **and**
+  family-clustered 95 % bootstrap lower bound `> 0`.
+* **P2 (primary):** per seed, `varied@256 ≥ 0.50` absolute.
+* **P3 (secondary, reported, never gating):** `control@256 − control@64` and
+  `varied@256 − varied@64`.
+* **Verdict:** `VARIED_CURRICULUM_BETTER` iff ≥ 2 of 3 seeds satisfy P1 **and**
+  ≥ 2 satisfy P2; else `VARIED_CURRICULUM_NOT_ESTABLISHED`. Thresholds are **not**
+  lowered; every learner and checkpoint is reported, including regressions.
+* Uncertainty: family-clustered percentile bootstrap (10,000 resamples, seed
+  `20260926`, 30 clusters × 3 cases) plus exact McNemar.
+
+## Checkpoint delivery (the concrete fix)
+
+Each learner writes **real files** — initial, `step064`, `step256` (18 files) —
+containing model `state_dict`, **optimizer state**, encoder projection and
+tokenizer vocabulary, step, condition, seed, record ids, torch version. Every
+file is **reloaded into a fresh module in-job** and verified by parameter
+identity and re-prediction; the launcher **downloads every artifact and
+re-verifies sha256 and byte count before cleanup deletes the bucket**, failing
+closed on any mismatch.
+
+## Exact package (built; NOT launched)
+
+| Field | Value |
+| --- | --- |
+| source_sha | `310db0dd7428692067a3c67f9117a2642145042f` |
+| archive_sha256 | `4512783483d43111be623894cccbadc5bfe678bfb24eb687ab6d4ab0b1021e06` |
+| archive_bytes | 406219 |
+| manifest_sha256 | `7b18cd2c8d1ae200876d4e282e62e2ced7534670d5d4cd0914706e79dd556dfa` |
+| member_count | 37 |
+| package | `training_mode_001/graph6_curriculum_package_001/` |
+| launch request | `training_mode_001/graph6_curriculum_launch_001/launch_request.json` (sha256 `afc369338ca689cb28a2d3a58d913189aab780a68c7eb207fbeca8e649ce563c`, `launch_authorized: false`) |
+| proposed job | `cas-meta2-graph6curr-20260910043000-310db0dd` |
+| launcher | `aws/graph_training_curriculum_launch.py` at commit `310db0dd` |
+| preregistration | `GRAPH6_CURRICULUM_002.md`; evidence `CURRICULUM_002_CHECK.json` (sha256 `b4bd85480c8bc4fedd35f44bda3dbe6a3e46802a395fbc4524c7a9b5fe4ec214`) |
+
+Packaged worker byte-checked against `render_worker()`; manifest carries
+`launch_enabled:false`, pair seeds, conditions, checkpoints, 1,536 steps, panel
+seed `20260930`. 241 graph tests pass. Plan output verified inert
+(`PLAN_ONLY_NOT_EXECUTED`, 0 provider calls, no reservation).
+
+## What I need from you
+
+**GO / NO-GO** for this single job (one new owner-signed record + one new `$7.00`
+reservation), and confirmation that building the untouched final panel from a
+**new shape bank** is acceptable — that is the only way to honour "untouched"
+with this generator, and it makes the test stricter (unseen topologies), not
+easier. On GO I mint the owner record binding these exact identities, register,
+and execute — nothing before.
