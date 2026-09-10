@@ -231,15 +231,22 @@ def _list_options(rng, correct, graph, idea, profile):
                          1 for option in wrong if set(option) - set(correct))}
 
 
-def _shared_options(rng, correct, graph, part_names):
+def _shared_options(rng, correct, graph, part_names, offer_none_as_distractor=False):
     """Three unmarked options for FIND_SHARED_PART.
 
-    The retained-error review measured that neither the teaching records nor the
-    examined panel ever offered three options of equal length for this operation,
-    and that the model never chose "none" when "none" was the answer (0 of 60
-    wrong before training, 0 of 46 after) while the examined panel answered
-    "none" in 21 of 30 cases. The builder therefore prefers distractors of the
-    SAME character length as the correct option and keeps "none" in play.
+    Two measured problems shaped this builder.
+
+    1. The retained-error review found the model never chose "none" when "none"
+       was the answer (0 of 60 wrong before training, 0 of 46 after) while the
+       examined panel answered "none" in 21 of 30 cases, and that neither the
+       teaching records nor that panel ever offered three options of equal
+       length. So the builder prefers distractors of the same character length
+       as the correct option and keeps "none" in play.
+    2. A pure check of the FIRST draft found that "none" appeared in exactly four
+       lessons and was the correct answer in all four, which permits the shortcut
+       "choose none whenever it appears". When the two ideas DO share a part, the
+       builder therefore offers "none" as an INCORRECT distractor in the declared
+       subset of lessons, so the presence of "none" cannot settle the question.
     """
     correct_length = len(correct)
     same_length = [name for name in part_names
@@ -247,7 +254,8 @@ def _shared_options(rng, correct, graph, part_names):
     other = [name for name in part_names if name != correct and name not in same_length]
     distractors = same_length + other
     if correct != "none":
-        distractors.append("none")
+        if offer_none_as_distractor:
+            distractors.insert(0, "none")
     else:
         distractors.append(next((name for name in part_names if len(name) == 4), None))
     options = [correct]
@@ -259,7 +267,9 @@ def _shared_options(rng, correct, graph, part_names):
             "VARIED_SHARED_OPTIONS_INVALID")
     return options, {"option_lengths": sorted(len(option) for option in options),
                      "equal_length": len({len(option) for option in options}) == 1,
-                     "none_is_an_option": "none" in options}
+                     "none_is_an_option": "none" in options,
+                     "none_is_the_answer": correct == "none",
+                     "none_is_a_distractor": "none" in options and correct != "none"}
 
 
 def _reach_options(rng, correct, direct_parts):
@@ -319,7 +329,9 @@ def varied_family(index, *, seed=CURRICULUM_SEED):
     shared = reference.shared_parts(graph, a, b)
     answer = shared[0] if shared else "none"
     question = {"a": a, "b": b}
-    shared_options, shared_meta = _shared_options(rng, answer, graph, part_names)
+    shared_options, shared_meta = _shared_options(
+        rng, answer, graph, part_names,
+        offer_none_as_distractor=(answer != "none" and index % 2 == 0))
     records.append(lessons._record(
         VARIED_SPLIT, family_seed, "whole_part", "FIND_SHARED_PART", graph, question,
         answer, shared_options,
@@ -527,7 +539,17 @@ def curriculum_report(records=None):
                 and record["variation"].get("shared_none_is_an_option")),
             "none_is_the_answer": sum(
                 1 for record in records if record["op"] == "FIND_SHARED_PART"
-                and record["correct"] == "none"),
+                and record["variation"].get("shared_none_is_the_answer")),
+            "none_is_an_incorrect_distractor": sum(
+                1 for record in records if record["op"] == "FIND_SHARED_PART"
+                and record["variation"].get("shared_none_is_a_distractor")),
+            "choose_none_shortcut_accuracy": (
+                sum(1 for record in records if record["op"] == "FIND_SHARED_PART"
+                    and record["variation"].get("shared_none_is_an_option")
+                    and record["correct"] == "none")
+                / max(1, sum(1 for record in records
+                             if record["op"] == "FIND_SHARED_PART"
+                             and record["variation"].get("shared_none_is_an_option")))),
         },
         "exposure_at_256_updates": exposure(records, 256),
         "boundary": ("curriculum construction only: no training, no checkpoint "

@@ -71,6 +71,27 @@ def test_reach_and_shared_practice_are_maintained(records):
     assert answers == {"none", "part"}
 
 
+def test_none_is_not_a_shortcut_in_shared_part_lessons(records):
+    """The first draft offered 'none' in four lessons and it was correct in all
+    four, which permits 'choose none whenever it appears'. The presence of 'none'
+    must not settle the answer."""
+    shared = [record for record in records if record["op"] == "FIND_SHARED_PART"]
+    offering = [record for record in shared if "none" in record["options"]]
+    as_answer = [record for record in offering if record["correct"] == "none"]
+    as_distractor = [record for record in offering if record["correct"] != "none"]
+    assert len(shared) == 10
+    assert len(offering) == 7
+    assert len(as_answer) == 4
+    assert len(as_distractor) == 3
+    for record in as_distractor:
+        assert "none" in record["options"]
+        assert record["correct"] in record["options"]
+        assert len(record["options"]) == 3
+    report = curriculum.curriculum_report(records)
+    assert report["find_shared_part"]["none_is_an_incorrect_distractor"] == 3
+    assert report["find_shared_part"]["choose_none_shortcut_accuracy"] == 4 / 7
+
+
 def test_renaming_moves_most_families_off_the_teaching_labels(records):
     """Eight of the ten families use labels that never appear in the teaching
     records; the remaining two deliberately reuse the plain-letter style, so the
@@ -134,6 +155,9 @@ def test_curriculum_report_matches_the_records(records):
     assert report["list_parts"]["correct_is_unique_shortest"] == 0
     assert report["reach_answers"] == {"direct": 4, "via": 3, "absent": 3}
     assert report["shared_part_answers"] == {"part": 6, "none": 4}
+    assert report["find_shared_part"]["lessons_offering_none"] == 7
+    assert report["find_shared_part"]["none_is_the_answer"] == 4
+    assert report["find_shared_part"]["none_is_an_incorrect_distractor"] == 3
     assert report["rewired_families"] == 4
     assert report["reordered_families"] == 5
     assert report["distinct_label_styles"] == 8

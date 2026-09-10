@@ -353,11 +353,13 @@
     },
     "family_count": 10,
     "find_shared_part": {
-      "equal_length_lessons": 4,
-      "lessons_offering_none": 4,
+      "choose_none_shortcut_accuracy": 0.5714285714285714,
+      "equal_length_lessons": 3,
+      "lessons_offering_none": 7,
+      "none_is_an_incorrect_distractor": 3,
       "none_is_the_answer": 4
     },
-    "identity": "f3e56f29b54bde0b91b1832208ef023271617dccd551c7e4ce2496623e4c7387",
+    "identity": "a1caa27adfaebe9297008008a5f98f32e6b3685051ba612693939ed8a00655e4",
     "list_parts": {
       "correct_is_unique_longest": 0,
       "correct_is_unique_shortest": 0,

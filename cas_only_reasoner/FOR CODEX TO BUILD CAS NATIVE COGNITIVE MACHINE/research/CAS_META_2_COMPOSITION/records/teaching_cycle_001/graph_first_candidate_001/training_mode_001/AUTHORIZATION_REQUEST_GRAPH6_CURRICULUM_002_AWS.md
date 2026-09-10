@@ -84,9 +84,25 @@ questions, and selects **30 pairwise non-isomorphic arrangements** from a
 
 90 cases, one question per operation, **0** id and **0** signature overlap with
 the teaching dataset, the examined panel and the varied curriculum. The examined
-panel's content digest still reproduces exactly (`d1076de3…`). **No unfamiliar
-vocabulary and no deeper reasoning requirement was added to escape the filter**;
-the panel stays inside the teaching envelope. Same panel for both conditions.
+panel's content digest still reproduces exactly (`d1076de3…`). No unfamiliar
+vocabulary and no deeper reasoning requirement was added to escape the filter.
+Same panel for both conditions.
+
+**Interpretation limit:** these limits show the panel is built *within the
+documented teaching envelope*; they do **not** prove equal difficulty. New
+arrangements may challenge the learner differently — acceptable here because
+both curricula face the same panel.
+
+## A second shortcut found and closed (owner review)
+
+The first draft of the curriculum offered `none` in exactly four
+`FIND_SHARED_PART` lessons and had `none` **correct in all four**, which permits
+"choose none whenever it appears". A pure check of the generated records
+confirmed exactly that (offered 4/10, correct 4/4, incorrect 0/4). The builder
+now offers `none` as an **incorrect distractor in three lessons where a real
+shared part exists**: `none` appears in 7 lessons, is the answer in 4 and a
+distractor in 3, so the shortcut scores 4 of 7. Three choices, correct targets,
+record count, module and training allowance are unchanged.
 
 ## Design and budget (one request)
 

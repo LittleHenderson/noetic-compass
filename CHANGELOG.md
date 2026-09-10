@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 shortcut closed; experiment unchanged — **LAUNCH AUTHORIZED**
+
+Owner review found a curriculum shortcut before registration: the first draft
+offered `none` in exactly four `FIND_SHARED_PART` lessons and had `none` correct
+in **all four** (verified from the generated records: offered 4/10, correct 4/4,
+incorrect 0/4), which permits "choose none whenever it appears". Fixed in
+`curriculum.py`: `none` is now an **incorrect distractor in three lessons where a
+real shared part exists** — offered in 7 lessons, correct in 4, distractor in 3
+(shortcut scores 4 of 7). Three choices, correct targets, 30 records, module and
+allowance unchanged; the 30-arrangement panel and the one-job design are kept.
+Panel wording corrected to "unseen arrangements within the documented teaching
+envelope", with an explicit note that this does NOT prove equal difficulty (both
+conditions face the same panel). Varied curriculum identity `a1caa27a…`;
+evidence `CURRICULUM_002_CHECK.json` sha256 `187457c6…`. 244+ graph tests pass.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 PREPARED (varied relationship lessons vs repetition control) — **NOT LAUNCHED**
 
 Owner-directed preparation of one combined curriculum experiment, no diagnostic

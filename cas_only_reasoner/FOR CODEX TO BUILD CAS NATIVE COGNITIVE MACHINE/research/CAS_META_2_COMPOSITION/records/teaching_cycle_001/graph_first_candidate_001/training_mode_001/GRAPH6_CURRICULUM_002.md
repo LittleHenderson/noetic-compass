@@ -116,6 +116,12 @@ overlap with the teaching dataset, the examined panel and the varied curriculum.
 The examined panel's own content digest still reproduces exactly
 (`d1076de3…`). Evidence: `CURRICULUM_002_CHECK.json`.
 
+**Interpretation limit (owner review):** the table shows the panel is built
+**within the documented teaching envelope** — same size, depth, part counts and
+vocabulary. It does **not** prove equal difficulty; new arrangements may still
+challenge the learner differently. That limit is acceptable here because **both
+curricula face the same panel**, which is the comparison being run.
+
 ## 4. The two curricula (equal budget, same schedule)
 
 | | Control | Varied |
@@ -123,10 +129,19 @@ The examined panel's own content digest still reproduces exactly
 | Records | the existing 30 train+practice lessons, unchanged | 30 new records (10 per operation) |
 | Variation | none | consistent renaming (8 of 10 families use labels absent from teaching), harmless connection reordering (5 families), meaningful rewiring (4 families), nested wholes |
 | `LIST_PARTS` | as-is | every lesson carries a missing-part option and a foreign-part option; 7 of 10 have all three options the same length; the correct list is never the unique longest or shortest |
-| `FIND_SHARED_PART` | as-is | 4 of 10 offer `none`; 4 of 10 have `none` as the answer; 4 of 10 have equal-length options |
+| `FIND_SHARED_PART` | as-is | `none` offered in **7 of 10** lessons — the answer in **4**, an **incorrect distractor in 3** (so the presence of `none` cannot settle the question); 3 of 10 have equal-length options |
 | `REACHED_VIA` | as-is | answers 4 direct / 3 via / 3 absent |
 | Schedule | balanced round-robin over operations, position-major | **identical** schedule shape |
 | Exposure at 256 updates | 256 deliveries, 30 distinct records, 85/86/85 per operation, 8–9 deliveries per record | **identical counts**, reported |
+
+**A shortcut found and closed before registration (owner review).** The first
+draft of this curriculum offered `none` in exactly four `FIND_SHARED_PART`
+lessons and had `none` as the correct answer in all four, which permits "choose
+none whenever it appears". A pure check of the generated records confirmed it
+(`none` offered 4/10, correct 4/4, incorrect 0/4). The builder now offers `none`
+as an **incorrect distractor** in three lessons where a real shared part exists,
+so the shortcut scores 4 of the 7 lessons where `none` appears. Three choices,
+correct targets, record count, module and allowance are unchanged.
 
 ## 5. Design (pre-registered before execution)
 
