@@ -1,0 +1,148 @@
+{
+  "artifacts": [
+    {
+      "bytes": 174191,
+      "condition": "control",
+      "learner_seed": 20260913,
+      "name": "control_seed20260913_step000.pt",
+      "sha256": "ac6b0b53c9331976b9868b49b08c0de6835a3a34f4ecbd789ba352f0c8516c2b",
+      "step": 0
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260913,
+      "name": "control_seed20260913_step064.pt",
+      "sha256": "e00e16b957799bb8223d1fc59da66d56c3bffd82ec07d876de61e69112b71543",
+      "step": 64
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260913,
+      "name": "control_seed20260913_step256.pt",
+      "sha256": "8d9e847d353746e79e977ab53103eec218061c5b4669a98c3213f441f55e81bb",
+      "step": 256
+    },
+    {
+      "bytes": 174191,
+      "condition": "control",
+      "learner_seed": 20260914,
+      "name": "control_seed20260914_step000.pt",
+      "sha256": "0ba768bfb75fded834574304ba5223e948cb4cfc7f477985d736275eb60abbc8",
+      "step": 0
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260914,
+      "name": "control_seed20260914_step064.pt",
+      "sha256": "5ca351c453d797123bdf4ec8741247f302c2b4b625915439be34b624f08a415e",
+      "step": 64
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260914,
+      "name": "control_seed20260914_step256.pt",
+      "sha256": "f81b1d5c6d7f8c04d1445a8bb1a62b852cdebd4723d6da82fffd0272df6eaeb1",
+      "step": 256
+    },
+    {
+      "bytes": 174191,
+      "condition": "control",
+      "learner_seed": 20260915,
+      "name": "control_seed20260915_step000.pt",
+      "sha256": "08bf34561c05e2f88471cf49626183744a5c5e6af16c0eed77e917987d51fbc4",
+      "step": 0
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260915,
+      "name": "control_seed20260915_step064.pt",
+      "sha256": "1c6ef87290622c57ba450977fe1c8bee654967cc1589a4739793817d8c3b6ef7",
+      "step": 64
+    },
+    {
+      "bytes": 307979,
+      "condition": "control",
+      "learner_seed": 20260915,
+      "name": "control_seed20260915_step256.pt",
+      "sha256": "ace2ce87fe775bb838264f071f31ce19f71940263f4fab6f5eb3376a0d26372a",
+      "step": 256
+    },
+    {
+      "bytes": 174181,
+      "condition": "varied",
+      "learner_seed": 20260913,
+      "name": "varied_seed20260913_step000.pt",
+      "sha256": "d441d9448c3945b6051b5c2703f97fddd51f56b075370976d9b43375ba22a5af",
+      "step": 0
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260913,
+      "name": "varied_seed20260913_step064.pt",
+      "sha256": "ccef656300765d40d61cffcc1f6ee35f9e08e253ca42cbbfb2ee84b4e2b48d1b",
+      "step": 64
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260913,
+      "name": "varied_seed20260913_step256.pt",
+      "sha256": "74f18371ba64e8ce2397cfc41ef420dd1d97f1fd23fd7a571c22006d89b80cdf",
+      "step": 256
+    },
+    {
+      "bytes": 174181,
+      "condition": "varied",
+      "learner_seed": 20260914,
+      "name": "varied_seed20260914_step000.pt",
+      "sha256": "b6cb1b7cca604aad152a46af994c6590ff711966900b173582644b1102fb1ce2",
+      "step": 0
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260914,
+      "name": "varied_seed20260914_step064.pt",
+      "sha256": "1a1e2fdd0a669cd5624e5fc49db8195b25d655eed63bd6884ec4d3b056798713",
+      "step": 64
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260914,
+      "name": "varied_seed20260914_step256.pt",
+      "sha256": "3f6332a9966ab30abf8acb07a6c71b704bb64fcadce6c028f99c03849f2e32a9",
+      "step": 256
+    },
+    {
+      "bytes": 174181,
+      "condition": "varied",
+      "learner_seed": 20260915,
+      "name": "varied_seed20260915_step000.pt",
+      "sha256": "a0313076aa2686b181767b9298654b2ff661986af8cd79cea0de97e456cd9319",
+      "step": 0
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260915,
+      "name": "varied_seed20260915_step064.pt",
+      "sha256": "2d2972a056d23792dd9513f62997b29ee0d99c685495bc9442d016866e056fca",
+      "step": 64
+    },
+    {
+      "bytes": 307960,
+      "condition": "varied",
+      "learner_seed": 20260915,
+      "name": "varied_seed20260915_step256.pt",
+      "sha256": "84cab19fd46e38ae2805f77758c30a698b10d69dc7a1f88eb28957ab3deabcb6",
+      "step": 256
+    }
+  ]
+}

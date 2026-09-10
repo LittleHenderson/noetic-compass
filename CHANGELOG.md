@@ -4,6 +4,33 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 004 **FINISHED and DELIVERED** — `VARIED_CURRICULUM_NOT_ESTABLISHED`
+
+Attempt 004 (`cas-meta2-graph6curr-20260910133000-aecb5d07`, owner GO, one new
+`$7.00` reservation, ledger 50 → 51: `$270.00` reserved / `$130.00` unreserved)
+**completed and was delivered**: stages `execution FINISHED`, `collection
+VERIFIED`, `cleanup COMPLETE`; result sha256 `848db69b…`; **18/18 checkpoint files
+collected** (4,740,750 bytes); instance `i-06d963e0b19f80dbc` terminated; elapsed
+571.3 s. **Registered outcome: `VARIED_CURRICULUM_NOT_ESTABLISHED`** — the varied
+relationship lessons did NOT beat repeating the existing lessons at equal budget
+and neither condition exceeded chance on the untouched panel. Per seed at 256
+updates (90 cases): control 26/90 vs varied 30/90 (+4.44 %, CI −8.89…+17.78 %,
+p 0.6440); control 22/90 vs varied 26/90 (+4.44 %, CI −8.89…+17.78 %, p 0.6358);
+control 26/90 vs varied 26/90 (0 %, CI −14.44…+14.44 %, p 1.0000); pooled control
+74/270 (27.41 %) vs varied 82/270 (30.37 %), chance 33.33 %. **Repetition did not
+help**: control 64 → 256 mean −4.8 %, varied −1.1 %. Informative detail: control
+reached 23/30 on the frozen familiar records (all seeds) while varied reached
+27/30 on its OWN lessons (all seeds) but only 12–14/30 on the familiar records and
+22–30/90 on the unseen arrangements. Controls held: shared encoder identity
+`116f3677…`, paired initial weights matched within each seed, 6/6 learners
+reported, 1,536 updates, all reload verifications true, exposure matched
+(256 deliveries, 85/86/85 per operation). **Reported gap:** the registered
+digest-level containment report was NOT measured in this run (the segmented
+trainer path does not produce it); the optimizer only ever held the decompose
+module's parameters and the encoder projection is frozen, but that is an argument
+from the code, not the registered evidence. Record:
+`ATTEMPT_GRAPH6_CURRICULUM_002_004_RESULT.md`.
+
 ## 2026-09-10 - Graph-first ^6: delivery rehearsal PASSES; conditional evidence deletion; attempt 004 bound request returned
 
 Owner-directed delivery rehearsal (`tests/test_graph_training_delivery_rehearsal.py`,
