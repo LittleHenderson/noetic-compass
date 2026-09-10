@@ -88,9 +88,32 @@ NOT supported (no claim licensed by this run):
   single-seed result on a 12-case panel that had already been examined. What
   this run adds is that on a **new, balanced 90-case panel** (30 per operation,
   reach 10 direct / 10 via / 10 absent, 0 id and 0 signature overlap with
-  everything previously seen) the same frozen candidate reached 37.78 %–40.00 %,
-  not 58 %.
+  everything previously seen) **the three newly trained candidates** reached
+  37.78 %–40.00 %, not 58 %.
 * No composition, specialist, or two-framing claim.
+
+## Corrections to this record (owner-directed, 2026-09-10)
+
+Two statements in the first version of this record needed correction. Both are
+recorded here rather than edited away, so the error stays visible.
+
+1. **"The same frozen candidate" was wrong wording.** The 37.78 %–40.00 %
+   scores belong to the three **newly trained candidates** (seeds `20260913`,
+   `20260914`, `20260915`), not to the run-005 checkpoint. Run 005's weights were
+   never persisted (only the digest `cb008721…` survived), so the original
+   checkpoint's fresh performance is **UNAVAILABLE, not disproved**. Asking for
+   the checkpoint to be preserved did not establish that its bytes existed.
+   GRAPH6_CURRICULUM_002 therefore writes and collects real checkpoint files.
+2. **"Answers sealed before predictions" states less than it looks.** The
+   recorded flag proves that the prediction pass received **no answer field**
+   (the sealed input strips `correct`, `encoded_correct_index` and `reference`).
+   It does **not**, by itself, prove that the answers were opened only after the
+   predictions were written; the record has no independent event-ordering
+   evidence. The honest statement is: predictions were produced from an
+   answer-free input view, and correctness was computed in a second pass over the
+   already-recorded predictions. The curriculum experiment keeps the same
+   mechanism and records this limit explicitly in
+   `claims.answer_sealing_limit`.
 
 ## Follow-on options (none authorized by this record)
 

@@ -27,11 +27,16 @@ from .graph import canonical, digest, require
 
 PANEL_SCHEMA = "cas-graph-training-fresh-panel/1"
 PANEL_SEED = 20260920
+PANEL_SEED_002 = 20260930
 PANEL_FAMILY_COUNT = 30
 PANEL_FAMILY_BASE = 41000
+PANEL_FAMILY_BASE_002 = 51000      # a disjoint family-seed region for panel 002
 PANEL_SPLIT = "fresh"
 PANEL_OPS = tuple(lessons.WHOLE_PART_OPS)          # LIST_PARTS, FIND_SHARED_PART, REACHED_VIA
 EXCLUDED_DATASET_SEEDS = (20260909,)               # includes the examined attempt-010 panel
+# Panels already EXAMINED during development: their cases are excluded from any
+# new panel, so a later improvement claim is measured on untouched material.
+EXAMINED_PANEL_SEEDS = (PANEL_SEED,)
 MAX_FAMILY_PROBES = 3000
 
 
@@ -142,14 +147,29 @@ def _family_records(family_seed, split=PANEL_SPLIT):
     return by_op
 
 
-def used_index(excluded_seeds=EXCLUDED_DATASET_SEEDS):
+def examined_panel_index(panel_seeds=EXAMINED_PANEL_SEEDS):
+    """Ids and signatures of panels that have already been examined during
+    development. They are excluded from any new panel."""
+    ids, signatures = set(), set()
+    for seed in panel_seeds:
+        panel = build_panel(panel_seed=seed)
+        for case in panel["cases"]:
+            ids.add(case["record_id"])
+            signatures.add(case["signature"])
+    return ids, signatures
+
+
+def used_index(excluded_seeds=EXCLUDED_DATASET_SEEDS, excluded_panels=(),
+               excluded_curricula=()):
     """Ids and signatures of every case the learner has already seen: the
-    training/practice records AND the whole previously examined dataset."""
-    return _used_index(tuple(excluded_seeds))
+    training/practice records, the whole previously examined dataset, any panel
+    development has already examined, and any curriculum built for a candidate."""
+    return _used_index(tuple(excluded_seeds), tuple(excluded_panels),
+                       tuple(excluded_curricula))
 
 
 @lru_cache(maxsize=8)
-def _used_index(excluded_seeds):
+def _used_index(excluded_seeds, excluded_panels, excluded_curricula):
     ids, signatures = set(), set()
     for seed in excluded_seeds:
         for records in lessons.build_dataset(seed=seed).values():
@@ -158,11 +178,22 @@ def _used_index(excluded_seeds):
                     continue
                 ids.add(record["record_id"])
                 signatures.add(signature_key(record))
+    if excluded_panels:
+        panel_ids, panel_signatures = examined_panel_index(excluded_panels)
+        ids |= panel_ids
+        signatures |= panel_signatures
+    if excluded_curricula:
+        from . import curriculum
+        for seed in excluded_curricula:
+            for record in curriculum.varied_records(seed=seed):
+                ids.add(record["record_id"])
+                signatures.add(signature_key(record))
     return ids, signatures
 
 
 def candidate_families(*, panel_seed=PANEL_SEED, family_base=PANEL_FAMILY_BASE,
-                       max_probes=MAX_FAMILY_PROBES, excluded_seeds=EXCLUDED_DATASET_SEEDS):
+                       max_probes=MAX_FAMILY_PROBES,
+                       excluded_seeds=EXCLUDED_DATASET_SEEDS, excluded_panels=()):
     """Every fresh family that passes the exclusion, in deterministic order.
 
     A family passes only if EVERY whole-part record it generates is new: no
@@ -170,8 +201,13 @@ def candidate_families(*, panel_seed=PANEL_SEED, family_base=PANEL_FAMILY_BASE,
     used set (so a renamed duplicate of a used case is rejected too). Checking
     the whole family, not just the selected cases, keeps the rejection
     independent of which cases the panel ends up choosing.
+
+    This family-level rule is what produced the examined 90-case panel
+    (digest ``d1076de3…``); it is kept exactly so that panel stays
+    reproducible. A panel built from a NEW shape bank, where the frozen
+    generator's pattern space is already exhausted, is ``final_panel.py``.
     """
-    used_ids, used_signatures = used_index(excluded_seeds)
+    used_ids, used_signatures = used_index(excluded_seeds, excluded_panels)
     accepted = []
     rejected = {"missing_op": 0, "used_case": 0}
     for probe in range(1, max_probes + 1):
@@ -196,7 +232,7 @@ def _case_item(family_id, family_seed, op, record):
 
 def build_panel(*, panel_seed=PANEL_SEED, family_count=PANEL_FAMILY_COUNT,
                 family_base=PANEL_FAMILY_BASE, max_probes=MAX_FAMILY_PROBES,
-                excluded_seeds=EXCLUDED_DATASET_SEEDS,
+                excluded_seeds=EXCLUDED_DATASET_SEEDS, excluded_panels=(),
                 reach_quota=None):
     """Deterministic panel construction with declared quotas and diversification.
 
@@ -213,7 +249,7 @@ def build_panel(*, panel_seed=PANEL_SEED, family_count=PANEL_FAMILY_COUNT,
                                  "absent": family_count // 3})
     candidates, rejected = candidate_families(
         panel_seed=panel_seed, family_base=family_base, max_probes=max_probes,
-        excluded_seeds=excluded_seeds)
+        excluded_seeds=excluded_seeds, excluded_panels=excluded_panels)
     require(len(candidates) >= family_count, "FRESH_PANEL_POOL_EXHAUSTED")
     chosen, chosen_signatures, chosen_triples = [], set(), set()
     remaining = dict(quota)
@@ -277,8 +313,9 @@ def build_panel(*, panel_seed=PANEL_SEED, family_count=PANEL_FAMILY_COUNT,
         "cases_per_op": {op: sum(1 for case in cases if case["op"] == op)
                          for op in PANEL_OPS},
         "excluded_dataset_seeds": list(excluded_seeds),
-        "excluded_case_ids": len(used_index(excluded_seeds)[0]),
-        "excluded_signatures": len(used_index(excluded_seeds)[1]),
+        "excluded_panels": list(excluded_panels),
+        "excluded_case_ids": len(used_index(excluded_seeds, excluded_panels)[0]),
+        "excluded_signatures": len(used_index(excluded_seeds, excluded_panels)[1]),
         "candidate_families": len(candidates),
         "rejected": rejected,
         "reach_quota": quota,
@@ -312,7 +349,8 @@ def validate_panel(panel):
     require(len(ids) == len(set(ids)), "FRESH_PANEL_DUPLICATE_CASE_ID")
     triples = [family["family_signature"] for family in panel["families"]]
     require(len(triples) == len(set(triples)), "FRESH_PANEL_DUPLICATE_FAMILY_PATTERN")
-    used_ids, used_signatures = used_index(panel["excluded_dataset_seeds"])
+    used_ids, used_signatures = used_index(panel["excluded_dataset_seeds"],
+                                          tuple(panel.get("excluded_panels", ())))
     require(not (set(ids) & used_ids), "FRESH_PANEL_REUSES_USED_CASE")
     require(not ({case["signature"] for case in cases} & used_signatures),
             "FRESH_PANEL_REUSES_RENAMED_USED_CASE")

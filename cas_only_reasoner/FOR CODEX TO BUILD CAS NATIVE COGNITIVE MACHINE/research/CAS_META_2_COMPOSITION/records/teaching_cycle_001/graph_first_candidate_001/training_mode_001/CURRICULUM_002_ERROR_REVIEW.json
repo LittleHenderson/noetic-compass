@@ -1,0 +1,3322 @@
+{
+  "A_list_parts_error_classification": {
+    "per_candidate": [
+      {
+        "after": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 8,
+            "missing_part": 13,
+            "mixed_missing_and_extra": 0,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 3
+          },
+          "correct": 6,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "family_id": "family_06",
+                "predicted": [
+                  "alpha_1",
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "record_id": "48b911fe382407a82e93d08ba06d3db332215a88dafb7726d3975ea5a894fade"
+              },
+              {
+                "correct": [
+                  "alpha_1",
+                  "beta_2"
+                ],
+                "family_id": "family_16",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "gamma_3"
+                ],
+                "record_id": "598ef7e29c12b8dd48f31a53982c994c8f5ae215b70447d4033f0e44b85a8d89"
+              },
+              {
+                "correct": [
+                  "B",
+                  "D"
+                ],
+                "family_id": "family_17",
+                "predicted": [
+                  "A7",
+                  "B",
+                  "D"
+                ],
+                "record_id": "b135dd2381d9185687fbe080a2084c3eeac2f72780a863cd5c481ea8d84505a7"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_19",
+                "predicted": [
+                  "alpha_18",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "529338542d2bbc2fd2ee9b4d1fb238c7ade2f82544c627afb25d9b23afdf6482"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_22",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "924666e4bdda9d04546778909663c34e7f8075bd4e400e9f3d1ea15557f511c9"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "family_id": "family_01",
+                "predicted": [
+                  "obj2",
+                  "obj3"
+                ],
+                "record_id": "cbd14fe9c53dd7ec7330ea526f20359c7e669c5fa050a18fa9406aafb548da45"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj3"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj17"
+                ],
+                "family_id": "family_05",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "ac3f83154b13dc4b500fda07b879c323edbc07f24babfaab4401b8d78c8a54b9"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "idea1",
+                  "idea18"
+                ],
+                "family_id": "family_13",
+                "predicted": [
+                  "idea4",
+                  "idea6"
+                ],
+                "record_id": "a3ea80c4bae53c04e186b46ffd73baf54147821c93f8db11f6692ed6f217f6fe"
+              },
+              {
+                "correct": [
+                  "idea3",
+                  "idea4"
+                ],
+                "family_id": "family_14",
+                "predicted": [
+                  "idea17",
+                  "idea2",
+                  "idea5"
+                ],
+                "record_id": "a7814edb776ea55a888a47f5114058d4bf75f05748ca8fc46e75eb6a6497fefc"
+              },
+              {
+                "correct": [
+                  "A8",
+                  "B"
+                ],
+                "family_id": "family_24",
+                "predicted": [
+                  "A7",
+                  "D",
+                  "F"
+                ],
+                "record_id": "bb132fa8044b0dd3c41812dc033dd33108f16c62a8aac8768b6634b49b32e48e"
+              }
+            ]
+          },
+          "wrong": 24,
+          "wrong_correct_size_distribution": {
+            "2": 18,
+            "3": 6
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 8,
+            "2": 6,
+            "3": 9,
+            "4": 1
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 8,
+            "2|2": 1,
+            "2|3": 5,
+            "3|2": 9,
+            "4|3": 1
+          }
+        },
+        "before": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 4,
+            "missing_part": 14,
+            "mixed_missing_and_extra": 2,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 5
+          },
+          "correct": 5,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1",
+                  "obj2",
+                  "obj6"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "family_id": "family_06",
+                "predicted": [
+                  "alpha_1",
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "record_id": "48b911fe382407a82e93d08ba06d3db332215a88dafb7726d3975ea5a894fade"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_22",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "924666e4bdda9d04546778909663c34e7f8075bd4e400e9f3d1ea15557f511c9"
+              },
+              {
+                "correct": [
+                  "obj110",
+                  "obj3",
+                  "obj5"
+                ],
+                "family_id": "family_23",
+                "predicted": [
+                  "obj110",
+                  "obj2",
+                  "obj3",
+                  "obj5"
+                ],
+                "record_id": "c51109ae2beed075dd72de3ee46fe7d2b5490bea0c17e09faf030bb1354460f7"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "alpha_17",
+                  "delta_4"
+                ],
+                "family_id": "family_02",
+                "predicted": [
+                  "alpha_17"
+                ],
+                "record_id": "4a16573a59aa3c16563d6d38ed899d02efd308f68050dc50ea01c0fb7fabcc05"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj3"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj17"
+                ],
+                "family_id": "family_05",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "ac3f83154b13dc4b500fda07b879c323edbc07f24babfaab4401b8d78c8a54b9"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea5"
+                ],
+                "family_id": "family_11",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "be794099d4b0b2deff70ebfbceab04f963f7eea93dcd3edaadfab504af5552ca"
+              }
+            ],
+            "mixed_missing_and_extra": [
+              {
+                "correct": [
+                  "idea1",
+                  "idea17",
+                  "idea3"
+                ],
+                "family_id": "family_08",
+                "predicted": [
+                  "idea1",
+                  "idea17",
+                  "idea6"
+                ],
+                "record_id": "0ce13dd01578c09f1ff1d3c7517fca3c0542ec1975d7af914d002fd28e50499e"
+              },
+              {
+                "correct": [
+                  "obj18",
+                  "obj2",
+                  "obj4"
+                ],
+                "family_id": "family_09",
+                "predicted": [
+                  "obj2",
+                  "obj4",
+                  "obj6"
+                ],
+                "record_id": "5f71a30e3269cb4546f4274f06d261912ec72e28563d2d6bbfe2b81d6a76ea58"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "obj1",
+                  "obj18"
+                ],
+                "family_id": "family_10",
+                "predicted": [
+                  "obj17",
+                  "obj6"
+                ],
+                "record_id": "fc9cf035ea4d04500eaa4ed14d10f91aee01eac7987857bc1b998da4aa335eac"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj3"
+                ],
+                "family_id": "family_12",
+                "predicted": [
+                  "obj17",
+                  "obj6"
+                ],
+                "record_id": "fa2bc3d8c30fc620af837bc89f5e9c866c0561f5bf48b64820e90cebd1b35629"
+              },
+              {
+                "correct": [
+                  "idea3",
+                  "idea4"
+                ],
+                "family_id": "family_14",
+                "predicted": [
+                  "idea17",
+                  "idea2",
+                  "idea5"
+                ],
+                "record_id": "a7814edb776ea55a888a47f5114058d4bf75f05748ca8fc46e75eb6a6497fefc"
+              },
+              {
+                "correct": [
+                  "obj17",
+                  "obj18"
+                ],
+                "family_id": "family_15",
+                "predicted": [
+                  "obj4",
+                  "obj5",
+                  "obj6"
+                ],
+                "record_id": "7f984e41b099923664d74cbef2dc1b14948862a9746d18a018efacb00171f558"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3"
+                ],
+                "family_id": "family_18",
+                "predicted": [
+                  "idea1",
+                  "idea17"
+                ],
+                "record_id": "86e54de0d77687202b71b4d915316632046bf742b5014f43ecf97173db707664"
+              }
+            ]
+          },
+          "wrong": 25,
+          "wrong_correct_size_distribution": {
+            "2": 19,
+            "3": 6
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 12,
+            "2": 5,
+            "3": 6,
+            "4": 2
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 12,
+            "2|2": 3,
+            "2|3": 2,
+            "3|2": 4,
+            "3|3": 2,
+            "4|3": 2
+          }
+        },
+        "learner_seed": 20260913
+      },
+      {
+        "after": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 7,
+            "missing_part": 8,
+            "mixed_missing_and_extra": 0,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 5
+          },
+          "correct": 10,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "family_id": "family_06",
+                "predicted": [
+                  "alpha_1",
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "record_id": "48b911fe382407a82e93d08ba06d3db332215a88dafb7726d3975ea5a894fade"
+              },
+              {
+                "correct": [
+                  "alpha_1",
+                  "beta_2"
+                ],
+                "family_id": "family_16",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "gamma_3"
+                ],
+                "record_id": "598ef7e29c12b8dd48f31a53982c994c8f5ae215b70447d4033f0e44b85a8d89"
+              },
+              {
+                "correct": [
+                  "B",
+                  "D"
+                ],
+                "family_id": "family_17",
+                "predicted": [
+                  "A7",
+                  "B",
+                  "D"
+                ],
+                "record_id": "b135dd2381d9185687fbe080a2084c3eeac2f72780a863cd5c481ea8d84505a7"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_19",
+                "predicted": [
+                  "alpha_18",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "529338542d2bbc2fd2ee9b4d1fb238c7ade2f82544c627afb25d9b23afdf6482"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_22",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "924666e4bdda9d04546778909663c34e7f8075bd4e400e9f3d1ea15557f511c9"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "family_id": "family_01",
+                "predicted": [
+                  "obj2",
+                  "obj3"
+                ],
+                "record_id": "cbd14fe9c53dd7ec7330ea526f20359c7e669c5fa050a18fa9406aafb548da45"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              },
+              {
+                "correct": [
+                  "idea1",
+                  "idea17",
+                  "idea3"
+                ],
+                "family_id": "family_08",
+                "predicted": [
+                  "idea1",
+                  "idea17"
+                ],
+                "record_id": "0ce13dd01578c09f1ff1d3c7517fca3c0542ec1975d7af914d002fd28e50499e"
+              },
+              {
+                "correct": [
+                  "obj18",
+                  "obj2",
+                  "obj4"
+                ],
+                "family_id": "family_09",
+                "predicted": [
+                  "obj18",
+                  "obj2"
+                ],
+                "record_id": "5f71a30e3269cb4546f4274f06d261912ec72e28563d2d6bbfe2b81d6a76ea58"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj1",
+                  "obj6"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "idea1",
+                  "idea18"
+                ],
+                "family_id": "family_13",
+                "predicted": [
+                  "idea4",
+                  "idea6"
+                ],
+                "record_id": "a3ea80c4bae53c04e186b46ffd73baf54147821c93f8db11f6692ed6f217f6fe"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_20",
+                "predicted": [
+                  "obj17",
+                  "obj6"
+                ],
+                "record_id": "c6d1492f71fd2936c37ceb644d692d81c3994171f73454a85e52008b9bb82dcb"
+              },
+              {
+                "correct": [
+                  "A8",
+                  "B"
+                ],
+                "family_id": "family_24",
+                "predicted": [
+                  "A7",
+                  "D",
+                  "F"
+                ],
+                "record_id": "bb132fa8044b0dd3c41812dc033dd33108f16c62a8aac8768b6634b49b32e48e"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_28",
+                "predicted": [
+                  "obj17",
+                  "obj2"
+                ],
+                "record_id": "18b7f382ae71d7f68155ac9e9e21696dd5839d95154f33c524e4d48f33414e64"
+              }
+            ]
+          },
+          "wrong": 20,
+          "wrong_correct_size_distribution": {
+            "2": 14,
+            "3": 6
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 3,
+            "2": 9,
+            "3": 7,
+            "4": 1
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 3,
+            "2|2": 4,
+            "2|3": 5,
+            "3|2": 7,
+            "4|3": 1
+          }
+        },
+        "before": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 5,
+            "missing_part": 12,
+            "mixed_missing_and_extra": 0,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 5
+          },
+          "correct": 8,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "family_id": "family_01",
+                "predicted": [
+                  "obj1",
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "record_id": "cbd14fe9c53dd7ec7330ea526f20359c7e669c5fa050a18fa9406aafb548da45"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1",
+                  "obj2",
+                  "obj6"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "alpha_1",
+                  "beta_2"
+                ],
+                "family_id": "family_16",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "gamma_3"
+                ],
+                "record_id": "598ef7e29c12b8dd48f31a53982c994c8f5ae215b70447d4033f0e44b85a8d89"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_19",
+                "predicted": [
+                  "alpha_18",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "529338542d2bbc2fd2ee9b4d1fb238c7ade2f82544c627afb25d9b23afdf6482"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_22",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "924666e4bdda9d04546778909663c34e7f8075bd4e400e9f3d1ea15557f511c9"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              },
+              {
+                "correct": [
+                  "obj18",
+                  "obj2",
+                  "obj4"
+                ],
+                "family_id": "family_09",
+                "predicted": [
+                  "obj18",
+                  "obj2"
+                ],
+                "record_id": "5f71a30e3269cb4546f4274f06d261912ec72e28563d2d6bbfe2b81d6a76ea58"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea5"
+                ],
+                "family_id": "family_11",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "be794099d4b0b2deff70ebfbceab04f963f7eea93dcd3edaadfab504af5552ca"
+              },
+              {
+                "correct": [
+                  "idea1",
+                  "idea18"
+                ],
+                "family_id": "family_13",
+                "predicted": [
+                  "idea1"
+                ],
+                "record_id": "a3ea80c4bae53c04e186b46ffd73baf54147821c93f8db11f6692ed6f217f6fe"
+              },
+              {
+                "correct": [
+                  "idea3",
+                  "idea4"
+                ],
+                "family_id": "family_14",
+                "predicted": [
+                  "idea3"
+                ],
+                "record_id": "a7814edb776ea55a888a47f5114058d4bf75f05748ca8fc46e75eb6a6497fefc"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj1",
+                  "obj6"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj17"
+                ],
+                "family_id": "family_05",
+                "predicted": [
+                  "obj18",
+                  "obj4",
+                  "obj6"
+                ],
+                "record_id": "ac3f83154b13dc4b500fda07b879c323edbc07f24babfaab4401b8d78c8a54b9"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj3"
+                ],
+                "family_id": "family_12",
+                "predicted": [
+                  "obj17",
+                  "obj6"
+                ],
+                "record_id": "fa2bc3d8c30fc620af837bc89f5e9c866c0561f5bf48b64820e90cebd1b35629"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_20",
+                "predicted": [
+                  "obj17",
+                  "obj6"
+                ],
+                "record_id": "c6d1492f71fd2936c37ceb644d692d81c3994171f73454a85e52008b9bb82dcb"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_28",
+                "predicted": [
+                  "obj17",
+                  "obj2"
+                ],
+                "record_id": "18b7f382ae71d7f68155ac9e9e21696dd5839d95154f33c524e4d48f33414e64"
+              }
+            ]
+          },
+          "wrong": 22,
+          "wrong_correct_size_distribution": {
+            "2": 17,
+            "3": 5
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 8,
+            "2": 8,
+            "3": 5,
+            "4": 1
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 8,
+            "2|2": 4,
+            "2|3": 4,
+            "3|2": 5,
+            "4|3": 1
+          }
+        },
+        "learner_seed": 20260914
+      },
+      {
+        "after": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 7,
+            "missing_part": 13,
+            "mixed_missing_and_extra": 0,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 3
+          },
+          "correct": 7,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "family_id": "family_06",
+                "predicted": [
+                  "alpha_1",
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "record_id": "48b911fe382407a82e93d08ba06d3db332215a88dafb7726d3975ea5a894fade"
+              },
+              {
+                "correct": [
+                  "alpha_1",
+                  "beta_2"
+                ],
+                "family_id": "family_16",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "gamma_3"
+                ],
+                "record_id": "598ef7e29c12b8dd48f31a53982c994c8f5ae215b70447d4033f0e44b85a8d89"
+              },
+              {
+                "correct": [
+                  "B",
+                  "D"
+                ],
+                "family_id": "family_17",
+                "predicted": [
+                  "A7",
+                  "B",
+                  "D"
+                ],
+                "record_id": "b135dd2381d9185687fbe080a2084c3eeac2f72780a863cd5c481ea8d84505a7"
+              },
+              {
+                "correct": [
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "family_id": "family_22",
+                "predicted": [
+                  "alpha_1",
+                  "beta_2",
+                  "epsilon_5"
+                ],
+                "record_id": "924666e4bdda9d04546778909663c34e7f8075bd4e400e9f3d1ea15557f511c9"
+              },
+              {
+                "correct": [
+                  "idea18",
+                  "idea5"
+                ],
+                "family_id": "family_25",
+                "predicted": [
+                  "idea18",
+                  "idea4",
+                  "idea5"
+                ],
+                "record_id": "4dc0bcb7a617a2631759d29b067ba628f1dfc4aafe48afd9822833aad0bcf3d4"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "family_id": "family_01",
+                "predicted": [
+                  "obj2",
+                  "obj3"
+                ],
+                "record_id": "cbd14fe9c53dd7ec7330ea526f20359c7e669c5fa050a18fa9406aafb548da45"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj3"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj17"
+                ],
+                "family_id": "family_05",
+                "predicted": [
+                  "obj1"
+                ],
+                "record_id": "ac3f83154b13dc4b500fda07b879c323edbc07f24babfaab4401b8d78c8a54b9"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "idea1",
+                  "idea18"
+                ],
+                "family_id": "family_13",
+                "predicted": [
+                  "idea4",
+                  "idea6"
+                ],
+                "record_id": "a3ea80c4bae53c04e186b46ffd73baf54147821c93f8db11f6692ed6f217f6fe"
+              },
+              {
+                "correct": [
+                  "idea3",
+                  "idea4"
+                ],
+                "family_id": "family_14",
+                "predicted": [
+                  "idea17",
+                  "idea2",
+                  "idea5"
+                ],
+                "record_id": "a7814edb776ea55a888a47f5114058d4bf75f05748ca8fc46e75eb6a6497fefc"
+              },
+              {
+                "correct": [
+                  "A8",
+                  "B"
+                ],
+                "family_id": "family_24",
+                "predicted": [
+                  "A7",
+                  "D",
+                  "F"
+                ],
+                "record_id": "bb132fa8044b0dd3c41812dc033dd33108f16c62a8aac8768b6634b49b32e48e"
+              }
+            ]
+          },
+          "wrong": 23,
+          "wrong_correct_size_distribution": {
+            "2": 17,
+            "3": 6
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 8,
+            "2": 6,
+            "3": 8,
+            "4": 1
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 8,
+            "2|2": 1,
+            "2|3": 5,
+            "3|2": 8,
+            "4|3": 1
+          }
+        },
+        "before": {
+          "anomalies": {
+            "correct_not_a_list": 0,
+            "identical_set_different_order": 0,
+            "predicted_not_list_and_not_padding": 0
+          },
+          "cases": 30,
+          "categories": {
+            "extra_part": 6,
+            "missing_part": 10,
+            "mixed_missing_and_extra": 1,
+            "other": 0,
+            "padding_choice": 0,
+            "wrong_whole": 8
+          },
+          "correct": 5,
+          "examples_by_category": {
+            "extra_part": [
+              {
+                "correct": [
+                  "obj1",
+                  "obj6"
+                ],
+                "family_id": "family_03",
+                "predicted": [
+                  "obj1",
+                  "obj2",
+                  "obj6"
+                ],
+                "record_id": "9c56540ab8636453951714faa467381f9298e785c75a10ec1bb6308a597f3b76"
+              },
+              {
+                "correct": [
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "family_id": "family_06",
+                "predicted": [
+                  "alpha_1",
+                  "alpha_18",
+                  "alpha_19",
+                  "zeta_6"
+                ],
+                "record_id": "48b911fe382407a82e93d08ba06d3db332215a88dafb7726d3975ea5a894fade"
+              },
+              {
+                "correct": [
+                  "B",
+                  "D"
+                ],
+                "family_id": "family_17",
+                "predicted": [
+                  "A7",
+                  "B",
+                  "D"
+                ],
+                "record_id": "b135dd2381d9185687fbe080a2084c3eeac2f72780a863cd5c481ea8d84505a7"
+              },
+              {
+                "correct": [
+                  "obj110",
+                  "obj3",
+                  "obj5"
+                ],
+                "family_id": "family_23",
+                "predicted": [
+                  "obj110",
+                  "obj2",
+                  "obj3",
+                  "obj5"
+                ],
+                "record_id": "c51109ae2beed075dd72de3ee46fe7d2b5490bea0c17e09faf030bb1354460f7"
+              },
+              {
+                "correct": [
+                  "idea18",
+                  "idea5"
+                ],
+                "family_id": "family_25",
+                "predicted": [
+                  "idea18",
+                  "idea4",
+                  "idea5"
+                ],
+                "record_id": "4dc0bcb7a617a2631759d29b067ba628f1dfc4aafe48afd9822833aad0bcf3d4"
+              }
+            ],
+            "missing_part": [
+              {
+                "correct": [
+                  "obj2",
+                  "obj3",
+                  "obj6"
+                ],
+                "family_id": "family_01",
+                "predicted": [
+                  "obj2",
+                  "obj3"
+                ],
+                "record_id": "cbd14fe9c53dd7ec7330ea526f20359c7e669c5fa050a18fa9406aafb548da45"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea6"
+                ],
+                "family_id": "family_07",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "eeea9937047ae1d22638f45e6d89a2ef14fc4960af30b9d9107386c31eb620b2"
+              },
+              {
+                "correct": [
+                  "obj18",
+                  "obj2",
+                  "obj4"
+                ],
+                "family_id": "family_09",
+                "predicted": [
+                  "obj18",
+                  "obj2"
+                ],
+                "record_id": "5f71a30e3269cb4546f4274f06d261912ec72e28563d2d6bbfe2b81d6a76ea58"
+              },
+              {
+                "correct": [
+                  "idea2",
+                  "idea3",
+                  "idea5"
+                ],
+                "family_id": "family_11",
+                "predicted": [
+                  "idea2",
+                  "idea3"
+                ],
+                "record_id": "be794099d4b0b2deff70ebfbceab04f963f7eea93dcd3edaadfab504af5552ca"
+              },
+              {
+                "correct": [
+                  "alpha_1",
+                  "beta_2"
+                ],
+                "family_id": "family_16",
+                "predicted": [
+                  "alpha_1"
+                ],
+                "record_id": "598ef7e29c12b8dd48f31a53982c994c8f5ae215b70447d4033f0e44b85a8d89"
+              }
+            ],
+            "mixed_missing_and_extra": [
+              {
+                "correct": [
+                  "idea1",
+                  "idea17",
+                  "idea3"
+                ],
+                "family_id": "family_08",
+                "predicted": [
+                  "idea1",
+                  "idea17",
+                  "idea6"
+                ],
+                "record_id": "0ce13dd01578c09f1ff1d3c7517fca3c0542ec1975d7af914d002fd28e50499e"
+              }
+            ],
+            "wrong_whole": [
+              {
+                "correct": [
+                  "alpha_17",
+                  "delta_4"
+                ],
+                "family_id": "family_02",
+                "predicted": [
+                  "beta_2",
+                  "gamma_3"
+                ],
+                "record_id": "4a16573a59aa3c16563d6d38ed899d02efd308f68050dc50ea01c0fb7fabcc05"
+              },
+              {
+                "correct": [
+                  "obj3",
+                  "obj4"
+                ],
+                "family_id": "family_04",
+                "predicted": [
+                  "obj1",
+                  "obj6"
+                ],
+                "record_id": "6eea130f4ba4d8a3c758ac173c3d4a6c6ecf64b6d96fc1c96382d24e2ac05ad1"
+              },
+              {
+                "correct": [
+                  "obj1",
+                  "obj17"
+                ],
+                "family_id": "family_05",
+                "predicted": [
+                  "obj18",
+                  "obj4",
+                  "obj6"
+                ],
+                "record_id": "ac3f83154b13dc4b500fda07b879c323edbc07f24babfaab4401b8d78c8a54b9"
+              },
+              {
+                "correct": [
+                  "idea1",
+                  "idea18"
+                ],
+                "family_id": "family_13",
+                "predicted": [
+                  "idea4",
+                  "idea6"
+                ],
+                "record_id": "a3ea80c4bae53c04e186b46ffd73baf54147821c93f8db11f6692ed6f217f6fe"
+              },
+              {
+                "correct": [
+                  "idea3",
+                  "idea4"
+                ],
+                "family_id": "family_14",
+                "predicted": [
+                  "idea17",
+                  "idea2",
+                  "idea5"
+                ],
+                "record_id": "a7814edb776ea55a888a47f5114058d4bf75f05748ca8fc46e75eb6a6497fefc"
+              }
+            ]
+          },
+          "wrong": 25,
+          "wrong_correct_size_distribution": {
+            "2": 18,
+            "3": 7
+          },
+          "wrong_predicted_size_distribution": {
+            "1": 6,
+            "2": 8,
+            "3": 9,
+            "4": 2
+          },
+          "wrong_size_pair_distribution": {
+            "1|2": 6,
+            "2|2": 4,
+            "2|3": 4,
+            "3|2": 8,
+            "3|3": 1,
+            "4|3": 2
+          }
+        },
+        "learner_seed": 20260915
+      }
+    ],
+    "pooled": {
+      "after": {
+        "anomalies": {
+          "correct_not_a_list": 0,
+          "identical_set_different_order": 0,
+          "predicted_not_list_and_not_padding": 0
+        },
+        "cases": 90,
+        "categories": {
+          "extra_part": 22,
+          "missing_part": 34,
+          "mixed_missing_and_extra": 0,
+          "other": 0,
+          "padding_choice": 0,
+          "wrong_whole": 11
+        },
+        "correct": 23,
+        "wrong": 67,
+        "wrong_correct_size_distribution": {
+          "2": 49,
+          "3": 18
+        },
+        "wrong_predicted_size_distribution": {
+          "1": 19,
+          "2": 21,
+          "3": 24,
+          "4": 3
+        },
+        "wrong_size_pair_distribution": {
+          "1|2": 19,
+          "2|2": 6,
+          "2|3": 15,
+          "3|2": 24,
+          "4|3": 3
+        }
+      },
+      "before": {
+        "anomalies": {
+          "correct_not_a_list": 0,
+          "identical_set_different_order": 0,
+          "predicted_not_list_and_not_padding": 0
+        },
+        "cases": 90,
+        "categories": {
+          "extra_part": 15,
+          "missing_part": 36,
+          "mixed_missing_and_extra": 3,
+          "other": 0,
+          "padding_choice": 0,
+          "wrong_whole": 18
+        },
+        "correct": 18,
+        "wrong": 72,
+        "wrong_correct_size_distribution": {
+          "2": 54,
+          "3": 18
+        },
+        "wrong_predicted_size_distribution": {
+          "1": 26,
+          "2": 21,
+          "3": 20,
+          "4": 5
+        },
+        "wrong_size_pair_distribution": {
+          "1|2": 26,
+          "2|2": 11,
+          "2|3": 10,
+          "3|2": 17,
+          "3|3": 3,
+          "4|3": 5
+        }
+      }
+    }
+  },
+  "B_classification_contract": {
+    "categories_are_mutually_exclusive": true,
+    "find_shared_part_categories": [
+      "wrong_part",
+      "chose_none",
+      "other"
+    ],
+    "list_parts_categories": [
+      "missing_part",
+      "extra_part",
+      "mixed_missing_and_extra",
+      "wrong_whole",
+      "padding_choice",
+      "other"
+    ],
+    "practice_set_classification": {
+      "available": false,
+      "reason": "packet practice predictions rows carry ONLY record_id, op, correct; the predicted option string is not stored, so no practice error can be classified"
+    },
+    "reached_via_categories": [
+      "said_direct",
+      "said_absent",
+      "said_via",
+      "padding_choice",
+      "other"
+    ]
+  },
+  "B_other_ops_error_classification": {
+    "FIND_SHARED_PART": {
+      "per_candidate": [
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 16
+            },
+            "correct": 14,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "obj6",
+                  "family_id": "family_01",
+                  "predicted": "obj1",
+                  "record_id": "4610d1d9236bc1b2d197186f3f8d63f2a5fd12baa09825ad4d3100cf7d4048ed"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_02",
+                  "predicted": "alpha_1",
+                  "record_id": "b1d68838f9e994a931b17e8172c34c86689c8ceaa7675d353f3da43fd9d76abf"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_03",
+                  "predicted": "obj17",
+                  "record_id": "3660eea314985da367799e456754758cbfe1896d92f33708b173109c1d1e6cc2"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_04",
+                  "predicted": "obj1",
+                  "record_id": "1cc4af9aba215f5729c9c40fa36ce9bcb24422fdc8c2f8135e9190d135896fd0"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_05",
+                  "predicted": "obj17",
+                  "record_id": "0806b299ba89332e33312170418fb19f981774f4c1ca5ea09525cb85176af103"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 16
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 14
+            },
+            "correct": 16,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "none",
+                  "family_id": "family_02",
+                  "predicted": "alpha_1",
+                  "record_id": "b1d68838f9e994a931b17e8172c34c86689c8ceaa7675d353f3da43fd9d76abf"
+                },
+                {
+                  "correct": "zeta_6",
+                  "family_id": "family_06",
+                  "predicted": "alpha_1",
+                  "record_id": "d0e763e3c208c3f6cca82fa815ebb01e5b9af7c0739f679ccd7b56325c264fac"
+                },
+                {
+                  "correct": "idea6",
+                  "family_id": "family_07",
+                  "predicted": "idea18",
+                  "record_id": "aa6a5bdfba7845b3694fef708e99dbf2cb2e80f2b5167d3eb8535aa3fda4afa9"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_08",
+                  "predicted": "idea17",
+                  "record_id": "249712b097307a12950ab320f6ede2e92c4c78ff99690560f4e02ed16db3d129"
+                },
+                {
+                  "correct": "idea5",
+                  "family_id": "family_11",
+                  "predicted": "idea17",
+                  "record_id": "b786628c9740a1bc9601b57971e6e7275e5b414604cf8ebb679c738a6f7e08b5"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 14
+          },
+          "learner_seed": 20260913
+        },
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 15
+            },
+            "correct": 15,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "obj6",
+                  "family_id": "family_01",
+                  "predicted": "obj1",
+                  "record_id": "4610d1d9236bc1b2d197186f3f8d63f2a5fd12baa09825ad4d3100cf7d4048ed"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_02",
+                  "predicted": "alpha_1",
+                  "record_id": "b1d68838f9e994a931b17e8172c34c86689c8ceaa7675d353f3da43fd9d76abf"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_03",
+                  "predicted": "obj17",
+                  "record_id": "3660eea314985da367799e456754758cbfe1896d92f33708b173109c1d1e6cc2"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_04",
+                  "predicted": "obj18",
+                  "record_id": "1cc4af9aba215f5729c9c40fa36ce9bcb24422fdc8c2f8135e9190d135896fd0"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_05",
+                  "predicted": "obj17",
+                  "record_id": "0806b299ba89332e33312170418fb19f981774f4c1ca5ea09525cb85176af103"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 15
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 19
+            },
+            "correct": 11,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "obj6",
+                  "family_id": "family_01",
+                  "predicted": "obj1",
+                  "record_id": "4610d1d9236bc1b2d197186f3f8d63f2a5fd12baa09825ad4d3100cf7d4048ed"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_04",
+                  "predicted": "obj18",
+                  "record_id": "1cc4af9aba215f5729c9c40fa36ce9bcb24422fdc8c2f8135e9190d135896fd0"
+                },
+                {
+                  "correct": "idea6",
+                  "family_id": "family_07",
+                  "predicted": "idea17",
+                  "record_id": "aa6a5bdfba7845b3694fef708e99dbf2cb2e80f2b5167d3eb8535aa3fda4afa9"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_08",
+                  "predicted": "idea17",
+                  "record_id": "249712b097307a12950ab320f6ede2e92c4c78ff99690560f4e02ed16db3d129"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_09",
+                  "predicted": "obj18",
+                  "record_id": "c9366b00e057eb80b620d0fdcf6f558309afaebd410f3908d7c7c333f211b561"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 19
+          },
+          "learner_seed": 20260914
+        },
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 15
+            },
+            "correct": 15,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "obj6",
+                  "family_id": "family_01",
+                  "predicted": "obj1",
+                  "record_id": "4610d1d9236bc1b2d197186f3f8d63f2a5fd12baa09825ad4d3100cf7d4048ed"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_02",
+                  "predicted": "alpha_1",
+                  "record_id": "b1d68838f9e994a931b17e8172c34c86689c8ceaa7675d353f3da43fd9d76abf"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_03",
+                  "predicted": "obj17",
+                  "record_id": "3660eea314985da367799e456754758cbfe1896d92f33708b173109c1d1e6cc2"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_04",
+                  "predicted": "obj1",
+                  "record_id": "1cc4af9aba215f5729c9c40fa36ce9bcb24422fdc8c2f8135e9190d135896fd0"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_05",
+                  "predicted": "obj17",
+                  "record_id": "0806b299ba89332e33312170418fb19f981774f4c1ca5ea09525cb85176af103"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 15
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "chose_none": 0,
+              "other": 0,
+              "wrong_part": 27
+            },
+            "correct": 3,
+            "examples_by_category": {
+              "wrong_part": [
+                {
+                  "correct": "obj6",
+                  "family_id": "family_01",
+                  "predicted": "obj2",
+                  "record_id": "4610d1d9236bc1b2d197186f3f8d63f2a5fd12baa09825ad4d3100cf7d4048ed"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_02",
+                  "predicted": "alpha_1",
+                  "record_id": "b1d68838f9e994a931b17e8172c34c86689c8ceaa7675d353f3da43fd9d76abf"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_03",
+                  "predicted": "obj1",
+                  "record_id": "3660eea314985da367799e456754758cbfe1896d92f33708b173109c1d1e6cc2"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_04",
+                  "predicted": "obj1",
+                  "record_id": "1cc4af9aba215f5729c9c40fa36ce9bcb24422fdc8c2f8135e9190d135896fd0"
+                },
+                {
+                  "correct": "none",
+                  "family_id": "family_05",
+                  "predicted": "obj1",
+                  "record_id": "0806b299ba89332e33312170418fb19f981774f4c1ca5ea09525cb85176af103"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 27
+          },
+          "learner_seed": 20260915
+        }
+      ],
+      "pooled": {
+        "after": {
+          "cases": 90,
+          "categories": {
+            "chose_none": 0,
+            "other": 0,
+            "wrong_part": 46
+          },
+          "correct": 44,
+          "other_breakdown": {},
+          "wrong": 46
+        },
+        "before": {
+          "cases": 90,
+          "categories": {
+            "chose_none": 0,
+            "other": 0,
+            "wrong_part": 60
+          },
+          "correct": 30,
+          "other_breakdown": {},
+          "wrong": 60
+        }
+      }
+    },
+    "REACHED_VIA": {
+      "per_candidate": [
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 8,
+              "said_direct": 1,
+              "said_via": 7
+            },
+            "correct": 14,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_07",
+                  "predicted": "absent",
+                  "record_id": "80eaf5cecbcf60bba5046adca26a5833a57853e57a3c720ee57f36463e2fd37c"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_08",
+                  "predicted": "absent",
+                  "record_id": "7122c13ba0210b91650ae213aa887be294ee3aa8d5bdaba69a346ce827f78b65"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "absent",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_13",
+                  "predicted": "absent",
+                  "record_id": "b51aa70ab2ad37a22925136e9aa3e9afc67fc0aaf8779c18b0d1033c8797ad5e"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "absent",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "via:beta_2",
+                  "family_id": "family_16",
+                  "predicted": "direct",
+                  "record_id": "6c0c08b54b1fcadd7529dd23b1782b1308fb37e06e12c50d7d9e8a70115fa0a7"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "via:obj2",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_05",
+                  "predicted": "via:obj18",
+                  "record_id": "b3d442d4d173af92e2cdb6f95e470e6efc8de2490aa2e1e8a02736de71758700"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_06",
+                  "predicted": "via:alpha_1",
+                  "record_id": "fafff3694ecb71635d7e74714534fc6a11d2809e808f4aa5050e0356a1100054"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "via:obj18",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_12",
+                  "predicted": "via:obj17",
+                  "record_id": "17790ca7c40cce1816c19ee66534df91c03dce20611d647053c59745109b9f34"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 16
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 9,
+              "said_direct": 8,
+              "said_via": 5
+            },
+            "correct": 8,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "direct",
+                  "family_id": "family_02",
+                  "predicted": "absent",
+                  "record_id": "e3b8e7a559774fdb38006d5f98f9f8f9f4b2cb22ba4411572d81d8772d4caa18"
+                },
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_07",
+                  "predicted": "absent",
+                  "record_id": "80eaf5cecbcf60bba5046adca26a5833a57853e57a3c720ee57f36463e2fd37c"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "absent",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_13",
+                  "predicted": "absent",
+                  "record_id": "b51aa70ab2ad37a22925136e9aa3e9afc67fc0aaf8779c18b0d1033c8797ad5e"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "absent",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_01",
+                  "predicted": "direct",
+                  "record_id": "88b39a59b85d35a0c9d25307db9e675447a3e99da1f9d8bda9ead8c11efc5cb1"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "direct",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_04",
+                  "predicted": "direct",
+                  "record_id": "816177e90f686740de76ef60b93ffcdd4ab6fe7cb6486267e64cf7f50fdc582e"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "direct",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                },
+                {
+                  "correct": "via:obj3",
+                  "family_id": "family_10",
+                  "predicted": "direct",
+                  "record_id": "fb32f4c27c2343d09d73b8538b2e0b4ad49d54b3869a77d132375f873a6523f1"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "absent",
+                  "family_id": "family_06",
+                  "predicted": "via:alpha_1",
+                  "record_id": "fafff3694ecb71635d7e74714534fc6a11d2809e808f4aa5050e0356a1100054"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_08",
+                  "predicted": "via:idea1",
+                  "record_id": "7122c13ba0210b91650ae213aa887be294ee3aa8d5bdaba69a346ce827f78b65"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_18",
+                  "predicted": "via:idea18",
+                  "record_id": "576943fd5b2cf57e76e0364d1f3fa18b2eda81123b032e41fcce8b9af69ce200"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_29",
+                  "predicted": "via:idea1",
+                  "record_id": "bffd974fc71bfc37d2575de5d51636e4d9680eebda43cab8b9eac08990165ef9"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_30",
+                  "predicted": "via:A7",
+                  "record_id": "88450d9f954ee9b27df386a0465c241aee9b9d7ff6163f9b2e1cff928264ed69"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 22
+          },
+          "learner_seed": 20260913
+        },
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 8,
+              "said_direct": 6,
+              "said_via": 5
+            },
+            "correct": 11,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_07",
+                  "predicted": "absent",
+                  "record_id": "80eaf5cecbcf60bba5046adca26a5833a57853e57a3c720ee57f36463e2fd37c"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_08",
+                  "predicted": "absent",
+                  "record_id": "7122c13ba0210b91650ae213aa887be294ee3aa8d5bdaba69a346ce827f78b65"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "absent",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_13",
+                  "predicted": "absent",
+                  "record_id": "b51aa70ab2ad37a22925136e9aa3e9afc67fc0aaf8779c18b0d1033c8797ad5e"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "absent",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_01",
+                  "predicted": "direct",
+                  "record_id": "88b39a59b85d35a0c9d25307db9e675447a3e99da1f9d8bda9ead8c11efc5cb1"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "direct",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_04",
+                  "predicted": "direct",
+                  "record_id": "816177e90f686740de76ef60b93ffcdd4ab6fe7cb6486267e64cf7f50fdc582e"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_06",
+                  "predicted": "direct",
+                  "record_id": "fafff3694ecb71635d7e74714534fc6a11d2809e808f4aa5050e0356a1100054"
+                },
+                {
+                  "correct": "via:beta_2",
+                  "family_id": "family_16",
+                  "predicted": "direct",
+                  "record_id": "6c0c08b54b1fcadd7529dd23b1782b1308fb37e06e12c50d7d9e8a70115fa0a7"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "direct",
+                  "family_id": "family_05",
+                  "predicted": "via:obj18",
+                  "record_id": "b3d442d4d173af92e2cdb6f95e470e6efc8de2490aa2e1e8a02736de71758700"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "via:obj18",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_12",
+                  "predicted": "via:obj17",
+                  "record_id": "17790ca7c40cce1816c19ee66534df91c03dce20611d647053c59745109b9f34"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_15",
+                  "predicted": "via:obj4",
+                  "record_id": "71456a4c59f7656c967673fa50375f518fcd384f057303bcd4bb6298d00d5d3f"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_20",
+                  "predicted": "via:obj1",
+                  "record_id": "6eaed855f114a19533a0f695539edd292249037aafe9e7d3538e037319592235"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 19
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 6,
+              "said_direct": 9,
+              "said_via": 7
+            },
+            "correct": 8,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "direct",
+                  "family_id": "family_02",
+                  "predicted": "absent",
+                  "record_id": "e3b8e7a559774fdb38006d5f98f9f8f9f4b2cb22ba4411572d81d8772d4caa18"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_17",
+                  "predicted": "absent",
+                  "record_id": "46cffc885fe94d8897fd8da11dd7d2a6d9047a363cc8360132f3df2227afe2e9"
+                },
+                {
+                  "correct": "via:epsilon_5",
+                  "family_id": "family_19",
+                  "predicted": "absent",
+                  "record_id": "7f8768c61e3b6722a52ce3336051e392a00f2be05cfed46a404a2b201253a95c"
+                },
+                {
+                  "correct": "via:epsilon_5",
+                  "family_id": "family_22",
+                  "predicted": "absent",
+                  "record_id": "d46d2f08e9e249732479a8569d963002950a69277ed65b508693f2085fcf0280"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_26",
+                  "predicted": "absent",
+                  "record_id": "2b8726d7186f0d777f17f1fe5348eaae42f14b0b45b321d6e59831ff6d30a84c"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_01",
+                  "predicted": "direct",
+                  "record_id": "88b39a59b85d35a0c9d25307db9e675447a3e99da1f9d8bda9ead8c11efc5cb1"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "direct",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_04",
+                  "predicted": "direct",
+                  "record_id": "816177e90f686740de76ef60b93ffcdd4ab6fe7cb6486267e64cf7f50fdc582e"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "direct",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                },
+                {
+                  "correct": "via:obj3",
+                  "family_id": "family_10",
+                  "predicted": "direct",
+                  "record_id": "fb32f4c27c2343d09d73b8538b2e0b4ad49d54b3869a77d132375f873a6523f1"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "direct",
+                  "family_id": "family_08",
+                  "predicted": "via:idea1",
+                  "record_id": "7122c13ba0210b91650ae213aa887be294ee3aa8d5bdaba69a346ce827f78b65"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "via:idea17",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "via:idea1",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_18",
+                  "predicted": "via:idea18",
+                  "record_id": "576943fd5b2cf57e76e0364d1f3fa18b2eda81123b032e41fcce8b9af69ce200"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_21",
+                  "predicted": "via:A",
+                  "record_id": "009a5b7a95c33241c4980167165837d13d44df8a1e395b5c77e8a0f6389fa111"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 22
+          },
+          "learner_seed": 20260914
+        },
+        {
+          "after": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 6,
+              "said_direct": 4,
+              "said_via": 6
+            },
+            "correct": 14,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_07",
+                  "predicted": "absent",
+                  "record_id": "80eaf5cecbcf60bba5046adca26a5833a57853e57a3c720ee57f36463e2fd37c"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "absent",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_13",
+                  "predicted": "absent",
+                  "record_id": "b51aa70ab2ad37a22925136e9aa3e9afc67fc0aaf8779c18b0d1033c8797ad5e"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "absent",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_17",
+                  "predicted": "absent",
+                  "record_id": "46cffc885fe94d8897fd8da11dd7d2a6d9047a363cc8360132f3df2227afe2e9"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "absent",
+                  "family_id": "family_06",
+                  "predicted": "direct",
+                  "record_id": "fafff3694ecb71635d7e74714534fc6a11d2809e808f4aa5050e0356a1100054"
+                },
+                {
+                  "correct": "via:beta_2",
+                  "family_id": "family_16",
+                  "predicted": "direct",
+                  "record_id": "6c0c08b54b1fcadd7529dd23b1782b1308fb37e06e12c50d7d9e8a70115fa0a7"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_27",
+                  "predicted": "direct",
+                  "record_id": "c4f873ecbcb80e949d9024ea06543bb271ebbca129483dbc6471384ad690b66a"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_30",
+                  "predicted": "direct",
+                  "record_id": "88450d9f954ee9b27df386a0465c241aee9b9d7ff6163f9b2e1cff928264ed69"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "via:obj2",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_05",
+                  "predicted": "via:obj18",
+                  "record_id": "b3d442d4d173af92e2cdb6f95e470e6efc8de2490aa2e1e8a02736de71758700"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "via:obj18",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_12",
+                  "predicted": "via:obj17",
+                  "record_id": "17790ca7c40cce1816c19ee66534df91c03dce20611d647053c59745109b9f34"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_15",
+                  "predicted": "via:obj4",
+                  "record_id": "71456a4c59f7656c967673fa50375f518fcd384f057303bcd4bb6298d00d5d3f"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 16
+          },
+          "before": {
+            "cases": 30,
+            "categories": {
+              "other": 0,
+              "padding_choice": 0,
+              "said_absent": 3,
+              "said_direct": 13,
+              "said_via": 5
+            },
+            "correct": 9,
+            "examples_by_category": {
+              "said_absent": [
+                {
+                  "correct": "via:idea6",
+                  "family_id": "family_07",
+                  "predicted": "absent",
+                  "record_id": "80eaf5cecbcf60bba5046adca26a5833a57853e57a3c720ee57f36463e2fd37c"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_14",
+                  "predicted": "absent",
+                  "record_id": "f2c1358d2179fbf3cd09569fadb63894da911498f528bdc0738e393546376d15"
+                },
+                {
+                  "correct": "direct",
+                  "family_id": "family_17",
+                  "predicted": "absent",
+                  "record_id": "46cffc885fe94d8897fd8da11dd7d2a6d9047a363cc8360132f3df2227afe2e9"
+                }
+              ],
+              "said_direct": [
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_01",
+                  "predicted": "direct",
+                  "record_id": "88b39a59b85d35a0c9d25307db9e675447a3e99da1f9d8bda9ead8c11efc5cb1"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_03",
+                  "predicted": "direct",
+                  "record_id": "9b9c53edd421c72ec2020114381e9257b54be300a6544409005334ebacd02cc5"
+                },
+                {
+                  "correct": "via:obj6",
+                  "family_id": "family_04",
+                  "predicted": "direct",
+                  "record_id": "816177e90f686740de76ef60b93ffcdd4ab6fe7cb6486267e64cf7f50fdc582e"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_06",
+                  "predicted": "direct",
+                  "record_id": "fafff3694ecb71635d7e74714534fc6a11d2809e808f4aa5050e0356a1100054"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_09",
+                  "predicted": "direct",
+                  "record_id": "6279bb9177e799440a56d3e287b9d34f2edfda529b7ffb83ff6853dbb672594b"
+                }
+              ],
+              "said_via": [
+                {
+                  "correct": "direct",
+                  "family_id": "family_11",
+                  "predicted": "via:idea17",
+                  "record_id": "71007ea1a76d35be0a67fb828d3eca9c3b956b063efac34a7f774f9e888cae86"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_18",
+                  "predicted": "via:idea18",
+                  "record_id": "576943fd5b2cf57e76e0364d1f3fa18b2eda81123b032e41fcce8b9af69ce200"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_21",
+                  "predicted": "via:A",
+                  "record_id": "009a5b7a95c33241c4980167165837d13d44df8a1e395b5c77e8a0f6389fa111"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_24",
+                  "predicted": "via:A",
+                  "record_id": "501acf30dfac2f0b642e6b06a3d1b032ca214da95842a7b1f98b48bec044a278"
+                },
+                {
+                  "correct": "absent",
+                  "family_id": "family_27",
+                  "predicted": "via:E",
+                  "record_id": "c4f873ecbcb80e949d9024ea06543bb271ebbca129483dbc6471384ad690b66a"
+                }
+              ]
+            },
+            "other_breakdown": {},
+            "wrong": 21
+          },
+          "learner_seed": 20260915
+        }
+      ],
+      "pooled": {
+        "after": {
+          "cases": 90,
+          "categories": {
+            "other": 0,
+            "padding_choice": 0,
+            "said_absent": 22,
+            "said_direct": 11,
+            "said_via": 18
+          },
+          "correct": 39,
+          "other_breakdown": {},
+          "wrong": 51
+        },
+        "before": {
+          "cases": 90,
+          "categories": {
+            "other": 0,
+            "padding_choice": 0,
+            "said_absent": 18,
+            "said_direct": 30,
+            "said_via": 17
+          },
+          "correct": 25,
+          "other_breakdown": {},
+          "wrong": 65
+        }
+      }
+    }
+  },
+  "C_correct_option_availability_and_position": {
+    "availability_on_wrong_cases": {
+      "anomaly_examples": [],
+      "correct_absent_from_record_options": 0,
+      "correct_duplicated_in_record_options": 0,
+      "correct_present_exactly_once_in_record_options": 361,
+      "per_op": {
+        "FIND_SHARED_PART": {
+          "correct_present_exactly_once": 106,
+          "wrong_cases": 106
+        },
+        "LIST_PARTS": {
+          "correct_present_exactly_once": 139,
+          "wrong_cases": 139
+        },
+        "REACHED_VIA": {
+          "correct_present_exactly_once": 116,
+          "wrong_cases": 116
+        }
+      },
+      "wrong_cases_checked": 361
+    },
+    "encoded_correct_index_panel": {
+      "distribution": {
+        "0": 26,
+        "1": 32,
+        "2": 32
+      },
+      "encoded_options_at_index_equals_correct_mismatches": 0,
+      "padding_slots_per_encoded_option_list": {
+        "0": 90
+      },
+      "per_op": {
+        "FIND_SHARED_PART": {
+          "0": 7,
+          "1": 8,
+          "2": 15
+        },
+        "LIST_PARTS": {
+          "0": 9,
+          "1": 12,
+          "2": 9
+        },
+        "REACHED_VIA": {
+          "0": 10,
+          "1": 12,
+          "2": 8
+        }
+      },
+      "records": 90
+    },
+    "encoded_correct_index_teaching": {
+      "distribution": {
+        "0": 12,
+        "1": 13,
+        "2": 5
+      },
+      "encoded_options_at_index_equals_correct_mismatches": 0,
+      "padding_slots_per_encoded_option_list": {
+        "0": 30
+      },
+      "per_op": {
+        "FIND_SHARED_PART": {
+          "0": 5,
+          "1": 4,
+          "2": 1
+        },
+        "LIST_PARTS": {
+          "0": 5,
+          "1": 4,
+          "2": 1
+        },
+        "REACHED_VIA": {
+          "0": 2,
+          "1": 5,
+          "2": 3
+        }
+      },
+      "records": 30
+    },
+    "source": "adapter.public_records(record, 'cas')['encoded_correct_index']"
+  },
+  "D_coverage_comparison": {
+    "distractor_option_count": {
+      "panel": {
+        "FIND_SHARED_PART": {
+          "2": 30
+        },
+        "LIST_PARTS": {
+          "2": 30
+        },
+        "REACHED_VIA": {
+          "2": 30
+        }
+      },
+      "teaching": {
+        "FIND_SHARED_PART": {
+          "2": 10
+        },
+        "LIST_PARTS": {
+          "2": 10
+        },
+        "REACHED_VIA": {
+          "2": 10
+        }
+      }
+    },
+    "find_shared_part_answer_kind": {
+      "panel": {
+        "none": 21,
+        "part_label": 9
+      },
+      "teaching": {
+        "none": 3,
+        "part_label": 7
+      }
+    },
+    "find_shared_part_option_composition": {
+      "panel": {
+        "cases": 30,
+        "cases_all_options_equal_character_length": 1,
+        "cases_answer_is_none": 21,
+        "cases_answer_is_none_and_none_is_an_option": 21,
+        "cases_with_none_among_options": 21
+      },
+      "teaching": {
+        "cases": 10,
+        "cases_all_options_equal_character_length": 0,
+        "cases_answer_is_none": 3,
+        "cases_answer_is_none_and_none_is_an_option": 3,
+        "cases_with_none_among_options": 3
+      }
+    },
+    "graph_size": {
+      "panel": {
+        "distinct_graphs": 30,
+        "node_count_distribution": {
+          "10": 6,
+          "8": 84
+        },
+        "records": 90,
+        "relation_count_distribution": {
+          "6": 54,
+          "8": 30,
+          "9": 6
+        }
+      },
+      "teaching": {
+        "distinct_graphs": 5,
+        "node_count_distribution": {
+          "10": 6,
+          "8": 12,
+          "9": 12
+        },
+        "records": 30,
+        "relation_count_distribution": {
+          "6": 6,
+          "7": 12,
+          "8": 6,
+          "9": 6
+        }
+      }
+    },
+    "label_coverage": {
+      "answer_labels": {
+        "panel_distinct": 42,
+        "panel_labels_absent_from_teaching_count": 23,
+        "panel_labels_absent_from_teaching_examples": [
+          "A",
+          "C",
+          "D",
+          "E",
+          "alpha_18",
+          "beta_2",
+          "idea5",
+          "obj1",
+          "obj110",
+          "obj17",
+          "obj18",
+          "obj2",
+          "obj3",
+          "obj4",
+          "obj5",
+          "obj6",
+          "via:beta_2",
+          "via:epsilon_5",
+          "via:idea5",
+          "via:idea6"
+        ],
+        "shared": 19,
+        "teaching_distinct": 22,
+        "teaching_labels_absent_from_panel_count": 3,
+        "teaching_labels_absent_from_panel_examples": [
+          "A9",
+          "F",
+          "via:alpha_1"
+        ]
+      },
+      "node_labels": {
+        "panel_distinct": 36,
+        "panel_labels_absent_from_teaching_count": 10,
+        "panel_labels_absent_from_teaching_examples": [
+          "obj1",
+          "obj110",
+          "obj17",
+          "obj18",
+          "obj19",
+          "obj2",
+          "obj3",
+          "obj4",
+          "obj5",
+          "obj6"
+        ],
+        "shared": 26,
+        "teaching_distinct": 28,
+        "teaching_labels_absent_from_panel_count": 2,
+        "teaching_labels_absent_from_panel_examples": [
+          "A9",
+          "idea19"
+        ]
+      },
+      "option_labels": {
+        "panel_distinct": 57,
+        "panel_labels_absent_from_teaching_count": 32,
+        "panel_labels_absent_from_teaching_examples": [
+          "A",
+          "D",
+          "alpha_18",
+          "beta_2",
+          "gamma_3",
+          "obj1",
+          "obj110",
+          "obj17",
+          "obj18",
+          "obj2",
+          "obj3",
+          "obj4",
+          "obj5",
+          "obj6",
+          "via:A",
+          "via:A7",
+          "via:B",
+          "via:E",
+          "via:alpha_17",
+          "via:beta_2"
+        ],
+        "shared": 25,
+        "teaching_distinct": 29,
+        "teaching_labels_absent_from_panel_count": 4,
+        "teaching_labels_absent_from_panel_examples": [
+          "A9",
+          "alpha_110",
+          "via:C",
+          "via:idea3"
+        ]
+      }
+    },
+    "list_parts_answer_size": {
+      "panel": {
+        "2": 22,
+        "3": 8
+      },
+      "teaching": {
+        "2": 5,
+        "3": 5
+      }
+    },
+    "list_parts_direct_parts_of_questioned_idea": {
+      "cases_where_count_differs_from_len_correct": {
+        "panel": 0,
+        "teaching": 0
+      },
+      "panel": {
+        "2": 22,
+        "3": 8
+      },
+      "teaching": {
+        "2": 5,
+        "3": 5
+      }
+    },
+    "list_parts_option_structure": {
+      "panel": {
+        "cases": 30,
+        "cases_all_three_options_are_lists": 30,
+        "cases_with_a_disjoint_distractor": 13,
+        "cases_with_a_distractor_strictly_longer_than_correct": 19,
+        "cases_with_a_distractor_strictly_shorter_than_correct": 30,
+        "cases_with_a_strict_subset_distractor": 30,
+        "cases_with_a_strict_superset_distractor": 15,
+        "competing_options_that_are_lists_total": 60,
+        "correct_option_is_max_length": 11,
+        "correct_option_is_min_length": 0,
+        "correct_option_position_by_length": {
+          "strictly_middle": 19,
+          "tied_longest": 11
+        },
+        "distractor_relation_to_correct_total": {
+          "disjoint_from_correct": 13,
+          "partial_overlap_with_correct": 2,
+          "strict_subset_of_correct": 30,
+          "strict_superset_of_correct": 15
+        },
+        "option_length_spread_distribution": {
+          "1": 11,
+          "2": 19
+        }
+      },
+      "teaching": {
+        "cases": 10,
+        "cases_all_three_options_are_lists": 10,
+        "cases_with_a_disjoint_distractor": 5,
+        "cases_with_a_distractor_strictly_longer_than_correct": 6,
+        "cases_with_a_distractor_strictly_shorter_than_correct": 10,
+        "cases_with_a_strict_subset_distractor": 10,
+        "cases_with_a_strict_superset_distractor": 5,
+        "competing_options_that_are_lists_total": 20,
+        "correct_option_is_max_length": 4,
+        "correct_option_is_min_length": 0,
+        "correct_option_position_by_length": {
+          "strictly_middle": 6,
+          "tied_longest": 4
+        },
+        "distractor_relation_to_correct_total": {
+          "disjoint_from_correct": 5,
+          "strict_subset_of_correct": 10,
+          "strict_superset_of_correct": 5
+        },
+        "option_length_spread_distribution": {
+          "1": 4,
+          "2": 6
+        }
+      }
+    },
+    "option_count": {
+      "panel": {
+        "FIND_SHARED_PART": {
+          "3": 30
+        },
+        "LIST_PARTS": {
+          "3": 30
+        },
+        "REACHED_VIA": {
+          "3": 30
+        }
+      },
+      "teaching": {
+        "FIND_SHARED_PART": {
+          "3": 10
+        },
+        "LIST_PARTS": {
+          "3": 10
+        },
+        "REACHED_VIA": {
+          "3": 10
+        }
+      }
+    },
+    "reached_via_answer_label": {
+      "panel": {
+        "absent": 10,
+        "direct": 10,
+        "via": 10
+      },
+      "teaching": {
+        "absent": 4,
+        "direct": 5,
+        "via": 1
+      }
+    },
+    "shortcut_observed_choices": {
+      "per_candidate": [
+        {
+          "after": {
+            "chosen_was_longest": 11,
+            "chosen_was_shortest": 13,
+            "wrong_cases": 24
+          },
+          "before": {
+            "chosen_was_longest": 11,
+            "chosen_was_shortest": 14,
+            "wrong_cases": 25
+          },
+          "learner_seed": 20260913
+        },
+        {
+          "after": {
+            "chosen_was_longest": 12,
+            "chosen_was_shortest": 8,
+            "wrong_cases": 20
+          },
+          "before": {
+            "chosen_was_longest": 10,
+            "chosen_was_shortest": 12,
+            "wrong_cases": 22
+          },
+          "learner_seed": 20260914
+        },
+        {
+          "after": {
+            "chosen_was_longest": 10,
+            "chosen_was_shortest": 13,
+            "wrong_cases": 23
+          },
+          "before": {
+            "chosen_was_longest": 15,
+            "chosen_was_shortest": 10,
+            "wrong_cases": 25
+          },
+          "learner_seed": 20260915
+        }
+      ],
+      "pooled": {
+        "chosen_was_longest": 69,
+        "chosen_was_shortest": 70,
+        "wrong_cases": 139
+      }
+    },
+    "token_coverage": {
+      "lossless_by_construction": "features_v2 LosslessPublicTokenizer has a fixed 256-byte UTF-8 fallback vocabulary and no UNK token; every unit is encodable, so 'unknown token' does not exist and out-of-vocabulary ids are verified to be 0 rather than assumed",
+      "panel": {
+        "cases_with_at_least_one_unseen_unit": 33,
+        "distinct_unseen_units": 10,
+        "max_sequence_length": 518,
+        "min_sequence_length": 294,
+        "records": 90,
+        "token_ids_outside_fitted_vocabulary": 0,
+        "total_token_ids": 31549,
+        "unseen_unit_examples": {
+          "obj1": 130,
+          "obj110": 10,
+          "obj17": 97,
+          "obj18": 98,
+          "obj19": 6,
+          "obj2": 118,
+          "obj3": 110,
+          "obj4": 89,
+          "obj5": 116,
+          "obj6": 117
+        },
+        "unseen_unit_occurrences": 891
+      },
+      "teaching": {
+        "cases_with_at_least_one_unseen_unit": 0,
+        "distinct_unseen_units": 0,
+        "max_sequence_length": 386,
+        "min_sequence_length": 294,
+        "records": 30,
+        "token_ids_outside_fitted_vocabulary": 0,
+        "total_token_ids": 9953,
+        "unseen_unit_examples": {},
+        "unseen_unit_occurrences": 0
+      },
+      "tokenizer": {
+        "fit_source": "30 teaching records, arm 'cas' (matches the frozen encoder fit)",
+        "fitted_examples": 30,
+        "fitted_public_sha256": "8d32370e04dea943b3a7700219a2abe13a4a542106a7cb5973b9d6b69d5c3f4b",
+        "fixed_vocabulary_size": 261,
+        "lexical_vocabulary_size": 112,
+        "max_length": 1024,
+        "vocabulary_size": 373
+      }
+    }
+  },
+  "E_unavailable": [
+    {
+      "detail": "packet practice rows store only record_id, op, correct (30 rows per candidate/phase); no predicted option string is stored, so practice errors cannot be classified or sized",
+      "item": "practice-set predicted option strings",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "follows from the missing practice predicted strings",
+      "item": "practice-set wrong-answer categories and predicted sizes",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "the packet stores only the argmax option per case; no score vector, logit, or probability is persisted",
+      "item": "per-option readout scores / logits / softmax probabilities",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "only the selected option is stored",
+      "item": "option ranking beyond the argmax (2nd/3rd preference, ties)",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "no forward-pass state is persisted; only parameter digests (initial/trained checkpoint identity) and the containment change list are stored",
+      "item": "model internals (activations, embeddings, attention, module tensors)",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "the packet stores permitted/frozen parameter NAMES and parameter digests, never tensors; the baseline row states the run-005 weights were never written to evidence",
+      "item": "optimizer state (AdamW moments, per-parameter values)",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "only trained_checkpoint_identity digests are stored",
+      "item": "trained weights for any candidate",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "history is sampled every 8 optimizer steps (9 points: 0,8,...,64); the intermediate steps are not stored",
+      "item": "per-step training loss curve",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "not persisted in the packet, but exactly reconstructible from the deterministic generators plus the fitted tokenizer (computed in section D)",
+      "item": "per-case token counts and encoded public inputs as stored artifacts",
+      "status": "DERIVED_ONLY"
+    },
+    {
+      "detail": "not persisted per case; deterministically reconstructible via adapter.public_records(record, 'cas')",
+      "item": "per-case encoded option order",
+      "status": "DERIVED_ONLY"
+    },
+    {
+      "detail": "no per-case or per-step timing is stored",
+      "item": "per-case wall-clock timings",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "detail": "only encoder_identity (a digest of the frozen projection) is stored; the tokenizer is refitted here from the 30 teaching publics, matching the frozen fit source",
+      "item": "tokenizer artifact for the run",
+      "status": "DERIVED_ONLY"
+    }
+  ],
+  "boundaries": {
+    "cached_on_disk": false,
+    "causal_claims_made": false,
+    "deterministic": true,
+    "network_used": false,
+    "read_only": true,
+    "torch_imported": false,
+    "training_performed": false
+  },
+  "checks": {
+    "build_panel_verification": {
+      "built_case_count": 90,
+      "built_panel_digest": "32f027d2da34c3e24b9f5cac8617944eed54b0818b90e4ad88212c6ed30d2e48",
+      "overlap_with_sealed_panel_record_ids": 36,
+      "same_order": false,
+      "status": "mismatch"
+    },
+    "candidates": 3,
+    "learner_seeds": [
+      20260913,
+      20260914,
+      20260915
+    ],
+    "packet_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/graph6_confirmation_result.json",
+    "packet_sha256": "8a313f3d39a42443a2d00bcb4f4f00a3d71de8763f59098e057e4fc4951105f4",
+    "panel_case_count": 90,
+    "panel_cases_per_op": {
+      "FIND_SHARED_PART": 30,
+      "LIST_PARTS": 30,
+      "REACHED_VIA": 30
+    },
+    "panel_digest_recomputed": "c709877fc11c8d339ea9e13c69a9928ade25de3c9f27f964680573615127f771",
+    "panel_family_count": 30,
+    "panel_reach_label_counts": {
+      "absent": 10,
+      "direct": 10,
+      "via": 10
+    },
+    "panel_record_ids_equal_sealed_panel": true,
+    "panel_record_ids_same_order_as_sealed_panel": true,
+    "panel_record_recovery": {
+      "missing": [],
+      "recovered": 90,
+      "requested": 90,
+      "source": "fresh_panel family-seed region + lessons._whole_part_exercises, matched on record_id"
+    },
+    "panel_seed": 20260920,
+    "practice_prediction_rows": [
+      {
+        "learner_seed": 20260913,
+        "phase": "before",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      },
+      {
+        "learner_seed": 20260913,
+        "phase": "after",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      },
+      {
+        "learner_seed": 20260914,
+        "phase": "before",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      },
+      {
+        "learner_seed": 20260914,
+        "phase": "after",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      },
+      {
+        "learner_seed": 20260915,
+        "phase": "before",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      },
+      {
+        "learner_seed": 20260915,
+        "phase": "after",
+        "predicted_string_present": false,
+        "row_fields": [
+          "correct",
+          "op",
+          "record_id"
+        ],
+        "rows": 30
+      }
+    ],
+    "recomputed_from_packet": {
+      "20260913:after": {
+        "all_record_ids_in_panel": true,
+        "correct": 34,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 14
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 6
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 14
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      },
+      "20260913:before": {
+        "all_record_ids_in_panel": true,
+        "correct": 29,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 16
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 5
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 8
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      },
+      "20260914:after": {
+        "all_record_ids_in_panel": true,
+        "correct": 36,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 15
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 10
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 11
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      },
+      "20260914:before": {
+        "all_record_ids_in_panel": true,
+        "correct": 27,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 11
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 8
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 8
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      },
+      "20260915:after": {
+        "all_record_ids_in_panel": true,
+        "correct": 36,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 15
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 7
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 14
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      },
+      "20260915:before": {
+        "all_record_ids_in_panel": true,
+        "correct": 17,
+        "packet_correct_match": true,
+        "packet_per_op_match": true,
+        "panel_digest_matches": true,
+        "per_op": {
+          "FIND_SHARED_PART": {
+            "attempted": 30,
+            "correct": 3
+          },
+          "LIST_PARTS": {
+            "attempted": 30,
+            "correct": 5
+          },
+          "REACHED_VIA": {
+            "attempted": 30,
+            "correct": 9
+          }
+        },
+        "results": 90,
+        "row_order_matches_panel": true,
+        "sealed_predictions_match_results": true
+      }
+    },
+    "source_sha256": {
+      "cas_meta2/features_v2.py": "79dd26ad6183cde7e586dda2cd1b65d812e601e793d5c60e0658ad886c09b4dc",
+      "cas_meta2/graph_teaching/adapter.py": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7",
+      "cas_meta2/graph_teaching/fresh_panel.py": "29755de94139a8693452a2bcc4fc037517d2501bf174610a6f340a739f76e1af",
+      "cas_meta2/graph_teaching/graph.py": "1dfa2f67ab76847d0ae351d36f9e0ea6c6e1bea053640dd20ab898a550b63543",
+      "cas_meta2/graph_teaching/lessons.py": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6",
+      "cas_meta2/graph_teaching/reference.py": "aab7af24638c842b7197e7468a168fdf05b9cd0dc951583eec5aa8590dc765ee",
+      "cas_meta2/graph_teaching/trainer.py": "e3302b90030dd9da048d6aacdc1c806967455f8a51435665eae3489d25066bd4",
+      "tools/graph6_curriculum_error_review.py": "d75f99374706d8a2ef4a0ed872f8eeffacbfb03537debee45b29f01aa1c10641"
+    },
+    "teaching_record_count": 30
+  },
+  "inputs": {
+    "packet": {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/graph6_confirmation_result.json",
+      "sha256": "8a313f3d39a42443a2d00bcb4f4f00a3d71de8763f59098e057e4fc4951105f4"
+    },
+    "panel": {
+      "build_panel_verification": {
+        "built_case_count": 90,
+        "built_panel_digest": "32f027d2da34c3e24b9f5cac8617944eed54b0818b90e4ad88212c6ed30d2e48",
+        "overlap_with_sealed_panel_record_ids": 36,
+        "same_order": false,
+        "status": "mismatch"
+      },
+      "builder": "cas_meta2.graph_teaching.fresh_panel family-seed region; records recovered by record_id (see checks.build_panel_verification)",
+      "case_count": 90,
+      "cases_per_op": {
+        "FIND_SHARED_PART": 30,
+        "LIST_PARTS": 30,
+        "REACHED_VIA": 30
+      },
+      "family_base": 41000,
+      "family_count": 30,
+      "max_family_probes": 3000,
+      "panel_digest": "c709877fc11c8d339ea9e13c69a9928ade25de3c9f27f964680573615127f771",
+      "panel_seed": 20260920,
+      "reach_label_counts": {
+        "absent": 10,
+        "direct": 10,
+        "via": 10
+      }
+    },
+    "teaching": {
+      "builder": "cas_meta2.graph_teaching.trainer.training_records",
+      "by_op": {
+        "FIND_SHARED_PART": 10,
+        "LIST_PARTS": 10,
+        "REACHED_VIA": 10
+      },
+      "record_count": 30,
+      "seed": 20260909
+    },
+    "tokenizer": {
+      "arm": "cas",
+      "builder": "cas_meta2.features_v2.LosslessPublicTokenizer.fit_train",
+      "fitted_examples": 30,
+      "max_length": 1024
+    }
+  },
+  "schema": "cas-meta2-curriculum-002-error-review/1"
+}

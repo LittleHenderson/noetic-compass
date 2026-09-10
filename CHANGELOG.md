@@ -4,6 +4,41 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 PREPARED (varied relationship lessons vs repetition control) — **NOT LAUNCHED**
+
+Owner-directed preparation of one combined curriculum experiment, no diagnostic
+campaign and no child-call integration. **Read-only error review of the retained
+attempt-002 predictions** (`tools/graph6_curriculum_error_review.py`, evidence
+`CURRICULUM_002_ERROR_REVIEW.json` sha256 `e317c0c7…`, verified independently):
+pooled `LIST_PARTS` wrongs 72 before / 67 after — `missing_part` 36→34,
+`extra_part` 15→22, `mixed` 3→0, `wrong_whole` 18→11, padding 0; `FIND_SHARED_PART`
+correct 30→44 with `chose_none` 0→0; `REACHED_VIA` correct 25→39 with
+`said_direct` 30→11. Correct option present 361/361 wrong cases; no lesson or
+panel case ever had three equal-length `LIST_PARTS` options; practice predicted
+strings are UNAVAILABLE. **New curriculum** (`cas_meta2/graph_teaching/curriculum.py`,
+identity `f3e56f29…`): 30 records / 10 per op — every `LIST_PARTS` lesson carries a
+missing-part AND a foreign-part option, 7/10 have all-equal option lengths, the
+correct list is never the unique longest/shortest; `FIND_SHARED_PART` 4/10 offer
+`none` and 4/10 answer `none` with equal-length options; `REACHED_VIA` 4/3/3.
+**Panel finding:** the frozen generator cannot supply an untouched panel (0 of
+2,840 families in a fresh region offer a fully-new triple), so
+`cas_meta2/graph_teaching/final_panel.py` builds one from a NEW twelve-shape bank
+— 30 families / 90 cases, reach 10/10/10, 0 id and 0 signature overlap with
+teaching, the examined panel and the varied curriculum (content digest
+`60569f69…`). The examined panel's content digest still reproduces exactly
+(`d1076de3…`). **Design** (`curriculum_experiment.py` + `aws/graph_training_curriculum_launch.py`):
+control vs varied, three paired seeds (matched initial weights, separate
+optimizers), checkpoints at 64 and 256 updates, 6 learners, 1,536 updates, one
+job; REAL checkpoint files (model + optimizer + encoder state) saved, reloaded
+and verified in-job, and collected with sha256 verification before bucket
+cleanup. Pre-registered rule: `VARIED_CURRICULUM_BETTER` iff ≥2 of 3 seeds show
+varied−control ≥ +0.10 with family-clustered 95 % CI low > 0 AND ≥2 seeds reach
+0.50 absolute; thresholds NOT lowered. 46 new tests; 241 graph tests pass. No
+reservation, no owner record, no AWS call. Records: `GRAPH6_CURRICULUM_002.md`,
+`CURRICULUM_002_CHECK.json`; the attempt-002 record now states the two
+corrections (run-005 baseline UNAVAILABLE; sealing flag does not prove event
+order).
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CONFIRMATION_001 attempt 002 FINISHED — **FRESH_TRANSFER_NOT_CONFIRMED (0 of 3)**
 
 Attempt 002 (`cas-meta2-graph6conf-20260910023000-a387d882`, owner GO, one new
