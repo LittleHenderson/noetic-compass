@@ -1,0 +1,56 @@
+{
+  "bucket": "cas-meta2-graph6cand-20260910164749-db2342b3-807562639912",
+  "collected_utc": "2026-09-10T17:05:00+00:00",
+  "objects": [
+    {
+      "bytes": 525,
+      "key": "input/config.json",
+      "path": "remote_input_config.json",
+      "sha256": "ce9c16e5722243f3d47f1a8b6934f821c00b44b39aa6163932c54979d1c28247"
+    },
+    {
+      "bytes": 497645,
+      "key": "input/source.zip",
+      "path": "remote_input_source.zip",
+      "sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744"
+    },
+    {
+      "bytes": 81552,
+      "key": "reservation/ledger_snapshot.json",
+      "path": "remote_reservation_ledger_snapshot.json",
+      "sha256": "7d86de0e9650153e0dc11649e5008f982dd7e21566640319c2de9a505e392a03"
+    },
+    {
+      "bytes": 1718,
+      "key": "reservation/reservation_receipt.json",
+      "path": "remote_reservation_reservation_receipt.json",
+      "sha256": "d12e788bc47a1e34274e5fcd62369818716d54a2fea3cd9336ab129ed6bd086b"
+    },
+    {
+      "bytes": 628,
+      "key": "results/failure.json",
+      "path": "remote_results_failure.json",
+      "sha256": "5801caff9de2d69de7c3ef2bbe7e823597a3315ee2cb20fcd0dd3d67108d0f70"
+    },
+    {
+      "bytes": 448,
+      "key": "results/manifest.json",
+      "path": "remote_results_manifest.json",
+      "sha256": "f9429019b4a4965580d3b40adbd2b753c1ce0bc8b0c6d3ea01872a0f7e4b6367"
+    },
+    {
+      "bytes": 774,
+      "key": "results/result.json",
+      "path": "remote_results_result.json",
+      "sha256": "1f1204ff7121eff888208016d356cc8cd59c2ff945422098639f3158a22ddba8"
+    },
+    {
+      "bytes": 774,
+      "key": "results/result_partial.json",
+      "path": "remote_results_result_partial.json",
+      "sha256": "1f1204ff7121eff888208016d356cc8cd59c2ff945422098639f3158a22ddba8"
+    }
+  ],
+  "reason": "the launcher did not verify collection (wait rejected the result on CURRICULUM_RESULT_IDENTITY), so the retained objects were read out by hand before any deletion",
+  "schema": "cas-candidate-manual-collection/1"
+}
