@@ -495,12 +495,16 @@ def git_tree_paths(root, commit, directory):
 
 
 def resolve_members(root, commit, *, git_bytes_fn=git_bytes, git_paths_fn=git_tree_paths,
-                    worker_name=WORKER_NAME, worker_source=None):
+                    worker_name=WORKER_NAME, worker_source=None, extra_files=()):
     require(type(commit) is str and bool(HEX40.fullmatch(commit)), "PACKAGE_EXACT_COMMIT_REQUIRED")
     names = set(EXPLICIT_FILES)
     for directory in SOURCE_DIRS:
         names.update(git_paths_fn(root, commit, directory))
     names.update(WHEELS)
+    # Data files this experiment's code reads from the repository at run time.
+    # They live outside SOURCE_DIRS (records/), so a package built without them
+    # deploys code that fails closed on its own missing input.
+    names.update(checked_names(list(extra_files)))
     names.add(worker_name)
     checked_names(names)
     rendered = (worker_source or render_worker()).encode("utf-8")
@@ -552,14 +556,15 @@ def build_package(output, *, source_sha, git_bytes_fn=git_bytes,
                   git_paths_fn=git_tree_paths, worker_name=WORKER_NAME,
                   worker_source=None, experiment=EXPERIMENT,
                   package_schema=PACKAGE_SCHEMA, design=None,
-                  receipt_schema="cas-graph-training-curriculum-package-receipt/1"):
+                  receipt_schema="cas-graph-training-curriculum-package-receipt/1",
+                  extra_files=()):
     output = Path(output).absolute()
     require(not output.exists() and output.parent.is_dir()
             and output.is_relative_to((ROOT / "records").absolute())
             and output != ROOT / "records", "PACKAGE_NEW_SCOPED_OUTPUT_REQUIRED")
     members = resolve_members(ROOT, source_sha, git_bytes_fn=git_bytes_fn,
                               git_paths_fn=git_paths_fn, worker_name=worker_name,
-                              worker_source=worker_source)
+                              worker_source=worker_source, extra_files=extra_files)
     manifest = manifest_for(members, source_sha, worker_name=worker_name,
                             experiment=experiment, package_schema=package_schema,
                             design=design)

@@ -28,7 +28,7 @@ import time
 from pathlib import Path
 
 from aws.graph_training_curriculum_launch import (  # reused machinery
-    HEX40, HEX64, LEDGER_PATH, OWNER_AUTHORIZATION_PATH, RESOURCE_PLAN,
+    HEX40, HEX64, LEDGER_PATH, OWNER_AUTHORIZATION_PATH, PILOT, RESOURCE_PLAN,
     RESERVATION_USD, ROOT, CurriculumProvider, build_package, canonical,
     collection_is_verified, digest, prepare_evidence, read_ledger, require, scope,
     validate_preflight, validate_reservation_scope, validate_reserved_transition,
@@ -323,6 +323,33 @@ def render_worker():
     ])
 
 
+def package_data_files(root=None):
+    """Repository data files this pilot's code reads at run time.
+
+    Derived from the constants the deployed code itself resolves, so the package
+    cannot drift from where the runtime looks:
+
+    - ``cube_node.pinned_bundle_path()`` — the pinned cube bundle the graph
+      operations and the whole-bundle compile read. REQUIRED: without it the
+      deployed worker fails closed with ``CUBE_BUNDLE_FILE_MISSING``.
+    - ``verified_teaching.pinned_fixture_path()`` — the authored fixture the
+      on-instance compile compares itself against. Optional at run time
+      (``compare_with_fixture`` reports ``fixture_present: False`` when absent);
+      carried so the delivered report contains the comparison.
+
+    Both sit under ``records/``, which is not among ``SOURCE_DIRS``. The package
+    rehearsal caught this; no paid attempt had to.
+    """
+    from cas_meta2.graph_teaching import cube_node, verified_teaching
+    base = Path(root or ROOT).resolve()
+    names = []
+    for path in (cube_node.pinned_bundle_path(),
+                 verified_teaching.pinned_fixture_path()):
+        relative = Path(path).resolve().relative_to(base).as_posix()
+        names.append(PILOT + relative)
+    return tuple(sorted(names))
+
+
 def build_candidate_package(output, *, source_sha, git_bytes_fn=None,
                             git_paths_fn=None):
     """The source package for this pilot, through the existing package builder."""
@@ -333,7 +360,7 @@ def build_candidate_package(output, *, source_sha, git_bytes_fn=None,
         git_paths_fn=git_paths_fn or curriculum.git_tree_paths,
         worker_name=WORKER_NAME, worker_source=render_worker(),
         experiment=EXPERIMENT, package_schema=PACKAGE_SCHEMA, design=DESIGN,
-        receipt_schema=RECEIPT_SCHEMA)
+        receipt_schema=RECEIPT_SCHEMA, extra_files=package_data_files())
 
 
 class CandidateProvider(CurriculumProvider):
