@@ -1,0 +1,66 @@
+{
+  "schema": "cas-graph-training-candidate-owner-authorization/1",
+  "recorded_utc": "2026-09-10T16:47:49.063309+00:00",
+  "owner_instruction_raw": "GO",
+  "instruction_interpretation": "The owner authorizes a THIRD $7.00 reservation and one launch for the checked-component pilot, on the condition the owner set with the instruction: fix what the failures exposed, and run again only if the package rehearsal passes. The condition is met - the rehearsal now builds the deployed artifact, unpacks it and executes both conditions from the unpacked layout (9 passed). It also found, before any reservation, a fourth and a fifth defect that would each have destroyed an attempt: the packaged worker had no pinned cube bundle (CUBE_BUNDLE_FILE_MISSING), and the worker's checkpoint verifier hashed parameter names as well as bytes and so could never equal GraphLearner.checkpoint_identity (CANDIDATE_CHECKPOINT_NOT_VERIFIED after the full update budget). Same frozen design, conditions, limits and reservation amount as OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json and _002.json; only the job name, the source commit, the package and the receipt directory differ, because the ledger already holds the attempt-003 and attempt-004 jobs and a job is never reserved twice.",
+  "attempt": 5,
+  "supersedes_attempt": 4,
+  "previous_attempt_outcome": "attempt 004 reserved $7.00, launched instance i-0d54b39f7ad972156 (g7.2xlarge, 15:12:10 UTC) and died at 15:13:54 with ModuleNotFoundError: No module named 'cas_meta2' - the rendered worker never put the package's repository-relative path on sys.path. Nothing was trained. The launcher's wait could not see the failure because the worker's failure path wrote only result_partial.json; I terminated the idle instance at 15:57:24 UTC to stop billing and the evidence bucket was retained. Ledger revision 53 records the reservation.",
+  "rehearsal_gate": {
+    "test": "tests/test_graph_training_candidate_package_rehearsal.py",
+    "result": "9 passed",
+    "what_it_executes": "the built source.zip, unpacked: the worker is present, the repository-relative code imports, the pinned cube bundle and the authored fixture resolve where the deployed code looks, the frozen inputs build (8 records, 44 probe questions, groups 3/5/44), both conditions run to 64 updates each with stub learners, and the worker's own checkpoint writer/verifier round trip verifies",
+    "defects_it_caught_before_spending": [
+      "the packaged worker could not find the pinned cube bundle: records/ is not among the packaged source directories (CUBE_BUNDLE_FILE_MISSING)",
+      "the worker's checkpoint verifier hashed parameter names as well as bytes, which can never equal GraphLearner.checkpoint_identity (CANDIDATE_CHECKPOINT_NOT_VERIFIED after 64 updates)"
+    ]
+  },
+  "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+  "launcher": "aws/graph_training_candidate_launch.py at commit ea4112f005c7186f7b0e417e714efc8469b8be37",
+  "entrypoint": "cas_meta2.graph_teaching.candidate_experiment.launch",
+  "source_sha": "ea4112f005c7186f7b0e417e714efc8469b8be37",
+  "archive_sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744",
+  "manifest_sha256": "7de05cdd12dba902b04b8e55d21e51723cff7f61aeec8494a60b3c52e8ea4e4b",
+  "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_package_004/",
+  "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_request_003.json",
+  "authorization_context": "Same pilot as OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json, restated in short: two conditions from matched initial weights - checked_component_teaching (40 component plus 24 whole-answer corrections per 64 updates) and final_answer_only (0 plus 64, frozen round-robin 22/21/21) - 64 updates each, 128 total, seed 20260909, arm cas, ordering mode declared, separate optimizer states and checkpoints, the same frozen encoder, framing and scoring. Data: eight teaching records covering seven distinct questions and a common 44-question untaught probe evaluated after each condition's final checkpoint with no update. Reporting: before and after, the three taught whole-answer questions as the primary set with all three scores and the loss, the five component questions separately, and the probe by operation; independent and assisted never merged; missing values unavailable. Interpretation bound: how to spend a fixed budget, not adding component instruction at equal final-question practice; a negative result never means the seven-stage program failed.",
+  "run_bounds": {
+    "jobs": 1,
+    "conditions": ["checked_component_teaching", "final_answer_only"],
+    "updates_per_condition": 64,
+    "total_optimizer_steps": 128,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0,
+    "arm": "cas",
+    "seed": 20260909,
+    "encoder_seed": 20260909,
+    "ordering_mode": "declared",
+    "per_condition": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "checkpoints": ["final"],
+    "probe_questions": 44
+  },
+  "execution_gates": [
+    "single launch attempt through the candidate launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "execute() refuses before the reservation unless the provider holds a readable source archive whose digest matches the request",
+    "both conditions use the same teaching records, the same probe and the same update allowance; matched initial weights required",
+    "only the operation:^6 parameter group may change; any forbidden change fails the run closed",
+    "the probe never enters training, checkpoint selection or any mid-run curriculum change",
+    "each condition's final checkpoint is written, read back and verified with the learner's own identity rule before upload; collection verified before the bucket is deleted",
+    "the deployed package is executed by the package rehearsal before the reservation, not after it",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single attempt",
+    "any change to the frozen design, package, conditions, limits or reservation amount",
+    "any architecture, representation, encoder, readout, pooling, tokenizer or option-contract change",
+    "child-call / parent-integration work for this specialist",
+    "any modification of accepted models, trainers, the ledger beyond this job's reservation, frozen negatives, sealed splits, previous results or retained checkpoints",
+    "the pending zero-update contrast probe, which stays pending",
+    "any claim that this pilot tests or demonstrates the seven-stage cube program"
+  ]
+}

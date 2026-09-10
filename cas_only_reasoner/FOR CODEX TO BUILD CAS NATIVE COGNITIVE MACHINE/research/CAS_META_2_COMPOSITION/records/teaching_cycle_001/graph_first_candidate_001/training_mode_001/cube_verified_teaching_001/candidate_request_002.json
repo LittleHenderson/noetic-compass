@@ -1,0 +1,8 @@
+{
+  "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+  "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+  "launch_authorized": false,
+  "manifest_sha256": "14fc7d1373cfd18af2ee0e3ae3086e75ad9ebb56ffa440b38eb288cba8d5c5b4",
+  "schema": "cas-graph-training-candidate-launch-request/1",
+  "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee"
+}

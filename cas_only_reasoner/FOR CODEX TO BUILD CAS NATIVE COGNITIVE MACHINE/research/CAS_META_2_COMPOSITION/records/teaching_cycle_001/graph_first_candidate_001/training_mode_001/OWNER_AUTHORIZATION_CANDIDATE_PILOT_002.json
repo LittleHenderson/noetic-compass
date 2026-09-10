@@ -1,0 +1,56 @@
+{
+  "schema": "cas-graph-training-candidate-owner-authorization/1",
+  "recorded_utc": "2026-09-10T15:00:00.000000+00:00",
+  "owner_instruction_raw": "GO",
+  "instruction_interpretation": "The owner authorizes a SECOND $7.00 reservation and one launch for the checked-component pilot, after attempt 003 consumed its reservation and failed on the builder's own missing source archive (AUTHORIZATION_REQUEST_002.md section 8). Same frozen design, same package, same conditions, limits and reservation amount as OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json; only the job name and receipt directory differ, because the ledger already holds the attempt-003 job.",
+  "attempt": 4,
+  "supersedes_attempt": 3,
+  "previous_attempt_outcome": "attempt 003 reserved $7.00 and failed inside launch() with CURRICULUM_SOURCE_ARCHIVE_REQUIRED (builder wiring omission, no instance created, nothing trained); ledger revision 52 records it",
+  "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+  "launcher": "aws/graph_training_candidate_launch.py at commit 61da2601a91b0d0e52a3adf16a5a9e5f4e0cbf21",
+  "entrypoint": "cas_meta2.graph_teaching.candidate_experiment.launch",
+  "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+  "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+  "manifest_sha256": "14fc7d1373cfd18af2ee0e3ae3086e75ad9ebb56ffa440b38eb288cba8d5c5b4",
+  "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_package_001/",
+  "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_request_002.json",
+  "authorization_context": "Same pilot as OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json, restated in short: two conditions from matched initial weights - checked_component_teaching (40 component plus 24 whole-answer corrections per 64 updates) and final_answer_only (0 plus 64, frozen round-robin 22/21/21) - 64 updates each, 128 total, seed 20260909, arm cas, ordering mode declared, separate optimizer states and checkpoints, the same frozen encoder, framing and scoring. Data: eight teaching records covering seven distinct questions and a common 44-question untaught probe evaluated after each condition's final checkpoint with no update. Reporting: before and after, the three taught whole-answer questions as the primary set with all three scores and the loss, the five component questions separately, and the probe by operation; independent and assisted never merged; missing values unavailable. Interpretation bound: how to spend a fixed budget, not adding component instruction at equal final-question practice; a negative result never means the seven-stage program failed.",
+  "run_bounds": {
+    "jobs": 1,
+    "conditions": ["checked_component_teaching", "final_answer_only"],
+    "updates_per_condition": 64,
+    "total_optimizer_steps": 128,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0,
+    "arm": "cas",
+    "seed": 20260909,
+    "encoder_seed": 20260909,
+    "ordering_mode": "declared",
+    "per_condition": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "checkpoints": ["final"],
+    "probe_questions": 44
+  },
+  "execution_gates": [
+    "single launch attempt through the candidate launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "execute() refuses before the reservation unless the provider holds a readable source archive whose digest matches the request (added after attempt 003)",
+    "both conditions use the same teaching records, the same probe and the same update allowance; matched initial weights required",
+    "only the operation:^6 parameter group may change; any forbidden change fails the run closed",
+    "the probe never enters training, checkpoint selection or any mid-run curriculum change",
+    "each condition's final checkpoint is written, read back and verified before upload; collection verified before the bucket is deleted",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any third job or automatic retry beyond this single attempt",
+    "any change to the frozen design, package, conditions, limits or reservation amount",
+    "any architecture, representation, encoder, readout, pooling, tokenizer or option-contract change",
+    "child-call / parent-integration work for this specialist",
+    "any modification of accepted models, trainers, the ledger beyond this job's reservation, frozen negatives, sealed splits, previous results or retained checkpoints",
+    "the pending zero-update contrast probe, which stays pending",
+    "any claim that this pilot tests or demonstrates the seven-stage cube program"
+  ]
+}
