@@ -48,6 +48,28 @@ def _unpack(tmp_path):
     return root
 
 
+def zipped_read(archive, name):
+    with zipfile.ZipFile(archive) as zipped:
+        return zipped.read(name)
+
+
+def test_the_package_carries_the_very_worker_this_rehearsal_exercises():
+    """The deployed worker file must be the rendered worker, byte for byte.
+
+    Every worker test above renders the worker from the module. Without this one,
+    a package built before a worker change would still pass them all while
+    shipping the older worker — the rehearsed artefact and the paid artefact would
+    not be the same file.
+    """
+    archive = _package()
+    packaged = zipped_read(archive, cl.WORKER_NAME)
+    assert packaged == cl.render_worker().encode("utf-8")
+    manifest = json.loads(zipped_read(archive, curriculum.MANIFEST_NAME))
+    assert manifest["worker_script"] == cl.WORKER_NAME
+    assert manifest["files_sha256"][cl.WORKER_NAME] == hashlib.sha256(
+        packaged).hexdigest()
+
+
 def test_the_package_contains_the_worker_and_the_repo_relative_code(tmp_path):
     root = _unpack(tmp_path)
     assert (root / cl.WORKER_NAME).is_file()
