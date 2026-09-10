@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: delivery rehearsal PASSES; conditional evidence deletion; attempt 004 bound request returned
+
+Owner-directed delivery rehearsal (`tests/test_graph_training_delivery_rehearsal.py`,
+no neural execution, no paid launch) drives the ACTUAL exported chain — rendered
+worker inner runner → exported `upload_results` → real `wait/collect/cleanup` —
+against a simulated bucket with a dummy result and four dummy checkpoints.
+**Normal completion:** the collector receives the known result byte-identically
+(sha256 checked) and every dummy checkpoint with matching hashes and byte counts,
+and the completion signal `results/result.json` is uploaded last, after every
+artifact and the manifest. **Injected upload failure after the dummy experiment
+returns:** the original result survives byte-for-byte, the failure is recorded in
+a separate `failure.json`, no completion signal appears, collection cannot start,
+and cleanup RETAINS the bucket (`retained_bucket`,
+`EVIDENCE_RETAINED_PENDING_COLLECTION`) while the compute still stops.
+**Checkpoints lost in transport** are named explicitly (`artifacts_missing`,
+`reason: ARTIFACTS_MISSING:<name>`) and the run counts as not delivered.
+Owner-directed behaviour change: compute shutdown and evidence deletion are now
+separate — the instance always terminates by its deadline, the bucket is deleted
+only when `collection_is_verified(collected)`; and `execute()` reports
+`stages.execution/collection/cleanup` plus `completed_deliverable`. Corrected
+claims: attempt 003's traceback position is *reported execution progress*, not a
+recovered result (the comparison outcome is unavailable); the four failed
+allocations are `$27.00` **consumed from the campaign's reservation allowance**,
+not verified billing. 257 graph tests pass. Bound request returned:
+`AUTHORIZATION_REQUEST_GRAPH6_CURRICULUM_002_ATTEMPT_004_AWS.md` —
+`graph6_curriculum_package_005/`, source `aecb5d07…`, archive `fd9b4902…`,
+manifest `45fd5339…`, request `950bd798…`, one new `$7.00` (ledger 50 → 51). The
+experiment itself is unchanged.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 003 **FAILED at the upload step — the experiment itself ran to completion**; fixes + replacement prepared
 
 Attempt 003 (`cas-meta2-graph6curr-20260910093000-75387578`, one new `$7.00`
