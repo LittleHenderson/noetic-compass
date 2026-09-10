@@ -1,0 +1,9 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\n/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py:170: UserWarning: No PYTORCH_KERNEL_CACHE_PATH or HOME environment variable set! This disables kernel caching. (Triggered internally at /pytorch/aten/src/ATen/native/cuda/jit_utils.cpp:1489.)\n  for token_id in segment]).prod(dim=0)\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 33, in <module>\n    import boto3\nModuleNotFoundError: No module named 'boto3'\n",
+    "type": "SystemExit"
+  },
+  "job": "cas-meta2-graph6curr-20260910093000-75387578",
+  "schema": "cas-graph-training-curriculum-result/1",
+  "status": "REMOTE_WORKER_FAILED"
+}

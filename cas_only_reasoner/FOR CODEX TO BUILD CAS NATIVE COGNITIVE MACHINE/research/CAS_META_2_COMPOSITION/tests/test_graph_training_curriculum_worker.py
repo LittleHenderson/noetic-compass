@@ -7,6 +7,7 @@ sequence the job depends on: encoder from the FROZEN teaching records, the
 untouched final panel, one launch call with the registered kwargs, a result file
 with its sha256, and the checkpoint artifacts uploaded.
 """
+import inspect
 import json
 import sys
 import types
@@ -123,14 +124,57 @@ def test_worker_runs_the_registered_sequence(worker_run):
     assert sidecar == sha256(raw).hexdigest()
 
 
-def test_worker_uploads_every_checkpoint_artifact_and_a_manifest(worker_run):
-    recorded, s3, _root = worker_run
-    assert "results/artifacts/control_seed20260913_step064.pt" in s3.objects
-    assert s3.objects["results/artifacts/control_seed20260913_step064.pt"] == b"weights"
-    manifest = json.loads(s3.objects[launch.ARTIFACT_MANIFEST_KEY])
+def test_inner_runner_stages_artifacts_without_needing_the_aws_sdk(worker_run):
+    """Attempt 003 died on 'import boto3' INSIDE the training venv at the very
+    end, after the whole run had succeeded. The inner runner must not import it,
+    and must stage the checkpoints plus a manifest under results/artifacts."""
+    recorded, _s3, root = worker_run
+    outer = {}
+    exec(compile(launch.render_worker(), "worker.py", "exec"), outer)
+    executable = [line for line in outer["INNER_RUNNER"].splitlines()
+                  if not line.strip().startswith("#")]
+    assert not any("boto3" in line for line in executable)
+    results = root / "results"
+    manifest = json.loads((results / "artifacts" / "manifest.json").read_text())
     entry = manifest["artifacts"][0]
     assert entry["name"] == "control_seed20260913_step064.pt"
     assert entry["bytes"] == len(b"weights")
     assert entry["sha256"] == sha256(b"weights").hexdigest()
-    assert entry["step"] == 64 and entry["condition"] == "control"
-    assert entry["learner_seed"] == 20260913
+    assert (results / "artifacts" / entry["name"]).read_bytes() == b"weights"
+
+
+def test_upload_results_sends_artifacts_before_the_result(tmp_path):
+    """The launcher polls for result.json, so it must be uploaded LAST."""
+    outer = {}
+    exec(compile(launch.render_worker(), "worker.py", "exec"), outer)
+    results = tmp_path / "results"
+    (results / "artifacts").mkdir(parents=True)
+    (results / "artifacts" / "cp.pt").write_bytes(b"weights")
+    (results / "artifacts" / "manifest.json").write_text(json.dumps(
+        {"artifacts": [{"name": "cp.pt", "bytes": 7,
+                        "sha256": sha256(b"weights").hexdigest(), "step": 64,
+                        "condition": "control", "learner_seed": 20260913}]}))
+    (results / "result.json").write_bytes(b"{}")
+    (results / "result.json.sha256").write_text(sha256(b"{}").hexdigest() + "\n")
+    s3 = StubS3()
+    uploaded = outer["upload_results"](s3, "bucket", results)
+    assert uploaded["manifest"] is True
+    assert uploaded["artifacts"] == ["cp.pt"]
+    assert uploaded["result"] is True
+    assert s3.objects["results/artifacts/cp.pt"] == b"weights"
+    assert "results/artifacts/manifest.json" in s3.objects
+    assert list(s3.objects)[-1] == "results/result.json"          # result last
+
+
+def test_a_completed_result_is_never_destroyed_by_a_later_failure():
+    """Attempt 003 completed the whole run and then failed at upload; the failure
+    report overwrote the real result. The preservation branch must exist and must
+    only write a failure report when no result exists."""
+    source = launch.render_worker()
+    assert "result_partial.json" in source
+    assert "NEVER destroy a result" in source
+    main_source = source.split("def main():", 1)[1]
+    preservation = main_source.split("if failure is not None:", 1)[1]
+    assert "result_partial.json" in preservation
+    assert "if existing.exists():" in preservation
+    assert "    else:" in preservation          # failure report only when absent

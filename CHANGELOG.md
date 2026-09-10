@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 003 **FAILED at the upload step — the experiment itself ran to completion**; fixes + replacement prepared
+
+Attempt 003 (`cas-meta2-graph6curr-20260910093000-75387578`, one new `$7.00`
+reservation, ledger 49 → 50: `$263.00` / `$137.00`) failed after 579.1 s with
+`ModuleNotFoundError: No module named 'boto3'` **at line 33 of the inner runner —
+after `curriculum_experiment.launch(...)` had returned**, i.e. after the six
+learners, 1,536 updates, 64/256 checkpoints, reload verifications and verdict had
+all been produced. Attempt 003 therefore cleared every defect that killed attempts
+001 and 002. The measurement was then LOST: the outer worker's failure path
+overwrote `results/result.json`, and cleanup terminated the instance and deleted
+the bucket. Two packaging defects fixed: (1) the training venv has no AWS SDK, so
+uploads moved to the OUTER worker (system python) and the inner runner only stages
+`results/artifacts/` + manifest — it never imports boto3; (2) `result.json` is now
+uploaded LAST so the launcher's poll means everything is already in S3; (3) a
+completed result is NEVER overwritten — it is preserved as `result_partial.json`
+(+ sidecar) with `failure.json` beside it, and the launcher collects both. Four
+new tests pin the staging, the upload ordering, the preservation branch and
+collection tolerance; 253 graph tests pass. Cleanup verified complete (instance
+`i-0926a1d98af470331` terminated, bucket deleted). Four paid attempts have now
+failed, all on defects in the new code (`$27.00` total, no retained measurement).
+Record: `ATTEMPT_GRAPH6_CURRICULUM_002_003_FAILURE.md`. A replacement needs a new
+owner GO and a new reservation.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 002 **FAILED** (my defect: wrong lesson index) — fixes + replacement prepared
 
 Replacement job (`cas-meta2-graph6curr-20260910073000-210109c7`, one new `$7.00`

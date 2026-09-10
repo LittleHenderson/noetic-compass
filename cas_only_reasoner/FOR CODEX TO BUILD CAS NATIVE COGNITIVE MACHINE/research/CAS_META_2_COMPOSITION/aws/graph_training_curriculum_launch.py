@@ -283,24 +283,24 @@ def render_worker():
         "results.mkdir(exist_ok=True)",
         "(results / 'result.json').write_bytes(raw)",
         "(results / 'result.json.sha256').write_text(hashlib.sha256(raw).hexdigest() + '\\n')",
-        "# Upload the real checkpoint files and an artifact manifest.",
-        "import boto3",
-        "s3 = boto3.client('s3', region_name=config['region'])",
-        "bucket = config['bucket']",
+        "# Stage the real checkpoint files and their manifest INSIDE results/.",
+        "# Uploading is the OUTER worker's job: it runs with the system python, so",
+        "# the training venv needs no AWS SDK (attempt 003 died on 'import boto3'",
+        "# at the very end, after the whole run had already succeeded).",
+        "artifacts_dir = results / 'artifacts'",
+        "artifacts_dir.mkdir(exist_ok=True)",
         "manifest = []",
         "for artifact in report['artifacts']:",
         "    path = Path(artifact['path'])",
-        "    name = path.name",
         "    body = path.read_bytes()",
-        "    s3.put_object(Bucket=bucket, Key='results/artifacts/' + name, Body=body)",
-        "    manifest.append({'name': name, 'bytes': len(body),",
+        "    (artifacts_dir / path.name).write_bytes(body)",
+        "    manifest.append({'name': path.name, 'bytes': len(body),",
         "                     'sha256': hashlib.sha256(body).hexdigest(),",
         "                     'step': artifact['step'],",
         "                     'condition': artifact['condition'],",
         "                     'learner_seed': artifact['learner_seed']})",
-        "s3.put_object(Bucket=bucket, Key='results/artifacts/manifest.json',",
-        "              Body=(json.dumps({'artifacts': manifest}, sort_keys=True,",
-        "                               indent=2) + '\\n').encode('utf-8'))",
+        "(artifacts_dir / 'manifest.json').write_text(",
+        "    json.dumps({'artifacts': manifest}, sort_keys=True, indent=2) + '\\n')",
     ]
     runner_block = ",\n".join(repr(line) for line in inner_lines)
     lines = [
@@ -333,6 +333,40 @@ def render_worker():
         "def run_checked(argv):",
         "    subprocess.run(argv, check=True)",
         "",
+        "def upload_results(s3, bucket, results):",
+        "    \"\"\"Upload staged checkpoints and THEN the result.",
+        "",
+        "    Runs in the OUTER worker (system python, which has the AWS SDK), so the",
+        "    training venv needs no boto3. result.json is uploaded LAST: the launcher",
+        "    polls for it, so its presence means every artifact is already there.\"\"\"",
+        "    uploaded = {'result': False, 'manifest': False, 'artifacts': []}",
+        "    if (results / 'result_partial.json').exists():",
+        "        s3.put_object(Bucket=bucket, Key='results/result_partial.json',",
+        "                      Body=(results / 'result_partial.json').read_bytes())",
+        "    if (results / 'failure.json').exists():",
+        "        s3.put_object(Bucket=bucket, Key='results/failure.json',",
+        "                      Body=(results / 'failure.json').read_bytes())",
+        "    artifacts_dir = results / 'artifacts'",
+        "    manifest_path = artifacts_dir / 'manifest.json'",
+        "    if manifest_path.exists():",
+        "        s3.put_object(Bucket=bucket, Key='results/artifacts/manifest.json',",
+        "                      Body=manifest_path.read_bytes())",
+        "        uploaded['manifest'] = True",
+        "        for entry in json.loads(manifest_path.read_text())['artifacts']:",
+        "            path = artifacts_dir / entry['name']",
+        "            if path.exists():",
+        "                s3.put_object(Bucket=bucket,",
+        "                              Key='results/artifacts/' + entry['name'],",
+        "                              Body=path.read_bytes())",
+        "                uploaded['artifacts'].append(entry['name'])",
+        "    for name in ('result.json.sha256', 'result.json'):",
+        "        path = results / name",
+        "        if path.exists():",
+        "            s3.put_object(Bucket=bucket, Key='results/' + name,",
+        "                          Body=path.read_bytes())",
+        "            uploaded['result'] = True",
+        "    return uploaded",
+        "",
         "def main():",
         "    root = Path(__file__).resolve().parent",
         "    config = json.loads((root / 'config.json').read_bytes())",
@@ -341,6 +375,7 @@ def render_worker():
         "    region = config['region']",
         "    results = root / 'results'",
         "    results.mkdir(exist_ok=True)",
+        "    failure = None",
         "    try:",
         "        venv = root / 'venv'",
         "        venv_py = venv / 'bin' / 'python'",
@@ -365,24 +400,38 @@ def render_worker():
         "                             timeout=MAX_WALL_SECONDS * LEARNERS + 2400)",
         "        if inner.returncode != 0:",
         "            detail = (inner.stderr or inner.stdout or '')[-1800:]",
-        "            raise SystemExit('INNER_RUNNER_EXIT_' + str(inner.returncode) + '\\n' + detail)",
+        "            failure = {'type': 'InnerRunnerFailure',",
+        "                       'message': 'INNER_RUNNER_EXIT_' + str(inner.returncode)",
+        "                                  + '\\n' + detail}",
         "        raw = (results / 'result.json').read_bytes()",
         "        sidecar = (results / 'result.json.sha256').read_text().strip()",
         "        if hashlib.sha256(raw).hexdigest() != sidecar:",
-        "            raise SystemExit('RESULT_SHA_MISMATCH')",
+        "            failure = failure or {'type': 'ResultMismatch',",
+        "                                  'message': 'RESULT_SHA_MISMATCH'}",
         "    except BaseException as error:",
         "        failure = {'type': type(error).__name__, 'message': str(error)[:2000]}",
-        "        report = {'schema': 'cas-graph-training-curriculum-result/1',",
-        "                  'status': 'REMOTE_WORKER_FAILED', 'failure': failure, 'job': job}",
-        "        raw = (json.dumps(report, sort_keys=True, indent=2) + '\\n').encode('utf-8')",
-        "        (results / 'result.json').write_bytes(raw)",
-        "        (results / 'result.json.sha256').write_text(hashlib.sha256(raw).hexdigest() + '\\n')",
+        "    if failure is not None:",
+        "        # NEVER destroy a result the run already produced: keep it, and record",
+        "        # the failure beside it (attempt 003 lost a completed run this way).",
+        "        existing = results / 'result.json'",
+        "        if existing.exists():",
+        "            preserved = existing.read_bytes()",
+        "            (results / 'result_partial.json').write_bytes(preserved)",
+        "            (results / 'result_partial.json.sha256').write_text(",
+        "                hashlib.sha256(preserved).hexdigest() + '\\n')",
+        "        else:",
+        "            report = {'schema': 'cas-graph-training-curriculum-result/1',",
+        "                      'status': 'REMOTE_WORKER_FAILED', 'failure': failure,",
+        "                      'job': job}",
+        "            raw = (json.dumps(report, sort_keys=True, indent=2) + '\\n').encode('utf-8')",
+        "            existing.write_bytes(raw)",
+        "            (results / 'result.json.sha256').write_text(",
+        "                hashlib.sha256(raw).hexdigest() + '\\n')",
+        "        (results / 'failure.json').write_text(",
+        "            json.dumps(failure, sort_keys=True, indent=2) + '\\n')",
         "    import boto3",
         "    s3 = boto3.client('s3', region_name=region)",
-        "    s3.put_object(Bucket=bucket, Key='results/result.json',",
-        "                  Body=(results / 'result.json').read_bytes())",
-        "    s3.put_object(Bucket=bucket, Key='results/result.json.sha256',",
-        "                  Body=(results / 'result.json.sha256').read_bytes())",
+        "    upload_results(s3, bucket, results)",
         "",
         "if __name__ == '__main__':",
         "    main()",
@@ -873,6 +922,23 @@ class CurriculumProvider:
             time.sleep(poll_interval)
         return {"worker_status": "REMOTE_TIMED_OUT"}
 
+    def _collect_partial(self, bucket, s3, collected):
+        """Best-effort collection of a preserved partial result and the failure
+        record, so a run that completed but failed afterwards is not lost
+        (GRAPH6_CURRICULUM_002 attempt 003 lost a completed run this way)."""
+        for key, name in (("results/result_partial.json", "result_partial.json"),
+                          ("results/failure.json", "failure.json")):
+            try:
+                response = s3.get_object(Bucket=bucket, Key=key)
+                body = self._read_body(response["Body"], 256 * 1024**2)
+            except Exception:                     # noqa: BLE001 - best effort
+                continue
+            receipt = write_evidence(self._evidence / name, body)
+            collected.setdefault("preserved", []).append(
+                {"key": key, "path": receipt["path"], "sha256": receipt["sha256"],
+                 "bytes": receipt["bytes"]})
+        return collected
+
     def collect(self, job):
         """Collect the result AND every checkpoint artifact BEFORE cleanup."""
         self.calls.append("collect")
@@ -896,6 +962,13 @@ class CurriculumProvider:
             # a confusing launch failure (GRAPH6_CURRICULUM_002 attempt 001).
             collected["artifacts_available"] = False
             collected["reason"] = "REMOTE_WORKER_FAILED"
+            self._collect_partial(bucket, s3, collected)
+            return collected
+        if not (self._result or {}).get("artifacts"):
+            # A completed result that lists no checkpoints cannot have artifacts.
+            collected["artifacts_available"] = False
+            collected["reason"] = "RESULT_LISTS_NO_ARTIFACTS"
+            self._collect_partial(bucket, s3, collected)
             return collected
         manifest_response = s3.get_object(Bucket=bucket, Key=ARTIFACT_MANIFEST_KEY)
         manifest_raw = self._read_body(manifest_response["Body"], 4 * 1024**2)

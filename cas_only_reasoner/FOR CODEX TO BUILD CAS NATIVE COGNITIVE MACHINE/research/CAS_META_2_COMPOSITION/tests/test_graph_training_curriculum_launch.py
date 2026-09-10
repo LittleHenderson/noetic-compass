@@ -189,7 +189,10 @@ class FakeS3:
 def _collect_fixture(tmp_path, artifact_body=b"checkpoint-bytes"):
     import hashlib
     result = json.dumps({"schema": launch.RESULT_SCHEMA, "job": JOB,
-                         "artifacts": []}).encode()
+                         "artifacts": [{"path": "/opt/checkpoints/"
+                                                "varied_seed20260913_step064.pt",
+                                        "step": 64, "condition": "varied",
+                                        "learner_seed": 20260913}]}).encode()
     sidecar = hashlib.sha256(result).hexdigest().encode()
     manifest = json.dumps({"artifacts": [
         {"name": "varied_seed20260913_step064.pt", "bytes": len(artifact_body),
@@ -204,6 +207,7 @@ def _collect_fixture(tmp_path, artifact_body=b"checkpoint-bytes"):
     provider._instance_id = "i-0123456789abcdef0"
     provider._resources["bucket"] = "job-bucket"
     provider._result_raw = result
+    provider._result = json.loads(result)       # wait() sets both
     (tmp_path / "receipt").mkdir()
     provider.configure_evidence(tmp_path / "receipt")
     return provider, clients
