@@ -955,7 +955,12 @@ class CurriculumProvider:
         collected = {"result": str(self._evidence / "curriculum_result.json"),
                      "sha256": str(self._evidence / "curriculum_result.json.sha256"),
                      "result_sha256": digest(self._result_raw),
-                     "artifacts": []}
+                     "artifacts": [],
+                     "artifact_expectations": sorted(
+                         _artifact_name(entry) for entry in
+                         ((self._result or {}).get("artifacts") or [])),
+                     "artifacts_collected": [],
+                     "artifacts_missing": []}
         if (self._result or {}).get("status") == "REMOTE_WORKER_FAILED":
             # A failed worker never reaches the artifact upload, so demanding a
             # manifest here would turn a clean, fully recorded worker failure into
@@ -979,19 +984,41 @@ class CurriculumProvider:
         target_dir = self._evidence / "checkpoints"
         target_dir.mkdir()
         for entry in manifest["artifacts"]:
-            name = safe_name(entry["name"])
+            name = safe_name(_artifact_name(entry))
             require("/" not in name, "CURRICULUM_ARTIFACT_NAME")
-            response = s3.get_object(Bucket=bucket, Key=ARTIFACT_PREFIX + name)
-            body = self._read_body(response["Body"], MAX_ARTIFACT_BYTES)
-            require(len(body) == entry["bytes"], "CURRICULUM_ARTIFACT_BYTES:" + name)
-            require(digest(body) == entry["sha256"], "CURRICULUM_ARTIFACT_SHA:" + name)
+            try:
+                response = s3.get_object(Bucket=bucket, Key=ARTIFACT_PREFIX + name)
+                body = self._read_body(response["Body"], MAX_ARTIFACT_BYTES)
+                require(len(body) == entry["bytes"],
+                        "CURRICULUM_ARTIFACT_BYTES:" + name)
+                require(digest(body) == entry["sha256"],
+                        "CURRICULUM_ARTIFACT_SHA:" + name)
+            except self._client_error as error:
+                if self._error_code(error) not in ("NoSuchKey", "404"):
+                    raise
+                collected["artifacts_missing"].append(name)
+                continue
+            except ValueError as error:
+                collected["artifacts_missing"].append(name)
+                collected.setdefault("artifact_mismatches", []).append(str(error))
+                continue
             receipt = write_evidence(target_dir / name, body)
             collected["artifacts"].append({**entry, "path": receipt["path"]})
-        require(len(collected["artifacts"]) == len(manifest["artifacts"]),
-                "CURRICULUM_ARTIFACT_COUNT")
+            collected["artifacts_collected"].append(name)
+        collected["artifacts_collected"].sort()
+        collected["artifacts_missing"].sort()
         collected["artifact_manifest_sha256"] = digest(manifest_raw)
         collected["artifact_count"] = len(collected["artifacts"])
-        collected["artifact_bytes"] = sum(entry["bytes"] for entry in collected["artifacts"])
+        collected["artifact_bytes"] = sum(entry["bytes"]
+                                          for entry in collected["artifacts"])
+        if collected["artifacts_missing"]:
+            # Honest partial collection: name exactly what did not arrive. The
+            # caller keeps the bucket because the run is not fully delivered.
+            collected["artifacts_available"] = False
+            collected["reason"] = ("ARTIFACTS_MISSING:"
+                                   + ",".join(collected["artifacts_missing"]))
+            return collected
+        collected["artifacts_available"] = True
         return collected
 
     def _describe_with_retry(self, ec2, instance_id):
@@ -1026,14 +1053,35 @@ class CurriculumProvider:
                 time.sleep(poll_interval)
         return pending
 
-    def cleanup(self, job):
+    def cleanup(self, job, *, collection_verified=False):
+        """Stop the compute unconditionally; delete evidence only when the
+        collection was verified.
+
+        Compute shutdown and evidence deletion are separate concerns. The instance
+        always terminates (by its deadline), but the evidence bucket is deleted
+        ONLY when the launcher has already written every promised artifact into
+        the local receipt. If collection was not verified, the bucket is retained
+        and named in the result as an explicit, bounded retention — deleting it
+        would destroy the only surviving copy of the run's measurements
+        (GRAPH6_CURRICULUM_002 attempt 003 lost a completed result this way).
+        """
         self.calls.append("cleanup")
         require(job == self.job, "CURRICULUM_CLEANUP_JOB_MISMATCH")
         failures = []
         status = {"instance_ids": list(self._instance_ids), "instances": {},
                   "security_group_deleted": True, "schedule_removed": True,
-                  "roles_removed": True, "bucket_deleted": True,
-                  "results_deleted": False, "complete": False, "failures": failures}
+                  "roles_removed": True, "bucket_deleted": False,
+                  "results_deleted": False, "collection_verified":
+                      bool(collection_verified),
+                  "evidence_retained": not collection_verified,
+                  "complete": False, "failures": failures}
+        if not collection_verified:
+            status["retention_reason"] = (
+                "COLLECTION_NOT_VERIFIED: the evidence bucket is retained so the "
+                "run's measurements are not destroyed; collect it manually and "
+                "then delete the bucket")
+            status["retained_bucket"] = (self._resources.get("bucket")
+                                         or self._bucket_name())
         ec2, s3, iam, scheduler = (self.clients.get(name) for name in
                                    ("ec2", "s3", "iam", "scheduler"))
 
@@ -1125,7 +1173,14 @@ class CurriculumProvider:
             failed("INSTANCE_PROFILE_REMOVAL_FAILED", error)
             status["roles_removed"] = False
         bucket = self._resources.get("bucket")
-        if bucket is not None:
+        if bucket is None:
+            status["bucket_deleted"] = True
+        elif not collection_verified:
+            # Deliberate, bounded retention: the compute is already stopped, and
+            # the bucket stays until its contents are collected.
+            status["bucket_deleted"] = False
+            failures.append("EVIDENCE_RETAINED_PENDING_COLLECTION:" + str(bucket))
+        else:
             try:
                 listing = s3.list_objects_v2(Bucket=bucket)
                 keys = [item["Key"] for item in listing.get("Contents", [])]
@@ -1135,10 +1190,13 @@ class CurriculumProvider:
                     require(not deleted.get("Errors"), "S3_PARTIAL_DELETION_FAILED")
                 status["results_deleted"] = any(key.startswith("results/") for key in keys)
                 s3.delete_bucket(Bucket=bucket)
+                status["bucket_deleted"] = True
             except self._client_error as error:
                 if self._error_code(error) not in ("NoSuchBucket", "404"):
                     failed("EVIDENCE_CLEANUP_FAILED", error)
                     status["bucket_deleted"] = False
+                else:
+                    status["bucket_deleted"] = True     # already absent
             except Exception as error:
                 failed("EVIDENCE_CLEANUP_FAILED", error)
                 status["bucket_deleted"] = False
@@ -1214,6 +1272,30 @@ def validate_preflight(facts):
     return facts
 
 
+def _artifact_name(entry):
+    """Artifact name from a result receipt (it carries a path) or a manifest entry."""
+    return entry.get("name") or Path(entry["path"]).name
+
+
+def collection_is_verified(collected):
+    """True only when the local receipt holds the result bytes AND every artifact
+    the result promised.
+
+    It reads the collection record itself (``artifact_expectations`` versus
+    ``artifacts_collected``), never a private provider attribute — the delivery
+    rehearsal showed that reaching into provider state made the verdict depend on
+    the provider's internals. Anything short of a full match retains the bucket
+    instead of deleting the only surviving copy.
+    """
+    if not collected or not collected.get("result_sha256"):
+        return False
+    expected = collected.get("artifact_expectations") or []
+    if not expected:
+        return True                     # nothing but the result was promised
+    collected_names = {name for name in (collected.get("artifacts_collected") or [])}
+    return collected_names == set(expected)
+
+
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_dir=None,
             owner_authorization_path=None):
     validate_request(request)
@@ -1242,6 +1324,7 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
     preflight = None
     reservation = ledger_after = launched = collected = None
     reservation_valid, reservation_error = False, None
+    verified = False
     try:
         preflight = validate_preflight(provider.preflight())
         write_evidence(directory / "preflight.json", canonical(preflight))
@@ -1261,6 +1344,7 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
         write_evidence(directory / "launch.json", canonical(launched))
         outcome = provider.wait(request["job"], timeout=RESOURCE_PLAN["instance_seconds_max"])
         collected = provider.collect(request["job"])
+        verified = collection_is_verified(collected)
         status = ("AWS_CURRICULUM_FINISHED" if outcome.get("worker_status")
                   == "REMOTE_FINISHED" else "AWS_CURRICULUM_FAILED")
     except BaseException as error:
@@ -1275,6 +1359,10 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
                                                 + str(record_error)[:1000])
     finally:
         try:
+            cleanup = provider.cleanup(request["job"],
+                                       collection_verified=verified)
+        except TypeError:
+            # providers without the collection_verified parameter (older fakes)
             cleanup = provider.cleanup(request["job"])
         except BaseException as error:
             cleanup = {"complete": False, "failures": [
@@ -1286,6 +1374,16 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
               "preflight": preflight, "launch": launched, "outcome": outcome,
               "collected": collected, "receipt_dir": str(directory),
               "cleanup": cleanup, "elapsed_seconds": time.monotonic() - started,
+              # the three outcomes are reported SEPARATELY: a job whose execution
+              # succeeded but whose delivery did not is not a completed deliverable
+              "stages": {"execution": ("FINISHED" if outcome.get("worker_status")
+                                       == "REMOTE_FINISHED" else "FAILED"),
+                         "collection": ("VERIFIED" if verified else "NOT_VERIFIED"),
+                         "cleanup": ("COMPLETE" if cleanup.get("complete")
+                                     else "INCOMPLETE")},
+              "completed_deliverable": bool(verified and cleanup.get("complete")
+                                            and outcome.get("worker_status")
+                                            == "REMOTE_FINISHED"),
               "claims": {"specialist_claimed": False, "composition_claimed": False,
                          "final_targets_read": False}}
     if not cleanup.get("complete"):

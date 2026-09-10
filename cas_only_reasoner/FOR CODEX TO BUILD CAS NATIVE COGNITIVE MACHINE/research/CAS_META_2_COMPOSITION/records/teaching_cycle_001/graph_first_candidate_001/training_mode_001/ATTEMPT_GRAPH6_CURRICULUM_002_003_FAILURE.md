@@ -1,9 +1,20 @@
 # GRAPH6_CURRICULUM_002 — attempt 003 FAILURE (preserved error, root cause, fixes)
 
-Status: **FAILED — but for the first time the EXPERIMENT ITSELF RAN TO
-COMPLETION.** The failure is in the packaging/upload plumbing at the very end of
-the job, after the six-learner comparison had finished. The measured result was
-then lost when the failure report overwrote it and the instance was terminated.
+Status: **FAILED.** The failure is in the packaging/upload plumbing, not in the
+experiment: the traceback sits after the training call returned. The measurement
+was then lost — **the comparison's scientific outcome is unavailable.**
+
+## Corrected claim (owner review, 2026-09-10)
+
+The traceback's position is evidence of **how far execution progressed**; it is not
+a recovered scientific result. Without the result and the checkpoint files, the
+1,536 updates, the 64/256 checkpoints, the reload verifications and the verdict
+are recorded as **reported execution progress** — not as verified measurements.
+Nothing about the learner's behaviour on the final panel is known from this run.
+
+Likewise the four failed allocations are **`$27.00` consumed from the campaign's
+reservation allowance**; no invoices were inspected, so this is not independently
+verified billing.
 
 ## Preserved evidence
 
@@ -29,15 +40,15 @@ Traceback (most recent call last):
 ModuleNotFoundError: No module named 'boto3'
 ```
 
-## What this failure proves, and what it cost
+## What this failure shows, and what it cost
 
-**The experiment ran.** The traceback is at line 33 of the inner runner, which is
-*after* `curriculum_experiment.launch(...)` returned, after the result was
-serialised and written, and after the sha256 sidecar was written. The six learners
-(three paired seeds × control/varied), the 1,536 updates, the 64- and 256-update
-checkpoints, the reload verifications and the final verdict were all produced
-inside that call. Attempt 003 therefore cleared every defect that killed attempts
-001 and 002.
+**Reported execution progress (not a verified measurement).** The traceback is at
+line 33 of the inner runner, which is *after* `curriculum_experiment.launch(...)`
+returned and after the result and its sha256 sidecar were written. That is
+evidence the training call completed rather than dying inside the experiment — so
+attempts 001's and 002's defects did not recur — but with the result and the
+checkpoints gone, none of the run's numbers (updates, losses, accuracies,
+verdict) can be verified or reported.
 
 **What went wrong is packaging, twice:**
 
@@ -45,11 +56,16 @@ inside that call. Attempt 003 therefore cleared every defect that killed attempt
    wheels and `requirements-gpu.txt` into a venv, and the inner runner (which runs
    inside that venv) then tried to `import boto3` to upload the checkpoints. This
    is the first attempt that got far enough to reach that line.
-2. **A failure report destroyed a completed measurement.** The outer worker's
+2. **A failure report destroyed a completed result.** The outer worker's
    `except` path unconditionally overwrote `results/result.json` with the failure
    report, so the finished run's numbers were replaced on the instance and then
    lost when the instance was terminated. The launcher's cleanup then removed the
    bucket, leaving nothing to recover.
+3. **Preserving a file on a machine about to be deleted is not delivering it**
+   (owner review). The earlier "a completed result can no longer be destroyed"
+   claim went beyond what the code demonstrated: the preservation branch had no
+   test that the *delivery chain* carries the bytes out, and cleanup deleted the
+   bucket unconditionally even when collection had failed.
 
 ## Fixes (all before any further launch)
 
@@ -66,12 +82,28 @@ inside that call. Attempt 003 therefore cleared every defect that killed attempt
 4. **The launcher collects the preserved material.** `collect()` accepts a result
    that lists no artifacts (recording `artifacts_available: false`) and
    best-effort downloads `result_partial.json` and `failure.json` into the receipt
-   directory, so an "it worked but the plumbing failed" case can no longer lose
-   its numbers.
-5. **Four new tests** pin all of it: the inner runner must not import boto3 and
-   must stage the manifest; `upload_results` must send the result last; the
-   preservation branch must exist and only fire when no result exists; collection
-   must tolerate a result without artifacts. **255 graph tests pass.**
+   directory.
+5. **Evidence deletion is now conditional (owner-directed).** Compute shutdown and
+   evidence deletion are separate: the instance always terminates by its deadline,
+   but the bucket is deleted ONLY when `collection_is_verified(collected)` is true
+   — the local receipt holds the result bytes and every artifact the result
+   promised. Otherwise the bucket is **retained**, named in the cleanup record as
+   `retained_bucket` with `retention_reason`, and the job is reported incomplete
+   (`EVIDENCE_RETAINED_PENDING_COLLECTION`). Partial collection names exactly which
+   checkpoints did not arrive (`artifacts_missing`, `reason:
+   ARTIFACTS_MISSING:<names>`). `execute()` now reports the three stages
+   separately — `stages.execution`, `stages.collection`, `stages.cleanup` — and
+   sets `completed_deliverable` only when all three succeeded.
+6. **A delivery rehearsal with the exported code** (`tests/
+   test_graph_training_delivery_rehearsal.py`) runs the REAL rendered worker inner
+   runner, the REAL exported `upload_results`, the REAL `wait/collect/cleanup`
+   against a simulated bucket, on two paths: normal completion (collector
+   receives the known result and every dummy checkpoint with matching hashes and
+   byte counts; the completion signal appears only after its required uploads) and
+   an injected upload failure after the dummy experiment returns (the original
+   result survives byte-for-byte, the failure is recorded separately, missing
+   checkpoints are named, cleanup retains the bucket, and the compute still
+   stops). **256 graph tests pass.**
 
 ## Cost and next step
 

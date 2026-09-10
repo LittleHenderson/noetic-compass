@@ -131,15 +131,28 @@ def make_provider(ledger_path, clients):
         client_error=FakeClientError)
 
 
-def test_cleanup_tolerates_already_absent_resources(tmp_path):
-    provider = make_provider(tmp_path / "ledger.json", fake_clients())
+def test_cleanup_retains_evidence_unless_collection_is_verified(tmp_path):
+    """Owner-directed: compute shutdown and evidence deletion are separate. The
+    instance always stops; the bucket is deleted only when collection was
+    verified, otherwise it is retained and named."""
+    clients = fake_clients()
+    provider = make_provider(tmp_path / "ledger.json", clients)
     provider._resources["bucket"] = "job-bucket"
-    status = provider.cleanup(JOB)
-    assert status["complete"] is True
-    assert status["instances_termination_pending"] == []
-    assert status["security_group_deleted"] is True
-    assert status["roles_removed"] is True
-    assert status["bucket_deleted"] is True
+    retained = provider.cleanup(JOB)                       # default: not verified
+    assert retained["instances_termination_pending"] == []
+    assert retained["security_group_deleted"] is True
+    assert retained["roles_removed"] is True
+    assert retained["bucket_deleted"] is False
+    assert retained["evidence_retained"] is True
+    assert retained["retained_bucket"] == "job-bucket"
+    assert any("EVIDENCE_RETAINED_PENDING_COLLECTION" in entry
+               for entry in retained["failures"])
+    assert retained["complete"] is False
+
+    verified = provider.cleanup(JOB, collection_verified=True)
+    assert verified["bucket_deleted"] is True
+    assert verified["evidence_retained"] is False
+    assert verified["complete"] is True
 
 
 def test_wait_accepts_only_the_curriculum_result_identity(tmp_path):
@@ -224,12 +237,19 @@ def test_collect_downloads_and_verifies_checkpoint_artifacts(tmp_path):
     assert (tmp_path / "receipt" / "curriculum_result.json").is_file()
 
 
-def test_collect_rejects_a_corrupted_artifact(tmp_path):
+def test_collect_reports_a_corrupted_artifact_honestly(tmp_path):
+    """A tampered artifact is named as missing/mismatched rather than aborting the
+    whole collection: the run is then reported as not delivered."""
     provider, _ = _collect_fixture(tmp_path, artifact_body=b"checkpoint-bytes")
     provider.clients["s3"].objects[
         launch.ARTIFACT_PREFIX + "varied_seed20260913_step064.pt"] = b"tampered"
-    with pytest.raises(ValueError, match="CURRICULUM_ARTIFACT_BYTES|CURRICULUM_ARTIFACT_SHA"):
-        provider.collect(JOB)
+    collected = provider.collect(JOB)
+    assert collected["artifacts_available"] is False
+    assert collected["artifacts_missing"] == ["varied_seed20260913_step064.pt"]
+    assert collected["artifacts_collected"] == []
+    assert any("CURRICULUM_ARTIFACT_BYTES" in entry
+               for entry in collected["artifact_mismatches"])
+    assert launch.collection_is_verified(collected) is False
 
 
 def test_collect_requires_a_non_empty_artifact_manifest(tmp_path):
