@@ -150,7 +150,14 @@ def save_checkpoint(torch, path, *, module, learner, step, condition, learner_se
         "optimizer": learner.optimizer.state_dict() if optimizer else None,
         "encoder": encoder_state(torch, encoder),
         "record_ids": [record["record_id"] for record in records],
-        "torch_version": getattr(torch, "__version__", None),
+        # Plain str, never the torch.torch_version.TorchVersion object:
+        # GRAPH6_CURRICULUM_002 attempt 001's preserved error was
+        # `_pickle.UnpicklingError: Weights only load failed` because PyTorch 2.6
+        # changed torch.load's default to weights_only=True and that object is not
+        # an allowed global. Keeping the payload to str/int/float/tensor/dict/list
+        # means the safe default loads it, so checkpoints can be reloaded without
+        # ever disabling it.
+        "torch_version": str(getattr(torch, "__version__", "")),
     }
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -162,7 +169,13 @@ def save_checkpoint(torch, path, *, module, learner, step, condition, learner_se
 
 
 def load_checkpoint(torch, path):
-    return torch.load(str(path), map_location="cpu")
+    """Reload a checkpoint under PyTorch's SAFE default.
+
+    ``weights_only=True`` is passed explicitly. The payload is deliberately
+    restricted to str / int / float / tensor / dict / list so this succeeds; the
+    safe default is never disabled to make a checkpoint load.
+    """
+    return torch.load(str(path), map_location="cpu", weights_only=True)
 
 
 def verify_checkpoint(torch, path, *, framework_factory, learner_factory, tasks,

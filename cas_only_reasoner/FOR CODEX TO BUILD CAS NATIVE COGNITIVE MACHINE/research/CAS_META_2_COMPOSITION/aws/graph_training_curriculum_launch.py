@@ -890,6 +890,13 @@ class CurriculumProvider:
                      "sha256": str(self._evidence / "curriculum_result.json.sha256"),
                      "result_sha256": digest(self._result_raw),
                      "artifacts": []}
+        if (self._result or {}).get("status") == "REMOTE_WORKER_FAILED":
+            # A failed worker never reaches the artifact upload, so demanding a
+            # manifest here would turn a clean, fully recorded worker failure into
+            # a confusing launch failure (GRAPH6_CURRICULUM_002 attempt 001).
+            collected["artifacts_available"] = False
+            collected["reason"] = "REMOTE_WORKER_FAILED"
+            return collected
         manifest_response = s3.get_object(Bucket=bucket, Key=ARTIFACT_MANIFEST_KEY)
         manifest_raw = self._read_body(manifest_response["Body"], 4 * 1024**2)
         manifest = json.loads(manifest_raw)

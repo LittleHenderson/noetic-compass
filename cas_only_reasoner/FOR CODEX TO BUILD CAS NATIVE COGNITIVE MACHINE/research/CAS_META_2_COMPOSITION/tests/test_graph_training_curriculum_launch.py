@@ -236,6 +236,30 @@ def test_collect_requires_a_non_empty_artifact_manifest(tmp_path):
         provider.collect(JOB)
 
 
+def test_collect_does_not_demand_artifacts_from_a_failed_worker(tmp_path):
+    """Attempt 001: the worker failed before uploading anything, and demanding a
+    manifest turned a clean, recorded worker failure into a launch failure."""
+    import hashlib
+    result = json.dumps({"schema": launch.RESULT_SCHEMA, "job": JOB,
+                         "status": "REMOTE_WORKER_FAILED",
+                         "failure": {"type": "SystemExit", "message": "x"}}).encode()
+    clients = fake_clients()
+    clients["s3"] = FakeS3({"results/result.json.sha256":
+                            hashlib.sha256(result).hexdigest().encode()})
+    provider = make_provider(tmp_path / "ledger.json", clients)
+    provider._instance_id = "i-0123456789abcdef0"
+    provider._resources["bucket"] = "job-bucket"
+    provider._result_raw = result
+    provider._result = json.loads(result)
+    (tmp_path / "receipt").mkdir()
+    provider.configure_evidence(tmp_path / "receipt")
+    collected = provider.collect(JOB)
+    assert collected["artifacts"] == []
+    assert collected["artifacts_available"] is False
+    assert collected["reason"] == "REMOTE_WORKER_FAILED"
+    assert (tmp_path / "receipt" / "curriculum_result.json").is_file()
+
+
 def test_user_data_enables_the_teaching_cycle_gate():
     provider = make_provider("ledger.json", fake_clients())
     text = provider._user_data("job-bucket")

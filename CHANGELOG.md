@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 001 **FAILED** (two of my defects, preserved error) — replacement prepared
+
+Owner GO executed one job (`cas-meta2-graph6curr-20260910053000-951cab20`, one new
+`$7.00` reservation, ledger 47 → 48: `$249.00` reserved / `$151.00` unreserved).
+It failed after 564.5 s at the FIRST checkpoint reload, before any training, with
+`_pickle.UnpicklingError: Weights only load failed` — PyTorch 2.6 defaults
+`torch.load` to `weights_only=True` and my payload embedded
+`torch.torch_version.TorchVersion` (the runtime type of `torch.__version__`), so
+the job refused the file it had just written. **Second defect, also mine:** the
+launcher's `collect()` demanded an artifact manifest, which a worker that fails
+before upload never writes, turning a clean, fully recorded worker failure into
+`AWS_CURRICULUM_LAUNCH_FAILED`. Both fixed: the payload stores the version as a
+plain string and `load_checkpoint` passes `weights_only=True` explicitly (the
+safe default is never disabled); `collect()` now records the failure result and
+returns `artifacts_available: false` when the worker reports
+`REMOTE_WORKER_FAILED`. Regression tests added; 52 curriculum tests pass. The
+launcher's fail-closed path behaved correctly throughout: one reservation, error
+preserved, cleanup complete (instance `i-0b56a1eed5c813cc9` terminated, bucket
+deleted). No measurement produced. Record:
+`ATTEMPT_GRAPH6_CURRICULUM_002_001_FAILURE.md`. A replacement (identical
+pre-registered design on the fixed source) needs a new owner GO and a new
+reservation.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 shortcut closed; experiment unchanged — **LAUNCH AUTHORIZED**
 
 Owner review found a curriculum shortcut before registration: the first draft

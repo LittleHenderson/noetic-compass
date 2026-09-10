@@ -195,9 +195,17 @@ class FakeTorch:
             pickle.dump(payload, stream)
 
     @staticmethod
-    def load(path, map_location=None):
+    def load(path, map_location=None, weights_only=True):
+        """Mirrors PyTorch >= 2.6: the safe default is on, and a payload that is
+        not weights-only-safe is refused."""
         with open(path, "rb") as stream:
-            return pickle.load(stream)
+            payload = pickle.load(stream)
+        if weights_only:
+            for key, value in payload.items():
+                if key == "torch_version" and not isinstance(value, str):
+                    raise pickle.UnpicklingError(
+                        "Weights only load failed: %r" % (type(value),))
+        return payload
 
     @staticmethod
     def stack(values):
@@ -240,6 +248,8 @@ def test_checkpoint_round_trip_restores_weights_and_predictions(tmp_path, panel)
     assert payload["encoder"]["vocabulary"] == ["a", "b"]
     assert payload["encoder"]["projection"] == ["row0", "row1"]
     assert payload["record_ids"] == [record["record_id"] for record in records]
+    # the safe default must be able to load it: the version is a plain string
+    assert isinstance(payload["torch_version"], str)
 
     def framework_factory(seed):
         return _fake_framework("fresh")
@@ -258,6 +268,20 @@ def test_checkpoint_round_trip_restores_weights_and_predictions(tmp_path, panel)
     assert verification["verified"] is True
     assert verification["predictions_match"] is True
     assert verification["step"] == 64
+
+
+def test_checkpoint_load_uses_pytorch_safe_default_and_rejects_unsafe_payload(tmp_path):
+    """Attempt 001's preserved error: torch.load refused the payload because it
+    carried a torch.torch_version.TorchVersion object. The loader must use the
+    safe default, and a payload that is not weights-only-safe must fail."""
+    import inspect
+    source = inspect.getsource(curriculum_experiment.load_checkpoint)
+    assert "weights_only=True" in source
+    path = tmp_path / "unsafe.pt"
+    with open(path, "wb") as stream:
+        pickle.dump({"torch_version": ("2", "11", "0")}, stream)
+    with pytest.raises(pickle.UnpicklingError):
+        curriculum_experiment.load_checkpoint(FakeTorch(), path)
 
 
 def test_verify_checkpoint_detects_a_prediction_mismatch(tmp_path, panel):
