@@ -1,0 +1,25 @@
+{
+  "schema": "cas-graph-training-candidate-launch-authority/1",
+  "job": "cas-meta2-graph6cand-20260910120000-0a55f4b1",
+  "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+  "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+  "manifest_sha256": "14fc7d1373cfd18af2ee0e3ae3086e75ad9ebb56ffa440b38eb288cba8d5c5b4",
+  "owner_authorization_sha256": null,
+  "conditions": ["checked_component_teaching", "final_answer_only"],
+  "updates_per_condition": 64,
+  "total_optimizer_steps": 128,
+  "seed": 20260909,
+  "encoder_seed": 20260909,
+  "ordering_mode": "declared",
+  "probe_questions": 44,
+  "checkpoints": ["final"],
+  "learning_rate": 0.003,
+  "max_wall_seconds_per_condition": 600.0,
+  "reservation_usd": "7.00",
+  "status": "TEMPLATE_NOT_SIGNED",
+  "unfilled": {
+    "owner_authorization_sha256": "the sha256 of the owner-signed authorization record; until it is filled, `validate_authority` refuses this document and `execute` cannot run",
+    "owner_signature_and_date": "see AUTHORIZATION_REQUEST_002.md section 7"
+  },
+  "note": "Authority template for the checked-component pilot. Every design field is frozen and matches the launcher's FROZEN constants; only the owner's authorization hash and signature are missing."
+}

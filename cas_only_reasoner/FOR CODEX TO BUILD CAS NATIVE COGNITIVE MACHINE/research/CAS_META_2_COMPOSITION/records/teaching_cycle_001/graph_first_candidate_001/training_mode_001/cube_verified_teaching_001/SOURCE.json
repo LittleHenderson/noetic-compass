@@ -51,9 +51,14 @@
     "cas_meta2/graph_teaching/verified_teaching.py",
     "cas_meta2/graph_teaching/verified_training.py",
     "cas_meta2/graph_teaching/candidate_run.py",
+    "cas_meta2/graph_teaching/candidate_experiment.py",
+    "aws/graph_training_candidate_launch.py (pilot-specific binding; reuses the curriculum launcher's machinery)",
+    "aws/graph_training_curriculum_launch.py (three behaviour-neutral extension points: worker name, worker config, result schema)",
     "tests/test_graph_teaching_verified_teaching.py",
     "tests/test_graph_teaching_verified_training.py",
     "tests/test_graph_teaching_candidate_run.py",
+    "tests/test_graph_teaching_candidate_experiment.py",
+    "tests/test_graph_training_candidate_launch.py",
     "tools/graph6_cube_node_check.py (extended: --verified-teaching, --artifacts; default report unchanged)"
   ],
   "documents": [
@@ -61,8 +66,33 @@
     {"name": "TASK_BINDINGS.md", "bytes": 8602, "sha256": "44474a951555ae7cd4621b5052155949fead55964b14cf89f2890e1ba6fa5f46"},
     {"name": "EXECUTION_CONNECTION.md", "bytes": 6617, "sha256": "b1c995e97e0340733482622dd7b94c8fdfb2246b4d7f4d02f8cef98327437d48"},
     {"name": "CANDIDATE_RUN_001.md", "bytes": 10571, "sha256": "d1d499754bea7544bbbd84f55b335711d515012c1eee36cdbe88c578cc36d3b7"},
-    {"name": "AUTHORIZATION_REQUEST_001.md", "bytes": 9036, "sha256": "e42a8eaccb73750b05203eaaefb4f3bf6a66c9ce684a9ddaf1cdf1a8ba74ffd7"}
+    {"name": "AUTHORIZATION_REQUEST_001.md", "bytes": 9036, "sha256": "e42a8eaccb73750b05203eaaefb4f3bf6a66c9ce684a9ddaf1cdf1a8ba74ffd7"},
+    {"name": "AUTHORIZATION_REQUEST_002.md", "bytes": 6765, "sha256": "8e4774dd9a160abd6f402c5855bd5dfac8093a78111252e27413b62d28425deb"}
   ],
+  "pilot_package": {
+    "directory": "candidate_package_001",
+    "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+    "archive": "candidate_package_001/source.zip",
+    "archive_bytes": 488735,
+    "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+    "manifest_sha256": "14fc7d1373cfd18af2ee0e3ae3086e75ad9ebb56ffa440b38eb288cba8d5c5b4",
+    "members": 44,
+    "worker_script": "graph6_candidate_worker.py",
+    "entrypoint": "cas_meta2.graph_teaching.candidate_experiment.launch",
+    "status": "SOURCE_ONLY_NO_LAUNCH",
+    "launch_enabled": false
+  },
+  "authorization_records": {
+    "request": {"name": "candidate_request_001.json", "bytes": 388,
+                "sha256": "3005b84ca2b5138af2f1b0f91a59bf6c03cf42d19f109a94761bd9fb878cdeef",
+                "launch_authorized": false,
+                "job": "cas-meta2-graph6cand-20260910120000-0a55f4b1"},
+    "authority_template": {"name": "candidate_authority_TEMPLATE.json", "bytes": 1273,
+                           "sha256": "efaa88ab40a3f426e7982553d396c56d8109c60ad8dde7f138e0042d001ae6bb",
+                           "status": "TEMPLATE_NOT_SIGNED",
+                           "owner_authorization_sha256": null},
+    "note": "both records are inert: the request sets launch_authorized false and the authority lacks the owner's record hash, so the launcher refuses to reserve or launch"
+  },
   "question_ledger": {
     "catalog_questions": 51,
     "teaching_records": 8,
@@ -86,14 +116,16 @@
     "ordering_rule": "round-robin over the whole-answer questions in their frozen export order; the remainder to the first"
   },
   "authorization_request": {
-    "document": "AUTHORIZATION_REQUEST_001.md",
+    "document": "AUTHORIZATION_REQUEST_002.md",
+    "supersedes": "AUTHORIZATION_REQUEST_001.md",
     "status": "REQUEST ONLY - not approved, not reserved, not launched",
     "reservation_usd_proposed": "7.00",
     "reservation_usd_tighter_alternative": "4.00",
     "per_condition_updates": 64,
     "combined_updates": 128,
     "auto_retries": 0,
-    "owner_signature_required": true
+    "owner_signature_required": true,
+    "package_and_launcher_identities": "bound in sections 1 and 2 of the request"
   },
   "candidate_schedule": {
     "profile_id": "cas-cube-component-teaching-schedule/1:8x8",
