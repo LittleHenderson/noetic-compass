@@ -508,10 +508,21 @@ CLIENT_NAMES = ("ec2", "s3", "iam", "sts", "pricing")
 
 
 def _clients(profile):
+    """The same client construction the working curriculum path uses.
+
+    Two details matter and both cost a preflight failure to learn: every client
+    needs the frozen region, and the **Pricing** client must be built in
+    ``us-east-1`` (its only usable endpoint), or ``get_products`` answers
+    ``AccessDeniedException``.
+    """
     import boto3
-    session = boto3.Session(profile_name=None if profile == "default" else profile)
-    return {name: session.client(name, region_name=RESOURCE_PLAN["region"])
-            for name in CLIENT_NAMES}
+    from botocore.config import Config
+    config = Config(connect_timeout=5, read_timeout=10, retries={"max_attempts": 0})
+    session = boto3.Session(profile_name=profile, region_name=RESOURCE_PLAN["region"])
+    clients = {name: session.client(name, config=config) for name in CLIENT_NAMES}
+    clients["pricing"] = session.client("pricing", region_name="us-east-1",
+                                        config=config)
+    return clients
 
 
 if __name__ == "__main__":

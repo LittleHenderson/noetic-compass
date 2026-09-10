@@ -85,6 +85,27 @@ def test_the_client_set_covers_every_name_the_reused_provider_asks_for():
     assert asked, "the reused provider must ask for at least one client"
     assert asked <= set(cl.CLIENT_NAMES), sorted(asked - set(cl.CLIENT_NAMES))
     assert set(cl.CLIENT_NAMES) == {"ec2", "s3", "iam", "sts", "pricing"}
+
+
+def test_the_pricing_client_is_built_in_its_own_region():
+    """Regression guard: attempt 002 failed on AccessDeniedException from get_products.
+
+    The Pricing API is answered from ``us-east-1``; building it in the frozen
+    instance region makes every preflight fail before any reservation, which is
+    exactly what happened once. This checks the construction against the working
+    curriculum path's own rules.
+    """
+    import inspect
+    import re as _re
+
+    source = inspect.getsource(cl._clients)
+    assert 'region_name="us-east-1"' in source
+    assert "max_attempts" in source and "0" in source
+    curriculum_source = inspect.getsource(curriculum.main)
+    assert 'clients["pricing"] = session.client("pricing", region_name="us-east-1"' \
+        in curriculum_source
+    assert "profile_name=profile" in source
+    assert "RESOURCE_PLAN" in source
 def test_the_curriculum_profile_is_preserved_not_overwritten():
     assert curriculum.RESERVATION_USD == cl.RESERVATION_USD
     assert curriculum.JOB_PATTERN != cl.JOB_PATTERN
