@@ -111,7 +111,41 @@ cleanup policy accepted:          ______   (instance always terminated; bucket d
 owner signature / date:           ______
 ```
 
-## 8. What this request does NOT authorize
+## 8. Attempt log after the owner's `$7.00 run.` authorization
+
+| Attempt | Outcome | Spend |
+|---|---|---|
+| 001 | `KeyError: 'sts'` at preflight: my client set named three of the five clients the reused lifecycle asks for | **none** — before the reservation |
+| 002 | `AccessDeniedException` from `pricing.get_products` at preflight: the Pricing client was built in `us-west-2`, not `us-east-1` | **none** — before the reservation |
+| 003 | preflight passed; the **single `$7.00` reservation was taken**; then `launch()` failed with `CURRICULUM_SOURCE_ARCHIVE_REQUIRED` because `main()` never passed the built package's `source.zip` | **`$7.00` consumed** |
+
+Attempt 003's evidence is preserved at
+`receipt_cas-meta2-graph6cand-20260910120000-0a55f4b1_attempt003/` (`intent.json`,
+`preflight.json`, `provider_000[1-3].json`, `reservation.json`, `failure.json`,
+`result.json`). Ledger after it: **revision 52, `$277.00` reserved of `$400.00`,
+`$123.00` free**, job `cas-meta2-graph6cand-20260910120000-0a55f4b1` recorded.
+
+Attempt 003 created **no instance and no evidence bucket** and trained nothing. The
+cleanup report reads `INCOMPLETE` only because it tried to remove a scheduler and a role
+that were never created. One S3 object remains: the budget helper's own reservation
+receipt bucket `cas-meta2-graph6cand-20260910120000-0a55f4b1-807562639912`, which is part
+of the ledger's audit trail and is left in place.
+
+Four fixes are in, none of which can spend a reservation:
+
+1. `main()` locates and passes the archive by the hash the request binds.
+2. `execute()` refuses **before** the reservation unless the provider holds a readable
+   source archive whose digest matches the request — two tests prove `reserve()` is never
+   reached when the check fails.
+3. `_locate_archive()` hashes the candidate file before accepting it, because scratch
+   receipts elsewhere in `records/` carry synthetic hashes.
+4. The client set and the Pricing region are checked against the reused source by tests.
+
+**No second launch has been made.** The owner's single authorization is consumed, and
+another attempt needs a new owner GO for a second `$7.00` reservation (ledger revision
+53). The exact command is §6 above with a fresh `--receipt-dir` ending `_attempt004`.
+
+## 9. What this request does NOT authorize
 
 * No reservation, provider call, neural execution, or paid launch until §7 is signed.
 * No change to the fixed architecture, readout, pooling, embeddings or tokenizer.
