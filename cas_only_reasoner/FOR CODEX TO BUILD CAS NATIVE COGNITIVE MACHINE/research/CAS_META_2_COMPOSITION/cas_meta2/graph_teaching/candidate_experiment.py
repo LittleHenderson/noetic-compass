@@ -18,6 +18,7 @@ the component questions and the probe are reported **separately**; the probe nev
 selects a checkpoint, adjusts the curriculum, or extends training.
 """
 from __future__ import annotations
+import hashlib
 
 from .graph import canonical, digest, require
 from . import adapter, candidate_run as cr, cube_node, trainer, verified_training as vtr
@@ -246,6 +247,36 @@ def compare(results):
 def checkpoint_identity(framework, model):
     """Digest of the current parameter bytes, for the checkpoint round trip."""
     return digest(canonical(sorted(trainer.parameter_snapshot(framework, model).items())))
+
+
+def parameter_order(module):
+    """The parameter names, in the order ``checkpoint_identity`` digests them.
+
+    ``GraphLearner.checkpoint_identity`` hashes ``parameter.tobytes()`` for each
+    ``(name, parameter)`` of ``module.named_parameters()`` — in that order, with
+    the names themselves **not** included. The order is recorded explicitly
+    because it is not recoverable from a loaded checkpoint: ``state_dict()``
+    order is a different order once a module registers buffers, and it carries
+    entries that are not parameters at all.
+    """
+    return [name for name, _ in module.named_parameters()]
+
+
+def state_digest(state, order):
+    """The learner's own identity rule, applied to a loaded ``state`` mapping.
+
+    A checkpoint round trip must reproduce exactly this rule. Hashing the
+    parameter *names* as well, or trusting the mapping's own order, produces a
+    digest that can never equal the identity the learner reports, and the whole
+    condition then fails closed on ``CANDIDATE_CHECKPOINT_NOT_VERIFIED`` — after
+    its entire update budget has been spent.
+    """
+    require(order, "CANDIDATE_STATE_ORDER_REQUIRED")
+    accumulator = hashlib.sha256()
+    for name in order:
+        require(name in state, "CANDIDATE_STATE_NAME_MISSING:" + str(name))
+        accumulator.update(state[name].detach().cpu().numpy().tobytes())
+    return accumulator.hexdigest()
 
 
 def build_inputs(bundle=None, view_id="view_context", ordering_mode="declared"):

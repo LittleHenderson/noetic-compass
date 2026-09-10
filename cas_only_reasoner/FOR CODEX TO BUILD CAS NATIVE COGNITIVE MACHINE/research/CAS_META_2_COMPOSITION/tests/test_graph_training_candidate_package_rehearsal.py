@@ -224,3 +224,118 @@ def test_the_worker_reports_completion_and_uploads_the_marker_last(needle):
     worker = cl.render_worker()
     assert needle in worker
     assert worker.index("results/manifest.json") < worker.index("results/result.json")
+
+
+def _worker_functions(names):
+    """The worker's own function bodies, compiled from the rendered source.
+
+    Returns the namespace they were compiled into, so the caller can bind the
+    names they close over (``torch``, ``ce``, ``ARTIFACTS``) and then execute the
+    worker's literal code.
+    """
+    import ast
+    import textwrap
+
+    source = cl.render_worker()
+    namespace = {}
+    found = []
+    for node in ast.walk(ast.parse(source)):
+        if isinstance(node, ast.FunctionDef) and node.name in names:
+            segment = ast.get_source_segment(source, node)
+            exec(textwrap.dedent(segment), namespace)  # noqa: S102 - test-only
+            found.append(node.name)
+    assert sorted(found) == sorted(names)
+    return namespace
+
+
+class _FakeTensor:
+    def __init__(self, payload):
+        self.payload = payload
+
+    def detach(self):
+        return self
+
+    def cpu(self):
+        return self
+
+    def numpy(self):
+        return self
+
+    def tobytes(self):
+        return self.payload
+
+
+class _FakeModule:
+    """``state_dict`` order and membership deliberately differ from parameters."""
+
+    def __init__(self):
+        self.pairs = [("module.left.weight", _FakeTensor(b"left")),
+                      ("module.right.weight", _FakeTensor(b"right"))]
+        self.state = {"module.running": _FakeTensor(b"buffer"),
+                      "module.right.weight": self.pairs[1][1],
+                      "module.left.weight": self.pairs[0][1]}
+
+    def named_parameters(self):
+        return list(self.pairs)
+
+    def state_dict(self):
+        return dict(self.state)
+
+
+class _FakeLearner:
+    condition_tag = "checked_component_teaching"
+
+    def __init__(self):
+        self.module = _FakeModule()
+
+
+class _FakeTorch:
+    """``torch.save``/``torch.load`` reduced to a pickle round trip."""
+
+    @staticmethod
+    def save(payload, path):
+        import pickle
+        with open(path, "wb") as stream:
+            pickle.dump(payload, stream)
+
+    @staticmethod
+    def load(path, map_location=None, weights_only=None):
+        import pickle
+        with open(path, "rb") as stream:
+            return pickle.load(stream)
+
+
+def test_the_workers_real_checkpoint_round_trip_verifies(tmp_path):
+    """Executes the worker's own writer and verifier, not a stand-in for them.
+
+    A verifier that hashed the parameter names alongside the bytes could never
+    equal ``GraphLearner.checkpoint_identity()``, so every condition would fail
+    closed on ``CANDIDATE_CHECKPOINT_NOT_VERIFIED`` after spending its full
+    update budget. The identity here is computed with the learner's rule.
+    """
+    import hashlib
+
+    from cas_meta2.graph_teaching import candidate_experiment as ce
+
+    namespace = _worker_functions({"checkpoint_writer", "checkpoint_verifier"})
+    namespace.update({
+        "torch": _FakeTorch,
+        "ce": ce,
+        "ARTIFACTS": tmp_path,
+        "sha256_file": lambda path: hashlib.sha256(
+            Path(path).read_bytes()).hexdigest(),
+    })
+    writer = namespace["checkpoint_writer"]
+    verifier = namespace["checkpoint_verifier"]
+    learner = _FakeLearner()
+    accumulator = hashlib.sha256()
+    for _, tensor in learner.module.named_parameters():
+        accumulator.update(tensor.detach().cpu().numpy().tobytes())
+    identity = accumulator.hexdigest()
+    saved = writer(learner, identity)
+    assert saved["identity"] == identity
+    assert Path(saved["path"]).is_file()
+    assert verifier(saved, identity) is True
+    # The identity is the learner's rule, so a names-inclusive digest cannot pass.
+    assert verifier(saved, "0" * 64) is False
+    assert "name.encode" not in cl.render_worker()

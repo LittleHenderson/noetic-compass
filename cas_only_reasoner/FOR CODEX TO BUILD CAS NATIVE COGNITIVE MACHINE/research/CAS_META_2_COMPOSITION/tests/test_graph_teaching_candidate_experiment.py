@@ -5,6 +5,7 @@ for the framework, the learner and the checkpoints so the *order*, the *budgets*
 the *separation of measures* and the *matched initial weights* can be checked
 without any neural execution.
 """
+import hashlib
 import json
 
 import pytest
@@ -298,3 +299,89 @@ def test_probe_geometry_is_reported_rather_than_assumed_balanced():
     assert geometry["unequal_because_the_answer_is_empty"] >= 1
     assert "cannot offer equal item counts" in geometry["note"]
     assert all(len(record["options"]) == 3 for record in inputs["probe"])
+
+
+class StubTensor:
+    """Enough of a tensor for the identity rule, and nothing more."""
+
+    def __init__(self, payload):
+        self.payload = payload
+
+    def detach(self):
+        return self
+
+    def cpu(self):
+        return self
+
+    def numpy(self):
+        return self
+
+    def tobytes(self):
+        return self.payload
+
+
+class StubModule:
+    def __init__(self, pairs):
+        self.pairs = pairs
+
+    def named_parameters(self):
+        return list(self.pairs)
+
+
+def _learner_rule_identity(pairs):
+    """``GraphLearner.checkpoint_identity``, transcribed for a fake module."""
+    accumulator = hashlib.sha256()
+    for _, tensor in pairs:
+        accumulator.update(tensor.detach().cpu().numpy().tobytes())
+    return accumulator.hexdigest()
+
+
+def test_state_digest_is_the_learners_own_identity_rule():
+    """The round trip digests parameter bytes, in ``named_parameters()`` order.
+
+    A verifier that also hashed the parameter *names* could never equal the
+    identity the learner reports, and the condition would fail closed on
+    ``CANDIDATE_CHECKPOINT_NOT_VERIFIED`` with its whole budget already spent.
+    """
+    pairs = [("module.left.weight", StubTensor(b"left")),
+             ("module.right.weight", StubTensor(b"right"))]
+    # state_dict order deliberately differs, and carries a buffer: neither the
+    # mapping's order nor its membership is the identity.
+    state = {"module.running": StubTensor(b"buffer"),
+             "module.right.weight": pairs[1][1],
+             "module.left.weight": pairs[0][1]}
+    order = ce.parameter_order(StubModule(pairs))
+    assert order == ["module.left.weight", "module.right.weight"]
+    assert ce.state_digest(state, order) == _learner_rule_identity(pairs)
+    assert ce.state_digest(state, order) != hashlib.sha256(
+        b"left" + b"right" + b"buffer").hexdigest()
+
+
+class StubModule:
+    def __init__(self, pairs):
+        self.pairs = pairs
+
+    def named_parameters(self):
+        return list(self.pairs)
+
+
+def test_state_digest_refuses_a_missing_order_or_a_missing_name():
+    with pytest.raises(ValueError) as error:
+        ce.state_digest({"module.left.weight": StubTensor(b"left")}, [])
+    assert str(error.value).startswith("CANDIDATE_STATE_ORDER_REQUIRED")
+    with pytest.raises(ValueError) as error:
+        ce.state_digest({}, ["module.left.weight"])
+    assert str(error.value).startswith("CANDIDATE_STATE_NAME_MISSING")
+
+
+def test_the_learner_identity_rule_the_digest_mirrors_is_still_the_same_one():
+    """Binds ``state_digest`` to the real ``GraphLearner`` source, not to a hope."""
+    import inspect
+
+    from cas_meta2.graph_teaching import real_framework
+
+    source = inspect.getsource(real_framework.GraphLearner.checkpoint_identity)
+    assert "self.module.named_parameters()" in source
+    assert "parameter.detach().cpu().numpy().tobytes()" in source
+    assert "name.encode" not in source
+    assert "state_dict" not in source
