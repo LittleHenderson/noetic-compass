@@ -1,0 +1,60 @@
+{
+  "schema": "cas-graph-training-candidate-owner-authorization/1",
+  "recorded_utc": "2026-09-10T12:00:00.000000+00:00",
+  "owner_instruction_raw": "$7.00 run.",
+  "instruction_interpretation": "The owner approves the $7.00 option of AUTHORIZATION_REQUEST_002.md: one reservation of $7.00, one launch, for the checked-component two-condition pilot (cas-meta2-graph6cand-20260910120000-0a55f4b1), under the frozen design and limits recorded in this file. This is the owner's decision on the spending question the request posed; no other option in the request ($4.00 with a changed resource plan) is taken.",
+  "job": "cas-meta2-graph6cand-20260910120000-0a55f4b1",
+  "launcher": "aws/graph_training_candidate_launch.py at commit c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+  "entrypoint": "cas_meta2.graph_teaching.candidate_experiment.launch",
+  "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+  "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+  "manifest_sha256": "14fc7d1373cfd18af2ee0e3ae3086e75ad9ebb56ffa440b38eb288cba8d5c5b4",
+  "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_package_001/",
+  "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_request_001.json",
+  "authorization_context": "CUBE_VERIFIED_TEACHING_001 / checked component teaching - the owner-approved single two-condition pilot. Purpose: test how to spend a fixed update budget - is it better to spend some practice on the parts of a problem (five checked component route questions) rather than every update on the complete whole-part questions? The measured problem it attacks is that fresh transfer on the graph specialist has not been established (GRAPH6_CURRICULUM_002 attempt 004: VARIED_CURRICULUM_NOT_ESTABLISHED, fresh LIST_PARTS 23/180 = 12.8 per cent against FIND_SHARED_PART 71/180 = 39.4 per cent and REACHED_VIA 62/180 = 34.4 per cent). Design: two conditions from matched initial weights - checked_component_teaching (40 component corrections plus 24 whole-answer corrections per 64 updates, in eight blocks of five component questions then three whole-answer questions) and final_answer_only (0 plus 64, frozen round-robin ordering 22/21/21) - 64 updates per condition, 128 total, seed 20260909, encoder seed 20260909, arm cas, ordering mode declared, separate optimizer states and checkpoints, the same frozen encoder, framing and scoring path. Data: the pinned illustrative scene, eight teaching records covering SEVEN distinct questions (the REACHED_VIA(Bicycle, Rim) route is taught once as a component question and once as a whole-answer question, so it receives 16 corrections across the eight blocks while the other six distinct questions receive eight each), and a common 44-question untaught probe (51 catalog questions minus the 7 distinct taught; REACHED_VIA 25, FIND_SHARED_PART 14, LIST_PARTS 5) evaluated after each condition's final checkpoint with no update, never used to select a checkpoint, adjust the curriculum, or extend training. Reporting: before and after, per condition - the selected answer, all three scores and the loss for each of the three taught whole-answer questions (the primary set; one changed answer moves accuracy by 33.3 percentage points, so no single percentage carries the conclusion), the five component questions separately, and the 44 untaught probe by operation; independent and assisted figures are never merged; missing measurements are recorded as unavailable, never zero. Interpretation bound: this comparison measures how to spend a fixed budget; it does NOT isolate adding component instruction at equal final-question practice, because the control practises the final questions 64 times against 24. A negative result means this allocation did not help under these conditions, never that the seven-stage program failed - definition, analogy, correspondence and story presentations have no numerical delivery path here.",
+  "run_bounds": {
+    "jobs": 1,
+    "conditions": ["checked_component_teaching", "final_answer_only"],
+    "updates_per_condition": 64,
+    "total_optimizer_steps": 128,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0,
+    "arm": "cas",
+    "seed": 20260909,
+    "encoder_seed": 20260909,
+    "ordering_mode": "declared",
+    "per_condition": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "checkpoints": ["final"],
+    "probe_questions": 44,
+    "data": {
+      "teaching_records": 8,
+      "distinct_taught_questions": 7,
+      "control_ordering": "frozen round-robin 22 / 21 / 21 over the three whole-answer questions",
+      "probe": "44 untaught catalog questions, same set for both conditions, evaluated after the final checkpoint"
+    }
+  },
+  "execution_gates": [
+    "single launch attempt through the candidate launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "both conditions use the same teaching records, the same probe and the same update allowance; matched initial weights are required (CANDIDATE_INITIAL_WEIGHTS_NOT_MATCHED fails closed)",
+    "only the operation:^6 parameter group may change; the containment report must name any forbidden change (CANDIDATE_CONTAINMENT_VIOLATION fails closed)",
+    "the probe never enters tokenizer fitting, training, checkpoint selection or any mid-run curriculum change",
+    "each condition's final checkpoint is written, read back and verified before upload; collection is verified before the bucket is deleted",
+    "per-step predictions are recorded before their correction; all three scores or the explicit value unavailable",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any second job, any automatic retry, or any experiment beyond this single pilot",
+    "the $4.00 resource-plan alternative or any other change to the frozen resource plan",
+    "any architecture, representation, encoder, readout, pooling, tokenizer or option-contract change",
+    "child-call / parent-integration work for this specialist",
+    "any modification of accepted models, trainers, the ledger beyond this job's reservation, frozen negatives, sealed splits, previous results or retained checkpoints",
+    "the pending zero-update contrast probe, which stays pending",
+    "any claim that this pilot tests or demonstrates the seven-stage cube program",
+    "any capability claim beyond the measured result of this pilot"
+  ]
+}

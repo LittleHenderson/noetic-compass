@@ -501,12 +501,17 @@ def main(argv=None):
     return 0
 
 
+# Every client name the reused provider lifecycle asks for. The first attempt at
+# this pilot failed at preflight with KeyError: 'sts' because only three of the
+# five were created; a test now checks this set against the reused source.
+CLIENT_NAMES = ("ec2", "s3", "iam", "sts", "pricing")
+
+
 def _clients(profile):
     import boto3
     session = boto3.Session(profile_name=None if profile == "default" else profile)
-    return {"ec2": session.client("ec2", region_name=RESOURCE_PLAN["region"]),
-            "s3": session.client("s3", region_name=RESOURCE_PLAN["region"]),
-            "iam": session.client("iam", region_name=RESOURCE_PLAN["region"])}
+    return {name: session.client(name, region_name=RESOURCE_PLAN["region"])
+            for name in CLIENT_NAMES}
 
 
 if __name__ == "__main__":

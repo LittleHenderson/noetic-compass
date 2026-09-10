@@ -67,6 +67,24 @@ def test_plan_only_is_inert_and_binds_this_experiment():
     assert plan["job_pattern"] == cl.JOB_PATTERN
 
 
+def test_the_client_set_covers_every_name_the_reused_provider_asks_for():
+    """Regression guard: the first launch attempt failed with KeyError: 'sts'.
+
+    The reused lifecycle asks for five clients; creating three of them is enough
+    to fail at preflight, before any reservation. This test reads the reused
+    source and requires CLIENT_NAMES to cover every name it requests.
+    """
+    import inspect
+    import re as _re
+
+    source = inspect.getsource(curriculum)
+    asked = set(_re.findall(r'self\.clients\["([a-z0-9]+)"\]', source))
+    asked |= {name for group in _re.findall(
+        r'\(self\.clients\[name\] for name in \(([^)]*)\)\)', source)
+        for name in _re.findall(r'"([a-z0-9]+)"', group)}
+    assert asked, "the reused provider must ask for at least one client"
+    assert asked <= set(cl.CLIENT_NAMES), sorted(asked - set(cl.CLIENT_NAMES))
+    assert set(cl.CLIENT_NAMES) == {"ec2", "s3", "iam", "sts", "pricing"}
 def test_the_curriculum_profile_is_preserved_not_overwritten():
     assert curriculum.RESERVATION_USD == cl.RESERVATION_USD
     assert curriculum.JOB_PATTERN != cl.JOB_PATTERN
