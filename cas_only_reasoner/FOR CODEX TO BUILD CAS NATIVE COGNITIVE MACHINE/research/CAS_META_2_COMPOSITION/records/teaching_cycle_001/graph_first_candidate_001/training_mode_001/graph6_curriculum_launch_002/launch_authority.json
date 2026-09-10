@@ -1,0 +1,27 @@
+{
+  "archive_sha256": "c24f2f9ce2d01a44ac79e46bfdc59788256200b6a2079c3223f8a6758a0f20f9",
+  "checkpoints": [
+    64,
+    256
+  ],
+  "conditions": [
+    "control",
+    "varied"
+  ],
+  "job": "cas-meta2-graph6curr-20260910073000-210109c7",
+  "learning_rate": 0.003,
+  "manifest_sha256": "c5b35dc4f544cbf43fe4a9190f12db71d249722dbaba6020c5ef49fae9c830dd",
+  "max_wall_seconds_per_learner": 900.0,
+  "owner_authorization_sha256": "c583ca27202abcd5079a514ea3fcc4d32b1fb8ddaf72585ecbf7211df3a1ff37",
+  "pair_seeds": [
+    20260913,
+    20260914,
+    20260915
+  ],
+  "panel_seed": 20260930,
+  "reservation_usd": "7.00",
+  "schema": "cas-graph-training-curriculum-launch-authority/1",
+  "source_sha": "210109c7cc848b4cf8e68c15ba31a186fe5638f8",
+  "total_optimizer_steps": 1536,
+  "updates_per_learner": 256
+}
