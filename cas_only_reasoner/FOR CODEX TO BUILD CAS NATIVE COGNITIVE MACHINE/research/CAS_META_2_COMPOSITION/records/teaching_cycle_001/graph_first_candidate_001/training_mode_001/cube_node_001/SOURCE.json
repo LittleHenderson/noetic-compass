@@ -1,0 +1,64 @@
+{
+  "record": "cube_node_001",
+  "purpose": "Pinned inputs for the Cube Node Schema v0.1 data-only deliverable.",
+  "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+  "claim_state": "schema valid (the first of the five states in the schema's section 12); no lesson has been delivered to a module, no practice was measured, no transfer was demonstrated, nothing was integrated",
+  "source_identity": [
+    {
+      "pinned_name": "Cube_Node_Example_v0.1.json",
+      "origin_path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Example_v0.1.json",
+      "origin": "owner-delivered illustrative six-cube bundle accompanying Cube Node Schema v0.1",
+      "bytes": 29971,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+      "copied_unchanged": true
+    },
+    {
+      "pinned_name": "Cube_Node_Schema_v0.1.md",
+      "origin_path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Schema_v0.1.md",
+      "origin": "owner-delivered specification document, Cube Node Schema v0.1",
+      "bytes": 25974,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b",
+      "copied_unchanged": true
+    }
+  ],
+  "generated_records": [
+    {
+      "name": "CUBE_NODE_CHECK.json",
+      "producer": "tools/graph6_cube_node_check.py",
+      "bytes": 80153,
+      "sha256": "1df29252dbf3a69f54726ff6f22208f0ad50fc9843f28a5b32fb95ff87226651",
+      "reproduces_reading": "python -m tools.graph6_cube_node_check --output <path>",
+      "note": "byte-identical on re-run; the tool refuses to overwrite an existing file"
+    }
+  ],
+  "bundle_identity": {
+    "schema_version": "cas.cube-bundle/0.1",
+    "lesson_family_id": "illustration_family_01",
+    "context_id": "toy_scene_01",
+    "nodes": 6,
+    "branches": 5,
+    "views": 3,
+    "mappings": 1,
+    "context_contains_inventory_complete": true,
+    "canonical_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16"
+  },
+  "code": [
+    "cas_meta2/graph_teaching/cube_node.py",
+    "tests/test_graph_teaching_cube_node.py",
+    "tools/graph6_cube_node_check.py"
+  ],
+  "boundary": {
+    "training": "none",
+    "reservation": "none",
+    "launch": "none",
+    "neural_calls": 0,
+    "checkpoints_touched": "none",
+    "unchanged": [
+      "the zero-update contrast probe",
+      "the accepted models",
+      "the retained checkpoints",
+      "the registered curricula and panels",
+      "every paid-run decision and the campaign reservation allowance"
+    ]
+  }
+}
