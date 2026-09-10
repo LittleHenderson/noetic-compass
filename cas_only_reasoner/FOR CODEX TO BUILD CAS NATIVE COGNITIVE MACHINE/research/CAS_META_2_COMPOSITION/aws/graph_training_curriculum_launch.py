@@ -631,6 +631,11 @@ class CurriculumProvider:
         # this launcher's own behaviour exactly as it was.
         self.worker_name = WORKER_NAME
         self.result_schema = RESULT_SCHEMA
+        # Which result statuses mean "the worker failed". Declared here rather
+        # than hard-coded in wait()/collect(), because a reusing experiment names
+        # its own statuses (the candidate worker writes WORKER_FAILED) and a
+        # hard-coded word would silently report a failed run as finished.
+        self.failure_statuses = ("REMOTE_WORKER_FAILED",)
 
     def _worker_config(self, bucket):
         """The worker config this experiment uploads; a candidate overrides this."""
@@ -921,11 +926,13 @@ class CurriculumProvider:
                 response = s3.get_object(Bucket=bucket, Key="results/result.json")
                 raw = self._read_body(response["Body"], 128 * 1024**2)
                 result = json.loads(raw)
-                require(result.get("schema") == RESULT_SCHEMA,
+                require(result.get("schema") == getattr(self, "result_schema",
+                                                        RESULT_SCHEMA),
                         "CURRICULUM_RESULT_IDENTITY")
                 self._result = result
                 self._result_raw = raw
-                if result.get("status") == "REMOTE_WORKER_FAILED":
+                if result.get("status") in getattr(self, "failure_statuses",
+                                                   ("REMOTE_WORKER_FAILED",)):
                     return {"worker_status": "REMOTE_FAILED"}
                 return {"worker_status": "REMOTE_FINISHED"}
             except self._client_error as error:
@@ -984,7 +991,8 @@ class CurriculumProvider:
                          ((self._result or {}).get("artifacts") or [])),
                      "artifacts_collected": [],
                      "artifacts_missing": []}
-        if (self._result or {}).get("status") == "REMOTE_WORKER_FAILED":
+        if (self._result or {}).get("status") in getattr(
+                self, "failure_statuses", ("REMOTE_WORKER_FAILED",)):
             # A failed worker never reaches the artifact upload, so demanding a
             # manifest here would turn a clean, fully recorded worker failure into
             # a confusing launch failure (GRAPH6_CURRICULUM_002 attempt 001).
@@ -1145,8 +1153,15 @@ class CurriculumProvider:
             failed("SECURITY_GROUP_DELETION_FAILED", error)
             status["security_group_deleted"] = False
         try:
-            scheduler.get_schedule(Name=self.job)
-            scheduler.delete_schedule(Name=self.job)
+            if scheduler is None:
+                # This experiment never creates an instance schedule (the launcher
+                # of record for the candidate pilot builds five clients, no
+                # scheduler). Reporting a failure to remove a schedule that was
+                # never created is noise that hides real cleanup failures.
+                status["schedule_removed"] = "NOT_APPLICABLE"
+            else:
+                scheduler.get_schedule(Name=self.job)
+                scheduler.delete_schedule(Name=self.job)
         except self._client_error as error:
             if self._error_code(error) != "ResourceNotFoundException":
                 failed("SCHEDULE_REMOVAL_FAILED", error)

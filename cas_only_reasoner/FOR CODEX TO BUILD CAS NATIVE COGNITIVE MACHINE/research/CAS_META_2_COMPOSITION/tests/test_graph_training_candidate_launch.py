@@ -275,8 +275,15 @@ def test_the_worker_connects_the_pilot_entrypoint_and_delivers_last():
     assert "condition_order" in worker
     assert "result_partial.json" in worker
     assert "WORKER_FAILED" in worker
-    assert worker.index("results/manifest.json") < worker.index("results/result.json")
+    # The artifact manifest, the sidecar, and then the completion marker last.
+    assert worker.index("Key=ARTIFACT_MANIFEST_KEY") < worker.index(
+        "Key='results/result.json'")
+    assert worker.index("'result.json.sha256'") < worker.index(
+        "Key='results/result.json'")
     assert "REMOTE_FINISHED" in worker
+    # The training body runs under the venv python (attempt 005 lost a
+    # reservation to a worker that ran it under the system python, no torch).
+    assert "subprocess.run([python, '-B', str(runner), str(root)]" in worker
 
 
 def test_provider_reuses_the_lifecycle_and_binds_the_candidate_config():
