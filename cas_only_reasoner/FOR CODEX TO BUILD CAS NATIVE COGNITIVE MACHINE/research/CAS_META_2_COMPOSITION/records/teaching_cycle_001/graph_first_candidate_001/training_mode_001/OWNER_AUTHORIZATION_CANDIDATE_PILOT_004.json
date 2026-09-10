@@ -1,0 +1,69 @@
+{
+  "schema": "cas-graph-training-candidate-owner-authorization/1",
+  "recorded_utc": "2026-09-10T17:21:00.000000+00:00",
+  "owner_instruction_raw": "come on bro I believe in you 🙏🏿 ...you can do this...you got got this man ...GO!!!",
+  "instruction_interpretation": "The owner authorizes a FOURTH $7.00 reservation and one launch of the checked-component pilot. This is a new instruction, not a retry of attempt 005: attempt 005 consumed its reservation and failed on the worker's missing torch environment, and the launcher performs no automatic retry. The instruction is recorded here in the owner's own words, and it authorizes exactly one attempt under the bounds below - no further job, no automatic retry, and no change to the frozen design.",
+  "attempt": 6,
+  "supersedes_attempt": 5,
+  "previous_attempt_outcome": "attempt 005 reserved $7.00 (ledger revision 54), launched instance i-08f0bc3f273448d50 (g7.2xlarge, 16:50:31 UTC) and died at 16:52:10 UTC with ModuleNotFoundError: No module named 'torch' - the rendered candidate worker ran the training body under the system python instead of the venv the proven curriculum worker builds. No learning result. Instance CONFIRMED_TERMINATED; its evidence bucket, and the two earlier pilot buckets, were read out object by object with sha256 recorded and then deleted. Recorded in ATTEMPT_005.md.",
+  "rehearsal_gate": {
+    "test": "tests/test_graph_training_candidate_package_rehearsal.py",
+    "result": "13 passed",
+    "what_it_executes": "the built source.zip, unpacked: the worker is present and is byte-for-byte the worker the rehearsal exercised, the repository-relative code imports, the pinned cube bundle and the authored fixture resolve where the deployed code looks, the frozen inputs build (8 records, 44 probe questions, groups 3/5/44), both conditions run to 64 updates each with stub learners, the worker's own checkpoint writer/verifier round trip verifies, and the worker's own main() is executed with fakes and fails unless the venv python runs the training body, the result envelope declares its checkpoints, the sidecar matches, and result.json is uploaded last",
+    "defects_it_caught_before_spending": [
+      "the packaged worker could not find the pinned cube bundle: records/ is not among the packaged source directories (CUBE_BUNDLE_FILE_MISSING)",
+      "the worker's checkpoint verifier hashed parameter names as well as bytes, which can never equal GraphLearner.checkpoint_identity (CANDIDATE_CHECKPOINT_NOT_VERIFIED after 64 updates)",
+      "the worker did not create the venv or install torch, so the training body ran under the system python (this is what killed attempt 005, and the rehearsal now executes that stage)"
+    ],
+    "what_it_still_cannot_cover": "the real framework, the real encoder, the real 128 optimizer updates and the real probe measurement over 44 questions run only on the GPU instance. Each of the last two attempts died on a defect that existed only there. This authorisation is for one attempt, and a further failure is a possible outcome, not an excluded one."
+  },
+  "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+  "launcher": "aws/graph_training_candidate_launch.py at commit 889c37e00fd8cd75aace74b5161f0186ab5a6a99",
+  "entrypoint": "cas_meta2.graph_teaching.candidate_experiment.launch",
+  "source_sha": "889c37e00fd8cd75aace74b5161f0186ab5a6a99",
+  "archive_sha256": "5c8b9efd3c7fc2dd54bb8d739dd38f78a1a703175a08843a03e70074c374f9b9",
+  "manifest_sha256": "858352a7e209b02e9eeac9c59d43e3e98cd0785a41f6b5c1df6e83900104d2d4",
+  "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_package_005/",
+  "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/candidate_request_004.json",
+  "authorization_context": "Same pilot as OWNER_AUTHORIZATION_CANDIDATE_PILOT_001.json, restated in short: two conditions from matched initial weights - checked_component_teaching (40 component plus 24 whole-answer corrections per 64 updates) and final_answer_only (0 plus 64, frozen round-robin 22/21/21) - 64 updates each, 128 total, seed 20260909, arm cas, ordering mode declared, separate optimizer states and checkpoints, the same frozen encoder, framing and scoring. Data: eight teaching records covering seven distinct questions and a common 44-question untaught probe evaluated after each condition's final checkpoint with no update. Reporting: before and after, the three taught whole-answer questions as the primary set with all three scores and the loss, the five component questions separately, and the probe by operation; independent and assisted never merged; missing values unavailable. Interpretation bound: how to spend a fixed budget, not adding component instruction at equal final-question practice; a negative result never means the seven-stage program failed.",
+  "run_bounds": {
+    "jobs": 1,
+    "conditions": ["checked_component_teaching", "final_answer_only"],
+    "updates_per_condition": 64,
+    "total_optimizer_steps": 128,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0,
+    "arm": "cas",
+    "seed": 20260909,
+    "encoder_seed": 20260909,
+    "ordering_mode": "declared",
+    "per_condition": {
+      "learning_rate": 0.003,
+      "max_optimizer_steps": 64,
+      "max_wall_seconds": 600.0
+    },
+    "checkpoints": ["final"],
+    "probe_questions": 44
+  },
+  "execution_gates": [
+    "single launch attempt through the candidate launcher; bounded readiness checks; verified cleanup on every exit",
+    "one new budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "execute() refuses before the reservation unless the provider holds a readable source archive whose digest matches the request",
+    "the deployed package, including the worker's environment stage, is executed by the package rehearsal before the reservation, not after it",
+    "both conditions use the same teaching records, the same probe and the same update allowance; matched initial weights required",
+    "only the operation:^6 parameter group may change; any forbidden change fails the run closed",
+    "the probe never enters training, checkpoint selection or any mid-run curriculum change",
+    "each condition's final checkpoint is written, read back and verified with the learner's own identity rule before upload; the result declares its checkpoints so verified collection cannot delete them undelivered",
+    "original errors and any completed progress preserved on any failure; evidence persisted on every exit"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single attempt",
+    "any change to the frozen design, package, conditions, limits or reservation amount",
+    "any architecture, representation, encoder, readout, pooling, tokenizer or option-contract change",
+    "child-call / parent-integration work for this specialist",
+    "any modification of accepted models, trainers, the ledger beyond this job's reservation, frozen negatives, sealed splits, previous results or retained checkpoints",
+    "deletion of any evidence bucket before its objects are read out and hashed into the receipt directory",
+    "the pending zero-update contrast probe, which stays pending",
+    "any claim that this pilot tests or demonstrates the seven-stage cube program"
+  ]
+}
