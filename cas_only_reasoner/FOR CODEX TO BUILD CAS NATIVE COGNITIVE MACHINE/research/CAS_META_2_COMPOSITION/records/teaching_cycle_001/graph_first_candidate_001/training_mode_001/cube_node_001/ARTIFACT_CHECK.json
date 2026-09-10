@@ -1,0 +1,24 @@
+{
+  "status": "AUTHORING_ARTIFACT_CHECK_ONLY",
+  "files": {
+    "Cube_Verified_Step_Example_v0.1.json": {
+      "bytes": 36940,
+      "sha256": "dcda4cd6be8dad598e06646adb999250c4491c1719b7922d54473c7c169a8be4"
+    },
+    "Cube_Verified_Step_Teaching_v0.1.md": {
+      "bytes": 26764,
+      "sha256": "9a8ffe6e81b8db55d8d47ecc3beebce7559850c45b7d3233a1f91b4dbd5680b5"
+    }
+  },
+  "example": {
+    "nodes": 6,
+    "branches": 5,
+    "public_exercises": 8,
+    "teacher_targets": 8,
+    "teacher_contrasts": 16,
+    "compiled_stage_count": 7,
+    "repository_reference_called": false,
+    "neural_execution": false,
+    "scope": "JSON round-trip, public-content IDs, choice-target references, and authored answers checked by standalone toy-graph arithmetic. Not a test of the builder implementation."
+  }
+}

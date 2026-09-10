@@ -1,0 +1,888 @@
+{
+  "schema_version": "cas.cube-verified-teaching/0.1",
+  "status": "DRAFT_AUTHORING_FIXTURE_NOT_REPOSITORY_VALIDATED",
+  "usage": "Contains private teacher records. Never send this entire authoring bundle to a learner. Compile permitted views only.",
+  "source": {
+    "filename": "Cube_Node_Example_v0.1.json",
+    "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+  },
+  "proposed_identity_rule": "SHA-256 of compact sorted-key UTF-8 JSON (ensure_ascii=false; allow_nan=false). Builder must bind to the repository canonicalization profile or declare a versioned translation.",
+  "public_contexts": [
+    {
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "scene_id": "toy_scene_01",
+      "view_id": "view_context",
+      "nodes": [
+        {
+          "node_id": "node_001",
+          "label": "Bicycle"
+        },
+        {
+          "node_id": "node_002",
+          "label": "Wheel"
+        },
+        {
+          "node_id": "node_003",
+          "label": "Frame"
+        },
+        {
+          "node_id": "node_004",
+          "label": "Cart"
+        },
+        {
+          "node_id": "node_005",
+          "label": "Platform"
+        },
+        {
+          "node_id": "node_006",
+          "label": "Rim"
+        }
+      ],
+      "branches": [
+        {
+          "branch_id": "branch_01",
+          "source_node_id": "node_001",
+          "predicate": "contains",
+          "target_node_id": "node_002"
+        },
+        {
+          "branch_id": "branch_02",
+          "source_node_id": "node_001",
+          "predicate": "contains",
+          "target_node_id": "node_003"
+        },
+        {
+          "branch_id": "branch_03",
+          "source_node_id": "node_004",
+          "predicate": "contains",
+          "target_node_id": "node_002"
+        },
+        {
+          "branch_id": "branch_04",
+          "source_node_id": "node_004",
+          "predicate": "contains",
+          "target_node_id": "node_005"
+        },
+        {
+          "branch_id": "branch_05",
+          "source_node_id": "node_002",
+          "predicate": "contains",
+          "target_node_id": "node_006"
+        }
+      ],
+      "contains_inventory": "complete",
+      "candidate_universe": [
+        "node_001",
+        "node_002",
+        "node_003",
+        "node_004",
+        "node_005",
+        "node_006"
+      ]
+    }
+  ],
+  "public_exercises": [
+    {
+      "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "component-route/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_004"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        },
+        {
+          "choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+          "value": "via:Wheel"
+        },
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "component-route/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_003"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        },
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        },
+        {
+          "choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+          "value": "via:Wheel"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "component-route/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_005"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        },
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        },
+        {
+          "choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+          "value": "via:Wheel"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "component-route/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_006"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        },
+        {
+          "choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+          "value": "via:Wheel"
+        },
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "component-route/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_002"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        },
+        {
+          "choice_id": "choice:b364145f0caa6d30fa2acd1763ea8acf896d55b1c234f3ca085cda40b09802ea",
+          "value": "via:Frame"
+        },
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "whole-answer/0.1",
+      "question": {
+        "operation": "LIST_PARTS",
+        "named_arguments": {
+          "whole_id": "node_001"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:36c2e225352a5f657ba002e4998076458e9c005bcd26a995c936a1ec526b31a0",
+          "value": [
+            "Frame",
+            "Wheel"
+          ]
+        },
+        {
+          "choice_id": "choice:b9e9bb414f101667b76ca862006a9a87339521d15b63cb123228051f6e0742a4",
+          "value": [
+            "Rim",
+            "Wheel"
+          ]
+        },
+        {
+          "choice_id": "choice:b21f90be1d1335376c8f50a2f62c05814491c43b775bc8ec5417e6ecd4e10852",
+          "value": [
+            "Frame",
+            "Platform"
+          ]
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "whole-answer/0.1",
+      "question": {
+        "operation": "FIND_SHARED_PART",
+        "named_arguments": {
+          "first_whole_id": "node_001",
+          "second_whole_id": "node_004"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:7118a0e9f50f651f43d1bc0287180f707988c82262ecc02ef509669afeb2b595",
+          "value": "Wheel"
+        },
+        {
+          "choice_id": "choice:30a0924a3360be687d1df9fcbbfdff62c01bc0fd14036ab9076cf7f451568666",
+          "value": "none"
+        },
+        {
+          "choice_id": "choice:ce3a6c03765dbbd85a6e61ac1d5e68fbc36c46bd956d49eab730feabc09f1dc8",
+          "value": "Frame"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    },
+    {
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "task_profile": "whole-answer/0.1",
+      "question": {
+        "operation": "REACHED_VIA",
+        "named_arguments": {
+          "whole_id": "node_001",
+          "candidate_id": "node_006"
+        }
+      },
+      "choices": [
+        {
+          "choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+          "value": "direct"
+        },
+        {
+          "choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+          "value": "via:Wheel"
+        },
+        {
+          "choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+          "value": "absent"
+        }
+      ],
+      "visibility_profile": "graph-only/0.1",
+      "prefix_mode": "none"
+    }
+  ],
+  "private_teacher_targets": [
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "expected_answer": "absent",
+      "expected_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "expected_slot": 0,
+      "worked_explanation": "Cart is another whole in this complete scene, not reachable from Bicycle.",
+      "witness": {
+        "kind": "complete_scope_absence",
+        "branch_refs": [],
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "required_completeness": "complete"
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "expected_answer": "direct",
+      "expected_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "expected_slot": 1,
+      "worked_explanation": "Bicycle directly contains Frame.",
+      "witness": {
+        "kind": "direct_branch",
+        "branch_refs": [
+          "branch_02"
+        ],
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "required_completeness": null
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "expected_answer": "absent",
+      "expected_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "expected_slot": 0,
+      "worked_explanation": "Platform belongs to Cart; no containment path from Bicycle reaches Platform in this complete scene.",
+      "witness": {
+        "kind": "complete_scope_absence",
+        "branch_refs": [],
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "required_completeness": "complete"
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "expected_answer": "via:Wheel",
+      "expected_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "expected_slot": 1,
+      "worked_explanation": "The path Bicycle to Wheel to Rim makes Rim indirect, not direct.",
+      "witness": {
+        "kind": "path",
+        "branch_refs": [
+          "branch_01",
+          "branch_05"
+        ],
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "required_completeness": null
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "expected_answer": "direct",
+      "expected_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "expected_slot": 0,
+      "worked_explanation": "Bicycle directly contains Wheel.",
+      "witness": {
+        "kind": "direct_branch",
+        "branch_refs": [
+          "branch_01"
+        ],
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "required_completeness": null
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "expected_answer": [
+        "Frame",
+        "Wheel"
+      ],
+      "expected_choice_id": "choice:36c2e225352a5f657ba002e4998076458e9c005bcd26a995c936a1ec526b31a0",
+      "expected_slot": 0,
+      "worked_explanation": "Frame and Wheel are exactly the direct Bicycle constituents. Rim is indirect; Platform belongs elsewhere.",
+      "witness": {
+        "kind": "complete_direct_inventory",
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "branch_refs": [
+          "branch_01",
+          "branch_02"
+        ],
+        "required_completeness": "complete"
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "expected_answer": "Wheel",
+      "expected_choice_id": "choice:7118a0e9f50f651f43d1bc0287180f707988c82262ecc02ef509669afeb2b595",
+      "expected_slot": 0,
+      "worked_explanation": "Wheel is the unique shared direct constituent of Bicycle and Cart.",
+      "witness": {
+        "kind": "unique_shared_direct_constituent",
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "branch_refs": [
+          "branch_01",
+          "branch_03"
+        ],
+        "required_completeness": "complete"
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    },
+    {
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "expected_answer": "via:Wheel",
+      "expected_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "expected_slot": 1,
+      "worked_explanation": "The reference-compatible path is Bicycle to Wheel to Rim.",
+      "witness": {
+        "kind": "path",
+        "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+        "branch_refs": [
+          "branch_01",
+          "branch_05"
+        ],
+        "required_completeness": null
+      },
+      "reference_verification": {
+        "status": "PENDING_REFERENCE_CHECK",
+        "checker_identity": null
+      },
+      "origin": "AUTHORED_ILLUSTRATIVE_EXPECTATION"
+    }
+  ],
+  "private_step_contrasts": [
+    {
+      "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "public_context_digest": "bc3a40804b22e7ad0abaf35b960b7365cfcede8059ec4153a062e06400818a3f",
+      "positive_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "negative_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "public_context_digest": "bc3a40804b22e7ad0abaf35b960b7365cfcede8059ec4153a062e06400818a3f",
+      "positive_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "negative_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "public_context_digest": "6eb4bd31b81b7170f021f0c61dcb833814112e84671ac23eb80070532a5fe78c",
+      "positive_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "negative_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "public_context_digest": "6eb4bd31b81b7170f021f0c61dcb833814112e84671ac23eb80070532a5fe78c",
+      "positive_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "negative_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "public_context_digest": "16a9c84cf895f1d03abd0eabd3b5cba19a612f452e435779f15a6ba16b959845",
+      "positive_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "negative_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "public_context_digest": "16a9c84cf895f1d03abd0eabd3b5cba19a612f452e435779f15a6ba16b959845",
+      "positive_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "negative_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "public_context_digest": "10b349ba03214b1102b6ea05caa4861a751c03c03ff54b83769fb1894ed9b6fc",
+      "positive_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "negative_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "public_context_digest": "10b349ba03214b1102b6ea05caa4861a751c03c03ff54b83769fb1894ed9b6fc",
+      "positive_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "negative_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "public_context_digest": "85a9de52ab08216745bfc6e5272915974960a517c1c9f9c382b0a9f325d55f32",
+      "positive_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "negative_choice_id": "choice:b364145f0caa6d30fa2acd1763ea8acf896d55b1c234f3ca085cda40b09802ea",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "public_context_digest": "85a9de52ab08216745bfc6e5272915974960a517c1c9f9c382b0a9f325d55f32",
+      "positive_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "negative_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "public_context_digest": "2406fb5a15e1c415b739be2409491b51935b87c40bd0e3b9d3955a22c71001f8",
+      "positive_choice_id": "choice:36c2e225352a5f657ba002e4998076458e9c005bcd26a995c936a1ec526b31a0",
+      "negative_choice_id": "choice:b9e9bb414f101667b76ca862006a9a87339521d15b63cb123228051f6e0742a4",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "public_context_digest": "2406fb5a15e1c415b739be2409491b51935b87c40bd0e3b9d3955a22c71001f8",
+      "positive_choice_id": "choice:36c2e225352a5f657ba002e4998076458e9c005bcd26a995c936a1ec526b31a0",
+      "negative_choice_id": "choice:b21f90be1d1335376c8f50a2f62c05814491c43b775bc8ec5417e6ecd4e10852",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "public_context_digest": "b462daf50990cc889c961056ae1cebcbf0bf67194def9532cd31bb1266f9fe27",
+      "positive_choice_id": "choice:7118a0e9f50f651f43d1bc0287180f707988c82262ecc02ef509669afeb2b595",
+      "negative_choice_id": "choice:30a0924a3360be687d1df9fcbbfdff62c01bc0fd14036ab9076cf7f451568666",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "public_context_digest": "b462daf50990cc889c961056ae1cebcbf0bf67194def9532cd31bb1266f9fe27",
+      "positive_choice_id": "choice:7118a0e9f50f651f43d1bc0287180f707988c82262ecc02ef509669afeb2b595",
+      "negative_choice_id": "choice:ce3a6c03765dbbd85a6e61ac1d5e68fbc36c46bd956d49eab730feabc09f1dc8",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "public_context_digest": "11d9835155dc8504f8e034f575b6966f6507c2bfa9ff74dd398c60d491cb7683",
+      "positive_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "negative_choice_id": "choice:e095a134d1ac99d543b61895fe3aa0281367b29099ec19c390697397830b729a",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "learner_visible": false
+    },
+    {
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "public_context_digest": "11d9835155dc8504f8e034f575b6966f6507c2bfa9ff74dd398c60d491cb7683",
+      "positive_choice_id": "choice:1cc94083b6ad74d7741b6a873842e92755bd2528c93c48aff70b187ee9615dba",
+      "negative_choice_id": "choice:15dbb2c4361b809a46b847b3b6c071f3c27c096057d31c45351902b79fe39efd",
+      "reason_status": "PENDING_BUILDER_PREDICATE_VALIDATION",
+      "teacher_target_ref": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "learner_visible": false
+    }
+  ],
+  "private_teacher_traces": [
+    {
+      "trace_id": "toy-list-trace-001",
+      "schema_version": "cas.cube-verified-teaching/0.1",
+      "context_id": "ctx:b14dad05bc832c10d0d518718f570bb280c27fbaa57a5b149d4d0902467bba48",
+      "component_exercise_ids": [
+        "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+        "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+        "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+        "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+        "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264"
+      ],
+      "final_exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "teacher_only": true,
+      "reference_verification": "PENDING_REFERENCE_CHECK",
+      "final_prediction_receives_component_answers": false,
+      "content_kind": "TEACHER_DEMONSTRATION_NOT_MODEL_INTERNAL_REASONING"
+    }
+  ],
+  "lesson_variants": [
+    {
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "phase": "DEMONSTRATION",
+      "teacher_target_ref": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "assistance": "WORKED_SOLUTION_VISIBLE",
+      "scored_as_independent": false
+    },
+    {
+      "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+      "phase": "UNASSISTED_MEASUREMENT",
+      "teacher_target_ref": null,
+      "assistance": "NONE",
+      "visibility_profile": "graph-only/0.1",
+      "execution_status": "NOT_RUN"
+    },
+    {
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "phase": "DEMONSTRATION",
+      "teacher_target_ref": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "assistance": "WORKED_SOLUTION_VISIBLE",
+      "scored_as_independent": false
+    },
+    {
+      "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+      "phase": "UNASSISTED_MEASUREMENT",
+      "teacher_target_ref": null,
+      "assistance": "NONE",
+      "visibility_profile": "graph-only/0.1",
+      "execution_status": "NOT_RUN"
+    },
+    {
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "phase": "DEMONSTRATION",
+      "teacher_target_ref": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "assistance": "WORKED_SOLUTION_VISIBLE",
+      "scored_as_independent": false
+    },
+    {
+      "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+      "phase": "UNASSISTED_MEASUREMENT",
+      "teacher_target_ref": null,
+      "assistance": "NONE",
+      "visibility_profile": "graph-only/0.1",
+      "execution_status": "NOT_RUN"
+    }
+  ],
+  "cycle_plan": {
+    "family_id": "illustration_family_01",
+    "compiled_cycles": 1,
+    "stages": [
+      {
+        "stage": 1,
+        "name": "name/function",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_1"
+        ],
+        "events": [
+          {
+            "kind": "PREPARED_PRESENTATION",
+            "source": "pinned_cube_bundle",
+            "numeric_delivery_binding": "UNIMPLEMENTED",
+            "neural_deliveries": 0
+          }
+        ],
+        "new_scored_profile_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": 2,
+        "name": "context",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_2"
+        ],
+        "events": [
+          {
+            "kind": "PREPARED_PRESENTATION",
+            "source": "pinned_cube_bundle",
+            "numeric_delivery_binding": "UNIMPLEMENTED",
+            "neural_deliveries": 0
+          }
+        ],
+        "new_scored_profile_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": 3,
+        "name": "analogy",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_3"
+        ],
+        "events": [
+          {
+            "kind": "PREPARED_PRESENTATION",
+            "source": "pinned_cube_bundle",
+            "numeric_delivery_binding": "UNIMPLEMENTED",
+            "neural_deliveries": 0
+          }
+        ],
+        "new_scored_profile_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": 4,
+        "name": "explicit mapping",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_4"
+        ],
+        "events": [
+          {
+            "kind": "PREPARED_PRESENTATION",
+            "source": "pinned_cube_bundle",
+            "numeric_delivery_binding": "UNIMPLEMENTED",
+            "neural_deliveries": 0
+          }
+        ],
+        "new_scored_profile_status": "NOT_IMPLEMENTED"
+      },
+      {
+        "stage": 5,
+        "name": "guided decomposition",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_5"
+        ],
+        "events": [
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+            "teacher_target_ref": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          },
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+            "teacher_target_ref": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          },
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+            "teacher_target_ref": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          },
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+            "teacher_target_ref": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          },
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+            "teacher_target_ref": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          }
+        ],
+        "new_scored_profile_status": "PROPOSED_BINDING_TO_EXISTING_REACHED_VIA"
+      },
+      {
+        "stage": 6,
+        "name": "recomposition/story",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [
+          "node_001.face_6"
+        ],
+        "events": [
+          {
+            "kind": "DEMONSTRATION",
+            "teacher_trace_ref": "toy-list-trace-001",
+            "scored_as_independent": false
+          },
+          {
+            "kind": "PREDICT_THEN_CORRECT",
+            "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+            "teacher_target_ref": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+            "feedback_release": "AFTER_RECORDED_PREDICTION",
+            "execution_status": "NOT_RUN"
+          }
+        ],
+        "new_scored_profile_status": "RESTRICTED_FINAL_LIST_BINDING_PROPOSED; STORY_TASK_UNIMPLEMENTED"
+      },
+      {
+        "stage": 7,
+        "name": "reinforcement",
+        "status": "COMPILED_NOT_DELIVERED",
+        "face_refs": [],
+        "events": [
+          {
+            "kind": "PLANNED_REPETITION",
+            "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+            "execution_status": "NOT_RUN",
+            "note": "Same illustrative family; no new-family or mastery claim."
+          }
+        ],
+        "new_scored_profile_status": "PROPOSED_REUSE_OF_EXISTING_FINAL_GRAPH_TASK"
+      }
+    ],
+    "minimum_complete_guided_cycles_per_family": null,
+    "maximum_optimizer_updates": null,
+    "execution_enabled": false
+  },
+  "actual_execution": {
+    "repository_reference_calls": 0,
+    "neural_calls": 0,
+    "optimizer_updates": 0,
+    "neural_presentations": 0,
+    "complete_neural_cycles": 0,
+    "aws_calls": 0,
+    "reservations": 0
+  },
+  "known_limits": [
+    "Only an illustrative small scene, not a balanced dataset or held-out panel.",
+    "Reference and adapter compatibility remain for the builder to verify.",
+    "Reason-code and witness checking must be implemented and tested before teacher targets are marked verified.",
+    "The stage plan does not implement numeric delivery for all seven stages."
+  ]
+}
