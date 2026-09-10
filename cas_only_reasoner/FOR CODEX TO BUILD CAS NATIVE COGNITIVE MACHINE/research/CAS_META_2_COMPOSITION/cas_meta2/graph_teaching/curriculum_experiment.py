@@ -178,14 +178,19 @@ def load_checkpoint(torch, path):
     return torch.load(str(path), map_location="cpu", weights_only=True)
 
 
-def verify_checkpoint(torch, path, *, framework_factory, learner_factory, tasks,
-                      cases, expected_predictions, condition, learner_seed):
+def verify_checkpoint(torch, path, *, framework_factory, learner_for, tasks, cases,
+                      expected_predictions, condition, learner_seed):
     """Reload the saved file into a FRESH module and prove it restores both the
-    weights and the behaviour."""
+    weights and the behaviour.
+
+    ``learner_for(framework)`` must bind the learner to the framework it is GIVEN:
+    the reloaded module is a different object from the trained one, and predicting
+    with the original learner would make this check vacuous.
+    """
     payload = load_checkpoint(torch, path)
     framework = framework_factory(learner_seed)
     framework.module.load_state_dict(payload["model"])
-    learner = learner_factory(framework.module)
+    learner = learner_for(framework)(framework.module)
     reloaded_digest = learner.checkpoint_identity()
     fresh = evaluate_panel(learner, cases)
     predictions_match = ([row["predicted"] for row in fresh["results"]]
@@ -199,16 +204,37 @@ def verify_checkpoint(torch, path, *, framework_factory, learner_factory, tasks,
             "sha256": sha256(Path(path).read_bytes()).hexdigest()}
 
 
-def run_learner(*, run_id, condition, learner_seed, framework, torch, device, tasks,
-                records, cases, learner_factory, checkpoint_dir,
-                learning_rate=FROZEN_LEARNING_RATE,
+def _require_indexed_learner(learner, own_tasks):
+    """Fail closed BEFORE any training if a learner cannot score its own lesson
+    records (GRAPH6_CURRICULUM_002 attempt 002 died with a bare KeyError here)."""
+    try:
+        learner.eval_loss(own_tasks[0]["op"], own_tasks)
+    except KeyError as error:
+        raise ValueError("LEARNER_INDEX_MISSING_OWN_CONDITION_RECORDS:" + str(error))
+    return learner
+
+
+def run_learner(*, run_id, condition, learner_seed, framework, torch, device,
+                own_tasks, familiar_tasks, records, cases, learner_for,
+                checkpoint_dir, learning_rate=FROZEN_LEARNING_RATE,
                 checkpoints=CHECKPOINTS, history_every=HISTORY_EVERY,
                 trainer_module=None, framework_factory=None,
                 wall_seconds=MAX_WALL_SECONDS_PER_LEARNER):
-    """One learner of one condition: save, measure, train to 64, train to 256."""
+    """One learner of one condition: save, measure, train to 64, train to 256.
+
+    ``own_tasks`` are this condition's own lesson records, and the learner is
+    built over exactly those: a real ``GraphLearner`` indexes the records it is
+    handed, so training or scoring it on any other set fails with a KeyError.
+    GRAPH6_CURRICULUM_002 attempt 002's preserved error was precisely that — the
+    varied learner was built over the frozen lessons and then trained on the
+    varied curriculum. ``familiar_tasks`` are the frozen train+practice records,
+    used for the practice measurement that is comparable across conditions (the
+    sealed predict path handles records outside the learner's index).
+    """
     from . import trainer as trainer_module_default
     trainer_module = trainer_module or trainer_module_default
-    learner = learner_factory(framework.module)
+    learner = _require_indexed_learner(learner_for(framework)(framework.module),
+                                       own_tasks)
     artifacts = []
     initial_identity = learner.checkpoint_identity()
     initial = save_checkpoint(torch, Path(checkpoint_dir) /
@@ -217,7 +243,8 @@ def run_learner(*, run_id, condition, learner_seed, framework, torch, device, ta
                               condition=condition, learner_seed=learner_seed,
                               encoder=framework.encoder, records=records)
     artifacts.append(initial)
-    practice_before = practice_accuracy(learner, tasks)
+    practice_before = practice_accuracy(learner, familiar_tasks)
+    own_before = practice_accuracy(learner, own_tasks)
     fresh_before = evaluate_panel(learner, cases)
 
     segments = []
@@ -232,7 +259,8 @@ def run_learner(*, run_id, condition, learner_seed, framework, torch, device, ta
         position = segment["schedule_position"]
         completed += segment["completed_updates"]
         segments.append(segment)
-        practice = practice_accuracy(learner, tasks)
+        practice = practice_accuracy(learner, familiar_tasks)
+        own = practice_accuracy(learner, own_tasks)
         fresh = evaluate_panel(learner, cases)
         artifact = save_checkpoint(
             torch, Path(checkpoint_dir) /
@@ -243,12 +271,13 @@ def run_learner(*, run_id, condition, learner_seed, framework, torch, device, ta
         artifacts.append(artifact)
         verification = verify_checkpoint(
             torch, artifact["path"], framework_factory=framework_factory,
-            learner_factory=learner_factory, tasks=tasks, cases=cases,
+            learner_for=learner_for, tasks=own_tasks, cases=cases,
             expected_predictions=[row["predicted"] for row in fresh["results"]],
             condition=condition, learner_seed=learner_seed)
         require(verification["verified"], "CURRICULUM_CHECKPOINT_RELOAD_FAILED")
-        segments[-1] = {**segment, "practice": practice, "fresh": fresh,
-                        "checkpoint": artifact, "reload_verification": verification}
+        segments[-1] = {**segment, "practice": practice, "own_curriculum": own,
+                        "fresh": fresh, "checkpoint": artifact,
+                        "reload_verification": verification}
 
     first, last = segments[0], segments[-1]
     return {"schema": LEARNER_SCHEMA, "run_id": run_id, "condition": condition,
@@ -261,6 +290,9 @@ def run_learner(*, run_id, condition, learner_seed, framework, torch, device, ta
             "practice": {"before": practice_before,
                          "after_64": first["practice"],
                          "after_256": last["practice"]},
+            "own_curriculum": {"before": own_before,
+                               "after_64": first["own_curriculum"],
+                               "after_256": last["own_curriculum"]},
             "fresh": {"before": fresh_before,
                       "after_64": first["fresh"],
                       "after_256": last["fresh"]},
@@ -334,8 +366,18 @@ def launch(*, run_id, torch, device, encoder, tasks, panel, checkpoint_dir,
            pair_seeds=PAIR_SEEDS, conditions=CONDITIONS,
            framework_factory=None, learner_factory=None, trainer_module=None,
            encoder_identity_fn=None, wall_seconds=MAX_WALL_SECONDS_PER_LEARNER):
-    """Run the whole pre-registered comparison in ONE call (six learners)."""
+    """Run the whole pre-registered comparison in ONE call (six learners).
+
+    ``tasks`` are the frozen train+practice tasks, used only for the practice
+    measurement that is comparable across conditions. Each learner is built over
+    its OWN condition's tasks, because a real ``GraphLearner`` indexes the records
+    it is handed: building the varied learner over the frozen lessons and then
+    training it on the varied curriculum is exactly what failed in attempt 002.
+    An injected ``learner_factory`` therefore receives ``(framework, own_tasks)``
+    and returns the ``(model, arm, learning_rate) -> learner`` callable.
+    """
     from .confirmation import encoder_identity
+    from . import adapter
     from .real_framework import GraphLearner, build_graph_training_framework
     require(list(pair_seeds) == list(PAIR_SEEDS), "PAIR_SEEDS_FROZEN")
     require(list(conditions) == list(CONDITIONS), "CONDITIONS_FROZEN")
@@ -349,12 +391,18 @@ def launch(*, run_id, torch, device, encoder, tasks, panel, checkpoint_dir,
         lambda seed: build_graph_training_framework(
             torch, device, seed=FROZEN_ENCODER_SEED, encoder=encoder))
 
-    def real_learner_factory(framework):
+    def real_learner_factory(framework, own_tasks_for_condition):
         return lambda model, arm=FROZEN_ARM, learning_rate=FROZEN_LEARNING_RATE: (
-            GraphLearner(torch, framework, tasks, device, learning_rate))
+            GraphLearner(torch, framework, own_tasks_for_condition, device,
+                         learning_rate))
 
     curricula = {"control": curriculum.control_records(),
                  "varied": curriculum.varied_records()}
+    own_tasks = {name: [adapter.public_records(record, FROZEN_ARM)
+                        for record in records]
+                 for name, records in curricula.items()}
+    require("LEARNER_TASKS_PER_CONDITION_REQUIRED",
+            set(own_tasks) == set(conditions))
     for name, records in curricula.items():
         require(len(curriculum.schedule(records)) == curriculum.TOTAL_RECORDS,
                 "CURRICULUM_SCHEDULE_SIZE:" + name)
@@ -366,13 +414,18 @@ def launch(*, run_id, torch, device, encoder, tasks, panel, checkpoint_dir,
             # control and varied learners of one seed start from IDENTICAL weights.
             torch.manual_seed(seed)
             framework = framework_factory(seed)
-            factory = learner_factory or real_learner_factory(framework)
+            # The learner is bound to THIS condition's lessons AND to the given
+            # framework, so the reload verification predicts with the RELOADED
+            # module rather than the trained one.
+            def learner_for(fw, _condition=condition):
+                return (learner_factory or real_learner_factory)(
+                    fw, own_tasks[_condition])
             learners[(condition, seed)] = run_learner(
                 run_id="%s.%s.seed%d" % (run_id, condition, seed),
                 condition=condition, learner_seed=seed, framework=framework,
-                torch=torch, device=device, tasks=tasks,
-                records=curricula[condition], cases=cases,
-                learner_factory=factory, checkpoint_dir=checkpoint_dir,
+                torch=torch, device=device, own_tasks=own_tasks[condition],
+                familiar_tasks=tasks, records=curricula[condition], cases=cases,
+                learner_for=learner_for, checkpoint_dir=checkpoint_dir,
                 trainer_module=trainer_module, framework_factory=framework_factory,
                 wall_seconds=wall_seconds)
 

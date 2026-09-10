@@ -4,6 +4,29 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 002 **FAILED** (my defect: wrong lesson index) — fixes + replacement prepared
+
+Replacement job (`cas-meta2-graph6curr-20260910073000-210109c7`, one new `$7.00`
+reservation, ledger 48 → 49: `$256.00` / `$144.00`) failed after 574.2 s in the
+FIRST learner's before-loss pass: `KeyError: '2032cbff…'`. **Root cause, mine:**
+`launch` built EVERY learner over the frozen train+practice tasks, but the varied
+condition trains on the varied curriculum, so the varied learner's index did not
+contain its own records — the same defect class as confirmation attempt 001.
+Fixed: each learner is built over its OWN condition's lessons (explicit contract
+`learner_factory(framework, own_tasks)`), a fail-closed
+`LEARNER_INDEX_MISSING_OWN_CONDITION_RECORDS` guard scores the learner's own
+records before any training, `verify_checkpoint` now takes
+`learner_for(framework)` so reload verification predicts with the RELOADED module
+rather than the trained one, practice accuracy is measured on the frozen records
+for both conditions with each learner's own-curriculum accuracy reported
+separately, and three regression tests reproduce the real index contract
+end-to-end. 249 graph tests pass. Cleanup verified complete (instance
+`i-052ec698273544485` terminated, bucket deleted, hygiene re-checked). No
+measurement produced. Three paid attempts have now failed, all on defects in the
+new experiment code caught before training ($6.00 + $7.00 + $7.00). Record:
+`ATTEMPT_GRAPH6_CURRICULUM_002_002_FAILURE.md`. A replacement needs a new owner
+GO and a new reservation.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 001 **FAILED** (two of my defects, preserved error) — replacement prepared
 
 Owner GO executed one job (`cas-meta2-graph6curr-20260910053000-951cab20`, one new

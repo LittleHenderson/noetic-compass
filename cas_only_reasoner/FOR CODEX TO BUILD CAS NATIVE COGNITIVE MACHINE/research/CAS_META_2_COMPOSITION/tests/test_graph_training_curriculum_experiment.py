@@ -7,8 +7,8 @@ import pickle
 import pytest
 from types import SimpleNamespace
 
-from cas_meta2.graph_teaching import (curriculum, curriculum_experiment, final_panel,
-                                      fresh_panel, lessons, trainer)
+from cas_meta2.graph_teaching import (confirmation, curriculum, curriculum_experiment,
+                                      final_panel, fresh_panel, lessons, trainer)
 
 
 # --------------------------------------------------------------- final panel
@@ -211,6 +211,10 @@ class FakeTorch:
     def stack(values):
         return list(values)
 
+    @staticmethod
+    def manual_seed(seed):
+        return None
+
 
 class FakeModule(dict):
     def state_dict(self):
@@ -262,8 +266,8 @@ def test_checkpoint_round_trip_restores_weights_and_predictions(tmp_path, panel)
                 for case in panel["cases"]]
     verification = curriculum_experiment.verify_checkpoint(
         torch, artifact["path"], framework_factory=framework_factory,
-        learner_factory=learner_factory, tasks=[], cases=cases,
-        expected_predictions=expected,
+        learner_for=lambda framework: (lambda model: FakeLearner(model)), tasks=[],
+        cases=cases, expected_predictions=expected,
         condition="varied", learner_seed=20260913)
     assert verification["verified"] is True
     assert verification["predictions_match"] is True
@@ -293,11 +297,130 @@ def test_verify_checkpoint_detects_a_prediction_mismatch(tmp_path, panel):
         learner_seed=20260913, encoder=framework.encoder, records=[])
     verification = curriculum_experiment.verify_checkpoint(
         torch, artifact["path"], framework_factory=lambda seed: _fake_framework(),
-        learner_factory=lambda model: FakeLearner(model), tasks=[],
+        learner_for=lambda framework: (lambda model: FakeLearner(model)), tasks=[],
         cases=[(case["family_id"], case["record"]) for case in panel["cases"]],
         expected_predictions=["definitely_not_the_prediction"],
         condition="control", learner_seed=20260913)
     assert verification["verified"] is False
+
+
+class IndexedFakeLearner:
+    """Emulates the REAL GraphLearner's index contract.
+
+    A real learner indexes the records it is handed and raises KeyError for any
+    other record id (attempt 002 died exactly that way). The tasks the factory
+    receives are therefore treated as the learner's index, and a state-dependent
+    prediction makes the reload verification meaningful.
+    """
+
+    def __init__(self, module, indexed_tasks):
+        self.module = module
+        self.optimizer = FakeOptimizer()
+        self.index = {task["record_id"] for task in indexed_tasks}
+        self.steps = 0
+
+    def _position(self, task):
+        if task["record_id"] not in self.index:
+            raise KeyError(task["record_id"])
+        return task["record_id"]
+
+    def step(self, task):
+        self._position(task)
+        self.steps += 1
+        self.module["state"] = "trained-%d" % self.steps
+        return 1.0 / (1 + self.steps)
+
+    def eval_loss(self, op, tasks):
+        for task in tasks:
+            if task["op"] == op:
+                self._position(task)
+        return {"total": 1.0 / (1 + self.steps)}
+
+    def checkpoint_identity(self):
+        return "id-%s" % self.module["state"]
+
+    def predict(self, task_input):
+        options = list(task_input["encoded_options"])
+        state = str(self.module.get("state"))
+        # state-dependent choice, so a reload that did not restore the weights
+        # cannot produce the same predictions
+        offset = (len(state) + ord(state[0])) % len(options)
+        return options[offset]
+
+
+def _indexed_factory(tracker):
+    """Injected factory with the launcher's contract: (framework, own_tasks)."""
+
+    def factory(framework, tasks):
+        tracker.append((framework, [task["record_id"] for task in tasks]))
+
+        def build(model, arm=confirmation.FROZEN_ARM, learning_rate=0.003):
+            return IndexedFakeLearner(model, tasks)
+        return build
+    return factory
+
+
+def test_each_learner_is_indexed_by_its_own_condition_lessons(panel, tmp_path):
+    """Attempt 002's preserved error: the varied learner was built over the frozen
+    lessons and then trained on the varied curriculum, so the first before-loss
+    pass raised KeyError. Every learner must be indexed by its own lessons."""
+    from cas_meta2.graph_teaching import adapter
+    records = trainer.training_records(20260909)[:6]
+    familiar = [adapter.public_records(record, confirmation.FROZEN_ARM)
+                for record in records]
+    tracker = []
+    curriculum_experiment.launch(
+        run_id="indexed", torch=FakeTorch(), device=None,
+        encoder={"vocabulary_size": 2}, tasks=familiar, panel=panel,
+        checkpoint_dir=str(tmp_path / "checkpoints"),
+        framework_factory=lambda seed: _fake_framework("initial-%d" % seed),
+        learner_factory=_indexed_factory(tracker),
+        encoder_identity_fn=lambda torch, encoder: "encoder")
+    indexed = [set(ids) for _framework, ids in tracker]
+    control = {record["record_id"] for record in curriculum.control_records()}
+    varied = {record["record_id"] for record in curriculum.varied_records()}
+    # every learner (and every reload verification) is bound to ONE of the two
+    # condition lesson sets, never to anything else
+    assert {frozenset(ids) for ids in indexed} == {frozenset(control), frozenset(varied)}
+    assert sum(1 for ids in indexed if ids == varied) >= 3
+    assert sum(1 for ids in indexed if ids == control) >= 3
+
+
+def test_verify_checkpoint_predicts_with_the_reloaded_module(tmp_path, panel):
+    """The reload verification must predict with the RELOADED module; a
+    state-dependent learner makes a vacuous check detectable."""
+    from cas_meta2.graph_teaching import adapter
+    torch = FakeTorch()
+    live = _fake_framework("live-state")
+    tasks = [adapter.public_records(record, confirmation.FROZEN_ARM)
+             for record in curriculum.varied_records()[:3]]
+    cases = [(case["family_id"], case["record"]) for case in panel["cases"]]
+    learner = IndexedFakeLearner(live.module, tasks)
+    artifact = curriculum_experiment.save_checkpoint(
+        torch, tmp_path / "cp.pt", module=live.module, learner=learner, step=64,
+        condition="varied", learner_seed=20260913, encoder=live.encoder,
+        records=curriculum.varied_records())
+    recorded = [row["predicted"]
+                for row in confirmation.evaluate_panel(learner, cases)["results"]]
+    verification = curriculum_experiment.verify_checkpoint(
+        torch, artifact["path"],
+        framework_factory=lambda seed: _fake_framework("x"),
+        learner_for=lambda framework: (lambda model: IndexedFakeLearner(model, tasks)),
+        tasks=tasks, cases=cases, expected_predictions=recorded,
+        condition="varied", learner_seed=20260913)
+    assert verification["verified"] is True
+    other = _fake_framework("other-state")
+    other_artifact = curriculum_experiment.save_checkpoint(
+        torch, tmp_path / "cp2.pt", module=other.module, learner=learner, step=64,
+        condition="varied", learner_seed=20260913, encoder=other.encoder,
+        records=curriculum.varied_records())
+    mismatch = curriculum_experiment.verify_checkpoint(
+        torch, other_artifact["path"],
+        framework_factory=lambda seed: _fake_framework("x"),
+        learner_for=lambda framework: (lambda model: IndexedFakeLearner(model, tasks)),
+        tasks=tasks, cases=cases, expected_predictions=recorded,
+        condition="varied", learner_seed=20260913)
+    assert mismatch["verified"] is False
 
 
 # ------------------------------------------------------- experiment verdict
