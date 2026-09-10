@@ -8,6 +8,32 @@ The varied relationship lessons did **not** beat repeating the existing lessons 
 equal budget, and neither condition rose above chance on the untouched panel. The
 run finished, was collected, and its checkpoint files are retained.
 
+## Corrections to this record (owner review, 2026-09-10)
+
+1. **Denominator.** This was **90 questions drawn from 30 distinct graph
+   arrangements**, not 90 independent arrangements. The same panel was used by
+   every learner, so the pooled 270 scores are **repeated evaluations of one
+   panel**, not 270 new graphs.
+2. **"Degrading the original worksheet" was the wrong reading.** The varied
+   learners performed *worse than the control* on the frozen familiar records, but
+   they **improved relative to their own starting scores**: 9/30 → 12/30,
+   4/30 → 14/30, 9/30 → 14/30. These were separately trained learners with matched
+   initial weights, so **this is not a forgetting experiment**. The accurate
+   statement is: **each curriculum produced strong performance on its own lessons,
+   with limited performance outside that lesson set** — a generalization gap, not
+   demonstrated forgetting and not proof of memorization.
+3. **The containment gap is not replaced by an argument.** The earlier text
+   explained the missing containment report by pointing at how the optimizer is
+   constructed. That is an assertion, not evidence, and it is withdrawn. A
+   **retrospective endpoint comparison** recovered from the retained checkpoint
+   files is reported in `RETROSPECTIVE_CONTAINMENT_001.md`, with its limits stated.
+4. **Scope of the negative.** Each condition received 30 distinct records repeated
+   about eight or nine times each — not an expanding stream of families and not the
+   full seven-stage teaching programme. The tested approach was insufficient **at
+   this allowance**; the scores do not identify whether the limiting factor is
+   training coverage, the fixed representation, the readout, the module's
+   computation, or an interaction.
+
 ## Execution, collection and cleanup (reported separately)
 
 | Stage | Outcome |

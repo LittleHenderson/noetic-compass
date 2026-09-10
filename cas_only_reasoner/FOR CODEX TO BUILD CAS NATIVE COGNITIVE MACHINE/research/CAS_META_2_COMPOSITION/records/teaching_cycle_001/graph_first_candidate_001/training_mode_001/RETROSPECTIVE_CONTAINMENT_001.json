@@ -1,0 +1,656 @@
+{
+  "boundary": "RETROSPECTIVE ENDPOINT COMPARISON ONLY: it compares components STORED in the retained checkpoints. It is not the registered digest-level containment report, it cannot show when a change happened between endpoints, and it says nothing about components that were never saved.",
+  "checkpoint_dir": "records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-graph6curr-20260910133000-aecb5d07\\checkpoints",
+  "checkpoints_read": 18,
+  "components_that_changed_by_endpoint_256": [
+    "model.left.weight",
+    "model.merge.weight",
+    "model.right.weight"
+  ],
+  "conclusion": {
+    "encoder_projection_frozen_and_identical_everywhere": true,
+    "model_matrices_changed": [
+      "model.left.weight",
+      "model.merge.weight",
+      "model.right.weight"
+    ],
+    "registered_containment_report_status": "STILL MISSING as registered evidence: this tool compares only the components STORED in the checkpoints. Parameters that were never saved (for example any parameter outside the checkpointed module and encoder projection) cannot be compared, and the intermediate history between endpoints does not exist.",
+    "tokenizer_vocabulary_identical_everywhere": true
+  },
+  "encoder_projection_sha256_across_all_checkpoints": [
+    "116f3677d343db7cd9becbb0b293c4419d5f455b9e1044e33dbd6738ed1468cb"
+  ],
+  "learners": [
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "ac6b0b53c9331976b9868b49b08c0de6835a3a34f4ecbd789ba352f0c8516c2b",
+        "256": "8d9e847d353746e79e977ab53103eec218061c5b4669a98c3213f441f55e81bb",
+        "64": "e00e16b957799bb8223d1fc59da66d56c3bffd82ec07d876de61e69112b71543"
+      },
+      "condition": "control",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260913,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    },
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "0ba768bfb75fded834574304ba5223e948cb4cfc7f477985d736275eb60abbc8",
+        "256": "f81b1d5c6d7f8c04d1445a8bb1a62b852cdebd4723d6da82fffd0272df6eaeb1",
+        "64": "5ca351c453d797123bdf4ec8741247f302c2b4b625915439be34b624f08a415e"
+      },
+      "condition": "control",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260914,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    },
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "08bf34561c05e2f88471cf49626183744a5c5e6af16c0eed77e917987d51fbc4",
+        "256": "ace2ce87fe775bb838264f071f31ce19f71940263f4fab6f5eb3376a0d26372a",
+        "64": "1c6ef87290622c57ba450977fe1c8bee654967cc1589a4739793817d8c3b6ef7"
+      },
+      "condition": "control",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260915,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    },
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "d441d9448c3945b6051b5c2703f97fddd51f56b075370976d9b43375ba22a5af",
+        "256": "74f18371ba64e8ce2397cfc41ef420dd1d97f1fd23fd7a571c22006d89b80cdf",
+        "64": "ccef656300765d40d61cffcc1f6ee35f9e08e253ca42cbbfb2ee84b4e2b48d1b"
+      },
+      "condition": "varied",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260913,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    },
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "b6cb1b7cca604aad152a46af994c6590ff711966900b173582644b1102fb1ce2",
+        "256": "3f6332a9966ab30abf8acb07a6c71b704bb64fcadce6c028f99c03849f2e32a9",
+        "64": "1a1e2fdd0a669cd5624e5fc49db8195b25d655eed63bd6884ec4d3b056798713"
+      },
+      "condition": "varied",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260914,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    },
+    {
+      "64_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "checkpoint_sha256": {
+        "0": "a0313076aa2686b181767b9298654b2ff661986af8cd79cea0de97e456cd9319",
+        "256": "84cab19fd46e38ae2805f77758c30a698b10d69dc7a1f88eb28957ab3deabcb6",
+        "64": "2d2972a056d23792dd9513f62997b29ee0d99c685495bc9442d016866e056fca"
+      },
+      "condition": "varied",
+      "encoder_projection_unchanged_across_endpoints": true,
+      "initial_vs_256": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "initial_vs_64": {
+        "changed": [
+          {
+            "component": "model.left.weight",
+            "shape": [
+              64,
+              64
+            ]
+          },
+          {
+            "component": "model.merge.weight",
+            "shape": [
+              64,
+              128
+            ]
+          },
+          {
+            "component": "model.right.weight",
+            "shape": [
+              64,
+              64
+            ]
+          }
+        ],
+        "unchanged": [
+          "encoder.projection"
+        ],
+        "unresolved": []
+      },
+      "learner_seed": 20260915,
+      "optimizer_state_entries": {
+        "0": 0,
+        "256": 3,
+        "64": 3
+      },
+      "vocabulary_unchanged": true
+    }
+  ],
+  "learners_compared": 6,
+  "method": "torch.save zip archive -> pickle object graph with stand-ins for torch classes -> per-component sha256 over the raw storage bytes (Python standard library only: no torch, no GPU, no neural run)",
+  "schema": "cas-graph-training-retrospective-containment/1",
+  "stored_components": [
+    "encoder.projection",
+    "model.left.weight",
+    "model.merge.weight",
+    "model.right.weight"
+  ],
+  "stored_model_components_that_did_not_change": [],
+  "vocabulary_sha256_across_all_checkpoints": [
+    "86d5dd21379203af2e955d4b409d331d61b0790d8a4108c31d8ca4fc1b1bbcd2"
+  ]
+}

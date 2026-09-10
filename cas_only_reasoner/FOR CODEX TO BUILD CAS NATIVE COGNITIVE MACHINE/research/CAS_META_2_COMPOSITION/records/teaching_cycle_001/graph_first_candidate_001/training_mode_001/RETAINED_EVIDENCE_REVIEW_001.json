@@ -1,0 +1,995 @@
+{
+  "boundary": "read-only: no training, no checkpoint tensors loaded, no provider call, no reservation",
+  "checkpoint_metadata": {
+    "boundary": "RETROSPECTIVE ENDPOINT COMPARISON ONLY: it compares components STORED in the retained checkpoints. It is not the registered digest-level containment report, it cannot show when a change happened between endpoints, and it says nothing about components that were never saved.",
+    "checkpoint_dir": "records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-graph6curr-20260910133000-aecb5d07\\checkpoints",
+    "checkpoints_read": 18,
+    "components_that_changed_by_endpoint_256": [
+      "model.left.weight",
+      "model.merge.weight",
+      "model.right.weight"
+    ],
+    "conclusion": {
+      "encoder_projection_frozen_and_identical_everywhere": true,
+      "model_matrices_changed": [
+        "model.left.weight",
+        "model.merge.weight",
+        "model.right.weight"
+      ],
+      "registered_containment_report_status": "STILL MISSING as registered evidence: this tool compares only the components STORED in the checkpoints. Parameters that were never saved (for example any parameter outside the checkpointed module and encoder projection) cannot be compared, and the intermediate history between endpoints does not exist.",
+      "tokenizer_vocabulary_identical_everywhere": true
+    },
+    "encoder_projection_sha256_across_all_checkpoints": [
+      "116f3677d343db7cd9becbb0b293c4419d5f455b9e1044e33dbd6738ed1468cb"
+    ],
+    "learners": [
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "ac6b0b53c9331976b9868b49b08c0de6835a3a34f4ecbd789ba352f0c8516c2b",
+          "256": "8d9e847d353746e79e977ab53103eec218061c5b4669a98c3213f441f55e81bb",
+          "64": "e00e16b957799bb8223d1fc59da66d56c3bffd82ec07d876de61e69112b71543"
+        },
+        "condition": "control",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260913,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      },
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "0ba768bfb75fded834574304ba5223e948cb4cfc7f477985d736275eb60abbc8",
+          "256": "f81b1d5c6d7f8c04d1445a8bb1a62b852cdebd4723d6da82fffd0272df6eaeb1",
+          "64": "5ca351c453d797123bdf4ec8741247f302c2b4b625915439be34b624f08a415e"
+        },
+        "condition": "control",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260914,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      },
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "08bf34561c05e2f88471cf49626183744a5c5e6af16c0eed77e917987d51fbc4",
+          "256": "ace2ce87fe775bb838264f071f31ce19f71940263f4fab6f5eb3376a0d26372a",
+          "64": "1c6ef87290622c57ba450977fe1c8bee654967cc1589a4739793817d8c3b6ef7"
+        },
+        "condition": "control",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260915,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      },
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "d441d9448c3945b6051b5c2703f97fddd51f56b075370976d9b43375ba22a5af",
+          "256": "74f18371ba64e8ce2397cfc41ef420dd1d97f1fd23fd7a571c22006d89b80cdf",
+          "64": "ccef656300765d40d61cffcc1f6ee35f9e08e253ca42cbbfb2ee84b4e2b48d1b"
+        },
+        "condition": "varied",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260913,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      },
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "b6cb1b7cca604aad152a46af994c6590ff711966900b173582644b1102fb1ce2",
+          "256": "3f6332a9966ab30abf8acb07a6c71b704bb64fcadce6c028f99c03849f2e32a9",
+          "64": "1a1e2fdd0a669cd5624e5fc49db8195b25d655eed63bd6884ec4d3b056798713"
+        },
+        "condition": "varied",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260914,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      },
+      {
+        "64_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "checkpoint_sha256": {
+          "0": "a0313076aa2686b181767b9298654b2ff661986af8cd79cea0de97e456cd9319",
+          "256": "84cab19fd46e38ae2805f77758c30a698b10d69dc7a1f88eb28957ab3deabcb6",
+          "64": "2d2972a056d23792dd9513f62997b29ee0d99c685495bc9442d016866e056fca"
+        },
+        "condition": "varied",
+        "encoder_projection_unchanged_across_endpoints": true,
+        "initial_vs_256": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "initial_vs_64": {
+          "changed": [
+            {
+              "component": "model.left.weight",
+              "shape": [
+                64,
+                64
+              ]
+            },
+            {
+              "component": "model.merge.weight",
+              "shape": [
+                64,
+                128
+              ]
+            },
+            {
+              "component": "model.right.weight",
+              "shape": [
+                64,
+                64
+              ]
+            }
+          ],
+          "unchanged": [
+            "encoder.projection"
+          ],
+          "unresolved": []
+        },
+        "learner_seed": 20260915,
+        "optimizer_state_entries": {
+          "0": 0,
+          "256": 3,
+          "64": 3
+        },
+        "vocabulary_unchanged": true
+      }
+    ],
+    "learners_compared": 6,
+    "method": "torch.save zip archive -> pickle object graph with stand-ins for torch classes -> per-component sha256 over the raw storage bytes (Python standard library only: no torch, no GPU, no neural run)",
+    "schema": "cas-graph-training-retrospective-containment/1",
+    "stored_components": [
+      "encoder.projection",
+      "model.left.weight",
+      "model.merge.weight",
+      "model.right.weight"
+    ],
+    "stored_model_components_that_did_not_change": [],
+    "vocabulary_sha256_across_all_checkpoints": [
+      "86d5dd21379203af2e955d4b409d331d61b0790d8a4108c31d8ca4fc1b1bbcd2"
+    ]
+  },
+  "fresh_panel_pooled_by_operation": {
+    "FIND_SHARED_PART": {
+      "attempted": 180,
+      "correct": 71,
+      "rate": 0.39444444444444443
+    },
+    "LIST_PARTS": {
+      "attempted": 180,
+      "correct": 23,
+      "rate": 0.12777777777777777
+    },
+    "REACHED_VIA": {
+      "attempted": 180,
+      "correct": 62,
+      "rate": 0.34444444444444444
+    }
+  },
+  "fresh_panel_pooled_reach_labels": {
+    "absent": {
+      "attempted": 60,
+      "correct": 17,
+      "rate": 0.2833333333333333
+    },
+    "direct": {
+      "attempted": 60,
+      "correct": 32,
+      "rate": 0.5333333333333333
+    },
+    "via": {
+      "attempted": 60,
+      "correct": 13,
+      "rate": 0.21666666666666667
+    }
+  },
+  "gpu_used": false,
+  "learners": [
+    {
+      "condition": "control",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 26
+      },
+      "learner_seed": 20260913,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 9
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "none": {
+          "attempted": 30,
+          "correct": 23
+        }
+      },
+      "own_curriculum_list_profiles": {},
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 9
+      }
+    },
+    {
+      "condition": "varied",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 30
+      },
+      "learner_seed": 20260913,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 27,
+        "attempted": 30,
+        "before": 12
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "renamed": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "renamed_reordered": {
+          "attempted": 15,
+          "correct": 14
+        },
+        "renamed_rewired": {
+          "attempted": 12,
+          "correct": 10
+        }
+      },
+      "own_curriculum_list_profiles": {
+        "extra_foreign_part": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "same_length_foreign": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "same_length_omission": {
+          "attempted": 4,
+          "correct": 3
+        },
+        "short_subset": {
+          "attempted": 1,
+          "correct": 1
+        }
+      },
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 12,
+        "attempted": 30,
+        "before": 9
+      }
+    },
+    {
+      "condition": "control",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 22
+      },
+      "learner_seed": 20260914,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 4
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "none": {
+          "attempted": 30,
+          "correct": 23
+        }
+      },
+      "own_curriculum_list_profiles": {},
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 4
+      }
+    },
+    {
+      "condition": "varied",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 26
+      },
+      "learner_seed": 20260914,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 27,
+        "attempted": 30,
+        "before": 13
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "renamed": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "renamed_reordered": {
+          "attempted": 15,
+          "correct": 14
+        },
+        "renamed_rewired": {
+          "attempted": 12,
+          "correct": 10
+        }
+      },
+      "own_curriculum_list_profiles": {
+        "extra_foreign_part": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "same_length_foreign": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "same_length_omission": {
+          "attempted": 4,
+          "correct": 3
+        },
+        "short_subset": {
+          "attempted": 1,
+          "correct": 1
+        }
+      },
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 14,
+        "attempted": 30,
+        "before": 4
+      }
+    },
+    {
+      "condition": "control",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 26
+      },
+      "learner_seed": 20260915,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 9
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "none": {
+          "attempted": 30,
+          "correct": 23
+        }
+      },
+      "own_curriculum_list_profiles": {},
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 23,
+        "attempted": 30,
+        "before": 9
+      }
+    },
+    {
+      "condition": "varied",
+      "fresh_correct_after_256": {
+        "attempted": 90,
+        "correct": 26
+      },
+      "learner_seed": 20260915,
+      "own_cases_correct_before_vs_after": {
+        "after_256": 27,
+        "attempted": 30,
+        "before": 9
+      },
+      "own_curriculum_correct_by_variation_kind": {
+        "renamed": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "renamed_reordered": {
+          "attempted": 15,
+          "correct": 14
+        },
+        "renamed_rewired": {
+          "attempted": 12,
+          "correct": 10
+        }
+      },
+      "own_curriculum_list_profiles": {
+        "extra_foreign_part": {
+          "attempted": 2,
+          "correct": 1
+        },
+        "same_length_foreign": {
+          "attempted": 3,
+          "correct": 3
+        },
+        "same_length_omission": {
+          "attempted": 4,
+          "correct": 3
+        },
+        "short_subset": {
+          "attempted": 1,
+          "correct": 1
+        }
+      },
+      "practice_cases_correct_before_vs_after": {
+        "after_256": 14,
+        "attempted": 30,
+        "before": 9
+      }
+    }
+  ],
+  "list_profiles_pooled_own_curriculum": {
+    "extra_foreign_part": {
+      "attempted": 6,
+      "correct": 3,
+      "rate": 0.5
+    },
+    "same_length_foreign": {
+      "attempted": 9,
+      "correct": 9,
+      "rate": 1.0
+    },
+    "same_length_omission": {
+      "attempted": 12,
+      "correct": 9,
+      "rate": 0.75
+    },
+    "short_subset": {
+      "attempted": 3,
+      "correct": 3,
+      "rate": 1.0
+    }
+  },
+  "missing_measurements": [
+    "predicted option strings for the practice and own-curriculum passes (only record_id/op/correct were stored), so the rename / reorder / rewire contrasts on correctly answered practice cases cannot be recovered from the delivered result",
+    "any trained-learner contrast between a practice case and its renamed, reordered or rewired variant: those forward passes were never run",
+    "per-option scores or logits: only the argmax was stored",
+    "the intermediate training history between the saved endpoints (0, 64, 256)",
+    "any component that was never written to a checkpoint (for example the other operation modules a RegisteredOperationBank constructs alongside decompose)",
+    "the tokenizer artifact itself: only its vocabulary list is inside each checkpoint"
+  ],
+  "neural_work": false,
+  "panel_denominator": {
+    "cases": 90,
+    "graph_arrangements": 30,
+    "note": "90 questions drawn from 30 distinct graph arrangements; the same panel was used by every learner, so pooled scores are repeated evaluations of one panel, not independent graphs"
+  },
+  "result_path": "records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-graph6curr-20260910133000-aecb5d07\\curriculum_result.json",
+  "retained_per_case_fields": {
+    "fresh": [
+      "correct",
+      "family_id",
+      "op",
+      "predicted",
+      "record_id"
+    ],
+    "practice_and_own": [
+      "correct",
+      "op",
+      "record_id"
+    ]
+  },
+  "schema": "cas-graph-training-retained-evidence-review/1",
+  "variation_kinds_pooled_own_curriculum": {
+    "none": {
+      "attempted": 90,
+      "correct": 69,
+      "rate": 0.7666666666666667
+    },
+    "renamed": {
+      "attempted": 9,
+      "correct": 9,
+      "rate": 1.0
+    },
+    "renamed_reordered": {
+      "attempted": 45,
+      "correct": 42,
+      "rate": 0.9333333333333333
+    },
+    "renamed_rewired": {
+      "attempted": 36,
+      "correct": 30,
+      "rate": 0.8333333333333334
+    }
+  }
+}

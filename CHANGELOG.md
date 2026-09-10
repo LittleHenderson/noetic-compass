@@ -4,6 +4,42 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-10 - Graph-first ^6: retained-evidence review + retrospective endpoint containment; one measured defect found (LIST_PARTS far below chance)
+
+Read-only work on the delivered attempt-004 artifacts — no training, no
+reservation, no neural execution. **Retrospective endpoint containment**
+(`tools/graph6_checkpoint_containment.py`, stdlib only: it unpickles the
+`torch.save` ZIP object graph with stand-ins for the torch classes and hashes each
+stored tensor's raw bytes): all 18 checkpoints read, 6/6 learners compared; the
+only stored components are `model.left/right/merge.weight` + `encoder.projection`;
+**only those three matrices changed by 256 updates**; the encoder projection is
+byte-identical everywhere (sha256 `116f3677…`, matching the run's own recorded
+`encoder_identity` — an independent cross-check) and the tokenizer vocabulary is
+identical. Labelled RETROSPECTIVE ENDPOINT COMPARISON with its limits stated: no
+intermediate history, and components never saved (e.g. the other operation
+modules) are unverifiable, not "unchanged". **Retained-evidence review**
+(`tools/graph6_retained_evidence_review.py`): practice/own passes stored only
+`correct/op/record_id` (so the trained-learner rename/reorder/rewire contrasts on
+correctly answered practice cases were never measured and are unrecoverable), while
+the fresh pass retained predictions. Own-curriculum accuracy by variation: renaming
+9/9, reordering 42/45, **rewiring 30/36**, control lessons 69/90 — the varied
+learners did follow the relationship on practised cases. **The sharpest finding:**
+on unseen arrangements pooled over six learners, `LIST_PARTS` is **23/180
+(12.8 %)**, far BELOW the 33.3 % chance level (control 5/90 = 5.6 % at 256, down
+from 14.4 % at 64; varied 18/90 = 20.0 %), while `FIND_SHARED_PART` is 39.4 % and
+`REACHED_VIA` 34.4 %. Below-chance list selection is a systematic
+wrong-kind-of-option bias, not random failure. **Prepared (not authorized):** a
+bounded zero-update contrast probe (`cas_meta2/graph_teaching/contrast_probe.py`,
+9 tests) over the retained checkpoints — original / consistently renamed /
+reordered / rewired per correctly answered practice case, plus an option-length
+reading. **One recommendation:** do not raise the allowance; measure whether the
+list failure follows renaming, rewiring or option length, and only then make the
+smallest matching change (a length-normalized/per-slot readout if, and only if, the
+readout hypothesis reproduces). Record: `RETROSPECTIVE_CONTAINMENT_001.md`. The
+result record's interpretation was corrected: the varied learners improved on their
+own starting scores (9→12, 4→14, 9→14 of 30) — **not a forgetting experiment** —
+and the panel is 90 questions from 30 arrangements.
+
 ## 2026-09-10 - Graph-first ^6: GRAPH6_CURRICULUM_002 attempt 004 **FINISHED and DELIVERED** — `VARIED_CURRICULUM_NOT_ESTABLISHED`
 
 Attempt 004 (`cas-meta2-graph6curr-20260910133000-aecb5d07`, owner GO, one new
