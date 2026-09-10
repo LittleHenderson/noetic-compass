@@ -125,15 +125,25 @@ def verified_teaching_section(bundle_path=None, view_id="view_context"):
             "dry_run_plan": vtr.dry_run_plan(view_id=view_id,
                                              ordering_mode="declared"),
         },
+        "candidate_preparation": prepare_candidate_section(view_id),
         "boundary": {
             "neural_calls": 0, "optimizer_updates": 0, "delivered_lessons": 0,
             "aws_calls": 0, "reservations": 0,
-            "note": ("data compilation, deterministic teacher checks, and a stub "
-                     "walk through the existing trainer loop; the stub is not a "
-                     "model and delivers nothing"),
+            "note": ("data compilation, deterministic teacher checks, a stub walk "
+                     "through the existing trainer loop, and a prepared candidate "
+                     "runner; the stub is not a model and nothing is delivered"),
         },
         "bundles": bundles,
     }
+
+
+def prepare_candidate_section(view_id="view_context"):
+    """The runnable candidate preparation: schedule, order, and evaluation."""
+    from cas_meta2.graph_teaching import candidate_run as cr
+    preparation = cr.prepare_candidate_run(view_id=view_id)
+    preparation.pop("sequence", None)
+    preparation["sequence"] = cr.execution_sequence()
+    return preparation
 
 
 def _write(path, text):

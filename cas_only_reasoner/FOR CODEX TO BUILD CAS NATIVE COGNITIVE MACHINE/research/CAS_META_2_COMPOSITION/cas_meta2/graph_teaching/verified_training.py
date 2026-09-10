@@ -226,11 +226,33 @@ def connection_check(bundle=None, view_id="view_context", ordering_mode="declare
         "schema": CONNECTION_SCHEMA,
         "ordering_mode": ordering_mode, "arm": arm,
         "records": len(records),
-        "optimizer_updates_in_this_check": report["completed_updates"],
+        # Field-name correction (owner review): the earlier name
+        # "optimizer_updates_in_this_check" read as if a model had been trained.
+        # These counts say exactly what happened: the loop was driven, nothing
+        # was updated, nothing was delivered.
+        "stub_training_step_calls": report["completed_updates"],
+        "actual_optimizer_updates": 0,
+        "actual_neural_presentations": 0,
+        "field_correction": {
+            "replaced": "optimizer_updates_in_this_check",
+            "with": ["stub_training_step_calls", "actual_optimizer_updates",
+                     "actual_neural_presentations"],
+            "reason": ("the learner is a stub with no parameters, so no optimizer "
+                       "step and no neural presentation occurred; the earlier name "
+                       "overstated what the check did"),
+            "preserved_from": "the loop's own 'completed_updates' count, renamed "
+                              "to say that the calls went to a stub",
+        },
         "records_that_received_correction": len(seen),
         "every_record_reached": seen == set(layout),
         "corrective_targets_used": sorted({canonical(step["correct"]).decode("utf-8")
                                            for step in stub.steps}),
+        "stub_step_allocation_by_op": {
+            op: sum(1 for step in stub.steps if step["op"] == op)
+            for op in sorted({step["op"] for step in stub.steps})},
+        "stub_step_allocation_note": ("this allocation follows from cycling the "
+                                      "eight records over the frozen budget; it is "
+                                      "not a proposed teaching schedule"),
         "correction_point": correction_point(records, arm),
         "lesson_exposure": report["lesson_exposure"],
         "checkpoint_identity": report["checkpoint_identity"],
@@ -295,11 +317,17 @@ def dry_run_plan(bundle=None, view_id="view_context", ordering_mode="declared",
              "call": "trainer.run_training(learner, records, arm, budget)",
              "gives": ("make_task(record, arm) -> learner.step(task) -> "
                        "cross-entropy against encoded_correct_index -> one "
-                       "optimizer step")},
+                       "optimizer step"),
+             "note": ("this is the frozen 64-step budget running the records in "
+                      "cycle order; it is a wiring default, NOT a teaching "
+                      "schedule. The proposed schedule lives in "
+                      "candidate_run.proposed_schedule()")},
             {"step": 8,
              "call": "trainer.parameter_snapshot + containment_report",
-             "gives": ("proof that only allowlisted parameters changed; run once "
-                       "before and once after")},
+             "gives": ("proof that only allowlisted parameters changed; the BEFORE "
+                       "snapshot must be taken before the first update and the "
+                       "AFTER snapshot after the last one (see "
+                       "candidate_run.execution_sequence)")},
             {"step": 9,
              "call": "record the observation contract",
              "gives": ("per-event prediction, all three scores, released "

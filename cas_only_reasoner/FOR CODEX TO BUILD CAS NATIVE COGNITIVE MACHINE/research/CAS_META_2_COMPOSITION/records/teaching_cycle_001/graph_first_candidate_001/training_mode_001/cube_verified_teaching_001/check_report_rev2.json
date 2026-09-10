@@ -1,0 +1,3353 @@
+{
+  "answer_signature": {
+    "cases": 51,
+    "counts": {
+      "FIND_SHARED_PART": 15,
+      "LIST_PARTS": 6,
+      "REACHED_VIA": 30
+    },
+    "digest": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9"
+  },
+  "artifacts_written": [
+    "exports/declared/public_contexts.jsonl",
+    "exports/declared/public_exercises.jsonl",
+    "exports/declared/teacher_targets.jsonl",
+    "exports/declared/teacher_traces.jsonl",
+    "exports/declared/step_contrasts.jsonl",
+    "exports/declared/cycle_plan.json",
+    "exports/declared/EXPORT_MANIFEST.json",
+    "exports/authored_fixture/public_contexts.jsonl",
+    "exports/authored_fixture/public_exercises.jsonl",
+    "exports/authored_fixture/teacher_targets.jsonl",
+    "exports/authored_fixture/teacher_traces.jsonl",
+    "exports/authored_fixture/step_contrasts.jsonl",
+    "exports/authored_fixture/cycle_plan.json",
+    "exports/authored_fixture/EXPORT_MANIFEST.json"
+  ],
+  "boundary": {
+    "checkpoints_touched": "none",
+    "launch": "none",
+    "neural_calls": 0,
+    "registered_records_changed": "none",
+    "reservation": "none",
+    "training": "none",
+    "unchanged": [
+      "the zero-update contrast probe",
+      "the accepted models",
+      "the retained checkpoints",
+      "the registered curricula and panels",
+      "every paid-run decision and the campaign reservation allowance"
+    ]
+  },
+  "bundle_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\cube_node_001\\Cube_Node_Example_v0.1.json",
+  "cases": {
+    "FIND_SHARED_PART": 15,
+    "LIST_PARTS": 6,
+    "REACHED_VIA": 30
+  },
+  "containment_signature": {
+    "digest": "d9a43c9d885fbb9bcc89f0dcf1ea345bb2527c7a22ccc122b3af00398d1086d6",
+    "edges": [
+      [
+        "contains",
+        2,
+        0
+      ],
+      [
+        "contains",
+        3,
+        1
+      ],
+      [
+        "contains",
+        3,
+        1
+      ],
+      [
+        "contains",
+        3,
+        2
+      ],
+      [
+        "contains",
+        3,
+        2
+      ]
+    ],
+    "node_types": [
+      0,
+      1,
+      1,
+      2,
+      3,
+      3
+    ]
+  },
+  "contrasts": {
+    "analogy_view_same_answers": true,
+    "analogy_view_same_arrangement": true,
+    "original": {
+      "answer_signature": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9",
+      "cases": 51,
+      "containment_signature": "d9a43c9d885fbb9bcc89f0dcf1ea345bb2527c7a22ccc122b3af00398d1086d6",
+      "counts": {
+        "FIND_SHARED_PART": 15,
+        "LIST_PARTS": 6,
+        "REACHED_VIA": 30
+      },
+      "edges": [
+        [
+          "contains",
+          2,
+          0
+        ],
+        [
+          "contains",
+          3,
+          1
+        ],
+        [
+          "contains",
+          3,
+          1
+        ],
+        [
+          "contains",
+          3,
+          2
+        ],
+        [
+          "contains",
+          3,
+          2
+        ]
+      ],
+      "node_types": [
+        0,
+        1,
+        1,
+        2,
+        3,
+        3
+      ]
+    },
+    "original_answers": {
+      "cases": 51,
+      "counts": {
+        "FIND_SHARED_PART": 15,
+        "LIST_PARTS": 6,
+        "REACHED_VIA": 30
+      },
+      "digest": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9"
+    },
+    "original_signature": {
+      "digest": "d9a43c9d885fbb9bcc89f0dcf1ea345bb2527c7a22ccc122b3af00398d1086d6",
+      "edges": [
+        [
+          "contains",
+          2,
+          0
+        ],
+        [
+          "contains",
+          3,
+          1
+        ],
+        [
+          "contains",
+          3,
+          1
+        ],
+        [
+          "contains",
+          3,
+          2
+        ],
+        [
+          "contains",
+          3,
+          2
+        ]
+      ],
+      "node_types": [
+        0,
+        1,
+        1,
+        2,
+        3,
+        3
+      ]
+    },
+    "variants": {
+      "renamed": {
+        "answer_signature": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9",
+        "answers_preserved": true,
+        "arrangement_preserved": true,
+        "as_expected": true,
+        "cases": 51,
+        "containment_signature": "d9a43c9d885fbb9bcc89f0dcf1ea345bb2527c7a22ccc122b3af00398d1086d6",
+        "counts": {
+          "FIND_SHARED_PART": 15,
+          "LIST_PARTS": 6,
+          "REACHED_VIA": 30
+        },
+        "edges": [
+          [
+            "contains",
+            2,
+            0
+          ],
+          [
+            "contains",
+            3,
+            1
+          ],
+          [
+            "contains",
+            3,
+            1
+          ],
+          [
+            "contains",
+            3,
+            2
+          ],
+          [
+            "contains",
+            3,
+            2
+          ]
+        ],
+        "node_types": [
+          0,
+          1,
+          1,
+          2,
+          3,
+          3
+        ]
+      },
+      "renamed_stale_mapping_rejected": "CUBE_MAPPING_ROLE_LABEL_MISMATCH:view_context:node_001",
+      "reordered": {
+        "answer_signature": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9",
+        "answers_preserved": true,
+        "arrangement_preserved": true,
+        "as_expected": true,
+        "cases": 51,
+        "containment_signature": "d9a43c9d885fbb9bcc89f0dcf1ea345bb2527c7a22ccc122b3af00398d1086d6",
+        "counts": {
+          "FIND_SHARED_PART": 15,
+          "LIST_PARTS": 6,
+          "REACHED_VIA": 30
+        },
+        "edges": [
+          [
+            "contains",
+            2,
+            0
+          ],
+          [
+            "contains",
+            3,
+            1
+          ],
+          [
+            "contains",
+            3,
+            1
+          ],
+          [
+            "contains",
+            3,
+            2
+          ],
+          [
+            "contains",
+            3,
+            2
+          ]
+        ],
+        "node_types": [
+          0,
+          1,
+          1,
+          2,
+          3,
+          3
+        ]
+      },
+      "rewired": {
+        "answer_signature": "395bfd4c2484be3b7144658ddf941bc618837842120bdddf991a8ba5f9b6cb7b",
+        "answers_preserved": false,
+        "arrangement_preserved": false,
+        "as_expected": true,
+        "cases": 51,
+        "changed_answers": [
+          {
+            "after": [
+              "REACHED_VIA",
+              {
+                "idea": "Wheel",
+                "part": "Rim"
+              },
+              "absent"
+            ],
+            "before": [
+              "REACHED_VIA",
+              {
+                "idea": "Wheel",
+                "part": "Rim"
+              },
+              "direct"
+            ],
+            "case_key": "2a2761a96c99919c6a1ed360d9c56594b86a0790b63628de36d85fa55dee7298"
+          },
+          {
+            "after": [
+              "REACHED_VIA",
+              {
+                "idea": "Bicycle",
+                "part": "Rim"
+              },
+              "via:Frame"
+            ],
+            "before": [
+              "REACHED_VIA",
+              {
+                "idea": "Bicycle",
+                "part": "Rim"
+              },
+              "via:Wheel"
+            ],
+            "case_key": "379d37f2d98c369e732aa9b958a203311cfa75e56846d30abe6408214774e053"
+          },
+          {
+            "after": [
+              "LIST_PARTS",
+              {
+                "idea": "Wheel"
+              },
+              []
+            ],
+            "before": [
+              "LIST_PARTS",
+              {
+                "idea": "Wheel"
+              },
+              [
+                "Rim"
+              ]
+            ],
+            "case_key": "37bb7b95f6cb29686e2621cedffd109307e791075d17dfb0369d78f1ebc35ce9"
+          },
+          {
+            "after": [
+              "REACHED_VIA",
+              {
+                "idea": "Frame",
+                "part": "Rim"
+              },
+              "direct"
+            ],
+            "before": [
+              "REACHED_VIA",
+              {
+                "idea": "Frame",
+                "part": "Rim"
+              },
+              "absent"
+            ],
+            "case_key": "588f779104d6ba5879290029c055e3242a3f63e1ac0f2b0d748ad4b8b4011292"
+          },
+          {
+            "after": [
+              "LIST_PARTS",
+              {
+                "idea": "Frame"
+              },
+              [
+                "Rim"
+              ]
+            ],
+            "before": [
+              "LIST_PARTS",
+              {
+                "idea": "Frame"
+              },
+              []
+            ],
+            "case_key": "70a9e0a26c8715e9f32a875d971f6ea82f2144197759ec9599af0e685c67dd20"
+          },
+          {
+            "after": [
+              "FIND_SHARED_PART",
+              {
+                "a": "Rim",
+                "b": "Wheel"
+              },
+              "none"
+            ],
+            "before": [
+              "FIND_SHARED_PART",
+              {
+                "a": "Rim",
+                "b": "Wheel"
+              },
+              "Rim"
+            ],
+            "case_key": "838198d0b8c955be85e6970a02692f2d32ae1b553c2078c27c42d1b8046e5086"
+          },
+          {
+            "after": [
+              "FIND_SHARED_PART",
+              {
+                "a": "Frame",
+                "b": "Rim"
+              },
+              "Rim"
+            ],
+            "before": [
+              "FIND_SHARED_PART",
+              {
+                "a": "Frame",
+                "b": "Rim"
+              },
+              "none"
+            ],
+            "case_key": "d5f7eb259650cec4ca8f63a4ea7c5def58942172ad467008d112ec227a69038d"
+          },
+          {
+            "after": [
+              "REACHED_VIA",
+              {
+                "idea": "Cart",
+                "part": "Rim"
+              },
+              "absent"
+            ],
+            "before": [
+              "REACHED_VIA",
+              {
+                "idea": "Cart",
+                "part": "Rim"
+              },
+              "via:Wheel"
+            ],
+            "case_key": "fbd1e4efdb88c0a2453c93cfd53931225729e372ad3106f79fae7e506663ab6b"
+          }
+        ],
+        "containment_signature": "3caeae9f719a48dbb23bd7fa5eb9b51971e2aacb5da0ead4da0d27f43aaded84",
+        "counts": {
+          "FIND_SHARED_PART": 15,
+          "LIST_PARTS": 6,
+          "REACHED_VIA": 30
+        },
+        "edges": [
+          [
+            "contains",
+            3,
+            0
+          ],
+          [
+            "contains",
+            4,
+            1
+          ],
+          [
+            "contains",
+            4,
+            2
+          ],
+          [
+            "contains",
+            5,
+            2
+          ],
+          [
+            "contains",
+            5,
+            3
+          ]
+        ],
+        "node_types": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "rewired_stale_faces_face_check": "CUBE_FACE2_FACT_NOT_INCIDENT:branch_05",
+      "rewired_stale_faces_inventory_check": "CUBE_FACE5_DIRECT_BRANCH_MISMATCH:node_002",
+      "rewired_stale_faces_rejected": "CUBE_FACE2_FACT_NOT_INCIDENT:branch_05",
+      "stale_variant_note": "validation fails closed on the first violation found, so the two stale variants report the first code each one hits; the face check is probed separately so the face-versus-branch rule is visible on its own"
+    },
+    "view_id": "view_context"
+  },
+  "design_review": {
+    "complete_cycle_demonstrated": {
+      "counts": {
+        "assistance_states_recorded": 7,
+        "complete_cycles": 1,
+        "corrective_examples": 2,
+        "delivered_neural_lessons": 0,
+        "distinct_graph_families": 1,
+        "elapsed_note": "not measured in this data-only draft",
+        "elapsed_seconds": null,
+        "optimizer_updates": 0,
+        "presentations": 7,
+        "scored_task_tokens": 49,
+        "stage_masked_paths": 0,
+        "stage_visible_paths": 88,
+        "stages_delivered": 7
+      },
+      "cycle_digest": "dbbd76bef7bda2ca2f367c40d43fbd42ce012f15b506a35783427b3ce601f10c",
+      "operation": "LIST_PARTS",
+      "stages": [
+        {
+          "assistance_level": "guided",
+          "exercise_status": "new_task_profile_required",
+          "masked": [],
+          "stage": 1,
+          "stage_id": "name_and_function",
+          "teacher_payload_present": false,
+          "visible": [
+            "node_001.core.identity_statement",
+            "node_001.core.kind",
+            "node_001.core.label",
+            "node_001.face_1.availability",
+            "node_001.face_1.human_text",
+            "node_001.face_1.provenance_refs",
+            "node_001.face_1.structured.canonical_name",
+            "node_001.face_1.structured.definition",
+            "node_001.face_1.structured.function"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "new_task_profile_required",
+          "masked": [],
+          "stage": 2,
+          "stage_id": "context",
+          "teacher_payload_present": false,
+          "visible": [
+            "node_001.face_2.availability",
+            "node_001.face_2.human_text",
+            "node_001.face_2.provenance_refs",
+            "node_001.face_2.structured.context_scope",
+            "node_001.face_2.structured.fact_refs",
+            "node_001.face_2.structured.view_refs"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "new_task_profile_required",
+          "masked": [],
+          "stage": 3,
+          "stage_id": "analogy",
+          "teacher_payload_present": false,
+          "visible": [
+            "node_001.face_3.availability",
+            "node_001.face_3.human_text",
+            "node_001.face_3.provenance_refs",
+            "node_001.face_3.structured.analogy_limits",
+            "node_001.face_3.structured.analogy_scope",
+            "node_001.face_3.structured.mapping_refs",
+            "node_001.face_3.structured.view_refs"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "new_task_profile_required",
+          "masked": [],
+          "stage": 4,
+          "stage_id": "explicit_mapping",
+          "teacher_payload_present": false,
+          "visible": [
+            "node_001.face_4.availability",
+            "node_001.face_4.human_text",
+            "node_001.face_4.provenance_refs",
+            "node_001.face_4.structured.mapping_refs"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "existing_three_choice_interface",
+          "masked": [],
+          "stage": 5,
+          "stage_id": "guided_decomposition",
+          "teacher_payload_present": true,
+          "visible": [
+            "node_001.face_5.availability",
+            "node_001.face_5.human_text",
+            "node_001.face_5.provenance_refs",
+            "node_001.face_5.structured.completeness",
+            "node_001.face_5.structured.direct_branch_refs"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "new_task_profile_required",
+          "masked": [],
+          "stage": 6,
+          "stage_id": "recomposition",
+          "teacher_payload_present": true,
+          "visible": [
+            "node_001.face_6.availability",
+            "node_001.face_6.human_text",
+            "node_001.face_6.provenance_refs",
+            "node_001.face_6.structured.sequence_kind",
+            "node_001.face_6.structured.steps[0].step_id",
+            "node_001.face_6.structured.steps[0].text",
+            "node_001.face_6.structured.steps[0].uses_branch_refs",
+            "node_001.face_6.structured.steps[1].step_id",
+            "node_001.face_6.structured.steps[1].text",
+            "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "node_001.face_6.structured.steps[2].step_id",
+            "node_001.face_6.structured.steps[2].text",
+            "node_001.face_6.structured.steps[2].uses_branch_refs"
+          ]
+        },
+        {
+          "assistance_level": "guided",
+          "exercise_status": "existing_three_choice_interface",
+          "masked": [],
+          "stage": 7,
+          "stage_id": "reinforcement",
+          "teacher_payload_present": false,
+          "visible": [
+            "node_001.core.identity_statement",
+            "node_001.core.kind",
+            "node_001.core.label",
+            "node_001.face_1.availability",
+            "node_001.face_1.human_text",
+            "node_001.face_1.provenance_refs",
+            "node_001.face_1.structured.canonical_name",
+            "node_001.face_1.structured.definition",
+            "node_001.face_1.structured.function",
+            "node_001.face_2.availability",
+            "node_001.face_2.human_text",
+            "node_001.face_2.provenance_refs",
+            "node_001.face_2.structured.context_scope",
+            "node_001.face_2.structured.fact_refs",
+            "node_001.face_2.structured.view_refs",
+            "node_001.face_3.availability",
+            "node_001.face_3.human_text",
+            "node_001.face_3.provenance_refs",
+            "node_001.face_3.structured.analogy_limits",
+            "node_001.face_3.structured.analogy_scope",
+            "node_001.face_3.structured.mapping_refs",
+            "node_001.face_3.structured.view_refs",
+            "node_001.face_4.availability",
+            "node_001.face_4.human_text",
+            "node_001.face_4.provenance_refs",
+            "node_001.face_4.structured.mapping_refs",
+            "node_001.face_5.availability",
+            "node_001.face_5.human_text",
+            "node_001.face_5.provenance_refs",
+            "node_001.face_5.structured.completeness",
+            "node_001.face_5.structured.direct_branch_refs",
+            "node_001.face_6.availability",
+            "node_001.face_6.human_text",
+            "node_001.face_6.provenance_refs",
+            "node_001.face_6.structured.sequence_kind",
+            "node_001.face_6.structured.steps[0].step_id",
+            "node_001.face_6.structured.steps[0].text",
+            "node_001.face_6.structured.steps[0].uses_branch_refs",
+            "node_001.face_6.structured.steps[1].step_id",
+            "node_001.face_6.structured.steps[1].text",
+            "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "node_001.face_6.structured.steps[2].step_id",
+            "node_001.face_6.structured.steps[2].text",
+            "node_001.face_6.structured.steps[2].uses_branch_refs"
+          ]
+        }
+      ],
+      "view_id": "view_context"
+    },
+    "evidence_state": "schema valid -> lesson delivered -> practice improved -> fresh transfer demonstrated -> accepted integration; this draft reaches the first state only",
+    "interface": {
+      "new_profile_detail": "a new profile must specify output vocabulary, loss, and training adapter before execution",
+      "operations_available_now": [
+        "LIST_PARTS",
+        "FIND_SHARED_PART",
+        "REACHED_VIA"
+      ],
+      "stages": [
+        {
+          "basis": "select the definition/function that matches the presented concept",
+          "content_keys": [
+            "core",
+            "face_1"
+          ],
+          "exercise_status": "new_task_profile_required",
+          "representable_in_current_interface": false,
+          "stage": 1,
+          "stage_id": "name_and_function"
+        },
+        {
+          "basis": "select the supplied contextual relation relevant to the question",
+          "content_keys": [
+            "face_2"
+          ],
+          "exercise_status": "new_task_profile_required",
+          "representable_in_current_interface": false,
+          "stage": 2,
+          "stage_id": "context"
+        },
+        {
+          "basis": "select the analogy that preserves the same directed relationship",
+          "content_keys": [
+            "face_3"
+          ],
+          "exercise_status": "new_task_profile_required",
+          "representable_in_current_interface": false,
+          "stage": 3,
+          "stage_id": "analogy"
+        },
+        {
+          "basis": "select the correct role correspondence between two views",
+          "content_keys": [
+            "face_4"
+          ],
+          "exercise_status": "new_task_profile_required",
+          "representable_in_current_interface": false,
+          "stage": 4,
+          "stage_id": "explicit_mapping"
+        },
+        {
+          "basis": "LIST_PARTS / FIND_SHARED_PART / REACHED_VIA over the public graph",
+          "content_keys": [
+            "face_5"
+          ],
+          "exercise_status": "existing_three_choice_interface",
+          "representable_in_current_interface": true,
+          "stage": 5,
+          "stage_id": "guided_decomposition"
+        },
+        {
+          "basis": "select a valid recomposition or complete explanation from supplied parts",
+          "content_keys": [
+            "face_6"
+          ],
+          "exercise_status": "new_task_profile_required",
+          "representable_in_current_interface": false,
+          "stage": 6,
+          "stage_id": "recomposition"
+        },
+        {
+          "basis": "repeat the connected lesson with declared variations of the same three ops",
+          "content_keys": [
+            "core",
+            "face_1",
+            "face_2",
+            "face_3",
+            "face_4",
+            "face_5",
+            "face_6"
+          ],
+          "exercise_status": "existing_three_choice_interface",
+          "representable_in_current_interface": true,
+          "stage": 7,
+          "stage_id": "reinforcement"
+        }
+      ],
+      "stages_representable_now": [
+        5,
+        7
+      ],
+      "stages_requiring_new_task_profile": [
+        1,
+        2,
+        3,
+        4,
+        6
+      ],
+      "unchanged_by_this_draft": [
+        "the zero-update contrast probe",
+        "the accepted models",
+        "the retained checkpoints",
+        "the registered curricula and panels",
+        "every paid-run decision and the campaign reservation allowance"
+      ]
+    },
+    "schema": "cas-cube-node-check/1",
+    "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+    "what_each_branch_asserts": [
+      {
+        "asserts": "Bicycle contains Wheel",
+        "branch_id": "branch_01",
+        "commonality": {
+          "kind": "constituent",
+          "referent": "node_002"
+        }
+      },
+      {
+        "asserts": "Bicycle contains Frame",
+        "branch_id": "branch_02",
+        "commonality": {
+          "kind": "constituent",
+          "referent": "node_003"
+        }
+      },
+      {
+        "asserts": "Cart contains Wheel",
+        "branch_id": "branch_03",
+        "commonality": {
+          "kind": "constituent",
+          "referent": "node_002"
+        }
+      },
+      {
+        "asserts": "Cart contains Platform",
+        "branch_id": "branch_04",
+        "commonality": {
+          "kind": "constituent",
+          "referent": "node_005"
+        }
+      },
+      {
+        "asserts": "Wheel contains Rim",
+        "branch_id": "branch_05",
+        "commonality": {
+          "kind": "constituent",
+          "referent": "node_006"
+        }
+      }
+    ],
+    "what_each_face_contributes": {
+      "face_1": "technical_identity",
+      "face_2": "context_and_environment",
+      "face_3": "analogy_and_metaphor",
+      "face_4": "explicit_correspondence",
+      "face_5": "decomposition",
+      "face_6": "recomposition_and_story"
+    },
+    "what_feedback_teaches": [
+      {
+        "corrective_feedback": "The direct constituents are exactly the targets of the outgoing contains branches: Frame, Wheel.",
+        "delivered": true,
+        "task_id": "5be9f7f22fbd115ae0c3f0ad9a990c30887004fe561e6fe65481cd3fa08faba1",
+        "worked_solution": [
+          "LIST_PARTS(b'{\"idea\":\"Bicycle\"}') = b'[\"Frame\",\"Wheel\"]'",
+          "derived by the deterministic reference checker from the stored contains branches only"
+        ]
+      },
+      {
+        "corrective_feedback": "The checker derives b'\"Wheel\"' from the stored branches.",
+        "delivered": true,
+        "task_id": "377d1d6e52e10f415853d5faef3b169036ece1e832f6ce1537d21286b7cdb6b5",
+        "worked_solution": [
+          "FIND_SHARED_PART(b'{\"a\":\"Bicycle\",\"b\":\"Cart\"}') = b'\"Wheel\"'",
+          "derived by the deterministic reference checker from the stored contains branches only"
+        ]
+      },
+      {
+        "corrective_feedback": "The checker derives b'\"via:Wheel\"' from the stored branches.",
+        "delivered": true,
+        "task_id": "fff0f1780b9a51409bff8eaf257aed07e62a1e0acde4c4e613e0dcf085edc69c",
+        "worked_solution": [
+          "REACHED_VIA(b'{\"idea\":\"Bicycle\",\"part\":\"Rim\"}') = b'\"via:Wheel\"'",
+          "derived by the deterministic reference checker from the stored contains branches only"
+        ]
+      }
+    ],
+    "what_idea_is_stored": {
+      "Bicycle": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      },
+      "Cart": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      },
+      "Frame": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      },
+      "Platform": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      },
+      "Rim": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      },
+      "Wheel": {
+        "face_1": {
+          "availability": "populated",
+          "role": "technical_identity",
+          "structured_keys": [
+            "canonical_name",
+            "definition",
+            "function"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "role": "context_and_environment",
+          "structured_keys": [
+            "context_scope",
+            "fact_refs",
+            "view_refs"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "role": "analogy_and_metaphor",
+          "structured_keys": [
+            "analogy_limits",
+            "analogy_scope",
+            "mapping_refs",
+            "view_refs"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "role": "explicit_correspondence",
+          "structured_keys": [
+            "mapping_refs"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "role": "decomposition",
+          "structured_keys": [
+            "completeness",
+            "direct_branch_refs"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "role": "recomposition_and_story",
+          "structured_keys": [
+            "sequence_kind",
+            "steps"
+          ]
+        }
+      }
+    },
+    "what_reaches_the_learner": [
+      {
+        "encoded_public_digest": "e693d7d00770363c2d082c16ed147bd81b85e4f4db8388975dfd865761abeed6",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "LIST_PARTS",
+        "task_id": "5be9f7f22fbd115ae0c3f0ad9a990c30887004fe561e6fe65481cd3fa08faba1",
+        "tokens": 49,
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[2].step_id"
+        ]
+      },
+      {
+        "encoded_public_digest": "0f65118e7f07e687016cd0632f714c9a8d5d9441c4c719bcc73d74c9e6afb0a7",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs",
+          "node_004.face_2.structured.fact_refs",
+          "node_004.face_3.human_text",
+          "node_004.face_5.structured.direct_branch_refs",
+          "node_004.face_6.structured.steps[0].text",
+          "node_004.face_6.structured.steps[0].uses_branch_refs",
+          "node_004.face_6.structured.steps[1].text",
+          "node_004.face_6.structured.steps[1].uses_branch_refs",
+          "node_004.face_6.structured.steps[2].text",
+          "node_004.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "FIND_SHARED_PART",
+        "task_id": "377d1d6e52e10f415853d5faef3b169036ece1e832f6ce1537d21286b7cdb6b5",
+        "tokens": 50,
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[2].step_id",
+          "node_004.core.identity_statement",
+          "node_004.core.kind",
+          "node_004.core.label",
+          "node_004.face_1.availability",
+          "node_004.face_1.human_text",
+          "node_004.face_1.provenance_refs",
+          "node_004.face_1.structured.canonical_name",
+          "node_004.face_1.structured.definition",
+          "node_004.face_1.structured.function",
+          "node_004.face_2.availability",
+          "node_004.face_2.human_text",
+          "node_004.face_2.provenance_refs",
+          "node_004.face_2.structured.context_scope",
+          "node_004.face_2.structured.view_refs",
+          "node_004.face_3.availability",
+          "node_004.face_3.provenance_refs",
+          "node_004.face_3.structured.analogy_limits",
+          "node_004.face_3.structured.analogy_scope",
+          "node_004.face_3.structured.mapping_refs",
+          "node_004.face_3.structured.view_refs",
+          "node_004.face_4.availability",
+          "node_004.face_4.human_text",
+          "node_004.face_4.provenance_refs",
+          "node_004.face_4.structured.mapping_refs",
+          "node_004.face_5.availability",
+          "node_004.face_5.human_text",
+          "node_004.face_5.provenance_refs",
+          "node_004.face_5.structured.completeness",
+          "node_004.face_6.availability",
+          "node_004.face_6.human_text",
+          "node_004.face_6.provenance_refs",
+          "node_004.face_6.structured.sequence_kind",
+          "node_004.face_6.structured.steps[0].step_id",
+          "node_004.face_6.structured.steps[1].step_id",
+          "node_004.face_6.structured.steps[2].step_id"
+        ]
+      },
+      {
+        "encoded_public_digest": "3a141e0e61a5c4507197db28c9f10d2daafcfd379f065a7faa9a52b533ca2ac0",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "REACHED_VIA",
+        "task_id": "fff0f1780b9a51409bff8eaf257aed07e62a1e0acde4c4e613e0dcf085edc69c",
+        "tokens": 50,
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[2].step_id",
+          "node_006.core.identity_statement",
+          "node_006.core.kind",
+          "node_006.core.label",
+          "node_006.face_1.availability",
+          "node_006.face_1.human_text",
+          "node_006.face_1.provenance_refs",
+          "node_006.face_1.structured.canonical_name",
+          "node_006.face_1.structured.definition",
+          "node_006.face_1.structured.function",
+          "node_006.face_2.availability",
+          "node_006.face_2.human_text",
+          "node_006.face_2.provenance_refs",
+          "node_006.face_2.structured.context_scope",
+          "node_006.face_2.structured.fact_refs",
+          "node_006.face_2.structured.view_refs",
+          "node_006.face_3.availability",
+          "node_006.face_3.human_text",
+          "node_006.face_3.provenance_refs",
+          "node_006.face_3.structured.analogy_limits",
+          "node_006.face_3.structured.analogy_scope",
+          "node_006.face_3.structured.mapping_refs",
+          "node_006.face_3.structured.view_refs",
+          "node_006.face_4.availability",
+          "node_006.face_4.human_text",
+          "node_006.face_4.provenance_refs",
+          "node_006.face_4.structured.mapping_refs",
+          "node_006.face_5.availability",
+          "node_006.face_5.human_text",
+          "node_006.face_5.provenance_refs",
+          "node_006.face_5.structured.completeness",
+          "node_006.face_5.structured.direct_branch_refs",
+          "node_006.face_6.availability",
+          "node_006.face_6.human_text",
+          "node_006.face_6.provenance_refs",
+          "node_006.face_6.structured.sequence_kind",
+          "node_006.face_6.structured.steps[0].step_id",
+          "node_006.face_6.structured.steps[0].text",
+          "node_006.face_6.structured.steps[0].uses_branch_refs",
+          "node_006.face_6.structured.steps[1].step_id",
+          "node_006.face_6.structured.steps[1].text",
+          "node_006.face_6.structured.steps[1].uses_branch_refs"
+        ]
+      }
+    ],
+    "what_the_learner_predicts": [
+      {
+        "asks": {
+          "idea": "Bicycle"
+        },
+        "choices": [
+          [
+            "Frame",
+            "Rim",
+            "Wheel"
+          ],
+          [
+            "Frame"
+          ],
+          [
+            "Frame",
+            "Wheel"
+          ]
+        ],
+        "operation": "LIST_PARTS"
+      },
+      {
+        "asks": {
+          "a": "Bicycle",
+          "b": "Cart"
+        },
+        "choices": [
+          "Cart",
+          "Bicycle",
+          "Wheel"
+        ],
+        "operation": "FIND_SHARED_PART"
+      },
+      {
+        "asks": {
+          "idea": "Bicycle",
+          "part": "Rim"
+        },
+        "choices": [
+          "absent",
+          "direct",
+          "via:Wheel"
+        ],
+        "operation": "REACHED_VIA"
+      }
+    ]
+  },
+  "interface": {
+    "new_profile_detail": "a new profile must specify output vocabulary, loss, and training adapter before execution",
+    "operations_available_now": [
+      "LIST_PARTS",
+      "FIND_SHARED_PART",
+      "REACHED_VIA"
+    ],
+    "stages": [
+      {
+        "basis": "select the definition/function that matches the presented concept",
+        "content_keys": [
+          "core",
+          "face_1"
+        ],
+        "exercise_status": "new_task_profile_required",
+        "representable_in_current_interface": false,
+        "stage": 1,
+        "stage_id": "name_and_function"
+      },
+      {
+        "basis": "select the supplied contextual relation relevant to the question",
+        "content_keys": [
+          "face_2"
+        ],
+        "exercise_status": "new_task_profile_required",
+        "representable_in_current_interface": false,
+        "stage": 2,
+        "stage_id": "context"
+      },
+      {
+        "basis": "select the analogy that preserves the same directed relationship",
+        "content_keys": [
+          "face_3"
+        ],
+        "exercise_status": "new_task_profile_required",
+        "representable_in_current_interface": false,
+        "stage": 3,
+        "stage_id": "analogy"
+      },
+      {
+        "basis": "select the correct role correspondence between two views",
+        "content_keys": [
+          "face_4"
+        ],
+        "exercise_status": "new_task_profile_required",
+        "representable_in_current_interface": false,
+        "stage": 4,
+        "stage_id": "explicit_mapping"
+      },
+      {
+        "basis": "LIST_PARTS / FIND_SHARED_PART / REACHED_VIA over the public graph",
+        "content_keys": [
+          "face_5"
+        ],
+        "exercise_status": "existing_three_choice_interface",
+        "representable_in_current_interface": true,
+        "stage": 5,
+        "stage_id": "guided_decomposition"
+      },
+      {
+        "basis": "select a valid recomposition or complete explanation from supplied parts",
+        "content_keys": [
+          "face_6"
+        ],
+        "exercise_status": "new_task_profile_required",
+        "representable_in_current_interface": false,
+        "stage": 6,
+        "stage_id": "recomposition"
+      },
+      {
+        "basis": "repeat the connected lesson with declared variations of the same three ops",
+        "content_keys": [
+          "core",
+          "face_1",
+          "face_2",
+          "face_3",
+          "face_4",
+          "face_5",
+          "face_6"
+        ],
+        "exercise_status": "existing_three_choice_interface",
+        "representable_in_current_interface": true,
+        "stage": 7,
+        "stage_id": "reinforcement"
+      }
+    ],
+    "stages_representable_now": [
+      5,
+      7
+    ],
+    "stages_requiring_new_task_profile": [
+      1,
+      2,
+      3,
+      4,
+      6
+    ],
+    "unchanged_by_this_draft": [
+      "the zero-update contrast probe",
+      "the accepted models",
+      "the retained checkpoints",
+      "the registered curricula and panels",
+      "every paid-run decision and the campaign reservation allowance"
+    ]
+  },
+  "leakage": {
+    "bundle_is_never_a_learner_view": {
+      "authoring_only_fields": [
+        "face_2.structured.fact_refs",
+        "face_5.structured.direct_branch_refs",
+        "face_6.structured.steps",
+        "mappings[].node_role_rows"
+      ],
+      "learner_view_requirement": {
+        "must_compile_explicit_visibility_profile": true,
+        "note": "The full faces include worked teaching information. Do not pass this entire bundle to an unassisted learner.",
+        "teacher_targets_included": false
+      },
+      "note": "the delivered bundle carries worked teaching content; compile_lesson returns a learner_view and a separate teacher_target, and validate_bundle rejects a bundle that does not demand an explicit visibility profile"
+    },
+    "lessons": [
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[2].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[2].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "guided",
+        "encoded_public_digest": "31076ca127cf4900eaa3e5ff2c4f735f08726d85f264325120152a3f3dde16b0",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "70c9b5c0cfe6b470b667cc6ebae472a054225d435a891cdb6b8b096c0b6ea43a",
+        "masked_field_paths": [],
+        "operation": "LIST_PARTS",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ],
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": [
+              "Frame"
+            ],
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "5be9f7f22fbd115ae0c3f0ad9a990c30887004fe561e6fe65481cd3fa08faba1",
+        "teacher_target_delivered": true
+      },
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[2].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[2].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002",
+              "node_003"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "unassisted",
+        "encoded_public_digest": "e693d7d00770363c2d082c16ed147bd81b85e4f4db8388975dfd865761abeed6",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "1da09a9436740f84c01f4412d546fac19071a098cabc3c9d043e8a0f3e5a5c2f",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "LIST_PARTS",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": [
+              "Frame",
+              "Rim",
+              "Wheel"
+            ],
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": [
+              "Frame"
+            ],
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "5be9f7f22fbd115ae0c3f0ad9a990c30887004fe561e6fe65481cd3fa08faba1",
+        "teacher_target_delivered": false
+      },
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[0].uses_branch_refs",
+              "node_004.face_6.structured.steps[1].uses_branch_refs",
+              "node_004.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[0].text",
+              "node_004.face_6.structured.steps[1].text",
+              "node_004.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[*].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_3.human_text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_3.human_text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "guided",
+        "encoded_public_digest": "0f65118e7f07e687016cd0632f714c9a8d5d9441c4c719bcc73d74c9e6afb0a7",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "559199f757918f361f90faa2af858e3cbffe753f027cd4bbc0c3c5f94c72859d",
+        "masked_field_paths": [],
+        "operation": "FIND_SHARED_PART",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": "Cart",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": "Bicycle",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "377d1d6e52e10f415853d5faef3b169036ece1e832f6ce1537d21286b7cdb6b5",
+        "teacher_target_delivered": true
+      },
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[0].uses_branch_refs",
+              "node_004.face_6.structured.steps[1].uses_branch_refs",
+              "node_004.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_6.structured.steps[0].text",
+              "node_004.face_6.structured.steps[1].text",
+              "node_004.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_6.structured.steps[*].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_004.face_3.human_text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_004.face_3.human_text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "unassisted",
+        "encoded_public_digest": "0f65118e7f07e687016cd0632f714c9a8d5d9441c4c719bcc73d74c9e6afb0a7",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "d7bdfd62f8217602b02027b26f05e55dd34a7f85e6eb9a9fba9ca1509762979d",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs",
+          "node_004.face_2.structured.fact_refs",
+          "node_004.face_3.human_text",
+          "node_004.face_5.structured.direct_branch_refs",
+          "node_004.face_6.structured.steps[0].text",
+          "node_004.face_6.structured.steps[0].uses_branch_refs",
+          "node_004.face_6.structured.steps[1].text",
+          "node_004.face_6.structured.steps[1].uses_branch_refs",
+          "node_004.face_6.structured.steps[2].text",
+          "node_004.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "FIND_SHARED_PART",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": "Cart",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": "Bicycle",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "377d1d6e52e10f415853d5faef3b169036ece1e832f6ce1537d21286b7cdb6b5",
+        "teacher_target_delivered": false
+      },
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "guided",
+        "encoded_public_digest": "58831b05a9b1446878c127daeb69011fa5480a99be4e9219c011cc2d9e5583d8",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "cb8eb0c5e60f630fba17eab95f0887633d5d4d379c5dd17855179f1e43eaf65c",
+        "masked_field_paths": [],
+        "operation": "REACHED_VIA",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": "absent",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": "direct",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "fff0f1780b9a51409bff8eaf257aed07e62a1e0acde4c4e613e0dcf085edc69c",
+        "teacher_target_delivered": true
+      },
+      {
+        "answer_bearing_paths": [
+          {
+            "leaf_paths": [
+              "node_001.face_2.structured.fact_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_2.structured.fact_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_5.structured.direct_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_5.structured.direct_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[1].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[1].text",
+            "source": "text"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].uses_branch_refs",
+              "node_001.face_6.structured.steps[1].uses_branch_refs",
+              "node_001.face_6.structured.steps[2].uses_branch_refs"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].uses_branch_refs",
+            "source": "references"
+          },
+          {
+            "leaf_paths": [
+              "node_001.face_6.structured.steps[0].text",
+              "node_001.face_6.structured.steps[1].text",
+              "node_001.face_6.structured.steps[2].text"
+            ],
+            "matched": [
+              "node_002"
+            ],
+            "path": "node_001.face_6.structured.steps[*].text",
+            "source": "text"
+          }
+        ],
+        "answer_bearing_paths_masked": true,
+        "assistance_level": "unassisted",
+        "encoded_public_digest": "3a141e0e61a5c4507197db28c9f10d2daafcfd379f065a7faa9a52b533ca2ac0",
+        "learner_input_invariant_under_target_change": true,
+        "learner_view_digest": "e457722f1e10c6317eea54edf17da9f6bd9026033d5910fe55598475cdf9e7d4",
+        "masked_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ],
+        "operation": "REACHED_VIA",
+        "target_alternatives_tested": [
+          {
+            "declared_correct": "absent",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          },
+          {
+            "declared_correct": "direct",
+            "encoded_public_unchanged": true,
+            "learner_view_unchanged": true
+          }
+        ],
+        "target_keys_absent_from_learner_view": true,
+        "task_id": "fff0f1780b9a51409bff8eaf257aed07e62a1e0acde4c4e613e0dcf085edc69c",
+        "teacher_target_delivered": false
+      }
+    ],
+    "view_id": "view_context"
+  },
+  "rejected_cases": [],
+  "schema": "cas-cube-node-check/1",
+  "scope_of_updates": {
+    "data_edits": "the contrast variants (renamed, reordered, rewired) are data edits made to a copy in memory; they change no parameter and no stored record",
+    "delivered_neural_lessons": 0,
+    "measured_by": "cycle_counts(), which never merges these counts",
+    "optimizer_updates": 0,
+    "permitted_parameter_changes": "none: no module was constructed or updated",
+    "presentations": "7 stage deliveries per compiled cycle"
+  },
+  "selected_cases": {
+    "FIND_SHARED_PART": {
+      "answer": "Wheel",
+      "question": {
+        "a": "Bicycle",
+        "b": "Cart"
+      }
+    },
+    "LIST_PARTS": {
+      "answer": [
+        "Frame",
+        "Wheel"
+      ],
+      "question": {
+        "idea": "Bicycle"
+      }
+    },
+    "REACHED_VIA": {
+      "answer": "via:Wheel",
+      "question": {
+        "idea": "Bicycle",
+        "part": "Rim"
+      }
+    }
+  },
+  "semantic_nulls": {
+    "empty_direct_part_list": "an answer only when the relation inventory is declared complete (CUBE_NEGATIVE_ANSWER_REQUIRES_COMPLETENESS)",
+    "masked": "a learner-view marker; the authoring face still holds the value ([withheld: answer-bearing for this question])",
+    "missing_face_key": "refused: all six face keys must exist (CUBE_FACE_KEYS)",
+    "no_parts_vs_not_recorded": "context.contains_inventory_complete decides: complete means 'declares no direct parts', incomplete means 'not recorded'",
+    "not_applicable_face": "availability='not_applicable', same envelope, a different meaning: the face does not apply here",
+    "unknown_face": "availability='unknown', a non-empty human_text as the explanation, and an empty structured object"
+  },
+  "sources": {
+    "delivered_copy": {
+      "bytes": 29971,
+      "path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Example_v0.1.json",
+      "present": true,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    "delivered_schema_copy": {
+      "bytes": 25974,
+      "path": "C:\\Users\\wakil\\Downloads\\Cube_Node_Schema_v0.1.md",
+      "present": true,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    "pinned_bundle": {
+      "bytes": 29971,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\cube_node_001\\Cube_Node_Example_v0.1.json",
+      "present": true,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    "pinned_matches_delivered": true,
+    "pinned_schema_document": {
+      "bytes": 25974,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\cube_node_001\\Cube_Node_Schema_v0.1.md",
+      "present": true,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    "provenance_note": "the illustrative bundle is authored data, not experimental evidence: it is the handoff example of Cube Node Schema v0.1, copied into this homebase with its source identity recorded",
+    "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA"
+  },
+  "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+  "validation": {
+    "branches": 5,
+    "bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+    "context_complete": true,
+    "context_id": "toy_scene_01",
+    "lesson_family_id": "illustration_family_01",
+    "mappings": 1,
+    "nodes": 6,
+    "schema_version": "cas.cube-bundle/0.1",
+    "views": 3
+  },
+  "verified_teaching": {
+    "boundary": {
+      "aws_calls": 0,
+      "delivered_lessons": 0,
+      "neural_calls": 0,
+      "note": "data compilation, deterministic teacher checks, and a stub walk through the existing trainer loop; the stub is not a model and delivers nothing",
+      "optimizer_updates": 0,
+      "reservations": 0
+    },
+    "bundles_note": "the full per-mode bundles are written to exports/<ordering_mode>/ so each export names exactly one ordering mode",
+    "checker_identity": "cas_meta2.graph_teaching.reference@aab7af24638c842b",
+    "compiled": {
+      "authored_fixture": {
+        "counts": {
+          "public_exercises": 8,
+          "step_contrasts": 16,
+          "teacher_targets": 8,
+          "teacher_traces": 1
+        },
+        "counts_of_delivery": {
+          "compiled_stages": 7,
+          "complete_neural_cycles": 0,
+          "distinct_graph_families": 1,
+          "neural_presentations": 0,
+          "note": "a compiled seven-stage plan is not seven neural presentations; a passive presentation is not an update; a complete neural cycle needs real delivery receipts",
+          "optimizer_updates": 0,
+          "presented_stages": 7,
+          "supervised_decisions": 0
+        },
+        "fixture_comparison": {
+          "choice_orders_compared": 8,
+          "choice_orders_matching": 8,
+          "choice_sets_compared": 8,
+          "choice_sets_matching": 8,
+          "context_id_reproduced": true,
+          "counts_compiled_then_fixture": {
+            "lesson_variants": [
+              6,
+              6
+            ],
+            "public_contexts": [
+              1,
+              1
+            ],
+            "public_exercises": [
+              8,
+              8
+            ],
+            "step_contrasts": [
+              16,
+              16
+            ],
+            "teacher_targets": [
+              8,
+              8
+            ],
+            "traces": [
+              1,
+              1
+            ]
+          },
+          "counts_match": true,
+          "exercise_id_overlap": 8,
+          "exercise_ids_reproduced": true,
+          "field_translation": {
+            "public_context_digest": "delivered fixture's name; the complete public exercise scope",
+            "public_exercise_digest": "the compiler's name for the same scope",
+            "public_graph_digest": "shared graph scope only, a different value"
+          },
+          "fixture_identity": {
+            "fixture": {
+              "bytes": 36940,
+              "sha256": "dcda4cd6be8dad598e06646adb999250c4491c1719b7922d54473c7c169a8be4"
+            }
+          },
+          "fixture_present": true,
+          "note": "exercises are compared by question, not by id, so the id is evidence rather than a lookup key. The fixture's public_context_digest is the digest of the COMPLETE public exercise including its exercise_id, not of the graph alone; the earlier reading of that ambiguous field as a graph digest was wrong and is corrected here",
+          "public_context_digest_reproduced": true,
+          "public_context_digest_scope": "complete public exercise, including exercise_id",
+          "public_context_digest_values_reproduced": {
+            "considered": 16,
+            "reproduced": 16
+          },
+          "questions_compared": 8,
+          "unreproduced_authored_values": []
+        },
+        "ordering_mode": "authored_fixture",
+        "shortcut_report": {
+          "list_alternatives_equal_length": true,
+          "note": "shorter component questions do not by themselves fix or disprove a list-scoring bias",
+          "rows": [
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:d19751d2192c506b8a91e54a70105d8b715612c42855eec61f57dbc0b8dcc22b",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 0,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                6,
+                9
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:949160cc46351f0fc72074fd4c494ea68aa5d9b1726e9f61a774866302ec0766",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 1,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                6,
+                9
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:258e6332ca104d3c90ef7ed754cf226de8d59ae78eb2959ff5ebed9b5a04b1ee",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 0,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:dc387943f20bf78be0a18ef188e22bcff4286d9f084fa644bf8808438a8c50b9",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 1,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:9f69e4c09284103b79ef618e3fa5c5c50e80ac34884f2400b863e8b757d4f264",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 0,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                17,
+                15,
+                20
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:2fa83ea5729ec94136717cc86b14a4746567cc9d947d1c0ac7514c19230bf861",
+              "item_counts": [
+                2,
+                2,
+                2
+              ],
+              "operation": "LIST_PARTS",
+              "slot_of_answer": 0,
+              "task_profile": "whole-answer/0.1"
+            },
+            {
+              "character_lengths": [
+                5,
+                4,
+                5
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:89c324a6446021417e1b3583d52499f45b7ec6ce47a2fb347a8fb5f52019a781",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "FIND_SHARED_PART",
+              "slot_of_answer": 0,
+              "task_profile": "whole-answer/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:765b84303f33a0704e80436fb1b670373fe7067a8148b677e757fc0238997605",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 1,
+              "task_profile": "whole-answer/0.1"
+            }
+          ],
+          "slot_distribution": {
+            "0": 5,
+            "1": 3
+          }
+        },
+        "slot_alignment_summary": {
+          "all_permutations_align": true,
+          "exercises": 8,
+          "permutations_per_exercise": 6,
+          "rule": "expected_slot follows expected_choice_id through all six orderings of three choices"
+        },
+        "trace_status": "VERIFIED"
+      },
+      "declared": {
+        "counts": {
+          "public_exercises": 8,
+          "step_contrasts": 16,
+          "teacher_targets": 8,
+          "teacher_traces": 1
+        },
+        "counts_of_delivery": {
+          "compiled_stages": 7,
+          "complete_neural_cycles": 0,
+          "distinct_graph_families": 1,
+          "neural_presentations": 0,
+          "note": "a compiled seven-stage plan is not seven neural presentations; a passive presentation is not an update; a complete neural cycle needs real delivery receipts",
+          "optimizer_updates": 0,
+          "presented_stages": 7,
+          "supervised_decisions": 0
+        },
+        "fixture_comparison": {
+          "choice_orders_compared": 8,
+          "choice_orders_matching": 0,
+          "choice_sets_compared": 8,
+          "choice_sets_matching": 8,
+          "context_id_reproduced": true,
+          "counts_compiled_then_fixture": {
+            "lesson_variants": [
+              6,
+              6
+            ],
+            "public_contexts": [
+              1,
+              1
+            ],
+            "public_exercises": [
+              8,
+              8
+            ],
+            "step_contrasts": [
+              16,
+              16
+            ],
+            "teacher_targets": [
+              8,
+              8
+            ],
+            "traces": [
+              1,
+              1
+            ]
+          },
+          "counts_match": true,
+          "exercise_id_overlap": 0,
+          "exercise_ids_reproduced": false,
+          "field_translation": {
+            "public_context_digest": "delivered fixture's name; the complete public exercise scope",
+            "public_exercise_digest": "the compiler's name for the same scope",
+            "public_graph_digest": "shared graph scope only, a different value"
+          },
+          "fixture_identity": {
+            "fixture": {
+              "bytes": 36940,
+              "sha256": "dcda4cd6be8dad598e06646adb999250c4491c1719b7922d54473c7c169a8be4"
+            }
+          },
+          "fixture_present": true,
+          "note": "exercises are compared by question, not by id, so the id is evidence rather than a lookup key. The fixture's public_context_digest is the digest of the COMPLETE public exercise including its exercise_id, not of the graph alone; the earlier reading of that ambiguous field as a graph digest was wrong and is corrected here",
+          "public_context_digest_reproduced": true,
+          "public_context_digest_scope": "complete public exercise, including exercise_id",
+          "public_context_digest_values_reproduced": {
+            "considered": 16,
+            "reproduced": 16
+          },
+          "questions_compared": 8,
+          "unreproduced_authored_values": []
+        },
+        "ordering_mode": "declared",
+        "shortcut_report": {
+          "list_alternatives_equal_length": true,
+          "note": "shorter component questions do not by themselves fix or disprove a list-scoring bias",
+          "rows": [
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:dd652845dc7dbba7123f67a910ba33a0f61ac6ff108fce2635e997941ed51e6d",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 2,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                6,
+                9
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:5d67c827cb77f68a0b2783401dfe99c6e40717d055517b6af7414f7453bde802",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 0,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:2fa80b6dd01f3d9bb8092280ef3d444d2d144f6fb562fb8e097e102e4940da05",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 2,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                9,
+                6
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 1,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                6,
+                9
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:41eae384884026e2c47e796aba13b60f12f87eab697df85d5cc68912b8fa7670",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 0,
+              "task_profile": "component-route/0.1"
+            },
+            {
+              "character_lengths": [
+                15,
+                17,
+                20
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:cdce70a24ba9b6c32a0682f74a59d498638cbde24e49a660fd99a4d446c35e35",
+              "item_counts": [
+                2,
+                2,
+                2
+              ],
+              "operation": "LIST_PARTS",
+              "slot_of_answer": 1,
+              "task_profile": "whole-answer/0.1"
+            },
+            {
+              "character_lengths": [
+                5,
+                5,
+                4
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:2bc70b47d2fad76283f45564e5f8465b9debb8d99a6ebfa150aa3cc71be97f40",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "FIND_SHARED_PART",
+              "slot_of_answer": 1,
+              "task_profile": "whole-answer/0.1"
+            },
+            {
+              "character_lengths": [
+                6,
+                6,
+                9
+              ],
+              "equal_item_counts": true,
+              "exercise_id": "exercise:b88862309be8bc1f6a36436e2c1db99c59f25021822a80687a37bcb3275bb739",
+              "item_counts": [
+                1,
+                1,
+                1
+              ],
+              "operation": "REACHED_VIA",
+              "slot_of_answer": 2,
+              "task_profile": "whole-answer/0.1"
+            }
+          ],
+          "slot_distribution": {
+            "0": 2,
+            "1": 3,
+            "2": 3
+          }
+        },
+        "slot_alignment_summary": {
+          "all_permutations_align": true,
+          "exercises": 8,
+          "permutations_per_exercise": 6,
+          "rule": "expected_slot follows expected_choice_id through all six orderings of three choices"
+        },
+        "trace_status": "VERIFIED"
+      }
+    },
+    "connection": {
+      "check": {
+        "arm": "cas",
+        "budget": {
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0
+        },
+        "checkpoint_identity": "STUB_NO_PARAMETERS",
+        "correction_point": {
+          "all_sets_permuted_only": true,
+          "all_slots_carry_the_teacher_answer": true,
+          "arm": "cas",
+          "correction_stage": {
+            "index_built_from": "record['correct']",
+            "index_source": "adapter.public_records(record, arm)['encoded_correct_index']",
+            "note": "the teacher's checked answer is the loss target; no other target enters the loop",
+            "record_field_origin": "TeacherTarget.expected_answer (verified)",
+            "source_file": "cas_meta2/graph_teaching/real_framework.py",
+            "source_lines": "297-307",
+            "update": "trainer.scope_parameters allowlist only; encoder and readout frozen",
+            "where": "GraphLearner.step -> cross_entropy(scores, encoded_correct_index)"
+          },
+          "records": [
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "absent",
+              "value_at_encoded_correct_index": "absent"
+            },
+            {
+              "declared_slot": 0,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "direct",
+              "value_at_encoded_correct_index": "direct"
+            },
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 2,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "absent",
+              "value_at_encoded_correct_index": "absent"
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 1,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "via:Wheel",
+              "value_at_encoded_correct_index": "via:Wheel"
+            },
+            {
+              "declared_slot": 0,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "direct",
+              "value_at_encoded_correct_index": "direct"
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "LIST_PARTS",
+              "record_id": "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "value_at_encoded_correct_index": [
+                "Frame",
+                "Wheel"
+              ]
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 2,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "FIND_SHARED_PART",
+              "record_id": "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "Wheel",
+              "value_at_encoded_correct_index": "Wheel"
+            },
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "via:Wheel",
+              "value_at_encoded_correct_index": "via:Wheel"
+            }
+          ]
+        },
+        "corrective_targets_used": [
+          "\"Wheel\"",
+          "\"absent\"",
+          "\"direct\"",
+          "\"via:Wheel\"",
+          "[\"Frame\",\"Wheel\"]"
+        ],
+        "every_record_reached": true,
+        "learner_is_a_stub": true,
+        "lesson_exposure": {
+          "boundary": "An optimizer step is a single correction on one record, not a complete teaching cycle.",
+          "records_by_op": {
+            "FIND_SHARED_PART": 1,
+            "LIST_PARTS": 1,
+            "REACHED_VIA": 6
+          },
+          "updates_by_op": {
+            "FIND_SHARED_PART": 8,
+            "LIST_PARTS": 8,
+            "REACHED_VIA": 48
+          }
+        },
+        "neural_execution": false,
+        "optimizer_updates_in_this_check": 64,
+        "ordering_mode": "declared",
+        "records": 8,
+        "records_that_received_correction": 8,
+        "schema": "cas-cube-verified-teaching-connection/1",
+        "stub_note": "the stub records what it is taught; its responses are not model predictions and this check delivers nothing",
+        "torch_imported": false
+      },
+      "dry_run_plan": {
+        "authorization": "no launcher, no reservation, no paid run, no neural execution is authorized by this preparation",
+        "correction_point": {
+          "all_sets_permuted_only": true,
+          "all_slots_carry_the_teacher_answer": true,
+          "arm": "cas",
+          "correction_stage": {
+            "index_built_from": "record['correct']",
+            "index_source": "adapter.public_records(record, arm)['encoded_correct_index']",
+            "note": "the teacher's checked answer is the loss target; no other target enters the loop",
+            "record_field_origin": "TeacherTarget.expected_answer (verified)",
+            "source_file": "cas_meta2/graph_teaching/real_framework.py",
+            "source_lines": "297-307",
+            "update": "trainer.scope_parameters allowlist only; encoder and readout frozen",
+            "where": "GraphLearner.step -> cross_entropy(scores, encoded_correct_index)"
+          },
+          "records": [
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "absent",
+              "value_at_encoded_correct_index": "absent"
+            },
+            {
+              "declared_slot": 0,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "direct",
+              "value_at_encoded_correct_index": "direct"
+            },
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 2,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "absent",
+              "value_at_encoded_correct_index": "absent"
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 1,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "via:Wheel",
+              "value_at_encoded_correct_index": "via:Wheel"
+            },
+            {
+              "declared_slot": 0,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "direct",
+              "value_at_encoded_correct_index": "direct"
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "LIST_PARTS",
+              "record_id": "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": [
+                "Frame",
+                "Wheel"
+              ],
+              "value_at_encoded_correct_index": [
+                "Frame",
+                "Wheel"
+              ]
+            },
+            {
+              "declared_slot": 1,
+              "encoded_correct_index": 2,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "FIND_SHARED_PART",
+              "record_id": "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "Wheel",
+              "value_at_encoded_correct_index": "Wheel"
+            },
+            {
+              "declared_slot": 2,
+              "encoded_correct_index": 0,
+              "encoded_options_are_a_permutation_of_the_choices": true,
+              "operation": "REACHED_VIA",
+              "record_id": "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9",
+              "slot_carries_teacher_answer": true,
+              "teacher_expected_answer": "via:Wheel",
+              "value_at_encoded_correct_index": "via:Wheel"
+            }
+          ]
+        },
+        "execution_enabled": false,
+        "learner_indexing_requirement": "the learner must be indexed by the same records' public records (_position raises KeyError otherwise; preserved failure from curriculum attempt 002)",
+        "not_used": [
+          "trainer.launch: it has no record-injection parameter and always runs the registered whole-part dataset; adding one would change registered infrastructure",
+          "any new head, loss, reward model, or output vocabulary",
+          "any GPU, provider, launcher, or reservation call"
+        ],
+        "ordering_mode": "declared",
+        "schema": "cas-cube-verified-teaching-connection/1",
+        "sequence": [
+          {
+            "call": "cube_node.load_bundle()",
+            "gives": "the pinned public graph",
+            "step": 1
+          },
+          {
+            "call": "verified_teaching.compile_bundle(bundle, choice_order=...)",
+            "gives": "8 public exercises and 8 verified teacher targets",
+            "step": 2
+          },
+          {
+            "call": "verified_training.training_records(bundle, ...)",
+            "gives": "8 records whose 'correct' field IS the teacher answer",
+            "step": 3
+          },
+          {
+            "call": "adapter.public_records(record, arm) for every record",
+            "gives": "the learner's own task layout, including encoded_correct_index",
+            "step": 4
+          },
+          {
+            "call": "trainer.TrainingBudget().validate()",
+            "gives": "the frozen budget: learning_rate=0.003, max_optimizer_steps=64, max_wall_seconds=600.0",
+            "step": 5
+          },
+          {
+            "call": "trainer.scope_parameters(framework, model)",
+            "gives": "the permitted plasticity allowlist and the frozen set (operation:^6 only)",
+            "step": 6
+          },
+          {
+            "call": "trainer.run_training(learner, records, arm, budget)",
+            "gives": "make_task(record, arm) -> learner.step(task) -> cross-entropy against encoded_correct_index -> one optimizer step",
+            "step": 7
+          },
+          {
+            "call": "trainer.parameter_snapshot + containment_report",
+            "gives": "proof that only allowlisted parameters changed; run once before and once after",
+            "step": 8
+          },
+          {
+            "call": "record the observation contract",
+            "gives": "per-event prediction, all three scores, released correction, option lengths; missing values stay 'unavailable'",
+            "step": 9
+          }
+        ],
+        "seven_stage_status": "stages 1, 2, 3, 4 and 6 remain presentation-only with numeric_delivery_binding UNIMPLEMENTED; this connection covers the five component-route questions and the three final questions only"
+      }
+    },
+    "export_modes": {
+      "authored_fixture": {
+        "artifacts": [
+          "public_contexts.jsonl",
+          "public_exercises.jsonl",
+          "teacher_targets.jsonl",
+          "teacher_traces.jsonl",
+          "step_contrasts.jsonl",
+          "cycle_plan.json"
+        ],
+        "boundary": "data only: no neural execution, no training, no reservation; the graded cycle records every stage as compiled and not delivered",
+        "expected_slot_rule": "the position of expected_choice_id in this exercise's final ordered choices",
+        "field_translation": {
+          "public_context_digest": "delivered fixture's ambiguous name; it is the digest of the COMPLETE public exercise, including its exercise_id",
+          "public_exercise_digest": "the same scope under an unambiguous name",
+          "public_graph_digest": "digest of the shared graph context only"
+        },
+        "ordering_mode": "authored_fixture",
+        "ordering_rule": "the delivered fixture's authored choice order, adopted so public identity reproduces; fixture reproduction only",
+        "schema_version": "cas.cube-verified-teaching/0.1",
+        "slot_alignment": {
+          "all_permutations_align": true,
+          "exercises": 8,
+          "permutations_per_exercise": 6,
+          "rule": "expected_slot follows expected_choice_id through all six orderings of three choices"
+        },
+        "slot_distribution_of_expected_answers": {
+          "0": 5,
+          "1": 3
+        }
+      },
+      "declared": {
+        "artifacts": [
+          "public_contexts.jsonl",
+          "public_exercises.jsonl",
+          "teacher_targets.jsonl",
+          "teacher_traces.jsonl",
+          "step_contrasts.jsonl",
+          "cycle_plan.json"
+        ],
+        "boundary": "data only: no neural execution, no training, no reservation; the graded cycle records every stage as compiled and not delivered",
+        "expected_slot_rule": "the position of expected_choice_id in this exercise's final ordered choices",
+        "field_translation": {
+          "public_context_digest": "delivered fixture's ambiguous name; it is the digest of the COMPLETE public exercise, including its exercise_id",
+          "public_exercise_digest": "the same scope under an unambiguous name",
+          "public_graph_digest": "digest of the shared graph context only"
+        },
+        "ordering_mode": "declared",
+        "ordering_rule": "the three choices are permuted with a seed over the question and the choice SET, so no slot depends on which choice is correct",
+        "schema_version": "cas.cube-verified-teaching/0.1",
+        "slot_alignment": {
+          "all_permutations_align": true,
+          "exercises": 8,
+          "permutations_per_exercise": 6,
+          "rule": "expected_slot follows expected_choice_id through all six orderings of three choices"
+        },
+        "slot_distribution_of_expected_answers": {
+          "0": 2,
+          "1": 3,
+          "2": 3
+        }
+      }
+    },
+    "schema_version": "cas.cube-verified-teaching/0.1",
+    "status": "TEACHING_DATA_READY_NEURAL_UNTESTED"
+  },
+  "worked_example": {
+    "FIND_SHARED_PART": {
+      "answer": "Wheel",
+      "derivation": {
+        "derived_relation": "shares",
+        "method": "shared_parts",
+        "used_relations": [
+          "contains"
+        ]
+      },
+      "question": {
+        "a": "Bicycle",
+        "b": "Cart"
+      }
+    },
+    "LIST_PARTS": {
+      "answer": [
+        "Frame",
+        "Wheel"
+      ],
+      "derivation": {
+        "method": "direct_parts",
+        "used_relations": [
+          "contains"
+        ]
+      },
+      "question": {
+        "idea": "Bicycle"
+      }
+    },
+    "REACHED_VIA": {
+      "answer": "via:Wheel",
+      "derivation": {
+        "method": "reach_kind",
+        "used_relations": [
+          "contains"
+        ]
+      },
+      "question": {
+        "idea": "Bicycle",
+        "part": "Rim"
+      }
+    }
+  }
+}

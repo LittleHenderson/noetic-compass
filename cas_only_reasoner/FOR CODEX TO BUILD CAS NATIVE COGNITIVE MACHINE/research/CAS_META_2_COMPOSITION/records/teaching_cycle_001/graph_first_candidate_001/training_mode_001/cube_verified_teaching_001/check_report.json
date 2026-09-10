@@ -8,22 +8,7 @@
     },
     "digest": "50f99df1a43422044846a565b29c530a1e90c8525cd622c0671a518e497ec9d9"
   },
-  "artifacts_written": [
-    "exports/declared/public_contexts.jsonl",
-    "exports/declared/public_exercises.jsonl",
-    "exports/declared/teacher_targets.jsonl",
-    "exports/declared/teacher_traces.jsonl",
-    "exports/declared/step_contrasts.jsonl",
-    "exports/declared/cycle_plan.json",
-    "exports/declared/EXPORT_MANIFEST.json",
-    "exports/authored_fixture/public_contexts.jsonl",
-    "exports/authored_fixture/public_exercises.jsonl",
-    "exports/authored_fixture/teacher_targets.jsonl",
-    "exports/authored_fixture/teacher_traces.jsonl",
-    "exports/authored_fixture/step_contrasts.jsonl",
-    "exports/authored_fixture/cycle_plan.json",
-    "exports/authored_fixture/EXPORT_MANIFEST.json"
-  ],
+  "artifacts_written": [],
   "boundary": {
     "checkpoints_touched": "none",
     "launch": "none",
@@ -2466,11 +2451,226 @@
       "aws_calls": 0,
       "delivered_lessons": 0,
       "neural_calls": 0,
-      "note": "data compilation, deterministic teacher checks, and a stub walk through the existing trainer loop; the stub is not a model and delivers nothing",
+      "note": "data compilation, deterministic teacher checks, a stub walk through the existing trainer loop, and a prepared candidate runner; the stub is not a model and nothing is delivered",
       "optimizer_updates": 0,
       "reservations": 0
     },
     "bundles_note": "the full per-mode bundles are written to exports/<ordering_mode>/ so each export names exactly one ordering mode",
+    "candidate_preparation": {
+      "arm": "cas",
+      "authorization_required": "an owner GO record; run_candidate refuses without one",
+      "boundary": {
+        "aws_calls": 0,
+        "launcher": "none",
+        "neural_execution": "not performed here",
+        "reservation": "none",
+        "unchanged": [
+          "the frozen trainer.launch",
+          "the pending contrast probe",
+          "all earlier evidence and checkpoints"
+        ]
+      },
+      "checkpoint_identity": "determined at run time; this preparation records none",
+      "execution_enabled": false,
+      "expected_counters": {
+        "automatic_retries": 0,
+        "component_teaching_blocks": 8,
+        "scheduled_supervised_corrections": 64,
+        "seven_stage_neural_cycles": 0
+      },
+      "kind": "CHECKED_COMPONENT_TEACHING",
+      "learning_question": "does practicing checked component relationships help the same ^6 learner answer the complete whole-part question?",
+      "not_the_seven_stage_program": "stages 1, 2, 3, 4 and 6 have no numerical delivery path and stay unimplemented; this is checked component teaching only",
+      "ordering_mode": "declared",
+      "proposed_evaluation": {
+        "condition_note": "the two conditions must differ in component supervision only; the update allowance is held equal",
+        "conditions": [
+          {
+            "component_supervision_counted_separately": 40,
+            "name": "checked_component_teaching",
+            "teaches": "five component-route questions then the three whole-answer questions, per block",
+            "updates": 64
+          },
+          {
+            "component_supervision_counted_separately": 0,
+            "name": "final_answer_only",
+            "teaches": "the three whole-answer questions only, same update allowance",
+            "updates": 64
+          }
+        ],
+        "cost_note": "no reservation or cost estimate is proposed here; the frozen budget profile bounds the candidate at 64 updates and 600 seconds",
+        "held_out_probe": {
+          "available_questions_in_the_scene": 51,
+          "candidate_probe_questions": 43,
+          "caveat": "same authored scene: within-scene generalisation, not transfer to a new graph family",
+          "taught_questions": 8
+        },
+        "not_measured": [
+          "definition, analogy, correspondence and story content: no numerical delivery path exists for them"
+        ],
+        "primary_measure": "independent accuracy on the taught whole-answer questions: no worked answer, no teacher-verified subanswers, no correct prefix",
+        "primary_question": "does teaching the smaller relationship decisions help the same learner answer the complete whole-part question?",
+        "reporting_rules": [
+          "the learner's own prediction is recorded before any correction",
+          "all three scores or logits are retained, or marked unavailable",
+          "the teacher checker never selects among the learner's test answers",
+          "independent and assisted figures are never merged",
+          "missing measurements are unavailable, never zero"
+        ],
+        "requires_owner_decisions": [
+          "how many conditions to run and their update allowance",
+          "whether the held-out probe questions are used",
+          "whether any budget-profile change is approved for a larger schedule"
+        ],
+        "schema": "cas-cube-verified-teaching-candidate-run/1",
+        "secondary_measures": [
+          "component-question accuracy, reported separately from the complete question",
+          "assisted performance during teaching, never mixed into the independent figure"
+        ]
+      },
+      "record_ids": [
+        "f5e24efd08e0ac41b51f3a8b825ad805a11e75cf25f2f9cc7639e820dfebe7b7",
+        "88a15ee30fe8afd9714d9c42cb5c68cda4211cff71eff2384569d461b947656e",
+        "70072c34014377b3bc79e0ccd724a7638dc985f2c4740b492a9bd8e0ff154268",
+        "f760a266f0206d3f49c24a7a98100c1fe91ba9733beb6a47e955a9c6f0d333d7",
+        "37d05b9f7c6646fbda0aa6de79c01ad7814e3f6071255527e6aa65353894a8b5",
+        "503b742ac7aa42751b118961b8c048e225c834068d83c60fc507e9b374d4ccac",
+        "1a94bc7c634ab284d01e9a8cc5c97634125939373599ef3859fc69a111e6c59a",
+        "27067ec105fe8c1a4ce6a61d457f78035c27f75d7f138f68f3611feff3aac8c9"
+      ],
+      "records": 8,
+      "required_instrumentation": [
+        "framework",
+        "model",
+        "learner_factory",
+        "authorization"
+      ],
+      "schedule": {
+        "blocks": 8,
+        "component_to_final_ratio": "5:3",
+        "counters_note": "this partial method is counted in component-teaching blocks; it is not a complete seven-stage neural cycle and must not be reported as one",
+        "counts": {
+          "component_question_presentations": 40,
+          "component_teaching_blocks": 8,
+          "distinct_graph_families": 1,
+          "scheduled_steps": 64,
+          "seven_stage_neural_cycles": 0,
+          "supervised_corrections": 64,
+          "whole_answer_presentations": 24
+        },
+        "does_not_inherit": [
+          "the stub's 48 / 8 / 8 step allocation",
+          "the 64-step frozen default as a teaching principle",
+          "the earlier binding experiment's 1,024-cycle allocation"
+        ],
+        "every_record_practiced": true,
+        "fits_frozen_budget_profile": true,
+        "kind": "CHECKED_COMPONENT_TEACHING",
+        "minimum_repeated_teaching_blocks": 8,
+        "per_operation_totals_note": "the per-operation totals (48 route, 8 list, 8 shared) coincide with the stub's, because both give every one of the eight questions equal practice. The design here is the declared block structure \u2014 five component questions then the three whole-answer questions, eight times \u2014 and the declared 5:3 component-to-final ratio, not the stub's cycle order",
+        "profile_id": "cas-cube-component-teaching-schedule/1:8x8",
+        "requires_budget_profile_change": false,
+        "schema": "cas-cube-component-teaching-schedule/1",
+        "steps": 64,
+        "steps_by_operation": {
+          "FIND_SHARED_PART": 8,
+          "LIST_PARTS": 8,
+          "REACHED_VIA": 48
+        },
+        "steps_by_phase": {
+          "component-route": 40,
+          "whole-answer": 24
+        },
+        "stopping_limits": {
+          "automatic_retries": 0,
+          "max_optimizer_updates": 64,
+          "max_wall_seconds": 600,
+          "stop_on_containment_failure": true,
+          "stop_when_blocks_complete": true
+        },
+        "stub_allocation_not_used": "the stub cycled the records over the frozen budget and produced 48 / 8 / 8; the schedule above is the proposed design instead"
+      },
+      "schema": "cas-cube-verified-teaching-candidate-run/1",
+      "sequence": {
+        "arm": "cas",
+        "execution_enabled": false,
+        "note": "the per-step phases repeat in the listed order for every scheduled step; the surrounding phases occur once",
+        "order": [
+          "BUILD_AND_INDEX_FROM_EXACT_RECORDS",
+          "APPLY_PERMITTED_PARAMETER_SCOPE",
+          "TAKE_BEFORE_SNAPSHOT",
+          "PER_STEP_CAPTURE_PREDICTION",
+          "PER_STEP_APPLY_CHECKED_TARGET",
+          "PER_STEP_PERFORM_PERMITTED_UPDATE",
+          "PER_STEP_RECORD_UPDATE_IDENTITY",
+          "TAKE_AFTER_SNAPSHOT",
+          "COMPUTE_CONTAINMENT",
+          "SAVE_AND_VERIFY_CHECKPOINT",
+          "WRITE_COLLECTED_OBSERVATIONS"
+        ],
+        "ordering_mode": "declared",
+        "phases": [
+          {
+            "phase": "BUILD_AND_INDEX_FROM_EXACT_RECORDS",
+            "what": "construct the candidate from these exact records and index the learner with adapter.public_records(record, arm) for the same records and the same encoded ordering the loop uses",
+            "why": "curriculum attempt 002 failed with KeyError because the learner was indexed from a different record set"
+          },
+          {
+            "phase": "APPLY_PERMITTED_PARAMETER_SCOPE",
+            "what": "trainer.scope_parameters(framework, model)",
+            "why": "only operation:^6 may change"
+          },
+          {
+            "phase": "TAKE_BEFORE_SNAPSHOT",
+            "what": "trainer.parameter_snapshot(framework, model)",
+            "why": "must precede the first update, otherwise containment cannot distinguish a trained change from an initial state"
+          },
+          {
+            "phase": "PER_STEP_CAPTURE_PREDICTION",
+            "what": "record the learner's scores and selected answer for the record about to be taught, from the prediction being corrected",
+            "why": "a prediction reconstructed after training is not the behaviour that was corrected"
+          },
+          {
+            "phase": "PER_STEP_APPLY_CHECKED_TARGET",
+            "what": "make_task(record, arm) -> learner.step(task): cross-entropy against the teacher's verified encoded_correct_index",
+            "why": "this is where the teacher's answer becomes the correction"
+          },
+          {
+            "phase": "PER_STEP_PERFORM_PERMITTED_UPDATE",
+            "what": "the optimizer step inside learner.step",
+            "why": "one correction on one record; not a teaching cycle"
+          },
+          {
+            "phase": "PER_STEP_RECORD_UPDATE_IDENTITY",
+            "what": "block, phase, record_id, op, target, and the update index in the run",
+            "why": "later audits need the update identity, not only a loss value"
+          },
+          {
+            "phase": "TAKE_AFTER_SNAPSHOT",
+            "what": "trainer.parameter_snapshot after the last update",
+            "why": "endpoint comparison only"
+          },
+          {
+            "phase": "COMPUTE_CONTAINMENT",
+            "what": "trainer.containment_report(before, after, scope['allowed']) and fail closed on any forbidden change",
+            "why": "the plasticity claim must be checked, not assumed"
+          },
+          {
+            "phase": "SAVE_AND_VERIFY_CHECKPOINT",
+            "what": "write the candidate state through the injected writer and verify it reads back with the same identity",
+            "why": "an unsaved result is not evidence"
+          },
+          {
+            "phase": "WRITE_COLLECTED_OBSERVATIONS",
+            "what": "the per-step observation record, with missing measurements marked 'unavailable' rather than zero",
+            "why": "the earlier practice passes lost their predicted options"
+          }
+        ],
+        "scheduled_steps": [],
+        "schema": "cas-cube-verified-teaching-candidate-run/1",
+        "step_count": 0
+      }
+    },
     "checker_identity": "cas_meta2.graph_teaching.reference@aab7af24638c842b",
     "compiled": {
       "authored_fixture": {
@@ -2935,6 +3135,8 @@
     },
     "connection": {
       "check": {
+        "actual_neural_presentations": 0,
+        "actual_optimizer_updates": 0,
         "arm": "cas",
         "budget": {
           "learning_rate": 0.003,
@@ -3053,6 +3255,16 @@
           "[\"Frame\",\"Wheel\"]"
         ],
         "every_record_reached": true,
+        "field_correction": {
+          "preserved_from": "the loop's own 'completed_updates' count, renamed to say that the calls went to a stub",
+          "reason": "the learner is a stub with no parameters, so no optimizer step and no neural presentation occurred; the earlier name overstated what the check did",
+          "replaced": "optimizer_updates_in_this_check",
+          "with": [
+            "stub_training_step_calls",
+            "actual_optimizer_updates",
+            "actual_neural_presentations"
+          ]
+        },
         "learner_is_a_stub": true,
         "lesson_exposure": {
           "boundary": "An optimizer step is a single correction on one record, not a complete teaching cycle.",
@@ -3068,12 +3280,18 @@
           }
         },
         "neural_execution": false,
-        "optimizer_updates_in_this_check": 64,
         "ordering_mode": "declared",
         "records": 8,
         "records_that_received_correction": 8,
         "schema": "cas-cube-verified-teaching-connection/1",
         "stub_note": "the stub records what it is taught; its responses are not model predictions and this check delivers nothing",
+        "stub_step_allocation_by_op": {
+          "FIND_SHARED_PART": 8,
+          "LIST_PARTS": 8,
+          "REACHED_VIA": 48
+        },
+        "stub_step_allocation_note": "this allocation follows from cycling the eight records over the frozen budget; it is not a proposed teaching schedule",
+        "stub_training_step_calls": 64,
         "torch_imported": false
       },
       "dry_run_plan": {
@@ -3224,11 +3442,12 @@
           {
             "call": "trainer.run_training(learner, records, arm, budget)",
             "gives": "make_task(record, arm) -> learner.step(task) -> cross-entropy against encoded_correct_index -> one optimizer step",
+            "note": "this is the frozen 64-step budget running the records in cycle order; it is a wiring default, NOT a teaching schedule. The proposed schedule lives in candidate_run.proposed_schedule()",
             "step": 7
           },
           {
             "call": "trainer.parameter_snapshot + containment_report",
-            "gives": "proof that only allowlisted parameters changed; run once before and once after",
+            "gives": "proof that only allowlisted parameters changed; the BEFORE snapshot must be taken before the first update and the AFTER snapshot after the last one (see candidate_run.execution_sequence)",
             "step": 8
           },
           {

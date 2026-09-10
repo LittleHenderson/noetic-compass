@@ -77,8 +77,16 @@ def test_the_real_trainer_loop_reaches_every_record_with_the_teacher_target():
     assert check["records"] == 8
     assert check["every_record_reached"] is True
     assert check["records_that_received_correction"] == 8
-    assert check["optimizer_updates_in_this_check"] == \
-        trainer.FROZEN_MAX_OPTIMIZER_STEPS
+    # the field-name correction: these calls went to a stub, so no update occurred
+    assert check["stub_training_step_calls"] == trainer.FROZEN_MAX_OPTIMIZER_STEPS
+    assert check["actual_optimizer_updates"] == 0
+    assert check["actual_neural_presentations"] == 0
+    assert "optimizer_updates_in_this_check" not in check
+    correction = check["field_correction"]
+    assert correction["replaced"] == "optimizer_updates_in_this_check"
+    assert correction["with"] == ["stub_training_step_calls",
+                                  "actual_optimizer_updates",
+                                  "actual_neural_presentations"]
     assert set(check["corrective_targets_used"]) == _teacher_answers()
     assert check["neural_execution"] is False
     assert check["torch_imported"] is False
@@ -89,6 +97,10 @@ def test_the_real_trainer_loop_reaches_every_record_with_the_teacher_target():
     assert exposure["records_by_op"] == {"REACHED_VIA": 6, "LIST_PARTS": 1,
                                         "FIND_SHARED_PART": 1}
     assert "not a complete teaching cycle" in exposure["boundary"]
+    assert check["stub_step_allocation_by_op"] == {"REACHED_VIA": 48,
+                                                   "LIST_PARTS": 8,
+                                                   "FIND_SHARED_PART": 8}
+    assert "not a proposed teaching schedule" in check["stub_step_allocation_note"]
 
 
 def test_connection_reuses_existing_machinery_and_imports_no_neural_code():

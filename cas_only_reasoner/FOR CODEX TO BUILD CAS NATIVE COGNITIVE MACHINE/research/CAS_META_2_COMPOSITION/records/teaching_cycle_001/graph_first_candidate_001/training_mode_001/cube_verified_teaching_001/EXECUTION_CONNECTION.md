@@ -73,7 +73,9 @@ attempt 002, recorded so it is not repeated silently.
 
 ```json
 {"records": 8,
- "optimizer_updates_in_this_check": 64,
+ "stub_training_step_calls": 64,
+ "actual_optimizer_updates": 0,
+ "actual_neural_presentations": 0,
  "records_that_received_correction": 8,
  "every_record_reached": true,
  "corrective_targets_used": ["\"Wheel\"", "\"absent\"", "\"direct\"",
@@ -81,18 +83,28 @@ attempt 002, recorded so it is not repeated silently.
  "neural_execution": false,
  "torch_imported": false,
  "learner_is_a_stub": true,
- "lesson_exposure": {"records_by_op": {"REACHED_VIA": 6, "LIST_PARTS": 1,
-                                       "FIND_SHARED_PART": 1},
-                     "updates_by_op": {"REACHED_VIA": 48, "LIST_PARTS": 8,
-                                       "FIND_SHARED_PART": 8}}}
+ "stub_step_allocation_by_op": {"REACHED_VIA": 48, "LIST_PARTS": 8,
+                                "FIND_SHARED_PART": 8}}
 ```
+
+**Field correction (owner review).** The earlier name
+`"optimizer_updates_in_this_check": 64` read as if a model had been trained. It has been
+replaced by `stub_training_step_calls`, `actual_optimizer_updates`, and
+`actual_neural_presentations`; the successor report carries the change under
+`field_correction`, and the previous report is preserved unchanged as
+`check_report_rev2.json`. This is a reporting correction, not a reason to repeat the
+check: the useful finding is that the real loop dispatched the expected
+correction-bearing tasks to the stub.
 
 64 is `trainer.FROZEN_MAX_OPTIMIZER_STEPS`, the frozen budget: this is a wiring check on a
 stub, not a training result. The five corrective targets used are exactly the teacher's
-verified answers — no other target entered the loop.
+verified answers — no other target entered the loop. The 48 / 8 / 8 per-operation counts
+follow from cycling the eight records over that budget; they are **not** a proposed
+teaching schedule.
 
 `verified_training.dry_run_plan()` lists the nine calls a candidate run would make, in
-order, with `execution_enabled: false` and the authorization statement attached.
+order, with `execution_enabled: false` and the authorization statement attached. The
+proposed schedule and the runnable wrapper are in `CANDIDATE_RUN_001.md`.
 
 ## 4. What this does not do
 

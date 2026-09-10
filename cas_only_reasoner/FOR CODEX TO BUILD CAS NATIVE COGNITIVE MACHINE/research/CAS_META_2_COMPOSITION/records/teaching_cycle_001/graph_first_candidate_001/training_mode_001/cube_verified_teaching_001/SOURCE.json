@@ -2,7 +2,28 @@
   "record": "cube_verified_teaching_001",
   "status": "TEACHING_DATA_READY_NEURAL_UNTESTED",
   "completion_statement": "The checked intermediate teaching records, worked traces, public/teacher separation, task-binding specifications, and the candidate-only execution connection are implemented and tested. No neural lessons were delivered, no weights were updated, and no paid execution was authorized.",
-  "revision": "second candidate revision: two artifact-consistency corrections resolved (digest provenance, ordering-mode export) and the execution connection added",
+  "revision": "third candidate revision: two artifact-consistency corrections resolved, the candidate-only execution connection added, the stub counter terminology corrected, and the instrumented candidate runner with its teaching schedule prepared",
+  "report_revisions": {
+    "check_report_rev2.json": {
+      "bytes": 113609,
+      "sha256": "5e1455958f37de2a7fe17651a176d9925efa9919873eb2895e04f21ff93e545b",
+      "preserved": true,
+      "note": "superseded only in its stub counter name; kept unchanged"
+    },
+    "check_report.json": {
+      "bytes": 124755,
+      "sha256": "313f567023d691dcad6834060d4a499d836a52e3dd910479b0c1823c214fc17f",
+      "revision": 3,
+      "note": "corrected counters, candidate preparation, and the schedule proposal"
+    }
+  },
+  "field_correction": {
+    "replaced": "optimizer_updates_in_this_check",
+    "with": ["stub_training_step_calls", "actual_optimizer_updates",
+             "actual_neural_presentations"],
+    "why": "the earlier name read as if a model had been trained; the calls went to a stub",
+    "recorded_in": "check_report.json -> verified_teaching.connection.check.field_correction"
+  },
   "pinned_inputs": [
     {
       "name": "Cube_Node_Example_v0.1.json",
@@ -29,17 +50,37 @@
   "code": [
     "cas_meta2/graph_teaching/verified_teaching.py",
     "cas_meta2/graph_teaching/verified_training.py",
+    "cas_meta2/graph_teaching/candidate_run.py",
     "tests/test_graph_teaching_verified_teaching.py",
     "tests/test_graph_teaching_verified_training.py",
+    "tests/test_graph_teaching_candidate_run.py",
     "tools/graph6_cube_node_check.py (extended: --verified-teaching, --artifacts; default report unchanged)"
   ],
   "documents": [
-    {"name": "DESIGN.md", "bytes": 15514, "sha256": "dd7065c57aa5271b17e80ccebc989c5c8c6fe26653d5f7f9350473c25e9689e2"},
+    {"name": "DESIGN.md", "bytes": 16662, "sha256": "7c7c7977b207a24609cf3e0ae9be7517f249270acfbcdc9635044712f3b6deb3"},
     {"name": "TASK_BINDINGS.md", "bytes": 8602, "sha256": "44474a951555ae7cd4621b5052155949fead55964b14cf89f2890e1ba6fa5f46"},
-    {"name": "EXECUTION_CONNECTION.md", "bytes": 5934, "sha256": "669b074a6ab083c34fe8e757fcb11c7d01093b8c7a62b07c49050495fecd8432"}
+    {"name": "EXECUTION_CONNECTION.md", "bytes": 6617, "sha256": "b1c995e97e0340733482622dd7b94c8fdfb2246b4d7f4d02f8cef98327437d48"},
+    {"name": "CANDIDATE_RUN_001.md", "bytes": 8272, "sha256": "54db2f9f87f976c941a3e021eb28440c55d83528fd5fbabfc83c5744508a72bb"}
   ],
+  "candidate_schedule": {
+    "profile_id": "cas-cube-component-teaching-schedule/1:8x8",
+    "kind": "CHECKED_COMPONENT_TEACHING",
+    "blocks": 8,
+    "component_to_final_ratio": "5:3",
+    "updates": 64,
+    "steps_by_operation": {"REACHED_VIA": 48, "LIST_PARTS": 8, "FIND_SHARED_PART": 8},
+    "minimum_repeated_teaching_blocks": 8,
+    "stopping_limits": {"max_optimizer_updates": 64, "max_wall_seconds": 600,
+                        "stop_on_containment_failure": true, "automatic_retries": 0},
+    "requires_budget_profile_change": false,
+    "counts": {"component_teaching_blocks": 8, "component_question_presentations": 40,
+               "whole_answer_presentations": 24, "supervised_corrections": 64,
+               "seven_stage_neural_cycles": 0},
+    "execution_enabled": false
+  },
   "generated": [
-    {"name": "check_report.json", "bytes": 113609, "sha256": "5e1455958f37de2a7fe17651a176d9925efa9919873eb2895e04f21ff93e545b"},
+    {"name": "check_report.json", "bytes": 124755, "sha256": "313f567023d691dcad6834060d4a499d836a52e3dd910479b0c1823c214fc17f"},
+    {"name": "check_report_rev2.json", "bytes": 113609, "sha256": "5e1455958f37de2a7fe17651a176d9925efa9919873eb2895e04f21ff93e545b"},
     {"name": "exports/declared/EXPORT_MANIFEST.json", "bytes": 1323, "sha256": "daf93e0109ce3d702cd4dc05798eb40ff42307042784dcdaa88fa869bf27b8f7"},
     {"name": "exports/declared/public_contexts.jsonl", "bytes": 1175, "sha256": "e2a6cbf8cfe6d2999c8c80b3fee308bcc21532090b17a0eaee86beaf7b6bcbbe"},
     {"name": "exports/declared/public_exercises.jsonl", "bytes": 6333, "sha256": "6df18991223283cf713bf5d6c6e8dfebc4320e0bdc4ca123a925e02c375a394c"},

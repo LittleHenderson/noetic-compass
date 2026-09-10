@@ -25,10 +25,16 @@ architecture were not changed.
 |---|---|
 | `cas_meta2/graph_teaching/verified_teaching.py` | the deterministic teacher, the schema objects, the compiler |
 | `cas_meta2/graph_teaching/verified_training.py` | the candidate-only execution connection and its dry-run plan |
+| `cas_meta2/graph_teaching/candidate_run.py` | the instrumented candidate wrapper, the explicit execution order, and the proposed teaching schedule |
 | `tests/test_graph_teaching_verified_teaching.py` | 23 tests |
 | `tests/test_graph_teaching_verified_training.py` | 12 tests |
+| `tests/test_graph_teaching_candidate_run.py` | 12 tests |
 | `tools/graph6_cube_node_check.py` | extended with an opt-in `--verified-teaching` section and an `--artifacts` writer; the default report is unchanged, so the earlier `CUBE_NODE_CHECK.json` still reproduces byte-for-byte |
-| `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/` | `DESIGN.md`, `TASK_BINDINGS.md`, `EXECUTION_CONNECTION.md`, `SOURCE.json`, `check_report.json`, and `exports/<ordering_mode>/` |
+| `records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/` | `DESIGN.md`, `TASK_BINDINGS.md`, `EXECUTION_CONNECTION.md`, `CANDIDATE_RUN_001.md`, `SOURCE.json`, `check_report.json` (revision 3), `check_report_rev2.json` (preserved), and `exports/<ordering_mode>/` |
+
+Report revisions: `check_report_rev2.json` (sha256 `5e145595…e545b`) is preserved
+unchanged; `check_report.json` is revision 3, which carries the corrected stub counters
+and the candidate preparation.
 
 Each export directory holds one ordering mode and nothing else: the five `.jsonl`
 records, `cycle_plan.json`, and an `EXPORT_MANIFEST.json` naming the mode, the ordering
@@ -221,12 +227,21 @@ TeacherTarget.expected_answer -> record["correct"]
   -> optimizer.step()   (operation:^6 allowlist only)
 ```
 
-Readings: 8 records, 64 updates under the frozen budget, all 8 records reached,
-the corrective targets used are exactly the teacher's five verified answers,
-`neural_execution: false`, `torch_imported: false`, `learner_is_a_stub: true`.
+Readings: 8 records, 64 stub training-step calls, 0 actual optimizer updates, all 8
+records reached, the corrective targets used are exactly the teacher's five verified
+answers, `neural_execution: false`, `torch_imported: false`, `learner_is_a_stub: true`.
 `EXECUTION_CONNECTION.md` records why the connection enters at `run_training`
 rather than `trainer.launch` (which has no record-injection parameter), and what a
 future authorized run would still need.
+
+`candidate_run.py` then wraps that connection into an instrumented candidate run with the
+declared chronological order and a proposed teaching schedule: **8 blocks of 5 component
+questions then 3 whole-answer questions, 64 supervised corrections, a declared 5:3
+component-to-final ratio, 0 automatic retries**, labelled **checked component teaching**.
+`CANDIDATE_RUN_001.md` states the schedule, the evaluation proposal, and the decisions the
+owner still has to make. The wrapper rehearses cleanly with injected stubs (64 recorded
+predictions, each taken before its own update) and refuses to run without an owner
+authorization record.
 
 ## 7. Counts kept apart
 
