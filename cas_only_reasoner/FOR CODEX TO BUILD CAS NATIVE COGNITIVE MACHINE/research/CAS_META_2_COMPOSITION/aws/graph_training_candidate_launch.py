@@ -167,6 +167,10 @@ def render_worker():
         "from pathlib import Path",
         "",
         "ROOT = Path(__file__).resolve().parent",
+        "# The package stores code under its repository-relative path, exactly as the",
+        "# proven curriculum worker does. Attempt 004 died on 'No module named",
+        "# cas_meta2' because this line was missing.",
+        "sys.path.insert(0, str(ROOT / 'research/CAS_META_2_COMPOSITION'))",
         "CONFIG = json.loads((ROOT / 'config.json').read_text())",
         "ARTIFACTS = ROOT / 'artifacts'",
         "ARTIFACTS.mkdir(exist_ok=True)",
@@ -299,6 +303,12 @@ def render_worker():
         "                   'failure': failure}",
         "        (ARTIFACTS / 'result_partial.json').write_text(",
         "            json.dumps(partial, sort_keys=True))",
+        "        # result.json goes LAST and is written even on failure: the launcher's",
+        "        # wait loop only watches result.json, so a failure that reports itself",
+        "        # nowhere leaves the instance idling until the full timeout",
+        "        # (attempt 004 did exactly that).",
+        "        (ARTIFACTS / 'result.json').write_text(",
+        "            json.dumps(partial, sort_keys=True))",
         "        try:",
         "            upload_results(s3, bucket, None)",
         "        except BaseException:",
@@ -355,6 +365,43 @@ class CandidateProvider(CurriculumProvider):
     def _authority_sha256(self):
         require(getattr(self, "_authority", None), "CANDIDATE_PROVIDER_AUTHORITY_HASH")
         return self._authority
+
+    def collect(self, job):
+        """Collect, even when the run died before it could read a result.
+
+        The inherited collect requires a result object, which a terminated
+        instance never produced (attempt 004: CURRICULUM_COLLECT_STATE, so nothing
+        was collected). Here a missing result collects whatever ``results/``
+        objects exist instead, reports the reason, and leaves the bucket in place
+        because collection is not verified.
+        """
+        if self._result_raw is not None:
+            return super().collect(job)
+        self.calls.append("collect")
+        require(job == self.job and self._instance_id is not None,
+                "CANDIDATE_COLLECT_STATE")
+        s3 = self.clients["s3"]
+        bucket = self._resources["bucket"]
+        collected = {"result": None, "result_sha256": None, "artifacts": [],
+                     "artifacts_collected": [], "artifacts_missing": [],
+                     "artifacts_available": False,
+                     "reason": "NO_RESULT_OBJECT_COLLECTED_WHAT_EXISTS"}
+        listing = s3.list_objects_v2(Bucket=bucket)
+        for entry in sorted(listing.get("Contents", []), key=lambda item: item["Key"]):
+            key = entry["Key"]
+            if not key.startswith("results/"):
+                continue
+            name = key.split("/", 1)[1]
+            try:
+                body = self._read_body(s3.get_object(Bucket=bucket, Key=key)["Body"],
+                                       256 * 1024**2)
+            except Exception:                     # noqa: BLE001 - best effort
+                continue
+            receipt = write_evidence(self._evidence / ("remote_" + name), body)
+            collected["artifacts_collected"].append(
+                {"key": key, "path": receipt["path"], "sha256": receipt["sha256"],
+                 "bytes": receipt["bytes"]})
+        return collected
 
 
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
