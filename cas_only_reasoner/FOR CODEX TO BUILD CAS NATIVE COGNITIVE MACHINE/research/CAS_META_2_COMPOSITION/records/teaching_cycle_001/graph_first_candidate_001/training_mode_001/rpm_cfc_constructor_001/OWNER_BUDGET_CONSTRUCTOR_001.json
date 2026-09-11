@@ -1,0 +1,40 @@
+{
+  "schema": "cas.rpm-cfc-constructor-budget-instruction/1",
+  "plan_id": "RPM_CFC_CONSTRUCTOR_001",
+  "recorded_utc": "2026-09-11T17:05:00.000000+00:00",
+  "owner_instruction_raw": "$58.00 is your budget",
+  "instruction_interpretation": "The owner sets $58.00 as the total budget for the RPM-Guided CAS PCBA Learning Constructor (RPM_CFC_CONSTRUCTOR_001) and its future execution. This is a ceiling, not an allocation to be spent: the constructor's execution request must be costed within it, and nothing is reserved by this record.",
+  "budget_usd": "58.00",
+  "campaign_arithmetic": {
+    "campaign_cap_usd": "400.00",
+    "reserved_before_this_instruction_usd": "340.00",
+    "free_before_this_instruction_usd": "60.00",
+    "free_if_the_full_ceiling_were_reserved_usd": "2.00",
+    "note": "a reservation equal to the full ceiling would leave two dollars of campaign headroom, so the execution request should be costed from the work it actually performs rather than reserved at the ceiling"
+  },
+  "what_the_ceiling_buys_at_the_frozen_resource_plan": {
+    "instance_type": "g7.2xlarge",
+    "on_demand_rate_ceiling_usd_per_hour": "2.52",
+    "instance_hours_at_ceiling_usd": 23.02,
+    "ancillary_reserved_usd": "1.48",
+    "instance_hours_after_ancillary": 22.43,
+    "note": "these are ceiling figures from the frozen resource plan, not a forecast of the job's duration"
+  },
+  "required_coverage_in_the_future_request": [
+    "constructor apprenticeship (the planning profiles taught before the planner is frozen)",
+    "source selection and evidence acquisition for the episodes the battery exercises",
+    "every learning subgoal: within-cube, across-face, return-to-cube",
+    "earlier-skill maintenance practice",
+    "runtime qualification of the trained candidate",
+    "the frozen-student replay control over the same acquired material",
+    "evaluation, cold restart, and collection with its pre-run evidence contract"
+  ],
+  "constraints_carried_forward": {
+    "counts_for_a_complete_executed_course_only": true,
+    "proposed_local_course_is_not_a_sufficiency_guarantee": true,
+    "automatic_retries": 0,
+    "one_reservation_per_authorised_attempt": true,
+    "no_spend_follows_from_this_record": true
+  },
+  "boundary": "A recorded owner instruction and its arithmetic. No reservation was created, no ledger entry was written, no provider was called, and the running or completed recovery job is unaffected."
+}
