@@ -70,10 +70,16 @@ def test_the_package_carries_the_readout_code_and_the_delivered_weights():
 
 
 def test_the_packaged_worker_is_the_worker_this_rehearsal_exercises():
+    from aws import run_evidence
     with zipfile.ZipFile(_package()) as zipped:
         packaged = zipped.read(rl.WORKER_NAME)
         manifest = json.loads(zipped.read(curriculum.MANIFEST_NAME))
-    assert packaged == rl.render_worker().encode("utf-8")
+    # the package carries the worker with the shared transport applied, and says so
+    assert packaged == run_evidence.unified_worker_source(
+        rl.render_worker()).encode("utf-8")
+    assert manifest["transport"]["implementation"] == \
+        "aws.run_evidence.render_transport"
+    assert "upload_results" in manifest["transport"]["replaced_functions"]
     assert manifest["worker_script"] == rl.WORKER_NAME
     assert manifest["files_sha256"][rl.WORKER_NAME] == \
         hashlib.sha256(packaged).hexdigest()

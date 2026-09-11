@@ -563,12 +563,29 @@ def build_package(output, *, source_sha, git_bytes_fn=git_bytes,
     require(not output.exists() and output.parent.is_dir()
             and output.is_relative_to((ROOT / "records").absolute())
             and output != ROOT / "records", "PACKAGE_NEW_SCOPED_OUTPUT_REQUIRED")
+    transport = run_evidence.unified_transport(
+        worker_source if worker_source is not None else render_worker())
     members = resolve_members(ROOT, source_sha, git_bytes_fn=git_bytes_fn,
                               git_paths_fn=git_paths_fn, worker_name=worker_name,
-                              worker_source=worker_source, extra_files=extra_files)
+                              worker_source=run_evidence.unified_worker_source(
+                                  worker_source if worker_source is not None
+                                  else render_worker()),
+                              extra_files=extra_files)
     manifest = manifest_for(members, source_sha, worker_name=worker_name,
                             experiment=experiment, package_schema=package_schema,
                             design=design)
+    # RUN_EVIDENCE_PRESERVATION_001: every package states, checkably, that its
+    # worker carries the shared transport rather than a drifted copy.
+    manifest["transport"] = {
+        "implementation": "aws.run_evidence.render_transport",
+        "replaced_functions": transport["replaced"],
+        "evidence_directory": transport["evidence_subdir"],
+        "uploads": "every regular file under the evidence directory, no suffix filter",
+        "create_only": "IfNoneMatch='*' where the SDK supports it",
+        "marker_last": "results/result.json, after the inventory and the sidecar",
+        "publisher_wired": transport["publisher_wired"],
+        "note": ("the package builder applies the shared transport to the rendered "
+                 "worker, and records that here rather than rewriting in silence")}
     members[MANIFEST_NAME] = canonical(manifest)
     buffer = io.BytesIO()
     with ZipFile(buffer, "w", compression=ZIP_DEFLATED, compresslevel=6) as zipped:

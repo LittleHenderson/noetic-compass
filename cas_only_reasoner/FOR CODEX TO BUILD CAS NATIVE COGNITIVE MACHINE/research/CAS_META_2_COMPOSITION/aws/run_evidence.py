@@ -1031,6 +1031,69 @@ def completed_deliverable(*, execution, byte_verdict, completeness_verdict,
 # 8. the shared outer-worker transport
 # --------------------------------------------------------------------------
 
+def unified_transport(source, *, evidence_subdir="results", marker="result.json",
+                      sidecar="result.json.sha256", publisher_seconds=60.0,
+                      artifact_prefix="results/artifacts/",
+                      manifest_key="results/artifacts/manifest.json"):
+    """Rewrite a rendered worker so it uses the shared transport, and say so.
+
+    Declared, not silent: the caller is told exactly which functions were replaced
+    and the package manifest records it, so a reader of the package can see that the
+    transport is the shared one rather than a copy that has drifted.
+
+    The launchers each grew their own ``upload_results``, and that duplication is
+    how attempt 004 lost its readout: the copies staged an explicit list of names
+    instead of the evidence directory, so a payload the worker wrote but did not
+    list was never uploaded under a declared artefact. One implementation removes
+    the class of defect rather than the instance.
+    """
+    require(type(source) is str and source, "TRANSPORT_SOURCE_REQUIRED")
+    if "def upload_results(s3, bucket, root, published=None):" in source:
+        # already unified: applying it twice is a no-op, so a caller cannot
+        # accidentally drop the transport by unifying an already-unified source
+        return {"source": source, "replaced": [], "already_unified": True,
+                "transport": "aws.run_evidence.render_transport",
+                "evidence_subdir": evidence_subdir,
+                "publisher_wired": "publisher(" in source,
+                "note": "the source already carries the shared transport"}
+    lines = source.splitlines()
+    kept, replaced, skipping = [], [], False
+    for line in lines:
+        if line.startswith("def upload_results("):
+            skipping = True
+            replaced.append("upload_results")
+            continue
+        if skipping:
+            # the replaced function ends at the next top-level statement
+            if line and not line[0].isspace() and not line.startswith(")"):
+                skipping = False
+            else:
+                continue
+        kept.append(line)
+    require(replaced, "TRANSPORT_UPLOADER_NOT_FOUND")
+    text = "\n".join(kept)
+    # the shared uploader takes the run root, because it walks the evidence
+    # directory; the copies took the results directory
+    for call in (", results_dir)", ", results)"):
+        text = text.replace(call, call[:-1] + ".parent)")
+    text = text + "\n" + "\n".join(render_transport(
+        evidence_subdir=evidence_subdir, marker=marker, sidecar=sidecar,
+        publisher_seconds=publisher_seconds, artifact_prefix=artifact_prefix,
+        manifest_key=manifest_key)) + "\n"
+    return {"source": text, "replaced": replaced,
+            "transport": "aws.run_evidence.render_transport",
+            "evidence_subdir": evidence_subdir,
+            "publisher_wired": ("publisher(" in text and
+                                "PUBLISH_SECONDS" in text),
+            "note": ("the stager now uploads every regular file under the evidence "
+                     "directory, with create-only keys and the marker last")}
+
+
+def unified_worker_source(source, **kwargs):
+    """The rewritten source alone, for callers that only want the text."""
+    return unified_transport(source, **kwargs)["source"]
+
+
 def render_transport(*, evidence_subdir="results", marker="result.json",
                      sidecar="result.json.sha256", publisher_seconds=60.0,
                      artifact_prefix="results/artifacts/",
