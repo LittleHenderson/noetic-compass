@@ -36,7 +36,11 @@ import zipfile
 from pathlib import Path
 
 EVENTS_PER_CONDITION = 8          # one batch, one optimizer update
-CONDITIONS = ("cfc_stable_cues", "cfc_neutral_cue")
+#: ALL four conditions, never a sample. Attempt 003 died in the mixed-order
+#: conditions because this smoke ran only the two CFC ones, so the path that
+#: failed was never executed here.
+CONDITIONS = ("cfc_stable_cues", "cfc_neutral_cue",
+              "mixed_order_stable_cues", "mixed_order_neutral_cue")
 PANEL_ITEMS = 24                  # a sample, so both panel passes stay quick
 
 

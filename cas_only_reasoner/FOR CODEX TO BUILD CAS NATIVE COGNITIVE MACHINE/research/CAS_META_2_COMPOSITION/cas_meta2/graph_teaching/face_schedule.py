@@ -69,7 +69,18 @@ STAGE_FACES = (
 
 
 def _seed_for(name):
-    return int(digest(("cas.cube-face-schedule:" + name).encode("utf-8"))[:8], 16)
+    """A deterministic RNG seed from either a declared integer seed or a name.
+
+    Attempt 003 died here: the runner passes the experiment's integer seed, this
+    helper assumed a name string, and the mixed-order conditions raised
+    ``TypeError: can only concatenate str (not "int") to str`` - after the encoder
+    and both pre-training checks had already run. Both kinds are now accepted, and
+    the suite builds *every* declared condition through the production call so a
+    path only some conditions take cannot go unexercised again.
+    """
+    if isinstance(name, int) and not isinstance(name, bool):
+        return name
+    return int(digest(("cas.cube-face-schedule:" + str(name)).encode("utf-8"))[:8], 16)
 
 
 def _rotated(items, offset):

@@ -143,3 +143,40 @@ def test_the_request_states_the_single_initialization_limitation():
     assert plan["schedule_facts"]["total_optimizer_updates"] == 2304
     assert plan["bounds"]["fits"] is True
     assert "not_included" in plan["experiment"]
+
+
+def test_every_declared_condition_builds_through_the_production_call():
+    """The exact call the job makes, for all four conditions.
+
+    Attempt 003 died in the mixed-order conditions because the runner passes an
+    integer seed and the schedule helper assumed a name string. Neither of the two
+    CFC conditions touches that path, so nothing before the run had exercised it.
+    This test calls what the runner calls, with the runner's own seed value.
+    """
+    from cas_meta2.graph_teaching import face_experiment as experiment
+    for entry in schedule.comparison_conditions():
+        events = schedule.condition_events(entry["condition"],
+                                           entry["organization"], entry["cue"],
+                                           seed=experiment.SEED)
+        assert len(events) == 4608, entry["condition"]
+        assert {event.get("arm") for event in events} == {entry["cue"]}
+    # both seed kinds are accepted, and they are deterministic
+    loop = schedule.cfc_events()
+    assert schedule.mixed_order(loop, experiment.SEED) == \
+        schedule.mixed_order(loop, experiment.SEED)
+    assert schedule.mixed_order(loop, "cfc-mixed-order-control") == \
+        schedule.mixed_order(loop, "cfc-mixed-order-control")
+
+
+def test_the_two_organizations_still_differ_after_the_seed_fix():
+    from cas_meta2.graph_teaching import face_experiment as experiment
+    loop_events = schedule.condition_events("cfc_stable_cues", "CFC_LOOP",
+                                            "stable", seed=experiment.SEED)
+    mixed_events = schedule.condition_events("mixed_order_stable_cues",
+                                             "MIXED_ORDER", "stable",
+                                             seed=experiment.SEED)
+    assert len(loop_events) == len(mixed_events) == 4608
+    assert Counter(schedule.event_key(event) for event in loop_events) == \
+        Counter(schedule.event_key(event) for event in mixed_events)
+    loop_batches, mixed_batches = _batches(loop_events), _batches(mixed_events)
+    assert not (set(loop_batches) & set(mixed_batches))

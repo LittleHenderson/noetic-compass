@@ -606,3 +606,44 @@ def test_launch_refuses_without_authority_and_requires_matched_weights():
                   authorization={"owner_go": True, "run_id": "rehearsal"},
                   built=built, panel_items=stub_panel, event_limit=8)
     assert "FACE_INITIAL_WEIGHTS_NOT_MATCHED" in str(error.value)
+
+
+def test_all_four_declared_conditions_run_end_to_end_with_stubs():
+    """Every condition the job declares, through the runner, on a bounded panel.
+
+    Attempt 003 died in the mixed-order conditions, which the earlier rehearsal
+    never reached because it ran the two CFC conditions only. This runs all four.
+    """
+    built = corpus.families()
+    panel = ev.panel(built)[:6]
+    built_frameworks = []
+
+    def framework_factory(seed):
+        framework = _StubFramework()
+        built_frameworks.append(framework)
+        return framework, framework.module
+
+    result = fx.launch(
+        conditions=list(fl_conditions()),
+        framework_factory=framework_factory,
+        learner_factory=_learner_factory,
+        checkpoint_writer=lambda learner, identity: {"identity": identity,
+                                                     "condition": learner.condition_tag},
+        checkpoint_verifier=lambda saved, identity: saved["identity"] == identity,
+        authorization={"owner_go": True, "run_id": "rehearsal"},
+        built=built, panel_items=panel, event_limit=8)
+    assert result["matched_initial_weights"] is True
+    assert len(result["results"]) == 4
+    assert len(built_frameworks) == 4
+    for condition, payload in result["results"].items():
+        assert payload["status"] == fx.STATUS_COMPLETE
+        assert payload["teaching"]["delivered_episodes"] == 8
+        assert payload["teaching"]["actual_optimizer_updates"] == 1
+        assert payload["evaluation"]["after"], condition
+        assert payload["cue"] in ("stable", "neutral")
+    assert set(result["comparison"]) == {"role_recognition", "role_application"}
+
+
+def fl_conditions():
+    from cas_meta2.graph_teaching import face_schedule as schedule_module
+    return [entry["condition"] for entry in schedule_module.comparison_conditions()]
