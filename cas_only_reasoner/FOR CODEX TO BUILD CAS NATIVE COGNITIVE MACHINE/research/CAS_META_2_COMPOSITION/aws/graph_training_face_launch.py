@@ -43,6 +43,7 @@ from aws.graph_training_curriculum_launch import (  # noqa: E402
     prepare_evidence, read_ledger, require, scope, validate_preflight,
     validate_reservation_scope, validate_reserved_transition, write_evidence)
 from aws import graph_training_candidate_launch as candidate  # noqa: E402
+from cas_meta2.graph_teaching import face_schedule as schedule  # noqa: E402
 
 SCHEMA = "cas-graph-training-face-launch/1"
 REQUEST_SCHEMA = "cas-graph-training-face-launch-request/1"
@@ -52,14 +53,19 @@ RECEIPT_SCHEMA = "cas-graph-training-face-package-receipt/1"
 RESULT_SCHEMA = "cas.cube-face-result/1"
 WORKER_NAME = "graph6_face_worker.py"
 JOB_PATTERN = r"cas-meta2-graph6face-\d{14}-[a-f0-9]{8}"
-EXPERIMENT = {"profile": "cube_face_grounding_cfc",
-              "entrypoint": "cas_meta2.graph_teaching.face_worker.run"}
+EXPERIMENT = {"profile": "cfc_loop_face_cue_pilot",
+              "title": "CFC Loop x Face-Cue Pilot",
+              "entrypoint": "cas_meta2.graph_teaching.face_worker.run",
+              "selected_schedule": "CFC_LOOP",
+              "not_included": ("the face-grounding plan's 9,216-query Phase A/B "
+                               "schedule is implemented but is NOT what this job "
+                               "runs; this is the combined CFC pilot, not delivery "
+                               "of both original schedules in full")}
 
-#: The four conditions the two plans ask about. Both plans proposed one paired
-#: two-condition pilot; running all four in one job answers both questions from one
-#: reservation and one matched initialization, which is declared here explicitly as
-#: a deviation rather than assumed. The ceiling is sized for four conditions on one
-#: instance inside one reservation.
+#: The four conditions. Both plans proposed one paired two-condition pilot; the
+#: owner's ruling is to run all four cells in one job, so one initialization and one
+#: reservation answer both questions. That is a declared deviation, not an
+#: assumption.
 FROZEN_CONDITIONS = ("cfc_stable_cues", "cfc_neutral_cue",
                      "mixed_order_stable_cues", "mixed_order_neutral_cue")
 FROZEN_ORGANIZATION = {"cfc_stable_cues": "CFC_LOOP",
@@ -77,14 +83,83 @@ FROZEN_EVENTS_PER_CONDITION = 4608
 FROZEN_UPDATES_PER_CONDITION = FROZEN_EVENTS_PER_CONDITION // FROZEN_BATCH_SIZE
 FROZEN_TOTAL_UPDATES = FROZEN_UPDATES_PER_CONDITION * len(FROZEN_CONDITIONS)
 FROZEN_PANEL_ITEMS = 192
-FROZEN_MAX_WALL_SECONDS_PER_CONDITION = 3600.0
+
+#: Wall-clock bound. Four conditions share one instance inside one $7.00
+#: reservation, so the per-condition ceiling has to fit the reservation's instance
+#: ceiling *together with* the environment install; a design that cannot fit is
+#: refused here rather than discovered by a timed-out run.
+FROZEN_MAX_WALL_SECONDS_PER_CONDITION = 1500.0
+FROZEN_INSTALL_ALLOWANCE_SECONDS = 600.0
+FROZEN_TOTAL_WALL_CLOCK_CEILING = (
+    FROZEN_MAX_WALL_SECONDS_PER_CONDITION * len(FROZEN_CONDITIONS)
+    + FROZEN_INSTALL_ALLOWANCE_SECONDS)
 FROZEN_BUCKET_PREFIX = "cas-meta2-graph6face"
 RECEIPT_PREFIX = "graph6face_"
+
+
+def validate_bounds(resource_plan=None):
+    """The declared job must fit inside the reservation's instance ceiling."""
+    resource_plan = RESOURCE_PLAN if resource_plan is None else resource_plan
+    ceiling = resource_plan["instance_seconds_max"]
+    require(FROZEN_TOTAL_WALL_CLOCK_CEILING <= ceiling,
+            "FACE_DESIGN_WALL_CLOCK_EXCEEDS_RESERVATION:%d>%d"
+            % (FROZEN_TOTAL_WALL_CLOCK_CEILING, ceiling))
+    return {"per_condition_seconds": FROZEN_MAX_WALL_SECONDS_PER_CONDITION,
+            "install_allowance_seconds": FROZEN_INSTALL_ALLOWANCE_SECONDS,
+            "total_ceiling_seconds": FROZEN_TOTAL_WALL_CLOCK_CEILING,
+            "instance_ceiling_seconds": ceiling,
+            "fits": True}
+
+
+def schedule_facts():
+    """The counts of the schedule the worker will actually execute.
+
+    Read from the same module that is packaged and run, so the request cannot state
+    numbers that the run would not deliver: the within/across/return split, the
+    worked-support exposures, the completed rounds and the optimizer updates all
+    come from the schedule itself.
+    """
+    events = schedule.cfc_events()
+    movements = {}
+    supports = 0
+    rounds = set()
+    for event in events:
+        movements[event["movement"]] = movements.get(event["movement"], 0) + 1
+        supports += len(event.get("support_ids") or ())
+        if "round" in event:
+            rounds.add(event["round"])
+    per_condition = len(events)
+    counts = schedule.planned_counts()
+    require(per_condition == FROZEN_EVENTS_PER_CONDITION,
+            "FACE_DESIGN_EVENT_COUNT:%d" % per_condition)
+    require(per_condition // FROZEN_BATCH_SIZE == FROZEN_UPDATES_PER_CONDITION,
+            "FACE_DESIGN_UPDATE_COUNT")
+    return {
+        "selected_schedule": "CFC_LOOP",
+        "events_per_condition": per_condition,
+        "movements_per_condition": movements,
+        "completed_rounds_per_condition": len(rounds),
+        "worked_support_exposures_per_condition": supports,
+        "optimizer_updates_per_condition": per_condition // FROZEN_BATCH_SIZE,
+        "conditions": len(FROZEN_CONDITIONS),
+        "total_events": per_condition * len(FROZEN_CONDITIONS),
+        "total_optimizer_updates": (per_condition // FROZEN_BATCH_SIZE)
+        * len(FROZEN_CONDITIONS),
+        "batch_size": FROZEN_BATCH_SIZE,
+        "grounding_schedule_not_run": {
+            "supervised_query_presentations":
+                counts["supervised_query_presentations"],
+            "worked_support_presentations":
+                counts["worked_support_presentations"],
+            "updates_at_declared_batch": counts["updates_at_declared_batch"],
+            "note": ("implemented and selectable, but not what this job runs")},
+    }
 
 DESIGN = {
     "launch_enabled": False,
     "training": True,
-    "organization": "CFC_LOOP with a mixed-order control",
+    "title": "CFC Loop x Face-Cue Pilot",
+    "selected_schedule": "CFC_LOOP",
     "conditions": list(FROZEN_CONDITIONS),
     "organization_per_condition": dict(FROZEN_ORGANIZATION),
     "cue_per_condition": dict(FROZEN_CUES),
@@ -97,11 +172,19 @@ DESIGN = {
     "learning_rate": FROZEN_LEARNING_RATE,
     "panel_items": FROZEN_PANEL_ITEMS,
     "max_wall_seconds_per_condition": FROZEN_MAX_WALL_SECONDS_PER_CONDITION,
+    "install_allowance_seconds": FROZEN_INSTALL_ALLOWANCE_SECONDS,
+    "total_wall_clock_ceiling_seconds": FROZEN_TOTAL_WALL_CLOCK_CEILING,
     "reservation_usd": RESERVATION_USD,
     "deviation_from_the_plans": (
-        "each plan proposed one paired two-condition pilot; this binding runs the "
-        "four cells (loop/mixed x stable/neutral) in one job so both plans' "
-        "questions are answered from one initialization and one reservation"),
+        "each plan proposed one paired two-condition pilot; by owner ruling this "
+        "binding runs the four cells (loop/mixed x stable/neutral) in one job so "
+        "both plans' questions are answered from one initialization and one "
+        "reservation"),
+    "schedule_scope": (
+        "the counts are the CFC loop schedule: 4,608 decisions and 576 batch-of-8 "
+        "updates per condition, 2,304 updates in total across four conditions. The "
+        "face-grounding plan's 9,216-query Phase A/B schedule is implemented and "
+        "selectable but is NOT delivered by this job"),
     "unchanged": ("no architecture change, no new head, no readout change; the "
                   "trainable scope stays the accepted operation:^6 allowlist"),
 }
@@ -426,6 +509,8 @@ def plan_only():
     return {"schema": SCHEMA, "status": "PLAN_ONLY_NOT_EXECUTED",
             "experiment": EXPERIMENT, "design": DESIGN,
             "conditions": list(FROZEN_CONDITIONS),
+            "schedule_facts": schedule_facts(),
+            "bounds": validate_bounds(),
             "reservation_created": False, "provider_calls": 0,
             "boundary": ("No provider client, reservation, model import or output "
                          "mutation occurred.")}
