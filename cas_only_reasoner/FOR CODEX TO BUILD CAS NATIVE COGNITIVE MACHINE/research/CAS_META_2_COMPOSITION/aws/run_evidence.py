@@ -1076,6 +1076,73 @@ def unified_transport(source, *, evidence_subdir="results", marker="result.json"
     # directory; the copies took the results directory
     for call in (", results_dir)", ", results)"):
         text = text.replace(call, call[:-1] + ".parent)")
+
+    # Environment phases are marked as they complete, and the publisher is started
+    # BEFORE the install rather than after the run. The 2026-09-11 readout burned its
+    # full two-hour ceiling in the environment phase and left an empty archive: with
+    # the client created only at the end, nothing the worker wrote was ever uploaded,
+    # so the hang could not be located. Beacons and an early publisher make that
+    # failure visible while it is happening.
+    marked, started = [], False
+    # Inserted BEFORE each step, so a phase that hangs is named rather than only the
+    # phases that finished. Anchoring on the opening line of each call keeps this
+    # robust across the workers' differing argument layouts.
+    ordered_marks = (
+        ("        python = str(venv_py)", "venv_ready", "after"),
+        ("        run_checked([python, '-m', 'pip', 'install',", "pip_step", "before"),
+        ("        inner = subprocess.run([python, '-B', str(runner), str(root)],",
+         "inner_runner_starting", "before"),
+    )
+    pip_names = ("pip_torch_starting", "pip_wheels_starting",
+                 "pip_requirements_starting")
+    pip_seen = 0
+    for anchor, name, where in ordered_marks:
+        while anchor in text:
+            if name == "pip_step":
+                if pip_seen >= len(pip_names):
+                    break
+                mark = "        beacon(root, %r)" % pip_names[pip_seen]
+                pip_seen += 1
+            else:
+                mark = "        beacon(root, %r)" % name
+            if where == "after":
+                text = text.replace(anchor, anchor + "\n" + mark, 1)
+            else:
+                text = text.replace(anchor, mark + "\n" + anchor, 1)
+            marked.append(mark.strip().split("'")[1])
+            if name != "pip_step":
+                break
+    starter = (
+        "    failure = None\n"
+        "    import threading\n"
+        "    import boto3\n"
+        "    s3 = boto3.client('s3', region_name=region)\n"
+        "    _published = {}\n"
+        "    _publish_errors = []\n"
+        "    _stop_publishing = threading.Event()\n"
+        "    beacon(root, 'worker_started')\n"
+        "    _publisher = threading.Thread(\n"
+        "        target=publisher,\n"
+        "        args=(s3, bucket, root, _published, _stop_publishing,\n"
+        "              _publish_errors, PUBLISH_SECONDS), daemon=True)\n"
+        "    _publisher.start()\n"
+        "    beacon(root, 'publisher_started')\n")
+    if "    failure = None\n" in text:
+        text = text.replace("    failure = None\n", starter, 1)
+        started = True
+    if started:
+        # the publisher is stopped before the final upload, so the inventory it was
+        # writing is quiet while the marker goes up
+        lines = text.splitlines()
+        for index, line in enumerate(lines):
+            if "upload_results(s3, bucket," in line and "def upload_results" not in line:
+                indent = line[:len(line) - len(line.lstrip())]
+                lines[index:index] = [
+                    indent + "_stop_publishing.set()",
+                    indent + "_publisher.join(timeout=30)",
+                    indent + "beacon(root, 'publishing_stopped')"]
+                break
+        text = "\n".join(lines)
     text = text + "\n" + "\n".join(render_transport(
         evidence_subdir=evidence_subdir, marker=marker, sidecar=sidecar,
         publisher_seconds=publisher_seconds, artifact_prefix=artifact_prefix,
@@ -1083,10 +1150,12 @@ def unified_transport(source, *, evidence_subdir="results", marker="result.json"
     return {"source": text, "replaced": replaced,
             "transport": "aws.run_evidence.render_transport",
             "evidence_subdir": evidence_subdir,
-            "publisher_wired": ("publisher(" in text and
-                                "PUBLISH_SECONDS" in text),
+            "publisher_wired": started,
+            "phase_beacons": marked,
             "note": ("the stager now uploads every regular file under the evidence "
-                     "directory, with create-only keys and the marker last")}
+                     "directory, with create-only keys and the marker last, and the "
+                     "publisher runs from before the environment install so a hang "
+                     "leaves a visible timeline")}
 
 
 def unified_worker_source(source, **kwargs):
@@ -1109,6 +1178,31 @@ def render_transport(*, evidence_subdir="results", marker="result.json",
     collection completeness nor evidence deletion.
     """
     lines = [
+        "PUBLISH_SECONDS = %.1f" % publisher_seconds,
+        "",
+        "",
+        "def beacon(root, name, **fields):",
+        "    \"\"\"A durable mark that an environment phase completed.",
+        "    ",
+        "    Written into the evidence directory the moment it happens, so a run that",
+        "    later hangs or is killed still shows how far it got. The two-hour run on",
+        "    2026-09-11 left an empty archive for exactly this reason: when the worker",
+        "    dies before its first upload, nothing on the instance is visible afterwards.",
+        "    \"\"\"",
+        "    import json as _json",
+        "    import time as _time",
+        "    directory = root / %r / 'evidence'" % evidence_subdir,
+        "    try:",
+        "        directory.mkdir(parents=True, exist_ok=True)",
+        "        document = dict(fields, phase=name, at=round(_time.time(), 3))",
+        "        path = directory / ('phase_%s.json' % name)",
+        "        if not path.exists():",
+        "            path.write_text(_json.dumps(document, sort_keys=True) + '\\n')",
+        "        return str(path)",
+        "    except BaseException:                     # noqa: BLE001 - never fatal",
+        "        return None",
+        "",
+        "",
         "def evidence_files(root):",
         "    \"\"\"Every regular file under the evidence directory, no suffix filter.\"\"\"",
         "    base = root / %r" % evidence_subdir,

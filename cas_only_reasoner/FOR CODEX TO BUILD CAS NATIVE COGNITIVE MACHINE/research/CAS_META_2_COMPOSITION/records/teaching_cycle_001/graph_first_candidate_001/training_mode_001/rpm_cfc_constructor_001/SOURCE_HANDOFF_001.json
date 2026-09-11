@@ -1,0 +1,83 @@
+{
+  "schema": "cas.rpm-cfc-constructor-source/1",
+  "plan_id": "RPM_CFC_CONSTRUCTOR_001",
+  "recorded_utc": "2026-09-11T16:20:00.000000+00:00",
+  "concept_origin": "Little Henderson",
+  "status": "HANDOFF_RECORDED_NOT_EXECUTED",
+  "completion_label_available_to_this_build": "RPM_CFC_CONSTRUCTOR_READY_NEURAL_UNTESTED",
+  "delivered_plan": {
+    "location": "C:/Users/wakil/Downloads/RPM_CFC_Learning_Constructor_v0.1_Handoff/RPM_CFC_Learning_Constructor_v0.1",
+    "files_verified_against_HANDOFF_MANIFEST": true,
+    "verified": [
+      {"path": "RPM_Guided_CAS_PCBA_Learning_Constructor_v0.1.md",
+       "sha256": "9b0a80e59a8fd76c30c9c37a69b085f2030f1eeb5ada38220bb4335ec9ce50be",
+       "bytes": 45926},
+      {"path": "Implementation_Profile_v0.1.json",
+       "sha256": "3f20eafe9a7f0bbd27c6c2807e653bc1cadc03ff8c099b2f5413a3fd6f61aa48",
+       "bytes": 6339},
+      {"path": "Constructor_Example_Public_v0.1.json",
+       "sha256": "e4eab3942da56367605bf80df3c4db7ff27119854df53d48269a1d78909e46ed",
+       "bytes": 2597},
+      {"path": "Constructor_Example_Teacher_v0.1.json",
+       "sha256": "e76007f10db1c5f8865df2088742cad932838d9f76aa5c1ec4ad0665686df943",
+       "bytes": 1594},
+      {"path": "AUTHORING_CHECKS.json",
+       "sha256": "f930d6e41cfb503d8c0261a34ab77f793d9f371b304d6ad6fe03de16a852f91f",
+       "bytes": 1168},
+      {"path": "README.md",
+       "sha256": "f4caba99e48a377857292316714335519e27ae85ec42972182dbd8b8adf36f45",
+       "bytes": 1331}
+    ],
+    "execution_authorized": false,
+    "owner_signature": null,
+    "note": "the handoff is planning material: authoring checks only, no repository code, no CAS reference checker, no model, no provider"
+  },
+  "declared_boundaries_accepted": {
+    "isolated_from_the_running_job": true,
+    "modify_active_checkout_or_package": false,
+    "modify_active_job_configuration": false,
+    "read_or_write_live_ledger": false,
+    "append_constructor_work_to_active_job": false,
+    "new_launcher": false,
+    "new_external_model_teacher": false,
+    "accepted_model_mutations": false,
+    "arbitrary_topology_synthesis": false,
+    "physical_hardware_construction": false,
+    "reuse_old_cfc_panel_as_fresh": false,
+    "resample_already_known_skill_to_force_failure": false
+  },
+  "build_portions": [
+    {"portion": "bind_existing_components",
+     "output": "current RPM/RRK/RLP, cube, face-task, training, write-back and preservation interfaces bound by name and version"},
+    {"portion": "diagnosis_and_construction",
+     "output": "evidence-backed routes, source selection, policy-selected cube edits, typed board configuration"},
+    {"portion": "connect_actual_learning",
+     "output": "constructor apprenticeship, CFC student training, qualification, candidate model-version transition"},
+    {"portion": "exercise_the_whole_path",
+     "output": "one complete recorded rehearsal plus missing-evidence, wrong-source, recursion, interruption and retention cases"},
+    {"portion": "package_the_candidate",
+     "output": "real dependency bindings, pure tests, source identities, evidence contract, one costed future execution request"}
+  ],
+  "proposed_local_course_accepted_as_proposed_not_as_guarantee": {
+    "support_cubes_per_cohort": 4,
+    "rounds": 16,
+    "target_decisions": 768,
+    "maintenance_decisions": 128,
+    "total_supervised_decisions": 896,
+    "total_optimizer_updates": 128,
+    "batch_size_max": 8,
+    "flush_at_phase_boundary": true,
+    "status": "PROPOSED_LOCAL_ALLOCATION_NOT_SUFFICIENCY_GUARANTEE"
+  },
+  "what_this_build_must_not_do": [
+    "let the teacher's correct construction or final answer stand in for the learner's output",
+    "pass a hidden fixture label such as SKILL_GAP into the model as though the model discovered it",
+    "report the scripted rehearsal wrong response as a model prediction",
+    "populate a face with invented material to satisfy a stage count",
+    "claim row-level or coverage completeness that the contract does not declare",
+    "touch the running recovery job, its package, its reservation or its live files",
+    "claim admitted native CAS execution for a Python reference adapter"
+  ],
+  "evidence_contract_note": "the constructor's own future job will declare its own pre-run contract under the completed RUN_EVIDENCE_PRESERVATION_001 machinery; this record adds no requirement to the running job",
+  "boundary": "Documentation of source identity only. No code was changed, no model executed, no reservation created, no provider called, and the running recovery job was not read or written beyond its own receipt directory."
+}
