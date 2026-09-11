@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    {
+      "bytes": 68463,
+      "condition": "checked_component_teaching",
+      "identity": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+      "name": "checkpoint_checked_component_teaching.pt",
+      "sha256": "e4b41c74e423636faeff006c78622bafeba5447ca859872cc44d17c5f28025b0"
+    },
+    {
+      "bytes": 68382,
+      "condition": "final_answer_only",
+      "identity": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+      "name": "checkpoint_final_answer_only.pt",
+      "sha256": "67f18a4cb93c1db15a7d702a3b32e4757eb9f94b8f2ed14ac0a1ce17a1c59142"
+    }
+  ],
+  "job": "cas-meta2-graph6cand-20260910174500-e33a6497",
+  "schema": "cas-graph-training-candidate-artifact-manifest/1"
+}

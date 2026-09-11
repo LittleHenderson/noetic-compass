@@ -1,0 +1,3151 @@
+{
+  "artifacts": [
+    {
+      "bytes": 68463,
+      "condition": "checked_component_teaching",
+      "identity": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+      "name": "checkpoint_checked_component_teaching.pt",
+      "sha256": "e4b41c74e423636faeff006c78622bafeba5447ca859872cc44d17c5f28025b0"
+    },
+    {
+      "bytes": 68382,
+      "condition": "final_answer_only",
+      "identity": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+      "name": "checkpoint_final_answer_only.pt",
+      "sha256": "67f18a4cb93c1db15a7d702a3b32e4757eb9f94b8f2ed14ac0a1ce17a1c59142"
+    }
+  ],
+  "failure": null,
+  "job": "cas-meta2-graph6cand-20260910174500-e33a6497",
+  "measurements": {
+    "arm": "cas",
+    "comparison": {
+      "assisted_versus_independent": "independent figures are the ones above; assisted performance is never merged into them",
+      "checked_component_teaching": {
+        "after_accuracy": 1.0,
+        "after_correct": 3,
+        "after_total": 3,
+        "before_accuracy": 0.6666666666666666,
+        "before_correct": 2,
+        "before_total": 3,
+        "by_operation_after": {
+          "FIND_SHARED_PART": {
+            "correct": 1,
+            "total": 1
+          },
+          "LIST_PARTS": {
+            "correct": 1,
+            "total": 1
+          },
+          "REACHED_VIA": {
+            "correct": 1,
+            "total": 1
+          }
+        },
+        "delta_correct": 1
+      },
+      "component_measure": {
+        "checked_component_teaching": {
+          "after_accuracy": 0.4,
+          "after_correct": 2,
+          "after_total": 5,
+          "before_accuracy": 0.4,
+          "before_correct": 2,
+          "before_total": 5,
+          "by_operation_after": {
+            "REACHED_VIA": {
+              "correct": 2,
+              "total": 5
+            }
+          },
+          "delta_correct": 0
+        },
+        "final_answer_only": {
+          "after_accuracy": 0.2,
+          "after_correct": 1,
+          "after_total": 5,
+          "before_accuracy": 0.4,
+          "before_correct": 2,
+          "before_total": 5,
+          "by_operation_after": {
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 5
+            }
+          },
+          "delta_correct": -1
+        },
+        "note": "reported separately from the complete question"
+      },
+      "final_answer_only": {
+        "after_accuracy": 1.0,
+        "after_correct": 3,
+        "after_total": 3,
+        "before_accuracy": 0.6666666666666666,
+        "before_correct": 2,
+        "before_total": 3,
+        "by_operation_after": {
+          "FIND_SHARED_PART": {
+            "correct": 1,
+            "total": 1
+          },
+          "LIST_PARTS": {
+            "correct": 1,
+            "total": 1
+          },
+          "REACHED_VIA": {
+            "correct": 1,
+            "total": 1
+          }
+        },
+        "delta_correct": 1
+      },
+      "primary_delta_between_conditions": 0,
+      "primary_measure": "independent accuracy on the three taught whole-answer questions",
+      "primary_set_size_warning": "three taught whole-answer questions: one changed answer moves accuracy by 33.3 percentage points, so no single percentage carries the conclusion",
+      "probe": {
+        "checked_component_teaching": {
+          "after_accuracy": 0.20454545454545456,
+          "after_correct": 9,
+          "after_total": 44,
+          "before_accuracy": 0.2727272727272727,
+          "before_correct": 12,
+          "before_total": 44,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 2,
+              "total": 14
+            },
+            "LIST_PARTS": {
+              "correct": 4,
+              "total": 5
+            },
+            "REACHED_VIA": {
+              "correct": 3,
+              "total": 25
+            }
+          },
+          "delta_correct": -3
+        },
+        "final_answer_only": {
+          "after_accuracy": 0.1590909090909091,
+          "after_correct": 7,
+          "after_total": 44,
+          "before_accuracy": 0.2727272727272727,
+          "before_correct": 12,
+          "before_total": 44,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 2,
+              "total": 14
+            },
+            "LIST_PARTS": {
+              "correct": 4,
+              "total": 5
+            },
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 25
+            }
+          },
+          "delta_correct": -5
+        },
+        "note": "common untaught set, within-scene generalisation only, never transfer to a new graph arrangement"
+      }
+    },
+    "conditions": [
+      "checked_component_teaching",
+      "final_answer_only"
+    ],
+    "counters": {
+      "actual_optimizer_updates": 128,
+      "automatic_retries": 0,
+      "neural_presentations": 128,
+      "seven_stage_neural_cycles": 0
+    },
+    "initial_weight_digest": "67d3ce8ffa9fbf024a2f35073cf4f972e048ee97bd7ad34705a7c9c312800bc6",
+    "kind": "CHECKED_COMPONENT_TEACHING",
+    "matched_initial_weights": true,
+    "ordering_mode": "declared",
+    "probe_geometry": {
+      "equal_item_counts": 40,
+      "note": "an empty answer cannot offer equal item counts; the alternative is one foreign part and one indirect part, and the geometry is reported rather than assumed balanced",
+      "questions": 44,
+      "unequal_because_the_answer_is_empty": 3,
+      "unequal_detail": [
+        {
+          "answer_is_empty": true,
+          "item_counts": [
+            0,
+            2,
+            1
+          ],
+          "op": "LIST_PARTS",
+          "record_id": "5543a2696153b4212a126a661c5656d63bd08ca7316ef59bbb6f718e27cc4948"
+        },
+        {
+          "answer_is_empty": true,
+          "item_counts": [
+            0,
+            2,
+            1
+          ],
+          "op": "LIST_PARTS",
+          "record_id": "acaf9e5d6f78bed16fc21bb603a3db7d2ad118c603b74dbe040143d50db85754"
+        },
+        {
+          "answer_is_empty": true,
+          "item_counts": [
+            0,
+            2,
+            1
+          ],
+          "op": "LIST_PARTS",
+          "record_id": "f359a8c2dbc95e170c9ef69169db2f860daefe5ecab8b221b192d86ce01f9955"
+        },
+        {
+          "answer_is_empty": false,
+          "item_counts": [
+            1,
+            1,
+            2
+          ],
+          "op": "LIST_PARTS",
+          "record_id": "c7fcf3947fa65fcac674574901da621efd9983f25a5aea2a8c0093398391e42e"
+        }
+      ],
+      "unequal_item_counts": 4
+    },
+    "probe_questions": 44,
+    "procedure_note": "this pilot measures how to spend a fixed update budget: it does not isolate adding component instruction at equal final-question practice, because the control practises the final questions 64 times against 24",
+    "records": 8,
+    "results": {
+      "checked_component_teaching": {
+        "automatic_retries": 0,
+        "checkpoint": {
+          "identity": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+          "saved": {
+            "identity": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+            "path": "/opt/cas-graph6curr/package/results/artifacts/checkpoint_checked_component_teaching.pt",
+            "sha256": "e4b41c74e423636faeff006c78622bafeba5447ca859872cc44d17c5f28025b0"
+          },
+          "verified": true
+        },
+        "component_corrections": 40,
+        "component_measure": {
+          "after_accuracy": 0.4,
+          "after_correct": 2,
+          "after_total": 5,
+          "before_accuracy": 0.4,
+          "before_correct": 2,
+          "before_total": 5,
+          "by_operation_after": {
+            "REACHED_VIA": {
+              "correct": 2,
+              "total": 5
+            }
+          },
+          "delta_correct": 0
+        },
+        "condition": "checked_component_teaching",
+        "containment": {
+          "contained": true,
+          "forbidden_changes": [],
+          "permitted_changes": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "total_changed": 3
+        },
+        "independent_note": "'independent' means no worked answer was supplied during prediction; the taught questions have not become unseen questions",
+        "learner_index_identity": "1ea3e069063a0d5ca85fd585cf05be3dcc8fa1ed0c0dcf963d164d39069883a0",
+        "planned_steps": 64,
+        "prediction_summary": {
+          "by_phase": {
+            "component-route": 40,
+            "whole-answer": 24
+          },
+          "corrections_applied": 64,
+          "missing_measurement_rule": "unavailable, never zero",
+          "predictions_taken_before_their_update": true,
+          "recorded_predictions": 64,
+          "recorded_updates": 64,
+          "scores_unavailable_count": 64
+        },
+        "predictions": [
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "d0354e45fb09fb5f2e5194f70b2ec11ea2bf0fafc440625b420aca87b0e1a6c4",
+              "checkpoint_before": "1063cc3ab1b1ca752e0b6a92e8fd38882f216be5a94336e358bc8c8219873793",
+              "index": 0
+            },
+            "update_index": 0
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "6ba6d492550085d2c6bbab25993392c7460953094ba5967de72bb158976a1f71",
+              "checkpoint_before": "d0354e45fb09fb5f2e5194f70b2ec11ea2bf0fafc440625b420aca87b0e1a6c4",
+              "index": 1
+            },
+            "update_index": 1
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "ae0124ecb6ca9088b0a835c8222406bf0f00b304d78b1ae651e0c467aa83dca1",
+              "checkpoint_before": "6ba6d492550085d2c6bbab25993392c7460953094ba5967de72bb158976a1f71",
+              "index": 2
+            },
+            "update_index": 2
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "d55be71aac4fb16829bb2159e4215aebaf424948d8e111e376ab3452bf287111",
+              "checkpoint_before": "ae0124ecb6ca9088b0a835c8222406bf0f00b304d78b1ae651e0c467aa83dca1",
+              "index": 3
+            },
+            "update_index": 3
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "b28658f9de6f44b6b4631d5004524e73cbba78ca7044911e8307ac3422610a04",
+              "checkpoint_before": "d55be71aac4fb16829bb2159e4215aebaf424948d8e111e376ab3452bf287111",
+              "index": 4
+            },
+            "update_index": 4
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Rim",
+              "Wheel"
+            ],
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "6f20324cbd9cda09de7d930934e9353d5714cb36b2f489ef5a1931b4b491ffd9",
+              "checkpoint_before": "b28658f9de6f44b6b4631d5004524e73cbba78ca7044911e8307ac3422610a04",
+              "index": 5
+            },
+            "update_index": 5
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "none",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "bfc22f5b7b163365f2f68d3d297ed4f1dfa0b9587c048ac8a47812510f27dc19",
+              "checkpoint_before": "6f20324cbd9cda09de7d930934e9353d5714cb36b2f489ef5a1931b4b491ffd9",
+              "index": 6
+            },
+            "update_index": 6
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "c3b42ada8abde2bb7298e402c01e49591501b1c2d009cd4ff6b167b402b20272",
+              "checkpoint_before": "bfc22f5b7b163365f2f68d3d297ed4f1dfa0b9587c048ac8a47812510f27dc19",
+              "index": 7
+            },
+            "update_index": 7
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "66abf4cb41bae531d73dd7e4c7b01721c023931babc7fe523e6ce1f96cfe22d9",
+              "checkpoint_before": "c3b42ada8abde2bb7298e402c01e49591501b1c2d009cd4ff6b167b402b20272",
+              "index": 8
+            },
+            "update_index": 8
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "8c941a2149beb8b2f57da7cf80a4f963fee567711094758ed72b38bebe483b28",
+              "checkpoint_before": "66abf4cb41bae531d73dd7e4c7b01721c023931babc7fe523e6ce1f96cfe22d9",
+              "index": 9
+            },
+            "update_index": 9
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "4a364c1857e296aad8d974f1cd66aec312248d971cbfad03efe02bce69d97c77",
+              "checkpoint_before": "8c941a2149beb8b2f57da7cf80a4f963fee567711094758ed72b38bebe483b28",
+              "index": 10
+            },
+            "update_index": 10
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "205227ebbee9ff097dcca7d8b7d72b5a1d19b574ae83eb05c9a918c978b265a6",
+              "checkpoint_before": "4a364c1857e296aad8d974f1cd66aec312248d971cbfad03efe02bce69d97c77",
+              "index": 11
+            },
+            "update_index": 11
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2dd1fc9c61a133298907aeef6944a63e8735556e003453a9067bf546e4ed981e",
+              "checkpoint_before": "205227ebbee9ff097dcca7d8b7d72b5a1d19b574ae83eb05c9a918c978b265a6",
+              "index": 12
+            },
+            "update_index": 12
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2fbb9f170aab83811f171a57ac4b96deced33f031b9e81283ce3e8b69a1987cd",
+              "checkpoint_before": "2dd1fc9c61a133298907aeef6944a63e8735556e003453a9067bf546e4ed981e",
+              "index": 13
+            },
+            "update_index": 13
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "4a8519667ecad78b1fac429c8b14b4adff77a0e1e1901c22a2c44a7807333802",
+              "checkpoint_before": "2fbb9f170aab83811f171a57ac4b96deced33f031b9e81283ce3e8b69a1987cd",
+              "index": 14
+            },
+            "update_index": 14
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "acf64198ca102a1c9cae96086af64433eba7f4b2dbff96a732eff9304f9e8249",
+              "checkpoint_before": "4a8519667ecad78b1fac429c8b14b4adff77a0e1e1901c22a2c44a7807333802",
+              "index": 15
+            },
+            "update_index": 15
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "82fe2eb01e85b5776d5ac70b7b68f04bb5afd720d169b4238837f0ecb28b1940",
+              "checkpoint_before": "acf64198ca102a1c9cae96086af64433eba7f4b2dbff96a732eff9304f9e8249",
+              "index": 16
+            },
+            "update_index": 16
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "c63e5c61794e0e1b0a4bc40672f2ee8aef9183546dca229575db217524182551",
+              "checkpoint_before": "82fe2eb01e85b5776d5ac70b7b68f04bb5afd720d169b4238837f0ecb28b1940",
+              "index": 17
+            },
+            "update_index": 17
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "074d73d3d92424798b0986024f0722f134564ea3cbc3c56b5438bf669a2e4164",
+              "checkpoint_before": "c63e5c61794e0e1b0a4bc40672f2ee8aef9183546dca229575db217524182551",
+              "index": 18
+            },
+            "update_index": 18
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "d937d4c355a90fcabf6880ac30a676f225b67ace3ede46089fa78c346d5af0d4",
+              "checkpoint_before": "074d73d3d92424798b0986024f0722f134564ea3cbc3c56b5438bf669a2e4164",
+              "index": 19
+            },
+            "update_index": 19
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2f4a68f97dca2220d5241423911e959842fcdb49b362b93c50866b3d78a66779",
+              "checkpoint_before": "d937d4c355a90fcabf6880ac30a676f225b67ace3ede46089fa78c346d5af0d4",
+              "index": 20
+            },
+            "update_index": 20
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "0f7b9ad2a9002a4bf18cd51d81d8a94ca7f06aab9a6ea4132b7441603d4c5a30",
+              "checkpoint_before": "2f4a68f97dca2220d5241423911e959842fcdb49b362b93c50866b3d78a66779",
+              "index": 21
+            },
+            "update_index": 21
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "72a9c69cca103f00f1ff9cbb485cbe6e4ce3f6c3164e7180d19dd7813f20189f",
+              "checkpoint_before": "0f7b9ad2a9002a4bf18cd51d81d8a94ca7f06aab9a6ea4132b7441603d4c5a30",
+              "index": 22
+            },
+            "update_index": 22
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "93811bb4af3917136448502512588cca71a2ab4c8982bad2336c1de93ed3656f",
+              "checkpoint_before": "72a9c69cca103f00f1ff9cbb485cbe6e4ce3f6c3164e7180d19dd7813f20189f",
+              "index": 23
+            },
+            "update_index": 23
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "88b327f998dbec2e35cb8c48088c0af47a5fbf79b29557521d890898930907c5",
+              "checkpoint_before": "93811bb4af3917136448502512588cca71a2ab4c8982bad2336c1de93ed3656f",
+              "index": 24
+            },
+            "update_index": 24
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "d658793c91e5c5a831832e2bddba60ff7c89bc784b1c24300534e74e49e14bd7",
+              "checkpoint_before": "88b327f998dbec2e35cb8c48088c0af47a5fbf79b29557521d890898930907c5",
+              "index": 25
+            },
+            "update_index": 25
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "e689ae6258a4383d9def9d50b5ae2da054afe05e4f677ac16befe80041d23467",
+              "checkpoint_before": "d658793c91e5c5a831832e2bddba60ff7c89bc784b1c24300534e74e49e14bd7",
+              "index": 26
+            },
+            "update_index": 26
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "814ffe872a1fcdce8891eb924385ca53205d36b20da9b65c287ab6fd82e7b580",
+              "checkpoint_before": "e689ae6258a4383d9def9d50b5ae2da054afe05e4f677ac16befe80041d23467",
+              "index": 27
+            },
+            "update_index": 27
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "275046cf6b71fc5f8e569e79082a6793d7a71441c2cf5ccb23749146b11fffa5",
+              "checkpoint_before": "814ffe872a1fcdce8891eb924385ca53205d36b20da9b65c287ab6fd82e7b580",
+              "index": 28
+            },
+            "update_index": 28
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "57735bce0e0b81b63b6723fe77ba4629b1026ca7cb606121c9c6247ac97d033d",
+              "checkpoint_before": "275046cf6b71fc5f8e569e79082a6793d7a71441c2cf5ccb23749146b11fffa5",
+              "index": 29
+            },
+            "update_index": 29
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "1b6e279f3771059cf3d99b4ed75320425512644f73f3353758c3a89da0c2dffc",
+              "checkpoint_before": "57735bce0e0b81b63b6723fe77ba4629b1026ca7cb606121c9c6247ac97d033d",
+              "index": 30
+            },
+            "update_index": 30
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "c6826932784f184c91fe29eca7e6e01ba0c9f52b8d6083bfa1d458d6eae22818",
+              "checkpoint_before": "1b6e279f3771059cf3d99b4ed75320425512644f73f3353758c3a89da0c2dffc",
+              "index": 31
+            },
+            "update_index": 31
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "3e0d1e8ae9f571cb0ee771c91e2adb31a93f29f90ca2b9d453606ccd6ab36386",
+              "checkpoint_before": "c6826932784f184c91fe29eca7e6e01ba0c9f52b8d6083bfa1d458d6eae22818",
+              "index": 32
+            },
+            "update_index": 32
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "964675e5ca3a6252a0d54891916f9a3a3c9649805ae26e1474cece68991e6d51",
+              "checkpoint_before": "3e0d1e8ae9f571cb0ee771c91e2adb31a93f29f90ca2b9d453606ccd6ab36386",
+              "index": 33
+            },
+            "update_index": 33
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "direct",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "b5fc858821c5ea7650bc5c6b82ced34d46722d18f3e2d93d26427ef4be24eac0",
+              "checkpoint_before": "964675e5ca3a6252a0d54891916f9a3a3c9649805ae26e1474cece68991e6d51",
+              "index": 34
+            },
+            "update_index": 34
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "c2eea93cb912c61e7dad988cf7582af23fd1a775fadaeef03ccf13133283ee17",
+              "checkpoint_before": "b5fc858821c5ea7650bc5c6b82ced34d46722d18f3e2d93d26427ef4be24eac0",
+              "index": 35
+            },
+            "update_index": 35
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "34e8e8783503e73274a220a0e03a341706914e43193701ba1bead3bee242c123",
+              "checkpoint_before": "c2eea93cb912c61e7dad988cf7582af23fd1a775fadaeef03ccf13133283ee17",
+              "index": 36
+            },
+            "update_index": 36
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "9262f458ce5989db70d45a318def64da5b85a772f1df4a3ba2435030a5ea953d",
+              "checkpoint_before": "34e8e8783503e73274a220a0e03a341706914e43193701ba1bead3bee242c123",
+              "index": 37
+            },
+            "update_index": 37
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "ec8a5a9d81aa2a4a332735b551ab29bde14d2e8a522e5c091514e1fb55cd0fd8",
+              "checkpoint_before": "9262f458ce5989db70d45a318def64da5b85a772f1df4a3ba2435030a5ea953d",
+              "index": 38
+            },
+            "update_index": 38
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "447567eaf7fe3a38aa795e72c40471c638e389d67369a52bb18fd3fd32a8b684",
+              "checkpoint_before": "ec8a5a9d81aa2a4a332735b551ab29bde14d2e8a522e5c091514e1fb55cd0fd8",
+              "index": 39
+            },
+            "update_index": 39
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "931d0d4ae4cbb5791b9d6ec782cc4113b9aa7b691e470d5b0193ac25a0452263",
+              "checkpoint_before": "447567eaf7fe3a38aa795e72c40471c638e389d67369a52bb18fd3fd32a8b684",
+              "index": 40
+            },
+            "update_index": 40
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "128650bddba4ab06b5e2ea61768adeea53ffa8e7d08864a905abd81429dddec7",
+              "checkpoint_before": "931d0d4ae4cbb5791b9d6ec782cc4113b9aa7b691e470d5b0193ac25a0452263",
+              "index": 41
+            },
+            "update_index": 41
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "9a012c45d1942ab8bea0e34d3f7bcc3d0d2bb4dd2d026d5512a7530fabbd29b8",
+              "checkpoint_before": "128650bddba4ab06b5e2ea61768adeea53ffa8e7d08864a905abd81429dddec7",
+              "index": 42
+            },
+            "update_index": 42
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "fc7a4d744a67a13e2159a2619e43bcd589bd7533b9c2d3201b40d4f5146ce5e2",
+              "checkpoint_before": "9a012c45d1942ab8bea0e34d3f7bcc3d0d2bb4dd2d026d5512a7530fabbd29b8",
+              "index": 43
+            },
+            "update_index": 43
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "f121b29c20757fd81952c6436246f7c1009961e8f88a72fc7c5dc9cedbe6505b",
+              "checkpoint_before": "fc7a4d744a67a13e2159a2619e43bcd589bd7533b9c2d3201b40d4f5146ce5e2",
+              "index": 44
+            },
+            "update_index": 44
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "e6280cd5942ba5cc96060a68e123304c2294e42fd66b7780ba43b8fd3a3c0726",
+              "checkpoint_before": "f121b29c20757fd81952c6436246f7c1009961e8f88a72fc7c5dc9cedbe6505b",
+              "index": 45
+            },
+            "update_index": 45
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "332b4a8d90dcd075dbd1826aa5d23db255010e3f43951a8b5cf19d8c099f9e8e",
+              "checkpoint_before": "e6280cd5942ba5cc96060a68e123304c2294e42fd66b7780ba43b8fd3a3c0726",
+              "index": 46
+            },
+            "update_index": 46
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "62489554cc12fb7047532c034c5a9b63e31fe0c2df9aa1c3414a6e08dc208f5d",
+              "checkpoint_before": "332b4a8d90dcd075dbd1826aa5d23db255010e3f43951a8b5cf19d8c099f9e8e",
+              "index": 47
+            },
+            "update_index": 47
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "99566b545de3e81e17db2c149e016e73cba496a249e5c4b6277e9ac8932d440e",
+              "checkpoint_before": "62489554cc12fb7047532c034c5a9b63e31fe0c2df9aa1c3414a6e08dc208f5d",
+              "index": 48
+            },
+            "update_index": 48
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "fae351e05497bcf9c00fd67bfe7249c5efd34683fa4d7662f9e34c41585e3750",
+              "checkpoint_before": "99566b545de3e81e17db2c149e016e73cba496a249e5c4b6277e9ac8932d440e",
+              "index": 49
+            },
+            "update_index": 49
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "a3b6f07126e41a75f5de57ca4dc407ca3da612c791bb7c21edef9e5f32534049",
+              "checkpoint_before": "fae351e05497bcf9c00fd67bfe7249c5efd34683fa4d7662f9e34c41585e3750",
+              "index": 50
+            },
+            "update_index": 50
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "a75e90ad03551570f2a3566a5cc8af0b04be7a7bc6e3940f48f9c795862401c7",
+              "checkpoint_before": "a3b6f07126e41a75f5de57ca4dc407ca3da612c791bb7c21edef9e5f32534049",
+              "index": 51
+            },
+            "update_index": 51
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "aa8dd32274678251a9ec099054ebf4801386562e56ae0a110f7dc822570db685",
+              "checkpoint_before": "a75e90ad03551570f2a3566a5cc8af0b04be7a7bc6e3940f48f9c795862401c7",
+              "index": 52
+            },
+            "update_index": 52
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "721d3471866aaead86f0da351f3c5f50d56d54fe08d9e481da1e770d886bc275",
+              "checkpoint_before": "aa8dd32274678251a9ec099054ebf4801386562e56ae0a110f7dc822570db685",
+              "index": 53
+            },
+            "update_index": 53
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "f9d70bde52e566b524ba3a8ae4bce13bb16c7ddaf047e17f17d74497ce809887",
+              "checkpoint_before": "721d3471866aaead86f0da351f3c5f50d56d54fe08d9e481da1e770d886bc275",
+              "index": 54
+            },
+            "update_index": 54
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "de526427f7ed3d9e66cfb891ac7601707e072f23d2fbaaeb658880aae58bdf8a",
+              "checkpoint_before": "f9d70bde52e566b524ba3a8ae4bce13bb16c7ddaf047e17f17d74497ce809887",
+              "index": 55
+            },
+            "update_index": 55
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "286685b4f1355e1f85b3c315354e2bc3f0769e4c695fb9ca99c9831d4f18a46c",
+              "checkpoint_before": "de526427f7ed3d9e66cfb891ac7601707e072f23d2fbaaeb658880aae58bdf8a",
+              "index": 56
+            },
+            "update_index": 56
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "66b9e1cf5e5e7f657300ddde5c774937426bcd01c3fc5a0ec3f96f57574c48ea",
+              "checkpoint_before": "286685b4f1355e1f85b3c315354e2bc3f0769e4c695fb9ca99c9831d4f18a46c",
+              "index": 57
+            },
+            "update_index": 57
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "absent",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "95c00fa46d80109df02036225259d7939682a682ef1355c7210c0f7dce5c855d",
+              "checkpoint_before": "66b9e1cf5e5e7f657300ddde5c774937426bcd01c3fc5a0ec3f96f57574c48ea",
+              "index": 58
+            },
+            "update_index": 58
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "d5c8652511089ddcae6ba03c9bd877d4c139314625f9fc214eeae226c08391d4",
+              "checkpoint_before": "95c00fa46d80109df02036225259d7939682a682ef1355c7210c0f7dce5c855d",
+              "index": 59
+            },
+            "update_index": 59
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "direct",
+            "operation": "REACHED_VIA",
+            "phase": "component-route",
+            "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "absent",
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "23718131b72a9a036308d2887229a36b4a6a05edac6c3e9775dd5107ac338887",
+              "checkpoint_before": "d5c8652511089ddcae6ba03c9bd877d4c139314625f9fc214eeae226c08391d4",
+              "index": 60
+            },
+            "update_index": 60
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "b7c77b4182fd9f74e86ce3fda4917f830e3c383be8fa6a5f3b871dbeaf911074",
+              "checkpoint_before": "23718131b72a9a036308d2887229a36b4a6a05edac6c3e9775dd5107ac338887",
+              "index": 61
+            },
+            "update_index": 61
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "732b2a17221fdf79cf6a4c5ff69e87ecf2c6968deb065b6756aac06525aeab4c",
+              "checkpoint_before": "b7c77b4182fd9f74e86ce3fda4917f830e3c383be8fa6a5f3b871dbeaf911074",
+              "index": 62
+            },
+            "update_index": 62
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+              "checkpoint_before": "732b2a17221fdf79cf6a4c5ff69e87ecf2c6968deb065b6756aac06525aeab4c",
+              "index": 63
+            },
+            "update_index": 63
+          }
+        ],
+        "primary_measure": {
+          "after_accuracy": 1.0,
+          "after_correct": 3,
+          "after_total": 3,
+          "before_accuracy": 0.6666666666666666,
+          "before_correct": 2,
+          "before_total": 3,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 1,
+              "total": 1
+            },
+            "LIST_PARTS": {
+              "correct": 1,
+              "total": 1
+            },
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 1
+            }
+          },
+          "delta_correct": 1
+        },
+        "probe_geometry": {
+          "equal_item_counts": 40,
+          "note": "an empty answer cannot offer equal item counts; the alternative is one foreign part and one indirect part, and the geometry is reported rather than assumed balanced",
+          "questions": 44,
+          "unequal_because_the_answer_is_empty": 3,
+          "unequal_detail": [
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "5543a2696153b4212a126a661c5656d63bd08ca7316ef59bbb6f718e27cc4948"
+            },
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "acaf9e5d6f78bed16fc21bb603a3db7d2ad118c603b74dbe040143d50db85754"
+            },
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "f359a8c2dbc95e170c9ef69169db2f860daefe5ecab8b221b192d86ce01f9955"
+            },
+            {
+              "answer_is_empty": false,
+              "item_counts": [
+                1,
+                1,
+                2
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "c7fcf3947fa65fcac674574901da621efd9983f25a5aea2a8c0093398391e42e"
+            }
+          ],
+          "unequal_item_counts": 4
+        },
+        "probe_measure": {
+          "after_accuracy": 0.20454545454545456,
+          "after_correct": 9,
+          "after_total": 44,
+          "before_accuracy": 0.2727272727272727,
+          "before_correct": 12,
+          "before_total": 44,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 2,
+              "total": 14
+            },
+            "LIST_PARTS": {
+              "correct": 4,
+              "total": 5
+            },
+            "REACHED_VIA": {
+              "correct": 3,
+              "total": 25
+            }
+          },
+          "delta_correct": -3
+        },
+        "steps": 64,
+        "stopping_reason": "blocks complete",
+        "whole_answer_corrections": 24
+      },
+      "final_answer_only": {
+        "automatic_retries": 0,
+        "checkpoint": {
+          "identity": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+          "saved": {
+            "identity": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+            "path": "/opt/cas-graph6curr/package/results/artifacts/checkpoint_final_answer_only.pt",
+            "sha256": "67f18a4cb93c1db15a7d702a3b32e4757eb9f94b8f2ed14ac0a1ce17a1c59142"
+          },
+          "verified": true
+        },
+        "component_corrections": 0,
+        "component_measure": {
+          "after_accuracy": 0.2,
+          "after_correct": 1,
+          "after_total": 5,
+          "before_accuracy": 0.4,
+          "before_correct": 2,
+          "before_total": 5,
+          "by_operation_after": {
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 5
+            }
+          },
+          "delta_correct": -1
+        },
+        "condition": "final_answer_only",
+        "containment": {
+          "contained": true,
+          "forbidden_changes": [],
+          "permitted_changes": [
+            "left.weight",
+            "merge.weight",
+            "right.weight"
+          ],
+          "total_changed": 3
+        },
+        "independent_note": "'independent' means no worked answer was supplied during prediction; the taught questions have not become unseen questions",
+        "learner_index_identity": "1ea3e069063a0d5ca85fd585cf05be3dcc8fa1ed0c0dcf963d164d39069883a0",
+        "planned_steps": 64,
+        "prediction_summary": {
+          "by_phase": {
+            "whole-answer": 64
+          },
+          "corrections_applied": 64,
+          "missing_measurement_rule": "unavailable, never zero",
+          "predictions_taken_before_their_update": true,
+          "recorded_predictions": 64,
+          "recorded_updates": 64,
+          "scores_unavailable_count": 64
+        },
+        "predictions": [
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Rim",
+              "Wheel"
+            ],
+            "selected_is_correct": false,
+            "update_identity": {
+              "checkpoint_after": "c24d9be7b299ffdbba8d555e11858ed07f396f39a664e235a01007ae583de329",
+              "checkpoint_before": "1063cc3ab1b1ca752e0b6a92e8fd38882f216be5a94336e358bc8c8219873793",
+              "index": 0
+            },
+            "update_index": 0
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "05bb710a07116aea940b2bc784880e85fe838189478699bfe0bb6711889f4a94",
+              "checkpoint_before": "c24d9be7b299ffdbba8d555e11858ed07f396f39a664e235a01007ae583de329",
+              "index": 1
+            },
+            "update_index": 1
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 1,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "438232f30af7877ecf37583091b88ca15919b1adff18bf2c8a1b5b45a0d51c09",
+              "checkpoint_before": "05bb710a07116aea940b2bc784880e85fe838189478699bfe0bb6711889f4a94",
+              "index": 2
+            },
+            "update_index": 2
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "a38855980e3829495645d93c5717ae0e7675ff661ae6c527a659de47656d7d53",
+              "checkpoint_before": "438232f30af7877ecf37583091b88ca15919b1adff18bf2c8a1b5b45a0d51c09",
+              "index": 3
+            },
+            "update_index": 3
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "d0a89a3288dad680da0044762e00a72442bce29b1ea5c4fe551b1fe4e4b37bd2",
+              "checkpoint_before": "a38855980e3829495645d93c5717ae0e7675ff661ae6c527a659de47656d7d53",
+              "index": 4
+            },
+            "update_index": 4
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 2,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "ed6ad7704130bf1a39186090570b6e3df87df6104db016588533c2581e3f5e1e",
+              "checkpoint_before": "d0a89a3288dad680da0044762e00a72442bce29b1ea5c4fe551b1fe4e4b37bd2",
+              "index": 5
+            },
+            "update_index": 5
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "942378487821bafe2a28c903dd79425813adf5d2b3ccda7b976ad6278848acc5",
+              "checkpoint_before": "ed6ad7704130bf1a39186090570b6e3df87df6104db016588533c2581e3f5e1e",
+              "index": 6
+            },
+            "update_index": 6
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "78449d91a61cd09673e4cd2366df43349e10e59c74db50427fef035cdb923acb",
+              "checkpoint_before": "942378487821bafe2a28c903dd79425813adf5d2b3ccda7b976ad6278848acc5",
+              "index": 7
+            },
+            "update_index": 7
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 3,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2481dce776d81e6b5a5c462d867ab4f339d9243a5de53bf5afb470842a2cdd70",
+              "checkpoint_before": "78449d91a61cd09673e4cd2366df43349e10e59c74db50427fef035cdb923acb",
+              "index": 8
+            },
+            "update_index": 8
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "bd5cbfe028f1a8b5603bf5e56120ea4e226a02c8e19132c1cb6b2c198c1c9d7d",
+              "checkpoint_before": "2481dce776d81e6b5a5c462d867ab4f339d9243a5de53bf5afb470842a2cdd70",
+              "index": 9
+            },
+            "update_index": 9
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "f2ce3f53169ac160bb45b23ea44d5cc7641a8a93adfa179a807e6aed5f338b83",
+              "checkpoint_before": "bd5cbfe028f1a8b5603bf5e56120ea4e226a02c8e19132c1cb6b2c198c1c9d7d",
+              "index": 10
+            },
+            "update_index": 10
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 4,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "05354b43dce254a366ca4c5096b85396d8f736951b5cdc1dcf6f083f391472c6",
+              "checkpoint_before": "f2ce3f53169ac160bb45b23ea44d5cc7641a8a93adfa179a807e6aed5f338b83",
+              "index": 11
+            },
+            "update_index": 11
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "d658d97ca339fcf6caf5ea5a412fa8214182a320e5d674d31d75d1193dd1821d",
+              "checkpoint_before": "05354b43dce254a366ca4c5096b85396d8f736951b5cdc1dcf6f083f391472c6",
+              "index": 12
+            },
+            "update_index": 12
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "5f80bb0fbdc2fb55ba421766b71360f0ded35a1c974edcc4de478570e39861f3",
+              "checkpoint_before": "d658d97ca339fcf6caf5ea5a412fa8214182a320e5d674d31d75d1193dd1821d",
+              "index": 13
+            },
+            "update_index": 13
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 5,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "070bda198f4e7a4fa526dd144f2b6b7238ff43ab06f1ea14ddb808c594a50d7b",
+              "checkpoint_before": "5f80bb0fbdc2fb55ba421766b71360f0ded35a1c974edcc4de478570e39861f3",
+              "index": 14
+            },
+            "update_index": 14
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "fa9d4ce51315cf69345429ae3bc68627922424d4ca9b46f44702c4c27321631d",
+              "checkpoint_before": "070bda198f4e7a4fa526dd144f2b6b7238ff43ab06f1ea14ddb808c594a50d7b",
+              "index": 15
+            },
+            "update_index": 15
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "79b809c42768829c1f4b9dc664c4dd1ba014af4290995c66eb5638690f5783bd",
+              "checkpoint_before": "fa9d4ce51315cf69345429ae3bc68627922424d4ca9b46f44702c4c27321631d",
+              "index": 16
+            },
+            "update_index": 16
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 6,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "da84fe493639b85363b4f16b6825320eaaf439438b46783a1bbd2d8a4224e1ec",
+              "checkpoint_before": "79b809c42768829c1f4b9dc664c4dd1ba014af4290995c66eb5638690f5783bd",
+              "index": 17
+            },
+            "update_index": 17
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2c0c7ee8610909932b98ca72055a623272d31fb81e3d5fed8732a71dacf353c3",
+              "checkpoint_before": "da84fe493639b85363b4f16b6825320eaaf439438b46783a1bbd2d8a4224e1ec",
+              "index": 18
+            },
+            "update_index": 18
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "397ca1ff1eea1a44cb5233799095b61016b4baafba44649358ca6fdd0c5cf227",
+              "checkpoint_before": "2c0c7ee8610909932b98ca72055a623272d31fb81e3d5fed8732a71dacf353c3",
+              "index": 19
+            },
+            "update_index": 19
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 7,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "9e4ef120176d82637aaf6e11db015014233c9bcf736a9ab5873fcbe5c37e5f2e",
+              "checkpoint_before": "397ca1ff1eea1a44cb5233799095b61016b4baafba44649358ca6fdd0c5cf227",
+              "index": 20
+            },
+            "update_index": 20
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "beead965ad9282cbdbe38e9d8d7956bb2c585452b3dd2a12fd45ee4b82f32221",
+              "checkpoint_before": "9e4ef120176d82637aaf6e11db015014233c9bcf736a9ab5873fcbe5c37e5f2e",
+              "index": 21
+            },
+            "update_index": 21
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "ae7aa67136da5909f9685c8c039d5da59e6352a20e572389bd3cfc4b6fc28f5e",
+              "checkpoint_before": "beead965ad9282cbdbe38e9d8d7956bb2c585452b3dd2a12fd45ee4b82f32221",
+              "index": 22
+            },
+            "update_index": 22
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 8,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "90aba8394a6c766b467ab9a0100972adf49a4bb04632e93cc71deb4534abafff",
+              "checkpoint_before": "ae7aa67136da5909f9685c8c039d5da59e6352a20e572389bd3cfc4b6fc28f5e",
+              "index": 23
+            },
+            "update_index": 23
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 9,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "340150e2da558bef730a8da9a92aae1301a0061f45dcd60986246160be386ee9",
+              "checkpoint_before": "90aba8394a6c766b467ab9a0100972adf49a4bb04632e93cc71deb4534abafff",
+              "index": 24
+            },
+            "update_index": 24
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 9,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "a7752328b32cf4335b8ed6a553402ef7f3b39ea29636672c8826719e322a6268",
+              "checkpoint_before": "340150e2da558bef730a8da9a92aae1301a0061f45dcd60986246160be386ee9",
+              "index": 25
+            },
+            "update_index": 25
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 9,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "5cda526876abc43701cabe82d8ba2de582c15db7dec7c297d5fe23b4d6381fc7",
+              "checkpoint_before": "a7752328b32cf4335b8ed6a553402ef7f3b39ea29636672c8826719e322a6268",
+              "index": 26
+            },
+            "update_index": 26
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 10,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "9a049f2e0bc2d57b89b5ebf41558b1c1ea6d2e8c2913b6811e699664eb53ff6a",
+              "checkpoint_before": "5cda526876abc43701cabe82d8ba2de582c15db7dec7c297d5fe23b4d6381fc7",
+              "index": 27
+            },
+            "update_index": 27
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 10,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "da3b63a9b7fabe1857d86868f333b3fda1c6b2f70020b8a6f07e73bccb77aaf8",
+              "checkpoint_before": "9a049f2e0bc2d57b89b5ebf41558b1c1ea6d2e8c2913b6811e699664eb53ff6a",
+              "index": 28
+            },
+            "update_index": 28
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 10,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "0afbe2694d557bfde224fa11aca1409246d9155e212e679e1655e424f25b5df2",
+              "checkpoint_before": "da3b63a9b7fabe1857d86868f333b3fda1c6b2f70020b8a6f07e73bccb77aaf8",
+              "index": 29
+            },
+            "update_index": 29
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 11,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "a2e146730a46dbf7b66f0d539f6b0b0826cdd47306dccff67118449fd93171bc",
+              "checkpoint_before": "0afbe2694d557bfde224fa11aca1409246d9155e212e679e1655e424f25b5df2",
+              "index": 30
+            },
+            "update_index": 30
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 11,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "b1707931251045984dd696abf4b8dcb0eb8d087100fd6ed75da6ad47839dd396",
+              "checkpoint_before": "a2e146730a46dbf7b66f0d539f6b0b0826cdd47306dccff67118449fd93171bc",
+              "index": 31
+            },
+            "update_index": 31
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 11,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2e4fd301242bfb6a6d319e60578aa9f5b06469653b89ba276328192d585fd76f",
+              "checkpoint_before": "b1707931251045984dd696abf4b8dcb0eb8d087100fd6ed75da6ad47839dd396",
+              "index": 32
+            },
+            "update_index": 32
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 12,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "87823eeca19720816d08398e1bac150a0d30cab89b092b62a5ccf048caf4ab06",
+              "checkpoint_before": "2e4fd301242bfb6a6d319e60578aa9f5b06469653b89ba276328192d585fd76f",
+              "index": 33
+            },
+            "update_index": 33
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 12,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "c8e904d991087142e3461400eb8e978d7e7a5d71012e62ee25e3627014b75990",
+              "checkpoint_before": "87823eeca19720816d08398e1bac150a0d30cab89b092b62a5ccf048caf4ab06",
+              "index": 34
+            },
+            "update_index": 34
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 12,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "31d36f183638f62a319db6e841a4b6d09cb41b9f6d190eadc2c05c8e75747892",
+              "checkpoint_before": "c8e904d991087142e3461400eb8e978d7e7a5d71012e62ee25e3627014b75990",
+              "index": 35
+            },
+            "update_index": 35
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 13,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "0cb3f2770c335497ba6e3cd2873b5379f51f3c31bb2232e5e2cc81604e8bfc29",
+              "checkpoint_before": "31d36f183638f62a319db6e841a4b6d09cb41b9f6d190eadc2c05c8e75747892",
+              "index": 36
+            },
+            "update_index": 36
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 13,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "442b34f22b54ef201f685637af2268776f6767bf177cab2ec213a3d35d3fd221",
+              "checkpoint_before": "0cb3f2770c335497ba6e3cd2873b5379f51f3c31bb2232e5e2cc81604e8bfc29",
+              "index": 37
+            },
+            "update_index": 37
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 13,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "8f891d23a726b1d634a3d39ddf4aa974a5c7f265eb4d4cfc9862073f3f403740",
+              "checkpoint_before": "442b34f22b54ef201f685637af2268776f6767bf177cab2ec213a3d35d3fd221",
+              "index": 38
+            },
+            "update_index": 38
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 14,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2d76b37814b0ab4865779154de3098ab871373679d6862239d0a71f97d07f4bb",
+              "checkpoint_before": "8f891d23a726b1d634a3d39ddf4aa974a5c7f265eb4d4cfc9862073f3f403740",
+              "index": 39
+            },
+            "update_index": 39
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 14,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "42545e4b715b19b1408a913ca8e24d7d366738bab336c3b6668ed23d47bf5382",
+              "checkpoint_before": "2d76b37814b0ab4865779154de3098ab871373679d6862239d0a71f97d07f4bb",
+              "index": 40
+            },
+            "update_index": 40
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 14,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2efacf323ae66f2d369d4ff5cf638742513196ffa5681e77be209542fd3cc1d3",
+              "checkpoint_before": "42545e4b715b19b1408a913ca8e24d7d366738bab336c3b6668ed23d47bf5382",
+              "index": 41
+            },
+            "update_index": 41
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 15,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "e860c384a2797e3018dbebb0a6e336d754d06cdceb58f33f9ce7c3de12760936",
+              "checkpoint_before": "2efacf323ae66f2d369d4ff5cf638742513196ffa5681e77be209542fd3cc1d3",
+              "index": 42
+            },
+            "update_index": 42
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 15,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "e32157c874bb93c8185c461ae8b6d06855d468a1e566e490e128ada2e212442e",
+              "checkpoint_before": "e860c384a2797e3018dbebb0a6e336d754d06cdceb58f33f9ce7c3de12760936",
+              "index": 43
+            },
+            "update_index": 43
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 15,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "87734707885f7cdeceef54fef8fae4946d90afc34b3ad14a081cb1208dd7c3c2",
+              "checkpoint_before": "e32157c874bb93c8185c461ae8b6d06855d468a1e566e490e128ada2e212442e",
+              "index": 44
+            },
+            "update_index": 44
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 16,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "1bb3d762a39de1dc14adc87d17dc0b8906d39016678b3f28140ff096623a3662",
+              "checkpoint_before": "87734707885f7cdeceef54fef8fae4946d90afc34b3ad14a081cb1208dd7c3c2",
+              "index": 45
+            },
+            "update_index": 45
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 16,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2973ae25856fb2c0cfd9559207766a6782baeeefed5219a0524828df9cabd47a",
+              "checkpoint_before": "1bb3d762a39de1dc14adc87d17dc0b8906d39016678b3f28140ff096623a3662",
+              "index": 46
+            },
+            "update_index": 46
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 16,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "7b0afecee19ca4589511f8d4c26df3cd3d12b200f65b6ba5be019d1586aa3914",
+              "checkpoint_before": "2973ae25856fb2c0cfd9559207766a6782baeeefed5219a0524828df9cabd47a",
+              "index": 47
+            },
+            "update_index": 47
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 17,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "c4692fb1d54ef3bbf92ccfeb68b2fa8735da3f345f3db099562c19519652640d",
+              "checkpoint_before": "7b0afecee19ca4589511f8d4c26df3cd3d12b200f65b6ba5be019d1586aa3914",
+              "index": 48
+            },
+            "update_index": 48
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 17,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "d671062bdeb3e73f02359381937b54beea4973ee135d09927501399283bc3b68",
+              "checkpoint_before": "c4692fb1d54ef3bbf92ccfeb68b2fa8735da3f345f3db099562c19519652640d",
+              "index": 49
+            },
+            "update_index": 49
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 17,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "86d472958c6fe17f196d7fbf22975cdea99fd65f41009b88b1e67dd62ae9c2b4",
+              "checkpoint_before": "d671062bdeb3e73f02359381937b54beea4973ee135d09927501399283bc3b68",
+              "index": 50
+            },
+            "update_index": 50
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 18,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "8741b0045dcb0ef56182bd05c2855733625f00b306e0119ede174c4e58f5b908",
+              "checkpoint_before": "86d472958c6fe17f196d7fbf22975cdea99fd65f41009b88b1e67dd62ae9c2b4",
+              "index": 51
+            },
+            "update_index": 51
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 18,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "f91f45ac777c67f4ee34a96f5036dc2cfd77ce86d601ffc26823eef5b11b4501",
+              "checkpoint_before": "8741b0045dcb0ef56182bd05c2855733625f00b306e0119ede174c4e58f5b908",
+              "index": 52
+            },
+            "update_index": 52
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 18,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "b00ab04a47e121d21e258a44abc796f4e4494bf40e2964573d92aa4d21c77413",
+              "checkpoint_before": "f91f45ac777c67f4ee34a96f5036dc2cfd77ce86d601ffc26823eef5b11b4501",
+              "index": 53
+            },
+            "update_index": 53
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 19,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "b4b8d667da5b916e7eb442504caaee14cc50c52ff459184d2ef4c1c65d87045a",
+              "checkpoint_before": "b00ab04a47e121d21e258a44abc796f4e4494bf40e2964573d92aa4d21c77413",
+              "index": 54
+            },
+            "update_index": 54
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 19,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "cb014d213811176fea6e3bb5af5b5456bfd5f39eef247a838cacab3ca8ebf5ef",
+              "checkpoint_before": "b4b8d667da5b916e7eb442504caaee14cc50c52ff459184d2ef4c1c65d87045a",
+              "index": 55
+            },
+            "update_index": 55
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 19,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "2bd710d4d8321f9eacc9a9a83c9e37e1244ac1712bfbb1b7dd288cab1bd44e8f",
+              "checkpoint_before": "cb014d213811176fea6e3bb5af5b5456bfd5f39eef247a838cacab3ca8ebf5ef",
+              "index": 56
+            },
+            "update_index": 56
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 20,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "1e7d506b5c186fea14da77ae14845897e0f8dd19ac5a1265559382c2ea1ffd4f",
+              "checkpoint_before": "2bd710d4d8321f9eacc9a9a83c9e37e1244ac1712bfbb1b7dd288cab1bd44e8f",
+              "index": 57
+            },
+            "update_index": 57
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 20,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "b9610f7a917e78b557977c818f946478f52ebcec0abe95379d7d0d16a8cd5fc3",
+              "checkpoint_before": "1e7d506b5c186fea14da77ae14845897e0f8dd19ac5a1265559382c2ea1ffd4f",
+              "index": 58
+            },
+            "update_index": 58
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 20,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "c84c08a424964027ccad651f03cad9ff89f3fa6216b4f354a4aee94dca17eb85",
+              "checkpoint_before": "b9610f7a917e78b557977c818f946478f52ebcec0abe95379d7d0d16a8cd5fc3",
+              "index": 59
+            },
+            "update_index": 59
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 21,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "a789454cd3f356e19e05fe1a271e0e1b4833f42f8b50d790393413d7c16fde75",
+              "checkpoint_before": "c84c08a424964027ccad651f03cad9ff89f3fa6216b4f354a4aee94dca17eb85",
+              "index": 60
+            },
+            "update_index": 60
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 21,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "Wheel",
+            "operation": "FIND_SHARED_PART",
+            "phase": "whole-answer",
+            "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "11a6b3e44e930fabc8c5f33701a0eda53f477f831b6b375e7848f1f0ae4b1b7a",
+              "checkpoint_before": "a789454cd3f356e19e05fe1a271e0e1b4833f42f8b50d790393413d7c16fde75",
+              "index": 61
+            },
+            "update_index": 61
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 21,
+            "correction_released_after_this_recording": true,
+            "expected_answer": "via:Wheel",
+            "operation": "REACHED_VIA",
+            "phase": "whole-answer",
+            "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": "via:Wheel",
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "42522855b0c2dad8b30ea77e04603e832b4de70876102aedbd61f0fbb93a1394",
+              "checkpoint_before": "11a6b3e44e930fabc8c5f33701a0eda53f477f831b6b375e7848f1f0ae4b1b7a",
+              "index": 62
+            },
+            "update_index": 62
+          },
+          {
+            "assistance_state": "NONE",
+            "block": 22,
+            "correction_released_after_this_recording": true,
+            "expected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "operation": "LIST_PARTS",
+            "phase": "whole-answer",
+            "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+            "scores_note": "unavailable: no scorer was supplied; a run must not report zeros for unmeasured scores",
+            "scores_or_logits": "unavailable",
+            "selected_answer": [
+              "Frame",
+              "Wheel"
+            ],
+            "selected_is_correct": true,
+            "update_identity": {
+              "checkpoint_after": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+              "checkpoint_before": "42522855b0c2dad8b30ea77e04603e832b4de70876102aedbd61f0fbb93a1394",
+              "index": 63
+            },
+            "update_index": 63
+          }
+        ],
+        "primary_measure": {
+          "after_accuracy": 1.0,
+          "after_correct": 3,
+          "after_total": 3,
+          "before_accuracy": 0.6666666666666666,
+          "before_correct": 2,
+          "before_total": 3,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 1,
+              "total": 1
+            },
+            "LIST_PARTS": {
+              "correct": 1,
+              "total": 1
+            },
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 1
+            }
+          },
+          "delta_correct": 1
+        },
+        "probe_geometry": {
+          "equal_item_counts": 40,
+          "note": "an empty answer cannot offer equal item counts; the alternative is one foreign part and one indirect part, and the geometry is reported rather than assumed balanced",
+          "questions": 44,
+          "unequal_because_the_answer_is_empty": 3,
+          "unequal_detail": [
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "5543a2696153b4212a126a661c5656d63bd08ca7316ef59bbb6f718e27cc4948"
+            },
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "acaf9e5d6f78bed16fc21bb603a3db7d2ad118c603b74dbe040143d50db85754"
+            },
+            {
+              "answer_is_empty": true,
+              "item_counts": [
+                0,
+                2,
+                1
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "f359a8c2dbc95e170c9ef69169db2f860daefe5ecab8b221b192d86ce01f9955"
+            },
+            {
+              "answer_is_empty": false,
+              "item_counts": [
+                1,
+                1,
+                2
+              ],
+              "op": "LIST_PARTS",
+              "record_id": "c7fcf3947fa65fcac674574901da621efd9983f25a5aea2a8c0093398391e42e"
+            }
+          ],
+          "unequal_item_counts": 4
+        },
+        "probe_measure": {
+          "after_accuracy": 0.1590909090909091,
+          "after_correct": 7,
+          "after_total": 44,
+          "before_accuracy": 0.2727272727272727,
+          "before_correct": 12,
+          "before_total": 44,
+          "by_operation_after": {
+            "FIND_SHARED_PART": {
+              "correct": 2,
+              "total": 14
+            },
+            "LIST_PARTS": {
+              "correct": 4,
+              "total": 5
+            },
+            "REACHED_VIA": {
+              "correct": 1,
+              "total": 25
+            }
+          },
+          "delta_correct": -5
+        },
+        "steps": 64,
+        "stopping_reason": "blocks complete",
+        "whole_answer_corrections": 64
+      }
+    },
+    "run_id": "cas-meta2-graph6cand-20260910174500-e33a6497",
+    "schema": "cas-graph-training-candidate-result/1",
+    "seed": 20260909,
+    "seven_stage_note": "checked component teaching only; definition, analogy, correspondence and story presentations have no numerical delivery path here",
+    "updates_per_condition": 64
+  },
+  "schema": "cas-graph-training-candidate-result/1",
+  "status": "REMOTE_FINISHED"
+}
