@@ -927,6 +927,8 @@ def deletion_decision(*, receipt, contract_document, inventory_digest_check=True
 
 def archive_status(*, collection_state, retention=None, backup=None):
     """The archive's own state, which is not the compute's state."""
+    retention = retention if isinstance(retention, dict) else None
+    backup = backup if isinstance(backup, dict) else None
     if retention and retention.get("approved_by_owner"):
         return "RETAINED_UNDER_POLICY"
     if collection_state in ("COMPLETE_VERIFIED", "INCOMPLETE"):
@@ -947,8 +949,14 @@ def stage_states(*, execution, byte_verdict, completeness_verdict, backup=None,
     false; the unacceptable state is an incomplete measurement whose only surviving
     copy was deleted.
     """
-    byte_state = (byte_verdict or {}).get("state", "NOT_ATTEMPTED")
-    missing = set((byte_verdict or {}).get("missing") or ())
+    byte_verdict = byte_verdict if isinstance(byte_verdict, dict) else {}
+    completeness_verdict = (completeness_verdict
+                            if isinstance(completeness_verdict, dict) else {})
+    compute = compute if isinstance(compute, dict) else {"state": "NOT_ATTEMPTED"}
+    backup = backup if isinstance(backup, dict) else None
+    retention = retention if isinstance(retention, dict) else None
+    byte_state = byte_verdict.get("state", "NOT_ATTEMPTED")
+    missing = set(byte_verdict.get("missing") or ())
     required = set(contract_keys(document)) if document else set()
     checkpoint_keys = {key for key in required if key.endswith(".pt")}
     measurement = set(measurement_keys) & (required or set(measurement_keys))

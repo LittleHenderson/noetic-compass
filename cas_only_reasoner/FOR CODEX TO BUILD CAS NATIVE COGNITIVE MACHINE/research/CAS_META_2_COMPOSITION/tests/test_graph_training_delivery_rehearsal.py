@@ -203,7 +203,12 @@ def test_delivery_rehearsal_normal_completion(worker, tmp_path):
     s3 = SimulatedS3()
     uploaded = worker["upload_results"](s3, "bucket", worker["root"])
     assert uploaded["marker"] is True and uploaded["manifest"] is True
-    assert sorted(uploaded["artifacts"]) == sorted(CHECKPOINTS)
+    # the shared transport stages the whole evidence directory, so every
+    # checkpoint is published and the manifest travels with them
+    published = set(uploaded["artifacts"])
+    for name in CHECKPOINTS:
+        assert "results/artifacts/" + name in published, name
+    assert "results/artifacts/manifest.json" in uploaded["artifacts"]
 
     provider = _provider(s3, tmp_path / "receipt")
     outcome = provider.wait(JOB, timeout=30, poll_interval=0.01)
@@ -396,7 +401,13 @@ def test_execute_reports_execution_collection_and_cleanup_separately(
     receipt_dir = tmp_path / "receipt_execute"
     result = launch.execute(request, authority, provider, ledger_path=ledger,
                             receipt_dir=receipt_dir, owner_authorization_path=owner)
-    assert result["stages"] == {"execution": "FINISHED", "collection": "VERIFIED",
-                                "cleanup": "COMPLETE"}
-    assert result["completed_deliverable"] is True
+    # RUN_EVIDENCE_PRESERVATION_001: the states are reported separately, and
+    # no completeness claim is made without a pre-run contract to check against
+    assert result["stages"]["execution"] == "FINISHED"
+    assert result["stages"]["compute_cleanup"] == "COMPLETE"
+    assert result["stages"]["measurement_completeness"] == "NOT_EVALUATED"
+    assert result["stages"]["evidence_archive"] in (
+        "RETAINED_PENDING_COLLECTION", "DELETION_DENIED")
+    assert result["stages"]["only_surviving_copy"] == "RETAINED"
+    assert result["completed_deliverable"] is False
     assert result["collected"]["artifact_count"] == len(CHECKPOINTS)
