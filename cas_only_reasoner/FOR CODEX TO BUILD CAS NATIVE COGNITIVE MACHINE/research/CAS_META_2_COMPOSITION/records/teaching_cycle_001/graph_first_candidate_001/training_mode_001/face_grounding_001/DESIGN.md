@@ -1,8 +1,10 @@
-# CUBE_FACE_GROUNDING_001 and CFC_LOOP_001 — what was built, and what is not built yet
+# CUBE_FACE_GROUNDING_001 and CFC_LOOP_001 — what was built, and what has not been executed
 
-Written 2026-09-10. Status: **non-neural implementation complete and tested;
-launcher binding and package build not yet done.** Nothing here trains, reserves,
-loads a model or launches. No execution is authorised by this document.
+Written 2026-09-10. Status: **non-neural implementation complete, tested, packaged
+and rehearsed; nothing executed.** The package exists
+(`candidate_package_001`, archive sha256 `d7fe838e…`) and
+`EXECUTION_REQUEST_001.md` names it. No training, no model load, no reservation and
+no launch have happened, and none is authorised by this document.
 
 The two owner plans are pinned beside this file as
 `Cross_Cube_Face_Grounding_Plan_v0.1.md` (sha256 `c9de1732e15382c3…`, 28,212 bytes)
@@ -76,26 +78,29 @@ every role pair competes in some question group.
 - **A sweep over six roles is not a completed seven-stage neural cycle**, and no
   counter in this build calls it one.
 
-## 4. What is not built yet — stated plainly
+## 4. What is built, and what remains unexecuted — stated plainly
 
-1. **The launcher binding and the package build.** The runner is complete and
-   rehearsed with injected stubs, but there is no rendered worker, no `DESIGN`
-   binding for the four conditions, and no built source package, so the execution
-   request below cannot yet name a package hash. This is the one remaining
-   implementation step, and it is inside this assignment's scope rather than a
-   blocker outside it.
-2. **The interface-capacity question is not answered, and cannot be answered
-   without a model.** Whether the accepted transform can represent these six tasks
-   is exactly what the eventual job's pre-training input and gradient checks are
-   for: changed roles, changed contents and same-token rewiring must produce
-   different model-facing representations, and scores and losses must be finite
-   with useful target-dependent gradients. Compilation proves the tasks *reach* the
+1. **Built**: the corpus, both task profiles for all six faces, both schedules, the
+   evaluation, the runner, the worker body, the launcher binding and the source
+   package (`candidate_package_001`, 53 members). The packaged rehearsal passes six
+   tests: the packaged worker is byte-for-byte the rendered worker, the unpacked
+   tree imports and compiles the plan with the declared counts, the worker's own
+   `main()` runs the environment stage and uploads `result.json` last, a wrong
+   sidecar fails closed while preserving the completed result, and an inner failure
+   is reported through the result marker.
+2. **Not executed**: no model has been loaded, no encoder fitted, no representation
+   or gradient check run, no condition taught, no panel evaluated. Those are the
+   authorised job's work, and `EXECUTION_REQUEST_001.md` is the one request that
+   would authorise them.
+3. **The interface-capacity question is deliberately open.** Whether the accepted
+   transform can represent these six tasks is exactly what the job's pre-training
+   input and gradient checks are for. Compilation proves the tasks *reach* the
    encoder; it cannot prove the encoder separates them. If it does not, that is a
    finding to report with the concrete restriction named, not a reason to
    substitute a name-lookup task.
-3. **Batching is implemented but has never run on real tensors.** The rehearsal
-   proves one optimizer step per batch and the row shape with an injected stub;
-   the real path is exercised only when the job runs.
+4. **Batching has never run on real tensors.** The rehearsal proves one optimizer
+   step per batch and the row shape with an injected stub; the real path is
+   exercised only when the job runs.
 
 ## 5. Interpretation rules this pilot will be held to
 
