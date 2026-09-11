@@ -200,11 +200,19 @@ def gradient_check(*, learner, torch, built):
 
     It drives the learner's own indexed path - the same one the runner uses - so a
     pass means the task is usable at all. It measures nothing about learning.
+
+    The learner must already hold the task in its index: the second attempt died
+    here with a bare ``KeyError`` because the check built a learner with an empty
+    task list and then asked it to score a task. Indexing the task first is the
+    fix, and the local worker smoke run exists so this class of defect is found
+    without a reservation.
     """
     family = corpus.by_split(corpus.TRAINING, built)[0]
     episode = tasks.compile_episode(family, 5, roles.FACE_APPLY, arm="stable",
                                     supports=(), built=built)
     task = experiment.episode_task(episode)
+    require(task["record_id"] in getattr(learner, "_index", {}),
+            "FACE_WORKER_CHECK_TASK_NOT_INDEXED:" + task["record_id"])
     info = learner.scores(task)
     require(info is not None, "FACE_WORKER_SCORES_UNAVAILABLE")
     scores = torch.tensor(info["scores"])
@@ -283,8 +291,11 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
         return recomputed == identity and loaded["identity"] == identity
 
     check_framework, check_model = framework_factory(seed)
+    check_episode = tasks.compile_episode(
+        corpus.by_split(corpus.TRAINING, built)[0], 5, roles.FACE_APPLY,
+        arm="stable", supports=(), built=built)
     check_learner = learner_factory(framework=check_framework, model=check_model,
-                                   tasks=[])
+                                    tasks=[experiment.episode_task(check_episode)])
     checks["gradient"] = gradient_check(learner=check_learner, torch=torch,
                                         built=built)
     del check_learner, check_model, check_framework

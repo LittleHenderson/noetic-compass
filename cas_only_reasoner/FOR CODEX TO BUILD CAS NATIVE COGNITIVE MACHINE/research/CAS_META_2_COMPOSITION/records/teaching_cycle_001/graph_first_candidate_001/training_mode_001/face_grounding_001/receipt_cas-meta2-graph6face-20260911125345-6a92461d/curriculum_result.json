@@ -1,0 +1,11 @@
+{
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\n/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py:170: UserWarning: No PYTORCH_KERNEL_CACHE_PATH or HOME environment variable set! This disables kernel caching. (Triggered internally at /pytorch/aten/src/ATen/native/cuda/jit_utils.cpp:1489.)\n  for token_id in segment]).prod(dim=0)\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 13, in <module>\n    report = face_worker.run(CONFIG, torch=torch, device=device,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_worker.py\", line 288, in run\n    checks[\"gradient\"] = gradient_check(learner=check_learner, torch=torch,\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_worker.py\", line 212, in gradient_check\n    position = learner._position(task)\n               ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 289, in _position\n    return self._index[task[\"record_id\"]]\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\nKeyError: 'bf24e4d100d7f9d7ebc31dd32e5db0d50869457fd3ee2101c99a5094c2bbde7d'\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-graph6face-20260911125345-6a92461d",
+  "measurements": null,
+  "schema": "cas.cube-face-result/1",
+  "status": "WORKER_FAILED"
+}
