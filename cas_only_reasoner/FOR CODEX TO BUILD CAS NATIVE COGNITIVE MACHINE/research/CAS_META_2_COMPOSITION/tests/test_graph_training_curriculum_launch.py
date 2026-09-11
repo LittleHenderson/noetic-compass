@@ -145,13 +145,18 @@ def test_cleanup_retains_evidence_unless_collection_is_verified(tmp_path):
     assert retained["bucket_deleted"] is False
     assert retained["evidence_retained"] is True
     assert retained["retained_bucket"] == "job-bucket"
-    assert any("EVIDENCE_RETAINED_PENDING_COLLECTION" in entry
-               for entry in retained["failures"])
-    assert retained["complete"] is False
+    # RUN_EVIDENCE_PRESERVATION_001: retention is not a failure of cleanup, and
+    # cleanup has no erasure step at all
+    assert retained["evidence_deleted"] is False
+    assert retained["deletion_decision"]["decision"] == "DENY"
+    assert retained["complete"] is True
 
     verified = provider.cleanup(JOB, collection_verified=True)
-    assert verified["bucket_deleted"] is True
-    assert verified["evidence_retained"] is False
+    assert verified["bucket_deleted"] is False, (
+        "cleanup must not delete evidence even when collection was verified")
+    assert verified["deletion_decision"]["decision"] == "DENY"
+    assert "A_PREVIOUS_DENIAL_IS_STICKY" in verified["deletion_decision"]["reasons"]
+    assert verified["evidence_retained"] is True
     assert verified["complete"] is True
 
 
@@ -357,7 +362,7 @@ class FakeProvider:
         self.ledger_path = ledger_path
         self.calls = []
 
-    def configure_evidence(self, directory):
+    def configure_evidence(self, directory, contract=None):
         self.evidence = directory
 
     def preflight(self):

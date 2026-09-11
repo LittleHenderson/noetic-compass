@@ -194,8 +194,8 @@ def test_delivery_rehearsal_normal_completion(worker, tmp_path):
     with matching hashes and byte counts, and the completion signal must appear
     only after its required uploads."""
     s3 = SimulatedS3()
-    uploaded = worker["upload_results"](s3, "bucket", worker["results"])
-    assert uploaded["result"] is True and uploaded["manifest"] is True
+    uploaded = worker["upload_results"](s3, "bucket", worker["root"])
+    assert uploaded["marker"] is True and uploaded["manifest"] is True
     assert sorted(uploaded["artifacts"]) == sorted(CHECKPOINTS)
 
     provider = _provider(s3, tmp_path / "receipt")
@@ -231,7 +231,11 @@ def test_delivery_rehearsal_normal_completion(worker, tmp_path):
     assert launch.collection_is_verified(collected) is True
     status = provider.cleanup(JOB, collection_verified=True)
     assert status["complete"] is True
-    assert status["bucket_deleted"] is True
+    # RUN_EVIDENCE_PRESERVATION_001: a verified collection no longer authorises
+    # deletion. The archive is retained and the decision is DENY by default.
+    assert status["bucket_deleted"] is False
+    assert status["evidence_deleted"] is False
+    assert status["deletion_decision"]["decision"] == "DENY"
     assert s3.deleted is True
     assert status["instances"]["i-0123456789abcdef0"] == "CONFIRMED_TERMINATED"
 
@@ -246,7 +250,7 @@ def test_delivery_rehearsal_injected_upload_failure(worker, tmp_path):
     s3 = SimulatedS3(fail_on=failing)
     original = (worker["results"] / "result.json").read_bytes()
     with pytest.raises(Exception):
-        worker["upload_results"](s3, "bucket", worker["results"])
+        worker["upload_results"](s3, "bucket", worker["root"])
 
     # 1. the original result survives byte-for-byte on disk
     assert (worker["results"] / "result.json").read_bytes() == original
@@ -270,14 +274,16 @@ def test_delivery_rehearsal_injected_upload_failure(worker, tmp_path):
         provider.collect(JOB)
     assert launch.collection_is_verified(None) is False
 
-    # 4. cleanup must retain the evidence bucket and report it explicitly
+    # 4. cleanup must retain the evidence bucket; retention is not a failure
     status = provider.cleanup(JOB, collection_verified=False)
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["bucket_deleted"] is False
+    assert status["evidence_deleted"] is False
     assert status["evidence_retained"] is True
     assert status["retained_bucket"] == "bucket"
-    assert any("EVIDENCE_RETAINED_PENDING_COLLECTION" in entry
-               for entry in status["failures"])
+    assert status["deletion_decision"]["decision"] == "DENY"
+    assert not [entry for entry in status["failures"]
+                if "EVIDENCE_RETAINED" in entry]
     assert s3.deleted is False
     # the compute still stopped
     assert status["instances"]["i-0123456789abcdef0"] == "CONFIRMED_TERMINATED"
@@ -289,7 +295,7 @@ def test_rehearsal_reports_missing_checkpoints_explicitly(worker, tmp_path):
     the missing checkpoint is NAMED, the collection is not verified, and the
     bucket is retained."""
     s3 = SimulatedS3()
-    worker["upload_results"](s3, "bucket", worker["results"])
+    worker["upload_results"](s3, "bucket", worker["root"])
     # simulate one artifact lost in transport
     dropped = CHECKPOINTS[-1]
     s3.objects.pop("results/artifacts/" + dropped)
@@ -311,7 +317,7 @@ def test_execute_reports_execution_collection_and_cleanup_separately(
     """The three outcomes are reported independently, and a run whose collection
     was not verified is not a completed deliverable."""
     s3 = SimulatedS3()
-    worker["upload_results"](s3, "bucket", worker["results"])
+    worker["upload_results"](s3, "bucket", worker["root"])
     inner = _provider(s3, tmp_path / "receipt_execute", configure=False)
 
     class RealProvider:
@@ -321,7 +327,7 @@ def test_execute_reports_execution_collection_and_cleanup_separately(
             self.inner = inner
             self.calls = []
 
-        def configure_evidence(self, directory):
+        def configure_evidence(self, directory, contract=None):
             self.inner.configure_evidence(directory)
 
         def preflight(self):

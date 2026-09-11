@@ -33,6 +33,7 @@ from aws.graph_training_curriculum_launch import (  # reused machinery
     CurriculumProvider, build_package, canonical, collection_is_verified, digest,
     prepare_evidence, read_ledger, require, scope, validate_preflight,
     validate_reservation_scope, validate_reserved_transition, write_evidence)
+from aws import run_evidence  # RUN_EVIDENCE_PRESERVATION_001
 
 SCHEMA = "cas-graph-training-candidate-launch/1"
 REQUEST_SCHEMA = "cas-graph-training-candidate-launch-request/1"
@@ -580,12 +581,17 @@ class CandidateProvider(CurriculumProvider):
 
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
             receipt_dir=None, owner_authorization_path=None,
-            validate_request_fn=None, validate_authority_fn=None):
+            validate_request_fn=None, validate_authority_fn=None,
+            evidence_contract=None):
     """One reservation, one launch, verified collection, then cleanup.
 
     The two validators are injectable so a later experiment can reuse this proven
     lifecycle with its own schema and bounds instead of copying it. They default to
     this pilot's own validators, so nothing about this pilot changes.
+
+    ``evidence_contract`` is the experiment's pre-run evidence requirement
+    (RUN_EVIDENCE_PRESERVATION_001): frozen before the worker starts and held here
+    independently of anything the worker uploads.
     """
     validate_request_fn = validate_request_fn or validate_request
     validate_authority_fn = validate_authority_fn or validate_authority
@@ -622,7 +628,19 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
     write_evidence(directory / "intent.json", canonical({
         "schema": SCHEMA, "request": request, "authority": authority,
         "ledger_before": ledger_before, "automatic_retries": 0}))
-    provider.configure_evidence(directory)
+    # The pre-run evidence requirement, frozen before the worker starts and held
+    # here independently of anything the worker later uploads
+    # (RUN_EVIDENCE_PRESERVATION_001).
+    if evidence_contract is not None:
+        require(evidence_contract.get("schema") == run_evidence.CONTRACT_SCHEMA,
+                "EVIDENCE_CONTRACT_SCHEMA")
+        if authority.get("evidence_contract_sha256"):
+            require(run_evidence.contract_digest(evidence_contract)
+                    == authority["evidence_contract_sha256"],
+                    "EVIDENCE_CONTRACT_AUTHORITY_MISMATCH")
+        write_evidence(directory / "evidence_contract.json",
+                       canonical(evidence_contract))
+    provider.configure_evidence(directory, evidence_contract)
     if hasattr(provider, "set_authority_sha256"):
         provider.set_authority_sha256(authority["owner_authorization_sha256"])
     preflight = reservation = ledger_after = launched = collected = None
@@ -650,7 +668,9 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
         outcome = provider.wait(request["job"],
                                 timeout=RESOURCE_PLAN["instance_seconds_max"])
         collected = provider.collect(request["job"])
-        verified = collection_is_verified(collected)
+        receipt = (collected or {}).get("receiver_receipt")
+        provider._receipt = receipt                 # what the deletion decision reads
+        verified = bool(receipt and receipt.get("collection") == "COMPLETE_VERIFIED")
         status = ("AWS_CANDIDATE_FINISHED"
                   if outcome.get("worker_status") == "REMOTE_FINISHED"
                   else "AWS_CANDIDATE_FAILED")
@@ -671,6 +691,18 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
         except BaseException as error:
             cleanup = {"complete": False, "failures": [
                 "CLEANUP_EXCEPTION:" + type(error).__name__ + ":" + str(error)[:2000]]}
+    byte_verdict = (collected or {}).get("byte_integrity") or {}
+    completeness_verdict = (collected or {}).get("measurement_completeness") or {}
+    compute_state = "COMPLETE" if cleanup.get("complete") else "INCOMPLETE"
+    stages = run_evidence.stage_states(
+        execution=("FINISHED" if outcome.get("worker_status") == "REMOTE_FINISHED"
+                   else "FAILED"),
+        byte_verdict=byte_verdict, completeness_verdict=completeness_verdict,
+        backup=None, compute={"state": compute_state},
+        retention=getattr(provider, "_retention", None),
+        measurement_keys=("results/artifacts/measurements.json",
+                          "results/artifacts/readout.json"),
+        document=evidence_contract)
     result = {"schema": SCHEMA, "status": status, "job": request["job"],
               "request": request, "authority": authority,
               "ledger_before": ledger_before, "ledger_after": ledger_after,
@@ -678,14 +710,17 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
               "preflight": preflight, "launch": launched, "outcome": outcome,
               "collected": collected, "receipt_dir": str(directory),
               "cleanup": cleanup, "elapsed_seconds": time.monotonic() - started,
-              "stages": {"execution": ("FINISHED" if outcome.get("worker_status")
-                                       == "REMOTE_FINISHED" else "FAILED"),
-                         "collection": ("VERIFIED" if verified else "NOT_VERIFIED"),
-                         "cleanup": ("COMPLETE" if cleanup.get("complete")
-                                     else "INCOMPLETE")},
-              "completed_deliverable": bool(verified and cleanup.get("complete")
-                                            and outcome.get("worker_status")
-                                            == "REMOTE_FINISHED"),
+              "evidence_contract": ({"profile": evidence_contract.get("profile"),
+                                     "required_count":
+                                         evidence_contract.get("required_count"),
+                                     "sha256":
+                                         run_evidence.contract_digest(evidence_contract)}
+                                    if evidence_contract else None),
+              "stages": stages,
+              "completed_deliverable": run_evidence.completed_deliverable(
+                  execution=stages["execution"], byte_verdict=byte_verdict,
+                  completeness_verdict=completeness_verdict, receipt=receipt,
+                  compute={"state": compute_state}, document=evidence_contract),
               "claims": {"seven_stage_program_claimed": False,
                          "component_teaching_claimed": "pending the measured result"}}
     if not cleanup.get("complete"):

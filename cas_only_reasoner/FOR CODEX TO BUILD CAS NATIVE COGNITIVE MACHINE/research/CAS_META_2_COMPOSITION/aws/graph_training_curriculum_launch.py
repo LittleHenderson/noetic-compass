@@ -28,6 +28,7 @@ from pathlib import Path
 from zipfile import ZipFile, ZipInfo, ZIP_DEFLATED
 
 from aws import budget
+from aws import run_evidence
 
 ROOT = Path(__file__).resolve().parents[1]
 GIT_PREFIX = "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/"
@@ -636,6 +637,16 @@ class CurriculumProvider:
         # its own statuses (the candidate worker writes WORKER_FAILED) and a
         # hard-coded word would silently report a failed run as finished.
         self.failure_statuses = ("REMOTE_WORKER_FAILED",)
+        # RUN_EVIDENCE_PRESERVATION_001: the pre-run evidence requirement. It is
+        # held by the collector independently of anything the worker uploads, so a
+        # worker cannot narrow the requirements by leaving something out of its own
+        # artifact list.
+        self._contract = None
+        # The archive holds one prefix per run; within it the keys the contract
+        # names are bucket-relative ("results/..."), so the listing keeps them whole.
+        self.evidence_prefix = ""
+        self.run_object_prefix = "results/"
+        self._deletion_denied = False
 
     def _worker_config(self, bucket):
         """The worker config this experiment uploads; a candidate overrides this."""
@@ -647,10 +658,15 @@ class CurriculumProvider:
                 "updates_per_learner": FROZEN_UPDATES_PER_LEARNER,
                 "panel_seed": FROZEN_PANEL_SEED}
 
-    def configure_evidence(self, directory):
+    def configure_evidence(self, directory, contract=None):
         directory = evidence_directory(directory)
         require(directory.is_dir() and self._evidence is None, "CURRICULUM_FRESH_EVIDENCE_REQUIRED")
         self._evidence = directory
+        if contract is not None:
+            require(contract.get("schema") == run_evidence.CONTRACT_SCHEMA,
+                    "CURRICULUM_EVIDENCE_CONTRACT_SCHEMA")
+            self._contract = contract
+        return self._contract
 
     def _event(self, operation, state, **details):
         require(self._evidence is not None, "CURRICULUM_EVIDENCE_REQUIRED")
@@ -970,6 +986,18 @@ class CurriculumProvider:
         return collected
 
     def collect(self, job):
+        """Collect the declared artifacts, then verify against the CONTRACT.
+
+        The declared list is only the worker's own account of what it produced. The
+        directive's lesson is that checking that list is not checking completeness:
+        attempt 004 delivered every file it declared and still lost the measurement,
+        because the measurement was never declared. So the declared collection is
+        one step, and the verification that follows is a second, independent one
+        (RUN_EVIDENCE_PRESERVATION_001).
+        """
+        return self._verify_collection(self._collect_declared(job))
+
+    def _collect_declared(self, job):
         """Collect the result AND every checkpoint artifact BEFORE cleanup."""
         self.calls.append("collect")
         require(job == self.job and self._instance_id is not None
@@ -1052,6 +1080,168 @@ class CurriculumProvider:
         collected["artifacts_available"] = True
         return collected
 
+    def _collect_inventory(self, bucket, s3):
+        """Download the whole evidence prefix, every extension, into the receipt.
+
+        Nothing is filtered by suffix, because extension selection is not the
+        definition of scientific importance. Files the contract does not name are
+        kept and surfaced as unlisted rather than discarded.
+        """
+        target = self._evidence / "collected"
+        target.mkdir(exist_ok=True)
+        files, failures, versions = [], [], {}
+        listing = s3.list_objects_v2(Bucket=bucket, Prefix=self.evidence_prefix)
+        require(not listing.get("NextToken"), "EVIDENCE_LISTING_TRUNCATED")
+        for entry in sorted(listing.get("Contents", []),
+                            key=lambda item: item["Key"]):
+            key = entry["Key"]
+            if key.endswith("/") or entry.get("Size") == 0:
+                continue
+            relative = key[len(self.evidence_prefix):]
+            if not relative or ".." in Path(relative).parts:
+                continue
+            try:
+                response = s3.get_object(Bucket=bucket, Key=key)
+                body = self._read_body(response["Body"], MAX_ARTIFACT_BYTES)
+            except Exception as error:                      # noqa: BLE001
+                failures.append("EVIDENCE_OBJECT_UNREADABLE:%s:%s:%s"
+                                % (key, type(error).__name__, str(error)[:200]))
+                continue
+            if entry.get("Size") is not None and entry["Size"] != len(body):
+                failures.append("EVIDENCE_OBJECT_SIZE:%s:%s!=%s"
+                                % (key, len(body), entry["Size"]))
+            path = target / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            receipt = write_evidence(path, body)
+            files.append({"key": key, "relative_path": relative,
+                          "bytes": len(body), "sha256": receipt["sha256"],
+                          "bytes_raw": body,
+                          "object_version": entry.get("VersionId"),
+                          "etag": (entry.get("ETag") or "").strip('"') or None})
+            if entry.get("VersionId"):
+                versions[relative] = entry["VersionId"]
+        return files, versions, failures
+
+    def _declared_manifest_mismatches(self, files):
+        """Compare received bytes with the digests the worker declared it produced."""
+        manifest_path = (self._evidence / "collected"
+                         / "results/artifacts/manifest.json")
+        if not manifest_path.is_file():
+            return []
+        try:
+            document = json.loads(manifest_path.read_bytes())
+        except ValueError:
+            return [{"key": "results/artifacts/manifest.json",
+                     "reason": "DECLARED_MANIFEST_UNPARSABLE"}]
+        by_path = {entry["relative_path"]: entry for entry in files}
+        mismatches = []
+        for entry in (document.get("artifacts") or []):
+            name = entry.get("name") or Path(entry.get("path", "")).name
+            key = "results/artifacts/" + name
+            found = by_path.get(key)
+            if found is None:
+                continue
+            if entry.get("sha256") and found["sha256"] != entry["sha256"]:
+                mismatches.append({"key": key, "reason": "DECLARED_SHA256_MISMATCH",
+                                   "declared": entry["sha256"],
+                                   "received": found["sha256"],
+                                   "note": ("the received bytes are not the bytes "
+                                            "the worker declared it produced")})
+            elif entry.get("bytes") is not None and found["bytes"] != entry["bytes"]:
+                mismatches.append({"key": key, "reason": "DECLARED_SIZE_MISMATCH",
+                                   "declared": entry["bytes"],
+                                   "received": found["bytes"]})
+        return mismatches
+
+    def _verify_collection(self, collected):
+        """The receiver's independent checks, then the receipt it alone issues."""
+        s3 = self.clients["s3"]
+        bucket = self._resources.get("bucket")
+        collected["contract"] = ({"profile": self._contract.get("profile"),
+                                  "required_count":
+                                      self._contract.get("required_count"),
+                                  "contract_sha256":
+                                      run_evidence.contract_digest(self._contract)}
+                                 if self._contract else None)
+        if bucket is None or self._contract is None:
+            collected["evidence_collection"] = "NOT_ATTEMPTED"
+            collected["measurement_completeness"] = "NOT_EVALUATED"
+            collected["receiver_receipt"] = None
+            collected["verification_note"] = (
+                "no contract configured: the declared-list check ran, and no "
+                "completeness claim is made because there is nothing independent to "
+                "check against")
+            return collected
+        files, versions, failures = self._collect_inventory(bucket, s3)
+        write_evidence(self._evidence / "collected_inventory.json", canonical({
+            "schema": run_evidence.INVENTORY_SCHEMA, "job": self.job,
+            "prefix": self.evidence_prefix,
+            "file_count": len(files), "failures": failures,
+            "files": [{key: value for key, value in entry.items()
+                       if key != "bytes_raw"} for entry in files]}))
+        byte_verdict = run_evidence.verify_byte_integrity(files, self._contract,
+                                                          versions=versions)
+        # The contract says what must be here; the worker's own produced manifest
+        # says what it put there. Checking the received bytes against BOTH is what
+        # catches a same-length corruption, which no size comparison can see.
+        declared_mismatches = self._declared_manifest_mismatches(files)
+        if declared_mismatches:
+            byte_verdict["mismatched"] = (list(byte_verdict["mismatched"])
+                                          + declared_mismatches)
+            byte_verdict["state"] = "INCOMPLETE"
+            byte_verdict["declared_manifest_checked"] = True
+        records = {}
+        for key, spec in run_evidence.required_records(self._contract).items():
+            path = self._evidence / "collected" / key
+            if not path.is_file():
+                continue
+            try:
+                records[key] = run_evidence.read_records(path)
+            except ValueError as error:
+                failures.append(str(error)[:300])
+        summaries = {}
+        analysis = self._evidence / "collected" / "results/evidence/panel_analysis.json"
+        if analysis.is_file():
+            try:
+                document = json.loads(analysis.read_bytes())
+                if isinstance(document, dict):
+                    # per-condition summaries are comparable with per-condition rows
+                    summaries = (document.get("by_condition")
+                                 or document.get("layers") or {})
+            except ValueError:
+                failures.append("SUMMARY_UNPARSABLE:panel_analysis.json")
+        completeness_verdict = run_evidence.verify_completeness(
+            records, self._contract, summaries=summaries,
+            missing_measurement=[key for key in
+                                 ("results/artifacts/measurements.json",
+                                  "results/artifacts/readout.json")
+                                 if key in set(byte_verdict["missing"])])
+        receipt = run_evidence.collection_receipt(
+            job=self.job, profile=self._contract["profile"],
+            document=self._contract, collected_inventory=files,
+            byte_verdict=byte_verdict, completeness_verdict=completeness_verdict,
+            destination=str(self._evidence), versions=versions,
+            failures=failures)
+        write_evidence(self._evidence / "receiver_receipt.json",
+                       canonical(receipt))
+        collected["inventory"] = {
+            "prefix": self.evidence_prefix, "file_count": len(files),
+            "unlisted": sorted(entry["relative_path"] for entry in files
+                               if entry["relative_path"] not in
+                               set(run_evidence.contract_keys(self._contract))),
+            "unlisted_retained": True,
+            "missing_required": byte_verdict["missing"],
+            "downloaded_bytes": sum(len(entry["bytes_raw"]) for entry in files),
+            "failures": failures}
+        collected["byte_integrity"] = byte_verdict
+        collected["measurement_completeness"] = completeness_verdict
+        collected["receiver_receipt"] = receipt
+        collected["evidence_collection"] = receipt["collection"]
+        collected["artifacts_missing"] = sorted(
+            set(collected.get("artifacts_missing") or ())
+            | set(byte_verdict["missing"]))
+        return collected
+
     def _describe_with_retry(self, ec2, instance_id):
         deadline = time.monotonic() + self._visibility_window
         while True:
@@ -1084,35 +1274,55 @@ class CurriculumProvider:
                 time.sleep(poll_interval)
         return pending
 
-    def cleanup(self, job, *, collection_verified=False):
-        """Stop the compute unconditionally; delete evidence only when the
-        collection was verified.
+    def cleanup(self, job, *, collection_verified=False, retention=None,
+                backup=None, deletion_policy=None):
+        """Stop the compute. Never delete evidence.
 
-        Compute shutdown and evidence deletion are separate concerns. The instance
-        always terminates (by its deadline), but the evidence bucket is deleted
-        ONLY when the launcher has already written every promised artifact into
-        the local receipt. If collection was not verified, the bucket is retained
-        and named in the result as an explicit, bounded retention — deleting it
-        would destroy the only surviving copy of the run's measurements
-        (GRAPH6_CURRICULUM_002 attempt 003 lost a completed result this way).
+        RUN_EVIDENCE_PRESERVATION_001 removed evidence erasure from this path
+        entirely. Two different defects - an exception handler that overwrote a
+        completed result, and a measurement that was uploaded but never declared -
+        reached the same endpoint because routine cleanup could destroy the only
+        surviving copy. So ``collection_verified`` no longer authorises deletion:
+        it is recorded, and deletion is decided by ``run_evidence`` instrumentation
+        that defaults to DENY and needs an approved policy, an elapsed minimum
+        protection period, a complete verified collection and a verified
+        independent backup.
+
+        The GPU is disposable; the evidence is not. The instance still terminates
+        here, on schedule, and every temporary compute resource is still removed.
         """
         self.calls.append("cleanup")
         require(job == self.job, "CURRICULUM_CLEANUP_JOB_MISMATCH")
         failures = []
         status = {"instance_ids": list(self._instance_ids), "instances": {},
                   "security_group_deleted": True, "schedule_removed": True,
-                  "roles_removed": True, "bucket_deleted": False,
-                  "results_deleted": False, "collection_verified":
-                      bool(collection_verified),
-                  "evidence_retained": not collection_verified,
+                  "roles_removed": True,
+                  # kept for the receipt's history, and no longer a deletion gate
+                  "bucket_deleted": False, "results_deleted": False,
+                  "collection_verified": bool(collection_verified),
+                  "evidence_deleted": False,
+                  "evidence_retained": True,
                   "complete": False, "failures": failures}
-        if not collection_verified:
-            status["retention_reason"] = (
-                "COLLECTION_NOT_VERIFIED: the evidence bucket is retained so the "
-                "run's measurements are not destroyed; collect it manually and "
-                "then delete the bucket")
-            status["retained_bucket"] = (self._resources.get("bucket")
-                                         or self._bucket_name())
+        decision = run_evidence.deletion_decision(
+            receipt=getattr(self, "_receipt", None),
+            contract_document=self._contract,
+            inventory_digest_check=True,
+            retention=retention, backup=backup, policy=deletion_policy,
+            denied_before=self._deletion_denied)
+        self._deletion_denied = True                 # a denial is sticky
+        status["deletion_decision"] = decision
+        status["evidence_archive"] = run_evidence.archive_status(
+            collection_state=("COMPLETE_VERIFIED" if collection_verified
+                              else "INCOMPLETE"),
+            retention=retention, backup=backup)
+        status["retention_reason"] = (
+            "EVIDENCE_RETENTION_IS_INDEPENDENT_OF_COMPUTE: the bucket is a durable "
+            "private archive with one prefix per run, and this path has no erasure "
+            "step. Disposal needs an approved policy, an elapsed minimum protection "
+            "period, a complete verified collection and a verified independent "
+            "backup.")
+        status["retained_bucket"] = (self._resources.get("bucket")
+                                     or self._bucket_name())
         ec2, s3, iam, scheduler = (self.clients.get(name) for name in
                                    ("ec2", "s3", "iam", "scheduler"))
 
@@ -1212,32 +1422,17 @@ class CurriculumProvider:
             status["roles_removed"] = False
         bucket = self._resources.get("bucket")
         if bucket is None:
-            status["bucket_deleted"] = True
-        elif not collection_verified:
-            # Deliberate, bounded retention: the compute is already stopped, and
-            # the bucket stays until its contents are collected.
             status["bucket_deleted"] = False
-            failures.append("EVIDENCE_RETAINED_PENDING_COLLECTION:" + str(bucket))
+            status["evidence_archive"] = "ABSENT"
         else:
-            try:
-                listing = s3.list_objects_v2(Bucket=bucket)
-                keys = [item["Key"] for item in listing.get("Contents", [])]
-                if keys:
-                    deleted = s3.delete_objects(Bucket=bucket, Delete={"Objects": [
-                        {"Key": key} for key in keys]})
-                    require(not deleted.get("Errors"), "S3_PARTIAL_DELETION_FAILED")
-                status["results_deleted"] = any(key.startswith("results/") for key in keys)
-                s3.delete_bucket(Bucket=bucket)
-                status["bucket_deleted"] = True
-            except self._client_error as error:
-                if self._error_code(error) not in ("NoSuchBucket", "404"):
-                    failed("EVIDENCE_CLEANUP_FAILED", error)
-                    status["bucket_deleted"] = False
-                else:
-                    status["bucket_deleted"] = True     # already absent
-            except Exception as error:
-                failed("EVIDENCE_CLEANUP_FAILED", error)
-                status["bucket_deleted"] = False
+            # No delete_objects, no delete_bucket, no version deletion, no lifecycle
+            # edit, no retention bypass. The archive is left exactly as the run
+            # published it, and this path cannot become a deletion path later by
+            # flipping a flag: there is no call here to flip it into.
+            status["bucket_deleted"] = False
+            status["evidence_deleted"] = False
+            status["retained_bucket"] = bucket
+            status["archive_object_prefix"] = self.run_object_prefix
         status["complete"] = not failures
         return status
 
@@ -1335,7 +1530,7 @@ def collection_is_verified(collected):
 
 
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_dir=None,
-            owner_authorization_path=None):
+            owner_authorization_path=None, evidence_contract=None):
     validate_request(request)
     validate_authority(authority)
     owner_path = (Path(owner_authorization_path) if owner_authorization_path is not None
@@ -1358,11 +1553,25 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
     write_evidence(directory / "intent.json", canonical({
         "schema": SCHEMA, "request": request, "authority": authority,
         "ledger_before": ledger_before, "automatic_retries": 0}))
-    provider.configure_evidence(directory)
+    # The evidence requirement is frozen BEFORE the worker starts and is written
+    # into the receipt, so the collector's ground truth does not depend on anything
+    # the worker later chooses to upload. Its digest is bound in the authority by
+    # the binding that supplies it (RUN_EVIDENCE_PRESERVATION_001).
+    contract = evidence_contract
+    if contract is not None:
+        require(contract.get("schema") == run_evidence.CONTRACT_SCHEMA,
+                "EVIDENCE_CONTRACT_SCHEMA")
+        if authority.get("evidence_contract_sha256"):
+            require(run_evidence.contract_digest(contract)
+                    == authority["evidence_contract_sha256"],
+                    "EVIDENCE_CONTRACT_AUTHORITY_MISMATCH")
+        write_evidence(directory / "evidence_contract.json", canonical(contract))
+    provider.configure_evidence(directory, contract)
     preflight = None
     reservation = ledger_after = launched = collected = None
     reservation_valid, reservation_error = False, None
     verified = False
+    receipt = None
     try:
         preflight = validate_preflight(provider.preflight())
         write_evidence(directory / "preflight.json", canonical(preflight))
@@ -1382,7 +1591,9 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
         write_evidence(directory / "launch.json", canonical(launched))
         outcome = provider.wait(request["job"], timeout=RESOURCE_PLAN["instance_seconds_max"])
         collected = provider.collect(request["job"])
-        verified = collection_is_verified(collected)
+        receipt = (collected or {}).get("receiver_receipt")
+        provider._receipt = receipt                 # what the deletion decision reads
+        verified = bool(receipt and receipt.get("collection") == "COMPLETE_VERIFIED")
         status = ("AWS_CURRICULUM_FINISHED" if outcome.get("worker_status")
                   == "REMOTE_FINISHED" else "AWS_CURRICULUM_FAILED")
     except BaseException as error:
@@ -1391,6 +1602,8 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
         if not reservation_valid:
             reservation_error = error
         try:
+            # A failure record is a separate, immutable object. It never replaces
+            # measurements, a summary or a completed result (attempt 003's lesson).
             write_evidence(directory / "failure.json", canonical(outcome))
         except Exception as record_error:
             outcome["failure_record_error"] = (type(record_error).__name__ + ":"
@@ -1405,6 +1618,22 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
         except BaseException as error:
             cleanup = {"complete": False, "failures": [
                 "CLEANUP_EXCEPTION:" + type(error).__name__ + ":" + str(error)[:2000]]}
+    byte_verdict = (collected or {}).get("byte_integrity") or {}
+    completeness_verdict = (collected or {}).get("measurement_completeness") or {}
+    compute_state = "COMPLETE" if cleanup.get("complete") else "INCOMPLETE"
+    stages = run_evidence.stage_states(
+        execution=("FINISHED" if outcome.get("worker_status") == "REMOTE_FINISHED"
+                   else "FAILED"),
+        byte_verdict=byte_verdict, completeness_verdict=completeness_verdict,
+        backup=None, compute={"state": compute_state},
+        retention=getattr(provider, "_retention", None),
+        measurement_keys=("results/artifacts/measurements.json",
+                          "results/artifacts/readout.json"),
+        document=contract)
+    deliverable = run_evidence.completed_deliverable(
+        execution=stages["execution"], byte_verdict=byte_verdict,
+        completeness_verdict=completeness_verdict, receipt=receipt,
+        compute={"state": compute_state}, document=contract)
     result = {"schema": SCHEMA, "status": status, "job": request["job"],
               "request": request, "authority": authority,
               "ledger_before": ledger_before, "ledger_after": ledger_after,
@@ -1412,16 +1641,15 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH, receipt_di
               "preflight": preflight, "launch": launched, "outcome": outcome,
               "collected": collected, "receipt_dir": str(directory),
               "cleanup": cleanup, "elapsed_seconds": time.monotonic() - started,
-              # the three outcomes are reported SEPARATELY: a job whose execution
-              # succeeded but whose delivery did not is not a completed deliverable
-              "stages": {"execution": ("FINISHED" if outcome.get("worker_status")
-                                       == "REMOTE_FINISHED" else "FAILED"),
-                         "collection": ("VERIFIED" if verified else "NOT_VERIFIED"),
-                         "cleanup": ("COMPLETE" if cleanup.get("complete")
-                                     else "INCOMPLETE")},
-              "completed_deliverable": bool(verified and cleanup.get("complete")
-                                            and outcome.get("worker_status")
-                                            == "REMOTE_FINISHED"),
+              "evidence_contract": ({"profile": contract.get("profile"),
+                                     "required_count": contract.get("required_count"),
+                                     "sha256": run_evidence.contract_digest(contract)}
+                                    if contract else None),
+              # The states are reported SEPARATELY and none of them is inferred from
+              # exit code zero: an execution that finished is not a delivery, and a
+              # good aggregate with lost rows is not a complete measurement.
+              "stages": stages,
+              "completed_deliverable": deliverable,
               "claims": {"specialist_claimed": False, "composition_claimed": False,
                          "final_targets_read": False}}
     if not cleanup.get("complete"):
