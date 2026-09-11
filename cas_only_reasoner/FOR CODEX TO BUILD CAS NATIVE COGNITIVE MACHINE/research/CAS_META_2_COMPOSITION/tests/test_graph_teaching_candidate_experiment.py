@@ -385,3 +385,55 @@ def test_the_learner_identity_rule_the_digest_mirrors_is_still_the_same_one():
     assert "parameter.detach().cpu().numpy().tobytes()" in source
     assert "name.encode" not in source
     assert "state_dict" not in source
+
+
+def test_the_learner_exposes_the_scores_the_report_asks_for():
+    """``_scores`` looks for ``learner.scores``; without it the report is empty.
+
+    The first completed run delivered 64 of 64 per-step captures as
+    'unavailable', so the declared reporting plan's three scores and the loss per
+    primary question could not be reported. The method now exists, and this checks
+    the wiring end to end without torch: a learner that exposes ``scores`` must be
+    reported, and one that does not must stay 'unavailable' rather than become a
+    row of zeros.
+    """
+    from cas_meta2.graph_teaching import real_framework
+
+    assert callable(getattr(real_framework.GraphLearner, "scores", None)), \
+        "GraphLearner must expose scores(task) for the delivered report"
+
+    class WithScores:
+        def scores(self, task):
+            return {"scores": [0.25, 0.75], "loss": 0.31}
+
+    class WithoutScores:
+        pass
+
+    task = {"record_id": "r", "public": {}}
+    assert ce._scores(WithScores(), task) == {"scores": [0.25, 0.75], "loss": 0.31}
+    assert ce._scores(WithoutScores(), task) == "unavailable"
+
+
+def test_condition_report_keeps_both_breakdowns_and_the_items():
+    """Both per-operation breakdowns and both row sets survive the summary."""
+    def group(correct):
+        return {"correct": correct, "questions": 2, "accuracy": correct / 2,
+                "by_operation": {"LIST_PARTS": {"correct": correct, "total": 2}},
+                "rows": [{"record_id": "a", "is_correct": True},
+                         {"record_id": "b", "is_correct": False}]}
+
+    groups = {"taught_whole_answer": group(1), "taught_component": group(2),
+              "untaught_probe": group(1)}
+    report = ce.condition_report(
+        condition="checked_component_teaching",
+        run={"completed_steps": 64, "planned_steps": 64,
+             "observations": [{"phase": "component-route"}] * 3,
+             "containment": {"contained": True}, "checkpoint": {"verified": True},
+             "observation_summary": {}, "stopping_reason": "blocks complete"},
+        pre=groups, post=groups, probe_geometry={})
+    for key in ("primary_measure", "component_measure", "probe_measure"):
+        measure = report[key]
+        assert "by_operation_before" in measure and "by_operation_after" in measure
+        assert len(measure["items_before"]) == 2 and len(measure["items_after"]) == 2
+    assert report["probe_measure"]["by_operation_before"]["LIST_PARTS"]["correct"] == 1
+    assert report["probe_measure"]["items_before"][0]["record_id"] == "a"

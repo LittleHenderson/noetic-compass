@@ -882,11 +882,24 @@ def run_candidate(*, framework, model, learner_factory, authorization,
 
 
 def _capture(learner, task, scorer):
-    """The selected answer and, when a scorer is supplied, the scores."""
+    """The selected answer and, when one is available, the scores.
+
+    An injected ``scorer`` wins. Without one the learner's own ``scores`` method
+    is used, because a run whose per-step scores are all 'unavailable' (attempt
+    007 reported 64 of 64 that way) cannot deliver the declared reporting plan.
+    When neither exists the field stays 'unavailable': a run must never print
+    zeros for a value it did not measure.
+    """
     selected = learner.predict(task) if hasattr(learner, "predict") else "unavailable"
     if scorer is None:
-        return selected, None, ("unavailable: no scorer was supplied; a run must "
-                                "not report zeros for unmeasured scores")
+        own = getattr(learner, "scores", None)
+        if callable(own):
+            scores = own(task)
+            if scores is not None:
+                return selected, scores, None
+        return selected, None, ("unavailable: no scorer was supplied and the learner "
+                                "exposes no scores; a run must not report zeros for "
+                                "unmeasured scores")
     scores = scorer(learner, task)
     require(scores is not None, "CANDIDATE_SCORER_RETURNED_NOTHING")
     return selected, scores, None

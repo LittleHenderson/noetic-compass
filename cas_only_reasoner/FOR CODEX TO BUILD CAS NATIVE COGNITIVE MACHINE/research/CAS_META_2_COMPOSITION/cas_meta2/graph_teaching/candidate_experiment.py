@@ -97,14 +97,23 @@ def measure(*, learner, groups, arm=ARM):
 
 
 def condition_report(*, condition, run, pre, post, probe_geometry):
-    """Before and after, per group, with the primary measure named."""
+    """Before and after, per group, with the primary measure named.
+
+    Both per-operation breakdowns and both per-question row sets are kept. The
+    first completed run (attempt 007) discarded them, so its delivered report
+    could not say whether a set was already at a given score before training -
+    and for this pilot that matters, because LIST_PARTS (4/5) dominated the
+    9/44 probe total. Nothing is summarised away now.
+    """
     def delta(name):
         before, after = pre[name], post[name]
         return {"before_correct": before["correct"], "before_total": before["questions"],
                 "after_correct": after["correct"], "after_total": after["questions"],
                 "before_accuracy": before["accuracy"], "after_accuracy": after["accuracy"],
                 "delta_correct": after["correct"] - before["correct"],
-                "by_operation_after": after["by_operation"]}
+                "by_operation_before": before["by_operation"],
+                "by_operation_after": after["by_operation"],
+                "items_before": before["rows"], "items_after": after["rows"]}
 
     return {
         "condition": condition,

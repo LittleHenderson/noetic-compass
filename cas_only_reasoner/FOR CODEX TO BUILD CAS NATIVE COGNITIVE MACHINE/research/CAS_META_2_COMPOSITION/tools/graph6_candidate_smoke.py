@@ -90,6 +90,31 @@ def main(argv=None):
     condition_order = ["checked_component_teaching", "final_answer_only"]
     checkpoints = []
 
+    # The learner's own scores must agree with the answer it reports, on the
+    # indexed path and on the on-demand path, or a delivered report would show an
+    # answer that its own scores contradict.
+    from cas_meta2.graph_teaching import trainer as trainer_module
+    from cas_meta2.graph_teaching import verified_training as vtr
+    layout = vtr.learner_index(records, "cas")
+    probe_learner = rf.GraphLearner(
+        torch, framework, [layout[record["record_id"]] for record in records],
+        device, 0.003)
+    agreement = {}
+    for label, task in (("taught", trainer_module.make_task(records[0], "cas")),
+                        ("untaught_probe",
+                         adapter.public_records(probe[0], "cas"))):
+        info = probe_learner.scores(task)
+        selected = probe_learner.predict(task)
+        argmax = info["scores"].index(max(info["scores"]))
+        agreement[label] = {
+            "path": info["path"],
+            "option_count": info["option_count"],
+            "argmax_matches_reported_answer":
+                task["encoded_options"][argmax] == selected,
+            "loss": info["loss"],
+        }
+    report["scores_agreement"] = agreement
+
     def framework_factory(seed):
         torch.manual_seed(seed)
         framework = rf.build_graph_training_framework(
@@ -144,6 +169,20 @@ def main(argv=None):
     report["probe_items_measured"] = {
         condition: payload["probe_measure"].get("after_total")
         for condition, payload in result["results"].items()}
+    # The delivered report must carry the scores and both breakdowns: attempt 007
+    # delivered every score as 'unavailable' and kept only the after breakdown.
+    report["report_completeness"] = {}
+    for condition, payload in result["results"].items():
+        measure = payload["probe_measure"]
+        item = measure["items_after"][0]
+        report["report_completeness"][condition] = {
+            "by_operation_before": "by_operation_before" in measure,
+            "items_before": len(measure.get("items_before") or []),
+            "items_after": len(measure.get("items_after") or []),
+            "first_item_has_scores": isinstance(item.get("scores_or_logits"), dict),
+            "step_scores_unavailable": result["results"][condition]
+                ["prediction_summary"]["scores_unavailable_count"],
+        }
     report["execution_order"] = list(cr.EXECUTION_ORDER)
     print(json.dumps(report, sort_keys=True, indent=2))
     print("SMOKE ONLY - not a measurement, not claim-bearing, local GPU.")

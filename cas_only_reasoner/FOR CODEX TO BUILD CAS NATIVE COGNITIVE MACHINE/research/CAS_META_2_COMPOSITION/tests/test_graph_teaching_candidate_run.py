@@ -456,3 +456,48 @@ def test_the_module_prepares_and_never_executes_on_its_own():
         trainer.FROZEN_MAX_OPTIMIZER_STEPS
     assert list(inspect.signature(cr.run_candidate).parameters)[:5] == [
         "framework", "model", "learner_factory", "authorization", "bundle"]
+
+
+def test_the_per_step_capture_uses_the_learners_own_scores_without_a_scorer():
+    """An injected scorer wins; otherwise the learner's own scores are used.
+
+    Attempt 007 delivered all 64 per-step captures as 'unavailable' because the
+    worker injected no scorer and nothing else was consulted. A learner that
+    exposes no scores must still be reported as unmeasured, never as zero.
+    """
+    task = {"record_id": "r", "public": {}}
+
+    class Scored:
+        def predict(self, task):
+            return "answer"
+
+        def scores(self, task):
+            return {"scores": [0.1, 0.9], "loss": 0.2}
+
+    class Unscored:
+        def predict(self, task):
+            return "answer"
+
+    class NullScored(Unscored):
+        def scores(self, task):
+            return None
+
+    selected, scores, note = cr._capture(Scored(), task, None)
+    assert selected == "answer" and scores == {"scores": [0.1, 0.9], "loss": 0.2}
+    assert note is None
+
+    selected, scores, note = cr._capture(Unscored(), task, None)
+    assert selected == "answer" and scores is None
+    assert note.startswith("unavailable: no scorer was supplied")
+    assert "zeros" in note
+
+    selected, scores, note = cr._capture(NullScored(), task, None)
+    assert scores is None and note.startswith("unavailable")
+
+    # an injected scorer is still honoured, and still required to return something
+    selected, scores, note = cr._capture(
+        Unscored(), task, lambda learner, task: {"scores": [1.0], "loss": 0.0})
+    assert scores == {"scores": [1.0], "loss": 0.0}
+    with pytest.raises(ValueError) as error:
+        cr._capture(Unscored(), task, lambda learner, task: None)
+    assert str(error.value).startswith("CANDIDATE_SCORER_RETURNED_NOTHING")

@@ -317,6 +317,46 @@ class GraphLearner:
                                   device=self.device)).item())
         return {"total": sum(losses) / max(1, len(losses))}
 
+    def scores(self, task):
+        """The option scores and the loss for one task: what the report expects.
+
+        ``candidate_experiment._scores`` looks for exactly this method, and
+        without it every score and loss field in a delivered report reads
+        'unavailable' - the first completed run reported 64 of 64 that way, so the
+        declared reporting plan's "all three scores and the loss" for the primary
+        questions could not be delivered.
+
+        The scores are the same dot products ``predict`` takes its argmax over,
+        from the indexed path when the task was taught and from the on-demand
+        encoding path when it was not, so a reported answer and its reported
+        scores can never come from different computations. This only reads; it
+        trains nothing and changes no prediction.
+        """
+        torch = self.torch
+        indexed = task["record_id"] in self._index
+        if indexed:
+            position = self._position(task)
+            value = self.module(self._problem_vectors[position].unsqueeze(0))[0]
+            option_vectors = self._option_vectors[position]
+        else:
+            _problem_ids, slot_ids = self.framework.encoder["encode"](task["public"])
+            value = self.module(
+                self.framework.encoder["encode_problem"](task["public"]).unsqueeze(0))[0]
+            zero = torch.zeros_like(value)
+            option_vectors = [self._sum(item) if item else zero
+                              for item in self._content_ids(slot_ids)]
+        scores = torch.stack([torch.dot(value, vector) for vector in option_vectors])
+        correct = task.get("encoded_correct_index")
+        loss = None
+        if type(correct) is int and 0 <= correct < int(scores.shape[0]):
+            loss = float(torch.nn.functional.cross_entropy(
+                scores.unsqueeze(0),
+                torch.tensor([correct], device=self.device)).item())
+        return {"scores": [round(float(score), 6) for score in scores],
+                "loss": loss, "correct_index": correct,
+                "path": "indexed" if indexed else "on_demand",
+                "option_count": int(scores.shape[0])}
+
     def checkpoint_identity(self):
         import hashlib as _hashlib
         digest = _hashlib.sha256()
