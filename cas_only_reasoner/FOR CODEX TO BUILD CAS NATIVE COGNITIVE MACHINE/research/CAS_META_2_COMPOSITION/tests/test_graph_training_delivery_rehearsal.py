@@ -52,10 +52,15 @@ class SimulatedS3:
         self.fail_on = fail_on
         self.deleted = False
 
-    def put_object(self, Bucket, Key, Body):
+    def put_object(self, Bucket, Key, Body, **kwargs):
         self.calls.append(("put", Key))
         if self.fail_on is not None and self.fail_on in Key:
             raise StubClientError("InternalError")
+        # the shared transport publishes create-only: an existing key with
+        # different content is a conflict, not an invitation to overwrite
+        if kwargs.get("IfNoneMatch") == "*" and Key in self.objects \
+                and self.objects[Key] != Body:
+            raise StubClientError("PreconditionFailed")
         self.objects[Key] = Body
         self.put_order.append(Key)
         return {}
@@ -155,7 +160,9 @@ def worker(tmp_path, monkeypatch):
     monkeypatch.setattr(experiment, "launch", launch_experiment)
 
     outer = {}
-    exec(compile(launch.render_worker(), "worker.py", "exec"), outer)
+    exec(compile(
+        launch.run_evidence.unified_worker_source(launch.render_worker()),
+        "worker.py", "exec"), outer)
     root = tmp_path / "root"
     (root / "results").mkdir(parents=True)
     (root / "config.json").write_bytes(json.dumps(
@@ -236,7 +243,7 @@ def test_delivery_rehearsal_normal_completion(worker, tmp_path):
     assert status["bucket_deleted"] is False
     assert status["evidence_deleted"] is False
     assert status["deletion_decision"]["decision"] == "DENY"
-    assert s3.deleted is True
+    assert s3.deleted is False
     assert status["instances"]["i-0123456789abcdef0"] == "CONFIRMED_TERMINATED"
 
 
