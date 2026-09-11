@@ -1,60 +1,8 @@
 {
-  "schema": "cas.rpm-cfc-constructor-bindings/1",
-  "plan_id": "RPM_CFC_CONSTRUCTOR_001",
+  "boundary": "A read-only interface survey. No code was changed by this record, no model was loaded, and the recovery job's files were not touched.",
   "build_portion": "bind_existing_components",
-  "recorded_utc": "2026-09-11T17:35:00.000000+00:00",
   "method": "AST survey of cas_meta2/graph_teaching and cas_meta2/teaching_cycle for top-level definitions; names below were read from the source, not assumed",
-  "verified_surveyed": {
-    "cas_meta2/graph_teaching/cube_node.py": {
-      "role": "the cube knowledge object: pinned bundle, six-face validation, containment graph, answer cases",
-      "binds": ["pinned_bundle_path", "load_bundle", "bundle_digest", "validate_bundle",
-                "error_code", "face_consistency_code", "face_inventory_code",
-                "view_labels", "label_index", "containment_graph", "graph_record",
-                "containment_signature", "answer_cases", "answer_signature",
-                "select_cases"],
-      "note": "the cube constructor's edits must validate against validate_bundle and the face-against-branch checks; a face's existence never proves the learner can generate or use it"
-    },
-    "cas_meta2/graph_teaching/adapter.py": {
-      "role": "graph to task encoding and scoring boundary",
-      "binds": ["encode_graph", "build_task", "option_vector", "readout", "predict",
-                "score", "scoring_table", "public_records"]
-    },
-    "cas_meta2/graph_teaching/candidate_run.py": {
-      "role": "the existing candidate run: proposed schedule, execution sequence, observation recording",
-      "binds": ["proposed_schedule", "scheduled_steps", "schedule_report",
-                "execution_sequence", "prepare_candidate_run", "taught_questions",
-                "probe_questions", "control_schedule", "probe_records",
-                "probe_geometry", "control_steps", "run_candidate",
-                "class ObservationRecorder(observe, record_update, summary)"],
-      "note": "ObservationRecorder is the existing observe/record shape; the constructor's new records extend it rather than inventing a parallel one"
-    },
-    "cas_meta2/graph_teaching/candidate_experiment.py": {
-      "role": "candidate learning and the model-version identity used by write-back",
-      "binds": ["question_groups", "condition_steps", "measure", "condition_report",
-                "launch", "compare", "checkpoint_identity", "parameter_order",
-                "state_digest", "build_inputs"]
-    },
-    "cas_meta2/graph_teaching/contrast_probe.py": {
-      "role": "the rename, reorder and rewire probe cases",
-      "binds": ["rename_record", "reorder_record", "rewire_record",
-                "correctly_answered", "build_probe_cases", "validate_probe_cases",
-                "probe_digest", "summarise", "run_probe"]
-    },
-    "cas_meta2/graph_teaching/confirmation.py": {
-      "role": "sealed evaluation, paired analysis and verdict machinery",
-      "binds": ["encoder_identity", "sealed_input", "evaluate_panel",
-                "practice_accuracy", "mcnemar", "clustered_bootstrap",
-                "paired_analysis", "transfer_verdict", "confirmation_verdict",
-                "baseline_row", "table_row"]
-    },
-    "cas_meta2/graph_teaching/competence.py": {
-      "role": "stage gates and outcome recording",
-      "binds": ["panel_normalized_threshold", "fit_criterion", "outcome",
-                "stage1_passes", "confirmation_outcome", "launch"]
-    }
-  },
   "named_but_not_yet_enumerated": {
-    "note": "these modules are known to exist from the delivered work; their public names were not read in this survey and must not be assumed",
     "modules": [
       "cas_meta2/graph_teaching/face_roles.py",
       "cas_meta2/graph_teaching/face_corpus.py",
@@ -70,17 +18,258 @@
       "cas_meta2/graph_teaching/curriculum_experiment.py",
       "cas_meta2/teaching_cycle/gpu_adapter.py",
       "aws/run_evidence.py (surveyed separately this session: the preservation boundary)"
-    ]
+    ],
+    "note": "these modules are known to exist from the delivered work; their public names were not read in this survey and must not be assumed"
   },
+  "next_step": "implement the diagnosis routes, the evidence records and the cube-edit proposals against these bindings; the memory-admission check is verified_teaching.Index, which already exists",
   "part_to_binding_map": {
-    "RPM": "binds candidate_run's schedule and observation shape plus the new GAP_ROUTE evidence records; the return address and remaining budget are the existing control principles, not a new kernel",
-    "evidence_acquisition": "new module; reads only pinned permitted sources and records visibility and scope with each packet",
-    "cube_constructor": "binds cube_node.validate_bundle, the face-against-branch checks and containment_graph so every proposed edit is checkable",
     "CAS_PCBA_constructor": "new typed board over adapter, candidate_experiment and the CFC modules, executed by a Python reference adapter that is labelled as such",
     "CFC_LL": "binds face_schedule's three movements and the phase-separated batching, with the six face meanings and the seven teaching stages unchanged",
-    "qualification_and_write_back": "binds candidate_experiment.checkpoint_identity, parameter_order and state_digest for the version transition",
-    "preservation": "binds aws/run_evidence.py as completed: the constructor's future job declares its own pre-run contract"
+    "RPM": "binds candidate_run's schedule and observation shape plus the new GAP_ROUTE evidence records; the return address and remaining budget are the existing control principles, not a new kernel",
+    "cube_constructor": "binds cube_node.validate_bundle, the face-against-branch checks and containment_graph so every proposed edit is checkable",
+    "evidence_acquisition": "new module; reads only pinned permitted sources and records visibility and scope with each packet",
+    "preservation": "binds aws/run_evidence.py as completed: the constructor's future job declares its own pre-run contract",
+    "qualification_and_write_back": "binds candidate_experiment.checkpoint_identity, parameter_order and state_digest for the version transition"
   },
-  "next_step": "enumerate the face_*, verified_teaching, trainer and real_framework surfaces, then implement the diagnosis routes and the evidence records against these bindings",
-  "boundary": "A read-only interface survey. No code was changed by this record, no model was loaded, and the recovery job's files were not touched."
+  "plan_id": "RPM_CFC_CONSTRUCTOR_001",
+  "recorded_utc": "2026-09-11T17:35:00.000000+00:00",
+  "schema": "cas.rpm-cfc-constructor-bindings/1",
+  "verified_second_pass": {
+    "face_evaluation": {
+      "binds": [
+        "panel",
+        "panel_manifest",
+        "evaluate",
+        "baselines",
+        "milestone_report",
+        "between_conditions",
+        "compile_panel_item",
+        "diagnostic_item",
+        "DIAGNOSTIC_KINDS"
+      ],
+      "role": "the frozen panel, summaries, baselines and paired analysis"
+    },
+    "face_roles": {
+      "binds": [
+        "ROLES",
+        "FACE_NUMBERS",
+        "ROLE_BY_FACE",
+        "ROLE_BY_NAME",
+        "ROLE_PAIRS",
+        "ROLE_FROM_CONTENT",
+        "FACE_APPLY",
+        "CUES",
+        "role_for",
+        "cue_for",
+        "role_label",
+        "other_faces",
+        "registry_report"
+      ],
+      "role": "the six face roles and the two task profiles; unchanged meanings"
+    },
+    "face_schedule": {
+      "binds": [
+        "MOVEMENTS",
+        "STAGE_FACES",
+        "CFC_WITHIN_STAGES",
+        "CFC_ROUNDS",
+        "CFC_CUBES_PER_COHORT",
+        "CFC_COHORTS",
+        "BATCH_SIZE",
+        "cfc_round_events",
+        "cfc_events",
+        "planned_counts",
+        "mixed_order",
+        "schedule_report"
+      ],
+      "note": "the course's four phases and phase-boundary flushing map onto this shape rather than duplicating it",
+      "role": "the CFC-LL movements and the phase structure the local course must reuse"
+    },
+    "face_tasks": {
+      "binds": [
+        "family_graph",
+        "facts_text",
+        "whole_of",
+        "branch_set",
+        "direct_parts",
+        "indirect_parts",
+        "foreign_parts",
+        "shared_parts",
+        "reach_kind",
+        "OPTIONS_PER_QUESTION",
+        "neutralize",
+        "definition_lines",
+        "context_lines"
+      ],
+      "note": "reach_kind plus direct_parts and indirect_parts are exactly the distinction the handoff's example needs: 'the learner confused direct and indirect constituents' is a measurable observation here, not a paraphrase",
+      "role": "the graph views and answer machinery the diagnosis and the parent task need"
+    },
+    "method": "AST survey, second pass: the modules named but not enumerated in the first",
+    "real_framework": {
+      "binds": [
+        "class GraphLearner(forward, step, eval_loss, scores, checkpoint_identity, predict)",
+        "class GraphTrainingFramework(contract_for, resolve_plasticity_groups, tensor_bytes, build_decompose_model)",
+        "build_graph_training_framework",
+        "build_encoder",
+        "TARGET_CONTRACT_ID",
+        "TARGET_PLASTICITY_ROLE"
+      ],
+      "note": "checkpoint_identity is the version identity the parent resumption binds; the planner and the student are separate instances of this same class",
+      "role": "the candidate learner and its plasticity contract"
+    },
+    "trainer": {
+      "binds": [
+        "class TrainingBudget(validate)",
+        "FROZEN_LEARNING_RATE",
+        "FROZEN_MAX_OPTIMIZER_STEPS",
+        "FROZEN_MAX_WALL_SECONDS",
+        "training_records",
+        "select_target",
+        "scope_parameters",
+        "parameter_snapshot",
+        "containment_report",
+        "make_task",
+        "run_training",
+        "evaluate_sealed",
+        "prediction_input"
+      ],
+      "note": "prediction_input is the pre-existing answer-index leak already recorded as unfixed; the constructor must not build on it",
+      "role": "the existing training budget, containment and sealed evaluation"
+    },
+    "verified_teaching": {
+      "binds": [
+        "class Index(branch_between, direct_parts, direct_part_ids, reach, shared, path)",
+        "lesson_context",
+        "choice_record",
+        "reference_arguments",
+        "canonical_question_key",
+        "catalog_question_key",
+        "question_key_digest",
+        "PHASES",
+        "ASSISTANCE_WORKED",
+        "ASSISTANCE_NONE",
+        "PENDING",
+        "PENDING_REASON",
+        "VERIFIED",
+        "WITNESS_KINDS",
+        "REASON_CODES",
+        "CHECKER_IDENTITY",
+        "ROLE_BINDINGS",
+        "VISIBILITY_PROFILE"
+      ],
+      "note": "Index.branch_between, reach and shared are the checks a proposed cube field or relationship must pass before admission; this is the memory-admission layer, and it is already built",
+      "role": "source-support verification for cube content, with the answer-versus-private-target boundary"
+    }
+  },
+  "verified_surveyed": {
+    "cas_meta2/graph_teaching/adapter.py": {
+      "binds": [
+        "encode_graph",
+        "build_task",
+        "option_vector",
+        "readout",
+        "predict",
+        "score",
+        "scoring_table",
+        "public_records"
+      ],
+      "role": "graph to task encoding and scoring boundary"
+    },
+    "cas_meta2/graph_teaching/candidate_experiment.py": {
+      "binds": [
+        "question_groups",
+        "condition_steps",
+        "measure",
+        "condition_report",
+        "launch",
+        "compare",
+        "checkpoint_identity",
+        "parameter_order",
+        "state_digest",
+        "build_inputs"
+      ],
+      "role": "candidate learning and the model-version identity used by write-back"
+    },
+    "cas_meta2/graph_teaching/candidate_run.py": {
+      "binds": [
+        "proposed_schedule",
+        "scheduled_steps",
+        "schedule_report",
+        "execution_sequence",
+        "prepare_candidate_run",
+        "taught_questions",
+        "probe_questions",
+        "control_schedule",
+        "probe_records",
+        "probe_geometry",
+        "control_steps",
+        "run_candidate",
+        "class ObservationRecorder(observe, record_update, summary)"
+      ],
+      "note": "ObservationRecorder is the existing observe/record shape; the constructor's new records extend it rather than inventing a parallel one",
+      "role": "the existing candidate run: proposed schedule, execution sequence, observation recording"
+    },
+    "cas_meta2/graph_teaching/competence.py": {
+      "binds": [
+        "panel_normalized_threshold",
+        "fit_criterion",
+        "outcome",
+        "stage1_passes",
+        "confirmation_outcome",
+        "launch"
+      ],
+      "role": "stage gates and outcome recording"
+    },
+    "cas_meta2/graph_teaching/confirmation.py": {
+      "binds": [
+        "encoder_identity",
+        "sealed_input",
+        "evaluate_panel",
+        "practice_accuracy",
+        "mcnemar",
+        "clustered_bootstrap",
+        "paired_analysis",
+        "transfer_verdict",
+        "confirmation_verdict",
+        "baseline_row",
+        "table_row"
+      ],
+      "role": "sealed evaluation, paired analysis and verdict machinery"
+    },
+    "cas_meta2/graph_teaching/contrast_probe.py": {
+      "binds": [
+        "rename_record",
+        "reorder_record",
+        "rewire_record",
+        "correctly_answered",
+        "build_probe_cases",
+        "validate_probe_cases",
+        "probe_digest",
+        "summarise",
+        "run_probe"
+      ],
+      "role": "the rename, reorder and rewire probe cases"
+    },
+    "cas_meta2/graph_teaching/cube_node.py": {
+      "binds": [
+        "pinned_bundle_path",
+        "load_bundle",
+        "bundle_digest",
+        "validate_bundle",
+        "error_code",
+        "face_consistency_code",
+        "face_inventory_code",
+        "view_labels",
+        "label_index",
+        "containment_graph",
+        "graph_record",
+        "containment_signature",
+        "answer_cases",
+        "answer_signature",
+        "select_cases"
+      ],
+      "note": "the cube constructor's edits must validate against validate_bundle and the face-against-branch checks; a face's existence never proves the learner can generate or use it",
+      "role": "the cube knowledge object: pinned bundle, six-face validation, containment graph, answer cases"
+    }
+  }
 }
