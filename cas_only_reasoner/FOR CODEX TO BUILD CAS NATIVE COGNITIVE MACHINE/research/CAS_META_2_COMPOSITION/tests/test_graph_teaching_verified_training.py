@@ -228,3 +228,48 @@ def test_the_public_problem_is_the_shape_the_frozen_encoder_parses():
                  in zip(encoded["ids"], encoded["kinds"], encoded["slots"])
                  if kind == 2 and slot in (1, 2, 3)}
         assert slots == {0, 1, 2}, (index, slots)
+
+
+def test_the_private_teacher_target_cannot_reach_the_public_bytes():
+    """The id, the visible problem and the visible option order are public-only.
+
+    The records delivered by Attempt 007 folded the private target's
+    ``expected_choice_id`` and ``witness_kind`` into the digest that becomes
+    ``record_id``, and the adapter derives the learner-visible option ORDER from
+    that id. Measured on the eight taught records, flipping the private target to
+    another offered choice left every prompt identical and changed the record id
+    on 8 of 8 and the visible option order on 4 of 8. New compilations digest a
+    public projection instead; the delivered records keep the ids they were
+    measured with, so nothing already measured is rewritten.
+    """
+    bundle = cube_node.load_bundle()
+    report = vt.compile_bundle(bundle, choice_order="declared")
+    index = vt.Index(bundle, vt.lesson_context(bundle, "view_context"),
+                     "view_context")
+    targets = {target["exercise_id"]: target
+               for target in report["private_teacher_targets"]}
+    for exercise in report["public_exercises"]:
+        target = targets[exercise["exercise_id"]]
+        choices = {choice["choice_id"]: choice["value"]
+                   for choice in exercise["choices"]}
+        choice_id, value = sorted(
+            (cid, option) for cid, option in choices.items()
+            if option != target["expected_answer"])[0]
+        flipped = dict(target, expected_answer=value,
+                       expected_choice_id=choice_id)
+        first = vtr.record_from_exercise(bundle, exercise, target, index,
+                                         "view_context", "audit")
+        second = vtr.record_from_exercise(bundle, exercise, flipped, index,
+                                          "view_context", "audit")
+        assert first["record_id"] == second["record_id"], exercise["exercise_id"]
+        assert first["correct"] != second["correct"], "the target did change"
+        first_public = adapter.public_records(first, "cas")
+        second_public = adapter.public_records(second, "cas")
+        assert first_public["public"] == second_public["public"]
+        assert first_public["encoded_options"] == second_public["encoded_options"]
+        assert first["cube_verified_teaching"]["expected_choice_id"] == \
+            target["expected_choice_id"]
+        assert first["cube_verified_teaching"]["witness_kind"] == \
+            target["witness"]["kind"]
+        assert first["cube_verified_teaching"]["record_id_basis"] == \
+            "public_projection"

@@ -1,0 +1,541 @@
+{
+  "schema": "cas-graph-pilot-audit/1",
+  "boundary": "read-only; no torch, no model, no provider, no reservation, no training; Attempt 007 preserved as delivered and never backfilled",
+  "probe_panel": {
+    "probe_questions": 44,
+    "catalog_questions": 51,
+    "distinct_taught_questions": 7,
+    "excluded_taught_questions": 7,
+    "by_operation": {
+      "LIST_PARTS": {
+        "part_list": 2,
+        "empty_list": 3
+      },
+      "FIND_SHARED_PART": {
+        "shared_part": 5,
+        "none": 9
+      },
+      "REACHED_VIA": {
+        "absent": 21,
+        "direct": 3,
+        "via_other": 1
+      }
+    },
+    "taught_versus_probe": {
+      "taught": {
+        "absent": 2,
+        "direct": 2,
+        "via_other": 2,
+        "part_list": 1,
+        "shared_part": 1
+      },
+      "probe": {
+        "part_list": 2,
+        "empty_list": 3,
+        "shared_part": 5,
+        "none": 9,
+        "absent": 21,
+        "direct": 3,
+        "via_other": 1
+      }
+    },
+    "correct_slot_histogram": {
+      "0": 17,
+      "1": 14,
+      "2": 13
+    },
+    "absence_answers": 33,
+    "questions_without_an_absence_option": 2,
+    "absence_share": 0.75,
+    "shared_part_rule": "reference.shared_parts: the direct constituents common to both ideas, plus either idea itself when it is a direct constituent of the other. The second clause is why Bicycle/Frame answers Frame and Rim/Wheel answers Rim; a reading of the first clause alone reports all fourteen pairs as 'none'."
+  },
+  "constant_rules": {
+    "questions": 44,
+    "rules": {
+      "always_absence_then_first_offered": 34,
+      "always_absence_then_last_offered": 34,
+      "always_positive_then_first_offered": 7,
+      "always_slot_0": 17,
+      "always_slot_1": 14,
+      "always_slot_2": 13,
+      "uniform_random_expectation": 14.67
+    },
+    "absence_answer_mass": 33
+  },
+  "target_dependence": {
+    "taught_records": [
+      {
+        "exercise_id": "exercise:dd652845dc7dbba7123f67a910ba33a0f61ac6ff108fce2635e997941ed51e6d",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:5d67c827cb77f68a0b2783401dfe99c6e40717d055517b6af7414f7453bde802",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:2fa80b6dd01f3d9bb8092280ef3d444d2d144f6fb562fb8e097e102e4940da05",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:41eae384884026e2c47e796aba13b60f12f87eab697df85d5cc68912b8fa7670",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:cdce70a24ba9b6c32a0682f74a59d498638cbde24e49a660fd99a4d446c35e35",
+        "operation": "LIST_PARTS",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:2bc70b47d2fad76283f45564e5f8465b9debb8d99a6ebfa150aa3cc71be97f40",
+        "operation": "FIND_SHARED_PART",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      },
+      {
+        "exercise_id": "exercise:b88862309be8bc1f6a36436e2c1db99c59f25021822a80687a37bcb3275bb739",
+        "operation": "REACHED_VIA",
+        "target_changed_only": true,
+        "prompt_text_identical": true,
+        "record_id_changed": false,
+        "learner_visible_option_order_changed": false,
+        "learner_visible_observations_changed": false,
+        "encoded_correct_index_changed": true
+      }
+    ],
+    "probe_records": [
+      {
+        "operation": "LIST_PARTS",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      },
+      {
+        "operation": "LIST_PARTS",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      },
+      {
+        "operation": "LIST_PARTS",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      },
+      {
+        "operation": "LIST_PARTS",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      },
+      {
+        "operation": "LIST_PARTS",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      },
+      {
+        "operation": "FIND_SHARED_PART",
+        "record_id_changed": false,
+        "prompt_text_identical": true,
+        "learner_visible_option_order_changed": false
+      }
+    ],
+    "record_id_basis_contains": [
+      "expected_choice_id",
+      "witness_kind",
+      "expected_answer",
+      "correct",
+      "record_id"
+    ],
+    "delivered_compilation_measurement": {
+      "note": "measured on the code as delivered to Attempt 007, BEFORE the public-projection fix was applied; the live rows below measure the current code, which no longer carries the dependence",
+      "id_basis": "digest(canonical(core)), with expected_choice_id and witness_kind inside core",
+      "record_id_changed": "8 of 8",
+      "learner_visible_option_order_changed": "4 of 8",
+      "learner_visible_observations_changed": "4 of 8",
+      "problem_text_changed": "0 of 8",
+      "probe_records_via_record_from_question": "no change on any field",
+      "fix": "verified_training.public_projection strips the two target-derived fields from the id basis; new compilations only, so the delivered Attempt 007 records keep the ids they were measured with"
+    },
+    "label_alignment_check": "candidate_experiment.connection_check reports all_slots_carry_the_teacher_answer, which asserts encoded_options[encoded_correct_index] == the teacher answer. That is label alignment: if it failed, the loss could reward the wrong option. It is not evidence of leakage, and it is kept."
+  },
+  "attempt_007": {
+    "receipt": "receipt_cas-meta2-graph6cand-20260910174500-e33a6497",
+    "result_sha256": "7f193c9ebed0b52a4b7aacf602a8cfa479366a29a8546754318581e4e3fea8b9",
+    "envelope_status": "REMOTE_FINISHED",
+    "updates_per_condition": 64,
+    "artifacts": [
+      {
+        "bytes": 68463,
+        "condition": "checked_component_teaching",
+        "identity": "ba394befa3b63bee798d14b3e7e75b98697e41ec92363bb7c2eaffe02d99c506",
+        "name": "checkpoint_checked_component_teaching.pt",
+        "sha256": "e4b41c74e423636faeff006c78622bafeba5447ca859872cc44d17c5f28025b0"
+      },
+      {
+        "bytes": 68382,
+        "condition": "final_answer_only",
+        "identity": "51427c1d51d6c5feccefdc8fd541a8fda3ceccd7064de33dcd47dbdc1f77baa4",
+        "name": "checkpoint_final_answer_only.pt",
+        "sha256": "67f18a4cb93c1db15a7d702a3b32e4757eb9f94b8f2ed14ac0a1ce17a1c59142"
+      }
+    ],
+    "conditions": {
+      "checked_component_teaching": {
+        "steps": 64,
+        "correct_steps": 30,
+        "expected_category_counts": {
+          "absent": 16,
+          "direct": 16,
+          "via_other": 16,
+          "part_list": 8,
+          "shared_part": 8
+        },
+        "selected_category_counts": {
+          "via_other": 26,
+          "absent": 10,
+          "part_list": 8,
+          "none": 1,
+          "direct": 12,
+          "shared_part": 7
+        },
+        "confusion": {
+          "absent->via_other": 11,
+          "direct->absent": 6,
+          "absent->absent": 1,
+          "via_other->absent": 3,
+          "part_list->part_list": 8,
+          "shared_part->none": 1,
+          "absent->direct": 4,
+          "direct->direct": 5,
+          "via_other->direct": 3,
+          "shared_part->shared_part": 7,
+          "via_other->via_other": 10,
+          "direct->via_other": 5
+        },
+        "phase_counts": {
+          "component-route": 40,
+          "whole-answer": 24
+        },
+        "per_record": {
+          "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933": {
+            "operation": "REACHED_VIA",
+            "expected": "absent",
+            "correct": 0,
+            "steps": 8,
+            "selected": {
+              "via:Wheel": 6,
+              "direct": 2
+            }
+          },
+          "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595": {
+            "operation": "REACHED_VIA",
+            "expected": "direct",
+            "correct": 2,
+            "steps": 8,
+            "selected": {
+              "absent": 1,
+              "direct": 2,
+              "via:Wheel": 5
+            }
+          },
+          "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47": {
+            "operation": "REACHED_VIA",
+            "expected": "absent",
+            "correct": 1,
+            "steps": 8,
+            "selected": {
+              "absent": 1,
+              "direct": 2,
+              "via:Wheel": 5
+            }
+          },
+          "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b": {
+            "operation": "REACHED_VIA",
+            "expected": "via:Wheel",
+            "correct": 4,
+            "steps": 8,
+            "selected": {
+              "absent": 2,
+              "direct": 2,
+              "via:Wheel": 4
+            }
+          },
+          "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089": {
+            "operation": "REACHED_VIA",
+            "expected": "direct",
+            "correct": 3,
+            "steps": 8,
+            "selected": {
+              "absent": 5,
+              "direct": 3
+            }
+          },
+          "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178": {
+            "operation": "LIST_PARTS",
+            "expected": [
+              "Frame",
+              "Wheel"
+            ],
+            "correct": 7,
+            "steps": 8,
+            "selected": {
+              "['Rim', 'Wheel']": 1,
+              "['Frame', 'Wheel']": 7
+            }
+          },
+          "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc": {
+            "operation": "FIND_SHARED_PART",
+            "expected": "Wheel",
+            "correct": 7,
+            "steps": 8,
+            "selected": {
+              "none": 1,
+              "Wheel": 7
+            }
+          },
+          "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a": {
+            "operation": "REACHED_VIA",
+            "expected": "via:Wheel",
+            "correct": 6,
+            "steps": 8,
+            "selected": {
+              "absent": 1,
+              "via:Wheel": 6,
+              "direct": 1
+            }
+          }
+        },
+        "checkpoint_chain": {
+          "links": 64,
+          "distinct_checkpoint_after": 64,
+          "consecutive_links_join": true
+        },
+        "first_half_correct": 14,
+        "second_half_correct": 16
+      },
+      "final_answer_only": {
+        "steps": 64,
+        "correct_steps": 63,
+        "expected_category_counts": {
+          "part_list": 22,
+          "shared_part": 21,
+          "via_other": 21
+        },
+        "selected_category_counts": {
+          "part_list": 22,
+          "shared_part": 21,
+          "via_other": 21
+        },
+        "confusion": {
+          "part_list->part_list": 22,
+          "shared_part->shared_part": 21,
+          "via_other->via_other": 21
+        },
+        "phase_counts": {
+          "whole-answer": 64
+        },
+        "per_record": {
+          "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178": {
+            "operation": "LIST_PARTS",
+            "expected": [
+              "Frame",
+              "Wheel"
+            ],
+            "correct": 21,
+            "steps": 22,
+            "selected": {
+              "['Rim', 'Wheel']": 1,
+              "['Frame', 'Wheel']": 21
+            }
+          },
+          "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc": {
+            "operation": "FIND_SHARED_PART",
+            "expected": "Wheel",
+            "correct": 21,
+            "steps": 21,
+            "selected": {
+              "Wheel": 21
+            }
+          },
+          "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a": {
+            "operation": "REACHED_VIA",
+            "expected": "via:Wheel",
+            "correct": 21,
+            "steps": 21,
+            "selected": {
+              "via:Wheel": 21
+            }
+          }
+        },
+        "checkpoint_chain": {
+          "links": 64,
+          "distinct_checkpoint_after": 64,
+          "consecutive_links_join": true
+        },
+        "first_half_correct": 31,
+        "second_half_correct": 32
+      }
+    },
+    "available_from_this_delivery": [
+      "per-step expected and selected answers for all 128 training updates, with operation, phase, block and per-step parameter digests",
+      "per-condition measured counts for the three taught whole-answer questions, the five taught component questions and the 44-question probe",
+      "containment, checkpoint verification, matched initial weights, and the delivered checkpoint files with their hashes"
+    ],
+    "not_available_from_this_delivery": [
+      "the per-question probe rows: the delivered report kept only the after-training per-operation breakdown, so which individual probe questions were lost or gained is not recoverable, and a paired McNemar comparison cannot be computed",
+      "the per-step scores and losses: the worker injected no scorer and the learner exposed no scores method, so every score field reads 'unavailable' (64 of 64 per condition)",
+      "the before-training per-operation breakdown of the probe"
+    ],
+    "paired_taught_records_last_exposure": {
+      "records_with_steps_in_both_conditions": 3,
+      "records_only_checked_practised": 5,
+      "records_only_control_practised": 0,
+      "only_checked_correct": 0,
+      "only_control_correct": 0,
+      "both_correct": 3,
+      "neither_correct": 0,
+      "note": "this pairing is over the taught records where per-step telemetry exists in both conditions - three whole-answer questions; the five component questions have no control-condition telemetry because the control never practises them. The paired PROBE comparison the directive asks for cannot be computed from this delivery: its per-question rows were not retained."
+    }
+  },
+  "observations": {
+    "attempt_007": {
+      "kind": "paid AWS run, the pilot's measurement",
+      "status": "AWS_CANDIDATE_FINISHED",
+      "elapsed_seconds": 551.9,
+      "package": "candidate_package_006/",
+      "updates": 128,
+      "updates_per_condition": 64,
+      "matched_initial_weights": true,
+      "checkpoints": [
+        {
+          "name": "checkpoint_checked_component_teaching.pt",
+          "bytes": 68463,
+          "sha256": "e4b41c74e423636faeff006c78622bafeba5447ca859872cc44d17c5f28025b0"
+        },
+        {
+          "name": "checkpoint_final_answer_only.pt",
+          "bytes": 68382,
+          "sha256": "67f18a4cb93c1db15a7d702a3b32e4757eb9f94b8f2ed14ac0a1ce17a1c59142"
+        }
+      ],
+      "device": "the AWS instance's A10G (g7.2xlarge)"
+    },
+    "smoke_runs": {
+      "SMOKE_RUN_001.json": {
+        "sha256": "1ea8c3a4ce0e3f02b68765f2a8b5af4a374f952167384f8caf36028cd9705c6a",
+        "kind": "local smoke run, NOT a measurement",
+        "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+        "torch": "2.11.0+cu128",
+        "updates_per_condition": 3,
+        "total_updates": 6,
+        "checkpoints_written": [
+          "smoke_checkpoint_checked_component_teaching.pt",
+          "smoke_checkpoint_final_answer_only.pt"
+        ],
+        "provenance_recorded_by_the_tool": [
+          "archive",
+          "boundary",
+          "checkpoint_verified",
+          "checkpoints",
+          "containment",
+          "counters",
+          "device",
+          "encoded_problems",
+          "execution_order",
+          "gpu",
+          "matched_initial_weights",
+          "probe_items_measured",
+          "probe_questions",
+          "probe_questions_measured",
+          "problem_vector_dim",
+          "records",
+          "torch",
+          "updates_per_condition"
+        ]
+      },
+      "SMOKE_RUN_002.json": {
+        "sha256": "fae287aeffc4b195e164dccb12a0f6f91985b03f04be5f492d5993b456acc72b",
+        "kind": "local smoke run, NOT a measurement",
+        "device": "NVIDIA GeForce RTX 4070 Laptop GPU",
+        "torch": "2.11.0+cu128",
+        "updates_per_condition": 3,
+        "total_updates": 6,
+        "checkpoints_written": [
+          "smoke_checkpoint_checked_component_teaching.pt",
+          "smoke_checkpoint_final_answer_only.pt"
+        ],
+        "provenance_recorded_by_the_tool": [
+          "archive",
+          "boundary",
+          "checkpoint_verified",
+          "checkpoints",
+          "containment",
+          "counters",
+          "device",
+          "encoded_problems",
+          "execution_order",
+          "gpu",
+          "matched_initial_weights",
+          "probe_items_measured",
+          "probe_questions",
+          "probe_questions_measured",
+          "problem_vector_dim",
+          "records",
+          "report_completeness",
+          "scores_agreement",
+          "torch",
+          "updates_per_condition"
+        ]
+      }
+    },
+    "separations": [
+      "Attempt 007 trained 128 updates on the paid instance and delivered the checkpoints named above. The smoke runs trained 6 updates each, from fresh initial weights, on the local RTX 4070, and wrote their own throwaway checkpoint files: they are newly trained mini-runs, not rereads of the retained weights.",
+      "The smoke runs therefore cannot recover Attempt 007's missing per-question probe rows or its missing scores. They establish that the corrected instrumentation now records those fields.",
+      "A zero-update reread of the retained checkpoints is a third thing again, and it has not been done. That is what the packaged diagnostic specifies."
+    ]
+  }
+}

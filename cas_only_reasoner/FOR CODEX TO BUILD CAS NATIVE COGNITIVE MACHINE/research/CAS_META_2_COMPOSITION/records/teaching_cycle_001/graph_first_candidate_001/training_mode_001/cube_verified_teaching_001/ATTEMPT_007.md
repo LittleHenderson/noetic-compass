@@ -120,3 +120,28 @@ both were fixed after the run without touching the run's numbers:
   any of the five pilot jobs.
 - The two checkpoints are delivered locally with their hashes recorded above;
   the evidence bucket was deleted only after verified collection.
+
+## Addendum, 2026-09-10 — after the consolidated answer-selection audit
+
+Nothing above is rewritten. Three readings in it need the audit's corrections,
+and they are recorded here rather than edited into the original text:
+
+1. **The baselines that matter are not the ones I printed.** The probe is a
+   75 %-absence panel (33 of 44 answers are empty/none/absent), and a constant
+   rule — always prefer the absence option, fall back to the first offered choice
+   — scores **34 of 44** on it. The binomial figures against 1/3 in the table
+   above compare the count with a uniform-random model; they are not the
+   informative comparison, and they do not identify a mechanism.
+2. **The paired comparison the result invites cannot be computed from this
+   delivery.** The per-question probe rows were not retained, so McNemar over
+   discordant pairs is unavailable; the Fisher figures above used marginal totals
+   only.
+3. **The retained per-step telemetry points at a mechanism.** On the 16 taught
+   presentations whose answer is `absent`, the checked-component learner answered
+   `absent` once and a positive reach label 15 times, and the control learned its
+   three positive-answer questions to 63 of 64 — then scored exactly the
+   "never answer absence" baseline (7 of 44) on the probe.
+
+`PILOT_CONSOLIDATED_ANALYSIS_001.md` and `PILOT_AUDIT_001.json` hold the audit;
+`BOUNDED_DIAGNOSTIC_001.md` packages the one measurement that would settle the
+mechanism, unrun and unauthorised.

@@ -25,6 +25,7 @@ Usage:
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -49,6 +50,22 @@ def main(argv=None):
         zipped.extractall(root)
     sys.path.insert(0, str(root / "research" / "CAS_META_2_COMPOSITION"))
 
+    # What this smoke run is running, recorded so the report identifies itself:
+    # a smoke report whose package and source are not named cannot be told apart
+    # from a measurement of something else.
+    archive_sha256 = hashlib.sha256(archive.read_bytes()).hexdigest()
+    packaged_manifest = json.loads(
+        (root / "graph6_curriculum_source_manifest.json").read_bytes())
+    package_identity = {
+        "archive": archive.name,
+        "archive_sha256": archive_sha256,
+        "source_sha": packaged_manifest["source_sha"],
+        "worker_script": packaged_manifest["worker_script"],
+        "worker_sha256": packaged_manifest["files_sha256"][
+            packaged_manifest["worker_script"]],
+        "members": packaged_manifest["member_count"],
+    }
+
     # The deployed worker installs these frozen wheels into its venv. This
     # installs the same wheel files into a scratch target, so the shared
     # development venv is left alone.
@@ -68,10 +85,16 @@ def main(argv=None):
     # ``gpu_adapter._cuda`` is guarded to Linux worker instances on purpose, so
     # the smoke tool binds the device itself.
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    report = {"archive": archive.name, "device": device,
+    report = {"package": package_identity, "device": device,
               "torch": torch.__version__,
               "gpu": (torch.cuda.get_device_name(0) if device == "cuda" else None),
               "updates_per_condition": UPDATES_PER_CONDITION,
+              "training": {"updates_per_condition": UPDATES_PER_CONDITION,
+                           "total_updates": UPDATES_PER_CONDITION * 2,
+                           "fresh_initial_weights": True,
+                           "note": ("a newly trained mini-run from fresh initial "
+                                    "weights, NOT a reread of any retained "
+                                    "checkpoint from a paid run")},
               "boundary": ("local development GPU, truncated updates, no provider, "
                            "no reservation, no measurement")}
 
@@ -140,7 +163,10 @@ def main(argv=None):
                     "condition": learner.condition_tag, "identity": identity,
                     "parameter_order": ce.parameter_order(learner.module),
                     "state": learner.module.state_dict()}, str(path))
-        checkpoints.append(path.name)
+        checkpoints.append({"name": path.name, "bytes": path.stat().st_size,
+                            "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                            "condition": learner.condition_tag,
+                            "parameter_identity": identity})
         return {"path": str(path), "identity": identity}
 
     def checkpoint_verifier(saved, identity):

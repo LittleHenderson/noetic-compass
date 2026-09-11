@@ -39,6 +39,8 @@ its responses are not predictions.
 """
 from __future__ import annotations
 
+import json
+
 from .graph import canonical, digest, require
 from .lessons import EXERCISE_SCHEMA
 from . import adapter, cube_node, reference, trainer, verified_teaching as vt
@@ -125,11 +127,39 @@ def record_from_exercise(bundle, exercise, target, index, view_id, split):
                 "question_key": question_key}}
     core["cube_verified_teaching"]["question_key_digest"] = vt.question_key_digest(
         question_key)
-    record = {**core, "record_id": digest(canonical(core)), "correct": correct,
+    record = {**core, "record_id": digest(canonical(public_projection(core))),
+              "correct": correct,
               "reference": reference.derivation_for(
                   question["op"], cube_node.containment_graph(bundle, view_id),
                   question)}
     return record
+
+
+#: Fields inside ``cube_verified_teaching`` that are functions of the PRIVATE
+#: teacher target rather than of public content.
+TARGET_DERIVED_FIELDS = ("expected_choice_id", "witness_kind")
+
+
+def public_projection(core):
+    """The part of a record's core that public content alone determines.
+
+    ``record_from_exercise`` folds the private teacher target's
+    ``expected_choice_id`` and ``witness_kind`` into the dict it digests to make
+    ``record_id``, and ``adapter.public_records`` derives the learner-visible
+    option ORDER from that id (``seed = digests(record_id + ':' + arm)[:8]``).
+    So a changed private target could reorder the public choices: measured on the
+    eight taught records, flipping the target to another offered choice left every
+    prompt identical and changed the record id on 8 of 8 and the visible option
+    order on 4 of 8. That is the old target-dependence the cube compiler was
+    meant not to inherit, and this projection is the fix - for new compilations
+    only. The delivered Attempt 007 records keep the ids they were measured with.
+    """
+    projection = json.loads(canonical(core))
+    detail = projection.get("cube_verified_teaching")
+    if isinstance(detail, dict):
+        for field in TARGET_DERIVED_FIELDS:
+            detail.pop(field, None)
+    return projection
 
 
 def catalog_question(operation, named_arguments, index):

@@ -6774,13 +6774,13 @@
                 {
                   "exercise_id": "exercise:3219b3bcacf7745843535cbfb92c62251759b144430ac5668ae97617ac1e3ec2",
                   "operation": "REACHED_VIA",
-                  "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+                  "record_id": "5d84c542cc8d5104d59a33a6ce615786865a11a04005709521dde85fc95bb08c",
                   "task_profile": "component-route/0.1"
                 },
                 {
                   "exercise_id": "exercise:b88862309be8bc1f6a36436e2c1db99c59f25021822a80687a37bcb3275bb739",
                   "operation": "REACHED_VIA",
-                  "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+                  "record_id": "bff2302c0c7d3e9cc51a3ef98226720e6b997a33234334f16b02f0f24e42b653",
                   "task_profile": "whole-answer/0.1"
                 }
               ]
@@ -6789,14 +6789,14 @@
         }
       },
       "record_ids": [
-        "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
-        "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
-        "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
-        "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
-        "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
-        "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
-        "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
-        "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a"
+        "8980556dcf2557f36410c12ea2664f2265ff64f8ba894ad9c76adbd55e52dd89",
+        "0cc44e0aaabdfcac7442209693f34459055d14f4a623a500138032e01736c68c",
+        "0f08293290414caf22ea4d3f705abb282008d58c6c7619b3bd700250247bdf66",
+        "5d84c542cc8d5104d59a33a6ce615786865a11a04005709521dde85fc95bb08c",
+        "a855472d48282febe764ce9f8afd89f4306684a4c00c2b3dbab7e88cbc6a05e9",
+        "b7bfcea70186040f691b9dbd2fd4aa41af853b7dc77d9845a3b0b7d86ccdfb30",
+        "d91ef3da13942abb884d966ebf39a9ace3b7a23b0b63c55c6c1a7d42d86d40b2",
+        "bff2302c0c7d3e9cc51a3ef98226720e6b997a33234334f16b02f0f24e42b653"
       ],
       "records": 8,
       "required_instrumentation": [
@@ -7422,30 +7422,30 @@
           "records": [
             {
               "declared_slot": 2,
-              "encoded_correct_index": 0,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+              "record_id": "8980556dcf2557f36410c12ea2664f2265ff64f8ba894ad9c76adbd55e52dd89",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
             },
             {
               "declared_slot": 0,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+              "record_id": "0cc44e0aaabdfcac7442209693f34459055d14f4a623a500138032e01736c68c",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
             },
             {
               "declared_slot": 2,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+              "record_id": "0f08293290414caf22ea4d3f705abb282008d58c6c7619b3bd700250247bdf66",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
@@ -7455,7 +7455,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+              "record_id": "5d84c542cc8d5104d59a33a6ce615786865a11a04005709521dde85fc95bb08c",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -7465,17 +7465,17 @@
               "encoded_correct_index": 1,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+              "record_id": "a855472d48282febe764ce9f8afd89f4306684a4c00c2b3dbab7e88cbc6a05e9",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "LIST_PARTS",
-              "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+              "record_id": "b7bfcea70186040f691b9dbd2fd4aa41af853b7dc77d9845a3b0b7d86ccdfb30",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": [
                 "Frame",
@@ -7488,10 +7488,10 @@
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 0,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "FIND_SHARED_PART",
-              "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+              "record_id": "d91ef3da13942abb884d966ebf39a9ace3b7a23b0b63c55c6c1a7d42d86d40b2",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "Wheel",
               "value_at_encoded_correct_index": "Wheel"
@@ -7501,7 +7501,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+              "record_id": "bff2302c0c7d3e9cc51a3ef98226720e6b997a33234334f16b02f0f24e42b653",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -7574,30 +7574,30 @@
           "records": [
             {
               "declared_slot": 2,
-              "encoded_correct_index": 0,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "4646db3fb29ff1f180c6c3b39b7dba7290b6d436eecc5bc72887bdcd9dff2933",
+              "record_id": "8980556dcf2557f36410c12ea2664f2265ff64f8ba894ad9c76adbd55e52dd89",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
             },
             {
               "declared_slot": 0,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "6a205028a823ae4d13c5608b48dfdbd8479b327e5a916b5c1b092f9e56883595",
+              "record_id": "0cc44e0aaabdfcac7442209693f34459055d14f4a623a500138032e01736c68c",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
             },
             {
               "declared_slot": 2,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "c85d32de33c72173a2f2f52d18dfc5f4b8d3e09fe7c7c6cd7ca12598f7c2db47",
+              "record_id": "0f08293290414caf22ea4d3f705abb282008d58c6c7619b3bd700250247bdf66",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "absent",
               "value_at_encoded_correct_index": "absent"
@@ -7607,7 +7607,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "780f3f94c2c5508b8adff2fda49690bf7ef02905802f3f8736c49f1dd1d6382b",
+              "record_id": "5d84c542cc8d5104d59a33a6ce615786865a11a04005709521dde85fc95bb08c",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
@@ -7617,17 +7617,17 @@
               "encoded_correct_index": 1,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "87ee0e07dbf0d18f6812dad3e68fae35d437427c3fc9b1a7e06ea9d0dfd80089",
+              "record_id": "a855472d48282febe764ce9f8afd89f4306684a4c00c2b3dbab7e88cbc6a05e9",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "direct",
               "value_at_encoded_correct_index": "direct"
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 2,
+              "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "LIST_PARTS",
-              "record_id": "f5c98a6ee72cea97105c44f22c3321fed7558351d71c3ff33ad43facaf87c178",
+              "record_id": "b7bfcea70186040f691b9dbd2fd4aa41af853b7dc77d9845a3b0b7d86ccdfb30",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": [
                 "Frame",
@@ -7640,10 +7640,10 @@
             },
             {
               "declared_slot": 1,
-              "encoded_correct_index": 0,
+              "encoded_correct_index": 2,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "FIND_SHARED_PART",
-              "record_id": "04d5d907b21a5f7297e839a64a0060cd213484a496d7138bade6b0f7ac1e29cc",
+              "record_id": "d91ef3da13942abb884d966ebf39a9ace3b7a23b0b63c55c6c1a7d42d86d40b2",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "Wheel",
               "value_at_encoded_correct_index": "Wheel"
@@ -7653,7 +7653,7 @@
               "encoded_correct_index": 0,
               "encoded_options_are_a_permutation_of_the_choices": true,
               "operation": "REACHED_VIA",
-              "record_id": "9532bd298e2cbb7be2185512bffd105fb661ecfce782945c90e8cb9f86957b4a",
+              "record_id": "bff2302c0c7d3e9cc51a3ef98226720e6b997a33234334f16b02f0f24e42b653",
               "slot_carries_teacher_answer": true,
               "teacher_expected_answer": "via:Wheel",
               "value_at_encoded_correct_index": "via:Wheel"
