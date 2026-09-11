@@ -1,10 +1,16 @@
-# CUBE_FACE_GROUNDING_001 and CFC_LOOP_001 — what was built, and what has not been executed
+# CFC Loop × Face-Cue Pilot — what was built, and what has not been executed
 
-Written 2026-09-10. Status: **non-neural implementation complete, tested, packaged
-and rehearsed; nothing executed.** The package exists
-(`candidate_package_001`, archive sha256 `d7fe838e…`) and
-`EXECUTION_REQUEST_001.md` names it. No training, no model load, no reservation and
-no launch have happened, and none is authorised by this document.
+Written 2026-09-10; finalised 2026-09-11 under the owner's pre-signature
+clarifications. Status: **non-neural implementation complete, tested, packaged and
+rehearsed; nothing executed.** The package exists (`candidate_package_001`, archive
+sha256 `382aa3fc…`) and `EXECUTION_REQUEST_001.md` names it, its selected schedule
+and its bounds. No training, no model load, no reservation and no launch have
+happened, and none is authorised by this document.
+
+**Selected schedule, stated explicitly**: the job runs the **CFC loop** schedule —
+4,608 decisions and 576 batch-of-eight updates per condition (2,304 across four
+conditions). The face-grounding plan's 9,216-query Phase A/B schedule is
+implemented and selectable but is **not** delivered by this job.
 
 The two owner plans are pinned beside this file as
 `Cross_Cube_Face_Grounding_Plan_v0.1.md` (sha256 `c9de1732e15382c3…`, 28,212 bytes)
@@ -88,17 +94,27 @@ every role pair competes in some question group.
    `main()` runs the environment stage and uploads `result.json` last, a wrong
    sidecar fails closed while preserving the completed result, and an inner failure
    is reported through the result marker.
-2. **Not executed**: no model has been loaded, no encoder fitted, no representation
+2. **Batching is real, not cosmetic** — pinned by the pre-signature checks: loop and
+   mixed share zero whole update batches out of 576 and no batch coincides anywhere,
+   the teaching-event multiset and per-event supports are identical, the loop orders
+   within-cube before across-face before the return every round, and a condition
+   builds exactly one learner so weights and optimizer state persist across its
+   phases.
+3. **The bounds fit** — 1,500 s per condition plus a 600 s install allowance gives a
+   6,600 s ceiling inside the reservation's 7,200 s, and `validate_bounds` refuses
+   any design that does not. A condition that runs out of wall clock reports
+   `TEACHING_INCOMPLETE` rather than pretending to have finished.
+4. **Not executed**: no model has been loaded, no encoder fitted, no representation
    or gradient check run, no condition taught, no panel evaluated. Those are the
    authorised job's work, and `EXECUTION_REQUEST_001.md` is the one request that
    would authorise them.
-3. **The interface-capacity question is deliberately open.** Whether the accepted
-   transform can represent these six tasks is exactly what the job's pre-training
-   input and gradient checks are for. Compilation proves the tasks *reach* the
-   encoder; it cannot prove the encoder separates them. If it does not, that is a
-   finding to report with the concrete restriction named, not a reason to
-   substitute a name-lookup task.
-4. **Batching has never run on real tensors.** The rehearsal proves one optimizer
+5. **The interface-capacity question is deliberately open.** Whether the accepted
+   transform can represent these six tasks is what the job's pre-training input and
+   gradient checks are for. Compilation proves the tasks *reach* the encoder; it
+   cannot prove the encoder separates them. If it does not, that is a finding to
+   report with the concrete restriction named, not a reason to substitute a
+   name-lookup task.
+6. **Batching has never run on real tensors.** The rehearsal proves one optimizer
    step per batch and the row shape with an injected stub; the real path is
    exercised only when the job runs.
 
