@@ -291,6 +291,14 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
     measurements_path.write_text(json.dumps(measurements, sort_keys=True,
                                             indent=2, allow_nan=False) + "\n",
                                  encoding="utf-8")
+    staged = [{"name": name, "sha256": _sha256(artifacts / name),
+               "bytes": (artifacts / name).stat().st_size}
+              for name in sorted(path.name for path in artifacts.iterdir()
+                                 if path.suffix == ".pt")]
+    (artifacts / "manifest.json").write_text(
+        json.dumps({"schema": "cas.cube-face-artifact-manifest/1",
+                    "job": config["job"], "artifacts": staged},
+                   sort_keys=True, indent=2) + "\n", encoding="utf-8")
     envelope = {
         "schema": "cas.cube-face-result/1",
         "job": config["job"],
@@ -298,10 +306,8 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
                    if all(payload["status"] == experiment.STATUS_COMPLETE
                           for payload in result["results"].values())
                    else experiment.STATUS_INCOMPLETE),
-        "artifacts": [{"name": name, "sha256": _sha256(artifacts / name),
-                       "bytes": (artifacts / name).stat().st_size}
-                      for name in sorted(path.name for path in artifacts.iterdir()
-                                         if path.suffix == ".pt")],
+        "failure": None,
+        "artifacts": staged,
         "conditions": {
             name: {"status": payload["status"],
                    "planned_episodes": payload["planned_episodes"],
@@ -316,8 +322,21 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
         "boundary": {"automatic_retries": 0, "seven_stage_neural_cycles": 0,
                      "scores_from_the_correction_pass": True},
     }
+    # The body writes its own delivery, exactly as the proven workers do: the
+    # result marker and its sidecar, so the outer worker only uploads and a
+    # failure it detects cannot overwrite a completed result.
+    raw = (json.dumps(envelope, sort_keys=True, indent=2,
+                      allow_nan=False) + "\n").encode("utf-8")
+    (results / "result.json").write_bytes(raw)
+    (results / "result.json.sha256").write_text(
+        _sha256_bytes(raw) + "\n", encoding="utf-8")
     return {"plan": plan, "checks": checks, "envelope": envelope,
-            "measurements": measurements}
+            "measurements": measurements, "artifacts": staged}
+
+
+def _sha256_bytes(raw):
+    import hashlib as _hashlib
+    return _hashlib.sha256(raw).hexdigest()
 
 
 def _parameter_order(learner):
