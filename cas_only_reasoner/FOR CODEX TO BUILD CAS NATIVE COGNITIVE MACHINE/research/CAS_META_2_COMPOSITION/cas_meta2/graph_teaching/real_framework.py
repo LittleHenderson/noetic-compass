@@ -347,6 +347,10 @@ class GraphLearner:
                               for item in self._content_ids(slot_ids)]
         scores = torch.stack([torch.dot(value, vector) for vector in option_vectors])
         correct = task.get("encoded_correct_index")
+        if correct is None and indexed:
+            # The training-shaped task carries the answer as a value, not as an
+            # option index; the learner's own index holds the index it trains on.
+            correct = self.tasks[position]["encoded_correct_index"]
         loss = None
         if type(correct) is int and 0 <= correct < int(scores.shape[0]):
             loss = float(torch.nn.functional.cross_entropy(
