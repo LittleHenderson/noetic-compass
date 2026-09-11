@@ -1,0 +1,59 @@
+{
+  "schema": "cas-cube-face-readout-owner-authorization/1",
+  "recorded_utc": "2026-09-11T14:42:49.000000+00:00",
+  "owner_instruction_raw": "Yes - authorise the bounded zero-update readout (Recommended)",
+  "instruction_interpretation": "The owner authorises ONE bounded zero-update readout of the four checkpoints that attempt 004 delivered, to regenerate the per-face breakdowns, the per-question rows, the before/after pairing, the constant-rule baselines and the milestone report that attempt 004 uploaded but never declared as an artefact, and which verified collection therefore discarded before cleanup deleted the bucket. The owner selected this option from three offered: recover the detail, accept the headline result and stop, or hold the readout until after another decision. This is a new instruction covering one job, not a retry of anything: the readout trains nothing, steps no optimizer, writes no checkpoint and changes no attempt-004 record. It is a separate reservation because the readout was not part of attempt 004's authorised work.",
+  "attempt": 1,
+  "readout_of": {
+    "job": "cas-meta2-graph6face-20260911133305-9723735f",
+    "attempt": 4,
+    "receipt": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/",
+    "delivered": "four conditions TEACHING_COMPLETE at 4608/4608 episodes and 576 updates each, four checkpoints verified, collection VERIFIED, cleanup COMPLETE, instance i-046de3ddc12d5835e CONFIRMED_TERMINATED, elapsed 724.33 s, $7.00 reserved at ledger revision 60",
+    "lost": "results/measurements.json, written by the body and uploaded by the outer worker but absent from the result envelope's artifact list, so verified collection kept only the four checkpoints and cleanup deleted the bucket; its digest survives as measurements_sha256 796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "why_the_readout_can_recover_it": "the four checkpoints were collected and their file hashes match the envelope, so the trained weights survive; the panel is frozen and arm-independent; and the evaluation path is deterministic, so the same code that produced the delivered layer totals can be run again from those weights with no training"
+  },
+  "what_the_readout_may_produce": [
+    "per-condition, per-face counts and macro accuracy for role_recognition, role_application and targeted_check",
+    "every per-question row for the 192 primary questions and the 24 diagnostics, with expected and selected answers, the three scores, the loss and the delivered slot order",
+    "the before/after pairing per layer, computed from a deterministically reconstructed initial state",
+    "the constant-rule baselines per layer, computed from the delivered option order",
+    "the plan's milestone report, including which faces fall below the 0.50 minimum",
+    "the four declared paired comparisons between conditions, which the delivered envelope could not carry because a paired test needs the per-question rows"
+  ],
+  "bounds": {
+    "jobs": 1,
+    "conditions": [
+      "cfc_stable_cues",
+      "cfc_neutral_cue",
+      "mixed_order_stable_cues",
+      "mixed_order_neutral_cue"
+    ],
+    "optimizer_updates": 0,
+    "training": false,
+    "panel_items": 192,
+    "diagnostics": 24,
+    "max_wall_seconds": 1200.0,
+    "install_allowance_seconds": 600.0,
+    "total_wall_clock_ceiling_seconds": 1800.0,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0
+  },
+  "execution_gates": [
+    "the four checkpoint file hashes are bound in the authority; a file that does not hash to the delivered value fails the job closed before it is read",
+    "the parameter digest recorded inside each checkpoint is recomputed from its stored tensors; a mismatch fails the job closed",
+    "the zero-update claim is measured per condition: the parameter digest after loading the checkpoint must equal the digest after the last panel pass, and a change during either pass fails the job closed",
+    "the recomputed per-layer totals must equal the totals attempt 004 published, which are bound by digest in the authority; a mismatch is delivered as READOUT_FAILED, never presented as the recovered detail",
+    "no optimizer is constructed with intent to step, no gradient is computed, no checkpoint is written, and no attempt-004 artefact is modified",
+    "the readout writes only into its own record directory; the payloads are declared as artefacts so verified collection cannot drop them as attempt 004's were",
+    "zero automatic retries; compute shutdown and evidence deletion are separate steps"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single readout",
+    "any training, fine-tuning, retraining or optimizer step of any kind",
+    "any change to the frozen panel, the checkpoint set, the declared comparisons or the bounds",
+    "any change to attempt 004's receipt, checkpoints or records, or to attempt 007's",
+    "presenting the reconstructed before readings as the run's own before readings, or presenting the readout as a new measurement rather than a recovery",
+    "any claim that the readout resolves the recognition weakness, the loop-versus-mixed question or the cue question; it reports counts, and the paired comparisons it recovers are counts of discordant questions, not a significance result",
+    "any promotion of a claim beyond what a single matched initialization can support"
+  ]
+}
