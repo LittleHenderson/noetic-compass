@@ -1,0 +1,167 @@
+{
+  "bindings": [
+    {
+      "cue_visible": false,
+      "face": 1,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "name_definition_function",
+      "subtypes": [
+        "identity",
+        "function"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 1,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "state what the whole is and what it is for, as declared",
+      "role": "name_definition_function",
+      "subtypes": [
+        "identity",
+        "function"
+      ]
+    },
+    {
+      "cue_visible": false,
+      "face": 2,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "context_environment",
+      "subtypes": [
+        "setting",
+        "interaction_direction",
+        "participants"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 2,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "state the setting and the interactions that hold here",
+      "role": "context_environment",
+      "subtypes": [
+        "setting",
+        "interaction_direction",
+        "participants"
+      ]
+    },
+    {
+      "cue_visible": false,
+      "face": 3,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "analogy_metaphor",
+      "subtypes": [
+        "preserves_scope",
+        "same_words_wrong_links",
+        "different_words_right_links"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 3,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "choose the example whose declared relationships match",
+      "role": "analogy_metaphor",
+      "subtypes": [
+        "preserves_scope",
+        "same_words_wrong_links",
+        "different_words_right_links"
+      ]
+    },
+    {
+      "cue_visible": false,
+      "face": 4,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "explicit_correspondence",
+      "subtypes": [
+        "edge_preserving",
+        "endpoint_swapped",
+        "child_edge_dropped"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 4,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "choose the mapping that preserves the declared relations",
+      "role": "explicit_correspondence",
+      "subtypes": [
+        "edge_preserving",
+        "endpoint_swapped",
+        "child_edge_dropped"
+      ]
+    },
+    {
+      "cue_visible": false,
+      "face": 5,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "parts_structure",
+      "subtypes": [
+        "direct_inventory",
+        "indirect_intrusion",
+        "foreign_whole_part",
+        "shared_constituent",
+        "reach_kind"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 5,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "list the parts directly inside the requested whole",
+      "role": "parts_structure",
+      "subtypes": [
+        "direct_inventory",
+        "indirect_intrusion",
+        "foreign_whole_part",
+        "shared_constituent",
+        "reach_kind"
+      ]
+    },
+    {
+      "cue_visible": false,
+      "face": 6,
+      "options_are_roles": true,
+      "profile": "ROLE_FROM_CONTENT",
+      "public_request": "classify the excerpt's instructional purpose",
+      "role": "recomposition_process",
+      "subtypes": [
+        "complete_recomposition",
+        "missing_connection",
+        "foreign_part",
+        "ordered_process"
+      ]
+    },
+    {
+      "cue_visible": true,
+      "face": 6,
+      "options_are_roles": false,
+      "profile": "FACE_APPLY",
+      "public_request": "choose the complete account of how these parts make the whole",
+      "role": "recomposition_process",
+      "subtypes": [
+        "complete_recomposition",
+        "missing_connection",
+        "foreign_part",
+        "ordered_process"
+      ]
+    }
+  ],
+  "presentation_only_faces": [],
+  "schema": "cas.cube-face-task/0.1",
+  "statement": "every one of the six faces has a bounded numerical task in both profiles; no face is presentation-only here"
+}

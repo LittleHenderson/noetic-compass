@@ -1,0 +1,91 @@
+{
+  "boundary": "A face number is a categorical teaching handle, not a Noetic operator number, not a magnitude, and not a model input when the role is the thing being recognized.",
+  "faces": [
+    {
+      "cue": "CUBE_FACE_1",
+      "face": 1,
+      "objective": "recognize and select a definition or function consistent with the supplied facts",
+      "public_request": "state what the whole is and what it is for, as declared",
+      "role": "name_definition_function",
+      "subtypes": [
+        "identity",
+        "function"
+      ],
+      "title": "Technical name, definition and function"
+    },
+    {
+      "cue": "CUBE_FACE_2",
+      "face": 2,
+      "objective": "recognize and select a contextual account consistent with the supplied facts",
+      "public_request": "state the setting and the interactions that hold here",
+      "role": "context_environment",
+      "subtypes": [
+        "setting",
+        "interaction_direction",
+        "participants"
+      ],
+      "title": "Context, environment and interactions"
+    },
+    {
+      "cue": "CUBE_FACE_3",
+      "face": 3,
+      "objective": "recognize a bounded cross-domain comparison and select the analogy that preserves the specified relationship",
+      "public_request": "choose the example whose declared relationships match",
+      "role": "analogy_metaphor",
+      "subtypes": [
+        "preserves_scope",
+        "same_words_wrong_links",
+        "different_words_right_links"
+      ],
+      "title": "Analogy or metaphor within a declared scope"
+    },
+    {
+      "cue": "CUBE_FACE_4",
+      "face": 4,
+      "objective": "recognize and select the role and relationship mapping between two presentations",
+      "public_request": "choose the mapping that preserves the declared relations",
+      "role": "explicit_correspondence",
+      "subtypes": [
+        "edge_preserving",
+        "endpoint_swapped",
+        "child_edge_dropped"
+      ],
+      "title": "Explicit correspondence"
+    },
+    {
+      "cue": "CUBE_FACE_5",
+      "face": 5,
+      "objective": "recognize decomposition and correctly identify constituents and their connections",
+      "public_request": "list the parts directly inside the requested whole",
+      "role": "parts_structure",
+      "subtypes": [
+        "direct_inventory",
+        "indirect_intrusion",
+        "foreign_whole_part",
+        "shared_constituent",
+        "reach_kind"
+      ],
+      "title": "Parts and structural relationships"
+    },
+    {
+      "cue": "CUBE_FACE_6",
+      "face": 6,
+      "objective": "recognize and select a valid account of how supplied parts or steps form a whole, within the declared process semantics",
+      "public_request": "choose the complete account of how these parts make the whole",
+      "role": "recomposition_process",
+      "subtypes": [
+        "complete_recomposition",
+        "missing_connection",
+        "foreign_part",
+        "ordered_process"
+      ],
+      "title": "Recomposition, story or bounded process"
+    }
+  ],
+  "neutral_cue": "CUBE_FACE_NEUTRAL",
+  "schema": "cas.cube-face-roles/0.1",
+  "task_profiles": [
+    "ROLE_FROM_CONTENT",
+    "FACE_APPLY"
+  ]
+}

@@ -1,0 +1,3097 @@
+{
+  "coverage": {
+    "base_face_presentations": 576,
+    "cross_domain_analogy_pairs": 96,
+    "distinct_family_graphs": 96,
+    "distinct_topologies": 6,
+    "domain_histogram": {
+      "container": 16,
+      "grammatical": 16,
+      "mechanical": 16,
+      "narrative": 16,
+      "organisational": 16,
+      "procedural": 16
+    },
+    "every_domain_carries_all_six_roles": true,
+    "families": 96,
+    "rendering_histogram": {
+      "0": 24,
+      "1": 24,
+      "2": 24,
+      "3": 24
+    },
+    "schema": "cas.cube-face-corpus/0.1",
+    "split_counts": {
+      "development": 16,
+      "final_held_out": 16,
+      "training": 64
+    },
+    "split_rule": "assigned by family index before any rendering is built, so no derived item of a family crosses the split",
+    "structure_histogram": {
+      "branch3": 18,
+      "chain2": 18,
+      "chain3": 18,
+      "diamond": 18,
+      "fork_child": 12,
+      "pair_shared": 12
+    },
+    "structure_overlap_statement": "96 families share 6 topologies: structure repeats while labels, domains and renderings do not. Familiar-structure/new-instance items are therefore a separate class from unseen arrangements and are counted separately, never merged."
+  },
+  "families": [
+    {
+      "analogy_partner": "family:grammatical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Bicycle",
+          "target": "Wheel"
+        },
+        {
+          "source": "Wheel",
+          "target": "Rim"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:00",
+      "function": "transmits force between Bicycle and Wheel",
+      "graph_digest": "20cb304f3b795291e062a20bba391304218ee00e69f8fcd94c1672bea27a34fb",
+      "kind": "a wheeled vehicle",
+      "labels": [
+        "Bicycle",
+        "Wheel",
+        "Rim"
+      ],
+      "rendering": 0,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Cart",
+          "target": "Platform"
+        },
+        {
+          "source": "Cart",
+          "target": "Axle"
+        },
+        {
+          "source": "Cart",
+          "target": "Handle"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:01",
+      "function": "transmits force between Cart and Platform",
+      "graph_digest": "27da9cfda6f4940e5dc03dcb121089ed18a9af192b2347ef69e8acfe658b02f8",
+      "kind": "a hand-drawn platform",
+      "labels": [
+        "Cart",
+        "Platform",
+        "Axle",
+        "Handle"
+      ],
+      "rendering": 1,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Clock",
+          "target": "Gear"
+        },
+        {
+          "source": "Clock",
+          "target": "Spring"
+        },
+        {
+          "source": "Spring",
+          "target": "Seal"
+        },
+        {
+          "source": "Gear",
+          "target": "Seal"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:02",
+      "function": "transmits force between Clock and Gear",
+      "graph_digest": "6c181f83c6fea3e8fc541341d3f75c3030f66798c2009b355ee83f6726abbbb7",
+      "kind": "a timekeeping mechanism",
+      "labels": [
+        "Clock",
+        "Gear",
+        "Spring",
+        "Seal"
+      ],
+      "rendering": 2,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Pump",
+          "target": "Piston"
+        },
+        {
+          "source": "Piston",
+          "target": "Valve"
+        },
+        {
+          "source": "Valve",
+          "target": "Gasket"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:03",
+      "function": "transmits force between Pump and Piston",
+      "graph_digest": "dc3e3be410c8531f767ce8db887cd0f26eee1420ae254812993fdc76bbd9fea5",
+      "kind": "a fluid-moving device",
+      "labels": [
+        "Pump",
+        "Piston",
+        "Valve",
+        "Gasket"
+      ],
+      "rendering": 3,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Loom",
+          "target": "Thread"
+        },
+        {
+          "source": "Shuttle",
+          "target": "Thread"
+        },
+        {
+          "source": "Loom",
+          "target": "Bearing"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:04",
+      "function": "transmits force between Loom and Shuttle",
+      "graph_digest": "0e98240a1ada8ca5aa33893a34d1ac050beb08f4847fb9ee7dab652396d3c5cf",
+      "kind": "a weaving machine",
+      "labels": [
+        "Loom",
+        "Shuttle",
+        "Thread",
+        "Bearing"
+      ],
+      "rendering": 0,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Lathe",
+          "target": "Chuck"
+        },
+        {
+          "source": "Lathe",
+          "target": "Tool"
+        },
+        {
+          "source": "Tool",
+          "target": "Bolt"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:05",
+      "function": "transmits force between Lathe and Chuck",
+      "graph_digest": "d339f393964db3d1506db9e1dacfe0ee771da34b16d85d70c5c4d2b6c526e6ea",
+      "kind": "a turning machine",
+      "labels": [
+        "Lathe",
+        "Chuck",
+        "Tool",
+        "Bolt"
+      ],
+      "rendering": 1,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Turbine",
+          "target": "Blade"
+        },
+        {
+          "source": "Blade",
+          "target": "Rotor"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:06",
+      "function": "transmits force between Turbine and Blade",
+      "graph_digest": "66e8d7f0f31fe81e4ad1c507dbe79f18c8f0e08ee5409dd15e1c4506739425d2",
+      "kind": "a rotary engine",
+      "labels": [
+        "Turbine",
+        "Blade",
+        "Rotor"
+      ],
+      "rendering": 2,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Boiler",
+          "target": "Drum"
+        },
+        {
+          "source": "Boiler",
+          "target": "Tube"
+        },
+        {
+          "source": "Boiler",
+          "target": "Sprocket"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:07",
+      "function": "transmits force between Boiler and Drum",
+      "graph_digest": "6623627a2c5031c076537684770fdfc2fd267cc6b0e6559220dc70b7fe80cea8",
+      "kind": "a steam vessel",
+      "labels": [
+        "Boiler",
+        "Drum",
+        "Tube",
+        "Sprocket"
+      ],
+      "rendering": 3,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Crane",
+          "target": "Hook"
+        },
+        {
+          "source": "Crane",
+          "target": "Cable"
+        },
+        {
+          "source": "Cable",
+          "target": "Bracket"
+        },
+        {
+          "source": "Hook",
+          "target": "Bracket"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:08",
+      "function": "transmits force between Crane and Hook",
+      "graph_digest": "47f8271887c1ba8c9d380316ca5d4dbfb54f39bea9541b9c1f65cfa91eb9ea16",
+      "kind": "a lifting machine",
+      "labels": [
+        "Crane",
+        "Hook",
+        "Cable",
+        "Bracket"
+      ],
+      "rendering": 0,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Drill",
+          "target": "Bit"
+        },
+        {
+          "source": "Bit",
+          "target": "Chuck"
+        },
+        {
+          "source": "Chuck",
+          "target": "Liner"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:09",
+      "function": "transmits force between Drill and Bit",
+      "graph_digest": "e14c00e07fa636ab77ffba6544388f5315f460029fc754f1622749cbd906da39",
+      "kind": "a boring tool",
+      "labels": [
+        "Drill",
+        "Bit",
+        "Chuck",
+        "Liner"
+      ],
+      "rendering": 1,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Engine",
+          "target": "Piston"
+        },
+        {
+          "source": "Crankshaft",
+          "target": "Piston"
+        },
+        {
+          "source": "Engine",
+          "target": "Shim"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:10",
+      "function": "transmits force between Engine and Crankshaft",
+      "graph_digest": "770061e515b5b62bf65e85704ab0e2cd94ffb2ccec9296a7af03f57a8f23a4db",
+      "kind": "a combustion engine",
+      "labels": [
+        "Engine",
+        "Crankshaft",
+        "Piston",
+        "Shim"
+      ],
+      "rendering": 2,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Brake",
+          "target": "Pad"
+        },
+        {
+          "source": "Brake",
+          "target": "Disc"
+        },
+        {
+          "source": "Disc",
+          "target": "Pinion"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:11",
+      "function": "transmits force between Brake and Pad",
+      "graph_digest": "9e0f08d72862a98af24826319eff2171c00ece99e72d1676a908ef5d8fa1fc44",
+      "kind": "a stopping assembly",
+      "labels": [
+        "Brake",
+        "Pad",
+        "Disc",
+        "Pinion"
+      ],
+      "rendering": 3,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Clutch",
+          "target": "Plate"
+        },
+        {
+          "source": "Plate",
+          "target": "Spring"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:12",
+      "function": "transmits force between Clutch and Plate",
+      "graph_digest": "09293a51cce8a0e0891375f49b5c67326eb892b2550fd83027c57f607f58fd88",
+      "kind": "a coupling assembly",
+      "labels": [
+        "Clutch",
+        "Plate",
+        "Spring"
+      ],
+      "rendering": 0,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Radiator",
+          "target": "Core"
+        },
+        {
+          "source": "Radiator",
+          "target": "Fin"
+        },
+        {
+          "source": "Radiator",
+          "target": "Cam"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:13",
+      "function": "transmits force between Radiator and Core",
+      "graph_digest": "cbda210e5e2e2844cb15adef92391f0169357d2bb5881ae2ad90ed74ef46fbb3",
+      "kind": "a cooling assembly",
+      "labels": [
+        "Radiator",
+        "Core",
+        "Fin",
+        "Cam"
+      ],
+      "rendering": 1,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Alternator",
+          "target": "Rotor"
+        },
+        {
+          "source": "Alternator",
+          "target": "Brush"
+        },
+        {
+          "source": "Brush",
+          "target": "Filter"
+        },
+        {
+          "source": "Rotor",
+          "target": "Filter"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:14",
+      "function": "transmits force between Alternator and Rotor",
+      "graph_digest": "9dc1aadd05173de14ff8c364281ad70ae67edf3bffae729c1ed8872d38bb74ea",
+      "kind": "a charging machine",
+      "labels": [
+        "Alternator",
+        "Rotor",
+        "Brush",
+        "Filter"
+      ],
+      "rendering": 2,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:grammatical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Gearbox",
+          "target": "Shaft"
+        },
+        {
+          "source": "Shaft",
+          "target": "Gear"
+        },
+        {
+          "source": "Gear",
+          "target": "Manifold"
+        }
+      ],
+      "domain": "mechanical",
+      "family_id": "family:mechanical:15",
+      "function": "transmits force between Gearbox and Shaft",
+      "graph_digest": "8a09efd9ba1682d6694d487383c73b1604b99a7ac482fdb23362dcf19700221c",
+      "kind": "a transmission assembly",
+      "labels": [
+        "Gearbox",
+        "Shaft",
+        "Gear",
+        "Manifold"
+      ],
+      "rendering": 3,
+      "setting": "in a workshop",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Sentence",
+          "target": "Phrase"
+        },
+        {
+          "source": "Phrase",
+          "target": "Word"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:00",
+      "function": "carries the relation between Sentence and Phrase",
+      "graph_digest": "2663def5697df9bde02911780866d4a6f6d0b076d7b4ccfe430355bd3d04b21d",
+      "kind": "a grammatical unit",
+      "labels": [
+        "Sentence",
+        "Phrase",
+        "Word"
+      ],
+      "rendering": 0,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Clause",
+          "target": "Subject"
+        },
+        {
+          "source": "Clause",
+          "target": "Predicate"
+        },
+        {
+          "source": "Clause",
+          "target": "Object"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:01",
+      "function": "carries the relation between Clause and Subject",
+      "graph_digest": "3fedb8a100a4ff378e81fb9916f706fa972d9251c4c2b3fd124df118a3c93e14",
+      "kind": "a clause pattern",
+      "labels": [
+        "Clause",
+        "Subject",
+        "Predicate",
+        "Object"
+      ],
+      "rendering": 1,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Paragraph",
+          "target": "Topic"
+        },
+        {
+          "source": "Paragraph",
+          "target": "Support"
+        },
+        {
+          "source": "Support",
+          "target": "Adjunct"
+        },
+        {
+          "source": "Topic",
+          "target": "Adjunct"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:02",
+      "function": "carries the relation between Paragraph and Topic",
+      "graph_digest": "1ba00ccc721db397a9343163a39b9e5b00909ad750685b7cbebb7085d80e416a",
+      "kind": "a paragraph pattern",
+      "labels": [
+        "Paragraph",
+        "Topic",
+        "Support",
+        "Adjunct"
+      ],
+      "rendering": 2,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Question",
+          "target": "Auxiliary"
+        },
+        {
+          "source": "Auxiliary",
+          "target": "VerbPhrase"
+        },
+        {
+          "source": "VerbPhrase",
+          "target": "Complement"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:03",
+      "function": "carries the relation between Question and Auxiliary",
+      "graph_digest": "adc9d8d914cedeaeb5c3cc801c6ef2a818329d16ca6fb1031c5aea8587ad0f5f",
+      "kind": "a question pattern",
+      "labels": [
+        "Question",
+        "Auxiliary",
+        "VerbPhrase",
+        "Complement"
+      ],
+      "rendering": 3,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "List",
+          "target": "Marker"
+        },
+        {
+          "source": "Item",
+          "target": "Marker"
+        },
+        {
+          "source": "List",
+          "target": "Determiner"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:04",
+      "function": "carries the relation between List and Item",
+      "graph_digest": "c277d95b9f8c161f98d3b95d04c70c5a8ce173daa47df6d0e8c7e41ad6f75d72",
+      "kind": "a list pattern",
+      "labels": [
+        "List",
+        "Item",
+        "Marker",
+        "Determiner"
+      ],
+      "rendering": 0,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Compound",
+          "target": "ClauseA"
+        },
+        {
+          "source": "Compound",
+          "target": "Conjunction"
+        },
+        {
+          "source": "Conjunction",
+          "target": "Particle"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:05",
+      "function": "carries the relation between Compound and ClauseA",
+      "graph_digest": "150cf1bdd84622c7abb3830066850d0b21f00ce7b0903b9c5ac01c4c9464376a",
+      "kind": "a compound pattern",
+      "labels": [
+        "Compound",
+        "ClauseA",
+        "Conjunction",
+        "Particle"
+      ],
+      "rendering": 1,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Quotation",
+          "target": "Speaker"
+        },
+        {
+          "source": "Speaker",
+          "target": "Utterance"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:06",
+      "function": "carries the relation between Quotation and Speaker",
+      "graph_digest": "c9ba0a118397304b1c9a13fbbd604ad74fe659a797dc0ef25a64e3e287176312",
+      "kind": "a quotation pattern",
+      "labels": [
+        "Quotation",
+        "Speaker",
+        "Utterance"
+      ],
+      "rendering": 2,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Heading",
+          "target": "Section"
+        },
+        {
+          "source": "Heading",
+          "target": "Subheading"
+        },
+        {
+          "source": "Heading",
+          "target": "Appositive"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:07",
+      "function": "carries the relation between Heading and Section",
+      "graph_digest": "795e15cfc55156d6f6cbcadb22ac9800be893aeebb55e657bbebce13388832ee",
+      "kind": "a heading pattern",
+      "labels": [
+        "Heading",
+        "Section",
+        "Subheading",
+        "Appositive"
+      ],
+      "rendering": 3,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Caption",
+          "target": "Figure"
+        },
+        {
+          "source": "Caption",
+          "target": "Label"
+        },
+        {
+          "source": "Label",
+          "target": "Gerund"
+        },
+        {
+          "source": "Figure",
+          "target": "Gerund"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:08",
+      "function": "carries the relation between Caption and Figure",
+      "graph_digest": "43dd6ee33c213ee623ac10173b800c2e74a9b214ea0b7c08f4d4eb8a0ada0c97",
+      "kind": "a caption pattern",
+      "labels": [
+        "Caption",
+        "Figure",
+        "Label",
+        "Gerund"
+      ],
+      "rendering": 0,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Footnote",
+          "target": "Marker"
+        },
+        {
+          "source": "Marker",
+          "target": "Note"
+        },
+        {
+          "source": "Note",
+          "target": "Infinitive"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:09",
+      "function": "carries the relation between Footnote and Marker",
+      "graph_digest": "0d5bc55730aaa23daa694c81086f374565e66ecfa552b90e9c5ea4c5aa068290",
+      "kind": "a footnote pattern",
+      "labels": [
+        "Footnote",
+        "Marker",
+        "Note",
+        "Infinitive"
+      ],
+      "rendering": 1,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Acronym",
+          "target": "Expansion"
+        },
+        {
+          "source": "Letters",
+          "target": "Expansion"
+        },
+        {
+          "source": "Acronym",
+          "target": "Qualifier"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:10",
+      "function": "carries the relation between Acronym and Letters",
+      "graph_digest": "3eda8e49178e3ef49a5c1bbca18430f8aa868acc4d9d8fc78037917c63607d92",
+      "kind": "an acronym pattern",
+      "labels": [
+        "Acronym",
+        "Letters",
+        "Expansion",
+        "Qualifier"
+      ],
+      "rendering": 2,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Syllable",
+          "target": "Onset"
+        },
+        {
+          "source": "Syllable",
+          "target": "Rhyme"
+        },
+        {
+          "source": "Rhyme",
+          "target": "Interjection"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:11",
+      "function": "carries the relation between Syllable and Onset",
+      "graph_digest": "782c40c274e92ea48ae58260363f12ad8795d02db90e3fd41eb717b0768e47f0",
+      "kind": "a syllable pattern",
+      "labels": [
+        "Syllable",
+        "Onset",
+        "Rhyme",
+        "Interjection"
+      ],
+      "rendering": 3,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Morpheme",
+          "target": "Root"
+        },
+        {
+          "source": "Root",
+          "target": "Affix"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:12",
+      "function": "carries the relation between Morpheme and Root",
+      "graph_digest": "e48cda86477cf17546baff313503ced7de731a4d7ad503ec8183e0383609cca1",
+      "kind": "a morpheme pattern",
+      "labels": [
+        "Morpheme",
+        "Root",
+        "Affix"
+      ],
+      "rendering": 0,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Tense",
+          "target": "AuxiliaryForm"
+        },
+        {
+          "source": "Tense",
+          "target": "Participle"
+        },
+        {
+          "source": "Tense",
+          "target": "Adverb"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:13",
+      "function": "carries the relation between Tense and AuxiliaryForm",
+      "graph_digest": "700bf70b066460a0b13dd963f37e5d9bd75c854b8c512a506684d3d8485ea365",
+      "kind": "a tense pattern",
+      "labels": [
+        "Tense",
+        "AuxiliaryForm",
+        "Participle",
+        "Adverb"
+      ],
+      "rendering": 1,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Agreement",
+          "target": "Noun"
+        },
+        {
+          "source": "Agreement",
+          "target": "VerbForm"
+        },
+        {
+          "source": "VerbForm",
+          "target": "Preposition"
+        },
+        {
+          "source": "Noun",
+          "target": "Preposition"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:14",
+      "function": "carries the relation between Agreement and Noun",
+      "graph_digest": "9b8398c21b9df320be95da81ef2cc6bf91e5f76f89e3fc90509a648d26669e5b",
+      "kind": "an agreement pattern",
+      "labels": [
+        "Agreement",
+        "Noun",
+        "VerbForm",
+        "Preposition"
+      ],
+      "rendering": 2,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:procedural:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Punctuation",
+          "target": "Mark"
+        },
+        {
+          "source": "Mark",
+          "target": "Boundary"
+        },
+        {
+          "source": "Boundary",
+          "target": "Diphthong"
+        }
+      ],
+      "domain": "grammatical",
+      "family_id": "family:grammatical:15",
+      "function": "carries the relation between Punctuation and Mark",
+      "graph_digest": "58ce2bb6cb780b00164c5f28da94fcd6393ea69ff786c8348e02da14d008e3b2",
+      "kind": "a punctuation pattern",
+      "labels": [
+        "Punctuation",
+        "Mark",
+        "Boundary",
+        "Diphthong"
+      ],
+      "rendering": 3,
+      "setting": "in an edited sentence",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Recipe",
+          "target": "Step"
+        },
+        {
+          "source": "Step",
+          "target": "Ingredient"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:00",
+      "function": "produces Step as part of Recipe",
+      "graph_digest": "e169cd10880114957670cc85a2f4aa7149b13e8b647d982da0acb38455117f08",
+      "kind": "a cooking procedure",
+      "labels": [
+        "Recipe",
+        "Step",
+        "Ingredient"
+      ],
+      "rendering": 0,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Assembly",
+          "target": "Stage"
+        },
+        {
+          "source": "Assembly",
+          "target": "Fastener"
+        },
+        {
+          "source": "Assembly",
+          "target": "Signoff"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:01",
+      "function": "produces Stage as part of Assembly",
+      "graph_digest": "38d055154c96ebbbb09f0e5aa6ece794c120652d700e5c9d59965b7eb6996d9b",
+      "kind": "an assembly procedure",
+      "labels": [
+        "Assembly",
+        "Stage",
+        "Fastener",
+        "Signoff"
+      ],
+      "rendering": 1,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Checkout",
+          "target": "Payment"
+        },
+        {
+          "source": "Checkout",
+          "target": "Receipt"
+        },
+        {
+          "source": "Receipt",
+          "target": "Template"
+        },
+        {
+          "source": "Payment",
+          "target": "Template"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:02",
+      "function": "produces Payment as part of Checkout",
+      "graph_digest": "fe20ea4b59bb915c7795a6da6fa182ec78b67a87bcd729d4e610303364e787c1",
+      "kind": "a checkout procedure",
+      "labels": [
+        "Checkout",
+        "Payment",
+        "Receipt",
+        "Template"
+      ],
+      "rendering": 2,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Onboarding",
+          "target": "Briefing"
+        },
+        {
+          "source": "Briefing",
+          "target": "Task"
+        },
+        {
+          "source": "Task",
+          "target": "Ticket"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:03",
+      "function": "produces Briefing as part of Onboarding",
+      "graph_digest": "7fb78588ce716bb693a02a482cde62f8183a829420aa0b7c3195e4ef9b39cec3",
+      "kind": "an onboarding procedure",
+      "labels": [
+        "Onboarding",
+        "Briefing",
+        "Task",
+        "Ticket"
+      ],
+      "rendering": 3,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Backup",
+          "target": "Archive"
+        },
+        {
+          "source": "Copy",
+          "target": "Archive"
+        },
+        {
+          "source": "Backup",
+          "target": "Log"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:04",
+      "function": "produces Copy as part of Backup",
+      "graph_digest": "d66ef6c7214b29d8ca93c3f1c6cb0edb3d0a3e7e85a12a70d1b80b5c55b5afe0",
+      "kind": "a backup procedure",
+      "labels": [
+        "Backup",
+        "Copy",
+        "Archive",
+        "Log"
+      ],
+      "rendering": 0,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Deploy",
+          "target": "Build"
+        },
+        {
+          "source": "Deploy",
+          "target": "Release"
+        },
+        {
+          "source": "Release",
+          "target": "Handover"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:05",
+      "function": "produces Build as part of Deploy",
+      "graph_digest": "fd818306ab37f3ee1af25a312030328e7c939f16477c88e25e84570eda9cebfc",
+      "kind": "a deployment procedure",
+      "labels": [
+        "Deploy",
+        "Build",
+        "Release",
+        "Handover"
+      ],
+      "rendering": 1,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Inspection",
+          "target": "Check"
+        },
+        {
+          "source": "Check",
+          "target": "Report"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:06",
+      "function": "produces Check as part of Inspection",
+      "graph_digest": "21c5b02060f9325bfc5cf1525fd4560a82c362eabf20d76637e63c843e678852",
+      "kind": "an inspection procedure",
+      "labels": [
+        "Inspection",
+        "Check",
+        "Report"
+      ],
+      "rendering": 2,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Calibration",
+          "target": "Measure"
+        },
+        {
+          "source": "Calibration",
+          "target": "Adjust"
+        },
+        {
+          "source": "Calibration",
+          "target": "Snapshot"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:07",
+      "function": "produces Measure as part of Calibration",
+      "graph_digest": "c42e562e18c0a9e56a8c4e8d04a6dbe47d24966d306bed329efe51b157ad2c90",
+      "kind": "a calibration procedure",
+      "labels": [
+        "Calibration",
+        "Measure",
+        "Adjust",
+        "Snapshot"
+      ],
+      "rendering": 3,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Refund",
+          "target": "Request"
+        },
+        {
+          "source": "Refund",
+          "target": "Approval"
+        },
+        {
+          "source": "Approval",
+          "target": "Verifier"
+        },
+        {
+          "source": "Request",
+          "target": "Verifier"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:08",
+      "function": "produces Request as part of Refund",
+      "graph_digest": "dc469639636f9a31143ba346bef0e453759aa8ff1d81705882e601fad7908ed9",
+      "kind": "a refund procedure",
+      "labels": [
+        "Refund",
+        "Request",
+        "Approval",
+        "Verifier"
+      ],
+      "rendering": 0,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Interview",
+          "target": "Schedule"
+        },
+        {
+          "source": "Schedule",
+          "target": "Notes"
+        },
+        {
+          "source": "Notes",
+          "target": "Batch"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:09",
+      "function": "produces Schedule as part of Interview",
+      "graph_digest": "ccc788d67f8068f97f2570c2374583d2829c823b620e61fc450e2574fd5d09e6",
+      "kind": "an interview procedure",
+      "labels": [
+        "Interview",
+        "Schedule",
+        "Notes",
+        "Batch"
+      ],
+      "rendering": 1,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Migration",
+          "target": "Cutover"
+        },
+        {
+          "source": "Plan",
+          "target": "Cutover"
+        },
+        {
+          "source": "Migration",
+          "target": "Queue"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:10",
+      "function": "produces Plan as part of Migration",
+      "graph_digest": "126bb1e8187c990aa14f9c9da4033ae775a1500f2c79aedbffa2b5d3b71e2a09",
+      "kind": "a migration procedure",
+      "labels": [
+        "Migration",
+        "Plan",
+        "Cutover",
+        "Queue"
+      ],
+      "rendering": 2,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Rehearsal",
+          "target": "Run"
+        },
+        {
+          "source": "Rehearsal",
+          "target": "Notes"
+        },
+        {
+          "source": "Notes",
+          "target": "Escalation"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:11",
+      "function": "produces Run as part of Rehearsal",
+      "graph_digest": "68b479ca64e5522b50f1deaad5b92da2fab2e1383a8d16eb997b5e5447f0f9c0",
+      "kind": "a rehearsal procedure",
+      "labels": [
+        "Rehearsal",
+        "Run",
+        "Notes",
+        "Escalation"
+      ],
+      "rendering": 3,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Audit",
+          "target": "Sample"
+        },
+        {
+          "source": "Sample",
+          "target": "Finding"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:12",
+      "function": "produces Sample as part of Audit",
+      "graph_digest": "ea30ca4da54b214c5caf493f82a0b12c6607cb715247b068cad4ca940433c816",
+      "kind": "an audit procedure",
+      "labels": [
+        "Audit",
+        "Sample",
+        "Finding"
+      ],
+      "rendering": 0,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Repair",
+          "target": "Diagnosis"
+        },
+        {
+          "source": "Repair",
+          "target": "Replacement"
+        },
+        {
+          "source": "Repair",
+          "target": "Ledger"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:13",
+      "function": "produces Diagnosis as part of Repair",
+      "graph_digest": "0869bf2741a0654ed55217c5ead53059e11fd2cb6e03d0762c57f11ffaa37ac7",
+      "kind": "a repair procedure",
+      "labels": [
+        "Repair",
+        "Diagnosis",
+        "Replacement",
+        "Ledger"
+      ],
+      "rendering": 1,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Cleaning",
+          "target": "Rinse"
+        },
+        {
+          "source": "Cleaning",
+          "target": "Dry"
+        },
+        {
+          "source": "Dry",
+          "target": "Stamp"
+        },
+        {
+          "source": "Rinse",
+          "target": "Stamp"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:14",
+      "function": "produces Rinse as part of Cleaning",
+      "graph_digest": "c2418cf8d8b08fd2a1e9ea52267ecda00f0c2be399af99ee43c12bbe4c90cf39",
+      "kind": "a cleaning procedure",
+      "labels": [
+        "Cleaning",
+        "Rinse",
+        "Dry",
+        "Stamp"
+      ],
+      "rendering": 2,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:container:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Printing",
+          "target": "Plate"
+        },
+        {
+          "source": "Plate",
+          "target": "Ink"
+        },
+        {
+          "source": "Ink",
+          "target": "Voucher"
+        }
+      ],
+      "domain": "procedural",
+      "family_id": "family:procedural:15",
+      "function": "produces Plate as part of Printing",
+      "graph_digest": "5a542a4e8295139e7135ef841a89fe0e73400740eb4f2db38c572161ff9b40c8",
+      "kind": "a printing procedure",
+      "labels": [
+        "Printing",
+        "Plate",
+        "Ink",
+        "Voucher"
+      ],
+      "rendering": 3,
+      "setting": "during a recorded run",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Kit",
+          "target": "Rope"
+        },
+        {
+          "source": "Rope",
+          "target": "Strand"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:00",
+      "function": "holds Rope inside Kit",
+      "graph_digest": "53347f5065b7093ea7749393a23a3a7b2862bfabdde2c08b584065856c11450d",
+      "kind": "a packed kit",
+      "labels": [
+        "Kit",
+        "Rope",
+        "Strand"
+      ],
+      "rendering": 0,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Toolbox",
+          "target": "Wrench"
+        },
+        {
+          "source": "Toolbox",
+          "target": "Socket"
+        },
+        {
+          "source": "Toolbox",
+          "target": "Insert"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:01",
+      "function": "holds Wrench inside Toolbox",
+      "graph_digest": "aad5b891c04e60afd199d5ce87036e4233205e39f14516daddb576e60f6c6350",
+      "kind": "a tool container",
+      "labels": [
+        "Toolbox",
+        "Wrench",
+        "Socket",
+        "Insert"
+      ],
+      "rendering": 1,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Pantry",
+          "target": "Jar"
+        },
+        {
+          "source": "Pantry",
+          "target": "Lid"
+        },
+        {
+          "source": "Lid",
+          "target": "Tray"
+        },
+        {
+          "source": "Jar",
+          "target": "Tray"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:02",
+      "function": "holds Jar inside Pantry",
+      "graph_digest": "44ca4ba5aa0629444e9d5ee08f016be5b8c740aa65c66a9e2612646c2a272b32",
+      "kind": "a food store",
+      "labels": [
+        "Pantry",
+        "Jar",
+        "Lid",
+        "Tray"
+      ],
+      "rendering": 2,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Backpack",
+          "target": "Pouch"
+        },
+        {
+          "source": "Pouch",
+          "target": "Zipper"
+        },
+        {
+          "source": "Zipper",
+          "target": "Liner"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:03",
+      "function": "holds Pouch inside Backpack",
+      "graph_digest": "af607bf92a774fef6f97c5f6e16c271a6d8b870e8e50ba95cce58c758636de20",
+      "kind": "a carried pack",
+      "labels": [
+        "Backpack",
+        "Pouch",
+        "Zipper",
+        "Liner"
+      ],
+      "rendering": 3,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Crate",
+          "target": "Cap"
+        },
+        {
+          "source": "Bottle",
+          "target": "Cap"
+        },
+        {
+          "source": "Crate",
+          "target": "Pocket"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:04",
+      "function": "holds Bottle inside Crate",
+      "graph_digest": "97eddff70da2e320d4014222d7896177580c0bfb50b733df21275942ae147e04",
+      "kind": "a shipping crate",
+      "labels": [
+        "Crate",
+        "Bottle",
+        "Cap",
+        "Pocket"
+      ],
+      "rendering": 0,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Shelf",
+          "target": "Box"
+        },
+        {
+          "source": "Shelf",
+          "target": "Label"
+        },
+        {
+          "source": "Label",
+          "target": "HandleTag"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:05",
+      "function": "holds Box inside Shelf",
+      "graph_digest": "144f7bcca4c1b5b46d006d0e1aef2900ca339deb7660846f1ed96ea0d26713e0",
+      "kind": "a storage shelf",
+      "labels": [
+        "Shelf",
+        "Box",
+        "Label",
+        "HandleTag"
+      ],
+      "rendering": 1,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Suitcase",
+          "target": "Strap"
+        },
+        {
+          "source": "Strap",
+          "target": "Buckle"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:06",
+      "function": "holds Strap inside Suitcase",
+      "graph_digest": "a7d0beb4b8a726d41da64fead139d5aacb0a46db8d459a6bea222873d7e23224",
+      "kind": "a travel case",
+      "labels": [
+        "Suitcase",
+        "Strap",
+        "Buckle"
+      ],
+      "rendering": 2,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "FirstAidKit",
+          "target": "Bandage"
+        },
+        {
+          "source": "FirstAidKit",
+          "target": "Gauze"
+        },
+        {
+          "source": "FirstAidKit",
+          "target": "Seal"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:07",
+      "function": "holds Bandage inside FirstAidKit",
+      "graph_digest": "208a4b739a1434a480becd43ba27c19463a9afab8b26d356a3ac2768ff817228",
+      "kind": "a first-aid kit",
+      "labels": [
+        "FirstAidKit",
+        "Bandage",
+        "Gauze",
+        "Seal"
+      ],
+      "rendering": 3,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "CameraBag",
+          "target": "Lens"
+        },
+        {
+          "source": "CameraBag",
+          "target": "Cap"
+        },
+        {
+          "source": "Cap",
+          "target": "Clasp"
+        },
+        {
+          "source": "Lens",
+          "target": "Clasp"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:08",
+      "function": "holds Lens inside CameraBag",
+      "graph_digest": "fae4505ab1c97fd62bbc8dc69847996fe30ff1dae56bb1306d41d5dd75d4fa4a",
+      "kind": "a camera bag",
+      "labels": [
+        "CameraBag",
+        "Lens",
+        "Cap",
+        "Clasp"
+      ],
+      "rendering": 0,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "PencilCase",
+          "target": "Eraser"
+        },
+        {
+          "source": "Eraser",
+          "target": "Sleeve"
+        },
+        {
+          "source": "Sleeve",
+          "target": "Card"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:09",
+      "function": "holds Eraser inside PencilCase",
+      "graph_digest": "d238951ea5ef4d2e171d73dc299e8ed1f13eb8262decaf0c65abc8aea8a674f0",
+      "kind": "a pencil case",
+      "labels": [
+        "PencilCase",
+        "Eraser",
+        "Sleeve",
+        "Card"
+      ],
+      "rendering": 1,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "PicnicBasket",
+          "target": "Napkin"
+        },
+        {
+          "source": "Plate",
+          "target": "Napkin"
+        },
+        {
+          "source": "PicnicBasket",
+          "target": "Sticker"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:10",
+      "function": "holds Plate inside PicnicBasket",
+      "graph_digest": "785a14ed83bd4440c701db587dc35560daf7e3d9c105785df20f0c63447c863a",
+      "kind": "a picnic basket",
+      "labels": [
+        "PicnicBasket",
+        "Plate",
+        "Napkin",
+        "Sticker"
+      ],
+      "rendering": 2,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "FilingBox",
+          "target": "Folder"
+        },
+        {
+          "source": "FilingBox",
+          "target": "Tab"
+        },
+        {
+          "source": "Tab",
+          "target": "Wrapper"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:11",
+      "function": "holds Folder inside FilingBox",
+      "graph_digest": "966772b78728c0dc2fe69225717d4d70863f691a65827002eab320c3f8485602",
+      "kind": "a filing box",
+      "labels": [
+        "FilingBox",
+        "Folder",
+        "Tab",
+        "Wrapper"
+      ],
+      "rendering": 3,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "SeedPacket",
+          "target": "Seeds"
+        },
+        {
+          "source": "Seeds",
+          "target": "Envelope"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:12",
+      "function": "holds Seeds inside SeedPacket",
+      "graph_digest": "a15483fe7db226c069b5da9d0fd002bfea771e109d259eb11c55567d320e5d02",
+      "kind": "a seed packet",
+      "labels": [
+        "SeedPacket",
+        "Seeds",
+        "Envelope"
+      ],
+      "rendering": 0,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "CableBag",
+          "target": "Coil"
+        },
+        {
+          "source": "CableBag",
+          "target": "Tie"
+        },
+        {
+          "source": "CableBag",
+          "target": "Sachet"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:13",
+      "function": "holds Coil inside CableBag",
+      "graph_digest": "eab79240de53480b945f02e19581ab3e2768b642fc80868370370a9998082aab",
+      "kind": "a cable bag",
+      "labels": [
+        "CableBag",
+        "Coil",
+        "Tie",
+        "Sachet"
+      ],
+      "rendering": 1,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "SpiceRack",
+          "target": "SpiceJar"
+        },
+        {
+          "source": "SpiceRack",
+          "target": "Scoop"
+        },
+        {
+          "source": "Scoop",
+          "target": "Cushion"
+        },
+        {
+          "source": "SpiceJar",
+          "target": "Cushion"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:14",
+      "function": "holds SpiceJar inside SpiceRack",
+      "graph_digest": "34dcbc37248144e58d3d0e13bc28b1c5b61ba1eadd5ceb46aaae8ab2a6512322",
+      "kind": "a spice rack",
+      "labels": [
+        "SpiceRack",
+        "SpiceJar",
+        "Scoop",
+        "Cushion"
+      ],
+      "rendering": 2,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:organisational:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "ArtCase",
+          "target": "Brush"
+        },
+        {
+          "source": "Brush",
+          "target": "Bristle"
+        },
+        {
+          "source": "Bristle",
+          "target": "Bin"
+        }
+      ],
+      "domain": "container",
+      "family_id": "family:container:15",
+      "function": "holds Brush inside ArtCase",
+      "graph_digest": "7e194582725281ac9be114e84ec8c141c48cc6c2900b352d023ae2192385640e",
+      "kind": "an art case",
+      "labels": [
+        "ArtCase",
+        "Brush",
+        "Bristle",
+        "Bin"
+      ],
+      "rendering": 3,
+      "setting": "in a packed store",
+      "split": "training"
+    },
+    {
+      "analogy_partner": "family:narrative:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Team",
+          "target": "Squad"
+        },
+        {
+          "source": "Squad",
+          "target": "Lead"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:00",
+      "function": "assigns Squad within Team",
+      "graph_digest": "0b599710350083ee601701a48360193aed420a30d012db8ce0b6bf1e9f93613a",
+      "kind": "a working team",
+      "labels": [
+        "Team",
+        "Squad",
+        "Lead"
+      ],
+      "rendering": 0,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Company",
+          "target": "Division"
+        },
+        {
+          "source": "Company",
+          "target": "Team"
+        },
+        {
+          "source": "Company",
+          "target": "Secretary"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:01",
+      "function": "assigns Division within Company",
+      "graph_digest": "42c6f1b392e1f06a09cf2ec2b0bce88cddb2b55b62e2bd2e8d4b3d77588f995a",
+      "kind": "a company structure",
+      "labels": [
+        "Company",
+        "Division",
+        "Team",
+        "Secretary"
+      ],
+      "rendering": 1,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Project",
+          "target": "Workstream"
+        },
+        {
+          "source": "Project",
+          "target": "Task"
+        },
+        {
+          "source": "Task",
+          "target": "Steering"
+        },
+        {
+          "source": "Workstream",
+          "target": "Steering"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:02",
+      "function": "assigns Workstream within Project",
+      "graph_digest": "2d41319cd25b5880a2337c5d30a7a964a11287a6f09fbda7939c135c3df9c721",
+      "kind": "a project structure",
+      "labels": [
+        "Project",
+        "Workstream",
+        "Task",
+        "Steering"
+      ],
+      "rendering": 2,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Committee",
+          "target": "Panel"
+        },
+        {
+          "source": "Panel",
+          "target": "Member"
+        },
+        {
+          "source": "Member",
+          "target": "Quorum"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:03",
+      "function": "assigns Panel within Committee",
+      "graph_digest": "e42619e3a425ac3197f2ba55d9c9905ef6050e73863b3afdda862cac796c2ebf",
+      "kind": "a committee structure",
+      "labels": [
+        "Committee",
+        "Panel",
+        "Member",
+        "Quorum"
+      ],
+      "rendering": 3,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Department",
+          "target": "Role"
+        },
+        {
+          "source": "Unit",
+          "target": "Role"
+        },
+        {
+          "source": "Department",
+          "target": "Minute"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:04",
+      "function": "assigns Unit within Department",
+      "graph_digest": "9b9854c402515ae810177879bf703e7ad57b2c6fb799b224039c565efa621c20",
+      "kind": "a department structure",
+      "labels": [
+        "Department",
+        "Unit",
+        "Role",
+        "Minute"
+      ],
+      "rendering": 0,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Programme",
+          "target": "Initiative"
+        },
+        {
+          "source": "Programme",
+          "target": "Deliverable"
+        },
+        {
+          "source": "Deliverable",
+          "target": "Proxy"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:05",
+      "function": "assigns Initiative within Programme",
+      "graph_digest": "61072971d9a99bb45dcfe7fafbdeb77b3dcc4d6867e03fccc9aee3f62756197d",
+      "kind": "a programme structure",
+      "labels": [
+        "Programme",
+        "Initiative",
+        "Deliverable",
+        "Proxy"
+      ],
+      "rendering": 1,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Board",
+          "target": "Committee"
+        },
+        {
+          "source": "Committee",
+          "target": "Charter"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:06",
+      "function": "assigns Committee within Board",
+      "graph_digest": "5fe65567a8ba05da0d626846e800c2c7098f092c792f47731b17412e1994b6a5",
+      "kind": "a board structure",
+      "labels": [
+        "Board",
+        "Committee",
+        "Charter"
+      ],
+      "rendering": 2,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Partnership",
+          "target": "Firm"
+        },
+        {
+          "source": "Partnership",
+          "target": "Partner"
+        },
+        {
+          "source": "Partnership",
+          "target": "Taskforce"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:07",
+      "function": "assigns Firm within Partnership",
+      "graph_digest": "67f42dc72f7adff0aa614d057433930b628765c0baef41871623b0688c2dbf13",
+      "kind": "a partnership structure",
+      "labels": [
+        "Partnership",
+        "Firm",
+        "Partner",
+        "Taskforce"
+      ],
+      "rendering": 3,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Guild",
+          "target": "Chapter"
+        },
+        {
+          "source": "Guild",
+          "target": "Member"
+        },
+        {
+          "source": "Member",
+          "target": "Delegate"
+        },
+        {
+          "source": "Chapter",
+          "target": "Delegate"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:08",
+      "function": "assigns Chapter within Guild",
+      "graph_digest": "6d48606418abab1983bc4f45368b668e29c53b9873026512997a533f17ce9be9",
+      "kind": "a guild structure",
+      "labels": [
+        "Guild",
+        "Chapter",
+        "Member",
+        "Delegate"
+      ],
+      "rendering": 0,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Consortium",
+          "target": "MemberOrg"
+        },
+        {
+          "source": "MemberOrg",
+          "target": "Liaison"
+        },
+        {
+          "source": "Liaison",
+          "target": "Registrar"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:09",
+      "function": "assigns MemberOrg within Consortium",
+      "graph_digest": "65402199a079bc0ef9efc6701f81e1d2e78c20cda2e3d09d7363845e3b6806d2",
+      "kind": "a consortium structure",
+      "labels": [
+        "Consortium",
+        "MemberOrg",
+        "Liaison",
+        "Registrar"
+      ],
+      "rendering": 1,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Shift",
+          "target": "Roster"
+        },
+        {
+          "source": "Crew",
+          "target": "Roster"
+        },
+        {
+          "source": "Shift",
+          "target": "Trustee"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:10",
+      "function": "assigns Crew within Shift",
+      "graph_digest": "6138d653d77ba4dcc360c01ff63560fccfd79f557949cb0355e182855412f1f3",
+      "kind": "a shift structure",
+      "labels": [
+        "Shift",
+        "Crew",
+        "Roster",
+        "Trustee"
+      ],
+      "rendering": 2,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Council",
+          "target": "WorkingGroup"
+        },
+        {
+          "source": "Council",
+          "target": "Mandate"
+        },
+        {
+          "source": "Mandate",
+          "target": "Warden"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:11",
+      "function": "assigns WorkingGroup within Council",
+      "graph_digest": "519e272709e55aabd2936800ec4a6a71c3bed8c94e3b6119831b312427419fd7",
+      "kind": "a council structure",
+      "labels": [
+        "Council",
+        "WorkingGroup",
+        "Mandate",
+        "Warden"
+      ],
+      "rendering": 3,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Institute",
+          "target": "Lab"
+        },
+        {
+          "source": "Lab",
+          "target": "Group"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:12",
+      "function": "assigns Lab within Institute",
+      "graph_digest": "cf17fa0a2060462ebcfabc2e70619a0efb9d29d9d525ff40841d04cd3ef99ee1",
+      "kind": "an institute structure",
+      "labels": [
+        "Institute",
+        "Lab",
+        "Group"
+      ],
+      "rendering": 0,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Alliance",
+          "target": "PartnerState"
+        },
+        {
+          "source": "Alliance",
+          "target": "Treaty"
+        },
+        {
+          "source": "Alliance",
+          "target": "Envoy"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:13",
+      "function": "assigns PartnerState within Alliance",
+      "graph_digest": "5e2727b6f8ef2e8c41f4fe0b1605a9b654c72a08ec25b2369d70eca7c6d844b5",
+      "kind": "an alliance structure",
+      "labels": [
+        "Alliance",
+        "PartnerState",
+        "Treaty",
+        "Envoy"
+      ],
+      "rendering": 1,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Network",
+          "target": "Node"
+        },
+        {
+          "source": "Network",
+          "target": "Link"
+        },
+        {
+          "source": "Link",
+          "target": "Rapporteur"
+        },
+        {
+          "source": "Node",
+          "target": "Rapporteur"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:14",
+      "function": "assigns Node within Network",
+      "graph_digest": "b88388a883f68cc59dcc81fd1cb26ad7d31ba84ca27f88da1057578ff3499c8a",
+      "kind": "a network structure",
+      "labels": [
+        "Network",
+        "Node",
+        "Link",
+        "Rapporteur"
+      ],
+      "rendering": 2,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:narrative:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Federation",
+          "target": "MemberBody"
+        },
+        {
+          "source": "MemberBody",
+          "target": "Statute"
+        },
+        {
+          "source": "Statute",
+          "target": "Secretariat"
+        }
+      ],
+      "domain": "organisational",
+      "family_id": "family:organisational:15",
+      "function": "assigns MemberBody within Federation",
+      "graph_digest": "b96af3adeb4606dfaf78f0048b848b6bf3e8e7747f7866738d4e80e21dda6def",
+      "kind": "a federation structure",
+      "labels": [
+        "Federation",
+        "MemberBody",
+        "Statute",
+        "Secretariat"
+      ],
+      "rendering": 3,
+      "setting": "in a standing arrangement",
+      "split": "development"
+    },
+    {
+      "analogy_partner": "family:mechanical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Story",
+          "target": "Act"
+        },
+        {
+          "source": "Act",
+          "target": "Scene"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:00",
+      "function": "connects Act to Story",
+      "graph_digest": "40379dbe3e73abc0ec38737a5dfd54a294ac5565974f37a77a05b89c521d4952",
+      "kind": "a story structure",
+      "labels": [
+        "Story",
+        "Act",
+        "Scene"
+      ],
+      "rendering": 0,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Plot",
+          "target": "Thread"
+        },
+        {
+          "source": "Plot",
+          "target": "Beat"
+        },
+        {
+          "source": "Plot",
+          "target": "Foil"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:01",
+      "function": "connects Thread to Plot",
+      "graph_digest": "267211e506154ab947be20e38284d2395c1256be826d52ec2a3f592cdc0f241f",
+      "kind": "a plot structure",
+      "labels": [
+        "Plot",
+        "Thread",
+        "Beat",
+        "Foil"
+      ],
+      "rendering": 1,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Character",
+          "target": "Trait"
+        },
+        {
+          "source": "Character",
+          "target": "Motivation"
+        },
+        {
+          "source": "Motivation",
+          "target": "Climax"
+        },
+        {
+          "source": "Trait",
+          "target": "Climax"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:02",
+      "function": "connects Trait to Character",
+      "graph_digest": "a6a6bc8af967d4c76eeac3ab40c588ba5a23912ae90c06dfc43c7b91c11db73d",
+      "kind": "a character structure",
+      "labels": [
+        "Character",
+        "Trait",
+        "Motivation",
+        "Climax"
+      ],
+      "rendering": 2,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Mystery",
+          "target": "Clue"
+        },
+        {
+          "source": "Clue",
+          "target": "Suspect"
+        },
+        {
+          "source": "Suspect",
+          "target": "Twist"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:03",
+      "function": "connects Clue to Mystery",
+      "graph_digest": "a7ff49a4f9f23942bc096d338fe24d3964a49d5a705374ecb506c0ffa0117a3c",
+      "kind": "a mystery structure",
+      "labels": [
+        "Mystery",
+        "Clue",
+        "Suspect",
+        "Twist"
+      ],
+      "rendering": 3,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Journey",
+          "target": "Waypoint"
+        },
+        {
+          "source": "Leg",
+          "target": "Waypoint"
+        },
+        {
+          "source": "Journey",
+          "target": "Narrator"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:04",
+      "function": "connects Leg to Journey",
+      "graph_digest": "04b08db9c81c36707bbbad6fdea51ae7cb1fd25c1791468cff3e25fc582c862e",
+      "kind": "a journey structure",
+      "labels": [
+        "Journey",
+        "Leg",
+        "Waypoint",
+        "Narrator"
+      ],
+      "rendering": 0,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Fable",
+          "target": "Animal"
+        },
+        {
+          "source": "Fable",
+          "target": "Moral"
+        },
+        {
+          "source": "Moral",
+          "target": "Prologue"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:05",
+      "function": "connects Animal to Fable",
+      "graph_digest": "461cb95a4d253ee96d67d061f420da3744fafeddc61092d80ae1d09cb42430a6",
+      "kind": "a fable structure",
+      "labels": [
+        "Fable",
+        "Animal",
+        "Moral",
+        "Prologue"
+      ],
+      "rendering": 1,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Dialogue",
+          "target": "Turn"
+        },
+        {
+          "source": "Turn",
+          "target": "Reply"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:06",
+      "function": "connects Turn to Dialogue",
+      "graph_digest": "4f96a312089fc6b6673d3473fa5f5967c64231744bfb8962ea1d4b26d44c9d9e",
+      "kind": "a dialogue structure",
+      "labels": [
+        "Dialogue",
+        "Turn",
+        "Reply"
+      ],
+      "rendering": 2,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Flashback",
+          "target": "Scene"
+        },
+        {
+          "source": "Flashback",
+          "target": "Trigger"
+        },
+        {
+          "source": "Flashback",
+          "target": "Coda"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:07",
+      "function": "connects Scene to Flashback",
+      "graph_digest": "6e824b7c176d5ffb2b100519cb8bf786341536c93d9840b0dbe80fcc52d13d80",
+      "kind": "a flashback structure",
+      "labels": [
+        "Flashback",
+        "Scene",
+        "Trigger",
+        "Coda"
+      ],
+      "rendering": 3,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Series",
+          "target": "Season"
+        },
+        {
+          "source": "Series",
+          "target": "Episode"
+        },
+        {
+          "source": "Episode",
+          "target": "Omen"
+        },
+        {
+          "source": "Season",
+          "target": "Omen"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:08",
+      "function": "connects Season to Series",
+      "graph_digest": "bf0ac75375b881771c4dd3458efbe1fe06578b13712f766e94af681a55c29cb5",
+      "kind": "a series structure",
+      "labels": [
+        "Series",
+        "Season",
+        "Episode",
+        "Omen"
+      ],
+      "rendering": 0,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Legend",
+          "target": "Hero"
+        },
+        {
+          "source": "Hero",
+          "target": "Deed"
+        },
+        {
+          "source": "Deed",
+          "target": "Rival"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:09",
+      "function": "connects Hero to Legend",
+      "graph_digest": "9b03cc3efe20c1bcf05957d36ead075c62f8176db89e1c04fe4a82c6e77975f7",
+      "kind": "a legend structure",
+      "labels": [
+        "Legend",
+        "Hero",
+        "Deed",
+        "Rival"
+      ],
+      "rendering": 1,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:04",
+      "archetype": "pair_shared",
+      "branches": [
+        {
+          "source": "Myth",
+          "target": "Domain"
+        },
+        {
+          "source": "Deity",
+          "target": "Domain"
+        },
+        {
+          "source": "Myth",
+          "target": "Mentor"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:10",
+      "function": "connects Deity to Myth",
+      "graph_digest": "c5e12cc427dd4e7c8cc281f09d4685bcce7a32663fbb69756375cd7df2b640e0",
+      "kind": "a myth structure",
+      "labels": [
+        "Myth",
+        "Deity",
+        "Domain",
+        "Mentor"
+      ],
+      "rendering": 2,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:05",
+      "archetype": "fork_child",
+      "branches": [
+        {
+          "source": "Chronicle",
+          "target": "Entry"
+        },
+        {
+          "source": "Chronicle",
+          "target": "Event"
+        },
+        {
+          "source": "Event",
+          "target": "Herald"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:11",
+      "function": "connects Entry to Chronicle",
+      "graph_digest": "7f33c4b5407395a0bd9f22155ee1fbe2a4221e17ff0c91caea085a2f0ab18432",
+      "kind": "a chronicle structure",
+      "labels": [
+        "Chronicle",
+        "Entry",
+        "Event",
+        "Herald"
+      ],
+      "rendering": 3,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:00",
+      "archetype": "chain2",
+      "branches": [
+        {
+          "source": "Ballad",
+          "target": "Stanza"
+        },
+        {
+          "source": "Stanza",
+          "target": "Refrain"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:12",
+      "function": "connects Stanza to Ballad",
+      "graph_digest": "454700103c64df631c92ff498fe715459e0500c965ee1c15fff2486694a8e321",
+      "kind": "a ballad structure",
+      "labels": [
+        "Ballad",
+        "Stanza",
+        "Refrain"
+      ],
+      "rendering": 0,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:01",
+      "archetype": "branch3",
+      "branches": [
+        {
+          "source": "Parable",
+          "target": "Setting"
+        },
+        {
+          "source": "Parable",
+          "target": "Lesson"
+        },
+        {
+          "source": "Parable",
+          "target": "Oracle"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:13",
+      "function": "connects Setting to Parable",
+      "graph_digest": "b78fd205300afa60e3cf3f1df7c2c535a9ee8a8750da9d08b58d31aad76e2505",
+      "kind": "a parable structure",
+      "labels": [
+        "Parable",
+        "Setting",
+        "Lesson",
+        "Oracle"
+      ],
+      "rendering": 1,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:02",
+      "archetype": "diamond",
+      "branches": [
+        {
+          "source": "Saga",
+          "target": "Family"
+        },
+        {
+          "source": "Saga",
+          "target": "Feud"
+        },
+        {
+          "source": "Feud",
+          "target": "Verse"
+        },
+        {
+          "source": "Family",
+          "target": "Verse"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:14",
+      "function": "connects Family to Saga",
+      "graph_digest": "7ad95d7e7a6463377e828657ef60d858847c2ff3cedb72598930ff41b2d113c6",
+      "kind": "a saga structure",
+      "labels": [
+        "Saga",
+        "Family",
+        "Feud",
+        "Verse"
+      ],
+      "rendering": 2,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    },
+    {
+      "analogy_partner": "family:mechanical:03",
+      "archetype": "chain3",
+      "branches": [
+        {
+          "source": "Anecdote",
+          "target": "Setup"
+        },
+        {
+          "source": "Setup",
+          "target": "Punchline"
+        },
+        {
+          "source": "Punchline",
+          "target": "Chorus"
+        }
+      ],
+      "domain": "narrative",
+      "family_id": "family:narrative:15",
+      "function": "connects Setup to Anecdote",
+      "graph_digest": "61f3e889056cc79c7e1b79d5072f43e24abf60bbcdb54e55a87d4191f5be5a8f",
+      "kind": "an anecdote structure",
+      "labels": [
+        "Anecdote",
+        "Setup",
+        "Punchline",
+        "Chorus"
+      ],
+      "rendering": 3,
+      "setting": "within one telling",
+      "split": "final_held_out"
+    }
+  ],
+  "schema": "cas.cube-face-corpus/0.1"
+}

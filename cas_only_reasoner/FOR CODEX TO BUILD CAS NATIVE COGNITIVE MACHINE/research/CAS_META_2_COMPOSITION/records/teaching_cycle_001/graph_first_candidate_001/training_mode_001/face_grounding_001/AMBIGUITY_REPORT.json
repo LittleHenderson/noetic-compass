@@ -1,0 +1,7 @@
+{
+  "recognition_items_accepted": 1728,
+  "recognition_items_rejected": 0,
+  "rejections": [],
+  "rule": "a single-answer three-choice profile rejects an excerpt that names a role, carries its own cue, or could serve another offered role; rejected items are reported, never scored arbitrarily",
+  "schema": "cas.cube-face-task/0.1"
+}

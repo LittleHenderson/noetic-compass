@@ -1,0 +1,28 @@
+{
+  "base_families": 16,
+  "by_face": {
+    "role_application:1": 16,
+    "role_application:2": 16,
+    "role_application:3": 16,
+    "role_application:4": 16,
+    "role_application:5": 16,
+    "role_application:6": 16,
+    "role_recognition:1": 16,
+    "role_recognition:2": 16,
+    "role_recognition:3": 16,
+    "role_recognition:4": 16,
+    "role_recognition:5": 16,
+    "role_recognition:6": 16
+  },
+  "by_layer": {
+    "role_application": 96,
+    "role_recognition": 96,
+    "targeted_check": 24
+  },
+  "cue_note": "the panel carries no face cue in either arm, so it is identical across conditions and doubles as the cue-removal check",
+  "items": 216,
+  "panel_digest": "332ab9a6aef3dd1f3e12a078490a1a24a20aefac0abe9557d04e1d78271523ca",
+  "primary_items": 192,
+  "repeat_note": "the 192 primary questions are views of 16 base families, not 192 independent families",
+  "schema": "cas.cube-face-evaluation/0.1"
+}

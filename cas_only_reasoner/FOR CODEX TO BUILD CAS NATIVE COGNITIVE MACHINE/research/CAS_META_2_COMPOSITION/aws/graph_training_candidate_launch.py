@@ -579,10 +579,18 @@ class CandidateProvider(CurriculumProvider):
 
 
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
-            receipt_dir=None, owner_authorization_path=None):
-    """One reservation, one launch, verified collection, then cleanup."""
-    validate_request(request)
-    validate_authority(authority)
+            receipt_dir=None, owner_authorization_path=None,
+            validate_request_fn=None, validate_authority_fn=None):
+    """One reservation, one launch, verified collection, then cleanup.
+
+    The two validators are injectable so a later experiment can reuse this proven
+    lifecycle with its own schema and bounds instead of copying it. They default to
+    this pilot's own validators, so nothing about this pilot changes.
+    """
+    validate_request_fn = validate_request_fn or validate_request
+    validate_authority_fn = validate_authority_fn or validate_authority
+    validate_request_fn(request)
+    validate_authority_fn(authority)
     owner_path = (Path(owner_authorization_path) if owner_authorization_path is not None
                   else OWNER_AUTHORIZATION_PATH)
     require(authority["owner_authorization_sha256"] == digest(owner_path.read_bytes()),

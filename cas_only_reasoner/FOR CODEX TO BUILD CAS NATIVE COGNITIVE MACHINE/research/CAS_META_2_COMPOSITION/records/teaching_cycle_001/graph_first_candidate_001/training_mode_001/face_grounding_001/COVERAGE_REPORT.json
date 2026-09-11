@@ -1,0 +1,38 @@
+{
+  "base_face_presentations": 576,
+  "cross_domain_analogy_pairs": 96,
+  "distinct_family_graphs": 96,
+  "distinct_topologies": 6,
+  "domain_histogram": {
+    "container": 16,
+    "grammatical": 16,
+    "mechanical": 16,
+    "narrative": 16,
+    "organisational": 16,
+    "procedural": 16
+  },
+  "every_domain_carries_all_six_roles": true,
+  "families": 96,
+  "rendering_histogram": {
+    "0": 24,
+    "1": 24,
+    "2": 24,
+    "3": 24
+  },
+  "schema": "cas.cube-face-corpus/0.1",
+  "split_counts": {
+    "development": 16,
+    "final_held_out": 16,
+    "training": 64
+  },
+  "split_rule": "assigned by family index before any rendering is built, so no derived item of a family crosses the split",
+  "structure_histogram": {
+    "branch3": 18,
+    "chain2": 18,
+    "chain3": 18,
+    "diamond": 18,
+    "fork_child": 12,
+    "pair_shared": 12
+  },
+  "structure_overlap_statement": "96 families share 6 topologies: structure repeats while labels, domains and renderings do not. Familiar-structure/new-instance items are therefore a separate class from unseen arrangements and are counted separately, never merged."
+}

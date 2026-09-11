@@ -1,0 +1,53 @@
+{
+  "batch_arithmetic_holds": true,
+  "cfc_round_movements": {
+    "across_face": 12,
+    "return_to_cube": 8,
+    "within_cube": 28
+  },
+  "counts": {
+    "UPDATES_IF_ONE_PER_EPISODE": 9216,
+    "batch_size": 8,
+    "batching_note": "the plan's 1,152 updates presuppose minibatches of 8 independent query episodes. One optimizer step per episode is the unbatched path and costs 9,216 updates; eight sequential updates are not one minibatch update and are never relabelled as one.",
+    "cfc_cohorts": 6,
+    "cfc_cubes_per_cohort": 4,
+    "cfc_decisions_per_round": 48,
+    "cfc_rounds": 16,
+    "cfc_total_decisions": 4608,
+    "phase_a_queries": 6144,
+    "phase_a_support_presentations": 18432,
+    "phase_a_sweeps": 16,
+    "phase_b_application_queries": 1536,
+    "phase_b_application_sweeps": 4,
+    "phase_b_queries": 3072,
+    "phase_b_recognition_queries": 1536,
+    "phase_b_recognition_sweeps": 4,
+    "roles": 6,
+    "schema": "cas.cube-face-schedule/0.1",
+    "seven_stage_cycles_note": "a sweep over six roles is not a completed seven-stage neural cycle; no counter in this profile calls it one",
+    "supervised_query_presentations": 9216,
+    "support_rule": "supports are worked examples from other training families and are counted separately from queries",
+    "training_families": 64,
+    "updates_at_declared_batch": 1152,
+    "worked_support_presentations": 18432
+  },
+  "events_by_phase": {
+    "A": 6144,
+    "B": 3072
+  },
+  "events_by_profile": {
+    "FACE_APPLY": 7680,
+    "ROLE_FROM_CONTENT": 1536
+  },
+  "events_by_role": {
+    "1": 1536,
+    "2": 1536,
+    "3": 1536,
+    "4": 1536,
+    "5": 1536,
+    "6": 1536
+  },
+  "events_with_supports": 6144,
+  "materialised_events": 9216,
+  "schema": "cas.cube-face-schedule/0.1"
+}

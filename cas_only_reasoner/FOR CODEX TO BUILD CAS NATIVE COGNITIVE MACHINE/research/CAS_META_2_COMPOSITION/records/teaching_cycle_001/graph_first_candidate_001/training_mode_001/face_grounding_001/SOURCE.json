@@ -1,0 +1,20 @@
+{
+  "note": "pinned copies; the originals are read-only inputs outside the homebase and were not modified",
+  "schema": "cas.face-grounding-sources/0.1",
+  "sources": [
+    {
+      "bytes": 28212,
+      "name": "Cross_Cube_Face_Grounding_Plan_v0.1.md",
+      "origin": "C:\\Users\\wakil\\Downloads\\Cross_Cube_Face_Grounding_Plan_v0.1.md",
+      "role": "owner-supplied plan, pinned as the authoritative specification",
+      "sha256": "c9de1732e15382c3481f92f938313751314a320eeddd66281cd0f81ca49ac9c4"
+    },
+    {
+      "bytes": 22656,
+      "name": "Cube_Face_Cube_Learning_Loop_v0.1.md",
+      "origin": "C:\\Users\\wakil\\Downloads\\Cube_Face_Cube_Learning_Loop_v0.1.md",
+      "role": "owner-supplied plan, pinned as the authoritative specification",
+      "sha256": "87765a17eb374d571e8d7b45c9eb53cc8c864fa80c7f28e33c7a090feb9659df"
+    }
+  ]
+}

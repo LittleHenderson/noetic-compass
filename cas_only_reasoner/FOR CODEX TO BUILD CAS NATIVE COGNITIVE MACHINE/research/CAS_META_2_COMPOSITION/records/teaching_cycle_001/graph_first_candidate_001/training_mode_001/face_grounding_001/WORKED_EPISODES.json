@@ -1,0 +1,1700 @@
+{
+  "episodes": [
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.",
+        "Bicycle is a wheeled vehicle. Declared function: it transmits force between Bicycle and Wheel."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 1,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_1\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Object under inspection: Clock, a timekeeping mechanism. Function: transmits force between Clock and Gear.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "b19c5837d0576387ecf54de28673c14870021aae646663ac8610580d68d4ac42",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "4: explicit correspondence",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\ndeclaration: Bicycle is a wheeled vehicle. Declared purpose: it transmits force between Bicycle and Wheel.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:02",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Bicycle is a wheeled vehicle. Declared function: it transmits force between Bicycle and Wheel.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "identity",
+        "subtypes": [
+          "identity"
+        ],
+        "support_ids": [
+          "family:mechanical:02",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "Setting: in a workshop. Participants: Bicycle, Wheel, Rim.",
+        "Setting: in a workshop. Participants: Bicycle, and Wheel is contained by Wheel.",
+        "This holds elsewhere, with Bicycle and Wheel, Rim present."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 2,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_2\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> In a workshop the participants are Pump and Piston, Valve.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "0478e9d295c8bcbeb028131f90b02a2beb66c408e23b8a89718c6587ec810cd1",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "6: recomposition, story or bounded process",
+        "5: parts and structural relationships"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nsurroundings: Surroundings: in a workshop. Participants: Bicycle, Wheel, Rim.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:03",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Setting: in a workshop. Participants: Bicycle, Wheel, Rim.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "setting",
+        "subtypes": [
+          "setting"
+        ],
+        "support_ids": [
+          "family:mechanical:03",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Word --contains--> Phrase\n",
+        "node Clause kind=idea\nnode Subject kind=idea\nnode Predicate kind=idea\nnode Object kind=idea\nrel Clause --contains--> Subject\nrel Clause --contains--> Predicate\nrel Clause --contains--> Object\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 3,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_3\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "efa1d1bcd0edbb5e1327387a49da3c32000efed2c7becc794555614fed1cf79d",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "1: technical name, definition and function",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nrelation to keep: a whole contains a direct constituent, and that constituent contains a further constituent (Bicycle -> Wheel -> Rim)\ncandidate: node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:04",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "different_words_right_links",
+        "subtypes": [
+          "different_words_right_links"
+        ],
+        "support_ids": [
+          "family:mechanical:04",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "Bicycle=Phrase ; Wheel=Sentence ; Rim=Word",
+        "Bicycle=Sentence ; Wheel=Phrase",
+        "Bicycle=Sentence ; Wheel=Phrase ; Rim=Word"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 4,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "3f3790ae4cefac407fcf59495044ff9c646c535139e75ecfc7a111de82d0d3e9",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "4: explicit correspondence",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\ncandidate table: Bicycle=Sentence ; Wheel=Phrase ; Rim=Word",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:05",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Bicycle=Sentence ; Wheel=Phrase ; Rim=Word",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:05",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "via:Wheel",
+        "absent",
+        "direct"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 5,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nRequested view: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_5 state whether Rim is directly inside, reached through another constituent, or absent (Bicycle)\nChoose one of the three supplied options.\n",
+      "public_record_id": "64e3ed3332b78876f989f7dd97a3301dadbf3df8a977be8cc49f82d9b4c5da23",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "2: context, environment and interactions",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\ninventory: via:Wheel",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "via:Wheel",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "reach_kind",
+        "subtypes": [
+          "reach_kind"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain2",
+      "delivered_choices": [
+        "Bicycle contains Wheel ; Wheel contains Rim",
+        "Bicycle contains Wheel",
+        "Bicycle contains Outsider ; Bicycle contains Wheel ; Wheel contains Rim"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 6,
+      "family_id": "family:mechanical:00",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "91638fcfc4c74bd139aad7c556d42b1ce7abcc19eb5a4dd2b963a2f165db5859",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "4: explicit correspondence",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Bicycle kind=idea\nnode Wheel kind=idea\nnode Rim kind=idea\nrel Bicycle --contains--> Wheel\nrel Wheel --contains--> Rim\naccount: Bicycle contains Wheel ; Wheel contains Rim",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Bicycle contains Wheel ; Wheel contains Rim",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:00",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.",
+        "Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 1,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_1\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Object under inspection: Clock, a timekeeping mechanism. Function: transmits force between Clock and Gear.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "bf12f8f67cb3a1eaf9a505f61c18fe983378e70f997138b7127bc80d07a5b279",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "1: technical name, definition and function",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\ndeclaration: Cart - a hand-drawn platform. Its declared purpose is to transmits force between Cart and Platform.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:02",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "function",
+        "subtypes": [
+          "function"
+        ],
+        "support_ids": [
+          "family:mechanical:02",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "Environment: elsewhere. Involved: Platform, Axle, and Cart.",
+        "This holds in a workshop, with Cart and Platform, Axle present.",
+        "Setting: in a workshop. Participants: Cart, and Platform is contained by Platform."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 2,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_2\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> In a workshop the participants are Pump and Piston, Valve.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "edb0c4b988d7d16d2890ae74f1e6e45c64d6ccb27b7cab3b50522d96d6e00cea",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "5: parts and structural relationships",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nsurroundings: This holds in a workshop, with Cart and Platform, Axle present.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:03",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "This holds in a workshop, with Cart and Platform, Axle present.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "interaction_direction",
+        "subtypes": [
+          "interaction_direction"
+        ],
+        "support_ids": [
+          "family:mechanical:03",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "node Clause kind=idea\nnode Subject kind=idea\nnode Predicate kind=idea\nnode Object kind=idea\nrel Clause --contains--> Subject\nrel Clause --contains--> Predicate\nrel Object --contains--> Clause\n",
+        "node Clause kind=idea\nnode Subject kind=idea\nnode Predicate kind=idea\nnode Object kind=idea\nrel Clause --contains--> Subject\nrel Clause --contains--> Predicate\nrel Clause --contains--> Object\n",
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 3,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_3\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "e5c90d0de7d003d073f419cec1869426aae72c945a248b5d69a95eaf96273887",
+      "recognition_choices": [
+        "3: analogy or metaphor within a declared scope",
+        "1: technical name, definition and function",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nrelation to keep: a whole contains two direct constituents (Cart -> Axle and Cart -> Handle)\ncandidate: node Clause kind=idea\nnode Subject kind=idea\nnode Predicate kind=idea\nnode Object kind=idea\nrel Clause --contains--> Subject\nrel Clause --contains--> Predicate\nrel Clause --contains--> Object\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:04",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node Clause kind=idea\nnode Subject kind=idea\nnode Predicate kind=idea\nnode Object kind=idea\nrel Clause --contains--> Subject\nrel Clause --contains--> Predicate\nrel Clause --contains--> Object\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "preserves_scope",
+        "subtypes": [
+          "preserves_scope"
+        ],
+        "support_ids": [
+          "family:mechanical:04",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "Cart=Subject ; Platform=Clause ; Axle=Predicate ; Handle=Object",
+        "Cart=Clause ; Platform=Subject ; Axle=Predicate",
+        "Cart=Clause ; Platform=Subject ; Axle=Predicate ; Handle=Object"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 4,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "3c26c9337dcbd6886c07fb8c2c13e9dae239215de6fccfaa2330b0da7e39c83b",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "4: explicit correspondence",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\ncandidate table: Cart=Clause ; Platform=Subject ; Axle=Predicate ; Handle=Object",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:05",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Cart=Clause ; Platform=Subject ; Axle=Predicate ; Handle=Object",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:05",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "Phrase contains Word ; Sentence contains Phrase",
+        "[Axle, Handle, Platform]",
+        "[Axle, Handle]"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 5,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nTask: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_5 list the parts directly inside (Cart)\nChoose one of the three supplied options.\n",
+      "public_record_id": "4cd908009c852e292cea0e2a4b878f062c0031e496cb4bd71914075ed9986c43",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "3: analogy or metaphor within a declared scope",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\ninventory: [Axle, Handle, Platform]",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "[Axle, Handle, Platform]",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "direct_inventory",
+        "subtypes": [
+          "direct_inventory",
+          "foreign_whole_part"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "branch3",
+      "delivered_choices": [
+        "Cart contains Axle ; Cart contains Handle",
+        "Cart contains Axle ; Cart contains Handle ; Cart contains Platform",
+        "Cart contains Axle ; Cart contains Handle ; Cart contains Outsider ; Cart contains Platform"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 6,
+      "family_id": "family:mechanical:01",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "e1ac378272abf81ee1bca03b06a5c7f1932bfe7719e0d8c90eb9bc6fbf0a55f0",
+      "recognition_choices": [
+        "3: analogy or metaphor within a declared scope",
+        "4: explicit correspondence",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\naccount: Cart contains Axle ; Cart contains Handle ; Cart contains Platform",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Cart contains Axle ; Cart contains Handle ; Cart contains Platform",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:01",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.",
+        "Object under inspection: Clock, a timekeeping mechanism. Function: transmits force between Clock and Gear."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 1,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_1\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nPlease: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "1e2d7dbb8fa4781a5236bb2c5434b138f76867b11f53119b7dbafe27ba20355c",
+      "recognition_choices": [
+        "4: explicit correspondence",
+        "5: parts and structural relationships",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\ndeclaration: Object under inspection: Clock, a timekeeping mechanism. Purpose: transmits force between Clock and Gear.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:01",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Object under inspection: Clock, a timekeeping mechanism. Function: transmits force between Clock and Gear.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "identity",
+        "subtypes": [
+          "identity"
+        ],
+        "support_ids": [
+          "family:mechanical:01",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "In a workshop the participants are Clock and Gear, Spring.",
+        "Environment: in a workshop. Involved: Gear, Spring, and Clock.",
+        "Setting: in a workshop. Participants: Clock, and Gear is contained by Gear."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 2,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_2\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nPlease: CUBE_FACE_2 state the setting and the interactions that hold here -> In a workshop the participants are Pump and Piston, Valve.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "acd9bcdc853abec6243915c5489a30661f898fa89f1ac9f05370a2e8435b5d51",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "2: context, environment and interactions",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nsurroundings: Environment: in a workshop. Involved: Gear, Spring, and Clock.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:03",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Environment: in a workshop. Involved: Gear, Spring, and Clock.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "interaction_direction",
+        "subtypes": [
+          "interaction_direction"
+        ],
+        "support_ids": [
+          "family:mechanical:03",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+        "node Paragraph kind=idea\nnode Topic kind=idea\nnode Support kind=idea\nnode Adjunct kind=idea\nrel Paragraph --contains--> Topic\nrel Paragraph --contains--> Support\nrel Support --contains--> Adjunct\nrel Adjunct --contains--> Topic\n",
+        "node Paragraph kind=idea\nnode Topic kind=idea\nnode Support kind=idea\nnode Adjunct kind=idea\nrel Paragraph --contains--> Topic\nrel Paragraph --contains--> Support\nrel Support --contains--> Adjunct\nrel Topic --contains--> Adjunct\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 3,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_3\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nPlease: CUBE_FACE_3 choose the example whose declared relationships match -> node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "6e90109c219ccb8255646d5b09303ca8f7eb4b7b0fe9437655d6f2f3db9b0ee2",
+      "recognition_choices": [
+        "3: analogy or metaphor within a declared scope",
+        "1: technical name, definition and function",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nrelation to keep: a whole contains a direct constituent, and that constituent contains a further constituent (Clock -> Gear -> Seal)\ncandidate: node Paragraph kind=idea\nnode Topic kind=idea\nnode Support kind=idea\nnode Adjunct kind=idea\nrel Paragraph --contains--> Topic\nrel Paragraph --contains--> Support\nrel Support --contains--> Adjunct\nrel Topic --contains--> Adjunct\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:04",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node Paragraph kind=idea\nnode Topic kind=idea\nnode Support kind=idea\nnode Adjunct kind=idea\nrel Paragraph --contains--> Topic\nrel Paragraph --contains--> Support\nrel Support --contains--> Adjunct\nrel Topic --contains--> Adjunct\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "different_words_right_links",
+        "subtypes": [
+          "different_words_right_links"
+        ],
+        "support_ids": [
+          "family:mechanical:04",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "Clock=Paragraph ; Gear=Topic ; Spring=Support ; Seal=Adjunct",
+        "Clock=Topic ; Gear=Paragraph ; Spring=Support ; Seal=Adjunct",
+        "Clock=Paragraph ; Gear=Topic ; Spring=Support"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 4,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nPlease: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "160e6ab32393ca2e693adf19e2b650743012b8b8816a0d8a471f8d4e50433c17",
+      "recognition_choices": [
+        "4: explicit correspondence",
+        "1: technical name, definition and function",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\ncandidate table: Clock=Paragraph ; Gear=Topic ; Spring=Support ; Seal=Adjunct",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:05",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Clock=Paragraph ; Gear=Topic ; Spring=Support ; Seal=Adjunct",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:05",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "via:Gear",
+        "absent",
+        "direct"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 5,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nPlease: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_5 state whether Seal is directly inside, reached through another constituent, or absent (Clock)\nChoose one of the three supplied options.\n",
+      "public_record_id": "9916c9f8388f7fa53265d5b7caa403eb3351ca07e7ee9c5ff640d4b1f03d7495",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "5: parts and structural relationships",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\ninventory: via:Gear",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "via:Gear",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "reach_kind",
+        "subtypes": [
+          "reach_kind"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "diamond",
+      "delivered_choices": [
+        "Clock contains Gear ; Clock contains Outsider ; Clock contains Spring ; Gear contains Seal ; Spring contains Seal",
+        "Clock contains Gear ; Clock contains Spring ; Gear contains Seal ; Spring contains Seal",
+        "Clock contains Gear ; Clock contains Spring ; Gear contains Seal"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 6,
+      "family_id": "family:mechanical:02",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nPlease: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nPlease: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nPlease: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nPlease: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "4e535ae933f686bc007d968058d51ae6bd5de8fb67f2a7ce6d8cc45d135fcfc9",
+      "recognition_choices": [
+        "3: analogy or metaphor within a declared scope",
+        "6: recomposition, story or bounded process",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\naccount: Clock contains Gear ; Clock contains Spring ; Gear contains Seal ; Spring contains Seal",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Clock contains Gear ; Clock contains Spring ; Gear contains Seal ; Spring contains Seal",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:02",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "Pump: a fluid-moving device. As declared, Pump transmits force between Pump and Piston.",
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 1,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_1\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nRequired: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "1f418778e24debaa9449f52cc324e276263b319e737260d3b3a49147d5b936ab",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "5: parts and structural relationships",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\ndeclaration: Pump: a fluid-moving device. As declared, Pump transmits force between Pump and Piston.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:01",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Pump: a fluid-moving device. As declared, Pump transmits force between Pump and Piston.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "function",
+        "subtypes": [
+          "function"
+        ],
+        "support_ids": [
+          "family:mechanical:01",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "Setting: in a workshop. Participants: Pump, and Piston is contained by Piston.",
+        "Setting: elsewhere. Participants: Pump, Piston, Valve.",
+        "In a workshop the participants are Pump and Piston, Valve."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 2,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_2\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nRequired: CUBE_FACE_2 state the setting and the interactions that hold here -> Environment: in a workshop. Involved: Gear, Spring, and Clock.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "dd609fee08eaf52e58291d21e627d0d876b62e996aa4598a1211c4d5a6f2eceb",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "5: parts and structural relationships",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nsurroundings: In a workshop the participants are Pump and Piston, Valve.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:02",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "In a workshop the participants are Pump and Piston, Valve.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "setting",
+        "subtypes": [
+          "setting"
+        ],
+        "support_ids": [
+          "family:mechanical:02",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel Complement --contains--> VerbPhrase\n",
+        "node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel VerbPhrase --contains--> Complement\n",
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 3,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_3\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequired: CUBE_FACE_3 choose the example whose declared relationships match -> node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "82c5b307d5c1b89dfe55130933c6d40c141e55564b9ca84590470e1f75494467",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "6: recomposition, story or bounded process",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nrelation to keep: a whole contains a direct constituent, and that constituent contains a further constituent (Pump -> Piston -> Gasket)\ncandidate: node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel VerbPhrase --contains--> Complement\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:04",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel VerbPhrase --contains--> Complement\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "preserves_scope",
+        "subtypes": [
+          "preserves_scope"
+        ],
+        "support_ids": [
+          "family:mechanical:04",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "Pump=Question ; Piston=Auxiliary ; Valve=VerbPhrase ; Gasket=Complement",
+        "Pump=Auxiliary ; Piston=Question ; Valve=VerbPhrase ; Gasket=Complement",
+        "Pump=Question ; Piston=Auxiliary ; Valve=VerbPhrase"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 4,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nRequired: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "50a9d7413a6a6c7b5890a2b7f70ab9df934f9d3184b125b1d01cc0aedc1b28da",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "4: explicit correspondence",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\ncandidate table: Pump=Question ; Piston=Auxiliary ; Valve=VerbPhrase ; Gasket=Complement",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:05",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Pump=Question ; Piston=Auxiliary ; Valve=VerbPhrase ; Gasket=Complement",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:05",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "via:Valve",
+        "direct",
+        "absent"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 5,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nRequired: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_5 state whether Gasket is directly inside, reached through another constituent, or absent (Pump)\nChoose one of the three supplied options.\n",
+      "public_record_id": "5e6adf69558b30691975a60a631273b8ebd16de4f68348a9b85c1d6cbe0ecb49",
+      "recognition_choices": [
+        "3: analogy or metaphor within a declared scope",
+        "2: context, environment and interactions",
+        "5: parts and structural relationships"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\ninventory: via:Valve",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "via:Valve",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "reach_kind",
+        "subtypes": [
+          "reach_kind"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "chain3",
+      "delivered_choices": [
+        "Piston contains Valve ; Pump contains Piston ; Valve contains Gasket",
+        "Piston contains Valve ; Pump contains Outsider ; Pump contains Piston ; Valve contains Gasket",
+        "Piston contains Valve ; Pump contains Piston"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 6,
+      "family_id": "family:mechanical:03",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nRequired: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequired: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequired: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequired: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "a7f5b8ef94fef0845cfa6a30423794539e4792e98051c14f3f42ea4284a62de7",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "3: analogy or metaphor within a declared scope",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\naccount: Piston contains Valve ; Pump contains Piston ; Valve contains Gasket",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Piston contains Valve ; Pump contains Piston ; Valve contains Gasket",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:03",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.",
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Loom is a weaving machine. Declared function: it transmits force between Loom and Shuttle."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 1,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_1\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "0f57d023b520b5656ad25ea0d6fdad6a39ef37483bcde374772f38f82d2280f8",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "5: parts and structural relationships",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\ndeclaration: Loom is a weaving machine. Declared purpose: it transmits force between Loom and Shuttle.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:01",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Loom is a weaving machine. Declared function: it transmits force between Loom and Shuttle.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "identity",
+        "subtypes": [
+          "identity"
+        ],
+        "support_ids": [
+          "family:mechanical:01",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "Setting: in a workshop. Participants: Loom, and Shuttle is contained by Shuttle.",
+        "This holds elsewhere, with Loom and Shuttle, Thread present.",
+        "Setting: in a workshop. Participants: Loom, Shuttle, Thread."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 2,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_2\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> Environment: in a workshop. Involved: Gear, Spring, and Clock.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "4de232b23135b6615b416579267ce2afe4bececbdda0825390d9409895dfb37b",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "6: recomposition, story or bounded process",
+        "5: parts and structural relationships"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nsurroundings: Surroundings: in a workshop. Participants: Loom, Shuttle, Thread.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:02",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Setting: in a workshop. Participants: Loom, Shuttle, Thread.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "setting",
+        "subtypes": [
+          "setting"
+        ],
+        "support_ids": [
+          "family:mechanical:02",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel Determiner --contains--> List\n",
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+        "node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 3,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_3\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel VerbPhrase --contains--> Complement\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "e7898cf935559c886a70a463038a42f73a5c30c322d53abaac6ec33cd7c4c08d",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "1: technical name, definition and function",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nrelation to keep: a whole contains two direct constituents (Loom -> Bearing and Loom -> Thread)\ncandidate: node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:03",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node List kind=idea\nnode Item kind=idea\nnode Marker kind=idea\nnode Determiner kind=idea\nrel List --contains--> Marker\nrel Item --contains--> Marker\nrel List --contains--> Determiner\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "different_words_right_links",
+        "subtypes": [
+          "different_words_right_links"
+        ],
+        "support_ids": [
+          "family:mechanical:03",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "Loom=List ; Shuttle=Item ; Thread=Marker",
+        "Loom=Item ; Shuttle=List ; Thread=Marker ; Bearing=Determiner",
+        "Loom=List ; Shuttle=Item ; Thread=Marker ; Bearing=Determiner"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 4,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "c8ef8e25b739b0b03f3fa69a049982f858ec70aa6a28f579cb75d38bdcd8a9ae",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "4: explicit correspondence",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\ncandidate table: Loom=List ; Shuttle=Item ; Thread=Marker ; Bearing=Determiner",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:05",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Loom=List ; Shuttle=Item ; Thread=Marker ; Bearing=Determiner",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:05",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "[Bearing]",
+        "[Bearing, Thread]",
+        "Phrase contains Word ; Sentence contains Phrase"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 5,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nRequested view: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_5 list the parts directly inside (Loom)\nChoose one of the three supplied options.\n",
+      "public_record_id": "97e23236a7802be45db64698ca059ef3c48c4a70c566f411b6f19b7b63d1efc6",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "3: analogy or metaphor within a declared scope",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\ninventory: [Bearing, Thread]",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "[Bearing, Thread]",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "direct_inventory",
+        "subtypes": [
+          "direct_inventory",
+          "foreign_whole_part"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "pair_shared",
+      "delivered_choices": [
+        "Loom contains Bearing ; Loom contains Outsider ; Loom contains Thread ; Shuttle contains Thread",
+        "Loom contains Bearing ; Loom contains Thread",
+        "Loom contains Bearing ; Loom contains Thread ; Shuttle contains Thread"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 6,
+      "family_id": "family:mechanical:04",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nRequested view: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "c4ab01a2903f5f6275f3eb1e0fa0c5567d850af3d37833092f2945d093fc541a",
+      "recognition_choices": [
+        "4: explicit correspondence",
+        "3: analogy or metaphor within a declared scope",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\naccount: Loom contains Bearing ; Loom contains Thread ; Shuttle contains Thread",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Loom contains Bearing ; Loom contains Thread ; Shuttle contains Thread",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:04",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "Clause - a clause pattern. Its declared function is to carries the relation between Clause and Subject.",
+        "Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.",
+        "Lathe - a turning machine. Its declared function is to transmits force between Lathe and Chuck."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 2,
+      "face": 1,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_1\nnode Cart kind=idea\nnode Platform kind=idea\nnode Axle kind=idea\nnode Handle kind=idea\nrel Cart --contains--> Platform\nrel Cart --contains--> Axle\nrel Cart --contains--> Handle\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Cart - a hand-drawn platform. Its declared function is to transmits force between Cart and Platform.\nCUBE_FACE_1\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Sentence is a grammatical unit. Declared function: it carries the relation between Sentence and Phrase.\nCUBE_FACE_1\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared -> Recipe is a cooking procedure. Declared function: it produces Step as part of Recipe.\nCUBE_FACE_1\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_1 state what the whole is and what it is for, as declared\nChoose one of the three supplied options.\n",
+      "public_record_id": "d96d7ac3b62723eb6caae07b1fcc37fa011e2a8cba0518ca8dcfc7eb04db3967",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "4: explicit correspondence",
+        "1: technical name, definition and function"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\ndeclaration: Lathe - a turning machine. Its declared purpose is to transmits force between Lathe and Chuck.",
+      "role": "name_definition_function",
+      "support_families": [
+        "family:mechanical:01",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Lathe - a turning machine. Its declared function is to transmits force between Lathe and Chuck.",
+        "declared_rule": "the definition and function must name the supplied whole and its declared kind; another whole's declaration cannot",
+        "excerpt_digest": null,
+        "face": 1,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "function",
+        "subtypes": [
+          "function"
+        ],
+        "support_ids": [
+          "family:mechanical:01",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "Environment: elsewhere. Involved: Chuck, Tool, and Lathe.",
+        "This holds in a workshop, with Lathe and Chuck, Tool present.",
+        "Setting: in a workshop. Participants: Lathe, and Chuck is contained by Chuck."
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 2,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_2\nnode Clock kind=idea\nnode Gear kind=idea\nnode Spring kind=idea\nnode Seal kind=idea\nrel Clock --contains--> Gear\nrel Clock --contains--> Spring\nrel Spring --contains--> Seal\nrel Gear --contains--> Seal\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> Environment: in a workshop. Involved: Gear, Spring, and Clock.\nCUBE_FACE_2\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: in an edited sentence. Participants: Sentence, Phrase, Word.\nCUBE_FACE_2\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_2 state the setting and the interactions that hold here -> Setting: during a recorded run. Participants: Recipe, Step, Ingredient.\nCUBE_FACE_2\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_2 state the setting and the interactions that hold here\nChoose one of the three supplied options.\n",
+      "public_record_id": "84e977cc81322f0cf078886752ee316b469199b2233dfe6228ea7fd787af9d72",
+      "recognition_choices": [
+        "2: context, environment and interactions",
+        "5: parts and structural relationships",
+        "6: recomposition, story or bounded process"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nsurroundings: This holds in a workshop, with Lathe and Chuck, Tool present.",
+      "role": "context_environment",
+      "support_families": [
+        "family:mechanical:02",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "This holds in a workshop, with Lathe and Chuck, Tool present.",
+        "declared_rule": "participants, relation direction and the declared setting must all match the supplied facts",
+        "excerpt_digest": null,
+        "face": 2,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "interaction_direction",
+        "subtypes": [
+          "interaction_direction"
+        ],
+        "support_ids": [
+          "family:mechanical:02",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "node Compound kind=idea\nnode ClauseA kind=idea\nnode Conjunction kind=idea\nnode Particle kind=idea\nrel Compound --contains--> ClauseA\nrel Compound --contains--> Conjunction\nrel Conjunction --contains--> Particle\n",
+        "node Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\n",
+        "node Compound kind=idea\nnode ClauseA kind=idea\nnode Conjunction kind=idea\nnode Particle kind=idea\nrel Compound --contains--> ClauseA\nrel Compound --contains--> Conjunction\nrel Particle --contains--> Conjunction\n"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 3,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_3\nnode Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node Question kind=idea\nnode Auxiliary kind=idea\nnode VerbPhrase kind=idea\nnode Complement kind=idea\nrel Question --contains--> Auxiliary\nrel Auxiliary --contains--> VerbPhrase\nrel VerbPhrase --contains--> Complement\nCUBE_FACE_3\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nCUBE_FACE_3\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_3 choose the example whose declared relationships match -> node Kit kind=idea\nnode Rope kind=idea\nnode Strand kind=idea\nrel Kit --contains--> Rope\nrel Rope --contains--> Strand\nCUBE_FACE_3\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_3 choose the example whose declared relationships match\nChoose one of the three supplied options.\n",
+      "public_record_id": "59ed2b17274736b56b0454ea6d22b0bd87f8cdb70cefe7e5901cb7227ec281d0",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "6: recomposition, story or bounded process",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 2,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nrelation to keep: a whole contains a direct constituent, and that constituent contains a further constituent (Lathe -> Chuck -> Bolt)\ncandidate: node Compound kind=idea\nnode ClauseA kind=idea\nnode Conjunction kind=idea\nnode Particle kind=idea\nrel Compound --contains--> ClauseA\nrel Compound --contains--> Conjunction\nrel Conjunction --contains--> Particle\n",
+      "role": "analogy_metaphor",
+      "support_families": [
+        "family:mechanical:03",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "node Compound kind=idea\nnode ClauseA kind=idea\nnode Conjunction kind=idea\nnode Particle kind=idea\nrel Compound --contains--> ClauseA\nrel Compound --contains--> Conjunction\nrel Conjunction --contains--> Particle\n",
+        "declared_rule": "the candidate must preserve the declared scoped relation; shared vocabulary is not structural correspondence",
+        "excerpt_digest": null,
+        "face": 3,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "preserves_scope",
+        "subtypes": [
+          "preserves_scope"
+        ],
+        "support_ids": [
+          "family:mechanical:03",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle",
+        "Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction",
+        "Lathe=ClauseA ; Chuck=Compound ; Tool=Conjunction ; Bolt=Particle"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 4,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_4\nnode Loom kind=idea\nnode Shuttle kind=idea\nnode Thread kind=idea\nnode Bearing kind=idea\nrel Loom --contains--> Thread\nrel Shuttle --contains--> Thread\nrel Loom --contains--> Bearing\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Loom=List ; Shuttle=Item ; Thread=Marker ; Bearing=Determiner\nCUBE_FACE_4\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Sentence=Recipe ; Phrase=Step ; Word=Ingredient\nCUBE_FACE_4\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations -> Recipe=Kit ; Step=Rope ; Ingredient=Strand\nCUBE_FACE_4\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_4 choose the mapping that preserves the declared relations\nChoose one of the three supplied options.\n",
+      "public_record_id": "2850f789459f883671c134cf2dfb578fa68d6f2047cdb6c0f9c33f13a5e6ecfe",
+      "recognition_choices": [
+        "1: technical name, definition and function",
+        "4: explicit correspondence",
+        "2: context, environment and interactions"
+      ],
+      "recognition_correct_index": 1,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\ncandidate table: Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle",
+      "role": "explicit_correspondence",
+      "support_families": [
+        "family:mechanical:04",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Lathe=Compound ; Chuck=ClauseA ; Tool=Conjunction ; Bolt=Particle",
+        "declared_rule": "the mapping must preserve every declared containment branch of the source family",
+        "excerpt_digest": null,
+        "face": 4,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "edge_preserving",
+        "subtypes": [
+          "edge_preserving"
+        ],
+        "support_ids": [
+          "family:mechanical:04",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "via:Tool",
+        "direct",
+        "absent"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 0,
+      "face": 5,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_5\nnode Turbine kind=idea\nnode Blade kind=idea\nnode Rotor kind=idea\nrel Turbine --contains--> Blade\nrel Blade --contains--> Rotor\nTask: CUBE_FACE_5 state whether Rotor is directly inside, reached through another constituent, or absent (Turbine) -> via:Blade\nCUBE_FACE_5\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_5 state whether Word is directly inside, reached through another constituent, or absent (Sentence) -> via:Phrase\nCUBE_FACE_5\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_5 state whether Ingredient is directly inside, reached through another constituent, or absent (Recipe) -> via:Step\nCUBE_FACE_5\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_5 state whether Bolt is directly inside, reached through another constituent, or absent (Lathe)\nChoose one of the three supplied options.\n",
+      "public_record_id": "5af96aae87f6a277241ca17b281877bf3d54645cd17f1ab439d3f82d28e510a7",
+      "recognition_choices": [
+        "5: parts and structural relationships",
+        "2: context, environment and interactions",
+        "3: analogy or metaphor within a declared scope"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\ninventory: via:Tool",
+      "role": "parts_structure",
+      "support_families": [
+        "family:mechanical:06",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "via:Tool",
+        "declared_rule": "direct constituents only; a part reached through another constituent is not direct, and another whole's part is not a constituent of this one",
+        "excerpt_digest": null,
+        "face": 5,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "reach_kind",
+        "subtypes": [
+          "reach_kind"
+        ],
+        "support_ids": [
+          "family:mechanical:06",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    },
+    {
+      "archetype": "fork_child",
+      "delivered_choices": [
+        "Lathe contains Chuck ; Lathe contains Outsider ; Lathe contains Tool ; Tool contains Bolt",
+        "Lathe contains Chuck ; Lathe contains Tool ; Tool contains Bolt",
+        "Lathe contains Chuck ; Lathe contains Tool"
+      ],
+      "domain": "mechanical",
+      "encoded_correct_index": 1,
+      "face": 6,
+      "family_id": "family:mechanical:05",
+      "learner_input": "CUBE_FACE_6\nnode Boiler kind=idea\nnode Drum kind=idea\nnode Tube kind=idea\nnode Sprocket kind=idea\nrel Boiler --contains--> Drum\nrel Boiler --contains--> Tube\nrel Boiler --contains--> Sprocket\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Boiler contains Drum ; Boiler contains Sprocket ; Boiler contains Tube\nCUBE_FACE_6\nnode Sentence kind=idea\nnode Phrase kind=idea\nnode Word kind=idea\nrel Sentence --contains--> Phrase\nrel Phrase --contains--> Word\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Phrase contains Word ; Sentence contains Phrase\nCUBE_FACE_6\nnode Recipe kind=idea\nnode Step kind=idea\nnode Ingredient kind=idea\nrel Recipe --contains--> Step\nrel Step --contains--> Ingredient\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole -> Recipe contains Step ; Step contains Ingredient\nCUBE_FACE_6\nnode Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\nTask: CUBE_FACE_6 choose the complete account of how these parts make the whole\nChoose one of the three supplied options.\n",
+      "public_record_id": "fc40deadfa81f64132f6d1b6b6e796649f5e956f3596b0abb1e0488c88fc4c75",
+      "recognition_choices": [
+        "6: recomposition, story or bounded process",
+        "3: analogy or metaphor within a declared scope",
+        "4: explicit correspondence"
+      ],
+      "recognition_correct_index": 0,
+      "recognition_input": "node Lathe kind=idea\nnode Chuck kind=idea\nnode Tool kind=idea\nnode Bolt kind=idea\nrel Lathe --contains--> Chuck\nrel Lathe --contains--> Tool\nrel Tool --contains--> Bolt\naccount: Lathe contains Chuck ; Lathe contains Tool ; Tool contains Bolt",
+      "role": "recomposition_process",
+      "support_families": [
+        "family:mechanical:07",
+        "family:grammatical:00",
+        "family:procedural:00"
+      ],
+      "teacher_target": {
+        "correct": "Lathe contains Chuck ; Lathe contains Tool ; Tool contains Bolt",
+        "declared_rule": "every declared connection must appear, no foreign part may appear, and declared process order must be kept",
+        "excerpt_digest": null,
+        "face": 6,
+        "family_id": "family:mechanical:05",
+        "hidden_role": false,
+        "profile": "FACE_APPLY",
+        "schema": "cas.cube-face-task/0.1",
+        "split": "training",
+        "subtype": "complete_recomposition",
+        "subtypes": [
+          "complete_recomposition"
+        ],
+        "support_ids": [
+          "family:mechanical:07",
+          "family:grammatical:00",
+          "family:procedural:00"
+        ]
+      }
+    }
+  ],
+  "note": "one cross-cube teaching episode per face, on the first six training families, with the exact learner input, the delivered choice order and the separate teacher target",
+  "schema": "cas.cube-face-episodes/0.1"
+}
