@@ -1,0 +1,8 @@
+{
+  "archive_sha256": "bb65cb6e2d5c244d26f4dd06eda8ed704356e53724617511801ea91c4e583869",
+  "job": "cas-meta2-graph6read-20260911160824-bb65cb6e",
+  "launch_authorized": false,
+  "manifest_sha256": "f1b2fd78fb1dbc10279dfd0bd939605dc4542c27ceda785fda6668a81e6b6f86",
+  "schema": "cas-graph-training-face-readout-request/1",
+  "source_sha": "9cb7505a1101dc6894dcb05ac87ea87608665e95"
+}
