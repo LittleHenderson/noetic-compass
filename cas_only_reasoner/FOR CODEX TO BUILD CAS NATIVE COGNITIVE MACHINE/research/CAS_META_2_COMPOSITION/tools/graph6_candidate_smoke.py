@@ -96,13 +96,20 @@ def main(argv=None):
     from cas_meta2.graph_teaching import trainer as trainer_module
     from cas_meta2.graph_teaching import verified_training as vtr
     layout = vtr.learner_index(records, "cas")
+    probe_framework = rf.build_graph_training_framework(
+        torch, device, seed=20260909, encoder=encoder)
     probe_learner = rf.GraphLearner(
-        torch, framework, [layout[record["record_id"]] for record in records],
+        torch, probe_framework, [layout[record["record_id"]] for record in records],
         device, 0.003)
     agreement = {}
-    for label, task in (("taught", trainer_module.make_task(records[0], "cas")),
-                        ("untaught_probe",
-                         adapter.public_records(probe[0], "cas"))):
+    taught_public = adapter.public_records(records[0], "cas")
+    probe_public = adapter.public_records(probe[0], "cas")
+    # ``trainer.make_task`` is the training-shaped task (no encoded options), and
+    # the adapter's public record is the evaluation-shaped one (with them). The
+    # option order is the record's public order in both cases.
+    for label, task, public in (
+            ("taught", trainer_module.make_task(records[0], "cas"), taught_public),
+            ("untaught_probe", probe_public, probe_public)):
         info = probe_learner.scores(task)
         selected = probe_learner.predict(task)
         argmax = info["scores"].index(max(info["scores"]))
@@ -110,7 +117,7 @@ def main(argv=None):
             "path": info["path"],
             "option_count": info["option_count"],
             "argmax_matches_reported_answer":
-                task["encoded_options"][argmax] == selected,
+                public["encoded_options"][argmax] == selected,
             "loss": info["loss"],
         }
     report["scores_agreement"] = agreement

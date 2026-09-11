@@ -352,7 +352,7 @@ class GraphLearner:
             loss = float(torch.nn.functional.cross_entropy(
                 scores.unsqueeze(0),
                 torch.tensor([correct], device=self.device)).item())
-        return {"scores": [round(float(score), 6) for score in scores],
+        return {"scores": [round(float(score.detach()), 6) for score in scores],
                 "loss": loss, "correct_index": correct,
                 "path": "indexed" if indexed else "on_demand",
                 "option_count": int(scores.shape[0])}
