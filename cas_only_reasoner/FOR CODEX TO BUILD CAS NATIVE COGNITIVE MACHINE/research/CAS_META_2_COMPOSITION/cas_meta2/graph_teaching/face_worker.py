@@ -87,16 +87,21 @@ def public_corpus(built, panel, conditions):
     """
     texts, seen = [], set()
 
-    def add(episode):
-        problem = episode["public"]["problem"]
-        if problem not in seen:
-            seen.add(problem)
-            texts.append(problem)
-        for observation in episode["public"]["observations"]:
-            tag = observation["tag"]
-            if tag not in seen:
-                seen.add(tag)
-                texts.append(tag)
+    def add(episode, arm):
+        """Take the episode's own public record, never a synthesised one.
+
+        The first attempt at this job died in `LosslessPublicTokenizer.fit_train`
+        with `PUBLIC_TAG_INVALID`: the fitting corpus had been rebuilt by hand with
+        the whole problem text as an option tag, which the frozen public codec
+        rejects. The encoder is fitted on the records the learner will actually
+        receive, validated by the codec, so that cannot recur.
+        """
+        public = episode["public"]
+        _validate(public)
+        key = (arm, public["problem"])
+        if key not in seen:
+            seen.add(key)
+            texts.append(public)
 
     training = corpus.by_split(corpus.TRAINING, built)
     for arm in ("stable", "neutral", "none"):
@@ -105,21 +110,33 @@ def public_corpus(built, panel, conditions):
                 supports = tasks.choose_supports(family, face, offset=face,
                                                  built=built)
                 add(tasks.compile_episode(family, face, roles.FACE_APPLY, arm=arm,
-                                          supports=supports, built=built))
+                                          supports=supports, built=built), arm)
                 add(tasks.compile_episode(family, face, roles.ROLE_FROM_CONTENT,
-                                          offset=face, built=built))
+                                          offset=face, built=built), arm)
     for item in panel:
         entry = (evaluation.diagnostic_item(item, built=built)
                  if item["kind"] in evaluation.DIAGNOSTIC_KINDS
                  else evaluation.compile_panel_item(item, built=built))
-        add(entry["episode"])
-    return {"publics": [{"problem": text, "observations": [
-        {"slot": slot, "tag": text if slot == 0 else "none_of_the_above",
-         "values": [0.0] * 8} for slot in range(3)]} for text in texts],
-        "distinct_texts": len(texts),
-        "fitting_rule": ("one canonical episode per family, role, profile and cue "
-                         "arm, plus the whole frozen panel; every label and cue "
-                         "token the schedules use is present")}
+        add(entry["episode"], "panel")
+    problems = [len(public["problem"]) for public in texts]
+    tags = [len(observation["tag"]) for public in texts
+            for observation in public["observations"]]
+    return {"publics": texts,
+            "distinct_texts": len(texts),
+            "longest_problem": max(problems) if problems else 0,
+            "longest_tag": max(tags) if tags else 0,
+            "fitting_rule": ("the learner's own public records, deduplicated by "
+                             "problem text: one canonical episode per family, role, "
+                             "profile and cue arm, plus the whole frozen panel; "
+                             "every label and cue token the schedules use is "
+                             "present, and every record is codec-validated")}
+
+
+def _validate(public):
+    """The frozen public codec's own check, applied before anything is fitted."""
+    from cas_meta2 import codec
+    codec.validate_public(public)
+    return public
 
 
 # --------------------------------------------------------------------------

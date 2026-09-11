@@ -1,0 +1,8 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 13, in <module>\n    report = face_worker.run(CONFIG, torch=torch, device=device,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_worker.py\", line 231, in run\n    encoder = rf.build_encoder(torch, corpus_bundle[\"publics\"], d_model=64,\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py\", line 98, in build_encoder\n    tokenizer = LosslessPublicTokenizer.fit_train(list(publics),\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 113, in fit_train\n    _validated(public)\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/features_v2.py\", line 75, in _validated\n    validate_public(public)\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/codec.py\", line 58, in validate_public\n    raise PolicyContractError(\"PUBLIC_TAG_INVALID\")\ncas_meta2.codec.PolicyContractError: PUBLIC_TAG_INVALID\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-graph6face-20260911120508-382aa3fc",
+  "schema": "cas.cube-face-failure/1"
+}
