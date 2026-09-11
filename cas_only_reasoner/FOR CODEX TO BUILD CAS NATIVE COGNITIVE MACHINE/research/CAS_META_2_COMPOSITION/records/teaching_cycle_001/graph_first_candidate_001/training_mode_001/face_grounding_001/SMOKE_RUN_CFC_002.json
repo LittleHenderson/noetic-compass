@@ -1,0 +1,80 @@
+{
+  "artifact_manifest_written": true,
+  "artifacts": [
+    "checkpoint_cfc_neutral_cue.pt",
+    "checkpoint_cfc_stable_cues.pt",
+    "checkpoint_mixed_order_neutral_cue.pt",
+    "checkpoint_mixed_order_stable_cues.pt"
+  ],
+  "boundary": "local development GPU, truncated schedule, no provider, no reservation, no measurement",
+  "checks": {
+    "gradient": {
+      "first_parameter_with_gradient": "left.weight",
+      "loss": 1.184588,
+      "loss_finite": true,
+      "note": "this checks whether the path is usable at all; it is not a measurement of learning",
+      "option_count": 3,
+      "path": "indexed",
+      "scores_finite": true,
+      "target_dependent_gradient": true
+    },
+    "representation": {
+      "distances": {
+        "changed_content": 2.66743113,
+        "changed_cue": 0.05764173,
+        "changed_role": 0.12368608,
+        "same_token_rewiring": 0.105994
+      },
+      "distinct_from_zero": {
+        "changed_content": true,
+        "changed_cue": true,
+        "changed_role": true,
+        "same_token_rewiring": true
+      },
+      "encoded_problems": 5,
+      "interpretation": "a distance of zero means the two inputs reach the model identically, which would make the distinction unavailable to it"
+    }
+  },
+  "conditions": {
+    "cfc_neutral_cue": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 8,
+      "optimizer_updates": 1,
+      "planned_episodes": 8,
+      "status": "TEACHING_COMPLETE"
+    },
+    "cfc_stable_cues": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 8,
+      "optimizer_updates": 1,
+      "planned_episodes": 8,
+      "status": "TEACHING_COMPLETE"
+    },
+    "mixed_order_neutral_cue": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 8,
+      "optimizer_updates": 1,
+      "planned_episodes": 8,
+      "status": "TEACHING_COMPLETE"
+    },
+    "mixed_order_stable_cues": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 8,
+      "optimizer_updates": 1,
+      "planned_episodes": 8,
+      "status": "TEACHING_COMPLETE"
+    }
+  },
+  "device": "cuda",
+  "envelope_status": "REMOTE_FINISHED",
+  "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+  "measurements_written": true,
+  "package": {
+    "archive": "source.zip",
+    "archive_sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8"
+  },
+  "result_sha256": "7605b9adad86fab0c1cbd268b77ce520bc0ac5b2f46e563cd5bdd3120b6df3b0",
+  "sidecar_matches": true,
+  "torch": "2.11.0+cu128"
+}
+SMOKE ONLY - not a measurement, not claim-bearing, local GPU.
