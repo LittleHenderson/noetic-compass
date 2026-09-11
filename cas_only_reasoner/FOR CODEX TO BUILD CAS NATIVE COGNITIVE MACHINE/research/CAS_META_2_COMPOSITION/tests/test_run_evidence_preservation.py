@@ -17,6 +17,7 @@ approval and must be confirmed during the next authorised job's preflight.
 import ast
 import hashlib
 import json
+import shutil
 import sys
 import textwrap
 from pathlib import Path
@@ -37,10 +38,13 @@ CONDITIONS = ("cfc_stable_cues", "cfc_neutral_cue")
 def _panel():
     items = []
     for number in range(192):
+        # face is decoupled from layer on purpose: the real panel carries all six
+        # faces in both primary layers, and a fixture that correlated them would
+        # hide a face-coverage defect
         items.append({"item_id": "item-%03d" % number,
                       "layer": ("role_application" if number % 2
                                 else "role_recognition"),
-                      "face": (number % 6) + 1, "kind": "primary"})
+                      "face": (number // 2 % 6) + 1, "kind": "primary"})
     for number in range(24):
         items.append({"item_id": "diag-%02d" % number, "layer": "targeted_check",
                       "face": (number % 6) + 1, "kind": "renamed"})
@@ -839,6 +843,75 @@ def test_the_wall_clock_ceiling_shuts_down_compute_with_evidence_retained(tmp_pa
     assert s3.destructive_calls() == []
     # the cleanup boundary touches no evidence object at all
     assert s3.calls == []
+
+
+def test_the_report_is_reconstructed_from_the_archive_alone(tmp_path):
+    """The directive's completion standard, exercised.
+
+    The run directory is removed before the restore reads anything, so the
+    regenerated report can only come from the retained bytes.
+    """
+    import importlib.util
+
+    tool_path = (Path(curriculum.ROOT) / "tools/run_evidence_restore_check.py")
+    spec = importlib.util.spec_from_file_location("_restore_check", tool_path)
+    restore_tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(restore_tool)
+
+    contract = _contract()
+    run = dummy_experiment(tmp_path / "run", contract)
+    archive = tmp_path / "archive"
+    shutil.copytree(run, archive)
+    shutil.rmtree(run)                            # the originals are gone
+    assert not run.exists()
+
+    out = restore_tool.restore(archive, tmp_path / "restored", contract, job=JOB)
+    assert out["originals_unavailable"] is True
+    assert out["byte_integrity"]["state"] == "COMPLETE_VERIFIED"
+    assert out["measurement_completeness"] == "COMPLETE"
+    assert out["differences"] == []
+    assert out["restored"] is True
+    # the report itself, rebuilt from the rows
+    layers = out["regenerated"]["layers"]
+    assert set(layers) >= {"role_application", "role_recognition", "targeted_check"}
+    application = layers["role_application"]
+    # the layer block pools both declared conditions, as the collector does
+    assert application["questions"] == 192
+    assert application["correct"] == 192
+    assert application["accuracy"] == 1.0
+    assert application["macro_accuracy"] == 1.0
+    assert len(application["by_face"]) == 6
+    assert application["faces_at_or_above_half"] == 6
+    # the before/after pairing is available again, which the lost payload had cost
+    assert application["before_after"]["discordant_pairs"] == 0
+    assert application["before_after"]["both_correct"] == 192
+    # and the per-condition figures are reported separately
+    assert set(out["regenerated"]["conditions"]) == set(CONDITIONS)
+
+
+def test_a_restore_from_a_damaged_archive_is_reported_not_trusted(tmp_path):
+    """A backup is verified by reading it back, not by its existence."""
+    import importlib.util
+
+    tool_path = Path(curriculum.ROOT) / "tools/run_evidence_restore_check.py"
+    spec = importlib.util.spec_from_file_location("_restore_check_damaged",
+                                                  tool_path)
+    restore_tool = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(restore_tool)
+
+    contract = _contract()
+    run = dummy_experiment(tmp_path / "run", contract)
+    archive = tmp_path / "archive"
+    shutil.copytree(run, archive)
+    victim = archive / ("results/evidence/rows_%s.jsonl" % CONDITIONS[0])
+    body = bytearray(victim.read_bytes())
+    body[10] = body[10] ^ 0xFF
+    victim.write_bytes(bytes(body))
+    shutil.rmtree(run)
+
+    out = restore_tool.restore(archive, tmp_path / "restored", contract, job=JOB)
+    assert out["restored"] is False
+    assert out["measurement_completeness"] == "INCOMPLETE"
 
 
 def test_no_lifecycle_or_version_deletion_call_exists_in_the_boundary():

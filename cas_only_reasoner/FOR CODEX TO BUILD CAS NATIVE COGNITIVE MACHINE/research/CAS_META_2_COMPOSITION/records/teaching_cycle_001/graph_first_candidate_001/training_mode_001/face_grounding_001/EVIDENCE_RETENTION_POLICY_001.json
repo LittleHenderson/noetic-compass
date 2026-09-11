@@ -1,0 +1,72 @@
+{
+  "schema": "cas.run-evidence-retention-policy/1",
+  "status": "APPROVED_BY_OWNER",
+  "recorded_utc": "2026-09-11T15:20:00.000000+00:00",
+  "owner_instruction_raw": "approved",
+  "what_was_approved": "the proposed archive access and retention policy returned with RUN_EVIDENCE_PRESERVATION_001: seven-day minimum protected retention, versioning on, Object Lock in governance mode with the bypass permission held only by an owner-controlled principal, one prefix per run, and deletion requiring elapsed retention plus a complete verified collection plus a verified independent backup plus an explicit policy",
+  "approved_by_owner": true,
+  "minimum_protection_days": 7,
+  "retention_is_a_minimum_not_a_timer": "day seven does not delete anything by itself; deletion still requires a complete verified collection, a verified independent backup, and this policy's explicit deletion clause, and a prior denial is sticky",
+  "archive": {
+    "shape": "one private bucket per campaign as a durable archive, one prefix per run, unique run keys, never reused",
+    "versioning": "required: S3 Object Lock requires it, and the receipt records the actual version ids it saw",
+    "object_lock": "governance mode",
+    "bypass_permission": "held only by an owner-controlled principal; no automated job role receives s3:BypassGovernanceRetention",
+    "encryption": "SSE at rest, as the run buckets already use",
+    "public_access": "blocked; no anonymous read"
+  },
+  "access": {
+    "runtime_worker_role": {
+      "existing_actions": ["s3:GetObject on <bucket>/input/*", "s3:PutObject on <bucket>/results/*"],
+      "erasure": "none, and none is added",
+      "note": "this was already true before the directive; erasure happened through the launcher's credentials, not the worker's"
+    },
+    "ordinary_cleanup_role": {
+      "evidence_actions": "none",
+      "code_path": "CurriculumProvider.cleanup contains no delete_objects, delete_bucket, version deletion, lifecycle edit or retention bypass, so the path cannot become a deletion path by flipping a flag"
+    },
+    "owner_controlled_deletion_principal": {
+      "purpose": "archive disposal, retention changes, and destruction of the keys needed to read the archive",
+      "requirements": ["the approved policy in this record", "an elapsed minimum protection period", "a complete verified collection receipt for the exact job and inventory", "a verified independently readable backup", "an explicit deletion instruction naming the run prefix"]
+    }
+  },
+  "proposed_storage_cost": {
+    "per_run_evidence_bytes_estimate": 1000000,
+    "per_run_range_bytes": [273000, 2000000],
+    "basis": "the four attempt-004 checkpoints are 273,472 bytes in total; a run's rows, panel, logs, manifests and summaries add roughly the same order again",
+    "s3_standard_usd_per_gb_month": 0.023,
+    "twenty_retained_runs_usd_per_month": 0.00046,
+    "standing_spend_added": "none beyond the bytes retained; the $7.00 single-instance reservation per authorised job is unchanged",
+    "estimate_not_a_quote": "these are estimates from the delivered artefact sizes, not a provider quote"
+  },
+  "independent_backup": {
+    "local_bundle": "the launcher's receipt directory, hash-verified",
+    "cloud_archive": "the retained run prefix",
+    "not_independent": ["two directories on the same disk", "a git commit alone"],
+    "restore_test": "tools/run_evidence_restore_check.py regenerates the report from archived bytes with the original directory unavailable"
+  },
+  "unuploaded_tail_at_interruption": {
+    "bound": "at most the last closed chunk plus the file in flight, because completed files are published incrementally",
+    "readout_estimate_bytes": 300000,
+    "reported_as": "remote_object_sequence and unuploaded_tail in every published manifest",
+    "not_guaranteed": "a sudden machine failure still loses that tail; bounding it and naming it is the requirement, not eliminating it"
+  },
+  "tested_failure_paths": [
+    "four checkpoints delivered and measurements.json omitted: completeness rejected, evidence retained, compute still shut down",
+    "one face or condition missing with every byte intact: completeness rejected",
+    "a missing phase, duplicate rows substituting, a missing score field",
+    "a corrupt download, an unreadable object, a disk failure during collection",
+    "a late exception: the measurement is untouched and the failure is a separate object",
+    "a stale or wrong-job receipt, and an old cleanup caller insisting collection was verified: deletion denied",
+    "a conflicting digest at an existing key: integrity error, never an overwrite",
+    "a hard deadline during collection: GPU stops, durable archive stays retrievable"
+  ],
+  "not_tested_here": [
+    "real S3 Object Lock and IAM enforcement (a stubbed storage test does not verify cloud configuration)",
+    "real conditional-write behaviour against the service",
+    "that the independent backup physically exists and is readable",
+    "power loss in the middle of fsync",
+    "the four launchers' packaged workers until render_transport is wired into their rendered sources"
+  ],
+  "boundary": "Documentation and code configuration only. No policy was applied to any live bucket, no IAM change was made, no Object Lock was enabled, and no lifecycle rule was written by this record."
+}
