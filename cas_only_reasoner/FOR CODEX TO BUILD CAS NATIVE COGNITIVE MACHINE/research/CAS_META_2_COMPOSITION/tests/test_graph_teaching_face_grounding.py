@@ -647,3 +647,87 @@ def test_all_four_declared_conditions_run_end_to_end_with_stubs():
 def fl_conditions():
     from cas_meta2.graph_teaching import face_schedule as schedule_module
     return [entry["condition"] for entry in schedule_module.comparison_conditions()]
+
+
+# --------------------------------------------------------------------------
+# delivery: what the body declares is what the collector keeps
+# --------------------------------------------------------------------------
+
+def _complete_result():
+    """A minimal completed four-condition result, shaped as the runner returns it."""
+    payload = {"status": fx.STATUS_COMPLETE, "planned_episodes": 4608,
+               "teaching": {"delivered_episodes": 4608,
+                            "actual_optimizer_updates": 576,
+                            "checkpoint": {"verified": True}},
+               "evaluation": {"after": {}}}
+    return {"results": {name: dict(payload) for name in fl_conditions()},
+            "comparison": {"role_recognition": {}, "role_application": {}}}
+
+
+def test_the_measurements_payload_is_declared_so_collection_cannot_drop_it(
+        tmp_path, monkeypatch):
+    """Attempt 004 lost its only per-face readout this way, and the bucket went too.
+
+    The body writes ``results/measurements.json`` and the outer worker uploads it,
+    but verified collection keeps exactly the artefacts *declared* in the envelope,
+    and cleanup then deletes the bucket. So the per-face, before/after and
+    per-question record must be declared as an artefact in its own right, must sit
+    under the artefact prefix the worker uploads from, and must be hashed in the
+    envelope. This test drives the real stager and then the real uploader, which is
+    the seam where the payload was dropped.
+    """
+    import hashlib
+    import importlib.util
+
+    from cas_meta2.graph_teaching import face_worker as worker
+    from aws import graph_training_face_launch as fl
+
+    results = tmp_path / "results"
+    artifacts = results / "artifacts"
+    artifacts.mkdir(parents=True)
+    for condition in fl_conditions():
+        (artifacts / ("checkpoint_%s.pt" % condition)).write_bytes(
+            ("weights " + condition).encode("utf-8"))
+
+    report = worker.deliver(
+        results=results, artifacts=artifacts, job="job-delivery",
+        plan={"corpus_digest": "d" * 64}, checks={"representation": {}},
+        result=_complete_result())
+
+    declared = [entry["name"] for entry in report["artifacts"]]
+    assert "measurements.json" in declared, declared
+    assert len(declared) == len(fl_conditions()) + 1, declared
+    assert sorted(declared) == declared, "the declaration is ordered"
+    assert (artifacts / "measurements.json").read_bytes() == \
+        (results / "measurements.json").read_bytes()
+
+    digest = hashlib.sha256((results / "measurements.json").read_bytes()).hexdigest()
+    assert report["envelope"]["measurements_sha256"] == digest
+    assert [entry["name"] for entry in report["envelope"]["artifacts"]] == declared
+    for entry in report["artifacts"]:
+        path = artifacts / entry["name"]
+        assert entry["bytes"] == path.stat().st_size, entry
+        assert entry["sha256"] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+    # The manifest on disk is what the outer worker uploads from, so the seam is
+    # driven with the worker's own uploader: every declared artefact must reach the
+    # artefact prefix the collector reads, and the result marker must still go last.
+    rehearsal_path = Path(__file__).with_name(
+        "test_graph_training_face_package_rehearsal.py")
+    spec = importlib.util.spec_from_file_location("_face_package_rehearsal",
+                                                  rehearsal_path)
+    rehearsal = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(rehearsal)
+    namespace = rehearsal._worker_functions(
+        {"upload_results", "read_json", "sha256_file"})
+    puts = []
+    rehearsal._bind(namespace, tmp_path, monkeypatch,
+                    {"inner": rehearsal._Completed(0)}, puts)
+    namespace["upload_results"](rehearsal._RecordingS3(puts), "bucket", results)
+    for name in declared:
+        assert "results/artifacts/" + name in puts, (name, puts)
+    assert puts[-1] == "results/result.json", puts
+
+    manifest = json.loads((artifacts / "manifest.json").read_bytes())
+    assert [entry["name"] for entry in manifest["artifacts"]] == declared
+    assert manifest["job"] == "job-delivery"

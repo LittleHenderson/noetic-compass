@@ -1,0 +1,24 @@
+{
+  "archive_sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8",
+  "batch_size": 8,
+  "conditions": [
+    "cfc_stable_cues",
+    "cfc_neutral_cue",
+    "mixed_order_stable_cues",
+    "mixed_order_neutral_cue"
+  ],
+  "encoder_seed": 20260909,
+  "events_per_condition": 4608,
+  "job": "cas-meta2-graph6face-20260911133305-9723735f",
+  "learning_rate": 0.003,
+  "manifest_sha256": "9afef274eb0e2aba64c8d067043b18c230e34f7a88da906bd474125802844912",
+  "max_wall_seconds_per_condition": 1500.0,
+  "owner_authorization_sha256": "801c5a6de54c0693d66f17cbea67db6f10f42c25cdb0dd04d8ea90e830bca834",
+  "panel_items": 192,
+  "reservation_usd": "7.00",
+  "schema": "cas-graph-training-face-launch-authority/1",
+  "seed": 20260912,
+  "source_sha": "5fa466cd1b2011e9fa26c3829a807867813c0daa",
+  "total_optimizer_steps": 2304,
+  "updates_per_condition": 576
+}

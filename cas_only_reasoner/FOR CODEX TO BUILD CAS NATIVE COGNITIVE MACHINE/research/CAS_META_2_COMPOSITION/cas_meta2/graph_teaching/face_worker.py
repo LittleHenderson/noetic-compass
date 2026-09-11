@@ -312,24 +312,41 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
         max_wall_seconds=config.get("max_wall_seconds_per_condition"),
         event_limit=plan["event_limit_per_condition"], seed=seed)
 
-    measurements = {"schema": SCHEMA, "job": config["job"], "plan": plan,
+    return {"plan": plan, "checks": checks, **deliver(
+        results=results, artifacts=artifacts, job=config["job"], plan=plan,
+        checks=checks, result=result)}
+
+
+def deliver(*, results, artifacts, job, plan, checks, result):
+    """Write the measurements, declare every artefact, and write the envelope.
+
+    Separated from the run so the delivery step can be exercised on its own, with
+    no encoder and no torch. The measurements object is the run's only per-face,
+    before/after and per-question record, so it is *declared* as an artefact: a
+    payload uploaded to the bucket but absent from this list is deleted with the
+    bucket after verified collection, which is how attempt 004's readout was lost.
+    """
+    measurements = {"schema": SCHEMA, "job": job, "plan": plan,
                     "checks": checks, "experiment": result,
                     "corpus_digest": plan["corpus_digest"]}
     measurements_path = results / "measurements.json"
     measurements_path.write_text(json.dumps(measurements, sort_keys=True,
                                             indent=2, allow_nan=False) + "\n",
                                  encoding="utf-8")
+    (artifacts / "measurements.json").write_bytes(
+        measurements_path.read_bytes())
     staged = [{"name": name, "sha256": _sha256(artifacts / name),
                "bytes": (artifacts / name).stat().st_size}
               for name in sorted(path.name for path in artifacts.iterdir()
-                                 if path.suffix == ".pt")]
+                                 if path.is_file()
+                                 and path.name != "manifest.json")]
     (artifacts / "manifest.json").write_text(
         json.dumps({"schema": "cas.cube-face-artifact-manifest/1",
-                    "job": config["job"], "artifacts": staged},
+                    "job": job, "artifacts": staged},
                    sort_keys=True, indent=2) + "\n", encoding="utf-8")
     envelope = {
         "schema": "cas.cube-face-result/1",
-        "job": config["job"],
+        "job": job,
         "status": ("REMOTE_FINISHED"
                    if all(payload["status"] == experiment.STATUS_COMPLETE
                           for payload in result["results"].values())
@@ -358,8 +375,8 @@ def run(config, *, torch, device, results, artifacts, outbound, execute=None):
     (results / "result.json").write_bytes(raw)
     (results / "result.json.sha256").write_text(
         _sha256_bytes(raw) + "\n", encoding="utf-8")
-    return {"plan": plan, "checks": checks, "envelope": envelope,
-            "measurements": measurements, "artifacts": staged}
+    return {"envelope": envelope, "measurements": measurements,
+            "artifacts": staged}
 
 
 def _sha256_bytes(raw):

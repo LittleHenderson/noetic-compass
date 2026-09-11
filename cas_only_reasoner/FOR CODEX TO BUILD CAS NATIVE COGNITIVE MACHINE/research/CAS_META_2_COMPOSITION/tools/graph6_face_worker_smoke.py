@@ -73,10 +73,19 @@ def main(argv=None):
     artifacts = results / "artifacts"
     artifacts.mkdir(exist_ok=True)
 
-    # a bounded panel: the smoke measures the code path, not the panel
+    # A panel stratified by layer, never the first N items: a truncated head of the
+    # panel contains only primary items, so the rename/reorder/rewire diagnostics
+    # would go unexercised - the same class of gap that hid the mixed-order defect.
     built = __import__("cas_meta2.graph_teaching.face_corpus",
                        fromlist=["families"]).families()
-    panel = evaluation.panel(built)[:PANEL_ITEMS]
+    full_panel = evaluation.panel(built)
+    diagnostics = [item for item in full_panel if item["kind"] in
+                   evaluation.DIAGNOSTIC_KINDS]
+    primary = [item for item in full_panel if item["kind"] == "primary"]
+    panel = primary[:8] + diagnostics
+    assert diagnostics, "the smoke must exercise the diagnostic items"
+    print("smoke panel: %d primary + %d diagnostic items"
+          % (len(primary[:8]), len(diagnostics)), file=sys.stderr)
     config = {"schema": "cas.cube-face-worker-config/1", "job": "local-smoke",
               "conditions": list(CONDITIONS), "batch_size": EVENTS_PER_CONDITION,
               "event_limit_per_condition": EVENTS_PER_CONDITION,

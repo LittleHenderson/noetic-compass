@@ -1,0 +1,85 @@
+{
+  "schema": "cas-cube-face-owner-authorization/1",
+  "recorded_utc": "2026-09-11T13:40:00.000000+00:00",
+  "owner_instruction_raw": "GO",
+  "instruction_interpretation": "The owner authorises a FOURTH $7.00 reservation and one launch of the CFC Loop x Face-Cue Pilot, after attempts 001, 002 and 003 were each reserved, launched and failed on defects in the worker body and schedule that local rehearsal could have caught. This is a new instruction, not an automatic retry: each attempt consumed its own reservation and launch, and the launcher performs no automatic retry. The instruction covers exactly one attempt under the bounds below.",
+  "attempt": 4,
+  "supersedes_attempt": 3,
+  "previous_attempt_outcomes": [
+    "Attempt 001 (revision 57, instance i-06165613e34e9ee83, 516.4 s) failed in build_encoder at LosslessPublicTokenizer.fit_train with PUBLIC_TAG_INVALID: the fitting corpus was synthesised by hand with the whole problem text as an option tag.",
+    "Attempt 002 (revision 58, instance i-07b0e18c438828f21, 537.2 s) installed torch, fitted the encoder and failed in face_worker.gradient_check with KeyError: the check built a learner with an empty task list and then scored a task.",
+    "Attempt 003 (revision 59, instance i-0d4ab802284d32d24, 651.9 s) installed torch, fitted the encoder, passed both pre-training checks, and failed in the mixed-order conditions: face_schedule._seed_for assumed a name string while the runner passes an integer seed.",
+    "All three reported through result.json, collected and verified their evidence, terminated their instance and deleted their bucket after verified collection, with no cleanup failures. Their original tracebacks are preserved in their receipts as failure.json."
+  ],
+  "what_changed_before_this_authorisation": {
+    "defects_fixed": [
+      "the fitting corpus is the learner's own public records, each validated by the frozen public codec as it is added",
+      "the gradient check indexes its task in the learner before scoring it and refuses loudly if it is not indexed",
+      "the schedule seed helper accepts either an integer seed or a name, deterministically"
+    ],
+    "rehearsal_gap_closed": [
+      "three failures shared one cause: the rehearsal covered the paths that were being thought about rather than every path the job takes. That gap is now closed at three levels:",
+      "every declared condition is built through the production call with the runner's own integer seed, and the two organizations still differ at the update-batch level after the fix",
+      "the full four-condition launch runs end to end with stub learners",
+      "the worker smoke runs ALL FOUR conditions and its panel is stratified - 8 primary items plus all 24 diagnostics - because a truncated head of the panel contains no diagnostics and the rename/reorder/rewire path would otherwise go unexercised"
+    ],
+    "smoke_evidence": "SMOKE_RUN_CFC_003.md and SMOKE_RUN_CFC_003.json (sha256 8a24671cf08eb0c18c38335ec37aa824434a4f8d0c0601e39c66e949bb3e703b): local RTX 4070, all four conditions TEACHING_COMPLETE, exactly one optimizer update for eight episodes each, four checkpoints written, read back and verified, both panel passes including diagnostics, envelope REMOTE_FINISHED with a matching sidecar, representation distances all non-zero (changed role 0.1348, changed content 5.0303, changed cue 0.0490, same-token rewiring 0.0974) and a finite loss with a target-dependent gradient.",
+    "package": "rebuilt after the fixes; the request is re-bound to the new identities because executable contents changed"
+  },
+  "experiment": "cfc_loop_face_cue_pilot",
+  "title": "CFC Loop x Face-Cue Pilot",
+  "entrypoint": "cas_meta2.graph_teaching.face_worker.run",
+  "job": "cas-meta2-graph6face-20260911133305-9723735f",
+  "launcher": "aws/graph_training_face_launch.py at commit 1e87d780",
+  "source_sha": "5fa466cd1b2011e9fa26c3829a807867813c0daa",
+  "archive_sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8",
+  "manifest_sha256": "9afef274eb0e2aba64c8d067043b18c230e34f7a88da906bd474125802844912",
+  "package_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/candidate_package_001/",
+  "request_path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/candidate_request_004.json",
+  "request_sha256": "11c3447e2aff89e9e86d59dfa92f3ee68d57045fa814b0fcfcc4901f4cebb571",
+  "selected_schedule": "CFC_LOOP",
+  "authorization_context": "Four conditions from one matched initialization: CFC loop with per-role numbered cues, CFC loop with one neutral cue, the same teaching events in fixed mixed order with numbered cues, and the mixed-order neutral control. Per condition: 4,608 supervised decisions (2,688 within-cube, 1,152 across-face, 768 return), 96 completed rounds, 6,912 worked-support exposures, 576 batch-of-eight optimizer updates, and the frozen panel of 96 role-recognition plus 96 role-application plus 24 diagnostic questions evaluated before and after with no updates. Across four conditions: 18,432 decisions and 2,304 optimizer updates. The face-grounding plan's 9,216-query Phase A/B schedule is implemented and selectable but is NOT delivered by this job. Trainable scope is the accepted operation:^6 allowlist only; no architecture, readout or scope change. Loop and mixed orders differ at the update-batch level with identical teaching-event multisets.",
+  "run_bounds": {
+    "jobs": 1,
+    "conditions": ["cfc_stable_cues", "cfc_neutral_cue",
+                   "mixed_order_stable_cues", "mixed_order_neutral_cue"],
+    "events_per_condition": 4608,
+    "updates_per_condition": 576,
+    "total_optimizer_steps": 2304,
+    "batch_size": 8,
+    "seed": 20260912,
+    "encoder_seed": 20260909,
+    "learning_rate": 0.003,
+    "panel_items": 192,
+    "max_wall_seconds_per_condition": 1500.0,
+    "install_allowance_seconds": 600.0,
+    "total_wall_clock_ceiling_seconds": 6600.0,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0
+  },
+  "execution_gates": [
+    "single job through the face launch binding, which reuses the proven execution lifecycle with this pilot's own validators",
+    "one budget reservation exactly once through the canonical budget helper; no refund; no automatic retry",
+    "execute() refuses before the reservation unless the provider holds a readable source archive whose digest matches the request",
+    "the fitting corpus, the encode path, every declared condition and the whole worker body - including the diagnostic panel items - are rehearsed before the reservation, the last of them on the local development GPU",
+    "representation and gradient checks run first and are recorded whether or not they pass; they check that the inputs are usable, not mastery",
+    "if those checks pass, the job proceeds into the declared training without a further approval interruption",
+    "all four conditions start from weights built from the same seed; the run fails closed if the initial snapshots differ",
+    "only the operation:^6 parameter group may change; any forbidden change fails the run closed",
+    "the frozen panel never enters training and no checkpoint is selected by panel performance",
+    "each condition's checkpoint is written, read back and verified with the learner's own identity rule before upload; the result declares its artifacts so verified collection cannot delete them undelivered",
+    "a condition that exhausts its wall-clock ceiling reports TEACHING_INCOMPLETE with the counts it reached rather than presenting a partial allocation as complete",
+    "original errors and any completed progress are preserved on any failure; evidence is persisted on every exit and any retained bucket is read out and hashed before it is deleted",
+    "zero automatic retries; compute shutdown and evidence deletion are separate steps"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single attempt",
+    "the face-grounding 9,216-query grounding schedule in this job; it would be a separate design decision",
+    "any change to the frozen design, package, conditions, schedule counts, bounds or reservation amount",
+    "any architecture, head, readout, tokenizer, option-contract or trainable-scope change",
+    "any probe or panel change after seeing an outcome, and any threshold lowered after an outcome",
+    "retraining or overwriting anything already measured: Attempt 007, its checkpoints, the accepted models, historical negatives and the pending retained-checkpoint investigation all stay untouched",
+    "any claim that this pilot resolves the earlier answer-selection or readout questions, or that it tests the seven-stage cube program",
+    "any promotion of a claim beyond what a single matched initialization can support"
+  ]
+}

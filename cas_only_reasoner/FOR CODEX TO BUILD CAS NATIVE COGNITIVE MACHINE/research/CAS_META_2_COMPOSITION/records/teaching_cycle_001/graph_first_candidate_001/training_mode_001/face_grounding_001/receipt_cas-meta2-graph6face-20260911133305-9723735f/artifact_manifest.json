@@ -1,0 +1,26 @@
+{
+  "artifacts": [
+    {
+      "bytes": 68300,
+      "name": "checkpoint_cfc_neutral_cue.pt",
+      "sha256": "2cbe25ecef2bf1e255f70a49ada42c9675f8b69cc327e1b14da3ebe6935c1820"
+    },
+    {
+      "bytes": 68300,
+      "name": "checkpoint_cfc_stable_cues.pt",
+      "sha256": "641dedea7df937c9d6af31aaf2e27f2b1fbe12f7aa3892dc6aa553e03e96842b"
+    },
+    {
+      "bytes": 68436,
+      "name": "checkpoint_mixed_order_neutral_cue.pt",
+      "sha256": "93ce1dc27a65780faff0a668980926df7cb9c1323d711eb6f39f5b414d5c8932"
+    },
+    {
+      "bytes": 68436,
+      "name": "checkpoint_mixed_order_stable_cues.pt",
+      "sha256": "38a359613a60748729b01479415668b90c5ab5f21b591aa716e86f5d12db87ee"
+    }
+  ],
+  "job": "cas-meta2-graph6face-20260911133305-9723735f",
+  "schema": "cas.cube-face-artifact-manifest/1"
+}

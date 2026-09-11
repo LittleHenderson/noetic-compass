@@ -1,0 +1,156 @@
+{
+  "artifacts": [
+    {
+      "bytes": 68300,
+      "name": "checkpoint_cfc_neutral_cue.pt",
+      "sha256": "2cbe25ecef2bf1e255f70a49ada42c9675f8b69cc327e1b14da3ebe6935c1820"
+    },
+    {
+      "bytes": 68300,
+      "name": "checkpoint_cfc_stable_cues.pt",
+      "sha256": "641dedea7df937c9d6af31aaf2e27f2b1fbe12f7aa3892dc6aa553e03e96842b"
+    },
+    {
+      "bytes": 68436,
+      "name": "checkpoint_mixed_order_neutral_cue.pt",
+      "sha256": "93ce1dc27a65780faff0a668980926df7cb9c1323d711eb6f39f5b414d5c8932"
+    },
+    {
+      "bytes": 68436,
+      "name": "checkpoint_mixed_order_stable_cues.pt",
+      "sha256": "38a359613a60748729b01479415668b90c5ab5f21b591aa716e86f5d12db87ee"
+    }
+  ],
+  "boundary": {
+    "automatic_retries": 0,
+    "scores_from_the_correction_pass": true,
+    "seven_stage_neural_cycles": 0
+  },
+  "comparison": {
+    "role_application": {
+      "conditions": [
+        "cfc_stable_cues",
+        "cfc_neutral_cue",
+        "mixed_order_stable_cues",
+        "mixed_order_neutral_cue"
+      ],
+      "per_condition": {
+        "cfc_neutral_cue": {
+          "accuracy": 0.78125,
+          "correct": 75,
+          "total": 96
+        },
+        "cfc_stable_cues": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "mixed_order_neutral_cue": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "mixed_order_stable_cues": {
+          "accuracy": 0.7708333333333334,
+          "correct": 74,
+          "total": 96
+        }
+      }
+    },
+    "role_recognition": {
+      "conditions": [
+        "cfc_stable_cues",
+        "cfc_neutral_cue",
+        "mixed_order_stable_cues",
+        "mixed_order_neutral_cue"
+      ],
+      "per_condition": {
+        "cfc_neutral_cue": {
+          "accuracy": 0.5833333333333334,
+          "correct": 56,
+          "total": 96
+        },
+        "cfc_stable_cues": {
+          "accuracy": 0.5729166666666666,
+          "correct": 55,
+          "total": 96
+        },
+        "mixed_order_neutral_cue": {
+          "accuracy": 0.5416666666666666,
+          "correct": 52,
+          "total": 96
+        },
+        "mixed_order_stable_cues": {
+          "accuracy": 0.4895833333333333,
+          "correct": 47,
+          "total": 96
+        }
+      }
+    },
+    "targeted_check": {
+      "conditions": [
+        "cfc_stable_cues",
+        "cfc_neutral_cue",
+        "mixed_order_stable_cues",
+        "mixed_order_neutral_cue"
+      ],
+      "per_condition": {
+        "cfc_neutral_cue": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        },
+        "cfc_stable_cues": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        },
+        "mixed_order_neutral_cue": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        },
+        "mixed_order_stable_cues": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        }
+      }
+    }
+  },
+  "conditions": {
+    "cfc_neutral_cue": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 4608,
+      "optimizer_updates": 576,
+      "planned_episodes": 4608,
+      "status": "TEACHING_COMPLETE"
+    },
+    "cfc_stable_cues": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 4608,
+      "optimizer_updates": 576,
+      "planned_episodes": 4608,
+      "status": "TEACHING_COMPLETE"
+    },
+    "mixed_order_neutral_cue": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 4608,
+      "optimizer_updates": 576,
+      "planned_episodes": 4608,
+      "status": "TEACHING_COMPLETE"
+    },
+    "mixed_order_stable_cues": {
+      "checkpoint_verified": true,
+      "delivered_episodes": 4608,
+      "optimizer_updates": 576,
+      "planned_episodes": 4608,
+      "status": "TEACHING_COMPLETE"
+    }
+  },
+  "failure": null,
+  "job": "cas-meta2-graph6face-20260911133305-9723735f",
+  "measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+  "schema": "cas.cube-face-result/1",
+  "status": "REMOTE_FINISHED"
+}

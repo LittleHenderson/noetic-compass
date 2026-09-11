@@ -4,6 +4,35 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-11 - CFC Loop x Face-Cue Pilot attempt 004 FINISHED: face-role application learned, recognition weak, both interventions unestablished — and the per-face readout lost to an undeclared artefact
+
+Job `cas-meta2-graph6face-20260911133305-9723735f`, `$7.00` reservation, ledger
+revision 60 = `$333.00` reserved / `$67.00` free. All four conditions
+TEACHING_COMPLETE at 4,608/4,608 episodes and 576 updates each (2,304 total, the
+derived CFC-loop schedule), 4 checkpoints verified, collection VERIFIED, cleanup
+COMPLETE, `i-046de3ddc12d5835e` CONFIRMED_TERMINATED, elapsed 724.33 s, 0 retries.
+One initialization, four conditions: exploratory, not a replication. Delivered
+per-condition totals, chance = 1/3 — **application** 76/96, 75/96, 74/96, 76/96
+(MET the declared 0.70 target in all four); **recognition** 55/96, 56/96, 47/96,
+52/96 (below the declared 0.75 target in all four, NOT MET); **targeted check**
+15/24, 15/24, 16/24, 16/24. Because the panel is exactly 16 questions per face in
+each 96-question layer, the aggregate equals the six-face macro; and because
+`mixed_order_stable_cues` recognition is 0.489583, at least one face is below the
+0.50 minimum there — which face is unrecoverable. Loop vs mixed: application +2
+and −1 of 96, recognition +8 and +4 of 96 (sign-consistent, untested). Stable vs
+neutral cue: +1 and −2, −1 and −5 of 96, sign flipping. **Evidence lost:** the
+per-face breakdowns, before/after readings, per-question rows, constant-rule
+baselines and the milestone report were written and uploaded but never declared
+as artefacts, so verified collection kept only the four checkpoints and cleanup
+deleted the bucket (digest retained: `measurements_sha256
+796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee`). Fixed the
+same turn: `face_worker.deliver` declares `measurements.json` beside the
+checkpoints and staging now takes every regular file except the manifest, pinned
+end to end by `test_the_measurements_payload_is_declared_so_collection_cannot_drop_it`
+(real stager + the worker's own uploader). No retrain, no probe change, no
+curriculum change; attempt 007 untouched. Recovery of the lost detail needs a
+zero-update reread of the four retained checkpoints — a new authorisation.
+
 ## 2026-09-10 - Graph-first ^6: retained-evidence review + retrospective endpoint containment; one measured defect found (LIST_PARTS far below chance)
 
 Read-only work on the delivered attempt-004 artifacts — no training, no
