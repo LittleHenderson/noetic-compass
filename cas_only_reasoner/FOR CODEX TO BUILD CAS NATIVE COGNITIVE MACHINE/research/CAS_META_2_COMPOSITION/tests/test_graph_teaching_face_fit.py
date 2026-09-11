@@ -93,3 +93,43 @@ def test_the_synthesised_corpus_that_failed_would_still_be_refused():
     with pytest.raises(Exception) as error:
         codec.validate_public(broken)
     assert "PUBLIC_TAG_INVALID" in str(error.value)
+
+
+def test_the_encode_problem_path_has_segments_and_three_slots_everywhere():
+    """The call immediately after the one that failed, rehearsed the same way."""
+    built, _panel, conditions, bundle = _bundle()
+    tokenizer = LosslessPublicTokenizer.fit_train(list(bundle["publics"]),
+                                                  max_length=64 * 1024)
+    vocabulary = tuple(tokenizer.vocabulary)
+    node_id = vocabulary.index(_word_token("node"))
+    rel_id = vocabulary.index(_word_token("rel"))
+    newline_id = vocabulary.index(_word_token("\n"))
+
+    def segments_and_slots(public):
+        encoded = tokenizer.encode_public(public)
+        problem_ids = [token for token, kind in zip(encoded["ids"], encoded["kinds"])
+                       if kind == 0]
+        segments, current = 0, None
+        for token in problem_ids:
+            if token == newline_id:
+                current = None
+            elif token in (node_id, rel_id):
+                current = [token]
+                segments += 1
+            elif current is not None:
+                current.append(token)
+        slots = {slot - 1 for token, kind, slot
+                 in zip(encoded["ids"], encoded["kinds"], encoded["slots"])
+                 if kind == 2 and slot in (1, 2, 3)}
+        return segments, slots
+
+    for public in bundle["publics"][:300]:
+        segments, slots = segments_and_slots(public)
+        assert segments >= 1, "PROBLEM_STRUCTURAL_SEGMENTS_REQUIRED"
+        assert slots == {0, 1, 2}, slots
+    name, organization, cue = conditions[0]
+    for event in schedule.condition_events(name, organization, cue,
+                                           built=built)[:100]:
+        episode = worker.experiment.compile_event(event, built=built)
+        segments, slots = segments_and_slots(episode["public"])
+        assert segments >= 1 and slots == {0, 1, 2}
