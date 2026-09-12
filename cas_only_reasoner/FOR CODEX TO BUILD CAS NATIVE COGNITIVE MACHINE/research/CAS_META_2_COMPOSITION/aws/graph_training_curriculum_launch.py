@@ -832,7 +832,8 @@ class CurriculumProvider:
             "export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''",
             "export CAS_META2_RUN_TEACHING_CYCLE=1",
             "mkdir -p /opt/cas-graph6curr/package",
-            "exec > /opt/cas-graph6curr/bootstrap.log 2>&1",
+            "exec > >(tee -a /opt/cas-graph6curr/bootstrap.log /dev/console) 2>&1",
+            "set -x",
             "timeout 120 aws s3api get-object --bucket " + bucket
             + " --key input/source.zip /opt/cas-graph6curr/package/source.zip --region "
             + self.region,
