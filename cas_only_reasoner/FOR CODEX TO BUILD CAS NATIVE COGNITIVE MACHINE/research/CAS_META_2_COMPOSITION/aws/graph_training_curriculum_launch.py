@@ -140,6 +140,21 @@ WORKER_WHEEL_DIR = "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduc
 WORKER_REQUIREMENTS = PILOT + "requirements-gpu.txt"
 
 
+#: Owner-authorised plan amendment (2026-09-11): the launcher previously took the
+#: first default subnet, which sits in us-west-2d, and RunInstances failed there with
+#: InsufficientInstanceCapacity for g7.2xlarge. AWS's error named us-west-2a, -2b and
+#: -2c as having capacity, so the subnet is now chosen by declared zone preference
+#: instead of by subnet order. This changes placement only: same account, region,
+#: instance type, AMI, volumes, roles and bounds.
+AZ_PREFERENCE = ("us-west-2a", "us-west-2b", "us-west-2c")
+
+
+def _az_rank(subnet):
+    zone = subnet.get("AvailabilityZone")
+    return (AZ_PREFERENCE.index(zone) if zone in AZ_PREFERENCE
+            else len(AZ_PREFERENCE), str(subnet.get("SubnetId")))
+
+
 def require(condition, code):
     if not condition:
         raise ValueError(code)
@@ -903,6 +918,10 @@ class CurriculumProvider:
                                                  "ToPort": 443,
                                                  "IpRanges": [{"CidrIp": "0.0.0.0/0"}]}])
         bootstrap = self._user_data(bucket)
+        ordered = sorted(subnets, key=_az_rank)
+        require(ordered and ordered[0].get("AvailabilityZone") in AZ_PREFERENCE,
+                "CURRICULUM_NO_SUBNET_IN_AN_AVAILABLE_ZONE")
+        subnets = ordered
         launched = self._effect("run_instances", ec2.run_instances,
             ImageId=frozen["ami"], InstanceType=frozen["instance_type"],
             MinCount=1, MaxCount=1, ClientToken=self.job,
