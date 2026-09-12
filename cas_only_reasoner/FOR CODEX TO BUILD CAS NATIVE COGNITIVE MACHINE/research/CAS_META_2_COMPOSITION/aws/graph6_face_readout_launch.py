@@ -45,6 +45,7 @@ from aws.graph_training_curriculum_launch import (  # noqa: E402
     WORKER_REQUIREMENTS, WORKER_WHEEL_DIR, build_package, canonical, digest,
     require)
 from aws import graph_training_candidate_launch as candidate  # noqa: E402
+from aws import run_evidence  # noqa: E402  RUN_EVIDENCE_PRESERVATION_001
 from cas_meta2.graph_teaching import face_readout as readout  # noqa: E402
 
 SCHEMA = "cas-graph-training-face-readout-launch/1"
@@ -548,6 +549,42 @@ def build_readout_package(output, *, source_sha, git_bytes_fn=None,
         extra_files=package_data_files())
 
 
+def evidence_contract():
+    """The readout's pre-run evidence requirement, frozen before the worker starts.
+
+    RUN_EVIDENCE_PRESERVATION_001: the collector checks REQUIRED against the received
+    bytes, independently of the worker's own artifact list, so a payload the worker
+    writes but does not declare can no longer pass as a complete delivery. This job
+    is the first to run under that contract.
+
+    Declared limitation, carried in the contract rather than left implicit: this
+    profile names the readout's actual outputs, and the readout payload is a single
+    JSON document holding every per-question row for both phases. Row-identity
+    completeness - exact question ids per phase, per-face counts, duplicates - needs
+    a JSON-lines rows file per condition, which this worker does not yet write, so
+    the contract requires the payload intact and parseable and does not claim
+    row-level coverage for this job.
+    """
+    return run_evidence.contract(
+        EXPERIMENT["profile"],
+        [run_evidence.requirement("results/result.json",
+                                  "readout transport marker and envelope", kind="json"),
+         run_evidence.requirement("results/result.json.sha256",
+                                  "sidecar binding the envelope bytes"),
+         run_evidence.requirement("results/artifacts/manifest.json",
+                                  "the worker's produced-file manifest, as reality"),
+         run_evidence.requirement("results/artifacts/measurements.json",
+                                  "the recovered measurement summary"),
+         run_evidence.requirement("results/artifacts/readout.json",
+                                  "the full per-question readout: the recovery's "
+                                  "payload, every row, both phases")],
+        notes=["row-identity completeness is not declared for this profile: the "
+               "payload is required intact and parseable, and per-question coverage is "
+               "checked when the readout is analysed",
+               "the four delivered checkpoints are this job's INPUTS, not its outputs; "
+               "the authority binds their hashes"])
+
+
 def validate_owner_authorization(path):
     document = json.loads(Path(path).read_bytes())
     require(document.get("schema") == "cas-cube-face-readout-owner-authorization/1",
@@ -564,7 +601,8 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
         receipt_dir=receipt_dir,
         owner_authorization_path=owner_authorization_path,
         validate_request_fn=validate_request,
-        validate_authority_fn=validate_authority)
+        validate_authority_fn=validate_authority,
+        evidence_contract=evidence_contract())
 
 
 def plan_only():

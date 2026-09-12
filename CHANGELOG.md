@@ -4,6 +4,86 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-12 - Readout attempt 5 diagnosed at $0: the bootstrap was never the fault. The worker died on `NameError: name 'beacon' is not defined`, because the shared transport was appended AFTER `if __name__ == '__main__': main()`
+
+Job `cas-meta2-graph6read-20260912044325-14fcd081`, instance
+`i-0916a3eedfccea11f`, us-west-2a. Three `$7.00` reservations were spent on this
+bug. The fourth was not needed: the whole diagnosis came from one free,
+read-only `ec2.get_console_output` call.
+
+**What the console actually showed.** The `set -x` trace WAS on the serial
+console, and every bootstrap command succeeded - the S3 downloads, the
+`sha256sum -c` check, `unzip`, and the interpreter search which selected
+`python3.12`. The last trace line is the worker starting, and then:
+
+    File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 84, in main
+        beacon(root, 'worker_started')
+    NameError: name 'beacon' is not defined
+
+All five hypotheses carried in the handoff were wrong: not IMDSv2, not the
+archive hash, not a missing `unzip`, not an invisible console, not a download
+timeout. The bootstrap, the AZ fix and the POSIX-safety check were all correct
+and are kept.
+
+**The defect.** `run_evidence.unified_transport` ended with
+`text = text + render_transport(...)`, which appended `def beacon`,
+`def publisher`, `def publish_once`, `def upload_results` and
+`PUBLISH_SECONDS` to the END of the worker file - after the module's
+`if __name__ == '__main__': main()` guard. Python binds a name when it executes
+the `def`, so the guard ran `main()` first and `beacon` did not exist yet. The
+transport block and its beacons were added on 2026-09-11 to fix the empty-archive
+run; the ordering fault arrived with them.
+
+**A second defect, found by the new test, in the same seam.** The shared
+`upload_results` replaced each worker's own uploader but returned a different
+shape: it dropped the `result` key its callers still print. Every readout run,
+successful or not, would have ended in an uncaught `KeyError: 'result'` on the
+last line of `main()` - after the evidence was already uploaded, so a delivered
+run would have reported itself as a crash. The shared uploader now returns
+`result` alongside `marker`.
+
+**Why nothing caught either one.** The worker compiles cleanly. Importing it as
+a module passes, because an import executes the whole file and never enters the
+guard. The existing rehearsal `exec`s individual function bodies, which skips the
+module body entirely. The failure only appears when the file is executed AS
+`__main__`.
+
+**Fixes, at the seam rather than per worker**
+(`research/CAS_META_2_COMPOSITION/aws/run_evidence.py`):
+
+* `insert_before_entrypoint` places the rendered transport in FRONT of the
+  entrypoint guard.
+* `require_definitions_precede_entrypoint` refuses any worker source whose module
+  body binds a top-level name after the guard, and `unified_transport` calls it on
+  every path, including the already-unified one. The invariant is blunt on
+  purpose: it is exactly the law that was broken, and it is checkable without
+  running anything.
+* the shared `upload_results` returns `result` again.
+
+**New test** `research/CAS_META_2_COMPOSITION/tests/test_worker_entrypoint_order.py`,
+8 tests, both workers (readout and curriculum). It runs each rendered worker as
+`__main__` in a subprocess with a fake `boto3` and with `shutil.which` returning
+`None`, so the worker fails in its own first environment step - no venv, no pip,
+no torch, no network, no AWS, no reservation - and asserts no name escapes
+unbound, that the failure path still writes `result.json`, `failure.json` and the
+`phase_worker_started` / `phase_publisher_started` beacons, and that the check
+refuses the exact shape that shipped. Re-rendering the pre-fix shape and running
+the same driver reproduces `NameError: name 'beacon' is not defined`, so the test
+is verified against the real failure, not only against the fix.
+
+Suites green: 112 tests across the curriculum launcher, candidate launcher, run
+evidence preservation, readout launcher, delivery rehearsal and the new file.
+
+**Status: NOT RUN.** No reservation was consumed and none is requested by this
+commit. `readout_package_005` is stale twice over - it carries the broken worker
+and was built at superseded commit `13002ed4` - so a new package, request and
+authority must be built from this commit, and a paid attempt needs a fresh
+owner GO. Ledger unchanged at revision 64, `$361.00` reserved / `$39.00` free.
+
+Also committed here: the previously uncommitted `evidence_contract()` in
+`aws/graph6_face_readout_launch.py`, prior in-flight work from the session that
+wrote the handoff. It was left in the working tree, not in git.
+
 ## 2026-09-11 - CFC Loop x Face-Cue Pilot attempt 004 FINISHED: face-role application learned, recognition weak, both interventions unestablished — and the per-face readout lost to an undeclared artefact
 
 Job `cas-meta2-graph6face-20260911133305-9723735f`, `$7.00` reservation, ledger

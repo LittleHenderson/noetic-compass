@@ -36,6 +36,7 @@ No model, no torch, no AWS SDK, no network in this module.
 """
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 import os
@@ -1039,6 +1040,89 @@ def completed_deliverable(*, execution, byte_verdict, completeness_verdict,
 # 8. the shared outer-worker transport
 # --------------------------------------------------------------------------
 
+ENTRYPOINT_GUARD = "if __name__ == '__main__':"
+
+
+def entrypoint_index(lines):
+    """Index of the module's ``if __name__ == '__main__':`` line, or None.
+
+    Either quoting is accepted, because the rendered workers are written by hand
+    and a future one may use double quotes.
+    """
+    for index in range(len(lines) - 1, -1, -1):
+        text = lines[index]
+        if text.startswith("if __name__ ==") and "__main__" in text:
+            return index
+    return None
+
+
+def insert_before_entrypoint(source, block):
+    """Place rendered definitions BEFORE the module calls ``main()``.
+
+    Python binds a name when it executes the ``def``, not when it parses the
+    file. The transport was appended to the END of the worker, which put
+    ``def beacon`` after ``if __name__ == '__main__': main()``: the interpreter
+    reached the guard first, entered ``main()``, and died on
+    ``NameError: name 'beacon' is not defined`` before the worker wrote a single
+    byte. The instance bootstrap was correct the whole time, and a launched GPU
+    instance plus a $7.00 reservation were spent proving it - job
+    cas-meta2-graph6read-20260912044325-14fcd081, instance i-0916a3eedfccea11f,
+    the NameError visible in that instance's serial console.
+
+    So the block goes in FRONT of the guard, and
+    :func:`require_definitions_precede_entrypoint` refuses any source where a
+    definition still trails it.
+    """
+    require(type(source) is str and type(block) is str,
+            "TRANSPORT_INSERT_TEXT_REQUIRED")
+    lines = source.splitlines()
+    guard = entrypoint_index(lines)
+    body = block.strip("\n").splitlines()
+    if guard is None:
+        return "\n".join(lines + ["", ""] + body) + "\n"
+    head = lines[:guard]
+    while head and not head[-1].strip():
+        head.pop()
+    return "\n".join(head + ["", ""] + body + ["", ""] + lines[guard:]) + "\n"
+
+
+def require_definitions_precede_entrypoint(source):
+    """Refuse a worker whose module body binds a name after it calls ``main()``.
+
+    The invariant is deliberately blunt: every top-level ``def``, ``class``,
+    assignment and import must appear before the entrypoint guard. That is
+    exactly the law the appended transport broke, it is checkable without
+    running anything, and a compile check cannot see it - the broken worker
+    compiled cleanly and still failed on the instance.
+
+    Returns the names bound before the guard, so a caller can record them.
+    """
+    require(type(source) is str and source, "ENTRYPOINT_ORDER_SOURCE_REQUIRED")
+    tree = ast.parse(source)
+    guard = entrypoint_index(source.splitlines())
+    bound, trailing = [], []
+    for node in tree.body:
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            names = [node.name]
+        elif isinstance(node, (ast.Import, ast.ImportFrom)):
+            names = [alias.asname or alias.name.split(".")[0] for alias in node.names]
+        elif isinstance(node, ast.Assign):
+            names = [t.id for t in node.targets if isinstance(t, ast.Name)]
+        elif isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name):
+            names = [node.target.id]
+        else:
+            names = []
+        if not names:
+            continue
+        if guard is not None and node.lineno > guard + 1:
+            trailing.extend(names)
+        else:
+            bound.extend(names)
+    require(not trailing,
+            "DEFINITION_AFTER_ENTRYPOINT:" + ",".join(sorted(set(trailing))))
+    return bound
+
+
 def unified_transport(source, *, evidence_subdir="results", marker="result.json",
                       sidecar="result.json.sha256", publisher_seconds=60.0,
                       artifact_prefix="results/artifacts/",
@@ -1059,6 +1143,7 @@ def unified_transport(source, *, evidence_subdir="results", marker="result.json"
     if "def upload_results(s3, bucket, root, published=None):" in source:
         # already unified: applying it twice is a no-op, so a caller cannot
         # accidentally drop the transport by unifying an already-unified source
+        require_definitions_precede_entrypoint(source)
         return {"source": source, "replaced": [], "already_unified": True,
                 "transport": "aws.run_evidence.render_transport",
                 "evidence_subdir": evidence_subdir,
@@ -1151,10 +1236,11 @@ def unified_transport(source, *, evidence_subdir="results", marker="result.json"
                     indent + "beacon(root, 'publishing_stopped')"]
                 break
         text = "\n".join(lines)
-    text = text + "\n" + "\n".join(render_transport(
+    text = insert_before_entrypoint(text, "\n".join(render_transport(
         evidence_subdir=evidence_subdir, marker=marker, sidecar=sidecar,
         publisher_seconds=publisher_seconds, artifact_prefix=artifact_prefix,
-        manifest_key=manifest_key)) + "\n"
+        manifest_key=manifest_key)))
+    require_definitions_precede_entrypoint(text)
     return {"source": text, "replaced": replaced,
             "transport": "aws.run_evidence.render_transport",
             "evidence_subdir": evidence_subdir,
@@ -1298,6 +1384,12 @@ def render_transport(*, evidence_subdir="results", marker="result.json",
         "        upload['marker'] = True",
         "    upload['manifest'] = manifest.is_file()",
         "    upload['sidecar'] = sidecar_path.is_file()",
+        # The replaced per-worker uploaders returned a 'result' flag and their
+        # callers still print it. Dropping the key turned every readout run into
+        # an uncaught KeyError on the last line of main(), after the evidence was
+        # already up: a delivered run that reported itself as a crash. A
+        # replacement keeps the keys its callers read.
+        "    upload['result'] = bool(upload.get('marker'))",
         "    upload['marker_meaning'] = ('the producer finished publishing its "
         "current inventory; it grants neither collection completeness nor "
         "evidence deletion')",
