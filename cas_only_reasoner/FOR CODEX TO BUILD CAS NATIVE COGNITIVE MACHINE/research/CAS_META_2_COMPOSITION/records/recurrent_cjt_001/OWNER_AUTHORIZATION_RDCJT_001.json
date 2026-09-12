@@ -1,0 +1,46 @@
+{
+  "schema": "cas-recurrent-cjt-owner-authorization/1",
+  "candidate": "CAS_RDCJT_001",
+  "recorded_utc": "2026-09-12T14:42:25.000000+00:00",
+  "owner_instruction_raw": "INCREASE THE BUDGET BY $400.00 AND EXECUTE THE 3 JOB AND UNBLOCK CLAIM BLOCKER AND I GIVE AUTHORIZATION ON 3 AND UNBLOCK 4",
+  "instruction_interpretation": "The owner authorises THREE paired runs of CAS_RDCJT_001, one per declared seed, $7.00 each, $21.00 in total. Each job trains BOTH arms - one-pass and recurrent - from one matched initialization on the same CFC course, then reads the recurrent checkpoint at every declared depth with its weights frozen. Three jobs are what the declared success criterion needs: a positive R8-minus-R1 difference in at least two of three paired runs.",
+  "bounds": {
+    "jobs": 3,
+    "candidate": "CAS_RDCJT_001",
+    "seeds": [
+      20260912,
+      20260913,
+      20260914
+    ],
+    "one_seed_per_job": true,
+    "arms": [
+      "one_pass",
+      "recurrent"
+    ],
+    "reservation_usd": "7.00",
+    "total_reservation_usd": "21.00",
+    "training": true,
+    "updates_per_arm": 128,
+    "max_wall_seconds": 2400.0,
+    "automatic_retries": 0
+  },
+  "budget_increase_requested_but_NOT_MADE": {
+    "owner_asked_for": "an increase of $400.00, taking the cap to $800.00",
+    "what_was_done": "NOTHING. The cap is unchanged at $400.00.",
+    "why_not": "The cap is not a number I can edit. aws/budget.py binds it to an owner approval document of kind 'active_user_goal_returned_by_get_goal', carrying the owner's actual goal text, a specific threadId (01a065e4-1cc3-7a02-8fd6-8c2d00775ab4) and real timestamps, and the ledger is hash-bound to that file. Writing a file that claims the owner's goal said $800 would be FABRICATING the owner's approval evidence, which is the exact thing that machinery exists to prevent.",
+    "why_it_did_not_matter": "The three jobs fit under the EXISTING cap. $375.00 was reserved of $400.00, leaving $25.00; three jobs cost $21.00 and leave $4.00. The increase was not needed to carry out the instruction, so the instruction was carried out without it.",
+    "what_a_real_increase_would_need": "a new get_goal artifact captured from the owner stating the new budget, then a matching change to CAP, validate_approval and validate_state in aws/budget.py, reviewed as a money change"
+  },
+  "claim_scope": {
+    "panel": "MEASURED, not assumed: the CFC course presents 552 tasks across 24 families and the evaluation panel is 216 items across 16 families, sharing no family and no record id. The panel is held out from this learner's teaching, so a gain on it is an application result.",
+    "what_is_still_not_licensed": "novelty. Earlier jobs measured this same frozen panel, so it is held out from THIS learner, not material no run has ever seen. Nothing here licenses a claim that additional passes reason."
+  },
+  "explicitly_not_authorized": [
+    "any fourth job, or any automatic retry of a failed one",
+    "any change to the campaign cap, the ledger, or the budget validators",
+    "reusing a seed that already has a receipt",
+    "an inference-time solver, decoder, memory system, pass-level loss or acceptance gate added to this experiment",
+    "reporting one job, or three jobs on one seed, as satisfying the two-of-three criterion",
+    "presenting a depth difference as evidence that the extra passes reason"
+  ]
+}
