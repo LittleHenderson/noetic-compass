@@ -1,0 +1,581 @@
+{
+  "baselines": {
+    "role_application": {
+      "answer_category_histogram": {
+        "analogy_candidate": 16,
+        "inventory": 5,
+        "mapping": 16,
+        "recomposition": 16,
+        "statement": 32,
+        "via_constituent": 11
+      },
+      "most_frequent_answer_category": "statement",
+      "note": "a rule that ignores the content and always takes one slot, the longest option, or the most frequent answer category scores as shown; no aggregate above these baselines is evidence of the intended skill",
+      "questions": 96,
+      "rules": {
+        "always_longest_option": 40,
+        "always_shortest_option": 18,
+        "always_slot_0": 32,
+        "always_slot_1": 35,
+        "always_slot_2": 29,
+        "most_frequent_answer_category": 32
+      },
+      "uniform_random_expectation": 32.0
+    },
+    "role_recognition": {
+      "answer_category_histogram": {
+        "role_label": 96
+      },
+      "most_frequent_answer_category": "role_label",
+      "note": "a rule that ignores the content and always takes one slot, the longest option, or the most frequent answer category scores as shown; no aggregate above these baselines is evidence of the intended skill",
+      "questions": 96,
+      "rules": {
+        "always_longest_option": 16,
+        "always_shortest_option": 32,
+        "always_slot_0": 28,
+        "always_slot_1": 29,
+        "always_slot_2": 39,
+        "most_frequent_answer_category": 96
+      },
+      "uniform_random_expectation": 32.0
+    },
+    "targeted_check": {
+      "answer_category_histogram": {
+        "inventory": 12,
+        "via_constituent": 12
+      },
+      "most_frequent_answer_category": "via_constituent",
+      "note": "a rule that ignores the content and always takes one slot, the longest option, or the most frequent answer category scores as shown; no aggregate above these baselines is evidence of the intended skill",
+      "questions": 24,
+      "rules": {
+        "always_longest_option": 12,
+        "always_shortest_option": 5,
+        "always_slot_0": 9,
+        "always_slot_1": 7,
+        "always_slot_2": 8,
+        "most_frequent_answer_category": 12
+      },
+      "uniform_random_expectation": 8.0
+    }
+  },
+  "boundary": {
+    "automatic_retries": 0,
+    "lost_measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "no_optimizer_step": true,
+    "scores_from_evaluation_pass": true,
+    "seven_stage_neural_cycles": 0,
+    "zero_updates_measured": true
+  },
+  "conditions": {
+    "cfc_neutral_cue": {
+      "checkpoint": {
+        "bytes": 68300,
+        "identity": "a5b8cd2b04e1cc4fc3948f69b0823e8c764844ce3f718c6ea61848f2909df0ce",
+        "identity_recomputed_in_place": "a5b8cd2b04e1cc4fc3948f69b0823e8c764844ce3f718c6ea61848f2909df0ce",
+        "name": "checkpoint_cfc_neutral_cue.pt",
+        "parameter_count": 3,
+        "sha256": "2cbe25ecef2bf1e255f70a49ada42c9675f8b69cc327e1b14da3ebe6935c1820"
+      },
+      "milestone": {
+        "every_face_at_least": 0.5,
+        "faces_below_minimum": {
+          "role_application": {},
+          "role_recognition": {
+            "2": 0.4375
+          },
+          "targeted_check": {}
+        },
+        "interpretation_rule": "meeting the capability targets does not establish that stable cues beat the control; that is a paired comparison, reported separately",
+        "role_application_macro": 0.78125,
+        "role_application_met": true,
+        "role_application_target": 0.7,
+        "role_recognition_macro": 0.5833333333333334,
+        "role_recognition_met": false,
+        "role_recognition_target": 0.75,
+        "targets_are_declared_engineering_targets": true
+      },
+      "parameters_unchanged_by_readout": true,
+      "total_correct": 146,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.78125,
+          "correct": 75,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5833333333333334,
+          "correct": 56,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        }
+      }
+    },
+    "cfc_stable_cues": {
+      "checkpoint": {
+        "bytes": 68300,
+        "identity": "efb8d473670655839ba7396314e2a0300454bffaa65cb62e037ec41b5eefe19f",
+        "identity_recomputed_in_place": "efb8d473670655839ba7396314e2a0300454bffaa65cb62e037ec41b5eefe19f",
+        "name": "checkpoint_cfc_stable_cues.pt",
+        "parameter_count": 3,
+        "sha256": "641dedea7df937c9d6af31aaf2e27f2b1fbe12f7aa3892dc6aa553e03e96842b"
+      },
+      "milestone": {
+        "every_face_at_least": 0.5,
+        "faces_below_minimum": {
+          "role_application": {},
+          "role_recognition": {
+            "2": 0.4375
+          },
+          "targeted_check": {}
+        },
+        "interpretation_rule": "meeting the capability targets does not establish that stable cues beat the control; that is a paired comparison, reported separately",
+        "role_application_macro": 0.7916666666666666,
+        "role_application_met": true,
+        "role_application_target": 0.7,
+        "role_recognition_macro": 0.5729166666666666,
+        "role_recognition_met": false,
+        "role_recognition_target": 0.75,
+        "targets_are_declared_engineering_targets": true
+      },
+      "parameters_unchanged_by_readout": true,
+      "total_correct": 146,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5729166666666666,
+          "correct": 55,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        }
+      }
+    },
+    "mixed_order_neutral_cue": {
+      "checkpoint": {
+        "bytes": 68436,
+        "identity": "5d3470f4fd5031135bb12ae437bb494816d413e4dc9a5e5d81162927161269a1",
+        "identity_recomputed_in_place": "5d3470f4fd5031135bb12ae437bb494816d413e4dc9a5e5d81162927161269a1",
+        "name": "checkpoint_mixed_order_neutral_cue.pt",
+        "parameter_count": 3,
+        "sha256": "93ce1dc27a65780faff0a668980926df7cb9c1323d711eb6f39f5b414d5c8932"
+      },
+      "milestone": {
+        "every_face_at_least": 0.5,
+        "faces_below_minimum": {
+          "role_application": {},
+          "role_recognition": {
+            "1": 0.4375,
+            "2": 0.375,
+            "3": 0.4375,
+            "6": 0.375
+          },
+          "targeted_check": {}
+        },
+        "interpretation_rule": "meeting the capability targets does not establish that stable cues beat the control; that is a paired comparison, reported separately",
+        "role_application_macro": 0.7916666666666666,
+        "role_application_met": true,
+        "role_application_target": 0.7,
+        "role_recognition_macro": 0.5416666666666666,
+        "role_recognition_met": false,
+        "role_recognition_target": 0.75,
+        "targets_are_declared_engineering_targets": true
+      },
+      "parameters_unchanged_by_readout": true,
+      "total_correct": 144,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5416666666666666,
+          "correct": 52,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        }
+      }
+    },
+    "mixed_order_stable_cues": {
+      "checkpoint": {
+        "bytes": 68436,
+        "identity": "7d8a6b1398d083725b9e7a124769ded2a570cc404ddf13b30bd46da7170e43e5",
+        "identity_recomputed_in_place": "7d8a6b1398d083725b9e7a124769ded2a570cc404ddf13b30bd46da7170e43e5",
+        "name": "checkpoint_mixed_order_stable_cues.pt",
+        "parameter_count": 3,
+        "sha256": "38a359613a60748729b01479415668b90c5ab5f21b591aa716e86f5d12db87ee"
+      },
+      "milestone": {
+        "every_face_at_least": 0.5,
+        "faces_below_minimum": {
+          "role_application": {
+            "3": 0.4375
+          },
+          "role_recognition": {
+            "1": 0.3125,
+            "2": 0.3125,
+            "3": 0.375,
+            "6": 0.375
+          },
+          "targeted_check": {}
+        },
+        "interpretation_rule": "meeting the capability targets does not establish that stable cues beat the control; that is a paired comparison, reported separately",
+        "role_application_macro": 0.7708333333333334,
+        "role_application_met": true,
+        "role_application_target": 0.7,
+        "role_recognition_macro": 0.4895833333333333,
+        "role_recognition_met": false,
+        "role_recognition_target": 0.75,
+        "targets_are_declared_engineering_targets": true
+      },
+      "parameters_unchanged_by_readout": true,
+      "total_correct": 137,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7708333333333334,
+          "correct": 74,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.4895833333333333,
+          "correct": 47,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        }
+      }
+    }
+  },
+  "job": "cas-meta2-graph6read-20260912072648-0651a3a8",
+  "lost_measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+  "optimizer_updates": 0,
+  "paired": {
+    "role_application|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "both_correct": 70,
+      "discordant_pairs": 11,
+      "first": "cfc_neutral_cue",
+      "layer": "role_application",
+      "neither_correct": 15,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 5,
+      "only_second_correct": 6,
+      "question": "CFC loop versus mixed order, both with the neutral cue",
+      "second": "mixed_order_neutral_cue"
+    },
+    "role_application|cfc_stable_cues|cfc_neutral_cue": {
+      "both_correct": 72,
+      "discordant_pairs": 7,
+      "first": "cfc_stable_cues",
+      "layer": "role_application",
+      "neither_correct": 17,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 4,
+      "only_second_correct": 3,
+      "question": "stable cue versus neutral cue, both in the CFC loop",
+      "second": "cfc_neutral_cue"
+    },
+    "role_application|cfc_stable_cues|mixed_order_stable_cues": {
+      "both_correct": 69,
+      "discordant_pairs": 12,
+      "first": "cfc_stable_cues",
+      "layer": "role_application",
+      "neither_correct": 15,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 7,
+      "only_second_correct": 5,
+      "question": "CFC loop versus mixed order, both with stable cues",
+      "second": "mixed_order_stable_cues"
+    },
+    "role_application|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "both_correct": 71,
+      "discordant_pairs": 8,
+      "first": "mixed_order_stable_cues",
+      "layer": "role_application",
+      "neither_correct": 17,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 3,
+      "only_second_correct": 5,
+      "question": "stable cue versus neutral cue, both in mixed order",
+      "second": "mixed_order_neutral_cue"
+    },
+    "role_recognition|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "both_correct": 46,
+      "discordant_pairs": 16,
+      "first": "cfc_neutral_cue",
+      "layer": "role_recognition",
+      "neither_correct": 34,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 10,
+      "only_second_correct": 6,
+      "question": "CFC loop versus mixed order, both with the neutral cue",
+      "second": "mixed_order_neutral_cue"
+    },
+    "role_recognition|cfc_stable_cues|cfc_neutral_cue": {
+      "both_correct": 54,
+      "discordant_pairs": 3,
+      "first": "cfc_stable_cues",
+      "layer": "role_recognition",
+      "neither_correct": 39,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 1,
+      "only_second_correct": 2,
+      "question": "stable cue versus neutral cue, both in the CFC loop",
+      "second": "cfc_neutral_cue"
+    },
+    "role_recognition|cfc_stable_cues|mixed_order_stable_cues": {
+      "both_correct": 43,
+      "discordant_pairs": 16,
+      "first": "cfc_stable_cues",
+      "layer": "role_recognition",
+      "neither_correct": 37,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 12,
+      "only_second_correct": 4,
+      "question": "CFC loop versus mixed order, both with stable cues",
+      "second": "mixed_order_stable_cues"
+    },
+    "role_recognition|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "both_correct": 47,
+      "discordant_pairs": 5,
+      "first": "mixed_order_stable_cues",
+      "layer": "role_recognition",
+      "neither_correct": 44,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 0,
+      "only_second_correct": 5,
+      "question": "stable cue versus neutral cue, both in mixed order",
+      "second": "mixed_order_neutral_cue"
+    },
+    "targeted_check|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "both_correct": 15,
+      "discordant_pairs": 1,
+      "first": "cfc_neutral_cue",
+      "layer": "targeted_check",
+      "neither_correct": 8,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 0,
+      "only_second_correct": 1,
+      "question": "CFC loop versus mixed order, both with the neutral cue",
+      "second": "mixed_order_neutral_cue"
+    },
+    "targeted_check|cfc_stable_cues|cfc_neutral_cue": {
+      "both_correct": 15,
+      "discordant_pairs": 0,
+      "first": "cfc_stable_cues",
+      "layer": "targeted_check",
+      "neither_correct": 9,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 0,
+      "only_second_correct": 0,
+      "question": "stable cue versus neutral cue, both in the CFC loop",
+      "second": "cfc_neutral_cue"
+    },
+    "targeted_check|cfc_stable_cues|mixed_order_stable_cues": {
+      "both_correct": 15,
+      "discordant_pairs": 1,
+      "first": "cfc_stable_cues",
+      "layer": "targeted_check",
+      "neither_correct": 8,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 0,
+      "only_second_correct": 1,
+      "question": "CFC loop versus mixed order, both with stable cues",
+      "second": "mixed_order_stable_cues"
+    },
+    "targeted_check|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "both_correct": 16,
+      "discordant_pairs": 0,
+      "first": "mixed_order_stable_cues",
+      "layer": "targeted_check",
+      "neither_correct": 8,
+      "note": "McNemar compares the two discordant counts; with zero discordant pairs no difference is measurable on this panel",
+      "only_first_correct": 0,
+      "only_second_correct": 0,
+      "question": "stable cue versus neutral cue, both in mixed order",
+      "second": "mixed_order_neutral_cue"
+    }
+  },
+  "panel": {
+    "by_layer": {
+      "role_application": 96,
+      "role_recognition": 96,
+      "targeted_check": 24
+    },
+    "items": 216,
+    "note": "192 primary questions (96 recognition + 96 application) plus 24 diagnostics; the 192 primary questions are views of 16 held-out families, not 192 independent families"
+  },
+  "plan": {
+    "checkpoint_dir": "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/checkpoints",
+    "conditions": [
+      {
+        "checkpoint": "checkpoint_cfc_stable_cues.pt",
+        "condition": "cfc_stable_cues",
+        "cue": "stable",
+        "organization": "CFC_LOOP",
+        "sha256": "641dedea7df937c9d6af31aaf2e27f2b1fbe12f7aa3892dc6aa553e03e96842b"
+      },
+      {
+        "checkpoint": "checkpoint_cfc_neutral_cue.pt",
+        "condition": "cfc_neutral_cue",
+        "cue": "neutral",
+        "organization": "CFC_LOOP",
+        "sha256": "2cbe25ecef2bf1e255f70a49ada42c9675f8b69cc327e1b14da3ebe6935c1820"
+      },
+      {
+        "checkpoint": "checkpoint_mixed_order_stable_cues.pt",
+        "condition": "mixed_order_stable_cues",
+        "cue": "stable",
+        "organization": "MIXED_ORDER",
+        "sha256": "38a359613a60748729b01479415668b90c5ab5f21b591aa716e86f5d12db87ee"
+      },
+      {
+        "checkpoint": "checkpoint_mixed_order_neutral_cue.pt",
+        "condition": "mixed_order_neutral_cue",
+        "cue": "neutral",
+        "organization": "MIXED_ORDER",
+        "sha256": "93ce1dc27a65780faff0a668980926df7cb9c1323d711eb6f39f5b414d5c8932"
+      }
+    ],
+    "corpus_digest": "cfe68c0ac350cf5af9c9fdc2ceb0cfd546fc2f907de8f16db9b8e1aadee5a81e",
+    "declared_pairs": [
+      {
+        "first": "cfc_stable_cues",
+        "question": "CFC loop versus mixed order, both with stable cues",
+        "second": "mixed_order_stable_cues"
+      },
+      {
+        "first": "cfc_neutral_cue",
+        "question": "CFC loop versus mixed order, both with the neutral cue",
+        "second": "mixed_order_neutral_cue"
+      },
+      {
+        "first": "cfc_stable_cues",
+        "question": "stable cue versus neutral cue, both in the CFC loop",
+        "second": "cfc_neutral_cue"
+      },
+      {
+        "first": "mixed_order_stable_cues",
+        "question": "stable cue versus neutral cue, both in mixed order",
+        "second": "mixed_order_neutral_cue"
+      }
+    ],
+    "encoder_seed": 20260909,
+    "expected_totals": {
+      "cfc_neutral_cue": {
+        "role_application": {
+          "correct": 75,
+          "total": 96
+        },
+        "role_recognition": {
+          "correct": 56,
+          "total": 96
+        },
+        "targeted_check": {
+          "correct": 15,
+          "total": 24
+        }
+      },
+      "cfc_stable_cues": {
+        "role_application": {
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "correct": 55,
+          "total": 96
+        },
+        "targeted_check": {
+          "correct": 15,
+          "total": 24
+        }
+      },
+      "mixed_order_neutral_cue": {
+        "role_application": {
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "correct": 52,
+          "total": 96
+        },
+        "targeted_check": {
+          "correct": 16,
+          "total": 24
+        }
+      },
+      "mixed_order_stable_cues": {
+        "role_application": {
+          "correct": 74,
+          "total": 96
+        },
+        "role_recognition": {
+          "correct": 47,
+          "total": 96
+        },
+        "targeted_check": {
+          "correct": 16,
+          "total": 24
+        }
+      }
+    },
+    "learning_rate": 0.003,
+    "lost_measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "optimizer_updates": 0,
+    "panel": {
+      "base_families": 16,
+      "by_face": {
+        "role_application:1": 16,
+        "role_application:2": 16,
+        "role_application:3": 16,
+        "role_application:4": 16,
+        "role_application:5": 16,
+        "role_application:6": 16,
+        "role_recognition:1": 16,
+        "role_recognition:2": 16,
+        "role_recognition:3": 16,
+        "role_recognition:4": 16,
+        "role_recognition:5": 16,
+        "role_recognition:6": 16
+      },
+      "by_layer": {
+        "role_application": 96,
+        "role_recognition": 96,
+        "targeted_check": 24
+      },
+      "cue_note": "the panel carries no face cue in either arm, so it is identical across conditions and doubles as the cue-removal check",
+      "items": 216,
+      "panel_digest": "332ab9a6aef3dd1f3e12a078490a1a24a20aefac0abe9557d04e1d78271523ca",
+      "primary_items": 192,
+      "repeat_note": "the 192 primary questions are views of 16 base families, not 192 independent families",
+      "schema": "cas.cube-face-evaluation/0.1"
+    },
+    "panel_note": "192 primary questions (96 recognition + 96 application) plus 24 diagnostics; the 192 primary questions are views of 16 held-out families, not 192 independent families",
+    "seed": 20260912,
+    "training": false
+  },
+  "reproduction": {
+    "checked": 12,
+    "gate": "a mismatch is a failed recovery, not a result: it would mean the checkpoint or the path no longer re-derives the numbers attempt 004 published",
+    "mismatches": [],
+    "reproduced": true
+  },
+  "schema": "cas.cube-face-readout/0.1"
+}

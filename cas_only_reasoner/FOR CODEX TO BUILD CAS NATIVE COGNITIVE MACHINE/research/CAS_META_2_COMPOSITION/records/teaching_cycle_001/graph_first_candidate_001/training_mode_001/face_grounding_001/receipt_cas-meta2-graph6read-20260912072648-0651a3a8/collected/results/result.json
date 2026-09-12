@@ -1,0 +1,192 @@
+{
+  "artifacts": [
+    {
+      "bytes": 21406,
+      "name": "measurements.json",
+      "sha256": "54ef8ad99e6ea035865c2d3329eb0472fec97534a6da3347eb84f9be22441eac"
+    },
+    {
+      "bytes": 2610908,
+      "name": "readout.json",
+      "sha256": "4bf492e6126327f9fdd72fc784220d721436ad4a18eae472273513fafc38acdb"
+    }
+  ],
+  "boundary": {
+    "automatic_retries": 0,
+    "lost_measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "no_optimizer_step": true,
+    "scores_from_evaluation_pass": true,
+    "seven_stage_neural_cycles": 0,
+    "zero_updates_measured": true
+  },
+  "conditions": {
+    "cfc_neutral_cue": {
+      "checkpoint_identity": "a5b8cd2b04e1cc4fc3948f69b0823e8c764844ce3f718c6ea61848f2909df0ce",
+      "checkpoint_sha256": "2cbe25ecef2bf1e255f70a49ada42c9675f8b69cc327e1b14da3ebe6935c1820",
+      "optimizer_updates": 0,
+      "parameters_unchanged_by_readout": true,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.78125,
+          "correct": 75,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5833333333333334,
+          "correct": 56,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        }
+      }
+    },
+    "cfc_stable_cues": {
+      "checkpoint_identity": "efb8d473670655839ba7396314e2a0300454bffaa65cb62e037ec41b5eefe19f",
+      "checkpoint_sha256": "641dedea7df937c9d6af31aaf2e27f2b1fbe12f7aa3892dc6aa553e03e96842b",
+      "optimizer_updates": 0,
+      "parameters_unchanged_by_readout": true,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5729166666666666,
+          "correct": 55,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.625,
+          "correct": 15,
+          "total": 24
+        }
+      }
+    },
+    "mixed_order_neutral_cue": {
+      "checkpoint_identity": "5d3470f4fd5031135bb12ae437bb494816d413e4dc9a5e5d81162927161269a1",
+      "checkpoint_sha256": "93ce1dc27a65780faff0a668980926df7cb9c1323d711eb6f39f5b414d5c8932",
+      "optimizer_updates": 0,
+      "parameters_unchanged_by_readout": true,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7916666666666666,
+          "correct": 76,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.5416666666666666,
+          "correct": 52,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        }
+      }
+    },
+    "mixed_order_stable_cues": {
+      "checkpoint_identity": "7d8a6b1398d083725b9e7a124769ded2a570cc404ddf13b30bd46da7170e43e5",
+      "checkpoint_sha256": "38a359613a60748729b01479415668b90c5ab5f21b591aa716e86f5d12db87ee",
+      "optimizer_updates": 0,
+      "parameters_unchanged_by_readout": true,
+      "totals": {
+        "role_application": {
+          "accuracy": 0.7708333333333334,
+          "correct": 74,
+          "total": 96
+        },
+        "role_recognition": {
+          "accuracy": 0.4895833333333333,
+          "correct": 47,
+          "total": 96
+        },
+        "targeted_check": {
+          "accuracy": 0.6666666666666666,
+          "correct": 16,
+          "total": 24
+        }
+      }
+    }
+  },
+  "failure": null,
+  "job": "cas-meta2-graph6read-20260912072648-0651a3a8",
+  "lost_measurements_sha256": "796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+  "measurements_sha256": "54ef8ad99e6ea035865c2d3329eb0472fec97534a6da3347eb84f9be22441eac",
+  "optimizer_updates": 0,
+  "paired_summary": {
+    "role_application|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "discordant_pairs": 11,
+      "only_first_correct": 5,
+      "only_second_correct": 6
+    },
+    "role_application|cfc_stable_cues|cfc_neutral_cue": {
+      "discordant_pairs": 7,
+      "only_first_correct": 4,
+      "only_second_correct": 3
+    },
+    "role_application|cfc_stable_cues|mixed_order_stable_cues": {
+      "discordant_pairs": 12,
+      "only_first_correct": 7,
+      "only_second_correct": 5
+    },
+    "role_application|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "discordant_pairs": 8,
+      "only_first_correct": 3,
+      "only_second_correct": 5
+    },
+    "role_recognition|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "discordant_pairs": 16,
+      "only_first_correct": 10,
+      "only_second_correct": 6
+    },
+    "role_recognition|cfc_stable_cues|cfc_neutral_cue": {
+      "discordant_pairs": 3,
+      "only_first_correct": 1,
+      "only_second_correct": 2
+    },
+    "role_recognition|cfc_stable_cues|mixed_order_stable_cues": {
+      "discordant_pairs": 16,
+      "only_first_correct": 12,
+      "only_second_correct": 4
+    },
+    "role_recognition|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "discordant_pairs": 5,
+      "only_first_correct": 0,
+      "only_second_correct": 5
+    },
+    "targeted_check|cfc_neutral_cue|mixed_order_neutral_cue": {
+      "discordant_pairs": 1,
+      "only_first_correct": 0,
+      "only_second_correct": 1
+    },
+    "targeted_check|cfc_stable_cues|cfc_neutral_cue": {
+      "discordant_pairs": 0,
+      "only_first_correct": 0,
+      "only_second_correct": 0
+    },
+    "targeted_check|cfc_stable_cues|mixed_order_stable_cues": {
+      "discordant_pairs": 1,
+      "only_first_correct": 0,
+      "only_second_correct": 1
+    },
+    "targeted_check|mixed_order_stable_cues|mixed_order_neutral_cue": {
+      "discordant_pairs": 0,
+      "only_first_correct": 0,
+      "only_second_correct": 0
+    }
+  },
+  "reproduction": {
+    "checked": 12,
+    "gate": "a mismatch is a failed recovery, not a result: it would mean the checkpoint or the path no longer re-derives the numbers attempt 004 published",
+    "mismatches": [],
+    "reproduced": true
+  },
+  "schema": "cas.cube-face-readout-result/1",
+  "status": "READOUT_COMPLETE",
+  "training_performed": false
+}

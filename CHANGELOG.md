@@ -4,6 +4,72 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-12 - CFC PILOT READOUT DELIVERED: `completed_deliverable true`, all 12 totals reproduce, collection COMPLETE_VERIFIED. The attempt-004 loss is closed
+
+Job `cas-meta2-graph6read-20260912072648-0651a3a8`, instance `i-0db26b12fb4a4f0dc`,
+package 007, owner record `OWNER_AUTHORIZATION_READOUT_003.json`, `$7.00`, elapsed
+557.67 s. Ledger revision 66, `$375.00` reserved, `$25.00` free.
+
+**The definition of done is met, in the launcher's own words:**
+
+    status                    AWS_CANDIDATE_FINISHED
+    completed_deliverable     true
+    execution                 FINISHED
+    checkpoint_collection     COMPLETE_VERIFIED
+    measurement_collection    COMPLETE_VERIFIED
+    measurement_completeness  COMPLETE
+    compute_cleanup           COMPLETE
+    evidence_archive          RETAINED_PENDING_COLLECTION
+    deletion_decision         DENY (sticky)
+
+All twelve totals reproduce exactly - `reproduction.reproduced true`, `checked 12`,
+`mismatches []` - and `parameters_unchanged_by_readout` is true for every condition:
+
+| condition | application | recognition | targeted |
+|---|---|---|---|
+| `cfc_stable_cues` | 76/96 | 55/96 | 15/24 |
+| `cfc_neutral_cue` | 75/96 | 56/96 | 15/24 |
+| `mixed_order_stable_cues` | 74/96 | 47/96 | 16/24 |
+| `mixed_order_neutral_cue` | 76/96 | 52/96 | 16/24 |
+
+Collected and verified into the receipt: `readout.json` (2,610,908 bytes, sha256
+`4bf492e6126327f9fdd72fc784220d721436ad4a18eae472273513fafc38acdb`) and
+`measurements.json`, plus a `receiver_receipt.json` and `collected_inventory.json`.
+The payload is byte-DIFFERENT from the fifth job's rescued copy (`83c42de0...`)
+because the envelope embeds the job id; the science is identical, which is what
+the twelve-way reproduction check establishes.
+
+**A fourth defect was found and fixed before this launch, not by it.** The
+no-result evidence rescue in `CandidateProvider.collect` wrote
+`results/artifacts/manifest.json` to the nested local path
+`remote_artifacts/manifest.json` without creating the parent, and raised
+`FileNotFoundError` from OUTSIDE the download guard - so the first nested key
+aborted the entire rescue and the fifth job saved nothing locally despite its
+payload sitting in the bucket. That is the whole content of that run's
+`failure.json`. Fixed, with the write moved inside the guard and skipped objects
+recorded under `uncollected`; `tests/test_no_result_evidence_rescue.py` drives the
+fallback with the exact nested keys the real bucket held.
+
+**The pre-flight audit did NOT run.** A six-agent workflow was launched to audit
+the never-yet-executed post-result path before spending. All six agents died with
+`You've hit your session limit`. It returned `survivors: []`, which means NOTHING
+EXECUTED, not that nothing was found - recorded here so that empty result is never
+later read as a clean audit. The `remote_artifacts` defect above was then found by
+hand instead.
+
+**Serial consoles preserved.** Both failed instances' console output is now kept
+under `<receipt>/serial_console/`. Each receipt's own `failure.json` records a
+downstream symptom; the causes are readable only in the console, which AWS discards
+for terminated instances. Without those two files the reasons four reservations
+were lost would not survive in the repository.
+
+**Four defects, all in the delivery path, all now fixed and tested:** the transport
+appended after the entrypoint guard (`NameError: beacon`); the shared uploader
+dropping the `result` key its callers print (`KeyError`); the create-only upload
+conflict whose read-back was denied (`AccessDenied`); and the evidence rescue dying
+on a nested key (`FileNotFoundError`). None was in the science. The readout body
+reproduced the published numbers on every attempt that reached it.
+
 ## 2026-09-12 - Readout attempt 5 RAN and the measurement IS RECOVERED - all 12 totals reproduce exactly - but the JOB FAILED: a create-only upload conflict killed the worker after the science was done
 
 Job `cas-meta2-graph6read-20260912062331-b34e3d92`, instance
