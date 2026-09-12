@@ -95,6 +95,52 @@ def course_task_index(built=None, rounds=None):
     return index
 
 
+def panel_disjointness(panel, task_index):
+    """Measure whether the panel is material the course actually taught.
+
+    This was ASSERTED before it was measured, and the assertion was wrong. The
+    readiness report's "the panel is examined material" was true of the readout's
+    rewired direct_inventory rows; it is NOT true of the evaluation panel, which
+    ``face_evaluation.panel`` draws from ``FINAL_HELD_OUT`` families while
+    ``face_schedule.cfc_round_events`` draws from ``TRAINING`` families.
+
+    Measured on the real corpus: the course presents 552 tasks across 24
+    families, the panel is 216 items across 16 families, and the two share no
+    family and no record id. So a gain on this panel is an application result on
+    unexamined material, not practice fit - and saying otherwise understates it.
+
+    The numbers are recomputed here on every run rather than quoted, because a
+    corpus or schedule change could make them false without anyone noticing.
+    """
+    panel_families = {item["family_id"] for item in panel if "family_id" in item}
+    course_families = {task["family_id"] for task in task_index
+                       if "family_id" in task}
+    panel_records = {item.get("record_id") for item in panel}
+    course_records = {task.get("record_id") for task in task_index}
+    family_overlap = sorted(panel_families & course_families)
+    record_overlap = sorted(value for value in (panel_records & course_records)
+                            if value is not None)
+    disjoint = not family_overlap and not record_overlap
+    return {
+        "panel_items": len(panel),
+        "panel_families": len(panel_families),
+        "course_tasks": len(task_index),
+        "course_families": len(course_families),
+        "shared_families": family_overlap,
+        "shared_record_ids": record_overlap,
+        "disjoint": disjoint,
+        "examined_during_teaching": not disjoint,
+        "what_this_licenses": (
+            "an application measurement on material this learner was never taught"
+            if disjoint else
+            "a depth effect on examined material only; not transfer"),
+        "what_it_still_does_not_license": (
+            "novelty. Earlier jobs measured this same frozen panel, so it is "
+            "held out from THIS learner's teaching, not material no run has "
+            "ever seen"),
+    }
+
+
 def build_context(config, *, torch, device):
     """Encoder, framework factory, learner factories, batch steps, panel.
 
@@ -127,6 +173,7 @@ def build_context(config, *, torch, device):
                                seed=encoder_seed, device=device)
 
     tasks_index = course_task_index(built=built)
+    disjointness = panel_disjointness(panel, tasks_index)
 
     def framework_factory(seed):
         torch.manual_seed(int(seed))
@@ -152,6 +199,7 @@ def build_context(config, *, torch, device):
         "encoder": encoder,
         "corpus_digest": corpus.get("digest"),
         "task_index_size": len(tasks_index),
+        "panel_disjointness": disjointness,
         "framework_factory": framework_factory,
         "tasks_for_round": tasks_for_round,
         "learner_factory": learner_factory,
@@ -275,7 +323,13 @@ def run(config, *, results, artifacts, root=None, torch=None, device=None,
         checkpoint_writer=checkpoint_writer_for(artifacts, torch=torch),
         tasks_for_round=context["tasks_for_round"],
         built=context["built"],
-        examined_during_teaching=True,
-        fresh_family_panel=None)
+        # MEASURED, not assumed. The previous literal True was wrong and
+        # understated the result: the panel and the course share no family and no
+        # record id on the real corpus.
+        examined_during_teaching=context["panel_disjointness"][
+            "examined_during_teaching"],
+        fresh_family_panel=(context["panel"]
+                            if context["panel_disjointness"]["disjoint"]
+                            else None))
     return deliver(results=Path(results), artifacts=Path(artifacts),
                    job=config["job"], report=report)

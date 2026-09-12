@@ -329,10 +329,19 @@ def readiness_report():
             "maintenance_event_source": MAINTENANCE_NOTE["status"],
         },
         "absent": {
-            "fresh_family_panel_for_the_recurrent_test": (
-                "the delivered rewired direct_inventory rows are examined material "
-                "and cannot be the final test; a fresh panel with the same subtype "
-                "structure does not exist yet"),
+            "a_panel_no_run_has_ever_measured": (
+                "RESOLVED DIFFERENTLY THAN EXPECTED, by measurement. The item used "
+                "to say the panel was examined material. That is true of the "
+                "readout's rewired direct_inventory rows, NOT of the evaluation "
+                "panel: panel() draws from FINAL_HELD_OUT families and "
+                "cfc_round_events draws from TRAINING families, and on the real "
+                "corpus the course's 552 tasks across 24 families share NO family "
+                "and NO record id with the panel's 216 items across 16 families. "
+                "So the panel is held out from this learner's teaching and a gain "
+                "on it is an application result. What remains absent is narrower: "
+                "earlier jobs measured this same frozen panel, so it is not "
+                "material no run has ever seen. runner.panel_disjointness "
+                "recomputes this every run rather than quoting it"),
             "a_built_package_for_this_candidate": (
                 "the entrypoint, worker and resource profile now exist in "
                 "aws/recurrent_cjt_launch.py, but no package ARTIFACT has been "

@@ -212,7 +212,7 @@ def test_an_authorized_request_is_refused():
 
 
 @pytest.mark.parametrize("field,value,code", [
-    ("seed", 1, "RDCJT_AUTHORITY_SEED_FROZEN"),
+    ("seed", 1, "RDCJT_AUTHORITY_SEED_NOT_DECLARED"),
     ("learning_rate", 0.9, "RDCJT_AUTHORITY_LR_FROZEN"),
     ("round_depths", [1, 1, 1, 1], "RDCJT_AUTHORITY_ROUND_DEPTHS_FROZEN"),
     ("updates_per_arm", 1, "RDCJT_AUTHORITY_UPDATES_FROZEN"),
@@ -281,3 +281,90 @@ def test_the_declared_cost_matches_the_two_arm_arithmetic():
     assert cost["total_sample_level_core_passes"] == 4256
     assert cost["ratio_recurrent_over_one_pass"] == 3.75
     assert cost["total_optimizer_updates"] == 256
+
+
+# --------------------------------------------------------------------------
+# the claim blocker: measured, not assumed
+# --------------------------------------------------------------------------
+
+def test_the_panel_is_measured_against_the_course_not_assumed():
+    """The panel IS held out from this learner's teaching, on the real corpus.
+
+    This was asserted the other way first - examined_during_teaching=True - which
+    was wrong and understated the experiment. The readiness report's "examined
+    material" was true of the readout's rewired direct_inventory rows, not of the
+    evaluation panel: panel() draws from FINAL_HELD_OUT families while
+    cfc_round_events draws from TRAINING families.
+    """
+    from cas_meta2.graph_teaching import face_corpus as corpus
+    from cas_meta2.graph_teaching import face_evaluation as evaluation
+    report = runner.panel_disjointness(evaluation.panel(corpus.families()),
+                                       runner.course_task_index())
+    assert report["shared_families"] == []
+    assert report["shared_record_ids"] == []
+    assert report["disjoint"] is True
+    assert report["examined_during_teaching"] is False
+    assert report["panel_items"] == 216
+    assert report["course_tasks"] == 552
+    assert "never taught" in report["what_this_licenses"]
+
+
+def test_an_overlapping_panel_is_reported_as_examined():
+    """The measurement must be able to say the opposite when it is true."""
+    panel = [{"family_id": "fam_a", "record_id": "rec_1"}]
+    course = [{"family_id": "fam_a", "record_id": "rec_1"}]
+    report = runner.panel_disjointness(panel, course)
+    assert report["shared_families"] == ["fam_a"]
+    assert report["shared_record_ids"] == ["rec_1"]
+    assert report["disjoint"] is False
+    assert report["examined_during_teaching"] is True
+    assert "not transfer" in report["what_this_licenses"]
+
+
+def test_held_out_is_not_claimed_as_never_before_seen():
+    """Held out from THIS learner is not the same as material no run has seen."""
+    report = runner.panel_disjointness([{"family_id": "a", "record_id": "1"}],
+                                       [{"family_id": "b", "record_id": "2"}])
+    assert "not material no run has" in report["what_it_still_does_not_license"]
+
+
+def test_each_of_the_three_declared_seeds_is_accepted():
+    """Three paired runs need three seeds, or they are one run reported thrice."""
+    assert len(set(rl.FROZEN_SEEDS)) == 3
+    for seed in rl.FROZEN_SEEDS:
+        assert rl.validate_authority(_authority(seed=seed))
+
+
+def test_a_seed_that_already_has_a_receipt_is_refused(tmp_path):
+    receipt = tmp_path / "receipt_cas-meta2-rdcjt-20260912000000-abcdef01"
+    receipt.mkdir()
+    (receipt / "intent.json").write_text(json.dumps(
+        {"authority": {"candidate": rl.CANDIDATE, "seed": rl.FROZEN_SEEDS[0],
+                       "job": "cas-meta2-rdcjt-20260912000000-abcdef01"}}))
+    used = rl.seeds_already_used(tmp_path)
+    assert used == {rl.FROZEN_SEEDS[0]: "cas-meta2-rdcjt-20260912000000-abcdef01"}
+    with pytest.raises(ValueError) as caught:
+        rl.require_unused_seed(rl.FROZEN_SEEDS[0], tmp_path)
+    assert "RDCJT_SEED_ALREADY_RUN" in str(caught.value)
+    # the other two are still available
+    report = rl.require_unused_seed(rl.FROZEN_SEEDS[1], tmp_path)
+    assert report["remaining"] == sorted(rl.FROZEN_SEEDS[1:])
+
+
+def test_an_undeclared_seed_is_refused_before_launch(tmp_path):
+    with pytest.raises(ValueError) as caught:
+        rl.require_unused_seed(999, tmp_path)
+    assert "RDCJT_SEED_NOT_DECLARED:999" in str(caught.value)
+
+
+def test_the_worker_config_refuses_an_unbound_seed():
+    """A job whose seed was never bound must fail closed, not default to one."""
+    provider = rl.RecurrentCjtProvider.__new__(rl.RecurrentCjtProvider)
+    provider.job = "cas-meta2-rdcjt-20260912000000-abcdef01"
+    provider.region = "us-west-2"
+    provider.seed = None
+    with pytest.raises(ValueError) as caught:
+        provider._worker_config("a-bucket")
+    assert "RDCJT_SEED_NOT_BOUND" in str(caught.value)
+    provider.bind_seed(rl.FROZEN_SEEDS[2])
+    assert provider._worker_config("a-bucket")["seed"] == rl.FROZEN_SEEDS[2]

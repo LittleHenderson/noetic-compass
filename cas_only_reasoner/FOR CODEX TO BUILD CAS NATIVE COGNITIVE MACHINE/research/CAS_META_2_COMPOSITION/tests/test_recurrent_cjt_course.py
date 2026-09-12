@@ -277,7 +277,7 @@ def test_the_readiness_report_states_the_absent_items_and_spends_nothing():
     # artefact does not. The list shrinking is only honest if what leaves it has
     # actually been built, which test_recurrent_cjt_launch.py checks.
     assert set(ready["absent"]) == {
-        "fresh_family_panel_for_the_recurrent_test",
+        "a_panel_no_run_has_ever_measured",
         "a_built_package_for_this_candidate",
         "repository_frozen_digests_for_this_candidate",
         "neural_execution",

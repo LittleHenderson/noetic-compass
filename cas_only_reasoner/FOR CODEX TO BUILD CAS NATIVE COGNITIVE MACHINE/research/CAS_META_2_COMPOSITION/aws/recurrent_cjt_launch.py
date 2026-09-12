@@ -87,7 +87,14 @@ EXPERIMENT = {
 
 #: Frozen before any run. Changing one of these changes the experiment, so they
 #: are bound in the authority rather than read from a config at launch time.
-FROZEN_SEED = 20260912
+#: THREE declared seeds, one per paired run. This is not decoration. With a
+#: single frozen seed the three jobs the criterion asks for would be bit-identical
+#: - the same initialization, the same course order, the same answer three times -
+#: and reporting that as "a positive difference in two of three paired runs" would
+#: be reporting ONE run three times. Each job binds ONE of these in its authority,
+#: and no two jobs may bind the same one.
+FROZEN_SEEDS = (20260912, 20260913, 20260914)
+FROZEN_SEED = FROZEN_SEEDS[0]
 FROZEN_LEARNING_RATE = 0.003
 FROZEN_ROUND_DEPTHS = tuple(rc.ROUND_DEPTH_SCHEDULE)
 FROZEN_EVALUATION_DEPTHS = tuple(rc.EVALUATION_DEPTHS)
@@ -127,7 +134,7 @@ DESIGN = {
     "candidate": CANDIDATE,
     "title": EXPERIMENT["title"],
     "arms": list(FROZEN_ARMS),
-    "seed": FROZEN_SEED,
+    "seeds": list(FROZEN_SEEDS),
     "learning_rate": FROZEN_LEARNING_RATE,
     "round_depths": list(FROZEN_ROUND_DEPTHS),
     "evaluation_depths": list(FROZEN_EVALUATION_DEPTHS),
@@ -148,6 +155,41 @@ DESIGN = {
         "is reported as one"),
     "not_included": EXPERIMENT["not_included"],
 }
+
+
+def seeds_already_used(record_dir):
+    """Which declared seeds already have a receipt, so a repeat cannot pass.
+
+    Three jobs on the same seed are ONE job run three times. The launcher reads
+    the receipts rather than trusting the caller to remember which seeds went.
+    """
+    used = {}
+    root = Path(record_dir)
+    if not root.is_dir():
+        return used
+    for intent in sorted(root.glob("receipt_*/intent.json")):
+        try:
+            document = json.loads(intent.read_bytes())
+        except (ValueError, OSError):
+            continue
+        authority = document.get("authority") or {}
+        if authority.get("candidate") != CANDIDATE:
+            continue
+        seed = authority.get("seed")
+        if seed is not None:
+            used[int(seed)] = authority.get("job")
+    return used
+
+
+def require_unused_seed(seed, record_dir):
+    """Refuse a seed that already has a receipt under this candidate."""
+    require(int(seed) in FROZEN_SEEDS, "RDCJT_SEED_NOT_DECLARED:" + str(seed))
+    used = seeds_already_used(record_dir)
+    require(int(seed) not in used,
+            "RDCJT_SEED_ALREADY_RUN:%d_by_%s" % (int(seed), used.get(int(seed))))
+    return {"seed": int(seed), "seeds_declared": list(FROZEN_SEEDS),
+            "seeds_already_used": sorted(used),
+            "remaining": sorted(s for s in FROZEN_SEEDS if s not in used)}
 
 
 def replication_status(jobs_completed=1):
@@ -209,7 +251,8 @@ def validate_authority(authority):
     require(authority["candidate"] == CANDIDATE, "RDCJT_AUTHORITY_CANDIDATE_FROZEN")
     require(list(authority["arms"]) == list(FROZEN_ARMS),
             "RDCJT_AUTHORITY_ARMS_FROZEN")
-    require(authority["seed"] == FROZEN_SEED, "RDCJT_AUTHORITY_SEED_FROZEN")
+    require(authority["seed"] in FROZEN_SEEDS,
+            "RDCJT_AUTHORITY_SEED_NOT_DECLARED:" + str(authority["seed"]))
     require(authority["learning_rate"] == FROZEN_LEARNING_RATE,
             "RDCJT_AUTHORITY_LR_FROZEN")
     require(list(authority["round_depths"]) == list(FROZEN_ROUND_DEPTHS),
@@ -489,13 +532,23 @@ class RecurrentCjtProvider(candidate.CandidateProvider):
         self.result_schema = RESULT_SCHEMA
         self.failure_statuses = ("WORKER_FAILED", ex.STATUS_FAILED,
                                  "REMOTE_WORKER_FAILED")
+        # set from the authority before launch; the default is only a placeholder
+        # so an unset seed is visible rather than silently the first one
+        self.seed = None
+
+    def bind_seed(self, seed):
+        require(int(seed) in FROZEN_SEEDS,
+                "RDCJT_SEED_NOT_DECLARED:" + str(seed))
+        self.seed = int(seed)
+        return self.seed
 
     def _worker_config(self, bucket):
         return {"schema": CONFIG_SCHEMA,
                 "job": self.job, "bucket": bucket, "region": self.region,
                 "candidate": CANDIDATE,
                 "arms": list(FROZEN_ARMS),
-                "seed": FROZEN_SEED,
+                "seed": (self.seed if self.seed is not None
+                         else require(False, "RDCJT_SEED_NOT_BOUND")),
                 "learning_rate": FROZEN_LEARNING_RATE,
                 "round_depths": list(FROZEN_ROUND_DEPTHS),
                 "evaluation_depths": list(FROZEN_EVALUATION_DEPTHS),
@@ -658,11 +711,18 @@ def main(argv=None):
         manifest_sha256=request["manifest_sha256"], ledger_path=LEDGER_PATH,
         clients=session_clients, client_error=candidate._client_error(),
         source_archive=candidate._locate_archive(request["archive_sha256"]))
+    # BEFORE the reservation: bind this job's seed and refuse one that already
+    # has a receipt. Three jobs on the same seed are one job run three times.
+    seed_report = require_unused_seed(authority["seed"],
+                                      Path(arguments.receipt_dir).parent)
+    provider.bind_seed(authority["seed"])
     result = execute(request, authority, provider, ledger_path=LEDGER_PATH,
                      receipt_dir=arguments.receipt_dir,
                      owner_authorization_path=arguments.owner_authorization)
     print(json.dumps({"status": result["status"], "stages": result["stages"],
-                      "completed_deliverable": result["completed_deliverable"]},
+                      "completed_deliverable": result["completed_deliverable"],
+                      "seed": seed_report["seed"],
+                      "seeds_remaining": seed_report["remaining"]},
                      sort_keys=True))
     return 0
 
