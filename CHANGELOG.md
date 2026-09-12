@@ -4,6 +4,90 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-12 - CAS_RDCJT_001 audited and built to the costed-request line: four defects fixed, the packaged worker connection made real, still NOT RUN
+
+Audit of steps one to three, then steps four and five built. No GPU, no
+reservation, no launch. Ledger untouched: `$375.00` reserved, `$25.00` free.
+
+**AUDIT.** The arithmetic, the feedback bound, the autograd seam, the
+one-update-per-batch rule, the RESET_8 mechanism check and the refusal to let a
+checker pick the depth are all correct as committed at `80067454` / `40a224d6`.
+Four real defects, each found by measurement rather than reading:
+
+1. **`transformation_calls` counted questions, not transformations.** Incremented
+   once per `passes()` call, so at depth eight it reported `1` where eight
+   transformations had run - an eightfold understatement in a field whose name
+   promises the count of core invocations. `Accounting` was always right; the
+   label was not. Now counted at the real call site, with `questions_answered`
+   keeping the old meaning.
+2. **`set()` over raw parameter snapshots would have raised `TypeError` on the
+   real path.** `trainer.parameter_snapshot` returns a mapping, and a mapping is
+   not hashable, so the matched-start check would have crashed on the instance
+   while passing against strings in a test. Snapshots are digested first.
+3. **The accounting ledger never reached the learner.** `recurrent_batch_step`
+   charges via `learner.accounting`; a ledger handed only to `run_course` stays
+   at zero. A real run would have reported ZERO core passes - a `$0` compute bill
+   for a 3,360-pass arm.
+4. **`rc.digest` already canonicalises**, so `digest(canonical(x))` handed
+   `json.dumps` a bytes object. One encode, not two.
+
+**BUILT — step four**, `cas_meta2/recurrent_cjt/experiment.py`: both arms from
+ONE matched start on the SAME course, then the recurrent checkpoint read at every
+declared depth with weights frozen. Every rival explanation is closed off
+mechanically: mismatched start fails `RECURRENT_INITIAL_WEIGHTS_NOT_MATCHED`,
+unequal capacity fails `RECURRENT_ARM_CAPACITY_DIFFERS` (measured from the
+modules), `select_best_depth` still raises, gains and losses are reported apart
+per depth, and `panel_provenance` states in the envelope that the panel is
+examined material and a gain on it is not transfer.
+
+**BUILT — step five**, the gap `readiness_report` named. `aws/recurrent_cjt_launch.py`
+is the candidate's own entrypoint - own schemas, own job pattern
+`cas-meta2-rdcjt-*`, own evidence contract, own resource profile - reusing the
+proven `candidate.execute` lifecycle rather than pointing the readout's launcher
+at a training candidate. `cas_meta2/recurrent_cjt/runner.py` is the real
+connection, not a stub: GPU acquired fail-closed (`GPU_REQUIRED`, no silent CPU
+fallback), encoder and framework from the real modules, a 552-task index built
+from the real sixteen-round schedule, and every payload declared in the manifest
+before the envelope is written.
+
+The one-pass arm uses `RecurrentGraphLearner` pinned to depth one rather than the
+plain `GraphLearner`. Depth one is the existing computation **bitwise**, so this
+gives a control that cannot drift from the treatment in readout, scoring or
+batching - only in passes.
+
+All three defects that cost reservations on 2026-09-12 are regression-tested on
+this candidate's worker before it can ever launch: definitions precede the
+entrypoint guard, the final upload is handed the publisher's map, and every
+REQUIRED evidence key is something the runner actually writes (verified by adding
+a REQUIRED file nothing produces and confirming the test fails).
+
+**Declared cost, derived from the phase arithmetic rather than copied:**
+
+| | one-pass arm | recurrent arm |
+|---|---|---|
+| teaching decisions | 896 | 896 |
+| optimizer updates | 128 | 128 |
+| sample-level core passes | 896 | 3,360 |
+| ratio | — | 3.75x |
+
+Both arms in one job: 256 optimizer updates, 4,256 sample-level core passes.
+
+**THE COSTED REQUEST, and the thing the owner has to decide.** One job is
+`$7.00` and buys a depth reading from ONE matched initialization on examined
+material. The handoff's own success criterion - "a positive difference in at
+least two of three paired runs" - needs THREE jobs at `$21.00`, which fits the
+`$25.00` free with `$4.00` to spare. One job is reported as `EXPLORATORY_PILOT`
+and cannot satisfy the criterion; the launcher says so in `replication_status`
+rather than letting one run be written up as three.
+
+**Still absent, and not papered over:** a fresh family panel (the panel is
+examined material), a built package artefact, an owner authorization record, the
+request and authority, and any neural execution.
+
+103 tests across the five recurrent files; 132 across the launcher and evidence
+files. **Correction to commit `b5a638b7`:** its message says "71 across the four
+recurrent files". The count at that commit was 77, not 71.
+
 ## 2026-09-12 - CFC PILOT READOUT DELIVERED: `completed_deliverable true`, all 12 totals reproduce, collection COMPLETE_VERIFIED. The attempt-004 loss is closed
 
 Job `cas-meta2-graph6read-20260912072648-0651a3a8`, instance `i-0db26b12fb4a4f0dc`,

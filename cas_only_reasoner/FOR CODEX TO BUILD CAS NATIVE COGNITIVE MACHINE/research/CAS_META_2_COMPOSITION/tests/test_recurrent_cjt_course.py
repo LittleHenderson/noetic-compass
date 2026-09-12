@@ -272,12 +272,22 @@ def test_a_short_phase_inside_a_delivered_round_is_named():
 def test_the_readiness_report_states_the_absent_items_and_spends_nothing():
     ready = co.readiness_report()
     assert ready["status"] == "RECURRENT_CJT_READY_NEURAL_UNTESTED"
+    # The entrypoint/worker gap CLOSED in step five, so it left this list. What
+    # replaced it is narrower and still true: the builder exists, a built package
+    # artefact does not. The list shrinking is only honest if what leaves it has
+    # actually been built, which test_recurrent_cjt_launch.py checks.
     assert set(ready["absent"]) == {
         "fresh_family_panel_for_the_recurrent_test",
-        "packaged_worker_and_entrypoint_for_the_recurrent_candidate",
+        "a_built_package_for_this_candidate",
         "repository_frozen_digests_for_this_candidate",
         "neural_execution",
-        "costed_execution_request"}
+        "owner_record_request_and_authority",
+        "the_three_paired_runs_the_criterion_needs"}
+    for name in ("two_matched_arms_and_the_fixed_weight_sweep",
+                 "the_real_worker_connection",
+                 "candidate_specific_entrypoint_and_resource_profile"):
+        assert name in ready["implemented"], name
+    assert ready["budget"]["declared_criterion_usd"] == "21.00"
     assert ready["budget"]["reserved"] == "$375.00"
     assert ready["budget"]["free"] == "$25.00"
     assert "None of it is a measurement of learning" in ready["boundary"]

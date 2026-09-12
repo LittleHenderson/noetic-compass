@@ -314,6 +314,16 @@ def readiness_report():
                 "cas_meta2/recurrent_cjt/course.py: schedule_binding",
             "depth_one_is_the_existing_computation":
                 "tests/test_recurrent_cjt_learner.py: bitwise equality at depth one",
+            "two_matched_arms_and_the_fixed_weight_sweep":
+                ("cas_meta2/recurrent_cjt/experiment.py: run, with the matched "
+                 "start and the arm capacity check enforced rather than promised"),
+            "the_real_worker_connection":
+                ("cas_meta2/recurrent_cjt/runner.py: GPU acquired fail-closed, "
+                 "encoder and framework from the real modules, both arms over the "
+                 "SAME registered module, every payload declared"),
+            "candidate_specific_entrypoint_and_resource_profile":
+                ("aws/recurrent_cjt_launch.py: own schemas, own job pattern, own "
+                 "evidence contract, reusing the proven candidate lifecycle"),
         },
         "declared_choices_filling_declared_gaps": {
             "maintenance_event_source": MAINTENANCE_NOTE["status"],
@@ -323,17 +333,29 @@ def readiness_report():
                 "the delivered rewired direct_inventory rows are examined material "
                 "and cannot be the final test; a fresh panel with the same subtype "
                 "structure does not exist yet"),
-            "packaged_worker_and_entrypoint_for_the_recurrent_candidate": (
-                "no versioned entrypoint, no resource profile, no package"),
+            "a_built_package_for_this_candidate": (
+                "the entrypoint, worker and resource profile now exist in "
+                "aws/recurrent_cjt_launch.py, but no package ARTIFACT has been "
+                "built: a package is built from a commit, and building one is a "
+                "separate step from writing the builder"),
             "repository_frozen_digests_for_this_candidate": (
                 "the encoder and checkpoint digests are frozen for the readout "
                 "candidate, not for this one"),
             "neural_execution": ("no GPU run has been performed or authorised; "
                                  "nothing in this status is a measurement of learning"),
-            "costed_execution_request": ("no request, no authority, no reservation"),
+            "owner_record_request_and_authority": (
+                "no owner authorization record exists for this candidate, and the "
+                "request and authority bind to a package that has not been built"),
+            "the_three_paired_runs_the_criterion_needs": (
+                "the declared criterion is a positive difference in at least two "
+                "of three paired runs. ONE job is an exploratory pilot and cannot "
+                "satisfy it; three jobs cost $21.00 of the $25.00 free"),
         },
         "budget": {"reserved": "$375.00", "cap": "$400.00", "free": "$25.00",
-                   "note": "nothing in this step spent or reserved anything"},
+                   "one_job_usd": "7.00", "declared_criterion_usd": "21.00",
+                   "note": ("nothing in this step spent or reserved anything; the "
+                            "costed request is printed by "
+                            "aws/recurrent_cjt_launch.py --costed-request")},
         "boundary": ("EVERY number in this candidate so far is derived arithmetic or "
                      "plumbing verification on a hand-built stand-in. None of it is a "
                      "measurement of learning, and none of it is evidence that more "
