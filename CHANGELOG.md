@@ -84,6 +84,26 @@ Also committed here: the previously uncommitted `evidence_contract()` in
 `aws/graph6_face_readout_launch.py`, prior in-flight work from the session that
 wrote the handoff. It was left in the working tree, not in git.
 
+**Rebuilt and ready, still unlaunched.** `readout_package_006` is built from
+commit `90413c6d` and carries the fixed worker: in the packaged bytes `def beacon`
+is at line 170 and the entrypoint guard at line 294, and
+`require_definitions_precede_entrypoint` passes on those exact bytes.
+
+| field | value |
+|---|---|
+| `source_sha` | `90413c6dd03375262e55c238a7e37099e6af689b` |
+| `archive_sha256` | `b34e3d9208dc22cafa6d89a147771969223823a1b0e2a19de472c84b3ad49bce` |
+| `manifest_sha256` | `9b9e7450985a5511586dc8c0bee171b74001fbe77be2ead6c71fa62a338eedf6` |
+| `job` | `cas-meta2-graph6read-20260912062331-b34e3d92` |
+| `--request-sha256` | `708024fd2f506b3fd04597dde32bd239df07659dde95322f9d66c1f2b43cf2ef` |
+| `--authority-sha256` | `32d1d932273998908f1637c5b10b4600242bb5179cc2b93876b17394142ba012` |
+| owner authorisation | `OWNER_AUTHORIZATION_READOUT_001.json`, sha256 `e88cdca96ccfc6d3ac63167689887c8dc3fa74954b262e9c5204ac0414068c05`, matching the authority's bound value |
+
+`validate_request` and `validate_authority` both pass. The inert plan reports
+`PLAN_ONLY_NOT_EXECUTED`, `provider_calls: 0`, `reservation_created: false`.
+Nothing has been launched and no reservation has been taken: a paid attempt
+needs a fresh owner GO.
+
 ## 2026-09-11 - CFC Loop x Face-Cue Pilot attempt 004 FINISHED: face-role application learned, recognition weak, both interventions unestablished — and the per-face readout lost to an undeclared artefact
 
 Job `cas-meta2-graph6face-20260911133305-9723735f`, `$7.00` reservation, ledger
