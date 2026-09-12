@@ -1,0 +1,26 @@
+{
+  "artifacts": [
+    {
+      "bytes": 68173,
+      "name": "checkpoint_one_pass.pt",
+      "sha256": "adf8b1d82fda7bf2c49d4f0caa78f5f5f405265542d766f981ecb5fe06fff80f"
+    },
+    {
+      "bytes": 68182,
+      "name": "checkpoint_recurrent.pt",
+      "sha256": "d27da5826cd9e837ad54a516bc4a1c951a1b75061947e19235a824747bf8077b"
+    },
+    {
+      "bytes": 995443,
+      "name": "depth_sweep.json",
+      "sha256": "72a76d2b4e5b51c142a47c2e8f724c316880d51331ab3624122c7bfd189a3ebb"
+    },
+    {
+      "bytes": 931225,
+      "name": "experiment.json",
+      "sha256": "0acfc7c0aa88ccd6f8a02d75bd97bf7e35508c60e127cbf4804187577f0b92c3"
+    }
+  ],
+  "job": "rdcjt-local-smoke",
+  "schema": "cas.recurrent-cjt-artifact-manifest/1"
+}

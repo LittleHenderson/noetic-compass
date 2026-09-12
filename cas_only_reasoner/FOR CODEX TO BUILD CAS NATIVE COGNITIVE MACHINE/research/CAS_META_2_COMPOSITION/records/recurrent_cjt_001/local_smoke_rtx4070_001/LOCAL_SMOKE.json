@@ -1,0 +1,65 @@
+{
+  "aws_comparison": {
+    "agreement": "same direction and similar magnitude on different hardware: local net -13, AWS net -16",
+    "aws_R1": 117,
+    "aws_R8": 101,
+    "aws_net": -16,
+    "job": "cas-meta2-rdcjt-20260912152001-abf38e1e"
+  },
+  "candidate": "CAS_RDCJT_001",
+  "claim_status": "NOT_CLAIM_BEARING",
+  "elapsed_seconds": 117.2,
+  "files": [
+    {
+      "bytes": 68173,
+      "name": "artifacts/checkpoint_one_pass.pt",
+      "sha256": "adf8b1d82fda7bf2c49d4f0caa78f5f5f405265542d766f981ecb5fe06fff80f"
+    },
+    {
+      "bytes": 68182,
+      "name": "artifacts/checkpoint_recurrent.pt",
+      "sha256": "d27da5826cd9e837ad54a516bc4a1c951a1b75061947e19235a824747bf8077b"
+    },
+    {
+      "bytes": 995443,
+      "name": "artifacts/depth_sweep.json",
+      "sha256": "72a76d2b4e5b51c142a47c2e8f724c316880d51331ab3624122c7bfd189a3ebb"
+    },
+    {
+      "bytes": 931225,
+      "name": "artifacts/experiment.json",
+      "sha256": "0acfc7c0aa88ccd6f8a02d75bd97bf7e35508c60e127cbf4804187577f0b92c3"
+    },
+    {
+      "bytes": 755,
+      "name": "artifacts/manifest.json",
+      "sha256": "d10b602ecae25fa8fc92a01ee8dc89d80e6e44ee1243df496a61a42f2f8ff36f"
+    },
+    {
+      "bytes": 11399,
+      "name": "result.json",
+      "sha256": "f837658bf648a50b8a31d98cead68eabc449710ec75092c49349f04f411ed171"
+    },
+    {
+      "bytes": 66,
+      "name": "result.json.sha256",
+      "sha256": "73552549ef07a82161ef72b67455e2db1ee6527b8ff9b835a0b9b245c5e750cf"
+    }
+  ],
+  "hardware": "NVIDIA RTX 4070, torch 2.11.0+cu128, CUDA",
+  "result": {
+    "baseline_correct": 115,
+    "baseline_label": "R1",
+    "gained": 13,
+    "lost": 26,
+    "net": -13,
+    "panel_items": 216,
+    "primary_correct": 102,
+    "primary_label": "R8",
+    "reset_matches_one_pass": true,
+    "weights_unchanged": true
+  },
+  "schema": "cas.recurrent-cjt-local-smoke/1",
+  "what_this_is": "A DEV SMOKE on the local RTX 4070, run to prove the pipeline end to end before spending the last reservation. Governance allows the local GPU for smoke/dev only.",
+  "why_not_claim_bearing": "Local GPU work is dev-only under the owner GPU-first rule. This number is kept because it REPRODUCES the AWS finding on different hardware, not because it is admissible as the result."
+}
