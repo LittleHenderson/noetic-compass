@@ -7,9 +7,12 @@ Monorepo-level log. Subprojects keep their own changelogs
 ## 2026-09-12 - Readout attempt 5 diagnosed at $0: the bootstrap was never the fault. The worker died on `NameError: name 'beacon' is not defined`, because the shared transport was appended AFTER `if __name__ == '__main__': main()`
 
 Job `cas-meta2-graph6read-20260912044325-14fcd081`, instance
-`i-0916a3eedfccea11f`, us-west-2a. Three `$7.00` reservations were spent on this
-bug. The fourth was not needed: the whole diagnosis came from one free,
-read-only `ec2.get_console_output` call.
+`i-0916a3eedfccea11f`, us-west-2a. **Correction to the handoff: FOUR `$7.00`
+reservations were spent on this bug, not three - `$28.00`, none refundable, no
+measurement delivered by any of them.** The handoff omitted
+`cas-meta2-graph6read-20260911160824-bb65cb6e`; the ledger carries all four as
+`RESERVED_NO_AUTOMATIC_REFUND`. A fifth was not needed to find the cause: the
+whole diagnosis came from one free, read-only `ec2.get_console_output` call.
 
 **What the console actually showed.** The `set -x` trace WAS on the serial
 console, and every bootstrap command succeeded - the S3 downloads, the
@@ -103,6 +106,50 @@ is at line 170 and the entrypoint guard at line 294, and
 `PLAN_ONLY_NOT_EXECUTED`, `provider_calls: 0`, `reservation_created: false`.
 Nothing has been launched and no reservation has been taken: a paid attempt
 needs a fresh owner GO.
+
+**Two governance repairs made in the same arc.**
+
+*The launcher never read the owner record.* It checked only that the record's
+sha256 equalled `owner_authorization_sha256` in the authority. It never opened
+the file. So `OWNER_AUTHORIZATION_READOUT_001.json` - which states
+`bounds.jobs: 1` and lists "any further job or automatic retry beyond this
+single readout" under `explicitly_not_authorized` - passed four jobs without
+complaint. `candidate.require_owner_record_bounds` now runs BEFORE the
+reservation, in the shared lifecycle both launchers use. It reads the record and
+enforces what the record says about itself: how many jobs it allows (default 1,
+because a record is the record of one instruction), and, where the record states
+a bound the authority also carries, that the two agree - `reservation_usd`,
+`optimizer_updates`, `panel_items`, `max_wall_seconds`, `conditions`, plus
+`automatic_retries` must be 0 and `training` must be false. The decision is
+written into the receipt's `intent.json` as `owner_record_bounds`, so it is
+auditable after the fact.
+
+Prior-job counting reads each receipt's `intent.json`, which already records the
+authority it ran under. Measured against the whole record directory before the
+gate was written: every owner record had exactly one receipt EXCEPT
+`OWNER_AUTHORIZATION_READOUT_001.json`, which had four. So the default fires on
+the known violation and on nothing else in the history.
+`tests/test_owner_record_bounds.py` (13 tests) runs the gate against those real
+committed records - it must refuse READOUT_001 with
+`OWNER_RECORD_JOB_BUDGET_EXHAUSTED:4_used_of_1_allowed` and pass all four CFC
+pilot records.
+
+Declared limit, not papered over: the gate counts receipts in the record
+directory. It catches reuse of a record inside a tree that holds its receipts,
+which is the committed state. It is not a global ledger check, and it cannot see
+a job launched from a tree without the receipts.
+
+*The fifth job got its own record.* `OWNER_AUTHORIZATION_READOUT_002.json`
+(sha256 `70a0399a47581860d8d7e5e7d1824b9a8ab11bdce33651a68182190554403f2f`)
+carries record 001's scientific bounds unchanged and records the four consumed
+attempts, the known cause and the fix. The owner was shown the discrepancy
+before anything was spent and chose a new record over stretching the old one.
+`candidate_authority_readout_006.json` is rebound to it; authority sha256 is now
+`73bc63de65cc98b222b5dc7b90641c873243650fe5df4a353fe172edb87b9245`.
+
+Consequence, stated plainly: record 002 also says `jobs: 1`. With the gate live,
+a sixth readout job cannot launch against it. Another attempt would need another
+owner record - which is the point.
 
 ## 2026-09-11 - CFC Loop x Face-Cue Pilot attempt 004 FINISHED: face-role application learned, recognition weak, both interventions unestablished — and the per-face readout lost to an undeclared artefact
 

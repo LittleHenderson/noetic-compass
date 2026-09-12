@@ -579,6 +579,85 @@ class CandidateProvider(CurriculumProvider):
         return collected
 
 
+def owner_record_receipt_count(owner_sha256, receipts_root, *, excluding_job=None):
+    """How many receipts already ran under this owner record.
+
+    Every receipt's ``intent.json`` carries the authority it ran under, and the
+    authority carries ``owner_authorization_sha256``, so the history is readable
+    from the record directory without a network call. Receipts are committed, so
+    a fresh checkout sees the same count.
+    """
+    used = []
+    root = Path(receipts_root)
+    if not root.is_dir():
+        return used
+    for intent_path in sorted(root.glob("receipt_*/intent.json")):
+        try:
+            intent = json.loads(intent_path.read_bytes())
+        except (ValueError, OSError):
+            continue
+        authority = intent.get("authority") or {}
+        if authority.get("owner_authorization_sha256") != owner_sha256:
+            continue
+        job = authority.get("job")
+        if excluding_job is not None and job == excluding_job:
+            continue
+        used.append(job or intent_path.parent.name)
+    return used
+
+
+def require_owner_record_bounds(record, authority, *, owner_sha256, receipts_root,
+                                job):
+    """Enforce what the owner record says about itself, before any money moves.
+
+    The launcher used to check only that the record's sha256 matched the value in
+    the authority. It never read the record. So
+    ``OWNER_AUTHORIZATION_READOUT_001.json`` - which states ``bounds.jobs: 1`` and
+    lists "any further job or automatic retry beyond this single readout" under
+    ``explicitly_not_authorized`` - passed four separate jobs, $28.00, none of
+    which delivered a measurement. A bound written in words that no program reads
+    is not a bound.
+
+    Measured against the whole record directory before this was written: every
+    owner record had exactly one receipt except READOUT_001, which had four. So
+    the default of one job per record fires on the known violation and on nothing
+    else in the history.
+
+    Declared limit: this reads receipts in ``receipts_root``. It catches reuse of
+    a record inside a tree that holds its receipts, which is the committed state;
+    it is not a global ledger check.
+    """
+    require(type(record) is dict, "OWNER_RECORD_DOCUMENT_REQUIRED")
+    bounds = record.get("bounds") or {}
+    require(type(bounds) is dict, "OWNER_RECORD_BOUNDS_TYPE")
+
+    # An owner record is the record of ONE instruction, so one job unless it
+    # says otherwise in a number a program can read.
+    allowed = bounds.get("jobs", 1)
+    require(type(allowed) is int and allowed >= 1, "OWNER_RECORD_JOBS_BOUND")
+    used = owner_record_receipt_count(owner_sha256, receipts_root,
+                                      excluding_job=job)
+    require(len(used) < allowed,
+            "OWNER_RECORD_JOB_BUDGET_EXHAUSTED:%d_used_of_%d_allowed:%s"
+            % (len(used), allowed, ",".join(sorted(used))))
+
+    # Where the record states a bound AND the authority carries the same field,
+    # they must agree: the record is what the owner approved, the authority is
+    # what the job will do.
+    for key in ("reservation_usd", "optimizer_updates", "panel_items",
+                "max_wall_seconds", "conditions"):
+        if key in bounds and key in authority:
+            require(bounds[key] == authority[key],
+                    "OWNER_RECORD_BOUND_CONTRADICTED:" + key)
+    if "automatic_retries" in bounds:
+        require(bounds["automatic_retries"] == 0,
+                "OWNER_RECORD_AUTOMATIC_RETRIES_MUST_BE_ZERO")
+    if "training" in bounds:
+        require(bounds["training"] is False, "OWNER_RECORD_TRAINING_NOT_AUTHORIZED")
+    return {"owner_authorization_sha256": owner_sha256, "jobs_allowed": allowed,
+            "jobs_already_used": sorted(used), "bounds_checked": sorted(bounds)}
+
+
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
             receipt_dir=None, owner_authorization_path=None,
             validate_request_fn=None, validate_authority_fn=None,
@@ -599,8 +678,18 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
     validate_authority_fn(authority)
     owner_path = (Path(owner_authorization_path) if owner_authorization_path is not None
                   else OWNER_AUTHORIZATION_PATH)
-    require(authority["owner_authorization_sha256"] == digest(owner_path.read_bytes()),
+    owner_sha256 = digest(owner_path.read_bytes())
+    require(authority["owner_authorization_sha256"] == owner_sha256,
             "OWNER_AUTHORIZATION_RECORD_MISMATCH")
+    # Fail closed BEFORE the reservation, on what the record SAYS and not only on
+    # its hash. Four readout jobs ran against a record authorizing one, because
+    # nothing read it.
+    owner_bounds = require_owner_record_bounds(
+        json.loads(owner_path.read_bytes()), authority,
+        owner_sha256=owner_sha256,
+        receipts_root=(Path(receipt_dir).parent if receipt_dir is not None
+                       else owner_path.parent),
+        job=request.get("job"))
     require(authority["job"] == request["job"]
             and authority["source_sha"] == request["source_sha"],
             "REQUEST_AUTHORITY_MISMATCH")
@@ -627,7 +716,10 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
                                  Path(ledger_path).parent / (RECEIPT_PREFIX + request["job"]))
     write_evidence(directory / "intent.json", canonical({
         "schema": SCHEMA, "request": request, "authority": authority,
-        "ledger_before": ledger_before, "automatic_retries": 0}))
+        "ledger_before": ledger_before, "automatic_retries": 0,
+        # what the owner record itself allowed, and how much of it was already
+        # spent, so the gate's decision is auditable from the receipt
+        "owner_record_bounds": owner_bounds}))
     # The pre-run evidence requirement, frozen before the worker starts and held
     # here independently of anything the worker later uploads
     # (RUN_EVIDENCE_PRESERVATION_001).
