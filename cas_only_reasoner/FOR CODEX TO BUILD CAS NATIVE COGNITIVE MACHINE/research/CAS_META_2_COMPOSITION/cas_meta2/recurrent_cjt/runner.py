@@ -283,9 +283,13 @@ def deliver(*, results, artifacts, job, report):
         "trainable_parameters_by_arm": report["trainable_parameters_by_arm"],
         "panel": report["panel"],
         "checkpoints": report.get("checkpoints") or {},
-        # every payload, named: the collector checks THIS list against the bytes
-        "artifacts": [entry["name"] for entry in staged],
-        "artifact_manifest": staged,
+        # Every payload, as the ENTRY SHAPE the collector reads. This was a list
+        # of plain strings, and graph_training_curriculum_launch._artifact_name
+        # does entry.get("name"), so collection died with
+        # AttributeError: 'str' object has no attribute 'get' AFTER the science
+        # had finished and uploaded - job cas-meta2-rdcjt-20260912152001-abf38e1e.
+        # The envelope must speak the collector's shape, not its own.
+        "artifacts": staged,
         "boundary": report["boundary"],
     }
     raw = (json.dumps(envelope, sort_keys=True, indent=2, allow_nan=False)

@@ -127,8 +127,9 @@ def test_delivery_declares_every_file_it_wrote(tmp_path):
     on_disk = {path.name for path in artifacts.iterdir()
                if path.is_file() and path.name != "manifest.json"}
     assert declared == on_disk, (declared, on_disk)
+    from aws.graph_training_curriculum_launch import _artifact_name
     envelope = json.loads((results / "result.json").read_bytes())
-    assert set(envelope["artifacts"]) == on_disk
+    assert {_artifact_name(e) for e in envelope["artifacts"]} == on_disk
     assert set(out["artifacts"]) == on_disk
 
 
@@ -583,3 +584,39 @@ def test_run_course_never_asks_the_learner_for_an_unindexed_task():
     assert set(looked_up) <= set(known)
     assert outcome["report"]["matches_declaration"] is True
     assert outcome["report"]["missing_rounds"] == []
+
+
+# --------------------------------------------------------------------------
+# the envelope must speak the collector's shape
+# --------------------------------------------------------------------------
+
+def test_the_envelope_artifacts_are_readable_by_the_collector(tmp_path):
+    """The defect that lost a completed run's delivery.
+
+    The envelope listed artifacts as plain strings. The collector reads them with
+    graph_training_curriculum_launch._artifact_name, which calls entry.get("name"),
+    so collection died with AttributeError: 'str' object has no attribute 'get' -
+    AFTER the experiment had trained both arms, run the sweep and uploaded
+    everything. Job cas-meta2-rdcjt-20260912152001-abf38e1e.
+
+    This drives the collector's OWN accessor over the envelope this code writes,
+    rather than asserting a shape I chose.
+    """
+    from aws.graph_training_curriculum_launch import _artifact_name
+    results, artifacts = tmp_path / "results", tmp_path / "results" / "artifacts"
+    artifacts.mkdir(parents=True)
+    (artifacts / "checkpoint_one_pass.pt").write_bytes(b"one")
+    (artifacts / "checkpoint_recurrent.pt").write_bytes(b"rec")
+    runner.deliver(results=results, artifacts=artifacts, job="rdcjt-test",
+                   report=_report())
+    envelope = json.loads((results / "result.json").read_bytes())
+    entries = envelope["artifacts"]
+    assert entries, "no artifacts declared"
+    names = sorted(_artifact_name(entry) for entry in entries)
+    on_disk = sorted(path.name for path in artifacts.iterdir()
+                     if path.is_file() and path.name != "manifest.json")
+    assert names == on_disk, (names, on_disk)
+    for entry in entries:
+        assert isinstance(entry, dict), entry
+        assert set(entry) >= {"name", "sha256", "bytes"}, entry
+        assert len(entry["sha256"]) == 64
