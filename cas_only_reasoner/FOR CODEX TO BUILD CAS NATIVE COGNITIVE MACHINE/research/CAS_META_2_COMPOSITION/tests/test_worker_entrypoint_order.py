@@ -65,9 +65,41 @@ fake = types.ModuleType('boto3')
 fake.client = lambda *a, **k: _S3()
 sys.modules['boto3'] = fake
 
-# No interpreter is 'found', so the worker raises SystemExit in its own first
-# environment step and takes its failure path. Nothing is installed.
-shutil.which = lambda *a, **k: None
+mode = sys.argv[3]
+
+if mode == 'fail':
+    # No interpreter is 'found', so the worker raises SystemExit in its own first
+    # environment step and takes its failure path. Nothing is installed.
+    shutil.which = lambda *a, **k: None
+else:
+    # The environment steps and the inner runner all 'succeed', so the worker
+    # takes its DELIVERED path: the sha check, the shared uploader and the final
+    # print. Every subprocess is faked, so no venv is made, nothing is installed
+    # and no interpreter is started.
+    import hashlib, subprocess
+
+    shutil.which = lambda name, *a, **k: '/usr/bin/' + name
+
+    class _Done:
+        def __init__(self):
+            self.returncode = 0
+            self.stdout = '{}'
+            self.stderr = ''
+
+    def _fake_run(argv, **kwargs):
+        argv = [str(item) for item in argv]
+        if any('_inner_runner.py' in item for item in argv):
+            results = root / 'results'
+            results.mkdir(parents=True, exist_ok=True)
+            body = (json.dumps({'schema': 'fake', 'status': 'FINISHED'},
+                               sort_keys=True, indent=2) + chr(10)).encode('utf-8')
+            (results / 'result.json').write_bytes(body)
+            (results / 'result.json.sha256').write_text(
+                hashlib.sha256(body).hexdigest() + chr(10))
+            (results / 'measurements.json').write_text('{"rows": 1}')
+        return _Done()
+
+    subprocess.run = _fake_run
 
 try:
     runpy.run_path(str(root / sys.argv[2]), run_name='__main__')
@@ -80,7 +112,7 @@ print('DRIVER_STATUS ' + status)
 """
 
 
-def _stage(tmp_path, name, render):
+def _stage(tmp_path, name, render, mode='fail'):
     source = run_evidence.unified_worker_source(render())
     (tmp_path / name).write_text(source, encoding='utf-8')
     (tmp_path / 'config.json').write_text(json.dumps(
@@ -88,8 +120,8 @@ def _stage(tmp_path, name, render):
          'region': 'us-west-2'}), encoding='utf-8')
     driver = tmp_path / '_driver.py'
     driver.write_text(DRIVER, encoding='utf-8')
-    return subprocess.run([sys.executable, '-B', str(driver), str(tmp_path), name],
-                          capture_output=True, text=True, timeout=300)
+    return subprocess.run([sys.executable, '-B', str(driver), str(tmp_path), name,
+                           mode], capture_output=True, text=True, timeout=300)
 
 
 @pytest.mark.parametrize('label,name,render', WORKERS,
@@ -166,3 +198,33 @@ def test_unified_transport_refuses_to_emit_a_trailing_definition():
     guard = run_evidence.entrypoint_index(lines)
     assert guard is not None
     assert 'def beacon(' in source[:len('\n'.join(lines[:guard]))]
+
+
+@pytest.mark.parametrize('label,name,render', WORKERS,
+                         ids=[entry[0] for entry in WORKERS])
+def test_the_delivered_path_runs_to_the_end_without_an_exception(label, name,
+                                                                 render, tmp_path):
+    """The success path, which is where the second defect lived.
+
+    The shared transport replaced each worker's ``upload_results`` with one whose
+    return value had no ``result`` key, while the workers' last line still printed
+    it. That raised ``KeyError: 'result'`` AFTER the evidence had been uploaded,
+    so a delivered run would have reported itself as a crash. Only a run that
+    reaches the final print can see it, so this drives the worker all the way
+    through with every subprocess faked.
+    """
+    result = _stage(tmp_path, name, render, mode='succeed')
+    combined = result.stdout + result.stderr
+    assert 'KeyError' not in combined, combined[-3000:]
+    assert 'NameError' not in combined, combined[-3000:]
+    assert 'DRIVER_STATUS RETURNED' in combined, combined[-3000:]
+    # the run's own result survived: nothing overwrote it with a failure
+    report = json.loads((tmp_path / 'results' / 'result.json').read_bytes())
+    assert report['status'] == 'FINISHED', report
+    assert not (tmp_path / 'results' / 'failure.json').exists()
+    marks = {path.name for path in
+             (tmp_path / 'results' / 'evidence').glob('phase_*.json')}
+    for phase in ('phase_worker_started.json', 'phase_publisher_started.json',
+                  'phase_venv_ready.json', 'phase_inner_runner_starting.json',
+                  'phase_publishing_stopped.json'):
+        assert phase in marks, (phase, sorted(marks))
