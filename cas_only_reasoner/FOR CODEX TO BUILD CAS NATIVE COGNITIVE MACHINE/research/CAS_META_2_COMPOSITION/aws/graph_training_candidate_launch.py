@@ -646,6 +646,9 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
     preflight = reservation = ledger_after = launched = collected = None
     reservation_valid, reservation_error = False, None
     verified = False
+    # assigned before the try, so a failure that happens before the receiver
+    # issues its receipt cannot crash the code that reports the failure
+    receipt = None
     cleanup = {"complete": False, "failures": ["NOT_ATTEMPTED"]}
     outcome = {}
     try:
