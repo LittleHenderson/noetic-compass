@@ -106,7 +106,8 @@ class RecurrentGraphLearner(GraphLearner):
         self.set_depth(depth)
         self.reset_each_pass = bool(reset_each_pass)
         self.accounting = accounting
-        self.transformation_calls = 0
+        self.transformation_calls = 0   # real F_theta invocations
+        self.questions_answered = 0     # calls to passes(), one per question
 
     # ---------------------------------------------------------------- depth
 
@@ -126,6 +127,12 @@ class RecurrentGraphLearner(GraphLearner):
         """
         torch = self.torch
         batched = incoming if torch.is_tensor(incoming) else torch.stack(list(incoming))
+        # Counted HERE, at the real call site. It used to be incremented once per
+        # passes() call, which is once per QUESTION: at depth eight that reported 1
+        # where eight transformations had run, an eightfold understatement in a field
+        # whose name promises the count of transformation calls. Accounting was always
+        # right; this label was not.
+        self.transformation_calls += 1
         return self.module(batched.unsqueeze(0))[0]
 
     def passes(self, encoded, *, state=None):
@@ -142,7 +149,7 @@ class RecurrentGraphLearner(GraphLearner):
             zeros=lambda count: torch.zeros(count, dtype=encoded.dtype,
                                             device=encoded.device),
             reset_each_pass=self.reset_each_pass)
-        self.transformation_calls += 1
+        self.questions_answered += 1
         return torch.stack(list(final))
 
     def value_at_depth(self, *, problem_vector=None, public=None,
@@ -225,6 +232,10 @@ class RecurrentGraphLearner(GraphLearner):
         return {"schema": SCHEMA, "depth": self.depth,
                 "reset_each_pass": self.reset_each_pass,
                 "transformation_calls": self.transformation_calls,
+                "questions_answered": self.questions_answered,
+                "transformation_calls_meaning": (
+                    "invocations of the shared core F_theta, counted at the call "
+                    "site; at depth d one question contributes d of these"),
                 "trainable_parameters": len(
                     [1 for _ in self.module.named_parameters()]),
                 "state_scope": "one fresh zero state per answer, per question",

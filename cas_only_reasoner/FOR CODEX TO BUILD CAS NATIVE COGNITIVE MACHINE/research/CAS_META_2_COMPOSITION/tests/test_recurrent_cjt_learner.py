@@ -509,3 +509,53 @@ def test_the_learner_report_states_its_scope():
     assert report["reset_each_pass"] is False
     assert report["trainable_parameters"] == 3
     assert report["state_scope"].startswith("one fresh zero state per answer")
+
+
+
+# --------------------------------------------------------------------------
+# the compute label must equal the compute
+# --------------------------------------------------------------------------
+
+@pytest.mark.parametrize("depth", [1, 2, 4, 8])
+def test_transformation_calls_counts_transformations_not_questions(depth):
+    """At depth d, ONE question must report d transformation calls, not 1.
+
+    The field used to be incremented once per passes() call - once per QUESTION -
+    so at depth eight it reported 1 where eight transformations had run. Accounting
+    was always right; this label was not, and a field named transformation_calls
+    that silently counts questions is exactly the kind of number this project must
+    not ship.
+    """
+    learner = _learner(depth=depth, framework=TinyFramework())
+    encoded = learner._problem_vectors[0]
+    with torch.no_grad():
+        learner.value_at_depth(problem_vector=encoded)
+    assert learner.transformation_calls == depth
+    assert learner.questions_answered == 1
+    report = learner.depth_report()
+    assert report["transformation_calls"] == depth
+    assert report["questions_answered"] == 1
+
+
+def test_two_questions_at_depth_eight_report_sixteen_transformations():
+    learner = _learner(depth=8, framework=TinyFramework())
+    encoded = learner._problem_vectors[0]
+    with torch.no_grad():
+        learner.value_at_depth(problem_vector=encoded)
+        learner.value_at_depth(problem_vector=encoded)
+    assert learner.transformation_calls == 16
+    assert learner.questions_answered == 2
+
+
+def test_the_reported_transformation_calls_match_the_accounting(self=None):
+    """The label and the ledger must agree: both count real core invocations."""
+    accounting = rc.Accounting()
+    learner = _learner(depth=4, framework=TinyFramework(), accounting=accounting)
+    batch = list(learner.tasks[:2])
+    ml.recurrent_batch_step(learner, batch)
+    report = accounting.report()
+    assert report["batched_core_forward_calls"] == 4      # one batched call per pass
+    assert report["sample_level_core_passes"] == 8        # 4 passes x 2 questions
+    assert report["optimizer_updates"] == 1
+    # the learner counted one core invocation per question per pass
+    assert learner.transformation_calls == 8
