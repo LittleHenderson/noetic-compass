@@ -559,9 +559,26 @@ class RecurrentCjtProvider(candidate.CandidateProvider):
                 "training": True}
 
 
+#: The curriculum builder's SOURCE_DIRS cover cas_meta2/graph_teaching and
+#: cas_meta2/teaching_cycle ONLY. This candidate's own package is not in them, so
+#: without this list the package ships the worker and none of the modules it
+#: imports, and the instance dies on ModuleNotFoundError after the reservation is
+#: spent. Named explicitly rather than globbed: a module that is not listed is a
+#: module that does not deploy, and that should be a visible edit.
+RECURRENT_MODULES = (
+    "cas_meta2/recurrent_cjt/__init__.py",
+    "cas_meta2/recurrent_cjt/recurrence.py",
+    "cas_meta2/recurrent_cjt/learner.py",
+    "cas_meta2/recurrent_cjt/course.py",
+    "cas_meta2/recurrent_cjt/experiment.py",
+    "cas_meta2/recurrent_cjt/runner.py",
+)
+
+
 def package_data_files():
-    """Extra members the deployed tree needs beyond the git-tracked sources."""
-    return ()
+    """Extra members the deployed tree needs beyond the builder's SOURCE_DIRS."""
+    from aws.graph_training_curriculum_launch import PILOT
+    return tuple(PILOT + name for name in RECURRENT_MODULES)
 
 
 def build_recurrent_package(output, *, source_sha, git_bytes_fn=None,

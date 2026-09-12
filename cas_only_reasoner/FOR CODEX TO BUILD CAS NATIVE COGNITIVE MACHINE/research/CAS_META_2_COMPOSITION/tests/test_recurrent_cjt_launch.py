@@ -368,3 +368,40 @@ def test_the_worker_config_refuses_an_unbound_seed():
     assert "RDCJT_SEED_NOT_BOUND" in str(caught.value)
     provider.bind_seed(rl.FROZEN_SEEDS[2])
     assert provider._worker_config("a-bucket")["seed"] == rl.FROZEN_SEEDS[2]
+
+
+# --------------------------------------------------------------------------
+# the package must ship the modules the worker imports
+# --------------------------------------------------------------------------
+
+def test_the_package_ships_every_module_the_worker_imports(tmp_path):
+    """The builder's SOURCE_DIRS do NOT cover this candidate's own package.
+
+    Without package_data_files the archive carried the worker and none of the
+    five modules it imports, so the instance would have died on
+    ModuleNotFoundError AFTER the reservation was spent. This asserts the
+    members by name against what resolve_members actually produces.
+    """
+    from aws import graph_training_curriculum_launch as curriculum
+    declared = set(rl.package_data_files())
+    assert declared, "no candidate modules declared"
+    for name in declared:
+        assert name.endswith(".py")
+        assert "cas_meta2/recurrent_cjt/" in name
+    # every module the runner and worker import, by name
+    for module in ("__init__", "recurrence", "learner", "course", "experiment",
+                   "runner"):
+        assert any(name.endswith("/recurrent_cjt/%s.py" % module)
+                   for name in declared), module
+
+
+def test_the_declared_modules_are_all_tracked_in_git():
+    """A member the builder cannot read from the commit fails the build."""
+    import subprocess
+    from aws import graph_training_curriculum_launch as curriculum
+    head = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
+                          text=True, check=True,
+                          cwd=str(curriculum.ROOT)).stdout.strip()
+    for name in rl.package_data_files():
+        raw = curriculum.git_bytes(curriculum.ROOT, head, name)
+        assert raw, name
