@@ -1,0 +1,116 @@
+{
+  "schema": "cas-cube-face-readout-owner-authorization/1",
+  "recorded_utc": "2026-09-12T07:26:32.000000+00:00",
+  "owner_instruction_raw": "draft record 003 plus request/authority against package 007, and launch",
+  "instruction_interpretation": "The owner authorises ONE further bounded zero-update readout job, the sixth overall, using package 007. Record 002 bounds itself to jobs: 1 and has been used once, and the owner-record gate committed at 82205d14 now refuses a further job against it, so a new record is required and the owner instructed one directly rather than being asked again. The scientific bounds are unchanged from records 001 and 002: one job, zero optimizer updates, no training, the frozen 192-item panel plus 24 diagnostics, the four delivered checkpoints, $7.00, no automatic retries. What changed since record 002 is engineering only: the create-only upload conflict that killed the fifth job AFTER its science had finished is fixed, and package 007 carries the fix.",
+  "attempt": 3,
+  "supersedes": {
+    "record": "OWNER_AUTHORIZATION_READOUT_002.json",
+    "sha256": "70a0399a47581860d8d7e5e7d1824b9a8ab11bdce33651a68182190554403f2f",
+    "relationship": "the scientific authorisation is carried forward unchanged from records 001 and 002; only the job count is extended"
+  },
+  "prior_attempts_consumed": {
+    "count": 5,
+    "reserved_usd_total": "35.00",
+    "jobs": [
+      {
+        "job": "cas-meta2-graph6read-20260911160824-bb65cb6e",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false,
+        "cause": "not diagnosed in this arc"
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912004619-d25f84ba",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false,
+        "cause": "unbound receipt crash"
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912013748-801da48f",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false,
+        "cause": "InsufficientInstanceCapacity in us-west-2d"
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912044325-14fcd081",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false,
+        "cause": "NameError: name 'beacon' is not defined - the shared transport was appended after the worker's entrypoint guard"
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912062331-b34e3d92",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false,
+        "science_completed": true,
+        "cause": "create-only upload conflict: upload_results ran without the publisher's map, re-put files already in the bucket, and the conflict handler's read-back was denied because the job role granted s3:GetObject on input/* only. The readout itself had ALREADY finished and its payload was already uploaded."
+      }
+    ],
+    "what_the_fifth_job_recovered": "the measurement IS recovered and verified - reproduction.reproduced true, checked 12, mismatches [] - but the JOB failed its delivery contract: execution FAILED, checkpoint_collection NOT_ATTEMPTED, measurement_completeness NOT_EVALUATED, completed_deliverable false. The payload is preserved at receipt_cas-meta2-graph6read-20260912062331-b34e3d92/rescued_evidence/ with digests matching the worker's own manifest. This sixth job is therefore for the DELIVERY CONTRACT, not for new science.",
+    "fixes_since_record_002": "unified_transport hands the publisher's _published map to the final upload_results so the conflict does not arise; publish_once records a conflict it cannot read back as unverified_existing and continues, while a readable genuine mismatch still raises EVIDENCE_DIGEST_CONFLICT; the worker role now grants s3:GetObject on results/* as well as input/*, with writes still confined to results/*. Covered by tests/test_transport_conflict_recovery.py, which reproduces the production failure."
+  },
+  "package": {
+    "package": "readout_package_007",
+    "source_sha": "4716dbe565c5dc695f7583c204d608bb40524e4a",
+    "archive_sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723",
+    "manifest_sha256": "04cfe417bd1d007d71210fae6cc731c695f0566f7d5c7611a7f6fdbf02197a79",
+    "verified_on_the_packaged_bytes": [
+      "every top-level definition precedes the entrypoint guard",
+      "the final upload call is upload_results(s3, bucket, results_dir.parent, _published)"
+    ]
+  },
+  "readout_of": {
+    "job": "cas-meta2-graph6face-20260911133305-9723735f",
+    "attempt": 4,
+    "receipt": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/",
+    "delivered": "four conditions TEACHING_COMPLETE at 4608/4608 episodes and 576 updates each, four checkpoints verified, collection VERIFIED, cleanup COMPLETE, instance i-046de3ddc12d5835e CONFIRMED_TERMINATED, elapsed 724.33 s, $7.00 reserved at ledger revision 60",
+    "lost": "results/measurements.json, written by the body and uploaded by the outer worker but absent from the result envelope's artifact list, so verified collection kept only the four checkpoints and cleanup deleted the bucket; its digest survives as measurements_sha256 796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "why_the_readout_can_recover_it": "the four checkpoints were collected and their file hashes match the envelope, so the trained weights survive; the panel is frozen and arm-independent; and the evaluation path is deterministic, so the same code that produced the delivered layer totals can be run again from those weights with no training"
+  },
+  "what_the_readout_may_produce": [
+    "per-condition, per-face counts and macro accuracy for role_recognition, role_application and targeted_check",
+    "every per-question row for the 192 primary questions and the 24 diagnostics, with expected and selected answers, the three scores, the loss and the delivered slot order",
+    "the before/after pairing per layer, computed from a deterministically reconstructed initial state",
+    "the constant-rule baselines per layer, computed from the delivered option order",
+    "the plan's milestone report, including which faces fall below the 0.50 minimum",
+    "the four declared paired comparisons between conditions, which the delivered envelope could not carry because a paired test needs the per-question rows"
+  ],
+  "bounds": {
+    "jobs": 1,
+    "conditions": [
+      "cfc_stable_cues",
+      "cfc_neutral_cue",
+      "mixed_order_stable_cues",
+      "mixed_order_neutral_cue"
+    ],
+    "optimizer_updates": 0,
+    "training": false,
+    "panel_items": 192,
+    "diagnostics": 24,
+    "max_wall_seconds": 1200.0,
+    "install_allowance_seconds": 600.0,
+    "total_wall_clock_ceiling_seconds": 1800.0,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0
+  },
+  "execution_gates": [
+    "the four checkpoint file hashes are bound in the authority; a file that does not hash to the delivered value fails the job closed before it is read",
+    "the parameter digest recorded inside each checkpoint is recomputed from its stored tensors; a mismatch fails the job closed",
+    "the zero-update claim is measured per condition: the parameter digest after loading the checkpoint must equal the digest after the last panel pass, and a change during either pass fails the job closed",
+    "the recomputed per-layer totals must equal the totals attempt 004 published, which are bound by digest in the authority; a mismatch is delivered as READOUT_FAILED, never presented as the recovered detail",
+    "no optimizer is constructed with intent to step, no gradient is computed, no checkpoint is written, and no attempt-004 artefact is modified",
+    "the readout writes only into its own record directory; the payloads are declared as artefacts so verified collection cannot drop them as attempt 004's were",
+    "zero automatic retries; compute shutdown and evidence deletion are separate steps",
+    "every top-level definition in the packaged worker precedes its entrypoint guard, checked on the packaged bytes before launch",
+    "the final upload is handed the publisher's record of what it already sent, so a create-only conflict cannot arise from re-uploading the job's own files",
+    "a create-only conflict whose object cannot be read back is recorded as unverified_existing and does not destroy a delivery that already happened; a readable genuine digest mismatch still fails the job closed"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single readout",
+    "any training, fine-tuning, retraining or optimizer step of any kind",
+    "any change to the frozen panel, the checkpoint set, the declared comparisons or the bounds",
+    "any change to attempt 004's receipt, checkpoints or records, or to attempt 007's",
+    "presenting the reconstructed before readings as the run's own before readings, or presenting the readout as a new measurement rather than a recovery",
+    "any claim that the readout resolves the recognition weakness, the loop-versus-mixed question or the cue question; it reports counts, and the paired comparisons it recovers are counts of discordant questions, not a significance result",
+    "any promotion of a claim beyond what a single matched initialization can support"
+  ]
+}
