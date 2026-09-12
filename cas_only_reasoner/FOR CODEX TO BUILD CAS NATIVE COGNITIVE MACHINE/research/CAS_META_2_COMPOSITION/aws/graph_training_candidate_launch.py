@@ -665,7 +665,21 @@ def require_owner_record_bounds(record, authority, *, owner_sha256, receipts_roo
         require(bounds["automatic_retries"] == 0,
                 "OWNER_RECORD_AUTOMATIC_RETRIES_MUST_BE_ZERO")
     if "training" in bounds:
-        require(bounds["training"] is False, "OWNER_RECORD_TRAINING_NOT_AUTHORIZED")
+        # The record and the job must AGREE about whether training happens - not
+        # "no record may authorise training", which is what this said first. That
+        # was right for the readout, whose whole point is zero updates, and wrong
+        # as a general rule: it refused CAS_RDCJT_001, a training candidate whose
+        # record correctly declares training true. It fired before the
+        # reservation, so it cost nothing, but a gate that refuses a legitimate
+        # job is as broken as one that admits an illegitimate one.
+        if "training" in authority:
+            require(bounds["training"] == authority["training"],
+                    "OWNER_RECORD_TRAINING_DISAGREES_WITH_AUTHORITY")
+        else:
+            # A job that does not declare training must not be authorised to
+            # train: silence is not consent in this direction.
+            require(bounds["training"] is False,
+                    "OWNER_RECORD_TRAINING_NOT_AUTHORIZED")
     return {"owner_authorization_sha256": owner_sha256, "jobs_allowed": allowed,
             "jobs_already_used": sorted(used), "bounds_checked": sorted(bounds)}
 

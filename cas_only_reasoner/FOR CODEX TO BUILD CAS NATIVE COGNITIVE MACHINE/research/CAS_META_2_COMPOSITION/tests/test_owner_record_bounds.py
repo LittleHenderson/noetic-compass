@@ -136,3 +136,55 @@ def test_an_unreadable_receipt_is_skipped_not_fatal(tmp_path):
     receipt.mkdir()
     (receipt / "intent.json").write_text("{not json")
     assert candidate.owner_record_receipt_count("f" * 64, tmp_path) == []
+
+
+# --------------------------------------------------------------------------
+# training: the record and the job must AGREE
+# --------------------------------------------------------------------------
+
+def _bounds(**overrides):
+    bounds = {"jobs": 1}
+    bounds.update(overrides)
+    return {"bounds": bounds}
+
+
+def test_a_training_record_authorises_a_training_job(tmp_path):
+    """The rule that had to be fixed.
+
+    The gate first said "no owner record may authorise training". That is right
+    for the readout, whose whole point is zero optimizer updates, and wrong as a
+    general rule: it refused CAS_RDCJT_001, a training candidate whose record
+    correctly declares training true. It fired before the reservation so it cost
+    nothing, but a gate that refuses a legitimate job is as broken as one that
+    admits an illegitimate one.
+    """
+    report = candidate.require_owner_record_bounds(
+        _bounds(training=True), {"job": "j", "training": True},
+        owner_sha256="a" * 64, receipts_root=tmp_path, job="j")
+    assert report["jobs_allowed"] == 1
+
+
+def test_a_non_training_record_refuses_a_training_job(tmp_path):
+    with pytest.raises(Exception) as caught:
+        candidate.require_owner_record_bounds(
+            _bounds(training=False), {"job": "j", "training": True},
+            owner_sha256="a" * 64, receipts_root=tmp_path, job="j")
+    assert "OWNER_RECORD_TRAINING_DISAGREES_WITH_AUTHORITY" in str(caught.value)
+
+
+def test_a_training_record_refuses_a_job_that_does_not_declare_training(tmp_path):
+    """Silence is not consent in this direction."""
+    with pytest.raises(Exception) as caught:
+        candidate.require_owner_record_bounds(
+            _bounds(training=True), {"job": "j"},
+            owner_sha256="a" * 64, receipts_root=tmp_path, job="j")
+    assert "OWNER_RECORD_TRAINING_NOT_AUTHORIZED" in str(caught.value)
+
+
+def test_the_readout_shape_still_passes(tmp_path):
+    """record training false, authority with no training field: the readout."""
+    report = candidate.require_owner_record_bounds(
+        _bounds(training=False, optimizer_updates=0),
+        {"job": "j", "optimizer_updates": 0},
+        owner_sha256="a" * 64, receipts_root=tmp_path, job="j")
+    assert "training" in report["bounds_checked"]
