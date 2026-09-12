@@ -827,13 +827,26 @@ class CurriculumProvider:
             time.sleep(poll_interval)
 
     def _user_data(self, bucket):
-        return "\n".join([
-            "#!/bin/bash", "set -eu", "umask 077",
+        """The instance bootstrap. POSIX-safe on purpose: no bashisms.
+
+        Run diagnostics flagged a bootstrap failure that cloud-init reported only as
+        ``scripts_user`` failed, with no trace of which command broke. The first
+        attempt at a fix used ``exec > >(tee -a ... /dev/console)``, which is a bash
+        process substitution: if the script is executed by ``sh`` that line is a
+        syntax error and the script dies before writing anything, which is exactly
+        what the console then showed - a scripts_user failure and no trace at all.
+
+        So the script no longer redirects anything and instead relies on cloud-init,
+        which already sends script output to the serial console: that is why its own
+        warning appears there. ``set -x`` makes every command echo, so a failure
+        before the worker starts is readable with get_console_output after the
+        instance is gone. The check below refuses a bashism at build time.
+        """
+        lines = [
+            "#!/bin/bash", "set -eu", "set -x", "umask 077",
             "export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=''",
             "export CAS_META2_RUN_TEACHING_CYCLE=1",
             "mkdir -p /opt/cas-graph6curr/package",
-            "exec > >(tee -a /opt/cas-graph6curr/bootstrap.log /dev/console) 2>&1",
-            "set -x",
             "timeout 120 aws s3api get-object --bucket " + bucket
             + " --key input/source.zip /opt/cas-graph6curr/package/source.zip --region "
             + self.region,
@@ -850,7 +863,15 @@ class CurriculumProvider:
             "test -n \"$PY\" || { echo SUPPORTED_PYTHON_REQUIRED; exit 1; }",
             "\"$PY\" -B /opt/cas-graph6curr/package/" + self.worker_name,
             "",
-        ])
+        ]
+        script = "\n".join(lines)
+        # A bashism here is not a style question: process substitution or [[ ]] makes
+        # the script a syntax error under sh, which costs a whole reservation and
+        # leaves cloud-init's one-line warning as the only evidence.
+        for bashism in (">(", "<(", "[[", "]]", "$((", "function "):
+            require(bashism not in script,
+                    "BOOTSTRAP_NOT_POSIX_SAFE:" + bashism)
+        return script
 
     def launch(self, job, permit):
         self.calls.append("launch")
