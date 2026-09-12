@@ -1,0 +1,101 @@
+{
+  "schema": "cas-cube-face-readout-owner-authorization/1",
+  "recorded_utc": "2026-09-12T06:34:45.000000+00:00",
+  "owner_instruction_raw": "GO - launch the readout with package 006",
+  "instruction_interpretation": "The owner authorises ONE further bounded zero-update readout job, the fifth overall, using package 006. This record exists because OWNER_AUTHORIZATION_READOUT_001.json bounds itself to jobs: 1 and explicitly does not authorise any further job, while four jobs have already been reserved against it. Launching a fifth under that record would put more jobs against it than its own text allows, so the owner was shown the discrepancy before anything was spent and chose to authorise the further job in a new record rather than stretch the old one. The scientific bounds are unchanged from record 001: one job, zero optimizer updates, no training, the frozen panel, the four delivered checkpoints, $7.00, no automatic retries.",
+  "attempt": 2,
+  "supersedes": {
+    "record": "OWNER_AUTHORIZATION_READOUT_001.json",
+    "sha256": "e88cdca96ccfc6d3ac63167689887c8dc3fa74954b262e9c5204ac0414068c05",
+    "relationship": "the scientific authorisation is carried forward unchanged; only the job count is extended"
+  },
+  "prior_attempts_consumed": {
+    "count": 4,
+    "reserved_usd_total": "28.00",
+    "jobs": [
+      {
+        "job": "cas-meta2-graph6read-20260911160824-bb65cb6e",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912004619-d25f84ba",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912013748-801da48f",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false
+      },
+      {
+        "job": "cas-meta2-graph6read-20260912044325-14fcd081",
+        "reserved_usd": "7.00",
+        "delivered_measurement": false
+      }
+    ],
+    "none_delivered": "no prior attempt produced a measurement; every reservation is spent and none is refundable",
+    "cause_now_known": "the worker died in its module body with NameError: name 'beacon' is not defined, because the shared transport was appended after if __name__ == '__main__': main(). Found from the serial console of instance i-0916a3eedfccea11f at $0, not from a further paid attempt.",
+    "fix": "run_evidence.insert_before_entrypoint places the transport before the entrypoint guard; require_definitions_precede_entrypoint refuses any worker whose module body binds a top-level name after the guard; the shared upload_results returns the 'result' key its callers print, which a second defect had dropped. Commits 2b5d96db and 90413c6d, covered by tests/test_worker_entrypoint_order.py, which runs both workers as __main__ and is verified against both real failures."
+  },
+  "package": {
+    "package": "readout_package_006",
+    "source_sha": "90413c6dd03375262e55c238a7e37099e6af689b",
+    "archive_sha256": "b34e3d9208dc22cafa6d89a147771969223823a1b0e2a19de472c84b3ad49bce",
+    "manifest_sha256": "9b9e7450985a5511586dc8c0bee171b74001fbe77be2ead6c71fa62a338eedf6",
+    "job": "cas-meta2-graph6read-20260912062331-b34e3d92"
+  },
+  "readout_of": {
+    "job": "cas-meta2-graph6face-20260911133305-9723735f",
+    "attempt": 4,
+    "receipt": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/",
+    "delivered": "four conditions TEACHING_COMPLETE at 4608/4608 episodes and 576 updates each, four checkpoints verified, collection VERIFIED, cleanup COMPLETE, instance i-046de3ddc12d5835e CONFIRMED_TERMINATED, elapsed 724.33 s, $7.00 reserved at ledger revision 60",
+    "lost": "results/measurements.json, written by the body and uploaded by the outer worker but absent from the result envelope's artifact list, so verified collection kept only the four checkpoints and cleanup deleted the bucket; its digest survives as measurements_sha256 796658502cba1d3a03f026d3c7f5c97365de7bb35d7f312a5b105e0fa59dffee",
+    "why_the_readout_can_recover_it": "the four checkpoints were collected and their file hashes match the envelope, so the trained weights survive; the panel is frozen and arm-independent; and the evaluation path is deterministic, so the same code that produced the delivered layer totals can be run again from those weights with no training"
+  },
+  "what_the_readout_may_produce": [
+    "per-condition, per-face counts and macro accuracy for role_recognition, role_application and targeted_check",
+    "every per-question row for the 192 primary questions and the 24 diagnostics, with expected and selected answers, the three scores, the loss and the delivered slot order",
+    "the before/after pairing per layer, computed from a deterministically reconstructed initial state",
+    "the constant-rule baselines per layer, computed from the delivered option order",
+    "the plan's milestone report, including which faces fall below the 0.50 minimum",
+    "the four declared paired comparisons between conditions, which the delivered envelope could not carry because a paired test needs the per-question rows"
+  ],
+  "bounds": {
+    "jobs": 1,
+    "conditions": [
+      "cfc_stable_cues",
+      "cfc_neutral_cue",
+      "mixed_order_stable_cues",
+      "mixed_order_neutral_cue"
+    ],
+    "optimizer_updates": 0,
+    "training": false,
+    "panel_items": 192,
+    "diagnostics": 24,
+    "max_wall_seconds": 1200.0,
+    "install_allowance_seconds": 600.0,
+    "total_wall_clock_ceiling_seconds": 1800.0,
+    "reservation_usd": "7.00",
+    "automatic_retries": 0
+  },
+  "execution_gates": [
+    "the four checkpoint file hashes are bound in the authority; a file that does not hash to the delivered value fails the job closed before it is read",
+    "the parameter digest recorded inside each checkpoint is recomputed from its stored tensors; a mismatch fails the job closed",
+    "the zero-update claim is measured per condition: the parameter digest after loading the checkpoint must equal the digest after the last panel pass, and a change during either pass fails the job closed",
+    "the recomputed per-layer totals must equal the totals attempt 004 published, which are bound by digest in the authority; a mismatch is delivered as READOUT_FAILED, never presented as the recovered detail",
+    "no optimizer is constructed with intent to step, no gradient is computed, no checkpoint is written, and no attempt-004 artefact is modified",
+    "the readout writes only into its own record directory; the payloads are declared as artefacts so verified collection cannot drop them as attempt 004's were",
+    "zero automatic retries; compute shutdown and evidence deletion are separate steps",
+    "every top-level definition in the packaged worker precedes its entrypoint guard, checked on the packaged bytes before launch"
+  ],
+  "explicitly_not_authorized": [
+    "any further job or automatic retry beyond this single readout",
+    "any training, fine-tuning, retraining or optimizer step of any kind",
+    "any change to the frozen panel, the checkpoint set, the declared comparisons or the bounds",
+    "any change to attempt 004's receipt, checkpoints or records, or to attempt 007's",
+    "presenting the reconstructed before readings as the run's own before readings, or presenting the readout as a new measurement rather than a recovery",
+    "any claim that the readout resolves the recognition weakness, the loop-versus-mixed question or the cue question; it reports counts, and the paired comparisons it recovers are counts of discordant questions, not a significance result",
+    "any promotion of a claim beyond what a single matched initialization can support"
+  ]
+}
