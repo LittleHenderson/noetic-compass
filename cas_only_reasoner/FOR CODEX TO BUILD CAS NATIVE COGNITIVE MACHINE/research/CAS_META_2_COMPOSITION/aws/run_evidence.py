@@ -1169,6 +1169,18 @@ def unified_transport(source, *, evidence_subdir="results", marker="result.json"
     # directory; the copies took the results directory
     for call in (", results_dir)", ", results)"):
         text = text.replace(call, call[:-1] + ".parent)")
+    # Hand the publisher's own record of what it already uploaded to the final
+    # upload. Without it the final pass starts from an EMPTY map, re-puts every
+    # file the publisher had already sent, and every one of those create-only
+    # puts conflicts. Job cas-meta2-graph6read-20260912062331-b34e3d92 died that
+    # way AFTER its readout was complete and uploaded: the conflict handler tried
+    # to read the object back to compare digests, the job role grants GetObject on
+    # input/* only, and the AccessDenied killed the worker before it could write
+    # results/result.json. The science was done; the delivery marker was lost.
+    text = text.replace("upload_results(s3, bucket, results_dir.parent)",
+                        "upload_results(s3, bucket, results_dir.parent, _published)")
+    text = text.replace("upload_results(s3, bucket, results.parent)",
+                        "upload_results(s3, bucket, results.parent, _published)")
 
     # Environment phases are marked as they complete, and the publisher is started
     # BEFORE the install rather than after the run. The 2026-09-11 readout burned its
@@ -1318,7 +1330,7 @@ def render_transport(*, evidence_subdir="results", marker="result.json",
         "def publish_once(s3, bucket, root, published, marker_name=%r," % marker,
         "                 sidecar_name=%r):" % sidecar,
         "    \"\"\"Upload new completed files. Create-only where the SDK supports it.\"\"\"",
-        "    uploaded, skipped = [], []",
+        "    uploaded, skipped, unverified = [], [], []",
         "    for path in evidence_files(root):",
         "        key = path.relative_to(root).as_posix()",
         "        if key.endswith('.partial') or key.endswith('.tmp'):",
@@ -1337,8 +1349,18 @@ def render_transport(*, evidence_subdir="results", marker="result.json",
         "        except Exception as error:                      # noqa: BLE001",
         "            code = getattr(error, 'response', {}).get('Error', {}).get('Code')",
         "            if code in ('PreconditionFailed', 'ConditionalRequestConflict'):",
-        "                existing = s3.get_object(Bucket=bucket, Key=key)",
-        "                current = existing['Body'].read()",
+        "                try:",
+        "                    existing = s3.get_object(Bucket=bucket, Key=key)",
+        "                    current = existing['Body'].read()",
+        "                except Exception as read_error:          # noqa: BLE001",
+        "                    # The key is already there - create-only said so - but",
+        "                    # we cannot read it back to compare. Losing the whole",
+        "                    # delivery over a file that IS uploaded is the worse",
+        "                    # failure, so record it and carry on.",
+        "                    unverified.append({'key': key,",
+        "                                       'reason': type(read_error).__name__})",
+        "                    published[key] = digest_value",
+        "                    continue",
         "                if hashlib.sha256(current).hexdigest() != digest_value:",
         "                    raise SystemExit('EVIDENCE_DIGEST_CONFLICT:' + key)",
         "                published[key] = digest_value",
@@ -1348,6 +1370,7 @@ def render_transport(*, evidence_subdir="results", marker="result.json",
         "        uploaded.append({'key': key, 'sha256': digest_value,",
         "                         'bytes': len(body)})",
         "    return {'uploaded': uploaded, 'skipped': skipped,",
+        "            'unverified_existing': unverified,",
         "            'artifacts': [entry['key'] for entry in uploaded],",
         "            'published_sequence': len(published),",
         "            'transport_tail': [key for key in skipped",

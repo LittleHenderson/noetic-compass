@@ -1,0 +1,16 @@
+{
+  "artifacts": [
+    {
+      "bytes": 21406,
+      "name": "measurements.json",
+      "sha256": "d43cffa74f446dee6a850f384ebd13adc2360be5949b1acb3cb095c7c3e29b50"
+    },
+    {
+      "bytes": 2610908,
+      "name": "readout.json",
+      "sha256": "83c42de0d1198406c1dec37f6048e4126ab2bdb9efc289ac89b958b877526108"
+    }
+  ],
+  "job": "cas-meta2-graph6read-20260912062331-b34e3d92",
+  "schema": "cas.cube-face-artifact-manifest/1"
+}

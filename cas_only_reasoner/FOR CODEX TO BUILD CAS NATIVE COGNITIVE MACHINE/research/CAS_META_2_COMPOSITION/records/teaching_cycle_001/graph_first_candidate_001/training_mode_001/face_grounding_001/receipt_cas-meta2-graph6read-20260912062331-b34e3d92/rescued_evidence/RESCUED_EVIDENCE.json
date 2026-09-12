@@ -1,0 +1,74 @@
+{
+  "all_declared_artifacts_match": true,
+  "artifact_digests_verified_against_the_workers_own_manifest": {
+    "measurements.json": {
+      "declared_sha256": "d43cffa74f446dee6a850f384ebd13adc2360be5949b1acb3cb095c7c3e29b50",
+      "matches": true,
+      "observed_sha256": "d43cffa74f446dee6a850f384ebd13adc2360be5949b1acb3cb095c7c3e29b50"
+    },
+    "readout.json": {
+      "declared_sha256": "83c42de0d1198406c1dec37f6048e4126ab2bdb9efc289ac89b958b877526108",
+      "matches": true,
+      "observed_sha256": "83c42de0d1198406c1dec37f6048e4126ab2bdb9efc289ac89b958b877526108"
+    }
+  },
+  "collected_by": "manual read-only download from s3://cas-meta2-graph6read-20260912062331-b34e3d92-807562639912/results/",
+  "files": [
+    {
+      "bytes": 433,
+      "name": "artifacts/manifest.json",
+      "sha256": "a8a0026c37fe49ccf0f75beb6bb2fc305d9f203e0957a141876cd2063ad4684c"
+    },
+    {
+      "bytes": 21406,
+      "name": "artifacts/measurements.json",
+      "sha256": "d43cffa74f446dee6a850f384ebd13adc2360be5949b1acb3cb095c7c3e29b50"
+    },
+    {
+      "bytes": 2610908,
+      "name": "artifacts/readout.json",
+      "sha256": "83c42de0d1198406c1dec37f6048e4126ab2bdb9efc289ac89b958b877526108"
+    },
+    {
+      "bytes": 57,
+      "name": "evidence/phase_inner_runner_starting.json",
+      "sha256": "93865952c95fb3e10c79e70a270862d8664b8fe6dfcf08254229ec53824b495a"
+    },
+    {
+      "bytes": 61,
+      "name": "evidence/phase_pip_requirements_starting.json",
+      "sha256": "b2f55e7e5687f9c1a5deb568b2cf34d723d7b4c787ab4c2bb00a50be708c2dfe"
+    },
+    {
+      "bytes": 54,
+      "name": "evidence/phase_pip_torch_starting.json",
+      "sha256": "5742510a65f064e6c241e3c0a02475ee29a6b9cd1af87f1f9797fa6501b2136b"
+    },
+    {
+      "bytes": 55,
+      "name": "evidence/phase_pip_wheels_starting.json",
+      "sha256": "6ee0dfd3e8166a830e9f3de5b6041f58ae14db3f9a8d2dc45c51a62a75b31095"
+    },
+    {
+      "bytes": 53,
+      "name": "evidence/phase_publisher_started.json",
+      "sha256": "9f0dd6fcf5d7a53bf140da30f51abc790ba0c8bcc6582580a61bd51c68f32704"
+    },
+    {
+      "bytes": 46,
+      "name": "evidence/phase_venv_ready.json",
+      "sha256": "4efd597dc8cfa4923e4ede086b214d355494195d9d43e82422c87b361af3c1c3"
+    },
+    {
+      "bytes": 49,
+      "name": "evidence/phase_worker_started.json",
+      "sha256": "39e8e2e2d221a03a1ba3d696e123771c22bde9764dd5d5bb48ea6b48887ee8c5"
+    }
+  ],
+  "instance": "i-0460ab42e053672d7",
+  "job": "cas-meta2-graph6read-20260912062331-b34e3d92",
+  "schema": "cas.cube-face-readout-rescued-evidence/1",
+  "this_is_not_a_collection_receipt": "A collection receipt is issued only by run_evidence.collection_receipt, bound to the job, the contract digest and the inventory digest. This record is not one, and it does not make the job a completed deliverable. The launcher's reading stands: execution FAILED, checkpoint_collection NOT_ATTEMPTED, measurement_completeness NOT_EVALUATED, completed_deliverable false.",
+  "what_this_is": "Every results/ object from the job's bucket, copied down by hand after the worker died. The launcher's own collection never ran: it requires results/result.json, and the worker was killed before it could write one. Without this copy the only surviving copy of the recovered measurement would be the S3 bucket.",
+  "why_the_worker_died": "upload_results was called without the publisher's map of what it had already uploaded, so it re-put files that were already in the bucket; each create-only put conflicted; the conflict handler read the object back to compare digests; the job role granted s3:GetObject on input/* only, so the read was denied and the denial was raised. The readout itself had already finished and its payload was already uploaded by the incremental publisher."
+}

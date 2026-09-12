@@ -908,7 +908,14 @@ class CurriculumProvider:
                      PolicyName="job-only",
                      PolicyDocument=json.dumps({"Version": "2012-10-17", "Statement": [
                          {"Effect": "Allow", "Action": ["s3:GetObject"],
-                          "Resource": ["arn:aws:s3:::" + bucket + "/input/*"]},
+                          # results/* as well as input/*: the create-only
+                          # transport reads an object back to compare digests
+                          # when a put conflicts, and a role that cannot read
+                          # what it just wrote turns a benign conflict into a
+                          # fatal AccessDenied. Still this job's own bucket and
+                          # only the two prefixes it already uses.
+                          "Resource": ["arn:aws:s3:::" + bucket + "/input/*",
+                                       "arn:aws:s3:::" + bucket + "/results/*"]},
                          {"Effect": "Allow", "Action": ["s3:PutObject"],
                           "Resource": ["arn:aws:s3:::" + bucket + "/results/*"]}]}))
         self._effect("create_instance_profile", iam.create_instance_profile,

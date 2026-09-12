@@ -4,6 +4,104 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-12 - Readout attempt 5 RAN and the measurement IS RECOVERED - all 12 totals reproduce exactly - but the JOB FAILED: a create-only upload conflict killed the worker after the science was done
+
+Job `cas-meta2-graph6read-20260912062331-b34e3d92`, instance
+`i-0460ab42e053672d7`, us-west-2a, `$7.00` reservation, package 006, owner
+record `OWNER_AUTHORIZATION_READOUT_002.json`. Ledger revision 65.
+
+**Two statuses, and they differ. Both are true and neither replaces the other.**
+
+*The measurement is recovered.* The readout's own deterministic gate reports
+`reproduction.reproduced: true`, `checked: 12`, `mismatches: []`. Every delivered
+total equals what attempt 004 published, and `parameters_unchanged_by_readout` is
+true for all four conditions, so the zero-update claim is measured, not asserted:
+
+| condition | application | recognition | targeted |
+|---|---|---|---|
+| `cfc_stable_cues` | 76/96 | 55/96 | 15/24 |
+| `cfc_neutral_cue` | 75/96 | 56/96 | 15/24 |
+| `mixed_order_stable_cues` | 74/96 | 47/96 | 16/24 |
+| `mixed_order_neutral_cue` | 76/96 | 52/96 | 16/24 |
+
+The question attempt 004 could not answer is now answered. `mixed_order_stable_cues`
+recognition was known to be 0.489583, which meant at least one face was below the
+0.50 minimum but not which. The recovered per-face readings name them: faces 1
+(0.3125), 2 (0.3125), 3 (0.375) and 6 (0.375) in recognition, plus face 3
+(0.4375) in application. `mixed_order_neutral_cue` has faces 1 (0.4375), 2
+(0.375), 3 (0.4375) and 6 (0.375) below the minimum in recognition; both cfc
+conditions have only face 2 (0.4375).
+
+*The job failed.* The launcher's own reading, unedited:
+`status AWS_CANDIDATE_LAUNCH_FAILED`, `completed_deliverable false`,
+`execution FAILED`, `checkpoint_collection NOT_ATTEMPTED`,
+`measurement_completeness NOT_EVALUATED`, `compute_cleanup COMPLETE`,
+`evidence_archive DELETION_DENIED`, `only_surviving_copy RETAINED`. **The
+definition of done is NOT met.** This is a recovered measurement, not a
+completed deliverable, and it is not promoted to one.
+
+**A third defect, in the same transport layer, one line of failure with three
+faults.** After the readout finished and its payload was already uploaded:
+
+    File ".../graph6_face_readout_worker.py", line 260, in upload_results
+        upload = publish_once(s3, bucket, root, published, 'result.json', ...)
+    File ".../graph6_face_readout_worker.py", line 232, in publish_once
+        existing = s3.get_object(Bucket=bucket, Key=key)
+    botocore.errorfactory.AccessDenied: ... not authorized to perform:
+        s3:GetObject on ".../results/evidence/phase_pip_requirements_starting.json"
+
+1. `upload_results` was called WITHOUT the publisher's map of what it had already
+   uploaded, so the final pass started from an empty map and re-put every file
+   the publisher had already sent. Every one of those create-only puts conflicted.
+2. The conflict handler reads the object back to compare digests, but the job
+   role granted `s3:GetObject` on `input/*` only, so the read was denied.
+3. The denial was raised, killing a worker whose science was finished and whose
+   payload was already safely in the bucket. `results/result.json` was never
+   written, so the launcher's collection - which requires it - never ran.
+
+Fixed in all three places, because any one alone leaves the trap armed:
+`unified_transport` now hands `_published` to the final `upload_results`, so the
+conflict does not arise; `publish_once` records a conflict it cannot read back as
+`unverified_existing` and continues instead of destroying the delivery, while a
+readable genuine mismatch still raises `EVIDENCE_DIGEST_CONFLICT`; and the worker
+role now grants `s3:GetObject` on `results/*` as well as `input/*` - still the
+job's own bucket, still only the prefixes it already uses, and writes stay
+confined to `results/*`.
+`tests/test_transport_conflict_recovery.py` (6 tests) reproduces the production
+failure against a fake bucket with real create-only semantics and reading
+switched off, and checks the policy by evaluating the launcher's own policy
+expression rather than matching its text.
+
+**What the design got right.** The incremental publisher - added on 2026-09-11
+after the two-hour run that produced an empty archive - is the only reason this
+is a recovered measurement rather than a fourth total loss. It had already
+uploaded `readout.json` (2,610,908 bytes) and `measurements.json` (21,406 bytes)
+before the worker died. The preservation layer then refused deletion
+(`DELETION_DENIED`) and the bucket survives.
+
+**Evidence placement.** Because the launcher's collection never ran, the results
+were downloaded by hand and placed at
+`receipt_cas-meta2-graph6read-20260912062331-b34e3d92/rescued_evidence/` with a
+provenance record. Both declared artifacts hash to exactly what the worker's own
+manifest declares. That record states plainly that it is NOT a collection
+receipt and does not make the job a completed deliverable.
+
+**Meter.** The launcher waits up to 7,200 s for a marker that was never coming.
+The instance was idling, was confirmed to carry tag `cas_meta_job` equal to this
+job id, and was terminated at about 1,020 s. `compute_cleanup COMPLETE`,
+instance `terminated`.
+
+**Recorded limit of the failure record.** The receipt's `failure.json` says only
+`FileNotFoundError` on `remote_artifacts/manifest.json` - the launcher's own
+collection step falling over a manifest it never collected. It does NOT name the
+root cause. The root cause is readable only in the instance's serial console,
+quoted above.
+
+**Not authorized to retry.** `OWNER_AUTHORIZATION_READOUT_002.json` states
+`jobs: 1` and has now been used once. With the owner-record gate live, a sixth
+readout job cannot launch against it. Another attempt needs a new owner record.
+Ledger: `$368.00` reserved, `$32.00` free.
+
 ## 2026-09-12 - Readout attempt 5 diagnosed at $0: the bootstrap was never the fault. The worker died on `NameError: name 'beacon' is not defined`, because the shared transport was appended AFTER `if __name__ == '__main__': main()`
 
 Job `cas-meta2-graph6read-20260912044325-14fcd081`, instance
