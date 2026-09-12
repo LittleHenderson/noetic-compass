@@ -1,0 +1,11 @@
+{
+  "bytes": 69063,
+  "collected_by": "ec2.get_console_output, read-only",
+  "file": "console_i-0460ab42e053672d7.txt",
+  "instance": "i-0460ab42e053672d7",
+  "job": "cas-meta2-graph6read-20260912062331-b34e3d92",
+  "root_cause_visible_here": "AccessDenied on s3:GetObject for a results/ key - upload_results ran without the publisher's map, re-put files already in the bucket, and the create-only conflict handler's read-back was denied because the role granted GetObject on input/* only.",
+  "schema": "cas.instance-serial-console/1",
+  "sha256": "7d5fc68b3e8a7cc52e13c0937579957dfd0a842fea68e1cc7b48bdbd277b1c31",
+  "why_it_is_kept": "This is the ONLY place the run's root cause is readable. The receipt's own failure.json records a downstream symptom, not the cause, and AWS discards console output for a terminated instance after a while. Without this file the cause of the failure would not survive."
+}

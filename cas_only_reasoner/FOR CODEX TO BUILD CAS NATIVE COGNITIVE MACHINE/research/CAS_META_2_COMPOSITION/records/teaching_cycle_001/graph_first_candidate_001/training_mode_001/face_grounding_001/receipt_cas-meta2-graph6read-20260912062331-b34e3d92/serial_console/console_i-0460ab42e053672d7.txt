@@ -1,0 +1,630 @@
+temd[1]: Mounting sys-kernel-debug.mount - Kernel Debug File System...
+         Mounting [0;1;39msys-kernel-debug.mount[0m - Kernel Debug File System...
+[   15.707247] systemd[1]: Mounting sys-kernel-tracing.mount - Kernel Trace File System...
+         Mounting [0;1;39msys-kernel-tracing.mount[0m - Kernel Trace File System...
+[   15.712906] systemd[1]: Starting systemd-journald.service - Journal Service...
+         Starting [0;1;39msystemd-journald.service[0m - Journal Service...
+[   15.715802] systemd[1]: Starting efa-config.service - Elastic Fabric Adapter Configuration...
+         Starting [0;1;39mefa-config.service[0m - Elastic Fabric Adapter Configuration...
+[   15.720817] systemd[1]: Starting keyboard-setup.service - Set the console keyboard layout...
+         Starting [0;1;39mkeyboard-setup.service[0m - Set the console keyboard layout...
+[   15.723864] systemd[1]: Starting kmod-static-nodes.service - Create List of Static Device Nodes...
+         Starting [0;1;39mkmod-static-nodes.service[0m…eate List of Static Device Nodes...
+[   15.727266] systemd[1]: Starting lvm2-monitor.service - Monitoring of LVM2 mirrors, snapshots etc. using dmeventd or progress polling...
+         Starting [0;1;39mlvm2-monitor.service[0m - Mo…ing dmeventd or progress polling...
+[   15.731049] systemd[1]: Starting modprobe@configfs.service - Load Kernel Module configfs...
+         Starting [0;1;39mmodprobe@configfs.service[0m - Load Kernel Module configfs...
+[   15.735737] systemd[1]: Starting modprobe@dm_mod.service - Load Kernel Module dm_mod...
+         Starting [0;1;39mmodprobe@dm_mod.service[0m - Load Kernel Module dm_mod...
+[   15.738770] systemd[1]: Starting modprobe@drm.service - Load Kernel Module drm...
+         Starting [0;1;39mmodprobe@drm.service[0m - Load Kernel Module drm...
+[   15.745751] systemd[1]: Starting modprobe@efi_pstore.service - Load Kernel Module efi_pstore...
+         Starting [0;1;39mmodprobe@efi_pstore.servi…[0m - Load Kernel Module efi_pstore...
+[   15.748957] systemd[1]: Starting modprobe@fuse.service - Load Kernel Module fuse...
+         Starting [0;1;39mmodprobe@fuse.service[0m - Load Kernel Module fuse...
+[   15.751742] systemd[1]: Starting modprobe@loop.service - Load Kernel Module loop...
+         Starting [0;1;39mmodprobe@loop.service[0m - Load Kernel Module loop...
+[   15.754150] systemd[1]: netplan-ovs-cleanup.service - OpenVSwitch configuration for cleanup was skipped because of an unmet condition check (ConditionFileIsExecutable=/usr/bin/ovs-vsctl).
+[   15.757411] systemd[1]: Starting systemd-fsck-root.service - File System Check on Root Device...
+         Starting [0;1;39msystemd-fsck-root.service[0m…File System Check on Root Device...
+[   15.762610] systemd[1]: Starting systemd-modules-load.service - Load Kernel Modules...
+[   15.763938] systemd[1]: systemd-pcrmachine.service - TPM2 PCR Machine ID Measurement was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+         Starting [0;1;39msystemd-modules-load.[   15.766291] systemd[1]: systemd-tpm2-setup-early.service - TPM2 SRK Setup (Early) was skipped because of an unmet condition check (ConditionSecurity=measured-uki).
+service[0m - Lo[   15.766891] systemd[1]: Starting systemd-udev-trigger.service - Coldplug All udev Devices...
+ad Kernel Modules...
+         Starting [0;1;39msystemd-udev-trigger.service[0m - Co[   15.770991] systemd[1]: Finished kmod-static-nodes.service - Create List of Static Device Nodes.
+ldplug All udev Devices...
+[[0;32m  OK  [0m] Finished [0[   15.772788] systemd[1]: modprobe@configfs.service: Deactivated successfully.
+;1;39mkmod-static-nodes.service[0m…Create Lis[   15.774299] systemd[1]: Finished modprobe@configfs.service - Load Kernel Module configfs.
+t of Static Device Nodes.
+[[0;32m  OK  [0m] Finished [0[   15.776055] systemd[1]: modprobe@dm_mod.service: Deactivated successfully.
+;1;39mmodprobe@configfs.service[0m - Load Kerne[   15.777588] systemd[1]: Finished modprobe@dm_mod.service - Load Kernel Module dm_mod.
+l Module configfs.
+[[0;32m  OK  [0m] Finished [0[   15.779319] systemd[1]: modprobe@drm.service: Deactivated successfully.
+;1;39mmodprobe@dm_mod.service[0m - Load Kernel [   15.780740] systemd[1]: Finished modprobe@drm.service - Load Kernel Module drm.
+Module dm_mod.
+[[0;32m  OK  [0m] Finished [0[   15.782407] systemd[1]: modprobe@fuse.service: Deactivated successfully.
+;1;39mmodprobe@drm.service[0m - Load Kernel Mod[   15.783822] systemd[1]: Finished modprobe@fuse.service - Load Kernel Module fuse.
+ule drm.
+[[0;32m  OK  [[   15.785597] systemd[1]: modprobe@loop.service: Deactivated successfully.
+0m] Finished [0;1;39mmodprobe@fuse.service[0m [   15.786816] systemd[1]: Finished modprobe@loop.service - Load Kernel Module loop.
+- Load Kernel Module fuse.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@loop.service[0m - Load Kernel Module loop.
+[   15.800224] systemd[1]: Mounting sys-fs-fuse-connections.mount - FUSE Control File System...
+         Mounting [0;1;39msys-fs-fuse-connectio[   15.802161] systemd[1]: Mounting sys-kernel-config.mount - Kernel Configuration File System...
+ns.mount[0m - FUSE Control File System...
+         Mounting [0;1;39msys-kernel-config.mount[0m - Kernel [   15.804609] systemd[1]: Started systemd-fsckd.service - File System Check Daemon to report status.
+Configuration Fi[   15.806568] systemd[1]: systemd-repart.service - Repartition Root Disk was skipped because no trigger condition checks were met.
+[   15.807154] systemd-journald[214]: Collecting audit messages is disabled.
+[   15.808779] systemd[1]: Starting systemd-tmpfiles-setup-dev-early.service - Create Static Device Nodes in /dev gracefully...
+le System...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-fsckd.service[0m - Fi…stem Check [   15.811822] systemd[1]: Mounted dev-mqueue.mount - POSIX Message Queue File System.
+Daemon to report status.
+         Starting [0;1;39msystemd-tmpfiles-setup-de…[0m Device No[   15.813800] systemd[1]: Mounted sys-kernel-debug.mount - Kernel Debug File System.
+des in /dev gracefully...
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-mqueue.moun[   15.815833] systemd[1]: Mounted sys-kernel-tracing.mount - Kernel Trace File System.
+t[0m - POSIX Message Queue File System.
+[[0;32m  OK  [0m] Mounted [0;1;39m[   15.817815] systemd[1]: Mounted sys-fs-fuse-connections.mount - FUSE Control File System.
+sys-kernel-debug.mount[0m - Kernel Debug File System.
+[[0;32m  OK  [0m] Mou[   15.819874] systemd[1]: Mounted sys-kernel-config.mount - Kernel Configuration File System.
+nted [0;1;39msys-kernel-tracing.mount[0m - Kernel Trace File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-fs-fuse-connections.mount[0m - FUSE Control File System.
+[[0;32m  OK  [0m] Mounted [0;1;39msys-kernel-config.mount[0m - Kernel Configuration File System.
+[   15.834216] pstore: Using crash dump compression: deflate
+[   15.836456] pstore: Registered efi_pstore as persistent store backend
+[   15.837671] systemd[1]: modprobe@efi_pstore.service: Deactivated successfully.
+[   15.838843] systemd[1]: Finished modprobe@efi_pstore.service - Load Kernel Module efi_pstore.
+[[0;32m  OK  [0m] Finished [0;1;39mmodprobe@efi_pstore.service[0m - Load Kernel Module efi_pstore.
+[   15.847934] systemd[1]: Started systemd-journald.service - Journal Service.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-journald.service[0m - Journal Service.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-fsck-root.service[0m - File System Check on Root Device.
+         Starting [0;1;39msystemd-remount-fs.servic…[0munt Root and Kernel File Systems...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup-de…[0mic Device Nodes in /dev gracefully.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-udev-trigger.service[0m - Coldplug All udev Devices.
+[   16.086977] EXT4-fs (nvme0n1p1): re-mounted 9a0c5a4c-c182-4726-ab35-8c0ccd1fee89 r/w.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-remount-fs.servic…[0mmount Root and Kernel File Systems.
+         Starting [0;1;39mmultipathd.service[0m - Devi…pper Multipath Device Controller...
+         Starting [0;1;39msystemd-journal-flush.ser…[0msh Journal to Persistent Storage...
+         Starting [0;1;39msystemd-random-seed.service[0m - Load/Save OS Random Seed...
+         Starting [0;1;39msystemd-tmpfiles-setup-de…[0meate Static Device Nodes in /dev...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup-de…[0mCreate Static Device Nodes in /dev.
+[   16.115773] systemd-journald[214]: Received client request to flush runtime journal.
+         Starting [0;1;39msystemd-udevd.service[0m - R…ager for Device Events and Files...
+[[0;32m  OK  [0m] Finished [0;1;39mkeyboard-setup.service[0m - Set the console keyboard layout.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-random-seed.service[0m - Load/Save OS Random Seed.
+[   16.481904] efa: loading out-of-tree module taints kernel.
+[   16.482744] efa: module verification failed: signature and/or required key missing - tainting kernel
+[   16.484976] Elastic Fabric Adapter (EFA) v3.0.0g
+[   16.559384] systemd-journald[214]: /var/log/journal/ec2f724afa2d63666f41378db7a31875/system.journal: Journal file uses a different sequence number ID, rotating.
+[   16.561703] systemd-journald[214]: Rotating system journal.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-udevd.service[0m - Ru…anager for Device Events and Files.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-ask-password-conso…[0mequests to Console Directory Watch.
+[[0;32m  OK  [0m] Reached target [0;1;39mcryptsetup.target[0m - Local Encrypted Volumes.
+[[0;32m  OK  [0m] Found device [0;1;39mdev-ttyS0.device[0m - /dev/ttyS0.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-rfkill.socket[0m…ll Switch Status /dev/rfkill Watch.
+[   16.780198] parport_pc 00:03: reported by Plug and Play ACPI
+[   16.785816] ppdev: user-space parallel port driver
+[   16.830267] ena 0000:27:00.0: ENA device version: 0.10
+[   16.831007] ena 0000:27:00.0: ENA controller version: 0.0.1 implementation version 1
+[   16.837086] ena 0000:27:00.0: Elastic Network Adapter (ENA) found at mem 87000000, mac addr 06:ff:d9:dd:2a:a1
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-journal-flush.ser…[0mlush Journal to Persistent Storage.
+[   16.915639] vmclock AMZNC10C:00: vmclock0: registered miscdev
+[   16.916608] ena 0000:27:00.0 enp39s0: renamed from eth0
+[   16.956657] piix4_smbus 0000:00:01.3: SMBus base address uninitialized - upgrade BIOS or use force_addr=0xaddr
+[[0;32m  OK  [0m] Finished [0;1;39mlvm2-monitor.service[0m - Mo…using dmeventd or progress polling.
+[   17.022404] intel_powerclamp: No package C-state available
+[   17.042656] nvme nvme1: using unchecked data buffer
+[[0;32m  OK  [0m] Started [0;1;39mmultipathd.service[0m - Devic…Mapper Multipath Device Controller.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs-pre.target[0m…Preparation for Local File Systems.
+         Mounting [0;1;39msnap-amazon\x2dssm\x2dage…[0mamazon-ssm-agent, revision 13349...
+         Mounting [0;1;39msnap-core22-2411.mount[0m - …t unit for core22, revision 2411...
+         Mounting [0;1;39msnap-snapd-27406.mount[0m - …t unit for snapd, revision 27406...
+[   17.159872] loop0: detected capacity change from 0 to 151512
+[   17.160914] loop1: detected capacity change from 0 to 58160
+[   17.161930] loop2: detected capacity change from 0 to 102600
+[[0;32m  OK  [0m] Found device [0;1;39mdev-disk-by\x2dlabel-…[0m - Amazon Elastic Block Store UEFI.
+[[0;32m  OK  [0m] Found device [0;1;39mdev-disk-by\x2dlabel-…[0m - Amazon Elastic Block Store BOOT.
+         Starting [0;1;39msystemd-fsck@dev-disk-by\…[0mCheck on /dev/disk/by-label/BOOT...
+         Starting [0;1;39msystemd-fsck@dev-disk-by\…[0mCheck on /dev/disk/by-label/UEFI...
+Checking in progress on 1 disk (0.0% complete)[[0;32m  OK  [0m] Finished [0;1;39msystemd-fsck@dev-disk-by\…[0mm Check on /dev/disk/by-label/BOOT.
+         Mounting [0;1;39mboot.mount[0m - /boot...
+[   17.319479] EXT4-fs (nvme0n1p16): Supports (experimental) DIO atomic writes awu_min: 4096, awu_max: 4096
+[   17.322712] EXT4-fs (nvme0n1p16): mounted filesystem 64375848-128e-49ad-bdc3-fbe594aa399d r/w with ordered data mode. Quota mode: none.
+[[0;32m  OK  [0m] Mounted [0;1;39mboot.mount[0m - /boot.
+[[0;32m  OK  [0m] Mounted [0;1;39msnap-amazon\x2dssm\x2dagen…[0mr amazon-ssm-agent, revision 13349.
+Checking in progress on 0 disks (100.0% complete)[[0;32m  OK  [0m] Finished [0;1;39msystemd-fsck@dev-disk-by\…[0mm Check on /dev/disk/by-label/UEFI.
+         Mounting [0;1;39mboot-efi.mount[0m - /boot/efi...
+[[0;32m  OK  [0m] Finished [0;1;39mefa-config.service[0m - Elastic Fabric Adapter Configuration.
+         Mounting [0;1;39mdev-hugepages.mount[0m - Huge Pages File System...
+[[0;32m  OK  [0m] Mounted [0;1;39mdev-hugepages.mount[0m - Huge Pages File System.
+[[0;32m  OK  [0m] Mounted [0;1;39mboot-efi.mount[0m - /boot/efi.
+[[0;32m  OK  [0m] Mounted [0;1;39msnap-core22-2411.mount[0m - Mount unit for core22, revision 2411.
+[[0;32m  OK  [0m] Mounted [0;1;39msnap-snapd-27406.mount[0m - Mount unit for snapd, revision 27406.
+[[0;32m  OK  [0m] Reached target [0;1;39msnapd.mounts.target[0m - Mounted snaps.
+[[0;32m  OK  [0m] Reached target [0;1;39mlocal-fs.target[0m - Local File Systems.
+[[0;32m  OK  [0m] Listening on [0;1;39msystemd-sysext.socket[0m…tension Image Management (Varlink).
+         Starting [0;1;39mconsole-setup.service[0m - Set console font and keymap...
+         Starting [0;1;39mfinalrd.service[0m - Create …time dir for shutdown pivot root...
+         Starting [0;1;39mplymouth-read-write.servi…[0mymouth To Write Out Runtime Data...
+         Starting [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats...
+         Starting [0;1;39msystemd-tmpfiles-setup.se…[0me Volatile Files and Directories...
+         Starting [0;1;39mufw.service[0m - Uncomplicated firewall...
+[[0;32m  OK  [0m] Finished [0;1;39mconsole-setup.service[0m - Set console font and keymap.
+[[0;32m  OK  [0m] Finished [0;1;39mufw.service[0m - Uncomplicated firewall.
+[   17.501701] input: ImPS/2 Generic Wheel Mouse as /devices/platform/i8042/serio1/input/input4
+[[0;32m  OK  [0m] Finished [0;1;39mfinalrd.service[0m - Create …untime dir for shutdown pivot root.
+[[0;32m  OK  [0m] Finished [0;1;39mplymouth-read-write.servi…[0mPlymouth To Write Out Runtime Data.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-tmpfiles-setup.se…[0mate Volatile Files and Directories.
+         Starting [0;1;39msystemd-update-utmp.servi…[0mord System Boot/Shutdown in UTMP...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-update-utmp.servi…[0mecord System Boot/Shutdown in UTMP.
+         Mounting [0;1;39mproc-sys-fs-binfmt_misc.m…[0mcutable File Formats File System...
+[[0;32m  OK  [0m] Mounted [0;1;39mproc-sys-fs-binfmt_misc.mo…[0mxecutable File Formats File System.
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats.
+[   21.361965] nvidia: unknown parameter 'NVreg_GrdmaPciTopoCheckOverride' ignored
+[   21.364279] nvidia-nvlink: Nvlink Core is being initialized, major device number 235
+[   21.365656] 
+[   21.371316] pcieport 0000:2e:00.0: can't derive routing for PCI INT A
+[   21.372523] nvidia 0000:2f:00.0: PCI INT A: no GSI
+[   21.385305] NVRM: loading NVIDIA UNIX Open Kernel Module for x86_64  595.91.07  Release Build  (dvs-builder@U22-I3-B08-02-2)  Wed Jul 29 03:01:16 UTC 2026
+[   21.564075] EFA NV Peermem v1.2.3
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-modules-load.service[0m - Load Kernel Modules.
+         Starting [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables.
+         Starting [0;1;39mapparmor.service[0m - Load AppArmor profiles...
+         Starting [0;1;39msystemd-resolved.service[0m - Network Name Resolution...
+[[0;32m  OK  [0m] Finished [0;1;39mapparmor.service[0m - Load AppArmor profiles.
+         Starting [0;1;39msnapd.apparmor.service[0m - …iles managed internally by snapd...
+         Starting [0;1;39mcloud-init-local.service[0m …-init: Local Stage (pre-network)...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-resolved.service[0m - Network Name Resolution.
+[[0;32m  OK  [0m] Reached target [0;1;39mnss-lookup.target[0m - Host and Network Name Lookups.
+[[0;32m  OK  [0m] Finished [0;1;39msnapd.apparmor.service[0m - …ofiles managed internally by snapd.
+[   36.475738] cloud-init[588]: Cloud-init v. 26.1-0ubuntu1~24.04.1 running 'init-local' at Sat, 12 Sep 2026 06:37:08 +0000. Up 36.46 seconds.
+[[0;32m  OK  [0m] Finished [0;1;39mcloud-init-local.service[0m …ud-init: Local Stage (pre-network).
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork-pre.target[0m - Preparation for Network.
+         Starting [0;1;39msystemd-networkd.service[0m - Network Configuration...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-networkd.service[0m - Network Configuration.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork.target[0m - Network.
+         Starting [0;1;39msystemd-networkd-wait-onl…[0mait for Network to be Configured...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-networkd-wait-onl…[0m Wait for Network to be Configured.
+         Starting [0;1;39mcloud-init.service[0m - Cloud-init: Network Stage...
+[   42.545708] cloud-init[671]: Cloud-init v. 26.1-0ubuntu1~24.04.1 running 'init' at Sat, 12 Sep 2026 06:37:14 +0000. Up 42.53 seconds.
+[   42.551997] cloud-init[671]: ci-info: +++++++++++++++++++++++++++++++++++++++Net device info+++++++++++++++++++++++++++++++++++++++
+[   42.553676] cloud-init[671]: ci-info: +---------+------+-----------------------------+---------------+--------+-------------------+
+[   42.558723] cloud-init[671]: ci-info: |  Device |  Up  |           Address           |      Mask     | Scope  |     Hw-Address    |
+[   42.560307] cloud-init[671]: ci-info: +---------+------+-----------------------------+---------------+--------+-------------------+
+[   42.561906] cloud-init[671]: ci-info: | enp39s0 | True |         172.31.33.76        | 255.255.240.0 | global | 06:ff:d9:dd:2a:a1 |
+[   42.563527] cloud-init[671]: ci-info: | enp39s0 | True | fe80::4ff:d9ff:fedd:2aa1/64 |       .       |  link  | 06:ff:d9:dd:2a:a1 |
+[   42.565144] cloud-init[671]: ci-info: |    lo   | True |          127.0.0.1          |   255.0.0.0   |  host  |         .         |
+[   42.566786] cloud-init[671]: ci-info: |    lo   | True |           ::1/128           |       .       |  host  |         .         |
+[   42.568395] cloud-init[671]: ci-info: +---------+------+-----------------------------+---------------+--------+-------------------+
+[   42.576038] cloud-init[671]: ci-info: ++++++++++++++++++++++++++++++Route IPv4 info++++++++++++++++++++++++++++++
+[   42.577384] cloud-init[671]: ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+[   42.578795] cloud-init[671]: ci-info: | Route | Destination |   Gateway   |     Genmask     | Interface | Flags |
+[   42.580200] cloud-init[671]: ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+[   42.581605] cloud-init[671]: ci-info: |   0   |   0.0.0.0   | 172.31.32.1 |     0.0.0.0     |  enp39s0  |   UG  |
+[   42.583028] cloud-init[671]: ci-info: |   1   |  172.31.0.2 | 172.31.32.1 | 255.255.255.255 |  enp39s0  |  UGH  |
+[   42.584428] cloud-init[671]: ci-info: |   2   | 172.31.32.0 |   0.0.0.0   |  255.255.240.0  |  enp39s0  |   U   |
+[   42.585837] cloud-init[671]: ci-info: |   3   | 172.31.32.1 |   0.0.0.0   | 255.255.255.255 |  enp39s0  |   UH  |
+[   42.587247] cloud-init[671]: ci-info: +-------+-------------+-------------+-----------------+-----------+-------+
+[   42.588655] cloud-init[671]: ci-info: +++++++++++++++++++Route IPv6 info+++++++++++++++++++
+[   42.592029] cloud-init[671]: ci-info: +-------+-------------+---------+-----------+-------+
+[   42.595037] cloud-init[671]: ci-info: | Route | Destination | Gateway | Interface | Flags |
+[   42.598891] cloud-init[671]: ci-info: +-------+-------------+---------+-----------+-------+
+[   42.600133] cloud-init[671]: ci-info: |   0   |  fe80::/64  |    ::   |  enp39s0  |   U   |
+[   42.603143] cloud-init[671]: ci-info: |   2   |    local    |    ::   |  enp39s0  |   U   |
+[   42.606051] cloud-init[671]: ci-info: |   3   |  multicast  |    ::   |  enp39s0  |   U   |
+[   42.609036] cloud-init[671]: ci-info: +-------+-------------+---------+-----------+-------+
+[   44.023312] cloud-init[671]: Generating public/private rsa key pair.
+[   44.024357] cloud-init[671]: Your identification has been saved in /etc/ssh/ssh_host_rsa_key
+[   44.025529] cloud-init[671]: Your public key has been saved in /etc/ssh/ssh_host_rsa_key.pub
+[   44.026692] cloud-init[671]: The key fingerprint is:
+[   44.027328] cloud-init[671]: SHA256:T2J0FkYen/k9gd6AzbOR79lYXm2bSYlbcFRzCG3cRNU root@ip-172-31-33-76
+[   44.031802] cloud-init[671]: The key's randomart image is:
+[   44.034043] cloud-init[671]: +---[RSA 3072]----+
+[   44.036055] cloud-init[671]: |         .= .+ BX|
+[   44.036603] cloud-init[671]: |         o ++oO E|
+[   44.037240] cloud-init[671]: |        . +.+@ o |
+[   44.037880] cloud-init[671]: |       . o  ..@.+|
+[   44.038513] cloud-init[671]: |        S .  +.B*|
+[   44.039148] cloud-init[671]: |       . +    ==O|
+[   44.039782] cloud-init[671]: |          .  ..*o|
+[   44.040419] cloud-init[671]: |                 |
+[   44.041044] cloud-init[671]: |                 |
+[   44.046684] cloud-init[671]: +----[SHA256]-----+
+[   44.047486] cloud-init[671]: Generating public/private ecdsa key pair.
+[   44.048376] cloud-init[671]: Your identification has been saved in /etc/ssh/ssh_host_ecdsa_key
+[   44.049574] cloud-init[671]: Your public key has been saved in /etc/ssh/ssh_host_ecdsa_key.pub
+[   44.050752] cloud-init[671]: The key fingerprint is:
+[   44.051416] cloud-init[671]: SHA256:jN+E1vuaD04cb7Ns8s4n1+R7peQevog0m3znNPcR+co root@ip-172-31-33-76
+[   44.052665] cloud-init[671]: The key's randomart image is:
+[   44.056032] cloud-init[671]: +---[ECDSA 256]---+
+[   44.058048] cloud-init[671]: |                 |
+[   44.058682] cloud-init[671]: |                 |
+[   44.059331] cloud-init[671]: |                 |
+[   44.059982] cloud-init[671]: |       o o      .|
+[   44.060626] cloud-init[671]: |      . S +    o |
+[   44.061263] cloud-init[671]: |       o + +  . =|
+[   44.061909] cloud-init[671]: |        . O +o+*+|
+[   44.062531] cloud-init[671]: |         =.%+B*=*|
+[   44.063179] cloud-init[671]: |          OOXBEo+|
+[   44.066807] cloud-init[671]: +----[SHA256]-----+
+[   44.067635] cloud-init[671]: Generating public/private ed25519 key pair.
+[   44.068618] cloud-init[671]: Your identification has been saved in /etc/ssh/ssh_host_ed25519_key
+[   44.069740] cloud-init[671]: Your public key has been saved in /etc/ssh/ssh_host_ed25519_key.pub
+[   44.070950] cloud-init[671]: The key fingerprint is:
+[   44.071619] cloud-init[671]: SHA256:VEDB9IIlHvtbhOuIVnILJ4fbUZmhAggd+EMGp6iQ+HY root@ip-172-31-33-76
+[   44.072882] cloud-init[671]: The key's randomart image is:
+[   44.076026] cloud-init[671]: +--[ED25519 256]--+
+[   44.076675] cloud-init[671]: |+=+.  o+Bo.      |
+[   44.077326] cloud-init[671]: |=++. . B.B       |
+[   44.077962] cloud-init[671]: |*+  . = B o      |
+[   44.078640] cloud-init[671]: |o.o  o + +       |
+[   44.083241] cloud-init[671]: |. o.E * S .      |
+[   44.083913] cloud-init[671]: | . . % = o       |
+[   44.084599] cloud-init[671]: |    + + o        |
+[   44.085206] cloud-init[671]: |   .             |
+[   44.085837] cloud-init[671]: |                 |
+[   44.086475] cloud-init[671]: +----[SHA256]-----+
+[[0;32m  OK  [0m] Finished [0;1;39mcloud-init.service[0m - Cloud-init: Network Stage.
+[[0;32m  OK  [0m] Reached target [0;1;39mcloud-config.target[0m - Cloud-config availability.
+[[0;32m  OK  [0m] Reached target [0;1;39mnetwork-online.target[0m - Network is Online.
+[[0;32m  OK  [0m] Reached target [0;1;39msysinit.target[0m - System Initialization.
+[[0;32m  OK  [0m] Started [0;1;39macpid.path[0m - ACPI Events Check.
+[[0;32m  OK  [0m] Started [0;1;39mnvidia-cdi-refresh.path[0m - …r toolkit install / upgrade events.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-tmpfiles-clean.tim…[0my Cleanup of Temporary Directories.
+[[0;32m  OK  [0m] Started [0;1;39mupdate-notifier-download.t…[0mhat failed at package install time.
+[[0;32m  OK  [0m] Reached target [0;1;39mpaths.target[0m - Path Units.
+[[0;32m  OK  [0m] Listening on [0;1;39macpid.socket[0m - ACPID Listen Socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mcloud-init-hotplugd.s…t[0m - cloud-init hotplug hook socket.
+[[0;32m  OK  [0m] Listening on [0;1;39mdbus.socket[0m - D-Bus System Message Bus Socket.
+         Starting [0;1;39mdocker.socket[0m - Docker Socket for the API...
+[[0;32m  OK  [0m] Listening on [0;1;39miscsid.socket[0m - Open-iSCSI iscsid Socket.
+         Starting [0;1;39mlxd-installer.socket[0m - He…er to install lxd snap on demand...
+         Starting [0;1;39msnapd.socket[0m - Socket activation for snappy daemon...
+[[0;32m  OK  [0m] Listening on [0;1;39mssh.socket[0m - OpenBSD Secure Shell server socket.
+[[0;32m  OK  [0m] Listening on [0;1;39muuidd.socket[0m - UUID daemon activation socket.
+[[0;32m  OK  [0m] Reached target [0;1;39mremote-fs-pre.targe…[0mreparation for Remote File Systems.
+[[0;32m  OK  [0m] Reached target [0;1;39mremote-fs.target[0m - Remote File Systems.
+[[0;32m  OK  [0m] Finished [0;1;39mblk-availability.service[0m - Availability of block devices.
+[[0;32m  OK  [0m] Listening on [0;1;39mdocker.socket[0m - Docker Socket for the API.
+[[0;32m  OK  [0m] Listening on [0;1;39mlxd-installer.socket[0m …lper to install lxd snap on demand.
+[[0;32m  OK  [0m] Listening on [0;1;39msnapd.socket[0m - Socket activation for snappy daemon.
+[[0;32m  OK  [0m] Reached target [0;1;39msockets.target[0m - Socket Units.
+[[0;32m  OK  [0m] Reached target [0;1;39mbasic.target[0m - Basic System.
+[[0;32m  OK  [0m] Started [0;1;39macpid.service[0m - ACPI event daemon.
+[[0;32m  OK  [0m] Started [0;1;39mapply_instance_tag_service…[0mnce_tag_service AWS Helper Service.
+         Starting [0;1;39mapport.service[0m - automatic crash report generation...
+         Starting [0;1;39mchrony.service[0m - chrony, an NTP client/server...
+         Starting [0;1;39mcloud-config.service[0m - Cloud-init: Config Stage...
+[[0;32m  OK  [0m] Started [0;1;39mcron.service[0m - Regular background program processing daemon.
+         Starting [0;1;39mdbus.service[0m - D-Bus System Message Bus...
+         Starting [0;1;39mdlami-nvme.service[0m - Mount Ephemeral NVME Storage to DLAMI...
+[[0;32m  OK  [0m] Started [0;1;39mdmesg.service[0m - Save initial kernel messages after boot.
+         Starting [0;1;39me2scrub_reap.service[0m - Re…ne ext4 Metadata Check Snapshots...
+         Starting [0;1;39mec2-instance-connect-harv…[0mance Connect Host Key Harvesting...
+         Starting [0;1;39mgdrdrv.service[0m - LSB: Sta…t for GDRcopy kernel-mode driver...
+         Starting [0;1;39mgrub-common.service[0m - Record successful boot for GRUB...
+[[0;32m  OK  [0m] Started [0;1;39mirqbalance.service[0m - irqbalance daemon.
+         Starting [0;1;39mnetworkd-dispatcher.servi…[0mcher daemon for systemd-networkd...
+         Starting [0;1;39mnvidia-cdi-refresh.servic…[0msh NVIDIA CDI specification file...
+[[0;32m  OK  [0m] Started [0;1;39mnvidia-dcgm.service[0m - NVIDIA DCGM service.
+         Starting [0;1;39mnvidia-fabricmanager.serv…[0m - NVIDIA fabric manager service...
+         Starting [0;1;39mnvidia_gpu_settings_servi…[0mtings_service AWS Helper Service...
+         Starting [0;1;39mpolkit.service[0m - Authorization Manager...
+         Starting [0;1;39mpollinate.service[0m - Polli…e pseudo random number generator...
+         Starting [0;1;39mrsyslog.service[0m - System Logging Service...
+[[0;32m  OK  [0m] Started [0;1;39msnap.amazon-ssm-agent.amaz…[0m amazon-ssm-agent.amazon-ssm-agent.
+[[0;32m  OK  [0m] Reached target [0;1;39mgetty-pre.target[0m - Preparation for Logins.
+         Starting [0;1;39msnapd.seeded.service[0m - Wait until snapd is fully seeded...
+         Starting [0;1;39msnapd.service[0m - Snap Daemon...
+         Starting [0;1;39msoci-snapshotter.service[0m …ci snapshotter containerd plugin...
+         Starting [0;1;39msysstat.service[0m - Resets System Activity Logs...
+         Starting [0;1;39msystemd-logind.service[0m - User Login Management...
+         Starting [0;1;39msystemd-user-sessions.service[0m - Permit User Sessions...
+         Starting [0;1;39mudisks2.service[0m - Disk Manager...
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-user-sessions.service[0m - Permit User Sessions.
+         Starting [0;1;39mplymouth-quit-wait.servic…[0md until boot process finishes up...
+         Starting [0;1;39mplymouth-quit.service[0m - Terminate Plymouth Boot Screen...
+[[0;32m  OK  [0m] Finished [0;1;39mplymouth-quit-wait.servic…[0mold until boot process finishes up.
+[[0;32m  OK  [0m] Started [0;1;39mserial-getty@ttyS0.service[0m - Serial Getty on ttyS0.
+         Starting [0;1;39msetvtrgb.service[0m - Set console scheme...
+[[0;32m  OK  [0m] Finished [0;1;39msetvtrgb.service[0m - Set console scheme.
+[[0;32m  OK  [0m] Created slice [0;1;39msystem-getty.slice[0m - Slice /system/getty.
+[[0;32m  OK  [0m] Started [0;1;39mgetty@tty1.service[0m - Getty on tty1.
+[[0;32m  OK  [0m] Reached target [0;1;39mgetty.target[0m - Login Prompts.
+[[0;32m  OK  [0m] Finished [0;1;39mplymouth-quit.service[0m - Terminate Plymouth Boot Screen.
+[[0;32m  OK  [0m] Started [0;1;39msystemd-logind.service[0m - User Login Management.
+[[0;32m  OK  [0m] Started [0;1;39munattended-upgrades.service[0m - Unattended Upgrades Shutdown.
+[[0;32m  OK  [0m] Finished [0;1;39me2scrub_reap.service[0m - Re…line ext4 Metadata Check Snapshots.
+[[0;32m  OK  [0m] Finished [0;1;39mgrub-common.service[0m - Record successful boot for GRUB.
+         Starting [0;1;39mgrub-initrd-fallback.service[0m - GRUB failed boot detection...
+[[0;32m  OK  [0m] Finished [0;1;39mgrub-initrd-fallback.service[0m - GRUB failed boot detection.
+[[0;32m  OK  [0m] Finished [0;1;39msysstat.service[0m - Resets System Activity Logs.
+[[0;32m  OK  [0m] Started [0;1;39mgdrdrv.service[0m - LSB: Star…ipt for GDRcopy kernel-mode driver.
+[[0;32m  OK  [0m] Started [0;1;39mdbus.service[0m - D-Bus System Message Bus.
+         Starting [0;1;39msystemd-hostnamed.service[0m - Hostname Service...
+[[0;32m  OK  [0m] Started [0;1;39msystemd-hostnamed.service[0m - Hostname Service.
+[[0;32m  OK  [0m] Started [0;1;39mrsyslog.service[0m - System Logging Service.
+[[0;32m  OK  [0m] Started [0;1;39mpolkit.service[0m - Authorization Manager.
+         Starting [0;1;39mModemManager.service[0m - Modem Manager...
+[[0;32m  OK  [0m] Started [0;1;39mchrony.service[0m - chrony, an NTP client/server.
+[[0;32m  OK  [0m] Started [0;1;39mnetworkd-dispatcher.servic…[0matcher daemon for systemd-networkd.
+[[0;32m  OK  [0m] Reached target [0;1;39mtime-sync.target[0m - System Time Synchronized.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily.timer[0m - Daily apt download activities.
+[[0;32m  OK  [0m] Started [0;1;39mapt-daily-upgrade.timer[0m - …y apt upgrade and clean activities.
+[[0;32m  OK  [0m] Started [0;1;39mdpkg-db-backup.timer[0m - Daily dpkg database backup timer.
+[[0;32m  OK  [0m] Started [0;1;39me2scrub_all.timer[0m - Period…Metadata Check for All Filesystems.
+[[0;32m  OK  [0m] Started [0;1;39mfstrim.timer[0m - Discard unused filesystem blocks once a week.
+[[0;32m  OK  [0m] Started [0;1;39mfwupd-refresh.timer[0m - Refresh fwupd metadata regularly.
+[[0;32m  OK  [0m] Started [0;1;39mlogrotate.timer[0m - Daily rotation of log files.
+[[0;32m  OK  [0m] Started [0;1;39mman-db.timer[0m - Daily man-db regeneration.
+[[0;32m  OK  [0m] Started [0;1;39mmotd-news.timer[0m - Message of the Day.
+[[0;32m  OK  [0m] Started [0;1;39msysstat-collect.timer[0m - Ru…y accounting tool every 10 minutes.
+[[0;32m  OK  [0m] Started [0;1;39msysstat-summary.timer[0m - Ge… of yesterday's process accounting.
+[[0;32m  OK  [0m] Started [0;1;39mupdate-notifier-motd.timer[0m… a new version of Ubuntu available.
+[[0;32m  OK  [0m] Reached target [0;1;39mtimers.target[0m - Timer Units.
+         Starting [0;1;39mdpkg-db-backup.service[0m - …ily dpkg database backup service...
+[   45.183514] cloud-init[903]: Cloud-init v. 26.1-0ubuntu1~24.04.1 running 'modules:config' at Sat, 12 Sep 2026 06:37:17 +0000. Up 45.16 seconds.
+         Starting [0;1;39me2scrub_all.service[0m - Onl…tadata Check for All Filesystems...
+         Starting [0;1;39mlogrotate.service[0m - Rotate log files...
+[[0;32m  OK  [0m] Finished [0;1;39me2scrub_all.service[0m - Onl…Metadata Check for All Filesystems.
+[[0;32m  OK  [0m] Finished [0;1;39mlogrotate.service[0m - Rotate log files.
+[[0;32m  OK  [0m] Finished [0;1;39mec2-instance-connect-harv…[0mstance Connect Host Key Harvesting.
+[[0;32m  OK  [0m] Finished [0;1;39mpollinate.service[0m - Polli…the pseudo random number generator.
+[[0;32m  OK  [0m] Started [0;1;39mudisks2.service[0m - Disk Manager.
+[[0;32m  OK  [0m] Finished [0;1;39mcloud-config.service[0m - Cloud-init: Config Stage.
+         Starting [0;1;39mhibinit-agent.service[0m - E…instance hibernation setup agent...
+[[0;32m  OK  [0m] Started [0;1;39mhibinit-agent.service[0m - EC2 instance hibernation setup agent.
+[[0;32m  OK  [0m] Finished [0;1;39mapport.service[0m - automatic crash report generation.
+[[0;32m  OK  [0m] Started [0;1;39mModemManager.service[0m - Modem Manager.
+[[0;32m  OK  [0m] Finished [0;1;39mdpkg-db-backup.service[0m - Daily dpkg database backup service.
+[[0;32m  OK  [0m] Finished [0;1;39mdlami-nvme.service[0m - Mount Ephemeral NVME Storage to DLAMI.
+                                                   [[0;32m  OK  [0m] Started [0;1;39msnapd.service[0m - Snap Daemon.
+2026/09/12 06:37:22Z: SSM Agent unable to acquire credentials: <error>no valid credentials could be retrieved for ec2 identity. Default Host Management Err: error calling RequestManagedInstanceRoleToken: AccessDeniedException: Systems Manager's instance management role is not configured for account: 807562639912
+	status code: 400, request id: 11cc54de-b4df-4cef-885f-ab7a92fb4682</error>
+
+Ubuntu 24.04.4 LTS ip-172-31-33-76 ttyS0
+ip-172-31-33-76 login: [   77.670374] cloud-init[1686]: Cloud-init v. 26.1-0ubuntu1~24.04.1 running 'modules:final' at Sat, 12 Sep 2026 06:37:50 +0000. Up 77.65 seconds.
+[   77.694918] cloud-init[1686]: + umask 077
+[   77.694953] cloud-init[1686]: + export PYTHONDONTWRITEBYTECODE=1 AWS_MAX_ATTEMPTS=1 AWS_PAGER=
+[   77.694966] cloud-init[1686]: + PYTHONDONTWRITEBYTECODE=1
+[   77.694977] cloud-init[1686]: + AWS_MAX_ATTEMPTS=1
+[   77.694998] cloud-init[1686]: + AWS_PAGER=
+[   77.695033] cloud-init[1686]: + export CAS_META2_RUN_TEACHING_CYCLE=1
+[   77.695050] cloud-init[1686]: + CAS_META2_RUN_TEACHING_CYCLE=1
+[   77.695060] cloud-init[1686]: + mkdir -p /opt/cas-graph6curr/package
+[   77.696079] cloud-init[1686]: + timeout 120 aws s3api get-object --bucket cas-meta2-graph6read-20260912062331-b34e3d92-807562639912 --key input/source.zip /opt/cas-graph6curr/package/source.zip --region us-west-2
+[   78.595384] cloud-init[1686]: {
+[   78.595534] cloud-init[1686]:     "AcceptRanges": "bytes",
+[   78.595555] cloud-init[1686]:     "LastModified": "2026-09-12T06:36:00+00:00",
+[   78.595574] cloud-init[1686]:     "ContentLength": 804446,
+[   78.595589] cloud-init[1686]:     "ETag": "\"c1530f8f3dfc4ae62519eec2d569f164\"",
+[   78.595608] cloud-init[1686]:     "ChecksumCRC32": "IsS3dw==",
+[   78.595627] cloud-init[1686]:     "ChecksumType": "FULL_OBJECT",
+[   78.595644] cloud-init[1686]:     "ContentType": "binary/octet-stream",
+[   78.595658] cloud-init[1686]:     "ServerSideEncryption": "AES256",
+[   78.595675] cloud-init[1686]:     "Metadata": {}
+[   78.595686] cloud-init[1686]: }
+[   78.698838] cloud-init[1686]: + echo 'b34e3d9208dc22cafa6d89a147771969223823a1b0e2a19de472c84b3ad49bce  /opt/cas-graph6curr/package/source.zip'
+[   78.698933] cloud-init[1686]: + sha256sum -c -
+[   78.700425] cloud-init[1686]: /opt/cas-graph6curr/package/source.zip: OK
+[   78.700625] cloud-init[1686]: + cd /opt/cas-graph6curr/package
+[   78.700646] cloud-init[1686]: + unzip -q source.zip
+[   78.773752] cloud-init[1686]: + timeout 120 aws s3api get-object --bucket cas-meta2-graph6read-20260912062331-b34e3d92-807562639912 --key input/config.json /opt/cas-graph6curr/package/config.json --region us-west-2
+[   79.226424] cloud-init[1686]: {
+[   79.226543] cloud-init[1686]:     "AcceptRanges": "bytes",
+[   79.226559] cloud-init[1686]:     "LastModified": "2026-09-12T06:36:00+00:00",
+[   79.226571] cloud-init[1686]:     "ContentLength": 2068,
+[   79.226640] cloud-init[1686]:     "ETag": "\"1ac91f188356c8c3379eae7b56f2ded0\"",
+[   79.226657] cloud-init[1686]:     "ChecksumCRC32": "HtEQWQ==",
+[   79.226675] cloud-init[1686]:     "ChecksumType": "FULL_OBJECT",
+[   79.226798] cloud-init[1686]:     "ContentType": "binary/octet-stream",
+[   79.226933] cloud-init[1686]:     "ServerSideEncryption": "AES256",
+[   79.227068] cloud-init[1686]:     "Metadata": {}
+[   79.227080] cloud-init[1686]: }
+[   79.322034] cloud-init[1686]: + PY=
+[   79.322085] cloud-init[1686]: + for p in python3.12 python3.11 python3
+[   79.322100] cloud-init[1686]: + command -v python3.12
+[   79.322117] cloud-init[1686]: + PY=python3.12
+[   79.322129] cloud-init[1686]: + break
+[   79.322144] cloud-init[1686]: + test -n python3.12
+[   79.322159] cloud-init[1686]: + python3.12 -B /opt/cas-graph6curr/package/graph6_face_readout_worker.py
+[   87.205051] cloud-init[1686]: Looking in indexes: https://download.pytorch.org/whl/cu128
+[   87.355307] cloud-init[1686]: Collecting torch==2.11.0
+[   87.459840] cloud-init[1686]:   Downloading https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (29 kB)
+[   87.525146] cloud-init[1686]: Collecting filelock (from torch==2.11.0)
+[   87.568517] cloud-init[1686]:   Downloading filelock-3.32.3-py3-none-any.whl.metadata (2.0 kB)
+[   87.599484] cloud-init[1686]: Collecting typing-extensions>=4.10.0 (from torch==2.11.0)
+[   87.608707] cloud-init[1686]:   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+[   87.631285] cloud-init[1686]: Collecting setuptools<82 (from torch==2.11.0)
+[   87.639247] cloud-init[1686]:   Downloading https://download.pytorch.org/whl/setuptools-78.1.0-py3-none-any.whl.metadata (6.6 kB)
+[   87.671212] cloud-init[1686]: Collecting sympy>=1.13.3 (from torch==2.11.0)
+[   87.680277] cloud-init[1686]:   Downloading sympy-1.14.0-py3-none-any.whl.metadata (12 kB)
+[   87.720957] cloud-init[1686]: Collecting networkx>=2.5.1 (from torch==2.11.0)
+[   87.730156] cloud-init[1686]:   Downloading networkx-3.6.1-py3-none-any.whl.metadata (6.8 kB)
+[   87.751485] cloud-init[1686]: Collecting jinja2 (from torch==2.11.0)
+[   87.761397] cloud-init[1686]:   Downloading https://download.pytorch.org/whl/jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+[   87.804086] cloud-init[1686]: Collecting fsspec>=0.8.5 (from torch==2.11.0)
+[   87.813711] cloud-init[1686]:   Downloading fsspec-2026.7.0-py3-none-any.whl.metadata (10 kB)
+[   88.082855] cloud-init[1686]: Collecting cuda-toolkit==12.8.1 (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   88.132991] cloud-init[1686]:   Downloading https://pypi.nvidia.com/cuda-toolkit/cuda_toolkit-12.8.1-py2.py3-none-any.whl (2.3 kB)
+[   88.453723] cloud-init[1686]: Collecting cuda-bindings<13,>=12.9.4 (from torch==2.11.0)
+[   88.462724] cloud-init[1686]:   Downloading cuda_bindings-12.9.7-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (2.6 kB)
+[   88.493531] cloud-init[1686]: Collecting nvidia-cudnn-cu12==9.19.0.56 (from torch==2.11.0)
+[   88.503707] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cudnn-cu12/nvidia_cudnn_cu12-9.19.0.56-py3-none-manylinux_2_27_x86_64.whl (657.9 MB)
+[   91.523261] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 657.9/657.9 MB 113.7 MB/s eta 0:00:00
+[   92.027268] cloud-init[1686]: Collecting nvidia-cusparselt-cu12==0.7.1 (from torch==2.11.0)
+[   92.035977] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cusparselt-cu12/nvidia_cusparselt_cu12-0.7.1-py3-none-manylinux2014_x86_64.whl (287.2 MB)
+[   92.822728] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 287.2/287.2 MB 185.5 MB/s eta 0:00:00
+[   93.057327] cloud-init[1686]: Collecting nvidia-nccl-cu12==2.28.9 (from torch==2.11.0)
+[   93.066394] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-nccl-cu12/nvidia_nccl_cu12-2.28.9-py3-none-manylinux_2_18_x86_64.whl (296.8 MB)
+[   93.835572] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 296.8/296.8 MB 189.4 MB/s eta 0:00:00
+[   94.077471] cloud-init[1686]: Collecting nvidia-nvshmem-cu12==3.4.5 (from torch==2.11.0)
+[   94.086422] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-nvshmem-cu12/nvidia_nvshmem_cu12-3.4.5-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (139.1 MB)
+[   94.445152] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 139.1/139.1 MB 239.6 MB/s eta 0:00:00
+[   94.575953] cloud-init[1686]: Collecting triton==3.6.0 (from torch==2.11.0)
+[   94.588059] cloud-init[1686]:   Downloading https://download-r2.pytorch.org/whl/triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (1.7 kB)
+[   94.717460] cloud-init[1686]: Collecting nvidia-cublas-cu12==12.8.4.1.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   94.726229] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cublas-cu12/nvidia_cublas_cu12-12.8.4.1-py3-none-manylinux_2_27_x86_64.whl (594.3 MB)
+[   96.207851] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 594.3/594.3 MB 126.3 MB/s eta 0:00:00
+[   96.669623] cloud-init[1686]: Collecting nvidia-cuda-runtime-cu12==12.8.90.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   96.678339] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cuda-runtime-cu12/nvidia_cuda_runtime_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (954 kB)
+[   96.682010] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 954.8/954.8 kB 430.6 MB/s eta 0:00:00
+[   96.704100] cloud-init[1686]: Collecting nvidia-cufft-cu12==11.3.3.83.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   96.712555] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cufft-cu12/nvidia_cufft_cu12-11.3.3.83-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (193.1 MB)
+[   97.165370] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 193.1/193.1 MB 171.4 MB/s eta 0:00:00
+[   97.329287] cloud-init[1686]: Collecting nvidia-cufile-cu12==1.13.1.3.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   97.337474] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cufile-cu12/nvidia_cufile_cu12-1.13.1.3-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.2 MB)
+[   97.341634] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 436.6 MB/s eta 0:00:00
+[   97.361724] cloud-init[1686]: Collecting nvidia-cuda-cupti-cu12==12.8.90.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   97.370205] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cuda-cupti-cu12/nvidia_cuda_cupti_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (10.2 MB)
+[   97.393299] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 472.3 MB/s eta 0:00:00
+[   97.422244] cloud-init[1686]: Collecting nvidia-curand-cu12==10.3.9.90.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   97.430750] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-curand-cu12/nvidia_curand_cu12-10.3.9.90-py3-none-manylinux_2_27_x86_64.whl (63.6 MB)
+[   97.590488] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 63.6/63.6 MB 222.4 MB/s eta 0:00:00
+[   97.658402] cloud-init[1686]: Collecting nvidia-cusolver-cu12==11.7.3.90.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   97.666715] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cusolver-cu12/nvidia_cusolver_cu12-11.7.3.90-py3-none-manylinux_2_27_x86_64.whl (267.5 MB)
+[   98.297267] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 267.5/267.5 MB 205.2 MB/s eta 0:00:00
+[   98.516798] cloud-init[1686]: Collecting nvidia-cusparse-cu12==12.5.8.93.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   98.525212] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cusparse-cu12/nvidia_cusparse_cu12-12.5.8.93-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (288.2 MB)
+[   99.223355] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 288.2/288.2 MB 131.3 MB/s eta 0:00:00
+[   99.457358] cloud-init[1686]: Collecting nvidia-nvjitlink-cu12==12.8.93.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   99.466307] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-nvjitlink-cu12/nvidia_nvjitlink_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (39.3 MB)
+[   99.559655] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 39.3/39.3 MB 383.8 MB/s eta 0:00:00
+[   99.608134] cloud-init[1686]: Collecting nvidia-cuda-nvrtc-cu12==12.8.93.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   99.616563] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-cuda-nvrtc-cu12/nvidia_cuda_nvrtc_cu12-12.8.93-py3-none-manylinux2010_x86_64.manylinux_2_12_x86_64.whl (88.0 MB)
+[   99.821375] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 88.0/88.0 MB 336.4 MB/s eta 0:00:00
+[   99.906181] cloud-init[1686]: Collecting nvidia-nvtx-cu12==12.8.90.* (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==12.8.1; platform_system == "Linux"->torch==2.11.0)
+[   99.914832] cloud-init[1686]:   Downloading https://pypi.nvidia.com/nvidia-nvtx-cu12/nvidia_nvtx_cu12-12.8.90-py3-none-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (89 kB)
+[   99.916725] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.0/90.0 kB 211.4 MB/s eta 0:00:00
+[  100.181496] cloud-init[1686]: Collecting cuda-pathfinder~=1.1 (from cuda-bindings<13,>=12.9.4->torch==2.11.0)
+[  100.191883] cloud-init[1686]:   Downloading cuda_pathfinder-1.6.0-py3-none-any.whl.metadata (1.9 kB)
+[  100.293093] cloud-init[1686]: Collecting mpmath<1.4,>=1.1.0 (from sympy>=1.13.3->torch==2.11.0)
+[  100.302261] cloud-init[1686]:   Downloading mpmath-1.3.0-py3-none-any.whl.metadata (8.6 kB)
+[  100.338579] cloud-init[1686]: Collecting MarkupSafe>=2.0 (from jinja2->torch==2.11.0)
+[  100.346317] cloud-init[1686]:   Downloading https://download.pytorch.org/whl/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+[  100.372996] cloud-init[1686]: Downloading https://download-r2.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl (820.3 MB)
+[  111.303070] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 820.3/820.3 MB 1.1 MB/s eta 0:00:00
+[  111.313500] cloud-init[1686]: Downloading https://download-r2.pytorch.org/whl/triton-3.6.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (188.3 MB)
+[  114.098794] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 188.3/188.3 MB 4.2 MB/s eta 0:00:00
+[  114.108308] cloud-init[1686]: Downloading cuda_bindings-12.9.7-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (7.6 MB)
+[  114.448640] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.6/7.6 MB 22.4 MB/s eta 0:00:00
+[  114.457961] cloud-init[1686]: Downloading fsspec-2026.7.0-py3-none-any.whl (206 kB)
+[  114.610112] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 206.6/206.6 kB 1.3 MB/s eta 0:00:00
+[  114.620723] cloud-init[1686]: Downloading networkx-3.6.1-py3-none-any.whl (2.1 MB)
+[  114.755239] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 15.5 MB/s eta 0:00:00
+[  114.768274] cloud-init[1686]: Downloading https://download.pytorch.org/whl/setuptools-78.1.0-py3-none-any.whl (1.3 MB)
+[  114.955275] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 6.7 MB/s eta 0:00:00
+[  114.964855] cloud-init[1686]: Downloading sympy-1.14.0-py3-none-any.whl (6.3 MB)
+[  115.232559] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.3/6.3 MB 23.6 MB/s eta 0:00:00
+[  115.241622] cloud-init[1686]: Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+[  115.360518] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 45.6/45.6 kB 300.9 kB/s eta 0:00:00
+[  115.369579] cloud-init[1686]: Downloading filelock-3.32.3-py3-none-any.whl (98 kB)
+[  115.490085] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 98.9/98.9 kB 743.3 kB/s eta 0:00:00
+[  115.499457] cloud-init[1686]: Downloading https://download.pytorch.org/whl/jinja2-3.1.6-py3-none-any.whl (134 kB)
+[  115.652894] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 819.5 kB/s eta 0:00:00
+[  115.661912] cloud-init[1686]: Downloading cuda_pathfinder-1.6.0-py3-none-any.whl (54 kB)
+[  115.782424] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 54.6/54.6 kB 372.0 kB/s eta 0:00:00
+[  115.790253] cloud-init[1686]: Downloading https://download.pytorch.org/whl/markupsafe-3.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+[  115.920009] cloud-init[1686]: Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+[  115.982568] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 8.6 MB/s eta 0:00:00
+[  117.026968] cloud-init[1686]: Installing collected packages: nvidia-cusparselt-cu12, mpmath, cuda-toolkit, typing-extensions, triton, sympy, setuptools, nvidia-nvtx-cu12, nvidia-nvshmem-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufile-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, networkx, MarkupSafe, fsspec, filelock, cuda-pathfinder, nvidia-cusparse-cu12, nvidia-cufft-cu12, nvidia-cudnn-cu12, jinja2, cuda-bindings, nvidia-cusolver-cu12, torch
+[  163.919265] cloud-init[1686]: Successfully installed MarkupSafe-3.0.3 cuda-bindings-12.9.7 cuda-pathfinder-1.6.0 cuda-toolkit-12.8.1 filelock-3.32.3 fsspec-2026.7.0 jinja2-3.1.6 mpmath-1.3.0 networkx-3.6.1 nvidia-cublas-cu12-12.8.4.1 nvidia-cuda-cupti-cu12-12.8.90 nvidia-cuda-nvrtc-cu12-12.8.93 nvidia-cuda-runtime-cu12-12.8.90 nvidia-cudnn-cu12-9.19.0.56 nvidia-cufft-cu12-11.3.3.83 nvidia-cufile-cu12-1.13.1.3 nvidia-curand-cu12-10.3.9.90 nvidia-cusolver-cu12-11.7.3.90 nvidia-cusparse-cu12-12.5.8.93 nvidia-cusparselt-cu12-0.7.1 nvidia-nccl-cu12-2.28.9 nvidia-nvjitlink-cu12-12.8.93 nvidia-nvshmem-cu12-3.4.5 nvidia-nvtx-cu12-12.8.90 setuptools-78.1.0 sympy-1.14.0 torch-2.11.0+cu128 triton-3.6.0 typing-extensions-4.16.0
+[  164.583851] cloud-init[1686]: Processing ./research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl
+[  164.589149] cloud-init[1686]: Processing ./research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl
+[  164.591681] cloud-init[1686]: Installing collected packages: casformer-reference, cas-neural-cjt
+[  165.051728] cloud-init[1686]: Successfully installed cas-neural-cjt-0.2.0 casformer-reference-0.1.0
+[  165.670477] cloud-init[1686]: Collecting numpy==2.2.6 (from -r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 4))
+[  165.710506] cloud-init[1686]:   Downloading numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (62 kB)
+[  165.815354] cloud-init[1686]:      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.0/62.0 kB 503.3 kB/s eta 0:00:00
+[  165.916063] cloud-init[1686]: Collecting jsonschema==4.26.0 (from -r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5))
+[  165.924621] cloud-init[1686]:   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+[  166.047643] cloud-init[1686]: Collecting pytest==9.0.2 (from -r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 6))
+[  166.056634] cloud-init[1686]:   Downloading pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+[  166.126046] cloud-init[1686]: Collecting attrs>=22.2.0 (from jsonschema==4.26.0->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5))
+[  166.135027] cloud-init[1686]:   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+[  166.209890] cloud-init[1686]: Collecting jsonschema-specifications>=2023.03.6 (from jsonschema==4.26.0->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5))
+[  166.218684] cloud-init[1686]:   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+[  166.286877] cloud-init[1686]: Collecting referencing>=0.28.4 (from jsonschema==4.26.0->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5))
+[  166.295415] cloud-init[1686]:   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+[  166.582097] cloud-init[1686]: Collecting rpds-py>=0.25.0 (from jsonschema==4.26.0->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5))
+[  166.590891] cloud-init[1686]:   Downloading rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+[  166.834576] cloud-init[1686]: Collecting iniconfig>=1.0.1 (from pytest==9.0.2->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 6))
+[  166.843154] cloud-init[1686]:   Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+[  167.117978] cloud-init[1686]: Collecting packaging>=22 (from pytest==9.0.2->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 6))
+[  167.126469] cloud-init[1686]:   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+[  167.372521] cloud-init[1686]: Collecting pluggy<2,>=1.5 (from pytest==9.0.2->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 6))
+[  167.381260] cloud-init[1686]:   Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+[  167.635549] cloud-init[1686]: Collecting pygments>=2.7.2 (from pytest==9.0.2->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 6))
+[  167.644296] cloud-init[1686]:   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+[  167.757462] cloud-init[1686]: Requirement already satisfied: typing-extensions>=4.4.0 in ./venv/lib/python3.12/site-packages (from referencing>=0.28.4->jsonschema==4.26.0->-r /opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/requirements-gpu.txt (line 5)) (4.16.0)
+[  167.769866] cloud-init[1686]: Downloading numpy-2.2.6-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (16.5 MB)
+[  168.266735] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.5/16.5 MB 24.3 MB/s eta 0:00:00
+[  168.275354] cloud-init[1686]: Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+[  168.391671] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 90.6/90.6 kB 699.3 kB/s eta 0:00:00
+[  168.400737] cloud-init[1686]: Downloading pytest-9.0.2-py3-none-any.whl (374 kB)
+[  168.526019] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.8/374.8 kB 2.9 MB/s eta 0:00:00
+[  168.534636] cloud-init[1686]: Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+[  168.655628] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 67.5/67.5 kB 478.9 kB/s eta 0:00:00
+[  168.664329] cloud-init[1686]: Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+[  168.792837] cloud-init[1686]: Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+[  168.921702] cloud-init[1686]: Downloading packaging-26.3-py3-none-any.whl (129 kB)
+[  169.037108] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 1.0 MB/s eta 0:00:00
+[  169.045681] cloud-init[1686]: Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+[  169.059487] cloud-init[1686]: Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+[  169.071486] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 117.1 MB/s eta 0:00:00
+[  169.080557] cloud-init[1686]: Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+[  169.093795] cloud-init[1686]: Downloading rpds_py-2026.6.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (366 kB)
+[  169.100789] cloud-init[1686]:    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 366.2/366.2 kB 61.8 MB/s eta 0:00:00
+[  169.291047] cloud-init[1686]: Installing collected packages: rpds-py, pygments, pluggy, packaging, numpy, iniconfig, attrs, referencing, pytest, jsonschema-specifications, jsonschema
+[  171.492234] cloud-init[1686]: Successfully installed attrs-26.1.0 iniconfig-2.3.0 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 numpy-2.2.6 packaging-26.3 pluggy-1.6.0 pygments-2.21.0 pytest-9.0.2 referencing-0.37.0 rpds-py-2026.6.3
+[  208.718306] cloud-init[1686]: Traceback (most recent call last):
+[  208.718449] cloud-init[1686]:   File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 227, in publish_once
+[  208.718490] cloud-init[1686]:     s3.put_object(Bucket=bucket, Key=key, Body=body,
+[  208.718510] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/client.py", line 606, in _api_call
+[  208.718527] cloud-init[1686]:     return self._make_api_call(operation_name, kwargs)
+[  208.718541] cloud-init[1686]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  208.718560] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/context.py", line 123, in wrapper
+[  208.718580] cloud-init[1686]:     return func(*args, **kwargs)
+[  208.718592] cloud-init[1686]:            ^^^^^^^^^^^^^^^^^^^^^
+[  208.718610] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/client.py", line 1094, in _make_api_call
+[  208.718628] cloud-init[1686]:     raise error_class(parsed_response, operation_name)
+[  208.718761] cloud-init[1686]: botocore.exceptions.ClientError: An error occurred (PreconditionFailed) when calling the PutObject operation: At least one of the pre-conditions you specified did not hold
+[  208.718890] cloud-init[1686]: During handling of the above exception, another exception occurred:
+[  208.719042] cloud-init[1686]: Traceback (most recent call last):
+[  208.719056] cloud-init[1686]:   File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 295, in <module>
+[  208.719076] cloud-init[1686]:     main()
+[  208.719096] cloud-init[1686]:   File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 158, in main
+[  208.719114] cloud-init[1686]:     uploaded = upload_results(s3, bucket, results_dir.parent)
+[  208.719131] cloud-init[1686]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  208.719148] cloud-init[1686]:   File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 260, in upload_results
+[  208.719165] cloud-init[1686]:     upload = publish_once(s3, bucket, root, published, 'result.json', 'result.json.sha256')
+[  208.719183] cloud-init[1686]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  208.719327] cloud-init[1686]:   File "/opt/cas-graph6curr/package/graph6_face_readout_worker.py", line 232, in publish_once
+[  208.719454] cloud-init[1686]:     existing = s3.get_object(Bucket=bucket, Key=key)
+[  208.719577] cloud-init[1686]:                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  208.719590] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/client.py", line 606, in _api_call
+[  208.719602] cloud-init[1686]:     return self._make_api_call(operation_name, kwargs)
+[  208.719615] cloud-init[1686]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[  208.719626] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/context.py", line 123, in wrapper
+[  208.719637] cloud-init[1686]:     return func(*args, **kwargs)
+[  208.719647] cloud-init[1686]:            ^^^^^^^^^^^^^^^^^^^^^
+[  208.719659] cloud-init[1686]:   File "/usr/local/lib/python3.12/dist-packages/botocore/client.py", line 1094, in _make_api_call
+[  208.719783] cloud-init[1686]:     raise error_class(parsed_response, operation_name)
+[  208.719796] cloud-init[1686]: botocore.errorfactory.AccessDenied: An error occurred (AccessDenied) when calling the GetObject operation: User: arn:aws:sts::807562639912:assumed-role/cas-meta2-graph6read-20260912062331-b34e3d92-worker/i-0460ab42e053672d7 is not authorized to perform: s3:GetObject on resource: "arn:aws:s3:::cas-meta2-graph6read-20260912062331-b34e3d92-807562639912/results/evidence/phase_pip_requirements_starting.json" because no identity-based policy allows the s3:GetObject action
+[  208.798203] cloud-init[1686]: 2026-09-12 06:40:01,185 - cc_scripts_user.py[WARNING]: Failed to run module scripts_user (scripts in /var/lib/cloud/instance/scripts)
+[  208.798310] cloud-init[1686]: 2026-09-12 06:40:01,185 - log_util.py[WARNING]: Running module scripts_user (<module 'cloudinit.config.cc_scripts_user' from '/usr/lib/python3/dist-packages/cloudinit/config/cc_scripts_user.py'>) failed
+ci-info: no authorized SSH keys fingerprints found for user ubuntu.
+<14>Sep 12 06:40:01 cloud-init: #############################################################
+<14>Sep 12 06:40:01 cloud-init: -----BEGIN SSH HOST KEY FINGERPRINTS-----
+<14>Sep 12 06:40:01 cloud-init: 256 SHA256:jN+E1vuaD04cb7Ns8s4n1+R7peQevog0m3znNPcR+co root@ip-172-31-33-76 (ECDSA)
+<14>Sep 12 06:40:01 cloud-init: 256 SHA256:VEDB9IIlHvtbhOuIVnILJ4fbUZmhAggd+EMGp6iQ+HY root@ip-172-31-33-76 (ED25519)
+<14>Sep 12 06:40:01 cloud-init: 3072 SHA256:T2J0FkYen/k9gd6AzbOR79lYXm2bSYlbcFRzCG3cRNU root@ip-172-31-33-76 (RSA)
+<14>Sep 12 06:40:01 cloud-init: -----END SSH HOST KEY FINGERPRINTS-----
+<14>Sep 12 06:40:01 cloud-init: #############################################################
+-----BEGIN SSH HOST KEY KEYS-----
+ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBGzlqTvxLHzO+R26d4DJL6NolPYf6zmaaO1cOk+SvB5XMO8+ZgItQqLEbW3gk78ByAtJV3IjE0GBSlxD9MY7eOI= root@ip-172-31-33-76
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDF0rndjmwuSdl6l/KFaKuedvq5oOCDKh5WqaR8osxNv root@ip-172-31-33-76
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCmofWavzRrHKMvCamwWivuRDNhpsI5+g7tssfBwf2l6x73tHG01t89lJLYMvrCSJ0oSNwB3uW4l0zP8c9Uced2uXjXGhwRT/KvUGWsoseX+/DZq59SYu3UnE8/JVGaIbfMCYJYSF1rjc1ntGL1Airb7CkCwbNJECM9SbdRm7S0fMAepllnU2yJ+0+sEIgCVD3qWX6MzeMAdkjpoEkIJ3BdrlpIPgzGZdlLB94kekAvpWMcsC4YUNPHx23R0juNI894vU4OBN/r7bL3P2t04Y1VTjIAS3QzrDI2Nee+HWmkv02mRraR1v0gyF35KvH9I40mM/+dHIyaOFXnY3sj3HS2RciEToTDN+2rxo159/5XAUYiYSQPvIsNzZ5uB3hWK2zW8OoAiaryhFCOCp2QtA0iBsZmkRxFZ1+09KEnU0IkszNxkckoo7cWcB1AYVkzMhQknwy+TbydYInkNcRrSKtH3kWkt50lkDMsd0GzRdomjKwrz8X0l0+bgFJ+ZfFjgj8= root@ip-172-31-33-76
+-----END SSH HOST KEY KEYS-----
+[  208.880277] cloud-init[1686]: Cloud-init v. 26.1-0ubuntu1~24.04.1 finished at Sat, 12 Sep 2026 06:40:01 +0000. Datasource DataSourceEc2Local.  Up 208.87 seconds

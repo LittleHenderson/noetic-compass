@@ -1,0 +1,11 @@
+{
+  "bytes": 66280,
+  "collected_by": "ec2.get_console_output, read-only",
+  "file": "console_i-0916a3eedfccea11f.txt",
+  "instance": "i-0916a3eedfccea11f",
+  "job": "cas-meta2-graph6read-20260912044325-14fcd081",
+  "root_cause_visible_here": "NameError: name 'beacon' is not defined - the shared transport was appended after the worker's entrypoint guard, so the module ran main() before the def had executed.",
+  "schema": "cas.instance-serial-console/1",
+  "sha256": "e86aca8650516f1cec9464b2ac665933f7ed46aace86870e61efc652f5cd8182",
+  "why_it_is_kept": "This is the ONLY place the run's root cause is readable. The receipt's own failure.json records a downstream symptom, not the cause, and AWS discards console output for a terminated instance after a while. Without this file the cause of the failure would not survive."
+}

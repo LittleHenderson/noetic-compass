@@ -570,9 +570,21 @@ class CandidateProvider(CurriculumProvider):
             try:
                 body = self._read_body(s3.get_object(Bucket=bucket, Key=key)["Body"],
                                        256 * 1024**2)
-            except Exception:                     # noqa: BLE001 - best effort
+                # The key can be NESTED - results/artifacts/manifest.json becomes
+                # remote_artifacts/manifest.json - so the parent must exist first.
+                # Without this the very first nested key raised FileNotFoundError
+                # OUTSIDE the download guard and killed the whole rescue, which is
+                # how job cas-meta2-graph6read-20260912062331-b34e3d92 saved NOTHING
+                # locally even though its payload was sitting in the bucket. This is
+                # the path that exists precisely for a run with no result.json; it
+                # must not be the thing that fails.
+                target = self._evidence / ("remote_" + name)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                receipt = write_evidence(target, body)
+            except Exception as error:            # noqa: BLE001 - best effort
+                collected.setdefault("uncollected", []).append(
+                    {"key": key, "error": type(error).__name__ + ":" + str(error)[:300]})
                 continue
-            receipt = write_evidence(self._evidence / ("remote_" + name), body)
             collected["artifacts_collected"].append(
                 {"key": key, "path": receipt["path"], "sha256": receipt["sha256"],
                  "bytes": receipt["bytes"]})
