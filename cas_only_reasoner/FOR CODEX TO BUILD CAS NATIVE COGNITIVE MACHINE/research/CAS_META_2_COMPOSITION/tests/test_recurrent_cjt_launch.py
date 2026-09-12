@@ -513,3 +513,73 @@ def test_the_declared_modules_are_all_tracked_in_git():
     for name in rl.package_data_files():
         raw = curriculum.git_bytes(curriculum.ROOT, head, name)
         assert raw, name
+
+
+# --------------------------------------------------------------------------
+# the learner index must cover every task the course will present
+# --------------------------------------------------------------------------
+
+def test_the_task_index_covers_every_round_the_course_will_ask_for():
+    """The off-by-one that cost $7.00, made checkable for free.
+
+    course_task_index built rounds 1..16 from range(1, 17). course_plan actually
+    numbers its rounds 0..15, so round 0 was never indexed and round 16 never
+    existed. run_course asks for entry["round"], hit round 0 on its very first
+    batch, and GraphLearner._position raised
+    KeyError: 'b19c5837d0576387ecf54de28673c14870021aae646663ac8610580d68d4ac42'
+    after the reservation was spent.
+
+    The rounds are now READ from the plan, so they cannot drift from what
+    run_course asks for. This asserts that directly.
+    """
+    from cas_meta2.recurrent_cjt import course as cs
+    planned = [entry["round"] for entry in cs.course_plan()["rounds"]]
+    assert planned == list(range(len(planned))), planned
+    index = runner.course_task_index()
+    known = {task["record_id"] for task in index}
+    missing = []
+    for number in planned:
+        for pool in cs.default_tasks_for_round(number).values():
+            missing.extend(task["record_id"] for task in pool
+                           if task["record_id"] not in known)
+    assert not missing, "%d tasks the course presents are not indexed" % len(missing)
+
+
+def test_run_course_never_asks_the_learner_for_an_unindexed_task():
+    """Drives the REAL run_course against the REAL index, with a stub learner.
+
+    The earlier tests supplied their own tasks_for_round, so they never
+    exercised the real task supply against a real index - which is exactly why
+    the off-by-one survived to the instance. This one uses both.
+    """
+    from cas_meta2.recurrent_cjt import course as cs
+
+    index = runner.course_task_index()
+    known = {task["record_id"]: position
+             for position, task in enumerate(index)}
+    looked_up = []
+
+    class _Learner:
+        def __init__(self):
+            self.depth = 1
+            self.accounting = None
+
+        def set_depth(self, depth):
+            self.depth = depth
+
+        def _position(self, task):
+            # the real GraphLearner._position: a KeyError here is the bug
+            looked_up.append(task["record_id"])
+            return known[task["record_id"]]
+
+    def _step(learner, batch):
+        for task in batch:
+            learner._position(task)
+        return {"optimizer_steps": 1, "mean_loss": 0.0}
+
+    outcome = cs.run_course(learner=_Learner(), batch_step=_step)
+    # 896 teaching decisions, every one of them resolved against the real index
+    assert len(looked_up) == 896
+    assert set(looked_up) <= set(known)
+    assert outcome["report"]["matches_declaration"] is True
+    assert outcome["report"]["missing_rounds"] == []

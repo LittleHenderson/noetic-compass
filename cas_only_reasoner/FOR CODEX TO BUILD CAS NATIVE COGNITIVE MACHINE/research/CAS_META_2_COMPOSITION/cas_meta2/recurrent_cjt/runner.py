@@ -81,7 +81,14 @@ def course_task_index(built=None, rounds=None):
     Deduplication is by ``record_id`` because the same question legitimately
     recurs across rounds - that is what maintenance practice IS.
     """
-    rounds = range(1, len(rc.ROUND_DEPTH_SCHEDULE) + 1) if rounds is None else rounds
+    # The round NUMBERS come from the plan, not from a guess. This said
+    # range(1, 17) and course_plan actually numbers its rounds 0..15, so round 0
+    # was never indexed and round 16 never existed: the first batch of the first
+    # arm raised KeyError on _position, after $7.00 was spent. Reading the plan
+    # cannot drift from what run_course will ask for, because it IS what
+    # run_course reads.
+    if rounds is None:
+        rounds = [entry["round"] for entry in cs.course_plan()["rounds"]]
     index, seen = [], set()
     for round_index in rounds:
         for tasks in cs.default_tasks_for_round(round_index, built=built).values():
