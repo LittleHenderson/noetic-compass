@@ -163,7 +163,7 @@ def seeds_already_used(record_dir):
     Three jobs on the same seed are ONE job run three times. The launcher reads
     the receipts rather than trusting the caller to remember which seeds went.
     """
-    used = {}
+    used, attempted = {}, {}
     root = Path(record_dir)
     if not root.is_dir():
         return used
@@ -176,8 +176,25 @@ def seeds_already_used(record_dir):
         if authority.get("candidate") != CANDIDATE:
             continue
         seed = authority.get("seed")
-        if seed is not None:
+        if seed is None:
+            continue
+        # A seed is CONSUMED only by a run that delivered. A technical failure
+        # burns $7.00 but produces no measurement, and refusing to re-run that
+        # seed would leave a permanent hole in the three paired runs the
+        # criterion needs. The guard exists to stop three jobs on ONE seed being
+        # reported as three paired runs - not to punish a crash.
+        result = intent.parent / "result.json"
+        delivered = False
+        if result.is_file():
+            try:
+                delivered = bool(json.loads(result.read_bytes()).get(
+                    "completed_deliverable"))
+            except (ValueError, OSError):
+                delivered = False
+        if delivered:
             used[int(seed)] = authority.get("job")
+        else:
+            attempted.setdefault(int(seed), []).append(authority.get("job"))
     return used
 
 
@@ -188,8 +205,10 @@ def require_unused_seed(seed, record_dir):
     require(int(seed) not in used,
             "RDCJT_SEED_ALREADY_RUN:%d_by_%s" % (int(seed), used.get(int(seed))))
     return {"seed": int(seed), "seeds_declared": list(FROZEN_SEEDS),
-            "seeds_already_used": sorted(used),
-            "remaining": sorted(s for s in FROZEN_SEEDS if s not in used)}
+            "seeds_already_delivered": sorted(used),
+            "remaining": sorted(s for s in FROZEN_SEEDS if s not in used),
+            "note": ("a seed is consumed by a DELIVERED run; a failed attempt "
+                     "costs its reservation but does not burn the seed")}
 
 
 def replication_status(jobs_completed=1):
@@ -572,6 +591,13 @@ RECURRENT_MODULES = (
     "cas_meta2/recurrent_cjt/course.py",
     "cas_meta2/recurrent_cjt/experiment.py",
     "cas_meta2/recurrent_cjt/runner.py",
+    # recurrence.phase_batches imports diagnosis.phase_batches from this OTHER
+    # package. Run 1 died on ModuleNotFoundError: cas_meta2.rpm_cfc_constructor
+    # after $7.00 was spent, because the first version of this list was written
+    # from the directory listing instead of from the import graph. The test
+    # below now walks the graph, so a new cross-package import cannot be missed.
+    "cas_meta2/rpm_cfc_constructor/__init__.py",
+    "cas_meta2/rpm_cfc_constructor/diagnosis.py",
 )
 
 

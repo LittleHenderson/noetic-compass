@@ -335,20 +335,56 @@ def test_each_of_the_three_declared_seeds_is_accepted():
         assert rl.validate_authority(_authority(seed=seed))
 
 
-def test_a_seed_that_already_has_a_receipt_is_refused(tmp_path):
-    receipt = tmp_path / "receipt_cas-meta2-rdcjt-20260912000000-abcdef01"
-    receipt.mkdir()
-    (receipt / "intent.json").write_text(json.dumps(
-        {"authority": {"candidate": rl.CANDIDATE, "seed": rl.FROZEN_SEEDS[0],
-                       "job": "cas-meta2-rdcjt-20260912000000-abcdef01"}}))
-    used = rl.seeds_already_used(tmp_path)
-    assert used == {rl.FROZEN_SEEDS[0]: "cas-meta2-rdcjt-20260912000000-abcdef01"}
+def _receipt(tmp_path, seed, job, *, delivered):
+    directory = tmp_path / ("receipt_" + job)
+    directory.mkdir()
+    (directory / "intent.json").write_text(json.dumps(
+        {"authority": {"candidate": rl.CANDIDATE, "seed": seed, "job": job}}))
+    (directory / "result.json").write_text(json.dumps(
+        {"completed_deliverable": bool(delivered)}))
+    return directory
+
+
+def test_a_seed_whose_run_DELIVERED_is_refused(tmp_path):
+    """Three jobs on one seed are one job run three times."""
+    _receipt(tmp_path, rl.FROZEN_SEEDS[0], "cas-meta2-rdcjt-x-aaaaaaaa",
+             delivered=True)
+    assert rl.seeds_already_used(tmp_path) == {
+        rl.FROZEN_SEEDS[0]: "cas-meta2-rdcjt-x-aaaaaaaa"}
     with pytest.raises(ValueError) as caught:
         rl.require_unused_seed(rl.FROZEN_SEEDS[0], tmp_path)
     assert "RDCJT_SEED_ALREADY_RUN" in str(caught.value)
-    # the other two are still available
     report = rl.require_unused_seed(rl.FROZEN_SEEDS[1], tmp_path)
     assert report["remaining"] == sorted(rl.FROZEN_SEEDS[1:])
+
+
+def test_a_seed_whose_run_FAILED_may_be_run_again(tmp_path):
+    """A crash burns $7.00 and produces no measurement.
+
+    Refusing to re-run that seed would leave a permanent hole in the three
+    paired runs the criterion needs. The guard exists to stop three jobs on one
+    seed being reported as three paired runs, not to punish a crash. Run 1 of
+    CAS_RDCJT_001 died on ModuleNotFoundError and had to be re-run on its own
+    seed, which is exactly this case.
+    """
+    _receipt(tmp_path, rl.FROZEN_SEEDS[0], "cas-meta2-rdcjt-y-bbbbbbbb",
+             delivered=False)
+    assert rl.seeds_already_used(tmp_path) == {}
+    report = rl.require_unused_seed(rl.FROZEN_SEEDS[0], tmp_path)
+    assert report["seed"] == rl.FROZEN_SEEDS[0]
+    assert report["seeds_already_delivered"] == []
+    assert "does not burn the seed" in report["note"]
+
+
+def test_a_receipt_with_no_result_does_not_consume_its_seed(tmp_path):
+    """An aborted run leaves an intent and no result; that is not a delivery."""
+    directory = tmp_path / "receipt_cas-meta2-rdcjt-z-cccccccc"
+    directory.mkdir()
+    (directory / "intent.json").write_text(json.dumps(
+        {"authority": {"candidate": rl.CANDIDATE, "seed": rl.FROZEN_SEEDS[2],
+                       "job": "cas-meta2-rdcjt-z-cccccccc"}}))
+    assert rl.seeds_already_used(tmp_path) == {}
+    assert rl.require_unused_seed(rl.FROZEN_SEEDS[2], tmp_path)["seed"] ==         rl.FROZEN_SEEDS[2]
 
 
 def test_an_undeclared_seed_is_refused_before_launch(tmp_path):
@@ -374,25 +410,97 @@ def test_the_worker_config_refuses_an_unbound_seed():
 # the package must ship the modules the worker imports
 # --------------------------------------------------------------------------
 
-def test_the_package_ships_every_module_the_worker_imports(tmp_path):
-    """The builder's SOURCE_DIRS do NOT cover this candidate's own package.
+def _import_graph(entry="cas_meta2.recurrent_cjt.runner"):
+    """Every cas_meta2 module reachable from the worker's entry, statically.
 
-    Without package_data_files the archive carried the worker and none of the
-    five modules it imports, so the instance would have died on
-    ModuleNotFoundError AFTER the reservation was spent. This asserts the
-    members by name against what resolve_members actually produces.
+    Walks the AST rather than importing, so it sees imports made INSIDE
+    functions - which is exactly where the one that broke run 1 lives:
+    recurrence.phase_batches does `from ..rpm_cfc_constructor.diagnosis import
+    phase_batches` at call time, not at module level.
+    """
+    import ast
+    import os
+    from pathlib import Path as _Path
+    from aws import graph_training_curriculum_launch as curriculum
+
+    # curriculum.ROOT is already the composition directory, the one that holds
+    # cas_meta2/ - not the repository root.
+    base = _Path(curriculum.ROOT)
+
+    def module_path(dotted):
+        candidate_file = base / (dotted.replace(".", os.sep) + ".py")
+        if candidate_file.is_file():
+            return candidate_file
+        package_init = base / dotted.replace(".", os.sep) / "__init__.py"
+        return package_init if package_init.is_file() else None
+
+    def imports_of(path, dotted):
+        parts = dotted.split(".")
+        found = set()
+        for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
+            if isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name.startswith("cas_meta2"):
+                        found.add(alias.name)
+            elif isinstance(node, ast.ImportFrom):
+                if node.level:
+                    stem = parts[:max(0, len(parts) - node.level)]
+                    module = ".".join(stem + ([node.module] if node.module else []))
+                else:
+                    module = node.module or ""
+                if module.startswith("cas_meta2"):
+                    found.add(module)
+                    for alias in node.names:
+                        found.add(module + "." + alias.name)
+        return found
+
+    seen, queue = set(), [entry]
+    while queue:
+        dotted = queue.pop()
+        if dotted in seen:
+            continue
+        path = module_path(dotted)
+        if path is None:
+            continue
+        seen.add(dotted)
+        queue.extend(dep for dep in imports_of(path, dotted) if dep not in seen)
+    return seen
+
+
+def test_the_package_ships_every_module_the_worker_actually_imports():
+    """Walks the import graph. The earlier version of this test did NOT.
+
+    It asserted RECURRENT_MODULES against itself - that the six names I had
+    written down were the six names I had written down - which is no test at all.
+    The real graph reaches cas_meta2.rpm_cfc_constructor.diagnosis through an
+    in-function import in recurrence.phase_batches, that module was not in the
+    package, and run 1 died on ModuleNotFoundError after $7.00 was spent.
+
+    SOURCE_DIRS covers graph_teaching and teaching_cycle, so anything reachable
+    OUTSIDE those two must appear in package_data_files.
     """
     from aws import graph_training_curriculum_launch as curriculum
+    covered = ("graph_teaching", "teaching_cycle")
     declared = set(rl.package_data_files())
-    assert declared, "no candidate modules declared"
-    for name in declared:
-        assert name.endswith(".py")
-        assert "cas_meta2/recurrent_cjt/" in name
-    # every module the runner and worker import, by name
-    for module in ("__init__", "recurrence", "learner", "course", "experiment",
-                   "runner"):
-        assert any(name.endswith("/recurrent_cjt/%s.py" % module)
-                   for name in declared), module
+    missing = []
+    for dotted in sorted(_import_graph()):
+        parts = dotted.split(".")
+        if len(parts) < 3 or parts[1] in covered:
+            continue
+        relative = "cas_meta2/" + "/".join(parts[1:]) + ".py"
+        member = curriculum.PILOT + relative
+        if member not in declared:
+            missing.append(dotted)
+    assert not missing, "reachable but not packaged: %r" % (missing,)
+
+
+def test_the_graph_walker_sees_the_import_that_broke_run_one():
+    """Guards the guard: if the walker stopped seeing it, the test would pass
+    vacuously and the same $7.00 defect could ship again."""
+    graph = _import_graph()
+    assert "cas_meta2.rpm_cfc_constructor.diagnosis" in graph, sorted(graph)
+    assert "cas_meta2.recurrent_cjt.experiment" in graph
+    assert "cas_meta2.graph_teaching.face_evaluation" in graph
 
 
 def test_the_declared_modules_are_all_tracked_in_git():
