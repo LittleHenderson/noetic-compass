@@ -102,26 +102,33 @@ def rms(values):
     return (total / len(values)) ** 0.5
 
 
-def feedback(state, encoded, *, lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms):
+def feedback(state, encoded, *, lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms,
+             cast=float):
     """B(s, e): the previous state carried back, scaled against the input's RMS.
 
     In exact arithmetic the result's RMS cannot exceed ``lambda_ * rms(e)``: the
     denominator is at least ``rms(s)``, which cancels it. That bounds THIS term; it
     proves nothing about the whole process converging or reasoning correctly.
+
+    ``cast`` is the one hook the numerical path needs. The default ``float`` coerces
+    a plain sequence; a tensor path passes an identity instead, because ``float()``
+    on a tensor DETACHES it from the autograd graph. With the default, this function
+    would train the first pass and quietly freeze the rest.
     """
     require(len(state) == len(encoded), "FEEDBACK_SHAPE_MISMATCH")
     input_rms = rms_fn(encoded)
     state_rms = rms_fn(state)
     denominator = (input_rms ** 2 + state_rms ** 2 + epsilon ** 2) ** 0.5
     scale = lambda_ * input_rms / denominator
-    return [scale * float(value) for value in state]
+    return [scale * cast(value) for value in state]
 
 
-def reinjected(encoded, state, *, lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms):
+def reinjected(encoded, state, *, lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms,
+               cast=float):
     """e + B(s, e): what the transformation receives on the next pass."""
     carried = feedback(state, encoded, lambda_=lambda_, epsilon=epsilon,
-                       rms_fn=rms_fn)
-    return [float(base) + extra for base, extra in zip(encoded, carried)]
+                       rms_fn=rms_fn, cast=cast)
+    return [cast(base) + extra for base, extra in zip(encoded, carried)]
 
 
 class Accounting:
@@ -173,23 +180,34 @@ def per_question_state(count, *, width, zeros=None):
 
 
 def run_passes(encoded, core, *, depth, state=None, accounting=None,
-               lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms, reset_each_pass=False):
+               lambda_=LAMBDA, epsilon=EPSILON, rms_fn=rms, cast=float,
+               zeros=None, reset_each_pass=False):
     """Carry the state through ``depth`` passes of the same transformation.
 
     ``reset_each_pass`` implements RESET_8: eight computations with the working state
     discarded between them. Under a deterministic transformation it must reproduce
     the one-pass result, which is what makes it a mechanism check rather than a
     competing architecture.
+
+    ``rms_fn``, ``cast`` and ``zeros`` are the whole numerical seam. Both paths run
+    THIS loop, so the reference arithmetic and the training path cannot drift apart.
+    ``zeros`` exists because an initial state has to be built in the caller's backend:
+    zero floats cannot be stacked into a tensor.
     """
     require(depth in DEPTHS, "DEPTH_NOT_DECLARED:" + str(depth))
     width = len(encoded)
-    current = list(state) if state is not None else [0.0] * width
+    allocate = zeros or (lambda count: [0.0] * count)
+    # The shortcut is an identity, not a semantic change: with a zero state, B is the
+    # zero vector and e + 0 is e bitwise, so the one-pass path could go through
+    # ``reinjected`` and land on the same value. It is kept because depth one is the
+    # matched condition and should be the existing computation literally.
+    shortcut = depth == 1 and state is None
+    current = list(allocate(width)) if state is None else list(state)
     require(len(current) == width, "STATE_WIDTH_MISMATCH")
     for _ in range(depth):
-        incoming = (list(encoded) if reset_each_pass
-                    else (list(encoded) if depth == 1 and current == [0.0] * width
-                          else reinjected(encoded, current, lambda_=lambda_,
-                                          epsilon=epsilon, rms_fn=rms_fn)))
+        incoming = (list(encoded) if (reset_each_pass or shortcut)
+                    else reinjected(encoded, current, lambda_=lambda_,
+                                    epsilon=epsilon, rms_fn=rms_fn, cast=cast))
         current = list(core(incoming))
         require(len(current) == width, "CORE_WIDTH_CHANGED")
     if accounting is not None:
@@ -246,6 +264,81 @@ def depth_coverage():
     return counts
 
 
+def phase_batches(phase):
+    """The declared batch sizes for one course phase.
+
+    Taken from the constructor's implementation profile rather than restated here: a
+    second derivation of the same allowance would drift away from the first. The
+    phases flush at their boundaries, so within-cube updates can affect the
+    across-face work that follows.
+    """
+    from ..rpm_cfc_constructor.diagnosis import phase_batches as declared
+    return declared(phase)
+
+
+def phase_update_counts():
+    """Updates per phase per round, DERIVED from the declared batch structure.
+
+    This is what makes 8 updates per round a derivation and not a copied number:
+    ceil-per-phase of [8,8,8,4] / [8,4] / [8] / [8] is 4 + 2 + 1 + 1.
+    """
+    counts = {}
+    for phase, decisions, declared_updates in ROUND_PHASES:
+        batches = phase_batches(phase)
+        require(sum(batches) == decisions,
+                "COURSE_PHASE_DECISIONS:%s:%d!=%d"
+                % (phase, sum(batches), decisions))
+        require(len(batches) == declared_updates,
+                "COURSE_PHASE_UPDATES:%s:%d!=%d"
+                % (phase, len(batches), declared_updates))
+        counts[phase] = {"decisions": decisions, "batches": batches,
+                         "updates": len(batches)}
+    return counts
+
+
+def implementation_calls(*, depths=ROUND_DEPTH_SCHEDULE, module_calls_per_decision=1):
+    """What the loader that exists today actually issues, per condition.
+
+    ``GraphLearner.forward`` takes ONE position, so a batch of eight is eight
+    transformation calls, not one. The declared table counts a batched call as a
+    single pass over a whole batch, which is what a genuinely batched loader would
+    issue. Sample-level passes are the same number under either convention;
+    transformation calls are not. The ratio between the two learners is 3.75 either
+    way, and both figures are reported so neither can stand in for the other.
+    """
+    one_pass = recurrent = 0
+    for depth in depths:
+        for _phase, decisions, _updates in ROUND_PHASES:
+            one_pass += decisions * module_calls_per_decision
+            recurrent += decisions * module_calls_per_decision * depth
+    return {"one_pass_transformation_calls": one_pass,
+            "recurrent_transformation_calls": recurrent,
+            "ratio": round(recurrent / one_pass, 4),
+            "convention": ("one transformation call per question, which is what "
+                           "GraphLearner.forward issues today; a genuinely batched "
+                           "loader would issue the declared 128 / 480"),
+            "declared_sample_passes_one_pass": sum(
+                decisions for _p, decisions, _u in ROUND_PHASES) * len(depths)}
+
+
+def evaluation_depth_plan():
+    """The declared evaluation depths, and what each one is for."""
+    return {
+        "R1": {"depth": 1, "reset_each_pass": False,
+               "meaning": "the matched one-pass condition; identical to the "
+                          "existing learner's computation"},
+        "R2": {"depth": 2, "reset_each_pass": False,
+               "meaning": "two passes, state carried"},
+        "R4": {"depth": 4, "reset_each_pass": False,
+               "meaning": "four passes, state carried"},
+        "R8": {"depth": 8, "reset_each_pass": False,
+               "meaning": "eight passes, state carried: the primary allowance"},
+        "RESET_8": {"depth": 8, "reset_each_pass": True,
+                    "meaning": "eight computations with the state discarded between "
+                               "them: a mechanism check, not a second architecture"},
+    }
+
+
 def course_cost(*, depths=ROUND_DEPTH_SCHEDULE):
     """The declared per-learner cost, derived rather than asserted.
 
@@ -272,6 +365,9 @@ def course_cost(*, depths=ROUND_DEPTH_SCHEDULE):
     recurrent["trainable_parameters"] = "same as the one-pass learner"
     return {"one_pass": one_pass, "recurrent": recurrent,
             "declared": dict(DECLARED_COURSE),
+            "phases": phase_update_counts(),
+            "evaluation_depths": evaluation_depth_plan(),
+            "implemented_calls": implementation_calls(depths=depths),
             "boundary": ("derived planning counts, not measured GPU work; encoding, "
                          "backward computation, readout, checkpointing and "
                          "evaluation add their own cost")}
