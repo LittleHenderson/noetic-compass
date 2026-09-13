@@ -1,0 +1,2699 @@
+{
+  "approval": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
+    "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626",
+    "snapshot": {
+      "evidence_kind": "active_user_goal_returned_by_get_goal",
+      "goal": {
+        "createdAt": 1788624516,
+        "objective": "AMENDENDED AWS SPENDING BUDGET IS $400 SO IF ALL OF CAMPAIGN IS COMPLETED AND ACCOMPLISHED IN OUR FAVOR PLEASE CONTINUE WITH FURTHER RESEARCH AND DEVELOPMENT\n\nAMENDENDED IS THE 12 HOUR CAMPAIGN AND INCLUDING ANY FURTHER RESEARCH AND DEVELOPMENT DONE BEYOND THE 12 HOUR CAMPAIGN IF ANYTHING FROM THE 12 HOUR CAMPAIGN CONFLICTS WITH THE FOLLOWING VISION SUPERSED IT, FOR IT BECOMES NULL AND VOID MAKE NO MISTAKE THIS VISION IS OUR ULTIMATE GOAL:\n\nReferenced pasted text files:\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-1.txt. Read this file before continuing.\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-2.txt. Read this file before continuing.\n- pasted text file: C:\\Users\\wakil\\.codex\\attachments\\bbbecf38-bfe5-464a-bd8a-fe2f16b56e1a\\pasted-text-3.txt. Read this file before continuing.",
+        "status": "active",
+        "threadId": "01a065e4-1cc3-7a02-8fd6-8c2d00775ab4",
+        "timeUsedSeconds": 270,
+        "tokensUsed": 362013,
+        "updatedAt": 1788624786
+      },
+      "interpretation": {
+        "all_neural_work_on_aws": true,
+        "approval_scope": "CASformer research and development; no automatic merge; preserve accepted artifacts",
+        "includes_campaign_and_further_research": true,
+        "includes_prior_spending_and_reservations": true,
+        "no_t4": true,
+        "total_task_cap_usd": "400.00"
+      },
+      "schema": "cas-meta2-owner-budget-approval/1"
+    }
+  },
+  "no_automatic_refund": true,
+  "owner_task_cap_usd": "400.00",
+  "predecessor": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_budget_ledger.json",
+    "sha256": "3c6f61d7065fef65407dc7ca9405b8a2be8f3d163714014de1f7c4b6e33384d7",
+    "snapshot": {
+      "owner_task_cap_usd": "100.00",
+      "remaining_unreserved_usd": "96",
+      "reservations": [
+        {
+          "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
+          "job": "cas-meta1-20260905103339-cd06685e",
+          "reserved_usd": "2.00",
+          "reserved_utc": "2026-09-05T10:33:39.058409+00:00",
+          "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+          "status": "RESERVED_NO_AUTOMATIC_REFUND"
+        },
+        {
+          "archive_sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+          "job": "cas-meta1-20260905115219-33ee1c8f",
+          "reserved_usd": "2.00",
+          "reserved_utc": "2026-09-05T11:52:19.617700+00:00",
+          "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+          "status": "RESERVED_NO_AUTOMATIC_REFUND"
+        }
+      ],
+      "schema_version": 1,
+      "task": "CAS-META-1 learned selection",
+      "total_reserved_usd": "4"
+    }
+  },
+  "previous_state_sha256": "92a625a43db96b4502594bf5b0ca6db17e777c1a3da6ebf3fab906d4a00ef131",
+  "remaining_unreserved_usd": "88.00",
+  "reservations": [
+    {
+      "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
+      "job": "cas-meta1-20260905103339-cd06685e",
+      "reserved_usd": "2.00",
+      "reserved_utc": "2026-09-05T10:33:39.058409+00:00",
+      "source_sha": "a4dc9f2fc6f6d4f3d5e0b31100ac131327e02109",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "17688c68c1f35c06ea3c9fc6571c5b60af62201a69549cef3a4223a7dcb32b1f",
+      "job": "cas-meta1-20260905115219-33ee1c8f",
+      "reserved_usd": "2.00",
+      "reserved_utc": "2026-09-05T11:52:19.617700+00:00",
+      "source_sha": "cfd22ab96c479703d09e0792a139901f2931f5bd",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "a2acd19a441e287515c908fb1d4666d25be7002bfe44f2fee48c385c3dc676b8",
+      "job": "cas-meta2-20260905164134-b6dc38fe",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-05T16:41:34.647777+00:00",
+      "source_sha": "2a3ec1132770b121881a49effee2aa5d4e0494fb",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d648ab877d958b6729882a870c386f70d0e1c4d9ba24e614d719081d396c19bc",
+      "job": "cas-meta2-20260905170320-4a4c71e5",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-05T17:03:20.809122+00:00",
+      "source_sha": "b5f1718e63a2b5cf72b4b606d513d0524b9226ac",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "11311cf8451a95014b162e7b3b65e6854cf5eb72a61532e4c04168f59520bc5f",
+      "job": "cas-meta2-20260905214620-cfdbb893",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-05T21:46:20.116860+00:00",
+      "source_sha": "410bce98307a5644db51928459b73391c7066b72",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "f79e40602b9b0d3729d0f2b49dcf654bd4d0bd738107c8af7e6b9096b846aa5c",
+      "job": "cas-meta3-20260905225148-462ab42e",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "demo_boundary": "Fresh-process registry retrieval and native reuse only; not native suspended-call restart, learned skill acquisition or package promotion.",
+        "demo_seconds_max": 1200,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "entrypoint": "cas_meta3.native_demo",
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "learning_performed": false,
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "qualification_status": "UNQUALIFIED",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "PROCEDURAL_MEMORY_DEMO_PLANNED_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "1dc7580627bc0ad4eddbeb4e3c17a7d40b2028610db55358dc5a44fc508c1647",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-05T22:51:48.050093+00:00",
+      "source_sha": "8b5d8ac9e4f469b4cd89bbe917560678d2f52cb7",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "f45df65ff54e3396bc0c66baeb704deb43c3f2a572b6459b9dad253f4183dcd2",
+      "job": "cas-meta2-20260906002616-34a51f16",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T00:26:16.412463+00:00",
+      "source_sha": "ec9d161908ab4ed8a4fb300ca31cb089ac0c3b70",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e680545e231d7f9f7fca0dd4f84e3fe4988b3d7c129c83a0bfe313ea809fdbc2",
+      "job": "cas-meta2-20260906025939-e933c868",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T02:59:39.586287+00:00",
+      "source_sha": "3da01c577c47978e595caaff1ebbe9b30c3a87b6",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "3230d805b665b91f1191d423342bb591cfb1fd69cd677fbe49206cf50b8729bd",
+      "job": "cas-meta2-20260906032109-361b34a0",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T03:21:09.770520+00:00",
+      "source_sha": "9f562c761c7cb84c767673b2fab735cdd031b499",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "17cdaaf25a9d07439598bf24ab9105193da1a15614fe9b41a2ba037a49849d4b",
+      "job": "cas-meta2-20260906054131-feae01a9",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T05:41:31.291609+00:00",
+      "source_sha": "6a71e01c3689a1debe56eed842f101dfa4990556",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "3153318664641ea3affdbef306929c3113bb937cd04113bce41d02f736e0f1f1",
+      "job": "cas-meta2-20260906064703-c0d74ffa",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 6600,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "7.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7200,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_APPROVED_COMPOSITION_CANDIDATE_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0"
+      },
+      "plan_sha256": "b03377638683eba245b33519520f2f786b22d8fb83da27980d2e81b6ae0d4f86",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T06:47:03.036220+00:00",
+      "source_sha": "acbb266fbcdb6efcd69808f6f0f9b7b1e36b7ed0",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "54101904990bf3945dc1242e80982f05a47853a4fce56f2d9c88e9c9bb6f3bb7",
+      "job": "cas-meta2-20260906082659-383a339d",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 3300,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "fresh_test": false,
+        "gpu_count": 1,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "local_neural_execution": false,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "per_launch_reserved_cap_usd": "4.00",
+        "predictions_reused_unchanged": true,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "OWNER_AUTHORIZED_BOUNDED_EVALUATION_RECOVERY_NOT_LAUNCHED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0",
+        "training_performed": false
+      },
+      "plan_sha256": "31c15c741e2113b10ae27a24fff835683acfa2a05337958c4e7470100f6d6bf7",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T08:26:59.790857+00:00",
+      "source_sha": "cbf13795202094865744f7c0b5efa234451f9208",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "f9bed05bd582e0796e2c4e78ff0f5174e5e1b6a3f447e5c3eab56ad002d473f9",
+      "job": "cas-meta2-20260906094002-39762c47",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "approved_cap_usd_required": "400.00",
+        "archive_expanded_bytes_max": 536870912,
+        "artifact_bytes_max": 1073741824,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "billing_caveat": "Runtime/resource limits and conservative reservations are enforced. Provider/control-plane failure can delay cleanup; this is not an AWS billing invoice or provider-enforced account spending cap.",
+        "cloud_termination_confirmed_before_training": true,
+        "compute_seconds_max": 7200,
+        "dataset_max_seconds": 180,
+        "delete_on_termination": true,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_ceiling_note": "Separate bounds: source archive expanded <=512 MiB; runtime evidence expanded <=2 GiB; all three compressed S3 result objects together <=1 GiB. Oversize output is an explicit failed/partial run, never silent successful omission. Failure packets preserve all candidate checkpoints and sealed predictions when they fit the declared transfer ceiling.",
+        "evidence_expanded_bytes_max": 2147483648,
+        "gpu_count": 1,
+        "gpu_gate_max_seconds": 450,
+        "inbound_rules": [],
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "launch_enabled": true,
+        "local_neural_execution": false,
+        "native_max_seconds": 2700,
+        "new_dedicated_bucket_role_security_group": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "owner_task_cap_usd": "400.00",
+        "parent_max_seconds": 6900,
+        "per_launch_reserved_cap_usd": "7.00",
+        "prerequisite_recovery_review_required": true,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 7800,
+        "s3_retention_days": 7,
+        "schema_version": 2,
+        "status": "REGISTERED_SOURCE_FREEZE_AND_CURRENT_JOB_GPU_GATE_REQUIRED",
+        "torch_cuda_version": "12.8",
+        "torch_index_url": "https://download.pytorch.org/whl/cu128",
+        "torch_version": "2.11.0",
+        "training_max_seconds": 3300
+      },
+      "plan_sha256": "2e45fedc3f6c33624b84246de0bc3ee0a2468fd2f6575aa77608522b49b9d0d9",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-06T09:40:02.326766+00:00",
+      "source_sha": "42f9164754312f12850d9b8789c062fa7fb8069f",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "c1e784440b408a81d28efd00444fe69680972b9ef6ce14b5c298598dc6e83be1",
+      "job": "cas-meta2-20260906133828-cff56f29",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": false,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "training": false,
+        "worker_seconds_max": 1800
+      },
+      "plan_sha256": "97bf994053fc6b1c13e7d62705372cf48e9e2b2ee06d785828d021125fbb7b32",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T14:05:13.611839+00:00",
+      "source_sha": "13f424981d7434b1a92815d1ad5759d543bbd3be",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "1b13fbeb96465e2122b1709b87c99cdd06860f78a2bc4bbbfa4874e96ef7658a",
+      "job": "cas-meta2-20260906150012-7c9f6d00",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "training": false,
+        "worker_seconds_max": 600
+      },
+      "plan_sha256": "63963a67ca41c3b037c7b01ce555382426dbb1c8b18dd4eaee2fd115ddcde1d8",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T15:02:22.018440+00:00",
+      "source_sha": "d047540a635ecccdd2cfd4d96ee3b43da59f7ce7",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d93a39f3a264c23f27ac7dcdd2779eca665150a6bd739820651e953958e8f7d3",
+      "job": "cas-meta2-20260906155525-195f5ad8",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "training": false,
+        "worker_seconds_max": 1800
+      },
+      "plan_sha256": "81d9617badfae5ab083a34946a7c5c7c420c9434865d83bb3a339cb5ea4c29ab",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T15:56:18.909360+00:00",
+      "source_sha": "b61b011c3d53ae49a1f7f988397df632e95e82a6",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "39a2441a2eaa4c7403af11225356a98aee2a4477e26acffbc483254befa1ed7f",
+      "job": "cas-meta2-20260906162339-56837284",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "native_execution": false,
+        "on_demand_hourly_usd_max": "2.52",
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "sqlite_read_only": true,
+        "training": false,
+        "worker_seconds_max": 180
+      },
+      "plan_sha256": "ce200716fef897b660e896ce6122313a95d0aa5d706ba101239975b2ca810291",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T16:24:00.832186+00:00",
+      "source_sha": "37c591f3d6ae0606b27334c26d4392e0da94c675",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "c965a1dabb584f49a6d549129121de61de921658adbcb7cb57ced807d89f9b3d",
+      "job": "cas-meta2-20260906165606-cbc41523",
+      "plan": {
+        "account_id": "807562639912",
+        "ami_id": "ami-0fbbd0facbc9e3cff",
+        "ancillary_reserved_usd": "1.00",
+        "artifact_bytes_max": 268435456,
+        "artifact_objects_max": 3,
+        "automatic_retries": 0,
+        "cloud_shutdown_seconds": 3480,
+        "delete_on_termination": true,
+        "download_bytes_max": 268435456,
+        "ebs_encrypted": true,
+        "ebs_gb": 75,
+        "ebs_iops": 3000,
+        "ebs_throughput_mib_per_second": 125,
+        "ebs_type": "gp3",
+        "egress_tcp_ports": [
+          443
+        ],
+        "evidence_expanded_bytes_max": 536870912,
+        "gpu_count": 1,
+        "guest_shutdown_seconds": 3400,
+        "inbound_rules": [],
+        "input_bytes_max": 16777216,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "later_curriculum_execution": false,
+        "local_neural_execution": false,
+        "max_native_calls": 2,
+        "max_policy_units": 16384,
+        "native_execution": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "outer_caller_restored": false,
+        "per_launch_reserved_cap_usd": "4.00",
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "runtime_seconds_max": 3600,
+        "s3_read_requests_max": 1000,
+        "s3_retention_days": 7,
+        "s3_write_requests_max": 1000,
+        "scheduler_invocations_max": 1,
+        "training": false,
+        "worker_seconds_max": 600
+      },
+      "plan_sha256": "6609568f5ef5ff9e70cf340e9f2c67f91ba452bcf8a2882d9f16b49988e81bc8",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-06T16:57:17.191726+00:00",
+      "source_sha": "e85d224842c50b2be202c8a15181df0526fa26cc",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "87a557aece2d6035aefa5133423243700273d2d55c00a84b5d037e4cbe5ec371",
+      "job": "cas-meta2-20260907155404-80e827c9",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "condition_skill_v9": {
+          "account": "807562639912",
+          "ami": "ami-0fbbd0facbc9e3cff",
+          "automatic_retries": 0,
+          "budget": {
+            "campaign_cap_usd": "400.00",
+            "campaign_ledger_revision": 16,
+            "campaign_reserved_usd": "98.00",
+            "campaign_scope": "cas-meta2-composition-campaign",
+            "campaign_unreserved_usd": "302.00",
+            "task_scope": "condition_skill_v9"
+          },
+          "cloud_schedule_seconds": 3480,
+          "cuda_version": "12.8",
+          "dataset_manifest_sha256": "6b19020c4653aa535919f4af092020ad3650855bf7f58c6b550169af3d5468dd",
+          "ebs": {
+            "delete_on_termination": true,
+            "encrypted": true,
+            "iops": 3000,
+            "size_gib": 75,
+            "throughput_mib_s": 125
+          },
+          "evidence_boundary": "The learner reads only train/validation before sealing; private targets are opened only after the blind prediction receipt is hash-bound.",
+          "experiment": {
+            "entrypoint": "cas_meta2.condition_skill_v9.train",
+            "profile": "condition_skill_v9"
+          },
+          "gpu_name_contains": "RTX PRO 4500",
+          "guest_shutdown_seconds": 3400,
+          "instance_count": 1,
+          "instance_seconds_max": 3600,
+          "instance_type": "g7.2xlarge",
+          "max_native_calls": 0,
+          "native_execution": false,
+          "network": {
+            "egress_tcp_443_only": true,
+            "inbound_rules": 0
+          },
+          "on_demand_rate_ceiling_usd": "2.52",
+          "python_versions": [
+            "3.11",
+            "3.12"
+          ],
+          "region": "us-west-2",
+          "reservation_usd": "4.00",
+          "schema": "cas-meta2-condition-skill-v9-resource-plan/9",
+          "seed": 7,
+          "t4_rejected": true,
+          "torch_version": "2.11.0+cu128",
+          "trainer_output_bytes_max": 33554432,
+          "training": true,
+          "visible_gpu_count": 1,
+          "worker_seconds_max": 600
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "condition_skill_v9"
+      },
+      "plan_sha256": "e5c3cd8025a773988333018fd0defa7286da45aee411e4384eb73b0f6b67688f",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-07T22:54:56.545941+00:00",
+      "source_sha": "331f2746d75cdad369cb549784e3ce77c0ff6173",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+      "job": "cas-meta2-teaching-20260908052433-f44ebc7a",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "2.96",
+        "arms": [
+          "cas.aligned",
+          "cas.ordinary",
+          "generic.aligned",
+          "generic.ordinary"
+        ],
+        "artifact_bytes_bound_shared_across_processes": true,
+        "artifact_download_bytes_max": 2684354560,
+        "artifact_expanded_bytes_max": 2684354560,
+        "artifact_upload_bytes_max": 2684354560,
+        "automatic_retries": 0,
+        "cloud_evidence_retention_days_max": 7,
+        "compute_at_ceiling_usd": "5.04",
+        "cost_worksheet_and_live_pricing_required": true,
+        "ebs": {
+          "delete_on_termination": true,
+          "encrypted": true,
+          "iops": 3000,
+          "size_gib": 75,
+          "throughput_mib_s": 125,
+          "type": "gp3"
+        },
+        "egress_tcp_ports": [
+          443
+        ],
+        "final_public_inputs_released_only_after_checkpoint_seal": true,
+        "inbound_rules": [],
+        "independent_shutdown_verified_before_worker_release": true,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "native_execution": false,
+        "on_demand_hourly_usd_max": "2.52",
+        "prediction_process_count_max": 2,
+        "prediction_seconds_per_process_max": 300,
+        "public_release_bytes_max": 1048576,
+        "rate_is_current_quote": false,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "requirements_are_not_observed_provider_receipts": true,
+        "reservation_usd": "8.00",
+        "retention_after_intervening_learning": false,
+        "reuses_v9_one_shot_authorization": false,
+        "runtime_seconds_max": 7200,
+        "schema": "cas-teaching-cycle-resource-plan/2",
+        "seed": 7,
+        "shared_lifetime_not_reset_between_processes": true,
+        "t4_rejected": true,
+        "task_scope": "teaching_cycle_v2_four_arm_binding",
+        "training_archive_bytes_max": 33554432,
+        "training_expanded_bytes_max": 67108864,
+        "training_worker_seconds_max": 4800,
+        "visible_gpu_count": 1,
+        "worksheet_limits": {
+          "bootstrap_s3_api_attempts_max": 128,
+          "boundary": "Worksheet input ceilings only; actual rates, billed units and sufficient ancillary cover must be verified before launch.",
+          "caps_shared_by_parent_guest_and_all_processes": true,
+          "charged_artifact_download_gib_max": "2.50",
+          "ebs_gib_hours_max": "150.00",
+          "guest_s3_api_attempts_max": 896,
+          "parent_s3_api_attempts_max": 1024,
+          "prices_verified": false,
+          "public_ipv4_hours_max": "2.00",
+          "request_caps_include_failed_attempts_and_polls": true,
+          "s3_api_attempts_max": 2048
+        }
+      },
+      "plan_sha256": "e2511699bfe1b7e5a02d346596373654f4f79a8da2ba60381d09f985fc587e57",
+      "reserved_usd": "8.00",
+      "reserved_utc": "2026-09-08T05:24:48.492183+00:00",
+      "source_sha": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+      "job": "cas-meta2-teaching-20260908052915-8b5df59c",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "2.96",
+        "arms": [
+          "cas.aligned",
+          "cas.ordinary",
+          "generic.aligned",
+          "generic.ordinary"
+        ],
+        "artifact_bytes_bound_shared_across_processes": true,
+        "artifact_download_bytes_max": 2684354560,
+        "artifact_expanded_bytes_max": 2684354560,
+        "artifact_upload_bytes_max": 2684354560,
+        "automatic_retries": 0,
+        "cloud_evidence_retention_days_max": 7,
+        "compute_at_ceiling_usd": "5.04",
+        "cost_worksheet_and_live_pricing_required": true,
+        "ebs": {
+          "delete_on_termination": true,
+          "encrypted": true,
+          "iops": 3000,
+          "size_gib": 75,
+          "throughput_mib_s": 125,
+          "type": "gp3"
+        },
+        "egress_tcp_ports": [
+          443
+        ],
+        "final_public_inputs_released_only_after_checkpoint_seal": true,
+        "inbound_rules": [],
+        "independent_shutdown_verified_before_worker_release": true,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "native_execution": false,
+        "on_demand_hourly_usd_max": "2.52",
+        "prediction_process_count_max": 2,
+        "prediction_seconds_per_process_max": 300,
+        "public_release_bytes_max": 1048576,
+        "rate_is_current_quote": false,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "requirements_are_not_observed_provider_receipts": true,
+        "reservation_usd": "8.00",
+        "retention_after_intervening_learning": false,
+        "reuses_v9_one_shot_authorization": false,
+        "runtime_seconds_max": 7200,
+        "schema": "cas-teaching-cycle-resource-plan/2",
+        "seed": 7,
+        "shared_lifetime_not_reset_between_processes": true,
+        "t4_rejected": true,
+        "task_scope": "teaching_cycle_v2_four_arm_binding",
+        "training_archive_bytes_max": 33554432,
+        "training_expanded_bytes_max": 67108864,
+        "training_worker_seconds_max": 4800,
+        "visible_gpu_count": 1,
+        "worksheet_limits": {
+          "bootstrap_s3_api_attempts_max": 128,
+          "boundary": "Worksheet input ceilings only; actual rates, billed units and sufficient ancillary cover must be verified before launch.",
+          "caps_shared_by_parent_guest_and_all_processes": true,
+          "charged_artifact_download_gib_max": "2.50",
+          "ebs_gib_hours_max": "150.00",
+          "guest_s3_api_attempts_max": 896,
+          "parent_s3_api_attempts_max": 1024,
+          "prices_verified": false,
+          "public_ipv4_hours_max": "2.00",
+          "request_caps_include_failed_attempts_and_polls": true,
+          "s3_api_attempts_max": 2048
+        }
+      },
+      "plan_sha256": "e2511699bfe1b7e5a02d346596373654f4f79a8da2ba60381d09f985fc587e57",
+      "reserved_usd": "8.00",
+      "reserved_utc": "2026-09-08T05:29:28.675517+00:00",
+      "source_sha": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+      "job": "cas-meta2-teaching-20260908080138-5518e287",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "2.96",
+        "arms": [
+          "cas.aligned",
+          "cas.ordinary",
+          "generic.aligned",
+          "generic.ordinary"
+        ],
+        "artifact_bytes_bound_shared_across_processes": true,
+        "artifact_download_bytes_max": 2684354560,
+        "artifact_expanded_bytes_max": 2684354560,
+        "artifact_limit_includes_retained_history": true,
+        "artifact_upload_bytes_max": 2684354560,
+        "automatic_retries": 0,
+        "cloud_evidence_retention_days_max": 7,
+        "compute_at_ceiling_usd": "5.04",
+        "cost_worksheet_and_live_pricing_required": true,
+        "ebs": {
+          "delete_on_termination": true,
+          "encrypted": true,
+          "iops": 3000,
+          "size_gib": 75,
+          "throughput_mib_s": 125,
+          "type": "gp3"
+        },
+        "egress_tcp_ports": [
+          443
+        ],
+        "final_public_inputs_released_only_after_checkpoint_seal": true,
+        "inbound_rules": [],
+        "independent_shutdown_verified_before_worker_release": true,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "native_execution": false,
+        "new_cloud_job_original_logical_run_required": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "prediction_process_count_max": 2,
+        "prediction_seconds_per_process_max": 300,
+        "prior_input_limits_are_additional_to_output_limit": true,
+        "prior_state_archive_bytes_max": 536870912,
+        "prior_state_expanded_bound_includes_manifest": true,
+        "prior_state_expanded_bytes_max": 1073741824,
+        "prior_uncommitted_tail_rejected": true,
+        "public_release_bytes_max": 1048576,
+        "rate_is_current_quote": false,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "requirements_are_not_observed_provider_receipts": true,
+        "reservation_usd": "8.00",
+        "restore_probe_process_count_max": 1,
+        "restore_probe_seconds_max": 180,
+        "restore_verified_before_training": true,
+        "retention_after_intervening_learning": false,
+        "reuses_original_reservation": false,
+        "reuses_v9_one_shot_authorization": false,
+        "runtime_seconds_max": 7200,
+        "same_frozen_worker_and_profile_required": true,
+        "schema": "cas-teaching-continuation-resource-plan/1",
+        "seed": 7,
+        "shared_lifetime_not_reset_between_processes": true,
+        "t4_rejected": true,
+        "task_scope": "teaching_cycle_v2_four_arm_binding_continuation",
+        "training_archive_bytes_max": 33554432,
+        "training_expanded_bytes_max": 67108864,
+        "training_worker_seconds_max": 4800,
+        "visible_gpu_count": 1,
+        "worksheet_limits": {
+          "bootstrap_s3_api_attempts_max": 128,
+          "boundary": "Worksheet input ceilings only; actual rates, billed units and sufficient ancillary cover must be verified before launch.",
+          "caps_shared_by_parent_guest_and_all_processes": true,
+          "charged_artifact_download_gib_max": "2.50",
+          "ebs_gib_hours_max": "150.00",
+          "guest_s3_api_attempts_max": 896,
+          "parent_s3_api_attempts_max": 1024,
+          "prices_verified": false,
+          "public_ipv4_hours_max": "2.00",
+          "request_caps_include_failed_attempts_and_polls": true,
+          "s3_api_attempts_max": 2048,
+          "s3_storage_decimal_gb_months_max": "6.00"
+        }
+      },
+      "plan_sha256": "84d71e5588bc6592afa34f80ab377b5592dab22cb7ab4f25ac36f13189aa287c",
+      "reserved_usd": "8.00",
+      "reserved_utc": "2026-09-08T08:02:12.037228+00:00",
+      "source_sha": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "494f44d467a85e2edd54b568cf4b0822db6e25355003a8a6ae8c7d4c09dd8cec",
+      "job": "cas-meta2-teaching-20260908134143-ebd84f71",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "2.96",
+        "arms": [
+          "cas.aligned",
+          "cas.ordinary",
+          "generic.aligned",
+          "generic.ordinary"
+        ],
+        "artifact_bytes_bound_shared_across_processes": true,
+        "artifact_download_bytes_max": 2684354560,
+        "artifact_expanded_bytes_max": 2684354560,
+        "artifact_limit_includes_retained_history": true,
+        "artifact_upload_bytes_max": 2684354560,
+        "automatic_retries": 0,
+        "cloud_evidence_retention_days_max": 7,
+        "compute_at_ceiling_usd": "5.04",
+        "cost_worksheet_and_live_pricing_required": true,
+        "ebs": {
+          "delete_on_termination": true,
+          "encrypted": true,
+          "iops": 3000,
+          "size_gib": 75,
+          "throughput_mib_s": 125,
+          "type": "gp3"
+        },
+        "egress_tcp_ports": [
+          443
+        ],
+        "final_public_inputs_released_only_after_checkpoint_seal": true,
+        "inbound_rules": [],
+        "independent_shutdown_verified_before_worker_release": true,
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "native_execution": false,
+        "new_cloud_job_original_logical_run_required": true,
+        "on_demand_hourly_usd_max": "2.52",
+        "prediction_process_count_max": 2,
+        "prediction_seconds_per_process_max": 300,
+        "prior_input_limits_are_additional_to_output_limit": true,
+        "prior_state_archive_bytes_max": 536870912,
+        "prior_state_expanded_bound_includes_manifest": true,
+        "prior_state_expanded_bytes_max": 1073741824,
+        "prior_uncommitted_tail_rejected": true,
+        "public_release_bytes_max": 1048576,
+        "rate_is_current_quote": false,
+        "region": "us-west-2",
+        "required_gpu_name_contains": "RTX PRO 4500",
+        "requirements_are_not_observed_provider_receipts": true,
+        "reservation_usd": "8.00",
+        "restore_probe_process_count_max": 1,
+        "restore_probe_seconds_max": 900,
+        "restore_verified_before_training": true,
+        "retention_after_intervening_learning": false,
+        "reuses_original_reservation": false,
+        "reuses_v9_one_shot_authorization": false,
+        "runtime_seconds_max": 7200,
+        "same_frozen_worker_and_profile_required": true,
+        "schema": "cas-teaching-continuation-resource-plan/2",
+        "seed": 7,
+        "shared_lifetime_not_reset_between_processes": true,
+        "t4_rejected": true,
+        "task_scope": "teaching_cycle_v2_four_arm_binding_continuation_002",
+        "training_archive_bytes_max": 33554432,
+        "training_expanded_bytes_max": 67108864,
+        "training_worker_seconds_max": 4800,
+        "visible_gpu_count": 1,
+        "worksheet_limits": {
+          "bootstrap_s3_api_attempts_max": 128,
+          "boundary": "Worksheet input ceilings only; actual rates, billed units and sufficient ancillary cover must be verified before launch.",
+          "caps_shared_by_parent_guest_and_all_processes": true,
+          "charged_artifact_download_gib_max": "2.50",
+          "ebs_gib_hours_max": "150.00",
+          "guest_s3_api_attempts_max": 896,
+          "parent_s3_api_attempts_max": 1024,
+          "prices_verified": false,
+          "public_ipv4_hours_max": "2.00",
+          "request_caps_include_failed_attempts_and_polls": true,
+          "s3_api_attempts_max": 2048,
+          "s3_storage_decimal_gb_months_max": "6.00"
+        }
+      },
+      "plan_sha256": "2e3bffb727b570aba9da7aca28380d136a59bb5c6bd91716b50d38eed716748f",
+      "reserved_usd": "8.00",
+      "reserved_utc": "2026-09-08T13:42:39.896317+00:00",
+      "source_sha": "c8c0e558cf30cd5fe06c2bf3d475697e97698a3e",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "ddf39e5ea481c74b7f14ff866969dabb814ef83fa288e657af93d5b3520e55e9",
+      "job": "cas-meta2-teaching-binding-20260908191109-dcf939ab",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "binding_fit": {
+          "account": "807562639912",
+          "ami": "ami-0fbbd0facbc9e3cff",
+          "automatic_retries": 0,
+          "cuda_version": "12.8",
+          "ebs": {
+            "delete_on_termination": true,
+            "encrypted": true,
+            "iops": 3000,
+            "size_gib": 75,
+            "throughput_mib_s": 125
+          },
+          "experiment": {
+            "entrypoint": "cas_meta2.binding_fit_training.mode.launch",
+            "profile": "binding_fit_training"
+          },
+          "frozen_budget": {
+            "learning_rate": 0.003,
+            "max_optimizer_steps": 48,
+            "max_wall_seconds": 600.0,
+            "reservation_usd": "4.00"
+          },
+          "gpu_name_contains": "RTX PRO 4500",
+          "instance_count": 1,
+          "instance_seconds_max": 3600,
+          "instance_type": "g7.2xlarge",
+          "native_execution": false,
+          "network": {
+            "egress_tcp_443_only": true,
+            "inbound_rules": 0
+          },
+          "on_demand_rate_ceiling_usd": "2.52",
+          "region": "us-west-2",
+          "reservation_usd": "4.00",
+          "schema": "cas-teaching-binding-fit-resource-plan/1",
+          "t4_rejected": true,
+          "torch_index_url": "https://download.pytorch.org/whl/cu128",
+          "torch_version": "2.11.0+cu128",
+          "training": true,
+          "visible_gpu_count": 1,
+          "worker_seconds_max": 600
+        },
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "binding_fit_training_check_001"
+      },
+      "plan_sha256": "3b39ba2b3828f0d19d8f8b75e06210bef823148c350f5c5d2c0b7934922aa65a",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-08T19:12:56.826014+00:00",
+      "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "ddf39e5ea481c74b7f14ff866969dabb814ef83fa288e657af93d5b3520e55e9",
+      "job": "cas-meta2-teaching-binding-20260908203112-fb18899f",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "binding_fit": {
+          "account": "807562639912",
+          "ami": "ami-0fbbd0facbc9e3cff",
+          "automatic_retries": 0,
+          "cuda_version": "12.8",
+          "ebs": {
+            "delete_on_termination": true,
+            "encrypted": true,
+            "iops": 3000,
+            "size_gib": 75,
+            "throughput_mib_s": 125
+          },
+          "experiment": {
+            "entrypoint": "cas_meta2.binding_fit_training.mode.launch",
+            "profile": "binding_fit_training"
+          },
+          "frozen_budget": {
+            "learning_rate": 0.003,
+            "max_optimizer_steps": 48,
+            "max_wall_seconds": 600.0,
+            "reservation_usd": "4.00"
+          },
+          "gpu_name_contains": "RTX PRO 4500",
+          "instance_count": 1,
+          "instance_seconds_max": 3600,
+          "instance_type": "g7.2xlarge",
+          "native_execution": false,
+          "network": {
+            "egress_tcp_443_only": true,
+            "inbound_rules": 0
+          },
+          "on_demand_rate_ceiling_usd": "2.52",
+          "region": "us-west-2",
+          "reservation_usd": "4.00",
+          "schema": "cas-teaching-binding-fit-resource-plan/1",
+          "t4_rejected": true,
+          "torch_index_url": "https://download.pytorch.org/whl/cu128",
+          "torch_version": "2.11.0+cu128",
+          "training": true,
+          "visible_gpu_count": 1,
+          "worker_seconds_max": 600
+        },
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "binding_fit_training_check_001"
+      },
+      "plan_sha256": "3b39ba2b3828f0d19d8f8b75e06210bef823148c350f5c5d2c0b7934922aa65a",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-08T20:33:22.911177+00:00",
+      "source_sha": "31e787923390cfdfc83d2326b48e606da0fa71a1",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a",
+      "job": "cas-meta2-teaching-graph-20260909011302-e654ae56",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T02:00:00.403444+00:00",
+      "source_sha": "fec6349211fa3d67e612314f9280879dcd87dd53",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a",
+      "job": "cas-meta2-teaching-graph-20260909021717-7891f672",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T02:19:13.098039+00:00",
+      "source_sha": "fec6349211fa3d67e612314f9280879dcd87dd53",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a",
+      "job": "cas-meta2-teaching-graph-20260909024008-f27c195e",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T02:41:59.562985+00:00",
+      "source_sha": "fec6349211fa3d67e612314f9280879dcd87dd53",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "a4c07dda808615a250379f962db04aa9b9b1bbc4832f5dd686bfbfd6673605ae",
+      "job": "cas-meta2-teaching-graph-20260909030210-e1408e1a",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T03:10:59.596760+00:00",
+      "source_sha": "27f5efffb0f53acfa495fa74ff639ae23d08bec1",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4",
+      "job": "cas-meta2-teaching-graph-20260909040850-e4a39dea",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T04:11:05.168993+00:00",
+      "source_sha": "32d19fa2aaa058e624a31f230f95e7193dd7ab71",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d57ee62838c36b09cb75b171bbd9a017a40f2f8c6d981027a4dc45856f02d209",
+      "job": "cas-meta2-teaching-graph-20260909052323-cb2ebc76",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T05:25:27.307207+00:00",
+      "source_sha": "88f36b2f603db4d5fff20a2f6380242f8ea15619",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "60b75b727f44ae2b6f71c4fe9043e353af99436d3b2c4dcbe57a75be0040e069",
+      "job": "cas-meta2-teaching-graph-20260909054806-78ffe06a",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T05:49:56.747936+00:00",
+      "source_sha": "7d9d43ee591e13127e59cbaf3b2f545bfca9073f",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "7005cb88183176ce5f62a9fa669e5dd957a45776ee66365003986f77f85503c0",
+      "job": "cas-meta2-teaching-graph-20260909065540-823842d3",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T06:57:41.711925+00:00",
+      "source_sha": "71d8e71ab274699cad5e2e083afc30dd39ffca41",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "3536504718803e05d82c4cca6dc3b5c7c36d44c644fcfc40db887a601555ba4f",
+      "job": "cas-meta2-teaching-graph-20260909071727-23c7cca1",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T07:18:59.537663+00:00",
+      "source_sha": "838c6f7a2190ff3007ba74aa2642248f984338b4",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "81ff23213f00066b3252918acab07ca833945d5d9968c67fbb73740fa6cafef0",
+      "job": "cas-meta2-teaching-graph-20260909073316-0390037d",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T07:34:42.531657+00:00",
+      "source_sha": "a8e0ad13686bb61cb24717445d17babd2d73befa",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "c19d1df47e9f15174bf465203bd1d4db85bdc5be90a86ed3382db6f22ea9824d",
+      "job": "cas-meta2-ln3-diagnostic-20260909084139-f6f49be5",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T08:43:22.601536+00:00",
+      "source_sha": "68c9fc7a4c0983ffba9bcafa47f8c59a1c0d1fc2",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "507ace06661ecb16d1a149d1dfa7d43754290689f7c0ec0f24056123a34d17e3",
+      "job": "cas-meta2-ln3-diagnostic-20260909085756-95693cd8",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T08:58:33.208923+00:00",
+      "source_sha": "51f12c612429eb1004f0fd4b0f358e04c2914722",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "f2ef785bd093c2555d3094d7e368d774b94fad67bfece73d94406e4528c926a0",
+      "job": "cas-meta2-teaching-graph-20260909095712-4ca46fce",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00",
+          "total_optimizer_steps": 128,
+          "total_wall_seconds": 1200.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001"
+      },
+      "plan_sha256": "60bacb22c91a4506490266a8de6c04c763a2da41b1848ae09b6830468a2fc518",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T09:58:06.062743+00:00",
+      "source_sha": "c985d2f4a44c73a6f007c3ee4a5ad1676e438bba",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "17db81542b39a280b4dfc26d76c488e6b4e0c744d08a945991a795d2d4934dd6",
+      "job": "cas-meta2-ln3-diagnostic-20260909170435-5a0d662e",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T17:06:01.845109+00:00",
+      "source_sha": "f4b1450854ac0a1be4df792d406fa505519440b8",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "17db81542b39a280b4dfc26d76c488e6b4e0c744d08a945991a795d2d4934dd6",
+      "job": "cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T17:33:48.375340+00:00",
+      "source_sha": "f4b1450854ac0a1be4df792d406fa505519440b8",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "ac0215e1ddc624d7d1d1833f65e58d5a47a0efdf199c2839c9cbcc9665bb5375",
+      "job": "cas-meta2-ln3-diagnostic-20260909175351-5f425cf9",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T17:54:56.031129+00:00",
+      "source_sha": "80023e5a1c148c6f267d09a8a0e72d7ff5200f1c",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "3f67582734e90fc07611b43f246ad0604a77252abdf0b0db7b11b177ebc4a4ad",
+      "job": "cas-meta2-ln3-diagnostic-20260909183759-cce57ffb",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas",
+            "generic"
+          ],
+          "boundary": "measurement only: no optimizer step may be taken",
+          "learning_rate": 0.003,
+          "max_wall_seconds": 1200.0,
+          "optimizer_steps_permitted": 0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_ln3_diagnostic"
+      },
+      "plan_sha256": "59ec7d8ee3b9a401c4d2e2063886f0799a0bda8fde5721e62d77b05f0989f317",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T18:39:03.624284+00:00",
+      "source_sha": "6983d17fe043289686936ec6627665abc4bac650",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "71e72bae410ca3d90c57f067f2fa8507326fbcb24346f7166b4d343b0524b66d",
+      "job": "cas-meta2-competence-20260909193638-98f993ab",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "one targeted ^6 learner, cas framing only; the two-arm comparison is postponed",
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_competence"
+      },
+      "plan_sha256": "b80185fd9e60ca0d9f29b02c04165f27217c11b9127a05abb3cb02b4f6353345",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T19:37:49.176905+00:00",
+      "source_sha": "4489889c9813260d76a376f234765015cacca5ae",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "bce8325bcf12996b52917214ad65dad50b77802d79d09f996afc88d853ebc9b4",
+      "job": "cas-meta2-competence-20260909195309-68ac4845",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "one targeted ^6 learner, cas framing only; the two-arm comparison is postponed",
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_competence"
+      },
+      "plan_sha256": "b80185fd9e60ca0d9f29b02c04165f27217c11b9127a05abb3cb02b4f6353345",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T19:54:10.414697+00:00",
+      "source_sha": "17a310ec76bce4342ec89bae8f797b64e16f1fd2",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "82bcaf6c6d8eec5904381c6eb684645358aa89f16be276f116b3d1c5c2b8c55d",
+      "job": "cas-meta2-competence-20260909201205-f0da3fa3",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "one targeted ^6 learner, cas framing only; the two-arm comparison is postponed",
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_competence"
+      },
+      "plan_sha256": "b80185fd9e60ca0d9f29b02c04165f27217c11b9127a05abb3cb02b4f6353345",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T20:12:43.970644+00:00",
+      "source_sha": "f5d30db8ac965ab6e94d24b6e898b89a6d2ae7ab",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "838f93a719b90fc262ffd682f414485d283e42debcbc928fe5cce80acdd63b58",
+      "job": "cas-meta2-competence-20260909202533-7cb622f8",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "one targeted ^6 learner, cas framing only; the two-arm comparison is postponed",
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_competence"
+      },
+      "plan_sha256": "b80185fd9e60ca0d9f29b02c04165f27217c11b9127a05abb3cb02b4f6353345",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T20:26:12.761128+00:00",
+      "source_sha": "e0f1e83eed8dfacc6879b63067846b8538733ec7",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "2f3b027d57bc67e0d763b0b08ff433b53b1cb2d90e2c17ebca2e23004c52eff4",
+      "job": "cas-meta2-competence-20260909210625-0a10f14d",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "one targeted ^6 learner, cas framing only; the two-arm comparison is postponed",
+          "learning_rate": 0.003,
+          "max_optimizer_steps": 64,
+          "max_wall_seconds": 600.0,
+          "reservation_usd": "4.00"
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 3600,
+        "task_scope": "graph_first_teaching_candidate_001_competence"
+      },
+      "plan_sha256": "b80185fd9e60ca0d9f29b02c04165f27217c11b9127a05abb3cb02b4f6353345",
+      "reserved_usd": "4.00",
+      "reserved_utc": "2026-09-09T21:06:58.969963+00:00",
+      "source_sha": "52068640b6464867c303b5f7d8b4aacff8c12a8c",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "b3d7d1be6c811f856ceb859db461752e6f90135d5e7e4240eecb06e98e0f8c50",
+      "job": "cas-meta2-graph6conf-20260910013000-e485b07c",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "baseline_mode": "none",
+          "boundary": "frozen successful candidate; three independently initialized learners, 64 updates each, on a pre-registered fresh 90-case panel",
+          "candidates": 3,
+          "encoder_seed": 20260909,
+          "learner_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps_per_candidate": 64,
+          "max_wall_seconds_per_candidate": 600.0,
+          "panel_seed": 20260920,
+          "reservation_usd": "6.00",
+          "total_optimizer_steps": 192,
+          "total_wall_seconds_ceiling": 1800.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 5400,
+        "task_scope": "graph_first_teaching_candidate_001_graph6_confirmation"
+      },
+      "plan_sha256": "e230c31b465fcd1036c64fcb4cb54bb071df0f320cf48160f7d1704165c1a40c",
+      "reserved_usd": "6.00",
+      "reserved_utc": "2026-09-09T22:48:11.443330+00:00",
+      "source_sha": "e485b07c3fbdc1fd3231bfdc9638635119660e5a",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+      "job": "cas-meta2-graph6conf-20260910023000-a387d882",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "baseline_mode": "none",
+          "boundary": "frozen successful candidate; three independently initialized learners, 64 updates each, on a pre-registered fresh 90-case panel",
+          "candidates": 3,
+          "encoder_seed": 20260909,
+          "learner_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "learning_rate": 0.003,
+          "max_optimizer_steps_per_candidate": 64,
+          "max_wall_seconds_per_candidate": 600.0,
+          "panel_seed": 20260920,
+          "reservation_usd": "6.00",
+          "total_optimizer_steps": 192,
+          "total_wall_seconds_ceiling": 1800.0
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 5400,
+        "task_scope": "graph_first_teaching_candidate_001_graph6_confirmation"
+      },
+      "plan_sha256": "e230c31b465fcd1036c64fcb4cb54bb071df0f320cf48160f7d1704165c1a40c",
+      "reserved_usd": "6.00",
+      "reserved_utc": "2026-09-09T23:04:06.846874+00:00",
+      "source_sha": "a387d882250b526301d580face0bd11361f37941",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "8afb1f3fbcf5ff572c259e8e26878ef025361ac0a504d9ad612bff4ffc424464",
+      "job": "cas-meta2-graph6curr-20260910053000-951cab20",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T00:48:44.716193+00:00",
+      "source_sha": "951cab2039be879eebb2c61d8a6ad5092f31f049",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "c24f2f9ce2d01a44ac79e46bfdc59788256200b6a2079c3223f8a6758a0f20f9",
+      "job": "cas-meta2-graph6curr-20260910073000-210109c7",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T01:14:58.711765+00:00",
+      "source_sha": "210109c7cc848b4cf8e68c15ba31a186fe5638f8",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc",
+      "job": "cas-meta2-graph6curr-20260910093000-75387578",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T01:47:17.857165+00:00",
+      "source_sha": "75387578f8696dadf184199af5106e2073ba5976",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "fd9b4902ebf5aadfceab304797f69cdd8731f4ce3a09b82b57a8d63e8cbe2ac7",
+      "job": "cas-meta2-graph6curr-20260910133000-aecb5d07",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T02:33:13.586840+00:00",
+      "source_sha": "aecb5d07eed62fad8e18fd859484f253870d8c3b",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+      "job": "cas-meta2-graph6cand-20260910120000-0a55f4b1",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T14:24:57.943776+00:00",
+      "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+      "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T15:11:49.405477+00:00",
+      "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744",
+      "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T16:50:10.481624+00:00",
+      "source_sha": "ea4112f005c7186f7b0e417e714efc8469b8be37",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "5c8b9efd3c7fc2dd54bb8d739dd38f78a1a703175a08843a03e70074c374f9b9",
+      "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T22:26:00.724032+00:00",
+      "source_sha": "889c37e00fd8cd75aace74b5161f0186ab5a6a99",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e33a64975fddb794706f3995688ebda7df86a7f821091b7fdbedecdeab3134fc",
+      "job": "cas-meta2-graph6cand-20260910174500-e33a6497",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T03:46:19.725127+00:00",
+      "source_sha": "b2ff5a4bbdd3444cc8915bd0ed9665c350012222",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "382aa3fc179fb0f7b6f11d2b72a5e7d6786ffa930c124f33ef4f7079b4c8a9ac",
+      "job": "cas-meta2-graph6face-20260911120508-382aa3fc",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T12:39:31.143786+00:00",
+      "source_sha": "b285a10c34fb80745b1d30bd8d9fd310d1f54897",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    }
+  ],
+  "revision": 57,
+  "schema": "cas-meta-campaign-budget/2",
+  "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
+  "total_reserved_usd": "312.00",
+  "updated_utc": "2026-09-11T12:39:31.144811+00:00"
+}

@@ -44,10 +44,14 @@ class BudgetTests(unittest.TestCase):
     def test_initial_amendment_preserves_prior_reservations(self):
         before = self.prior.read_bytes()
         state = self.initialize()
-        self.assertEqual(state["owner_task_cap_usd"], "400.00")
+        # the OPERATING cap, which the owner raised on 2026-09-12; the approved
+        # original stays at CAP_ORIGINAL and is asserted separately below
+        self.assertEqual(state["owner_task_cap_usd"], str(budget.CAP))
+        self.assertEqual(budget.CAP_ORIGINAL, budget.Decimal("400.00"))
         self.assertEqual(state["reservations"], json.loads(before)["reservations"])
         self.assertEqual(budget.amount(state["total_reserved_usd"]), 4)
-        self.assertEqual(budget.amount(state["remaining_unreserved_usd"]), 396)
+        self.assertEqual(budget.amount(state["remaining_unreserved_usd"]),
+                         budget.CAP - 4)
         self.assertEqual(self.prior.read_bytes(), before)
         self.assertEqual(state["predecessor"]["sha256"], budget.digest(before))
 
@@ -63,7 +67,8 @@ class BudgetTests(unittest.TestCase):
         self.initialize()
         result = self.reserve()
         self.assertEqual(budget.amount(result["total_reserved_usd"]), 6)
-        self.assertEqual(budget.amount(result["remaining_unreserved_usd"]), 394)
+        self.assertEqual(budget.amount(result["remaining_unreserved_usd"]),
+                         budget.CAP - 6)
         state = budget.read_ledger(self.ledger)
         self.assertEqual(len(state["reservations"]), 3)
         self.assertEqual(state["reservations"][-1]["plan"], self.plan)
@@ -82,8 +87,16 @@ class BudgetTests(unittest.TestCase):
             self.reserve(state["reservations"][0]["job"])
 
     def test_cap_exhaustion_refused(self):
+        """Exhaustion is relative to the OPERATING cap, whatever it is set to.
+
+        Written against budget.CAP rather than a literal, so raising the cap
+        cannot silently turn this into a test of nothing: it still proves the
+        very next dollar past the ceiling is refused.
+        """
         self.initialize()
-        self.reserve(amount="396.00")
+        # fill the ledger to exactly $1.00 below the operating cap...
+        self.reserve(amount=str(budget.CAP - 5))
+        # ...then the default $2.00 reservation cannot fit
         with self.assertRaisesRegex(budget.BudgetRefused, "BUDGET_EXHAUSTED"):
             self.reserve(job="cas-meta2-over-cap")
 

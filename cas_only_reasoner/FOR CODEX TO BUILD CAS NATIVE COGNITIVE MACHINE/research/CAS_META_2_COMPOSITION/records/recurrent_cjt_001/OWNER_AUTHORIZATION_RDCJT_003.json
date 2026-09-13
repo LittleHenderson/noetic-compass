@@ -1,0 +1,95 @@
+{
+  "schema": "cas-recurrent-cjt-owner-authorization/1",
+  "candidate": "CAS_RDCJT_001",
+  "recorded_utc": "2026-09-13T18:20:00.000000+00:00",
+  "owner_instruction_raw": "YES CREATE THE GOAL AND THEN EXECUTE IT AND DO AWS TRAINING RUN AND BRING BACK THE RESULTS SO WE CAN SEE WHAT WE HAVE IF ANYTHING AND PLAN NEXT STEPS",
+  "evidence_kind": "owner_instruction_in_session",
+  "evidence_strength": "Recorded as a session instruction typed by the owner during a goal round. It is NOT a get_goal artifact and must not be described as one. It stands beside OWNER_AUTHORIZATION_RDCJT_001.json and OWNER_AUTHORIZATION_RDCJT_002.json, which it neither replaces nor weakens.",
+  "why_a_third_record_exists": {
+    "summary": "RDCJT_002 declared bounds.jobs = 2. BOTH slots were consumed by infrastructure failures that produced NO measurement, so this record authorises the two real runs it was written for. This is stated explicitly rather than resolved by editing RDCJT_002, because editing that record would change its sha256, orphan the two receipts that already bind to the old digest, and quietly erase the evidence that the failures happened.",
+    "slot_1": {
+      "job": "cas-meta2-rdcjt-20260913170842-d27a44e4",
+      "failure": "LEDGER_CAP_CHANGED",
+      "where": "aws/graph_training_curriculum_launch.py validate_reservation_scope",
+      "money_moved": "NONE. Refused before the reservation. Ledger unchanged at revision 69, 71 reservations."
+    },
+    "slot_2": {
+      "job": "cas-meta2-rdcjt-20260913185500-d27a44e4",
+      "failure": "BROKEN_BUDGET_HISTORY_CHAIN",
+      "where": "aws/budget.py publish -> read_locked, after the write-ahead history record was already committed",
+      "money_moved": "A $7.00 RESERVATION was recorded in the ledger (revision 70) and NOTHING WAS LAUNCHED. No EC2 instance was created, so the real AWS charge for this attempt is approximately zero. The reservation is not refunded: the policy is RESERVED_NO_AUTOMATIC_REFUND, and it remains in the ledger under that job name."
+    },
+    "orphaned_reservation": {
+      "job": "cas-meta2-rdcjt-20260913185500-d27a44e4",
+      "usd": "7.00",
+      "ledger_revision": 70,
+      "reusable": false,
+      "why_not": "reserve_budget refuses a job name that already holds a reservation (JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY), and unlike a seed there is no path that releases a reservation for a job that never launched. The job name is therefore retired and the two authorised runs below use new identities."
+    },
+    "root_cause_fixed_before_this_record": [
+      "The $400 campaign cap was hardcoded in the launchers while aws/budget.py carried the owner-amended $5000 cap. CAMPAIGN_CAP_USD now derives from budget.CAP.",
+      "validate_state demanded that EVERY write-ahead history entry carry today's cap, so after the cap raise all 70 entries failed and every paid launch was refused. Each state is now validated against the cap it recorded; only the operating head must carry the current cap, and only the head is compared to CAP.",
+      "The head/tail equality check and the write-ahead chain digest both require the ledger head and the newest history entry to be the same bytes. The cap amendment had edited the revision-69 head in place while history/00000069.json kept the pre-raise bytes, so the chain could not close. The amended revision-69 state was reconstructed and verified by reproducing the digest that revision 70 had already committed to: 9ac9970d319e2bb8b55c2154c9968703ddf0c864402196026d6ec0e3488b30cb. No reservation was altered.",
+      "The pre-raise bytes of revision 69 are preserved byte-for-byte in records/budget/PRESERVED_history_00000069_pre_cap_raise.json and records/budget/campaign_ledger.json.pre_cap_raise_400_to_5000."
+    ]
+  },
+  "instruction_interpretation": "The owner directs that a real AWS GPU training run be executed and its results returned, so that the project can see what it actually has and plan from evidence rather than from design documents. Applied to CAS_RDCJT_001, this authorises TWO paired runs, one per never-launched seed, 20260913 and 20260914, at $7.00 each, $14.00 in total. Each job trains BOTH arms - one_pass and recurrent - from one matched initialization on the same CFC course, then reads the recurrent checkpoint at every declared depth with its weights frozen.",
+  "seed_accounting": {
+    "measured_finding": "All three earlier CAS_RDCJT_001 launches bound seed 20260912. Seeds 20260913 and 20260914 have never been launched.",
+    "seed_20260912_is_done": "Seed 20260912 has one delivered measurement, R1=117 against R8=101, net -16, recovered under rescued_evidence/. It is NOT re-run.",
+    "criterion": "A positive R8-minus-R1 difference in at least two of three paired runs. Three paired runs exist only after both jobs below deliver."
+  },
+  "bounds": {
+    "jobs": 2,
+    "candidate": "CAS_RDCJT_001",
+    "seeds": [
+      20260913,
+      20260914
+    ],
+    "one_seed_per_job": true,
+    "seed_20260912_excluded": true,
+    "arms": [
+      "one_pass",
+      "recurrent"
+    ],
+    "reservation_usd": "7.00",
+    "total_reservation_usd": "14.00",
+    "training": true,
+    "updates_per_arm": 128,
+    "max_wall_seconds": 2400.0,
+    "automatic_retries": 0
+  },
+  "budget_context": {
+    "owner_task_cap_usd": "5000.00",
+    "owner_cap_floor_usd": "400.00",
+    "cap_source": "records/budget/OWNER_BUDGET_AMENDMENT_001.json",
+    "total_reserved_before_this_record_usd": "403.00",
+    "remaining_unreserved_before_this_record_usd": "4597.00",
+    "this_record_usd": "14.00",
+    "after_this_record_free_usd": "4583.00",
+    "note": "The reservation is a deliberately pessimistic ceiling, not a price. The recorded actual AWS charge for the whole 2026-09-12 working day was $1.68 against a $7.00-per-job reservation."
+  },
+  "preconditions_verified": {
+    "crash_1_fixed": "ModuleNotFoundError: cas_meta2.rpm_cfc_constructor. The package is listed in RECURRENT_MODULES and committed.",
+    "crash_2_fixed": "KeyError on _position because course_task_index read range(1, 17) while course_plan numbers rounds 0..15. Fixed at ce48fa91, an ancestor of HEAD 306bad4e.",
+    "local_reproduction": "index_size 552, presented_total 896, missing_count 0. Task construction deterministic across torch reseeds.",
+    "local_tests": "118 passed, 0 failed across the five recurrent_cjt modules; 140 passed plus 24 subtests across the money and launch modules.",
+    "local_gpu_smoke": "The entrypoint the deployed worker drives, on the local RTX 4070 under the smoke/dev allowance, returned RECURRENT_EXPERIMENT_DELIVERED with 2 arms, 4 artifacts and result.json written, in 299.3 seconds. DEV ONLY, NOT claim-bearing."
+  },
+  "claim_scope": {
+    "panel": "The CFC course presents 552 tasks across 24 families; the evaluation panel is 216 items across 16 families, sharing no family and no record id.",
+    "what_is_still_not_licensed": "Novelty, and any CAS-specific advantage. Two more seeds make the declared three-run criterion evaluable; they do not make it independent of the panel.",
+    "reported_whatever_the_sign": "Both seeds are run and reported whatever their sign."
+  },
+  "explicitly_not_authorized": [
+    "re-running seed 20260912",
+    "reusing the retired job identity cas-meta2-rdcjt-20260913185500-d27a44e4",
+    "any refund, removal or edit of the orphaned $7.00 reservation",
+    "editing OWNER_AUTHORIZATION_RDCJT_002.json or any prior receipt",
+    "any change to the campaign cap, the ledger, or the budget validators beyond the repairs recorded above",
+    "an inference-time solver, decoder, memory system, pass-level loss or acceptance gate added to this experiment",
+    "reporting one job, or jobs on one seed, as satisfying the two-of-three criterion",
+    "presenting a depth difference as evidence that the extra passes reason",
+    "any local CPU neural work"
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "arms": {
+    "one_pass": {
+      "accounting": {
+        "batched_core_forward_calls": 128,
+        "mean_depth": 1.0,
+        "note": "derived planning counts, not measured GPU work; equal teaching exposure is not equal training compute",
+        "optimizer_updates": 128,
+        "sample_level_core_passes": 896,
+        "schema": "cas.recurrent-cjt/0.1",
+        "trainable_parameter_count": "unchanged: no new trainable matrices"
+      }
+    },
+    "recurrent": {
+      "accounting": {
+        "batched_core_forward_calls": 480,
+        "mean_depth": 3.75,
+        "note": "derived planning counts, not measured GPU work; equal teaching exposure is not equal training compute",
+        "optimizer_updates": 128,
+        "sample_level_core_passes": 3360,
+        "schema": "cas.recurrent-cjt/0.1",
+        "trainable_parameter_count": "unchanged: no new trainable matrices"
+      }
+    }
+  },
+  "artifacts": [
+    {
+      "bytes": 68173,
+      "name": "checkpoint_one_pass.pt",
+      "sha256": "6ec7bf6721eaf600f299a1912be4ecf5db54a4fb3ebd99a4ecb772faedee4fad"
+    },
+    {
+      "bytes": 68182,
+      "name": "checkpoint_recurrent.pt",
+      "sha256": "98a1dfdb025c2e83963a618af2e8d4b28a5b3642425116186386d1a8e2a29e7f"
+    },
+    {
+      "bytes": 969499,
+      "name": "depth_sweep.json",
+      "sha256": "db38bec38df8f717de86e08e62f2fafb3f54e98644fbaf41d1e9cf1aef026e89"
+    },
+    {
+      "bytes": 905652,
+      "name": "experiment.json",
+      "sha256": "18d2b83eece25298a1af1e659331175771ab34360f236f2f26848db0f0181ddb"
+    }
+  ],
+  "boundary": {
+    "automatic_retries": 0,
+    "depth_selection_by_checker": "refused: select_best_depth raises",
+    "pooled_sweep_accuracy": "refused: gains and losses are reported apart",
+    "what_this_does_not_establish": "nothing here shows that additional passes reason. It shows whether the same frozen weights answer differently with more internal computation, on this panel, at this course size, from one matched initialization"
+  },
+  "checkpoints": {
+    "one_pass": {
+      "arm": "one_pass",
+      "bytes": 68173,
+      "identity": "c48331307ef4dc5fc98322ecae3cc5a2d09830d91d6504f51011b868e87a36f2",
+      "path": "/opt/cas-graph6curr/package/results/artifacts/checkpoint_one_pass.pt",
+      "sha256": "6ec7bf6721eaf600f299a1912be4ecf5db54a4fb3ebd99a4ecb772faedee4fad"
+    },
+    "recurrent": {
+      "arm": "recurrent",
+      "bytes": 68182,
+      "identity": "aaaaae7b4766ccdb4b187fc7eb92a05fbb25610f54bacad6fc7b6af91069bb1c",
+      "path": "/opt/cas-graph6curr/package/results/artifacts/checkpoint_recurrent.pt",
+      "sha256": "98a1dfdb025c2e83963a618af2e8d4b28a5b3642425116186386d1a8e2a29e7f"
+    }
+  },
+  "job": "cas-meta2-rdcjt-20260913184000-d27a44e4",
+  "matched_initial_weights": true,
+  "panel": {
+    "examined_during_teaching": false,
+    "fresh_family_panel_items": 216,
+    "fresh_family_panel_supplied": true,
+    "panel_item_count": 216,
+    "what_this_panel_can_support": "an application measurement on unexamined material",
+    "what_this_panel_cannot_support": null
+  },
+  "schema": "cas.recurrent-cjt-result/1",
+  "status": "RECURRENT_EXPERIMENT_DELIVERED",
+  "sweep_comparison": {
+    "baseline_correct": 113,
+    "baseline_label": "R1",
+    "gained": 11,
+    "gained_items": [
+      "application:family:narrative:00:6",
+      "application:family:narrative:05:1",
+      "application:family:narrative:05:2",
+      "application:family:narrative:05:4",
+      "application:family:narrative:11:1",
+      "application:family:narrative:11:2",
+      "application:family:narrative:13:3",
+      "recognition:family:narrative:05:1",
+      "recognition:family:narrative:13:3",
+      "recognition:family:narrative:13:4",
+      "recognition:family:narrative:14:4"
+    ],
+    "interpretation": "net is a bookkeeping total, not a result: a depth that gains two and loses two is not a depth that changed nothing, and both numbers are reported for every depth",
+    "lost": 22,
+    "lost_items": [
+      "application:family:narrative:01:2",
+      "application:family:narrative:01:5",
+      "application:family:narrative:03:6",
+      "application:family:narrative:07:3",
+      "application:family:narrative:09:5",
+      "application:family:narrative:10:2",
+      "application:family:narrative:13:6",
+      "application:family:narrative:14:1",
+      "application:family:narrative:14:2",
+      "application:family:narrative:14:4",
+      "application:family:narrative:14:5",
+      "application:family:narrative:14:6",
+      "application:family:narrative:15:2",
+      "application:family:narrative:15:4",
+      "application:family:narrative:15:5",
+      "application:family:narrative:15:6",
+      "diagnostic:family:narrative:01:reordered",
+      "recognition:family:narrative:03:4",
+      "recognition:family:narrative:07:4",
+      "recognition:family:narrative:08:6",
+      "recognition:family:narrative:13:2",
+      "recognition:family:narrative:13:6"
+    ],
+    "net": -11,
+    "panel_items": 216,
+    "per_depth": {
+      "R2": {
+        "compared_questions": 216,
+        "gained": [
+          "application:family:narrative:00:6",
+          "application:family:narrative:05:4",
+          "application:family:narrative:11:1",
+          "application:family:narrative:11:2",
+          "application:family:narrative:11:4",
+          "application:family:narrative:14:3",
+          "recognition:family:narrative:05:1",
+          "recognition:family:narrative:07:1",
+          "recognition:family:narrative:08:1",
+          "recognition:family:narrative:08:2",
+          "recognition:family:narrative:13:3",
+          "recognition:family:narrative:13:4",
+          "recognition:family:narrative:14:4"
+        ],
+        "gained_count": 13,
+        "lost": [
+          "application:family:narrative:01:2",
+          "application:family:narrative:01:5",
+          "application:family:narrative:03:6",
+          "application:family:narrative:08:3",
+          "application:family:narrative:10:2",
+          "application:family:narrative:10:3",
+          "application:family:narrative:14:1",
+          "application:family:narrative:14:2",
+          "application:family:narrative:15:4",
+          "application:family:narrative:15:5",
+          "application:family:narrative:15:6",
+          "diagnostic:family:narrative:01:reordered",
+          "recognition:family:narrative:01:6",
+          "recognition:family:narrative:03:4",
+          "recognition:family:narrative:07:4",
+          "recognition:family:narrative:09:3",
+          "recognition:family:narrative:13:2",
+          "recognition:family:narrative:14:2"
+        ],
+        "lost_count": 18,
+        "net": -5
+      },
+      "R4": {
+        "compared_questions": 216,
+        "gained": [
+          "application:family:narrative:00:6",
+          "application:family:narrative:05:1",
+          "application:family:narrative:05:2",
+          "application:family:narrative:05:4",
+          "application:family:narrative:11:1",
+          "application:family:narrative:11:2",
+          "recognition:family:narrative:05:1",
+          "recognition:family:narrative:13:3",
+          "recognition:family:narrative:13:4",
+          "recognition:family:narrative:14:4"
+        ],
+        "gained_count": 10,
+        "lost": [
+          "application:family:narrative:01:2",
+          "application:family:narrative:01:5",
+          "application:family:narrative:03:6",
+          "application:family:narrative:04:3",
+          "application:family:narrative:08:3",
+          "application:family:narrative:10:2",
+          "application:family:narrative:10:3",
+          "application:family:narrative:13:6",
+          "application:family:narrative:14:1",
+          "application:family:narrative:14:2",
+          "application:family:narrative:14:4",
+          "application:family:narrative:14:5",
+          "application:family:narrative:15:2",
+          "application:family:narrative:15:4",
+          "application:family:narrative:15:5",
+          "application:family:narrative:15:6",
+          "diagnostic:family:narrative:01:reordered",
+          "recognition:family:narrative:01:6",
+          "recognition:family:narrative:03:4",
+          "recognition:family:narrative:07:4",
+          "recognition:family:narrative:08:6",
+          "recognition:family:narrative:10:2",
+          "recognition:family:narrative:13:2",
+          "recognition:family:narrative:13:6"
+        ],
+        "lost_count": 24,
+        "net": -14
+      },
+      "R8": {
+        "compared_questions": 216,
+        "gained": [
+          "application:family:narrative:00:6",
+          "application:family:narrative:05:1",
+          "application:family:narrative:05:2",
+          "application:family:narrative:05:4",
+          "application:family:narrative:11:1",
+          "application:family:narrative:11:2",
+          "application:family:narrative:13:3",
+          "recognition:family:narrative:05:1",
+          "recognition:family:narrative:13:3",
+          "recognition:family:narrative:13:4",
+          "recognition:family:narrative:14:4"
+        ],
+        "gained_count": 11,
+        "lost": [
+          "application:family:narrative:01:2",
+          "application:family:narrative:01:5",
+          "application:family:narrative:03:6",
+          "application:family:narrative:07:3",
+          "application:family:narrative:09:5",
+          "application:family:narrative:10:2",
+          "application:family:narrative:13:6",
+          "application:family:narrative:14:1",
+          "application:family:narrative:14:2",
+          "application:family:narrative:14:4",
+          "application:family:narrative:14:5",
+          "application:family:narrative:14:6",
+          "application:family:narrative:15:2",
+          "application:family:narrative:15:4",
+          "application:family:narrative:15:5",
+          "application:family:narrative:15:6",
+          "diagnostic:family:narrative:01:reordered",
+          "recognition:family:narrative:03:4",
+          "recognition:family:narrative:07:4",
+          "recognition:family:narrative:08:6",
+          "recognition:family:narrative:13:2",
+          "recognition:family:narrative:13:6"
+        ],
+        "lost_count": 22,
+        "net": -11
+      }
+    },
+    "primary_correct": 102,
+    "primary_label": "R8",
+    "reset_matches_one_pass": true,
+    "weights_unchanged": true
+  },
+  "trainable_parameters_by_arm": {
+    "one_pass": 3,
+    "recurrent": 3
+  }
+}

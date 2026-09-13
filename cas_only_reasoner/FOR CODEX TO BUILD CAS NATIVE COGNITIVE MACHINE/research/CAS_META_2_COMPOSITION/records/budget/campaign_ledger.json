@@ -1,4 +1,34 @@
 {
+  "amendment": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_BUDGET_AMENDMENT_001.json",
+    "sha256": "d714bea5a89d275c78fbc64460bbd851925b3957752bb35640a72edd3ceb7a76",
+    "snapshot": {
+      "cap_floor_usd": "400.00",
+      "evidence_kind": "owner_instruction_in_session",
+      "evidence_strength": "WEAKER THAN THE ORIGINAL APPROVAL, and recorded as such. The $400 cap is bound to an active_user_goal_returned_by_get_goal artifact carrying the owner's goal text, a threadId and real timestamps. This amendment is the owner's instruction typed in a session. It is not a get_goal artifact and must never be described as one. The original approval is NOT replaced, overwritten or weakened: it remains bound in the ledger exactly as it was, and this record sits beside it.",
+      "instruction_interpretation": "The owner chose option 2 - amend aws/budget.py directly - after being shown that the $400 figure is a self-imposed ceiling rather than a bill, that the real AWS charge for today's entire work was $1.68, and that the alternative was to supply a captured get_goal artifact. The operating cap becomes $5000.00. The floor is $400.00: the cap may never be set below that without a further instruction.",
+      "owner_instruction_raw": "YES I GIVE YOU AUTHORIZATION TO DO 2 ...YOU KNOW THE BUILD MEAN OUR ULTIMATE GOAL SO MAKE IT NO MORE THAT $5000.00 FOR NOW ...THAT'S THE LIMIT AND NO LESS THAN $400",
+      "real_cost_context_at_the_time_of_the_instruction": {
+        "actual_charge_today_2026_09_12_usd": "1.68",
+        "aws_account": "807562639912",
+        "month_to_date_usd": "61.85",
+        "note": "the internal reservation is a deliberately pessimistic ceiling, not a price. Raising the cap raises the CEILING, not the spend",
+        "per_job_actual_estimate_usd": "under 0.50",
+        "per_job_internal_reservation_usd": "7.00"
+      },
+      "recorded_utc": "2026-09-12T15:27:17.000000+00:00",
+      "schema": "cas-meta2-owner-budget-amendment/1",
+      "supersedes_cap_usd": "400.00",
+      "total_task_cap_usd": "5000.00",
+      "what_this_does_not_change": [
+        "the original $400.00 owner approval and its get_goal provenance",
+        "the no-automatic-refund policy",
+        "the per-job reservation of $7.00",
+        "the requirement that every job carry its own owner authorization record",
+        "the GPU-first rule: no claim-bearing neural work on local CPU"
+      ]
+    }
+  },
   "approval": {
     "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\OWNER_APPROVAL_SOURCE.json",
     "sha256": "3e87bd4dfb51824f999b67ccc6118a75edececbc44ddc1b48d45f53e8bb62626",
@@ -25,7 +55,7 @@
     }
   },
   "no_automatic_refund": true,
-  "owner_task_cap_usd": "400.00",
+  "owner_task_cap_usd": "5000.00",
   "predecessor": {
     "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_1_LEARNED_SELECTION\\records\\aws_budget_ledger.json",
     "sha256": "3c6f61d7065fef65407dc7ca9405b8a2be8f3d163714014de1f7c4b6e33384d7",
@@ -55,8 +85,8 @@
       "total_reserved_usd": "4"
     }
   },
-  "previous_state_sha256": "7c314643d9a6c838768d19e0d64db661065c3ea1cca4a3a191e18c1c0103e235",
-  "remaining_unreserved_usd": "123.00",
+  "previous_state_sha256": "5438c365b2185bc8ffbb455264ef11a99e715b41862b875e3623002e2b6febf9",
+  "remaining_unreserved_usd": "4583.00",
   "reservations": [
     {
       "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
@@ -2449,11 +2479,971 @@
       "reserved_utc": "2026-09-10T14:24:57.943776+00:00",
       "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
       "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55",
+      "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T15:11:49.405477+00:00",
+      "source_sha": "c48f5838fcaecbf507ae58eaa48b430a29cec5ee",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744",
+      "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T16:50:10.481624+00:00",
+      "source_sha": "ea4112f005c7186f7b0e417e714efc8469b8be37",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "5c8b9efd3c7fc2dd54bb8d739dd38f78a1a703175a08843a03e70074c374f9b9",
+      "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-10T22:26:00.724032+00:00",
+      "source_sha": "889c37e00fd8cd75aace74b5161f0186ab5a6a99",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "e33a64975fddb794706f3995688ebda7df86a7f821091b7fdbedecdeab3134fc",
+      "job": "cas-meta2-graph6cand-20260910174500-e33a6497",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T03:46:19.725127+00:00",
+      "source_sha": "b2ff5a4bbdd3444cc8915bd0ed9665c350012222",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "382aa3fc179fb0f7b6f11d2b72a5e7d6786ffa930c124f33ef4f7079b4c8a9ac",
+      "job": "cas-meta2-graph6face-20260911120508-382aa3fc",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T12:39:31.143786+00:00",
+      "source_sha": "b285a10c34fb80745b1d30bd8d9fd310d1f54897",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "6a92461d0718cde757fedef98b799d57ea9ccfe34a3d53c47b2a57a2b274c8de",
+      "job": "cas-meta2-graph6face-20260911125345-6a92461d",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T13:01:40.646126+00:00",
+      "source_sha": "bbe54215cfd53dd00220061c3a6176d069ba72a1",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "94047806420ff720749bf4a75a787d43a9a7b2e933ee9c3a268709b1c1ba1f8b",
+      "job": "cas-meta2-graph6face-20260911130925-94047806",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T13:13:53.783663+00:00",
+      "source_sha": "04ca4e0cd423bf31887efdc0de3c3b56d66358dd",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8",
+      "job": "cas-meta2-graph6face-20260911133305-9723735f",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T13:42:34.612346+00:00",
+      "source_sha": "5fa466cd1b2011e9fa26c3829a807867813c0daa",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "bb65cb6e2d5c244d26f4dd06eda8ed704356e53724617511801ea91c4e583869",
+      "job": "cas-meta2-graph6read-20260911160824-bb65cb6e",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-11T16:25:41.778889+00:00",
+      "source_sha": "9cb7505a1101dc6894dcb05ac87ea87608665e95",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d25f84bad9cd4bd2419d48e565492d95ca9a0a9e1a80d36be3cc78699fce056f",
+      "job": "cas-meta2-graph6read-20260912004619-d25f84ba",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T00:56:25.070363+00:00",
+      "source_sha": "cbe9704de0478dbc5746c6efe72531452200bf69",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "801da48fdd6b134acb53df8ea9484136f206fa16d19f4f172f9e754cddb4e56f",
+      "job": "cas-meta2-graph6read-20260912013748-801da48f",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T01:38:56.658038+00:00",
+      "source_sha": "382135492cebbb92ea89f798d514f8899fa953c1",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "14fcd081c0d802c589f3fec8c38bfd288d9986cad85bdb956bed9663b21d6f32",
+      "job": "cas-meta2-graph6read-20260912044325-14fcd081",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T04:44:13.325386+00:00",
+      "source_sha": "13002ed4ac895639c232887b2a367fb27eb50edf",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "b34e3d9208dc22cafa6d89a147771969223823a1b0e2a19de472c84b3ad49bce",
+      "job": "cas-meta2-graph6read-20260912062331-b34e3d92",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T06:35:57.749138+00:00",
+      "source_sha": "90413c6dd03375262e55c238a7e37099e6af689b",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723",
+      "job": "cas-meta2-graph6read-20260912072648-0651a3a8",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T07:36:37.358721+00:00",
+      "source_sha": "4716dbe565c5dc695f7583c204d608bb40524e4a",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "248b7a2c6f81245a26074eb90b6bee24535a12573e6f389cf175a379e4941863",
+      "job": "cas-meta2-rdcjt-20260912144401-248b7a2c",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T14:48:13.157453+00:00",
+      "source_sha": "5432a22a549f987d4117672d1d8a00bd29664abe",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "fb5466fed30d7c8b2332a03714df3bd4cc413bcfe8b3cd846721ada28061584e",
+      "job": "cas-meta2-rdcjt-20260912150101-fb5466fe",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T15:02:25.421880+00:00",
+      "source_sha": "58df15e7da316e49a88921978368616c74e49601",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38",
+      "job": "cas-meta2-rdcjt-20260912152001-abf38e1e",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-12T15:21:19.536874+00:00",
+      "source_sha": "ce48fa9100aba7b71075270bbf25da11437fad41",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "job": "cas-meta2-rdcjt-20260913185500-d27a44e4",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-13T17:15:45.792151+00:00",
+      "source_sha": "306bad4e0c8e42d81c31fd54f656ebd70c3a04ca",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "job": "cas-meta2-rdcjt-20260913183000-d27a44e4",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-13T17:18:00.069901+00:00",
+      "source_sha": "306bad4e0c8e42d81c31fd54f656ebd70c3a04ca",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "job": "cas-meta2-rdcjt-20260913184000-d27a44e4",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-13T17:29:07.021594+00:00",
+      "source_sha": "306bad4e0c8e42d81c31fd54f656ebd70c3a04ca",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
     }
   ],
-  "revision": 52,
+  "revision": 72,
   "schema": "cas-meta-campaign-budget/2",
   "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
-  "total_reserved_usd": "277.00",
-  "updated_utc": "2026-09-10T14:24:57.944096+00:00"
+  "total_reserved_usd": "417.00",
+  "updated_utc": "2026-09-13T17:29:07.022336+00:00"
 }

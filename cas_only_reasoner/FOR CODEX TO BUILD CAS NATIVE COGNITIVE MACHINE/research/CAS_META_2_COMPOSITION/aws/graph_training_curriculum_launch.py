@@ -48,7 +48,15 @@ WORKER_NAME = "graph6_curriculum_worker.py"
 LEDGER_PATH = ROOT / "records/budget/campaign_ledger.json"
 OWNER_AUTHORIZATION_PATH = (ROOT / "records/teaching_cycle_001/graph_first_candidate_001/"
                             "training_mode_001/OWNER_AUTHORIZATION_GRAPH6_CURRICULUM_002.json")
-CAMPAIGN_CAP_USD = "400.00"
+# DERIVED, not hardcoded. This said "400.00", a second copy of a number that
+# already lives in aws/budget.py. When the owner amended the cap to $5000.00
+# (records/budget/OWNER_BUDGET_AMENDMENT_001.json, $400 floor), budget.CAP moved
+# and this copy did not, so validate_reservation_scope refused every launch with
+# LEDGER_CAP_CHANGED - the ledger was right and the constant was stale. A
+# duplicated money constant can only ever be right or stale, never authoritative.
+# Reading budget.CAP makes the owner-bound value the single source, and the
+# ledger comparison below still enforces that the ledger agrees with it.
+CAMPAIGN_CAP_USD = str(budget.CAP)
 
 # Frozen design.
 FROZEN_PAIR_SEEDS = (20260913, 20260914, 20260915)

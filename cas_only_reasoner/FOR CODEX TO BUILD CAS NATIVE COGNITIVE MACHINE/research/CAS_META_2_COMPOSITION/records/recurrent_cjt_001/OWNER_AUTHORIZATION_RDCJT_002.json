@@ -1,0 +1,66 @@
+{
+  "schema": "cas-recurrent-cjt-owner-authorization/1",
+  "candidate": "CAS_RDCJT_001",
+  "recorded_utc": "2026-09-13T16:55:00.000000+00:00",
+  "owner_instruction_raw": "YES CREATE THE GOAL AND THEN EXECUTE IT AND DO AWS TRAINING RUN AND BRING BACK THE RESULTS SO WE CAN SEE WHAT WE HAVE IF ANYTHING AND PLAN NEXT STEPS",
+  "evidence_kind": "owner_instruction_in_session",
+  "evidence_strength": "Recorded as a session instruction typed by the owner during a goal round. It is NOT a get_goal artifact and must not be described as one. It is recorded verbatim and stands beside OWNER_AUTHORIZATION_RDCJT_001.json, which it neither replaces nor weakens. The original $400 approval remains bound to its get_goal artifact in the ledger; the $5,000 operating cap comes from OWNER_BUDGET_AMENDMENT_001.json.",
+  "instruction_interpretation": "The owner directs that a real AWS GPU training run be executed and its results returned, so that the project can see what it actually has and plan from evidence rather than from design documents. Applied to CAS_RDCJT_001, the only fully built and locally verified training candidate, this authorises TWO paired runs: one per NEVER-LAUNCHED seed, 20260913 and 20260914, at $7.00 each, $14.00 in total. Each job trains BOTH arms - one_pass and recurrent - from one matched initialization on the same CFC course, then reads the recurrent checkpoint at every declared depth with its weights frozen.",
+  "why_two_jobs_and_not_three": {
+    "measured_finding": "All THREE prior CAS_RDCJT_001 launches bound seed 20260912 in their authority. Read from receipt intent.json: 144401-248b7a2c seed=20260912, 150101-fb5466fe seed=20260912, 152001-abf38e1e seed=20260912. FROZEN_SEED = FROZEN_SEEDS[0] = 20260912, and the launches used the default rather than a per-job seed.",
+    "consequence": "Only ONE seed has ever produced data. Seeds 20260913 and 20260914 have never been launched, so they carry no receipt and burn nothing by running.",
+    "seed_20260912_is_not_authorised_for_reuse": "Seed 20260912 already has three receipts and one delivered measurement (R1=117, R8=101, net -16). OWNER_AUTHORIZATION_RDCJT_001.json lists 'reusing a seed that already has a receipt' under explicitly_not_authorized. It is therefore NOT re-run here. Re-running it would spend money to reproduce a measurement already in hand.",
+    "guard_blind_spot_disclosed": "seeds_already_used() reads 'receipt_*/result.json' at the receipt root and counts a seed as consumed only when that document has completed_deliverable true. All three prior receipts carry completed_deliverable false (statuses AWS_CANDIDATE_FAILED, AWS_CANDIDATE_FAILED, AWS_CANDIDATE_LAUNCH_FAILED), because the third job produced measurements whose delivery envelope failed and whose evidence was preserved separately under rescued_evidence/. The guard therefore reports all three seeds as unused and would permit seed 20260912 to run again. That permission is NOT exercised: the seed accounting above is the binding reading, not the guard's silence. This is recorded so a later reader is not misled by a guard that cannot see rescued evidence."
+  },
+  "bounds": {
+    "jobs": 2,
+    "candidate": "CAS_RDCJT_001",
+    "seeds": [
+      20260913,
+      20260914
+    ],
+    "one_seed_per_job": true,
+    "seed_20260912_excluded": true,
+    "arms": [
+      "one_pass",
+      "recurrent"
+    ],
+    "reservation_usd": "7.00",
+    "total_reservation_usd": "14.00",
+    "training": true,
+    "updates_per_arm": 128,
+    "max_wall_seconds": 2400.0,
+    "automatic_retries": 0
+  },
+  "budget_context": {
+    "owner_task_cap_usd": "5000.00",
+    "owner_cap_floor_usd": "400.00",
+    "cap_source": "records/budget/OWNER_BUDGET_AMENDMENT_001.json (owner instruction 2026-09-12)",
+    "total_reserved_before_this_run_usd": "396.00",
+    "remaining_unreserved_before_this_run_usd": "4604.00",
+    "this_run_usd": "14.00",
+    "note": "The reservation is a deliberately pessimistic ceiling, not a price. The recorded actual AWS charge for the whole 2026-09-12 working day was $1.68 against a $7.00-per-job reservation."
+  },
+  "preconditions_verified_before_this_authorization": {
+    "crash_1_fixed": "ModuleNotFoundError: cas_meta2.rpm_cfc_constructor. The package is now listed in RECURRENT_MODULES and is committed. Commit 58df15e7 records the failure and the fix.",
+    "crash_2_fixed": "KeyError on _position because course_task_index read range(1, 17) while course_plan numbers its rounds 0..15. Commit ce48fa91 records the off-by-one; ce48fa91 is an ancestor of HEAD 306bad4e.",
+    "local_reproduction": "Every task the course presents was checked against the learner index at the current source: index_size 552, presented_total 896, missing_count 0. Task construction is deterministic and stable across torch reseeds.",
+    "local_tests": "118 passed, 0 failed across the five recurrent_cjt test modules.",
+    "local_gpu_smoke": "The same entrypoint the deployed worker drives, on the local RTX 4070 under the GPU-first rule's smoke/dev allowance, returned status RECURRENT_EXPERIMENT_DELIVERED with 2 arms, 4 artifacts and result.json written, in 299.3 seconds. That number is DEV ONLY and is NOT claim-bearing."
+  },
+  "claim_scope": {
+    "panel": "The CFC course presents 552 tasks across 24 families; the evaluation panel is 216 items across 16 families, sharing no family and no record id. The panel is held out from this learner, so a gain on it is an application measurement.",
+    "what_is_still_not_licensed": "Novelty, and any CAS-specific advantage. Earlier jobs measured this same frozen panel, so it is held out from THIS learner, not material no run has ever seen. Two additional seeds make the declared three-run criterion evaluable; they do not make it independent of the panel.",
+    "reported_whatever_the_sign": "Both seeds are run and reported whatever their sign. A negative, a null and a positive are all results. If the criterion is not met, that is reported as not met."
+  },
+  "explicitly_not_authorized": [
+    "any third job, any fourth job, or any automatic retry of a failed one",
+    "re-running seed 20260912",
+    "any change to the campaign cap, the ledger, or the budget validators",
+    "an inference-time solver, decoder, memory system, pass-level loss or acceptance gate added to this experiment",
+    "reporting one job, or jobs on one seed, as satisfying the two-of-three criterion",
+    "presenting a depth difference as evidence that the extra passes reason",
+    "any local CPU neural work; the local RTX 4070 is smoke/dev only",
+    "changing the complementary-teaching or perspective-resonance work, which stays unimplemented"
+  ]
+}

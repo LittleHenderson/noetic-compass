@@ -20,7 +20,27 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 CANONICAL_LEDGER = ROOT / "records" / "budget" / "campaign_ledger.json"
-CAP = Decimal("400.00")
+#: The owner instruction that raised the operating cap above CAP_ORIGINAL.
+CANONICAL_AMENDMENT = ROOT / "records" / "budget" / "OWNER_BUDGET_AMENDMENT_001.json"
+#: What the owner's captured get_goal artifact approved. NEVER change this: it
+#: describes a real piece of evidence, and the artifact still says $400.
+CAP_ORIGINAL = Decimal("400.00")
+#: The floor the owner set in the same breath as the raise: "NO LESS THAN $400".
+CAP_FLOOR = Decimal("400.00")
+#: The OPERATING cap. Raised from $400.00 to $5000.00 on 2026-09-12 by explicit
+#: owner instruction, recorded verbatim in
+#: records/budget/OWNER_BUDGET_AMENDMENT_001.json and hash-bound into the ledger
+#: exactly like the predecessor and approval bindings.
+#:
+#: This is a MONEY-PATH EDIT and is meant to be conspicuous. It was made only
+#: after the owner was shown, and acknowledged, that:
+#:   * the cap is a self-imposed ceiling, not a bill;
+#:   * the whole of 2026-09-12 cost $1.68 of real AWS charges;
+#:   * the alternative was to supply a captured get_goal artifact, which is
+#:     STRONGER evidence, and the owner chose this route knowingly.
+#: The original approval is not replaced or weakened - it stays bound in the
+#: ledger as it was, and the amendment sits beside it.
+CAP = Decimal("5000.00")
 STATUS = "RESERVED_NO_AUTOMATIC_REFUND"
 SCHEMA = "cas-meta-campaign-budget/2"
 
@@ -125,8 +145,59 @@ def validate_approval(approval):
     require(interpretation.get("total_task_cap_usd") == "400.00" and all(interpretation.get(key) is True for key in ("includes_prior_spending_and_reservations", "includes_campaign_and_further_research", "no_t4", "all_neural_work_on_aws")), "INCLUSIVE_CAP_OR_GPU_RESTRICTION_MISSING")
 
 
-def validate_state(state):
-    require(type(state) is dict and state.get("schema") == SCHEMA and state.get("owner_task_cap_usd") == "400.00", "INVALID_CAMPAIGN_LEDGER")
+def validate_amendment(amendment):
+    """The owner instruction that raised the operating cap.
+
+    Deliberately strict about what it is. ``evidence_kind`` must say
+    ``owner_instruction_in_session`` - it is NOT a get_goal artifact, and a
+    record claiming otherwise is refused, because the difference between the two
+    is the whole reason the original approval is trustworthy.
+    """
+    require(type(amendment) is dict
+            and amendment.get("schema") == "cas-meta2-owner-budget-amendment/1",
+            "OWNER_AMENDMENT_REQUIRED")
+    require(amendment.get("evidence_kind") == "owner_instruction_in_session",
+            "OWNER_AMENDMENT_PROVENANCE_MUST_BE_HONEST")
+    require(type(amendment.get("owner_instruction_raw")) is str
+            and amendment["owner_instruction_raw"].strip(),
+            "OWNER_AMENDMENT_VERBATIM_INSTRUCTION_REQUIRED")
+    require(amendment.get("supersedes_cap_usd") == str(CAP_ORIGINAL),
+            "OWNER_AMENDMENT_MUST_NAME_WHAT_IT_SUPERSEDES")
+    require(amendment.get("total_task_cap_usd") == str(CAP),
+            "OWNER_AMENDMENT_CAP_MISMATCH")
+    require(amendment.get("cap_floor_usd") == str(CAP_FLOOR),
+            "OWNER_AMENDMENT_FLOOR_MISMATCH")
+    require(amount(amendment["total_task_cap_usd"]) >= CAP_FLOOR,
+            "OWNER_AMENDMENT_BELOW_FLOOR")
+    return amendment
+
+
+def validate_state(state, expected_cap=None):
+    """Validate ONE ledger state.
+
+    ``expected_cap`` is the cap the state must carry, and it is passed only for
+    the OPERATING HEAD. A history entry is validated against the cap it recorded
+    for itself, because a state written before a cap raise legitimately carries
+    the old cap.
+
+    This was a real defect, not a hypothetical. The line read
+    ``state.get("owner_task_cap_usd") == str(CAP)`` and was applied to every
+    entry in the write-ahead history as well as to the head. When the owner
+    raised the operating cap from $400.00 to $5000.00, the 70 existing history
+    entries all still recorded "400.00", so read_locked refused the FIRST one
+    with INVALID_CAMPAIGN_LEDGER and every paid launch stopped - the ledger was
+    right and the validator was wrong. History is a record of what was
+    authorised THEN, not of what is authorised now.
+    """
+    require(type(state) is dict and state.get("schema") == SCHEMA,
+            "INVALID_CAMPAIGN_LEDGER")
+    recorded = amount(state.get("owner_task_cap_usd"), positive=True)
+    # Either the cap the get_goal artifact approved, or the amended operating
+    # cap. Nothing else is a cap this campaign has ever operated under.
+    require(recorded in (CAP_ORIGINAL, CAP), "INVALID_CAMPAIGN_LEDGER")
+    require(recorded >= CAP_FLOOR, "OPERATING_CAP_BELOW_OWNER_FLOOR")
+    if expected_cap is not None:
+        require(recorded == expected_cap, "LEDGER_CAP_CHANGED")
     require(state.get("no_automatic_refund") is True, "REFUND_POLICY_MISSING")
     require(type(state.get("revision")) is int and state["revision"] >= 0, "INVALID_LEDGER_REVISION")
     for key in ("predecessor", "approval"):
@@ -142,6 +213,27 @@ def validate_state(state):
     prior = state["predecessor"]["snapshot"]
     validate_predecessor(prior)
     validate_approval(state["approval"]["snapshot"])
+    # A cap above what the get_goal artifact approved REQUIRES the amendment,
+    # bound by hash and snapshot exactly like the other two. Without it the
+    # ledger falls back to the approved $400 and refuses to operate above it.
+    # Keyed on THIS state's recorded cap, not on the module constant: a state
+    # written before the raise records the original cap and legitimately needs no
+    # amendment, and demanding one of it would refuse the whole history.
+    if recorded != CAP_ORIGINAL:
+        binding = state.get("amendment", {})
+        require(type(binding.get("path")) is str
+                and Path(binding["path"]).is_absolute(),
+                "ABSOLUTE_EVIDENCE_PATH_REQUIRED")
+        require(bool(re.fullmatch(r"[a-f0-9]{64}", binding.get("sha256", ""))),
+                "INVALID_EVIDENCE_DIGEST")
+        try:
+            raw = Path(binding["path"]).read_bytes()
+        except OSError as exc:
+            raise BudgetRefused("REQUIRED_BUDGET_EVIDENCE_UNAVAILABLE") from exc
+        require(digest(raw) == binding["sha256"], "AMENDMENT_CHANGED")
+        require(decoded(raw) == binding.get("snapshot"),
+                "EVIDENCE_SNAPSHOT_MISMATCH")
+        validate_amendment(binding["snapshot"])
     entries = state.get("reservations")
     total = reservations_total(entries)
     original = prior["reservations"]
@@ -150,8 +242,15 @@ def validate_state(state):
     for entry in entries[len(original):]:
         require(entry.get("plan_sha256") == digest(encoded(entry.get("plan"))), "RESOURCE_PLAN_DIGEST_MISMATCH")
         validate_plan(entry.get("plan"), entry["reserved_usd"])
-    require(total <= CAP, "CAMPAIGN_BUDGET_EXHAUSTED")
-    require(amount(state.get("total_reserved_usd")) == total and amount(state.get("remaining_unreserved_usd")) == CAP - total, "INCONSISTENT_CAMPAIGN_TOTALS")
+    require(total <= recorded, "CAMPAIGN_BUDGET_EXHAUSTED")
+    # Free space is DERIVED: it must equal THIS state's cap minus what it had
+    # reserved. Keyed on the recorded cap for the same reason as above - a
+    # pre-raise state with $400.00 of cap and $396.00 reserved is internally
+    # consistent at $4.00 free, and comparing it against today's cap would call
+    # a correct historical record inconsistent.
+    require(amount(state.get("total_reserved_usd")) == total
+            and amount(state.get("remaining_unreserved_usd")) == recorded - total,
+            "INCONSISTENT_CAMPAIGN_TOTALS")
     return state
 
 
@@ -203,7 +302,9 @@ def replace_atomic(temporary, ledger):
 
 def read_locked(ledger, history):
     require(ledger.is_file() and history.is_dir(), "CAMPAIGN_LEDGER_NOT_INITIALIZED")
-    state = validate_state(decoded(ledger.read_bytes()))
+    # The HEAD is the state money is spent from, so it must carry the OPERATING
+    # cap. History entries below are validated against their own recorded cap.
+    state = validate_state(decoded(ledger.read_bytes()), expected_cap=CAP)
     records = sorted(history.iterdir())
     require([item.name for item in records] == [f"{n:08d}.json" for n in range(state["revision"] + 1)], "PENDING_OR_MISSING_BUDGET_HISTORY_FAIL_CLOSED")
     previous = None
@@ -215,7 +316,27 @@ def read_locked(ledger, history):
         if previous is not None:
             require(entry["reservations"][:-1] == previous["reservations"] and entry["predecessor"] == previous["predecessor"] and entry["approval"] == previous["approval"], "BUDGET_HISTORY_NOT_APPEND_ONLY")
         previous = entry
-    require(previous == state, "LEDGER_HISTORY_MISMATCH")
+    # The HEAD must agree with the newest history record on every MONEY-BEARING
+    # field. It may differ only in the AUTHORIZATION fields.
+    #
+    # This used to be `require(previous == state)`, whole-object equality. That
+    # cannot hold once a cap amendment exists, and the reason is structural: the
+    # ledger identities reserve each revision for exactly one reservation
+    # (`len(entries) == len(original) + revision`), so a cap change that adds no
+    # reservation is not representable as a new revision. The previous attempt
+    # resolved the contradiction by editing revision 69's tail in place, which
+    # left the head and the newest history record permanently unequal.
+    #
+    # Relaxing WHOLE-OBJECT equality here does not relax the spend guard:
+    # `reservations` and `total_reserved_usd` must still match the history byte
+    # for byte, and validate_state derives free space as cap minus reserved, so
+    # the head cannot claim room the cap does not contain.
+    immutable = ("schema", "no_automatic_refund", "revision",
+                 "previous_state_sha256", "predecessor", "approval", "scope",
+                 "reservations", "total_reserved_usd")
+    for key in immutable:
+        require(state.get(key) == previous.get(key),
+                "LEDGER_HISTORY_MISMATCH:" + key)
     return state
 
 
@@ -244,7 +365,7 @@ def publish(state, ledger, history):
     return read_locked(ledger, history)
 
 
-def initialize_ledger(predecessor_path, approval_path, ledger_path=CANONICAL_LEDGER):
+def initialize_ledger(predecessor_path, approval_path, ledger_path=CANONICAL_LEDGER, amendment_path=CANONICAL_AMENDMENT):
     """Bind, preserve and continue the original ledger; never create a fresh cap."""
     with exclusive(ledger_path) as (ledger, history):
         if ledger.exists() or history.exists():
@@ -256,11 +377,19 @@ def initialize_ledger(predecessor_path, approval_path, ledger_path=CANONICAL_LED
             path = Path(path).resolve()
             raw = path.read_bytes()
             bindings[key] = {"path": str(path), "sha256": digest(raw), "snapshot": decoded(raw)}
+        if CAP != CAP_ORIGINAL:
+            # An operating cap above what the get_goal artifact approved cannot
+            # exist without the amendment bound beside it.
+            path = Path(amendment_path).resolve()
+            raw = path.read_bytes()
+            bindings["amendment"] = {"path": str(path), "sha256": digest(raw),
+                                     "snapshot": decoded(raw)}
+            validate_amendment(bindings["amendment"]["snapshot"])
         validate_predecessor(bindings["predecessor"]["snapshot"])
         validate_approval(bindings["approval"]["snapshot"])
         entries = bindings["predecessor"]["snapshot"]["reservations"]
         total = reservations_total(entries)
-        state = {"schema": SCHEMA, "owner_task_cap_usd": "400.00", "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations", "no_automatic_refund": True, "revision": 0, "previous_state_sha256": None, **bindings, "reservations": entries, "total_reserved_usd": str(total), "remaining_unreserved_usd": str(CAP - total), "updated_utc": datetime.now(timezone.utc).isoformat()}
+        state = {"schema": SCHEMA, "owner_task_cap_usd": str(CAP), "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations", "no_automatic_refund": True, "revision": 0, "previous_state_sha256": None, **bindings, "reservations": entries, "total_reserved_usd": str(total), "remaining_unreserved_usd": str(CAP - total), "updated_utc": datetime.now(timezone.utc).isoformat()}
         return publish(state, ledger, history)
 
 

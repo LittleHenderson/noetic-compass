@@ -1,0 +1,45 @@
+{
+  "archive_sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+  "arms": [
+    "one_pass",
+    "recurrent"
+  ],
+  "candidate": "CAS_RDCJT_001",
+  "decisions_per_arm": 896,
+  "evaluation_depths": [
+    "R1",
+    "R2",
+    "R4",
+    "R8",
+    "RESET_8"
+  ],
+  "job": "cas-meta2-rdcjt-20260913184000-d27a44e4",
+  "learning_rate": 0.003,
+  "manifest_sha256": "376947a2aaa23d087bc366ff3320f348b04f8f45c6c42e87ad09f8e246c22ca1",
+  "max_wall_seconds": 2400.0,
+  "owner_authorization_sha256": "c6f85c51b53d203af2e063b9d4388f048ff82fcfa4ebd785146940ee5cc3434b",
+  "reservation_usd": "7.00",
+  "round_depths": [
+    1,
+    2,
+    4,
+    8,
+    2,
+    4,
+    8,
+    1,
+    4,
+    8,
+    1,
+    2,
+    8,
+    1,
+    2,
+    4
+  ],
+  "schema": "cas-recurrent-cjt-authority/1",
+  "seed": 20260914,
+  "source_sha": "306bad4e0c8e42d81c31fd54f656ebd70c3a04ca",
+  "training": true,
+  "updates_per_arm": 128
+}

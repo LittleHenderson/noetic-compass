@@ -1,0 +1,26 @@
+{
+  "cap_floor_usd": "400.00",
+  "evidence_kind": "owner_instruction_in_session",
+  "evidence_strength": "WEAKER THAN THE ORIGINAL APPROVAL, and recorded as such. The $400 cap is bound to an active_user_goal_returned_by_get_goal artifact carrying the owner's goal text, a threadId and real timestamps. This amendment is the owner's instruction typed in a session. It is not a get_goal artifact and must never be described as one. The original approval is NOT replaced, overwritten or weakened: it remains bound in the ledger exactly as it was, and this record sits beside it.",
+  "instruction_interpretation": "The owner chose option 2 - amend aws/budget.py directly - after being shown that the $400 figure is a self-imposed ceiling rather than a bill, that the real AWS charge for today's entire work was $1.68, and that the alternative was to supply a captured get_goal artifact. The operating cap becomes $5000.00. The floor is $400.00: the cap may never be set below that without a further instruction.",
+  "owner_instruction_raw": "YES I GIVE YOU AUTHORIZATION TO DO 2 ...YOU KNOW THE BUILD MEAN OUR ULTIMATE GOAL SO MAKE IT NO MORE THAT $5000.00 FOR NOW ...THAT'S THE LIMIT AND NO LESS THAN $400",
+  "real_cost_context_at_the_time_of_the_instruction": {
+    "actual_charge_today_2026_09_12_usd": "1.68",
+    "aws_account": "807562639912",
+    "month_to_date_usd": "61.85",
+    "note": "the internal reservation is a deliberately pessimistic ceiling, not a price. Raising the cap raises the CEILING, not the spend",
+    "per_job_actual_estimate_usd": "under 0.50",
+    "per_job_internal_reservation_usd": "7.00"
+  },
+  "recorded_utc": "2026-09-12T15:27:17.000000+00:00",
+  "schema": "cas-meta2-owner-budget-amendment/1",
+  "supersedes_cap_usd": "400.00",
+  "total_task_cap_usd": "5000.00",
+  "what_this_does_not_change": [
+    "the original $400.00 owner approval and its get_goal provenance",
+    "the no-automatic-refund policy",
+    "the per-job reservation of $7.00",
+    "the requirement that every job carry its own owner authorization record",
+    "the GPU-first rule: no claim-bearing neural work on local CPU"
+  ]
+}
