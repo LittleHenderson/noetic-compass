@@ -1,0 +1,120 @@
+
+=================================== ERRORS ====================================
+__________________ ERROR collecting tests/test_bundle_v3.py ___________________
+tests\test_bundle_v3.py:13: in <module>
+    from test_launch_v3 import bundle, fixture_manifest, fixture_members, launch, profiles
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1342: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:938: in _load_unlocked
+    ???
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_launch_v3.py:24: in <module>
+    launch = load("meta2_launch_v3_pure_test", ROOT / "aws/launch_v3.py")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_v3.py:20: in load
+    spec.loader.exec_module(module)
+aws\launch_v3.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+______________ ERROR collecting tests/test_launch_ablation_v4.py ______________
+tests\test_launch_ablation_v4.py:11: in <module>
+    from test_launch_v3 import load, fixture_members as old_fixture, launch as old_launch
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1342: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:938: in _load_unlocked
+    ???
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_launch_v3.py:24: in <module>
+    launch = load("meta2_launch_v3_pure_test", ROOT / "aws/launch_v3.py")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_v3.py:20: in load
+    spec.loader.exec_module(module)
+aws\launch_v3.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+______________ ERROR collecting tests/test_launch_contrast_v6.py ______________
+tests\test_launch_contrast_v6.py:10: in <module>
+    from test_launch_v3 import load, fixture_members, launch as old_launch
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1342: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:938: in _load_unlocked
+    ???
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_launch_v3.py:24: in <module>
+    launch = load("meta2_launch_v3_pure_test", ROOT / "aws/launch_v3.py")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_v3.py:20: in load
+    spec.loader.exec_module(module)
+aws\launch_v3.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+________________ ERROR collecting tests/test_launch_fit_v5.py _________________
+tests\test_launch_fit_v5.py:11: in <module>
+    from test_launch_v3 import load, fixture_members as old_fixture, launch as old_launch
+<frozen importlib._bootstrap>:1371: in _find_and_load
+    ???
+<frozen importlib._bootstrap>:1342: in _find_and_load_unlocked
+    ???
+<frozen importlib._bootstrap>:938: in _load_unlocked
+    ???
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\_pytest\assertion\rewrite.py:197: in exec_module
+    exec(co, module.__dict__)
+tests\test_launch_v3.py:24: in <module>
+    launch = load("meta2_launch_v3_pure_test", ROOT / "aws/launch_v3.py")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_v3.py:20: in load
+    spec.loader.exec_module(module)
+aws\launch_v3.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+______________ ERROR collecting tests/test_launch_recovery_v6.py ______________
+tests\test_launch_recovery_v6.py:47: in <module>
+    launch = load('pure_recovery_launcher_tested', ROOT/'aws/launch_recovery_v6.py')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_recovery_v6.py:42: in load
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:762: in exec_module
+    ???
+<frozen importlib._bootstrap>:491: in _call_with_frames_removed
+    ???
+aws\launch_recovery_v6.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+__________________ ERROR collecting tests/test_launch_v3.py ___________________
+tests\test_launch_v3.py:24: in <module>
+    launch = load("meta2_launch_v3_pure_test", ROOT / "aws/launch_v3.py")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_launch_v3.py:20: in load
+    spec.loader.exec_module(module)
+<frozen importlib._bootstrap_external>:762: in exec_module
+    ???
+<frozen importlib._bootstrap>:491: in _call_with_frames_removed
+    ???
+aws\launch_v3.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+____________ ERROR collecting tests/test_prototype_v7_launcher.py _____________
+tests\test_prototype_v7_launcher.py:12: in <module>
+    from aws import launch_prototype_v7 as l
+aws\launch_prototype_v7.py:69: in <module>
+    raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")
+E   ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT
+=========================== short test summary info ===========================
+ERROR tests/test_bundle_v3.py - ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFO...
+ERROR tests/test_launch_ablation_v4.py - ValueError: PINNED_SHARED_BUDGET_CHA...
+ERROR tests/test_launch_contrast_v6.py - ValueError: PINNED_SHARED_BUDGET_CHA...
+ERROR tests/test_launch_fit_v5.py - ValueError: PINNED_SHARED_BUDGET_CHANGED_...
+ERROR tests/test_launch_recovery_v6.py - ValueError: PINNED_SHARED_BUDGET_CHA...
+ERROR tests/test_launch_v3.py - ValueError: PINNED_SHARED_BUDGET_CHANGED_BEFO...
+ERROR tests/test_prototype_v7_launcher.py - ValueError: PINNED_SHARED_BUDGET_...
+!!!!!!!!!!!!!!!!!!! Interrupted: 7 errors during collection !!!!!!!!!!!!!!!!!!!
+no tests collected, 7 errors in 1.20s

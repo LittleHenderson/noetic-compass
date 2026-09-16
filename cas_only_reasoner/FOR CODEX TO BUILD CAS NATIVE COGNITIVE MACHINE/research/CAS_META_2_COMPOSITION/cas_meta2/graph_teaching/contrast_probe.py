@@ -28,13 +28,14 @@ rather than inferred.
 from __future__ import annotations
 
 import random
-from hashlib import sha256
+from contextlib import nullcontext
+from itertools import permutations
 
 from . import lessons, reference
 from .graph import Graph, canonical, digest, require
 
 PROBE_SCHEMA = "cas-graph-training-contrast-probe/1"
-RESULT_SCHEMA = "cas-graph-training-contrast-probe-result/1"
+RESULT_SCHEMA = "cas-graph-training-contrast-probe-result/2"
 CONTRASTS = ("original", "renamed", "reordered", "rewired")
 CONTRAST_SEED = 20260927
 MAX_CASES_PER_LEARNER = 30
@@ -182,8 +183,6 @@ def validate_probe_cases(cases):
             if variant is None:
                 continue
             Graph.from_record(variant["graph"]).validate()
-            if name == "rewired":
-                continue
             require(variant["options"].count(variant["correct"]) == 1,
                     "PROBE_CORRECT_OPTION:%s:%s" % (case["record_id"], name))
             require(len(variant["options"]) == 3,
@@ -204,12 +203,51 @@ def validate_probe_cases(cases):
 
 
 def probe_digest(cases):
-    return digest(canonical([{"record_id": case["record_id"],
-                              "op": case["op"],
-                              "variants": {name: (None if variant is None else
-                                                  sorted(variant["options"]))
-                                           for name, variant in case["variants"].items()}}
-                             for case in cases]))
+    """Bind graph, question, ordered options and rename map, not just choices."""
+    return digest(canonical(cases))
+
+
+def _unrename(value, plan):
+    reverse = {new: old for old, new in plan.items()}
+    if isinstance(value, list):
+        return sorted(_unrename(item, plan) for item in value)
+    if isinstance(value, str) and value.startswith("via:"):
+        return "via:" + reverse.get(value[4:], value[4:])
+    return reverse.get(value, value)
+
+
+def public_probe_input(record, variant, *, arm="cas"):
+    """Re-render changed structure and bypass the retained training-ID cache.
+
+    The inherited ID is used only for the original public option shuffle, so
+    renaming/reordering cannot confound the comparison with a new choice order.
+    The learner receives an ID derived from answer-free public bytes instead.
+    """
+    from . import adapter
+    graph = Graph.from_record(variant["graph"])
+    changed = {**record, **variant, "framings": {
+        arm: lessons._render_prompt(record["op"], graph, variant["question"], arm)}}
+    task = adapter.public_records(changed, arm)
+    public = {key: task[key] for key in ("public", "encoded_options", "op")}
+    public["record_id"] = "contrast:" + digest(canonical(public))
+    return public
+
+
+def list_length_inputs(public):
+    """Every slot permutation, ordered by public list length; targets unused.
+
+    This exposes slot sensitivity and chosen lengths. It cannot alone prove
+    that a preference for longer options caused a wrong semantic answer.
+    """
+    ordered = sorted(public["encoded_options"], key=lambda x: (len(x), canonical(x)))
+    for options in permutations(ordered):
+        task = {**public, "encoded_options": list(options), "public": {
+            **public["public"], "observations": [
+                {"slot": index, "tag": str(option)[:256], "values": [0.0] * 8}
+                for index, option in enumerate(options)]}}
+        task["record_id"] = "contrast:length:" + digest(canonical({
+            key: task[key] for key in ("public", "encoded_options", "op")}))
+        yield task
 
 
 def summarise(per_case):
@@ -224,7 +262,9 @@ def summarise(per_case):
                 continue
             summary[name]["attempted"] += 1
             summary[name]["correct"] += int(entry["correct"])
-        if row.get("renamed") and row["renamed"]["predicted"] != row["original"]["predicted"]:
+        if row.get("renamed") and row["renamed"].get(
+                "predicted_in_original_names", row["renamed"]["predicted"]
+                ) != row["original"]["predicted"]:
             changes["renamed_changed_answer"] += 1
         if row.get("reordered") and row["reordered"]["predicted"] != row["original"]["predicted"]:
             changes["reordered_changed_answer"] += 1
@@ -240,36 +280,63 @@ def summarise(per_case):
 
 
 def run_probe(*, torch, learner, records, practice_predictions, device=None,
-              seed=CONTRAST_SEED):
+              seed=CONTRAST_SEED, arm="cas"):
     """Record the four contrasts for each correctly answered practice case.
 
     The learner must already exist (loaded from a retained checkpoint); this
     function never calls ``step`` and never touches an optimizer.
     """
-    from . import adapter
+    require(arm in ("cas", "generic"), "PROBE_ARM")
     correct_ids = {record_id for record_id, row in practice_predictions.items()
                    if row}
     cases = validate_probe_cases(build_probe_cases(records, correct_ids, seed=seed))
-    per_case = []
-    for case in cases:
-        row = {"record_id": case["record_id"], "op": case["op"]}
-        for name, variant in case["variants"].items():
-            if variant is None:
-                row[name] = None
-                continue
-            record = {**{key: value for key, value in
-                         next(item for item in records
-                              if item["record_id"] == case["record_id"]).items()},
-                      **variant}
-            task = adapter.public_records(record, "cas")
-            predicted = learner.predict(
-                {key: value for key, value in task.items()
-                 if key not in ("correct", "encoded_correct_index", "reference")})
-            row[name] = {"predicted": predicted,
-                         "correct": predicted == variant["correct"],
-                         "options": list(variant["options"])}
-        per_case.append(row)
+    per_case, lengths = [], []
+    by_id = {record["record_id"]: record for record in records}
+    module = getattr(learner, "module", None)
+    training = getattr(module, "training", None)
+    identity = getattr(learner, "checkpoint_identity", None)
+    before = identity() if identity else None
+    if module is not None:
+        module.eval()
+    try:
+        with torch.no_grad() if torch is not None else nullcontext():
+            for case in cases:
+                row = {"record_id": case["record_id"], "op": case["op"]}
+                for name, variant in case["variants"].items():
+                    if variant is None:
+                        row[name] = None
+                        continue
+                    task = public_probe_input(by_id[case["record_id"]], variant, arm=arm)
+                    predicted = learner.predict(task)
+                    require(predicted in task["encoded_options"], "PROBE_PREDICTION_NOT_OPTION")
+                    row[name] = {"predicted": predicted,
+                                 "correct": predicted == variant["correct"],
+                                 "options": list(task["encoded_options"]),
+                                 "public_input_sha256": digest(canonical(task))}
+                    if name == "renamed":
+                        row[name]["predicted_in_original_names"] = _unrename(predicted, case["plan"])
+                    if name == "original" and case["op"] == "LIST_PARTS":
+                        for length_task in list_length_inputs(task):
+                            choice = learner.predict(length_task)
+                            require(choice in length_task["encoded_options"], "PROBE_PREDICTION_NOT_OPTION")
+                            lengths.append({"record_id": case["record_id"],
+                                "public_input_sha256": digest(canonical(length_task)),
+                                "options": length_task["encoded_options"],
+                                "option_lengths": [len(x) for x in length_task["encoded_options"]],
+                                "predicted": choice, "chosen_length": len(choice),
+                                "chosen_slot": length_task["encoded_options"].index(choice),
+                                "correct": choice == variant["correct"]})
+                per_case.append(row)
+    finally:
+        if module is not None and training is not None:
+            module.train(training)
+    after = identity() if identity else None
+    require(before == after, "PROBE_WEIGHTS_CHANGED")
     return {"schema": RESULT_SCHEMA, "cases": len(per_case),
             "probe_digest": probe_digest(cases),
             "per_case": per_case, "summary": summarise(per_case),
+            "arm": arm, "list_length_probe": lengths,
+            "parameter_digest_before": before, "parameter_digest_after": after,
+            "weights_unchanged": True if before is not None else None,
+            "length_probe_boundary": "Slot sensitivity and chosen lengths; not causal proof of length bias.",
             "optimizer_steps_taken": 0}

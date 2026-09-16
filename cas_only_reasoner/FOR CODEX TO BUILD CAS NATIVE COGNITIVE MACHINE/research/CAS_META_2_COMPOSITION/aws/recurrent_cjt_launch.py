@@ -158,7 +158,7 @@ DESIGN = {
 
 
 def seeds_already_used(record_dir):
-    """Which declared seeds already have a receipt, so a repeat cannot pass.
+    """Seeds with delivered or rescued evidence, so a repeat cannot pass.
 
     Three jobs on the same seed are ONE job run three times. The launcher reads
     the receipts rather than trusting the caller to remember which seeds went.
@@ -178,7 +178,7 @@ def seeds_already_used(record_dir):
         seed = authority.get("seed")
         if seed is None:
             continue
-        # A seed is CONSUMED only by a run that delivered. A technical failure
+        # A technical failure without measurement
         # burns $7.00 but produces no measurement, and refusing to re-run that
         # seed would leave a permanent hole in the three paired runs the
         # criterion needs. The guard exists to stop three jobs on ONE seed being
@@ -191,7 +191,12 @@ def seeds_already_used(record_dir):
                     "completed_deliverable"))
             except (ValueError, OSError):
                 delivered = False
-        if delivered:
+        # A failed lifecycle can still have a recovered measurement. Presence
+        # is deliberately sufficient for repeat prevention, even when its bytes
+        # need review. This does NOT certify recovery or change the failed
+        # parent receipt into a completed deliverable.
+        rescued = intent.parent / "rescued_evidence" / "results" / "result.json"
+        if delivered or rescued.exists():
             used[int(seed)] = authority.get("job")
         else:
             attempted.setdefault(int(seed), []).append(authority.get("job"))
@@ -205,10 +210,12 @@ def require_unused_seed(seed, record_dir):
     require(int(seed) not in used,
             "RDCJT_SEED_ALREADY_RUN:%d_by_%s" % (int(seed), used.get(int(seed))))
     return {"seed": int(seed), "seeds_declared": list(FROZEN_SEEDS),
-            "seeds_already_delivered": sorted(used),
+            "seeds_unavailable_for_reuse": sorted(used),
             "remaining": sorted(s for s in FROZEN_SEEDS if s not in used),
-            "note": ("a seed is consumed by a DELIVERED run; a failed attempt "
-                     "costs its reservation but does not burn the seed")}
+            "note": ("delivered runs and any recovered result block seed reuse; "
+                     "recovered evidence is not a completed lifecycle. A failed "
+                     "attempt without measurement costs its reservation but "
+                     "does not burn the seed")}
 
 
 def replication_status(jobs_completed=1):

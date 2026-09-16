@@ -1,0 +1,41 @@
+{
+  "all_detected": true,
+  "boundary": "Inputs were modified in memory only. Original receipt, archive, checkpoint and result bytes were not modified.",
+  "controls": [
+    {
+      "detected": true,
+      "expected_failure": "manifest_artifact:checkpoint_one_pass.pt",
+      "failed_checks": [
+        "manifest_artifact:checkpoint_one_pass.pt"
+      ],
+      "simulated_in_memory_only": "wrong_checkpoint_hash"
+    },
+    {
+      "detected": true,
+      "expected_failure": "answer_flags:R8",
+      "failed_checks": [
+        "answer_flags:R8",
+        "row_recomputed_tally:R8",
+        "primary_result"
+      ],
+      "simulated_in_memory_only": "changed_answer_flag"
+    },
+    {
+      "detected": true,
+      "expected_failure": "seed_binding",
+      "failed_checks": [
+        "seed_binding"
+      ],
+      "simulated_in_memory_only": "wrong_bound_seed"
+    },
+    {
+      "detected": true,
+      "expected_failure": "rescued_manifest_bound_to_result",
+      "failed_checks": [
+        "rescued_manifest_bound_to_result"
+      ],
+      "simulated_in_memory_only": "unbound_rescue_manifest"
+    }
+  ],
+  "schema": "cas.rdcjt-verifier-negative-controls/1"
+}

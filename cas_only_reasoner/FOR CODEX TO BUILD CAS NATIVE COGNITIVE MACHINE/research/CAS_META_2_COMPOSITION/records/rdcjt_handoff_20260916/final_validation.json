@@ -1,0 +1,37 @@
+{
+  "schema": "cas-rdcjt-handoff-validation/1",
+  "observed_utc": "2026-09-16T05:01:32.864022+00:00",
+  "base_commit": "a93d8ce404a3ea3dbb3d6ea31ccd62cf1c797774",
+  "pytest_tests": 215,
+  "pytest_subtests": 24,
+  "neural_execution": false,
+  "canonical_ledger_modified": false,
+  "full_suite_success_claimed": false,
+  "source_sha256": {
+    "aws/budget.py": "cb3c78a0dfed166857109710cb8eac79dd337d837c839d558565982084b5a22f",
+    "aws/recurrent_cjt_launch.py": "76deeda7b061cc32c590e15149f222313fbafd145a1cf18efe872bdf8a92cdb7",
+    "cas_meta2/graph_teaching/contrast_probe.py": "d428fd83881acdac2e965777c6703e16aefe7d660d1903d01619c282185bcdbf",
+    "tests/test_budget.py": "169246bd7091d3eb4591428681e863cde97abacbbd672bd3155a751782753f3d",
+    "tests/test_recurrent_cjt_launch.py": "5b94fdb02a7f46e900f7c98e986dbe3db46038572cd19a57e6c0fcb7af407263",
+    "tests/test_graph_training_contrast_probe.py": "b0cf9814b614184c8b5c8f8f1ad4154ff99e3d17f98376764ef424cb423c179b",
+    "tools/verify_rdcjt_handoff.py": "740de9aaf4c00a56d0fdb4cafca3b3f6a7a5c4f93008b0d30c85aa658cb993da",
+    "tools/check_structural_supply_20260916.py": "a78d24c5469d95937a1d49ec6827cef213eabbb0b4811defe3ae370bd75852e0",
+    "tests/test_structural_supply_20260916.py": "70851d7a78daba7b54cd47c7ad1aab9aa3ef5eed181911437285e07e4f185f69",
+    "tools/inspect_rdcjt_resources.py": "1b8cd10be9a756c56140e86959fcf8ab5be0c035f48a45a728dc99a8680ec64d"
+  },
+  "test_output_sha256": "9fd444c1da36c10291dee1bdbe304b04695efcf3fb28e1442538c7a80defdab0",
+  "junit_sha256": "248332deccad21ac6a095a330b383875e438f92773b1286179d9094d1b06d430",
+  "test_modules": [
+    "test_budget",
+    "test_graph_training_curriculum_launch",
+    "test_graph_training_candidate_launch",
+    "test_owner_record_bounds",
+    "test_recurrent_cjt_launch",
+    "test_recurrent_cjt_course",
+    "test_recurrent_cjt_experiment",
+    "test_recurrent_cjt_recurrence",
+    "test_graph_training_contrast_probe",
+    "test_structural_supply_20260916"
+  ],
+  "line_ending_check": "git -c core.whitespace=trailing-space,space-before-tab,cr-at-eol diff --check"
+}

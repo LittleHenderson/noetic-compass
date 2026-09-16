@@ -316,27 +316,13 @@ def read_locked(ledger, history):
         if previous is not None:
             require(entry["reservations"][:-1] == previous["reservations"] and entry["predecessor"] == previous["predecessor"] and entry["approval"] == previous["approval"], "BUDGET_HISTORY_NOT_APPEND_ONLY")
         previous = entry
-    # The HEAD must agree with the newest history record on every MONEY-BEARING
-    # field. It may differ only in the AUTHORIZATION fields.
-    #
-    # This used to be `require(previous == state)`, whole-object equality. That
-    # cannot hold once a cap amendment exists, and the reason is structural: the
-    # ledger identities reserve each revision for exactly one reservation
-    # (`len(entries) == len(original) + revision`), so a cap change that adds no
-    # reservation is not representable as a new revision. The previous attempt
-    # resolved the contradiction by editing revision 69's tail in place, which
-    # left the head and the newest history record permanently unequal.
-    #
-    # Relaxing WHOLE-OBJECT equality here does not relax the spend guard:
-    # `reservations` and `total_reserved_usd` must still match the history byte
-    # for byte, and validate_state derives free space as cap minus reserved, so
-    # the head cannot claim room the cap does not contain.
-    immutable = ("schema", "no_automatic_refund", "revision",
-                 "previous_state_sha256", "predecessor", "approval", "scope",
-                 "reservations", "total_reserved_usd")
-    for key in immutable:
-        require(state.get(key) == previous.get(key),
-                "LEDGER_HISTORY_MISMATCH:" + key)
+    # reserve_budget hashes the complete head for the next history link. The
+    # head must therefore equal the complete history tail before any write,
+    # including authorization and metadata. Otherwise a head-only amendment
+    # passes this read, consumes a reservation, then breaks the history chain.
+    # A future cap amendment needs an explicit migration/event design; accepting
+    # an unmatched head here does not provide one.
+    require(previous == state, "LEDGER_HISTORY_MISMATCH")
     return state
 
 

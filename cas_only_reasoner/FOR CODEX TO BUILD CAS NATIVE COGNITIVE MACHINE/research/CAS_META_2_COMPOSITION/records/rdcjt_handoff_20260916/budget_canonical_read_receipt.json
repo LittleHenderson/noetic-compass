@@ -1,0 +1,10 @@
+{
+  "revision": 72,
+  "owner_task_cap_usd": "5000.00",
+  "total_reserved_usd": "417.00",
+  "remaining_unreserved_usd": "4583.00",
+  "status": "PASS",
+  "canonical_bytes_unchanged": true,
+  "canonical_ledger_sha256": "e2c9cc87793a40c10361dbd5c2602d4e4ec8d1127b68ee4a6e1ad6b7624fba79",
+  "history_files": 73
+}

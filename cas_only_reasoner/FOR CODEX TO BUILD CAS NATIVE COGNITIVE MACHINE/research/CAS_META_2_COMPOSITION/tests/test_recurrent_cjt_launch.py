@@ -373,8 +373,49 @@ def test_a_seed_whose_run_FAILED_may_be_run_again(tmp_path):
     assert rl.seeds_already_used(tmp_path) == {}
     report = rl.require_unused_seed(rl.FROZEN_SEEDS[0], tmp_path)
     assert report["seed"] == rl.FROZEN_SEEDS[0]
-    assert report["seeds_already_delivered"] == []
+    assert report["seeds_unavailable_for_reuse"] == []
     assert "does not burn the seed" in report["note"]
+
+
+@pytest.mark.parametrize("rescued_bytes", [
+    b'{"status": "RECURRENT_EXPERIMENT_DELIVERED"}',
+    b"not valid JSON: recovery still needs review",
+])
+def test_recovered_measurement_blocks_reuse_without_rewriting_failed_receipt(
+        tmp_path, rescued_bytes):
+    """Recovery prevents repeats even before its payload is verified."""
+    seed = rl.FROZEN_SEEDS[0]
+    job = "cas-meta2-rdcjt-rescued-aaaaaaaa"
+    directory = _receipt(tmp_path, seed, job, delivered=False)
+    original_receipt = (directory / "result.json").read_bytes()
+    rescued = directory / "rescued_evidence" / "results" / "result.json"
+    rescued.parent.mkdir(parents=True)
+    rescued.write_bytes(rescued_bytes)
+
+    assert rl.seeds_already_used(tmp_path) == {seed: job}
+    with pytest.raises(ValueError, match="RDCJT_SEED_ALREADY_RUN"):
+        rl.require_unused_seed(seed, tmp_path)
+    report = rl.require_unused_seed(rl.FROZEN_SEEDS[1], tmp_path)
+    assert report["seeds_unavailable_for_reuse"] == [seed]
+    assert "seeds_already_delivered" not in report
+    assert "recovered evidence is not a completed lifecycle" in report["note"]
+    assert (directory / "result.json").read_bytes() == original_receipt
+    assert json.loads(original_receipt)["completed_deliverable"] is False
+    assert rescued.read_bytes() == rescued_bytes
+
+
+def test_recovered_measurement_without_parent_result_still_blocks_reuse(tmp_path):
+    seed = rl.FROZEN_SEEDS[0]
+    job = "cas-meta2-rdcjt-missing-parent-aaaaaaaa"
+    directory = tmp_path / ("receipt_" + job)
+    rescued = directory / "rescued_evidence" / "results" / "result.json"
+    rescued.parent.mkdir(parents=True)
+    rescued.write_bytes(b"unverified recovery")
+    (directory / "intent.json").write_text(json.dumps(
+        {"authority": {"candidate": rl.CANDIDATE, "seed": seed, "job": job}}))
+    with pytest.raises(ValueError, match="RDCJT_SEED_ALREADY_RUN"):
+        rl.require_unused_seed(seed, tmp_path)
+    assert not (directory / "result.json").exists()
 
 
 def test_a_receipt_with_no_result_does_not_consume_its_seed(tmp_path):

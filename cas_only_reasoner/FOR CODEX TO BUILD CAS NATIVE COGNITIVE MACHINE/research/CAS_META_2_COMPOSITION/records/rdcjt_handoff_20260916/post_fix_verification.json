@@ -1,0 +1,392 @@
+{
+  "all_integrity_checks_passed": true,
+  "boundary": "Local byte and JSON consistency verification only. Provider state and billing were not queried. Checkpoints were hashed as opaque bytes, never loaded. No neural work, launch, reservation, repair, or source mutation occurred. Unexamined panel flags do not prove structurally novel families. No general reasoning, CAS advantage, CNCM completion, or production readiness is established.",
+  "criterion": {
+    "positive_runs": 0,
+    "required_positive_runs": 2,
+    "status": "NOT_MET",
+    "text": "a positive R8-minus-R1 difference in at least two of three paired runs",
+    "verified_distinct_seeds": 3
+  },
+  "preservation": {
+    "all_passed": true,
+    "files": [
+      {
+        "name": "build_launch_inputs.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "commit_msg.txt",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "local_gpu_smoke.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "reconstruct_entry69.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "repair_history_69.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "repro_keyerror.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "seed_state.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "verify_delivered.py",
+        "sha256_matches": true,
+        "size_matches": true
+      },
+      {
+        "name": "write_inputs.py",
+        "sha256_matches": true,
+        "size_matches": true
+      }
+    ]
+  },
+  "runs": [
+    {
+      "R1": 117,
+      "R8": 101,
+      "R8_minus_R1": -16,
+      "all_passed": true,
+      "checks": {
+        "accounting:one_pass": true,
+        "accounting:recurrent": true,
+        "answer_flags:R1": true,
+        "answer_flags:R2": true,
+        "answer_flags:R4": true,
+        "answer_flags:R8": true,
+        "answer_flags:RESET_8": true,
+        "archive_matches_intent": true,
+        "comparison_same_in_payload": true,
+        "curriculum_result.json:sidecar": true,
+        "delivered_measurement": true,
+        "depth_labels": true,
+        "job_binding": true,
+        "manifest_artifact:checkpoint_one_pass.pt": true,
+        "manifest_artifact:checkpoint_recurrent.pt": true,
+        "manifest_artifact:depth_sweep.json": true,
+        "manifest_artifact:experiment.json": true,
+        "manifest_names": true,
+        "matched_initial_weights": true,
+        "panel_record": true,
+        "primary_result": true,
+        "rescue_original_failure_retained": true,
+        "rescued_artifact_names": true,
+        "rescued_evidence/results/result.json:sidecar": true,
+        "rescued_manifest_bound_to_result": true,
+        "reset_answers": true,
+        "row_recomputed_tally:R2": true,
+        "row_recomputed_tally:R4": true,
+        "row_recomputed_tally:R8": true,
+        "same_expected_answers:R2": true,
+        "same_expected_answers:R4": true,
+        "same_expected_answers:R8": true,
+        "same_panel_items:R2": true,
+        "same_panel_items:R4": true,
+        "same_panel_items:R8": true,
+        "seed_binding": true,
+        "trainable_parameters": true,
+        "unique_panel_items:R1": true,
+        "unique_panel_items:R2": true,
+        "unique_panel_items:R4": true,
+        "unique_panel_items:R8": true,
+        "unique_panel_items:RESET_8": true,
+        "weights_unchanged": true
+      },
+      "evidence_folder": "rescued_evidence",
+      "failed_checks": [],
+      "file_sha256": {
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/curriculum_result.json": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/intent.json": "77a4dd67cc87342dc094cb6fd2ef27328c769d25f61821d6718c48ae98dd65d9",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/artifacts/checkpoint_one_pass.pt": "23287ca368fc03be131dad1c13de4812a49e9b7f482569b195961041a68fde1d",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/artifacts/checkpoint_recurrent.pt": "854dffe7ff9fd02286d39817c01204a261118c444b41cdcc3bb97b6934f55b45",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/artifacts/depth_sweep.json": "74f346a44be7233c5b556937413174763ca6a0bf42c2efc086fb0962bb1a0e96",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/artifacts/experiment.json": "8d411ea6ef37c444e434a0565b764b3ca50290e0456b85d83120cee86bd11827",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/artifacts/manifest.json": "2f8bdc228a70057814e79ace386f1eda5b4ef2bff73f2b5ad4bbf33efffea0f0",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/result.json": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/result.json": "77cf9427df58393141c3493d5055afcdca4e82e6bab93b0cd5764dec45ace076",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/source.zip": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38"
+      },
+      "lifecycle_completed_deliverable": false,
+      "parameter_digest": "1ab81c4accdb924ea243de4aba7ba66806d12090a3cf16dd797f9cbcad07913c",
+      "per_depth_recomputed": {
+        "R2": {
+          "correct": 107,
+          "gained": 14,
+          "lost": 24,
+          "net": -10
+        },
+        "R4": {
+          "correct": 103,
+          "gained": 11,
+          "lost": 25,
+          "net": -14
+        },
+        "R8": {
+          "correct": 101,
+          "gained": 12,
+          "lost": 28,
+          "net": -16
+        }
+      },
+      "receipt": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e",
+      "seed": 20260912
+    },
+    {
+      "R1": 105,
+      "R8": 104,
+      "R8_minus_R1": -1,
+      "all_passed": true,
+      "checks": {
+        "accounting:one_pass": true,
+        "accounting:recurrent": true,
+        "answer_flags:R1": true,
+        "answer_flags:R2": true,
+        "answer_flags:R4": true,
+        "answer_flags:R8": true,
+        "answer_flags:RESET_8": true,
+        "archive_matches_intent": true,
+        "collected/results/result.json:sidecar": true,
+        "collected_summary_equal": true,
+        "comparison_same_in_payload": true,
+        "curriculum_result.json:sidecar": true,
+        "delivered_measurement": true,
+        "depth_labels": true,
+        "job_binding": true,
+        "lifecycle_completed": true,
+        "lifecycle_status": true,
+        "manifest_artifact:checkpoint_one_pass.pt": true,
+        "manifest_artifact:checkpoint_recurrent.pt": true,
+        "manifest_artifact:depth_sweep.json": true,
+        "manifest_artifact:experiment.json": true,
+        "manifest_names": true,
+        "matched_initial_weights": true,
+        "panel_record": true,
+        "primary_result": true,
+        "recorded_no_missing_objects": true,
+        "recorded_stage:checkpoint_collection": true,
+        "recorded_stage:compute_cleanup": true,
+        "recorded_stage:measurement_collection": true,
+        "reset_answers": true,
+        "row_recomputed_tally:R2": true,
+        "row_recomputed_tally:R4": true,
+        "row_recomputed_tally:R8": true,
+        "same_expected_answers:R2": true,
+        "same_expected_answers:R4": true,
+        "same_expected_answers:R8": true,
+        "same_panel_items:R2": true,
+        "same_panel_items:R4": true,
+        "same_panel_items:R8": true,
+        "seed_binding": true,
+        "summary_manifest_equal": true,
+        "trainable_parameters": true,
+        "unique_panel_items:R1": true,
+        "unique_panel_items:R2": true,
+        "unique_panel_items:R4": true,
+        "unique_panel_items:R8": true,
+        "unique_panel_items:RESET_8": true,
+        "weights_unchanged": true
+      },
+      "evidence_folder": "collected",
+      "failed_checks": [],
+      "file_sha256": {
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/artifacts/checkpoint_one_pass.pt": "671df2e673a8c6557e30143aca7bf50d0bccdb82c1766d3f303934580e8fdc6a",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/artifacts/checkpoint_recurrent.pt": "7612993a764bcee073ff0f896db7f9cf60982ed266003929644decac5da87609",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/artifacts/depth_sweep.json": "b4e40f5468233d371f36ae5f6f49c00080c1476365b8d0c85f15cbf51715eb51",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/artifacts/experiment.json": "7dfccece3b4064e62874eee7495be8c86e1fc3d0e71236d328c348afbfc27416",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/artifacts/manifest.json": "8d56dd11ba56904482fbbf39dde12316f814b48acad9476d483cab9501394271",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/result.json": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/curriculum_result.json": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/intent.json": "db7bebbe4ca39bedcfc6de9987434d80be45ddaeb512f69e7a560f8c8273cabb",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/result.json": "1385cc2c515a776a6d80fab0db6878cd855c1c0f3276e394aef06a8f1cf7fef2",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "lifecycle_completed_deliverable": true,
+      "parameter_digest": "c1a0690febc3c0b6048f1c0643b082f4dc2620951fff35d15e92bf18d838f184",
+      "per_depth_recomputed": {
+        "R2": {
+          "correct": 106,
+          "gained": 10,
+          "lost": 9,
+          "net": 1
+        },
+        "R4": {
+          "correct": 105,
+          "gained": 11,
+          "lost": 11,
+          "net": 0
+        },
+        "R8": {
+          "correct": 104,
+          "gained": 14,
+          "lost": 15,
+          "net": -1
+        }
+      },
+      "receipt": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4",
+      "seed": 20260913
+    },
+    {
+      "R1": 113,
+      "R8": 102,
+      "R8_minus_R1": -11,
+      "all_passed": true,
+      "checks": {
+        "accounting:one_pass": true,
+        "accounting:recurrent": true,
+        "answer_flags:R1": true,
+        "answer_flags:R2": true,
+        "answer_flags:R4": true,
+        "answer_flags:R8": true,
+        "answer_flags:RESET_8": true,
+        "archive_matches_intent": true,
+        "collected/results/result.json:sidecar": true,
+        "collected_summary_equal": true,
+        "comparison_same_in_payload": true,
+        "curriculum_result.json:sidecar": true,
+        "delivered_measurement": true,
+        "depth_labels": true,
+        "job_binding": true,
+        "lifecycle_completed": true,
+        "lifecycle_status": true,
+        "manifest_artifact:checkpoint_one_pass.pt": true,
+        "manifest_artifact:checkpoint_recurrent.pt": true,
+        "manifest_artifact:depth_sweep.json": true,
+        "manifest_artifact:experiment.json": true,
+        "manifest_names": true,
+        "matched_initial_weights": true,
+        "panel_record": true,
+        "primary_result": true,
+        "recorded_no_missing_objects": true,
+        "recorded_stage:checkpoint_collection": true,
+        "recorded_stage:compute_cleanup": true,
+        "recorded_stage:measurement_collection": true,
+        "reset_answers": true,
+        "row_recomputed_tally:R2": true,
+        "row_recomputed_tally:R4": true,
+        "row_recomputed_tally:R8": true,
+        "same_expected_answers:R2": true,
+        "same_expected_answers:R4": true,
+        "same_expected_answers:R8": true,
+        "same_panel_items:R2": true,
+        "same_panel_items:R4": true,
+        "same_panel_items:R8": true,
+        "seed_binding": true,
+        "summary_manifest_equal": true,
+        "trainable_parameters": true,
+        "unique_panel_items:R1": true,
+        "unique_panel_items:R2": true,
+        "unique_panel_items:R4": true,
+        "unique_panel_items:R8": true,
+        "unique_panel_items:RESET_8": true,
+        "weights_unchanged": true
+      },
+      "evidence_folder": "collected",
+      "failed_checks": [],
+      "file_sha256": {
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/artifacts/checkpoint_one_pass.pt": "6ec7bf6721eaf600f299a1912be4ecf5db54a4fb3ebd99a4ecb772faedee4fad",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/artifacts/checkpoint_recurrent.pt": "98a1dfdb025c2e83963a618af2e8d4b28a5b3642425116186386d1a8e2a29e7f",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/artifacts/depth_sweep.json": "db38bec38df8f717de86e08e62f2fafb3f54e98644fbaf41d1e9cf1aef026e89",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/artifacts/experiment.json": "18d2b83eece25298a1af1e659331175771ab34360f236f2f26848db0f0181ddb",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/artifacts/manifest.json": "44b03e4de8cbf551a1b95b6d346d2f736005add039cd82d90c247967e360fb63",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/result.json": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/curriculum_result.json": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/intent.json": "58f066423c43b8e76f400ce9210e9946105188a1bd4ef053eb68dbbf269cba61",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/result.json": "b4944ba40c4c3d9efaee79198055861abf5ee9724598903ca7b8989c71eb66b6",
+        "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "lifecycle_completed_deliverable": true,
+      "parameter_digest": "aaaaae7b4766ccdb4b187fc7eb92a05fbb25610f54bacad6fc7b6af91069bb1c",
+      "per_depth_recomputed": {
+        "R2": {
+          "correct": 108,
+          "gained": 13,
+          "lost": 18,
+          "net": -5
+        },
+        "R4": {
+          "correct": 99,
+          "gained": 10,
+          "lost": 24,
+          "net": -14
+        },
+        "R8": {
+          "correct": 102,
+          "gained": 11,
+          "lost": 22,
+          "net": -11
+        }
+      },
+      "receipt": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4",
+      "seed": 20260914
+    }
+  ],
+  "schema": "cas.rdcjt-local-handoff-verification/1",
+  "seed_guard": {
+    "earlier_intents": [
+      {
+        "receipt": "receipt_cas-meta2-rdcjt-20260912144401-248b7a2c",
+        "seed": 20260912
+      },
+      {
+        "receipt": "receipt_cas-meta2-rdcjt-20260912150101-fb5466fe",
+        "seed": 20260912
+      },
+      {
+        "receipt": "receipt_cas-meta2-rdcjt-20260912152001-abf38e1e",
+        "seed": 20260912
+      }
+    ],
+    "note": "The helper's satisfied field checks job count only. It does not evaluate the R8-minus-R1 criterion.",
+    "rescued_seed_missing_from_guard": false,
+    "reviewed_function_sha256": {
+      "replication_status": "c1a6f704fd25e4225aba4318d5d32c2b1fdd86534fe7afec338ca70450cd8ce5",
+      "require_unused_seed": "bde75ea790033ed7e5be7755dc2c1eb554459b97199f1386fc2924f12a91c1ae",
+      "seeds_already_used": "879935cc4f857b9289939a87e4b4903dc6303d217f6461def19f4116826f5754"
+    },
+    "seed_decisions": {
+      "20260912": {
+        "accepted": false,
+        "error": "RDCJT_SEED_ALREADY_RUN:20260912_by_cas-meta2-rdcjt-20260912152001-abf38e1e"
+      },
+      "20260913": {
+        "accepted": false,
+        "error": "RDCJT_SEED_ALREADY_RUN:20260913_by_cas-meta2-rdcjt-20260913183000-d27a44e4"
+      },
+      "20260914": {
+        "accepted": false,
+        "error": "RDCJT_SEED_ALREADY_RUN:20260914_by_cas-meta2-rdcjt-20260913184000-d27a44e4"
+      }
+    },
+    "source_sha256": "76deeda7b061cc32c590e15149f222313fbafd145a1cf18efe872bdf8a92cdb7",
+    "three_pair_count_helper": {
+      "criterion": "a positive R8-minus-R1 difference in at least two of three paired runs",
+      "matched_pairs_completed": 3,
+      "matched_pairs_required_by_the_declared_criterion": 3,
+      "note": "one matched initialization is an exploratory pilot, not multi-seed replication, and no number from one job may be reported as meeting the three-run criterion",
+      "satisfied": true,
+      "status": "CRITERION_EVALUABLE"
+    },
+    "used_seeds": [
+      20260912,
+      20260913,
+      20260914
+    ]
+  }
+}

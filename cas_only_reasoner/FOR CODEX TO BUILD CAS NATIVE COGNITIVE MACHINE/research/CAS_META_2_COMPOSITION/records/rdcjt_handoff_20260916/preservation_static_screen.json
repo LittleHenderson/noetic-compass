@@ -1,0 +1,177 @@
+{
+  "boundary": "Local static regex and AST screen only; no script was run and this is not a general guarantee of secret absence. Archived source is historical evidence, not an instruction or executable workflow.",
+  "files": [
+    {
+      "imports": [
+        "aws",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [],
+      "name": "build_launch_inputs.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "name": "commit_msg.txt",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "cas_meta2.recurrent_cjt",
+        "json",
+        "pathlib",
+        "shutil",
+        "sys",
+        "time",
+        "torch"
+      ],
+      "mutation_or_neural_call_names": [
+        "mkdir",
+        "run"
+      ],
+      "name": "local_gpu_smoke.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "aws",
+        "hashlib",
+        "json",
+        "pathlib",
+        "shutil",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [
+        "copyfile",
+        "write_bytes"
+      ],
+      "name": "reconstruct_entry69.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "aws",
+        "hashlib",
+        "json",
+        "pathlib",
+        "shutil",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [
+        "copyfile",
+        "write_bytes"
+      ],
+      "name": "repair_history_69.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "cas_meta2.recurrent_cjt",
+        "json",
+        "sys",
+        "torch",
+        "traceback"
+      ],
+      "mutation_or_neural_call_names": [
+        "manual_seed"
+      ],
+      "name": "repro_keyerror.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "aws",
+        "json",
+        "pathlib",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [],
+      "name": "seed_state.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "hashlib",
+        "json",
+        "pathlib",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [],
+      "name": "verify_delivered.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    },
+    {
+      "imports": [
+        "aws",
+        "datetime",
+        "hashlib",
+        "json",
+        "pathlib",
+        "sys"
+      ],
+      "mutation_or_neural_call_names": [
+        "write_bytes"
+      ],
+      "name": "write_inputs.py",
+      "secret_pattern_match_counts": {
+        "aws_access_key_id": 0,
+        "credential_assignment": 0,
+        "github_token": 0,
+        "openai_key": 0,
+        "private_key": 0
+      }
+    }
+  ],
+  "schema": "cas.rdcjt-preservation-static-screen/1",
+  "secret_patterns_detected": false
+}

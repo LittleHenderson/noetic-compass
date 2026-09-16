@@ -1,0 +1,318 @@
+{
+  "schema": "cas.exposure-bindings-inventory/0.1",
+  "status": "SOURCE_LOCATIONS_IDENTIFIED_EXCLUSION_MANIFEST_NOT_COMPILED",
+  "entries": [
+    {
+      "exposure": "Earlier lesson dataset and examined confirmation panel",
+      "result": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/graph6_confirmation_result.json",
+        "sha256": "8a313f3d39a42443a2d00bcb4f4f00a3d71de8763f59098e057e4fc4951105f4"
+      },
+      "source_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_package_002/source.zip",
+        "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6"
+      },
+      "required_exclusion": "Dataset seed 20260909, all partitions; confirmation panel seed 20260920; keep semantic duplicate/root-family exclusions, not only IDs.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "e813e0658c81a78ebd23e3833b12eef04ef1a818760c260fd49142b8ab178f3d"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    },
+    {
+      "exposure": "Examined structural final panel and varied teaching",
+      "result": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/curriculum_result.json",
+        "sha256": "848db69bdb0eaefa4f702a4dd4361f779fbc9fbc13c7ca5609de071a8cbcd4d0"
+      },
+      "source_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/source.zip",
+        "sha256": "fd9b4902ebf5aadfceab304797f69cdd8731f4ce3a09b82b57a8d63e8cbe2ac7"
+      },
+      "required_exclusion": "Final panel seed 20260930, digest 11ace422278c59d8629c4dc75468eabb228be52c67a629f97bbfaf775a4ac0a1; 30 families / 90 cases; varied seed 20260925.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/curriculum.py",
+          "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/final_panel.py",
+          "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    },
+    {
+      "exposure": "CFC face corpus and held-out panel",
+      "result": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/curriculum_result.json",
+        "sha256": "0bd4eea9362d594d674ec367b3d001502199714fc38aa0e2f600dc3d18579704"
+      },
+      "source_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/source.zip",
+        "sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8"
+      },
+      "required_exclusion": "All face family splits, actual delivered CFC queries/supports and six-role panel; freeze root-family grouping with derived analogies.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/curriculum.py",
+          "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py",
+          "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_evaluation.py",
+          "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_schedule.py",
+          "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_tasks.py",
+          "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/final_panel.py",
+          "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    },
+    {
+      "exposure": "Examined CFC readout perturbations",
+      "result": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/curriculum_result.json",
+        "sha256": "aa0701717ac3a5e73f6dddcf946d79769b2de4d08abd79dde8e8b4be17c4b04b"
+      },
+      "source_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/source.zip",
+        "sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723"
+      },
+      "required_exclusion": "Include renamed/reordered/rewired public families and targeted checks, not just base family IDs.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/curriculum.py",
+          "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py",
+          "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_evaluation.py",
+          "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_readout.py",
+          "sha256": "005c10dfa475a30d59def0eb9f8b275234b429d8168a0e9e56b8fc2ec23c88e9"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_schedule.py",
+          "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_tasks.py",
+          "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/final_panel.py",
+          "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    },
+    {
+      "exposure": "RDCJT completed seed 20260913",
+      "result": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/curriculum_result.json",
+        "sha256": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c"
+      },
+      "source_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "required_exclusion": "Reuse of the 216-item / 16-family face panel is historical exposure even though no overlap with that learner teaching was measured.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/curriculum.py",
+          "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py",
+          "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_evaluation.py",
+          "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_readout.py",
+          "sha256": "005c10dfa475a30d59def0eb9f8b275234b429d8168a0e9e56b8fc2ec23c88e9"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_schedule.py",
+          "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_tasks.py",
+          "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/final_panel.py",
+          "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    },
+    {
+      "exposure": "RDCJT completed seed 20260914",
+      "result": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/curriculum_result.json",
+        "sha256": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9"
+      },
+      "source_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "required_exclusion": "Reuse of the 216-item / 16-family face panel is historical exposure even though no overlap with that learner teaching was measured.",
+      "members": [
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/curriculum.py",
+          "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_corpus.py",
+          "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_evaluation.py",
+          "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_readout.py",
+          "sha256": "005c10dfa475a30d59def0eb9f8b275234b429d8168a0e9e56b8fc2ec23c88e9"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_schedule.py",
+          "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_tasks.py",
+          "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/final_panel.py",
+          "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+          "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+        },
+        {
+          "name": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+          "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+        }
+      ]
+    }
+  ],
+  "earlier_attempt_result_inventory": [
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909193638-98f993ab/competence_result.json",
+      "sha256": "86d9b73888ef3032daa0d8a321c31c7779f5ec96b7209d10e29907d0321aa936"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909195309-68ac4845/competence_result.json",
+      "sha256": "99d45ea9c40e0732678271e771034f2c8cab547cba61dcfb060fc1fbb6c514f7"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909201205-f0da3fa3/competence_result.json",
+      "sha256": "8c42c9dd6a74b5f9354715ee00a85d221a05dc903071d0675cb7cdc26d1dfe6e"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909202533-7cb622f8/competence_result.json",
+      "sha256": "f06da03805068e088dad4007a26e8c61d486549b9386ecacebcfa53bdd1a7646"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909210625-0a10f14d/competence_result.json",
+      "sha256": "ab085d682fbba7fef8b71a7a6f31cd38c822d77ca59bcce7ec0461024956ea80"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910013000-e485b07c/graph6_confirmation_result.json",
+      "sha256": "4fdca87e6bdeb87a2f52a8b758455164c6f5a59ae45ee418adcced7e339e7e5e"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/graph6_confirmation_result.json",
+      "sha256": "8a313f3d39a42443a2d00bcb4f4f00a3d71de8763f59098e057e4fc4951105f4"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910053000-951cab20/curriculum_result.json",
+      "sha256": "5f0cf5061c16c8820e6042000249e7da76a67da1f23e337ff71fc385225228e5"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910073000-210109c7/curriculum_result.json",
+      "sha256": "4cb9804b5a31b3437a3ccd6c3e6fccbd543de396211547fd3666d0c10cb52145"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910093000-75387578/curriculum_result.json",
+      "sha256": "9b9487daba3f51e657ab3f7fce8fa86ad5ba67726b2a89c8b51ea7b6700b1f1d"
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/curriculum_result.json",
+      "sha256": "848db69bdb0eaefa4f702a4dd4361f779fbc9fbc13c7ca5609de071a8cbcd4d0"
+    }
+  ],
+  "rescued_seed_20260912_result_candidates": [
+    {
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/curriculum_result.json",
+      "sha256": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd"
+    },
+    {
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/result.json",
+      "sha256": "77cf9427df58393141c3493d5055afcdca4e82e6bab93b0cd5764dec45ace076"
+    }
+  ],
+  "historical_probe": {
+    "commit": "a93d8ce4",
+    "path": "cas_meta2/graph_teaching/contrast_probe.py",
+    "sha256": "9f9057ad75a48e5c4b9a026896c6952112fa5954aaf909ddb20f304d44f7e6b9",
+    "public_probe_input_present": false,
+    "list_length_inputs_present": false
+  },
+  "boundary": "Files and archive members were read and hashed. No archived code executed and no panels authored. Earlier failed attempts, saved pilot cases and all downstream readouts must also be accounted for before asserting exhaustive exclusions."
+}

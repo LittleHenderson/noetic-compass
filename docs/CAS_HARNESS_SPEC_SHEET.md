@@ -1527,3 +1527,42 @@ Recovery of a prescribed turn type ran at **0.7619** against **0.1429** chance (
 ### Provenance note
 
 This sheet was assembled 2026-08-19 from the mined project record: the Gate-2 closure claims matrix and withdrawn-ACCEPT root cause, the original closure methodology, the Component Atlas prereg and all three run reports, the CAS-specificity and output-lens result documents, the operational runbooks and pod specs, and the legacy `CAS_HARNESS_SPEC_SHEET_current.md`. **Where the record disagreed with itself, both readings are recorded** (e.g. the Pythia-160M 40E `89.799%` vs `91.719%` conflict). **Where a fact is unrecoverable, it reads `unavailable`** and was not filled in.
+
+## 2026-09-16 UTC - RDCJT negative result verified; handoff and non-neural repairs
+
+CAS_RDCJT_001's three distinct seeds give R8-minus-R1 differences -16, -1,
+and -11 (117->101, 105->104, 113->102 correct out of 216). The declared
+criterion is NOT_MET: 0 of 3 positive. All three earlier September 12 intents
+used seed 20260912; the first seed's rescued measurement remains separate
+from its failed original lifecycle receipt. No further recurrent-depth seeds
+are warranted by this completed criterion.
+
+Follow-up in the meta1 worktree preserves eight diagnostic scripts and the
+prior commit message with byte hashes, and adds a portable no-model verifier.
+The budget head must now match its latest history record before reserving;
+two regressions prove mismatches fail before writes. A rescued result blocks
+seed reuse without marking the parent completed. The contrast probe now
+re-renders changed graphs, avoids stale training-cache IDs, compares renamed
+answers semantically, and records option-slot/length diagnostics. It is still
+NOT_RUN on retained neural checkpoints. Human money-path review remains OPEN.
+
+The 96-family face corpus has six structures. A wider existing generator has
+92 exact structures, with 47 potential candidates after conservative exclusions;
+full exposure custody and compatible teaching scope remain unverified. The
+complementary and perspective directives remain build-only and unimplemented,
+not ready labels. Neither a learning advantage nor CNCM/production readiness
+is established. Seven inherited legacy test imports remain blocked by old
+budget-source pins; full-suite success is not claimed.
+
+Canonical ledger remains revision 72, cap $5000.00, reserved $417.00,
+unreserved $4583.00, with all ledger/history bytes unchanged. A live read-only
+AWS check at 2026-09-16T04:56:00Z found no running/pending instances in
+us-west-2; the stopped g6e.xlarge and attached 300 GiB gp3 volume remain.
+The two evidence buckets have 19 objects each and no lifecycle policies.
+No provider mutation, paid run, neural computation, or invoice check occurred.
+
+Evidence: meta1 inner research/CAS_META_2_COMPOSITION/records/
+rdcjt_handoff_20260916/HANDOFF_STATUS.md, BUDGET_REVIEW.md,
+post_fix_verification.json, final_pure_tests.xml; structural_supply_20260916/
+post_fix/REPORT.md and EXPOSURE_BINDINGS.md. This addendum records research
+and software checks; it changes no CAS Harness acceptance/production gate.

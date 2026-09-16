@@ -1,0 +1,1692 @@
+{
+  "checkpoint_loading": false,
+  "contrast_probe": {
+    "audit_mode": "PURE_DATA_NO_LEARNER",
+    "by_contrast": {
+      "renamed": {
+        "public_problem_unchanged": 0,
+        "record_id_unchanged": 0,
+        "three_distinct_options": 30,
+        "variants": 30,
+        "whole_public_unchanged": 0
+      },
+      "reordered": {
+        "public_problem_unchanged": 0,
+        "record_id_unchanged": 0,
+        "three_distinct_options": 30,
+        "variants": 30,
+        "whole_public_unchanged": 0
+      },
+      "rewired": {
+        "public_problem_unchanged": 0,
+        "record_id_unchanged": 0,
+        "three_distinct_options": 10,
+        "variants": 10,
+        "whole_public_unchanged": 0
+      }
+    },
+    "cases": 30,
+    "implementation_audited": "CURRENT_WORKING_SOURCE_PUBLIC_PROBE_INPUT",
+    "length_permutations_per_list_case": [
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6,
+      6
+    ],
+    "list_length_inputs_function_present": true,
+    "neural_measurements": 0,
+    "rows": [
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "fc62b6dc7115b02a0a8d69b93e33c8c0b525c0f9e4d68907d6a1ccd5160075a0",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "07d08480608418ca17a8723eb391830df859384cb0bdb1cc097f5fef3324a08b",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "3e6c1c9c60a0d072258ff4ed8a702e0c702ced32e75e21f0d0e4a93f9a4e4873",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "fc62b6dc7115b02a0a8d69b93e33c8c0b525c0f9e4d68907d6a1ccd5160075a0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "07d08480608418ca17a8723eb391830df859384cb0bdb1cc097f5fef3324a08b",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "6d563bea930eacd4888573aa70df6dfd2e666857922a0f6266c0d608fd3d6490",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "fc62b6dc7115b02a0a8d69b93e33c8c0b525c0f9e4d68907d6a1ccd5160075a0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "07d08480608418ca17a8723eb391830df859384cb0bdb1cc097f5fef3324a08b",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "bd6856ce2ee8fede8f89fecdc1f5e2747f9c05f820cc55305b21c6dfcba8a80b",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "2eba7cee3ce8644b43b1d8b4e4e4229796a6b57e36d356ac6a487202fd890532",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "157b763e8630a3cee27b9fc7f0cfecc610b5cda514a17f5262c2059097d1d206",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a3fae353de29530846f4f009b421996a3f17b8f5ef92426d8afb71815ce98225",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "2eba7cee3ce8644b43b1d8b4e4e4229796a6b57e36d356ac6a487202fd890532",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "157b763e8630a3cee27b9fc7f0cfecc610b5cda514a17f5262c2059097d1d206",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1d9d99a57f6906e1f151aec17e7dac99ac4e4a1d4ab89b8e377bd4ca9c30ea54",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "236f5ed991285bc9081a78f23baaafa6b1c90767b1937e4b8c52eaefccd15de5",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "2032cbffce8b95884fd4838e57f814c5b0a08229f1ab25031813a143d9c28f30",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a3cd92904ecd2e555681a7e9162dd41b64c3f14e5b1a0f6d1029ed6823cf3681",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "236f5ed991285bc9081a78f23baaafa6b1c90767b1937e4b8c52eaefccd15de5",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "2032cbffce8b95884fd4838e57f814c5b0a08229f1ab25031813a143d9c28f30",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "ede2d79545e91bedf81311459e0a2aa48d4122da9dcc182f185a7398d2ff1592",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "6d93fd1208a07d5154d061aa3b7a572eb252a48c33cdb1ac23e0f4ee287ab9d6",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "23faf1d6e004934ea67f8fa0b73db6fe1dd8b368316bc4d03ea4e1f008d0fd4e",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "bef73afd18399d8cb8cea047a6a143c8800579a853036e184e53566f8e3fb723",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "6d93fd1208a07d5154d061aa3b7a572eb252a48c33cdb1ac23e0f4ee287ab9d6",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "23faf1d6e004934ea67f8fa0b73db6fe1dd8b368316bc4d03ea4e1f008d0fd4e",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a1c5d61aba9ed9ac0db1d77111c60593a2ecd79ecfecd59af69352583570ea27",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "26170c2885f546d5b424e2c84eee11384e2e102858218c193e5f54d0c94aecb0",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "2749c85abc0f8f3189cb5fd512a0f8a638bdb10aca6634b223d5c68e97648898",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "c78b7cbdd8eda492495d8a2ca7dcd3c1210a4ef673a21d5e86b687d85c8eb950",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "26170c2885f546d5b424e2c84eee11384e2e102858218c193e5f54d0c94aecb0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "2749c85abc0f8f3189cb5fd512a0f8a638bdb10aca6634b223d5c68e97648898",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "3308311eb3a2f40fcef54543db32c3dfd0a6b88e2584cf9391ebb06c7b5d83c2",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "ad2a48b4568d494a891bd2d0e91a4117d3acf138575b20153ed448e2c399a435",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "3a382beaad74c8998037839303396c42ab75417c7d94b7ca0d1ad1f72d21f7b7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "2c36ec12cf2be498fd68706d3f8a5b193b2d53bdc50099ae19ceefe9166051c8",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "ad2a48b4568d494a891bd2d0e91a4117d3acf138575b20153ed448e2c399a435",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "3a382beaad74c8998037839303396c42ab75417c7d94b7ca0d1ad1f72d21f7b7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "060e1ed5d2d7900566dcba84b90182656c2575f33fc175cdda42b19f35d7d323",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "bd8c7cde41eaabf86e2f7db4f70b7e0a4c7a8a3a9f0208ef7372c5a430ee97a0",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "3ac232efefad1ced39111c73aca4dc0542c9b5f4b86c6d01db3fbb982de58cb7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "c1743fe33e178a356ed47a189573f10546d36b4b2e2f237cfea99f3221ac15a4",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "bd8c7cde41eaabf86e2f7db4f70b7e0a4c7a8a3a9f0208ef7372c5a430ee97a0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "3ac232efefad1ced39111c73aca4dc0542c9b5f4b86c6d01db3fbb982de58cb7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "2a4edc9b117d218c9a14f6b00091f90f3bce76f212b8c87d63be616f8e8bee35",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "7a83a84abaa632bace03f4865debfd9898463d404b84a3ca8ad17923710bce28",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "44f3288751235bad46aa0c61ba54e3174aeae663d99d1d96a4ac541ea5390314",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "6dbc38a6387b3f8a6405ebaf495d3505861b6b2fc1b05a4fb2673dfc902fa824",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "7a83a84abaa632bace03f4865debfd9898463d404b84a3ca8ad17923710bce28",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "44f3288751235bad46aa0c61ba54e3174aeae663d99d1d96a4ac541ea5390314",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1f681fb1dab83b13ee96f60a7be2c49f8edbf499ba3e834f2655c75f5938d10f",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "9e7a2fab546206148823f08c84d65360f21d04029a7a25c109959ed5fffb3f78",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "4d7882fccdec1baa8ab57080321ec62b2b64e20c0becad06e92c001f035f5570",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "dfc73f86691ae77c5c4cfb3f17f1c53569e9af4984cbc0947d90e529a8b2ef46",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "9e7a2fab546206148823f08c84d65360f21d04029a7a25c109959ed5fffb3f78",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "4d7882fccdec1baa8ab57080321ec62b2b64e20c0becad06e92c001f035f5570",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1021fbd7474dd3e991efe9322a26c2b46e9df23c4dc792a9b80b5828d26df4a2",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "770fe9e3c7db0905e2c9297fd19f6096ea3bfa82e3ed93ebd52346f624eaea48",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "51880b643a316448e83954fed6f1295ec13bffb22cdca01a4728cca5a5151e3e",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "dc331cfa77f5c29bbfc93305ed3555175a9081780119437b12622a400db1db60",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "770fe9e3c7db0905e2c9297fd19f6096ea3bfa82e3ed93ebd52346f624eaea48",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "51880b643a316448e83954fed6f1295ec13bffb22cdca01a4728cca5a5151e3e",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "625da4d9e2c09d88a6dc5df1812fe8d3152bda7cfb4aad19a9fadb5988be3614",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "770fe9e3c7db0905e2c9297fd19f6096ea3bfa82e3ed93ebd52346f624eaea48",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "51880b643a316448e83954fed6f1295ec13bffb22cdca01a4728cca5a5151e3e",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "840e82410bcc36bedd1155ef08af190efa4d19c016844091d6e1679ffc796d50",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "9ef8bdd8d85367340157670ba992322fe744a439d8ad53a8ff593b671641be11",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "543e3a82a24d2d9feed6542efc9688840d827e5cf3e1c186903576b47143ba78",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "43350665d3d0764c98d362e17ebbd8271650e68e1ec3cdb1fd9fffd34d761366",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "9ef8bdd8d85367340157670ba992322fe744a439d8ad53a8ff593b671641be11",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "543e3a82a24d2d9feed6542efc9688840d827e5cf3e1c186903576b47143ba78",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a53656f675bd841f9db1706e3cb0bbd82b12a0c4586420c9dcf20a25a1a1464f",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "6eeaf0098d9becffbf2bbbfe5970b6e9a09f9993e24870c1e7422c96e59005bb",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "5602a6735db1bc5e2d4132945627c1dd6c36f97b439ca9c25057c0f9cc1b8a57",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "3e94e49291ed7cfd099a285435605886b852c75cde10db142c847088d8cf7130",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "6eeaf0098d9becffbf2bbbfe5970b6e9a09f9993e24870c1e7422c96e59005bb",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "5602a6735db1bc5e2d4132945627c1dd6c36f97b439ca9c25057c0f9cc1b8a57",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1d7eb3dc9657b8e47853d5a175ce96697eb0dc0b1b6ea4d54e835b75df3f37cf",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "6eeaf0098d9becffbf2bbbfe5970b6e9a09f9993e24870c1e7422c96e59005bb",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "5602a6735db1bc5e2d4132945627c1dd6c36f97b439ca9c25057c0f9cc1b8a57",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "2eb79742815e96b075e6439163671294595ec41bf90f6d8c7304d426f4d375bb",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "5803a78b2ad2dc63cdc70956586adaad9b1ded969c516f078aa0eb349140b23f",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "5d08582f71a7b6cb2aaa3439473346cd0d86213e797176f88344eb17d95ad16c",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "cfcaf0569dea60c57638d84aa8708ea76e61ef6a4577ed9d52bdbb134928f0bb",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "5803a78b2ad2dc63cdc70956586adaad9b1ded969c516f078aa0eb349140b23f",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "5d08582f71a7b6cb2aaa3439473346cd0d86213e797176f88344eb17d95ad16c",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1d36dc9e64a1d9d0163653ba754b18cadfc5398c24c34f0bc8ecf8f5c3a0fe7e",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "5803a78b2ad2dc63cdc70956586adaad9b1ded969c516f078aa0eb349140b23f",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "5d08582f71a7b6cb2aaa3439473346cd0d86213e797176f88344eb17d95ad16c",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "eed4801fd17ec636c10939fe9ef634ad06c20d8a74295c148d6f06aa4f0247d9",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "dfbd6c8a9b889f80f72226f62c27d833408cf7e282973e391f629a2caabf38ad",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "786ad36e7c3357ad8d78f286b2540a6578dd956218a4789d671845ee6c89948d",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "f0d5aa7d07aead436161229697d0fd3800586f8c3734466ff20e16801c4c9846",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "dfbd6c8a9b889f80f72226f62c27d833408cf7e282973e391f629a2caabf38ad",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "786ad36e7c3357ad8d78f286b2540a6578dd956218a4789d671845ee6c89948d",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1f1775c9fbe8c552faee6b412d5f8651c235de6325c23a72013d01875ece421e",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "b59fbe8634516c4a03fdc1ced3beda727295a7917e18c85de46a74aa327d4a93",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "811e3d93dc5fd3b7ce8e77974ae7d84dd871f855a37a7ef79e828860a2e34f37",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "357e4705ba8839eb44c9fbb4029aa5645a9f6d46d258461a2a0e47416a17b5ac",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "b59fbe8634516c4a03fdc1ced3beda727295a7917e18c85de46a74aa327d4a93",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "811e3d93dc5fd3b7ce8e77974ae7d84dd871f855a37a7ef79e828860a2e34f37",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "aacb882a34a68034d5d257e0992f383c01e4ae49c8273c2a331ef773bdc9131d",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "e45e863110502ed7b2c36da2a732f1eb4f91b69964112b0037338b1f7b566e3f",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "82e38a544082425c64141968f76ac275ad2887730889ab480d6dfc74b7ecd1e7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "1543e360f5dee4ceadb19a1ac893cbc6df1ea60e21c0aad73d43b833f31c23a3",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "e45e863110502ed7b2c36da2a732f1eb4f91b69964112b0037338b1f7b566e3f",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "82e38a544082425c64141968f76ac275ad2887730889ab480d6dfc74b7ecd1e7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "4b86759b01cb5a8e763cc15731cd721d48b56706f42f1a7373ea760ab4842594",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "e45e863110502ed7b2c36da2a732f1eb4f91b69964112b0037338b1f7b566e3f",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "82e38a544082425c64141968f76ac275ad2887730889ab480d6dfc74b7ecd1e7",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "c65bd4c3e14bbe797454bda7da2fcf4f81ffd48ba720c40d5741c77c11e884ab",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "e8b41bb1f38b87ea008c0120f0822e4a8e419bfb0b291865d5b4a70307022bc7",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "92d9d918707206749b2809987ff4587cbfe2b9044786a58fd8f17e083df64602",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "f85f35f3d8f50e00f0afb69b338120950528f2be637fa0e2ac9e98efbe5d6aed",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "e8b41bb1f38b87ea008c0120f0822e4a8e419bfb0b291865d5b4a70307022bc7",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "92d9d918707206749b2809987ff4587cbfe2b9044786a58fd8f17e083df64602",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "91dda0cfa9cf1e4118223545281b76fa85321498addf57ce4b6f5abe13a05859",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "33534e67433882681c4a3444ba9f282bbbbf1073b69145deefc85d55954af483",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "a542b78453af4953f1038b412ef3d62e4e113df356cbaee9e3c810660d9184b8",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "7910ccb895d1782a61d2d95bac4f269b36696d959b0f1122b46254f38dc84c17",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "33534e67433882681c4a3444ba9f282bbbbf1073b69145deefc85d55954af483",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "a542b78453af4953f1038b412ef3d62e4e113df356cbaee9e3c810660d9184b8",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "692817c82e0493b93e8092803fead178990109034f02671de7d6392c93c26ef8",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "e594297b97993abf9e74fd8155830d986118181d0a965735aa5976595bc868a2",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "b1a755857841bd6e3fad47c4b3d8d9dd60bd3d904a30c08f71f3a0d2acc6c988",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "8e5bfe6c278d296f18f9cde0f325877f670ccbbede94ea6aa22a35300e96c814",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "e594297b97993abf9e74fd8155830d986118181d0a965735aa5976595bc868a2",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "b1a755857841bd6e3fad47c4b3d8d9dd60bd3d904a30c08f71f3a0d2acc6c988",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "8b519e62932cd7334ba34dda861dedc644befeba3351a0df2a6630258b249f15",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "e594297b97993abf9e74fd8155830d986118181d0a965735aa5976595bc868a2",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "b1a755857841bd6e3fad47c4b3d8d9dd60bd3d904a30c08f71f3a0d2acc6c988",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "2b6c124dc535d9d4974d59d0d3f7c4e83e6ebc2b418ab9bcbb0409486ac0df19",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "1a150d6367cbdea749db6f315bd300f2c7693003facdda61df3155a170e2b8f7",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "c7f5120f4c4f45cfa4e5c28ab052fac97ac40097beecaf030dc2eefbb54bcaa1",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "ec7c56934074ee84ec7448a13c3296bf11b84245894e587d66450ec3056438d7",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "1a150d6367cbdea749db6f315bd300f2c7693003facdda61df3155a170e2b8f7",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "c7f5120f4c4f45cfa4e5c28ab052fac97ac40097beecaf030dc2eefbb54bcaa1",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "242d61de585fe12793f734abea87e9549092f7b74d7a94f2898e73de1e91e814",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "9e4cbb5a8ec4b821ae81211fb54fd9d198e58eb599e42ca55662daae6b5a9879",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "cd4be9a1fafbd35979de065d6a3d56b210fbc627f1a5c8cd8b0eb90a73e2bad4",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "62ea07ba87e6fa96bd9c75a62416c3ab2fab26e342c9683850f48b04f94236d4",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "9e4cbb5a8ec4b821ae81211fb54fd9d198e58eb599e42ca55662daae6b5a9879",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "cd4be9a1fafbd35979de065d6a3d56b210fbc627f1a5c8cd8b0eb90a73e2bad4",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a824c82dde8beb1f9a046910a42477aeae97335ed346523283166efda88eae42",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "b445169df3f962a86d9a2f885418e33628889fbb50dab8cdea75c2c567d99a2f",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "d315ae63da9debd0b8d020a54df5dfe9404dea84f917a5f944672fe13fae0efd",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "66630881123654ef9bf8771ed5b4e4fb14fc66fa00fce4915baf31d8d44d36e9",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "b445169df3f962a86d9a2f885418e33628889fbb50dab8cdea75c2c567d99a2f",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "d315ae63da9debd0b8d020a54df5dfe9404dea84f917a5f944672fe13fae0efd",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "960e9b4d6bf86ec0c6fbf98a0410f514b261d36c3f63cf86e508bbfb64e4cd85",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "b023377b92435d8818a01e0496f900b56df456682bfb0968c1439a6728dc12be",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "dade7bb72503c34a88c1d6dc06d760cb36872a20a5fbd290c830ebbbb056062d",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "5c5667dd1daab580c700159437fcbb18842ff95395aff83e523787111f59b7d9",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "b023377b92435d8818a01e0496f900b56df456682bfb0968c1439a6728dc12be",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "dade7bb72503c34a88c1d6dc06d760cb36872a20a5fbd290c830ebbbb056062d",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "b852b6492bbf27fe6fd2ed98e7f5a77de86dd319272e1749f8aa496282dea059",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "adfc40cc7a6464956fd08e72b3be2f870a97c5cb331ad91a8120ec43ae3271f1",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "df1181305d7a9acb9dc8aa3ce64fc6d01eb55a794c46c8a6f3637a07a26d9d7f",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a1f9b0e3cfe7d48103f5d099535c48e4a5da96693584908253398d7358acdc84",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "adfc40cc7a6464956fd08e72b3be2f870a97c5cb331ad91a8120ec43ae3271f1",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "df1181305d7a9acb9dc8aa3ce64fc6d01eb55a794c46c8a6f3637a07a26d9d7f",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "941013a06bf72963071eaa03c04295ca0a50995322b1864d6a1a6f7365efe317",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "adfc40cc7a6464956fd08e72b3be2f870a97c5cb331ad91a8120ec43ae3271f1",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "df1181305d7a9acb9dc8aa3ce64fc6d01eb55a794c46c8a6f3637a07a26d9d7f",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "883c91bf96c29b5d4be8fa11d26b13aa84e26ae278070ccde74310b0367bdc5f",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "7442af01df668db07a1902eaff06faa4aa7fa13d1517d881d35d3d8e8ec6f4f0",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "e07cebe8c325b13fa480a891c8f7253a9223021fdb756e9281104841f4bb9e48",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "566c8c2d9aadff7ec8da0f4332f17b8046999492bc3fa4a2e8cb875409517077",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "7442af01df668db07a1902eaff06faa4aa7fa13d1517d881d35d3d8e8ec6f4f0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e07cebe8c325b13fa480a891c8f7253a9223021fdb756e9281104841f4bb9e48",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a4127a85a737cda0ae695543eb2847e7691455f50d5378fb59a5170b14d115e3",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "7442af01df668db07a1902eaff06faa4aa7fa13d1517d881d35d3d8e8ec6f4f0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e07cebe8c325b13fa480a891c8f7253a9223021fdb756e9281104841f4bb9e48",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "5afa10d2c872810dde2106301f6970dcb04feecf6bca2431b6d466b0cf687378",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "2255124b7f5d3fd155438fcca8c99c2c40a57be94f94e0aa628b1a0b1f86f169",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "e1e5aa2b5488c74277e6450015e5a2158005a30c771684efc795fa07f02d7dde",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "d86b262b4497bca92004297cf114000362c2adcbeb73112b16b20f4d9354387d",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "2255124b7f5d3fd155438fcca8c99c2c40a57be94f94e0aa628b1a0b1f86f169",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e1e5aa2b5488c74277e6450015e5a2158005a30c771684efc795fa07f02d7dde",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "ae4bf2e85a7cc877fc008cf90dee0370e818a33eee342ac81fd60760822f86fd",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "2255124b7f5d3fd155438fcca8c99c2c40a57be94f94e0aa628b1a0b1f86f169",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e1e5aa2b5488c74277e6450015e5a2158005a30c771684efc795fa07f02d7dde",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "432e0b02bc29042c3fd55029d59276ca911e5a70c9539fa05c4c2045adb7958a",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "8f4805039c24334fc5d8e106bc63cb1b7a51a8f339e85ee8596e82d0c28fe0cd",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "e36627fb2df3f03c2c4f3bd268e374f0c2bc3a0fe8edad671208a1246308aaad",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "97d8e0580d9d77376c8958ecd7b76fe63c67bbc5e7dbdc4834bd77342dc23d1c",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "8f4805039c24334fc5d8e106bc63cb1b7a51a8f339e85ee8596e82d0c28fe0cd",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e36627fb2df3f03c2c4f3bd268e374f0c2bc3a0fe8edad671208a1246308aaad",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "adef8b13ad88bc88c75e4b4af493d93853da070916cfc5af8b4396b12c24938c",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "3cd810e893fea04a9645478324e2170aaee04114b6d909cd2850e49cda0855b9",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "e6e96e0b79d2cbc2430eb2f69466175e572fdd79cae34643b647c6cba0350ec1",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "bac9952a8128578e6e9d34a017a00021fa47485287af5a42f30c66747b27f4b6",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "3cd810e893fea04a9645478324e2170aaee04114b6d909cd2850e49cda0855b9",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "e6e96e0b79d2cbc2430eb2f69466175e572fdd79cae34643b647c6cba0350ec1",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "10402570b035db8ce15fa55cec2699bf36fb89062cc937d64ce1180d1731ab1e",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "7ea89dbdddb7e597c3a7c63492bc7298bd6523c9fb1b6baf955fe58c634ef2f0",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "f016e820bf395b79f461dfa078570aa3aa7bb443405d49880cca5e9eb7603b00",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "ec762daf3ed8948f8815c08a689f44db64bbea630af9a8df219c0fae365df248",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "7ea89dbdddb7e597c3a7c63492bc7298bd6523c9fb1b6baf955fe58c634ef2f0",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "f016e820bf395b79f461dfa078570aa3aa7bb443405d49880cca5e9eb7603b00",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "a4870e4774546fcd4e9a8f972ef5d5cfbe097b42462d6e66ff1e54ff4dba9068",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "renamed",
+        "graph_changed": true,
+        "original_public_sha256": "18a81503ea1f89c860ec2f08a9ec90b61890762b00368e280aa38b1ca0f2dff1",
+        "public_problem_unchanged": false,
+        "question_changed": true,
+        "record_id": "fa575a9bca00b5273f158325e34b77b2167e5c2a2d70da8f3b8264aef6556f06",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "0812851847795dd76a62d31bde87b6ae61e41c2a49d964d4db767d725889a671",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "reordered",
+        "graph_changed": true,
+        "original_public_sha256": "18a81503ea1f89c860ec2f08a9ec90b61890762b00368e280aa38b1ca0f2dff1",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "fa575a9bca00b5273f158325e34b77b2167e5c2a2d70da8f3b8264aef6556f06",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "76c900fe279955ad0a9df48f7166b407b51960672c255f20b966a7fc3ef12491",
+        "whole_public_unchanged": false
+      },
+      {
+        "contrast": "rewired",
+        "graph_changed": true,
+        "original_public_sha256": "18a81503ea1f89c860ec2f08a9ec90b61890762b00368e280aa38b1ca0f2dff1",
+        "public_problem_unchanged": false,
+        "question_changed": false,
+        "record_id": "fa575a9bca00b5273f158325e34b77b2167e5c2a2d70da8f3b8264aef6556f06",
+        "record_id_unchanged": false,
+        "variant_has_three_distinct_options": true,
+        "variant_public_sha256": "7da76babe54e9d3abbd882977527adfaf1b62d6567fd8b9255fb44d177e79f3b",
+        "whole_public_unchanged": false
+      }
+    ],
+    "source_inspection_findings": [
+      "Current public_probe_input re-renders each graph/question and supplies a contrast-prefixed public-content identity; byte measurements above use this actual helper.",
+      "Current run_probe calls public_probe_input and list_length_inputs, reverses renamed predictions before comparison, and checks before/after parameter identity when available.",
+      "Current length permutations expose slot sensitivity and selected lengths; they do not prove a causal length bias and do not record logits or vector norms.",
+      "A separate hash-bound checkpoint restoration/dispatch and owner-authorized AWS GPU request are required before a neural contrast result."
+    ]
+  },
+  "decision": {
+    "can_freeze_current_directives": false,
+    "complementary_blockers": [
+      "No compiled versioned panel with complete historical-exposure exclusions",
+      "Component/whole relevance, operation coverage and retention panels remain unbound",
+      "Checkpoint, optimizer, actual schedule/worker/resource identities remain unbound"
+    ],
+    "next_source_action": "Bind an opt-in candidate to unused EXISTING enumerator patterns only after excluding all historical root families/semantic cases and checking the 8-10-node source envelope against intended teaching. If that cannot meet the proposed 30 x 3 panel, state the shortfall and explicitly revise count/novelty class before freeze.",
+    "perspective_blocker": "Must pin one compatible frozen complementary profile before freeze; reference fixture is one family, not an extra corpus.",
+    "requires_new_authored_examples_established": false
+  },
+  "directives": {
+    "complementary_binding_state": "PLANNING_SLOTS_NOT_COMPILED_LESSONS",
+    "complementary_execution_enabled": false,
+    "perspective_execution_enabled": false,
+    "perspective_fixture_is_balanced_corpus": false,
+    "perspective_fixture_root_families": 1,
+    "perspective_fixture_views": 6,
+    "perspective_new_training_slots": 0,
+    "perspective_parent_schedule": "PIN_ONE_COMPATIBLE_COMPLEMENTARY_PROFILE_BEFORE_FREEZE",
+    "proposed_application_panel": {
+      "operations": [
+        "LIST_PARTS",
+        "FIND_SHARED_PART",
+        "REACHED_VIA"
+      ],
+      "root_families": 30,
+      "whole_questions": 90
+    }
+  },
+  "evidence_kind": "PURE_DETERMINISTIC_SOURCE_AND_PUBLIC_BYTES",
+  "face_corpus": {
+    "boundary": "Family-held-out is distinct from topology-held-out. The RDCJT panel is already examined and cannot become the proposed new panel.",
+    "exact_topologies": 6,
+    "rdcjt_panel_items": 216,
+    "rdcjt_panel_root_family_ids": 16,
+    "root_family_ids": 96,
+    "rows": [
+      {
+        "archetype": "chain2",
+        "family_id": "family:mechanical:00",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:mechanical:01",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:mechanical:02",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:mechanical:03",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:mechanical:04",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:mechanical:05",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:mechanical:06",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:mechanical:07",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:mechanical:08",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:mechanical:09",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:mechanical:10",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:mechanical:11",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:mechanical:12",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:mechanical:13",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:mechanical:14",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:mechanical:15",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:grammatical:00",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:grammatical:01",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:grammatical:02",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:grammatical:03",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:grammatical:04",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:grammatical:05",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:grammatical:06",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:grammatical:07",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:grammatical:08",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:grammatical:09",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:grammatical:10",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:grammatical:11",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:grammatical:12",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:grammatical:13",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:grammatical:14",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:grammatical:15",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:procedural:00",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:procedural:01",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:procedural:02",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:procedural:03",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:procedural:04",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:procedural:05",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:procedural:06",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:procedural:07",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:procedural:08",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:procedural:09",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:procedural:10",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:procedural:11",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:procedural:12",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:procedural:13",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:procedural:14",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:procedural:15",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:container:00",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:container:01",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:container:02",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:container:03",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:container:04",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:container:05",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:container:06",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:container:07",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:container:08",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:container:09",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:container:10",
+        "split": "training",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:container:11",
+        "split": "training",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:container:12",
+        "split": "training",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:container:13",
+        "split": "training",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:container:14",
+        "split": "training",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:container:15",
+        "split": "training",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:organisational:00",
+        "split": "development",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:organisational:01",
+        "split": "development",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:organisational:02",
+        "split": "development",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:organisational:03",
+        "split": "development",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:organisational:04",
+        "split": "development",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:organisational:05",
+        "split": "development",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:organisational:06",
+        "split": "development",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:organisational:07",
+        "split": "development",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:organisational:08",
+        "split": "development",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:organisational:09",
+        "split": "development",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:organisational:10",
+        "split": "development",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:organisational:11",
+        "split": "development",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:organisational:12",
+        "split": "development",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:organisational:13",
+        "split": "development",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:organisational:14",
+        "split": "development",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:organisational:15",
+        "split": "development",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:narrative:00",
+        "split": "final_held_out",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:narrative:01",
+        "split": "final_held_out",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:narrative:02",
+        "split": "final_held_out",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:narrative:03",
+        "split": "final_held_out",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:narrative:04",
+        "split": "final_held_out",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:narrative:05",
+        "split": "final_held_out",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:narrative:06",
+        "split": "final_held_out",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:narrative:07",
+        "split": "final_held_out",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:narrative:08",
+        "split": "final_held_out",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:narrative:09",
+        "split": "final_held_out",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      },
+      {
+        "archetype": "pair_shared",
+        "family_id": "family:narrative:10",
+        "split": "final_held_out",
+        "topology": "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61"
+      },
+      {
+        "archetype": "fork_child",
+        "family_id": "family:narrative:11",
+        "split": "final_held_out",
+        "topology": "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae"
+      },
+      {
+        "archetype": "chain2",
+        "family_id": "family:narrative:12",
+        "split": "final_held_out",
+        "topology": "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20"
+      },
+      {
+        "archetype": "branch3",
+        "family_id": "family:narrative:13",
+        "split": "final_held_out",
+        "topology": "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17"
+      },
+      {
+        "archetype": "diamond",
+        "family_id": "family:narrative:14",
+        "split": "final_held_out",
+        "topology": "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e"
+      },
+      {
+        "archetype": "chain3",
+        "family_id": "family:narrative:15",
+        "split": "final_held_out",
+        "topology": "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa"
+      }
+    ],
+    "splits": {
+      "development": {
+        "root_family_ids": 16,
+        "topologies": 6,
+        "topologies_absent_from_training": 0
+      },
+      "final_held_out": {
+        "root_family_ids": 16,
+        "topologies": 6,
+        "topologies_absent_from_training": 0
+      },
+      "training": {
+        "root_family_ids": 64,
+        "topologies": 6,
+        "topologies_absent_from_training": 0
+      }
+    }
+  },
+  "neural_execution": false,
+  "other_existing_source_supply": {
+    "actual_varied_topologies": 8,
+    "all_prior_exposures_checked": false,
+    "boundary": "Existing enumerator supply only. No new examples were authored. Potential supply is not a frozen compatible panel: all historical exposures, reference operations, root-family grouping, intended training envelope, vocabulary and renderer/learner bindings remain to be checked. This envelope is larger than the 3-4-node face corpus.",
+    "conservatively_excluded_old_panel_candidate_topologies": 45,
+    "enumerator_pattern_keys": 92,
+    "exact_topologies": 92,
+    "legacy_template_topologies": 4,
+    "new_panel_compiled": false,
+    "potential_topologies_after_these_exclusions": 47,
+    "potential_topology_digests": [
+      "006a321ca7e633c0e263ce941a0c44a11135c604d3263dbbaa585dd6cec57a58",
+      "03fee3a6589af814d7b3312028fb3e32015ecbab2f9ce6e858e7ac8c7a32fbb3",
+      "0c3c4c9c19eb1b02a9cf80b40189c7d29fbf939f47b587719d8f4c2db9e4a77b",
+      "1a29319b3556ab485dcc8d1bc5c77fc6a46d8f2751c747027c0fc975644c23c6",
+      "1d90392c451ee2a2efb5527ae3d36bb9f3ca789b2570e72351c11990625dd255",
+      "26cab57e55ee76dd59fc7231268b9bbf7909f95be18ed42a914639386e20f9d7",
+      "271da1572bdae6c5c5fbab66391c5a57e0e578136bda5cd8384ca626ee131680",
+      "34b38f6665c8cde0ffa8c216b562edef920bb10d0ba64171ebfd4908b14f6e21",
+      "35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "4f8bc7ded554f1badf3ee92ab4d60d8704f8c177714f3fda4c61c21039850a23",
+      "516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "65b12364e9a792c07a1c34d15fa8fdf538f150c4f664116cdadda5f4cc12b2e3",
+      "68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "77791d0f323677b22d097277b09d7fe5b508f459a456de302256ee03d5b08f09",
+      "7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "abdd8a4641562c0d1bc2140c9737452a880fea9d788f143f017bdb7cb01d6881",
+      "ad8b9a5f986ee1510aa2e18f1aa761e335c054f0d5012275fca5f90f9d0e692b",
+      "b84ae2656e5764c745d2d16c4bb323025ff101f28a0403d44e7fd781c10c071c",
+      "ba86a1cab91124c7bb2c0907edf271143c878b7991934610c7de57b1fe7a3549",
+      "baa69d41cb8c33ef8ac47e0fb7338219ab14d68a74bd79d373b4dc24d215a0c4",
+      "bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "fb99d8f06c232b68cf242817afcfdc17c0dcb1c09a4d3ee5dd56fbdf02d15dc2"
+    ],
+    "source_envelope": {
+      "max_depth_in_existing_stat_convention": 3,
+      "max_direct_parts": 3,
+      "nodes": [
+        8,
+        10
+      ],
+      "relations": [
+        6,
+        9
+      ]
+    },
+    "varied_base_topologies": 5
+  },
+  "provider_calls": 0,
+  "retained_examined_panel": {
+    "case_count": 90,
+    "cases_per_op": {
+      "FIND_SHARED_PART": 30,
+      "LIST_PARTS": 30,
+      "REACHED_VIA": 30
+    },
+    "checkpoint_files_present_not_loaded": 18,
+    "distinct_case_patterns": 90,
+    "excluded_case_ids": 162,
+    "excluded_curriculum_seeds": [
+      20260925
+    ],
+    "excluded_panels": [
+      20260920
+    ],
+    "excluded_signatures": 117,
+    "family_count": 30,
+    "panel_digest": "11ace422278c59d8629c4dc75468eabb228be52c67a629f97bbfaf775a4ac0a1",
+    "panel_seed": 20260930,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-graph6curr-20260910133000-aecb5d07\\curriculum_result.json",
+    "schema": "cas-graph-training-final-panel/1"
+  },
+  "schema": "cas.structural-supply-audit/0.1",
+  "source_identities": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\face_corpus.py",
+      "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\face_evaluation.py",
+      "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\lessons.py",
+      "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\curriculum.py",
+      "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\fresh_panel.py",
+      "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\final_panel.py",
+      "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\contrast_probe.py",
+      "sha256": "d428fd83881acdac2e965777c6703e16aefe7d660d1903d01619c282185bcdbf"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\adapter.py",
+      "sha256": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\real_framework.py",
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\Complementary_Recurrent_CJT_Teaching_v0.1_Builder_Handoff (1)\\complementary_cjt_teaching_v0_1\\Complementary_Teaching_Profile_v0.1.json",
+      "sha256": "89c3ea58f3c42cd52960c9ff1a534c358d45f0efa2c4e73ba74cc6e4346eccfc"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\Connected_Perspective_Learning_CAS_Ohm_v0.1_Builder_Handoff\\Perspective_Resonance_Profile_v0.1.json",
+      "sha256": "bf7efed2e934926adbd1d2ca55b0bc51938059f41118332267c8709d2f345bec"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\teaching_cycle_001\\graph_first_candidate_001\\training_mode_001\\receipt_cas-meta2-graph6curr-20260910133000-aecb5d07\\curriculum_result.json",
+      "sha256": "848db69bdb0eaefa4f702a4dd4361f779fbc9fbc13c7ca5609de071a8cbcd4d0"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tools\\check_structural_supply_20260916.py",
+      "sha256": "a78d24c5469d95937a1d49ec6827cef213eabbb0b4811defe3ae370bd75852e0"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\Complementary_Recurrent_CJT_Teaching_v0.1_Builder_Handoff (1)\\complementary_cjt_teaching_v0_1\\Complementary_CJT_Teaching_Directive_v0.1.md",
+      "sha256": "8728d59f682bf787c4953c3ee5ed91420943e83720854b14301647ec9e9736bc"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\Connected_Perspective_Learning_CAS_Ohm_v0.1_Builder_Handoff\\Connected_Perspective_Learning_and_CAS_Ohm_v0.1.md",
+      "sha256": "089113adc7aa950779e958cf466cfca491877a79432b79e9548a47ab09bf54da"
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\Connected_Perspective_Learning_CAS_Ohm_v0.1_Builder_Handoff\\Perspective_Family_Authoring_Example.json",
+      "sha256": "f85d8a074273990d84f3efcd6201eada5e70307f62d6ab3cc0f1c098c1647bd6"
+    }
+  ],
+  "status": "FREEZE_NOT_READY"
+}

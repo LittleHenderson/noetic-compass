@@ -184,6 +184,45 @@ class BudgetTests(unittest.TestCase):
         with self.assertRaisesRegex(budget.BudgetRefused, "PENDING_OR_MISSING"):
             budget.read_ledger(self.ledger)
 
+    def test_head_only_amendment_refused_before_reservation_write(self):
+        # Historical states retain the original cap. Raising only the head
+        # must fail before reserve_budget can consume a reservation or publish
+        # a next revision whose predecessor hash is absent from the history.
+        with patch.object(budget, "CAP", budget.CAP_ORIGINAL):
+            self.initialize()
+        state = budget.decoded(self.ledger.read_bytes())
+        amendment_path = budget.CANONICAL_AMENDMENT.resolve()
+        amendment_raw = amendment_path.read_bytes()
+        state.update(owner_task_cap_usd=str(budget.CAP),
+                     remaining_unreserved_usd=str(budget.CAP - 4),
+                     amendment={"path": str(amendment_path),
+                                "sha256": budget.digest(amendment_raw),
+                                "snapshot": budget.decoded(amendment_raw)})
+        self.ledger.write_bytes(budget.encoded(state))
+        history = budget.paths(self.ledger)[2]
+        before_head = self.ledger.read_bytes()
+        before_history = {p.name: p.read_bytes() for p in history.iterdir()}
+        with self.assertRaisesRegex(budget.BudgetRefused, "LEDGER_HISTORY_MISMATCH"):
+            self.reserve()
+        self.assertEqual(self.ledger.read_bytes(), before_head)
+        self.assertEqual({p.name: p.read_bytes() for p in history.iterdir()},
+                         before_history)
+        with self.assertRaisesRegex(budget.BudgetRefused, "LEDGER_HISTORY_MISMATCH"):
+            budget.read_ledger(self.ledger)
+
+    def test_head_only_metadata_change_refused_before_reservation_write(self):
+        self.initialize()
+        self.mutate(self.ledger, lambda state: state.update(
+            updated_utc="2026-01-01T00:00:00+00:00"))
+        before_head = self.ledger.read_bytes()
+        history = budget.paths(self.ledger)[2]
+        before_history = {p.name: p.read_bytes() for p in history.iterdir()}
+        with self.assertRaisesRegex(budget.BudgetRefused, "LEDGER_HISTORY_MISMATCH"):
+            self.reserve()
+        self.assertEqual(self.ledger.read_bytes(), before_head)
+        self.assertEqual({p.name: p.read_bytes() for p in history.iterdir()},
+                         before_history)
+
     def test_deleted_history_detected(self):
         self.initialize()
         self.reserve()

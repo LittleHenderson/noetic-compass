@@ -1,0 +1,33 @@
+test_head_only_amendment_refused_before_reservation_write (budget_regression_review.BudgetTests.test_head_only_amendment_refused_before_reservation_write) ... FAIL
+test_head_only_metadata_change_refused_before_reservation_write (budget_regression_review.BudgetTests.test_head_only_metadata_change_refused_before_reservation_write) ... FAIL
+
+======================================================================
+FAIL: test_head_only_amendment_refused_before_reservation_write (budget_regression_review.BudgetTests.test_head_only_amendment_refused_before_reservation_write)
+----------------------------------------------------------------------
+budget_before_fix.BudgetRefused: BROKEN_BUDGET_HISTORY_CHAIN
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\tests\test_budget.py", line 205, in test_head_only_amendment_refused_before_reservation_write
+    with self.assertRaisesRegex(budget.BudgetRefused, "LEDGER_HISTORY_MISMATCH"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "LEDGER_HISTORY_MISMATCH" does not match "BROKEN_BUDGET_HISTORY_CHAIN"
+
+======================================================================
+FAIL: test_head_only_metadata_change_refused_before_reservation_write (budget_regression_review.BudgetTests.test_head_only_metadata_change_refused_before_reservation_write)
+----------------------------------------------------------------------
+budget_before_fix.BudgetRefused: BROKEN_BUDGET_HISTORY_CHAIN
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\meta1\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\tests\test_budget.py", line 220, in test_head_only_metadata_change_refused_before_reservation_write
+    with self.assertRaisesRegex(budget.BudgetRefused, "LEDGER_HISTORY_MISMATCH"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "LEDGER_HISTORY_MISMATCH" does not match "BROKEN_BUDGET_HISTORY_CHAIN"
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.161s
+
+FAILED (failures=2)

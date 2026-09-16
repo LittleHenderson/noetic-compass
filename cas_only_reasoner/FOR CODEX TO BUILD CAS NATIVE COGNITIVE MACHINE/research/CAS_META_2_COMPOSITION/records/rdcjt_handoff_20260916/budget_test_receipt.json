@@ -1,0 +1,25 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "-p",
+    "no:cacheprovider",
+    "tests/test_budget.py",
+    "tests/test_graph_training_curriculum_launch.py",
+    "tests/test_graph_training_candidate_launch.py",
+    "tests/test_owner_record_bounds.py",
+    "tests/test_recurrent_cjt_launch.py",
+    "-q",
+    "--basetemp",
+    "records/budget/review_pytest_scoped_20260916"
+  ],
+  "exit_code": 0,
+  "python": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]",
+  "neural_work_performed": false,
+  "provider_calls": 0,
+  "log_sha256": "0fff0f0ba1091b75a1a9234d98b695969e7e2e443b75417d961ca229a066aba0",
+  "budget_sha256": "cb3c78a0dfed166857109710cb8eac79dd337d837c839d558565982084b5a22f",
+  "tests_sha256": "169246bd7091d3eb4591428681e863cde97abacbbd672bd3155a751782753f3d"
+}

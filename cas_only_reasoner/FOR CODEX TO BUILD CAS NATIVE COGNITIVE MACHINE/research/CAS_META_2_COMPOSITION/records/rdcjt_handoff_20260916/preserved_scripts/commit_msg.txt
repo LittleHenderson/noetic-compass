@@ -1,0 +1,75 @@
+Repair the blocked money path; run the two never-launched RDCJT seeds
+
+WHY THE REPAIR WAS NEEDED
+
+The cap amendment to $5000 had silently disabled every paid launch.
+
+1. CAMPAIGN_CAP_USD was hardcoded "400.00" in the launchers while
+   aws/budget.py carried the owner-amended cap. Launch attempt 1 refused
+   with LEDGER_CAP_CHANGED before the reservation. It now derives from
+   budget.CAP, so the owner-bound value is the single source and the
+   ledger comparison still enforces agreement.
+
+2. validate_state required EVERY write-ahead history entry to carry
+   today's cap. After the raise, all 70 entries recorded "400.00", so
+   read_locked refused the first one with INVALID_CAMPAIGN_LEDGER and no
+   launch could proceed. Each state is now validated against the cap it
+   RECORDED; only the operating head must carry the current cap. Free
+   space is likewise derived from the state's own cap. History is a
+   record of what was authorised THEN.
+
+3. The write-ahead chain digest and the head/tail equality both require
+   the ledger head and the newest history entry to be the same bytes.
+   The amendment had edited the revision-69 head in place while
+   history/00000069.json kept the pre-raise bytes, so the chain could not
+   close (attempt 2 wrote its reservation, then failed post-write with
+   BROKEN_BUDGET_HISTORY_CHAIN). The amended revision-69 state was
+   RECONSTRUCTED and verified by reproducing the digest revision 70 had
+   already committed to:
+     9ac9970d319e2bb8b55c2154c9968703ddf0c864402196026d6ec0e3488b30cb
+   Not one reservation was altered. The pre-raise bytes are preserved in
+   records/budget/PRESERVED_history_00000069_pre_cap_raise.json and
+   records/budget/campaign_ledger.json.pre_cap_raise_400_to_5000.
+
+No spend guard was weakened: reservations and total_reserved_usd must
+still match the history byte for byte, and free space remains derived as
+cap minus reserved.
+
+TESTS
+  140 passed, 24 subtests passed (budget, curriculum, candidate, owner
+  bounds, RDCJT launch). 118 passed across the five recurrent_cjt modules.
+
+THE RUNS
+
+Both crashed seeds were diagnosed and confirmed already fixed at HEAD:
+  - ModuleNotFoundError cas_meta2.rpm_cfc_constructor (packaging)
+  - KeyError on _position from range(1,17) vs rounds 0..15 (off-by-one)
+Local reproduction: index_size 552, presented 896, missing 0. A local
+RTX 4070 dev smoke returned RECURRENT_EXPERIMENT_DELIVERED in 299.3s
+(dev only, not claim-bearing).
+
+Two AWS g7.2xlarge jobs were run, one per never-launched seed, both
+delivered, both cleaned up (0 active instances).
+
+  seed 20260913  R1=105  R8=104  gained 14  lost 15  net  -1
+  seed 20260914  R1=113  R8=102  gained 11  lost 22  net -11
+
+With the earlier rescued seed 20260912 (R1=117 R8=101 net -16), the three
+declared paired runs now exist and the pre-registered criterion -
+
+  "a positive R8-minus-R1 difference in at least two of three paired runs"
+
+- is EVALUABLE AND FAILS: 0 of 3 positive. Recurrence at depth 8 did not
+improve held-out answers in any seed.
+
+EVIDENCE
+
+Both receipts verified locally against their own bytes: artifact hashes,
+result sidecar, arm accounting (128 updates; 896 / 3360 sample passes;
+mean depth 1.0 / 3.75), 3 trainable parameters per arm in both arms, a
+216-item panel with examined_during_teaching false, and identical
+parameter digests before and after the depth readout.
+
+NO claim of CAS-specific advantage, general reasoning, language ability,
+CNCM completion, AGI or production readiness follows from any of this.
+"Complete" here means the local prototype ran and the panel was measured.

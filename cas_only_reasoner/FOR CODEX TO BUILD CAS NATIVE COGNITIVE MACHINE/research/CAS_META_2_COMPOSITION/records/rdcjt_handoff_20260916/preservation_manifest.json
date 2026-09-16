@@ -1,0 +1,98 @@
+{
+  "execution_policy": "All preserved files are archival only. Do not execute the repair, input-writing, package-building or GPU scripts. Several have hardcoded paths and can mutate budget history or launch inputs. Use the separate portable read-only verifier.",
+  "files": [
+    {
+      "byte_identical": true,
+      "bytes": 1757,
+      "copied_sha256": "9b74d53825b8aa68969c005c59ffda6be70d4b62c9d1210dfe97dc2b14372873",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "build_launch_inputs.py",
+      "preserved_path": "preserved_scripts/build_launch_inputs.py",
+      "sha256": "9b74d53825b8aa68969c005c59ffda6be70d4b62c9d1210dfe97dc2b14372873",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\build_launch_inputs.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 3589,
+      "copied_sha256": "2471dba6cee56120c33698f7036458253d8444581e326760911146725c235d6f",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "commit_msg.txt",
+      "preserved_path": "preserved_scripts/commit_msg.txt",
+      "sha256": "2471dba6cee56120c33698f7036458253d8444581e326760911146725c235d6f",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\commit_msg.txt"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 4239,
+      "copied_sha256": "3c397ecdbd56d56c95f53e126cae5b22824560465d990c814a7130e688f9b23d",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "local_gpu_smoke.py",
+      "preserved_path": "preserved_scripts/local_gpu_smoke.py",
+      "sha256": "3c397ecdbd56d56c95f53e126cae5b22824560465d990c814a7130e688f9b23d",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\local_gpu_smoke.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 4141,
+      "copied_sha256": "f5adce02d010cf2622d7d6318ddf84d2346cc3fcc388b4a87dcdc52e427dc96b",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "reconstruct_entry69.py",
+      "preserved_path": "preserved_scripts/reconstruct_entry69.py",
+      "sha256": "f5adce02d010cf2622d7d6318ddf84d2346cc3fcc388b4a87dcdc52e427dc96b",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\reconstruct_entry69.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 4455,
+      "copied_sha256": "a609cf705e9f12ed81cc0e5634fcd472ce993b9a6872b65a68bfd0b258fa1ba4",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "repair_history_69.py",
+      "preserved_path": "preserved_scripts/repair_history_69.py",
+      "sha256": "a609cf705e9f12ed81cc0e5634fcd472ce993b9a6872b65a68bfd0b258fa1ba4",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\repair_history_69.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 3206,
+      "copied_sha256": "65d21c27b9ae11f810c6dede15b7a3c549a38e086dc44255ce0f3583e759fd5d",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "repro_keyerror.py",
+      "preserved_path": "preserved_scripts/repro_keyerror.py",
+      "sha256": "65d21c27b9ae11f810c6dede15b7a3c549a38e086dc44255ce0f3583e759fd5d",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\repro_keyerror.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 1570,
+      "copied_sha256": "56786d1118e65f118d47fa6b6cac2621622fab7d92b2914fb049c585c755a04b",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "seed_state.py",
+      "preserved_path": "preserved_scripts/seed_state.py",
+      "sha256": "56786d1118e65f118d47fa6b6cac2621622fab7d92b2914fb049c585c755a04b",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\seed_state.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 5952,
+      "copied_sha256": "77ba10e22b03361c93a8f121552126654fd5faabbd02ac824a14e34b2f46ed15",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "verify_delivered.py",
+      "preserved_path": "preserved_scripts/verify_delivered.py",
+      "sha256": "77ba10e22b03361c93a8f121552126654fd5faabbd02ac824a14e34b2f46ed15",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\verify_delivered.py"
+    },
+    {
+      "byte_identical": true,
+      "bytes": 3371,
+      "copied_sha256": "07abf0180bfbd277f6ed4d829670dc187668ebf716311efb97681d2af86b3521",
+      "execution_status": "NOT_EXECUTED_ARCHIVAL_ONLY",
+      "name": "write_inputs.py",
+      "preserved_path": "preserved_scripts/write_inputs.py",
+      "sha256": "07abf0180bfbd277f6ed4d829670dc187668ebf716311efb97681d2af86b3521",
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro\\write_inputs.py"
+    }
+  ],
+  "retained_originals": true,
+  "schema": "cas.rdcjt-handoff-preserved-scripts/1",
+  "source_directory": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\rdcjt_repro"
+}
