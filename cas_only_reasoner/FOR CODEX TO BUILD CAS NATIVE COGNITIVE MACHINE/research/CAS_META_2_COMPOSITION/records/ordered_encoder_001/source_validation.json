@@ -1,0 +1,14 @@
+{
+  "status": "PURE_INTEGRATION_PASS",
+  "tests": {
+    "tests": 102,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "xml_sha256": "223985a606a8f9127b87995df1832606d97fd4ee525e0fbb916738e25c4921ec",
+  "neural_execution": false,
+  "source_charter_sha256": "a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979dfea",
+  "preserved_failure_artifact": "probe_pure_tests_initial_failure.xml",
+  "whitespace_check_exception": "The original failed-test XML is preserved byte-for-byte, including pytest-rendered whitespace. All implementation/docs are checked."
+}

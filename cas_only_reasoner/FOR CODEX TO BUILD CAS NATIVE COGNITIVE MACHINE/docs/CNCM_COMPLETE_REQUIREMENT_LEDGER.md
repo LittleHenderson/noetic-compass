@@ -265,3 +265,39 @@ surface. These are dependency gates, not claims that a stage is already built.
 - Capability, evidence maturity, and deployment authority remain separate.
 - A visual board cannot award itself capability or runtime authority.
 - A repair recommendation cannot authorize its own patch or promotion.
+
+## 2026-09-16 research continuation: encoder gate and native integration
+
+The complete 31-system destination and V01-V18 scope remain open. Later isolated
+CAS_CJT v0.2/META research provides additional executable components beyond the
+2026-09-03 snapshot above; it does not close the integrated 20-step episode.
+
+Current retained evidence includes a negative recurrent-depth result (0/3
+positive paired seeds), a completed zero-update contrast diagnosis, and built
+complementary/perspective candidates whose neural effectiveness remains untested.
+The old graph encoder now has source-bound algebraic counterexamples: 96 paired
+changed-answer cases erase edge direction, query role, or unseen lexical order;
+32 graph-line-reorder cases are controls. The separate ordered encoder preserves
+the inherited tokenizer/projection/options while changing problem pooling.
+Its pure checks are software evidence only; numeric CUDA separation and learning
+are separate gates. Historical encoder source and completed artifacts remain intact.
+
+This representation repair is a prerequisite, not a substitute for native
+integration. Existing NeuralCJT/routing/control/runtime code has typed control
+and flow paths, while the teaching learner extracts only its standalone ^6
+transform. Fixed topology and authored target symbols are not learned network
+assembly, autonomous reasoning, or physical current measurements.
+
+The next direct V06/V08 integration gate is a real suspended parent acquiring a
+missing procedure, independently qualifying it, installing it through a new
+governed kernel transition, and resuming the exact caller with its remaining
+budget. Fresh-process reuse, retained neighboring behavior, forged/stale receipt
+rejection and behavioral rollback are required. Current CCB-T1 promotions are
+local store operations; existing RPM selects caller-supplied resolvers; neither
+provides that integrated capability. Existing failed native v8 qualification
+and repair results remain negative and must not be repeated without repair.
+
+Evidence and exact source paths are under research/CAS_META_2_COMPOSITION/records/
+ordered_encoder_001 and vision_continuation_20260916/INTEGRATION_GAPS.md. No broader
+capability grade, learned program synthesis, accepted-model promotion or complete
+machine claim follows from this continuation.
