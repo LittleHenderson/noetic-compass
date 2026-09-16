@@ -1,0 +1,35 @@
+{
+  "adapter_expected_sha256": "00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62",
+  "argv": [
+    "tools/reproduce_cube_rpa.py",
+    "--output",
+    "records/rpa_cube_001/acceptance_001",
+    "--observation-id",
+    "cube_acceptance_001",
+    "--observation-time",
+    "2026-09-16 15:21:04 UTC",
+    "--bind-input",
+    "tests/test_rpa_cube_adapter.py",
+    "--bind-input",
+    "tests/test_rpa_cube_adversarial.py",
+    "--bind-input",
+    "tests/test_rpa_cube_final_review.py",
+    "--bind-input",
+    "tests/test_rpa_cube_view.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+  "helper": {
+    "bytes": 32252,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\tools\\reproduce_cube_rpa.py",
+    "sha256": "9500b4f75a186d62aef5baed40bda21fb4a6a1683970fcf0f92d83832ea22678"
+  },
+  "observation_metadata": {
+    "observation_id": "cube_acceptance_001",
+    "observation_time": "2026-09-16 15:21:04 UTC"
+  },
+  "python": {
+    "executable": "C:\\Python314\\python.exe",
+    "version": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "started_utc": "2026-09-16T15:21:34.519067+00:00"
+}

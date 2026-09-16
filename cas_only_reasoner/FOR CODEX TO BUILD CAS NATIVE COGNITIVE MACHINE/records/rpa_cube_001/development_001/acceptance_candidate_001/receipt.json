@@ -1,0 +1,166 @@
+{
+  "adapter_sha256": "00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62",
+  "artifacts": [
+    {
+      "bytes": 807,
+      "path": "acceptance_summary.json",
+      "sha256": "6273388fd4a8be2e3a05b3327a8ff3a5c2049aa5fdba4847ad1b284d7307b767"
+    },
+    {
+      "bytes": 7021,
+      "path": "actual_imports.json",
+      "sha256": "c32ad816989f20a30ebee80094b31a2145478c50da84f9c1e3576645794c1452"
+    },
+    {
+      "bytes": 3078,
+      "path": "cache_identity_conformance.json",
+      "sha256": "4529f1ba4c3419bed4ab900186c89d2fb05a1d964fc407d5a0ce6eda1d83b069"
+    },
+    {
+      "bytes": 30695,
+      "path": "catalog_pages.json",
+      "sha256": "67ab6a5766dddf618e90b039ea72a1079760e2b674b2a291910d033eb80cb6df"
+    },
+    {
+      "bytes": 226519,
+      "path": "compiler_comparisons.json",
+      "sha256": "795c3037998ec11c0d73975ddcba6d94ace175d56a710741551214629d3495e0"
+    },
+    {
+      "bytes": 264697,
+      "path": "hypothesis.document.json",
+      "sha256": "e147f6db278b9269b506736f0dd6edaf04bbcab4b8a6f583cdaf1e5e9adf78b2"
+    },
+    {
+      "bytes": 19291,
+      "path": "hypothesis_bundle.json",
+      "sha256": "848e81dd6de73ce538c9f3bd668420420f9f26f3ee3b9a75a3704cf835b8761b"
+    },
+    {
+      "bytes": 459,
+      "path": "hypothesis_conformance.json",
+      "sha256": "d07463e00bd833efcbb7cdb1e393ed34681a50b3d48f57920c3bb8c4e0e516c0"
+    },
+    {
+      "bytes": 622,
+      "path": "hypothesis_source_receipt.json",
+      "sha256": "eeaa975ae55fc34fedf592e2e03626d40aee84a489369001e5b5fb8c87078752"
+    },
+    {
+      "bytes": 200034,
+      "path": "learner_inputs.jsonl",
+      "sha256": "0d65f2369e0bf9fa856197e47bc6188f817be80ff153deafeec5e55e377ad488"
+    },
+    {
+      "bytes": 360168,
+      "path": "lesson_bindings.jsonl",
+      "sha256": "b517a919ef235fece2ccb1fad75aadf539b89fff2adca23bc82bc0c4189af1d2"
+    },
+    {
+      "bytes": 44858,
+      "path": "navigation_conformance.json",
+      "sha256": "d1d34e4b6eca74cbcac8a8961dcac180d3b9049344564f7aaa5e4620683c58a4"
+    },
+    {
+      "bytes": 33478,
+      "path": "project_sources_before.json",
+      "sha256": "7f75380fbba26089c5f13fc7606b1e3f902524d7cc94bc7af62e316190af5a9d"
+    },
+    {
+      "bytes": 3052,
+      "path": "refusal_probes.json",
+      "sha256": "1d7946cdae6c9338abf5ef7651b310eefdaa36f00a34b2467a7b9ee13b089665"
+    },
+    {
+      "bytes": 1345,
+      "path": "run_context.json",
+      "sha256": "548ef7672de8a93b9f969a94098d1eb155d0312bbfab530f49ca622f14618fa8"
+    },
+    {
+      "bytes": 29971,
+      "path": "source_bundle.json",
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    {
+      "bytes": 45083,
+      "path": "source_projection_conformance.json",
+      "sha256": "b942271a43200eb9f19e2fe69808357e71e3201ef297f478a2df91318d43a6a0"
+    },
+    {
+      "bytes": 622,
+      "path": "source_receipt.json",
+      "sha256": "93da58c0283c4a4d9c9fe791c9e9a36807d143dcf1a3e755c0cb693fb40bd01e"
+    },
+    {
+      "bytes": 1659,
+      "path": "target_isolation.json",
+      "sha256": "0bdf6d0908feb46b47fa09391676a863d091d1bf3df89c295f8e88122cf55956"
+    },
+    {
+      "bytes": 1342379,
+      "path": "teacher_sidecars.jsonl",
+      "sha256": "1122acd13b02eecebaced6d861fe7e85bd582243a560df995ac6cfffcced4031"
+    },
+    {
+      "bytes": 1450652,
+      "path": "traversal_conformance.json",
+      "sha256": "fcf898440c9c700487fe8a93af1d67ce2eb7bf8307087375d4b87ece3fd78135"
+    },
+    {
+      "bytes": 130268,
+      "path": "view_analogy.document.json",
+      "sha256": "305a31fbf5e2867179ac54f39163ab0c8e7cadb08b61e41b8ebe91b028f864ec"
+    },
+    {
+      "bytes": 130282,
+      "path": "view_context.document.json",
+      "sha256": "c016c437a9f64118a7cb3e0c3701d109c5d92e082c86b1a0cee9d815dcc102de"
+    },
+    {
+      "bytes": 130098,
+      "path": "view_formal.document.json",
+      "sha256": "0ec450dfd90bc5f4c0a7205649aa67a405421bbebf515ece7a4d41f75ed112c4"
+    }
+  ],
+  "boundary": "Pure compiler/projection evidence; no learned competence claim.",
+  "bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+  "bundle_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+  "completed_utc": "2026-09-16T15:15:21.743476+00:00",
+  "helper_identity": {
+    "bytes": 26576,
+    "sha256": "3712ba72955348a4f7585159ddcd090dc02fe40b26e31c18e7420c13a694210e"
+  },
+  "results": {
+    "actual_project_imports": 31,
+    "assistance_levels": [
+      "guided",
+      "unassisted"
+    ],
+    "canonical_cubes": 6,
+    "competence_established": false,
+    "faces": 36,
+    "focus_checks": 129,
+    "links_per_view": 47,
+    "matched_directed_bfs_checks": 420,
+    "matching_compilations": 306,
+    "nodes_per_view": 43,
+    "questions_per_view": 51,
+    "refusal_probes": 20,
+    "scope": "Faithful authored-source projection and lesson preparation only; no learning or runtime execution.",
+    "source_contains_branches": 5,
+    "views": 3,
+    "work_counts": {
+      "bridge_compiler_calls": 451,
+      "delivered_neural_lessons": 0,
+      "learner_invocations": 0,
+      "legacy_comparison_compiler_calls": 308,
+      "legacy_target_free_probe_calls": 1,
+      "neural_calls": 0,
+      "optimizer_updates": 0,
+      "provider_calls": 0
+    }
+  },
+  "schema_version": "cncm.rpa-cube-acceptance/0.1",
+  "source_byte_identity_checked_before_and_after": true,
+  "status": "PASS"
+}

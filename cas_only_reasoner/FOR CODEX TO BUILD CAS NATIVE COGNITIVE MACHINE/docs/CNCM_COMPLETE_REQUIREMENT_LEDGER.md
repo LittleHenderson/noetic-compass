@@ -562,3 +562,45 @@ This advances bounded inspection/diagnosis portions of V08/V10/V13 and systems
 20-step charter remains open, including general learning/construction, semantic
 proof, CMB-R1, language, Foundations, adaptive flow, tools, Foundry and evolution.
 No local neural run, paid compute or AWS launch was used for this checkpoint.
+
+## 2026-09-16 Source-bound cube / idea-packet bridge and inspector
+
+The new pure cube bridge implements the useful part of the user's idea-packet
+proposal. It binds the supplied authored source bytes, keeps canonical idea IDs
+separate from presentation labels, retains all six faces and their provenance,
+and projects three views into 43 nodes and 47 composition links each. Current
+source, inspection focus and a separate hypothetical graph remain distinct.
+REACHED_VIA remains a structural containment query, not an action transition.
+
+The teacher compiler derives references from the complete authored graph and
+exports only record_id/public/encoded_options to the learner boundary. Answer
+keys and structural witnesses stay in a separate sidecar. Input identities bind
+exact public bytes, ordered options and declared encoding context. No learner
+was invoked. A coherent resealed teacher reference can pass local agreement;
+source-grounded checking requires reconstruction against pinned original bytes.
+The new offline inspector performs that reconstruction before showing a lesson.
+
+Final acceptance covers all 306 question/view/assistance compilations, 129 focus
+checks, 420 matched bounded graph traversals and 27 refusal cases. The receipt
+binds 28 artifacts, 31 actual imported source modules and ten declared review
+inputs. Independent review repeated the 306 pure compiler comparisons and
+separately derived all authored graph answers. Four actual accepted pages passed
+browser checks for exact cube/face/branch records, unchanged current/source and
+lesson data, readable desktop/mobile layout and zero page network requests.
+
+Full suite: 1,437 tests and 601 subtests passed in 732.08 seconds, with zero
+failures, errors or skips. All 97 source files from the accepted compound
+workbench remain unchanged. Evidence lives in records/rpa_cube_001/STATUS.md,
+acceptance_001/receipt.json and final_full_suite_tests.xml in vision-next. The
+outer output/rpa_cube_001 package contains the four interactive examples and
+separate source/lesson records. Original failed development and browser probes
+are retained rather than replaced by passing summaries.
+
+This advances bounded portions of V07/V13/V16 and systems 8/24/27/30. It does
+not establish learned competence, a reasoning advantage, source authorship,
+world truth, causal execution, general memory, an executing planner or the full
+CNCM. Unknown and incomplete inventories remain distinct from proved absence;
+Why is a structural teacher witness and How still needs an action contract.
+All earlier negative neural recurrence results remain unchanged. No local
+neural execution, paid compute, AWS launch or provider inference was used here.
+The full V01-V18, 31-system and integrated 20-step charter remains open.

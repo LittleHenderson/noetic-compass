@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\browser_validation_001\reusable\check_delivery.py", line 67, in <module>
+    try:main()
+        ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\browser_validation_001\reusable\check_delivery.py", line 44, in main
+    assert port_file.exists()
+           ~~~~~~~~~~~~~~~~^^
+AssertionError

@@ -1,0 +1,46 @@
+test_containment_not_runtime_transition (__main__.CubeBoundaryReview.test_containment_not_runtime_transition) ... ok
+test_namespace_identity_separated (__main__.CubeBoundaryReview.test_namespace_identity_separated) ... ok
+test_no_option_tag_truncation (__main__.CubeBoundaryReview.test_no_option_tag_truncation) ... FAIL
+test_no_private_answer_fields_in_context (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_context) ... FAIL
+test_no_private_answer_fields_in_views (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_views) ... FAIL
+test_source_document_reseal_does_not_accept_foreign_catalog (__main__.CubeBoundaryReview.test_source_document_reseal_does_not_accept_foreign_catalog) ... ok
+
+======================================================================
+FAIL: test_no_option_tag_truncation (__main__.CubeBoundaryReview.test_no_option_tag_truncation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_adversarial.py", line 60, in test_no_option_tag_truncation
+    self.assertEqual([row["tag"] for row in observations], [str(value) for value in options],
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                     "public option tags were silently truncated")
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: ["['p[248 chars]xxxxx", "['prefix_xxxxxxxxxxxxxxxxxxxxxxxxxxxx[476 chars]xxx"] != ["['p[248 chars]xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx[1548 chars]e']"]
+
+First differing element 0:
+"['pr[247 chars]xxxxx"
+"['pr[247 chars]xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx[313 chars]el']"
+
+Diff is 4143 characters long. Set self.maxDiff to None to see it. : public option tags were silently truncated
+
+======================================================================
+FAIL: test_no_private_answer_fields_in_context (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_context)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_adversarial.py", line 48, in test_no_private_answer_fields_in_context
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_no_private_answer_fields_in_views (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_views)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_adversarial.py", line 42, in test_no_private_answer_fields_in_views
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.224s
+
+FAILED (failures=3)

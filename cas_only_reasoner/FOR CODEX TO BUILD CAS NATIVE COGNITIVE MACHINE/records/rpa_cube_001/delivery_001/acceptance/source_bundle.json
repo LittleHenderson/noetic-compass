@@ -1,0 +1,952 @@
+{
+  "schema_version": "cas.cube-bundle/0.1",
+  "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+  "usage": "AUTHORING_BUNDLE_NOT_AN_UNASSISTED_LEARNER_INPUT",
+  "context": {
+    "context_id": "toy_scene_01",
+    "relation_scope": "conceptual_contains",
+    "world_assumption": "closed_within_this_authored_scene",
+    "contains_inventory_complete": true,
+    "note": "These are concepts in a teaching fixture, not exhaustive claims about physical objects."
+  },
+  "lesson_family_id": "illustration_family_01",
+  "sources": [
+    {
+      "source_id": "source:authored-toy-scene-01",
+      "origin": "New illustrative fixture authored with Cube Node Schema v0.1.",
+      "status": "ILLUSTRATIVE_NOT_EXPERIMENTAL_EVIDENCE"
+    }
+  ],
+  "cube_nodes": [
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_001",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Bicycle",
+        "kind": "concept",
+        "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Bicycle",
+            "definition": "The Bicycle concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_01",
+              "branch_02"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Kit A in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [
+              "branch_01",
+              "branch_02"
+            ],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Bicycle concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "Inspect its direct connection to Wheel.",
+                "uses_branch_refs": [
+                  "branch_01"
+                ]
+              },
+              {
+                "step_id": "step_03",
+                "text": "Inspect its direct connection to Frame.",
+                "uses_branch_refs": [
+                  "branch_02"
+                ]
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_002",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Wheel",
+        "kind": "concept",
+        "identity_statement": "The Wheel idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Wheel",
+            "definition": "The Wheel concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_01",
+              "branch_03",
+              "branch_05"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Rope in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [
+              "branch_05"
+            ],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Wheel concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "Inspect its direct connection to Rim.",
+                "uses_branch_refs": [
+                  "branch_05"
+                ]
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_003",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Frame",
+        "kind": "concept",
+        "identity_statement": "The Frame idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Frame",
+            "definition": "The Frame concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_02"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Torch in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Frame concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "This complete authored scene declares no direct constituents for this node.",
+                "uses_branch_refs": []
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_004",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Cart",
+        "kind": "concept",
+        "identity_statement": "The Cart idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Cart",
+            "definition": "The Cart concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_03",
+              "branch_04"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Kit B in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [
+              "branch_03",
+              "branch_04"
+            ],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Cart concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "Inspect its direct connection to Wheel.",
+                "uses_branch_refs": [
+                  "branch_03"
+                ]
+              },
+              {
+                "step_id": "step_03",
+                "text": "Inspect its direct connection to Platform.",
+                "uses_branch_refs": [
+                  "branch_04"
+                ]
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_005",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Platform",
+        "kind": "concept",
+        "identity_statement": "The Platform idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Platform",
+            "definition": "The Platform concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_04"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Cloth in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Platform concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "This complete authored scene declares no direct constituents for this node.",
+                "uses_branch_refs": []
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "schema_version": "cas.cube-node/0.1",
+      "node_id": "node_006",
+      "revision": 1,
+      "context_id": "toy_scene_01",
+      "core": {
+        "label": "Rim",
+        "kind": "concept",
+        "identity_statement": "The Rim idea within toy_scene_01, not a universal real-world inventory."
+      },
+      "faces": {
+        "face_1": {
+          "availability": "populated",
+          "human_text": "Technical identity within the authored teaching scene.",
+          "structured": {
+            "canonical_name": "Rim",
+            "definition": "The Rim concept as represented in this bounded graph.",
+            "function": "Participate in the explicit conceptual containment relationships of this scene."
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_2": {
+          "availability": "populated",
+          "human_text": "Inspect the contextual presentation and the incident facts.",
+          "structured": {
+            "view_refs": [
+              "view_context"
+            ],
+            "fact_refs": [
+              "branch_05"
+            ],
+            "context_scope": "toy_scene_01"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_3": {
+          "availability": "populated",
+          "human_text": "The corresponding role is presented as Strand in the analogy.",
+          "structured": {
+            "view_refs": [
+              "view_analogy"
+            ],
+            "mapping_refs": [
+              "mapping_01"
+            ],
+            "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+            "analogy_limits": [
+              "No claim of identical physical function.",
+              "No claim that two physical objects share one physical component.",
+              "No causal or temporal equivalence follows from the analogy."
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_4": {
+          "availability": "populated",
+          "human_text": "Use the declared cross-view role and relation correspondence.",
+          "structured": {
+            "mapping_refs": [
+              "mapping_01"
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_5": {
+          "availability": "populated",
+          "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+          "structured": {
+            "direct_branch_refs": [],
+            "completeness": "complete"
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        },
+        "face_6": {
+          "availability": "populated",
+          "human_text": "An explanatory walk through this node and its declared direct parts.",
+          "structured": {
+            "sequence_kind": "explanatory",
+            "steps": [
+              {
+                "step_id": "step_01",
+                "text": "Identify the Rim concept in this authored scene.",
+                "uses_branch_refs": []
+              },
+              {
+                "step_id": "step_02",
+                "text": "This complete authored scene declares no direct constituents for this node.",
+                "uses_branch_refs": []
+              }
+            ]
+          },
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ]
+        }
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "branch_id": "branch_01",
+      "context_id": "toy_scene_01",
+      "source_node_id": "node_001",
+      "predicate": "contains",
+      "target_node_id": "node_002",
+      "commonality": {
+        "kind": "constituent",
+        "referent": "node_002"
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "branch_id": "branch_02",
+      "context_id": "toy_scene_01",
+      "source_node_id": "node_001",
+      "predicate": "contains",
+      "target_node_id": "node_003",
+      "commonality": {
+        "kind": "constituent",
+        "referent": "node_003"
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "branch_id": "branch_03",
+      "context_id": "toy_scene_01",
+      "source_node_id": "node_004",
+      "predicate": "contains",
+      "target_node_id": "node_002",
+      "commonality": {
+        "kind": "constituent",
+        "referent": "node_002"
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "branch_id": "branch_04",
+      "context_id": "toy_scene_01",
+      "source_node_id": "node_004",
+      "predicate": "contains",
+      "target_node_id": "node_005",
+      "commonality": {
+        "kind": "constituent",
+        "referent": "node_005"
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    },
+    {
+      "branch_id": "branch_05",
+      "context_id": "toy_scene_01",
+      "source_node_id": "node_002",
+      "predicate": "contains",
+      "target_node_id": "node_006",
+      "commonality": {
+        "kind": "constituent",
+        "referent": "node_006"
+      },
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "view_id": "view_formal",
+      "kind": "technical",
+      "node_labels": {
+        "node_001": "A",
+        "node_002": "B",
+        "node_003": "C",
+        "node_004": "D",
+        "node_005": "E",
+        "node_006": "F"
+      },
+      "branch_refs": [
+        "branch_01",
+        "branch_02",
+        "branch_03",
+        "branch_04",
+        "branch_05"
+      ],
+      "relation_label": "contains",
+      "scope": "All and only the nodes and branches in toy_scene_01."
+    },
+    {
+      "view_id": "view_context",
+      "kind": "context",
+      "node_labels": {
+        "node_001": "Bicycle",
+        "node_002": "Wheel",
+        "node_003": "Frame",
+        "node_004": "Cart",
+        "node_005": "Platform",
+        "node_006": "Rim"
+      },
+      "branch_refs": [
+        "branch_01",
+        "branch_02",
+        "branch_03",
+        "branch_04",
+        "branch_05"
+      ],
+      "relation_label": "contains",
+      "scope": "All and only the nodes and branches in toy_scene_01."
+    },
+    {
+      "view_id": "view_analogy",
+      "kind": "analogy",
+      "node_labels": {
+        "node_001": "Kit A",
+        "node_002": "Rope",
+        "node_003": "Torch",
+        "node_004": "Kit B",
+        "node_005": "Cloth",
+        "node_006": "Strand"
+      },
+      "branch_refs": [
+        "branch_01",
+        "branch_02",
+        "branch_03",
+        "branch_04",
+        "branch_05"
+      ],
+      "relation_label": "contains",
+      "scope": "All and only the nodes and branches in toy_scene_01."
+    }
+  ],
+  "mappings": [
+    {
+      "mapping_id": "mapping_01",
+      "lesson_family_id": "illustration_family_01",
+      "view_ids": [
+        "view_formal",
+        "view_context",
+        "view_analogy"
+      ],
+      "node_role_rows": [
+        {
+          "role_id": "role_A",
+          "node_ref": "node_001",
+          "technical": "A",
+          "contextual": "Bicycle",
+          "analogical": "Kit A"
+        },
+        {
+          "role_id": "role_B",
+          "node_ref": "node_002",
+          "technical": "B",
+          "contextual": "Wheel",
+          "analogical": "Rope"
+        },
+        {
+          "role_id": "role_C",
+          "node_ref": "node_003",
+          "technical": "C",
+          "contextual": "Frame",
+          "analogical": "Torch"
+        },
+        {
+          "role_id": "role_D",
+          "node_ref": "node_004",
+          "technical": "D",
+          "contextual": "Cart",
+          "analogical": "Kit B"
+        },
+        {
+          "role_id": "role_E",
+          "node_ref": "node_005",
+          "technical": "E",
+          "contextual": "Platform",
+          "analogical": "Cloth"
+        },
+        {
+          "role_id": "role_F",
+          "node_ref": "node_006",
+          "technical": "F",
+          "contextual": "Rim",
+          "analogical": "Strand"
+        }
+      ],
+      "relation_rows": [
+        {
+          "branch_ref": "branch_01",
+          "technical_predicate": "contains",
+          "contextual_predicate": "contains",
+          "analogical_predicate": "contains"
+        },
+        {
+          "branch_ref": "branch_02",
+          "technical_predicate": "contains",
+          "contextual_predicate": "contains",
+          "analogical_predicate": "contains"
+        },
+        {
+          "branch_ref": "branch_03",
+          "technical_predicate": "contains",
+          "contextual_predicate": "contains",
+          "analogical_predicate": "contains"
+        },
+        {
+          "branch_ref": "branch_04",
+          "technical_predicate": "contains",
+          "contextual_predicate": "contains",
+          "analogical_predicate": "contains"
+        },
+        {
+          "branch_ref": "branch_05",
+          "technical_predicate": "contains",
+          "contextual_predicate": "contains",
+          "analogical_predicate": "contains"
+        }
+      ],
+      "coverage": "exact_on_declared_scope",
+      "unmapped_items": [],
+      "limits": [
+        "Exact correspondence applies only to the authored five-edge containment graph.",
+        "Real-world object functions, physical identity, and other properties are outside the mapping."
+      ],
+      "provenance_refs": [
+        "source:authored-toy-scene-01"
+      ]
+    }
+  ],
+  "learner_view_requirement": {
+    "must_compile_explicit_visibility_profile": true,
+    "teacher_targets_included": false,
+    "note": "The full faces include worked teaching information. Do not pass this entire bundle to an unassisted learner."
+  }
+}

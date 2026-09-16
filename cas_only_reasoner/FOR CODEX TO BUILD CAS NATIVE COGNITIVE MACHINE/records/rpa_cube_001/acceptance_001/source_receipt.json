@@ -1,0 +1,14 @@
+{
+  "authorship_authenticated": false,
+  "bundle_schema": "cas.cube-bundle/0.1",
+  "canonical_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+  "observation_id": "cube_acceptance_001",
+  "observation_time": "2026-09-16 15:21:04 UTC",
+  "record_version": 1,
+  "schema_version": "cncm.rpa-cube-source/0.1",
+  "scope": "LOADED_AUTHORED_SNAPSHOT_NOT_WORLD_TRUTH_OR_RUNTIME_STATE",
+  "source_bytes": 29971,
+  "source_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+  "source_namespace": "pinned_cube_fixture",
+  "world_truth_established": false
+}

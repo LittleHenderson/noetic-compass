@@ -1,0 +1,3446 @@
+{
+  "atlas": {
+    "current_state_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+    "focus_node_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+    "hypothesis_branch_id": null,
+    "links": [
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "branch-2b3052137317b3a393c402e1953d6ebbb315d53a1320808ea977332b61a18bdb",
+        "projection": "source_contains_branch:branch_05",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "branch-4f4d9bff8d2eb401805402f150bdb865d1a08f41449d3e1a67c98b54ec42fb67",
+        "projection": "source_contains_branch:branch_03",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "branch-be922bbd4d87c52d1accbad2d2cb93ce243613832dccc04acba9926d69f9149b",
+        "projection": "source_contains_branch:branch_04",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "branch-cafaa4ab8cb8144977c049be75a91019d1488e3dd488f5373aea178aa1d35c38",
+        "projection": "source_contains_branch:branch_01",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "branch-f93dbeb8df2e330c04531c921956c927aaf42f7065765e8eb04a287387a9cedd",
+        "projection": "source_contains_branch:branch_02",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-001184fe244640052bc0e89226cdf681eea526dabdad711f2c227a049e5e1370",
+        "projection": "authored_snapshot.cube_record:catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-2dd82a0c18a52ae66d1acb92b8c81345ecd9a84b13709a23ab2fd8c18d8b72de",
+        "projection": "authored_snapshot.cube_record:catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-2fa6e738b513229f71aca6048efcaa1b43c0cea8f0583fa80a6c3ef068845fd2",
+        "projection": "authored_snapshot.cube_record:catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-713cb6ff4930a5ddac5607987d4cd5acb30d0bff70b904529976771c08ef7825",
+        "projection": "authored_snapshot.cube_record:catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-b5bceefb76c8ccbdc2ab60510f43e665ca1e9d55c76e3745990f7e82e79a7c35",
+        "projection": "authored_snapshot.cube_record:catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "entry-e8583a39ff76111010625910bd1dfb266f0033ed2cb2edddee9ce895f7e16f35",
+        "projection": "authored_snapshot.cube_record:catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "target_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-0b641de5e9feccef8f8c996ed48407b17ef3b15ca9d5aa2cffe94a75653aa4ee",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-0b641de5e9feccef8f8c996ed48407b17ef3b15ca9d5aa2cffe94a75653aa4ee",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-13a30d99c178ee60bf3242b72a1f33dc5f89f98a30401c795436498540f40e1a",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-13a30d99c178ee60bf3242b72a1f33dc5f89f98a30401c795436498540f40e1a",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-18e12a04f66f295c73e7ead3b0a0b08e405f04e0c1c5fa6f25133468014c7d47",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-18e12a04f66f295c73e7ead3b0a0b08e405f04e0c1c5fa6f25133468014c7d47",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-19d9db2976dc072aec4a7d17c0a61cc4513416a3bec12154979b8308d9323a13",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-19d9db2976dc072aec4a7d17c0a61cc4513416a3bec12154979b8308d9323a13",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-1a7bc48945302e18cfa343e79b83e6e4b7230f826c0f139ee0ddbefd72916a56",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-1a7bc48945302e18cfa343e79b83e6e4b7230f826c0f139ee0ddbefd72916a56",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-2f9d900356f01d2c64d5e47ff1e846ff0b524f57a341acdbed2e7f74ea7492a6",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-2f9d900356f01d2c64d5e47ff1e846ff0b524f57a341acdbed2e7f74ea7492a6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-311bdbd61427f1b3fd69d2e3658496d4fdcc39110e14cacbdd332c709b1ae277",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-311bdbd61427f1b3fd69d2e3658496d4fdcc39110e14cacbdd332c709b1ae277",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-352cb36f885161f2352bd6c8c4aa788f44ee4cf3bd1d5b3e11bde036d06780e6",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-352cb36f885161f2352bd6c8c4aa788f44ee4cf3bd1d5b3e11bde036d06780e6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-39e19e9fc60d1dc3d7489344344ca7d7c51e4f0df5c9448bcc9382f26f8cb981",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-39e19e9fc60d1dc3d7489344344ca7d7c51e4f0df5c9448bcc9382f26f8cb981",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-3bb0c6f801224b4f1c3fe61c48ffb5f2ea161bff1e488bd70513613a6b12f102",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-3bb0c6f801224b4f1c3fe61c48ffb5f2ea161bff1e488bd70513613a6b12f102",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-3c40206a2fe7f74b02356df68d7cbf700509155d6669047260d259b5776df28c",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-3c40206a2fe7f74b02356df68d7cbf700509155d6669047260d259b5776df28c",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-4464c47f2e2a9293d605bf0798fbf0d9c4b7f6325718122b3427e5c952e6bdc3",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-4464c47f2e2a9293d605bf0798fbf0d9c4b7f6325718122b3427e5c952e6bdc3",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-4c88a9c9235dcc990471d8f896266da2a9d377f939c7ca39a45de9f9666f0529",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-4c88a9c9235dcc990471d8f896266da2a9d377f939c7ca39a45de9f9666f0529",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-537be456d7c19f6c341e66c31559af425b0c2e7758119bb1c6fa5eab7c819f58",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-537be456d7c19f6c341e66c31559af425b0c2e7758119bb1c6fa5eab7c819f58",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-5b0c3c9469074c168715d15402f13ac087f4c4bca9e6af183bcea6dd360a3b02",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-5b0c3c9469074c168715d15402f13ac087f4c4bca9e6af183bcea6dd360a3b02",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-6cce4707af090aa8c492a6624c231d3b5dd9abd0f4253b8f805a50128cc91092",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-6cce4707af090aa8c492a6624c231d3b5dd9abd0f4253b8f805a50128cc91092",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-6e7b385044f3f130c473c299a987a85f212bbcca5b5fb930a8e35da3a67a17fc",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-6e7b385044f3f130c473c299a987a85f212bbcca5b5fb930a8e35da3a67a17fc",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-70f7737569e153a700e6e28aea0d7834fa929fb2b297b027b1e07f1f74bb949c",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-70f7737569e153a700e6e28aea0d7834fa929fb2b297b027b1e07f1f74bb949c",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-729de5c6eedffe6cb9dc96929ba7977720cbf7243bc2441a868a985a928304c9",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-729de5c6eedffe6cb9dc96929ba7977720cbf7243bc2441a868a985a928304c9",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-7a387a6d13d482b1e084243997b198435b65023d62727de1bf182ebe87f1e28a",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-7a387a6d13d482b1e084243997b198435b65023d62727de1bf182ebe87f1e28a",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-7c714d31a6e1f3b9dafd9fd54e358d0332bd12cceb7f1c37322e7ee12540689c",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-7c714d31a6e1f3b9dafd9fd54e358d0332bd12cceb7f1c37322e7ee12540689c",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-871ee19be026f781d13846659fcfdc50324d5100669451ed79ec17ad9310dacd",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-871ee19be026f781d13846659fcfdc50324d5100669451ed79ec17ad9310dacd",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-8839aa22ef25c791f17332fa3042481cf688692a6890f47b6fcdea6d89c94c49",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-8839aa22ef25c791f17332fa3042481cf688692a6890f47b6fcdea6d89c94c49",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-898785ddc8510fa9065e8af83119e3c88c15d28a7c7a11a15cb23fd010d3f322",
+        "projection": "cube_record.faces.face_6",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-898785ddc8510fa9065e8af83119e3c88c15d28a7c7a11a15cb23fd010d3f322",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-89ff75d227e94322ba7891d04e66a5f134b7daff5ef70edb41df41a6324738ae",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-89ff75d227e94322ba7891d04e66a5f134b7daff5ef70edb41df41a6324738ae",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-a4166339b4006028c1943223bca953bbe9cc71f7bd974fd4cb30f40a7d27e21e",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "target_id": "face-a4166339b4006028c1943223bca953bbe9cc71f7bd974fd4cb30f40a7d27e21e",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-b05473af8f4e21aae9be9f68593ab56205059802f92db1bba9053ab6ef79d1cf",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-b05473af8f4e21aae9be9f68593ab56205059802f92db1bba9053ab6ef79d1cf",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-b53390426a5381e6185120cf92cce4aa42c2d2295540613f83de398ee4fb429b",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-b53390426a5381e6185120cf92cce4aa42c2d2295540613f83de398ee4fb429b",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-c99d5f9635537758a4dfba55581e952bc4f899333aaa26f860dd0d963438fa6f",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-c99d5f9635537758a4dfba55581e952bc4f899333aaa26f860dd0d963438fa6f",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-cb5f9330bf932871aca4bff30953db024438acf057db5b084143f3d3fb5f2395",
+        "projection": "cube_record.faces.face_5",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-cb5f9330bf932871aca4bff30953db024438acf057db5b084143f3d3fb5f2395",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-dbadecc7d6ec6300e7412058da88b30267e28a5ca14ad97babce3e9d787fce7a",
+        "projection": "cube_record.faces.face_2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "target_id": "face-dbadecc7d6ec6300e7412058da88b30267e28a5ca14ad97babce3e9d787fce7a",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-df8b98eed0921f9dbb47f2df33b894350355f26a71d0e4c090ec46427ebcd3e0",
+        "projection": "cube_record.faces.face_1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-df8b98eed0921f9dbb47f2df33b894350355f26a71d0e4c090ec46427ebcd3e0",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-ea4d3419314d07a52cbb0776de124db2007367f1fbb8a2e743a7558362ef6d94",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "target_id": "face-ea4d3419314d07a52cbb0776de124db2007367f1fbb8a2e743a7558362ef6d94",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-f0120c302d5a5275248c80afcf9ecc51294323d6367940a825f93c7b5e1cc62e",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "target_id": "face-f0120c302d5a5275248c80afcf9ecc51294323d6367940a825f93c7b5e1cc62e",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-f4d76bbd0cdb2317d4ad23e4619b9c93eefaa633d2bd341d3b67edf95602165b",
+        "projection": "cube_record.faces.face_3",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "target_id": "face-f4d76bbd0cdb2317d4ad23e4619b9c93eefaa633d2bd341d3b67edf95602165b",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "link_id": "face-link-f843ee15eb10d5b586bb123dc987bccb1fddae8061fcf49bfc4ec4800bcacb13",
+        "projection": "cube_record.faces.face_4",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "target_id": "face-f843ee15eb10d5b586bb123dc987bccb1fddae8061fcf49bfc4ec4800bcacb13",
+        "transition_status": null
+      }
+    ],
+    "nodes": [
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-b48f1b466ba325c193237d25a128055d737ed20329595b15d4dd1ada646390a7",
+        "kind": "evidence",
+        "label": "Kit B / face_3",
+        "members": null,
+        "node_id": "face-0b641de5e9feccef8f8c996ed48407b17ef3b15ca9d5aa2cffe94a75653aa4ee",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-938a58cbfddaacda6d61e3528005cc5502660c5f0dfecd716699c8ae2643df67",
+        "kind": "evidence",
+        "label": "Rope / face_1",
+        "members": null,
+        "node_id": "face-13a30d99c178ee60bf3242b72a1f33dc5f89f98a30401c795436498540f40e1a",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-b7c3ea3aa55c7aee653b1f1a61865398e5e6a9dbff46dcf7f42372dfc6383b85",
+        "kind": "evidence",
+        "label": "Rope / face_2",
+        "members": null,
+        "node_id": "face-18e12a04f66f295c73e7ead3b0a0b08e405f04e0c1c5fa6f25133468014c7d47",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-8107de584d54d5c1335d3395eec96cea125a32783beba3f68f055373a1e18e40",
+        "kind": "evidence",
+        "label": "Kit A / face_6",
+        "members": null,
+        "node_id": "face-19d9db2976dc072aec4a7d17c0a61cc4513416a3bec12154979b8308d9323a13",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-8935f474033a87025ffc890e33f59263a7524d4aa367f27c527b521939780507",
+        "kind": "evidence",
+        "label": "Torch / face_4",
+        "members": null,
+        "node_id": "face-1a7bc48945302e18cfa343e79b83e6e4b7230f826c0f139ee0ddbefd72916a56",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-e3cb9b0bedb4e832dda5c792f5b969666844acd187bc46001c724f282332e421",
+        "kind": "evidence",
+        "label": "Strand / face_1",
+        "members": null,
+        "node_id": "face-2f9d900356f01d2c64d5e47ff1e846ff0b524f57a341acdbed2e7f74ea7492a6",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-4f6ad6d90120822ab8caa4fe09fe9af7e396fe9d8b1b4694db9ab980479a0de4",
+        "kind": "evidence",
+        "label": "Kit A / face_2",
+        "members": null,
+        "node_id": "face-311bdbd61427f1b3fd69d2e3658496d4fdcc39110e14cacbdd332c709b1ae277",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-0064785234887a999389d1b968ffbe85d08f54c572083e1407a72a23a7bbb709",
+        "kind": "evidence",
+        "label": "Torch / face_5",
+        "members": null,
+        "node_id": "face-352cb36f885161f2352bd6c8c4aa788f44ee4cf3bd1d5b3e11bde036d06780e6",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-54285376123faa4340d5ede423df149a3620b4cfc443b49aeba4c8104e17c785",
+        "kind": "evidence",
+        "label": "Torch / face_2",
+        "members": null,
+        "node_id": "face-39e19e9fc60d1dc3d7489344344ca7d7c51e4f0df5c9448bcc9382f26f8cb981",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-3ccae0de0bf1758399e6d4bf9e2fc8c5702b2ae8fd79eefd4f9d739babab576a",
+        "kind": "evidence",
+        "label": "Kit B / face_6",
+        "members": null,
+        "node_id": "face-3bb0c6f801224b4f1c3fe61c48ffb5f2ea161bff1e488bd70513613a6b12f102",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-c1757923290501524c100c32b610d24d168c97e74b5dc0d9e58df73f4523a7ff",
+        "kind": "evidence",
+        "label": "Kit A / face_3",
+        "members": null,
+        "node_id": "face-3c40206a2fe7f74b02356df68d7cbf700509155d6669047260d259b5776df28c",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-ce2624872d0f6b07960f7a71eb7501cc9700c8da426700ada82cde2adc0c6462",
+        "kind": "evidence",
+        "label": "Cloth / face_1",
+        "members": null,
+        "node_id": "face-4464c47f2e2a9293d605bf0798fbf0d9c4b7f6325718122b3427e5c952e6bdc3",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-23b3595d004c715969ec7149654f2bce1ef47cfd060a6dc5321af5add99e9b6b",
+        "kind": "evidence",
+        "label": "Cloth / face_5",
+        "members": null,
+        "node_id": "face-4c88a9c9235dcc990471d8f896266da2a9d377f939c7ca39a45de9f9666f0529",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-aa19f9b115ad87b0295932abd564d190f653cbd4832145a5c7a445e74a30b96a",
+        "kind": "evidence",
+        "label": "Cloth / face_6",
+        "members": null,
+        "node_id": "face-537be456d7c19f6c341e66c31559af425b0c2e7758119bb1c6fa5eab7c819f58",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-5c6a1775bb81ffb731fdcff51009070a68c199078b2c10528068e2068c522c20",
+        "kind": "evidence",
+        "label": "Cloth / face_2",
+        "members": null,
+        "node_id": "face-5b0c3c9469074c168715d15402f13ac087f4c4bca9e6af183bcea6dd360a3b02",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-78d89695569bf5ebb6c875e0a7a8e5d293f841785e5ed30264221956dd910188",
+        "kind": "evidence",
+        "label": "Kit A / face_5",
+        "members": null,
+        "node_id": "face-6cce4707af090aa8c492a6624c231d3b5dd9abd0f4253b8f805a50128cc91092",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-088ec271aa1debdcab95b98999992672e557a56fdbdf59a35fffe6d07d0b144a",
+        "kind": "evidence",
+        "label": "Rope / face_3",
+        "members": null,
+        "node_id": "face-6e7b385044f3f130c473c299a987a85f212bbcca5b5fb930a8e35da3a67a17fc",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-c42cee235ed722b81285c7d6e093e4027571c6589a44efe3e9268331addfce16",
+        "kind": "evidence",
+        "label": "Torch / face_3",
+        "members": null,
+        "node_id": "face-70f7737569e153a700e6e28aea0d7834fa929fb2b297b027b1e07f1f74bb949c",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-07e9cb9a448bf2b31f8fd6059a735b51c334f292ee4e3c2aba14c4c50058d7cf",
+        "kind": "evidence",
+        "label": "Kit B / face_1",
+        "members": null,
+        "node_id": "face-729de5c6eedffe6cb9dc96929ba7977720cbf7243bc2441a868a985a928304c9",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-aa56c171486bd7047eedb897f42307633f6b32f01ccca173405e599b812bcdb0",
+        "kind": "evidence",
+        "label": "Rope / face_6",
+        "members": null,
+        "node_id": "face-7a387a6d13d482b1e084243997b198435b65023d62727de1bf182ebe87f1e28a",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-f528dc26add773148f0f6b414d43339046ed0f54c5157b6cc7ac3e0f7d090c9d",
+        "kind": "evidence",
+        "label": "Strand / face_6",
+        "members": null,
+        "node_id": "face-7c714d31a6e1f3b9dafd9fd54e358d0332bd12cceb7f1c37322e7ee12540689c",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-cdf863e0c6ffccda01145562f95c425e933f51e1774b488ceb2fdcb9add1af51",
+        "kind": "evidence",
+        "label": "Cloth / face_4",
+        "members": null,
+        "node_id": "face-871ee19be026f781d13846659fcfdc50324d5100669451ed79ec17ad9310dacd",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-efab8c17cb6b413d8fe573687837d90932fe455e86da9ffd744807db3deadf9b",
+        "kind": "evidence",
+        "label": "Strand / face_4",
+        "members": null,
+        "node_id": "face-8839aa22ef25c791f17332fa3042481cf688692a6890f47b6fcdea6d89c94c49",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_6"
+          ],
+          [
+            "role",
+            "recomposition_and_story"
+          ]
+        ],
+        "idea_id": "face-idea-5d5750b01f54e1770d4bfb0ad32b50a2809c306ffc6aac837ac1bfd21fe97f0e",
+        "kind": "evidence",
+        "label": "Torch / face_6",
+        "members": null,
+        "node_id": "face-898785ddc8510fa9065e8af83119e3c88c15d28a7c7a11a15cb23fd010d3f322",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-d589c444ffb4e57bdb7ba5c2330ff367239b12fcd5863ba1a0997752b6ffe2f3",
+        "kind": "evidence",
+        "label": "Kit B / face_4",
+        "members": null,
+        "node_id": "face-89ff75d227e94322ba7891d04e66a5f134b7daff5ef70edb41df41a6324738ae",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-86dab83984ddec798ea40398a14b26e702ab9e3b83c96a2656031828b74bf60b",
+        "kind": "evidence",
+        "label": "Torch / face_1",
+        "members": null,
+        "node_id": "face-a4166339b4006028c1943223bca953bbe9cc71f7bd974fd4cb30f40a7d27e21e",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-0689639b964cbbec57ba5beaa59e6655e3b88a75468874b2d7fb15c3f3d6ed5e",
+        "kind": "evidence",
+        "label": "Rope / face_5",
+        "members": null,
+        "node_id": "face-b05473af8f4e21aae9be9f68593ab56205059802f92db1bba9053ab6ef79d1cf",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-437768e9c293a0db7f8332abbd13f77d48a3d62818ca352d99532327a518ab4b",
+        "kind": "evidence",
+        "label": "Strand / face_5",
+        "members": null,
+        "node_id": "face-b53390426a5381e6185120cf92cce4aa42c2d2295540613f83de398ee4fb429b",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-7befe8d141b1b6007b634303f5b5e1b1a6d224ac60215b49cde36e3bd7d0a5ca",
+        "kind": "evidence",
+        "label": "Strand / face_2",
+        "members": null,
+        "node_id": "face-c99d5f9635537758a4dfba55581e952bc4f899333aaa26f860dd0d963438fa6f",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_5"
+          ],
+          [
+            "role",
+            "decomposition"
+          ]
+        ],
+        "idea_id": "face-idea-188effc0578d248306b94d21f8a0203785c53779d1ce870d16af5e955181606f",
+        "kind": "evidence",
+        "label": "Kit B / face_5",
+        "members": null,
+        "node_id": "face-cb5f9330bf932871aca4bff30953db024438acf057db5b084143f3d3fb5f2395",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "face_path",
+            "faces.face_2"
+          ],
+          [
+            "role",
+            "context_and_environment"
+          ]
+        ],
+        "idea_id": "face-idea-c2ad1e4b4d7dbb5f38d708d9e96abb0727a4e095cc8fb241e0f8e2eef2409b8b",
+        "kind": "evidence",
+        "label": "Kit B / face_2",
+        "members": null,
+        "node_id": "face-dbadecc7d6ec6300e7412058da88b30267e28a5ca14ad97babce3e9d787fce7a",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_1"
+          ],
+          [
+            "role",
+            "technical_identity"
+          ]
+        ],
+        "idea_id": "face-idea-12410a659622b4342caebcb4cace02ccb7885aa1ad57dfa4331c63b432c696ad",
+        "kind": "evidence",
+        "label": "Kit A / face_1",
+        "members": null,
+        "node_id": "face-df8b98eed0921f9dbb47f2df33b894350355f26a71d0e4c090ec46427ebcd3e0",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-a2946165670c8dfc207e4e35e69daaf559a7ead4b2421c42bb510680fe1a2d81",
+        "kind": "evidence",
+        "label": "Strand / face_3",
+        "members": null,
+        "node_id": "face-ea4d3419314d07a52cbb0776de124db2007367f1fbb8a2e743a7558362ef6d94",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-8ac430e8ae4311861d7b91de218b004d12b4b06fa62d2441b12e39b1cdd1bb4c",
+        "kind": "evidence",
+        "label": "Kit A / face_4",
+        "members": null,
+        "node_id": "face-f0120c302d5a5275248c80afcf9ecc51294323d6367940a825f93c7b5e1cc62e",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "face_path",
+            "faces.face_3"
+          ],
+          [
+            "role",
+            "analogy_and_metaphor"
+          ]
+        ],
+        "idea_id": "face-idea-0ca969fde2d6f1b09ad6159df5eb0c0a0f69766475431e077c55f6b32b4c86f8",
+        "kind": "evidence",
+        "label": "Cloth / face_3",
+        "members": null,
+        "node_id": "face-f4d76bbd0cdb2317d4ad23e4619b9c93eefaa633d2bd341d3b67edf95602165b",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "availability",
+            "populated"
+          ],
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "face_path",
+            "faces.face_4"
+          ],
+          [
+            "role",
+            "explicit_correspondence"
+          ]
+        ],
+        "idea_id": "face-idea-9045000eedb3e89fb6db756e272bba9ad3426f9618b754f208eda61927de674d",
+        "kind": "evidence",
+        "label": "Rope / face_4",
+        "members": null,
+        "node_id": "face-f843ee15eb10d5b586bb123dc987bccb1fddae8061fcf49bfc4ec4800bcacb13",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "contains_inventory_complete",
+            "true"
+          ],
+          [
+            "scope",
+            "LOADED_AUTHORED_SNAPSHOT_NOT_WORLD_TRUTH_OR_RUNTIME_STATE"
+          ],
+          [
+            "source_bundle_digest",
+            "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16"
+          ],
+          [
+            "source_status",
+            "DESIGN_ONLY_ILLUSTRATIVE_DATA"
+          ],
+          [
+            "view_id",
+            "view_analogy"
+          ],
+          [
+            "world_assumption",
+            "closed_within_this_authored_scene"
+          ]
+        ],
+        "idea_id": "snapshot-b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+        "kind": "state",
+        "label": "Loaded authored snapshot",
+        "members": null,
+        "node_id": "loaded-7649179b037d81e1f1a9fbe2aa8825b4388dc390b89b50ff2577f22aeb733ce3",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9"
+          ],
+          [
+            "source_node_id",
+            "node_003"
+          ]
+        ],
+        "idea_id": "cube-3a0505feeb4e0c0864a44e9a8311e6f2158afd5e5c319fb1de386e8504b96cab",
+        "kind": "idea_context",
+        "label": "Torch",
+        "members": null,
+        "node_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44"
+          ],
+          [
+            "source_node_id",
+            "node_005"
+          ]
+        ],
+        "idea_id": "cube-21a4aa61be3c02da995d6818999595da2fed22c0b877d9fd4a0eef9409505616",
+        "kind": "idea_context",
+        "label": "Cloth",
+        "members": null,
+        "node_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1"
+          ],
+          [
+            "source_node_id",
+            "node_002"
+          ]
+        ],
+        "idea_id": "cube-7884a7caebc670c5712be65bd7dca2b3ce6d4267330f4e58eed7c738fdce985c",
+        "kind": "idea_context",
+        "label": "Rope",
+        "members": null,
+        "node_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee"
+          ],
+          [
+            "source_node_id",
+            "node_004"
+          ]
+        ],
+        "idea_id": "cube-45d28bc605269d27f9fc7a8f4a51a4387c4b527f73527ed643dc0602ac03538e",
+        "kind": "idea_context",
+        "label": "Kit B",
+        "members": null,
+        "node_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8"
+          ],
+          [
+            "source_node_id",
+            "node_001"
+          ]
+        ],
+        "idea_id": "cube-20d4c61d9ef86029571eaf4e6d9a290accf72e99d8ef4cd1a108af84b947c86b",
+        "kind": "idea_context",
+        "label": "Kit A",
+        "members": null,
+        "node_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "context-2d9c6dc082ff2b67fcbd1c9589548f0bac92346936072a64edf933f62e9c365d",
+          "model_version": "authored-cube/0.1:b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+          "observation_id": "cube_acceptance_001",
+          "observation_time": "2026-09-16 15:21:04 UTC",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "source-2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "catalog_key",
+            "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1"
+          ],
+          [
+            "source_node_id",
+            "node_006"
+          ]
+        ],
+        "idea_id": "cube-e113670ea6b72519fa98e804836d3e8a941c22883603af9269ce8b2e2ce2438a",
+        "kind": "idea_context",
+        "label": "Strand",
+        "members": null,
+        "node_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      }
+    ],
+    "overlap_certificates": [],
+    "schema_version": "cas.rpa.snapshot/0.1"
+  },
+  "catalog": {
+    "bundle": {
+      "branches": [
+        {
+          "branch_id": "branch_01",
+          "commonality": {
+            "kind": "constituent",
+            "referent": "node_002"
+          },
+          "context_id": "toy_scene_01",
+          "predicate": "contains",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "source_node_id": "node_001",
+          "target_node_id": "node_002"
+        },
+        {
+          "branch_id": "branch_02",
+          "commonality": {
+            "kind": "constituent",
+            "referent": "node_003"
+          },
+          "context_id": "toy_scene_01",
+          "predicate": "contains",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "source_node_id": "node_001",
+          "target_node_id": "node_003"
+        },
+        {
+          "branch_id": "branch_03",
+          "commonality": {
+            "kind": "constituent",
+            "referent": "node_002"
+          },
+          "context_id": "toy_scene_01",
+          "predicate": "contains",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "source_node_id": "node_004",
+          "target_node_id": "node_002"
+        },
+        {
+          "branch_id": "branch_04",
+          "commonality": {
+            "kind": "constituent",
+            "referent": "node_005"
+          },
+          "context_id": "toy_scene_01",
+          "predicate": "contains",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "source_node_id": "node_004",
+          "target_node_id": "node_005"
+        },
+        {
+          "branch_id": "branch_05",
+          "commonality": {
+            "kind": "constituent",
+            "referent": "node_006"
+          },
+          "context_id": "toy_scene_01",
+          "predicate": "contains",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "source_node_id": "node_002",
+          "target_node_id": "node_006"
+        }
+      ],
+      "context": {
+        "contains_inventory_complete": true,
+        "context_id": "toy_scene_01",
+        "note": "These are concepts in a teaching fixture, not exhaustive claims about physical objects.",
+        "relation_scope": "conceptual_contains",
+        "world_assumption": "closed_within_this_authored_scene"
+      },
+      "cube_nodes": [
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Bicycle idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Bicycle"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Bicycle",
+                "definition": "The Bicycle concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_01",
+                  "branch_02"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Kit A in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": [
+                  "branch_01",
+                  "branch_02"
+                ]
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Bicycle concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "Inspect its direct connection to Wheel.",
+                    "uses_branch_refs": [
+                      "branch_01"
+                    ]
+                  },
+                  {
+                    "step_id": "step_03",
+                    "text": "Inspect its direct connection to Frame.",
+                    "uses_branch_refs": [
+                      "branch_02"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_001",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        },
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Wheel idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Wheel"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Wheel",
+                "definition": "The Wheel concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_01",
+                  "branch_03",
+                  "branch_05"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Rope in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": [
+                  "branch_05"
+                ]
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Wheel concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "Inspect its direct connection to Rim.",
+                    "uses_branch_refs": [
+                      "branch_05"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_002",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        },
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Frame idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Frame"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Frame",
+                "definition": "The Frame concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_02"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Torch in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": []
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Frame concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "This complete authored scene declares no direct constituents for this node.",
+                    "uses_branch_refs": []
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_003",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        },
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Cart idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Cart"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Cart",
+                "definition": "The Cart concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_03",
+                  "branch_04"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Kit B in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": [
+                  "branch_03",
+                  "branch_04"
+                ]
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Cart concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "Inspect its direct connection to Wheel.",
+                    "uses_branch_refs": [
+                      "branch_03"
+                    ]
+                  },
+                  {
+                    "step_id": "step_03",
+                    "text": "Inspect its direct connection to Platform.",
+                    "uses_branch_refs": [
+                      "branch_04"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_004",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        },
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Platform idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Platform"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Platform",
+                "definition": "The Platform concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_04"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Cloth in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": []
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Platform concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "This complete authored scene declares no direct constituents for this node.",
+                    "uses_branch_refs": []
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_005",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        },
+        {
+          "context_id": "toy_scene_01",
+          "core": {
+            "identity_statement": "The Rim idea within toy_scene_01, not a universal real-world inventory.",
+            "kind": "concept",
+            "label": "Rim"
+          },
+          "faces": {
+            "face_1": {
+              "availability": "populated",
+              "human_text": "Technical identity within the authored teaching scene.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "canonical_name": "Rim",
+                "definition": "The Rim concept as represented in this bounded graph.",
+                "function": "Participate in the explicit conceptual containment relationships of this scene."
+              }
+            },
+            "face_2": {
+              "availability": "populated",
+              "human_text": "Inspect the contextual presentation and the incident facts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "context_scope": "toy_scene_01",
+                "fact_refs": [
+                  "branch_05"
+                ],
+                "view_refs": [
+                  "view_context"
+                ]
+              }
+            },
+            "face_3": {
+              "availability": "populated",
+              "human_text": "The corresponding role is presented as Strand in the analogy.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "analogy_limits": [
+                  "No claim of identical physical function.",
+                  "No claim that two physical objects share one physical component.",
+                  "No causal or temporal equivalence follows from the analogy."
+                ],
+                "analogy_scope": "The directed concept-containment relationships listed in this scene only.",
+                "mapping_refs": [
+                  "mapping_01"
+                ],
+                "view_refs": [
+                  "view_analogy"
+                ]
+              }
+            },
+            "face_4": {
+              "availability": "populated",
+              "human_text": "Use the declared cross-view role and relation correspondence.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "mapping_refs": [
+                  "mapping_01"
+                ]
+              }
+            },
+            "face_5": {
+              "availability": "populated",
+              "human_text": "Inspect direct constituent branches; indirect constituents remain separate.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "completeness": "complete",
+                "direct_branch_refs": []
+              }
+            },
+            "face_6": {
+              "availability": "populated",
+              "human_text": "An explanatory walk through this node and its declared direct parts.",
+              "provenance_refs": [
+                "source:authored-toy-scene-01"
+              ],
+              "structured": {
+                "sequence_kind": "explanatory",
+                "steps": [
+                  {
+                    "step_id": "step_01",
+                    "text": "Identify the Rim concept in this authored scene.",
+                    "uses_branch_refs": []
+                  },
+                  {
+                    "step_id": "step_02",
+                    "text": "This complete authored scene declares no direct constituents for this node.",
+                    "uses_branch_refs": []
+                  }
+                ]
+              }
+            }
+          },
+          "node_id": "node_006",
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "revision": 1,
+          "schema_version": "cas.cube-node/0.1"
+        }
+      ],
+      "learner_view_requirement": {
+        "must_compile_explicit_visibility_profile": true,
+        "note": "The full faces include worked teaching information. Do not pass this entire bundle to an unassisted learner.",
+        "teacher_targets_included": false
+      },
+      "lesson_family_id": "illustration_family_01",
+      "mappings": [
+        {
+          "coverage": "exact_on_declared_scope",
+          "lesson_family_id": "illustration_family_01",
+          "limits": [
+            "Exact correspondence applies only to the authored five-edge containment graph.",
+            "Real-world object functions, physical identity, and other properties are outside the mapping."
+          ],
+          "mapping_id": "mapping_01",
+          "node_role_rows": [
+            {
+              "analogical": "Kit A",
+              "contextual": "Bicycle",
+              "node_ref": "node_001",
+              "role_id": "role_A",
+              "technical": "A"
+            },
+            {
+              "analogical": "Rope",
+              "contextual": "Wheel",
+              "node_ref": "node_002",
+              "role_id": "role_B",
+              "technical": "B"
+            },
+            {
+              "analogical": "Torch",
+              "contextual": "Frame",
+              "node_ref": "node_003",
+              "role_id": "role_C",
+              "technical": "C"
+            },
+            {
+              "analogical": "Kit B",
+              "contextual": "Cart",
+              "node_ref": "node_004",
+              "role_id": "role_D",
+              "technical": "D"
+            },
+            {
+              "analogical": "Cloth",
+              "contextual": "Platform",
+              "node_ref": "node_005",
+              "role_id": "role_E",
+              "technical": "E"
+            },
+            {
+              "analogical": "Strand",
+              "contextual": "Rim",
+              "node_ref": "node_006",
+              "role_id": "role_F",
+              "technical": "F"
+            }
+          ],
+          "provenance_refs": [
+            "source:authored-toy-scene-01"
+          ],
+          "relation_rows": [
+            {
+              "analogical_predicate": "contains",
+              "branch_ref": "branch_01",
+              "contextual_predicate": "contains",
+              "technical_predicate": "contains"
+            },
+            {
+              "analogical_predicate": "contains",
+              "branch_ref": "branch_02",
+              "contextual_predicate": "contains",
+              "technical_predicate": "contains"
+            },
+            {
+              "analogical_predicate": "contains",
+              "branch_ref": "branch_03",
+              "contextual_predicate": "contains",
+              "technical_predicate": "contains"
+            },
+            {
+              "analogical_predicate": "contains",
+              "branch_ref": "branch_04",
+              "contextual_predicate": "contains",
+              "technical_predicate": "contains"
+            },
+            {
+              "analogical_predicate": "contains",
+              "branch_ref": "branch_05",
+              "contextual_predicate": "contains",
+              "technical_predicate": "contains"
+            }
+          ],
+          "unmapped_items": [],
+          "view_ids": [
+            "view_formal",
+            "view_context",
+            "view_analogy"
+          ]
+        }
+      ],
+      "schema_version": "cas.cube-bundle/0.1",
+      "sources": [
+        {
+          "origin": "New illustrative fixture authored with Cube Node Schema v0.1.",
+          "source_id": "source:authored-toy-scene-01",
+          "status": "ILLUSTRATIVE_NOT_EXPERIMENTAL_EVIDENCE"
+        }
+      ],
+      "status": "DESIGN_ONLY_ILLUSTRATIVE_DATA",
+      "usage": "AUTHORING_BUNDLE_NOT_AN_UNASSISTED_LEARNER_INPUT",
+      "views": [
+        {
+          "branch_refs": [
+            "branch_01",
+            "branch_02",
+            "branch_03",
+            "branch_04",
+            "branch_05"
+          ],
+          "kind": "technical",
+          "node_labels": {
+            "node_001": "A",
+            "node_002": "B",
+            "node_003": "C",
+            "node_004": "D",
+            "node_005": "E",
+            "node_006": "F"
+          },
+          "relation_label": "contains",
+          "scope": "All and only the nodes and branches in toy_scene_01.",
+          "view_id": "view_formal"
+        },
+        {
+          "branch_refs": [
+            "branch_01",
+            "branch_02",
+            "branch_03",
+            "branch_04",
+            "branch_05"
+          ],
+          "kind": "context",
+          "node_labels": {
+            "node_001": "Bicycle",
+            "node_002": "Wheel",
+            "node_003": "Frame",
+            "node_004": "Cart",
+            "node_005": "Platform",
+            "node_006": "Rim"
+          },
+          "relation_label": "contains",
+          "scope": "All and only the nodes and branches in toy_scene_01.",
+          "view_id": "view_context"
+        },
+        {
+          "branch_refs": [
+            "branch_01",
+            "branch_02",
+            "branch_03",
+            "branch_04",
+            "branch_05"
+          ],
+          "kind": "analogy",
+          "node_labels": {
+            "node_001": "Kit A",
+            "node_002": "Rope",
+            "node_003": "Torch",
+            "node_004": "Kit B",
+            "node_005": "Cloth",
+            "node_006": "Strand"
+          },
+          "relation_label": "contains",
+          "scope": "All and only the nodes and branches in toy_scene_01.",
+          "view_id": "view_analogy"
+        }
+      ]
+    },
+    "cube_index": {
+      "catalog-17b809af8a0d9d1ef0da2a867169ae439afabb75125d57784c2a62d60eaca6d9": {
+        "atlas_node_id": "view-0369983dfc0b84a34ed2d6f8d7ef4607ed8f3a6369f677f1172818f5c64403f0",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_003",
+        "idea_id": "cube-3a0505feeb4e0c0864a44e9a8311e6f2158afd5e5c319fb1de386e8504b96cab",
+        "record_digest": "2a192a2fa19c9f6ff884659b79d4dac6745d8d4a229152640781f4e6497d153e",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          2
+        ]
+      },
+      "catalog-3510abc75d592883293c637615571d14ce50d15714accb01668a8106e79573f1": {
+        "atlas_node_id": "view-a03a8547ab70f8c612e842cd1eabdc7d1a23337c73464b988d7f8aa2bd78b87a",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_006",
+        "idea_id": "cube-e113670ea6b72519fa98e804836d3e8a941c22883603af9269ce8b2e2ce2438a",
+        "record_digest": "48e399a66f2fe82285a9f2d5b15edf8126f97b2d1c9891297067f61bdadc41f4",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          5
+        ]
+      },
+      "catalog-5000f4230d079bbe991e7b3ee337b49ccfb5fe9eafc630eb4f0419435ce829b1": {
+        "atlas_node_id": "view-389b085ff21523f9a686f62e0c55b49aabd794706ca7383af1be7a1f10fbe7e7",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_002",
+        "idea_id": "cube-7884a7caebc670c5712be65bd7dca2b3ce6d4267330f4e58eed7c738fdce985c",
+        "record_digest": "bb6240d748ffb02de4472a62b77a10f2174950c7a56fc04034f2852e14306f27",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          1
+        ]
+      },
+      "catalog-699bee46de30ed0f33d4cc948d5b7c16565e510299a27c4716a81689d5c981ee": {
+        "atlas_node_id": "view-57d457e25357fc88d765ee6ac76c2f840774d36f6ba7ab390da1ebf832c6f743",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_004",
+        "idea_id": "cube-45d28bc605269d27f9fc7a8f4a51a4387c4b527f73527ed643dc0602ac03538e",
+        "record_digest": "99e4c84f2449f1bf510618b85fda169448d5bb7ef3c2f100f36d81be26729bab",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          3
+        ]
+      },
+      "catalog-941ce48ee62281e2f35683ae05051806bffb1171bbc97810d9f39c1d327072f8": {
+        "atlas_node_id": "view-585d9c2a57c26a75efb964ce936a6b637ced17819845f084967d68b382c4f0d8",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_001",
+        "idea_id": "cube-20d4c61d9ef86029571eaf4e6d9a290accf72e99d8ef4cd1a108af84b947c86b",
+        "record_digest": "2285772d28092bd056eafdb8bdf6108f7b90e0f4691a7e8eb2aa555532b1645e",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          0
+        ]
+      },
+      "catalog-a072496e0c7c3a370cc5c24412b12ee364c62e094f52860b86e2b94d127a5e44": {
+        "atlas_node_id": "view-34a5657ab9ae0ae1b546fa2d98cbcead3127e79fa816da483a68e9fbc1d52d98",
+        "context_id": "toy_scene_01",
+        "cube_node_id": "node_005",
+        "idea_id": "cube-21a4aa61be3c02da995d6818999595da2fed22c0b877d9fd4a0eef9409505616",
+        "record_digest": "66e5fe235364fb35f0ef7be09e37d2842a0934c8c38aaae259c594f8c96f7dca",
+        "revision": 1,
+        "source_namespace": "pinned_cube_fixture",
+        "source_path": [
+          "cube_nodes",
+          4
+        ]
+      }
+    }
+  },
+  "hypotheses": [],
+  "schema_version": "cncm.rpa-cube-document/0.1",
+  "scope": "LOADED_AUTHORED_SNAPSHOT_NOT_WORLD_TRUTH_OR_RUNTIME_STATE",
+  "source_receipt": {
+    "authorship_authenticated": false,
+    "bundle_schema": "cas.cube-bundle/0.1",
+    "canonical_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+    "observation_id": "cube_acceptance_001",
+    "observation_time": "2026-09-16 15:21:04 UTC",
+    "record_version": 1,
+    "schema_version": "cncm.rpa-cube-source/0.1",
+    "scope": "LOADED_AUTHORED_SNAPSHOT_NOT_WORLD_TRUTH_OR_RUNTIME_STATE",
+    "source_bytes": 29971,
+    "source_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+    "source_namespace": "pinned_cube_fixture",
+    "world_truth_established": false
+  },
+  "view_id": "view_analogy"
+}

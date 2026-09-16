@@ -1,0 +1,1 @@
+This separate helper uses nearest-parent source-root discovery and the preserved browser checker. It does not alter the receipt-bound original helper. Import `check_page(page, output_directory, typed_document)`; the output directory must already exist. The helper compares displayed records against the supplied typed source and closes only its owned Chromium process.

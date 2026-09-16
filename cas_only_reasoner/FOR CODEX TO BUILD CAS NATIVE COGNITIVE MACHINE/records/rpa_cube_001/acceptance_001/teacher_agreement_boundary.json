@@ -1,0 +1,203 @@
+{
+  "agreement": {
+    "agrees": true,
+    "boundary": "Local target agreement only; no source authenticity, learner performance or world truth established.",
+    "record_id": "cube-input-745aa2fa8a78afb75515e78f64acdd91bf2a9a7a36478979371650bb4819ee9c",
+    "scope": "SUPPLIED_EXPORT_LOCAL_CONSISTENCY_ONLY",
+    "source_authenticity_established": false,
+    "source_reconstructed": false
+  },
+  "real_source_teacher_reference": [
+    "Frame",
+    "Wheel"
+  ],
+  "statement": "Local consistency accepted, source correctness unproven and false in this constructed probe.",
+  "supplied_coherent_forgery": {
+    "binding": {
+      "base_current_state_id": "loaded-c666055669b89e18e8ff57ffbdcd029d7f2b908e6c41d2d6a29e44f151821b09",
+      "cache_identity_bound": false,
+      "cache_identity_scope": "Supplied identity metadata only; no cache or encoder capability was probed.",
+      "competence_established": false,
+      "compiler_calls": 1,
+      "delivered_neural_lessons": 0,
+      "encoding_context": {
+        "compiler_schema": "cas-cube-lesson/2",
+        "content_revision": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+        "encoded_cache_identity": null,
+        "schema_version": "cncm.rpa-cube-public-input/0.1",
+        "source_context_id": "toy_scene_01",
+        "source_namespace": "pinned_cube_fixture",
+        "view_id": "view_context",
+        "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46"
+      },
+      "neural_calls": 0,
+      "optimizer_updates": 0,
+      "public_input_digest": "4c43ebed167447d4d7ae1f27aa7ea94c34a2b089d9243ca12ee887dff802042d",
+      "schema_version": "cncm.rpa-cube-lesson/0.1",
+      "semantic_question_id": "cube-question-e9527fd19f64017f820d007d5e8eb1d91e9549dc0247fd838b4fad199f4b8248",
+      "source_receipt_digest": "2601f9036346bad1661ed015650f8da4eb8f85a55afa16a76500b9e8974cab44",
+      "teacher_sidecar_digest": "f80ab319d7ee98018ee508be319d46901136ffc2101761415e9f928e4d3ab69e"
+    },
+    "learner_input": {
+      "encoded_options": [
+        [
+          "Frame",
+          "Wheel"
+        ],
+        [
+          "Frame",
+          "Rim",
+          "Wheel"
+        ],
+        [
+          "Frame"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "['Frame', 'Wheel']",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "['Frame', 'Rim', 'Wheel']",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "['Frame']",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+      },
+      "record_id": "cube-input-745aa2fa8a78afb75515e78f64acdd91bf2a9a7a36478979371650bb4819ee9c"
+    },
+    "teacher_sidecar": {
+      "answer_status": "GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION",
+      "assistance_level": "unassisted",
+      "encoded_correct_index": 1,
+      "expected_answer": [
+        "Frame",
+        "Rim",
+        "Wheel"
+      ],
+      "how_status": "UNSUPPORTED_NO_ACTION_CONTRACT",
+      "operation": "LIST_PARTS",
+      "question": {
+        "idea": "Bicycle"
+      },
+      "record_id": "cube-input-745aa2fa8a78afb75515e78f64acdd91bf2a9a7a36478979371650bb4819ee9c",
+      "reference_branch_ids": [
+        "branch_01",
+        "branch_02"
+      ],
+      "reference_paths": [
+        [
+          "branch_01",
+          "branch_02"
+        ]
+      ],
+      "scope": "LOADED_AUTHORED_SNAPSHOT_NOT_WORLD_TRUTH_OR_RUNTIME_STATE",
+      "source_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+      "visibility": {
+        "disclosures_after_mask": [],
+        "mask_is_declared": true,
+        "profile": {
+          "assistance_level": "unassisted",
+          "assisted": false,
+          "note": "withheld fields are the declarations above, expanded over the cubes the question asks about; the pattern is identical for every question of a (task, assistance) pair, so it carries no answer information",
+          "operation": "LIST_PARTS",
+          "profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+          "schema": "cas-cube-visibility/1",
+          "withheld_patterns": [
+            "face_2.structured.fact_refs",
+            "face_5.structured.direct_branch_refs",
+            "face_6.structured.steps[*].uses_branch_refs",
+            "face_6.structured.steps[*].text"
+          ]
+        },
+        "visible_field_paths": [
+          "node_001.core.identity_statement",
+          "node_001.core.kind",
+          "node_001.core.label",
+          "node_001.face_1.availability",
+          "node_001.face_1.human_text",
+          "node_001.face_1.provenance_refs",
+          "node_001.face_1.structured.canonical_name",
+          "node_001.face_1.structured.definition",
+          "node_001.face_1.structured.function",
+          "node_001.face_2.availability",
+          "node_001.face_2.human_text",
+          "node_001.face_2.provenance_refs",
+          "node_001.face_2.structured.context_scope",
+          "node_001.face_2.structured.view_refs",
+          "node_001.face_3.availability",
+          "node_001.face_3.human_text",
+          "node_001.face_3.provenance_refs",
+          "node_001.face_3.structured.analogy_limits",
+          "node_001.face_3.structured.analogy_scope",
+          "node_001.face_3.structured.mapping_refs",
+          "node_001.face_3.structured.view_refs",
+          "node_001.face_4.availability",
+          "node_001.face_4.human_text",
+          "node_001.face_4.provenance_refs",
+          "node_001.face_4.structured.mapping_refs",
+          "node_001.face_5.availability",
+          "node_001.face_5.human_text",
+          "node_001.face_5.provenance_refs",
+          "node_001.face_5.structured.completeness",
+          "node_001.face_6.availability",
+          "node_001.face_6.human_text",
+          "node_001.face_6.provenance_refs",
+          "node_001.face_6.structured.sequence_kind",
+          "node_001.face_6.structured.steps[0].step_id",
+          "node_001.face_6.structured.steps[1].step_id",
+          "node_001.face_6.structured.steps[2].step_id"
+        ],
+        "withheld_field_paths": [
+          "node_001.face_2.structured.fact_refs",
+          "node_001.face_5.structured.direct_branch_refs",
+          "node_001.face_6.structured.steps[0].text",
+          "node_001.face_6.structured.steps[0].uses_branch_refs",
+          "node_001.face_6.structured.steps[1].text",
+          "node_001.face_6.structured.steps[1].uses_branch_refs",
+          "node_001.face_6.structured.steps[2].text",
+          "node_001.face_6.structured.steps[2].uses_branch_refs"
+        ]
+      },
+      "visibility_profile_id": "cas-cube-visibility/1:LIST_PARTS:unassisted:82f64945ec46",
+      "why_status": "STRUCTURAL_TEACHER_WITNESS_ONLY",
+      "witness_basis": "complete_direct_inventory"
+    }
+  }
+}

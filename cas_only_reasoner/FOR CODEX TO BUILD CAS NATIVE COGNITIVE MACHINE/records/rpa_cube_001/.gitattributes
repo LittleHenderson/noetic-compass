@@ -1,5 +1,12 @@
 *.json -text -eol -whitespace
+*.jsonl -text -eol -whitespace
 *.txt -text -eol -whitespace
 *.py text eol=lf
 # Preserve exact receipt-bound diagnostic scripts.
 design_probe_001/*.py -text -whitespace
+*.xml -text -whitespace
+*.html -text -eol
+*.png -text
+# Keep copied failures, scripts and receipts byte-identical to their manifests.
+development_001/** -text -eol -whitespace
+browser_validation_001/** -text -eol -whitespace

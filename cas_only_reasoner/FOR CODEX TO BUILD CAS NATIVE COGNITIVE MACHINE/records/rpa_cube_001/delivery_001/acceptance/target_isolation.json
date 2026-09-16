@@ -1,0 +1,56 @@
+[
+  {
+    "learner_input_digest": "dbf5caf8d4605d76edef3927b4ea8ea85864a801fd1f37f2d10999fc83476f85",
+    "mutation": "delete",
+    "unchanged": true,
+    "view_id": "view_formal"
+  },
+  {
+    "learner_input_digest": "dbf5caf8d4605d76edef3927b4ea8ea85864a801fd1f37f2d10999fc83476f85",
+    "mutation": "replace",
+    "unchanged": true,
+    "view_id": "view_formal"
+  },
+  {
+    "learner_input_digest": "dbf5caf8d4605d76edef3927b4ea8ea85864a801fd1f37f2d10999fc83476f85",
+    "mutation": "change",
+    "unchanged": true,
+    "view_id": "view_formal"
+  },
+  {
+    "learner_input_digest": "4c43ebed167447d4d7ae1f27aa7ea94c34a2b089d9243ca12ee887dff802042d",
+    "mutation": "delete",
+    "unchanged": true,
+    "view_id": "view_context"
+  },
+  {
+    "learner_input_digest": "4c43ebed167447d4d7ae1f27aa7ea94c34a2b089d9243ca12ee887dff802042d",
+    "mutation": "replace",
+    "unchanged": true,
+    "view_id": "view_context"
+  },
+  {
+    "learner_input_digest": "4c43ebed167447d4d7ae1f27aa7ea94c34a2b089d9243ca12ee887dff802042d",
+    "mutation": "change",
+    "unchanged": true,
+    "view_id": "view_context"
+  },
+  {
+    "learner_input_digest": "dd0ad3fdecf105961ebf13ad4a4092a009ac10efb7cf9c65ff85b328a67bce13",
+    "mutation": "delete",
+    "unchanged": true,
+    "view_id": "view_analogy"
+  },
+  {
+    "learner_input_digest": "dd0ad3fdecf105961ebf13ad4a4092a009ac10efb7cf9c65ff85b328a67bce13",
+    "mutation": "replace",
+    "unchanged": true,
+    "view_id": "view_analogy"
+  },
+  {
+    "learner_input_digest": "dd0ad3fdecf105961ebf13ad4a4092a009ac10efb7cf9c65ff85b328a67bce13",
+    "mutation": "change",
+    "unchanged": true,
+    "view_id": "view_analogy"
+  }
+]

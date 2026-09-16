@@ -1,0 +1,9 @@
+{
+  "classification": "REVIEW_GUARD_TOO_BROAD_NOT_A_BRIDGE_EXECUTION_FAILURE",
+  "exit_code": 1,
+  "command": "python records/rpa_cube_001/_scratch/test_rpa_cube_adversarial.py",
+  "exception": "AssertionError: forbidden import: research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.real_framework",
+  "cause": "Initial probe blocked the pure real_framework import used by cube_profile for TARGET_CONTRACT_ID and TARGET_PLASTICITY_ROLE. It stopped before bridge tests.",
+  "resolution": "Parent authorized existing pure definitions/constants import; torch/numpy/provider imports and .learner imports remain blocked. No learner construction, prediction, or fitting was invoked.",
+  "raw_tool_chunk_id": "3d5c95"
+}

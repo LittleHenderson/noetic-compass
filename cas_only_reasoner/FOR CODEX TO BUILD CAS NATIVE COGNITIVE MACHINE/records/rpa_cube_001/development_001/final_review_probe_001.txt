@@ -1,0 +1,37 @@
+test_catalog_cursor_rejects_different_source_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_rejects_different_source_even_when_resealed) ... ok
+test_catalog_path_float_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_path_float_cannot_impersonate_source_integer) ... FAIL
+test_catalog_revision_bool_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_revision_bool_cannot_impersonate_source_integer) ... FAIL
+test_pages_each_resolve_to_exact_bound_source_record (__main__.FinalBoundaryReview.test_pages_each_resolve_to_exact_bound_source_record) ... ok
+test_wire_provenance_booleans_cannot_be_numeric (__main__.FinalBoundaryReview.test_wire_provenance_booleans_cannot_be_numeric) ... FAIL
+
+======================================================================
+FAIL: test_catalog_path_float_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_path_float_cannot_impersonate_source_integer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 20, in test_catalog_path_float_cannot_impersonate_source_integer
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_catalog_revision_bool_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_revision_bool_cannot_impersonate_source_integer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 12, in test_catalog_revision_bool_cannot_impersonate_source_integer
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_wire_provenance_booleans_cannot_be_numeric (__main__.FinalBoundaryReview.test_wire_provenance_booleans_cannot_be_numeric)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 27, in test_wire_provenance_booleans_cannot_be_numeric
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.870s
+
+FAILED (failures=3)

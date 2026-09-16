@@ -1,0 +1,30 @@
+{
+  "actual_project_imports": 31,
+  "assistance_levels": [
+    "guided",
+    "unassisted"
+  ],
+  "canonical_cubes": 6,
+  "competence_established": false,
+  "faces": 36,
+  "focus_checks": 129,
+  "links_per_view": 47,
+  "matched_directed_bfs_checks": 420,
+  "matching_compilations": 306,
+  "nodes_per_view": 43,
+  "questions_per_view": 51,
+  "refusal_probes": 20,
+  "scope": "Faithful authored-source projection and lesson preparation only; no learning or runtime execution.",
+  "source_contains_branches": 5,
+  "views": 3,
+  "work_counts": {
+    "bridge_compiler_calls": 451,
+    "delivered_neural_lessons": 0,
+    "learner_invocations": 0,
+    "legacy_comparison_compiler_calls": 308,
+    "legacy_target_free_probe_calls": 1,
+    "neural_calls": 0,
+    "optimizer_updates": 0,
+    "provider_calls": 0
+  }
+}

@@ -1,0 +1,246 @@
+"""Independently verify retained acceptance bytes and repeat pure compiler comparisons."""
+import sys
+sys.dont_write_bytecode = True
+from pathlib import Path, PurePosixPath
+from hashlib import sha256
+from itertools import combinations
+from collections import Counter, deque
+from datetime import datetime, timezone
+import importlib.abc
+import json
+
+ROOT = Path(__file__).resolve().parents[3]
+DIRECTORY = ROOT / "records/rpa_cube_001/acceptance_001"
+OUTPUT = ROOT / "records/rpa_cube_001/acceptance_review_001.json"
+RECEIPT_SHA = "b0550845a0e64653910bf8c17a5bd45011ca7068897c59608227b7ce6f50fe7c"
+DENIED = {"torch", "numpy", "boto3", "botocore", "requests", "cas_cjt"}
+ATTEMPTS = []
+class Deny(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split(".")[0] in DENIED or fullname.endswith(".learner"):
+            ATTEMPTS.append(fullname)
+            raise RuntimeError("Prohibited model/provider import: " + fullname)
+sys.meta_path.insert(0, Deny())
+sys.path.insert(0, str(ROOT))
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True, allow_nan=False)
+def digest(value):
+    return sha256(canonical(value).encode()).hexdigest()
+def identity(path):
+    data = path.read_bytes()
+    return {"bytes": len(data), "sha256": sha256(data).hexdigest()}
+def read(name):
+    return json.loads((DIRECTORY / name).read_bytes())
+def scoped(root, relative):
+    p = PurePosixPath(relative)
+    assert type(relative) is str and str(p) == relative and not p.is_absolute()
+    assert "\\" not in relative and ":" not in relative and all(part not in (".", "..") for part in p.parts)
+    path = (root / relative).resolve()
+    assert path.is_relative_to(root.resolve()) and path.is_file()
+    return path
+def verify_rows(rows, root):
+    assert len({row["path"] for row in rows}) == len(rows)
+    for row in rows:
+        assert identity(scoped(root, row["path"])) == {key: row[key] for key in ("bytes", "sha256")}, row["path"]
+
+receipt = read("receipt.json")
+assert identity(DIRECTORY / "receipt.json")["sha256"] == RECEIPT_SHA
+assert receipt["status"] == "PASS"
+verify_rows(receipt["artifacts"], DIRECTORY)
+artifact_names = {row["path"] for row in receipt["artifacts"]}
+assert artifact_names == {path.relative_to(DIRECTORY).as_posix() for path in DIRECTORY.rglob("*") if path.is_file()} - {"receipt.json"}
+assert len(receipt["artifacts"]) == 28
+imports = read("actual_imports.json")
+assert not imports["prohibited_import_attempts"] and not imports["prohibited_imports_present"]
+assert len(imports["modules"]) == 31
+verify_rows(imports["modules"], ROOT)
+before, after = read("declared_inputs_before.json"), read("declared_inputs_after.json")
+assert canonical(before) == canonical(after) and len(after) == 10
+verify_rows(after, ROOT)
+footprint = read("source_footprint.json")
+assert canonical(footprint["actual_project_imports"]) == canonical(imports["modules"])
+assert canonical(footprint["declared_review_inputs"]) == canonical(after)
+assert digest(footprint) == receipt["source_footprint_digest"]
+assert read("acceptance_summary.json") == receipt["results"]
+assert receipt["helper_source_unchanged"] is True and receipt["declared_inputs_unchanged"] is True
+assert identity(ROOT / "tools/reproduce_cube_rpa.py") == receipt["helper_identity"]
+project_before = {row["path"]: {key: row[key] for key in ("bytes", "sha256")} for row in read("project_sources_before.json")}
+for row in imports["modules"]:
+    assert project_before[row["path"]] == {key: row[key] for key in ("bytes", "sha256")}
+
+fixture = ROOT / "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Node_Example_v0.1.json"
+assert fixture.read_bytes() == (DIRECTORY / "source_bundle.json").read_bytes()
+assert identity(fixture)["sha256"] == receipt["bundle_file_sha256"]
+bundle = read("source_bundle.json")
+assert digest(bundle) == receipt["bundle_digest"]
+assert identity(ROOT / "cncm/rpa_cube_adapter.py")["sha256"] == receipt["adapter_sha256"]
+
+expected_errors = [
+("disagreeing_teacher_target","ContractError","supplied teacher target disagrees with the supplied teacher reference"),
+("wrong_source_bundle_digest","ContractError","source/bundle digest mismatch"),
+("wrong_source_file_digest","ContractError","source file SHA-256 mismatch"),
+("wrong_source_namespace","ContractError","source namespace identifier invalid"),
+("resealed_stale_projection","ContractError","stale or corrupted source projection"),
+("catalog_bool_revision","ContractError","stale or corrupted source projection"),
+("catalog_float_source_path","ContractError","stale or corrupted source projection"),
+("numeric_false_provenance","ContractError","stale or corrupted source projection"),
+("corrupt_page_cursor","ContractError","catalog cursor mismatch"),
+("resealed_cursor_bool","ContractError","catalog cursor integer types invalid"),
+("resealed_cursor_float","ContractError","catalog cursor integer types invalid"),
+("cross_joined_teacher_learner_identity","ContractError","teacher and learner record identity mismatch"),
+("teacher_answer_index_mismatch","ContractError","teacher target does not match its encoded option"),
+("private_target_in_source_context","ContractError","private target field prohibited anywhere in public source"),
+("partial_view_would_widen_input","ContractError","unsupported partial or duplicate branch view; complete view coverage required"),
+("foreign_partial_face_inventory","ContractError","face direct inventory must be a unique subset of its own outgoing branches"),
+("undeclared_predicate","ContractError","unsupported branch predicate"),
+("dangling_branch","ContractError","cube validation failed: CUBE_BRANCH_ENDPOINT_UNRESOLVED:missing"),
+("duplicate_cube_id","ContractError","cube validation failed: CUBE_NODE:DUPLICATE:node_001"),
+("contains_cycle","ContractError","cube validation failed: CUBE_CONTAINS_CYCLE"),
+("oversized_source_bytes","ContractError","source byte bound/type invalid"),
+("incomplete_inventory_cannot_license_absence","ContractError","complete scored answer requires declared complete inventory"),
+("unsupported_operation_Why","ContractError","unsupported scored operation; Why is teacher-only and How needs an action contract"),
+("unsupported_operation_How","ContractError","unsupported scored operation; Why is teacher-only and How needs an action contract"),
+("unsupported_operation_reachable_via","ContractError","unsupported scored operation; Why is teacher-only and How needs an action contract"),
+("lossy_three_choice_encoding","ContractError","lossy or ambiguous compiler option encoding"),
+("preserved_legacy_target_free_failure","KeyError","'correct'"),
+]
+refusals = read("refusal_probes.json")
+assert [(row["name"], row["exception"], row["message"]) for row in refusals] == expected_errors
+assert len(refusals) == 27 and len({row["name"] for row in refusals}) == 27
+comparisons = read("compiler_comparisons.json")
+learners = [json.loads(line) for line in (DIRECTORY / "learner_inputs.jsonl").read_text().splitlines()]
+teachers = [json.loads(line) for line in (DIRECTORY / "teacher_sidecars.jsonl").read_text().splitlines()]
+bindings = [json.loads(line) for line in (DIRECTORY / "lesson_bindings.jsonl").read_text().splitlines()]
+assert len(comparisons) == len(learners) == len(teachers) == len(bindings) == 306
+assert len({item["record_id"] for item in learners}) == 306
+
+from research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching import cube_profile
+from research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching import real_framework
+def forbid_learner(*args, **kwargs):
+    raise AssertionError("learner execution prohibited in review")
+for method in ("__init__", "predict", "step", "scores", "forward"):
+    setattr(real_framework.GraphLearner, method, forbid_learner)
+def answer_from_graph(view, operation, question):
+    labels = next(row["node_labels"] for row in bundle["views"] if row["view_id"] == view)
+    outgoing = {value: set() for value in labels.values()}
+    for branch in bundle["branches"]:
+        assert branch["predicate"] == "contains"
+        outgoing[labels[branch["source_node_id"]]].add(labels[branch["target_node_id"]])
+    if operation == "LIST_PARTS":
+        return sorted(outgoing[question["idea"]])
+    if operation == "FIND_SHARED_PART":
+        first, second = question["a"], question["b"]
+        common = outgoing[first] & outgoing[second]
+        if second in outgoing[first]: common.add(second)
+        if first in outgoing[second]: common.add(first)
+        assert len(common) <= 1
+        return next(iter(common)) if common else "none"
+    assert operation == "REACHED_VIA"
+    root, target = question["idea"], question["part"]
+    if target in outgoing[root]:
+        return "direct"
+    for first in sorted(outgoing[root]):
+        queue, visited = deque(outgoing[first]), set()
+        while queue:
+            item = queue.popleft()
+            if item == target:
+                return "via:" + first
+            if item not in visited:
+                visited.add(item)
+                queue.extend(outgoing[item] - visited)
+    return "absent"
+
+seen = set()
+for comparison, learner, teacher, binding in zip(comparisons, learners, teachers, bindings):
+    assert set(learner) == {"record_id", "public", "encoded_options"}
+    assert comparison["match"] is True
+    assert comparison["record_id"] == learner["record_id"] == teacher["record_id"]
+    assert comparison["public_digest"] == digest(learner["public"])
+    assert comparison["ordered_choices_digest"] == digest(learner["encoded_options"])
+    assert comparison["teacher_digest"] == digest(teacher) == binding["teacher_sidecar_digest"]
+    assert comparison["visibility_digest"] == digest(teacher["visibility"])
+    assert binding["public_input_digest"] == digest(learner)
+    assert binding["competence_established"] is False
+    assert binding["encoding_context"]["view_id"] == comparison["view_id"]
+    assert binding["encoding_context"]["content_revision"] == receipt["bundle_digest"]
+    assert binding["encoding_context"]["visibility_profile_id"] == teacher["visibility_profile_id"]
+    assert learner["record_id"] == "cube-input-" + digest({"public": learner["public"], "encoded_options": learner["encoded_options"], "encoding_context": binding["encoding_context"]})
+    answer = answer_from_graph(comparison["view_id"], comparison["operation"], comparison["question"])
+    assert canonical(answer) == canonical(teacher["expected_answer"])
+    assert canonical(answer) == canonical(learner["encoded_options"][teacher["encoded_correct_index"]])
+    case = {"op": comparison["operation"], "question": comparison["question"], "correct": answer}
+    legacy = cube_profile.compile_lesson(bundle, case, assistance=comparison["assistance"], view_id=comparison["view_id"])
+    assert legacy["task_id"] == comparison["legacy_task_id"]
+    assert canonical(legacy["encoding"]["public"]) == canonical(learner["public"])
+    assert canonical(legacy["encoding"]["encoded_options"]) == canonical(learner["encoded_options"])
+    assert legacy["encoding"]["encoded_correct_index"] == teacher["encoded_correct_index"]
+    assert canonical(legacy["visibility"]) == canonical(teacher["visibility"])
+    key = (comparison["view_id"], comparison["assistance"], comparison["operation"], canonical(comparison["question"]))
+    assert key not in seen
+    seen.add(key)
+    assert all(binding[k] == 0 for k in ("neural_calls", "optimizer_updates", "delivered_neural_lessons"))
+view_counts = Counter(row["view_id"] for row in comparisons)
+operation_counts = Counter(row["operation"] for row in comparisons)
+assert dict(view_counts) == {"view_formal": 102, "view_context": 102, "view_analogy": 102}
+assert dict(operation_counts) == {"LIST_PARTS": 36, "FIND_SHARED_PART": 90, "REACHED_VIA": 180}
+for view in bundle["views"]:
+    labels = sorted(view["node_labels"].values())
+    expected_questions = {("LIST_PARTS", canonical({"idea": label})) for label in labels}
+    expected_questions |= {("FIND_SHARED_PART", canonical({"a": a, "b": b})) for a,b in combinations(labels,2)}
+    expected_questions |= {("REACHED_VIA", canonical({"part": part, "idea": idea})) for part in labels for idea in labels if part != idea}
+    for assistance in ("guided", "unassisted"):
+        actual = {(op, question) for v,a,op,question in seen if v == view["view_id"] and a == assistance}
+        assert actual == expected_questions
+
+assert not ATTEMPTS and not (DENIED & set(sys.modules))
+verify_rows(receipt["artifacts"], DIRECTORY)
+verify_rows(imports["modules"], ROOT)
+verify_rows(after, ROOT)
+assert identity(DIRECTORY / "receipt.json")["sha256"] == RECEIPT_SHA
+source_rows = {}
+for row in imports["modules"] + after:
+    identity_row = {"path": row["path"], **identity(ROOT / row["path"])}
+    assert row["path"] not in source_rows or source_rows[row["path"]] == identity_row
+    source_rows[row["path"]] = identity_row
+canonical_sources = sorted(source_rows.values(), key=lambda row: row["path"])
+review = {
+    "schema_version": "cncm.rpa-cube-acceptance-review/0.1",
+    "status": "PASS",
+    "reviewed_utc": datetime.now(timezone.utc).isoformat(),
+    "acceptance_receipt": {"path": "records/rpa_cube_001/acceptance_001/receipt.json", **identity(DIRECTORY / "receipt.json")},
+    "source_footprint_digest": receipt["source_footprint_digest"],
+    "source_footprint_file": identity(DIRECTORY / "source_footprint.json"),
+    "current_source_identity_digest": digest(canonical_sources),
+    "current_source_identities": canonical_sources,
+    "canonical_fixture_identity": {"path": fixture.relative_to(ROOT).as_posix(), **identity(fixture)},
+    "checks": {
+        "artifacts_byte_verified": len(receipt["artifacts"]),
+        "actual_import_source_files_verified": len(imports["modules"]),
+        "declared_input_source_files_verified": len(after),
+        "unique_import_and_declared_source_files": len(source_rows),
+        "declared_before_after_equal": True,
+        "footprint_digest_recomputed": True,
+        "source_files_and_artifacts_rechecked_after_review": True,
+        "retained_refusal_names_types_and_messages_verified": len(refusals),
+        "refusal_exception_counts": dict(Counter(row["exception"] for row in refusals)),
+        "refusals_reexecuted_in_this_review": 0,
+        "retained_comparison_records_verified": len(comparisons),
+        "independent_legacy_compilations_repeated": len(comparisons),
+        "independent_graph_reference_answers_verified": len(comparisons),
+        "comparisons_by_view": dict(view_counts),
+        "comparisons_by_operation": dict(operation_counts),
+        "learner_teacher_binding_joins_verified": len(comparisons),
+        "exact_complete_question_coverage": True,
+        "prohibited_import_attempts": ATTEMPTS,
+        "neural_calls": 0, "learner_invocations": 0, "provider_calls": 0,
+        "full_suite_status_verified": False,
+    },
+    "review_program_identity": {"path": Path(__file__).relative_to(ROOT).as_posix(), **identity(Path(__file__))},
+    "conclusion": "All 28 retained artifacts, 31 imported source files and 10 declared inputs match their pinned bytes. The footprint recomputes exactly. All 27 retained refusal records have the expected exact names, exception types and messages. All 306 retained comparison records and joins match a repeated pure legacy compilation and an independent authored-graph answer.",
+    "boundary": "Byte integrity and pure compiler/projection conformance only. Hashes do not authenticate authorship or world truth; declared inputs are not evidence they executed. Refusal outcomes were inspected, not rerun here. Full-suite completion, CI, deployment and learner competence are not established by this review.",
+}
+with OUTPUT.open("x", encoding="utf-8", newline="\n") as stream:
+    json.dump(review, stream, indent=2, sort_keys=True)
+    stream.write("\n")
+print(json.dumps({"status": "PASS", "review": OUTPUT.relative_to(ROOT).as_posix(), **identity(OUTPUT), "checks": review["checks"]}, indent=2))
+

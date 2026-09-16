@@ -1,0 +1,73 @@
+test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed) ... 
+  test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed) (alias=True, type='bool') ... FAIL
+  test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed) (alias=1.0, type='float') ... FAIL
+test_catalog_cursor_rejects_different_source_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_rejects_different_source_even_when_resealed) ... ok
+test_catalog_path_float_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_path_float_cannot_impersonate_source_integer) ... FAIL
+test_catalog_revision_bool_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_revision_bool_cannot_impersonate_source_integer) ... FAIL
+test_pages_each_resolve_to_exact_bound_source_record (__main__.FinalBoundaryReview.test_pages_each_resolve_to_exact_bound_source_record) ... ok
+test_parser_duplicate_keys_are_rejected_before_schema_or_digest (__main__.FinalBoundaryReview.test_parser_duplicate_keys_are_rejected_before_schema_or_digest) ... ok
+test_parser_nonfinite_literals_and_overflow_are_rejected (__main__.FinalBoundaryReview.test_parser_nonfinite_literals_and_overflow_are_rejected) ... ok
+test_source_byte_and_canonical_identity_differ_by_whitespace (__main__.FinalBoundaryReview.test_source_byte_and_canonical_identity_differ_by_whitespace) ... ok
+test_teacher_agreement_is_only_self_contained_consistency (__main__.FinalBoundaryReview.test_teacher_agreement_is_only_self_contained_consistency) ... ok
+test_teacher_agreement_requires_matching_record_identity (__main__.FinalBoundaryReview.test_teacher_agreement_requires_matching_record_identity) ... FAIL
+test_wire_provenance_booleans_cannot_be_numeric (__main__.FinalBoundaryReview.test_wire_provenance_booleans_cannot_be_numeric) ... FAIL
+
+======================================================================
+FAIL: test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed) (alias=True, type='bool')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 89, in test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed
+    with self.subTest(alias=alias, type=type(alias).__name__), self.assertRaises(ContractError):
+                                                               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed (__main__.FinalBoundaryReview.test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed) (alias=1.0, type='float')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 89, in test_catalog_cursor_limit_has_strict_integer_type_even_when_resealed
+    with self.subTest(alias=alias, type=type(alias).__name__), self.assertRaises(ContractError):
+                                                               ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_catalog_path_float_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_path_float_cannot_impersonate_source_integer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 60, in test_catalog_path_float_cannot_impersonate_source_integer
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_catalog_revision_bool_cannot_impersonate_source_integer (__main__.FinalBoundaryReview.test_catalog_revision_bool_cannot_impersonate_source_integer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 52, in test_catalog_revision_bool_cannot_impersonate_source_integer
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_teacher_agreement_requires_matching_record_identity (__main__.FinalBoundaryReview.test_teacher_agreement_requires_matching_record_identity)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 100, in test_teacher_agreement_requires_matching_record_identity
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+======================================================================
+FAIL: test_wire_provenance_booleans_cannot_be_numeric (__main__.FinalBoundaryReview.test_wire_provenance_booleans_cannot_be_numeric)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\test_rpa_cube_final_review.py", line 67, in test_wire_provenance_booleans_cannot_be_numeric
+    with self.assertRaises(ContractError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+AssertionError: ContractError not raised
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.832s
+
+FAILED (failures=6)
+{"adapter_sha256_before": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275", "adapter_sha256_after": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275", "source_unchanged": true, "tests": 11, "failures": 6, "errors": 0, "neural_calls": 0, "provider_calls": 0}

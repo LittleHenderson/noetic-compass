@@ -1,0 +1,24 @@
+{
+  "reviewed_adapter_sha256": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275",
+  "adapter_unchanged": true,
+  "wire_scalar_integrity_bug": {
+    "loader_accepted_changed_json_type": true,
+    "source_revision_type": "int",
+    "returned_revision_type": "bool",
+    "returned_record_digest_matches_returned_cube": false
+  },
+  "wire_index_integrity_bug": {
+    "loader_accepted_float_index": true,
+    "paging_exception": "TypeError",
+    "message": "list indices must be integers or slices, not float"
+  },
+  "teacher_agreement_external_source_not_checked": {
+    "agrees": true,
+    "record_id": "cube-input-5f4536201a0621e183403e842debb516a08984c7d230a14ce20af274d37b3358",
+    "boundary": "Target agreement only; not learner performance or world truth."
+  },
+  "counts": {
+    "neural_calls": 0,
+    "provider_calls": 0
+  }
+}

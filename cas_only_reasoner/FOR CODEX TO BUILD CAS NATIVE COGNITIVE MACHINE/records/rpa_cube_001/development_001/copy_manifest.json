@@ -1,0 +1,1009 @@
+{
+  "boundary": "Historical evidence copied without rerunning, rewriting, promoting or reinterpreting results.",
+  "copied_bytes": 4661442,
+  "copied_files": 53,
+  "copies": [
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 807,
+        "sha256": "6273388fd4a8be2e3a05b3327a8ff3a5c2049aa5fdba4847ad1b284d7307b767"
+      },
+      "destination_path": "acceptance_candidate_001/acceptance_summary.json",
+      "source_after": {
+        "bytes": 807,
+        "sha256": "6273388fd4a8be2e3a05b3327a8ff3a5c2049aa5fdba4847ad1b284d7307b767"
+      },
+      "source_before": {
+        "bytes": 807,
+        "sha256": "6273388fd4a8be2e3a05b3327a8ff3a5c2049aa5fdba4847ad1b284d7307b767"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/acceptance_summary.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 7021,
+        "sha256": "c32ad816989f20a30ebee80094b31a2145478c50da84f9c1e3576645794c1452"
+      },
+      "destination_path": "acceptance_candidate_001/actual_imports.json",
+      "source_after": {
+        "bytes": 7021,
+        "sha256": "c32ad816989f20a30ebee80094b31a2145478c50da84f9c1e3576645794c1452"
+      },
+      "source_before": {
+        "bytes": 7021,
+        "sha256": "c32ad816989f20a30ebee80094b31a2145478c50da84f9c1e3576645794c1452"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/actual_imports.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 3078,
+        "sha256": "4529f1ba4c3419bed4ab900186c89d2fb05a1d964fc407d5a0ce6eda1d83b069"
+      },
+      "destination_path": "acceptance_candidate_001/cache_identity_conformance.json",
+      "source_after": {
+        "bytes": 3078,
+        "sha256": "4529f1ba4c3419bed4ab900186c89d2fb05a1d964fc407d5a0ce6eda1d83b069"
+      },
+      "source_before": {
+        "bytes": 3078,
+        "sha256": "4529f1ba4c3419bed4ab900186c89d2fb05a1d964fc407d5a0ce6eda1d83b069"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/cache_identity_conformance.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 30695,
+        "sha256": "67ab6a5766dddf618e90b039ea72a1079760e2b674b2a291910d033eb80cb6df"
+      },
+      "destination_path": "acceptance_candidate_001/catalog_pages.json",
+      "source_after": {
+        "bytes": 30695,
+        "sha256": "67ab6a5766dddf618e90b039ea72a1079760e2b674b2a291910d033eb80cb6df"
+      },
+      "source_before": {
+        "bytes": 30695,
+        "sha256": "67ab6a5766dddf618e90b039ea72a1079760e2b674b2a291910d033eb80cb6df"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/catalog_pages.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 226519,
+        "sha256": "795c3037998ec11c0d73975ddcba6d94ace175d56a710741551214629d3495e0"
+      },
+      "destination_path": "acceptance_candidate_001/compiler_comparisons.json",
+      "source_after": {
+        "bytes": 226519,
+        "sha256": "795c3037998ec11c0d73975ddcba6d94ace175d56a710741551214629d3495e0"
+      },
+      "source_before": {
+        "bytes": 226519,
+        "sha256": "795c3037998ec11c0d73975ddcba6d94ace175d56a710741551214629d3495e0"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/compiler_comparisons.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 264697,
+        "sha256": "e147f6db278b9269b506736f0dd6edaf04bbcab4b8a6f583cdaf1e5e9adf78b2"
+      },
+      "destination_path": "acceptance_candidate_001/hypothesis.document.json",
+      "source_after": {
+        "bytes": 264697,
+        "sha256": "e147f6db278b9269b506736f0dd6edaf04bbcab4b8a6f583cdaf1e5e9adf78b2"
+      },
+      "source_before": {
+        "bytes": 264697,
+        "sha256": "e147f6db278b9269b506736f0dd6edaf04bbcab4b8a6f583cdaf1e5e9adf78b2"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/hypothesis.document.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 19291,
+        "sha256": "848e81dd6de73ce538c9f3bd668420420f9f26f3ee3b9a75a3704cf835b8761b"
+      },
+      "destination_path": "acceptance_candidate_001/hypothesis_bundle.json",
+      "source_after": {
+        "bytes": 19291,
+        "sha256": "848e81dd6de73ce538c9f3bd668420420f9f26f3ee3b9a75a3704cf835b8761b"
+      },
+      "source_before": {
+        "bytes": 19291,
+        "sha256": "848e81dd6de73ce538c9f3bd668420420f9f26f3ee3b9a75a3704cf835b8761b"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/hypothesis_bundle.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 459,
+        "sha256": "d07463e00bd833efcbb7cdb1e393ed34681a50b3d48f57920c3bb8c4e0e516c0"
+      },
+      "destination_path": "acceptance_candidate_001/hypothesis_conformance.json",
+      "source_after": {
+        "bytes": 459,
+        "sha256": "d07463e00bd833efcbb7cdb1e393ed34681a50b3d48f57920c3bb8c4e0e516c0"
+      },
+      "source_before": {
+        "bytes": 459,
+        "sha256": "d07463e00bd833efcbb7cdb1e393ed34681a50b3d48f57920c3bb8c4e0e516c0"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/hypothesis_conformance.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 622,
+        "sha256": "eeaa975ae55fc34fedf592e2e03626d40aee84a489369001e5b5fb8c87078752"
+      },
+      "destination_path": "acceptance_candidate_001/hypothesis_source_receipt.json",
+      "source_after": {
+        "bytes": 622,
+        "sha256": "eeaa975ae55fc34fedf592e2e03626d40aee84a489369001e5b5fb8c87078752"
+      },
+      "source_before": {
+        "bytes": 622,
+        "sha256": "eeaa975ae55fc34fedf592e2e03626d40aee84a489369001e5b5fb8c87078752"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/hypothesis_source_receipt.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 200034,
+        "sha256": "0d65f2369e0bf9fa856197e47bc6188f817be80ff153deafeec5e55e377ad488"
+      },
+      "destination_path": "acceptance_candidate_001/learner_inputs.jsonl",
+      "source_after": {
+        "bytes": 200034,
+        "sha256": "0d65f2369e0bf9fa856197e47bc6188f817be80ff153deafeec5e55e377ad488"
+      },
+      "source_before": {
+        "bytes": 200034,
+        "sha256": "0d65f2369e0bf9fa856197e47bc6188f817be80ff153deafeec5e55e377ad488"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/learner_inputs.jsonl"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 360168,
+        "sha256": "b517a919ef235fece2ccb1fad75aadf539b89fff2adca23bc82bc0c4189af1d2"
+      },
+      "destination_path": "acceptance_candidate_001/lesson_bindings.jsonl",
+      "source_after": {
+        "bytes": 360168,
+        "sha256": "b517a919ef235fece2ccb1fad75aadf539b89fff2adca23bc82bc0c4189af1d2"
+      },
+      "source_before": {
+        "bytes": 360168,
+        "sha256": "b517a919ef235fece2ccb1fad75aadf539b89fff2adca23bc82bc0c4189af1d2"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/lesson_bindings.jsonl"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 44858,
+        "sha256": "d1d34e4b6eca74cbcac8a8961dcac180d3b9049344564f7aaa5e4620683c58a4"
+      },
+      "destination_path": "acceptance_candidate_001/navigation_conformance.json",
+      "source_after": {
+        "bytes": 44858,
+        "sha256": "d1d34e4b6eca74cbcac8a8961dcac180d3b9049344564f7aaa5e4620683c58a4"
+      },
+      "source_before": {
+        "bytes": 44858,
+        "sha256": "d1d34e4b6eca74cbcac8a8961dcac180d3b9049344564f7aaa5e4620683c58a4"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/navigation_conformance.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 33478,
+        "sha256": "7f75380fbba26089c5f13fc7606b1e3f902524d7cc94bc7af62e316190af5a9d"
+      },
+      "destination_path": "acceptance_candidate_001/project_sources_before.json",
+      "source_after": {
+        "bytes": 33478,
+        "sha256": "7f75380fbba26089c5f13fc7606b1e3f902524d7cc94bc7af62e316190af5a9d"
+      },
+      "source_before": {
+        "bytes": 33478,
+        "sha256": "7f75380fbba26089c5f13fc7606b1e3f902524d7cc94bc7af62e316190af5a9d"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/project_sources_before.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 5392,
+        "sha256": "a9ff8f684909ce63dd379679d89b04bf3df55b4e0badd60be54bd8a2ad9fa7b4"
+      },
+      "destination_path": "acceptance_candidate_001/receipt.json",
+      "source_after": {
+        "bytes": 5392,
+        "sha256": "a9ff8f684909ce63dd379679d89b04bf3df55b4e0badd60be54bd8a2ad9fa7b4"
+      },
+      "source_before": {
+        "bytes": 5392,
+        "sha256": "a9ff8f684909ce63dd379679d89b04bf3df55b4e0badd60be54bd8a2ad9fa7b4"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/receipt.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 3052,
+        "sha256": "1d7946cdae6c9338abf5ef7651b310eefdaa36f00a34b2467a7b9ee13b089665"
+      },
+      "destination_path": "acceptance_candidate_001/refusal_probes.json",
+      "source_after": {
+        "bytes": 3052,
+        "sha256": "1d7946cdae6c9338abf5ef7651b310eefdaa36f00a34b2467a7b9ee13b089665"
+      },
+      "source_before": {
+        "bytes": 3052,
+        "sha256": "1d7946cdae6c9338abf5ef7651b310eefdaa36f00a34b2467a7b9ee13b089665"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/refusal_probes.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 1345,
+        "sha256": "548ef7672de8a93b9f969a94098d1eb155d0312bbfab530f49ca622f14618fa8"
+      },
+      "destination_path": "acceptance_candidate_001/run_context.json",
+      "source_after": {
+        "bytes": 1345,
+        "sha256": "548ef7672de8a93b9f969a94098d1eb155d0312bbfab530f49ca622f14618fa8"
+      },
+      "source_before": {
+        "bytes": 1345,
+        "sha256": "548ef7672de8a93b9f969a94098d1eb155d0312bbfab530f49ca622f14618fa8"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/run_context.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 29971,
+        "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+      },
+      "destination_path": "acceptance_candidate_001/source_bundle.json",
+      "source_after": {
+        "bytes": 29971,
+        "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+      },
+      "source_before": {
+        "bytes": 29971,
+        "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/source_bundle.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 45083,
+        "sha256": "b942271a43200eb9f19e2fe69808357e71e3201ef297f478a2df91318d43a6a0"
+      },
+      "destination_path": "acceptance_candidate_001/source_projection_conformance.json",
+      "source_after": {
+        "bytes": 45083,
+        "sha256": "b942271a43200eb9f19e2fe69808357e71e3201ef297f478a2df91318d43a6a0"
+      },
+      "source_before": {
+        "bytes": 45083,
+        "sha256": "b942271a43200eb9f19e2fe69808357e71e3201ef297f478a2df91318d43a6a0"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/source_projection_conformance.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 622,
+        "sha256": "93da58c0283c4a4d9c9fe791c9e9a36807d143dcf1a3e755c0cb693fb40bd01e"
+      },
+      "destination_path": "acceptance_candidate_001/source_receipt.json",
+      "source_after": {
+        "bytes": 622,
+        "sha256": "93da58c0283c4a4d9c9fe791c9e9a36807d143dcf1a3e755c0cb693fb40bd01e"
+      },
+      "source_before": {
+        "bytes": 622,
+        "sha256": "93da58c0283c4a4d9c9fe791c9e9a36807d143dcf1a3e755c0cb693fb40bd01e"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/source_receipt.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 1659,
+        "sha256": "0bdf6d0908feb46b47fa09391676a863d091d1bf3df89c295f8e88122cf55956"
+      },
+      "destination_path": "acceptance_candidate_001/target_isolation.json",
+      "source_after": {
+        "bytes": 1659,
+        "sha256": "0bdf6d0908feb46b47fa09391676a863d091d1bf3df89c295f8e88122cf55956"
+      },
+      "source_before": {
+        "bytes": 1659,
+        "sha256": "0bdf6d0908feb46b47fa09391676a863d091d1bf3df89c295f8e88122cf55956"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/target_isolation.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 1342379,
+        "sha256": "1122acd13b02eecebaced6d861fe7e85bd582243a560df995ac6cfffcced4031"
+      },
+      "destination_path": "acceptance_candidate_001/teacher_sidecars.jsonl",
+      "source_after": {
+        "bytes": 1342379,
+        "sha256": "1122acd13b02eecebaced6d861fe7e85bd582243a560df995ac6cfffcced4031"
+      },
+      "source_before": {
+        "bytes": 1342379,
+        "sha256": "1122acd13b02eecebaced6d861fe7e85bd582243a560df995ac6cfffcced4031"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/teacher_sidecars.jsonl"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 1450652,
+        "sha256": "fcf898440c9c700487fe8a93af1d67ce2eb7bf8307087375d4b87ece3fd78135"
+      },
+      "destination_path": "acceptance_candidate_001/traversal_conformance.json",
+      "source_after": {
+        "bytes": 1450652,
+        "sha256": "fcf898440c9c700487fe8a93af1d67ce2eb7bf8307087375d4b87ece3fd78135"
+      },
+      "source_before": {
+        "bytes": 1450652,
+        "sha256": "fcf898440c9c700487fe8a93af1d67ce2eb7bf8307087375d4b87ece3fd78135"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/traversal_conformance.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 130268,
+        "sha256": "305a31fbf5e2867179ac54f39163ab0c8e7cadb08b61e41b8ebe91b028f864ec"
+      },
+      "destination_path": "acceptance_candidate_001/view_analogy.document.json",
+      "source_after": {
+        "bytes": 130268,
+        "sha256": "305a31fbf5e2867179ac54f39163ab0c8e7cadb08b61e41b8ebe91b028f864ec"
+      },
+      "source_before": {
+        "bytes": 130268,
+        "sha256": "305a31fbf5e2867179ac54f39163ab0c8e7cadb08b61e41b8ebe91b028f864ec"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/view_analogy.document.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 130282,
+        "sha256": "c016c437a9f64118a7cb3e0c3701d109c5d92e082c86b1a0cee9d815dcc102de"
+      },
+      "destination_path": "acceptance_candidate_001/view_context.document.json",
+      "source_after": {
+        "bytes": 130282,
+        "sha256": "c016c437a9f64118a7cb3e0c3701d109c5d92e082c86b1a0cee9d815dcc102de"
+      },
+      "source_before": {
+        "bytes": 130282,
+        "sha256": "c016c437a9f64118a7cb3e0c3701d109c5d92e082c86b1a0cee9d815dcc102de"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/view_context.document.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 130098,
+        "sha256": "0ec450dfd90bc5f4c0a7205649aa67a405421bbebf515ece7a4d41f75ed112c4"
+      },
+      "destination_path": "acceptance_candidate_001/view_formal.document.json",
+      "source_after": {
+        "bytes": 130098,
+        "sha256": "0ec450dfd90bc5f4c0a7205649aa67a405421bbebf515ece7a4d41f75ed112c4"
+      },
+      "source_before": {
+        "bytes": 130098,
+        "sha256": "0ec450dfd90bc5f4c0a7205649aa67a405421bbebf515ece7a4d41f75ed112c4"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/acceptance_candidate_001/view_formal.document.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 716,
+        "sha256": "b66ee73ac191a59a379ed4eafe93c880a827fdc22926c3232c3c1e7025d435b2"
+      },
+      "destination_path": "adversarial_probe_001.json",
+      "source_after": {
+        "bytes": 716,
+        "sha256": "b66ee73ac191a59a379ed4eafe93c880a827fdc22926c3232c3c1e7025d435b2"
+      },
+      "source_before": {
+        "bytes": 716,
+        "sha256": "b66ee73ac191a59a379ed4eafe93c880a827fdc22926c3232c3c1e7025d435b2"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_001.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 46,
+      "destination": {
+        "bytes": 3682,
+        "sha256": "17cbb5162a3d382ccf495eeec90de00f481573aea650234c6cb25b9eaff63c37"
+      },
+      "destination_path": "adversarial_probe_002.txt",
+      "source_after": {
+        "bytes": 3682,
+        "sha256": "17cbb5162a3d382ccf495eeec90de00f481573aea650234c6cb25b9eaff63c37"
+      },
+      "source_before": {
+        "bytes": 3682,
+        "sha256": "17cbb5162a3d382ccf495eeec90de00f481573aea650234c6cb25b9eaff63c37"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_002.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 21,
+      "destination": {
+        "bytes": 1770,
+        "sha256": "8c5522a640d60efe8de7db8a8c9e644d7c9625c66c77de0c7abc11e40ac8d23d"
+      },
+      "destination_path": "adversarial_probe_003.txt",
+      "source_after": {
+        "bytes": 1770,
+        "sha256": "8c5522a640d60efe8de7db8a8c9e644d7c9625c66c77de0c7abc11e40ac8d23d"
+      },
+      "source_before": {
+        "bytes": 1770,
+        "sha256": "8c5522a640d60efe8de7db8a8c9e644d7c9625c66c77de0c7abc11e40ac8d23d"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_003.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 12,
+      "destination": {
+        "bytes": 965,
+        "sha256": "e767ff9ecdba519f864e36af21c60a67752826dd9a916453c64b706271aa61ce"
+      },
+      "destination_path": "adversarial_probe_004.txt",
+      "source_after": {
+        "bytes": 965,
+        "sha256": "e767ff9ecdba519f864e36af21c60a67752826dd9a916453c64b706271aa61ce"
+      },
+      "source_before": {
+        "bytes": 965,
+        "sha256": "e767ff9ecdba519f864e36af21c60a67752826dd9a916453c64b706271aa61ce"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_004.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 14,
+      "destination": {
+        "bytes": 1235,
+        "sha256": "0f2daf65d85bb817a8f100d2e8aacede023f51f281d02babe9b672aaaa8f3d62"
+      },
+      "destination_path": "adversarial_probe_005.txt",
+      "source_after": {
+        "bytes": 1235,
+        "sha256": "0f2daf65d85bb817a8f100d2e8aacede023f51f281d02babe9b672aaaa8f3d62"
+      },
+      "source_before": {
+        "bytes": 1235,
+        "sha256": "0f2daf65d85bb817a8f100d2e8aacede023f51f281d02babe9b672aaaa8f3d62"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_005.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 14,
+      "destination": {
+        "bytes": 1235,
+        "sha256": "e39db343e25daeac0319923108167779ab994568aa613b58625e8a828afe3dc6"
+      },
+      "destination_path": "adversarial_probe_006.txt",
+      "source_after": {
+        "bytes": 1235,
+        "sha256": "e39db343e25daeac0319923108167779ab994568aa613b58625e8a828afe3dc6"
+      },
+      "source_before": {
+        "bytes": 1235,
+        "sha256": "e39db343e25daeac0319923108167779ab994568aa613b58625e8a828afe3dc6"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/adversarial_probe_006.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 2082,
+        "sha256": "db3f916e8b476fee35aa7d5b1307a5ea38e84604104c103ff8690bc3b159ef0e"
+      },
+      "destination_path": "capture_final_review_effects.py",
+      "source_after": {
+        "bytes": 2082,
+        "sha256": "db3f916e8b476fee35aa7d5b1307a5ea38e84604104c103ff8690bc3b159ef0e"
+      },
+      "source_before": {
+        "bytes": 2082,
+        "sha256": "db3f916e8b476fee35aa7d5b1307a5ea38e84604104c103ff8690bc3b159ef0e"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/capture_final_review_effects.py"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 5197,
+        "sha256": "b80184741ee773d1dc074a3848e0b5d7043bde66f7dbf8d4111a38d403ad50ff"
+      },
+      "destination_path": "draft_001.xml",
+      "source_after": {
+        "bytes": 5197,
+        "sha256": "b80184741ee773d1dc074a3848e0b5d7043bde66f7dbf8d4111a38d403ad50ff"
+      },
+      "source_before": {
+        "bytes": 5197,
+        "sha256": "b80184741ee773d1dc074a3848e0b5d7043bde66f7dbf8d4111a38d403ad50ff"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_001.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 12,
+      "destination": {
+        "bytes": 7188,
+        "sha256": "625b5078566a93ff229cfac8f690eed5ce580a724115d39eabbb8d96c38cf5f7"
+      },
+      "destination_path": "draft_002.xml",
+      "source_after": {
+        "bytes": 7188,
+        "sha256": "625b5078566a93ff229cfac8f690eed5ce580a724115d39eabbb8d96c38cf5f7"
+      },
+      "source_before": {
+        "bytes": 7188,
+        "sha256": "625b5078566a93ff229cfac8f690eed5ce580a724115d39eabbb8d96c38cf5f7"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_002.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 6328,
+        "sha256": "882d1a477ae341b9f044d489b6acca87beffffa7bd7cad691dee30f0e393ad2f"
+      },
+      "destination_path": "draft_003.xml",
+      "source_after": {
+        "bytes": 6328,
+        "sha256": "882d1a477ae341b9f044d489b6acca87beffffa7bd7cad691dee30f0e393ad2f"
+      },
+      "source_before": {
+        "bytes": 6328,
+        "sha256": "882d1a477ae341b9f044d489b6acca87beffffa7bd7cad691dee30f0e393ad2f"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_003.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 6987,
+        "sha256": "eb852090e179bd7bbc9886c32b286c6d362ab8598ac4b221446f1036faf77db5"
+      },
+      "destination_path": "draft_004.xml",
+      "source_after": {
+        "bytes": 6987,
+        "sha256": "eb852090e179bd7bbc9886c32b286c6d362ab8598ac4b221446f1036faf77db5"
+      },
+      "source_before": {
+        "bytes": 6987,
+        "sha256": "eb852090e179bd7bbc9886c32b286c6d362ab8598ac4b221446f1036faf77db5"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_004.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 6987,
+        "sha256": "c2d6ab9cb4bdfabf8640f1dfb62cf2527b43b101cc0c949c5ed267ef5b0f5d02"
+      },
+      "destination_path": "draft_005.xml",
+      "source_after": {
+        "bytes": 6987,
+        "sha256": "c2d6ab9cb4bdfabf8640f1dfb62cf2527b43b101cc0c949c5ed267ef5b0f5d02"
+      },
+      "source_before": {
+        "bytes": 6987,
+        "sha256": "c2d6ab9cb4bdfabf8640f1dfb62cf2527b43b101cc0c949c5ed267ef5b0f5d02"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_005.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 9144,
+        "sha256": "8907f53b38c01d4f072a9aca60f41d2d405c822489735bf440f7aa44388d6d6e"
+      },
+      "destination_path": "draft_006.xml",
+      "source_after": {
+        "bytes": 9144,
+        "sha256": "8907f53b38c01d4f072a9aca60f41d2d405c822489735bf440f7aa44388d6d6e"
+      },
+      "source_before": {
+        "bytes": 9144,
+        "sha256": "8907f53b38c01d4f072a9aca60f41d2d405c822489735bf440f7aa44388d6d6e"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/draft_006.xml"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 24,
+      "destination": {
+        "bytes": 873,
+        "sha256": "fa854af16d74d8bf03731cd6c41956b20184114e50d4e82eaa60ad9c8bcb5ef5"
+      },
+      "destination_path": "final_review_effects_001.json",
+      "source_after": {
+        "bytes": 873,
+        "sha256": "fa854af16d74d8bf03731cd6c41956b20184114e50d4e82eaa60ad9c8bcb5ef5"
+      },
+      "source_before": {
+        "bytes": 873,
+        "sha256": "fa854af16d74d8bf03731cd6c41956b20184114e50d4e82eaa60ad9c8bcb5ef5"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_effects_001.json"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 37,
+      "destination": {
+        "bytes": 3268,
+        "sha256": "d41cc5010a5b685c1bef1f68442c9346627e1e891b7f9525e04eaddcccc16e58"
+      },
+      "destination_path": "final_review_probe_001.txt",
+      "source_after": {
+        "bytes": 3268,
+        "sha256": "d41cc5010a5b685c1bef1f68442c9346627e1e891b7f9525e04eaddcccc16e58"
+      },
+      "source_before": {
+        "bytes": 3268,
+        "sha256": "d41cc5010a5b685c1bef1f68442c9346627e1e891b7f9525e04eaddcccc16e58"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_001.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 42,
+      "destination": {
+        "bytes": 4197,
+        "sha256": "e2761369908cc3170674a58375f22c23aab7f629869f761526cef6f3cbf3f119"
+      },
+      "destination_path": "final_review_probe_002.txt",
+      "source_after": {
+        "bytes": 4197,
+        "sha256": "e2761369908cc3170674a58375f22c23aab7f629869f761526cef6f3cbf3f119"
+      },
+      "source_before": {
+        "bytes": 4197,
+        "sha256": "e2761369908cc3170674a58375f22c23aab7f629869f761526cef6f3cbf3f119"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_002.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 73,
+      "destination": {
+        "bytes": 7675,
+        "sha256": "e0fe0ef552d202ee3c0fd93c9b7a47c2e04ed2ee0103e9672ce7f9b58feb1a36"
+      },
+      "destination_path": "final_review_probe_003.txt",
+      "source_after": {
+        "bytes": 7675,
+        "sha256": "e0fe0ef552d202ee3c0fd93c9b7a47c2e04ed2ee0103e9672ce7f9b58feb1a36"
+      },
+      "source_before": {
+        "bytes": 7675,
+        "sha256": "e0fe0ef552d202ee3c0fd93c9b7a47c2e04ed2ee0103e9672ce7f9b58feb1a36"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_003.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 83,
+      "destination": {
+        "bytes": 8618,
+        "sha256": "5709bd11dd7176cea4a14e77451b63dab1b0f0aed62cdb296d9bc404d9d0a7ce"
+      },
+      "destination_path": "final_review_probe_004.txt",
+      "source_after": {
+        "bytes": 8618,
+        "sha256": "5709bd11dd7176cea4a14e77451b63dab1b0f0aed62cdb296d9bc404d9d0a7ce"
+      },
+      "source_before": {
+        "bytes": 8618,
+        "sha256": "5709bd11dd7176cea4a14e77451b63dab1b0f0aed62cdb296d9bc404d9d0a7ce"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_004.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 18,
+      "destination": {
+        "bytes": 2276,
+        "sha256": "c40a15c24245070c4a63a307614505b2ef36844115b9ac0d7a4e96393d2d486e"
+      },
+      "destination_path": "final_review_probe_005.txt",
+      "source_after": {
+        "bytes": 2276,
+        "sha256": "c40a15c24245070c4a63a307614505b2ef36844115b9ac0d7a4e96393d2d486e"
+      },
+      "source_before": {
+        "bytes": 2276,
+        "sha256": "c40a15c24245070c4a63a307614505b2ef36844115b9ac0d7a4e96393d2d486e"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_005.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 18,
+      "destination": {
+        "bytes": 2276,
+        "sha256": "177eb1b7fde0c93859fa91ed7ab6c8fc4b284dfefe14f25fbcd79c4c566ccfd4"
+      },
+      "destination_path": "final_review_probe_006.txt",
+      "source_after": {
+        "bytes": 2276,
+        "sha256": "177eb1b7fde0c93859fa91ed7ab6c8fc4b284dfefe14f25fbcd79c4c566ccfd4"
+      },
+      "source_before": {
+        "bytes": 2276,
+        "sha256": "177eb1b7fde0c93859fa91ed7ab6c8fc4b284dfefe14f25fbcd79c4c566ccfd4"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/final_review_probe_006.txt"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 5045,
+        "sha256": "c321795fcdb479920b15566679edacd47cb25db8173dea35f54efe7f59509859"
+      },
+      "destination_path": "FINAL_SOURCE_REVIEW_001.md",
+      "source_after": {
+        "bytes": 5045,
+        "sha256": "c321795fcdb479920b15566679edacd47cb25db8173dea35f54efe7f59509859"
+      },
+      "source_before": {
+        "bytes": 5045,
+        "sha256": "c321795fcdb479920b15566679edacd47cb25db8173dea35f54efe7f59509859"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/FINAL_SOURCE_REVIEW_001.md"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 4828,
+        "sha256": "2d068b16067fb669e3e3e17ccf7418271afba42e5f4ced535f491f5c37f332dc"
+      },
+      "destination_path": "FINAL_SOURCE_REVIEW_002.md",
+      "source_after": {
+        "bytes": 4828,
+        "sha256": "2d068b16067fb669e3e3e17ccf7418271afba42e5f4ced535f491f5c37f332dc"
+      },
+      "source_before": {
+        "bytes": 4828,
+        "sha256": "2d068b16067fb669e3e3e17ccf7418271afba42e5f4ced535f491f5c37f332dc"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/FINAL_SOURCE_REVIEW_002.md"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 6374,
+        "sha256": "827d78a3b79a755893c1d158280ef5095db8e0eb9b23908e14bfca8f74f61304"
+      },
+      "destination_path": "IMPLEMENTATION_NOTE.md",
+      "source_after": {
+        "bytes": 6374,
+        "sha256": "827d78a3b79a755893c1d158280ef5095db8e0eb9b23908e14bfca8f74f61304"
+      },
+      "source_before": {
+        "bytes": 6374,
+        "sha256": "827d78a3b79a755893c1d158280ef5095db8e0eb9b23908e14bfca8f74f61304"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/IMPLEMENTATION_NOTE.md"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 26576,
+        "sha256": "3712ba72955348a4f7585159ddcd090dc02fe40b26e31c18e7420c13a694210e"
+      },
+      "destination_path": "reproduce_cube_bridge.py",
+      "source_after": {
+        "bytes": 26576,
+        "sha256": "3712ba72955348a4f7585159ddcd090dc02fe40b26e31c18e7420c13a694210e"
+      },
+      "source_before": {
+        "bytes": 26576,
+        "sha256": "3712ba72955348a4f7585159ddcd090dc02fe40b26e31c18e7420c13a694210e"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/reproduce_cube_bridge.py"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 33074,
+        "sha256": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275"
+      },
+      "destination_path": "rpa_cube_adapter_pre_scalar_fix.py",
+      "source_after": {
+        "bytes": 33074,
+        "sha256": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275"
+      },
+      "source_before": {
+        "bytes": 33074,
+        "sha256": "129bcf8876a1489841e97b3161ef9d5751bc08884e7915e70b661f5b3c4e3275"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/rpa_cube_adapter_pre_scalar_fix.py"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 27640,
+        "sha256": "360f96b3383683f25f7af07fac11278e12913b769a24dd5b47c4c78e2169ac1c"
+      },
+      "destination_path": "test_rpa_cube_adapter.py",
+      "source_after": {
+        "bytes": 27640,
+        "sha256": "360f96b3383683f25f7af07fac11278e12913b769a24dd5b47c4c78e2169ac1c"
+      },
+      "source_before": {
+        "bytes": 27640,
+        "sha256": "360f96b3383683f25f7af07fac11278e12913b769a24dd5b47c4c78e2169ac1c"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/test_rpa_cube_adapter.py"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 4840,
+        "sha256": "0be349126e3c20f4d3fb8c17e44482f2b4babec440c0937a29433b6c567c46d9"
+      },
+      "destination_path": "test_rpa_cube_adversarial.py",
+      "source_after": {
+        "bytes": 4840,
+        "sha256": "0be349126e3c20f4d3fb8c17e44482f2b4babec440c0937a29433b6c567c46d9"
+      },
+      "source_before": {
+        "bytes": 4840,
+        "sha256": "0be349126e3c20f4d3fb8c17e44482f2b4babec440c0937a29433b6c567c46d9"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/test_rpa_cube_adversarial.py"
+    },
+    {
+      "byte_equal": true,
+      "crlf_sequences": 0,
+      "destination": {
+        "bytes": 7836,
+        "sha256": "56b91ce1fef317f558fd2016a0fc44c52eac3a88ed7a432920779f311bb69f99"
+      },
+      "destination_path": "test_rpa_cube_final_review.py",
+      "source_after": {
+        "bytes": 7836,
+        "sha256": "56b91ce1fef317f558fd2016a0fc44c52eac3a88ed7a432920779f311bb69f99"
+      },
+      "source_before": {
+        "bytes": 7836,
+        "sha256": "56b91ce1fef317f558fd2016a0fc44c52eac3a88ed7a432920779f311bb69f99"
+      },
+      "source_path": "records/rpa_cube_001/_scratch/test_rpa_cube_final_review.py"
+    }
+  ],
+  "destination_root": "records/rpa_cube_001/development_001",
+  "excluded": [
+    "root_state.json",
+    "test_promotion_001.json",
+    "viewer_draft_001/",
+    "__pycache__/",
+    "all files not named by this finalized evidence copy set"
+  ],
+  "observed_utc": "2026-09-16T15:25:04.486229+00:00",
+  "receipt_checks": [
+    {
+      "all_match": true,
+      "receipt_identity": {
+        "bytes": 5392,
+        "sha256": "a9ff8f684909ce63dd379679d89b04bf3df55b4e0badd60be54bd8a2ad9fa7b4"
+      },
+      "receipt_path": "acceptance_candidate_001/receipt.json",
+      "relative_artifacts_verified": [
+        "acceptance_summary.json",
+        "actual_imports.json",
+        "cache_identity_conformance.json",
+        "catalog_pages.json",
+        "compiler_comparisons.json",
+        "hypothesis.document.json",
+        "hypothesis_bundle.json",
+        "hypothesis_conformance.json",
+        "hypothesis_source_receipt.json",
+        "learner_inputs.jsonl",
+        "lesson_bindings.jsonl",
+        "navigation_conformance.json",
+        "project_sources_before.json",
+        "refusal_probes.json",
+        "run_context.json",
+        "source_bundle.json",
+        "source_projection_conformance.json",
+        "source_receipt.json",
+        "target_isolation.json",
+        "teacher_sidecars.jsonl",
+        "traversal_conformance.json",
+        "view_analogy.document.json",
+        "view_context.document.json",
+        "view_formal.document.json"
+      ]
+    }
+  ],
+  "schema_version": "cncm.rpa-cube-development-copy/0.1",
+  "source_root": "records/rpa_cube_001/_scratch",
+  "status": "BYTE_EXACT_COPY_VERIFIED"
+}

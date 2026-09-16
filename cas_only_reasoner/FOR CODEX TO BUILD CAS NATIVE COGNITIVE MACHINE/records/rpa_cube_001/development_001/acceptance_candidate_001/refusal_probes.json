@@ -1,0 +1,102 @@
+[
+  {
+    "exception": "ContractError",
+    "message": "supplied teacher target disagrees with the supplied teacher reference",
+    "name": "disagreeing_teacher_target"
+  },
+  {
+    "exception": "ContractError",
+    "message": "source/bundle digest mismatch",
+    "name": "wrong_source_bundle_digest"
+  },
+  {
+    "exception": "ContractError",
+    "message": "source file SHA-256 mismatch",
+    "name": "wrong_source_file_digest"
+  },
+  {
+    "exception": "ContractError",
+    "message": "source namespace identifier invalid",
+    "name": "wrong_source_namespace"
+  },
+  {
+    "exception": "ContractError",
+    "message": "stale or corrupted source projection",
+    "name": "resealed_stale_projection"
+  },
+  {
+    "exception": "ContractError",
+    "message": "catalog cursor mismatch",
+    "name": "corrupt_page_cursor"
+  },
+  {
+    "exception": "ContractError",
+    "message": "private target field prohibited anywhere in public source",
+    "name": "private_target_in_source_context"
+  },
+  {
+    "exception": "ContractError",
+    "message": "unsupported partial or duplicate branch view; complete view coverage required",
+    "name": "partial_view_would_widen_input"
+  },
+  {
+    "exception": "ContractError",
+    "message": "face direct inventory must be a unique subset of its own outgoing branches",
+    "name": "foreign_partial_face_inventory"
+  },
+  {
+    "exception": "ContractError",
+    "message": "unsupported branch predicate",
+    "name": "undeclared_predicate"
+  },
+  {
+    "exception": "ContractError",
+    "message": "cube validation failed: CUBE_BRANCH_ENDPOINT_UNRESOLVED:missing",
+    "name": "dangling_branch"
+  },
+  {
+    "exception": "ContractError",
+    "message": "cube validation failed: CUBE_NODE:DUPLICATE:node_001",
+    "name": "duplicate_cube_id"
+  },
+  {
+    "exception": "ContractError",
+    "message": "cube validation failed: CUBE_CONTAINS_CYCLE",
+    "name": "contains_cycle"
+  },
+  {
+    "exception": "ContractError",
+    "message": "source byte bound/type invalid",
+    "name": "oversized_source_bytes"
+  },
+  {
+    "exception": "ContractError",
+    "message": "complete scored answer requires declared complete inventory",
+    "name": "incomplete_inventory_cannot_license_absence"
+  },
+  {
+    "exception": "ContractError",
+    "message": "unsupported scored operation; Why is teacher-only and How needs an action contract",
+    "name": "unsupported_operation_Why"
+  },
+  {
+    "exception": "ContractError",
+    "message": "unsupported scored operation; Why is teacher-only and How needs an action contract",
+    "name": "unsupported_operation_How"
+  },
+  {
+    "exception": "ContractError",
+    "message": "unsupported scored operation; Why is teacher-only and How needs an action contract",
+    "name": "unsupported_operation_reachable_via"
+  },
+  {
+    "exception": "ContractError",
+    "message": "lossy or ambiguous compiler option encoding",
+    "name": "lossy_three_choice_encoding"
+  },
+  {
+    "exception": "KeyError",
+    "message": "'correct'",
+    "name": "preserved_legacy_target_free_failure"
+  }
+]

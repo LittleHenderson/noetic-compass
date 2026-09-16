@@ -1,0 +1,78 @@
+"""Preserve cube viewer evidence and package only browser-tested HTML bytes."""
+from hashlib import sha256
+import json
+from pathlib import Path
+import shutil
+
+ROOT = next(p for p in Path(__file__).resolve().parents if (p/'cncm/rpa_cube_adapter.py').is_file())
+OUTER = Path('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE')
+DRAFT = ROOT/'records/rpa_cube_001/_scratch/viewer_draft_001'
+RECORD = ROOT/'records/rpa_cube_001/browser_validation_001'
+SOURCE = ROOT/'records/rpa_cube_001/acceptance_001'
+DELIVERY = OUTER/'output/rpa_cube_001'
+checksum = lambda p: sha256(p.read_bytes()).hexdigest()
+canonical = lambda value: json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n'
+
+def write(path, value):
+    with path.open('x',encoding='utf-8',newline='\n') as handle:
+        handle.write(value)
+
+def copy_exact(source, destination):
+    assert source.is_file() and not source.is_symlink()
+    destination.parent.mkdir(parents=True,exist_ok=True)
+    assert not destination.exists()
+    shutil.copyfile(source,destination)
+    assert source.read_bytes()==destination.read_bytes()
+    return {'source':str(source.relative_to(ROOT)),'destination':str(destination.relative_to(RECORD)),'sha256':checksum(source),'size':source.stat().st_size}
+
+def main():
+    renderer=checksum(ROOT/'tools/render_cube_rpa_view.py')
+    assert renderer=='c34e478d587767629fc8256fce3792db1126789dc9f59b2d99d39fbc158993f8'
+    assert checksum(SOURCE/'receipt.json')=='b0550845a0e64653910bf8c17a5bd45011ca7068897c59608227b7ce6f50fe7c'
+    checks=json.loads((DRAFT/'browser_acceptance_003/checks.json').read_text())
+    assert checks['status']=='PASS' and len(checks['cases'])==4
+    RECORD.mkdir(exist_ok=False)
+    preserved=[]
+    for source in sorted(DRAFT.rglob('*')):
+        if source.is_file() and not any(x in source.parts for x in ('__pycache__','.pytest_cache')):
+            preserved.append(copy_exact(source,RECORD/'original_draft'/source.relative_to(DRAFT)))
+    write(RECORD/'copy_manifest.json',canonical({'status':'BYTE_IDENTICAL_COPY','source':str(DRAFT),'files':preserved,'excluded':['__pycache__','.pytest_cache'],'active_browser_work':False}))
+    reusable=RECORD/'reusable';reusable.mkdir()
+    helper=(DRAFT/'run_browser_checks.py').read_text(encoding='utf-8')
+    helper=helper.split('\ndef main():')[0]
+    helper=helper.replace('ROOT=FOLDER.parents[3];sys.path.insert(0,str(ROOT));sys.path.insert(0,str(FOLDER))',"ROOT=next(parent for parent in FOLDER.parents if (parent/'cncm/rpa_cube_adapter.py').is_file() and (parent/'tools/render_cube_rpa_view.py').is_file());sys.path.insert(0,str(ROOT))")
+    helper=helper.replace('from test_cube_view_draft import project,lesson,partial_document,hypothesis_document\n','')
+    write(reusable/'cube_browser_helper.py',helper)
+    shutil.copyfile(DRAFT/'check_cube_browser.mjs',reusable/'check_cube_browser.mjs')
+    write(reusable/'README.md','This separate helper uses nearest-parent source-root discovery and the preserved browser checker. It does not alter the receipt-bound original helper. Import `check_page(page, output_directory, typed_document)`; the output directory must already exist. The helper compares displayed records against the supplied typed source and closes only its owned Chromium process.\n')
+    DELIVERY.mkdir(exist_ok=False)
+    shutil.copytree(SOURCE,DELIVERY/'acceptance')
+    names=('view_context','view_formal','view_analogy','hypothesis')
+    for name in names:
+        case=next(row for row in checks['cases'] if row['name']==name)
+        tested=DRAFT/'browser_acceptance_003'/name/'view.html'
+        assert checksum(tested)==case['page_sha256']
+        shutil.copyfile(tested,DELIVERY/(name+'.html'))
+        shutil.copyfile(DRAFT/'browser_acceptance_003'/name/'lesson.json',DELIVERY/(name+'.lesson.json'))
+        assert (DELIVERY/(name+'.html')).read_bytes()==tested.read_bytes()
+    shutil.copyfile(DRAFT/'browser_acceptance_003/checks.json',DELIVERY/'browser_checks.json')
+    cards=''.join('<article><p class="eyebrow">'+tag+'</p><h2><a href="'+name+'.html">'+title+'</a></h2><p>'+description+'</p><p class="record"><a href="acceptance/'+name+'.document.json">Exact document</a> · <a href="'+name+'.lesson.json">Prepared lesson</a></p></article>' for name,tag,title,description in (
+        ('view_context','Start here','Bicycle and its parts','Inspect the authored Bicycle scene, its six cubes, all six faces per cube, and direct containment branches.'),
+        ('view_formal','Same source · formal view','Symbols and relationships','Inspect A, B, C and the other source-defined symbols. The view changes labels while preserving the supplied relationships.'),
+        ('view_analogy','Same source · analogy view','Kit and components','Inspect the source-defined Kit analogy and its explicit correspondence to the Bicycle scene.'),
+        ('hypothesis','Separate possibility','Compare a hypothetical branch','Use “Inspect hypothesis” to explore a changed branch. The loaded current snapshot stays fixed. This possibility is not an executed transition.'),
+    ))
+    page='''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; style-src 'unsafe-inline'"><title>CAS cube inspector · offline examples</title><style>
+    *{box-sizing:border-box}body{margin:0;background:#f1f5ec;color:#173f37;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1120px;margin:0 auto;padding:42px 24px}h1{font-size:clamp(30px,4vw,46px);line-height:1.15;margin:8px 0 18px}h2{font-size:23px;line-height:1.3;margin:8px 0 14px}p{margin:12px 0}.eyebrow{font-size:16px;letter-spacing:.04em;color:#45675d}a{color:#075f51;text-decoration-thickness:1px;text-underline-offset:4px;overflow-wrap:anywhere}a:hover{color:#003d32}a:focus-visible{outline:3px solid #b27922;outline-offset:5px}.intro{max-width:870px}.notice{padding:18px 20px;background:#fff3d4;border-left:4px solid #b27922;border-radius:8px;margin:24px 0}.cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:26px 0}article,.sources{background:#fffef9;border:1px solid #cbded1;border-radius:14px;padding:24px}article p{margin-bottom:0}.record{padding-top:10px}ul{padding-left:22px}li{padding:5px 0}.sources{margin-top:26px}.sources h2{margin-top:0}footer{margin-top:24px;color:#45675d}@media(max-width:620px){main{padding:24px 18px}.cards{grid-template-columns:1fr}article,.sources{padding:20px}h2{font-size:22px}.notice{padding:16px}}
+    </style></head><body><main><p class="eyebrow">CAS · OFFLINE CUBE INSPECTOR</p><h1>Explore the source.<br>Keep evidence in view.</h1><p class="intro">Four interactive examples show the same authored cube catalog in three views, plus a separate hypothetical branch. Open a cube to inspect its six faces, source records and relationships.</p><div class="notice"><strong>Teacher inspection material.</strong> These pages include prepared learner inputs and separate teacher answers. Do not pass the HTML or full source document to a learner. No learner prediction, training update or runtime action occurs here.</div><section class="cards" aria-label="Four inspection examples">'''+cards+'''</section><section class="sources"><h2>What these files establish</h2><p>The renderer checked the documents against caller-pinned source bytes and rebuilt each supplied lesson before displaying it. This checks source integrity; it does not authenticate the author or establish real-world truth.</p><p>The catalog is an illustrative design example. A complete inventory means complete within this authored scene. Inspection focus, the current snapshot and a hypothetical possibility remain separate.</p><ul><li><a href="acceptance/source_bundle.json">Original source bundle</a> and <a href="acceptance/source_receipt.json">caller-pinned source receipt</a></li><li><a href="acceptance/hypothesis_bundle.json">Hypothetical source bundle</a> and <a href="acceptance/hypothesis_source_receipt.json">its separate source receipt</a></li><li><a href="acceptance/receipt.json">Acceptance artifact hashes</a> and <a href="browser_checks.json">four-page browser check results</a></li><li><a href="delivery.json">Delivered file hashes</a></li></ul><p>Browser checks cover every displayed cube and face, source and lesson preservation, desktop and mobile layout, and zero page network requests. They do not demonstrate improved reasoning or learning.</p></section><footer>Self-contained local files. Links stay within this folder. The source and prepared lesson JSON files are available beside each example.</footer></main></body></html>'''
+    write(DELIVERY/'index.html',page+'\n')
+    delivery={'status':'PACKAGED_TESTED_BYTES','renderer_sha256':renderer,'acceptance_receipt_sha256':checksum(SOURCE/'receipt.json'),'source_browser_checks_sha256':checksum(DRAFT/'browser_acceptance_003/checks.json'),'html_byte_equality':True,'files':[]}
+    for path in sorted(DELIVERY.rglob('*')):
+        if path.is_file():delivery['files'].append({'path':path.relative_to(DELIVERY).as_posix(),'sha256':checksum(path),'size':path.stat().st_size})
+    write(DELIVERY/'delivery.json',canonical(delivery))
+    write(RECORD/'delivery_pre_browser.json',canonical({'output_directory':str(DELIVERY),'delivery_receipt_sha256':checksum(DELIVERY/'delivery.json'),'index_sha256':checksum(DELIVERY/'index.html'),'files':len(delivery['files']),'copied_evidence_files':len(preserved),'renderer_sha256':renderer}))
+    shutil.copyfile(Path(__file__),RECORD/'package_source.py.txt')
+    assert renderer==checksum(ROOT/'tools/render_cube_rpa_view.py')
+    print(canonical({'output_directory':str(DELIVERY),'evidence_directory':str(RECORD),'delivery_receipt_sha256':checksum(DELIVERY/'delivery.json'),'index_sha256':checksum(DELIVERY/'index.html'),'files':len(delivery['files'])}),end='')
+
+if __name__=='__main__':main()

@@ -1,0 +1,63 @@
+"""Bind inspected screenshots and exact inner/outer delivery copies."""
+from hashlib import sha256
+import json
+from pathlib import Path
+import shutil
+
+ROOT=next(p for p in Path(__file__).resolve().parents if (p/'cncm/rpa_cube_adapter.py').is_file())
+RECORD=ROOT/'records/rpa_cube_001/browser_validation_001'
+OUTER=Path('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/output/rpa_cube_001')
+INNER=ROOT/'records/rpa_cube_001/delivery_001'
+checksum=lambda p:sha256(p.read_bytes()).hexdigest()
+read=lambda p:json.loads(p.read_text(encoding='utf-8'))
+canonical=lambda v:json.dumps(v,sort_keys=True,separators=(',',':'),ensure_ascii=False)+'\n'
+
+def write(path,value):
+    with path.open('x',encoding='utf-8',newline='\n') as handle:handle.write(canonical(value))
+
+def main():
+    renderer=checksum(ROOT/'tools/render_cube_rpa_view.py');adapter=checksum(ROOT/'cncm/rpa_cube_adapter.py')
+    assert renderer=='c34e478d587767629fc8256fce3792db1126789dc9f59b2d99d39fbc158993f8'
+    assert adapter=='00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62'
+    accepted=read(RECORD/'original_draft/browser_acceptance_003/checks.json')
+    delivered=read(RECORD/'delivery_browser_002/receipt.json')
+    assert accepted['status']==delivered['status']=='PASS'
+    assert checksum(OUTER/'delivery.json')==delivered['delivery_receipt_sha256']
+    for row in read(OUTER/'delivery.json')['files']:assert checksum(OUTER/row['path'])==row['sha256']
+    assert not INNER.exists()
+    shutil.copytree(OUTER,INNER)
+    pairs=[]
+    for source in sorted(OUTER.rglob('*')):
+        if source.is_file():
+            relative=source.relative_to(OUTER);copied=INNER/relative
+            assert copied.read_bytes()==source.read_bytes()
+            pairs.append({'path':relative.as_posix(),'sha256':checksum(source),'size':source.stat().st_size})
+    assert len(pairs)==40
+    copy_manifest={'status':'BYTE_IDENTICAL','outer_directory':str(OUTER),'inner_directory':str(INNER),'files':pairs}
+    write(RECORD/'delivery_copy_manifest.json',copy_manifest)
+    inspected=[
+        'original_draft/browser_acceptance_003/view_context/desktop_faces.png',
+        'original_draft/browser_acceptance_003/view_context/desktop_lesson.png',
+        'original_draft/browser_acceptance_003/view_context/mobile_top.png',
+        'original_draft/browser_acceptance_003/view_context/mobile_faces.png',
+        'original_draft/browser_acceptance_003/view_formal/desktop_faces.png',
+        'original_draft/browser_acceptance_003/view_formal/desktop_lesson.png',
+        'original_draft/browser_acceptance_003/view_analogy/desktop_faces.png',
+        'original_draft/browser_acceptance_003/view_analogy/mobile_faces.png',
+        'original_draft/browser_acceptance_003/hypothesis/desktop_faces.png',
+        'original_draft/browser_acceptance_003/hypothesis/mobile_faces.png',
+        'original_draft/browser_001/unknown_partial_hostile/desktop_faces.png',
+        'original_draft/browser_001/unknown_partial_hostile/mobile_faces.png',
+        'delivery_browser_002/index_desktop.png','delivery_browser_002/index_mobile.png','delivery_browser_002/index_mobile_evidence.png',
+        'delivery_browser_002/hypothesis_desktop.png','delivery_browser_002/hypothesis_mobile_identity.png','delivery_browser_002/hypothesis_mobile_catalog.png',
+    ]
+    write(RECORD/'visual_review.json',{'status':'PASS','review_method':'Images opened and visually inspected by assistant; automated bounds/font checks are separate.','screenshots':[{'path':name,'sha256':checksum(RECORD/name)} for name in inspected],'findings':['All three source views have readable labels and six-face cards.','Desktop and mobile source/teacher boundaries remain clear.','Unknown and not-applicable statuses stay explicit; partial inventory does not imply absence.','Hostile source markup is shown as literal text.','The active hypothesis display retains separate current, focus and hypothesis identities.','The static start page is readable at 1440 and 390 pixels; all 19 relative link targets exist.'],'limits':['Only the listed screenshot files received visual inspection.','Browser and compiler checks do not demonstrate learner competence, model training, runtime execution or real-world source truth.']})
+    shutil.copyfile(Path(__file__),RECORD/'finalizer_source.py.txt')
+    receipt={'status':'PASS','renderer_sha256':renderer,'adapter_sha256':adapter,'source_acceptance_receipt_sha256':accepted['source_acceptance_receipt_sha256'],'actual_acceptance_browser_checks_sha256':checksum(RECORD/'original_draft/browser_acceptance_003/checks.json'),'delivery_browser_receipt_sha256':checksum(RECORD/'delivery_browser_002/receipt.json'),'copy_manifest_sha256':checksum(RECORD/'copy_manifest.json'),'delivery_copy_manifest_sha256':checksum(RECORD/'delivery_copy_manifest.json'),'visual_review_sha256':checksum(RECORD/'visual_review.json'),'delivery_manifest_sha256':checksum(OUTER/'delivery.json'),'index_sha256':checksum(OUTER/'index.html'),'actual_acceptance_cases':4,'cube_record_inspections':sum(row['cube_count'] for row in accepted['cases']),'face_inspections':sum(row['face_count'] for row in accepted['cases']),'source_and_lesson_unchanged':True,'page_network_requests':0,'browser_exceptions':0,'desktop_width':1440,'mobile_width':390,'minimum_readable_text_px':16,'all_index_links_exist':19,'inner_outer_delivery_byte_equal_files':40,'reusable_helper_smoke_pass':True,'prohibited_imports_loaded':[],'neural_calls':0,'optimizer_updates':0,'delivered_neural_lessons':0,'preserved_failures':[{'path':'original_draft/browser_acceptance_002/failure.txt','scope':'Receipt-driver manifest-key typo, before browser work; corrected driver rerun passed.'},{'path':'delivery_browser_001/failure.txt','scope':'Owned Chromium profile launch did not create DevTools port file with longer profile path. New short-profile driver passed; page bytes unchanged.'}],'evidence_files':[]}
+    for path in sorted(RECORD.rglob('*')):
+        if path.is_file() and '__pycache__' not in path.parts:
+            receipt['evidence_files'].append({'path':path.relative_to(RECORD).as_posix(),'sha256':checksum(path),'size':path.stat().st_size})
+    write(RECORD/'receipt.json',receipt)
+    print(canonical({'status':'PASS','browser_receipt_sha256':checksum(RECORD/'receipt.json'),'delivery_copy_manifest_sha256':checksum(RECORD/'delivery_copy_manifest.json'),'inner_delivery':str(INNER),'evidence_files':len(receipt['evidence_files']),'visually_inspected_screenshots':len(inspected)}),end='')
+
+if __name__=='__main__':main()

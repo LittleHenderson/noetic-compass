@@ -1,0 +1,61 @@
+"""Bind draft browser checks to the actual published-preparation source receipt."""
+from hashlib import sha256
+import json
+from pathlib import Path
+import sys
+import traceback
+
+FOLDER=Path(__file__).resolve().parent
+ROOT=FOLDER.parents[3];sys.path.insert(0,str(ROOT));sys.path.insert(0,str(FOLDER))
+from run_browser_checks import check_page,DENIED
+from cncm.canonical import canonical_json
+from cncm.rpa_cube_adapter import cube_source_receipt,load_cube_atlas_document
+from tools.render_cube_rpa_view import render_cube_rpa_view
+
+SOURCE=ROOT/'records/rpa_cube_001/acceptance_001'
+OUTPUT=FOLDER/'browser_acceptance_003'
+checksum=lambda path:sha256(path.read_bytes()).hexdigest()
+read=lambda name:json.loads((SOURCE/name).read_text(encoding='utf-8'))
+
+def typed_receipt(name,source_name):
+    receipt=read(name)
+    return cube_source_receipt((SOURCE/source_name).read_bytes(),expected_file_sha256=receipt['source_file_sha256'],
+        expected_bundle_digest=receipt['canonical_bundle_digest'],source_namespace=receipt['source_namespace'],
+        observation_id=receipt['observation_id'],observation_time=receipt['observation_time'],record_version=receipt['record_version'])
+
+def main():
+    OUTPUT.mkdir(exist_ok=False)
+    receipt=read('receipt.json');acceptance_digest=checksum(SOURCE/'receipt.json')
+    for row in receipt['artifacts']:assert checksum(SOURCE/row['path'])==row['sha256']
+    renderer=checksum(ROOT/'tools/render_cube_rpa_view.py');assert renderer=='c34e478d587767629fc8256fce3792db1126789dc9f59b2d99d39fbc158993f8'
+    base=typed_receipt('source_receipt.json','source_bundle.json')
+    hypothesis=typed_receipt('hypothesis_source_receipt.json','hypothesis_bundle.json')
+    rows=[json.loads(line) for line in (SOURCE/'learner_inputs.jsonl').read_text().splitlines()]
+    teachers=[json.loads(line) for line in (SOURCE/'teacher_sidecars.jsonl').read_text().splitlines()]
+    bindings=[json.loads(line) for line in (SOURCE/'lesson_bindings.jsonl').read_text().splitlines()]
+    assert len(rows)==len(teachers)==len(bindings)==306
+    lessons=[dict(learner_input=a,teacher_sidecar=b,binding=c) for a,b,c in zip(rows,teachers,bindings,strict=True)]
+    proofs=[]
+    for name in ('view_context','view_formal','view_analogy','hypothesis'):
+        document=load_cube_atlas_document(read(name+'.document.json'),source_receipts=(base,hypothesis) if name=='hypothesis' else (base,))
+        wire=document.to_dict()
+        teaching=next(row for row in lessons if row['binding']['base_current_state_id']==wire['atlas']['current_state_id']
+                      and row['teacher_sidecar']['assistance_level']=='unassisted')
+        folder=OUTPUT/name;folder.mkdir();page=folder/'view.html'
+        page.write_text(render_cube_rpa_view(document,lesson=teaching),encoding='utf-8',newline='\n')
+        (folder/'lesson.json').write_text(canonical_json(teaching)+'\n',encoding='utf-8',newline='\n')
+        proof=check_page(page,folder,document)
+        proof.update(name=name,renderer_sha256=renderer,acceptance_receipt_sha256=acceptance_digest,
+                     source_document_sha256=checksum(SOURCE/(name+'.document.json')))
+        (folder/'proof.json').write_text(canonical_json(proof)+'\n',encoding='utf-8',newline='\n')
+        proofs.append(proof);print(canonical_json(proof),flush=True)
+    assert renderer==checksum(ROOT/'tools/render_cube_rpa_view.py')
+    assert acceptance_digest==checksum(SOURCE/'receipt.json')
+    assert not DENIED.intersection(sys.modules)
+    (OUTPUT/'checks.json').write_text(canonical_json({'status':'PASS','cases':proofs,'source_acceptance_receipt_sha256':acceptance_digest,
+        'renderer_sha256':renderer,'prohibited_imports_loaded':[],'neural_calls':0,'optimizer_updates':0,'delivered_neural_lessons':0})+'\n',encoding='utf-8',newline='\n')
+
+if __name__=='__main__':
+    try:main()
+    except Exception:
+        (OUTPUT/'failure.txt').write_text(traceback.format_exc(),encoding='utf-8',newline='\n');raise

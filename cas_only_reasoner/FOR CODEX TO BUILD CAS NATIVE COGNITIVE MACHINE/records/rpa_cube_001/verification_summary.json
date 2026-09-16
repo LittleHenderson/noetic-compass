@@ -1,0 +1,30 @@
+{
+  "schema_version": "cncm.rpa-cube-verification-summary/0.1",
+  "status": "PASS",
+  "tests": 1437,
+  "subtests": 601,
+  "xml_counts": {
+    "tests": 2038,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "xml_testcase_elements": 1437,
+  "full_suite_xml_sha256": "9ddf9425fc99adb88bfd0ae0296700b51e61932e1643eb73543828aa30f5b460",
+  "acceptance_receipt_sha256": "b0550845a0e64653910bf8c17a5bd45011ca7068897c59608227b7ce6f50fe7c",
+  "browser_receipt_sha256": "4b0ddecbdaee8e5b99a446ade66f6aee8af93fa0fc25d3000477bc515e87c651",
+  "acceptance_artifacts_verified": 28,
+  "browser_artifacts_verified": 91,
+  "declared_sources_verified": 10,
+  "actual_imported_sources_verified": 31,
+  "prior_compound_sources_unchanged": 97,
+  "matching_compilations": 306,
+  "focus_checks": 129,
+  "matched_graph_checks": 420,
+  "refusal_checks": 27,
+  "inner_outer_byte_equal_delivery_files": 40,
+  "desktop_mobile_pages": 4,
+  "cube_record_inspections": 30,
+  "face_inspections": 180,
+  "full_goal_complete": false
+}

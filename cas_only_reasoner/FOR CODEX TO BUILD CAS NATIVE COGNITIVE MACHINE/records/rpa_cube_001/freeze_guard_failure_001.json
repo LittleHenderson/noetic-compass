@@ -1,0 +1,8 @@
+{
+  "error": "AssertionError on expected renderer hash before source-freeze file creation",
+  "expected_renderer_sha256": "d5456621059e5448bf5609fe2d402d8846ef746c55886ac02292bdc91e787858",
+  "actual_renderer_sha256": "c34e478d587767629fc8256fce3792db1126789dc9f59b2d99d39fbc158993f8",
+  "difference": "Catalog choices sorted in authored source order, not catalog hash order",
+  "acceptance_bound_actual_before_and_after": true,
+  "continuation": "Full suite remains live; no source was modified during either run."
+}

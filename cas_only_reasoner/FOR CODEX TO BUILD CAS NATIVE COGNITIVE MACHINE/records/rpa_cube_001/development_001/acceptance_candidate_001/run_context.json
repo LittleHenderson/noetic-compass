@@ -1,0 +1,27 @@
+{
+  "adapter_expected_sha256": "00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62",
+  "argv": [
+    "records/rpa_cube_001/_scratch/reproduce_cube_bridge.py",
+    "--output",
+    "records/rpa_cube_001/_scratch/acceptance_candidate_001",
+    "--observation-id",
+    "cube_acceptance_candidate_001",
+    "--observation-time",
+    "2026-09-16 15:14:40 UTC"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+  "helper": {
+    "bytes": 26576,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_cube_001\\_scratch\\reproduce_cube_bridge.py",
+    "sha256": "3712ba72955348a4f7585159ddcd090dc02fe40b26e31c18e7420c13a694210e"
+  },
+  "observation_metadata": {
+    "observation_id": "cube_acceptance_candidate_001",
+    "observation_time": "2026-09-16 15:14:40 UTC"
+  },
+  "python": {
+    "executable": "C:\\Python314\\python.exe",
+    "version": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "started_utc": "2026-09-16T15:14:55.054224+00:00"
+}

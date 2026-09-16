@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\viewer_draft_001\run_acceptance_browser_checks.py", line 59, in <module>
+    try:main()
+        ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\rpa_cube_001\_scratch\viewer_draft_001\run_acceptance_browser_checks.py", line 29, in main
+    for row in receipt['files']:assert checksum(SOURCE/row['path'])==row['sha256']
+               ~~~~~~~^^^^^^^^^
+KeyError: 'files'

@@ -1,0 +1,12 @@
+test_containment_not_runtime_transition (__main__.CubeBoundaryReview.test_containment_not_runtime_transition) ... ok
+test_namespace_identity_separated (__main__.CubeBoundaryReview.test_namespace_identity_separated) ... ok
+test_no_option_tag_truncation (__main__.CubeBoundaryReview.test_no_option_tag_truncation) ... ok
+test_no_private_answer_fields_in_context (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_context) ... ok
+test_no_private_answer_fields_in_views (__main__.CubeBoundaryReview.test_no_private_answer_fields_in_views) ... ok
+test_partial_decomposition_rejects_nonoutgoing_branch (__main__.CubeBoundaryReview.test_partial_decomposition_rejects_nonoutgoing_branch) ... ok
+test_source_document_reseal_does_not_accept_foreign_catalog (__main__.CubeBoundaryReview.test_source_document_reseal_does_not_accept_foreign_catalog) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.181s
+
+OK

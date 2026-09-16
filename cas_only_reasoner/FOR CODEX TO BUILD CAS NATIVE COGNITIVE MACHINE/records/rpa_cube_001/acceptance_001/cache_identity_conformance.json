@@ -1,0 +1,133 @@
+{
+  "first_learner_input": {
+    "encoded_options": [
+      [
+        "Frame",
+        "Wheel"
+      ],
+      [
+        "Frame",
+        "Rim",
+        "Wheel"
+      ],
+      [
+        "Frame"
+      ]
+    ],
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "['Frame', 'Wheel']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "['Frame', 'Rim', 'Wheel']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "['Frame']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "problem": "Facts (labels as presented in view_context):\nBicycle contains Wheel\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+    },
+    "record_id": "cube-input-745aa2fa8a78afb75515e78f64acdd91bf2a9a7a36478979371650bb4819ee9c"
+  },
+  "legacy_task_id_unchanged": "ad7cee60c8fc6ecbc8434b8e946641ad98972ae6041d9fd639587fc903bb8c4d",
+  "second_learner_input": {
+    "encoded_options": [
+      [
+        "Frame",
+        "Wheel"
+      ],
+      [
+        "Frame",
+        "Rim",
+        "Wheel"
+      ],
+      [
+        "Frame"
+      ]
+    ],
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "['Frame', 'Wheel']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "['Frame', 'Rim', 'Wheel']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "['Frame']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "problem": "Facts (labels as presented in view_context):\nBicycle contains Frame\nCart contains Wheel\nCart contains Platform\nWheel contains Rim\nBicycle contains Wheel\nLIST_PARTS(Bicycle): what does it directly contain?\nChoose one of the three supplied options.\n"
+    },
+    "record_id": "cube-input-83b03c97b1dd6701a510d1eb6c0bfd7287bc7ee3ffc8f16768945d13a5dcec0f"
+  },
+  "semantic_question_id": "cube-question-e9527fd19f64017f820d007d5e8eb1d91e9549dc0247fd838b4fad199f4b8248",
+  "statement": "Input identity changes when public bytes change; no cache or encoder was invoked."
+}

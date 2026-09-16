@@ -1,0 +1,70 @@
+{
+  "schema_version": "cncm.rpa-cube-source-freeze/0.1",
+  "observed_utc": "2026-09-16T15:22:56.660462+00:00",
+  "parent_commit": "d0308d86d27c66b4d8ba657528dfa2ac95a906cb",
+  "sources": [
+    {
+      "bytes": 36908,
+      "path": "cncm/rpa_cube_adapter.py",
+      "sha256": "00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62",
+      "mtime_utc": "2026-09-16T15:13:41.089874+00:00"
+    },
+    {
+      "bytes": 24726,
+      "path": "cncm/rpa_model.py",
+      "sha256": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01",
+      "mtime_utc": "2026-09-16T08:40:44.257445+00:00"
+    },
+    {
+      "bytes": 8578,
+      "path": "docs/CAS_RPA_CUBE_IMPLEMENTATION_v0.1.md",
+      "sha256": "c1e0f0ca10178cae7fc81e684e3bb927acb4c2dcd9936bdb744ee1c7269e91bc",
+      "mtime_utc": "2026-09-16T15:20:25.061414+00:00"
+    },
+    {
+      "bytes": 24987,
+      "path": "docs/CAS_RPA_CUBE_INTEGRATION_v0.1.md",
+      "sha256": "49e82b644fe45234f69559ff1f5cbd7769a6d6c9d0af9d6213c4c3e9a4831784",
+      "mtime_utc": "2026-09-16T14:40:21.115151+00:00"
+    },
+    {
+      "bytes": 27625,
+      "path": "tests/test_rpa_cube_adapter.py",
+      "sha256": "faea2879f5fcdea08d56d95ed2f266011cc031a30528c31a29f1e1863b35cf3d",
+      "mtime_utc": "2026-09-16T15:16:43.486964+00:00"
+    },
+    {
+      "bytes": 5245,
+      "path": "tests/test_rpa_cube_adversarial.py",
+      "sha256": "10493e815f78a7a657cbbc6a9b335eb9eb9a188fd5b47a1394fb6099790478ec",
+      "mtime_utc": "2026-09-16T15:16:43.514857+00:00"
+    },
+    {
+      "bytes": 7914,
+      "path": "tests/test_rpa_cube_final_review.py",
+      "sha256": "4228897ffa66b7dcdf5a5824d6109e7c5dc3973cec22034740ec338013187c55",
+      "mtime_utc": "2026-09-16T15:16:43.535009+00:00"
+    },
+    {
+      "bytes": 6994,
+      "path": "tests/test_rpa_cube_view.py",
+      "sha256": "4b09b6c2cd8c55171deb903d6f212157c5ef0b052c8957d7fe0dfa9acae48fcb",
+      "mtime_utc": "2026-09-16T15:20:47.595517+00:00"
+    },
+    {
+      "bytes": 31013,
+      "path": "tools/render_cube_rpa_view.py",
+      "sha256": "c34e478d587767629fc8256fce3792db1126789dc9f59b2d99d39fbc158993f8",
+      "mtime_utc": "2026-09-16T15:20:44.414567+00:00"
+    },
+    {
+      "bytes": 32252,
+      "path": "tools/reproduce_cube_rpa.py",
+      "sha256": "9500b4f75a186d62aef5baed40bda21fb4a6a1683970fcf0f92d83832ea22678",
+      "mtime_utc": "2026-09-16T15:19:45.409428+00:00"
+    }
+  ],
+  "acceptance_receipt_sha256": "b0550845a0e64653910bf8c17a5bd45011ca7068897c59608227b7ce6f50fe7c",
+  "source_binding": "Acceptance declared inputs captured before run and rechecked afterward; all remain identical. Full suite is still running on these unchanged files.",
+  "freeze_guard_discrepancy": "Expected renderer d545662..., observed c34e478...; authored-order sorting change landed before freeze notification and before both runs. No source changed during either run."
+}

@@ -1,0 +1,192 @@
+{
+  "modules": [
+    {
+      "bytes": 2222,
+      "module": "cncm",
+      "path": "cncm/__init__.py",
+      "sha256": "88c22b440630e5b4c56999fe0f979a11f7faa0af19c9adaaf1d3d8f7b4a18de4"
+    },
+    {
+      "bytes": 3262,
+      "module": "cncm.api",
+      "path": "cncm/api.py",
+      "sha256": "c94b46d958993a468a285f7e2de8fa0f6698382323f4741236d85db1fd2e864b"
+    },
+    {
+      "bytes": 1696,
+      "module": "cncm.canonical",
+      "path": "cncm/canonical.py",
+      "sha256": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+    },
+    {
+      "bytes": 115500,
+      "module": "cncm.cognitive_apprenticeship",
+      "path": "cncm/cognitive_apprenticeship.py",
+      "sha256": "51c4edd649400b16c4d6a1ab8cf45c54f184b2766664dac62bdb7b4617f40880"
+    },
+    {
+      "bytes": 43064,
+      "module": "cncm.conversation",
+      "path": "cncm/conversation.py",
+      "sha256": "951a10467db313298af8f2c3c93bead5dc744b07918b0ba24c8bb07fcb5adc61"
+    },
+    {
+      "bytes": 42277,
+      "module": "cncm.engine",
+      "path": "cncm/engine.py",
+      "sha256": "0686201f1f011ef9233a60f7080b9a29614900c0e7fe130cf9b166592072b35e"
+    },
+    {
+      "bytes": 99921,
+      "module": "cncm.kernel",
+      "path": "cncm/kernel.py",
+      "sha256": "3082d2f3cdc319c3ec90f03324f3bd40d80f1ba18c033692d9e54c4284bd6147"
+    },
+    {
+      "bytes": 95248,
+      "module": "cncm.language_apprenticeship",
+      "path": "cncm/language_apprenticeship.py",
+      "sha256": "1b46e4550d4f03f79d2d742840ec56a6363872c20a2eb44e7b42efd124c8818c"
+    },
+    {
+      "bytes": 2434,
+      "module": "cncm.math_api",
+      "path": "cncm/math_api.py",
+      "sha256": "76f6b4a692368a19f39dc68bb17a32eb68bede26f9a34a2c706cafb042f699a2"
+    },
+    {
+      "bytes": 13319,
+      "module": "cncm.math_counterexample",
+      "path": "cncm/math_counterexample.py",
+      "sha256": "ca3ba260b3d87df0d17b517144a13eacda18209a5ee16812132b039635bbcf59"
+    },
+    {
+      "bytes": 17628,
+      "module": "cncm.math_engine",
+      "path": "cncm/math_engine.py",
+      "sha256": "889948480fbd5695d58090103fadd305cced0ac8b07a27fe14a22c3417f3b316"
+    },
+    {
+      "bytes": 26337,
+      "module": "cncm.math_kernel",
+      "path": "cncm/math_kernel.py",
+      "sha256": "036394c7066c3fb8b47931da71c4aa32fd1689478e8e8d082b6a1261225ad558"
+    },
+    {
+      "bytes": 43744,
+      "module": "cncm.math_model",
+      "path": "cncm/math_model.py",
+      "sha256": "3a02464ede14c2d7bb06c9c8493f614812a045d068bbb250ea3031561867db79"
+    },
+    {
+      "bytes": 10333,
+      "module": "cncm.math_normalize",
+      "path": "cncm/math_normalize.py",
+      "sha256": "c44ac643ce02a618cab8df49a05d0177003d5ce228b05b745594deb4da00908b"
+    },
+    {
+      "bytes": 9647,
+      "module": "cncm.math_parser",
+      "path": "cncm/math_parser.py",
+      "sha256": "40d8a8babee94789fd734f2e7620e1525d39628344fd2aab96e659ff06ebef7c"
+    },
+    {
+      "bytes": 58492,
+      "module": "cncm.model",
+      "path": "cncm/model.py",
+      "sha256": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+    },
+    {
+      "bytes": 36908,
+      "module": "cncm.rpa_cube_adapter",
+      "path": "cncm/rpa_cube_adapter.py",
+      "sha256": "00d4bdd06109dfa3324da548b37d5b10c6b117256d95f98eb875aa95938e1e62"
+    },
+    {
+      "bytes": 24726,
+      "module": "cncm.rpa_model",
+      "path": "cncm/rpa_model.py",
+      "sha256": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01"
+    },
+    {
+      "bytes": 17922,
+      "module": "cncm.semantics",
+      "path": "cncm/semantics.py",
+      "sha256": "439a741f078dd450fcbae7c8b8def799b569f3bd3a826045a9d0c2bc6e71ee20"
+    },
+    {
+      "bytes": 17378,
+      "module": "cncm.verification",
+      "path": "cncm/verification.py",
+      "sha256": "75954a4f1022625b992ef4e159018089e215cbb3041ac4b6bf317a722743061b"
+    },
+    {
+      "bytes": 173,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    {
+      "bytes": 13042,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.codec",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/codec.py",
+      "sha256": "c6ca7f489f91e4b43225b7ffc4d496490f038c18842266b6d5da05570ca29030"
+    },
+    {
+      "bytes": 809,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/__init__.py",
+      "sha256": "6b9d491e7b4c05d359982d46090a7de48cfe9a6221c6e0bbbdedd34ae0a78d74"
+    },
+    {
+      "bytes": 8472,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.adapter",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/adapter.py",
+      "sha256": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7"
+    },
+    {
+      "bytes": 79970,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.cube_node",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/cube_node.py",
+      "sha256": "9d3363a960298715c0b13256593693dff7b07d70563b9a1b044d5d9042431e4a"
+    },
+    {
+      "bytes": 49852,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.cube_profile",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/cube_profile.py",
+      "sha256": "08493344a5daff10e2fcaed5a1711cdf5299a7fa3e332f5efb63a75e5ac8bfef"
+    },
+    {
+      "bytes": 18236,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.fresh_panel",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/fresh_panel.py",
+      "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+    },
+    {
+      "bytes": 6829,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.graph",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/graph.py",
+      "sha256": "1dfa2f67ab76847d0ae351d36f9e0ea6c6e1bea053640dd20ab898a550b63543"
+    },
+    {
+      "bytes": 19198,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.lessons",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/lessons.py",
+      "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+    },
+    {
+      "bytes": 20252,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.real_framework",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py",
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "bytes": 5412,
+      "module": "research.CAS_META_2_COMPOSITION.cas_meta2.graph_teaching.reference",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/reference.py",
+      "sha256": "aab7af24638c842b7197e7468a168fdf05b9cd0dc951583eec5aa8590dc765ee"
+    }
+  ],
+  "prohibited_import_attempts": [],
+  "prohibited_imports_present": []
+}
