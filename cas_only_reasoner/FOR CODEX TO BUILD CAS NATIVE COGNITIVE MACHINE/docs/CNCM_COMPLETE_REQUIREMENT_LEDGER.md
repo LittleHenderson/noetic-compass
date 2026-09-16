@@ -721,3 +721,37 @@ observed numerical execution. No neural-learning benefit or complete-machine
 claim is made. See docs/CNCM_ORDERED_INGESTION_SMOKE_v0.2.md and
 records/learning_smoke_001/STATUS.md. The matched experiment and wider charter
 gates remain open.
+
+## 2026-09-16 Ordered ingestion CUDA teaching/reload observed
+
+One real AWS run at source 6ef614bfb448abb586a6f8c0c92058e57de9238b completed
+64 updates and 178 forward calls through the ordered source-bound learner path.
+Initial/final same-worker reloads preserved model, optimizer, projection, cache
+values and public predictions exactly. The receiver verified all 16 required
+objects; a separate pure-data checker and independent review verified the source,
+239 input pins, all 28 collected entries and 13 artifacts without decoding models
+locally. The lifecycle completed and current-job instance termination was
+confirmed independently. See records/learning_smoke_001/STATUS.md and its pinned
+lifecycle and delivery-verification receipts. This closes the mechanical
+connection/reload gate for this exposed fixture, not the matched learning gate.
+
+Three taught questions changed 0/3 to 3/3; three other exposed questions changed
+2/3 to1/3. These six questions and one seed do not establish improved learning,
+retention, transfer or a CAS advantage. The older recurrence criterion remains
+NOT_MET, 0/3 positive. Fresh-process restart and resumed optimizer-step equivalence
+also remain untested. All 607 accepted sources and 9 prior evidence receipts remain
+unchanged; the five previously checked native profiles are preserved.
+
+Exactly one $7 reservation, no job retry and no refund: canonical meta1 ledger
+revision 75, 438.00 USD reserved, 4562.00 USD unreserved under the 5000.00 USD cap.
+The publication copy and all 76 history states were verified. These totals are
+conservative reservations, not invoiced charges. Evidence remains in the private
+job bucket; independent backup verification was not performed. Current-job
+cleanup is separate from legacy account resources found in the read-only audit.
+
+Next: freeze a fresh matched multi-seed comparison with equal lessons/compute,
+explicit speed/retention/transfer endpoints, development-only selection and a
+separate final scoring boundary. NEXT_STUDY_REVIEW.md records concrete limitations
+in the old complementary runner; no new final panel or launch is frozen. The
+wider V01-V18, 31-system and 20-step charter gates remain open. This goal turn is
+PROGRESS, and the full goal remains active.

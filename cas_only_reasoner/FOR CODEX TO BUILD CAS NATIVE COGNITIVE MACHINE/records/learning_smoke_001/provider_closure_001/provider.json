@@ -1,0 +1,606 @@
+{
+  "account": "807562639912",
+  "caller_identity": {
+    "account": "807562639912",
+    "http_status": 200,
+    "request_id": "a610ad4f-8db7-41e9-9b41-f6d45057f31f"
+  },
+  "calls": {
+    "all_active_account_instances": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": [
+          {
+            "id": "i-0c3028734c8885542",
+            "job": [],
+            "state": "stopped",
+            "transition": "User initiated",
+            "type": "g6e.xlarge"
+          }
+        ],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.075054+00:00",
+      "request_id": "e2e57d86-992f-42d4-9c8d-b3a585997d6a"
+    },
+    "all_active_cas_instances": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.074249+00:00",
+      "request_id": "d74c4adc-1a41-48bb-aea2-3a374af032f6"
+    },
+    "all_tagged_cas_interfaces": {
+      "api": "ec2.describe_network_interfaces",
+      "http_status": 200,
+      "observed": {
+        "interfaces": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.674216+00:00",
+      "request_id": "c613cafb-465f-4de9-9c30-8eb8f8ed0a87"
+    },
+    "all_tagged_cas_security_groups": {
+      "api": "ec2.describe_security_groups",
+      "http_status": 200,
+      "observed": {
+        "groups": [
+          {
+            "id": "sg-0e709db963556da39",
+            "name": "cas-meta2-teaching-20260908134143-ebd84f71"
+          }
+        ],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.077196+00:00",
+      "request_id": "c01c481a-53f0-4bc4-a5fa-c4bb82cf7600"
+    },
+    "all_tagged_cas_volumes": {
+      "api": "ec2.describe_volumes",
+      "http_status": 200,
+      "observed": {
+        "next_token": null,
+        "volumes": []
+      },
+      "queried_utc": "2026-09-16T18:50:53.077854+00:00",
+      "request_id": "d5a19fd5-fc7e-4da7-95d0-b3955d13c8f0"
+    },
+    "bucket_region": {
+      "api": "s3.get_bucket_location",
+      "http_status": 200,
+      "observed": {
+        "LocationConstraint": "us-west-2"
+      },
+      "queried_utc": "2026-09-16T18:50:53.938861+00:00",
+      "request_id": "CKEX2E1F756KRR3R"
+    },
+    "cas_instance_profiles": {
+      "observed": {
+        "matches": [
+          {
+            "name": "cas-meta2-teaching-20260908134143-ebd84f71-worker",
+            "state": null
+          }
+        ],
+        "pages": [
+          {
+            "HTTPStatusCode": 200,
+            "RequestId": "71eec7e9-bdfc-4522-a123-12cbb7d0f5f9"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T18:50:55.148579+00:00"
+    },
+    "cas_roles": {
+      "observed": {
+        "matches": [
+          {
+            "name": "cas-meta2-teaching-20260908134143-ebd84f71-timer",
+            "state": null
+          },
+          {
+            "name": "cas-meta2-teaching-20260908134143-ebd84f71-worker",
+            "state": null
+          }
+        ],
+        "pages": [
+          {
+            "HTTPStatusCode": 200,
+            "RequestId": "6db0d84b-2aaf-452e-902f-29eafb75c10d"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T18:50:54.783538+00:00"
+    },
+    "cas_schedules": {
+      "observed": {
+        "matches": [],
+        "pages": [
+          {
+            "HTTPStatusCode": 200,
+            "RequestId": "5cd0bd52-6ae3-4779-b037-1eac341d6302"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T18:50:55.249851+00:00"
+    },
+    "encryption": {
+      "api": "s3.get_bucket_encryption",
+      "http_status": 200,
+      "observed": {
+        "ServerSideEncryptionConfiguration": {
+          "Rules": [
+            {
+              "ApplyServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256"
+              },
+              "BlockedEncryptionTypes": {
+                "EncryptionType": [
+                  "SSE-C"
+                ]
+              },
+              "BucketKeyEnabled": false
+            }
+          ]
+        }
+      },
+      "queried_utc": "2026-09-16T18:50:54.344473+00:00",
+      "request_id": "CKER0KHJJ89D1BVP"
+    },
+    "exact_instance": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": [
+          {
+            "id": "i-0df9728e05ae06711",
+            "job": [
+              "cas-meta2-ingestionsmoke-20260916183635-6ef614bf"
+            ],
+            "state": "terminated",
+            "transition": "User initiated (2026-09-16 18:41:25 GMT)",
+            "type": "g7.2xlarge"
+          }
+        ],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.072857+00:00",
+      "request_id": "215b9fe1-dea5-4ada-9a48-84424eee4a41"
+    },
+    "exact_instance_interfaces": {
+      "api": "ec2.describe_network_interfaces",
+      "http_status": 200,
+      "observed": {
+        "interfaces": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.701344+00:00",
+      "request_id": "95c0351d-8773-4968-b94f-4fd982b87f31"
+    },
+    "head:results/artifacts/final.pt": {
+      "api": "s3.head_object",
+      "http_status": 200,
+      "local_verified_file": {
+        "bytes": 291964,
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\collected\\results\\artifacts\\final.pt",
+        "sha256": "770b0e0d85e758f1662a675feeac4338605b1cd1caac63958c4bbeb47b4d1223"
+      },
+      "observed": {
+        "ContentLength": 291964,
+        "ETag": "\"57a230de12918babb34595cffab2d65e\"",
+        "LastModified": "2026-09-16 18:41:20+00:00",
+        "ObjectLockMode": null,
+        "ObjectLockRetainUntilDate": null,
+        "ServerSideEncryption": "AES256",
+        "VersionId": null
+      },
+      "queried_utc": "2026-09-16T18:50:55.453825+00:00",
+      "remote_size_matches_local": true,
+      "request_id": "615FPHVFM3XQ3K46"
+    },
+    "head:results/artifacts/initial.pt": {
+      "api": "s3.head_object",
+      "http_status": 200,
+      "local_verified_file": {
+        "bytes": 158493,
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\collected\\results\\artifacts\\initial.pt",
+        "sha256": "abee161a3365d89e9ec4e36a3a77c914091db7ad80adedd7cec8e9e5510f40ff"
+      },
+      "observed": {
+        "ContentLength": 158493,
+        "ETag": "\"b504ce6111b6e48f5e3424841ef5939b\"",
+        "LastModified": "2026-09-16 18:41:20+00:00",
+        "ObjectLockMode": null,
+        "ObjectLockRetainUntilDate": null,
+        "ServerSideEncryption": "AES256",
+        "VersionId": null
+      },
+      "queried_utc": "2026-09-16T18:50:55.427546+00:00",
+      "remote_size_matches_local": true,
+      "request_id": "615B14YDJTJ9RS6B"
+    },
+    "head:results/artifacts/manifest.json": {
+      "api": "s3.head_object",
+      "http_status": 200,
+      "local_verified_file": {
+        "bytes": 1582,
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\collected\\results\\artifacts\\manifest.json",
+        "sha256": "2bef224a401b31a50426f74dbde4f98db8c06df04af0b3e9fb1bb4634fa706cc"
+      },
+      "observed": {
+        "ContentLength": 1582,
+        "ETag": "\"9a4756d553cff974169ba66a2a2d968e\"",
+        "LastModified": "2026-09-16 18:41:20+00:00",
+        "ObjectLockMode": null,
+        "ObjectLockRetainUntilDate": null,
+        "ServerSideEncryption": "AES256",
+        "VersionId": null
+      },
+      "queried_utc": "2026-09-16T18:50:55.374648+00:00",
+      "remote_size_matches_local": true,
+      "request_id": "6159AQ2JFVBQ2VQS"
+    },
+    "head:results/artifacts/origin.pt": {
+      "api": "s3.head_object",
+      "http_status": 200,
+      "local_verified_file": {
+        "bytes": 155933,
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\collected\\results\\artifacts\\origin.pt",
+        "sha256": "37f1a9d7b1d5cef72a3ddc939a461bfe9c4a0295a0ea09581d16dde8ff568935"
+      },
+      "observed": {
+        "ContentLength": 155933,
+        "ETag": "\"8822a6879d4d98f79607fe7b4a2cb53c\"",
+        "LastModified": "2026-09-16 18:41:20+00:00",
+        "ObjectLockMode": null,
+        "ObjectLockRetainUntilDate": null,
+        "ServerSideEncryption": "AES256",
+        "VersionId": null
+      },
+      "queried_utc": "2026-09-16T18:50:55.400948+00:00",
+      "remote_size_matches_local": true,
+      "request_id": "615206PSBHCXT63X"
+    },
+    "head:results/result.json": {
+      "api": "s3.head_object",
+      "http_status": 200,
+      "local_verified_file": {
+        "bytes": 2379,
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\collected\\results\\result.json",
+        "sha256": "0c1bc4bd8041aa8bdab16fc1be19b8caac2e0589f602bd2fa391d0f38c4c417e"
+      },
+      "observed": {
+        "ContentLength": 2379,
+        "ETag": "\"1fbcbc99474c35b623d1525628a49fbf\"",
+        "LastModified": "2026-09-16 18:41:20+00:00",
+        "ObjectLockMode": null,
+        "ObjectLockRetainUntilDate": null,
+        "ServerSideEncryption": "AES256",
+        "VersionId": null
+      },
+      "queried_utc": "2026-09-16T18:50:55.336416+00:00",
+      "remote_size_matches_local": true,
+      "request_id": "6150WGVHVNG76ZPY"
+    },
+    "job_schedule": {
+      "api": "scheduler.get_schedule",
+      "error_code": "ResourceNotFoundException",
+      "error_type": "ResourceNotFoundException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:53.781132+00:00",
+      "request_id": "5d26ab55-23e4-4d74-a3cd-1a8dc1f74fa5"
+    },
+    "job_security_group": {
+      "api": "ec2.describe_security_groups",
+      "http_status": 200,
+      "observed": {
+        "groups": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T18:50:53.075825+00:00",
+      "request_id": "16c0507e-140f-4bdf-aced-b8cc529bc9b6"
+    },
+    "lifecycle_configuration": {
+      "api": "s3.get_bucket_lifecycle_configuration",
+      "error_code": "NoSuchLifecycleConfiguration",
+      "error_type": "ClientError",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:54.428592+00:00",
+      "request_id": "CKEQVXF3B9V05FNT"
+    },
+    "object_lock_configuration": {
+      "api": "s3.get_object_lock_configuration",
+      "error_code": "ObjectLockConfigurationNotFoundError",
+      "error_type": "ClientError",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:54.437571+00:00",
+      "request_id": "615EM5K8J9MQSRYD"
+    },
+    "ownership": {
+      "api": "s3.get_bucket_ownership_controls",
+      "http_status": 200,
+      "observed": {
+        "OwnershipControls": {
+          "Rules": [
+            {
+              "ObjectOwnership": "BucketOwnerEnforced"
+            }
+          ]
+        }
+      },
+      "queried_utc": "2026-09-16T18:50:54.400721+00:00",
+      "request_id": "6158T7B2BVXMKRD3"
+    },
+    "policy_public_status": {
+      "api": "s3.get_bucket_policy_status",
+      "error_code": "NoSuchBucketPolicy",
+      "error_type": "ClientError",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:54.405712+00:00",
+      "request_id": "CKEVQFNHTVWV0EDN"
+    },
+    "public_access_block": {
+      "api": "s3.get_public_access_block",
+      "http_status": 200,
+      "observed": {
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true
+        }
+      },
+      "queried_utc": "2026-09-16T18:50:54.315242+00:00",
+      "request_id": "6151M87ZPDNMWD7E"
+    },
+    "retained_bucket": {
+      "api": "s3.head_bucket",
+      "http_status": 200,
+      "observed": {
+        "AccessPointAlias": false,
+        "BucketArn": "arn:aws:s3:::cas-meta2-ingestionsmoke-20260916183635-6ef614bf-807562639912",
+        "BucketRegion": "us-west-2"
+      },
+      "queried_utc": "2026-09-16T18:50:53.862170+00:00",
+      "request_id": "CKEY0Z3PKGAMJ6FK"
+    },
+    "timer_role": {
+      "api": "iam.get_role",
+      "error_code": "NoSuchEntity",
+      "error_type": "NoSuchEntityException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:53.779744+00:00",
+      "request_id": "0c189e37-32f2-41ed-bd35-d0bfcb0c4f83"
+    },
+    "versioning": {
+      "api": "s3.get_bucket_versioning",
+      "http_status": 200,
+      "observed": {},
+      "queried_utc": "2026-09-16T18:50:54.380055+00:00",
+      "request_id": "CKEM2GBRZXF3T0E2"
+    },
+    "worker_profile": {
+      "api": "iam.get_instance_profile",
+      "error_code": "NoSuchEntity",
+      "error_type": "NoSuchEntityException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:53.740857+00:00",
+      "request_id": "1aa23a38-fb5a-4385-8fe9-3743c173f22a"
+    },
+    "worker_role": {
+      "api": "iam.get_role",
+      "error_code": "NoSuchEntity",
+      "error_type": "NoSuchEntityException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T18:50:53.724961+00:00",
+      "request_id": "e8ef1615-8e99-4c2f-8cc7-554b6d779c02"
+    }
+  },
+  "instance_id": "i-0df9728e05ae06711",
+  "job": "cas-meta2-ingestionsmoke-20260916183635-6ef614bf",
+  "lifecycle_result": {
+    "bytes": 274878,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916183635-6ef614bf\\result.json",
+    "sha256": "a99859a9bd93af0e502798399737e15a35bb8b2c9de17fad039b8fb860eb92cb"
+  },
+  "lifecycle_result_unchanged": true,
+  "model_loads": 0,
+  "object_body_downloads": 0,
+  "observed_end_utc": "2026-09-16T18:50:55.481937+00:00",
+  "observed_start_utc": "2026-09-16T18:50:53.071541+00:00",
+  "profile": "default",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "retained_bucket": "cas-meta2-ingestionsmoke-20260916183635-6ef614bf-807562639912",
+  "retained_results_inventory": {
+    "body_hashes_rechecked": false,
+    "bytes": 706239,
+    "count": 24,
+    "objects": [
+      {
+        "bytes": 1774,
+        "etag": "\"52fc7ca33ee22de6b6ee621f1db110b3\"",
+        "key": "results/artifacts/after_predictions.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 1774,
+        "etag": "\"12fc1cc2b85f87e601cf8af329024232\"",
+        "key": "results/artifacts/before_predictions.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 291964,
+        "etag": "\"57a230de12918babb34595cffab2d65e\"",
+        "key": "results/artifacts/final.pt",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 7737,
+        "etag": "\"d9b10e66008d8de962b91dc6ce7643e0\"",
+        "key": "results/artifacts/final_checkpoint.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 1774,
+        "etag": "\"52fc7ca33ee22de6b6ee621f1db110b3\"",
+        "key": "results/artifacts/final_reload_predictions.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 158493,
+        "etag": "\"b504ce6111b6e48f5e3424841ef5939b\"",
+        "key": "results/artifacts/initial.pt",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 7741,
+        "etag": "\"2231cbd0ce6fabaf019b574aa8f8d13e\"",
+        "key": "results/artifacts/initial_checkpoint.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 1774,
+        "etag": "\"12fc1cc2b85f87e601cf8af329024232\"",
+        "key": "results/artifacts/initial_reload_predictions.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 15003,
+        "etag": "\"c32757d3792cb790a04b1b8438210dec\"",
+        "key": "results/artifacts/installed_sources.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 1582,
+        "etag": "\"9a4756d553cff974169ba66a2a2d968e\"",
+        "key": "results/artifacts/manifest.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 536,
+        "etag": "\"7e149365ee8fa235ca3b19caf1b6f632\"",
+        "key": "results/artifacts/measurements.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 155933,
+        "etag": "\"8822a6879d4d98f79607fe7b4a2cb53c\"",
+        "key": "results/artifacts/origin.pt",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 23926,
+        "etag": "\"8e6597fc64c509357d232a47de9e01a4\"",
+        "key": "results/artifacts/receipt.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 33355,
+        "etag": "\"fe2b80b25bfc745873f9bb3eabc82256\"",
+        "key": "results/artifacts/worker_report.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 57,
+        "etag": "\"14f70ca0cf5cd9149914fb2e5ccf9292\"",
+        "key": "results/evidence/phase_inner_runner_starting.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 61,
+        "etag": "\"0ca6c9fc4651e471b891318d89b4de2f\"",
+        "key": "results/evidence/phase_pip_requirements_starting.json",
+        "last_modified": "2026-09-16 18:40:26+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 54,
+        "etag": "\"255923630922176b7edea70be6cedea3\"",
+        "key": "results/evidence/phase_pip_torch_starting.json",
+        "last_modified": "2026-09-16 18:40:26+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 55,
+        "etag": "\"bd5371e4ff7a60235c09580d7391ef9a\"",
+        "key": "results/evidence/phase_pip_wheels_starting.json",
+        "last_modified": "2026-09-16 18:40:26+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 52,
+        "etag": "\"4213a6373f1a1b87885335c736c3c3b2\"",
+        "key": "results/evidence/phase_publisher_started.json",
+        "last_modified": "2026-09-16 18:39:25+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 54,
+        "etag": "\"dbb42d584d01d4345e716ffdce9a1319\"",
+        "key": "results/evidence/phase_publishing_stopped.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 46,
+        "etag": "\"2e76e58d12b4ea6b5ed3900b4e87c279\"",
+        "key": "results/evidence/phase_venv_ready.json",
+        "last_modified": "2026-09-16 18:40:26+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 50,
+        "etag": "\"7ea82d1d70995a4d15bee96aa835e154\"",
+        "key": "results/evidence/phase_worker_started.json",
+        "last_modified": "2026-09-16 18:39:26+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 2379,
+        "etag": "\"1fbcbc99474c35b623d1525628a49fbf\"",
+        "key": "results/result.json",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      },
+      {
+        "bytes": 65,
+        "etag": "\"7cf50f3cc5e3429be5bef6a5601627e4\"",
+        "key": "results/result.json.sha256",
+        "last_modified": "2026-09-16 18:41:20+00:00",
+        "storage_class": "STANDARD"
+      }
+    ],
+    "pages": [
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "6155H4FHR243F4KQ"
+      }
+    ]
+  },
+  "schema": "cncm-ingestion-provider-closure/1",
+  "script": {
+    "bytes": 15600,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\q.py",
+    "sha256": "d479ebb71dd3b86b4189cc266bff6fbd5676272d36ad6a16b1bf3f396d5f51fe"
+  }
+}

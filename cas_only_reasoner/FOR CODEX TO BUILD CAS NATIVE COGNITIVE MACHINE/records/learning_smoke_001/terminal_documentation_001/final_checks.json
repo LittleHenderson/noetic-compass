@@ -1,0 +1,1 @@
+{"accepted_source_count": 607, "canonical_ledgers_byte_equal": true, "high_signal_credential_findings": [], "mismatches": [], "prior_evidence_count": 9, "scope": "No broad secret-detection guarantee; no key material printed. Exact byte evidence checks remain separate.", "status": "PRESERVATION_AND_PUBLICATION_SCOPE_CHECKED"}

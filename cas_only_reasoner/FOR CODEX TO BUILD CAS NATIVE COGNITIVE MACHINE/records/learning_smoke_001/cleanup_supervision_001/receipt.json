@@ -1,0 +1,1 @@
+{"artifact_bytes_rechecked": 13, "describe_request_id": "e80aba0f-f27b-4a04-a345-793dcb17889f", "force_termination_requested": false, "instance_id": "i-0df9728e05ae06711", "job_retries": 0, "new_launches": 0, "observed_utc": "2026-09-16T18:46:59.141071+00:00", "state_before": "terminated", "transition_reason": "User initiated (2026-09-16 18:41:25 GMT)"}

@@ -1,0 +1,1 @@
+{"boundary": "Read-only filtered console evidence only; no full console stored, and no model or launch call.", "console_timestamp": "2026-09-16 18:38:43+00:00", "instance_id": "i-0df9728e05ae06711", "observed_utc": "2026-09-16T18:38:43.078222+00:00", "request_id": "b6358554-da10-4471-ab33-e405b54b5b4c", "schema": "cncm.smoke-watchdog-console-observation/1", "selected_lines": []}

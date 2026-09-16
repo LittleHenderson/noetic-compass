@@ -1,18 +1,28 @@
 # Next learning experiment gate
 
-Status: **PROTOCOL_WITH_IMPLEMENTED_INGESTION — ORDERED_LEARNING_RUN_NOT_PERFORMED**.
+Status: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
 
-Source inspection and continuation: 2026-09-16. The original connection analysis
-below is retained; the versioned ingestion and teaching control extension is now
-implemented in cncm/rpa_learning_adapter.py and cncm/rpa_learning_cycle.py.
-Current acceptance evidence is in records/learning_ingestion_001/STATUS.md and
-docs/CNCM_LEARNING_INGESTION_v0.1.md. No new neural execution, optimizer update,
-provider call or spending is recorded. Earlier accepted sources remain unchanged.
+On 2026-09-16, source commit 6ef614bfb448abb586a6f8c0c92058e57de9238b
+completed one exposed-material AWS CUDA teaching/reload smoke: 64 optimizer
+updates, 178 model forward calls and exact initial/final same-worker checkpoint
+reconstruction. All required evidence arrived and the instance was confirmed
+terminated. One $7 campaign reservation was recorded. The independently checked
+record is records/learning_smoke_001/STATUS.md; earlier source-review notes below
+remain historical context, not the current execution status.
 
-The next execution gate is an actual exposed-material CUDA smoke using the new
-ordered input path and fresh model origin. Source review and pure tests do not
-replace that run. A matched learning comparison additionally needs frozen run
-inputs, teaching policies, success rules and genuinely separate evaluation.
+The connection gate is now observed. A matched learning comparison still needs
+fresh paired initialization, exact training-only tokenization and lessons, equal
+information and compute, saved public predictions before private scoring, and
+frozen development/final boundaries and success rules. The current six-question
+smoke is not that experiment: taught questions improved 0/3 to 3/3, while the
+other exposed questions changed 2/3 to 1/3. No CAS learning advantage is claimed.
+
+The concrete next source-review gaps are recorded in
+records/learning_smoke_001/NEXT_STUDY_REVIEW.md. The old complementary launch
+must not be reused unchanged: it uses a legacy encoder/checkpoint and its success
+rule need not win the equal-item contrast. A two-arm curriculum-order study on a
+shared learner also does not, by itself, isolate CAS architecture or superiority
+over an ordinary dependency graph. Define that comparator before such a claim.
 
 We will know whether teaching improves learned competence after an actual learner
 improves on untouched task families, against matched controls, with answer-bearing

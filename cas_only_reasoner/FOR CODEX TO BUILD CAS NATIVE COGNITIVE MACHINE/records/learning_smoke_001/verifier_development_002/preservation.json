@@ -1,0 +1,23 @@
+{
+  "files": [
+    {
+      "bytes": 32512,
+      "path": "verify_delivered.py",
+      "preserved_as": "verify_delivered.py.before.txt",
+      "sha256": "cb2990933775f45a4312c929657e26fb861b4a52a2ab07fa0fdd25d3eef7d6bf"
+    },
+    {
+      "bytes": 5306,
+      "path": "verifier_development_001/selfcheck.py",
+      "preserved_as": "selfcheck.py.before.txt",
+      "sha256": "e84761a19690063fcad39667dcc161031fbfdf02e7d332a651c4b28c90dda28b"
+    },
+    {
+      "bytes": 1508,
+      "path": "verifier_development_001/selfcheck_001.json",
+      "preserved_as": "selfcheck_001.json.before.txt",
+      "sha256": "d3fa6a94a36bf27e487a36e5c728ece886d31541742cb2c16c86539460a764fb"
+    }
+  ],
+  "status": "PRE_EDIT_PRESERVATION"
+}

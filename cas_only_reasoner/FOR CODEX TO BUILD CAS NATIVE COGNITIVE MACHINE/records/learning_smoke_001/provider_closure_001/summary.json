@@ -1,0 +1,105 @@
+{
+  "account": "807562639912",
+  "account_wide_CAS_cleanup_status": "OLDER_NAMED_RESOURCES_PRESENT",
+  "archive_presence": {
+    "body_hashes_rechecked": false,
+    "bucket": "cas-meta2-ingestionsmoke-20260916183635-6ef614bf-807562639912",
+    "bytes": 706239,
+    "independent_backup_verified": false,
+    "object_lock_status": "ObjectLockConfigurationNotFoundError",
+    "objects": 24,
+    "versioning_status": "No versioning status returned"
+  },
+  "boundary": "Account/region/time-scoped provider readback. S3 listing and HEAD sizes are presence/configuration evidence, not a second content-hash verification, independent backup, WORM claim or final bill. Untagged resources without CAS names are outside CAS resource attribution.",
+  "evidence": {
+    "initial_failure.json": {
+      "bytes": 575,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\initial_failure.json",
+      "sha256": "c20b368fb5373125c181c1140e5fc7da448405cfc91a282703332ba4de84f00e"
+    },
+    "provider.json": {
+      "bytes": 21627,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\provider.json",
+      "sha256": "3dc763397ad36d8a48e1ad2b8be22dc3fd90c64c2db23afdd4c0e1d883de7d8b"
+    },
+    "q.py": {
+      "bytes": 15600,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\q.py",
+      "sha256": "d479ebb71dd3b86b4189cc266bff6fbd5676272d36ad6a16b1bf3f396d5f51fe"
+    },
+    "receipt.json": {
+      "bytes": 2566,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\receipt.json",
+      "sha256": "77532f60849deae308893f9128cc9f365440228ff03f267c777db9c2ef8ea8f8"
+    }
+  },
+  "job": "cas-meta2-ingestionsmoke-20260916183635-6ef614bf",
+  "job_and_archive_checks": {
+    "exact_instance_terminated": true,
+    "job_schedule_absent": true,
+    "job_security_group_absent": true,
+    "lifecycle_result_unchanged": true,
+    "no_active_tagged_cas_instances": true,
+    "no_cas_schedules": true,
+    "no_instance_interfaces": true,
+    "no_tagged_cas_interfaces": true,
+    "no_tagged_cas_volumes": true,
+    "public_access_block_all_enabled": true,
+    "retained_bucket_present": true,
+    "retained_bucket_region": true,
+    "retained_checkpoint_and_marker_sizes": true,
+    "timer_role_absent": true,
+    "worker_profile_absent": true,
+    "worker_role_absent": true
+  },
+  "job_closure_status": "CONFIRMED_CLOSED",
+  "legacy_resource_observations": {
+    "all_tagged_cas_security_groups": {
+      "groups": [
+        {
+          "id": "sg-0e709db963556da39",
+          "name": "cas-meta2-teaching-20260908134143-ebd84f71"
+        }
+      ],
+      "next_token": null
+    },
+    "cas_instance_profiles": {
+      "matches": [
+        {
+          "name": "cas-meta2-teaching-20260908134143-ebd84f71-worker",
+          "state": null
+        }
+      ],
+      "pages": [
+        {
+          "HTTPStatusCode": 200,
+          "RequestId": "71eec7e9-bdfc-4522-a123-12cbb7d0f5f9"
+        }
+      ]
+    },
+    "cas_roles": {
+      "matches": [
+        {
+          "name": "cas-meta2-teaching-20260908134143-ebd84f71-timer",
+          "state": null
+        },
+        {
+          "name": "cas-meta2-teaching-20260908134143-ebd84f71-worker",
+          "state": null
+        }
+      ],
+      "pages": [
+        {
+          "HTTPStatusCode": 200,
+          "RequestId": "6db0d84b-2aaf-452e-902f-29eafb75c10d"
+        }
+      ]
+    }
+  },
+  "model_loads": 0,
+  "observed_end_utc": "2026-09-16T18:50:55.481937+00:00",
+  "observed_start_utc": "2026-09-16T18:50:53.071541+00:00",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "schema": "cncm-ingestion-provider-closure-summary/1"
+}

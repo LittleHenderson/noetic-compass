@@ -1,0 +1,13 @@
+{
+  "command": "python -I -B records/learning_smoke_001/provider_closure_001/q.py",
+  "failure": {
+    "detail": "No module named 'boto3'",
+    "type": "ModuleNotFoundError"
+  },
+  "model_loads": 0,
+  "mutations": 0,
+  "provider_calls": 0,
+  "reason": "Isolated interpreter excludes the established user-site boto3 installation. Retry uses the normal interpreter with bytecode disabled, as the previous approved read-only provider audit did.",
+  "script_sha256": "d479ebb71dd3b86b4189cc266bff6fbd5676272d36ad6a16b1bf3f396d5f51fe",
+  "status": "PRE_PROVIDER_IMPORT_FAILURE"
+}

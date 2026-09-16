@@ -1,0 +1,110 @@
+{
+  "common_fields": [
+    "source_file_sha256",
+    "source_bundle_digest",
+    "source_receipt_digest",
+    "source_namespace",
+    "source_context_id",
+    "base_current_state_id",
+    "rendering_schema",
+    "source_authorship_authenticated",
+    "world_truth_established"
+  ],
+  "differing_fields": [
+    "legacy_input_id"
+  ],
+  "failure": {
+    "detail": "SMOKE_SOURCE_CONTEXT_CHANGED",
+    "type": "ContractError"
+  },
+  "mapping": [
+    {
+      "prepared_id": "rpa-prepared-e2a004e694e35da4eeb9af43b0344480c4aaf31eedd59e3d8799a003814c6ad3",
+      "request": {
+        "assistance": "unassisted",
+        "operation": "LIST_PARTS",
+        "question": {
+          "idea": "Bicycle"
+        }
+      },
+      "source_binding": {
+        "base_current_state_id": "loaded-ce03e3a5fb1948d08230d02042852fdadc46f3e9430dd2472a4848265f3cb12d",
+        "legacy_input_id": "cube-input-039b9bb3a782596e50e5a505f9bea8dbf68c49293c2546ea38a1b1da559635ef",
+        "rendering_schema": "cncm.cube-contains-node-rel/0.1",
+        "source_authorship_authenticated": false,
+        "source_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+        "source_context_id": "toy_scene_01",
+        "source_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+        "source_namespace": "EXPOSED_ENGINEERING_FIXTURE",
+        "source_receipt_digest": "22b152168dfd3c20cd8d61b76dcd98a999932412af2d1b65e8779c5d8cb64d90",
+        "world_truth_established": false
+      }
+    },
+    {
+      "prepared_id": "rpa-prepared-3e606cce69d899c98e078522f14fe1b9a81a64106e5cc99c4c179b2c14919888",
+      "request": {
+        "assistance": "unassisted",
+        "operation": "FIND_SHARED_PART",
+        "question": {
+          "a": "Bicycle",
+          "b": "Cart"
+        }
+      },
+      "source_binding": {
+        "base_current_state_id": "loaded-ce03e3a5fb1948d08230d02042852fdadc46f3e9430dd2472a4848265f3cb12d",
+        "legacy_input_id": "cube-input-21313c328d751bae5495d314b9fb93132c7f2ba7ce844bbe921d4f1f7be197fe",
+        "rendering_schema": "cncm.cube-contains-node-rel/0.1",
+        "source_authorship_authenticated": false,
+        "source_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+        "source_context_id": "toy_scene_01",
+        "source_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+        "source_namespace": "EXPOSED_ENGINEERING_FIXTURE",
+        "source_receipt_digest": "22b152168dfd3c20cd8d61b76dcd98a999932412af2d1b65e8779c5d8cb64d90",
+        "world_truth_established": false
+      }
+    },
+    {
+      "prepared_id": "rpa-prepared-916b95e7416b6e1896fd7f4dc6f19db66a38a42b3723627788ef8d68d7c808e8",
+      "request": {
+        "assistance": "unassisted",
+        "operation": "REACHED_VIA",
+        "question": {
+          "idea": "Bicycle",
+          "part": "Cart"
+        }
+      },
+      "source_binding": {
+        "base_current_state_id": "loaded-ce03e3a5fb1948d08230d02042852fdadc46f3e9430dd2472a4848265f3cb12d",
+        "legacy_input_id": "cube-input-720ec4f897a0010a09974372c7086b6ec89851559d33b37cc34ee9eef8c6179e",
+        "rendering_schema": "cncm.cube-contains-node-rel/0.1",
+        "source_authorship_authenticated": false,
+        "source_bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16",
+        "source_context_id": "toy_scene_01",
+        "source_file_sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+        "source_namespace": "EXPOSED_ENGINEERING_FIXTURE",
+        "source_receipt_digest": "22b152168dfd3c20cd8d61b76dcd98a999932412af2d1b65e8779c5d8cb64d90",
+        "world_truth_established": false
+      }
+    }
+  ],
+  "numeric_calls": 0,
+  "provider_calls": 0,
+  "source_pins": [
+    {
+      "bytes": 27547,
+      "path": "cncm/rpa_learning_smoke.py",
+      "sha256": "19c3f5d1a2eb105b48f5b6d8398096e85e3bdf9d962169f6b09012167683d122"
+    },
+    {
+      "bytes": 14114,
+      "path": "cncm/rpa_learning_worker.py",
+      "sha256": "e5c1c5774131f178f3e26e578e0a43de41be9d1354a5517b8741e8fe3d0d3e11"
+    },
+    {
+      "bytes": 22256,
+      "path": "cncm/rpa_learning_adapter.py",
+      "sha256": "02902a594e9e2ea8175fe176417c046919b52406463cfdce66357b0884a51d72"
+    }
+  ],
+  "status": "CONFIRMED_SOURCE_BUG_NOT_A_VERIFIER_FAILURE"
+}

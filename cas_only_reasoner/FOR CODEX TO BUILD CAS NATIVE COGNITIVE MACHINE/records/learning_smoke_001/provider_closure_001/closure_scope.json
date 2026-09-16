@@ -1,0 +1,16 @@
+{
+  "broader_legacy_resources_remain": true,
+  "broader_observation_is_not_run_failure": true,
+  "broader_raw_receipt_status": "PARTIAL_OR_OPEN",
+  "current_job_cleanup_complete": true,
+  "evidence_archive_retained": true,
+  "job": "cas-meta2-ingestionsmoke-20260916183635-6ef614bf",
+  "observed_end_utc": "2026-09-16T18:50:55.481937+00:00",
+  "observed_start_utc": "2026-09-16T18:50:53.071541+00:00",
+  "provider_mutations": 0,
+  "provider_sha256": "3dc763397ad36d8a48e1ad2b8be22dc3fd90c64c2db23afdd4c0e1d883de7d8b",
+  "schema": "cncm-ingestion-provider-closure-scope/1",
+  "summary_sha256": "86078831bbaa3e230d00fcc264ba71af38364f89e0becfde6269c8f045a0fc56",
+  "untagged_stopped_instance_attribution": "Not attributed to this CAS run",
+  "untouched_older_job": "cas-meta2-teaching-20260908134143-ebd84f71"
+}

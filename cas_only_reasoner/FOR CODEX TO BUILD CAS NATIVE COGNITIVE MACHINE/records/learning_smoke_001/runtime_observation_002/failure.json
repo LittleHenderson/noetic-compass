@@ -1,0 +1,1 @@
+{"cause": "The SDK had already decoded console Output despite the service shape documentation describing the wire encoding. No model/job retry and no full console retained.", "error": "ValueError: string argument should contain only ASCII characters", "status": "READ_ONLY_OBSERVATION_SCRIPT_FAILED"}
