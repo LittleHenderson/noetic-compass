@@ -1,0 +1,11 @@
+*.json -text -eol -whitespace
+*.jsonl -text -eol -whitespace
+*.xml -text -eol -whitespace
+*.txt -text -eol -whitespace
+*.py text eol=lf
+development_001/** -text -eol -whitespace
+# Preserve the exact retained runner bytes, including their trailing blank line.
+/capture_baseline.py whitespace=-blank-at-eof
+/check_profiles.py whitespace=-blank-at-eof
+/finalize_checkpoint.py whitespace=-blank-at-eof
+/run_focused.py whitespace=-blank-at-eof

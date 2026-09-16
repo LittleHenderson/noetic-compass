@@ -1,0 +1,5 @@
+# Pytest scratch inputs stay local; reports and receipts remain published.
+/development_001/tmp_001/
+/development_001/tmp_002/
+/development_001/tmp_003/
+/development_001/adversarial_final_001/temporary/

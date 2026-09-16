@@ -1,0 +1,106 @@
+{
+  "custody_evaluation_ids_matched": 216,
+  "custody_root_families_matched": 16,
+  "files": [
+    {
+      "bytes": 12376,
+      "path": "records/learning_panel_001/a.py",
+      "sha256": "1747c863dd4075b0a1a070005707caacaaffbd78eec25fac3193c56ca9ccfc81"
+    },
+    {
+      "bytes": 5981,
+      "path": "records/learning_panel_001/b.py",
+      "sha256": "1389c32caef2e7929fb753e9e81e71bc2a9b273246f2fdd974f38c6351003868"
+    },
+    {
+      "bytes": 5706,
+      "path": "records/learning_panel_001/c.py",
+      "sha256": "bebcc6bc4c3c4df17e4be918d401e8ec6570ce5b2369e61c2632a4131b2d83ad"
+    },
+    {
+      "bytes": 13157,
+      "path": "records/learning_panel_001/check.json",
+      "sha256": "0b620ed6b75d0576b471204ec3c152292a361b7f92ff65668007f7357094713c"
+    },
+    {
+      "bytes": 54494,
+      "path": "records/learning_panel_001/custody.json",
+      "sha256": "85ca86487a224c9733da07026e482a6573548ff0af2a8d0341e1418bc5f43f11"
+    },
+    {
+      "bytes": 3362,
+      "path": "records/learning_panel_001/d.py",
+      "sha256": "3525b493d16e0ba55a4147bd1ae0108dbb7002fb74f719f5bd814dbd815d004a"
+    },
+    {
+      "bytes": 3340,
+      "path": "records/learning_panel_001/e.py",
+      "sha256": "d44b3a3b1ace7052daf44f993e8e25652e12de7f4db78057e672c0b8b1444382"
+    },
+    {
+      "bytes": 1129202,
+      "path": "records/learning_panel_001/envelope.json",
+      "sha256": "8fae53fcb1f8db3005edacb8f3d850b0e8b44a3edbe6cf5995b33ccc9b57f445"
+    },
+    {
+      "bytes": 659,
+      "path": "records/learning_panel_001/failure.json",
+      "sha256": "70a0c27944e1da0eca2edb3fb02bb8b27612dd7fac06e27d75deb08e6be1a4b0"
+    },
+    {
+      "bytes": 383,
+      "path": "records/learning_panel_001/finalizer_failure.json",
+      "sha256": "24920a42c0ce81f16d42b30d59a7d1ed1462b2945b54e6b429a01abfb5df9bc6"
+    },
+    {
+      "bytes": 1376747,
+      "path": "records/learning_panel_001/history.json",
+      "sha256": "56886cc5dca2d8c52a887ebd70563e04f555fc066a74603ad97892e5996369d3"
+    },
+    {
+      "bytes": 90395,
+      "path": "records/learning_panel_001/index.json",
+      "sha256": "83b2504ec08fba0e74ce290f20393a1847fd9f9f4633a969347d9f398638feed"
+    },
+    {
+      "bytes": 112519,
+      "path": "records/learning_panel_001/reconcile.json",
+      "sha256": "dfbb69cde0438fa8d787d694636b65aee0e57d3dfde12b8546f2e5bdd6509e0a"
+    },
+    {
+      "bytes": 8565,
+      "path": "records/learning_panel_001/REPORT.md",
+      "sha256": "4f686b2e31130a926786dcafee3b710f2971aed30c0ac77c728370c22d327e1d"
+    },
+    {
+      "bytes": 64695,
+      "path": "records/learning_panel_001/supply.json",
+      "sha256": "6290e13a4f40e0b61da6ede65c55b90939380f1ef79bcfe6a5b98269dde8d193"
+    }
+  ],
+  "head_at_receipt": "089223d81b70bbaab63e82e1aea763e7ea41caea",
+  "historical_source_gap_count": 1,
+  "new_final_labels_exported": false,
+  "new_neural_executions": 0,
+  "new_optimizer_updates": 0,
+  "new_panel_selected": false,
+  "new_provider_calls": 0,
+  "passing_audit_assertions": 106,
+  "preserved_failures": [
+    "Five historical JSON+disclaimer parsing failures and exact reconciliation",
+    "d.py root-vs-derived-family assertion failure; correction e.py",
+    "One read-only stdin helper import failure recorded in failure.json",
+    "Receipt finalizer relative/absolute path failure before writes; corrected path resolution"
+  ],
+  "remaining_gates": [
+    "Fresh ordered encoder/initializer/checkpoint/optimizer/run identities",
+    "Executed numerical smoke and public-only prediction boundary",
+    "Development-only feasibility/sample-size selection and frozen success criterion",
+    "Structural/size-transfer amendment",
+    "Perspective derived-variant development overlap must be resolved if that expanded panel is used"
+  ],
+  "schema": "cas.learning-panel-final-audit-receipt/0.1",
+  "source_pins_unchanged_at_receipt": true,
+  "status": "AUDIT_ONLY_EXISTING36_SUPPLIED_ORDERED_RUN_NOT_READY",
+  "viable_path": "Fresh matched initialization with exact ordered encoder, training-only tokenizer, frozen per-run input/exposure/selection custody and existing canonical30 final families held out from all new-run training/tuning; historical local gap disclosed."
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "cas.learning-panel-preserved-audit-failure/0.1",
+  "source": "d.py",
+  "source_sha256": "3525b493d16e0ba55a4147bd1ae0108dbb7002fb74f719f5bd814dbd815d004a",
+  "failure": "AssertionError: saved_ids==expected_ids and saved_families==expected_families",
+  "diagnosis": "All216 record IDs matched exactly. Saved family IDs are16 roots; compiled episodes include24 derived variant IDs. The independent correction in e.py compares against panel item root family IDs.",
+  "inspection_command_failure": "A stdin inspection initially omitted the helper directory from sys.path and raised ModuleNotFoundError:a; the retry only corrected module lookup."
+}

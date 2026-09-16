@@ -1,0 +1,21 @@
+# Learning ingestion checkpoint
+
+Status: IMPLEMENTED / FINAL_PURE_ACCEPTANCE_PENDING / CUDA_SMOKE_NOT_RUN.
+
+New source-bound node/rel preparation, strict public inference packets, checked
+private training registry, cache validation and seal-before-score control are
+implemented in separate versioned modules. Existing accepted sources are held.
+
+Development evidence includes 53 core tests covering all 306 source combinations,
+71 independent adversarial tests, and 9 cycle control tests (final combined run
+pending). CUDA entrypoints have source review only; no model/tensor/provider or
+AWS execution is performed for this checkpoint. Test doubles remain identified.
+
+The preservation baseline pins 601 accepted source files and six prior evidence
+receipts at parent commit 089223d81b70bbaab63e82e1aea763e7ea41caea. Failed label,
+temporary-directory and test-helper probes are retained beside their corrections.
+
+The complementary panel history/envelope audit is a separate workstream under
+research/CAS_META_2_COMPOSITION/records/learning_panel_001. Existing corpus
+preparation does not establish new ordered-checkpoint compatibility or a learning
+gain. The full goal stays active; the earlier recurrence result remains NOT_MET.

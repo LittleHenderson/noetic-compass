@@ -1,0 +1,1875 @@
+{
+  "actual_neural_presentations": 0,
+  "actual_optimizer_updates": 0,
+  "actual_provider_calls": 0,
+  "archives": [
+    {
+      "errors": [],
+      "graph_records": 399,
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/source.zip",
+      "sha256": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38",
+      "topologies": 67
+    },
+    {
+      "errors": [],
+      "graph_records": 399,
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip",
+      "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "topologies": 67
+    },
+    {
+      "errors": [],
+      "graph_records": 399,
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip",
+      "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "topologies": 67
+    },
+    {
+      "errors": [],
+      "graph_records": 399,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/source.zip",
+      "sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8",
+      "topologies": 67
+    },
+    {
+      "errors": [],
+      "graph_records": 399,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/source.zip",
+      "sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723",
+      "topologies": 67
+    },
+    {
+      "errors": [],
+      "graph_records": 132,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_package_002/source.zip",
+      "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 42,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909193638-98f993ab/source.zip",
+      "sha256": "71e72bae410ca3d90c57f067f2fa8507326fbcb24346f7166b4d343b0524b66d",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 42,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909195309-68ac4845/source.zip",
+      "sha256": "bce8325bcf12996b52917214ad65dad50b77802d79d09f996afc88d853ebc9b4",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 42,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909201205-f0da3fa3/source.zip",
+      "sha256": "82bcaf6c6d8eec5904381c6eb684645358aa89f16be276f116b3d1c5c2b8c55d",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 42,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909202533-7cb622f8/source.zip",
+      "sha256": "838f93a719b90fc262ffd682f414485d283e42debcbc928fe5cce80acdd63b58",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 42,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909210625-0a10f14d/source.zip",
+      "sha256": "2f3b027d57bc67e0d763b0b08ff433b53b1cb2d90e2c17ebca2e23004c52eff4",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 132,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910013000-e485b07c/source.zip",
+      "sha256": "b3d7d1be6c811f856ceb859db461752e6f90135d5e7e4240eecb06e98e0f8c50",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 132,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/source.zip",
+      "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+      "topologies": 4
+    },
+    {
+      "errors": [],
+      "graph_records": 207,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910053000-951cab20/source.zip",
+      "sha256": "8afb1f3fbcf5ff572c259e8e26878ef025361ac0a504d9ad612bff4ffc424464",
+      "topologies": 57
+    },
+    {
+      "errors": [],
+      "graph_records": 207,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910073000-210109c7/source.zip",
+      "sha256": "c24f2f9ce2d01a44ac79e46bfdc59788256200b6a2079c3223f8a6758a0f20f9",
+      "topologies": 57
+    },
+    {
+      "errors": [],
+      "graph_records": 207,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910093000-75387578/source.zip",
+      "sha256": "9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc",
+      "topologies": 57
+    },
+    {
+      "errors": [],
+      "graph_records": 207,
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/source.zip",
+      "sha256": "fd9b4902ebf5aadfceab304797f69cdd8731f4ce3a09b82b57a8d63e8cbe2ac7",
+      "topologies": 57
+    }
+  ],
+  "counts": {
+    "development": 6,
+    "excluded": 45,
+    "final": 30,
+    "unallocated": 11
+  },
+  "exclusions_reproduced_exactly": true,
+  "input_pins": [
+    {
+      "bytes": 10760,
+      "path": "records/complementary_teaching_001/preparation_20260916/historical_exclusions.json",
+      "sha256": "e00cc95d59b17fd36a8c478a0497257e5355e071348d4f4c833d9d3a470a3aa8"
+    },
+    {
+      "bytes": 1231609,
+      "path": "records/complementary_teaching_001/preparation_20260916/data_manifest.json",
+      "sha256": "4b8ffd62dcbd55ff1fb79c43a6a134ac3b5af3a84ec7ed9fccd3bc1e0c9f2c04"
+    },
+    {
+      "bytes": 2009701,
+      "path": "records/complementary_teaching_001/preparation_20260916/TASK_BINDINGS.json",
+      "sha256": "911b24e016ac274618c3d8256b52b3a0e2c163e749d0cd16c554362b99f42b88"
+    },
+    {
+      "bytes": 6344,
+      "path": "records/complementary_teaching_001/preparation_20260916/DESIGN.md",
+      "sha256": "5c9c621a111ceb452e93f6f3cb088ea0dc026a0d989583800e9aeec0c3df0b83"
+    },
+    {
+      "bytes": 4064,
+      "path": "records/complementary_teaching_001/preparation_20260916/UNSIGNED_EXECUTION_REQUEST.json",
+      "sha256": "1589bf235790ec159ed95ffbac0cf64b46e06e4619d3992cbc74d5f2cab9b2e8"
+    }
+  ],
+  "rows": [
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "006a321ca7e633c0e263ce941a0c44a11135c604d3263dbbaa585dd6cec57a58"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "03fee3a6589af814d7b3312028fb3e32015ecbab2f9ce6e858e7ac8c7a32fbb3"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "05a6059dbe528687d8d95be17148d2cb6e738e871a5bfd9db05d920be05cc2c0"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "06e45743da87db41652b55a78de0d1d5a8eb999214d299078ad370fb253fc42a"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "0c3c4c9c19eb1b02a9cf80b40189c7d29fbf939f47b587719d8f4c2db9e4a77b"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "0e25d3802b1e211609869ea190284a98f59ea1d6138cd8ee59679cc9c6aa50a2"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "0e41dee32cad0d2cec63fc81a1e11054d68d78d46dc96dfec5a19e86168cdd49"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "178562c0b47074025b89613f3a0520e8199248bf4d46d0dd7a763ba5e7ac424f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "1a29319b3556ab485dcc8d1bc5c77fc6a46d8f2751c747027c0fc975644c23c6"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "1d90392c451ee2a2efb5527ae3d36bb9f3ca789b2570e72351c11990625dd255"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "1f046580009fea08eb3f7afd34ef3169c6d2980be790fd05abb67cfe023c9bfc"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "26cab57e55ee76dd59fc7231268b9bbf7909f95be18ed42a914639386e20f9d7"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "271da1572bdae6c5c5fbab66391c5a57e0e578136bda5cd8384ca626ee131680"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "3034549e12ace6993934c0793c54e3bf8c2351d766fdda300a39a0bf2da80a76"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "321a820058d780ab5ffe26e4734bdba0522e0947e24f115c9945c4d1855f299b"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "33aa07cf7ed05463a177f44d6195b81079a9dff99cbdec664a78d1989f2f73de"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "development",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "34b38f6665c8cde0ffa8c216b562edef920bb10d0ba64171ebfd4908b14f6e21"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "416bd2a9267786ca510e3aea1cbc9f7bc07d1656185e1a26445d98a2a3d48460"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "49d033ffd7f3f5480aa2ec1557beefb95541e2e6d6c1df1bdcec05c643f74d65"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "4a4f60842d244def57143dbead643e90cd07ff3a473d4b0d852ec742f7a777c6"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "4e88bfe775851d9698ae91b0640563261abc523f077a442a7b00cc1114730d63"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "4eab21489a2281cb42cb343cd5d3f20c91006f4e41a91f1287147905376bfefc"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "4f8bc7ded554f1badf3ee92ab4d60d8704f8c177714f3fda4c61c21039850a23"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "55b4672e081550258fe335db4f2971438468dd56bfc430edf229162f0771c374"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "5a7f39879c13e7530b0bbaffbfe197d1c762dc4cb2b7575badd5036762e779be"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "5e9d875184cb158a21c68dc062d6b5e7f626e6a6409670a89c41c7bff949b356"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "65b12364e9a792c07a1c34d15fa8fdf538f150c4f664116cdadda5f4cc12b2e3"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "6cb0658dee99f9306371e45fb09de21b44f2038b33ec5bcb0a52129f5b2939f4"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "6deb7360edb74e238abfbfbf228888ff56a0b74dde55f5c0d264722bcf2838e8"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "77791d0f323677b22d097277b09d7fe5b508f459a456de302256ee03d5b08f09"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "814876fac7dad7eb8460480b0524ce90330f96b603c024cfb2afc23cc61a6ffe"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "8ed4b0d8ba20bb5f60e0bee0895858819ec2c0da54594e1f8fb6a1fb6daed463"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "941814a36b92e49048d2794ad7a173c87201e16f2aa8cc70098a8ecaf2c262ab"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "9c1179eaa3010854a8f54ad7990f3d40006a88a245be82acd306a0bcfca4e4ae"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "9e731370325af5ce2fc178fe71c32e7468bd5079c554c499917b812a488a454f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "9f91c5133a97296f360895f69b8d860c9ca6081799cd36e918360013e588a1f1"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "a62c4771d02bdd00167f8f84471dfc76d9780bc1b458afce1d18113e3d2e2e11"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "abdd8a4641562c0d1bc2140c9737452a880fea9d788f143f017bdb7cb01d6881"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "ad623965bf12e1d5473adbf96c6578729e4c7b50e6267477d274780588d02866"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "ad8b9a5f986ee1510aa2e18f1aa761e335c054f0d5012275fca5f90f9d0e692b"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "b0a0a3ccd2b39f8203d4e100d7527c4840477edadd693943e2489766ae734ebb"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "b84ae2656e5764c745d2d16c4bb323025ff101f28a0403d44e7fd781c10c071c"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "ba86a1cab91124c7bb2c0907edf271143c878b7991934610c7de57b1fe7a3549"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "baa69d41cb8c33ef8ac47e0fb7338219ab14d68a74bd79d373b4dc24d215a0c4"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "bc3ccbf74f127fea18d2f2a5094eae1083917cb451292711346d019183f1d30f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "bce09c1948447844d2b5e1565e99e669283227ae72ca7be1c88ce288066726e2"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "bde2bd34a78443d25cdc8ac2c90435a50c4e455b0bf1ca0e70fd1ad345d52553"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 6
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "c11516d843bd99d72c0e7001b949e9e3850008a729ba5cdd1287a0bbacd0d438"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "c1c7bbcd5a710b78252b9965173164c202b502865896340827055f3636677a51"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "c2701a488b3a49e5860fd429537b9c5e57232dbbc0c458e6e1284ba3c7b6c5f4"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "c2fe1c2d2d37fcdacb00b1314010b35ea2ebe290d4bf027d4e57e46d855cf6f7"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "de54e99652a21bcfa6576e5d9fe17467820d4d1d8db07abed6263322c6ff8732"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "dfc1482c7bde0ee21a6e4a47555f5f624eba5cabe1296d9ed91f0f72138e286f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "e77d179f5873d85fc14d6d6fe62b1df758ff48be44271dee757d4cc948d30545"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "e80b2f7b09b340308372fbfe5a0a4ef4a65ef664c997f4ec4b741fa229a312d5"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "e9ee3d0945fa38d0e1b20da13ff312239303c43dc2a4cae833c03bbbb8d0115e"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "ea739849a6081b7c3fee05cdc9a0807b95f291f876d233657e190f9728d9e9cc"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 9,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "ee6805cd0bc8bc26e0c63b96c76890143a06063981d2fdd5cdf99e43591eb81f"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": false,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 8,
+        "relations": 6,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "f0e487a81de9af4d420730ddaed66958695f48ec2ef9d8cb1e1cace77f6d4a14"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 9,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "f54284d9f988849ecbcc7d107abb75a6e53e716c091822e439caba34b0e58167"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": false,
+      "current_allocation": "excluded",
+      "historically_excluded": true,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "fad7d16170dcee9120189fe893053a0f4f999d8e6fcfe8890f249003307783f8"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "final",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 3,
+        "max_direct_parts": 3,
+        "nodes": 10,
+        "relations": 8,
+        "wholes": 4
+      },
+      "supports_all_three_reach_classes": true,
+      "topology": "fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5"
+    },
+    {
+      "authoring_examination": "existing deterministic enumerator/reference checker; not learner exposure",
+      "candidate_pool": true,
+      "current_allocation": "unallocated",
+      "historically_excluded": false,
+      "stats": {
+        "has_nested_whole": true,
+        "has_shared_part": true,
+        "max_depth": 2,
+        "max_direct_parts": 2,
+        "nodes": 10,
+        "relations": 7,
+        "wholes": 5
+      },
+      "supports_all_three_reach_classes": false,
+      "topology": "fb99d8f06c232b68cf242817afcfdc17c0dcb1c09a4d3ee5dd56fbdf02d15dc2"
+    }
+  ],
+  "schema": "cas.learning-panel-supply-audit/0.1",
+  "source_pins": [
+    {
+      "bytes": 173,
+      "path": "cas_meta2/__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    {
+      "bytes": 177,
+      "path": "cas_meta2/complementary_teaching/__init__.py",
+      "sha256": "e469cf153e6816be63bdec4c106d4a2440535cadad7959fa02cdef37cb6e6790"
+    },
+    {
+      "bytes": 14874,
+      "path": "cas_meta2/complementary_teaching/course.py",
+      "sha256": "dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0"
+    },
+    {
+      "bytes": 5262,
+      "path": "cas_meta2/complementary_teaching/data.py",
+      "sha256": "f810c5816bb0e04c02fde7255ff973f3131d6844f9cf037dd5933261b695335c"
+    },
+    {
+      "bytes": 809,
+      "path": "cas_meta2/graph_teaching/__init__.py",
+      "sha256": "6b9d491e7b4c05d359982d46090a7de48cfe9a6221c6e0bbbdedd34ae0a78d74"
+    },
+    {
+      "bytes": 8472,
+      "path": "cas_meta2/graph_teaching/adapter.py",
+      "sha256": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7"
+    },
+    {
+      "bytes": 16555,
+      "path": "cas_meta2/graph_teaching/contrast_probe.py",
+      "sha256": "da4fe13d5378a70039fcb233a537e498014c70bf4919175fdf4d9f706898b808"
+    },
+    {
+      "bytes": 79970,
+      "path": "cas_meta2/graph_teaching/cube_node.py",
+      "sha256": "9d3363a960298715c0b13256593693dff7b07d70563b9a1b044d5d9042431e4a"
+    },
+    {
+      "bytes": 27607,
+      "path": "cas_meta2/graph_teaching/curriculum.py",
+      "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+    },
+    {
+      "bytes": 21020,
+      "path": "cas_meta2/graph_teaching/face_corpus.py",
+      "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+    },
+    {
+      "bytes": 17884,
+      "path": "cas_meta2/graph_teaching/face_evaluation.py",
+      "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+    },
+    {
+      "bytes": 20372,
+      "path": "cas_meta2/graph_teaching/face_experiment.py",
+      "sha256": "7768367abe4a6694e0e2b69782d62fd3939ff51ad179470e492e01ce2b582f50"
+    },
+    {
+      "bytes": 7201,
+      "path": "cas_meta2/graph_teaching/face_roles.py",
+      "sha256": "463227f82faa2409dbd156481ae4dbc736c627d73510333f61df5f75a6c2fdc3"
+    },
+    {
+      "bytes": 15904,
+      "path": "cas_meta2/graph_teaching/face_schedule.py",
+      "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+    },
+    {
+      "bytes": 37159,
+      "path": "cas_meta2/graph_teaching/face_tasks.py",
+      "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+    },
+    {
+      "bytes": 24372,
+      "path": "cas_meta2/graph_teaching/final_panel.py",
+      "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+    },
+    {
+      "bytes": 18236,
+      "path": "cas_meta2/graph_teaching/fresh_panel.py",
+      "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+    },
+    {
+      "bytes": 6829,
+      "path": "cas_meta2/graph_teaching/graph.py",
+      "sha256": "1dfa2f67ab76847d0ae351d36f9e0ea6c6e1bea053640dd20ab898a550b63543"
+    },
+    {
+      "bytes": 19198,
+      "path": "cas_meta2/graph_teaching/lessons.py",
+      "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+    },
+    {
+      "bytes": 20252,
+      "path": "cas_meta2/graph_teaching/real_framework.py",
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "bytes": 5412,
+      "path": "cas_meta2/graph_teaching/reference.py",
+      "sha256": "aab7af24638c842b7197e7468a168fdf05b9cd0dc951583eec5aa8590dc765ee"
+    },
+    {
+      "bytes": 13502,
+      "path": "cas_meta2/graph_teaching/trainer.py",
+      "sha256": "e3302b90030dd9da048d6aacdc1c806967455f8a51435665eae3489d25066bd4"
+    },
+    {
+      "bytes": 78579,
+      "path": "cas_meta2/graph_teaching/verified_teaching.py",
+      "sha256": "3bf59ec79943186ec41aa5d4ef7c85754d68dadf15be1e48adca78029ebb9ea6"
+    },
+    {
+      "bytes": 22741,
+      "path": "cas_meta2/graph_teaching/verified_training.py",
+      "sha256": "0d70665b5385bf0e1381ba571b9f287bec3f1e9cea8c07868e26f5a9e652ba8a"
+    },
+    {
+      "bytes": 374,
+      "path": "cas_meta2/recurrent_cjt/__init__.py",
+      "sha256": "3f8eb71c21543c3fbe0b7a6024c3fb5cd2b44afae2e2c4216820bbebd909583a"
+    },
+    {
+      "bytes": 20730,
+      "path": "cas_meta2/recurrent_cjt/course.py",
+      "sha256": "95c248c45cccae38ac7b301f74866fe3400a589bd8c1c15b074d4b36fb83caa7"
+    },
+    {
+      "bytes": 18437,
+      "path": "cas_meta2/recurrent_cjt/recurrence.py",
+      "sha256": "45278c0455b042e5515a73eb629a0ae90c31d41ae373ad3527e11a9cae49d17c"
+    },
+    {
+      "bytes": 18529,
+      "path": "tools/check_structural_supply_20260916.py",
+      "sha256": "a78d24c5469d95937a1d49ec6827cef213eabbb0b4811defe3ae370bd75852e0"
+    },
+    {
+      "bytes": 7071,
+      "path": "tools/compile_complementary_data.py",
+      "sha256": "7b8d83705d3fec88b29de1343028915f71e30735fceaaa2cf777549e1bb80f0c"
+    }
+  ],
+  "status": "EXISTING_ALLOCATION_REPRODUCED_NOT_NEW_FREEZE"
+}

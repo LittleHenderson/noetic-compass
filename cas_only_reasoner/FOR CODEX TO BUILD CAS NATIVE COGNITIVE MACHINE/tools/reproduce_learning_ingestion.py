@@ -1,0 +1,299 @@
+"""Reproduce pure ingestion on exposed fixtures; never a neural smoke run."""
+from __future__ import annotations
+import argparse
+from copy import deepcopy
+from hashlib import sha256
+import importlib.abc
+import json
+from pathlib import Path
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[1]
+PILOT = ROOT / "research/CAS_META_2_COMPOSITION"
+BASE = ROOT / "records/learning_ingestion_001"
+FIXTURE = "research/CAS_META_2_COMPOSITION/records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Node_Example_v0.1.json"
+DENIED = {"torch", "numpy", "tensorflow", "jax", "boto3", "botocore", "requests",
+          "httpx", "openai", "anthropic", "cas_cjt", "casformer"}
+ATTEMPTS = []
+TEST_MODULES = ["tests/test_rpa_learning_adapter.py", "tests/test_rpa_learning_adversarial.py",
+    "tests/test_rpa_learning_cycle.py", "tests/test_rpa_cube_adapter.py",
+    "research/CAS_META_2_COMPOSITION/tests/test_features_v2.py",
+    "research/CAS_META_2_COMPOSITION/tests/test_ordered_graph_encoder.py",
+    "research/CAS_META_2_COMPOSITION/tests/test_ordered_encoder_probe.py"]
+
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+
+class Deny(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split(".")[0] in DENIED:
+            ATTEMPTS.append(fullname)
+            raise RuntimeError("PROHIBITED_IMPORT:" + fullname)
+
+
+def pin(path):
+    path = Path(path)
+    raw = path.read_bytes()
+    return {"path": path.relative_to(ROOT).as_posix(), "bytes": len(raw),
+            "sha256": sha256(raw).hexdigest()}
+
+
+def write(path, value):
+    raw = (json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n").encode()
+    with Path(path).open("xb") as stream:
+        stream.write(raw)
+    return pin(path)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", required=True)
+    parser.add_argument("--test-evidence", required=True)
+    parser.add_argument("--test-receipt", required=True)
+    parser.add_argument("--test-receipt-sha256", required=True)
+    args = parser.parse_args()
+    output = (ROOT / args.output).resolve()
+    require(output.parent == BASE.resolve(), "OUTPUT_MUST_BE_NEW_DIRECT_RECORDS_CHILD")
+    evidence = (ROOT / args.test_evidence).resolve()
+    require(evidence.is_relative_to(BASE.resolve()), "TEST_EVIDENCE_OUTSIDE_CHECKPOINT")
+    test_receipt_path = (ROOT / args.test_receipt).resolve()
+    require(test_receipt_path.parent == evidence.parent
+            and test_receipt_path.name == "receipt.json", "FOCUSED_RECEIPT_PATH_MISMATCH")
+    require(sha256(test_receipt_path.read_bytes()).hexdigest() == args.test_receipt_sha256,
+            "CALLER_FOCUSED_RECEIPT_DIGEST_MISMATCH")
+    test_receipt = json.loads(test_receipt_path.read_bytes())
+    require(test_receipt["status"] == "PASS" and test_receipt["exit_code"] == 0
+            and test_receipt["inputs_unchanged"] is True, "FOCUSED_EXECUTION_NOT_PASS")
+    require(len(test_receipt["artifacts"]) == 7
+            and {row["path"] for row in test_receipt["artifacts"]} == {
+                "inputs_before.json", "inputs_after.json", "launch.json", "guard.json",
+                "stdout.txt", "stderr.txt", "tests.xml"}, "FOCUSED_ARTIFACT_INVENTORY_CHANGED")
+    for row in test_receipt["artifacts"]:
+        require(Path(row["path"]).name == row["path"] and row["path"] not in (".", ".."),
+                "FOCUSED_ARTIFACT_PATH_INVALID")
+        actual = pin(test_receipt_path.parent / row["path"])
+        require((actual["bytes"], actual["sha256"]) == (row["bytes"], row["sha256"]),
+                "FOCUSED_ARTIFACT_CHANGED")
+    tested_before = json.loads((evidence.parent / "inputs_before.json").read_bytes())
+    tested_after = json.loads((evidence.parent / "inputs_after.json").read_bytes())
+    require(tested_before == tested_after, "FOCUSED_TESTED_INPUTS_CHANGED")
+    tested_names = {row["path"] for row in tested_after}
+    require(len(tested_names) == len(tested_after) and set(TEST_MODULES).issubset(tested_names)
+            and {"cncm/rpa_learning_adapter.py", "cncm/rpa_learning_cycle.py",
+                 "cncm/rpa_cube_adapter.py", "records/learning_ingestion_001/run_focused.py",
+                 "tools/reproduce_learning_ingestion.py"}.issubset(tested_names),
+            "FOCUSED_REQUIRED_SOURCE_BINDINGS_MISSING")
+    for row in tested_after:
+        require((ROOT / row["path"]).resolve().is_relative_to(ROOT.resolve()),
+                "FOCUSED_TESTED_PATH_OUTSIDE_ROOT")
+        require(pin(ROOT / row["path"]) == row, "CURRENT_SOURCE_DIFFERS_FROM_TESTED_INPUT:" + row["path"])
+    launch = json.loads((evidence.parent / "launch.json").read_bytes())
+    require(launch["argv"][4:12] == ["-q", *TEST_MODULES]
+            and len(launch["argv"]) == 14
+            and launch["argv"][12].startswith("--basetemp=")
+            and launch["argv"][13] == "--junitxml=" + str(evidence),
+            "FOCUSED_MODULE_LIST_OR_ARGUMENTS_CHANGED")
+    guard_receipt = json.loads((evidence.parent / "guard.json").read_bytes())
+    require(guard_receipt["exit_code"] == 0 and not guard_receipt["forbidden_modules_loaded"],
+            "FOCUSED_EXECUTION_GUARD_FAILED")
+    output.mkdir(exist_ok=False)
+    baseline_path = BASE / "source_baseline.json"
+    baseline = json.loads(baseline_path.read_bytes())
+    preserved = baseline["accepted_sources"] + baseline["prior_evidence"]
+    require(len(baseline["accepted_sources"]) == 601 and len(baseline["prior_evidence"]) == 6,
+            "PRESERVATION_INVENTORY_CHANGED")
+    for row in preserved:
+        require(pin(ROOT / row["path"]) == row, "PRESERVED_INPUT_CHANGED:" + row["path"])
+    declared = {row["path"] for row in preserved}
+    declared.update(("cncm/rpa_learning_adapter.py", "cncm/rpa_learning_cycle.py",
+                     "tests/test_rpa_learning_adapter.py", "tests/test_rpa_learning_cycle.py",
+                     "tests/test_rpa_learning_adversarial.py", "tools/reproduce_learning_ingestion.py",
+                     "records/learning_ingestion_001/capture_baseline.py",
+                     "records/learning_ingestion_001/source_baseline.json"))
+    declared.add(evidence.relative_to(ROOT).as_posix())
+    declared.add(test_receipt_path.relative_to(ROOT).as_posix())
+    declared.update((evidence.parent / row["path"]).relative_to(ROOT).as_posix()
+                    for row in test_receipt["artifacts"])
+    declared.add(FIXTURE)
+    before = [pin(ROOT / name) for name in sorted(declared)]
+    write(output / "inputs_before.json", before)
+    tests = ET.fromstring(evidence.read_bytes())
+    suites = list(tests.iter("testsuite"))
+    counts = {key: sum(int(row.get(key, "0")) for row in suites)
+              for key in ("tests", "failures", "errors", "skipped")}
+    require(counts["tests"] > 0 and all(counts[key] == 0 for key in ("failures", "errors", "skipped"))
+            and not any(list(tests.iter(tag)) for tag in ("failure", "error", "skipped")),
+            "FOCUSED_TEST_EVIDENCE_NOT_PASS")
+    require(counts == test_receipt["counts"], "FOCUSED_RECEIPT_XML_COUNT_MISMATCH")
+    require(not DENIED.intersection(sys.modules), "PROHIBITED_MODULE_ALREADY_LOADED")
+    guard = Deny()
+    sys.meta_path.insert(0, guard)
+    sys.path[:0] = [str(ROOT), str(PILOT)]
+    from cncm import rpa_cube_adapter as cube
+    from cncm import rpa_learning_adapter as adapter
+    from cncm import rpa_learning_cycle as cycle
+    from cncm.canonical import canonical_json, digest
+    from cncm.model import ContractError
+    from cas_meta2.features_v2 import LosslessPublicTokenizer
+    from cas_meta2.graph_teaching import ordered_encoder
+    bundle_path = cube.cube_node.pinned_bundle_path()
+    require(bundle_path.resolve() == (ROOT / FIXTURE).resolve(), "SOURCE_FIXTURE_PATH_CHANGED")
+    source = bundle_path.read_bytes()
+    require(sha256(source).hexdigest() == "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32",
+            "EXPOSED_SOURCE_BYTES_CHANGED")
+    bundle = json.loads(source)
+    require(cube.cube_node.bundle_digest(bundle) ==
+            "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16", "EXPOSED_SOURCE_CHANGED")
+    documents, prepared = {}, []
+    require({view["view_id"] for view in bundle["views"]} == {
+        "view_context", "view_analogy", "view_formal"} and len(bundle["views"]) == 3,
+        "SOURCE_VIEW_INVENTORY_CHANGED")
+    for view in bundle["views"]:
+        view_id = view["view_id"]
+        document = cube.cube_atlas_from_bytes(
+            source, expected_file_sha256=sha256(source).hexdigest(),
+            expected_bundle_digest=cube.cube_node.bundle_digest(bundle),
+            source_namespace="EXPOSED_ENGINEERING_FIXTURE",
+            observation_id="pure_ingestion_reproduction",
+            observation_time="caller-supplied fixture identity; no trusted clock",
+            record_version=1, view_id=view_id)
+        documents[view_id] = document
+        cases = cube.cube_node.answer_cases(bundle, view_id)["cases"]
+        require(len(cases) == 51 and len({canonical_json([case["op"], case["question"]])
+                                        for case in cases}) == 51, "SOURCE_QUESTION_INVENTORY_CHANGED")
+        for assistance in ("guided", "unassisted"):
+            for case in cases:
+                prepared.append((document, adapter.prepare_public_lesson(
+                    document, operation=case["op"], question=case["question"], assistance=assistance)))
+    require(len(prepared) == 306, "SOURCE_COMBINATION_COUNT_CHANGED")
+    require(len({canonical_json(row["request"]) for _, row in prepared}) == 306,
+            "SOURCE_COMBINATIONS_NOT_UNIQUE")
+    training_rows = []
+    for operation in ("LIST_PARTS", "FIND_SHARED_PART", "REACHED_VIA"):
+        training_rows.append(next(row for doc, row in prepared
+            if row["request"]["view_id"] == "view_context"
+            and row["request"]["assistance"] == "unassisted"
+            and row["request"]["operation"] == operation))
+    tokenizer = LosslessPublicTokenizer.fit_train([row["public"] for row in training_rows], max_length=1024)
+    profile = ordered_encoder.profile_identity(tokenizer, d_model=64, seed=20260916,
+                                               projection_sha256="f" * 64)
+    context = {"model_id": "EXPLICIT_PURE_REPRODUCTION_NO_MODEL", "checkpoint_sha256": "e" * 64}
+    kwargs = {"tokenizer": tokenizer, "ordered_profile": profile, "model_context": context}
+    write(output / "pure_identity_context.json", {
+        "tokenizer": tokenizer.to_dict(), "ordered_profile": profile, "model_context": context,
+        "training_fit_prepared_ids": [row["prepared_id"] for row in training_rows],
+        "scope": "EXPOSED_ENGINEERING_FIXTURES; DECLARED_TEST_IDENTITIES_NO_CHECKPOINT_OR_PROJECTION_BYTES"})
+    rows, exports = [], []
+    for index, (document, row) in enumerate(prepared):
+        lesson = adapter.bind_prepared_lesson(row, document=document, **kwargs)
+        packet = adapter.prediction_packet(lesson, **kwargs)
+        target = adapter.check_source_target(lesson, document=document, **kwargs)
+        training_record = adapter.training_record(lesson, document=document, **kwargs)
+        require(training_record["record_id"] == packet["record_id"]
+                and canonical_json(training_record["options"]) == canonical_json(packet["encoded_options"])
+                and canonical_json(training_record["correct"]) == canonical_json(target["expected_answer"]),
+                "TRAINER_INJECTION_MISMATCH")
+        changed = deepcopy(lesson)
+        changed["teacher_sidecar"] = {"deliberately_removed_private_target": True}
+        require(adapter.prediction_packet(changed, **kwargs) == packet,
+                "PRIVATE_TARGET_CHANGED_PREDICTION")
+        try:
+            adapter.check_source_target(changed, document=document, **kwargs)
+        except ContractError:
+            pass
+        else:
+            raise RuntimeError("ALTERED_PRIVATE_TARGET_WAS_ADMITTED")
+        rows.append({"index": index, "request": row["request"],
+                     "prepared_id": row["prepared_id"], "record_id": packet["record_id"],
+                     "public_input_digest": digest(packet),
+                     "tokenization": lesson["binding"]["tokenization"],
+                     "target_independent_prediction": True})
+        exports.append(lesson)
+        if (index + 1) % 51 == 0:
+            print(json.dumps({"checked_combinations": index + 1}), flush=True)
+    write(output / "combination_checks.json", rows)
+    write(output / "source_checked_lessons.json", exports)
+    class RecordingOnly:
+        def __init__(self, lessons):
+            self.tasks = [{**deepcopy(row["learner_input"]),
+                           "encoded_correct_index": row["teacher_sidecar"]["encoded_correct_index"]}
+                          for row in lessons]
+            self._index = {row["record_id"]: i for i, row in enumerate(self.tasks)}
+            self.calls = 0
+        def predict(self, packet):
+            require(set(packet) == {"record_id", "public", "encoded_options"}, "STUB_PRIVATE_FIELD")
+            self.calls += 1
+            return deepcopy(packet["encoded_options"][0])
+    unique = {}
+    for lesson in exports:
+        unique.setdefault(lesson["learner_input"]["record_id"], lesson)
+    examples = list(unique.values())[:3]
+    stub = RecordingOnly(examples)
+    predictor = cycle.PublicPredictor(stub, training_packets=[row["learner_input"] for row in examples], **kwargs)
+    seal = cycle.seal_predictions(predictor, [row["learner_input"] for row in examples],
+                                  path=output / "stub_predictions.json")
+    def private_targets():
+        require((output / "stub_predictions.json").is_file(), "TARGET_OPENED_BEFORE_SEAL")
+        result = {}
+        for lesson in examples:
+            target = adapter.check_source_target(
+                lesson, document=documents[lesson["provenance"]["request"]["view_id"]], **kwargs)
+            packet = lesson["learner_input"]
+            result[packet["record_id"]] = {
+                "public_input_digest": digest(packet), "encoded_correct_index": target["encoded_correct_index"],
+                "expected_answer": target["expected_answer"],
+                "operation": lesson["provenance"]["request"]["operation"]}
+        return result
+    scored = cycle.score_sealed_predictions(seal, targets_loader=private_targets)
+    write(output / "stub_control_only.json", {
+        "status": "RECORDING_STUB_ONLY_NOT_A_LEARNER", "calls": stub.calls,
+        "seal": seal, "scoring": scored, "neural_calls": 0, "optimizer_updates": 0})
+    imported = []
+    for module in tuple(sys.modules.values()):
+        module_name = getattr(module, "__name__", "")
+        name = getattr(module, "__file__", None)
+        if module_name == "cncm" or module_name.startswith("cncm."):
+            require(name is not None and Path(name).resolve().is_relative_to(ROOT / "cncm")
+                    and Path(name).suffix == ".py", "FOREIGN_CNCM_IMPORT:" + module_name)
+        if (module_name == "cas_meta2" or module_name.startswith("cas_meta2.")
+                or module_name == "research.CAS_META_2_COMPOSITION.cas_meta2"
+                or module_name.startswith("research.CAS_META_2_COMPOSITION.cas_meta2.")):
+            require(name is not None and Path(name).resolve().is_relative_to(PILOT / "cas_meta2")
+                    and Path(name).suffix == ".py", "FOREIGN_RESEARCH_IMPORT:" + module_name)
+        if name:
+            path = Path(name).resolve()
+            if path.is_relative_to(ROOT) and path.suffix == ".py":
+                imported.append(pin(path))
+    imported = sorted({row["path"]: row for row in imported}.values(), key=lambda row: row["path"])
+    expected = {row["path"]: row for row in before}
+    for row in imported:
+        require(expected.get(row["path"]) == row, "UNDECLARED_OR_CHANGED_PROJECT_IMPORT:" + row["path"])
+    after = [pin(ROOT / name) for name in sorted(declared)]
+    require(before == after and not ATTEMPTS, "INPUT_CHANGE_OR_PROHIBITED_IMPORT")
+    write(output / "inputs_after.json", after)
+    write(output / "actual_imports.json", imported)
+    artifacts = [pin(path) for path in sorted(output.iterdir()) if path.is_file()]
+    receipt = {"schema_version": "cncm.learning-ingestion-acceptance/0.1",
+               "status": "PURE_INGESTION_AND_CONTROL_PASS_CUDA_SMOKE_NOT_RUN",
+               "combinations": len(rows), "unique_public_inputs": len(unique),
+               "preserved_sources": 601, "preserved_prior_evidence": 6,
+               "test_counts": counts, "test_evidence": pin(evidence),
+               "source_bound_test_receipt": pin(test_receipt_path),
+               "tested_modules": TEST_MODULES,
+               "inputs_unchanged": True, "declared_inputs": len(before),
+               "source_fixture": pin(bundle_path), "actual_project_imports": len(imported),
+               "artifacts": artifacts, "forbidden_import_attempts": ATTEMPTS,
+               "neural_calls": 0, "optimizer_updates": 0, "provider_calls": 0,
+               "cuda_worker_observed": False, "learning_gain_established": False,
+               "boundary": "Pure text/framing/source admission and explicit recording stub only; no numerical encoder, checkpoint, or learned result."}
+    write(output / "receipt.json", receipt)
+    print(json.dumps({key: receipt[key] for key in ("status", "combinations", "unique_public_inputs",
+                                                   "inputs_unchanged", "actual_project_imports")}))
+
+
+if __name__ == "__main__":
+    main()

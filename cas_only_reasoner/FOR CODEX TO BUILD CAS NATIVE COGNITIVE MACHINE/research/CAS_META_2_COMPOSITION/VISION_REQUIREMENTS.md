@@ -420,3 +420,48 @@ separate topology/family panel before actual matched multi-seed training.
 The earlier recurrence result remains NOT_MET,0/3 positive; the later encoder
 diagnostic was zero-update and establishes no trained-transfer gain. The full
 V01–V18,31-system and integrated20-step charter remains open.
+
+## 2026-09-16 Source-bound learner connection and existing-panel audit
+
+The new versioned ingestion extension renders declared cube containment as the
+learner's actual node/rel syntax, preserves the question and ordered choices,
+and separates source-checked training targets from a closed public prediction
+packet. Public identity binds content, tokenizer/ordered profile and run-initial
+model context. Training cache bytes AND cached target indices are checked before
+and after updates; public predictions are retained before private scoring.
+
+Pure source-bound acceptance covered all 306 existing fixture combinations;
+308 focused compatibility tests passed without failures, errors or skips. The
+test receipt binds the exact current source and test inputs. The acceptance
+recipe also checks foreign-import refusal, target-independent public input and
+refusal of altered private supervision. Recording-stub calls are explicitly
+non-neural. All 601 preserved sources, six earlier evidence receipts and five
+runtime profiles remain unchanged. Failed development probes remain retained.
+
+The implemented CUDA smoke entrypoint constructs the ordered encoder explicitly,
+fits only training text, injects the newly admitted records into the existing
+trainer, checks actual numeric caches and permitted parameter changes, retains
+model/optimizer/encoder checkpoints and seals public-only predictions. These
+numeric paths have SOURCE REVIEW ONLY and were not executed in this checkpoint.
+Provider/source/wheel/budget bindings and real smoke/reload acceptance remain open.
+
+A separate retained-history audit reproduces the existing canonical six-development
+and thirty-final candidate families (18 and 90 application tasks). All final tasks
+fit the 1024-token ordered framing envelope under three separately identified
+tokenizers. The audit's 106 assertions include repeated source-hash checks, not
+106 independent learning tests. It preserves one old local-run source-custody
+gap and identifies two perspective-derived final variants that overlap development
+topology. The canonical 6/30 allocation stays disjoint; no new panel is selected.
+
+Use a fresh matched initializer and freeze the new run's exact training-only
+tokenizer, teaching inputs, curriculum and checkpoint-selection rules before
+final scoring. Old complementary execution bindings and a legacy checkpoint
+cannot silently serve the new ordered encoder. Historical authoring/checking
+differs from learner exposure; global all-history novelty is not asserted.
+
+Evidence: records/learning_ingestion_001/STATUS.md and
+research/CAS_META_2_COMPOSITION/records/learning_panel_001/REPORT.md.
+No neural/tensor/provider execution, AWS launch, spending or learning gain is
+reported here. The earlier three-seed recurrence result remains NOT_MET, 0/3
+positive. All V01-V18, 31-system and integrated 20-step charter requirements remain
+subject to their wider open gates; this checkpoint does not complete the goal.

@@ -1,10 +1,18 @@
 # Next learning experiment gate
 
-Status: **RESEARCH_PROTOCOL_ONLY — NOT_AN_ACCEPTED_RUN**.
+Status: **PROTOCOL_WITH_IMPLEMENTED_INGESTION — ORDERED_LEARNING_RUN_NOT_PERFORMED**.
 
-Source inspection: 2026-09-16. This document proposes the smallest next connection
-and measurement. It records no new neural execution, optimizer update, provider
-call or spending. Existing runtime and research sources were not changed.
+Source inspection and continuation: 2026-09-16. The original connection analysis
+below is retained; the versioned ingestion and teaching control extension is now
+implemented in cncm/rpa_learning_adapter.py and cncm/rpa_learning_cycle.py.
+Current acceptance evidence is in records/learning_ingestion_001/STATUS.md and
+docs/CNCM_LEARNING_INGESTION_v0.1.md. No new neural execution, optimizer update,
+provider call or spending is recorded. Earlier accepted sources remain unchanged.
+
+The next execution gate is an actual exposed-material CUDA smoke using the new
+ordered input path and fresh model origin. Source review and pure tests do not
+replace that run. A matched learning comparison additionally needs frozen run
+inputs, teaching policies, success rules and genuinely separate evaluation.
 
 We will know whether teaching improves learned competence after an actual learner
 improves on untouched task families, against matched controls, with answer-bearing
@@ -52,16 +60,36 @@ vectors; projection stability is agreement of recorded digests because projectio
 bytes were not separately exported. The legacy checkpoints and negative results
 remain unchanged. [E5:3, E5:15, E6]
 
-The structural supply audit is **FREEZE_NOT_READY**. Its 96 face-family IDs contain
+The earlier structural supply audit reported **FREEZE_NOT_READY**. Its 96 face-family IDs contain
 only six directed topologies, each present in train, development and final splits.
 The old RDCJT panel has 16 already examined root families. The wider enumerator
 has 47 potential topologies after conservative exclusions, but these are not yet
 a frozen, demonstrated-unexposed panel; its 8–10-node envelope also differs from
 the 3–4-node face corpus. New IDs or renamed labels do not establish novelty.
-Historical exposure custody and the supported task envelope must be settled
-before choosing final counts. [E4:3]
+That earlier report did not include the later complementary preparation. [E4:3]
 
-## Concrete connection gap
+The current records/learning_panel_001 audit under CAS_META_2_COMPOSITION
+reproduces the existing six-development/thirty-final allocation from 36 supported
+topologies. All 90 canonical final tasks fit the 1024-token limit and ordered
+framing under each of three separately identified tokenizers. The other eleven
+potential shapes lack an indirect-via case under the existing generator. This is
+prepared candidate supply, not an accepted ordered experiment or a new freeze.
+
+The audit examines 3438 retained JSON/JSONL files and 139 archives. No candidate
+learner exposure was found in that enumerated evidence, but one historical local
+recurrent run lacks a complete source/training-input snapshot. Two derived
+perspective final variants also overlap a development topology; the canonical
+six/thirty split stays disjoint. Preserve those limits. A fresh matched
+initializer and exact new-run input/selection boundaries provide a viable held-out
+experiment without asserting absolute worldwide historical unexposure.
+
+The old complementary request and checkpoint use the legacy encoder. They are
+not an execution binding for the new ordered encoder. The historical face
+tokenizer also fits old evaluation public text; a new training-only fit is needed.
+See the source-bound panel REPORT.md and receipt.json, including the explicit
+8–10-node versus 3–4-node size-transfer amendment.
+
+## Original connection gap and versioned implementation
 
 `cncm/rpa_cube_adapter.py:467` prepares a closed learner packet and a separate
 teacher sidecar. At lines 546–548 it explicitly reports zero neural calls, zero
@@ -103,16 +131,17 @@ The learner already has the required injection hook:
 `build_graph_training_framework(..., encoder=ordered_encoder)` stores the supplied
 encoder, and `GraphLearner` uses `framework.encoder['encode_problem']` for both its
 initial training cache and unseen prediction inputs. No `GraphLearner` rewrite
-is needed to select the wrapper. A NEW candidate integration path is still needed
-to bind the cube records, construct that encoder explicitly on the worker, admit
-matching checkpoint/optimizer identities, and run the real smoke gate. Source
-compatibility is not an observed cube-to-ordered-learner training run.
+is needed to select the wrapper. The new ingestion and cycle extension now binds
+the cube records and explicitly constructs that encoder in its worker entrypoint.
+Observed worker/checkpoint identities and the actual smoke gate remain open.
+Source compatibility is not an observed cube-to-ordered-learner training run.
 [S3:59, S3:246, S3:371]
 
-## Smallest next code change
+## Original ingestion requirements, now implemented as an extension
 
-Add one versioned candidate ingestion adapter, with focused boundary tests,
-leaving accepted sources unchanged. It should:
+The new candidate ingestion adapter and cycle control implement the following
+requirements while preserving earlier accepted sources. Their pure checks and
+locally unexecuted worker code have distinct evidence boundaries:
 
 1. Revalidate the source-bound cube document and construct the existing
    `Graph.render()` presentation from its exact declared graph. Preserve

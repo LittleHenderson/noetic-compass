@@ -1,0 +1,6 @@
+{
+  "schema": "cas.learning-panel-preserved-finalizer-failure/0.1",
+  "failure": "ValueError: relative artifact path is not in the subpath of absolute root",
+  "cause": "Initial receipt finalizer called f.relative_to(root) with a relative f. It stopped before any receipt writes.",
+  "correction": "Resolve audit directory against Path.cwd() before enumerating and pinning files."
+}

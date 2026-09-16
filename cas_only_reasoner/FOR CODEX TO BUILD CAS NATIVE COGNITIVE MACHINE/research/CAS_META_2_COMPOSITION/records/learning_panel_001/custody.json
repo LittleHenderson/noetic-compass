@@ -1,0 +1,923 @@
+{
+  "actual_neural_presentations": 0,
+  "actual_optimizer_updates": 0,
+  "actual_provider_calls": 0,
+  "association_rows": [
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/graph6_contrast_001/receipt_cas-meta2-graph6contrast-20260916052513-7bf38e64/source.zip",
+        "sha256": "8226f34037f518d2c44569620abd39f5ee63e08fb455487dfe75e46bb09240cc"
+      },
+      "job": "cas-meta2-graph6contrast-20260916052513-7bf38e64",
+      "path": "records/graph6_contrast_001/receipt_cas-meta2-graph6contrast-20260916052513-7bf38e64/collected/results/result.json",
+      "schema": "cas-graph6-contrast-result/1",
+      "sha256": "1f6e6d22b1417f54eb3ef3ba9401e02627874984078c8e89c5dfe1a089c579b3",
+      "status": "CONTRAST_READOUT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/graph6_contrast_001/receipt_cas-meta2-graph6contrast-20260916052513-7bf38e64/source.zip",
+        "sha256": "8226f34037f518d2c44569620abd39f5ee63e08fb455487dfe75e46bb09240cc"
+      },
+      "job": "cas-meta2-graph6contrast-20260916052513-7bf38e64",
+      "path": "records/graph6_contrast_001/receipt_cas-meta2-graph6contrast-20260916052513-7bf38e64/curriculum_result.json",
+      "schema": "cas-graph6-contrast-result/1",
+      "sha256": "1f6e6d22b1417f54eb3ef3ba9401e02627874984078c8e89c5dfe1a089c579b3",
+      "status": "CONTRAST_READOUT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": null,
+      "job": "rdcjt-local-smoke",
+      "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "f837658bf648a50b8a31d98cead68eabc449710ec75092c49349f04f411ed171",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/source.zip",
+        "sha256": "248b7a2c6f81245a26074eb90b6bee24535a12573e6f389cf175a379e4941863"
+      },
+      "job": "cas-meta2-rdcjt-20260912144401-248b7a2c",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/collected/results/failure.json",
+      "schema": "cas.recurrent-cjt-failure/1",
+      "sha256": "6fc2425eb45d37ca3db35d2be864d950c3658ca2a38576785932e1bb3058152a",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/source.zip",
+        "sha256": "248b7a2c6f81245a26074eb90b6bee24535a12573e6f389cf175a379e4941863"
+      },
+      "job": "cas-meta2-rdcjt-20260912144401-248b7a2c",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/collected/results/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "73eb187f1721f1343dfb117131f7437dfdecb66761aec6caa5422c2bde8b24ff",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/source.zip",
+        "sha256": "248b7a2c6f81245a26074eb90b6bee24535a12573e6f389cf175a379e4941863"
+      },
+      "job": "cas-meta2-rdcjt-20260912144401-248b7a2c",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/curriculum_result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "73eb187f1721f1343dfb117131f7437dfdecb66761aec6caa5422c2bde8b24ff",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/source.zip",
+        "sha256": "248b7a2c6f81245a26074eb90b6bee24535a12573e6f389cf175a379e4941863"
+      },
+      "job": "cas-meta2-rdcjt-20260912144401-248b7a2c",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912144401-248b7a2c/failure.json",
+      "schema": "cas.recurrent-cjt-failure/1",
+      "sha256": "6fc2425eb45d37ca3db35d2be864d950c3658ca2a38576785932e1bb3058152a",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/source.zip",
+        "sha256": "fb5466fed30d7c8b2332a03714df3bd4cc413bcfe8b3cd846721ada28061584e"
+      },
+      "job": "cas-meta2-rdcjt-20260912150101-fb5466fe",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/collected/results/failure.json",
+      "schema": "cas.recurrent-cjt-failure/1",
+      "sha256": "f684ca47325b85ffd84c500b4db832081e4645b178bfa61ebb2d30427b45c6bd",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/source.zip",
+        "sha256": "fb5466fed30d7c8b2332a03714df3bd4cc413bcfe8b3cd846721ada28061584e"
+      },
+      "job": "cas-meta2-rdcjt-20260912150101-fb5466fe",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/collected/results/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "0b3a82b501b389d34867f66030ffa340f79171ab3e1f52203e61362ebcb85b51",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/source.zip",
+        "sha256": "fb5466fed30d7c8b2332a03714df3bd4cc413bcfe8b3cd846721ada28061584e"
+      },
+      "job": "cas-meta2-rdcjt-20260912150101-fb5466fe",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/curriculum_result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "0b3a82b501b389d34867f66030ffa340f79171ab3e1f52203e61362ebcb85b51",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/source.zip",
+        "sha256": "fb5466fed30d7c8b2332a03714df3bd4cc413bcfe8b3cd846721ada28061584e"
+      },
+      "job": "cas-meta2-rdcjt-20260912150101-fb5466fe",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912150101-fb5466fe/failure.json",
+      "schema": "cas.recurrent-cjt-failure/1",
+      "sha256": "f684ca47325b85ffd84c500b4db832081e4645b178bfa61ebb2d30427b45c6bd",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/source.zip",
+        "sha256": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38"
+      },
+      "job": "cas-meta2-rdcjt-20260912152001-abf38e1e",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/curriculum_result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/source.zip",
+        "sha256": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38"
+      },
+      "job": "cas-meta2-rdcjt-20260912152001-abf38e1e",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/rescued_evidence/results/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "job": "cas-meta2-rdcjt-20260913183000-d27a44e4",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/collected/results/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "job": "cas-meta2-rdcjt-20260913183000-d27a44e4",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/curriculum_result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "job": "cas-meta2-rdcjt-20260913184000-d27a44e4",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/collected/results/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip",
+        "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0"
+      },
+      "job": "cas-meta2-rdcjt-20260913184000-d27a44e4",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/curriculum_result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910150000-0a55f4b1/source.zip",
+        "sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55"
+      },
+      "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910150000-0a55f4b1/remote_results_failure.json",
+      "schema": "cas-graph-training-candidate-failure/1",
+      "sha256": "a25b5cbeb229a1d877898dd72b28aabcbeb3fe9fe32fd669d3e9375ee7e3456b",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910150000-0a55f4b1/source.zip",
+        "sha256": "0a55f4b1eaab561c08b4d94acd4430c6c0f758a0a0648c8b0663f4f5987bdb55"
+      },
+      "job": "cas-meta2-graph6cand-20260910150000-0a55f4b1",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910150000-0a55f4b1/remote_results_result_partial.json",
+      "schema": "cas-graph-training-candidate-result/1",
+      "sha256": "1654ce4284ac61d5d6063ee01b162f87d5e6c547facc2da3a63b1b38fc6d0066",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/source.zip",
+        "sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744"
+      },
+      "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/remote_results_failure.json",
+      "schema": "cas-graph-training-candidate-failure/1",
+      "sha256": "5801caff9de2d69de7c3ef2bbe7e823597a3315ee2cb20fcd0dd3d67108d0f70",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/source.zip",
+        "sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744"
+      },
+      "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/remote_results_result.json",
+      "schema": "cas-graph-training-candidate-result/1",
+      "sha256": "1f1204ff7121eff888208016d356cc8cd59c2ff945422098639f3158a22ddba8",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/source.zip",
+        "sha256": "db2342b3c227ac13f1f8c42c75a3a0bf7cc6f14536aaa0fa0857f598e00d4744"
+      },
+      "job": "cas-meta2-graph6cand-20260910164749-db2342b3",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910164749-db2342b3/remote_results_result_partial.json",
+      "schema": "cas-graph-training-candidate-result/1",
+      "sha256": "1f1204ff7121eff888208016d356cc8cd59c2ff945422098639f3158a22ddba8",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910171323-5c8b9efd/source.zip",
+        "sha256": "5c8b9efd3c7fc2dd54bb8d739dd38f78a1a703175a08843a03e70074c374f9b9"
+      },
+      "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910171323-5c8b9efd/curriculum_result.json",
+      "schema": "cas-graph-training-candidate-result/1",
+      "sha256": "e4bfcd6fa1942c807b256d61853cc03c969ff8a423f17c150c2a0a703eddb0bd",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910171323-5c8b9efd/source.zip",
+        "sha256": "5c8b9efd3c7fc2dd54bb8d739dd38f78a1a703175a08843a03e70074c374f9b9"
+      },
+      "job": "cas-meta2-graph6cand-20260910171323-5c8b9efd",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910171323-5c8b9efd/failure.json",
+      "schema": "cas-graph-training-candidate-failure/1",
+      "sha256": "33f23c67097a259cf873e020d8234abd8095215ebf31f61b25f4a1e2722537bf",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910174500-e33a6497/source.zip",
+        "sha256": "e33a64975fddb794706f3995688ebda7df86a7f821091b7fdbedecdeab3134fc"
+      },
+      "job": "cas-meta2-graph6cand-20260910174500-e33a6497",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_verified_teaching_001/receipt_cas-meta2-graph6cand-20260910174500-e33a6497/curriculum_result.json",
+      "schema": "cas-graph-training-candidate-result/1",
+      "sha256": "7f193c9ebed0b52a4b7aacf602a8cfa479366a29a8546754318581e4e3fea8b9",
+      "status": "REMOTE_FINISHED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911120508-382aa3fc/source.zip",
+        "sha256": "382aa3fc179fb0f7b6f11d2b72a5e7d6786ffa930c124f33ef4f7079b4c8a9ac"
+      },
+      "job": "cas-meta2-graph6face-20260911120508-382aa3fc",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911120508-382aa3fc/curriculum_result.json",
+      "schema": "cas.cube-face-result/1",
+      "sha256": "27b3f156225e3f9857ad9d46cafe921984b353fc9925c91da39b5fb497232393",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911120508-382aa3fc/source.zip",
+        "sha256": "382aa3fc179fb0f7b6f11d2b72a5e7d6786ffa930c124f33ef4f7079b4c8a9ac"
+      },
+      "job": "cas-meta2-graph6face-20260911120508-382aa3fc",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911120508-382aa3fc/failure.json",
+      "schema": "cas.cube-face-failure/1",
+      "sha256": "90966de3bbf9c9ae0c981ce0892675530a0e7eb9dcabfb57e9e4a80324f8d8e5",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911125345-6a92461d/source.zip",
+        "sha256": "6a92461d0718cde757fedef98b799d57ea9ccfe34a3d53c47b2a57a2b274c8de"
+      },
+      "job": "cas-meta2-graph6face-20260911125345-6a92461d",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911125345-6a92461d/curriculum_result.json",
+      "schema": "cas.cube-face-result/1",
+      "sha256": "4755881edda5b106e9edc0fed8c9c2a613ee7151ff9f88ffbf0dfc5649c9c180",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911125345-6a92461d/source.zip",
+        "sha256": "6a92461d0718cde757fedef98b799d57ea9ccfe34a3d53c47b2a57a2b274c8de"
+      },
+      "job": "cas-meta2-graph6face-20260911125345-6a92461d",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911125345-6a92461d/failure.json",
+      "schema": "cas.cube-face-failure/1",
+      "sha256": "93e3e02668eac5586d250c55eba45d561e718e108f3b33ab308e61c64c78bb0f",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911130925-94047806/source.zip",
+        "sha256": "94047806420ff720749bf4a75a787d43a9a7b2e933ee9c3a268709b1c1ba1f8b"
+      },
+      "job": "cas-meta2-graph6face-20260911130925-94047806",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911130925-94047806/curriculum_result.json",
+      "schema": "cas.cube-face-result/1",
+      "sha256": "9b371477d3a331f64db129b93c591e1f611b244be2da182d5ae72072ee3cbb09",
+      "status": "WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911130925-94047806/source.zip",
+        "sha256": "94047806420ff720749bf4a75a787d43a9a7b2e933ee9c3a268709b1c1ba1f8b"
+      },
+      "job": "cas-meta2-graph6face-20260911130925-94047806",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911130925-94047806/failure.json",
+      "schema": "cas.cube-face-failure/1",
+      "sha256": "cb06acad275471f2a8c6ce71a7c8eedc96a9d0877ca6227a004010e63acb558d",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/source.zip",
+        "sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8"
+      },
+      "job": "cas-meta2-graph6face-20260911133305-9723735f",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/curriculum_result.json",
+      "schema": "cas.cube-face-result/1",
+      "sha256": "0bd4eea9362d594d674ec367b3d001502199714fc38aa0e2f600dc3d18579704",
+      "status": "REMOTE_FINISHED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/source.zip",
+        "sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723"
+      },
+      "job": "cas-meta2-graph6read-20260912072648-0651a3a8",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/collected/results/result.json",
+      "schema": "cas.cube-face-readout-result/1",
+      "sha256": "aa0701717ac3a5e73f6dddcf946d79769b2de4d08abd79dde8e8b4be17c4b04b",
+      "status": "READOUT_COMPLETE"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/source.zip",
+        "sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723"
+      },
+      "job": "cas-meta2-graph6read-20260912072648-0651a3a8",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/curriculum_result.json",
+      "schema": "cas.cube-face-readout-result/1",
+      "sha256": "aa0701717ac3a5e73f6dddcf946d79769b2de4d08abd79dde8e8b4be17c4b04b",
+      "status": "READOUT_COMPLETE"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909193638-98f993ab/source.zip",
+        "sha256": "71e72bae410ca3d90c57f067f2fa8507326fbcb24346f7166b4d343b0524b66d"
+      },
+      "job": "cas-meta2-competence-20260909193638-98f993ab",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909193638-98f993ab/competence_result.json",
+      "schema": "cas-graph-training-competence-result/1",
+      "sha256": "86d9b73888ef3032daa0d8a321c31c7779f5ec96b7209d10e29907d0321aa936",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909195309-68ac4845/source.zip",
+        "sha256": "bce8325bcf12996b52917214ad65dad50b77802d79d09f996afc88d853ebc9b4"
+      },
+      "job": "cas-meta2-competence-20260909195309-68ac4845",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909195309-68ac4845/competence_result.json",
+      "schema": "cas-graph-training-competence-result/1",
+      "sha256": "99d45ea9c40e0732678271e771034f2c8cab547cba61dcfb060fc1fbb6c514f7",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909201205-f0da3fa3/source.zip",
+        "sha256": "82bcaf6c6d8eec5904381c6eb684645358aa89f16be276f116b3d1c5c2b8c55d"
+      },
+      "job": "cas-meta2-competence-20260909201205-f0da3fa3",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909201205-f0da3fa3/competence_result.json",
+      "schema": "cas-graph-training-competence-result/1",
+      "sha256": "8c42c9dd6a74b5f9354715ee00a85d221a05dc903071d0675cb7cdc26d1dfe6e",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909202533-7cb622f8/source.zip",
+        "sha256": "838f93a719b90fc262ffd682f414485d283e42debcbc928fe5cce80acdd63b58"
+      },
+      "job": "cas-meta2-competence-20260909202533-7cb622f8",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909202533-7cb622f8/competence_result.json",
+      "schema": "cas-graph-training-competence-result/1",
+      "sha256": "f06da03805068e088dad4007a26e8c61d486549b9386ecacebcfa53bdd1a7646",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909210625-0a10f14d/source.zip",
+        "sha256": "2f3b027d57bc67e0d763b0b08ff433b53b1cb2d90e2c17ebca2e23004c52eff4"
+      },
+      "job": "cas-meta2-competence-20260909210625-0a10f14d",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909210625-0a10f14d/competence_result.json",
+      "schema": "cas-graph-training-competence-result/1",
+      "sha256": "ab085d682fbba7fef8b71a7a6f31cd38c822d77ca59bcce7ec0461024956ea80",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910013000-e485b07c/source.zip",
+        "sha256": "b3d7d1be6c811f856ceb859db461752e6f90135d5e7e4240eecb06e98e0f8c50"
+      },
+      "job": "cas-meta2-graph6conf-20260910013000-e485b07c",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910013000-e485b07c/graph6_confirmation_result.json",
+      "schema": "cas-graph-training-graph6-confirmation-result/1",
+      "sha256": "4fdca87e6bdeb87a2f52a8b758455164c6f5a59ae45ee418adcced7e339e7e5e",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/source.zip",
+        "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6"
+      },
+      "job": "cas-meta2-graph6conf-20260910023000-a387d882",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/graph6_confirmation_result.json",
+      "schema": "cas-graph-training-graph6-confirmation-result/1",
+      "sha256": "8a313f3d39a42443a2d00bcb4f4f00a3d71de8763f59098e057e4fc4951105f4",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910053000-951cab20/source.zip",
+        "sha256": "8afb1f3fbcf5ff572c259e8e26878ef025361ac0a504d9ad612bff4ffc424464"
+      },
+      "job": "cas-meta2-graph6curr-20260910053000-951cab20",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910053000-951cab20/curriculum_result.json",
+      "schema": "cas-graph-training-curriculum-result/1",
+      "sha256": "5f0cf5061c16c8820e6042000249e7da76a67da1f23e337ff71fc385225228e5",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910073000-210109c7/source.zip",
+        "sha256": "c24f2f9ce2d01a44ac79e46bfdc59788256200b6a2079c3223f8a6758a0f20f9"
+      },
+      "job": "cas-meta2-graph6curr-20260910073000-210109c7",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910073000-210109c7/curriculum_result.json",
+      "schema": "cas-graph-training-curriculum-result/1",
+      "sha256": "4cb9804b5a31b3437a3ccd6c3e6fccbd543de396211547fd3666d0c10cb52145",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910093000-75387578/source.zip",
+        "sha256": "9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc"
+      },
+      "job": "cas-meta2-graph6curr-20260910093000-75387578",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910093000-75387578/curriculum_result.json",
+      "schema": "cas-graph-training-curriculum-result/1",
+      "sha256": "9b9487daba3f51e657ab3f7fce8fa86ad5ba67726b2a89c8b51ea7b6700b1f1d",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/source.zip",
+        "sha256": "fd9b4902ebf5aadfceab304797f69cdd8731f4ce3a09b82b57a8d63e8cbe2ac7"
+      },
+      "job": "cas-meta2-graph6curr-20260910133000-aecb5d07",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/curriculum_result.json",
+      "schema": "cas-graph-training-curriculum-result/1",
+      "sha256": "848db69bdb0eaefa4f702a4dd4361f779fbc9fbc13c7ca5609de071a8cbcd4d0",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909084139-f6f49be5/source.zip",
+        "sha256": "c19d1df47e9f15174bf465203bd1d4db85bdc5be90a86ed3382db6f22ea9824d"
+      },
+      "job": "cas-meta2-ln3-diagnostic-20260909084139-f6f49be5",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909084139-f6f49be5/ln3_diagnostic_result.json",
+      "schema": "cas-graph-training-ln3-diagnostic-result/1",
+      "sha256": "db6cc8c9e5519c2d02c8655422ae3b292ac8d90ea8e1dd223628416530a1ef76",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909085756-95693cd8/source.zip",
+        "sha256": "507ace06661ecb16d1a149d1dfa7d43754290689f7c0ec0f24056123a34d17e3"
+      },
+      "job": "cas-meta2-ln3-diagnostic-20260909085756-95693cd8",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909085756-95693cd8/ln3_diagnostic_result.json",
+      "schema": "cas-graph-training-ln3-diagnostic-result/1",
+      "sha256": "f685506fcd8bdc6fc57407a8e5f0c5249461a9af7b576e30327620a4533fecb6",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7/source.zip",
+        "sha256": "17db81542b39a280b4dfc26d76c488e6b4e0c744d08a945991a795d2d4934dd6"
+      },
+      "job": "cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909173243-5cc6fae7/ln3_diagnostic_result.json",
+      "schema": "cas-graph-training-ln3-diagnostic-result/1",
+      "sha256": "70f3ce3c2faab9bc100e4657f537c39bf5a952c80d0fad9475b327a80356e186",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909175351-5f425cf9/source.zip",
+        "sha256": "ac0215e1ddc624d7d1d1833f65e58d5a47a0efdf199c2839c9cbcc9665bb5375"
+      },
+      "job": "cas-meta2-ln3-diagnostic-20260909175351-5f425cf9",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909175351-5f425cf9/ln3_diagnostic_result.json",
+      "schema": "cas-graph-training-ln3-diagnostic-result/1",
+      "sha256": "c6822f24cd3683a0620f127f3fea53243ed1b7f2b711e42e32e411b06a7dbf01",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909183759-cce57ffb/source.zip",
+        "sha256": "3f67582734e90fc07611b43f246ad0604a77252abdf0b0db7b11b177ebc4a4ad"
+      },
+      "job": "cas-meta2-ln3-diagnostic-20260909183759-cce57ffb",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-ln3-diagnostic-20260909183759-cce57ffb/ln3_diagnostic_result.json",
+      "schema": "cas-graph-training-ln3-diagnostic-result/1",
+      "sha256": "6c7469e8997981310507e73b1c2fd1d5aea82314c20f188ceb036672de28a5de",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909021717-7891f672/source.zip",
+        "sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a"
+      },
+      "job": "cas-meta2-teaching-graph-20260909021717-7891f672",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909021717-7891f672/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "a7a403e1bbc5a6281bcf02226e43209a521069581a00cf40aa81dcd4e69b2ea7",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909024008-f27c195e/source.zip",
+        "sha256": "e6c8768952076668bae74633d3416457234f2f3b3eaa0fb310733c0e47c1b97a"
+      },
+      "job": "cas-meta2-teaching-graph-20260909024008-f27c195e",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909024008-f27c195e/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "c534587e36db432f3922dc6a127be0fa1b610bccac523004bf090ece99505b11",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909030210-e1408e1a/source.zip",
+        "sha256": "a4c07dda808615a250379f962db04aa9b9b1bbc4832f5dd686bfbfd6673605ae"
+      },
+      "job": "cas-meta2-teaching-graph-20260909030210-e1408e1a",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909030210-e1408e1a/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "42148ecc05b70dce3d580a97f38a9eab649b1dcaaff287a99c95c07487ea7ebf",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909040850-e4a39dea/source.zip",
+        "sha256": "863cc79c650515be80e3b09c40c5bc43ddee61d92f08a677e116dfa2a506efd4"
+      },
+      "job": "cas-meta2-teaching-graph-20260909040850-e4a39dea",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909040850-e4a39dea/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "9c1df723423b024b5258bb2777f197fe1111faf01e991d89ec00a2bad2f3a0ae",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909052323-cb2ebc76/source.zip",
+        "sha256": "d57ee62838c36b09cb75b171bbd9a017a40f2f8c6d981027a4dc45856f02d209"
+      },
+      "job": "cas-meta2-teaching-graph-20260909052323-cb2ebc76",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909052323-cb2ebc76/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "0e5a00204c1ce58bba17f12151088c0affad236ac3cf566166f935df7052d7b7",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909054806-78ffe06a/source.zip",
+        "sha256": "60b75b727f44ae2b6f71c4fe9043e353af99436d3b2c4dcbe57a75be0040e069"
+      },
+      "job": "cas-meta2-teaching-graph-20260909054806-78ffe06a",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909054806-78ffe06a/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "bc5b4461dbec6bb54e2aeb715a8d7280a322185f99a6ae5b08d78aff6a03d591",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909065540-823842d3/source.zip",
+        "sha256": "7005cb88183176ce5f62a9fa669e5dd957a45776ee66365003986f77f85503c0"
+      },
+      "job": "cas-meta2-teaching-graph-20260909065540-823842d3",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909065540-823842d3/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "a2661553c6148520f764cbcf8e3b613ae00bec8a4283ae1c92e5be09cb624028",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909071727-23c7cca1/source.zip",
+        "sha256": "3536504718803e05d82c4cca6dc3b5c7c36d44c644fcfc40db887a601555ba4f"
+      },
+      "job": "cas-meta2-teaching-graph-20260909071727-23c7cca1",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909071727-23c7cca1/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "5981f703de880b930c5df8ed289e2c1e081c7ed2d448a94cd5f1ec54eb12640a",
+      "status": "REMOTE_WORKER_FAILED"
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909073316-0390037d/source.zip",
+        "sha256": "81ff23213f00066b3252918acab07ca833945d5d9968c67fbb73740fa6cafef0"
+      },
+      "job": "cas-meta2-teaching-graph-20260909073316-0390037d",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909073316-0390037d/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "b1b361633842c14d4ce3712fb7bb683919f30cc137ab77ac70763acd03997ae1",
+      "status": null
+    },
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": {
+        "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909095712-4ca46fce/source.zip",
+        "sha256": "f2ef785bd093c2555d3094d7e368d774b94fad67bfece73d94406e4528c926a0"
+      },
+      "job": "cas-meta2-teaching-graph-20260909095712-4ca46fce",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-teaching-graph-20260909095712-4ca46fce/training_result.json",
+      "schema": "cas-graph-training-result/1",
+      "sha256": "e4a0d61d09f0b44fc1e8530a468a47f2ce1ce5e91cb723c094a0d052b31f4e41",
+      "status": null
+    }
+  ],
+  "input_pins": [
+    {
+      "bytes": 12376,
+      "path": "records/learning_panel_001/a.py",
+      "sha256": "1747c863dd4075b0a1a070005707caacaaffbd78eec25fac3193c56ca9ccfc81"
+    },
+    {
+      "bytes": 3362,
+      "path": "records/learning_panel_001/d.py",
+      "sha256": "3525b493d16e0ba55a4147bd1ae0108dbb7002fb74f719f5bd814dbd815d004a"
+    },
+    {
+      "bytes": 3340,
+      "path": "records/learning_panel_001/e.py",
+      "sha256": "d44b3a3b1ace7052daf44f993e8e25652e12de7f4db78057e672c0b8b1444382"
+    },
+    {
+      "bytes": 1376747,
+      "path": "records/learning_panel_001/history.json",
+      "sha256": "56886cc5dca2d8c52a887ebd70563e04f555fc066a74603ad97892e5996369d3"
+    }
+  ],
+  "local_smoke": {
+    "evaluation_ids_exactly_match_reconstructed_old_face_panel": true,
+    "exact_historical_source_snapshot_available": false,
+    "gap": "Local run retains per-batch work/loss and old-panel evaluation IDs, not exact per-training-input bytes or a source archive. Do not silently convert recorded schedule intent into verified training input history.",
+    "pins": [
+      {
+        "bytes": 11399,
+        "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/result.json",
+        "sha256": "f837658bf648a50b8a31d98cead68eabc449710ec75092c49349f04f411ed171"
+      },
+      {
+        "bytes": 2320,
+        "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/LOCAL_SMOKE.json",
+        "sha256": "7e361dd7dae1303318eb5e94a66942bcecd081e822866d188102b752b55a520b"
+      },
+      {
+        "bytes": 931225,
+        "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/artifacts/experiment.json",
+        "sha256": "0acfc7c0aa88ccd6f8a02d75bd97bf7e35508c60e127cbf4804187577f0b92c3"
+      },
+      {
+        "bytes": 995443,
+        "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/artifacts/depth_sweep.json",
+        "sha256": "72a76d2b4e5b51c142a47c2e8f724c316880d51331ab3624122c7bfd189a3ebb"
+      }
+    ],
+    "saved_evaluation_record_ids": 216,
+    "saved_root_family_ids": 16,
+    "training_decisions_per_arm": 896,
+    "training_input_bytes_reconciled": false,
+    "updates_per_arm": 128
+  },
+  "retained_history_conclusion": "Prepared canonical36 remain candidate supply with no observed prior learner hit. Absolute demonstrated-unexposed status is not established across the local training-custody gap or unretained history.",
+  "schema": "cas.learning-panel-source-custody-audit/0.1",
+  "source_pins": [
+    {
+      "bytes": 173,
+      "path": "cas_meta2/__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    {
+      "bytes": 177,
+      "path": "cas_meta2/complementary_teaching/__init__.py",
+      "sha256": "e469cf153e6816be63bdec4c106d4a2440535cadad7959fa02cdef37cb6e6790"
+    },
+    {
+      "bytes": 14874,
+      "path": "cas_meta2/complementary_teaching/course.py",
+      "sha256": "dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0"
+    },
+    {
+      "bytes": 809,
+      "path": "cas_meta2/graph_teaching/__init__.py",
+      "sha256": "6b9d491e7b4c05d359982d46090a7de48cfe9a6221c6e0bbbdedd34ae0a78d74"
+    },
+    {
+      "bytes": 8472,
+      "path": "cas_meta2/graph_teaching/adapter.py",
+      "sha256": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7"
+    },
+    {
+      "bytes": 16555,
+      "path": "cas_meta2/graph_teaching/contrast_probe.py",
+      "sha256": "da4fe13d5378a70039fcb233a537e498014c70bf4919175fdf4d9f706898b808"
+    },
+    {
+      "bytes": 79970,
+      "path": "cas_meta2/graph_teaching/cube_node.py",
+      "sha256": "9d3363a960298715c0b13256593693dff7b07d70563b9a1b044d5d9042431e4a"
+    },
+    {
+      "bytes": 27607,
+      "path": "cas_meta2/graph_teaching/curriculum.py",
+      "sha256": "181a7a6b91ae277d5cb4436ac66937b399a14565cbd5f53591b652e4603de79b"
+    },
+    {
+      "bytes": 21020,
+      "path": "cas_meta2/graph_teaching/face_corpus.py",
+      "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+    },
+    {
+      "bytes": 17884,
+      "path": "cas_meta2/graph_teaching/face_evaluation.py",
+      "sha256": "56e709fcc7a5704a67b036f3ed5dac4797fc821f183c9a98c9280b7dd47650fa"
+    },
+    {
+      "bytes": 7201,
+      "path": "cas_meta2/graph_teaching/face_roles.py",
+      "sha256": "463227f82faa2409dbd156481ae4dbc736c627d73510333f61df5f75a6c2fdc3"
+    },
+    {
+      "bytes": 15904,
+      "path": "cas_meta2/graph_teaching/face_schedule.py",
+      "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+    },
+    {
+      "bytes": 37159,
+      "path": "cas_meta2/graph_teaching/face_tasks.py",
+      "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+    },
+    {
+      "bytes": 24372,
+      "path": "cas_meta2/graph_teaching/final_panel.py",
+      "sha256": "cae5428a6d2e91237b9a6d48775b5ec6a9b0082cca51506dcf1a57daacc24e31"
+    },
+    {
+      "bytes": 18236,
+      "path": "cas_meta2/graph_teaching/fresh_panel.py",
+      "sha256": "647e1af4bbc7a648dd9df6bc451537c0362f75ff0be7feb3541d49fd3a7d50ee"
+    },
+    {
+      "bytes": 6829,
+      "path": "cas_meta2/graph_teaching/graph.py",
+      "sha256": "1dfa2f67ab76847d0ae351d36f9e0ea6c6e1bea053640dd20ab898a550b63543"
+    },
+    {
+      "bytes": 19198,
+      "path": "cas_meta2/graph_teaching/lessons.py",
+      "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+    },
+    {
+      "bytes": 20252,
+      "path": "cas_meta2/graph_teaching/real_framework.py",
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "bytes": 5412,
+      "path": "cas_meta2/graph_teaching/reference.py",
+      "sha256": "aab7af24638c842b7197e7468a168fdf05b9cd0dc951583eec5aa8590dc765ee"
+    },
+    {
+      "bytes": 13502,
+      "path": "cas_meta2/graph_teaching/trainer.py",
+      "sha256": "e3302b90030dd9da048d6aacdc1c806967455f8a51435665eae3489d25066bd4"
+    },
+    {
+      "bytes": 78579,
+      "path": "cas_meta2/graph_teaching/verified_teaching.py",
+      "sha256": "3bf59ec79943186ec41aa5d4ef7c85754d68dadf15be1e48adca78029ebb9ea6"
+    },
+    {
+      "bytes": 22741,
+      "path": "cas_meta2/graph_teaching/verified_training.py",
+      "sha256": "0d70665b5385bf0e1381ba571b9f287bec3f1e9cea8c07868e26f5a9e652ba8a"
+    },
+    {
+      "bytes": 374,
+      "path": "cas_meta2/recurrent_cjt/__init__.py",
+      "sha256": "3f8eb71c21543c3fbe0b7a6024c3fb5cd2b44afae2e2c4216820bbebd909583a"
+    },
+    {
+      "bytes": 20730,
+      "path": "cas_meta2/recurrent_cjt/course.py",
+      "sha256": "95c248c45cccae38ac7b301f74866fe3400a589bd8c1c15b074d4b36fb83caa7"
+    },
+    {
+      "bytes": 18437,
+      "path": "cas_meta2/recurrent_cjt/recurrence.py",
+      "sha256": "45278c0455b042e5515a73eb629a0ae90c31d41ae373ad3527e11a9cae49d17c"
+    },
+    {
+      "bytes": 18529,
+      "path": "tools/check_structural_supply_20260916.py",
+      "sha256": "a78d24c5469d95937a1d49ec6827cef213eabbb0b4811defe3ae370bd75852e0"
+    }
+  ],
+  "unmatched_source_snapshot_rows": [
+    {
+      "association_scope": "Retained co-location, not independent proof of execution or external authenticity.",
+      "co_located_archive": null,
+      "job": "rdcjt-local-smoke",
+      "path": "records/recurrent_cjt_001/local_smoke_rtx4070_001/result.json",
+      "schema": "cas.recurrent-cjt-result/1",
+      "sha256": "f837658bf648a50b8a31d98cead68eabc449710ec75092c49349f04f411ed171",
+      "status": "RECURRENT_EXPERIMENT_DELIVERED"
+    }
+  ]
+}

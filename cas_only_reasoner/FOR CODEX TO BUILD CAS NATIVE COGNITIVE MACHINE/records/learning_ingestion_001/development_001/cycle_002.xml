@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="8" time="8.048" timestamp="2026-09-16T10:16:17.779935-07:00" hostname="MSI"><testcase classname="tests.test_rpa_learning_cycle" name="test_training_injects_new_records_and_preserves_scope" time="1.442" /><testcase classname="tests.test_rpa_learning_cycle" name="test_prediction_seals_before_private_loader" time="0.854"><failure message="KeyError: 'operation'">sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_cycle_002/test_prediction_seals_before_p0')
+
+    def test_prediction_seals_before_private_loader(sample, tmp_path):
+        learner, predictor, candidate = setup(sample)
+        path = tmp_path / "predictions.json"
+        seal = cycle.seal_predictions(predictor, [sample.packet], path=path)
+        calls = []
+        def loader():
+            assert path.is_file()
+            assert learner.predictions == 1
+            assert sha256(path.read_bytes()).hexdigest() == seal["sha256"]
+            calls.append("private opened")
+            return target_map(sample)
+&gt;       result = cycle.score_sealed_predictions(seal, targets_loader=loader)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_learning_cycle.py:172: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cncm\rpa_learning_cycle.py:170: in score_sealed_predictions
+    targets = targets_loader()
+              ^^^^^^^^^^^^^^^^
+tests\test_rpa_learning_cycle.py:171: in loader
+    return target_map(sample)
+           ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+
+    def target_map(sample):
+        return {sample.packet["record_id"]: {
+            "public_input_digest": digest(sample.packet),
+            "encoded_correct_index": sample.target["encoded_correct_index"],
+            "expected_answer": deepcopy(sample.target["expected_answer"]),
+&gt;           "operation": sample.target["operation"]}}
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'operation'
+
+tests\test_rpa_learning_cycle.py:144: KeyError</failure></testcase><testcase classname="tests.test_rpa_learning_cycle" name="test_tampered_seal_never_opens_targets" time="0.874" /><testcase classname="tests.test_rpa_learning_cycle" name="test_existing_seal_is_not_overwritten" time="0.838" /><testcase classname="tests.test_rpa_learning_cycle" name="test_duplicate_panel_refused_before_predict" time="0.761" /><testcase classname="tests.test_rpa_learning_cycle" name="test_private_target_cannot_change_sealed_input" time="0.817"><failure message="KeyError: 'operation'">sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_cycle_002/test_private_target_cannot_cha0')
+
+    def test_private_target_cannot_change_sealed_input(sample, tmp_path):
+        _, predictor, _ = setup(sample)
+        seal = cycle.seal_predictions(predictor, [sample.packet], path=tmp_path / "predictions.json")
+        old_bytes = Path(seal["path"]).read_bytes()
+&gt;       targets = target_map(sample)
+                  ^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_learning_cycle.py:211: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+
+    def target_map(sample):
+        return {sample.packet["record_id"]: {
+            "public_input_digest": digest(sample.packet),
+            "encoded_correct_index": sample.target["encoded_correct_index"],
+            "expected_answer": deepcopy(sample.target["expected_answer"]),
+&gt;           "operation": sample.target["operation"]}}
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'operation'
+
+tests\test_rpa_learning_cycle.py:144: KeyError</failure></testcase><testcase classname="tests.test_rpa_learning_cycle" name="test_scoring_refuses_wrong_public_binding" time="0.882"><failure message="KeyError: 'operation'">sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_cycle_002/test_scoring_refuses_wrong_pub0')
+
+    def test_scoring_refuses_wrong_public_binding(sample, tmp_path):
+        _, predictor, _ = setup(sample)
+        seal = cycle.seal_predictions(predictor, [sample.packet], path=tmp_path / "predictions.json")
+&gt;       targets = target_map(sample)
+                  ^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_learning_cycle.py:224: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+sample = namespace(args={'document': CubeAtlasDocument(), 'tokenizer': LosslessPublicTokenizer(vocabulary=('[PAD]', '[CLS]', '[...itness_basis': 'complete_direct_inventory', 'answer_status': 'GRAPH_DERIVED_TEACHER_REFERENCE_NOT_LEARNER_PREDICTION'})
+
+    def target_map(sample):
+        return {sample.packet["record_id"]: {
+            "public_input_digest": digest(sample.packet),
+            "encoded_correct_index": sample.target["encoded_correct_index"],
+            "expected_answer": deepcopy(sample.target["expected_answer"]),
+&gt;           "operation": sample.target["operation"]}}
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'operation'
+
+tests\test_rpa_learning_cycle.py:144: KeyError</failure></testcase><testcase classname="tests.test_rpa_learning_cycle" name="test_worker_refuses_cpu_before_numeric_construction" time="0.658" /></testsuite></testsuites>
