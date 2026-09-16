@@ -782,3 +782,42 @@ and docs/CNCM_LEARNING_INGESTION_v0.2.md.
 No new GPU/provider execution or budget reservation occurred for this correction.
 It establishes input disclosure, not neural learning or learning improvement.
 The matched multi-seed study and the wider charter remain open; goal PROGRESS.
+
+## 2026-09-16: full-course matched preparation and scoped input extension
+
+Status: PARTIAL — PURE_PREPARATION_CHECKS_PASS; no matched learning run.
+
+A guarded 129-test run retained 209 stable input pins and zero numerical,
+optimizer or provider calls. Evidence:
+records/matched_learning_preparation_001/checks_001/receipt.json, SHA-256
+f063cccc371db83143faedd30e1c80e939a15c0ee5e3bf58157b25a55961807c.
+The three source-construction seeds are not executed model seeds.
+
+The comparison compiler preserves 1,152 presentations, 160 planned batches and
+624 unique public inputs, including all six-face foundation/maintenance work.
+Component-then-whole and mixed schedules use equal lessons and corrections.
+An explicit ordinary dependency-graph policy over only the 256 supplements gives
+the identical component-then-whole update inputs at batch size eight. It cannot
+serve as a distinct CAS-advantage contrast; the common 896 presentations remain
+unchanged. Actual compute matching is unmeasured.
+
+The full-course adapter reconstructs source training only, preserves every source
+line, fits a fresh training-only tokenizer and separates public packets from
+private corrections. It requires the new scoped ordered encoder. That encoder
+removes a demonstrated support/query block-swap symmetry in pure frame and
+integer-map checks while preserving within-context reorder invariance. The old
+encoder remains unchanged; CUDA separation is not yet verified. Fixture model
+and projection identities are explicitly fictional.
+
+The development-only builder constructs 114 unique records/120 memberships
+without building final questions. Legacy target-conditioned choices, historical
+exposure limits and 8–10-node versus 3–4-node size transfer remain unresolved for
+study admission. The source profile pins files on disk; a future worker must also
+verify actual import origins and bytes.
+
+Next: a course-aware predictor and fresh paired worker, numerical scoped-profile
+acceptance, a target-independent answer protocol, and a frozen equal-information
+comparison. Keep taught-question gains and other-exposed-question losses separate;
+measure learning speed, untouched-family transfer and retention after intervening
+teaching. See docs/CNCM_MATCHED_LEARNING_PREPARATION_v0.1.md. No learning benefit,
+CAS-specific advantage or complete-machine claim is made; the goal remains active.

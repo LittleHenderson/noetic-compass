@@ -1,0 +1,54 @@
+{
+  "schema_version": "cncm.matched-preparation-independent-review/0.1",
+  "status": "PURE_SOURCE_AND_RETAINED_RECOUNT_PASS",
+  "reviewer": "/root/cube_bridge_review",
+  "review_mode": "Read-only independent agent source review and retained-byte recount",
+  "receipt_sha256": "f063cccc371db83143faedd30e1c80e939a15c0ee5e3bf58157b25a55961807c",
+  "artifacts_verified": 9,
+  "input_pins_verified": 209,
+  "identical_before_after_sha256": "8f96c84e4d298700b06d20afc2d58c5021c087b65d471a03bd929ed604530c47",
+  "tests": {
+    "rpa_learning_match": 27,
+    "rpa_course_adapter": 31,
+    "development_data": 17,
+    "scoped_ordered_encoder": 54,
+    "total": 129,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "junit_sha256": "fb43109387c4c25620bcddc49ea4bd05731d54567d90b226ebbc7e59b90e9c58",
+  "source_scope_review": {
+    "scoped_encoder_sha256": "e35430d4ca280f4b511e9e0fdee40d2c7be566c4a8356e8b5b96f0f7e1cf0107",
+    "course_adapter_sha256": "63eb6474a63adfc521876bd0467e5efd969285de49035aedcd76cdfe440558c0",
+    "material_current_scope_bug_found": false
+  },
+  "recounted": {
+    "source_seeds": [
+      101,
+      202,
+      303
+    ],
+    "presentations_per_condition": 1152,
+    "planned_batches": 160,
+    "unique_public_inputs": 624,
+    "semantic_questions": 252,
+    "supplement_presentations": 256,
+    "common_presentations": 896,
+    "mixed_has_distinct_grouping": true,
+    "dag_equals_alt_ordered_inputs": true,
+    "prepared_bound_joins": 1152,
+    "training_only_tokenizer_publics": 624,
+    "development_unique": 114,
+    "development_memberships": 120,
+    "old_frames_equal": true,
+    "new_frames_distinct": true
+  },
+  "unchanged_legacy_encoder_sha256": "670fb5acc42a9aa13fd7b1ff3d91bdd1ded38399833095293bec572313bc1bc4",
+  "future_worker_requirement": "Verify actual imported module origins and bytes; disk source_profile pins alone do not establish executed-source provenance.",
+  "numeric_execution": false,
+  "provider_execution": false,
+  "final_targets_accessed": false,
+  "boundary": "Independent review of pure preparation and retained bytes only. Placeholder model/projection hashes remain fictional; full course is NOT_YET_EXECUTION_ADMITTED."
+}
+

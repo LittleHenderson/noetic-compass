@@ -32,6 +32,20 @@ its success does not establish GPU acceptance of 0.2. Rebuild training-only
 tokenizer and model-origin bindings for a future 0.2 run. The old viewer's Facts
 prose and zero-update counters below describe the preserved earlier package.
 
+A later full-course preparation extension now retains all 1,152 presentations
+and 160 planned batches, fits a training-only tokenizer, and provides a separate
+scoped encoder profile for support/query contexts. Its combined 129 pure checks
+pass; no course-aware worker or numerical scoped acceptance is established.
+The ordinary graph scheduler equals component-then-whole for the current
+batch-eight supplement policy, so it cannot define a distinct CAS comparison.
+The mixed-order contrast is distinct. The new development-only builder avoids
+constructing final questions, but inherited answer-conditioned choices still
+prevent study admission. See docs/CNCM_MATCHED_LEARNING_PREPARATION_v0.1.md and
+records/matched_learning_preparation_001/STATUS.md. The older encoder selection
+requirements below describe the original single-graph connection review;
+multi-context full-course binding now explicitly requires the separate scoped
+profile. Existing historical runs and their source identities remain unchanged.
+
 We will know whether teaching improves learned competence after an actual learner
 improves on untouched task families, against matched controls, with answer-bearing
 memory and tools withheld. A successful parser test, changed checkpoint, lower
