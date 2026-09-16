@@ -1,0 +1,43 @@
+{
+  "boundary": "Current-job compute and temporary resources are confirmed closed at the recorded observation time. Older named resources remain untouched. Retained evidence is not WORM, independent backup or a final invoice.",
+  "broad_open_checks": [
+    "no_cas_instance_profiles",
+    "no_cas_roles",
+    "no_tagged_cas_security_groups"
+  ],
+  "broad_receipt_status": "PARTIAL_OR_OPEN",
+  "current_scope_checks": {
+    "exact_instance_terminated": true,
+    "job_schedule_absent": true,
+    "job_security_group_absent": true,
+    "lifecycle_result_unchanged": true,
+    "no_active_tagged_cas_instances": true,
+    "no_cas_schedules": true,
+    "no_instance_interfaces": true,
+    "no_tagged_cas_interfaces": true,
+    "no_tagged_cas_volumes": true,
+    "public_access_block_all_enabled": true,
+    "retained_bucket_present": true,
+    "retained_bucket_region": true,
+    "retained_checkpoint_and_marker_sizes": true,
+    "timer_role_absent": true,
+    "worker_profile_absent": true,
+    "worker_role_absent": true
+  },
+  "instance_id": "i-07c15e04e29d558bf",
+  "job": "cas-meta2-ingestionsmoke-20260916195214-bedc06d5",
+  "provider_evidence": {
+    "bytes": 21631,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_v02_001\\provider_closure_001\\provider.json",
+    "sha256": "f936418bd8bf2557cdd2e216a11139b7e7d2684141c1820fcb03cc38379fc05e"
+  },
+  "provider_mutations": 0,
+  "raw_receipt": {
+    "bytes": 2574,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_v02_001\\provider_closure_001\\receipt.json",
+    "sha256": "6d1cd196af7159ef259ba60519ecfcc21239c4581502f664e2c3d980b3a924b2"
+  },
+  "schema": "cncm-input-v02-closure-scope/1",
+  "separate_legacy_job": "cas-meta2-teaching-20260908134143-ebd84f71",
+  "status": "CURRENT_JOB_CLOSED_LEGACY_RESOURCES_SEPARATE"
+}

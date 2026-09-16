@@ -1,0 +1,21 @@
+{
+  "schema": "cncm-input-v02-verifier-review/1",
+  "status": "PURE_SOURCE_REVIEW_PASS",
+  "reviewer": "/root/cube_bridge_review",
+  "verifier_sha256": "2e2d18fcf4ac53f5b868ac9cb1741d4fd972bd8b8f3450e305af5c939220e01d",
+  "preserved_base_sha256": "318b36e66225ed90f8c2da533fd9ee8685f7d6940c3ef7a75c5a4ebac2c7898c",
+  "source_commit": "bedc06d52211491b7de4ef955227822801faa4a1",
+  "packaged_adapter_sha256": "7b265f13e87086b674c198e0025f1e0f329654e980c3d4ca9417937e788da8ed",
+  "checks": [
+    "exactly one guarded AST replacement",
+    "restoration equals every original measured-evidence AST node",
+    "actual new packaged v0.2 source contract passes caller pins",
+    "packaged adapter and fixture equal current bytes",
+    "preparation and package discovery scopes include new paths",
+    "v0.1 refusal, mixed versions, wrong pins and retained failure controls"
+  ],
+  "provider_calls": 0,
+  "model_calls": 0,
+  "checkpoint_decodes": 0,
+  "boundary": "Independent source review and pure package-contract check, not numerical results or current provider closure."
+}

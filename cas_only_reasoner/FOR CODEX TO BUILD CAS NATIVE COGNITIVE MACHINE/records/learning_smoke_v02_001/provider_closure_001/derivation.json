@@ -1,0 +1,16 @@
+{
+  "all_other_source_text_unchanged": true,
+  "boundary": "Derived read-only probe prepared before the run finishes; no closure claim.",
+  "literal_changes": {
+    "BASE = OUT.parent": "BASE = OUT.parent.parent / \"learning_smoke_001\"",
+    "EXPECTED_RESULT = \"a99859a9bd93af0e502798399737e15a35bb8b2c9de17fad039b8fb860eb92cb\"": "EXPECTED_RESULT = sys.argv[1]",
+    "INSTANCE = \"i-0df9728e05ae06711\"": "INSTANCE = \"i-07c15e04e29d558bf\"",
+    "JOB = \"cas-meta2-ingestionsmoke-20260916183635-6ef614bf\"": "JOB = \"cas-meta2-ingestionsmoke-20260916195214-bedc06d5\""
+  },
+  "new_script_sha256": "ada456c1e96fc7f53e0bdd18881ee528ffccb3fc74f5095d77d3b90d51642cde",
+  "provider_calls": 0,
+  "result_sha256_required_from_caller": true,
+  "schema": "cncm-input-v02-closure-probe-derivation/1",
+  "source_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_closure_001\\q.py",
+  "source_sha256": "d479ebb71dd3b86b4189cc266bff6fbd5676272d36ad6a16b1bf3f396d5f51fe"
+}

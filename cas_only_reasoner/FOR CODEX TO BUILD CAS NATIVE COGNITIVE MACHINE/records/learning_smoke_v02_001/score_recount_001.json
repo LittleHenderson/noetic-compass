@@ -1,0 +1,72 @@
+{
+  "boundary": "Data-only recount of this exposed six-question engineering fixture. No untouched transfer, delayed retention or causal comparison against input v0.1.",
+  "groups": {
+    "other_exposed": {
+      "after_correct": 2,
+      "before_correct": 1,
+      "gains": 2,
+      "losses": 1,
+      "total": 3
+    },
+    "taught": {
+      "after_correct": 3,
+      "before_correct": 0,
+      "gains": 3,
+      "losses": 0,
+      "total": 3
+    }
+  },
+  "model_calls": 0,
+  "rows": [
+    {
+      "after_correct": true,
+      "before_correct": false,
+      "change": "gain",
+      "group": "taught",
+      "operation": "LIST_PARTS",
+      "record_id": "rpa-learning-input-fa631ba4783b403e49adb8bd5834ffa07d4c7b89dbbe3458f10133d2d951c345"
+    },
+    {
+      "after_correct": true,
+      "before_correct": false,
+      "change": "gain",
+      "group": "other_exposed",
+      "operation": "LIST_PARTS",
+      "record_id": "rpa-learning-input-d4614cf7b4e03902cad6648fef861c2aa41ecbcb66154b74ae2ac580d9b687e9"
+    },
+    {
+      "after_correct": true,
+      "before_correct": false,
+      "change": "gain",
+      "group": "taught",
+      "operation": "FIND_SHARED_PART",
+      "record_id": "rpa-learning-input-e85896b1b3bfc3a5ee928d29957727b4a7e29674841fbaf65b1a67bf4a1d1663"
+    },
+    {
+      "after_correct": true,
+      "before_correct": false,
+      "change": "gain",
+      "group": "other_exposed",
+      "operation": "FIND_SHARED_PART",
+      "record_id": "rpa-learning-input-f989576b557a77837bc7d0a811a442b3e32a24a197cc232342c74d38f65a8946"
+    },
+    {
+      "after_correct": true,
+      "before_correct": false,
+      "change": "gain",
+      "group": "taught",
+      "operation": "REACHED_VIA",
+      "record_id": "rpa-learning-input-184491cc2f9d1978262ebbcda358980f9ed7ec4a21d4fb10ca1bb7e466728580"
+    },
+    {
+      "after_correct": false,
+      "before_correct": true,
+      "change": "loss",
+      "group": "other_exposed",
+      "operation": "REACHED_VIA",
+      "record_id": "rpa-learning-input-ea4831d8709810892766acd9da07a2e8ff4da48ced4fbbec935e47eae78d0769"
+    }
+  ],
+  "schema": "cncm-input-v02-exposed-score-recount/1",
+  "source_receipt_sha256": "7e8b1f4190a4a5331482108d4e9a361e49c9e10a7efe0317848d73b6bd1ed338"
+}

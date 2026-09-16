@@ -1,0 +1,62 @@
+{
+  "schema": "cncm-input-v02-independent-delivery-review/1",
+  "status": "DELIVERY_AND_CURRENT_JOB_CLOSURE_VERIFIED",
+  "reviewer": "/root/cube_bridge_review",
+  "review_mode": "Read-only source review, in-memory verifier stages and returned-byte recount; no numerical or provider rerun",
+  "lifecycle_result_sha256": "66aee7d84a2a5397d1f863c454fc6d44381dbb747b2d97a605f50c0e50623f08",
+  "delivery_receipt_sha256": "2e599b677018e3904de4af68f7f00add84c4b81dd4f4df0c078c9d9f8dcd4eff",
+  "verified": {
+    "file_pins": 245,
+    "archive_members": 215,
+    "required_objects": 16,
+    "artifacts": 13,
+    "optimizer_updates": 64,
+    "forward_calls": 178,
+    "prediction_rows_per_seal": 6,
+    "initial_reload_prediction_bytes_equal": true,
+    "final_reload_prediction_bytes_equal": true
+  },
+  "score_groups": {
+    "taught": {
+      "before": 0,
+      "after": 3,
+      "total": 3,
+      "gains": 3,
+      "losses": 0
+    },
+    "other_exposed": {
+      "before": 1,
+      "after": 2,
+      "total": 3,
+      "gains": 2,
+      "losses": 1
+    }
+  },
+  "lost_answer": "REACHED_VIA Bicycle -> Frame",
+  "fresh_binding": {
+    "rendering_schema": "cncm.cube-contains-node-rel/0.2",
+    "fitted_examples": 3,
+    "vocabulary": 326,
+    "tokenizer_sha256": "673ad93d253c85989d91bae5036ff0c3f84dd2b03dc4df7f079fce976b2bae50",
+    "origin_sha256": "5d5b6ad9625ef50261adb2672350e9efc372957d2408d92759c559ae68303f79"
+  },
+  "opaque_checkpoint_sha256": {
+    "initial": "56e2ca1c0a4258da88dcb2cde5131d7627390f348ef3c90af407e9fce1af5ff0",
+    "final": "bf40ba8caa3a9e2da610b5de52b9542175e1179db9741357a78b9568305174a6"
+  },
+  "closure": {
+    "instance": "i-07c15e04e29d558bf",
+    "state": "terminated",
+    "current_job_cleanup": true,
+    "raw_broad_receipt_status": "PARTIAL_OR_OPEN",
+    "broad_receipt_sha256": "6d1cd196af7159ef259ba60519ecfcc21239c4581502f664e2c3d980b3a924b2",
+    "legacy_resource_lists_equal_previous_readback": true,
+    "legacy_job": "cas-meta2-teaching-20260908134143-ebd84f71",
+    "observed_start_utc": "2026-09-16T20:05:55.935935+00:00",
+    "observed_end_utc": "2026-09-16T20:05:58.434154+00:00"
+  },
+  "checkpoint_decodes": 0,
+  "model_calls": 0,
+  "provider_calls": 0,
+  "boundary": "Returned-record joins and recorded provider responses only. Same-worker reload, exposed questions; no fresh-process restart, independent numerical rerun, matched learning advantage, delayed retention, untouched transfer, backup/WORM or final invoice."
+}

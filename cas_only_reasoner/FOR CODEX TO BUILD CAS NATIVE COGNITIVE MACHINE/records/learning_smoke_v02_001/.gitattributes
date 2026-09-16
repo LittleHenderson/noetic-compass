@@ -1,0 +1,4 @@
+# Preserve retained evidence bytes exactly.
+*.json -text -eol -whitespace
+*.xml -text -eol -whitespace
+*.txt -text -eol -whitespace

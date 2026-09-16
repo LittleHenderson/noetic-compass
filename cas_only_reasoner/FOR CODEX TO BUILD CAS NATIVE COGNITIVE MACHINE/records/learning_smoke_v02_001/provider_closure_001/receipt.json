@@ -1,0 +1,46 @@
+{
+  "boundary": "Account/region/time-scoped provider readback. S3 listing and HEAD sizes are presence/configuration evidence, not a second content-hash verification, independent backup, WORM claim or final bill. Untagged resources without CAS names are outside CAS resource attribution.",
+  "checks": {
+    "exact_instance_terminated": true,
+    "job_schedule_absent": true,
+    "job_security_group_absent": true,
+    "lifecycle_result_unchanged": true,
+    "no_active_tagged_cas_instances": true,
+    "no_cas_instance_profiles": false,
+    "no_cas_roles": false,
+    "no_cas_schedules": true,
+    "no_instance_interfaces": true,
+    "no_tagged_cas_interfaces": true,
+    "no_tagged_cas_security_groups": false,
+    "no_tagged_cas_volumes": true,
+    "public_access_block_all_enabled": true,
+    "retained_bucket_present": true,
+    "retained_bucket_region": true,
+    "retained_checkpoint_and_marker_sizes": true,
+    "timer_role_absent": true,
+    "worker_profile_absent": true,
+    "worker_role_absent": true
+  },
+  "lifecycle_result": {
+    "bytes": 278013,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\receipt_cas-meta2-ingestionsmoke-20260916195214-bedc06d5\\result.json",
+    "sha256": "66aee7d84a2a5397d1f863c454fc6d44381dbb747b2d97a605f50c0e50623f08"
+  },
+  "model_loads": 0,
+  "object_body_downloads": 0,
+  "observed_end_utc": "2026-09-16T20:05:58.434154+00:00",
+  "observed_start_utc": "2026-09-16T20:05:55.935935+00:00",
+  "provider_evidence": {
+    "bytes": 21631,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_v02_001\\provider_closure_001\\provider.json",
+    "sha256": "f936418bd8bf2557cdd2e216a11139b7e7d2684141c1820fcb03cc38379fc05e"
+  },
+  "provider_mutations": 0,
+  "schema": "cncm-ingestion-provider-closure-receipt/1",
+  "source": {
+    "bytes": 15575,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_v02_001\\provider_closure_001\\q.py",
+    "sha256": "ada456c1e96fc7f53e0bdd18881ee528ffccb3fc74f5095d77d3b90d51642cde"
+  },
+  "status": "PARTIAL_OR_OPEN"
+}

@@ -1,0 +1,20 @@
+{
+  "boundary": "Canonical meta1 ledger remains the only spending ledger. This is an exact publication snapshot, not a second spending authority or provider invoice.",
+  "canonical": {
+    "bytes": 147912,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+    "sha256": "56cf9df7a13244ccf35e073623206be4fbaf6abcf783eb480a4c6ea919865733"
+  },
+  "job_reservations": 1,
+  "job_reserved_usd": "7.00",
+  "previous_copy_sha256": "fe600468b17027587465fd0d4ccc989a6003deb47aac9f53331b9176950dfbc0",
+  "publication_copy": {
+    "bytes": 147912,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+    "sha256": "56cf9df7a13244ccf35e073623206be4fbaf6abcf783eb480a4c6ea919865733"
+  },
+  "remaining_unreserved_usd": "4555.00",
+  "revision": 76,
+  "schema": "cncm-input-v02-budget-publication/1",
+  "total_reserved_usd": "445.00"
+}

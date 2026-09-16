@@ -26,11 +26,16 @@ over an ordinary dependency graph. Define that comparator before such a claim.
 
 The later input contract 0.2 also discloses the source's complete containment
 inventory in every public question. See docs/CNCM_LEARNING_INGESTION_v0.2.md and
-records/learning_completeness_001/. This is a versioned input correction checked
-without model execution. The observed GPU smoke above used input contract 0.1;
-its success does not establish GPU acceptance of 0.2. Rebuild training-only
-tokenizer and model-origin bindings for a future 0.2 run. The old viewer's Facts
-prose and zero-update counters below describe the preserved earlier package.
+records/learning_completeness_001/. The initial correction had pure checks only.
+A later fresh input-v0.2 AWS run at source
+bedc06d52211491b7de4ef955227822801faa4a1 now completes 64 updates, 178 forward
+calls and exact initial/final same-worker reloads. Its taught questions change
+0/3 to 3/3; other exposed questions change 1/3 to 2/3 with two gains and one loss.
+Delivery and current-job closure are verified in
+records/learning_smoke_v02_001/STATUS.md. This is a separate exposed engineering
+run, not the matched experiment or numerical acceptance of the scoped full-course
+profile. The old viewer's Facts prose and zero-update counters below describe the
+preserved earlier package.
 
 A later full-course preparation extension now retains all 1,152 presentations
 and 160 planned batches, fits a training-only tokenizer, and provides a separate

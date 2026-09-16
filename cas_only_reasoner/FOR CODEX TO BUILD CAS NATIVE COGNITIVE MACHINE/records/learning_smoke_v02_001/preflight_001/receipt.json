@@ -1,0 +1,17 @@
+{
+  "account": "807562639912",
+  "active_tagged_cas_instances": [],
+  "boundary": "Read-only identity and current tagged-instance observation; GPU capacity and actual pricing remain launcher checks.",
+  "canonical_ledger_sha256": "fe600468b17027587465fd0d4ccc989a6003deb47aac9f53331b9176950dfbc0",
+  "ec2_request_id": "7ea70365-f497-41d3-a025-662b8601dd79",
+  "observed_utc": "2026-09-16T19:51:59.397095+00:00",
+  "owner_task_cap_usd": "5000.00",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "remaining_unreserved_usd": "4562.00",
+  "reservation_created": false,
+  "revision": 75,
+  "schema": "cncm-input-v02-preflight/1",
+  "sts_request_id": "faa112e2-ec8e-44d9-b8f8-48292dd1a40a",
+  "total_reserved_usd": "438.00"
+}

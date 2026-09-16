@@ -45,10 +45,16 @@ be reused as proof of compatibility. The ordered encoder algorithm is unchanged.
 
 Historical viewer packages and learning-smoke evidence remain unchanged. The
 current adapter source intentionally differs from the preserved baseline.
-Version 0.2 is checked with pure tests, including explicit learner test doubles;
-it has not completed a new GPU run. The earlier run's 64 updates and exact reload
-results belong to its exact version 0.1 input and source. Neither result proves
-improved learning, delayed retention, unseen transfer or a CAS-specific benefit.
+Version 0.2 first passed pure checks, including explicit learner test doubles.
+A later fresh AWS run at source bedc06d52211491b7de4ef955227822801faa4a1 completed
+64 updates and 178 forward calls, with exact initial/final same-worker reloads.
+Its taught questions improved 0/3 to 3/3; the other exposed questions changed
+1/3 to 2/3, consisting of two gains and one lost answer. Delivery and current-job
+closure are independently checked in records/learning_smoke_v02_001/STATUS.md.
+The earlier run's 64 updates and exact reload results remain bound to its exact
+version 0.1 input and source. Neither run proves better learning against a matched
+control, delayed retention, unseen transfer or a CAS-specific benefit. The fresh
+tokenizer/model bindings also prevent a causal comparison between these two runs.
 
 Evidence and a learner-visible Cloth example are under
 `records/learning_completeness_001/`. The next scientific gate remains a matched

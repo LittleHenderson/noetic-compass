@@ -821,3 +821,37 @@ comparison. Keep taught-question gains and other-exposed-question losses separat
 measure learning speed, untouched-family transfer and retention after intervening
 teaching. See docs/CNCM_MATCHED_LEARNING_PREPARATION_v0.1.md. No learning benefit,
 CAS-specific advantage or complete-machine claim is made; the goal remains active.
+
+## 2026-09-16: input v0.2 observed on CUDA with fresh bindings
+
+Status: RECORDED_INPUT_V02_MECHANICAL_EVIDENCE_VERIFIED; matched study still open.
+
+A new bounded run at source bedc06d52211491b7de4ef955227822801faa4a1 rebuilt the
+three-example training-only tokenizer and fresh model origin. It completed
+64 optimizer updates and 178 forward calls, with exact initial/final same-worker
+checkpoint reconstruction and matching predictions. The exposed taught questions
+changed 0/3 to 3/3 (three gains); the other exposed questions changed 1/3 to 2/3
+(two gains and one loss). The lost answer is REACHED_VIA Bicycle to Frame.
+Total 1/6 to 5/6 must not hide that loss.
+
+The separate v0.2 delivery checker passed 24 pure controls and independent source
+review. Independent delivered-byte review confirms 245 file pins, 215 archive
+members, 16 required objects and 13 artifacts. Lifecycle result SHA-256:
+66aee7d84a2a5397d1f863c454fc6d44381dbb747b2d97a605f50c0e50623f08.
+Delivery verification SHA-256:
+2e599b677018e3904de4af68f7f00add84c4b81dd4f4df0c078c9d9f8dcd4eff.
+
+Fresh AWS observations confirm instance i-07c15e04e29d558bf terminated and its
+temporary resources absent. Older resources named for the September 8 teaching
+job remain separately recorded and untouched; the broad account receipt stays
+PARTIAL_OR_OPEN. Private evidence is retained; backup/WORM/final billing are not
+claimed. One new $7 reservation and no retry leave canonical revision 76 at
+$445 reserved/$4,555 unreserved of $5,000. The local ledger is a publication copy.
+
+See records/learning_smoke_v02_001/STATUS.md. This proves the corrected input
+teaching/reload path on the exposed fixture. It is not full-course/scoped-encoder
+execution, a fresh-process restart, delayed retention, untouched transfer or
+CAS-specific advantage. The two input-version smokes are not a causal comparison.
+The earlier negative three-seed criterion remains unchanged. Continue the
+course-aware paired worker, answer-protocol repair and frozen matched study;
+the full goal remains active.
