@@ -1,0 +1,1 @@
+{"cause": "Inherited research-only Git reader refused new cncm package members", "error": "PACKAGE_GIT_MEMBER_SCOPE", "neural_execution": false, "provider_calls": 0, "reservation_created": false, "source_sha": "8697c6ff761d33a33ed489a11f6407ca095d602c", "status": "FAILED_BEFORE_PACKAGE_WRITE"}

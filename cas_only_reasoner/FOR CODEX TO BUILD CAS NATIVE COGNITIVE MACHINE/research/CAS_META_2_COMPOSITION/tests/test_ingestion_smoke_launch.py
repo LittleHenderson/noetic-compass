@@ -201,3 +201,73 @@ def test_uncommitted_source_refused_before_package_creation(tmp_path, monkeypatc
         launch.build_smoke_package(output, source_sha=SOURCE,
             git_bytes_fn=changed_bytes, git_paths_fn=get_paths)
     assert not output.exists()
+
+
+# This immutable commit actually contains the new CNCM sources. Earlier package
+# tests replaced git_bytes entirely, so they missed its research-only scope.
+PACKAGE_REGRESSION_COMMIT = "8697c6ff761d33a33ed489a11f6407ca095d602c"
+
+
+@pytest.mark.parametrize("name,size,expected_sha256", [
+    ("cncm/canonical.py", 1696, "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"),
+    ("cncm/rpa_learning_smoke.py", 27547, "19c3f5d1a2eb105b48f5b6d8398096e85e3bdf9d962169f6b09012167683d122"),
+])
+def test_real_committed_cncm_package_bytes_are_read_without_worktree_fallback(
+        monkeypatch, name, size, expected_sha256):
+    research_reader = Mock(wraps=launch.shared.git_bytes)
+    monkeypatch.setattr(launch.shared, "git_bytes", research_reader)
+    original_read = Path.read_bytes
+    worktree_path = (launch.PROJECT / name).resolve()
+    def forbid_worktree_read(path):
+        if path.resolve() == worktree_path:
+            raise AssertionError("Committed package input must come from Git, not current file bytes")
+        return original_read(path)
+    monkeypatch.setattr(Path, "read_bytes", forbid_worktree_read)
+    raw = launch.git_package_bytes(launch.ROOT, PACKAGE_REGRESSION_COMMIT, name)
+    assert type(raw) is bytes and len(raw) == size
+    assert sha256(raw).hexdigest() == expected_sha256
+    research_reader.assert_not_called()
+
+
+def test_real_committed_research_package_bytes_use_unchanged_research_reader(monkeypatch):
+    reader = Mock(wraps=launch.shared.git_bytes)
+    monkeypatch.setattr(launch.shared, "git_bytes", reader)
+    name = "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/real_framework.py"
+    raw = launch.git_package_bytes(launch.ROOT, PACKAGE_REGRESSION_COMMIT, name)
+    reader.assert_called_once_with(launch.ROOT, PACKAGE_REGRESSION_COMMIT, name)
+    assert len(raw) == 20252
+    assert sha256(raw).hexdigest() == "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+
+
+@pytest.mark.parametrize("name", [
+    "tests/test.py", "docs/private.md", "cncm_extra/model.py", "cncm/model.txt",
+    "cncm/subdir/model.py", "cncm/../model.py", "cncm\\model.py", "/cncm/model.py",
+    "C:/cncm/model.py", None,
+])
+def test_package_git_reader_rejects_foreign_or_unsafe_members_before_git(monkeypatch, name):
+    run_git = Mock(side_effect=AssertionError("Invalid member must not reach Git"))
+    monkeypatch.setattr(launch.shared, "_run_git", run_git)
+    with pytest.raises(ValueError, match="(INGESTION_SOURCE_MEMBER_SCOPE|PACKAGE_UNSAFE_MEMBER_PATH)"):
+        launch.git_package_bytes(launch.ROOT, PACKAGE_REGRESSION_COMMIT, name)
+    run_git.assert_not_called()
+
+
+@pytest.mark.parametrize("commit", ["HEAD", "a" * 39, "a" * 41, None])
+def test_package_git_reader_requires_exact_commit_before_git(monkeypatch, commit):
+    run_git = Mock(side_effect=AssertionError("Unpinned commit must not reach Git"))
+    monkeypatch.setattr(launch.shared, "_run_git", run_git)
+    with pytest.raises(ValueError, match="INGESTION_SOURCE_COMMIT"):
+        launch.git_package_bytes(launch.ROOT, commit, "cncm/canonical.py")
+    run_git.assert_not_called()
+
+
+def test_package_builder_selects_scoped_reader_by_default(tmp_path, monkeypatch):
+    fake, _, _ = package_fixture(tmp_path, monkeypatch)
+    reader = Mock(side_effect=LookupError("SCOPED_PACKAGE_READER_SELECTED"))
+    monkeypatch.setattr(launch, "git_package_bytes", reader)
+    output = fake / "records/package"
+    with pytest.raises(LookupError, match="SCOPED_PACKAGE_READER_SELECTED"):
+        launch.build_smoke_package(output, source_sha=PACKAGE_REGRESSION_COMMIT)
+    assert reader.call_count == 1
+    assert reader.call_args.args[:2] == (fake, PACKAGE_REGRESSION_COMMIT)
+    assert not output.exists()

@@ -190,12 +190,24 @@ def package_data_files():
                         | {item["path"] for item in frozen_inputs()}))
 
 
+def git_package_bytes(root, commit, name):
+    """Extend the research-only reader to this package's explicit CNCM sources."""
+    require(type(commit) is str and shared.HEX40.fullmatch(commit), "INGESTION_SOURCE_COMMIT")
+    shared.checked_names([name])
+    if name.startswith("research/"):
+        return shared.git_bytes(root, commit, name)
+    require(name.startswith("cncm/") and name.endswith(".py")
+            and name.count("/") == 1, "INGESTION_SOURCE_MEMBER_SCOPE")
+    return shared._run_git(["-c", "core.autocrlf=false", "show",
+                            commit + ":" + shared.GIT_PREFIX + name], root)
+
+
 def build_smoke_package(output, *, source_sha, git_bytes_fn=None, git_paths_fn=None):
     """Use committed bytes, the pinned import wheels, and the common transport."""
     output = Path(output).absolute()
     require(not output.exists() and output.parent.is_dir() and output.is_relative_to(ROOT / "records")
             and output != ROOT / "records", "INGESTION_FRESH_PACKAGE_PATH")
-    get_bytes, get_paths = git_bytes_fn or shared.git_bytes, git_paths_fn or shared.git_tree_paths
+    get_bytes, get_paths = git_bytes_fn or git_package_bytes, git_paths_fn or shared.git_tree_paths
     for name in PACKAGING_SOURCES:
         require(get_bytes(ROOT, source_sha, shared.PILOT + name) == (ROOT / name).read_bytes(),
                 "INGESTION_PACKAGING_SOURCE_NOT_COMMITTED:" + name)
