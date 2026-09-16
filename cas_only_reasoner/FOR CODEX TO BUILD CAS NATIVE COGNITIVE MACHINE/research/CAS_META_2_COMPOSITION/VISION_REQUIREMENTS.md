@@ -653,3 +653,49 @@ neural decoder; measure complete work and validate fresh paired initialization.
 The current extension has not rebuilt or run that full typed course. Transfer,
 retention, learning advantage and the wider charter remain open. No new cloud
 job or budget reservation occurred; goal PROGRESS, still active.
+
+
+## 2026-09-16: complete typed training course and source-based answer checker
+
+Status: PARTIAL — PURE_FULL_COURSE_AND_CHECKER_PASS; no new learning run.
+
+The extension reconstructs all 1,152 teaching presentations, 160 planned update
+groups, 16 rounds and 1,152 worked-support exposures from training-only source
+selectors. It retains every foundation, maintenance, component and whole
+occurrence, all six faces and source seeds 101/202/303. A separate private checker
+accepts all valid source-grounded analogies/maps and explicitly preserves static
+role ambiguity. Of 96 role-recognition occurrences, 80 are UNIQUE and 16 are
+AMBIGUOUS between roles 5 and 6. There are 564 distinct question packets.
+
+The guarded aggregate passed 248 checks, including the prior 72 contract checks,
+with 25 unchanged input pins and zero neural/optimizer/provider calls. Successful
+receipt: records/typed_course_001/checks_002/receipt.json, SHA-256
+7e83de9926e09f0c27bcda1c5ada3e67668fe363fd5a318090cb01473d0d523d.
+Initial development and aggregate failures remain documented. The first failed
+aggregate XML has a disclosed privacy redaction; its original failed receipt
+still references the original digest. The accepted report is unmodified.
+
+Three seed summaries cover nine compiled courses. They record equal registries,
+worked answers and lesson multisets across orders; mixed order differs from
+component-first, while the ordinary dependency graph equals component-first.
+Only seed101 component-first full-course bytes are retained in this receipt.
+These are pure course constructions, not model trials or measured compute.
+
+The teaching/audit bundle is durably sealed before private main-query targets.
+It contains private schedule lineage and must never be used wholesale as model
+input; only the closed model_packet projection is learner-visible. Controlled
+recognition has explicit language cues, and authored question selection remains
+restricted. This is a new task profile, not difficulty parity with the old menus.
+
+Next: implement the typed neural decoder and scoped encoding; fit training-only
+tokenization; measure all input/forward/backward work; verify fresh worker and
+paired model/optimizer identities; freeze transfer and delayed-retention rules.
+The maximum current materialized input is 225,368 bytes before tokenization.
+The current exact analogy/map checker has a four-node bound; larger-panel
+admission needs a supported extension. Interaction and temporal process
+learning, the matched study and the complete CNCM charter remain open.
+See docs/CNCM_TYPED_FULL_COURSE_v0.1.md and records/typed_course_001/STATUS.md.
+
+No new cloud job or reservation: canonical revision 76 remains $445 reserved and
+$4,555 unreserved of $5,000. Earlier CUDA smokes and the negative three-seed
+recurrence result remain unchanged. Goal PROGRESS, still active.

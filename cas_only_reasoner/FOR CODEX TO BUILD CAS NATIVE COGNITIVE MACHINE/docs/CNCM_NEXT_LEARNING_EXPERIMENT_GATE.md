@@ -2,6 +2,17 @@
 
 Status: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
 
+2026-09-16 newest extension: the complete typed training course and its separate
+source-based answer checker now pass 248 guarded pure checks with 25 unchanged
+input pins. All 1,152 presentations, 160 groups and 1,152 worked-support exposures
+are retained across all three source seeds and orders. Multiple correct answers
+and static role ambiguity are explicit. See docs/CNCM_TYPED_FULL_COURSE_v0.1.md
+and records/typed_course_001/STATUS.md. Its teaching/audit bundle contains private
+lineage; only the closed model_packet projection is learner input. The maximum
+materialized input is 225,368 bytes before tokenization. The typed neural decoder,
+fresh numeric encoder/compute acceptance and matched study remain open. The
+following 72-check stage describes the preserved earlier checkpoint.
+
 2026-09-16 later extension: the input-v0.2 run is separately recorded in
 records/learning_smoke_v02_001/STATUS.md. A new training-only public source and
 typed-answer contract now passes 72 pure checks; see
