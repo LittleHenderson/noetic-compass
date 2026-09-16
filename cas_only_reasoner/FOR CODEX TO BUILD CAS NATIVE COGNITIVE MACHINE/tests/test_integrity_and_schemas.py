@@ -163,6 +163,8 @@ class IntegrityAndSchemaTests(unittest.TestCase):
             "theorem.schema.json",
             "evidence_packet.schema.json",
             "problem_packet.schema.json",
+            "procedure_substrate_artifact.schema.json",
+            "procedure_substrate_execution.schema.json",
         }
         paths = sorted(SCHEMAS.glob("*.schema.json"))
         self.assertEqual({path.name for path in paths}, expected)

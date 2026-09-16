@@ -1,0 +1,56 @@
+{
+  "bundle_digest": "575e0a5454b102c6898eef00e2037659bda15a56b2b0cd7d4d55b7d7ea0756ad",
+  "claim_boundary": "Candidate byte reuse/checking only; no kernel journal or installed skill.",
+  "kernel_recovery": false,
+  "native_installation": false,
+  "schema": "cncm.procedural-substrate-fresh-process-replay/0.1",
+  "selected_artifact_sha256": "b69e5fd959a31dbfab27a1a05c32cbf4e221bc94a541c15686d30a3fec4ef9f0",
+  "source_files": [
+    {
+      "bytes": 1696,
+      "path": "cncm/canonical.py",
+      "sha256": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+    },
+    {
+      "bytes": 58492,
+      "path": "cncm/model.py",
+      "sha256": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+    },
+    {
+      "bytes": 43744,
+      "path": "cncm/math_model.py",
+      "sha256": "3a02464ede14c2d7bb06c9c8493f614812a045d068bbb250ea3031561867db79"
+    },
+    {
+      "bytes": 9647,
+      "path": "cncm/math_parser.py",
+      "sha256": "40d8a8babee94789fd734f2e7620e1525d39628344fd2aab96e659ff06ebef7c"
+    },
+    {
+      "bytes": 10333,
+      "path": "cncm/math_normalize.py",
+      "sha256": "c44ac643ce02a618cab8df49a05d0177003d5ce228b05b745594deb4da00908b"
+    },
+    {
+      "bytes": 26337,
+      "path": "cncm/math_kernel.py",
+      "sha256": "036394c7066c3fb8b47931da71c4aa32fd1689478e8e8d082b6a1261225ad558"
+    },
+    {
+      "bytes": 16644,
+      "path": "cncm/procedural_substrate.py",
+      "sha256": "9eb9b7c6024ac990cc15395824d4babe25df70caebe670e4fd765e996a8b68ee"
+    },
+    {
+      "bytes": 9754,
+      "path": "cncm/procedural_qualification.py",
+      "sha256": "65edc92761bd11f79ccdfded554f393c0c162fb3ae5c116bd61a47f832ad88de"
+    },
+    {
+      "bytes": 5713,
+      "path": "records/procedural_substrate_001/reproduce_candidate.py",
+      "sha256": "73e914f5afed582b240dc8d5da40e430549781ab83f3017c0fc2d76a53cab4ff"
+    }
+  ],
+  "status": "REPRODUCED"
+}

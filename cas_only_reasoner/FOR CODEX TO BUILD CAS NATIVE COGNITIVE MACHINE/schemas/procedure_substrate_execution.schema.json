@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/procedure_substrate_execution.schema.json",
+  "title": "Isolated candidate execution report; not mathematical verification",
+  "description": "The Python decoder additionally checks canonical rational spelling, content digest, and semantic counter/budget consistency. Replay re-executes the bound program and inputs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "executor_revision",
+    "claim_boundary",
+    "artifact_sha256",
+    "inputs_sha256",
+    "instruction_budget",
+    "status",
+    "outputs",
+    "instructions_executed",
+    "report_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "cncm.procedure-substrate-execution/0.1"
+    },
+    "executor_revision": {
+      "const": "cncm.six-instruction-rational-executor/0.1"
+    },
+    "claim_boundary": {
+      "const": "SUBSTRATE_CANDIDATE_ONLY"
+    },
+    "artifact_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "inputs_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "report_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "instruction_budget": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 6
+    },
+    "instructions_executed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 6
+    },
+    "status": {
+      "enum": [
+        "SUCCESS",
+        "DIVISION_BY_ZERO",
+        "ARITHMETIC_LIMIT",
+        "BUDGET_EXHAUSTED"
+      ]
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "x": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 312,
+          "pattern": "^-?(?:0|[1-9][0-9]*)(?:/[1-9][0-9]*)?$"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "properties": {
+        "status": {
+          "const": "SUCCESS"
+        },
+        "instruction_budget": {
+          "const": 6
+        },
+        "instructions_executed": {
+          "const": 6
+        },
+        "outputs": {
+          "required": [
+            "x"
+          ]
+        }
+      }
+    },
+    {
+      "properties": {
+        "status": {
+          "const": "DIVISION_BY_ZERO"
+        },
+        "instruction_budget": {
+          "const": 6
+        },
+        "instructions_executed": {
+          "const": 5
+        },
+        "outputs": {
+          "maxProperties": 0
+        }
+      }
+    },
+    {
+      "properties": {
+        "status": {
+          "const": "ARITHMETIC_LIMIT"
+        },
+        "instruction_budget": {
+          "const": 6
+        },
+        "instructions_executed": {
+          "enum": [
+            4,
+            5
+          ]
+        },
+        "outputs": {
+          "maxProperties": 0
+        }
+      }
+    },
+    {
+      "properties": {
+        "status": {
+          "const": "BUDGET_EXHAUSTED"
+        },
+        "instruction_budget": {
+          "maximum": 5
+        },
+        "instructions_executed": {
+          "const": 0
+        },
+        "outputs": {
+          "maxProperties": 0
+        }
+      }
+    }
+  ]
+}
