@@ -2,6 +2,16 @@
 
 Status: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
 
+2026-09-16 later extension: the input-v0.2 run is separately recorded in
+records/learning_smoke_v02_001/STATUS.md. A new training-only public source and
+typed-answer contract now passes 72 pure checks; see
+docs/CNCM_TYPED_TEACHING_INTERFACE_v0.1.md and
+records/typed_teaching_001/STATUS.md. It removes teacher-selected menus from its
+new syntax layer, but does not yet rebuild the full course or implement its
+semantic checker/neural decoder. The matched study remains unrun. Preserve all
+1,152 logical presentations, 160 groups and six faces through that next compiler;
+do not silently reuse ambiguous legacy targets or development-domain partners.
+
 On 2026-09-16, source commit 6ef614bfb448abb586a6f8c0c92058e57de9238b
 completed one exposed-material AWS CUDA teaching/reload smoke: 64 optimizer
 updates, 178 model forward calls and exact initial/final same-worker checkpoint

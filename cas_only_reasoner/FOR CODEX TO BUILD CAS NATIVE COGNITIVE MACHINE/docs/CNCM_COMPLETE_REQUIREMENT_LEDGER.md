@@ -855,3 +855,41 @@ CAS-specific advantage. The two input-version smokes are not a causal comparison
 The earlier negative three-seed criterion remains unchanged. Continue the
 course-aware paired worker, answer-protocol repair and frozen matched study;
 the full goal remains active.
+
+## 2026-09-16: training-only public source and typed answer syntax
+
+Status: PARTIAL — PURE_SOURCE_AND_SYNTAX_PASS; no new learning run.
+
+A separate typed interface constructs only 64 training families from selected
+source literals and freezes the entire supplied bank before choosing a focus.
+It exposes declared kind/function/setting/domain, scoped nodes, contains facts,
+snapshot completeness and the explicit participant convention. It never imports
+the old all-split corpus/task/course constructors. Authorship and world truth
+remain unauthenticated; generic caller admission is syntax checking only.
+
+The new public question/answer contract offers all six role IDs, all bank worlds,
+scoped declaration references, node sets, edge sets and explicit reach rules.
+Ambiguity and no-match forms are available. Wrong but well-formed answers pass
+syntax; no checker-derived pruning or answer repair occurs. The bounded mapping
+enumerator offers all 24 four-node bijections plus NO_MATCH. Static branch
+serialization is explicitly separate from temporal process; process_order is null.
+
+The guarded aggregate passed 72 tests with 11 unchanged input pins and no
+numerical/provider calls, forbidden imports or blocked artifact reads. Receipt:
+records/typed_teaching_001/checks_002/receipt.json, SHA-256
+a3f213d340c8ec37368688fbf2b805fa4ed5d58fc5af6ffffa25fedebe4eb869.
+The first aggregate reporting failure is preserved: an overbroad guard blocked
+JUnit's local hostname lookup. Only the runner changed for that repair.
+
+Review found multiple valid analogies/maps, static role ambiguity, an old helper
+that can choose a development-domain partner, and unsupported process-order
+claims. Historical sources and results remain preserved. The new full-bank
+public example is 219,149 bytes before tokenization; numerical sizing remains
+open and the legacy token ceiling cannot be presumed.
+
+Next: reconstruct all 1,152 presentations and 160 groups with explicit lineage,
+supports and all six faces; implement a separate semantic checker and typed
+neural decoder; measure complete work and validate fresh paired initialization.
+The current extension has not rebuilt or run that full typed course. Transfer,
+retention, learning advantage and the wider charter remain open. No new cloud
+job or budget reservation occurred; goal PROGRESS, still active.
