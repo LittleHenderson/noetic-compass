@@ -1,0 +1,10 @@
+{
+  "status": "LOCAL_REHEARSAL_CHILD_NOT_STARTED",
+  "source_sha": "e47349be13ee5449d31ae8d5cc3962ae2571ba15",
+  "archive_sha256": "57b17ab62301a4f026cde31fe54bec7e3988ee26f08a54e8072b1b6f6e167a0c",
+  "stage": "subprocess.run after successful archive validation and extraction",
+  "failure": "NotADirectoryError: [WinError 267] The directory name is invalid",
+  "cause_boundary": "Windows CreateProcess rejected the deeply nested extraction directory as cwd. No child process, model or provider operation started.",
+  "correction": "Use the Python executable directory as cwd with -I isolated imports and absolute extraction/output paths; reuse extracted source only after exact archive-byte comparison.",
+  "frozen_source_edits": 0
+}

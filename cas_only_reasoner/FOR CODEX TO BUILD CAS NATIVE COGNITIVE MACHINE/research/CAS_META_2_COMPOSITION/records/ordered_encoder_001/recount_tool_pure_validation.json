@@ -1,0 +1,26 @@
+{
+  "status": "PURE_SYNTHETIC_RECOUNT_CHECKS_PASSED",
+  "checks": [
+    "complete_128_pair_recount",
+    "independent_3_4_5_norm",
+    "partial_coverage_retained",
+    "duplicate_pair",
+    "false_distance",
+    "false_equality",
+    "wrong_answer_metadata",
+    "unknown_family",
+    "nan_coordinate",
+    "short_vector",
+    "boolean_coordinate",
+    "synthetic_end_to_end_source_and_artifact_bindings",
+    "synthetic_failed_partial_preserved",
+    "self_rehashed_wrong_declared_checks",
+    "changed_raw_artifact"
+  ],
+  "count": 15,
+  "tool_sha256": "03018483d62e9dbb9b177326c003e99571a3ea0fb6869a2f14789a4f63faf6b2",
+  "forbidden_import_attempts": [],
+  "provider_calls": 0,
+  "model_calls": 0,
+  "boundary": "Synthetic parser/numeric-recount/refusal validation only. No actual GPU result assessed."
+}

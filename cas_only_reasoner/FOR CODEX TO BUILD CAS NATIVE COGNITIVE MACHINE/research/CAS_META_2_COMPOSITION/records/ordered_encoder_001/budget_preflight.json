@@ -1,0 +1,11 @@
+{
+  "observed_utc": "2026-09-16T06:40:55.548768+00:00",
+  "canonical_ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "revision": 73,
+  "cap": "5000.00",
+  "reserved": "424.00",
+  "unreserved": "4576.00",
+  "ledger_sha256": "3a89d4a89dde9a94e6acab1af1d1d6ab65a57746004652ed86684ac108d48f14",
+  "full_chain_read": "PASS",
+  "new_checkout_ledger_equal": true
+}

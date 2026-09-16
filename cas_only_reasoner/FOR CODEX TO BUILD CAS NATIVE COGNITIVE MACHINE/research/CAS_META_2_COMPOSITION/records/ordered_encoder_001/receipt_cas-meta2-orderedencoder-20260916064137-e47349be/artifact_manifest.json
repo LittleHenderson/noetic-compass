@@ -1,0 +1,14 @@
+{
+  "artifacts": [
+    {
+      "bytes": 1229288,
+      "name": "encoder_probe.json",
+      "sha256": "1583ee7e2c80a35485ba2ee9d966b3943d28b755d7fef59f64f747e5c32b6e52"
+    },
+    {
+      "bytes": 794,
+      "name": "measurements.json",
+      "sha256": "d5e32dcf49c045175ea753424d4959bad33be26a3d8fb1ce4d66ac1702fe1255"
+    }
+  ]
+}

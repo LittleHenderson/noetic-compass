@@ -1,0 +1,27 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 200, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 124, in main
+    return child(sys.argv[2])
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 56, in child
+    from aws import ordered_encoder_launch as launch
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 46, in guarded_import
+    return original_import(name, *args, **kwargs)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\_scratch\package_e47349be\research\CAS_META_2_COMPOSITION\aws\ordered_encoder_launch.py", line 18, in <module>
+    from aws import graph6_contrast_launch as contrast
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 46, in guarded_import
+    return original_import(name, *args, **kwargs)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\_scratch\package_e47349be\research\CAS_META_2_COMPOSITION\aws\graph6_contrast_launch.py", line 13, in <module>
+    from aws import graph_training_candidate_launch as candidate
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 46, in guarded_import
+    return original_import(name, *args, **kwargs)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\_scratch\package_e47349be\research\CAS_META_2_COMPOSITION\aws\graph_training_candidate_launch.py", line 30, in <module>
+    from aws.graph_training_curriculum_launch import (  # reused machinery
+    ...<4 lines>...
+        validate_reservation_scope, validate_reserved_transition, write_evidence)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\package_rehearsal.py", line 46, in guarded_import
+    return original_import(name, *args, **kwargs)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\records\ordered_encoder_001\_scratch\package_e47349be\research\CAS_META_2_COMPOSITION\aws\graph_training_curriculum_launch.py", line 30, in <module>
+    from aws import budget
+ImportError: cannot import name 'budget' from 'aws' (unknown location)

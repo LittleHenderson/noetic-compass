@@ -1,0 +1,1 @@
+{"status": "EXTRACTED_PACKAGE_WINDOWS_GUARD_REHEARSAL_PASSED", "algebraic_pairs": 128, "guard": "TEACHING_GPU:LINUX_WORKER_REQUIRED", "imported_modules": 17}

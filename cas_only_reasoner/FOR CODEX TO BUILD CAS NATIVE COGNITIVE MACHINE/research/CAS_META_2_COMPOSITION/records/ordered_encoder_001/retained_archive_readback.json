@@ -1,0 +1,81 @@
+{
+  "schema": "cas-ordered-encoder-retained-archive-readback/v1",
+  "verified_at_utc": "2026-09-16T06:56:08.721588+00:00",
+  "job": "cas-meta2-orderedencoder-20260916064137-e47349be",
+  "source_sha": "e47349be13ee5449d31ae8d5cc3962ae2571ba15",
+  "read_only": true,
+  "verification_kind": "RETAINED_S3_ARCHIVE_READBACK",
+  "same_bucket_reread": true,
+  "remote_archive_readable": true,
+  "all_five_downloads_match_collected": true,
+  "independent_backup_verified": false,
+  "does_not_change_parent_backup_verification": true,
+  "boundary": "Actual retrieval from the retained evidence bucket confirms readability and equality with local collection. This is not an independent backup. A later verified Git publication is a separate recoverable copy.",
+  "files": [
+    {
+      "bucket": "cas-meta2-orderedencoder-20260916064137-e47349be-807562639912",
+      "key": "input/source.zip",
+      "http_status": 200,
+      "request_id": "N49B6BDSBPKJ5CBG",
+      "etag": "\"7554bec950c9ce535d794fdf888acc0d\"",
+      "bytes": 641091,
+      "download_sha256": "57b17ab62301a4f026cde31fe54bec7e3988ee26f08a54e8072b1b6f6e167a0c",
+      "collected_sha256": "57b17ab62301a4f026cde31fe54bec7e3988ee26f08a54e8072b1b6f6e167a0c",
+      "matches_collected_bytes": true,
+      "staged_download": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\ordered-encoder-retained-readback-e47349be\\input\\source.zip",
+      "collected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\receipt_cas-meta2-orderedencoder-20260916064137-e47349be\\collected\\input\\source.zip"
+    },
+    {
+      "bucket": "cas-meta2-orderedencoder-20260916064137-e47349be-807562639912",
+      "key": "results/result.json",
+      "http_status": 200,
+      "request_id": "N490WNYNV597GC7V",
+      "etag": "\"ed631cfde92a7763379adf44cdbc0b17\"",
+      "bytes": 1500,
+      "download_sha256": "a863dfd1c7b4eed485ca687d71ff925d5c3a011a64097795836a1ed8caee8ad7",
+      "collected_sha256": "a863dfd1c7b4eed485ca687d71ff925d5c3a011a64097795836a1ed8caee8ad7",
+      "matches_collected_bytes": true,
+      "staged_download": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\ordered-encoder-retained-readback-e47349be\\results\\result.json",
+      "collected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\receipt_cas-meta2-orderedencoder-20260916064137-e47349be\\collected\\results\\result.json"
+    },
+    {
+      "bucket": "cas-meta2-orderedencoder-20260916064137-e47349be-807562639912",
+      "key": "results/artifacts/manifest.json",
+      "http_status": 200,
+      "request_id": "N4906Q9WGBA2J1EM",
+      "etag": "\"6510b8585bbc29a5fc0cd0ce11e5fe39\"",
+      "bytes": 331,
+      "download_sha256": "813dbbebb5f0f59b77d37605715e4f89ffda4aa9296b147af0b4d137de50c388",
+      "collected_sha256": "813dbbebb5f0f59b77d37605715e4f89ffda4aa9296b147af0b4d137de50c388",
+      "matches_collected_bytes": true,
+      "staged_download": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\ordered-encoder-retained-readback-e47349be\\results\\artifacts\\manifest.json",
+      "collected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\receipt_cas-meta2-orderedencoder-20260916064137-e47349be\\collected\\results\\artifacts\\manifest.json"
+    },
+    {
+      "bucket": "cas-meta2-orderedencoder-20260916064137-e47349be-807562639912",
+      "key": "results/artifacts/encoder_probe.json",
+      "http_status": 200,
+      "request_id": "N49DCPASXCN15M4J",
+      "etag": "\"2040cf53283bea7519beb011f02fdc9a\"",
+      "bytes": 1229288,
+      "download_sha256": "1583ee7e2c80a35485ba2ee9d966b3943d28b755d7fef59f64f747e5c32b6e52",
+      "collected_sha256": "1583ee7e2c80a35485ba2ee9d966b3943d28b755d7fef59f64f747e5c32b6e52",
+      "matches_collected_bytes": true,
+      "staged_download": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\ordered-encoder-retained-readback-e47349be\\results\\artifacts\\encoder_probe.json",
+      "collected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\receipt_cas-meta2-orderedencoder-20260916064137-e47349be\\collected\\results\\artifacts\\encoder_probe.json"
+    },
+    {
+      "bucket": "cas-meta2-orderedencoder-20260916064137-e47349be-807562639912",
+      "key": "results/artifacts/measurements.json",
+      "http_status": 200,
+      "request_id": "N4989H0537622H0H",
+      "etag": "\"7b270667d3b7f0349e6264ddcb1e2811\"",
+      "bytes": 794,
+      "download_sha256": "d5e32dcf49c045175ea753424d4959bad33be26a3d8fb1ce4d66ac1702fe1255",
+      "collected_sha256": "d5e32dcf49c045175ea753424d4959bad33be26a3d8fb1ce4d66ac1702fe1255",
+      "matches_collected_bytes": true,
+      "staged_download": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\ordered-encoder-retained-readback-e47349be\\results\\artifacts\\measurements.json",
+      "collected_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\receipt_cas-meta2-orderedencoder-20260916064137-e47349be\\collected\\results\\artifacts\\measurements.json"
+    }
+  ]
+}

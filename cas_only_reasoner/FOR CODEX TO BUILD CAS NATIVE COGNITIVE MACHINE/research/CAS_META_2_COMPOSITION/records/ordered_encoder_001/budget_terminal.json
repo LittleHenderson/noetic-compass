@@ -1,0 +1,15 @@
+{
+  "all_75_history_revisions_verified": true,
+  "boundary": "Conservative reservations, not invoiced charges; the publication copy is not a second spending authority.",
+  "canonical_spending_ledger": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "head_sha256": "cd3928d0c0ae646de22612356618c709ea4ecd353bbf3b80d07e2aafbcc1546d",
+  "new_reservations_by_this_script": 0,
+  "observed_utc": "2026-09-16T06:55:13.195874+00:00",
+  "owner_task_cap_usd": "5000.00",
+  "publication_copy": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "refunds": 0,
+  "remaining_unreserved_usd": "4569.00",
+  "revision": 74,
+  "schema": "cas-canonical-budget-publication-copy/1",
+  "total_reserved_usd": "431.00"
+}

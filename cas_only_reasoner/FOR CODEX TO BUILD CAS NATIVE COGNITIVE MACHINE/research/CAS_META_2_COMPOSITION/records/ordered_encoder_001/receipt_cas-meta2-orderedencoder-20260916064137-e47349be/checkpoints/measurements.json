@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "assigned_pairs": 128,
+    "changed_answer_pairs": 96,
+    "legacy_collision_tolerance": 1e-05,
+    "legacy_near_collisions": 96,
+    "ordered_reorder_exact": 32,
+    "ordered_separated": 96,
+    "ordered_separation_threshold": 0.001,
+    "reorder_controls": 32
+  },
+  "elapsed_seconds": 5.906581611000007,
+  "failure": null,
+  "job": "cas-meta2-orderedencoder-20260916064137-e47349be",
+  "learner_forward_calls": 0,
+  "optimizer_updates": 0,
+  "projection_sha256_after": "116f3677d343db7cd9becbb0b293c4419d5f455b9e1044e33dbd6738ed1468cb",
+  "projection_sha256_before": "116f3677d343db7cd9becbb0b293c4419d5f455b9e1044e33dbd6738ed1468cb",
+  "projection_unchanged": true,
+  "schema": "cas-ordered-encoder-probe/1",
+  "source_sha": "e47349be13ee5449d31ae8d5cc3962ae2571ba15"
+}
