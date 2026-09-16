@@ -4,6 +4,21 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-16 UTC - Successor source packages verified
+
+Both build-only archives from source 12f25d301a0dfe9671929fa25b87bf580e71a177
+passed extracted-package rehearsal and an independent byte/hash readback.
+Complementary: 118 pure tests, nine compiled courses, 68 payload members plus
+manifest. Perspective: 36 pure tests, 86 payload members plus manifest, runtime
+source/config identities checked. Both disabled dispatch paths stop before
+neural execution. Statuses are COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED and
+PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED. Future execution requests remain
+unsigned; no successor GPU job or reservation was made. Empirical benefit and
+full GPU delivery remain untested; unavailable native flow/calibration and
+disabled adaptive control are unchanged. Evidence: inner research/
+CAS_META_2_COMPOSITION/records/successor_integration_20260916/OUTCOME.md and
+package_verification.json. No accepted-model or CAS Harness gate change.
+
 ## 2026-09-16 UTC - Complementary and perspective source builds frozen
 
 Implemented opt-in CAS_COMPLEMENTARY_TEACHING_001 and

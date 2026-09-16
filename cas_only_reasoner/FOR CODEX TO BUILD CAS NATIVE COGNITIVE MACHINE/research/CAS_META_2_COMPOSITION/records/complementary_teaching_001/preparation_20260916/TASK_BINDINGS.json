@@ -35435,9 +35435,16 @@
     "selection": "Earliest retained successful recurrent course seed20260912 by chronology; no score selection",
     "sha256": "854dffe7ff9fd02286d39817c01204a261118c444b41cdcc3bb97b6934f55b45"
   },
+  "package": {
+    "archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\complementary_teaching_001\\package_20260916_12f25d30\\source.zip",
+    "archive_bytes": 739903,
+    "archive_sha256": "9e24c99aa4942dcba6b91453385981c2cc3b3832742860392aa80f29351b3552",
+    "manifest_sha256": "11b6adafe0da467c0edc139d491eb526c9002183130ad68f12e66151d55efdec",
+    "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177"
+  },
   "schema": "cas.complementary-bindings/0.1",
   "source_identity_scope": "File SHA-256 binds current candidate bytes; source_sha when present is exact committed package basis",
-  "source_sha": null,
+  "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
   "sources": {
     "aws/complementary_teaching_launch.py": "272b08aeac989ad7fb359b87718214396ea919d9bbea4804624a358972126553",
     "cas_meta2/complementary_teaching/__init__.py": "e469cf153e6816be63bdec4c106d4a2440535cadad7959fa02cdef37cb6e6790",
@@ -35451,7 +35458,7 @@
     "tools/compile_complementary_data.py": "7b8d83705d3fec88b29de1343028915f71e30735fceaaa2cf777549e1bb80f0c",
     "tools/prepare_complementary_teaching.py": "5c6b6a4418e674d72a1725590337ab86fe143936dbea941741d889126746e2b7"
   },
-  "status": "COMPLEMENTARY_SOURCE_READY_PACKAGE_PENDING_NEURAL_UNTESTED",
+  "status": "COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED",
   "tokenizer_sha256": "cdc7071ca2b56d0dbd4d8ba8881092d2fae865bd5a3b75065efe6a102efff13a",
   "unchanged_original_encoder_fitting_corpus_sha256": "c4c4afc18985ddd8cb993df34bf394d6935e679586faf5565ed69b61ae85132f"
 }

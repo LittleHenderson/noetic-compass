@@ -1,4 +1,4 @@
-# CAS_COMPLEMENTARY_TEACHING_001 — source frozen, neural untested
+# CAS_COMPLEMENTARY_TEACHING_001 — packaged, neural untested
 
 The opt-in implementation compiles the actual inherited CFC phases, adds two
 eight-item component/whole practice batches, and retains maintenance. Each
@@ -79,9 +79,14 @@ isolation, parameter containment, zero-update monitors and reload measurements
 are mandatory inside the future authorized GPU job. There is no learning-benefit,
 causal-mechanism, production-readiness, accepted-model or native-current claim.
 
-Package completion is pending the exact source commit. Run
-`python tools/prepare_complementary_teaching.py --source-sha COMMIT --package-output records/complementary_teaching_001/PACKAGE_DIR`
-after the source/data commit; this writes the real archive, package receipt and
-updated unsigned request. Only then can the label become
-COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED. The present label is
-COMPLEMENTARY_SOURCE_READY_PACKAGE_PENDING_NEURAL_UNTESTED.
+The committed-source package is complete from
+`12f25d301a0dfe9671929fa25b87bf580e71a177`. Its 739,903-byte archive has SHA-256
+`9e24c99aa4942dcba6b91453385981c2cc3b3832742860392aa80f29351b3552`;
+manifest SHA-256 is `11b6adafe0da467c0edc139d491eb526c9002183130ad68f12e66151d55efdec`.
+The isolated package rehearsal verified all 68 named source/input/wheel members,
+compiled all nine actual courses from the extracted package, and executed the
+real worker's inner dispatch through its disabled-execution rejection before
+any torch/model/provider import. The exact archive, package receipt and
+REHEARSAL.json are in `../package_20260916_12f25d30/`; extracted scratch is ignored.
+The status is **COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED**. The complete
+execution request remains unsigned and no successor reservation was created.

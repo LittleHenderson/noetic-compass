@@ -1,0 +1,42 @@
+{
+  "schema": "cas.successor-integration/0.1",
+  "recorded_at_utc": "2026-09-16T06:02:09.637317+00:00",
+  "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
+  "packages": [
+    {
+      "record_directory": "records/complementary_teaching_001/package_20260916_12f25d30",
+      "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
+      "archive_bytes": 739903,
+      "archive_sha256": "9e24c99aa4942dcba6b91453385981c2cc3b3832742860392aa80f29351b3552",
+      "manifest_sha256": "11b6adafe0da467c0edc139d491eb526c9002183130ad68f12e66151d55efdec",
+      "zip_members_including_manifest": 69,
+      "hashed_payload_members": 68,
+      "rehearsal_file": "REHEARSAL.json",
+      "rehearsal_sha256": "6117ad79a871fdc396685375f530a34b5c2a251b9925ab92bab1815122938658",
+      "pure_tests_passed": 118,
+      "root_readback": "ALL_ARCHIVE_BYTES_AND_MEMBERS_VERIFIED"
+    },
+    {
+      "record_directory": "records/perspective_package_20260916",
+      "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
+      "archive_bytes": 882509,
+      "archive_sha256": "4b7a7301f124162d1d38606ae511ed80df49037500c2a9eaddb3872e30ef8100",
+      "manifest_sha256": "e2788e96fdbba091b6b5399644e17f78d28f9978fc2ff9bf6660dc0c84c749e3",
+      "zip_members_including_manifest": 87,
+      "hashed_payload_members": 86,
+      "rehearsal_file": "rehearsal_proof.json",
+      "rehearsal_sha256": "eb070b59715048f47bcd813a8559ba4ba59117b80e6a1b65f38c365d4e50550f",
+      "pure_tests_passed": 36,
+      "root_readback": "ALL_ARCHIVE_BYTES_AND_MEMBERS_VERIFIED"
+    }
+  ],
+  "complementary_status": "COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED",
+  "perspective_status": "PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED",
+  "successor_neural_jobs": 0,
+  "successor_reservations": 0,
+  "successor_execution_requests": "UNSIGNED_DISABLED",
+  "native_flow": "UNAVAILABLE_NO_NATIVE_FLOW_TAP",
+  "calibration": "UNAVAILABLE_NO_APPROVED_INTERVENTION_PORT",
+  "adaptive_policy": "SHADOW_ONLY_DISABLED",
+  "scope": "Software build and package rehearsal only; no new empirical benefit, production readiness or accepted-model claim."
+}

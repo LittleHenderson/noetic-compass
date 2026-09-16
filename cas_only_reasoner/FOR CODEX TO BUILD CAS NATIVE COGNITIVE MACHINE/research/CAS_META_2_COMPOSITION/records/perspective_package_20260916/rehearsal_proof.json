@@ -1,0 +1,23 @@
+{
+  "actual_model_runs": 0,
+  "adaptive_policy_status": "SHADOW_ONLY_DISABLED",
+  "additional_panel_rows": 210,
+  "archive_bytes": 882509,
+  "archive_members_checked": 87,
+  "archive_sha256": "4b7a7301f124162d1d38606ae511ed80df49037500c2a9eaddb3872e30ef8100",
+  "disabled_dispatch_rejected_before_runtime": true,
+  "empirical_response_profile_status": "UNAVAILABLE_NO_APPROVED_INTERVENTION_PORT",
+  "extract_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\perspective_package_20260916\\extracted",
+  "extracted_scratch_gitignored": true,
+  "forbidden_import_attempts": [],
+  "manifest_sha256": "e2788e96fdbba091b6b5399644e17f78d28f9978fc2ff9bf6660dc0c84c749e3",
+  "native_flow_binding_status": "UNAVAILABLE_NO_NATIVE_FLOW_TAP",
+  "network_disabled": true,
+  "parent_data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+  "provider_calls": 0,
+  "ready_label": "PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED",
+  "runtime_source_config_hashes_validated": true,
+  "semantic_comparisons": 120,
+  "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
+  "status": "PERSPECTIVE_COMMITTED_PACKAGE_REHEARSAL_PASS"
+}

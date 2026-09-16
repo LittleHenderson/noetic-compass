@@ -1,0 +1,204 @@
+{
+  "actual_course_compilation": {
+    "courses": [
+      {
+        "condition": "ALT_COMPONENT_WHOLE",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "b3ae26ac5703be1175ece23f84faa025507e51ed2648e365113642af27d00742",
+        "seed": 101
+      },
+      {
+        "condition": "MIXED_SAME_ITEMS",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "3ba1dc9c95f98cb2b339205fbd09e5d7f4bd1e74d2d27a54d517f412c19fc5b8",
+        "seed": 101
+      },
+      {
+        "condition": "WHOLE_SUPPLEMENT",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "MAINTENANCE": 128,
+            "WHOLE": 256
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 948,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 204
+        },
+        "schedule_sha256": "9a9aef32c58f7dc88d960c8ba3def1f8aed46d9ba37e2afbee1ec979f7c324e6",
+        "seed": 101
+      },
+      {
+        "condition": "ALT_COMPONENT_WHOLE",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "7365fc84a4c44ed1c965604e5f453a2fdf396ff41a53643a2efd479ab9d77a31",
+        "seed": 202
+      },
+      {
+        "condition": "MIXED_SAME_ITEMS",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "c99b282f62b33b959564a7f9608596fd11c8f4dcf3d269ebb70ae09fc5a324bf",
+        "seed": 202
+      },
+      {
+        "condition": "WHOLE_SUPPLEMENT",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "MAINTENANCE": 128,
+            "WHOLE": 256
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 948,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 204
+        },
+        "schedule_sha256": "6b2d3327df5b131078fd56c895f857955ce655f7b7b89d917ba8056fb9c8888e",
+        "seed": 202
+      },
+      {
+        "condition": "ALT_COMPONENT_WHOLE",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "b33cb93daddaca3ed72fd1dfa354f7d1013221816b22e8fbb5dc9e3d25aefd38",
+        "seed": 303
+      },
+      {
+        "condition": "MIXED_SAME_ITEMS",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "COMPONENT": 128,
+            "MAINTENANCE": 128,
+            "WHOLE": 128
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 900,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 252
+        },
+        "schedule_sha256": "8d281ba33980e555069e4633eeb9d32c49af6d394e8c4f8c54c2a3e92d397309",
+        "seed": 303
+      },
+      {
+        "condition": "WHOLE_SUPPLEMENT",
+        "counts": {
+          "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+          "batch_core_forward_calls_planned": 600,
+          "by_role": {
+            "CFC_FOUNDATION": 768,
+            "MAINTENANCE": 128,
+            "WHOLE": 256
+          },
+          "decisions": 1152,
+          "duplicate_semantic_exposures": 948,
+          "optimizer_updates": 160,
+          "rounds": 16,
+          "sample_core_passes_planned": 4320,
+          "unique_semantic_questions": 204
+        },
+        "schedule_sha256": "3e1e62b61de5928603ab805e021abcf9028514a0177b12e9cff228da2f0b2b75",
+        "seed": 303
+      }
+    ],
+    "data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+    "imported_module": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\complementary_teaching_001\\package_20260916_12f25d30\\_scratch\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\complementary_teaching\\runner.py"
+  },
+  "actual_neural_presentations": 0,
+  "actual_optimizer_updates": 0,
+  "actual_provider_calls": 0,
+  "archive_sha256": "9e24c99aa4942dcba6b91453385981c2cc3b3832742860392aa80f29351b3552",
+  "boundary": "Validates package imports/bytes/compiler and guarded dispatch only; no neural or provider outcome.",
+  "real_worker_dispatch": "COMPLEMENTARY_EXECUTION_DISABLED before torch/model/provider import",
+  "schema": "cas.complementary-packaged-rehearsal/0.1",
+  "source_sha": "12f25d301a0dfe9671929fa25b87bf580e71a177",
+  "status": "PASS",
+  "verified_package_members": 68
+}
