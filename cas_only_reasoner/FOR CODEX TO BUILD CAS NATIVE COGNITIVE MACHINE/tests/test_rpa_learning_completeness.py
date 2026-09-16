@@ -1,0 +1,276 @@
+"""Pure disclosure regressions over the already-exposed engineering fixture.
+
+No held-out panel, numeric encoder, learner, checkpoint or provider is executed.
+The declaration describes the supplied snapshot; it does not establish world truth.
+"""
+from copy import deepcopy
+import importlib.abc
+import json
+import sys
+
+import pytest
+
+DENIED = {"torch", "numpy", "tensorflow", "jax", "cas_cjt", "casformer",
+          "boto3", "botocore", "requests", "httpx", "openai", "anthropic"}
+
+
+class Deny(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split(".")[0] in DENIED:
+            raise AssertionError("PROHIBITED_IMPORT:" + fullname)
+
+
+_import_guard = Deny()
+sys.meta_path.insert(0, _import_guard)
+try:
+    from tests import test_rpa_learning_adapter as fixtures
+    from cncm.canonical import digest
+finally:
+    sys.meta_path.remove(_import_guard)
+
+adapter, cube = fixtures.adapter, fixtures.cube
+DECLARATION = (
+    "Containment inventory is complete within this supplied snapshot; "
+    "an unlisted direct contains relation is absent from this snapshot."
+)
+VIEWS = ("view_context", "view_formal", "view_analogy")
+
+
+@pytest.fixture(autouse=True)
+def deny_runtime_imports():
+    guard = Deny()
+    sys.meta_path.insert(0, guard)
+    try:
+        yield
+        assert not DENIED.intersection(name.split(".")[0] for name in sys.modules)
+    finally:
+        sys.meta_path.remove(guard)
+
+
+@pytest.fixture(scope="module")
+def bundle():
+    value = json.loads(cube.cube_node.pinned_bundle_path().read_bytes())
+    assert cube.cube_node.bundle_digest(value) == fixtures.BUNDLE_DIGEST
+    return value
+
+
+@pytest.fixture(scope="module")
+def sample(bundle):
+    document = fixtures.document_for(bundle, "view_analogy")
+    prepared = adapter.prepare_public_lesson(
+        document, operation="LIST_PARTS", question={"idea": "Cloth"})
+    identity = fixtures.identities([prepared["public"]])
+    lesson = adapter.bind_prepared_lesson(prepared, document=document, **identity)
+    return document, prepared, identity, lesson
+
+
+def assert_declaration(problem):
+    lines = problem.splitlines()
+    assert lines.count(DECLARATION) == 1
+    assert lines[-3] == DECLARATION
+    assert lines[-1] == "Choose one of the three supplied options."
+    assert lines[:-3]
+    assert all(line.startswith(("node ", "rel ")) for line in lines[:-3])
+    assert lines[-2].startswith(("LIST_PARTS(", "FIND_SHARED_PART(", "REACHED_VIA("))
+    return lines
+
+
+def test_versioned_contract_and_cloth_empty_answer(sample):
+    document, prepared, identity, lesson = sample
+    assert adapter.PREPARED_SCHEMA == "cncm.rpa-learning-prepared/0.2"
+    assert adapter.LESSON_SCHEMA == "cncm.rpa-learning-lesson/0.2"
+    assert adapter.RENDERING_SCHEMA == "cncm.cube-contains-node-rel/0.2"
+    assert adapter.INVENTORY_DECLARATION == DECLARATION
+    assert prepared["source_binding"]["rendering_schema"] == adapter.RENDERING_SCHEMA
+    assert prepared["teacher_sidecar"]["expected_answer"] == []
+    target = adapter.check_source_target(lesson, document=document, **identity)
+    assert target["expected_answer"] == []
+    assert lesson["learner_input"]["encoded_options"][target["encoded_correct_index"]] == []
+    assert_declaration(prepared["public"]["problem"])
+    assert prepared["source_binding"]["world_truth_established"] is False
+
+
+def test_all_306_combinations_disclose_same_source_assumption(bundle):
+    count = 0
+    answers = set()
+    publics = []
+    for view in VIEWS:
+        document = fixtures.document_for(bundle, view)
+        before = document.to_dict()
+        cases = cube.cube_node.answer_cases(bundle, view)["cases"]
+        assert len(cases) == 51
+        for case in cases:
+            for assistance in ("guided", "unassisted"):
+                prepared = fixtures.prepare(document, case, assistance)
+                assert_declaration(prepared["public"]["problem"])
+                answers.add(fixtures.canonical_json(prepared["teacher_sidecar"]["expected_answer"]))
+                publics.append(prepared["public"])
+                count += 1
+        assert document.to_dict() == before
+    assert count == 306
+    assert {"[]", '"absent"', '"direct"', '"none"'} <= answers
+    tokenizer = fixtures.identities(publics)["tokenizer"]
+    for public in publics:
+        assert len(tokenizer.encode_public(public)["ids"]) <= 1024
+        frames = fixtures.ordered_encoder.compile_frames(public, tokenizer)
+        assert sum(len(frame.token_ids) for frame in frames) <= 1024
+
+
+def test_actual_smoke_training_only_tokenizer_keeps_declaration_and_both_caps():
+    from cncm import rpa_learning_worker as worker
+    document, training, prediction = worker.smoke_material(fixtures.ROOT)
+    prepared_train = [adapter.prepare_public_lesson(document, **request) for request in training]
+    tokenizer = fixtures.identities([row["public"] for row in prepared_train])["tokenizer"]
+    assert tokenizer.fitted_examples == 3
+    for request in prediction:
+        public = adapter.prepare_public_lesson(document, **request)["public"]
+        assert_declaration(public["problem"])
+        assert len(tokenizer.encode_public(public)["ids"]) <= 1024
+        frames = fixtures.ordered_encoder.compile_frames(public, tokenizer)
+        assert sum(len(frame.token_ids) for frame in frames) <= 1024
+        assert tokenizer.decode_text(next(frame.token_ids for frame in frames
+            if frame.kind == "framing" and frame.ordinal == 1)) == DECLARATION
+
+
+@pytest.mark.parametrize("view", VIEWS)
+@pytest.mark.parametrize("operation", ["LIST_PARTS", "FIND_SHARED_PART", "REACHED_VIA"])
+def test_declaration_survives_public_training_and_ordered_frames(bundle, view, operation):
+    document = fixtures.document_for(bundle, view)
+    case = next(row for row in cube.cube_node.answer_cases(bundle, view)["cases"]
+                if row["op"] == operation)
+    prepared = fixtures.prepare(document, case)
+    identity = fixtures.identities([prepared["public"]])
+    lesson = adapter.bind_prepared_lesson(prepared, document=document, **identity)
+    packet = adapter.prediction_packet(lesson, **identity)
+    record = adapter.training_record(lesson, document=document, **identity)
+    for problem in (packet["public"]["problem"], record["framings"]["cas"],
+                    record["framings"]["generic"]):
+        assert problem == prepared["public"]["problem"]
+        assert_declaration(problem)
+    tokenizer = identity["tokenizer"]
+    decoded = tokenizer.decode_public_text(tokenizer.encode_public(packet["public"]))
+    assert decoded["problem"] == packet["public"]["problem"]
+    frames = fixtures.ordered_encoder.compile_frames(packet["public"], tokenizer)
+    framing = [frame for frame in frames if frame.kind == "framing"]
+    assert [frame.ordinal for frame in framing] == [0, 1, 2, 3]
+    assert [tokenizer.decode_text(frame.token_ids) for frame in framing[1:]] == (
+        packet["public"]["problem"].splitlines()[-3:])
+    assert len([frame for frame in frames if frame.kind in ("node", "rel")]) == 11
+
+
+@pytest.mark.parametrize("value", [False, None, 0, 1, 1.0, "true", "missing"])
+def test_incomplete_or_nonboolean_source_cannot_enter_learning(bundle, value):
+    changed = deepcopy(bundle)
+    if value == "missing":
+        changed["context"].pop("contains_inventory_complete")
+    else:
+        changed["context"]["contains_inventory_complete"] = value
+    with pytest.raises(ValueError):
+        document = fixtures.document_for(changed, "view_analogy")
+        adapter.prepare_public_lesson(document, operation="LIST_PARTS", question={"idea": "Cloth"})
+
+
+def test_valid_incomplete_source_refused_before_teacher_compilation(bundle, monkeypatch):
+    changed = deepcopy(bundle)
+    changed["context"]["contains_inventory_complete"] = False
+    for node in changed["cube_nodes"]:
+        face = node["faces"]["face_5"]
+        if face["availability"] == "populated":
+            face["structured"]["completeness"] = "partial"
+    document = fixtures.document_for(changed, "view_analogy")
+    def forbidden(*args, **kwargs):
+        raise AssertionError("INCOMPLETE_SOURCE_REACHED_TEACHER")
+    monkeypatch.setattr(cube, "compile_atlas_lesson", forbidden)
+    with pytest.raises(ValueError, match="complete"):
+        adapter.prepare_public_lesson(document, operation="LIST_PARTS", question={"idea": "Cloth"})
+
+
+@pytest.mark.parametrize("mode", [
+    "missing", "modified", "duplicated", "before_nodes", "inside_structure",
+    "after_question", "after_choice", "space_prefix", "world_scope",
+])
+def test_declaration_tampering_refused_with_recomputed_public_id(sample, mode):
+    _, _, identity, lesson = sample
+    packet = deepcopy(lesson["learner_input"])
+    lines = assert_declaration(packet["public"]["problem"])
+    position = lines.index(DECLARATION)
+    if mode == "missing":
+        lines.pop(position)
+    elif mode == "modified":
+        lines[position] = DECLARATION.replace("complete", "partial", 1)
+    elif mode == "duplicated":
+        lines.insert(position, DECLARATION)
+    elif mode == "space_prefix":
+        lines[position] = " " + DECLARATION
+    elif mode == "world_scope":
+        lines[position] = DECLARATION.replace("within this supplied snapshot", "throughout the real world")
+    else:
+        lines.pop(position)
+        destination = {"before_nodes": 0, "inside_structure": 1,
+                       "after_question": len(lines) - 1, "after_choice": len(lines)}[mode]
+        lines.insert(destination, DECLARATION)
+    packet["public"]["problem"] = "\n".join(lines) + "\n"
+    packet["record_id"] = adapter._public_id(packet["public"], packet["encoded_options"],
+        identity["ordered_profile"], identity["model_context"])
+    with pytest.raises(ValueError):
+        adapter.validate_prediction_packet(packet, **identity)
+
+
+@pytest.mark.parametrize("area", ["prepared", "lesson", "rendering"])
+def test_old_schema_refused_at_corresponding_boundary(sample, area):
+    document, prepared, identity, lesson = sample
+    if area == "prepared":
+        old = deepcopy(prepared)
+        old["schema_version"] = "cncm.rpa-learning-prepared/0.1"
+        old["prepared_id"] = "rpa-prepared-" + digest({
+            k: v for k, v in old.items() if k not in {"teacher_sidecar", "prepared_id"}})
+        with pytest.raises(ValueError):
+            adapter.bind_prepared_lesson(old, document=document, **identity)
+    elif area == "lesson":
+        old = deepcopy(lesson)
+        old["schema_version"] = "cncm.rpa-learning-lesson/0.1"
+        with pytest.raises(ValueError):
+            adapter.prediction_packet(old, **identity)
+    else:
+        old = deepcopy(prepared)
+        old["source_binding"]["rendering_schema"] = "cncm.cube-contains-node-rel/0.1"
+        old["prepared_id"] = "rpa-prepared-" + digest({
+            k: v for k, v in old.items() if k not in {"teacher_sidecar", "prepared_id"}})
+        with pytest.raises(ValueError):
+            adapter.bind_prepared_lesson(old, document=document, **identity)
+
+
+def test_old_packet_and_schema_identity_cannot_alias_new_packet(sample):
+    _, _, identity, lesson = sample
+    packet = adapter.prediction_packet(lesson, **identity)
+    identity_fields = {"public": packet["public"], "encoded_options": packet["encoded_options"],
+        "ordered_profile": identity["ordered_profile"], "model_context": identity["model_context"]}
+    old_schema_id = "rpa-learning-input-" + digest({
+        "schema_version": "cncm.rpa-learning-lesson/0.1", **identity_fields})
+    assert old_schema_id != packet["record_id"]
+    old = deepcopy(packet)
+    old["record_id"] = old_schema_id
+    with pytest.raises(ValueError, match="stale"):
+        adapter.validate_prediction_packet(old, **identity)
+    old["public"]["problem"] = old["public"]["problem"].replace(DECLARATION + "\n", "")
+    old["record_id"] = "rpa-learning-input-" + digest({
+        "schema_version": "cncm.rpa-learning-lesson/0.1",
+        **identity_fields, "public": old["public"]})
+    assert old["record_id"] != packet["record_id"]
+    with pytest.raises(ValueError):
+        adapter.validate_prediction_packet(old, **identity)
+
+
+def test_public_validation_keeps_declaration_without_opening_teacher(sample, monkeypatch):
+    _, _, identity, lesson = sample
+    def forbidden(*args, **kwargs):
+        raise AssertionError("PUBLIC_VALIDATION_OPENED_TEACHER")
+    for owner, name in ((cube, "compile_atlas_lesson"), (cube, "_revalidate_document"),
+                        (cube.cube_profile, "derived_answer"),
+                        (adapter, "prepare_public_lesson"), (adapter, "check_source_target")):
+        monkeypatch.setattr(owner, name, forbidden)
+    changed = deepcopy(lesson)
+    changed["teacher_sidecar"] = {"private": "must remain ignored"}
+    packet = adapter.prediction_packet(changed, **identity)
+    assert packet == lesson["learner_input"]
+    assert_declaration(packet["public"]["problem"])

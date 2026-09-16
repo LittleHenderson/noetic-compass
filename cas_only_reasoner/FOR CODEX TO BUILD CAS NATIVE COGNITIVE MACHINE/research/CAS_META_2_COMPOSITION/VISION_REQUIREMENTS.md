@@ -515,3 +515,30 @@ separate final scoring boundary. NEXT_STUDY_REVIEW.md records concrete limitatio
 in the old complementary runner; no new final panel or launch is frozen. The
 wider V01-V18, 31-system and 20-step charter gates remain open. This goal turn is
 PROGRESS, and the full goal remains active.
+
+
+## 2026-09-16 Learner-visible inventory completeness, input 0.2
+
+The new input contract explicitly states that the supplied snapshot contains the
+complete inventory of direct containment relations. The same statement reaches
+every view and question through public input, tokenizer, ordered frames and
+training text. Source admission requires boolean true; missing, changed or
+misplaced public declarations are refused. This makes the Cloth empty answer's
+assumption visible without claiming anything about real-world cloth.
+
+Prepared, lesson and rendering schemas now use 0.2. Historical cube/viewer
+packages and the actual GPU smoke remain preserved; that run used input 0.1.
+The adapter source deliberately advances beyond published baseline 9504f93c.
+Fresh training-only tokenizer and model-origin bindings are required for a new
+0.2 run. Both experiment arms must receive the same completeness information.
+
+Pure checks: the broad run had 260 passes and one invalid synthetic fixture;
+after correcting that fixture, all 34 focused regressions passed. Production
+inputs were unchanged between runs; 205 current input pins were rechecked.
+The failed record and before/after source hashes remain retained. Counts overlap
+and are not added together. See records/learning_completeness_001/verification.json
+and docs/CNCM_LEARNING_INGESTION_v0.2.md.
+
+No new GPU/provider execution or budget reservation occurred for this correction.
+It establishes input disclosure, not neural learning or learning improvement.
+The matched multi-seed study and the wider charter remain open; goal PROGRESS.

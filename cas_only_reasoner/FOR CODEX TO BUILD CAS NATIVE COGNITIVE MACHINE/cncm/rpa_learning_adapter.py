@@ -19,9 +19,15 @@ from .model import ContractError
 from .rpa_model import require
 from . import rpa_cube_adapter as cube
 
-PREPARED_SCHEMA = "cncm.rpa-learning-prepared/0.1"
-LESSON_SCHEMA = "cncm.rpa-learning-lesson/0.1"
-RENDERING_SCHEMA = "cncm.cube-contains-node-rel/0.1"
+PREPARED_SCHEMA = "cncm.rpa-learning-prepared/0.2"
+LESSON_SCHEMA = "cncm.rpa-learning-lesson/0.2"
+RENDERING_SCHEMA = "cncm.cube-contains-node-rel/0.2"
+# This source assumption must be learner-visible for empty and absent answers.
+# The same framing is required for every question, independent of its answer.
+INVENTORY_DECLARATION = (
+    "Containment inventory is complete within this supplied snapshot; "
+    "an unlisted direct contains relation is absent from this snapshot."
+)
 MAX_PACKET_BYTES = 2 * 1024 * 1024
 MAX_TOKENIZER_BYTES = 4 * 1024 * 1024
 MAX_INPUT_TOKENS = 1024
@@ -88,10 +94,11 @@ def _parse_public(public, options):
     problem = public["problem"]
     require(problem.endswith("\n") and "\r" not in problem, "noncanonical problem lines")
     lines = problem[:-1].split("\n")
-    require(len(lines) >= 3 and lines[-1] == _CHOICE_LINE, "problem framing invalid")
+    require(len(lines) >= 4 and lines[-1] == _CHOICE_LINE, "problem framing invalid")
+    require(lines[-3] == INVENTORY_DECLARATION, "explicit complete snapshot inventory required")
     nodes, edges = [], []
     in_relations = False
-    for line in lines[:-2]:
+    for line in lines[:-3]:
         node = re.fullmatch(r"node (" + _LABEL + r") kind=idea", line)
         relation = re.fullmatch(r"rel (" + _LABEL + r") --contains--> (" + _LABEL + r")", line)
         if node is not None:
@@ -154,6 +161,8 @@ def prepare_public_lesson(document, *, operation, question, assistance="unassist
     cube._revalidate_document(document)
     wire = document.to_dict()
     bundle, view = wire["catalog"]["bundle"], wire["view_id"]
+    require(bundle["context"]["contains_inventory_complete"] is True,
+            "complete scored answer requires declared complete inventory")
     labels = cube.cube_node.view_labels(bundle, view)
     for label in labels.values():
         _label(label)
@@ -180,7 +189,8 @@ def prepare_public_lesson(document, *, operation, question, assistance="unassist
                        for row in expected_edges]
     require(rendered == "\n".join(expected_lines) + "\n", "lossy or altered graph rendering")
     public = deepcopy(legacy["learner_input"]["public"])
-    public["problem"] = rendered + request_text + "\n" + _CHOICE_LINE + "\n"
+    public["problem"] = (rendered + INVENTORY_DECLARATION + "\n"
+                         + request_text + "\n" + _CHOICE_LINE + "\n")
     options = deepcopy(legacy["learner_input"]["encoded_options"])
     parsed_op, parsed_question, parsed_graph = _parse_public(public, options)
     require(parsed_op == operation and _same(parsed_question, question)

@@ -371,8 +371,8 @@ def test_1024_token_limit_fails_without_truncation(lesson, identity):
     # Allowed, single-line graph names can still exceed actual byte-token bounds.
     labels = ["N" + ("a" * 110) + str(i) for i in range(50)]
     public["problem"] = "\n".join("node %s kind=idea" % name for name in labels)
-    public["problem"] += "\nLIST_PARTS(%s): what does it directly contain?\n%s\n" % (
-        labels[0], "Choose one of the three supplied options.")
+    public["problem"] += "\n%s\nLIST_PARTS(%s): what does it directly contain?\n%s\n" % (
+        adapter.INVENTORY_DECLARATION, labels[0], "Choose one of the three supplied options.")
     options = [[], [labels[0]], [labels[1]]]
     public["observations"] = [{"slot": i, "tag": str(value), "values": [0.0] * 8}
                               for i, value in enumerate(options)]

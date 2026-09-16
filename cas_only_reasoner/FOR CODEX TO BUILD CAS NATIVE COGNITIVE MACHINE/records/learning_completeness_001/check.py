@@ -1,0 +1,103 @@
+"""Pure checks and a visible example for input version 0.2; no model execution."""
+from hashlib import sha256
+import importlib.abc
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[2]
+RESEARCH = ROOT / "research" / "CAS_META_2_COMPOSITION"
+OUT = Path(sys.argv[1]).resolve()
+OUT.relative_to(Path(__file__).resolve().parent)
+OUT.mkdir(parents=True, exist_ok=False)
+DENIED = {"torch", "numpy", "tensorflow", "jax", "boto3", "botocore", "requests",
+          "httpx", "openai", "anthropic", "cas_cjt", "casformer", "transformers"}
+attempts = []
+
+
+class Deny(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname.split(".")[0] in DENIED:
+            attempts.append(fullname)
+            raise AssertionError("PROHIBITED_EXECUTION_IMPORT:" + fullname)
+
+
+def write(name, value):
+    raw = (json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n").encode()
+    with (OUT / name).open("xb") as stream:
+        stream.write(raw)
+    assert (OUT / name).read_bytes() == raw
+    return {"path": name, "sha256": sha256(raw).hexdigest(), "bytes": len(raw)}
+
+
+def pin(path):
+    raw = path.read_bytes()
+    return {"path": path.relative_to(ROOT).as_posix(), "bytes": len(raw),
+            "sha256": sha256(raw).hexdigest()}
+
+
+assert not DENIED.intersection(sys.modules)
+sys.meta_path.insert(0, Deny())
+sys.path[:0] = [str(ROOT), str(RESEARCH)]
+os.chdir(ROOT)
+os.environ["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+tests = ["tests/test_rpa_learning_" + name + ".py" for name in
+         ("adapter", "completeness", "adversarial", "cycle", "smoke", "worker")]
+selected = sys.argv[2:] or tests
+assert selected and len(set(selected)) == len(selected) and set(selected) <= set(tests)
+paths = sorted(set((ROOT / "cncm").glob("*.py"))
+               | set((RESEARCH / "cas_meta2").rglob("*.py"))
+               | {ROOT / name for name in tests} | {Path(__file__).resolve()})
+from cncm import rpa_cube_adapter as cube
+paths = sorted(set(paths) | {cube.cube_node.pinned_bundle_path()})
+before = [pin(path) for path in paths]
+input_pin = write("inputs_before.json", before)
+head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+import pytest
+code = int(pytest.main(["-q", "-p", "no:cacheprovider", *selected,
+                       "--basetemp=" + str(OUT / "tmp"), "--junitxml=" + str(OUT / "tests.xml")]))
+counts = {key: sum(int(row.get(key, "0")) for row in ET.parse(OUT / "tests.xml").getroot().iter("testsuite"))
+          for key in ("tests", "failures", "errors", "skipped")}
+after = [pin(path) for path in paths]
+after_pin = write("inputs_after.json", after)
+artifacts = [input_pin, after_pin, pin(OUT / "tests.xml")]
+if code == 0:
+    from cncm import rpa_cube_adapter as cube, rpa_learning_adapter as adapter
+    from cas_meta2.features_v2 import LosslessPublicTokenizer
+    from cas_meta2.graph_teaching.ordered_encoder import compile_frames
+    raw = cube.cube_node.pinned_bundle_path().read_bytes()
+    bundle = json.loads(raw)
+    document = cube.cube_atlas_from_bytes(raw, expected_file_sha256=sha256(raw).hexdigest(),
+        expected_bundle_digest=cube.cube_node.bundle_digest(bundle), source_namespace="completeness_fixture",
+        observation_id="pure_fixture", observation_time="fixture; no world observation claimed",
+        record_version=1, view_id="view_analogy")
+    prepared = adapter.prepare_public_lesson(document, operation="LIST_PARTS", question={"idea": "Cloth"})
+    tokenizer = LosslessPublicTokenizer.fit_train([prepared["public"]], max_length=1024)
+    frames = compile_frames(prepared["public"], tokenizer)
+    declaration_ids = tuple(tokenizer._text_ids(adapter.INVENTORY_DECLARATION))
+    assert sum(frame.kind == "framing" and frame.token_ids == declaration_ids for frame in frames) == 1
+    assert prepared["teacher_sidecar"]["expected_answer"] == []
+    artifacts += [write("analogy_cloth_public.json", {"public": prepared["public"],
+                  "encoded_options": prepared["encoded_options"]}),
+                  write("analogy_cloth_teacher.json", prepared["teacher_sidecar"]),
+                  write("analogy_cloth_prepared.json", prepared)]
+    artifacts += [write("framing.json", {"tokenizer": tokenizer.to_dict(), "frames": [
+        {"kind": frame.kind, "ordinal": frame.ordinal, "token_ids": list(frame.token_ids)} for frame in frames],
+        "complete_statement_framed": True, "numeric_encoder_calls": 0})]
+loaded = sorted(DENIED.intersection(sys.modules))
+accepted = code == 0 and before == after and not loaded and not attempts
+receipt = {"schema_version": "cncm.learning-completeness-check/0.1",
+    "status": "PURE_INPUT_V02_CHECKS_PASS" if accepted else "FAILED",
+    "parent_commit": head, "tested_source": "working tree bound by input hashes", "counts": counts,
+    "test_modules": selected,
+    "input_pins_unchanged": before == after, "forbidden_import_attempts": attempts,
+    "forbidden_modules_loaded": loaded, "artifacts": artifacts, "neural_calls": 0,
+    "optimizer_updates": 0, "provider_calls": 0,
+    "boundary": "Pure grammar, source-admission, tokenizer, and test-double checks only. "
+                "No GPU test of input version 0.2 and no learning advantage claim."}
+write("receipt.json", receipt)
+print(json.dumps({"status": receipt["status"], "counts": counts, "receipt": str(OUT / "receipt.json")}))
+raise SystemExit(0 if accepted else 1)

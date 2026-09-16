@@ -24,6 +24,14 @@ rule need not win the equal-item contrast. A two-arm curriculum-order study on a
 shared learner also does not, by itself, isolate CAS architecture or superiority
 over an ordinary dependency graph. Define that comparator before such a claim.
 
+The later input contract 0.2 also discloses the source's complete containment
+inventory in every public question. See docs/CNCM_LEARNING_INGESTION_v0.2.md and
+records/learning_completeness_001/. This is a versioned input correction checked
+without model execution. The observed GPU smoke above used input contract 0.1;
+its success does not establish GPU acceptance of 0.2. Rebuild training-only
+tokenizer and model-origin bindings for a future 0.2 run. The old viewer's Facts
+prose and zero-update counters below describe the preserved earlier package.
+
 We will know whether teaching improves learned competence after an actual learner
 improves on untouched task families, against matched controls, with answer-bearing
 memory and tools withheld. A successful parser test, changed checkpoint, lower
