@@ -1,0 +1,24 @@
+{
+  "schema": "cas-publication-preflight/v1",
+  "source_head": "aaf969843c55bf681e3f2062377967b580f98d49",
+  "remote": "https://github.com/LittleHenderson/noetic-compass.git",
+  "remote_branch": "codex/cas-meta-2-composition",
+  "branch_observed_absent": true,
+  "source_worktree_rewritten": false,
+  "original_history_bundle": {
+    "filename": "source-aaf96984.bundle",
+    "size": 729531855,
+    "sha256": "b23e58c7dfd21f897c92c499778136ff54214a4e13e13618dec901e78d031b2b",
+    "git_bundle_verify": "PASS_COMPLETE_HISTORY",
+    "local_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\source-aaf96984.bundle"
+  },
+  "large_artifact": {
+    "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_ablation_v4_002/cloud_artifacts.zip",
+    "git_blob_sha1": "a61aca911fdd5a7ef1dc0e3db8d46d5e864b0a89",
+    "size": 136120962,
+    "sha256": "c0fbc413ce94a3b192a5b634bfc246dae96d94f3fe01943caacbff83a4e74708",
+    "git_lfs_push_object_id": "SUCCESS",
+    "new_plan_purchased": false
+  },
+  "publication": "PENDING_FINAL_SOURCE_INTEGRATION"
+}

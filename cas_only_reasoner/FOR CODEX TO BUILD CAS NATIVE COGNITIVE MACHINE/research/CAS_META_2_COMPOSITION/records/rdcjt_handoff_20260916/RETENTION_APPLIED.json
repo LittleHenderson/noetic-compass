@@ -1,0 +1,450 @@
+{
+  "buckets": [
+    {
+      "after_objects": [
+        {
+          "bytes": 494,
+          "etag": "\"1e1746ea98caf0b6d02fc3c437524683\"",
+          "key": "input/config.json"
+        },
+        {
+          "bytes": 585975,
+          "etag": "\"b9a8feca908a835729d42b72573682ef\"",
+          "key": "input/source.zip"
+        },
+        {
+          "bytes": 105208,
+          "etag": "\"2ee07a130ac3be2b5fea9577ca663803\"",
+          "key": "reservation/ledger_snapshot.json"
+        },
+        {
+          "bytes": 1714,
+          "etag": "\"aa79359ecea597e73dc4d2adadb1e81e\"",
+          "key": "reservation/reservation_receipt.json"
+        },
+        {
+          "bytes": 68173,
+          "etag": "\"cdefde720013a31408e832c389aa1850\"",
+          "key": "results/artifacts/checkpoint_one_pass.pt"
+        },
+        {
+          "bytes": 68182,
+          "etag": "\"855d45cf49b40fe35996549300784c2b\"",
+          "key": "results/artifacts/checkpoint_recurrent.pt"
+        },
+        {
+          "bytes": 967846,
+          "etag": "\"5ef728eec2e7b2bcdc465d19803434d6\"",
+          "key": "results/artifacts/depth_sweep.json"
+        },
+        {
+          "bytes": 907987,
+          "etag": "\"a3c98f45ce00bb5af6fd8a0f3b33146b\"",
+          "key": "results/artifacts/experiment.json"
+        },
+        {
+          "bytes": 751,
+          "etag": "\"650b431892bbe0fc1705886812ae2b8e\"",
+          "key": "results/artifacts/manifest.json"
+        },
+        {
+          "bytes": 57,
+          "etag": "\"a99444e86806c56804de6b3092e72da0\"",
+          "key": "results/evidence/phase_inner_runner_starting.json"
+        },
+        {
+          "bytes": 61,
+          "etag": "\"a6fc53a9d1a9de5bcdaf1d4c574c226c\"",
+          "key": "results/evidence/phase_pip_requirements_starting.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"7a088a2a5dbbf4a4bcf0089a4b7194af\"",
+          "key": "results/evidence/phase_pip_torch_starting.json"
+        },
+        {
+          "bytes": 55,
+          "etag": "\"368804676eded0ea549c7f82068b07d6\"",
+          "key": "results/evidence/phase_pip_wheels_starting.json"
+        },
+        {
+          "bytes": 53,
+          "etag": "\"f25643e35141fc39644c7604b08100b4\"",
+          "key": "results/evidence/phase_publisher_started.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"15f9c307ea3cf0bc50353425525b34de\"",
+          "key": "results/evidence/phase_publishing_stopped.json"
+        },
+        {
+          "bytes": 46,
+          "etag": "\"0801f1651bbfb1c41cdd43feb6c11125\"",
+          "key": "results/evidence/phase_venv_ready.json"
+        },
+        {
+          "bytes": 50,
+          "etag": "\"e4260652405b99c0636945bd10023f8f\"",
+          "key": "results/evidence/phase_worker_started.json"
+        },
+        {
+          "bytes": 8890,
+          "etag": "\"c668763adc857d2397e9997817536413\"",
+          "key": "results/result.json"
+        },
+        {
+          "bytes": 65,
+          "etag": "\"b7478e60ad1342da0fe9cf5d59dcb9ec\"",
+          "key": "results/result.json.sha256"
+        }
+      ],
+      "after_rules": [
+        {
+          "AbortIncompleteMultipartUpload": {
+            "DaysAfterInitiation": 7
+          },
+          "Filter": {
+            "Prefix": ""
+          },
+          "ID": "retain-evidence-abort-incomplete-after-7-days",
+          "Status": "Enabled"
+        }
+      ],
+      "before_objects": [
+        {
+          "bytes": 494,
+          "etag": "\"1e1746ea98caf0b6d02fc3c437524683\"",
+          "key": "input/config.json"
+        },
+        {
+          "bytes": 585975,
+          "etag": "\"b9a8feca908a835729d42b72573682ef\"",
+          "key": "input/source.zip"
+        },
+        {
+          "bytes": 105208,
+          "etag": "\"2ee07a130ac3be2b5fea9577ca663803\"",
+          "key": "reservation/ledger_snapshot.json"
+        },
+        {
+          "bytes": 1714,
+          "etag": "\"aa79359ecea597e73dc4d2adadb1e81e\"",
+          "key": "reservation/reservation_receipt.json"
+        },
+        {
+          "bytes": 68173,
+          "etag": "\"cdefde720013a31408e832c389aa1850\"",
+          "key": "results/artifacts/checkpoint_one_pass.pt"
+        },
+        {
+          "bytes": 68182,
+          "etag": "\"855d45cf49b40fe35996549300784c2b\"",
+          "key": "results/artifacts/checkpoint_recurrent.pt"
+        },
+        {
+          "bytes": 967846,
+          "etag": "\"5ef728eec2e7b2bcdc465d19803434d6\"",
+          "key": "results/artifacts/depth_sweep.json"
+        },
+        {
+          "bytes": 907987,
+          "etag": "\"a3c98f45ce00bb5af6fd8a0f3b33146b\"",
+          "key": "results/artifacts/experiment.json"
+        },
+        {
+          "bytes": 751,
+          "etag": "\"650b431892bbe0fc1705886812ae2b8e\"",
+          "key": "results/artifacts/manifest.json"
+        },
+        {
+          "bytes": 57,
+          "etag": "\"a99444e86806c56804de6b3092e72da0\"",
+          "key": "results/evidence/phase_inner_runner_starting.json"
+        },
+        {
+          "bytes": 61,
+          "etag": "\"a6fc53a9d1a9de5bcdaf1d4c574c226c\"",
+          "key": "results/evidence/phase_pip_requirements_starting.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"7a088a2a5dbbf4a4bcf0089a4b7194af\"",
+          "key": "results/evidence/phase_pip_torch_starting.json"
+        },
+        {
+          "bytes": 55,
+          "etag": "\"368804676eded0ea549c7f82068b07d6\"",
+          "key": "results/evidence/phase_pip_wheels_starting.json"
+        },
+        {
+          "bytes": 53,
+          "etag": "\"f25643e35141fc39644c7604b08100b4\"",
+          "key": "results/evidence/phase_publisher_started.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"15f9c307ea3cf0bc50353425525b34de\"",
+          "key": "results/evidence/phase_publishing_stopped.json"
+        },
+        {
+          "bytes": 46,
+          "etag": "\"0801f1651bbfb1c41cdd43feb6c11125\"",
+          "key": "results/evidence/phase_venv_ready.json"
+        },
+        {
+          "bytes": 50,
+          "etag": "\"e4260652405b99c0636945bd10023f8f\"",
+          "key": "results/evidence/phase_worker_started.json"
+        },
+        {
+          "bytes": 8890,
+          "etag": "\"c668763adc857d2397e9997817536413\"",
+          "key": "results/result.json"
+        },
+        {
+          "bytes": 65,
+          "etag": "\"b7478e60ad1342da0fe9cf5d59dcb9ec\"",
+          "key": "results/result.json.sha256"
+        }
+      ],
+      "before_rules": [],
+      "bucket": "cas-meta2-rdcjt-20260913183000-d27a44e4-807562639912",
+      "objects_unchanged": true,
+      "status": "VERIFIED"
+    },
+    {
+      "after_objects": [
+        {
+          "bytes": 494,
+          "etag": "\"e521718bf05944af93bd3873a0ead45b\"",
+          "key": "input/config.json"
+        },
+        {
+          "bytes": 585975,
+          "etag": "\"b9a8feca908a835729d42b72573682ef\"",
+          "key": "input/source.zip"
+        },
+        {
+          "bytes": 106454,
+          "etag": "\"9861fce7710453eabb7463e21d0611d3\"",
+          "key": "reservation/ledger_snapshot.json"
+        },
+        {
+          "bytes": 1714,
+          "etag": "\"9a7b799698f7913c185d1ca425a41dc0\"",
+          "key": "reservation/reservation_receipt.json"
+        },
+        {
+          "bytes": 68173,
+          "etag": "\"8e714bb3693bee47364ee1216bfb700f\"",
+          "key": "results/artifacts/checkpoint_one_pass.pt"
+        },
+        {
+          "bytes": 68182,
+          "etag": "\"67292e298151e040103ec27eed3fa1e2\"",
+          "key": "results/artifacts/checkpoint_recurrent.pt"
+        },
+        {
+          "bytes": 969499,
+          "etag": "\"5b5ed412f7c178c8c2f4b9dc1d01c77e\"",
+          "key": "results/artifacts/depth_sweep.json"
+        },
+        {
+          "bytes": 905652,
+          "etag": "\"6b9361b972c8b61e8e28f81cc474d451\"",
+          "key": "results/artifacts/experiment.json"
+        },
+        {
+          "bytes": 751,
+          "etag": "\"e7d131254c23eb43c8a39f93b5a524f2\"",
+          "key": "results/artifacts/manifest.json"
+        },
+        {
+          "bytes": 57,
+          "etag": "\"b6f0f9ea8c78f2b5cf5472b338ed818a\"",
+          "key": "results/evidence/phase_inner_runner_starting.json"
+        },
+        {
+          "bytes": 61,
+          "etag": "\"61c860be159b9edbc4bc8116eb6ee145\"",
+          "key": "results/evidence/phase_pip_requirements_starting.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"e9206c654c8801031bdd9c6330da8d49\"",
+          "key": "results/evidence/phase_pip_torch_starting.json"
+        },
+        {
+          "bytes": 55,
+          "etag": "\"6c6244de90512f4cfd7ce3b8e56c9aca\"",
+          "key": "results/evidence/phase_pip_wheels_starting.json"
+        },
+        {
+          "bytes": 53,
+          "etag": "\"f019c03158e660d86f9a123d0aee26fc\"",
+          "key": "results/evidence/phase_publisher_started.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"ef23eed67175d4de0168f6504bf49f37\"",
+          "key": "results/evidence/phase_publishing_stopped.json"
+        },
+        {
+          "bytes": 46,
+          "etag": "\"ef849d85075fe70f4d73f3c808bc0a9c\"",
+          "key": "results/evidence/phase_venv_ready.json"
+        },
+        {
+          "bytes": 50,
+          "etag": "\"6c77d9cd46cce16c9ee7aa331836794d\"",
+          "key": "results/evidence/phase_worker_started.json"
+        },
+        {
+          "bytes": 10384,
+          "etag": "\"53db62e5de730c18c2c92a29bfbfcb40\"",
+          "key": "results/result.json"
+        },
+        {
+          "bytes": 65,
+          "etag": "\"228fb3f0951478b892eaefc4e1e0d71c\"",
+          "key": "results/result.json.sha256"
+        }
+      ],
+      "after_rules": [
+        {
+          "AbortIncompleteMultipartUpload": {
+            "DaysAfterInitiation": 7
+          },
+          "Filter": {
+            "Prefix": ""
+          },
+          "ID": "retain-evidence-abort-incomplete-after-7-days",
+          "Status": "Enabled"
+        }
+      ],
+      "before_objects": [
+        {
+          "bytes": 494,
+          "etag": "\"e521718bf05944af93bd3873a0ead45b\"",
+          "key": "input/config.json"
+        },
+        {
+          "bytes": 585975,
+          "etag": "\"b9a8feca908a835729d42b72573682ef\"",
+          "key": "input/source.zip"
+        },
+        {
+          "bytes": 106454,
+          "etag": "\"9861fce7710453eabb7463e21d0611d3\"",
+          "key": "reservation/ledger_snapshot.json"
+        },
+        {
+          "bytes": 1714,
+          "etag": "\"9a7b799698f7913c185d1ca425a41dc0\"",
+          "key": "reservation/reservation_receipt.json"
+        },
+        {
+          "bytes": 68173,
+          "etag": "\"8e714bb3693bee47364ee1216bfb700f\"",
+          "key": "results/artifacts/checkpoint_one_pass.pt"
+        },
+        {
+          "bytes": 68182,
+          "etag": "\"67292e298151e040103ec27eed3fa1e2\"",
+          "key": "results/artifacts/checkpoint_recurrent.pt"
+        },
+        {
+          "bytes": 969499,
+          "etag": "\"5b5ed412f7c178c8c2f4b9dc1d01c77e\"",
+          "key": "results/artifacts/depth_sweep.json"
+        },
+        {
+          "bytes": 905652,
+          "etag": "\"6b9361b972c8b61e8e28f81cc474d451\"",
+          "key": "results/artifacts/experiment.json"
+        },
+        {
+          "bytes": 751,
+          "etag": "\"e7d131254c23eb43c8a39f93b5a524f2\"",
+          "key": "results/artifacts/manifest.json"
+        },
+        {
+          "bytes": 57,
+          "etag": "\"b6f0f9ea8c78f2b5cf5472b338ed818a\"",
+          "key": "results/evidence/phase_inner_runner_starting.json"
+        },
+        {
+          "bytes": 61,
+          "etag": "\"61c860be159b9edbc4bc8116eb6ee145\"",
+          "key": "results/evidence/phase_pip_requirements_starting.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"e9206c654c8801031bdd9c6330da8d49\"",
+          "key": "results/evidence/phase_pip_torch_starting.json"
+        },
+        {
+          "bytes": 55,
+          "etag": "\"6c6244de90512f4cfd7ce3b8e56c9aca\"",
+          "key": "results/evidence/phase_pip_wheels_starting.json"
+        },
+        {
+          "bytes": 53,
+          "etag": "\"f019c03158e660d86f9a123d0aee26fc\"",
+          "key": "results/evidence/phase_publisher_started.json"
+        },
+        {
+          "bytes": 54,
+          "etag": "\"ef23eed67175d4de0168f6504bf49f37\"",
+          "key": "results/evidence/phase_publishing_stopped.json"
+        },
+        {
+          "bytes": 46,
+          "etag": "\"ef849d85075fe70f4d73f3c808bc0a9c\"",
+          "key": "results/evidence/phase_venv_ready.json"
+        },
+        {
+          "bytes": 50,
+          "etag": "\"6c77d9cd46cce16c9ee7aa331836794d\"",
+          "key": "results/evidence/phase_worker_started.json"
+        },
+        {
+          "bytes": 10384,
+          "etag": "\"53db62e5de730c18c2c92a29bfbfcb40\"",
+          "key": "results/result.json"
+        },
+        {
+          "bytes": 65,
+          "etag": "\"228fb3f0951478b892eaefc4e1e0d71c\"",
+          "key": "results/result.json.sha256"
+        }
+      ],
+      "before_rules": [],
+      "bucket": "cas-meta2-rdcjt-20260913184000-d27a44e4-807562639912",
+      "objects_unchanged": true,
+      "status": "VERIFIED"
+    }
+  ],
+  "completed_object_expiration": "NONE",
+  "evidence_kind": "owner_instruction_in_session",
+  "observed_utc": "2026-09-16T05:27:20.775673+00:00",
+  "owner_instruction_raw": "I give you approval for it all ....GO!",
+  "schema": "cas-rdcjt-retention/1",
+  "stopped_resource_review": {
+    "billing": "Storage remains allocated; actual invoice not queried.",
+    "decision": "RETAINED: disk contents and recoverability are not established; completed evidence must not be deleted.",
+    "instance_id": "i-0c3028734c8885542",
+    "instance_tags": [
+      {
+        "Key": "Name",
+        "Value": "cas-bridge-control-20260822"
+      }
+    ],
+    "instance_type": "g6e.xlarge",
+    "size_gib": 300,
+    "state": "stopped",
+    "volume_id": "vol-01cc880a770c10854",
+    "volume_state": "in-use",
+    "volume_tags": []
+  }
+}

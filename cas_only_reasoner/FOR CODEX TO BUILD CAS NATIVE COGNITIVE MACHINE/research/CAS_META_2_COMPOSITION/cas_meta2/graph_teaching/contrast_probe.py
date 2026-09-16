@@ -1,4 +1,7 @@
-"""Zero-update contrast probe on the RETAINED checkpoints (prepared, not run).
+"""Zero-update contrast probe on the RETAINED checkpoints.
+
+Executed on six retained curriculum checkpoints on 2026-09-16. Exact inputs,
+raw results and conditional interpretation: records/graph6_contrast_001/RESULT.md.
 
 Owner-directed (2026-09-10). The question this answers is not "can the learner be
 trained further" but "when the learner answers a practised question correctly,

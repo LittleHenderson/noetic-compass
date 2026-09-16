@@ -63,7 +63,7 @@ if __name__ == "__main__":
             raise SystemExit(2)
 
 _BUDGET_PATH = Path(__file__).with_name("budget.py")
-_BUDGET_SHA256 = "77a845ea8669b775a28a940552a9212f667a9506e5586deff64baba06a82eda0"
+_BUDGET_SHA256 = "cb3c78a0dfed166857109710cb8eac79dd337d837c839d558565982084b5a22f"
 if (not _BUDGET_PATH.is_file() or _BUDGET_PATH.is_symlink()
         or hashlib.sha256(_BUDGET_PATH.read_bytes()).hexdigest() != _BUDGET_SHA256):
     raise ValueError("PINNED_SHARED_BUDGET_CHANGED_BEFORE_IMPORT")

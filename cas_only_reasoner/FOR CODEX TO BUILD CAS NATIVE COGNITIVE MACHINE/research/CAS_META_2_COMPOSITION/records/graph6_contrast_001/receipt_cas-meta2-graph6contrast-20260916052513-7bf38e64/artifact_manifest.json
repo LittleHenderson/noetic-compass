@@ -1,0 +1,14 @@
+{
+  "artifacts": [
+    {
+      "bytes": 399314,
+      "name": "contrast_readout.json",
+      "sha256": "03f491f0b967402043d3e6f1b5690e6552f78290e8c3748ec17fad87ceb99171"
+    },
+    {
+      "bytes": 6027,
+      "name": "measurements.json",
+      "sha256": "44e096a4d260e15cbe1df40e12cab89d560282004e36f5dd5c2470dc945a4eb9"
+    }
+  ]
+}

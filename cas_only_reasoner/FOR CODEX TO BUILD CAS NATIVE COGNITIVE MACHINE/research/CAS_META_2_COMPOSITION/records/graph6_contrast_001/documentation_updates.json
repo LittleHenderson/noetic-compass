@@ -1,0 +1,26 @@
+[
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\CHANGELOG.md",
+    "before_sha256": "b255c7d67ee47e2acc7b8b4b53e87c8b4eae7172378c8c47fa53b7fb90bad70c",
+    "after_sha256": "b43f9c4fff73ad1a3311810c99a1632dc0f34aa201a60616c4fc15e29aaa5b31",
+    "prior_bytes_preserved": true
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\docs\\CAS_HARNESS_SPEC_SHEET.md",
+    "before_sha256": "baada246f67510921607c15c3ab393d5ab549f724464078b3176f534d518a9a6",
+    "after_sha256": "e7ad9a8fa300cef34629da5ca7aeb68c613e9dcb2f876ab84be3cefa6f0f5eab",
+    "prior_bytes_preserved": true
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\CHANGELOG.md",
+    "before_sha256": "43e30101b75c0e44b0df78429ac9a94985efc53e5a04f6e516aff4a4b6448497",
+    "after_sha256": "4e07302f1762ff04b44a1a912aeb1a8bb071455571715bdeb549524d83418214",
+    "prior_bytes_preserved": true
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\docs\\CAS_HARNESS_SPEC_SHEET.md",
+    "before_sha256": "baada246f67510921607c15c3ab393d5ab549f724464078b3176f534d518a9a6",
+    "after_sha256": "e7ad9a8fa300cef34629da5ca7aeb68c613e9dcb2f876ab84be3cefa6f0f5eab",
+    "prior_bytes_preserved": true
+  }
+]

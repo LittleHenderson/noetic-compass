@@ -1,0 +1,228 @@
+{
+  "all_practice_scores_reproduced": true,
+  "all_weights_unchanged": true,
+  "boundary": "Conditional on each learner originally answering correctly. Retrospective diagnosis only; renaming sensitivity and rewiring failures do not identify a causal shortcut. Length observations do not prove length bias.",
+  "collection": "COMPLETE_VERIFIED",
+  "elapsed_inference_seconds": 6.065797732999982,
+  "job": "cas-meta2-graph6contrast-20260916052513-7bf38e64",
+  "learners": [
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 23,
+          "correct": 9,
+          "rate": 0.391304347826087
+        },
+        "reordered": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 8,
+          "correct": 1,
+          "rate": 0.125
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 14,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 2
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "control",
+      "seed": 20260913
+    },
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 12,
+          "correct": 12,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 12,
+          "correct": 6,
+          "rate": 0.5
+        },
+        "reordered": {
+          "attempted": 12,
+          "correct": 12,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 2,
+          "correct": 1,
+          "rate": 0.5
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 6,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 2
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "varied",
+      "seed": 20260913
+    },
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 23,
+          "correct": 8,
+          "rate": 0.34782608695652173
+        },
+        "reordered": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 8,
+          "correct": 0,
+          "rate": 0.0
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 15,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 1
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "control",
+      "seed": 20260914
+    },
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 14,
+          "correct": 14,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 14,
+          "correct": 6,
+          "rate": 0.42857142857142855
+        },
+        "reordered": {
+          "attempted": 14,
+          "correct": 14,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 2,
+          "correct": 1,
+          "rate": 0.5
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 8,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 2
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "varied",
+      "seed": 20260914
+    },
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 23,
+          "correct": 11,
+          "rate": 0.4782608695652174
+        },
+        "reordered": {
+          "attempted": 23,
+          "correct": 23,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 8,
+          "correct": 0,
+          "rate": 0.0
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 12,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 1
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "control",
+      "seed": 20260915
+    },
+    {
+      "accuracy": {
+        "original": {
+          "attempted": 14,
+          "correct": 14,
+          "rate": 1.0
+        },
+        "renamed": {
+          "attempted": 14,
+          "correct": 7,
+          "rate": 0.5
+        },
+        "reordered": {
+          "attempted": 14,
+          "correct": 14,
+          "rate": 1.0
+        },
+        "rewired": {
+          "attempted": 4,
+          "correct": 0,
+          "rate": 0.0
+        }
+      },
+      "answer_changes": {
+        "renamed_changed_answer": 7,
+        "reordered_changed_answer": 0,
+        "rewired_changed_answer": 1
+      },
+      "boundary": "zero optimizer steps were taken; the probe only records which option the retained learner selects",
+      "condition": "varied",
+      "seed": 20260915
+    }
+  ],
+  "length_reading": {
+    "chosen_longest": 78,
+    "chosen_shortest": 0,
+    "chosen_slot_0": 64,
+    "chosen_slot_1": 64,
+    "chosen_slot_2": 64,
+    "correct": 192,
+    "permutations": 192
+  },
+  "optimizer_updates": 0,
+  "schema": "cas-graph6-contrast-recount/1",
+  "source_sha": "fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5",
+  "status": "VERIFIED",
+  "totals": {
+    "original_attempted": 109,
+    "original_correct": 109,
+    "renamed_attempted": 109,
+    "renamed_changed_answer": 62,
+    "renamed_correct": 47,
+    "reordered_attempted": 109,
+    "reordered_changed_answer": 0,
+    "reordered_correct": 109,
+    "rewired_attempted": 32,
+    "rewired_changed_answer": 9,
+    "rewired_correct": 3
+  }
+}

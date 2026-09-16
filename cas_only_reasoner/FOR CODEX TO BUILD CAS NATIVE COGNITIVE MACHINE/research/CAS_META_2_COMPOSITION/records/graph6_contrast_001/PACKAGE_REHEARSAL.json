@@ -1,0 +1,12 @@
+{
+  "all_python_compiled": true,
+  "archive_bytes": 2996381,
+  "archive_sha256": "8226f34037f518d2c44569620abd39f5ee63e08fb455487dfe75e46bb09240cc",
+  "child_imports": "NON_NEURAL_IMPORTS_OK",
+  "manifest_sha256": "16e6ba1dc5ce025a2fac899359762fb23b713d04a1ea76d333b817f5a9b90599",
+  "member_count": 61,
+  "neural_execution": false,
+  "restored_inputs_verified": true,
+  "schema": "cas-graph6-contrast-package-rehearsal/1",
+  "source_sha": "fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5"
+}

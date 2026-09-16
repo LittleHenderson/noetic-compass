@@ -85,8 +85,8 @@
       "total_reserved_usd": "4"
     }
   },
-  "previous_state_sha256": "5438c365b2185bc8ffbb455264ef11a99e715b41862b875e3623002e2b6febf9",
-  "remaining_unreserved_usd": "4583.00",
+  "previous_state_sha256": "e2c9cc87793a40c10361dbd5c2602d4e4ec8d1127b68ee4a6e1ad6b7624fba79",
+  "remaining_unreserved_usd": "4576.00",
   "reservations": [
     {
       "archive_sha256": "86239dd52b3d19a7fe98a651e0f7e6b3793c95ea2e01bb0c2d9e732650e8819f",
@@ -3439,11 +3439,59 @@
       "reserved_utc": "2026-09-13T17:29:07.021594+00:00",
       "source_sha": "306bad4e0c8e42d81c31fd54f656ebd70c3a04ca",
       "status": "RESERVED_NO_AUTOMATIC_REFUND"
+    },
+    {
+      "archive_sha256": "8226f34037f518d2c44569620abd39f5ee63e08fb455487dfe75e46bb09240cc",
+      "job": "cas-meta2-graph6contrast-20260916052513-7bf38e64",
+      "plan": {
+        "account_id": "807562639912",
+        "ancillary_reserved_usd": "1.48",
+        "automatic_retries": 0,
+        "campaign_scope": "cas-meta2-composition-campaign",
+        "frozen_budget": {
+          "arms": [
+            "cas"
+          ],
+          "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+          "checkpoints": [
+            64,
+            256
+          ],
+          "conditions": [
+            "control",
+            "varied"
+          ],
+          "encoder_seed": 20260909,
+          "learners": 6,
+          "learning_rate": 0.003,
+          "max_wall_seconds_per_learner": 900.0,
+          "pair_seeds": [
+            20260913,
+            20260914,
+            20260915
+          ],
+          "panel_seed": 20260930,
+          "reservation_usd": "7.00",
+          "total_optimizer_steps": 1536,
+          "updates_per_learner": 256
+        },
+        "instance_count": 1,
+        "instance_type": "g7.2xlarge",
+        "on_demand_hourly_usd_max": "2.52",
+        "region": "us-west-2",
+        "runtime_seconds_max": 7200,
+        "task_scope": "graph_first_teaching_candidate_001_curriculum_002"
+      },
+      "plan_sha256": "5a0dcacaba516954a44c3ca2424e181b892d0b7bfe3a764b45e7e258aabce304",
+      "reserved_usd": "7.00",
+      "reserved_utc": "2026-09-16T05:25:53.388911+00:00",
+      "source_sha": "fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5",
+      "status": "RESERVED_NO_AUTOMATIC_REFUND"
     }
   ],
-  "revision": 72,
+  "revision": 73,
   "schema": "cas-meta-campaign-budget/2",
   "scope": "All CASformer campaign and further research, inclusive of prior META1 reservations",
-  "total_reserved_usd": "417.00",
-  "updated_utc": "2026-09-13T17:29:07.022336+00:00"
+  "total_reserved_usd": "424.00",
+  "updated_utc": "2026-09-16T05:25:53.389334+00:00"
 }

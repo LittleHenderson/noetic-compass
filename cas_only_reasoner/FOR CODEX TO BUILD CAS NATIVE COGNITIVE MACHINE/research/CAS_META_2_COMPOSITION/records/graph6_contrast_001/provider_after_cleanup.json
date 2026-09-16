@@ -1,0 +1,82 @@
+{
+  "account": "807562639912",
+  "billing": "NOT_QUERIED",
+  "checks": {
+    "cas-meta2-rdcjt-20260913183000-d27a44e4-807562639912:inventory": {
+      "data": {
+        "bytes": 2715715,
+        "objects": 19
+      },
+      "status": "READ_OK"
+    },
+    "cas-meta2-rdcjt-20260913183000-d27a44e4-807562639912:lifecycle": {
+      "data": [
+        {
+          "AbortIncompleteMultipartUpload": {
+            "DaysAfterInitiation": 7
+          },
+          "Filter": {
+            "Prefix": ""
+          },
+          "ID": "retain-evidence-abort-incomplete-after-7-days",
+          "Status": "Enabled"
+        }
+      ],
+      "status": "READ_OK"
+    },
+    "cas-meta2-rdcjt-20260913184000-d27a44e4-807562639912:inventory": {
+      "data": {
+        "bytes": 2717773,
+        "objects": 19
+      },
+      "status": "READ_OK"
+    },
+    "cas-meta2-rdcjt-20260913184000-d27a44e4-807562639912:lifecycle": {
+      "data": [
+        {
+          "AbortIncompleteMultipartUpload": {
+            "DaysAfterInitiation": 7
+          },
+          "Filter": {
+            "Prefix": ""
+          },
+          "ID": "retain-evidence-abort-incomplete-after-7-days",
+          "Status": "Enabled"
+        }
+      ],
+      "status": "READ_OK"
+    },
+    "nonterminated_instances": {
+      "data": [
+        {
+          "id": "i-0c3028734c8885542",
+          "state": "stopped",
+          "type": "g6e.xlarge"
+        }
+      ],
+      "status": "READ_OK"
+    },
+    "retained_volume": {
+      "data": [
+        {
+          "attachments": [
+            {
+              "delete_on_termination": true,
+              "instance": "i-0c3028734c8885542",
+              "state": "attached"
+            }
+          ],
+          "id": "vol-01cc880a770c10854",
+          "size_gib": 300,
+          "state": "in-use",
+          "type": "gp3"
+        }
+      ],
+      "status": "READ_OK"
+    }
+  },
+  "observed_utc": "2026-09-16T05:37:00.362868+00:00",
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "schema": "cas-rdcjt-resource-inspection/1"
+}

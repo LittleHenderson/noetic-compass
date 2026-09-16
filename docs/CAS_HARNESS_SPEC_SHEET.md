@@ -1566,3 +1566,32 @@ rdcjt_handoff_20260916/HANDOFF_STATUS.md, BUDGET_REVIEW.md,
 post_fix_verification.json, final_pure_tests.xml; structural_supply_20260916/
 post_fix/REPORT.md and EXPOSURE_BINDINGS.md. This addendum records research
 and software checks; it changes no CAS Harness acceptance/production gate.
+
+## 2026-09-16 UTC - Retained-checkpoint contrast diagnosis delivered
+
+The owner explicitly approved continuation. One AWS g7.2xlarge diagnostic,
+job cas-meta2-graph6contrast-20260916052513-7bf38e64, ran frozen implementation
+fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5. All six saved practice scores and
+checkpoint parameter identities reproduced; zero optimizer updates occurred.
+Raw-row recount: original 109/109, consistently renamed 47/109, reordered
+109/109, rewired 3/32. All 192 LIST_PARTS option-order permutations remained
+correct. These are conditional retrospective readings, not a new untouched
+transfer result or a causal finding about length bias. RDCJT remains NOT_MET,
+0 of 3 positive; no further recurrent-depth seed was run.
+
+The exact source package passed 53 pure checks and a non-neural unpack/import
+rehearsal. Seven previously blocked legacy launcher suites now pass 126 tests
+and 129 subtests after reviewed static budget-hash pins were updated. No legacy
+paid-job authority was expanded. The canonical ledger is revision 73: cap
+$5,000.00, reserved $424.00, unreserved $4,576.00. Reservation is not billing.
+
+Both named RDCJT evidence buckets now have verified seven-day abort rules for
+incomplete multipart uploads, with no completed-object expiration. All object
+inventories are unchanged. The pre-existing stopped g6e.xlarge and 300 GiB disk
+remain allocated: contents/recoverability are unproven. No invoice was queried.
+
+Evidence: inner research/CAS_META_2_COMPOSITION/records/graph6_contrast_001/
+RESULT.md, RECOUNT.json and the final lifecycle receipt; records/
+rdcjt_handoff_20260916/RETENTION_APPLIED.json; records/publication_20260916/
+LEGACY_IMPORT_REPAIR.md. Successor profiles remain build-only; this entry
+changes no CAS Harness acceptance or production gate.
