@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="16" failures="0" skipped="0" tests="35" time="2.450" timestamp="2026-09-16T02:09:50.039572-07:00" hostname="MSI"><testcase classname="tests.test_nested_recovery" name="test_every_graph_and_ordinary_cut_replays_and_finishes_exactly" time="0.124"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_reuse_is_new_input_dependent_and_rollback_revokes_only_dispatch" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_partial_failure_recovery_preserves_charges_and_exact_unwind[zero_leading]" time="0.816" /><testcase classname="tests.test_nested_recovery" name="test_partial_failure_recovery_preserves_charges_and_exact_unwind[missing]" time="0.091" /><testcase classname="tests.test_nested_recovery" name="test_partial_failure_recovery_preserves_charges_and_exact_unwind[cycle]" time="0.206" /><testcase classname="tests.test_nested_recovery" name="test_partial_failure_recovery_preserves_charges_and_exact_unwind[budget]" time="0.673" /><testcase classname="tests.test_nested_recovery" name="test_rejected_occurrences_remain_lossless_and_do_not_retry_work[duplicate]" time="0.037" /><testcase classname="tests.test_nested_recovery" name="test_rejected_occurrences_remain_lossless_and_do_not_retry_work[malformed]" time="0.036" /><testcase classname="tests.test_nested_recovery" name="test_rejected_occurrences_remain_lossless_and_do_not_retry_work[mixed]" time="0.039" /><testcase classname="tests.test_nested_recovery" name="test_tick_exhaustion_retains_unresolved_stack_and_forbids_budget_restart" time="0.041" /><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[output]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[budget]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[frame]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[source]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[occurrence]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[schema]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_resealed_false_history_is_not_imported[extra]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_trusted_complete_anchor_rejects_valid_truncation_and_wrong_genesis" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_external_anchor_is_required[None]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_external_anchor_is_required[]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_external_anchor_is_required[fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_external_anchor_is_required[GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_external_anchor_is_required[3]" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_wire_decoder_refuses_duplicate_keys_nonfinite_and_invalid_json[{&quot;x&quot;:1,&quot;x&quot;:2}]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_wire_decoder_refuses_duplicate_keys_nonfinite_and_invalid_json[{&quot;x&quot;:NaN}]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_wire_decoder_refuses_duplicate_keys_nonfinite_and_invalid_json[{&quot;x&quot;:Infinity}]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_wire_decoder_refuses_duplicate_keys_nonfinite_and_invalid_json[\xff]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_wire_decoder_refuses_duplicate_keys_nonfinite_and_invalid_json[{]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_non_json_or_unbounded_python_values_refuse_before_hashing[3.0]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_non_json_or_unbounded_python_values_refuse_before_hashing[value1]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_non_json_or_unbounded_python_values_refuse_before_hashing[18446744073709551616]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_non_json_or_unbounded_python_values_refuse_before_hashing[value3]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_non_json_or_unbounded_python_values_refuse_before_hashing[\ud800]" time="0.000" /><testcase classname="tests.test_nested_recovery" name="test_recursive_python_input_is_bounded_and_snapshot_copies_are_independent" time="0.000"><error message="failed on setup with &quot;AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        problem, profile = graph_problem(), simulated_profile()
+        machine = NestedMachine(profile)
+        result = machine.run(problem)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED
+E       AssertionError: assert &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = NestedRunResult(problem=NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='recovery-...988f6f804b6b3feb2b8a695', event_hash='a0d41ba31d66513d1600290868f8070bb107ed469e6e6e35d64aed1a2d389e18', sealed=True))).terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_nested_recovery.py:79: AssertionError</error></testcase><testcase classname="tests.test_nested_recovery" name="test_no_rollback_mid_call_and_no_acquisition_flag_coercion" time="0.009" /></testsuite></testsuites>

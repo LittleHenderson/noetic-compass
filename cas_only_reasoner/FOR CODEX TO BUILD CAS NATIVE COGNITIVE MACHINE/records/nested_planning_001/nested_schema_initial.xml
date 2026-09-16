@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="5.391" timestamp="2026-09-16T02:20:38.206961-07:00" hostname="MSI"><testcase classname="tests.test_nested_v03_schemas" name="test_new_schemas_are_valid_closed_and_source_bound_without_changing_v02" time="0.288" /><testcase classname="tests.test_nested_v03_schemas" name="test_every_reference_resolves_offline" time="0.263" /><testcase classname="tests.test_nested_v03_schemas" name="test_every_live_stage_reuse_and_rollback_have_closed_wire_shapes" time="2.153" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet0-True]" time="0.052" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet1-True]" time="0.030"><failure message="jsonschema.exceptions.ValidationError: 'LOOP_LIMIT_REACHED' is not one of ['RUNNING', 'CONCLUDED', 'NEEDS_INFORMATION', 'CONFLICT_UNRESOLVED', 'INADMISSIBLE', 'BUDGET_EXHAUSTED', 'FAULT', 'NEEDS_CAPABILITY']&#10;&#10;Failed validating 'enum' in schema['properties']['halt_status']:&#10;    {'type': 'string',&#10;     'enum': ['RUNNING',&#10;              'CONCLUDED',&#10;              'NEEDS_INFORMATION',&#10;              'CONFLICT_UNRESOLVED',&#10;              'INADMISSIBLE',&#10;              'BUDGET_EXHAUSTED',&#10;              'FAULT',&#10;              'NEEDS_CAPABILITY']}&#10;&#10;On instance['halt_status']:&#10;    'LOOP_LIMIT_REACHED'">packet = NestedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='nested-equations', goal_id='goal-...constant='0', rhs_terms=(('x', '1'),)),), budget=NativeBudget(instructions_remaining=512, checker_calls_remaining=128))
+allow = True
+
+    @pytest.mark.parametrize("packet,allow", [
+        (create_problem((), "missing"), True),
+        (create_problem((Equation("x", "1", "0", rhs_terms=(("x", "1"),)),), "x"), True),
+        (create_problem((Equation("x", "0", "1", "1"),), "x"), True),
+        (create_problem((Equation("x", "1", "0", "7"),), "x", budget=NativeBudget(20, 2)), True),
+        (graph(), False),
+        (create_problem((Equation("x", "1/" + str(2**127-1), "0", str(2**127-1)),
+                         Equation("y", "1", "0", rhs_terms=(("x", "1"),))), "y"), True),
+    ])
+    def test_actual_refusals_and_large_child_receipts_have_valid_shapes(packet, allow):
+        machine = NestedMachine(load_nested_profile())
+        result = machine.run(packet, allow_acquisition=allow)
+        assert result.output is None
+&gt;       machine_shapes(machine)
+
+tests\test_nested_v03_schemas.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_nested_v03_schemas.py:64: in machine_shapes
+    validate("state", value)
+tests\test_nested_v03_schemas.py:43: in validate
+    validator(kind).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Validator(schema={'$ref': 'https://cas....#/$defs/state'}, format_checker=None)
+args = ({'active_goal_id': 'goal-nested', 'branch_table': [{'active_goal_id': 'goal-nested', 'assumptions': [], 'branch_id': ..._state': {'conclusion': None, 'decision_status': 'UNCOMMITTED', 'gate_results': [], 'selected_branch_id': None}, ...},)
+kwargs = {}
+error = &lt;ValidationError: "'LOOP_LIMIT_REACHED' is not one of ['RUNNING', 'CONCLUDED', 'NEEDS_INFORMATION', 'CONFLICT_UNRESOLVED', 'INADMISSIBLE', 'BUDGET_EXHAUSTED', 'FAULT', 'NEEDS_CAPABILITY']"&gt;
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: 'LOOP_LIMIT_REACHED' is not one of ['RUNNING', 'CONCLUDED', 'NEEDS_INFORMATION', 'CONFLICT_UNRESOLVED', 'INADMISSIBLE', 'BUDGET_EXHAUSTED', 'FAULT', 'NEEDS_CAPABILITY']
+E           
+E           Failed validating 'enum' in schema['properties']['halt_status']:
+E               {'type': 'string',
+E                'enum': ['RUNNING',
+E                         'CONCLUDED',
+E                         'NEEDS_INFORMATION',
+E                         'CONFLICT_UNRESOLVED',
+E                         'INADMISSIBLE',
+E                         'BUDGET_EXHAUSTED',
+E                         'FAULT',
+E                         'NEEDS_CAPABILITY']}
+E           
+E           On instance['halt_status']:
+E               'LOOP_LIMIT_REACHED'
+
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:450: ValidationError</failure></testcase><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet2-True]" time="0.282" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet3-True]" time="0.100" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet4-False]" time="0.112" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_refusals_and_large_child_receipts_have_valid_shapes[packet5-True]" time="0.365" /><testcase classname="tests.test_nested_v03_schemas" name="test_actual_failed_qualification_and_return_shapes" time="0.300" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path0-cncm.native-problem/0.2]" time="0.001" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path1-3]" time="0.001" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path2-value2]" time="0.001" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path3-True]" time="0.003" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path4-512.0]" time="0.003" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path5-1]" time="0.002" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path6-01]" time="0.002" /><testcase classname="tests.test_nested_v03_schemas" name="test_problem_shape_rejects_plan_answer_version_and_raw_type_changes[path7-value7]" time="0.003" /><testcase classname="tests.test_nested_v03_schemas" name="test_accepted_intent_matrix_is_closed_but_trace_retains_rejected_payload" time="0.475" /><testcase classname="tests.test_nested_v03_schemas" name="test_record_body_annotation_requires_explicit_decoding" time="0.002" /><testcase classname="tests.test_nested_v03_schemas" name="test_shape_success_cannot_replace_semantic_replay" time="0.109" /><testcase classname="tests.test_nested_v03_schemas" name="test_wrong_versions_and_unknowns_rejected_at_every_top_level" time="0.127" /><testcase classname="tests.test_nested_v03_schemas" name="test_retained_state_and_proof_schemas_reject_new_runtime" time="0.002" /></testsuite></testsuites>

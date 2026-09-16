@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="10.098" timestamp="2026-09-16T02:12:00.047008-07:00" hostname="MSI"><testcase classname="tests.test_nested_kernel" name="test_accepted_v02_source_profile_is_unchanged" time="0.253" /><testcase classname="tests.test_nested_kernel" name="test_real_nested_acquisition_and_same_caller_return" time="0.311" /><testcase classname="tests.test_nested_kernel" name="test_shuffled_diamond_reuses_prerequisite_and_ignores_unreachable_failure" time="0.938" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[0]" time="0.451" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[1]" time="0.657" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[2]" time="0.706" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[3]" time="0.739" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[4]" time="0.925" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[5]" time="0.350" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[6]" time="0.514" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[7]" time="0.610" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[8]" time="0.691" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[9]" time="0.493" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[10]" time="0.375" /><testcase classname="tests.test_nested_kernel" name="test_generated_dependency_graphs_match_independent_fraction_reference[11]" time="0.453" /><testcase classname="tests.test_nested_kernel" name="test_typed_failure_propagates_without_answer[equations0-a-NEEDS_INFORMATION-MISSING_INFORMATION]" time="0.020" /><testcase classname="tests.test_nested_kernel" name="test_typed_failure_propagates_without_answer[equations1-a-LOOP_LIMIT_REACHED-CYCLIC_DEPENDENCY]" time="0.021" /><testcase classname="tests.test_nested_kernel" name="test_typed_failure_propagates_without_answer[equations2-a-LOOP_LIMIT_REACHED-CYCLIC_DEPENDENCY]" time="0.039" /><testcase classname="tests.test_nested_kernel" name="test_typed_failure_propagates_without_answer[equations3-a-NEEDS_CAPABILITY-TRANSITION_REJECTED]" time="0.144" /><testcase classname="tests.test_nested_kernel" name="test_live_depth_refusal_and_native_budget_refusal" time="0.106" /><testcase classname="tests.test_nested_kernel" name="test_tick_exhaustion_preserves_unfinished_frames_without_new_budget" time="0.048" /><testcase classname="tests.test_nested_kernel" name="test_next_input_cannot_silently_widen_from_128_to_512_bits" time="0.165"><failure message="cncm.model.ContractError: native JSON integer bound exceeded">profile = NestedProfile(source_files=(('cas_reasoner.txt', 400316, 'a72312231bfb346dc4895b1a0963e0c255d26b707c8a4fbc94d90ac52979...093cc069829dfc69e735c38901c338bab')), policy_digest='60c4213d62a90c9a12629eda2169097204411ad6b38c345030d4bbba5480ad68')
+
+    def test_next_input_cannot_silently_widen_from_128_to_512_bits(profile):
+        denominator=str(2**127-1)
+        numerator=str(2**127-2)
+        equations=(Equation("a","1/"+denominator,"0",numerator),
+            Equation("b","1","0","0",(("a","1"),)))
+&gt;       machine,result=run(profile,equations,"b")
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_nested_kernel.py:156: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_nested_kernel.py:22: in run
+    result=machine.run(create_problem(equations,query,**kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_engine.py:226: in run
+    self.advance(allow_acquisition=allow_acquisition)
+cncm\nested_engine.py:206: in advance
+    self._execute(intent)
+cncm\nested_engine.py:278: in _execute
+    return self._reasoner._execute_one(self.coordinator, intent.issuer_subsystem,
+cncm\engine.py:272: in _execute_one
+    result = coordinator.execute(
+cncm\nested_kernel.py:81: in execute
+    result=super().execute(enabled_components=enabled_components,
+cncm\kernel.py:517: in execute
+    next_state = self._apply_intent(next_state, item.intent)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_kernel.py:607: in _apply_intent
+    record=self._new_record(state,"EXECUTION",{"call_id":call.call_id,"variable":call.variable,
+cncm\nested_kernel.py:142: in _new_record
+    return NestedRecord.create(kind,{"run_id":state.run_id,"tick":state.logical_tick,**body})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_model.py:375: in create
+    encoded = _bounded_json(body, MAX_RECORD_BYTES, "nested record")
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_model.py:79: in _bounded_json
+    _wire(value)
+cncm\native_model.py:109: in _wire
+    _require(item.bit_length() &lt;= 63, "native JSON integer bound exceeded")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, label = 'native JSON integer bound exceeded'
+
+    def _require(condition, label):
+        if not condition:
+&gt;           raise ContractError(label)
+E           cncm.model.ContractError: native JSON integer bound exceeded
+
+cncm\native_model.py:64: ContractError</failure></testcase><testcase classname="tests.test_nested_kernel" name="test_new_episode_reuses_registry_and_rollback_removes_dispatch" time="0.651" /></testsuite></testsuites>
