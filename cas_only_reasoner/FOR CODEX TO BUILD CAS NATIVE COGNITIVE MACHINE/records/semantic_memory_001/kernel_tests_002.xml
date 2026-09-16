@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="20" time="12.467" timestamp="2026-09-16T02:42:28.124837-07:00" hostname="MSI"><testcase classname="tests.test_semantic_kernel" name="test_old_nested_source_profile_unchanged" time="0.007" /><testcase classname="tests.test_semantic_kernel" name="test_correction_changes_later_task_without_resupplying_value" time="1.456"><failure message="Failed: reused procedure selected again">tests\test_semantic_kernel.py:73: in test_correction_changes_later_task_without_resupplying_value
+    assert baseline.run(task("35",updates=(old,))).output == "10"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\semantic_engine.py:186: in run
+    return NestedMachine.run(self, semantic_problem, allow_acquisition=allow_acquisition)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_engine.py:226: in run
+    self.advance(allow_acquisition=allow_acquisition)
+cncm\semantic_engine.py:169: in advance
+    self._execute(intent)
+cncm\nested_engine.py:278: in _execute
+    return self._reasoner._execute_one(self.coordinator, intent.issuer_subsystem,
+cncm\engine.py:272: in _execute_one
+    result = coordinator.execute(
+cncm\nested_kernel.py:81: in execute
+    result=super().execute(enabled_components=enabled_components,
+cncm\kernel.py:455: in execute
+    work_state, work_denials = self._prepare_validation_work(
+cncm\semantic_kernel.py:160: in _prepare_validation_work
+    return super()._prepare_validation_work(state, proposed, enabled, scheduled, excluded_ids=excluded_ids)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_kernel.py:425: in _prepare_validation_work
+    artifact,report=select_finite_candidate()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\test_semantic_kernel.py:58: in &lt;lambda&gt;
+    monkeypatch.setattr(nk,"select_finite_candidate",lambda:pytest.fail("reused procedure selected again"))
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   Failed: reused procedure selected again</failure></testcase><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[missing]" time="0.016" /><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[unanchored]" time="0.016" /><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[stale]" time="0.024" /><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[revoked]" time="0.033" /><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[conflict]" time="0.032" /><testcase classname="tests.test_semantic_kernel" name="test_refusal_before_any_arithmetic[verification]" time="0.023" /><testcase classname="tests.test_semantic_kernel" name="test_insufficient_budget_refuses_before_checker" time="0.016" /><testcase classname="tests.test_semantic_kernel" name="test_unresolved_memory_cannot_be_bypassed_by_direct_nested_request" time="0.352" /><testcase classname="tests.test_semantic_kernel" name="test_wrong_issuer_stale_and_duplicate_memory_proposals_do_not_write" time="0.358" /><testcase classname="tests.test_semantic_kernel" name="test_correction_cannot_change_suspended_inputs" time="0.084" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[0]" time="1.198" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[1]" time="1.185" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[2]" time="1.185" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[3]" time="1.264" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[4]" time="1.202" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[5]" time="1.249" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[6]" time="1.217" /><testcase classname="tests.test_semantic_kernel" name="test_later_structural_variants_use_current_memory_and_fraction_oracle[7]" time="1.219" /></testsuite></testsuites>

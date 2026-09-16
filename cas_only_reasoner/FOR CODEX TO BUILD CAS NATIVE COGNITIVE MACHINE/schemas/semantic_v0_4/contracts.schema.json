@@ -1,0 +1,2909 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/semantic_v0_4/contracts.schema.json",
+  "title": "Closed source-attested correction memory v0.4 wire contracts",
+  "$comment": "Shape engineering only. Canonical rational reduction/bit limits, duplicate keys, aggregate bytes, explicit decoded record bodies, digest/source/ingress bindings and exact semantic replay remain runtime obligations. VALID receipts concern named relations; source labels never certify world truth.",
+  "$defs": {
+    "identifier": {
+      "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+    },
+    "hash": {
+      "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+    },
+    "budget": {
+      "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/budget"
+    },
+    "rational_input": {
+      "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/rational_input"
+    },
+    "terminal": {
+      "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/terminal"
+    },
+    "source_status": {
+      "enum": [
+        "USER_ATTESTED",
+        "TEST_FIXTURE"
+      ]
+    },
+    "source_statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "scope",
+        "key",
+        "source_id",
+        "value",
+        "status",
+        "action",
+        "previous_digest",
+        "source_ref"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-source-statement/0.4"
+        },
+        "scope": {
+          "$ref": "#/$defs/identifier"
+        },
+        "key": {
+          "$ref": "#/$defs/identifier"
+        },
+        "source_id": {
+          "$ref": "#/$defs/identifier"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/rational_input"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/source_status"
+        },
+        "action": {
+          "enum": [
+            "ASSERT",
+            "RETRACT"
+          ]
+        },
+        "previous_digest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "ASSERT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/rational_input"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "RETRACT"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "memory_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "scope",
+        "key",
+        "evidence_requirement"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-memory-ref/0.4"
+        },
+        "scope": {
+          "$ref": "#/$defs/identifier"
+        },
+        "key": {
+          "$ref": "#/$defs/identifier"
+        },
+        "evidence_requirement": {
+          "enum": [
+            "ATTESTED",
+            "INDEPENDENTLY_VERIFIED"
+          ]
+        }
+      }
+    },
+    "scalar": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/rational_input"
+        },
+        {
+          "$ref": "#/$defs/memory_ref"
+        }
+      ]
+    },
+    "equation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "variable",
+        "a",
+        "b",
+        "constant",
+        "terms"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-equation/0.4"
+        },
+        "variable": {
+          "$ref": "#/$defs/identifier"
+        },
+        "a": {
+          "$ref": "#/$defs/scalar"
+        },
+        "b": {
+          "$ref": "#/$defs/scalar"
+        },
+        "constant": {
+          "$ref": "#/$defs/scalar"
+        },
+        "terms": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+              },
+              {
+                "allOf": [
+                  {
+                    "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/rational_input"
+                  }
+                ],
+                "not": {
+                  "const": "0"
+                }
+              }
+            ],
+            "items": false,
+            "minItems": 2,
+            "maxItems": 2
+          },
+          "minItems": 0,
+          "maxItems": 4
+        }
+      }
+    },
+    "recall_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "ref",
+        "value",
+        "statement_digests",
+        "statuses",
+        "receipt_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-recall-binding/0.4"
+        },
+        "ref": {
+          "$ref": "#/$defs/memory_ref"
+        },
+        "value": {
+          "$ref": "#/$defs/rational_input"
+        },
+        "statement_digests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          },
+          "minItems": 1,
+          "maxItems": 256,
+          "uniqueItems": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_status"
+          },
+          "minItems": 1,
+          "maxItems": 256
+        },
+        "receipt_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "reasoning",
+        "query_variable",
+        "equations",
+        "budget",
+        "updates"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-problem/0.4"
+        },
+        "reasoning": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "problem_id",
+            "goal_id",
+            "seed",
+            "entities",
+            "predicates",
+            "facts",
+            "rules",
+            "query",
+            "candidates",
+            "rpm_resolvers",
+            "foundation_ref",
+            "budgets"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "cncm.problem/0.1"
+            },
+            "problem_id": {
+              "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/identifier"
+            },
+            "goal_id": {
+              "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/identifier"
+            },
+            "seed": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "entities": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "https://cas.local/schemas/problem_packet.schema.json#/$defs/entity_decl"
+              }
+            },
+            "predicates": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "$ref": "https://cas.local/schemas/problem_packet.schema.json#/$defs/predicate_decl"
+              }
+            },
+            "facts": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/problem_packet.schema.json#/$defs/asserted_ground_proposition"
+              }
+            },
+            "rules": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/rule.schema.json"
+              }
+            },
+            "query": {
+              "allOf": [
+                {
+                  "$ref": "https://cas.local/schemas/problem_packet.schema.json#/$defs/ground_proposition"
+                }
+              ],
+              "properties": {
+                "predicate": {
+                  "const": "nested_checked"
+                },
+                "arguments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+                  },
+                  "minItems": 1,
+                  "maxItems": 1
+                },
+                "polarity": {
+                  "const": true
+                }
+              }
+            },
+            "candidates": {
+              "type": "array",
+              "items": false,
+              "minItems": 0,
+              "maxItems": 0
+            },
+            "rpm_resolvers": {
+              "type": "array",
+              "items": false,
+              "minItems": 0,
+              "maxItems": 0
+            },
+            "foundation_ref": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^TF[1-7]([a-d])?$",
+              "default": null
+            },
+            "budgets": {
+              "allOf": [
+                {
+                  "$ref": "https://cas.local/schemas/problem_packet.schema.json#/$defs/budget_limits",
+                  "default": {}
+                }
+              ],
+              "properties": {
+                "max_ticks": {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 1024
+                },
+                "max_rpm_depth": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 8
+                }
+              }
+            }
+          }
+        },
+        "query_variable": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "equations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/equation"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "budget": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/budget"
+        },
+        "updates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_statement"
+          },
+          "minItems": 0,
+          "maxItems": 256,
+          "uniqueItems": true
+        }
+      }
+    },
+    "source_update_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "history_digest",
+        "history_count",
+        "statement",
+        "statement_digest",
+        "previous_head_digest"
+      ],
+      "properties": {
+        "history_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "history_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "statement": {
+          "$ref": "#/$defs/source_statement"
+        },
+        "statement_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "previous_head_digest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "recall_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "value",
+        "statement_digests",
+        "statuses"
+      ],
+      "properties": {
+        "ref": {
+          "$ref": "#/$defs/memory_ref"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/rational_input"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "statement_digests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          },
+          "minItems": 0,
+          "maxItems": 256,
+          "uniqueItems": true
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_status"
+          },
+          "minItems": 0,
+          "maxItems": 256
+        }
+      }
+    },
+    "recall_receipt_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "history_digest",
+        "history_count",
+        "binding",
+        "active_values",
+        "revoked_head_digests"
+      ],
+      "properties": {
+        "history_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "history_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "binding": {
+          "$ref": "#/$defs/recall_result"
+        },
+        "active_values": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rational_input"
+          },
+          "minItems": 0,
+          "maxItems": 256,
+          "uniqueItems": true
+        },
+        "revoked_head_digests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/hash"
+          },
+          "minItems": 0,
+          "maxItems": 256,
+          "uniqueItems": true
+        }
+      }
+    },
+    "resolution_receipt_bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "history_digest",
+        "history_count",
+        "problem_digest",
+        "resolved_problem_digest",
+        "bindings"
+      ],
+      "properties": {
+        "history_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "history_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "problem_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "resolved_problem_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recall_binding"
+          },
+          "minItems": 0,
+          "maxItems": 48
+        },
+        "reachable_variables": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 65,
+          "uniqueItems": true
+        },
+        "missing_producers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "omitted_unreachable_equations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 16,
+          "uniqueItems": true
+        },
+        "recall_refusal": {
+          "$ref": "#/$defs/recall_receipt"
+        }
+      }
+    },
+    "source_update_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "checker_id",
+        "source_profile_digest",
+        "domain",
+        "claim",
+        "status",
+        "reason",
+        "support",
+        "factual_status",
+        "bindings",
+        "receipt_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.verifier-receipt/0.1"
+        },
+        "checker_id": {
+          "const": "cncm.semantic-verifier/0.1"
+        },
+        "source_profile_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "domain": {
+          "const": "SOURCE_UPDATE"
+        },
+        "claim": {
+          "const": "SOURCE_UPDATE_ADMISSIBLE"
+        },
+        "status": {
+          "enum": [
+            "VALID",
+            "INVALID",
+            "UNSUPPORTED",
+            "INCOMPLETE",
+            "COUNTEREXAMPLE_FOUND"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/identifier"
+        },
+        "support": {
+          "enum": [
+            "NONE",
+            "USER_ATTESTED",
+            "TEST_FIXTURE",
+            "MIXED_ATTESTATIONS"
+          ]
+        },
+        "factual_status": {
+          "const": "NOT_INDEPENDENTLY_VERIFIED"
+        },
+        "bindings": {
+          "$ref": "#/$defs/source_update_bindings"
+        },
+        "receipt_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "recall_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "checker_id",
+        "source_profile_digest",
+        "domain",
+        "claim",
+        "status",
+        "reason",
+        "support",
+        "factual_status",
+        "bindings",
+        "receipt_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.verifier-receipt/0.1"
+        },
+        "checker_id": {
+          "const": "cncm.semantic-verifier/0.1"
+        },
+        "source_profile_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "domain": {
+          "const": "MEMORY_RECALL"
+        },
+        "claim": {
+          "const": "EXACT_ACTIVE_SOURCE_RECALL"
+        },
+        "status": {
+          "enum": [
+            "VALID",
+            "INVALID",
+            "UNSUPPORTED",
+            "INCOMPLETE",
+            "COUNTEREXAMPLE_FOUND"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/identifier"
+        },
+        "support": {
+          "enum": [
+            "NONE",
+            "USER_ATTESTED",
+            "TEST_FIXTURE",
+            "MIXED_ATTESTATIONS"
+          ]
+        },
+        "factual_status": {
+          "const": "NOT_INDEPENDENTLY_VERIFIED"
+        },
+        "bindings": {
+          "$ref": "#/$defs/recall_receipt_bindings"
+        },
+        "receipt_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "resolution_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "checker_id",
+        "source_profile_digest",
+        "domain",
+        "claim",
+        "status",
+        "reason",
+        "support",
+        "factual_status",
+        "bindings",
+        "receipt_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.verifier-receipt/0.1"
+        },
+        "checker_id": {
+          "const": "cncm.semantic-verifier/0.1"
+        },
+        "source_profile_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "domain": {
+          "const": "MEMORY_RESOLUTION"
+        },
+        "claim": {
+          "const": "EXACT_TEMPLATE_SUBSTITUTION"
+        },
+        "status": {
+          "enum": [
+            "VALID",
+            "INVALID",
+            "UNSUPPORTED",
+            "INCOMPLETE",
+            "COUNTEREXAMPLE_FOUND"
+          ]
+        },
+        "reason": {
+          "$ref": "#/$defs/identifier"
+        },
+        "support": {
+          "enum": [
+            "NONE",
+            "USER_ATTESTED",
+            "TEST_FIXTURE",
+            "MIXED_ATTESTATIONS"
+          ]
+        },
+        "factual_status": {
+          "const": "NOT_INDEPENDENTLY_VERIFIED"
+        },
+        "bindings": {
+          "$ref": "#/$defs/resolution_receipt_bindings"
+        },
+        "receipt_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "verifier_receipt": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/source_update_receipt"
+        },
+        {
+          "$ref": "#/$defs/recall_receipt"
+        },
+        {
+          "$ref": "#/$defs/resolution_receipt"
+        }
+      ]
+    },
+    "nested_record_body_DECOMPOSITION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "equation",
+        "dependencies",
+        "problem_hash"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "equation": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/equation"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+          },
+          "minItems": 0,
+          "maxItems": 4
+        },
+        "problem_hash": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        }
+      }
+    },
+    "nested_record_body_BINDING": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "equation",
+        "dependency_records",
+        "report"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "equation": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/equation"
+        },
+        "dependency_records": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/dependency_records"
+        },
+        "report": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/grounding_report"
+        }
+      }
+    },
+    "nested_record_body_SELECTION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "selected_artifact",
+        "report"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "selected_artifact": {
+          "$ref": "https://cas.local/schemas/procedure_substrate_artifact.schema.json"
+        },
+        "report": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/selection"
+        }
+      }
+    },
+    "nested_record_body_QUALIFICATION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "artifact_sha256",
+        "report"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "artifact_sha256": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "report": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/qualification"
+        }
+      }
+    },
+    "nested_record_body_INSTALLATION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "frame_id",
+        "capability",
+        "artifact_sha256",
+        "qualification_digest",
+        "previous_installation_digest"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "frame_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "capability": {
+          "const": "cncm.solve-linear/0.1"
+        },
+        "artifact_sha256": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "qualification_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "previous_installation_digest": {
+          "const": null
+        }
+      }
+    },
+    "nested_record_body_EXECUTION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "variable",
+        "equation",
+        "inputs_digest",
+        "artifact_sha256",
+        "dependency_records",
+        "output",
+        "report",
+        "equation_report"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "variable": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "equation": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/equation"
+        },
+        "inputs_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "artifact_sha256": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "dependency_records": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/dependency_records"
+        },
+        "output": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/rational"
+        },
+        "report": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/checked_report"
+        },
+        "equation_report": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/equation_report"
+        }
+      }
+    },
+    "nested_record_body_FAILURE": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "reason",
+        "detail"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "reason": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "detail": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 512
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "nested_record_body_ROLLBACK": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "capability",
+        "expected_head",
+        "installation_digest",
+        "target_installation_digest"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "capability": {
+          "const": "cncm.solve-linear/0.1"
+        },
+        "expected_head": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "installation_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "target_installation_digest": {
+          "const": null
+        }
+      }
+    },
+    "nested_record_body_RETURN": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "frame",
+        "result",
+        "budget"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "frame": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/frame"
+        },
+        "result": {
+          "oneOf": [
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/mutation_RETURN_DEPENDENCY"
+            },
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/mutation_RETURN_PROCEDURE"
+            }
+          ]
+        },
+        "budget": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/budget"
+        }
+      }
+    },
+    "nested_record_body_WORK_RESERVATION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "call_id",
+        "intent_id",
+        "operation",
+        "instructions_allocated",
+        "checker_calls_allocated",
+        "before",
+        "after",
+        "failure",
+        "failure_code",
+        "report_digest",
+        "failed_report",
+        "failed_equation_report"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "call_id": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "intent_id": {
+          "type": "string",
+          "pattern": "^intent-[0-9a-f]{16}$"
+        },
+        "operation": {
+          "enum": [
+            "SELECT_PROCEDURE",
+            "INSTALL_PROCEDURE",
+            "BIND_EQUATION",
+            "APPLY_EQUATION"
+          ]
+        },
+        "instructions_allocated": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "checker_calls_allocated": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "before": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/budget"
+        },
+        "after": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/budget"
+        },
+        "failure": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 4096
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failure_code": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "report_digest": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "failed_report": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/selection"
+            },
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/qualification"
+            },
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/checked_report"
+            },
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/grounding_report"
+            }
+          ]
+        },
+        "failed_equation_report": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/equation_report"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "nested_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "kind",
+        "body_json",
+        "record_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.nested-record/0.3"
+        },
+        "kind": {
+          "enum": [
+            "BINDING",
+            "DECOMPOSITION",
+            "EXECUTION",
+            "FAILURE",
+            "INSTALLATION",
+            "QUALIFICATION",
+            "RETURN",
+            "ROLLBACK",
+            "SELECTION",
+            "WORK_RESERVATION"
+          ]
+        },
+        "body_json": {
+          "type": "string",
+          "maxLength": 262144,
+          "contentMediaType": "application/json"
+        },
+        "record_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "BINDING"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_BINDING"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "DECOMPOSITION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_DECOMPOSITION"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "EXECUTION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_EXECUTION"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "FAILURE"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_FAILURE"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "INSTALLATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_INSTALLATION"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "QUALIFICATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_QUALIFICATION"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "RETURN"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_RETURN"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "ROLLBACK"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_ROLLBACK"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "SELECTION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_SELECTION"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "WORK_RESERVATION"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "body_json": {
+                "contentSchema": {
+                  "$ref": "#/$defs/nested_record_body_WORK_RESERVATION"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "contentSchema is annotation only. Explicitly parse canonical body_json and validate its record_body_KIND; runtime typed parsing and replay remain mandatory."
+    },
+    "record_body_STORE": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "statement_digest",
+        "receipt"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "statement_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "receipt": {
+          "$ref": "#/$defs/source_update_receipt"
+        }
+      }
+    },
+    "record_body_RECALL": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "binding",
+        "receipt"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "binding": {
+          "$ref": "#/$defs/recall_binding"
+        },
+        "receipt": {
+          "$ref": "#/$defs/recall_receipt"
+        }
+      }
+    },
+    "record_body_RESOLUTION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "problem_hash",
+        "resolved_problem",
+        "receipt"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "problem_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "resolved_problem": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/problem"
+        },
+        "receipt": {
+          "$ref": "#/$defs/resolution_receipt"
+        }
+      }
+    },
+    "record_body_WORK_RESERVATION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tick",
+        "intent_id",
+        "operation",
+        "before",
+        "after",
+        "instructions_allocated",
+        "checker_calls_allocated",
+        "failure",
+        "receipt"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "intent_id": {
+          "type": "string",
+          "pattern": "^intent-[0-9a-f]{16}$"
+        },
+        "operation": {
+          "enum": [
+            "STORE_SOURCE",
+            "RECALL_MEMORY",
+            "CHECK_MEMORY_RESOLUTION"
+          ]
+        },
+        "before": {
+          "$ref": "#/$defs/budget"
+        },
+        "after": {
+          "$ref": "#/$defs/budget"
+        },
+        "instructions_allocated": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 16
+        },
+        "checker_calls_allocated": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "failure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "receipt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/verifier_receipt"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "verifier_fault": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 131072
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "record": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "kind",
+            "body_json",
+            "record_digest"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "cncm.semantic-record/0.4"
+            },
+            "kind": {
+              "const": "STORE"
+            },
+            "body_json": {
+              "type": "string",
+              "maxLength": 131072,
+              "contentMediaType": "application/json",
+              "contentSchema": {
+                "$ref": "#/$defs/record_body_STORE"
+              }
+            },
+            "record_digest": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "kind",
+            "body_json",
+            "record_digest"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "cncm.semantic-record/0.4"
+            },
+            "kind": {
+              "const": "RECALL"
+            },
+            "body_json": {
+              "type": "string",
+              "maxLength": 131072,
+              "contentMediaType": "application/json",
+              "contentSchema": {
+                "$ref": "#/$defs/record_body_RECALL"
+              }
+            },
+            "record_digest": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "kind",
+            "body_json",
+            "record_digest"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "cncm.semantic-record/0.4"
+            },
+            "kind": {
+              "const": "RESOLUTION"
+            },
+            "body_json": {
+              "type": "string",
+              "maxLength": 131072,
+              "contentMediaType": "application/json",
+              "contentSchema": {
+                "$ref": "#/$defs/record_body_RESOLUTION"
+              }
+            },
+            "record_digest": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schema_version",
+            "kind",
+            "body_json",
+            "record_digest"
+          ],
+          "properties": {
+            "schema_version": {
+              "const": "cncm.semantic-record/0.4"
+            },
+            "kind": {
+              "const": "WORK_RESERVATION"
+            },
+            "body_json": {
+              "type": "string",
+              "maxLength": 131072,
+              "contentMediaType": "application/json",
+              "contentSchema": {
+                "$ref": "#/$defs/record_body_WORK_RESERVATION"
+              }
+            },
+            "record_digest": {
+              "$ref": "#/$defs/hash"
+            }
+          }
+        }
+      ],
+      "$comment": "contentSchema is annotation only; explicitly decode and validate each body. Runtime verifies canonical bytes, digest and semantics."
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_version",
+        "logical_tick",
+        "run_id",
+        "seed",
+        "constitution_revision",
+        "foundation_state",
+        "drive_state",
+        "domain_power_state",
+        "global_workspace",
+        "working_memory",
+        "episodic_memory",
+        "episodic_memory_revision",
+        "active_goal_id",
+        "rpm_stack",
+        "branch_table",
+        "pending_intents",
+        "commitment_state",
+        "learning_queue",
+        "halt_status",
+        "trace_head",
+        "state_hash",
+        "budget",
+        "procedural_artifacts",
+        "procedure_heads",
+        "native_records",
+        "native_calls",
+        "native_budget",
+        "native_contract_digest",
+        "prior_episode_state_hash",
+        "schema_version",
+        "memory_statements",
+        "memory_bindings",
+        "memory_update_index",
+        "memory_failure",
+        "ingress_digest",
+        "semantic_records",
+        "memory_resolution_digest"
+      ],
+      "properties": {
+        "runtime_version": {
+          "const": "0.4.0"
+        },
+        "logical_tick": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9223372036854775807
+        },
+        "constitution_revision": {
+          "const": "cncm-constitution/semantic-0.4"
+        },
+        "foundation_state": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/foundation_state"
+        },
+        "drive_state": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/drive_state"
+        },
+        "domain_power_state": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/domain_power_state"
+        },
+        "global_workspace": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/global_workspace"
+        },
+        "working_memory": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/proposition.schema.json"
+          }
+        },
+        "episodic_memory": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/episodic_record"
+          },
+          "maxItems": 128
+        },
+        "episodic_memory_revision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "active_goal_id": {
+          "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/identifier"
+        },
+        "rpm_stack": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/frame"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "branch_table": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/branch"
+          },
+          "minItems": 1,
+          "maxItems": 8
+        },
+        "pending_intents": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/intent_id_list"
+        },
+        "commitment_state": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/commitment_state"
+        },
+        "learning_queue": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/learning_queue"
+        },
+        "halt_status": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/terminal"
+        },
+        "trace_head": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/hash_or_empty"
+        },
+        "state_hash": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/hash"
+        },
+        "budget": {
+          "$ref": "https://cas.local/schemas/machine_state.schema.json#/$defs/budget_state"
+        },
+        "procedural_artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/procedure_substrate_artifact.schema.json"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "procedure_heads": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/heads"
+        },
+        "native_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nested_record"
+          },
+          "minItems": 0,
+          "maxItems": 512
+        },
+        "native_calls": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/call"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "native_budget": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/budget"
+        },
+        "native_contract_digest": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "prior_episode_state_hash": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "schema_version": {
+          "const": "cncm.semantic-state/0.4"
+        },
+        "memory_statements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source_statement"
+          },
+          "minItems": 0,
+          "maxItems": 256,
+          "uniqueItems": true
+        },
+        "memory_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recall_binding"
+          },
+          "minItems": 0,
+          "maxItems": 48
+        },
+        "memory_update_index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        },
+        "memory_failure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "ingress_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "semantic_records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/record"
+          },
+          "minItems": 0,
+          "maxItems": 1024,
+          "uniqueItems": true
+        },
+        "memory_resolution_digest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "mutation_STORE_SOURCE": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "statement"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255
+        },
+        "statement": {
+          "$ref": "#/$defs/source_statement"
+        }
+      }
+    },
+    "mutation_RECALL_MEMORY": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference"
+      ],
+      "properties": {
+        "reference": {
+          "$ref": "#/$defs/memory_ref"
+        }
+      }
+    },
+    "mutation_CHECK_MEMORY_RESOLUTION": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "problem_hash",
+        "resolved_problem_hash"
+      ],
+      "properties": {
+        "problem_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "resolved_problem_hash": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "accepted_intent": {
+      "oneOf": [
+        {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/accepted_intent"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intent_id",
+            "intent_type",
+            "issuer_subsystem",
+            "required_capability",
+            "target_scope",
+            "branch_id",
+            "goal_id",
+            "precondition",
+            "proposed_mutation",
+            "created_at_tick",
+            "provenance"
+          ],
+          "properties": {
+            "intent_id": {
+              "type": "string",
+              "pattern": "^intent-[0-9a-f]{16}$"
+            },
+            "intent_type": {
+              "const": "STORE_SOURCE"
+            },
+            "issuer_subsystem": {
+              "const": "semantic_memory_controller"
+            },
+            "required_capability": {
+              "const": "store_anchored_source"
+            },
+            "target_scope": {
+              "const": "semantic_memory"
+            },
+            "branch_id": {
+              "const": "branch-main"
+            },
+            "goal_id": {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+            },
+            "precondition": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/precondition"
+            },
+            "proposed_mutation": {
+              "$ref": "#/$defs/mutation_STORE_SOURCE"
+            },
+            "created_at_tick": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "provenance": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/provenance"
+              },
+              "minItems": 0,
+              "maxItems": 64
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intent_id",
+            "intent_type",
+            "issuer_subsystem",
+            "required_capability",
+            "target_scope",
+            "branch_id",
+            "goal_id",
+            "precondition",
+            "proposed_mutation",
+            "created_at_tick",
+            "provenance"
+          ],
+          "properties": {
+            "intent_id": {
+              "type": "string",
+              "pattern": "^intent-[0-9a-f]{16}$"
+            },
+            "intent_type": {
+              "const": "RECALL_MEMORY"
+            },
+            "issuer_subsystem": {
+              "const": "semantic_memory_controller"
+            },
+            "required_capability": {
+              "const": "recall_scoped_source"
+            },
+            "target_scope": {
+              "const": "semantic_memory"
+            },
+            "branch_id": {
+              "const": "branch-main"
+            },
+            "goal_id": {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+            },
+            "precondition": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/precondition"
+            },
+            "proposed_mutation": {
+              "$ref": "#/$defs/mutation_RECALL_MEMORY"
+            },
+            "created_at_tick": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "provenance": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/provenance"
+              },
+              "minItems": 0,
+              "maxItems": 64
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intent_id",
+            "intent_type",
+            "issuer_subsystem",
+            "required_capability",
+            "target_scope",
+            "branch_id",
+            "goal_id",
+            "precondition",
+            "proposed_mutation",
+            "created_at_tick",
+            "provenance"
+          ],
+          "properties": {
+            "intent_id": {
+              "type": "string",
+              "pattern": "^intent-[0-9a-f]{16}$"
+            },
+            "intent_type": {
+              "const": "CHECK_MEMORY_RESOLUTION"
+            },
+            "issuer_subsystem": {
+              "const": "semantic_memory_controller"
+            },
+            "required_capability": {
+              "const": "check_memory_resolution"
+            },
+            "target_scope": {
+              "const": "semantic_memory"
+            },
+            "branch_id": {
+              "const": "branch-main"
+            },
+            "goal_id": {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+            },
+            "precondition": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/precondition"
+            },
+            "proposed_mutation": {
+              "$ref": "#/$defs/mutation_CHECK_MEMORY_RESOLUTION"
+            },
+            "created_at_tick": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "provenance": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/provenance"
+              },
+              "minItems": 0,
+              "maxItems": 64
+            }
+          }
+        }
+      ]
+    },
+    "trace_intent": {
+      "anyOf": [
+        {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/trace_intent"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "intent_id",
+            "intent_type",
+            "issuer_subsystem",
+            "required_capability",
+            "target_scope",
+            "branch_id",
+            "goal_id",
+            "precondition",
+            "proposed_mutation",
+            "created_at_tick",
+            "provenance"
+          ],
+          "properties": {
+            "intent_id": {
+              "type": "string",
+              "pattern": "^intent-[0-9a-f]{16}$"
+            },
+            "intent_type": {
+              "enum": [
+                "STORE_SOURCE",
+                "RECALL_MEMORY",
+                "CHECK_MEMORY_RESOLUTION"
+              ]
+            },
+            "issuer_subsystem": {
+              "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/identifier"
+            },
+            "required_capability": {
+              "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/identifier"
+            },
+            "target_scope": {
+              "type": "string",
+              "minLength": 1
+            },
+            "branch_id": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/nullable_identifier"
+            },
+            "goal_id": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/nullable_identifier"
+            },
+            "precondition": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/precondition"
+            },
+            "proposed_mutation": {
+              "$ref": "https://cas.local/schemas/intent.schema.json#/$defs/trace_mutation_object"
+            },
+            "created_at_tick": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "provenance": {
+              "type": "array",
+              "items": {
+                "$ref": "https://cas.local/schemas/proposition.schema.json#/$defs/provenance"
+              }
+            }
+          }
+        }
+      ],
+      "$comment": "Rejected proposals retain bounded ordinary JSON payloads; only accepted_intent checks admitted semantic mutation shape."
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "parent_event_id",
+        "logical_tick",
+        "run_id",
+        "runtime_version",
+        "pre_state_hash",
+        "enabled_components",
+        "scheduled_components",
+        "proposed_intents",
+        "authorized_intent_ids",
+        "rejected_intents",
+        "committed_mutations",
+        "post_state_hash",
+        "terminal_status",
+        "previous_event_hash",
+        "event_hash",
+        "sealed"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^event-semantic-run-[0-9a-f]{16}-[0-9]{6,}$"
+        },
+        "parent_event_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^event-semantic-run-[0-9a-f]{16}-[0-9]{6,}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "logical_tick": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "run_id": {
+          "type": "string",
+          "pattern": "^semantic-run-[0-9a-f]{16}$"
+        },
+        "runtime_version": {
+          "const": "0.4.0"
+        },
+        "pre_state_hash": {
+          "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/hash"
+        },
+        "enabled_components": {
+          "allOf": [
+            {
+              "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/identifier_list"
+            }
+          ],
+          "maxItems": 32
+        },
+        "scheduled_components": {
+          "allOf": [
+            {
+              "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/identifier_list"
+            }
+          ],
+          "maxItems": 32
+        },
+        "proposed_intents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trace_intent"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "authorized_intent_ids": {
+          "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/intent_id_list"
+        },
+        "rejected_intents": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/rejected_intent"
+          }
+        },
+        "committed_mutations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "post_state_hash": {
+          "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/hash"
+        },
+        "terminal_status": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/terminal"
+        },
+        "previous_event_hash": {
+          "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/hash_or_empty"
+        },
+        "event_hash": {
+          "$ref": "https://cas.local/schemas/trace_event.schema.json#/$defs/hash"
+        },
+        "sealed": {
+          "const": true
+        }
+      }
+    },
+    "source_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "policy_digest",
+        "source_files"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-source-profile/0.4"
+        },
+        "policy_digest": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "source_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "bytes",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512,
+                "pattern": "^(?!/)(?!.*\\\\)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2147483647
+              },
+              "sha256": {
+                "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+              }
+            }
+          },
+          "minItems": 1,
+          "maxItems": 128
+        }
+      }
+    },
+    "episode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "problem",
+        "initial_state_hash",
+        "prior_episode_state_hash",
+        "source_profile_digest",
+        "trace",
+        "proposal_batches",
+        "final_state",
+        "ingress_digest"
+      ],
+      "properties": {
+        "problem": {
+          "$ref": "#/$defs/problem"
+        },
+        "initial_state_hash": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "prior_episode_state_hash": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_profile_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trace"
+          },
+          "minItems": 0,
+          "maxItems": 1024
+        },
+        "proposal_batches": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "intent",
+                "malformed"
+              ],
+              "properties": {
+                "intent": {
+                  "$ref": "#/$defs/trace_intent"
+                },
+                "malformed": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "minItems": 0,
+            "maxItems": 8
+          },
+          "minItems": 0,
+          "maxItems": 1024
+        },
+        "final_state": {
+          "$ref": "#/$defs/state"
+        },
+        "ingress_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "journal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "source_profile",
+        "episodes",
+        "journal_digest",
+        "ingress_digest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-journal/0.4"
+        },
+        "source_profile": {
+          "$ref": "#/$defs/source_profile"
+        },
+        "episodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/episode"
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "journal_digest": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/hash"
+        },
+        "ingress_digest": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "problem_hash",
+        "source_profile_digest",
+        "initial_state_hash",
+        "prior_episode_state_hash",
+        "final_state_hash",
+        "trace_digest",
+        "terminal_status",
+        "calls",
+        "procedure_heads",
+        "rejected_intent_count",
+        "conservative_policy_work_reserved",
+        "remaining_native_budget",
+        "scope",
+        "evidence_digest",
+        "query_variable",
+        "remaining_frames",
+        "authorized_nested_transitions",
+        "authorized_semantic_transitions",
+        "ingress_digest",
+        "memory_failure",
+        "memory_resolution_digest",
+        "source_bindings",
+        "claim_status",
+        "unconditional_world_truth"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "cncm.semantic-evidence/0.4"
+        },
+        "problem_hash": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "source_profile_digest": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "initial_state_hash": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "prior_episode_state_hash": {
+          "anyOf": [
+            {
+              "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "final_state_hash": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "trace_digest": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "terminal_status": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/terminal"
+        },
+        "calls": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/call"
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "procedure_heads": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/heads"
+        },
+        "rejected_intent_count": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
+        "conservative_policy_work_reserved": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "instructions",
+            "checker_calls"
+          ],
+          "properties": {
+            "instructions": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "checker_calls": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        },
+        "remaining_native_budget": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/budget"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dependency_source",
+            "procedure_source",
+            "qualification",
+            "neural_program_synthesis",
+            "secret_evaluation_custody",
+            "native_neural_flow",
+            "external_actions",
+            "source_authority",
+            "external_source_authentication",
+            "external_fact_verification",
+            "answer_scope"
+          ],
+          "properties": {
+            "dependency_source": {
+              "const": "bounded_typed_equation_references"
+            },
+            "procedure_source": {
+              "const": "bounded_public_finite_grammar"
+            },
+            "qualification": {
+              "const": "public_fixed_engineering_panel"
+            },
+            "neural_program_synthesis": {
+              "const": false
+            },
+            "secret_evaluation_custody": {
+              "const": false
+            },
+            "native_neural_flow": {
+              "const": false
+            },
+            "external_actions": {
+              "const": false
+            },
+            "source_authority": {
+              "const": "caller_supplied_statement_digest_allowlist"
+            },
+            "external_source_authentication": {
+              "const": false
+            },
+            "external_fact_verification": {
+              "const": false
+            },
+            "answer_scope": {
+              "const": "arithmetic conditional on recorded source bindings"
+            }
+          }
+        },
+        "evidence_digest": {
+          "$ref": "https://cas.local/schemas/native_v0_2/contracts.schema.json#/$defs/hash"
+        },
+        "query_variable": {
+          "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/identifier"
+        },
+        "remaining_frames": {
+          "type": "array",
+          "items": {
+            "$ref": "https://cas.local/schemas/nested_v0_3/contracts.schema.json#/$defs/frame"
+          },
+          "minItems": 0,
+          "maxItems": 8
+        },
+        "authorized_nested_transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "REQUEST_EQUATION",
+            "DECOMPOSE_EQUATION",
+            "PUSH_DEPENDENCY",
+            "RETURN_DEPENDENCY",
+            "BIND_EQUATION",
+            "PUSH_PROCEDURE",
+            "SELECT_PROCEDURE",
+            "INSTALL_PROCEDURE",
+            "RETURN_PROCEDURE",
+            "APPLY_EQUATION",
+            "FAIL_CALL",
+            "ROLLBACK_PROCEDURE"
+          ],
+          "properties": {
+            "REQUEST_EQUATION": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "DECOMPOSE_EQUATION": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "PUSH_DEPENDENCY": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "RETURN_DEPENDENCY": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "BIND_EQUATION": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "PUSH_PROCEDURE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "SELECT_PROCEDURE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "INSTALL_PROCEDURE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "RETURN_PROCEDURE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "APPLY_EQUATION": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "FAIL_CALL": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "ROLLBACK_PROCEDURE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            }
+          }
+        },
+        "authorized_semantic_transitions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "STORE_SOURCE",
+            "RECALL_MEMORY",
+            "CHECK_MEMORY_RESOLUTION"
+          ],
+          "properties": {
+            "STORE_SOURCE": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "RECALL_MEMORY": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            },
+            "CHECK_MEMORY_RESOLUTION": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000
+            }
+          }
+        },
+        "ingress_digest": {
+          "$ref": "#/$defs/hash"
+        },
+        "memory_failure": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/identifier"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "memory_resolution_digest": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "source_bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/recall_binding"
+          },
+          "minItems": 0,
+          "maxItems": 48
+        },
+        "claim_status": {
+          "const": "CONDITIONAL_ON_RECORDED_SOURCE_BINDINGS"
+        },
+        "unconditional_world_truth": {
+          "const": false
+        }
+      }
+    }
+  }
+}

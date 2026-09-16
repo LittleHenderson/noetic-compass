@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="4" time="0.520" timestamp="2026-09-16T02:49:22.518651-07:00" hostname="MSI"><testcase classname="tests.test_semantic_adversarial" name="test_independent_resolution_rejects_wrong_binding_returned_by_recall_alias[value]" time="0.041" /><testcase classname="tests.test_semantic_adversarial" name="test_independent_resolution_rejects_wrong_binding_returned_by_recall_alias[status]" time="0.035" /><testcase classname="tests.test_semantic_adversarial" name="test_independent_resolution_rejects_wrong_binding_returned_by_recall_alias[statement]" time="0.034" /><testcase classname="tests.test_semantic_adversarial" name="test_independent_resolution_rejects_wrong_binding_returned_by_recall_alias[scope]" time="0.023"><failure message="cncm.model.ContractError: duplicate retained memory reference">profile = SemanticProfile(source_files=(('cas_reasoner.txt', 1, '000000000000000000000000000000000000000000000000000000000000000...000000000000000000000000000000000')), policy_digest='7b573521e5a463e4e4da5aa08aa021c5a1e85fc7926013e4e6b95813a1c52fd9')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000013D1A3649E0&gt;
+attack = 'scope'
+
+    @pytest.mark.parametrize("attack", ["value", "status", "statement", "scope"])
+    def test_independent_resolution_rejects_wrong_binding_returned_by_recall_alias(profile, monkeypatch, attack):
+        # A trusted producer is deliberately fault-injected here. Its own genuine
+        # receipt digest is retained, so the independent resolution check must catch
+        # a counterfeit binding before any arithmetic caller exists.
+        row = source()
+        machine = start(profile, row)
+    
+        def corrupted(*args, **kwargs):
+            binding, receipt = resolve_memory(*args, **kwargs)
+            changes = {"value": {"value": "99"}, "status": {"statuses": ("TEST_FIXTURE",)},
+                       "statement": {"statement_digests": ("f" * 64,)},
+                       "scope": {"ref": MemoryRef("other", "fee")}}[attack]
+            return replace(binding, **changes), receipt
+    
+        monkeypatch.setattr("cncm.semantic_kernel.resolve_memory", corrupted)
+&gt;       result = machine.run()
+                 ^^^^^^^^^^^^^
+
+tests\test_semantic_adversarial.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cncm\semantic_engine.py:207: in run
+    return NestedMachine.run(self, allow_acquisition=allow_acquisition)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\nested_engine.py:226: in run
+    self.advance(allow_acquisition=allow_acquisition)
+cncm\semantic_engine.py:183: in advance
+    self._execute(intent)
+cncm\nested_engine.py:278: in _execute
+    return self._reasoner._execute_one(self.coordinator, intent.issuer_subsystem,
+cncm\engine.py:272: in _execute_one
+    result = coordinator.execute(
+cncm\nested_kernel.py:81: in execute
+    result=super().execute(enabled_components=enabled_components,
+cncm\kernel.py:517: in execute
+    next_state = self._apply_intent(next_state, item.intent)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\semantic_kernel.py:258: in _apply_intent
+    return replace(state, memory_bindings=state.memory_bindings + (binding,),
+C:\Python314\Lib\dataclasses.py:1698: in replace
+    return _replace(obj, **changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\dataclasses.py:1732: in _replace
+    return self.__class__(**changes)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;string&gt;:39: in __init__
+    ???
+cncm\semantic_model.py:384: in __post_init__
+    _require(len({row.ref for row in self.memory_bindings}) == len(self.memory_bindings), "duplicate retained memory reference")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, label = 'duplicate retained memory reference'
+
+    def _require(condition, label):
+        if not condition:
+&gt;           raise ContractError(label)
+E           cncm.model.ContractError: duplicate retained memory reference
+
+cncm\native_model.py:64: ContractError</failure></testcase></testsuite></testsuites>

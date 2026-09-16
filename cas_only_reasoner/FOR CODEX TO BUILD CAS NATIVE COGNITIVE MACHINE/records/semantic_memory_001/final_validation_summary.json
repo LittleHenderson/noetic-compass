@@ -1,0 +1,10 @@
+{
+  "tests_passed": 1019,
+  "subtests_passed": 530,
+  "duration_seconds": 270.37,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "command": "python -B -m pytest -q --junitxml=records/semantic_memory_001/final_full_suite_tests.xml --tb=short",
+  "pytest_exit_code": 0
+}

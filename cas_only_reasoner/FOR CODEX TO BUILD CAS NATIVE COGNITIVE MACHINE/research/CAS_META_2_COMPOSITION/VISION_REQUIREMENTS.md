@@ -205,3 +205,47 @@ and a common verifier contract, then broader checked program construction and
 the remaining language, flow, learning, tool and Foundry systems. The full
 V01-V18,31-system and integrated20-step vision remains open. No new paid
 model/provider work was used and prior negative experiments remain intact.
+
+## 2026-09-16 native sourced correction memory and later-task reuse
+
+Runtime0.4 now stores scoped source assertions/corrections/retractions through
+the actual transaction coordinator. Each source has an exact supersession head;
+history remains immutable. Recall binds current compatible source digests and
+statuses. An independent checker reconstructs every recalled scalar in the
+reachable original equation graph before any nested execution. Memory and
+procedure work share one conserved episode budget.
+
+A new correction may arrive after the first episode: the trusted host appends
+its authorized digest at a quiescent boundary. Fresh-process recovery requires
+the initial source set and exact external extension chronology. Journal data
+cannot authorize itself. Source custody remains a trusted-host boundary, not
+cryptographic principal authentication or proof of world facts.
+
+The retained TEST_FIXTURE episode stores fee5, accepts a later correction fee8,
+and changes a new task's answer from control10 to9 without resupplying the fee.
+All35 pause points replay/resume exactly in a separate process. A new nested
+structure returns-5, a neighboring scope still returns8, and procedure rollback
+preserves semantic memory while removing future dispatch. New-call procedure
+selection and qualification are disabled for the reuse demonstrations.
+
+Final source profile:
+6a27f94656b45a4c4732d1a185844517f382390d6e3d1ce4259b63861badcecf.
+Evidence: records/semantic_memory_001/STATUS.md and acceptance_002/receipt.json
+in vision-next. The full suite passed1019 tests plus 530 subtests; all14 original fixtures
+reproduce and both earlier native source profiles remain byte-identical.
+Missing, retracted, conflicting, insufficiently verified and unauthorized data,
+wrong references, false bindings, failed-check cost, budget exhaustion, scoped
+retention, ingress chronology and rehashed false histories have direct coverage.
+
+This advances bounded V05/V06/V10/V16, systems10/14/18/31 and fixture-level
+steps18-19, without completing them. USER_ATTESTED and TEST_FIXTURE are never
+promoted to independently verified fact by an arithmetic receipt. Three common
+memory verifier obligations are implemented; full verifier federation and
+CMB-R1 remain open. These engineering variants are not a protected held-out
+learning study or proof of improved reasoning/general learning.
+
+The next substantive gap is wider checked program construction beyond the
+twelve authored atomic forms, alongside independently proved semantic facts
+and all remaining language/flow/tool/Foundry/learning requirements. The full
+V01-V18,31-system,integrated20-step vision remains open. No new paid model or
+provider work was used; prior negative experiments remain intact.
