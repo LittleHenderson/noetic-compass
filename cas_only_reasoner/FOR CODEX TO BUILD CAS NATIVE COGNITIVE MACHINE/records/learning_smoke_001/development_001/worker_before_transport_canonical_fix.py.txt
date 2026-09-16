@@ -1,0 +1,247 @@
+"""Source-bound exposed-material CUDA smoke; imported locally without tensors."""
+from __future__ import annotations
+
+from hashlib import sha256
+import json
+import os
+from pathlib import Path
+import re
+import time
+
+from .canonical import canonical_json
+from .model import ContractError
+
+CANDIDATE = "CNCM_ORDERED_INGESTION_SMOKE_001"
+CONFIG_SCHEMA = "cncm-ordered-ingestion-smoke-config/1"
+RESULT_SCHEMA = "cncm-ordered-ingestion-smoke-result/1"
+FAILURE_SCHEMA = "cncm-ordered-ingestion-smoke-failure/1"
+SEED, MAX_WALL_SECONDS = 20260916, 1200
+PILOT = "research/CAS_META_2_COMPOSITION/"
+FIXTURE = PILOT + "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Node_Example_v0.1.json"
+FIXTURE_SHA = "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+BUNDLE_SHA = "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16"
+WHEEL_DIR = "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/"
+WHEELS = {
+    "casformer_reference-0.1.0-py3-none-any.whl":
+        ("casformer", "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"),
+    "cas_neural_cjt-0.2.0-py3-none-any.whl":
+        ("cas_cjt", "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"),
+}
+BOUNDS = {"training": True, "optimizer_updates_max": 64,
+          "max_wall_seconds": MAX_WALL_SECONDS, "jobs": 1, "automatic_retries": 0,
+          "reservation_usd": "7.00", "instance_type": "g7.2xlarge", "region": "us-west-2"}
+EXECUTION_DESIGN = {"candidate": CANDIDATE, **BOUNDS, "seed": SEED,
+    "training_requests": 3, "prediction_requests": 6, "view_id": "view_context",
+    "learning_rate": 0.003, "training_loop_seconds_max": 600.0,
+    "checkpoints": ["origin", "initial", "final"],
+    "reload_phases": ["initial", "final"], "launch_enabled": False,
+    "worker_bootstrap_seconds_max": 3600, "instance_seconds_max": 7200,
+    "resource_plan_role": "Inherited hardware, cost and teardown limits only; historical experiment metadata does not describe this smoke."}
+EXPECTED_ARTIFACTS = (
+    "origin.pt", "initial.pt", "final.pt", "initial_checkpoint.json", "final_checkpoint.json",
+    "before_predictions.json", "after_predictions.json", "initial_reload_predictions.json",
+    "final_reload_predictions.json", "receipt.json", "installed_sources.json",
+    "worker_report.json", "measurements.json")
+
+
+def require(condition, reason):
+    if not condition:
+        raise ContractError(reason)
+
+
+def canonical(value):
+    return canonical_json(value).encode("utf-8")
+
+
+def digest(value):
+    return sha256(value).hexdigest()
+
+
+def input_inventory(root):
+    """Pin the complete project Python packages and the already-exposed fixture."""
+    root = Path(root).resolve()
+    names = {FIXTURE} | {WHEEL_DIR + name for name in WHEELS}
+    for prefix in ("cncm", PILOT + "cas_meta2"):
+        files = list((root / prefix).rglob("*.py"))
+        require(files, "SMOKE_INPUT_PACKAGE_MISSING:" + prefix)
+        for path in files:
+            require(not path.is_symlink() and path.resolve().is_relative_to(root), "SMOKE_INPUT_PATH")
+            names.add(path.relative_to(root).as_posix())
+    rows = []
+    for name in sorted(names):
+        raw = (root / name).read_bytes()
+        rows.append({"path": name, "bytes": len(raw), "sha256": digest(raw)})
+    require(next(r for r in rows if r["path"] == FIXTURE)["sha256"] == FIXTURE_SHA,
+            "SMOKE_EXPOSED_FIXTURE_CHANGED")
+    for name, (_, expected) in WHEELS.items():
+        require(next(r for r in rows if r["path"] == WHEEL_DIR + name)["sha256"] == expected,
+                "SMOKE_FROZEN_WHEEL_CHANGED:" + name)
+    return rows
+
+
+def verify_worker_packages(root):
+    """Compare actual loaded packages and installed source to the pinned wheels."""
+    from cas_meta2.teaching_cycle.gpu_adapter import execution_guard
+    execution_guard()
+    import importlib
+    import sys
+    from zipfile import ZipFile
+    rows, loaded = [], []
+    for wheel_name, (package, expected) in WHEELS.items():
+        wheel = Path(root) / WHEEL_DIR / wheel_name
+        require(digest(wheel.read_bytes()) == expected, "SMOKE_FROZEN_WHEEL_CHANGED")
+        module = importlib.import_module(package)
+        package_root = Path(module.__file__).resolve().parent
+        with ZipFile(wheel) as archive:
+            sources = {name: archive.read(name) for name in archive.namelist()
+                       if name.startswith(package + "/") and name.endswith((".py", ".json"))}
+        require(sources, "SMOKE_WHEEL_SOURCES_MISSING")
+        for name, raw in sorted(sources.items()):
+            installed = package_root.parent / name
+            require(installed.read_bytes() == raw, "SMOKE_INSTALLED_SOURCE_MISMATCH:" + name)
+            rows.append({"wheel": wheel_name, "path": name, "bytes": len(raw), "sha256": digest(raw)})
+        for name, module in sorted(sys.modules.items()):
+            if name == package or name.startswith(package + "."):
+                path = Path(module.__file__).resolve()
+                require(path.is_relative_to(package_root), "SMOKE_FOREIGN_LOADED_PACKAGE:" + name)
+                relative = path.relative_to(package_root.parent).as_posix()
+                require(relative in sources and path.read_bytes() == sources[relative], "SMOKE_LOADED_SOURCE_MISMATCH:" + name)
+                loaded.append({"module": name, "source": relative, "sha256": digest(sources[relative])})
+    return {"status": "INSTALLED_AND_LOADED_SOURCES_MATCH_PINNED_WHEELS",
+            "source_files": rows, "loaded_modules": loaded}
+
+
+def smoke_material(root):
+    from . import rpa_cube_adapter as cube
+    raw = (Path(root) / FIXTURE).read_bytes()
+    require(digest(raw) == FIXTURE_SHA, "SMOKE_EXPOSED_FIXTURE_CHANGED")
+    bundle = json.loads(raw)
+    require(cube.cube_node.bundle_digest(bundle) == BUNDLE_SHA, "SMOKE_BUNDLE_CHANGED")
+    document = cube.cube_atlas_from_bytes(raw, expected_file_sha256=FIXTURE_SHA,
+        expected_bundle_digest=BUNDLE_SHA, source_namespace="EXPOSED_ENGINEERING_FIXTURE",
+        observation_id="ordered_ingestion_smoke_001",
+        observation_time="Source identity only; no trusted-clock claim", record_version=1,
+        view_id="view_context")
+    cases = cube.cube_node.answer_cases(bundle, "view_context")["cases"]
+    training, prediction = [], []
+    for operation in ("LIST_PARTS", "FIND_SHARED_PART", "REACHED_VIA"):
+        selected = [row for row in cases if row["op"] == operation][:2]
+        require(len(selected) == 2, "SMOKE_OPERATION_SUPPLY_CHANGED")
+        requests = [{"operation": operation, "question": row["question"], "assistance": "unassisted"}
+                    for row in selected]
+        training.append(requests[0])
+        prediction.extend(requests)
+    return document, training, prediction
+
+
+def material_identity(root):
+    document, training, prediction = smoke_material(root)
+    return {"document_sha256": digest(canonical(document.to_dict())),
+            "training_requests": training, "prediction_requests": prediction,
+            "boundary": "Already-exposed engineering material; not held-out learning evaluation."}
+
+
+def validate_config(config, root):
+    fields = {"schema", "candidate", "job", "bucket", "region", "source_sha", "training",
+              "optimizer_updates_max", "max_wall_seconds", "seed", "inputs", "inputs_sha256",
+              "execution_design", "material"}
+    require(type(config) is dict and set(config) == fields, "SMOKE_CONFIG_FIELDS")
+    require(config["schema"] == CONFIG_SCHEMA and config["candidate"] == CANDIDATE, "SMOKE_CONFIG_SCHEMA")
+    require(type(config["job"]) is str and re.fullmatch(r"cas-meta2-ingestionsmoke-\d{14}-[a-f0-9]{8}", config["job"]), "SMOKE_JOB")
+    require(type(config["bucket"]) is str and re.fullmatch(r"[a-z0-9][a-z0-9-]{1,61}[a-z0-9]", config["bucket"]), "SMOKE_BUCKET")
+    require(config["region"] == "us-west-2", "SMOKE_REGION")
+    require(type(config["source_sha"]) is str and re.fullmatch(r"[a-f0-9]{40}", config["source_sha"]), "SMOKE_SOURCE_SHA")
+    require(config["training"] is True and type(config["optimizer_updates_max"]) is int
+            and config["optimizer_updates_max"] == 64, "SMOKE_TRAINING_BOUND")
+    require(type(config["seed"]) is int and config["seed"] == SEED, "SMOKE_SEED")
+    require(type(config["max_wall_seconds"]) is int and config["max_wall_seconds"] == MAX_WALL_SECONDS, "SMOKE_WALL_BOUND")
+    require(canonical(config["execution_design"]) == canonical(EXECUTION_DESIGN), "SMOKE_DESIGN")
+    require(canonical(config["material"]) == canonical(material_identity(root)), "SMOKE_MATERIAL_BINDING")
+    require(canonical(config["inputs"]) == canonical(input_inventory(root)), "SMOKE_INPUT_BINDING")
+    require(config["inputs_sha256"] == digest(canonical(config["inputs"])), "SMOKE_INPUT_DIGEST")
+    return config
+
+
+def _write(path, value):
+    raw = canonical(value) + b"\n"
+    with Path(path).open("xb") as stream:
+        stream.write(raw)
+        stream.flush()
+        os.fsync(stream.fileno())
+    require(Path(path).read_bytes() == raw, "SMOKE_REPORT_READBACK")
+    return {"name": Path(path).name, "bytes": len(raw), "sha256": digest(raw)}
+
+
+def deliver(results, artifacts, report, *, failed):
+    results, artifacts = Path(results), Path(artifacts)
+    artifacts.mkdir(parents=True, exist_ok=True)
+    if not failed:
+        required = set(EXPECTED_ARTIFACTS) - {"worker_report.json", "measurements.json"}
+        require(required <= {p.name for p in artifacts.iterdir() if p.is_file()},
+                "SMOKE_REQUIRED_ARTIFACT_MISSING")
+    _write(artifacts / "worker_report.json", report)
+    summary = {key: report.get(key) for key in ("job", "source_sha", "status", "runtime",
+        "elapsed_seconds", "failure", "optimizer_updates", "checkpoint_reload_verified", "forward_calls")}
+    summary["learning_improvement_established"] = False
+    _write(artifacts / "measurements.json", summary)
+    entries = []
+    for path in sorted(artifacts.iterdir()):
+        require(path.is_file() and not path.is_symlink(), "SMOKE_FLAT_ARTIFACTS_REQUIRED")
+        raw = path.read_bytes()
+        entries.append({"name": path.name, "bytes": len(raw), "sha256": digest(raw)})
+    if not failed:
+        require(set(EXPECTED_ARTIFACTS) <= {r["name"] for r in entries}, "SMOKE_REQUIRED_ARTIFACT_MISSING")
+    _write(artifacts / "manifest.json", {"artifacts": entries})
+    envelope = {"schema": RESULT_SCHEMA, "job": report["job"], "artifacts": entries,
+                "status": "INGESTION_SMOKE_FAILED" if failed else "INGESTION_SMOKE_DELIVERED",
+                "summary": summary, "failure": report.get("failure"),
+                "boundary": "Mechanical teaching and reload only; no matched learning or full-machine claim."}
+    receipt = _write(results / "result.json", envelope)
+    with (results / "result.json.sha256").open("x", encoding="ascii") as stream:
+        stream.write(receipt["sha256"] + "\n")
+    return envelope
+
+
+def run(config, *, root, results, artifacts):
+    """Validate the caller's frozen inputs before acquiring CUDA."""
+    root, results, artifacts = Path(root).resolve(), Path(results), Path(artifacts)
+    validate_config(config, root)
+    require(not artifacts.exists() and artifacts.parent == results, "SMOKE_FRESH_ARTIFACT_DIRECTORY")
+    results.mkdir(parents=True, exist_ok=True)
+    started = time.monotonic()
+    report = {"job": config["job"], "source_sha": config["source_sha"],
+              "inputs": config["inputs"], "material": config["material"],
+              "execution_design": config["execution_design"], "learning_improvement_established": False}
+    try:
+        from cas_meta2.teaching_cycle.gpu_adapter import _cuda
+        from . import rpa_learning_smoke
+        torch, device = _cuda()
+        report["runtime"] = {"device": str(device), "torch_version": str(torch.__version__),
+                             "cuda_version": torch.version.cuda, "gpu_name": torch.cuda.get_device_name(device)}
+        require(report["runtime"]["torch_version"] == "2.11.0+cu128"
+                and report["runtime"]["cuda_version"] == "12.8"
+                and "RTX PRO 4500" in report["runtime"]["gpu_name"], "SMOKE_RUNTIME_MISMATCH")
+        packages_before = verify_worker_packages(root)
+        document, training, prediction = smoke_material(root)
+        observed = rpa_learning_smoke.run_worker_smoke(torch, device, document=document,
+            training_requests=training, prediction_requests=prediction, seed=SEED, output=artifacts)
+        require(observed["status"] == "MECHANICAL_SMOKE_AND_RELOAD_OBSERVED"
+                and observed["checkpoint_reload_verified"] is True, "SMOKE_RELOAD_NOT_OBSERVED")
+        updates = observed["training"]["training"]["completed_updates"]
+        require(type(updates) is int and 0 < updates <= 64, "SMOKE_OBSERVED_UPDATE_BOUND")
+        require(canonical(input_inventory(root)) == canonical(config["inputs"]), "SMOKE_SOURCE_CHANGED_DURING_RUN")
+        packages_after = verify_worker_packages(root)
+        require(packages_before["source_files"] == packages_after["source_files"], "SMOKE_INSTALLED_SOURCES_CHANGED")
+        require({"cas_cjt.neural", "cas_cjt.state", "casformer"} <=
+                {row["module"] for row in packages_after["loaded_modules"]}, "SMOKE_EXPECTED_MODULES_NOT_LOADED")
+        _write(artifacts / "installed_sources.json", {"before": packages_before, "after": packages_after})
+        report.update(status="MECHANICAL_SMOKE_AND_RELOAD_OBSERVED", optimizer_updates=updates,
+                      checkpoint_reload_verified=True, forward_calls=observed["forward_calls"],
+                      elapsed_seconds=time.monotonic() - started)
+        require(report["elapsed_seconds"] < MAX_WALL_SECONDS, "SMOKE_DEADLINE_EXCEEDED")
+        return deliver(results, artifacts, report, failed=False)
+    except Exception as error:
+        report.update(status="INGESTION_SMOKE_FAILED", elapsed_seconds=time.monotonic() - started,
+                      failure={"type": type(error).__name__, "detail": str(error)[:1000]})
+        deliver(results, artifacts, report, failed=True)
+        raise

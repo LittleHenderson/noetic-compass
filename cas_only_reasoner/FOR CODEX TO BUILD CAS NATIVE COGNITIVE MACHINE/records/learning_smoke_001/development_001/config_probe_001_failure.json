@@ -1,0 +1,1 @@
+{"cause": "Document dataclass was passed directly instead of its declared to_dict serialization", "detail": "unsupported canonical value: bytes", "numerical_execution": false, "provider_execution": false, "stage": "pure material_identity", "status": "FAILED", "type": "TypeError"}

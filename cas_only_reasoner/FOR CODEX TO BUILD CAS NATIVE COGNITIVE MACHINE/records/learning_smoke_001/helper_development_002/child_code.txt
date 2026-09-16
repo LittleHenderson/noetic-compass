@@ -1,0 +1,14 @@
+import runpy,sys,json,importlib,socket,subprocess
+m=runpy.run_path(sys.argv[1]); attempts=m['install_guards'](); passed=[]
+def deny(label,fn):
+    try:fn()
+    except RuntimeError as e:
+        if not str(e).startswith('REHEARSAL_'):raise
+        passed.append(label)
+    else:raise RuntimeError('GUARD_DID_NOT_REFUSE:'+label)
+for name in sorted(m['FORBIDDEN']):deny('import '+name,lambda name=name:__import__(name))
+deny('importlib numpy',lambda:importlib.import_module('numpy'))
+deny('socket constructor',lambda:socket.socket())
+deny('process creation',lambda:subprocess.run(['must-never-execute']))
+assert not m['FORBIDDEN'].intersection(sys.modules)
+print(json.dumps({'status':'PASSED','checks':passed,'attempts':attempts,'actual_forbidden_modules':sorted(m['FORBIDDEN'].intersection(sys.modules))}))

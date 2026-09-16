@@ -1,0 +1,52 @@
+{
+  "boundary": "Deliberate denied-import/socket/process guard probes only; no model, tensor, provider or network execution.",
+  "check_count": 16,
+  "child": {
+    "actual_forbidden_modules": [],
+    "attempts": {
+      "imports": [
+        "anthropic",
+        "boto3",
+        "botocore",
+        "cas_cjt",
+        "casformer",
+        "httpx",
+        "jax",
+        "jaxlib",
+        "numpy",
+        "openai",
+        "requests",
+        "tensorflow",
+        "torch",
+        "numpy"
+      ],
+      "network": [
+        "socket"
+      ],
+      "processes": [
+        "process"
+      ]
+    },
+    "checks": [
+      "import anthropic",
+      "import boto3",
+      "import botocore",
+      "import cas_cjt",
+      "import casformer",
+      "import httpx",
+      "import jax",
+      "import jaxlib",
+      "import numpy",
+      "import openai",
+      "import requests",
+      "import tensorflow",
+      "import torch",
+      "importlib numpy",
+      "socket constructor",
+      "process creation"
+    ],
+    "status": "PASSED"
+  },
+  "helper_sha256": "1a3b85aa4d77c360761e71de975199bca3b1a2ce44d75422a2bb4e26ffe4a18d",
+  "status": "PASSED"
+}

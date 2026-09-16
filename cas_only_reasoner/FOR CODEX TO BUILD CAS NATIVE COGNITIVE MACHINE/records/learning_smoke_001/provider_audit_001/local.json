@@ -1,0 +1,135 @@
+{
+  "new_request_or_reservation_written": false,
+  "observed_utc": "2026-09-16T17:54:25.998116+00:00",
+  "previous_authority": {
+    "bytes": 1820,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\ordered_encoder_001\\OWNER_AUTHORIZATION_001.json",
+    "sha256": "a65d1e0fa15a55aaf74ea6d94faa1e39f896d1ed8e02d300ff75f55b9710bba3"
+  },
+  "raw_neural_source": {
+    "bytes": 16546,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\cas_cjt\\neural.py",
+    "sha256": "03521d2b17311680fd91cde7076e4bf5b38393f0d6db115d47be20f63413fc96"
+  },
+  "resource_plan": {
+    "account": "807562639912",
+    "ami": "ami-0fbbd0facbc9e3cff",
+    "automatic_retries": 0,
+    "cuda_version": "12.8",
+    "ebs": {
+      "delete_on_termination": true,
+      "encrypted": true,
+      "iops": 3000,
+      "size_gib": 75,
+      "throughput_mib_s": 125
+    },
+    "experiment": {
+      "entrypoint": "cas_meta2.graph_teaching.curriculum_experiment.launch",
+      "profile": "graph_training_curriculum_comparison"
+    },
+    "frozen_budget": {
+      "arms": [
+        "cas"
+      ],
+      "boundary": "curriculum comparison only: varied relationship lessons vs repetition of the existing lessons, matched within each seed, 64 and 256 update checkpoints, real checkpoint files collected",
+      "checkpoints": [
+        64,
+        256
+      ],
+      "conditions": [
+        "control",
+        "varied"
+      ],
+      "encoder_seed": 20260909,
+      "learners": 6,
+      "learning_rate": 0.003,
+      "max_wall_seconds_per_learner": 900.0,
+      "pair_seeds": [
+        20260913,
+        20260914,
+        20260915
+      ],
+      "panel_seed": 20260930,
+      "reservation_usd": "7.00",
+      "total_optimizer_steps": 1536,
+      "updates_per_learner": 256
+    },
+    "gpu_name_contains": "RTX PRO 4500",
+    "instance_count": 1,
+    "instance_seconds_max": 7200,
+    "instance_type": "g7.2xlarge",
+    "network": {
+      "egress_tcp_443_only": true,
+      "inbound_rules": 0
+    },
+    "on_demand_rate_ceiling_usd": "2.52",
+    "region": "us-west-2",
+    "reservation_usd": "7.00",
+    "schema": "cas-graph-training-curriculum-resource-plan/1",
+    "t4_rejected": true,
+    "torch_index_url": "https://download.pytorch.org/whl/cu128",
+    "torch_version": "2.11.0+cu128",
+    "training": true,
+    "visible_gpu_count": 1,
+    "worker_seconds_max": 3600
+  },
+  "reuse": "CandidateProvider lifecycle and shared committed-member packaging/evidence transport. OrderedEncoderProvider is zero-update-only and must not be reused as training authorization.",
+  "schema": "cas.learning-smoke-local-prerequisites/0.1",
+  "source_pins": [
+    {
+      "bytes": 21534,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\budget.py",
+      "sha256": "cb3c78a0dfed166857109710cb8eac79dd337d837c839d558565982084b5a22f"
+    },
+    {
+      "bytes": 97322,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\graph_training_curriculum_launch.py",
+      "sha256": "00bd52b913601485798fb399da7288b5bdda3e57aac7acaccd4ab08d89459e99"
+    },
+    {
+      "bytes": 50688,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\graph_training_candidate_launch.py",
+      "sha256": "c435f963f2c3151857fc6a3fd9aa44e93ee8c10a732ec77c0befb939dc26e5c8"
+    },
+    {
+      "bytes": 16647,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\ordered_encoder_launch.py",
+      "sha256": "2dc99b5948b608c345ee5a4606cbfe14af79b341d973c33bb18f32ac70e3dae8"
+    },
+    {
+      "bytes": 10883,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\graph6_contrast_launch.py",
+      "sha256": "9b3a03c1ae50448dbf1a4ed740a4c945ffdb2f6e90fc2cad42c27b28d57b2f68"
+    },
+    {
+      "bytes": 72873,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\aws\\run_evidence.py",
+      "sha256": "5dba00fcb4ac5585efffd642ac9260a37b7a9c41f5cfa28a8111cd92988f83cf"
+    },
+    {
+      "bytes": 246,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\requirements-gpu.txt",
+      "sha256": "9d0be7810014ec3a58a112dc0024a74060400dc841523abd405e5fb579179379"
+    }
+  ],
+  "wheel_prerequisites": [
+    {
+      "bytes": 36501,
+      "exists": true,
+      "expected_sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee",
+      "matches_expected": true,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\artifacts\\release_reproduction\\dist\\casformer_reference-0.1.0-py3-none-any.whl",
+      "relative_path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/casformer_reference-0.1.0-py3-none-any.whl",
+      "sha256": "0487363cc7258c0e07ad65d137987088e01d5b95fc637cb0d63cfe41fd65d2ee"
+    },
+    {
+      "bytes": 221994,
+      "exists": true,
+      "expected_sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9",
+      "matches_expected": true,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_CJT_TRANSFORMER_v0_2\\artifacts\\release_reproduction\\dist\\cas_neural_cjt-0.2.0-py3-none-any.whl",
+      "relative_path": "research/CAS_CJT_TRANSFORMER_v0_2/artifacts/release_reproduction/dist/cas_neural_cjt-0.2.0-py3-none-any.whl",
+      "sha256": "6f1ceac9140027a14cecc79fb399ef90a993cd0bd411e47970798860c4217ac9"
+    }
+  ]
+}

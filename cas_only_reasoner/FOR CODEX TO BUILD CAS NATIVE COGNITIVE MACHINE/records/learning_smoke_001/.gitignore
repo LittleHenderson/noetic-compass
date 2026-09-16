@@ -1,0 +1,2 @@
+# Keep pytest scratch and links local; retain test reports and evidence.
+/test_tmp_viewer_001/

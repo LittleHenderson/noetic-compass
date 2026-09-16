@@ -1,0 +1,12 @@
+{
+  "canonical_ledger_unchanged": true,
+  "model_loads": 0,
+  "new_reservations": 0,
+  "observed_utc": "2026-09-16T17:54:40.005691+00:00",
+  "provider_mutations": 0,
+  "script": {
+    "bytes": 11080,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\provider_audit_001\\q.py",
+    "sha256": "e717479e4fdc5eab1c654ca35ab04cc67d27bb9519d68c15686ad0fe127506c6"
+  }
+}

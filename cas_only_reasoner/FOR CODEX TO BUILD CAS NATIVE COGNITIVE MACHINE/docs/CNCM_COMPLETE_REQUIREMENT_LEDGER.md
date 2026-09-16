@@ -705,3 +705,19 @@ No neural/tensor/provider execution, AWS launch, spending or learning gain is
 reported here. The earlier three-seed recurrence result remains NOT_MET, 0/3
 positive. All V01-V18, 31-system and integrated 20-step charter requirements remain
 subject to their wider open gates; this checkpoint does not complete the goal.
+
+## 2026-09-16 Ordered ingestion teaching/reload preparation
+
+A separate v0.2 extension now reconstructs saved model, optimizer, tokenizer and
+frozen encoder state, with exact value/cache/public prediction comparisons.
+The source-bound worker and AWS wrapper define one exposed-material smoke,
+three training and six prediction requests, at most 64 updates, a real 1200-second
+inner process timeout and one $7 reservation with no automatic job retry.
+
+169 focused pure tests passed; accepted sources and prior evidence remain
+unchanged. Exact-package rehearsal and actual CUDA teaching/reload acceptance
+remain pending at this preparation checkpoint. Source and pure tests are not
+observed numerical execution. No neural-learning benefit or complete-machine
+claim is made. See docs/CNCM_ORDERED_INGESTION_SMOKE_v0.2.md and
+records/learning_smoke_001/STATUS.md. The matched experiment and wider charter
+gates remain open.

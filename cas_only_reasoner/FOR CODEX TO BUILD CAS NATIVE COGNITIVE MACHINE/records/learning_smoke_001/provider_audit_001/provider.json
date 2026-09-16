@@ -1,0 +1,684 @@
+{
+  "account": "807562639912",
+  "calls": {
+    "active_all": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T17:54:27.926219+00:00",
+      "request_id": "7603c174-5e51-455c-b4d8-ae85b75af924"
+    },
+    "active_tagged": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": [],
+        "next_token": null
+      },
+      "queried_utc": "2026-09-16T17:54:27.924428+00:00",
+      "request_id": "9c84628c-f0bb-458e-9f0f-e3919227f726"
+    },
+    "ami": {
+      "api": "ec2.describe_images",
+      "http_status": 200,
+      "observed": {
+        "images": [
+          {
+            "Architecture": "x86_64",
+            "CreationDate": "2026-08-21T14:48:09.000Z",
+            "ImageId": "ami-0fbbd0facbc9e3cff",
+            "Name": "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 24.04) 20260821",
+            "OwnerId": "898082745236",
+            "State": "available"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T17:54:27.927933+00:00",
+      "request_id": "174f489e-80ec-43bd-88e8-95af2d13b994"
+    },
+    "default_subnets": {
+      "api": "ec2.describe_subnets",
+      "http_status": 200,
+      "observed": {
+        "next_token": null,
+        "subnets": [
+          {
+            "AvailabilityZone": "us-west-2d",
+            "AvailableIpAddressCount": 4091,
+            "MapPublicIpOnLaunch": true,
+            "State": "available",
+            "SubnetId": "subnet-0567d22d8a5fb9b72",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          },
+          {
+            "AvailabilityZone": "us-west-2b",
+            "AvailableIpAddressCount": 4091,
+            "MapPublicIpOnLaunch": true,
+            "State": "available",
+            "SubnetId": "subnet-02deacfa16bdaa4f4",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          },
+          {
+            "AvailabilityZone": "us-west-2c",
+            "AvailableIpAddressCount": 4090,
+            "MapPublicIpOnLaunch": true,
+            "State": "available",
+            "SubnetId": "subnet-0eb3ca4bf5ca98f24",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          },
+          {
+            "AvailabilityZone": "us-west-2a",
+            "AvailableIpAddressCount": 4091,
+            "MapPublicIpOnLaunch": true,
+            "State": "available",
+            "SubnetId": "subnet-0bb8fa82c2a7177b3",
+            "VpcId": "vpc-0df2f8cc1b9f23838"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T17:54:28.525640+00:00",
+      "request_id": "c58a57ed-908b-43a4-b614-b11df9dbf89d"
+    },
+    "instance_type": {
+      "api": "ec2.describe_instance_types",
+      "http_status": 200,
+      "observed": {
+        "types": [
+          {
+            "GpuInfo": {
+              "Gpus": [
+                {
+                  "Count": 1,
+                  "GpuPartitionSize": 1.0,
+                  "LogicalGpuCount": 1,
+                  "Manufacturer": "NVIDIA",
+                  "MemoryInfo": {
+                    "SizeInMiB": 32768
+                  },
+                  "Name": "RTX PRO 4500",
+                  "Workloads": [
+                    "ml-ai",
+                    "graphics"
+                  ]
+                }
+              ],
+              "TotalGpuMemoryInMiB": 32768
+            },
+            "InstanceType": "g7.2xlarge",
+            "MemoryInfo": {
+              "SizeInMiB": 32768
+            },
+            "ProcessorInfo": {
+              "Manufacturer": "Intel",
+              "SupportedArchitectures": [
+                "x86_64"
+              ],
+              "SustainedClockSpeedInGhz": 3.9
+            },
+            "VCpuInfo": {
+              "DefaultCores": 8,
+              "DefaultThreadsPerCore": 1,
+              "DefaultVCpus": 8,
+              "ValidCores": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8
+              ],
+              "ValidThreadsPerCore": [
+                1
+              ]
+            }
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T17:54:27.929002+00:00",
+      "request_id": "c4ca25b5-7573-44f9-b964-573c6732038f"
+    },
+    "offerings": {
+      "api": "ec2.describe_instance_type_offerings",
+      "http_status": 200,
+      "observed": {
+        "next_token": null,
+        "offerings": [
+          {
+            "InstanceType": "g7.2xlarge",
+            "Location": "us-west-2b",
+            "LocationType": "availability-zone"
+          },
+          {
+            "InstanceType": "g7.2xlarge",
+            "Location": "us-west-2c",
+            "LocationType": "availability-zone"
+          },
+          {
+            "InstanceType": "g7.2xlarge",
+            "Location": "us-west-2a",
+            "LocationType": "availability-zone"
+          },
+          {
+            "InstanceType": "g7.2xlarge",
+            "Location": "us-west-2d",
+            "LocationType": "availability-zone"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T17:54:28.482658+00:00",
+      "request_id": "397ccc2a-adf8-4175-8c73-27818cefe89e"
+    },
+    "old_instance_profile": {
+      "api": "iam.get_instance_profile",
+      "error_code": "NoSuchEntity",
+      "error_type": "NoSuchEntityException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T17:54:28.547221+00:00",
+      "request_id": "27d6d10d-7cb7-4719-84f8-542b96673b33"
+    },
+    "old_schedule": {
+      "api": "scheduler.get_schedule",
+      "error_code": "ResourceNotFoundException",
+      "error_type": "ResourceNotFoundException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T17:54:28.554738+00:00",
+      "request_id": "13c4cf7b-c2fa-4a1b-b17e-b436ae76a467"
+    },
+    "old_security_group": {
+      "api": "ec2.describe_security_groups",
+      "http_status": 200,
+      "observed": {
+        "groups": []
+      },
+      "queried_utc": "2026-09-16T17:54:28.527806+00:00",
+      "request_id": "d2551605-b593-4df3-b942-b33913e0b70d"
+    },
+    "old_worker_role": {
+      "api": "iam.get_role",
+      "error_code": "NoSuchEntity",
+      "error_type": "NoSuchEntityException",
+      "http_status": 404,
+      "queried_utc": "2026-09-16T17:54:28.540297+00:00",
+      "request_id": "3c0e6945-a41a-447a-8d8f-bd330bbaa967"
+    },
+    "previous_instance": {
+      "api": "ec2.describe_instances",
+      "http_status": 200,
+      "observed": {
+        "instances": []
+      },
+      "queried_utc": "2026-09-16T17:54:27.927167+00:00",
+      "request_id": "cc9614b0-5941-49c5-b2db-dd1d39528262"
+    },
+    "pricing": {
+      "api": "pricing.get_products",
+      "http_status": 200,
+      "observed": {
+        "next_token": null,
+        "products": [
+          {
+            "product": {
+              "attributes": {
+                "availabilityzone": "NA",
+                "capacitystatus": "Used",
+                "classicnetworkingsupport": "false",
+                "clockSpeed": "3.9 GHz",
+                "currentGeneration": "Yes",
+                "dedicatedEbsThroughput": "Up to 8000 Mbps",
+                "dedicatedEbsThroughputDescription": "4000 Mbps",
+                "ecu": "NA",
+                "enhancedNetworkingSupported": "Yes",
+                "gpu": "1",
+                "gpuMemory": "32 GB",
+                "instanceFamily": "GPU instance",
+                "instanceFamilyCategory": "Accelerated Computing",
+                "instanceType": "g7.2xlarge",
+                "intelAvx2Available": "Yes",
+                "intelAvxAvailable": "Yes",
+                "intelTurboAvailable": "Yes",
+                "licenseModel": "No License required",
+                "location": "US West (Oregon)",
+                "locationType": "AWS Region",
+                "marketoption": "OnDemand",
+                "memory": "32.0 GiB",
+                "networkPerformance": "Up to 60 Gigabit",
+                "normalizationSizeFactor": "1",
+                "operatingSystem": "Linux",
+                "operation": "RunInstances",
+                "physicalProcessor": "Intel Xeon Scalable (Granite Rapids)",
+                "preInstalledSw": "NA",
+                "processorArchitecture": "64-bit",
+                "processorFeatures": "Intel AMX; Intel AVX; Intel AVX2; Intel AVX512; Intel Turbo",
+                "regionCode": "us-west-2",
+                "servicecode": "AmazonEC2",
+                "servicename": "Amazon Elastic Compute Cloud",
+                "storage": "1x440 GB NVMe SSD",
+                "tenancy": "Shared",
+                "usagetype": "USW2-BoxUsage:g7.2xlarge",
+                "vcpu": "8",
+                "vpcnetworkingsupport": "true"
+              },
+              "productFamily": "Compute Instance",
+              "sku": "DA5FVRBHTKBSVJWJ"
+            },
+            "publicationDate": "2026-09-10T19:55:14Z",
+            "serviceCode": "AmazonEC2",
+            "terms": {
+              "OnDemand": {
+                "DA5FVRBHTKBSVJWJ.JRTCKXETXF": {
+                  "effectiveDate": "2026-09-01T00:00:00Z",
+                  "offerTermCode": "JRTCKXETXF",
+                  "priceDimensions": {
+                    "DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7": {
+                      "appliesTo": [],
+                      "beginRange": "0",
+                      "description": "$2.52 per On Demand Linux g7.2xlarge Instance Hour",
+                      "endRange": "Inf",
+                      "pricePerUnit": {
+                        "USD": "2.5200000000"
+                      },
+                      "rateCode": "DA5FVRBHTKBSVJWJ.JRTCKXETXF.6YS6EN2CT7",
+                      "unit": "Hrs"
+                    }
+                  },
+                  "sku": "DA5FVRBHTKBSVJWJ",
+                  "termAttributes": {}
+                }
+              }
+            },
+            "version": "20260910195514"
+          }
+        ]
+      },
+      "queried_utc": "2026-09-16T17:54:27.930029+00:00",
+      "request_id": "67b96fb6-5bbf-43d5-9b52-8a1041c3d17e"
+    }
+  },
+  "capacity_claim": "Instance-type offering and quota are not a capacity guarantee; no RunInstances or dry-run was called.",
+  "gpu_quotas": {
+    "pages": [
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "10003664-9c26-43ec-97ae-17393075d2f3"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "db3aa8b3-7d84-4ac3-b7d3-3735cfd295c9"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "5472cdf1-fdf3-41bf-8317-e56837f3a62d"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "ff876259-0cdb-448b-877f-9ab8ac828235"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "1f583c79-87df-484b-ad27-84ccd26df8f0"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "a980b494-e841-436d-8f52-5a247be65c9b"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "fce66d0f-4007-4a9e-88c2-22a7efa293cf"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "da57737b-cd04-413c-8867-a6a9fa1bbc94"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "4dfc535e-1998-4030-a849-c68d6104fd16"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "e20b113a-f9b5-4abf-9a15-a38517e00d4c"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "b605fd96-64f5-4925-a77d-860aa127b823"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "45679d7e-73ab-4d0a-92cd-c6d7bccd84e7"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "b6eb5f2b-0eb0-4ac5-854c-4f4714ab9402"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "9fb45cfb-18f7-4cec-9b37-5bb056ec9df7"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "c8db087d-1faa-4a5d-975b-88232abd4102"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "a5634066-4a02-46e9-9958-73e72e81a49b"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "537dc5c2-db75-4060-932f-74f3b967db87"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "301c92a5-2c83-4ed5-aafb-02583f553c32"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "6ffeb925-b0e9-47a7-834c-c5d07c58d1a2"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "9fcd4438-df97-448c-a931-2829d50981b2"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "319e922b-9b4e-4532-be09-6438f177fff3"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "58849f27-707c-4393-a78c-c4e19f2931e6"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "b6a3fd95-7a6e-4fe2-9e60-8f85cc8affba"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "0c88b932-30d2-4196-aebf-8d83adb910ff"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "adc4dfec-9e0e-4ecf-96eb-cd5cf73f2192"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "19a9dcde-a7fa-4d41-99bd-0d4203d23afb"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "4cd7998e-a7ba-4518-a07a-3e66844263ee"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "7df18ba3-8bd8-4048-aa63-0728c1dd242b"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "898f2976-691d-4233-8b40-840d08d02974"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "5b439fee-c9be-4aa2-b7d1-12a286c60045"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "193596e2-f351-4b38-ba84-2f38ab670ebb"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "58a643fa-70c4-4b80-af67-4387f4a1f597"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "280707ac-d72f-4ae1-ac9f-a5c1cb91d91f"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "94527ccc-f6f2-4e92-8b0f-ed469b779baa"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "f697f81e-7cd2-4cae-a47c-039f0ca3436c"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "319d073a-af46-4045-a1d8-0a581bd9f33c"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "830ba334-e4a5-403d-b6a5-25ca10f2a9e8"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "4f167fa1-4781-45a5-b561-9d0eff777294"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "1fdc3d99-cb48-488a-87d6-e7722d33ad90"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "fbae34d8-9bfb-420a-b255-a300eac5c427"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "026762da-1878-49d1-9686-aed9de42b399"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "ef7612a9-9520-403d-91a8-87d1e6782f5c"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "2a721526-8fb3-41e0-8634-340b592ae124"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "be9d71f2-8715-4c27-a366-098f1e9551bf"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "6ac4780c-a665-4e57-9de3-a9fd6f6f4eac"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "633cd880-ed2f-4db9-93fd-f25381903406"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "568635f3-c760-4cf9-afe9-c8124c0beb42"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "ed0b9a8a-8ecb-47d3-bc3a-d1dfc32b9ce1"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "86995c4e-fbf2-4c31-ade9-1e3e249d1baa"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "239b12e3-19fa-481c-a88f-6fa58439a385"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "10be9fbe-1ff6-47d2-9134-96ffb3b0cf13"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "378f2744-c877-4337-bf99-945edb7431d8"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "10d3aaa7-78c6-4425-aea6-afcce560ee67"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "ca834e84-f0b5-4e74-a1f3-397f2f44672f"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "f70a37cd-17c4-4c16-91c7-8f0e964fd693"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "282eac38-d24e-4610-95e6-adf490b8b650"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "521cd3af-cbdb-4ca7-a579-afdefdd8ef72"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "41dfb6f6-a919-4a92-9ae0-d023b3185656"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "d3f433d0-3537-45f7-be8f-497d00464728"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "30a5626c-9b53-47c3-9db5-21d9bca47388"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "d5c1ac63-1a0a-499c-bd1c-8fe2d15b98cb"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "707ee817-e5f8-4c5a-9325-ddc7d202dfdd"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "8ed937d5-338b-461f-9574-42b6d4d060b0"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "79ff6346-622e-47a7-92bd-cfcd5443c8da"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "d39ac99b-5347-4ae6-b872-240d808df0ec"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "54ba904a-f373-467f-8a1b-bc69d058e2ba"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "d24426ca-9415-4396-89ac-035fb0b261cf"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "17bad480-176a-47f4-a4a8-52cefd8340c5"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "3b5f9ef7-6dca-4d33-bd80-ff8abc0e5b7a"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "7798793b-1d21-4f1f-8ae1-f0777fd122ac"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "8a8d50a0-90a2-4f8c-8aa0-ac1ddb68d0fd"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "a1048ff2-632b-4299-83c9-d683ad069830"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "2d12a0df-de34-4242-a1cf-f12e515a673e"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "1f0b5008-c1f0-41df-a7d2-118daeb52f8b"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "e34c20d4-6bca-489f-93e2-c2c9032f0978"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "7d09a703-d54b-4b68-ad6f-e9af258ccb52"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "5ccadc9a-2ddf-44c8-9cec-2cf2f585293e"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "8beeb754-d7f4-416c-bd26-55298b6beedb"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "86643fdf-0a8f-4283-ae7c-a1db6f5f38a6"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "20e70f7e-ba9f-4683-976d-33aeaeafdaa6"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "208a4026-675b-48e6-9226-16c3402b2df0"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "aa59a54c-fcdb-4326-a2e3-a20484d66860"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "4160da20-58dc-4eb0-a3e8-08f9801d590c"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "ca466830-d633-4388-be99-a6c1a7fe6489"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "46d85529-4930-4b0b-8d52-2a0c8c623e65"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "d8e7b941-61f5-49c5-8b43-68817651e6ba"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "638de685-8620-46e0-bb6d-9d56f51c7ad0"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "5da3dcff-c88e-43ef-b6f4-d86ca9df8241"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "7f24aff6-3dec-4625-b74e-298aeb8311e6"
+      },
+      {
+        "HTTPStatusCode": 200,
+        "RequestId": "975ec146-9944-4c3a-abd4-9e041d91a7cf"
+      }
+    ],
+    "rows": [
+      {
+        "Adjustable": true,
+        "QuotaCode": "L-DB2E81BA",
+        "QuotaName": "Running On-Demand G and VT instances",
+        "Unit": "None",
+        "Value": 8.0
+      }
+    ]
+  },
+  "identity_http_status": 200,
+  "identity_request_id": "accafaf4-1410-4419-9050-9d65fa92b7ad",
+  "mutations": 0,
+  "observed_end_utc": "2026-09-16T17:54:39.995523+00:00",
+  "observed_start_utc": "2026-09-16T17:54:27.924033+00:00",
+  "profile": "default",
+  "region": "us-west-2",
+  "schema": "cas.learning-smoke-provider-readonly/0.1"
+}

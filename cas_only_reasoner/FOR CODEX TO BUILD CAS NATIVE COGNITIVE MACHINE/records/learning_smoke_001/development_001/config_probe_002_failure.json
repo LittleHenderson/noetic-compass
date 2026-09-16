@@ -1,0 +1,1 @@
+{"cause": "Transport canonical JSON includes one trailing newline; worker digest omitted it", "detail": "SMOKE_INPUT_DIGEST", "numerical_execution": false, "provider_execution": false, "stage": "pure config validation", "status": "FAILED"}

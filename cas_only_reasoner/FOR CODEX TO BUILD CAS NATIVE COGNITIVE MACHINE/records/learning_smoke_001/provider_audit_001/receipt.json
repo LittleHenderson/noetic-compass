@@ -1,0 +1,50 @@
+{
+  "canonical_ledger_unchanged": true,
+  "files": [
+    {
+      "bytes": 42380,
+      "name": "budget.json",
+      "sha256": "4cec5fed461f2fba5c15f42caba0034e81ecc69b1aa67fb87a9c3b3c72eae433"
+    },
+    {
+      "bytes": 562,
+      "name": "finish.json",
+      "sha256": "bad213452800c48773b84129a06c9edcd1d405f11522ae5868c4201fd1b41d4c"
+    },
+    {
+      "bytes": 7360,
+      "name": "local.json",
+      "sha256": "5ff5b1b0a73e3a523892ea77eaa9f2d9a88c8319391a7024e3e5a78f36bc7054"
+    },
+    {
+      "bytes": 20478,
+      "name": "provider.json",
+      "sha256": "2ceca7ba2e826df3e33edc4ad4c69382f7899d809e89cbf2ac240dd7dca87402"
+    },
+    {
+      "bytes": 11080,
+      "name": "q.py",
+      "sha256": "e717479e4fdc5eab1c654ca35ab04cc67d27bb9519d68c15686ad0fe127506c6"
+    },
+    {
+      "bytes": 6435,
+      "name": "REPORT.md",
+      "sha256": "59d39125939e7cf9e7b1bc589b715a0ceef520b04770888b70750b4961b0fcf8"
+    }
+  ],
+  "head": "a308f0eea30209ea60012873a5416c2de0adbfa6",
+  "model_execution": 0,
+  "new_reservations": 0,
+  "not_proven": [
+    "Launch/create-resource permissions",
+    "Immediate GPU capacity",
+    "New smoke numerical execution",
+    "Actual invoiced charges"
+  ],
+  "observed_utc": "2026-09-16T17:57:06.136622+00:00",
+  "provider_mutations": 0,
+  "remaining_unreserved_usd": "4569.00",
+  "schema": "cas.learning-smoke-provider-audit-receipt/0.1",
+  "source_inputs_unchanged": true,
+  "status": "READ_ONLY_PREFLIGHT_PASSED_NEW_SMOKE_BINDINGS_REQUIRED"
+}

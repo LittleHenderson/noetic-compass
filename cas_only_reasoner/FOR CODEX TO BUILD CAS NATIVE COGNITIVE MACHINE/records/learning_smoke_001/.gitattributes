@@ -1,0 +1,6 @@
+*.json -text -eol -whitespace
+*.jsonl -text -eol -whitespace
+*.xml -text -eol -whitespace
+*.txt -text -eol -whitespace
+*.py text eol=lf
+development_001/** -text -eol -whitespace
