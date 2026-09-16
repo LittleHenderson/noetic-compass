@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="1.469" timestamp="2026-09-16T09:06:17.233338-07:00" hostname="MSI"><testcase classname="tests.test_derived_v06_schemas" name="test_model_reference_definition_and_problem_closed_shapes" time="0.104" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-True]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-1.0]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-0]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-129]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[supersedes-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.004" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[variable-not a symbol]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[scope-]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[parameters-value7]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path0-INDEPENDENTLY_VERIFIED]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path1-5]" time="0.006" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path2-2]" time="0.006" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path3-True]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path4-420.0]" time="0.007" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path5-421]" time="0.008" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path6-True]" time="0.006" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path7-answer]" time="0.007" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path8-value8]" time="0.007" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_frame_exact_wire_and_typed_address_validation_are_separate" time="0.011" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_proof_shape_retains_formal_assumptions_and_no_world_truth" time="0.030" /><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_schema_documents_are_closed_offline_and_profile_bound" time="0.427" /><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_every_child_reuse_storage_and_refusal_stage_shape" time="0.131"><failure message="jsonschema.exceptions.ValidationError: 'event-derived-run-d524449d2df44163-000001' does not match '^event-compound-run-[0-9a-f]{16}-[0-9]{6,}$'&#10;&#10;Failed validating 'pattern' in schema['properties']['event_id']:&#10;    {'type': 'string',&#10;     'pattern': '^event-compound-run-[0-9a-f]{16}-[0-9]{6,}$'}&#10;&#10;On instance['event_id']:&#10;    'event-derived-run-d524449d2df44163-000001'">def test_runtime_every_child_reuse_storage_and_refusal_stage_shape():
+        from cncm.derived_engine import DerivedMachine
+        item=definition();machine=DerivedMachine(simulated_profile(),trusted_ingress=(item.definition_digest,))
+        machine.start(problem(definitions=(item,)))
+        seen=set()
+        while machine.state.halt_status is TerminalStatus.RUNNING:
+&gt;           shapes(machine,seen);machine.advance()
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_derived_v06_schemas.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_derived_v06_schemas.py:139: in shapes
+    validate('trace',event.to_dict())
+tests\test_derived_v06_schemas.py:41: in validate
+    validator(kind).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Validator(schema={'$ref': 'https://cas....#/$defs/trace'}, format_checker=None)
+args = ({'authorized_intent_ids': ['intent-2ed2fe8416e9fdaa'], 'committed_mutations': ['derived_memory', 'kernel/validation_w...['derived_memory_controller'], 'event_hash': 'bba62c31b42388c4ab320aeb157c63500949d07517d55abfa0023c2199164b5c', ...},)
+kwargs = {}
+error = &lt;ValidationError: "'event-derived-run-d524449d2df44163-000001' does not match '^event-compound-run-[0-9a-f]{16}-[0-9]{6,}$'"&gt;
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: 'event-derived-run-d524449d2df44163-000001' does not match '^event-compound-run-[0-9a-f]{16}-[0-9]{6,}$'
+E           
+E           Failed validating 'pattern' in schema['properties']['event_id']:
+E               {'type': 'string',
+E                'pattern': '^event-compound-run-[0-9a-f]{16}-[0-9]{6,}$'}
+E           
+E           On instance['event_id']:
+E               'event-derived-run-d524449d2df44163-000001'
+
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:450: ValidationError</failure></testcase><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_json_body_annotation_is_not_proof_or_decoded_body_validation" time="0.002" /></testsuite></testsuites>

@@ -1,0 +1,179 @@
+{
+  "status": "PASS",
+  "accepted_receipt_sha256": "e7ccd47f85ae2ff86eff3395ec0a39bb0c204206cfacd47cffe100d257bd4283",
+  "index_sha256": "5e60f45a90c07d782941f28ee60274e9b99616cd29112d74ad0aaed855c171ad",
+  "accepted_package_unchanged": true,
+  "helper_inputs": {
+    "records\\rpa_scoped_001\\browser_draft_001\\check_accepted_index.py": "af6917cce662c89518594f47f75c2dd758b882b9607f99e07e074123f57452e5",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_scoped_index.mjs": "f21d693113c225774d37ba95fddb269cd4fdaabd64e0507852265b0ecf781ce6",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_accepted_documents.py": "135124a52ff0018c298c15dd93e3911fa1c0d267389e47e0c7030637c144872c",
+    "records\\rpa_scoped_001\\browser_draft_001\\scoped_browser_helper.py": "51108040e9c9af02fe9df8a8d5c87f0f7c9029029cd93620cf368cb878ff50c0"
+  },
+  "browser": {
+    "views": [
+      {
+        "viewport": "desktop",
+        "width": 1440,
+        "scroll_width": 1440,
+        "links": [
+          {
+            "href": "missing_primitive.html",
+            "text": "missing primitive"
+          },
+          {
+            "href": "constructed_not_installed.html",
+            "text": "constructed not installed"
+          },
+          {
+            "href": "installed_waiting_return.html",
+            "text": "installed waiting return"
+          },
+          {
+            "href": "checked_solution.html",
+            "text": "checked solution"
+          },
+          {
+            "href": "source_correction.html",
+            "text": "source correction"
+          },
+          {
+            "href": "budget_exhausted.html",
+            "text": "budget exhausted"
+          },
+          {
+            "href": "search_exhausted.html",
+            "text": "search exhausted"
+          },
+          {
+            "href": "corrected_reuse.html",
+            "text": "corrected reuse"
+          },
+          {
+            "href": "compound_rollback.html",
+            "text": "compound rollback"
+          },
+          {
+            "href": "primitive_rollback.html",
+            "text": "primitive rollback"
+          }
+        ],
+        "minimum_font": 18,
+        "title": "CAS declared structure",
+        "csp": "default-src 'none'; style-src 'unsafe-inline'; connect-src 'none'",
+        "script_count": 0
+      },
+      {
+        "viewport": "mobile",
+        "width": 390,
+        "scroll_width": 390,
+        "links": [
+          {
+            "href": "missing_primitive.html",
+            "text": "missing primitive"
+          },
+          {
+            "href": "constructed_not_installed.html",
+            "text": "constructed not installed"
+          },
+          {
+            "href": "installed_waiting_return.html",
+            "text": "installed waiting return"
+          },
+          {
+            "href": "checked_solution.html",
+            "text": "checked solution"
+          },
+          {
+            "href": "source_correction.html",
+            "text": "source correction"
+          },
+          {
+            "href": "budget_exhausted.html",
+            "text": "budget exhausted"
+          },
+          {
+            "href": "search_exhausted.html",
+            "text": "search exhausted"
+          },
+          {
+            "href": "corrected_reuse.html",
+            "text": "corrected reuse"
+          },
+          {
+            "href": "compound_rollback.html",
+            "text": "compound rollback"
+          },
+          {
+            "href": "primitive_rollback.html",
+            "text": "primitive rollback"
+          }
+        ],
+        "minimum_font": 18,
+        "title": "CAS declared structure",
+        "csp": "default-src 'none'; style-src 'unsafe-inline'; connect-src 'none'",
+        "script_count": 0
+      }
+    ],
+    "requests": [],
+    "errors": [],
+    "page_sha256": "5e60f45a90c07d782941f28ee60274e9b99616cd29112d74ad0aaed855c171ad",
+    "owned_browser_exit_code": 0,
+    "page_unchanged": true
+  },
+  "targets": [
+    {
+      "relative_href": "missing_primitive.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "31265eb42da862d253f71fca54a14e47163de05e00239ad734a77ef735a38d55"
+    },
+    {
+      "relative_href": "constructed_not_installed.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "35b5d650d482a3ae19bfaab57051dac7f23702d7575b8a77c90abe636654baa9"
+    },
+    {
+      "relative_href": "installed_waiting_return.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "24aeb8ccf733db11dd600efc09cbaca48be73d54b6ab3e0f24ac414d29210d43"
+    },
+    {
+      "relative_href": "checked_solution.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "2aee913d25ea5f837ade46b638fc4cc9df38b3e47d5b6b1c372dc6be730b2539"
+    },
+    {
+      "relative_href": "source_correction.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "ce0b89a0b7ca7296bcfde0c93b1ac25da819b2358166d88dcac329b91466c566"
+    },
+    {
+      "relative_href": "budget_exhausted.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "a800ff6e8dd1a56baecdd7c23e7686e52c08dd1f78a257b04ae55c16027f8073"
+    },
+    {
+      "relative_href": "search_exhausted.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "fd31e62e422d27bb8a00feab268657a37a4560190be6883fa3c74897abf8d8ab"
+    },
+    {
+      "relative_href": "corrected_reuse.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "6cf261a8ea22eb1fab2a5385e7bfc80d1ee8a260f01d986ea8116064e0b1f2c7"
+    },
+    {
+      "relative_href": "compound_rollback.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "64b5524394882bf6661d6b2630f442ba09766f07d0905c1e3db297805dc15705"
+    },
+    {
+      "relative_href": "primitive_rollback.html",
+      "exists_in_accepted_directory": true,
+      "sha256": "580810faa1108d16e2ad6433bb3709eba4a4045087b71211ac88ea7ef7e21d94"
+    }
+  ],
+  "screenshots": {
+    "desktop_index.png": "39de16b912e3430d2c7f3d1c4f765e83fa4c28fc86c52d5f059d0fc2a89eaef7",
+    "mobile_index.png": "f93799a36d0a860ab2bd2f67b5a69d697159381007b1a72606f129d988ca6583"
+  }
+}

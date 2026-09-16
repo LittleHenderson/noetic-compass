@@ -1,0 +1,17 @@
+{
+  "cncm\\rpa_scoped_compound.py": "82772bc655d33d372e37b10254abfdc43560c32cc851cb4b0dcee11fc3061a21",
+  "tools\\render_scoped_rpa_view.py": "aa22835d41c7fd5bfa50a803985bd3a88e1b5c03fb697b8be9f35fadb4dbf276",
+  "records\\rpa_scoped_001\\browser_draft_001\\scoped_browser_helper.py": "51108040e9c9af02fe9df8a8d5c87f0f7c9029029cd93620cf368cb878ff50c0",
+  "records\\rpa_scoped_001\\browser_draft_001\\check_scoped_browser.mjs": "9d17ae6c1724174c698c68bc857a7eeef145b071a1f8ecc77f9b6b8ccbc3d299",
+  "records\\rpa_scoped_001\\browser_draft_001\\check_documents.py": "7e7cfc490c1dc4d999757314539eb208b0d41838c83130c653de582c2ef025e3",
+  "records\\rpa_scoped_001\\development_001\\budget_exhausted.json": "a2ab67691f186a960a2c7e42122ce55217f5119243ad6866c0b9f7c94906a7f4",
+  "records\\rpa_scoped_001\\development_001\\checked_solution.json": "f4b519c8701534e009647873fb571d307bc4e3c8c957b2907239c6e87e0d2613",
+  "records\\rpa_scoped_001\\development_001\\compound_rollback.json": "a46d3e6cecad2add0456c610b868836bef3bed2f5d40cedf304a75add82c9b72",
+  "records\\rpa_scoped_001\\development_001\\constructed_not_installed.json": "79bea971a7aa510fac9f65a4e276fc6bcdc1a9d7ae25afa0d86b8f15834cf757",
+  "records\\rpa_scoped_001\\development_001\\corrected_reuse.json": "0f97b700812efea413f07b9fcd1d1af57dc4f9eb43a16fa8fd89f49a7ddf9ce1",
+  "records\\rpa_scoped_001\\development_001\\installed_waiting_return.json": "8d0ea077fb6a0127d0693b4ce466324a36e76acd467da72e2ba0d620ce5282ae",
+  "records\\rpa_scoped_001\\development_001\\missing_primitive.json": "66e3447d405fe4ef1813422b156f05dd4b23605fc4476698bb5ec043b4526860",
+  "records\\rpa_scoped_001\\development_001\\primitive_rollback.json": "005c4643f5df366e8951df93a3b9b7a6e9937498efdb83b639e975b18b09e54a",
+  "records\\rpa_scoped_001\\development_001\\search_exhausted.json": "26142b6a7a6378fb9388bf9d57be3e9bc603b1b11dbaec45f6773fc5f69f5384",
+  "records\\rpa_scoped_001\\development_001\\source_correction.json": "bf27665dd7cb5ed85b5b4fcb14518cdc97ff914e10b115068b3f3916d260530b"
+}

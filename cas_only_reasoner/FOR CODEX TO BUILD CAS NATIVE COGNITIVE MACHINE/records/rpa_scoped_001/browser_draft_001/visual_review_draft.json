@@ -1,0 +1,71 @@
+{
+  "scope": "DRAFT_ONLY; final adapter promotion requires separate accepted-byte browser run",
+  "initial_defects": "Overlapping desktop cards, horizontal overflow, and projection text below16px. Preserved before correction.",
+  "review": "Revised surrounding-card layout, mobile stacked cards, breadcrumb returns, bindings, and instruction leaves are readable. Source/current boundaries and evidence-bundle semantics are explicit. No measured geometry or learning claim is made.",
+  "reviewed_images": [
+    {
+      "path": "initial_smoke_001/desktop.png",
+      "sha256": "99257405aa2302d0233968e61fe1908eb3405cdbc1936f05eae8c2ab8f28151b"
+    },
+    {
+      "path": "initial_smoke_001/mobile.png",
+      "sha256": "9ef32703215d94da864cfbb1b3beadababffdca386418f2e368383bef32dff09"
+    },
+    {
+      "path": "layout_002/desktop.png",
+      "sha256": "f54c7cbcba713e85172f1aff0c5e9adb654adcd375afa3393b3b649ac3bb6029"
+    },
+    {
+      "path": "layout_002/desktop_bindings.png",
+      "sha256": "6c66ceeacaf6bd17c021a2653222abac37d66bedcb81298694f70eb27c062b8f"
+    },
+    {
+      "path": "layout_002/mobile_instructions.png",
+      "sha256": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556"
+    },
+    {
+      "path": "breadcrumbs_005/mobile_breadcrumbs.png",
+      "sha256": "036c899a18f3b1c141de3316593326052b76197fd93bd90650c844b4c42d9358"
+    },
+    {
+      "path": "all_pages_004/missing_primitive/desktop_top.png",
+      "sha256": "07f5c5ccd608945f3f14d0e776d39b4e0a4a731644755a920cb6bfb41421d8bd"
+    },
+    {
+      "path": "all_pages_004/missing_primitive/mobile_top.png",
+      "sha256": "cfda31674212bd4e7c22348fff7ff5a80eba478bd4395817d0fd3a04e9db2c40"
+    },
+    {
+      "path": "all_pages_004/checked_solution/mobile_program.png",
+      "sha256": "6342574dce9d5ac397fc7778b20c28d5cef6b3d3155884782d94f02a2c9d2afd"
+    },
+    {
+      "path": "all_pages_004/checked_solution/desktop_instructions.png",
+      "sha256": "ffc35c145561089600dde286d7ff823046ee97df62a2b05dd12a188e631628cc"
+    },
+    {
+      "path": "all_pages_004/compound_rollback/mobile_top.png",
+      "sha256": "15df7c290e60645e93de87978adaa289469d6679145b80f48b9391fef708d24c"
+    },
+    {
+      "path": "all_pages_004/corrected_reuse/desktop_program.png",
+      "sha256": "6be37ef22cdfea0d649a3f8d2511449651b7c3a9dfffd8536a4c47a3ea2ae667"
+    },
+    {
+      "path": "all_pages_004/primitive_rollback/desktop_loaded.png",
+      "sha256": "aa9f92595f906bbce2ddfb179223984de189d168886e3880e9c76c11d8a521da"
+    },
+    {
+      "path": "all_pages_004/primitive_rollback/mobile_top.png",
+      "sha256": "15df7c290e60645e93de87978adaa289469d6679145b80f48b9391fef708d24c"
+    },
+    {
+      "path": "all_pages_004/source_correction/desktop_loaded.png",
+      "sha256": "3d80f5d261d003b633c80196575c4c9562f188338beb47fc57d0d310d8506efd"
+    },
+    {
+      "path": "all_pages_004/source_correction/mobile_top.png",
+      "sha256": "d08eb204836d60438c8b61157be63652e6330851a5d31329fb44288b28a71e60"
+    }
+  ]
+}

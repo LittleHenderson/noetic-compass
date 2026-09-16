@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/derived_v0_6/verifier_receipt.schema.json",
+  "$ref": "https://cas.local/schemas/derived_v0_6/contracts.schema.json#/$defs/verifier_receipt"
+}

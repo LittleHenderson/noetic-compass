@@ -1,0 +1,20 @@
+{
+  "status": "UPDATED_SUMMARIES_NO_NEW_ACCEPTANCE",
+  "files": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+      "before_sha256": "89ab030f39d7e10e98126b5e1994ee2d1a3aa2967ac176894c174df861833ca2",
+      "after_sha256": "3b5e8a3fbc9ff2aa725aab66fa4f1dbadd0cfd689ee149f82346a76b897625b1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+      "before_sha256": "89ab030f39d7e10e98126b5e1994ee2d1a3aa2967ac176894c174df861833ca2",
+      "after_sha256": "3b5e8a3fbc9ff2aa725aab66fa4f1dbadd0cfd689ee149f82346a76b897625b1"
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\VISION_REQUIREMENTS.md",
+      "before_sha256": "55c010c202b879677c3aaa31d3de7f7a8a0c726416b338ef80213bb2e16724ef",
+      "after_sha256": "7d0e51b3a291d0015655893ab30c7678f22edf7b10d3e1915197f93c2dfce647"
+    }
+  ]
+}

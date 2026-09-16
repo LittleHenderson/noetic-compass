@@ -1,0 +1,74 @@
+{
+  "status": "VISUAL_REVIEW_PASS",
+  "accepted_receipt_sha256": "e7ccd47f85ae2ff86eff3395ec0a39bb0c204206cfacd47cffe100d257bd4283",
+  "browser_receipt_sha256": "59a85e6ebd49c5563416896091d70a779baf16a157ff25499ed4ba006d36c011",
+  "index_browser_receipt_sha256": "c73bc92ca42a564dee56430895c496ec889bd3dc461103e8690be42e77b41446",
+  "renderer_sha256": "aa22835d41c7fd5bfa50a803985bd3a88e1b5c03fb697b8be9f35fadb4dbf276",
+  "review": "Reviewed actual accepted-page captures at desktop1440 and mobile390. Cards and labels remain readable; breadcrumb return controls fit. Program calls, bindings, primitive instructions, and retained installation/execution/qualification evidence have distinct labels. Current execution identity is explicitly fixed. Source-correction and rollback views preserve their recorded states. The static index has readable links and explains the navigation boundary.",
+  "geometry_scope": "All ten accepted documents report profile40_assigned=0, overlap_certificates=0, measured_geometry=false. Grid/card collision checks describe CSS layout only.",
+  "reviewed_images": [
+    {
+      "path": "browser_index_001/desktop_index.png",
+      "sha256": "39de16b912e3430d2c7f3d1c4f765e83fa4c28fc86c52d5f059d0fc2a89eaef7"
+    },
+    {
+      "path": "browser_index_001/mobile_index.png",
+      "sha256": "f93799a36d0a860ab2bd2f67b5a69d697159381007b1a72606f129d988ca6583"
+    },
+    {
+      "path": "browser_breadcrumbs_001/desktop_breadcrumbs.png",
+      "sha256": "6f7403124db83d2f20346f0686c3225392201573d2dadfccae882c99dd054f8b"
+    },
+    {
+      "path": "browser_breadcrumbs_001/mobile_breadcrumbs.png",
+      "sha256": "036c899a18f3b1c141de3316593326052b76197fd93bd90650c844b4c42d9358"
+    },
+    {
+      "path": "browser_acceptance_002/missing_primitive/desktop_top.png",
+      "sha256": "07f5c5ccd608945f3f14d0e776d39b4e0a4a731644755a920cb6bfb41421d8bd"
+    },
+    {
+      "path": "browser_acceptance_002/missing_primitive/mobile_top.png",
+      "sha256": "cfda31674212bd4e7c22348fff7ff5a80eba478bd4395817d0fd3a04e9db2c40"
+    },
+    {
+      "path": "browser_acceptance_002/checked_solution/desktop_program.png",
+      "sha256": "8a0f3b63c74f092d8d78b6b76a8664d20810abb794001b50fd75b8fc0dd341a9"
+    },
+    {
+      "path": "browser_acceptance_002/checked_solution/mobile_program.png",
+      "sha256": "60520200fc091d4d55328dd7f46258b5127e9e3070d9d7e7c2d0d97a4f6e1288"
+    },
+    {
+      "path": "browser_acceptance_002/checked_solution/desktop_bindings.png",
+      "sha256": "6c66ceeacaf6bd17c021a2653222abac37d66bedcb81298694f70eb27c062b8f"
+    },
+    {
+      "path": "browser_acceptance_002/checked_solution/mobile_instructions.png",
+      "sha256": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556"
+    },
+    {
+      "path": "browser_acceptance_002/source_correction/desktop_loaded.png",
+      "sha256": "cd4f71182fe0258f7f3d53c634cc90bdb3dbe3051605a9ded28ee1370d8f0dc8"
+    },
+    {
+      "path": "browser_acceptance_002/source_correction/mobile_top.png",
+      "sha256": "d08eb204836d60438c8b61157be63652e6330851a5d31329fb44288b28a71e60"
+    },
+    {
+      "path": "browser_acceptance_002/primitive_rollback/desktop_loaded.png",
+      "sha256": "aa9f92595f906bbce2ddfb179223984de189d168886e3880e9c76c11d8a521da"
+    },
+    {
+      "path": "browser_acceptance_002/primitive_rollback/mobile_top.png",
+      "sha256": "15df7c290e60645e93de87978adaa289469d6679145b80f48b9391fef708d24c"
+    }
+  ],
+  "preserved_failures": [
+    "browser_draft_001/initial_smoke_001",
+    "browser_draft_001/all_pages_003",
+    "browser_acceptance_001/failure.txt"
+  ],
+  "windows_reproduction": "Use browser_draft_001/qa.py to pin the helper import directory; direct long-script invocation failed before main.",
+  "delivery_copied_by_this_agent": false
+}

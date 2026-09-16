@@ -1,0 +1,1 @@
+{"status":"FAILED_BEFORE_OUTPUT_WRITE","error":"KeyError: source_files","location":"capture_baseline.py:14","cause":"Helper used source_files; the accepted compound receipt names this field sources.","resolution":"Use the existing sources field; no accepted source changed."}

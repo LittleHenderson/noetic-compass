@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="9.128" timestamp="2026-09-16T09:06:59.658190-07:00" hostname="MSI"><testcase classname="tests.test_derived_memory_adversarial" name="test_independent_input_check_catches_faulty_derived_to_compound_translation" time="8.721"><failure message="AssertionError: assert ('4' is None)&#10; +  where '4' = DerivedRunResult(problem=DerivedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='origina...23a08a09f77', sealed=True)), trusted_ingress_digest='1fe447393c6e1184cdf45bd0ba8ec86b7f660ff84ba1ca4c579cd7fa6872dd9c').output">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000021371557100&gt;
+
+    def test_independent_input_check_catches_faulty_derived_to_compound_translation(monkeypatch):
+        """Fault inject the compiler helper; original typed input stays unchanged."""
+        from cncm.model import TerminalStatus
+        defined = definition()
+        machine = runtime_machine(defined)
+        assert machine.run(runtime_parent(defined, register=True, name="learn-for-compiler-check")).output == "3"
+        machine.start(runtime_parent(defined, name="original-input-must-be-authoritative"))
+        original_input = machine.problem.to_dict()
+        real_translate = DerivedProblem.compound_packet
+    
+        def corrupted(self, *args, **kwargs):
+            translated = real_translate(self, *args, **kwargs)
+            wrong = dict(translated.parameters)
+            wrong["e"] = "41"
+            return replace(translated, parameters=tuple(sorted(wrong.items())))
+    
+        monkeypatch.setattr(DerivedProblem, "compound_packet", corrupted)
+        result = machine.run(allow_generation=False, allow_acquisition=False)
+        assert machine.problem.to_dict() == original_input
+&gt;       assert result.output is None and result.terminal_status is not TerminalStatus.CONCLUDED
+E       AssertionError: assert ('4' is None)
+E        +  where '4' = DerivedRunResult(problem=DerivedProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='origina...23a08a09f77', sealed=True)), trusted_ingress_digest='1fe447393c6e1184cdf45bd0ba8ec86b7f660ff84ba1ca4c579cd7fa6872dd9c').output
+
+tests\test_derived_memory_adversarial.py:363: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,10 @@
+{
+  "receipt_sha256": "e7ccd47f85ae2ff86eff3395ec0a39bb0c204206cfacd47cffe100d257bd4283",
+  "helpers": {
+    "records\\rpa_scoped_001\\browser_draft_001\\check_accepted_documents.py": "135124a52ff0018c298c15dd93e3911fa1c0d267389e47e0c7030637c144872c",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_documents.py": "7e7cfc490c1dc4d999757314539eb208b0d41838c83130c653de582c2ef025e3",
+    "records\\rpa_scoped_001\\browser_draft_001\\scoped_browser_helper.py": "51108040e9c9af02fe9df8a8d5c87f0f7c9029029cd93620cf368cb878ff50c0",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_scoped_browser.mjs": "9d17ae6c1724174c698c68bc857a7eeef145b071a1f8ecc77f9b6b8ccbc3d299",
+    "tests\\test_rpa_view.py": "24595bf35e660c9485235fccea950714c36501a8b0dc7f84f0a7f01f5ee3b4de"
+  }
+}

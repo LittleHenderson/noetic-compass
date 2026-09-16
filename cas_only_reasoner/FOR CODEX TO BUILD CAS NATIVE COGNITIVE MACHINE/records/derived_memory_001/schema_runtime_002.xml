@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="1.895" timestamp="2026-09-16T09:06:36.403592-07:00" hostname="MSI"><testcase classname="tests.test_derived_v06_schemas" name="test_model_reference_definition_and_problem_closed_shapes" time="0.078" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-True]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-1.0]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-0]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[revision-129]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[supersedes-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.004" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[variable-not a symbol]" time="0.003" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[scope-]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_definition_schema_refuses_wrong_scalar_types_and_revision_shape[parameters-value7]" time="0.002" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path0-INDEPENDENTLY_VERIFIED]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path1-5]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path2-2]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path3-True]" time="0.004" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path4-420.0]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path5-421]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path6-True]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path7-answer]" time="0.005" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_problem_schema_refuses_hidden_answers_and_type_coercion[path8-value8]" time="0.006" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_frame_exact_wire_and_typed_address_validation_are_separate" time="0.008" /><testcase classname="tests.test_derived_v06_schemas" name="test_model_proof_shape_retains_formal_assumptions_and_no_world_truth" time="0.026" /><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_schema_documents_are_closed_offline_and_profile_bound" time="0.413" /><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_every_child_reuse_storage_and_refusal_stage_shape" time="0.801"><failure message="jsonschema.exceptions.ValidationError: 'CHECK_DERIVED_INPUTS' is not one of ['REGISTER_DEFINITION', 'INSPECT_DERIVED', 'GENERATE_DERIVED', 'CHECK_DERIVED', 'ADMIT_DERIVED', 'STORE_DERIVED']&#10;&#10;Failed validating 'enum' in schema['properties']['operation']:&#10;    {'enum': ['REGISTER_DEFINITION',&#10;              'INSPECT_DERIVED',&#10;              'GENERATE_DERIVED',&#10;              'CHECK_DERIVED',&#10;              'ADMIT_DERIVED',&#10;              'STORE_DERIVED']}&#10;&#10;On instance['operation']:&#10;    'CHECK_DERIVED_INPUTS'">def test_runtime_every_child_reuse_storage_and_refusal_stage_shape():
+        from cncm.derived_engine import DerivedMachine
+        item=definition();machine=DerivedMachine(simulated_profile(),trusted_ingress=(item.definition_digest,))
+        machine.start(problem(definitions=(item,)))
+        seen=set()
+        while machine.state.halt_status is TerminalStatus.RUNNING:
+&gt;           shapes(machine,seen);machine.advance()
+            ^^^^^^^^^^^^^^^^^^^^
+
+tests\test_derived_v06_schemas.py:169: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_derived_v06_schemas.py:136: in shapes
+    validate(prefix+row['kind'],json.loads(row['body_json']))
+tests\test_derived_v06_schemas.py:41: in validate
+    validator(kind).validate(value)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Validator(schema={'$ref': 'https://cas....K_RESERVATION'}, format_checker=None)
+args = ({'after': {'checker_calls_remaining': 9095, 'instructions_remaining': 71024}, 'before': {'checker_calls_remaining': 9735, 'instructions_remaining': 91504}, 'checker_calls_allocated': 640, 'failure': None, ...},)
+kwargs = {}
+error = &lt;ValidationError: "'CHECK_DERIVED_INPUTS' is not one of ['REGISTER_DEFINITION', 'INSPECT_DERIVED', 'GENERATE_DERIVED', 'CHECK_DERIVED', 'ADMIT_DERIVED', 'STORE_DERIVED']"&gt;
+
+    def validate(self, *args, **kwargs):
+        for error in self.iter_errors(*args, **kwargs):
+&gt;           raise error
+E           jsonschema.exceptions.ValidationError: 'CHECK_DERIVED_INPUTS' is not one of ['REGISTER_DEFINITION', 'INSPECT_DERIVED', 'GENERATE_DERIVED', 'CHECK_DERIVED', 'ADMIT_DERIVED', 'STORE_DERIVED']
+E           
+E           Failed validating 'enum' in schema['properties']['operation']:
+E               {'enum': ['REGISTER_DEFINITION',
+E                         'INSPECT_DERIVED',
+E                         'GENERATE_DERIVED',
+E                         'CHECK_DERIVED',
+E                         'ADMIT_DERIVED',
+E                         'STORE_DERIVED']}
+E           
+E           On instance['operation']:
+E               'CHECK_DERIVED_INPUTS'
+
+C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\jsonschema\validators.py:450: ValidationError</failure></testcase><testcase classname="tests.test_derived_v06_schemas" name="test_runtime_json_body_annotation_is_not_proof_or_decoded_body_validation" time="0.001" /></testsuite></testsuites>

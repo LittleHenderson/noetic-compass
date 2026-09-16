@@ -1,0 +1,510 @@
+{
+  "status": "PASS",
+  "inputs": {
+    "cncm\\rpa_scoped_compound.py": "82772bc655d33d372e37b10254abfdc43560c32cc851cb4b0dcee11fc3061a21",
+    "tools\\render_scoped_rpa_view.py": "aa22835d41c7fd5bfa50a803985bd3a88e1b5c03fb697b8be9f35fadb4dbf276",
+    "records\\rpa_scoped_001\\browser_draft_001\\scoped_browser_helper.py": "51108040e9c9af02fe9df8a8d5c87f0f7c9029029cd93620cf368cb878ff50c0",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_scoped_browser.mjs": "9d17ae6c1724174c698c68bc857a7eeef145b071a1f8ecc77f9b6b8ccbc3d299",
+    "records\\rpa_scoped_001\\browser_draft_001\\check_documents.py": "7e7cfc490c1dc4d999757314539eb208b0d41838c83130c653de582c2ef025e3",
+    "records\\rpa_scoped_001\\development_001\\budget_exhausted.json": "a2ab67691f186a960a2c7e42122ce55217f5119243ad6866c0b9f7c94906a7f4",
+    "records\\rpa_scoped_001\\development_001\\checked_solution.json": "f4b519c8701534e009647873fb571d307bc4e3c8c957b2907239c6e87e0d2613",
+    "records\\rpa_scoped_001\\development_001\\compound_rollback.json": "a46d3e6cecad2add0456c610b868836bef3bed2f5d40cedf304a75add82c9b72",
+    "records\\rpa_scoped_001\\development_001\\constructed_not_installed.json": "79bea971a7aa510fac9f65a4e276fc6bcdc1a9d7ae25afa0d86b8f15834cf757",
+    "records\\rpa_scoped_001\\development_001\\corrected_reuse.json": "0f97b700812efea413f07b9fcd1d1af57dc4f9eb43a16fa8fd89f49a7ddf9ce1",
+    "records\\rpa_scoped_001\\development_001\\installed_waiting_return.json": "8d0ea077fb6a0127d0693b4ce466324a36e76acd467da72e2ba0d620ce5282ae",
+    "records\\rpa_scoped_001\\development_001\\missing_primitive.json": "66e3447d405fe4ef1813422b156f05dd4b23605fc4476698bb5ec043b4526860",
+    "records\\rpa_scoped_001\\development_001\\primitive_rollback.json": "005c4643f5df366e8951df93a3b9b7a6e9937498efdb83b639e975b18b09e54a",
+    "records\\rpa_scoped_001\\development_001\\search_exhausted.json": "26142b6a7a6378fb9388bf9d57be3e9bc603b1b11dbaec45f6773fc5f69f5384",
+    "records\\rpa_scoped_001\\development_001\\source_correction.json": "bf27665dd7cb5ed85b5b4fcb14518cdc97ff914e10b115068b3f3916d260530b"
+  },
+  "inputs_unchanged": true,
+  "document_count": 10,
+  "pages": [
+    {
+      "name": "budget_exhausted",
+      "source_sha256": "a2ab67691f186a960a2c7e42122ce55217f5119243ad6866c0b9f7c94906a7f4",
+      "page_sha256": "a800ff6e8dd1a56baecdd7c23e7686e52c08dd1f78a257b04ae55c16027f8073",
+      "browser_proof_sha256": "b96593875da4b062d0a2be64d60dc6703002d3a57fd8175028620117abe13a19",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 3,
+          "inspections": 28,
+          "leaf_count": 23,
+          "evidence_refs": 14,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 3,
+          "inspections": 28,
+          "leaf_count": 23,
+          "evidence_refs": 14,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_loaded.png": "a80dda88796e2b97590044e5569b4943c4f02f6f98a81eb8f4b34a834a0dcb51",
+        "desktop_top.png": "21b8de3085c563926fa01df0dddd31dd8e94b17e112cb0667b5b9952328d47ac",
+        "mobile_loaded.png": "a155d849ecea903984d1be7a0dad9876d793aa32e67a94753e8db50cf88288ba",
+        "mobile_top.png": "c6c9a8226496540fa4e296d0a5994d97ce9e0209b46ce712d4daab48f558476a"
+      }
+    },
+    {
+      "name": "checked_solution",
+      "source_sha256": "f4b519c8701534e009647873fb571d307bc4e3c8c957b2907239c6e87e0d2613",
+      "page_sha256": "2da1f9f3e6fa4b671d196c14784d0eddb9acd4e0266c1f8e6e38bc4e7a6903b4",
+      "browser_proof_sha256": "112e5581a40e0809f6ad2141722c6e36fcbf4710895dc0831a7cedee14648193",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 11,
+          "inspections": 83,
+          "leaf_count": 40,
+          "evidence_refs": 26,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 11,
+          "inspections": 83,
+          "leaf_count": 40,
+          "evidence_refs": 26,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "6c66ceeacaf6bd17c021a2653222abac37d66bedcb81298694f70eb27c062b8f",
+        "desktop_instructions.png": "ffc35c145561089600dde286d7ff823046ee97df62a2b05dd12a188e631628cc",
+        "desktop_loaded.png": "cbaa084b644168a0ca56dd5d7191bc51aa93f709d000c26bb7eec6adc12933e1",
+        "desktop_program.png": "064b38c11dc2f113059e43eb373331c39e023ed80b3a007f5ffbaec429318dc6",
+        "desktop_top.png": "d973a120f47892c2a0b4895f5e9342741ca4d47b9629885b1b80b27c835ffecc",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "ae6c5fafca4ee957ecbf18665f97728fe0c244c4c57c7da37686fab6b339ce3d",
+        "mobile_program.png": "6342574dce9d5ac397fc7778b20c28d5cef6b3d3155884782d94f02a2c9d2afd",
+        "mobile_top.png": "4b6816f924dc646167ad32c9a69a7ed10fc5bb5955fd8e8e9961f62a3962a540"
+      }
+    },
+    {
+      "name": "compound_rollback",
+      "source_sha256": "a46d3e6cecad2add0456c610b868836bef3bed2f5d40cedf304a75add82c9b72",
+      "page_sha256": "3a729afc729367b8009550882a3f316532432a67d7c22b67bc772597be9f8956",
+      "browser_proof_sha256": "909df5b7fdb7f3274cc483d95b76d01c867b379eeb3af67d7ffb63dadf2bb43d",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 7,
+          "inspections": 77,
+          "leaf_count": 55,
+          "evidence_refs": 41,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 7,
+          "inspections": 77,
+          "leaf_count": 55,
+          "evidence_refs": 41,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "5e9a85e235fb7d884e237cb6fc87a3e8b235e2ad8df28116adf7c79b32b85ebd",
+        "desktop_instructions.png": "0368f8e75ef5139189b05a8471ff8a7aaab20ac630a5d4b9f369004969711a4f",
+        "desktop_loaded.png": "d668e90aaf0fd74aa18d00179ad3a35bb4e711c21c555bd8c1ef00497e0a06ed",
+        "desktop_program.png": "ff8c849a24e26cfe95a321e88276649412bc2a2798a8b7243398d5ee444935ab",
+        "desktop_top.png": "5d64ad04464bf87f10809b8f276c78e5fcda9bc274f9985d746c49465fb31401",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "f84d79a8db65bf31be8028f5cd6b67c7cf370128c860cfbe8845e5c5708f6c4d",
+        "mobile_program.png": "60520200fc091d4d55328dd7f46258b5127e9e3070d9d7e7c2d0d97a4f6e1288",
+        "mobile_top.png": "15df7c290e60645e93de87978adaa289469d6679145b80f48b9391fef708d24c"
+      }
+    },
+    {
+      "name": "constructed_not_installed",
+      "source_sha256": "79bea971a7aa510fac9f65a4e276fc6bcdc1a9d7ae25afa0d86b8f15834cf757",
+      "page_sha256": "35b5d650d482a3ae19bfaab57051dac7f23702d7575b8a77c90abe636654baa9",
+      "browser_proof_sha256": "200e84ab6639af840be425c055a6b1a485a964ba88e583a3ec6d96db74f3dcfc",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 3,
+          "inspections": 34,
+          "leaf_count": 29,
+          "evidence_refs": 21,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 3,
+          "inspections": 34,
+          "leaf_count": 29,
+          "evidence_refs": 21,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_loaded.png": "fa917e5dda6c36e5dad11cec59ba93d8392673149f60626c35f190d36347b7a6",
+        "desktop_top.png": "f95c514edbd81f976733c63060e1643a013acb0e187a2e46f9cd57e13e21451e",
+        "mobile_loaded.png": "6a3d64e420a2ff95260f1908b630d84e3cd025027df1db59aa086cc654ea1f24",
+        "mobile_top.png": "65350e9d9be8da08876cf354b66e2d14908226ea757991ba8a3eee8c1c095d9f"
+      }
+    },
+    {
+      "name": "corrected_reuse",
+      "source_sha256": "0f97b700812efea413f07b9fcd1d1af57dc4f9eb43a16fa8fd89f49a7ddf9ce1",
+      "page_sha256": "b7a35100da4e7fbec5fb1e6ed1f94a8be8499201f72880c87b078c147f51b37b",
+      "browser_proof_sha256": "8d5fa85a6b231f32e833e2877012a44cb39d90807fc4015a7ecb149beaf02527",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 11,
+          "inspections": 114,
+          "leaf_count": 63,
+          "evidence_refs": 49,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 11,
+          "inspections": 114,
+          "leaf_count": 63,
+          "evidence_refs": 49,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "12921a648e93daed634e5dc05ef805878d814784b12fa9218450efad72423ede",
+        "desktop_instructions.png": "9a251ef123ccd617ad70103559be57fe4aa5e5b6657cf1dd825151e96e179bce",
+        "desktop_loaded.png": "4a263a7a2a2d994c65916063edbed6a6dd91cc9fa313facf2d250dbb606d79bb",
+        "desktop_program.png": "6be37ef22cdfea0d649a3f8d2511449651b7c3a9dfffd8536a4c47a3ea2ae667",
+        "desktop_top.png": "f9125dff4c807d35b9295c4fa0e1e9477db542f706e0f5b7625882c9f93e20ef",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "9af9b310702be9663df7a0e20d4a2e4520c06c3e7829e8b0bce1c3932d4991d0",
+        "mobile_program.png": "08450ade81fd6c231385b095da8276ad571e48d62f7d062489a28a54f24e3cf9",
+        "mobile_top.png": "7c4e73642b625fb7de18807e94bcd6449464f8b82dafc329da644f1f323cc4ce"
+      }
+    },
+    {
+      "name": "installed_waiting_return",
+      "source_sha256": "8d0ea077fb6a0127d0693b4ce466324a36e76acd467da72e2ba0d620ce5282ae",
+      "page_sha256": "1f6b1d513620251250845b58dea6d998379460864a381148d717103c7926215c",
+      "browser_proof_sha256": "8b7e8b3d772508d1b6bc6abbe294da4ccf3e4b7036e34145b82b62d8d18ca1fa",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 7,
+          "inspections": 58,
+          "leaf_count": 38,
+          "evidence_refs": 25,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 7,
+          "inspections": 58,
+          "leaf_count": 38,
+          "evidence_refs": 25,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "a4845421cda1fffbc9931aaf631b78a507c81f34720e0b2f00a33fdcc5ff3de1",
+        "desktop_instructions.png": "234728a09cbe6c79904aae99dccbee22cd4f41126283f9d7789d331ee3e0a330",
+        "desktop_loaded.png": "c13a8a69b4c76f6162b74f30705f36501c7942e90888b30016e762b89f2c9344",
+        "desktop_program.png": "97638fa922b2ecd8db8f6b36ddec856679c878bf7637281f1f7824bcc0dc3ee8",
+        "desktop_top.png": "bfb5706a8a69f90506cae0987efe6e4915c3eee5710fa48282dc75d3a3fb269e",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "0a8186b19c2779e2527209d2294e86e874ea7e7748961bba321d8324a98be55b",
+        "mobile_program.png": "e105958d733c4d08bfdb9e991d10425390faa73d318dfc489240a8f1e53b03ec",
+        "mobile_top.png": "726cc9a1de5590b4c84699a4108080801c1490e6986e02295948bd899ba2e60a"
+      }
+    },
+    {
+      "name": "missing_primitive",
+      "source_sha256": "66e3447d405fe4ef1813422b156f05dd4b23605fc4476698bb5ec043b4526860",
+      "page_sha256": "31265eb42da862d253f71fca54a14e47163de05e00239ad734a77ef735a38d55",
+      "browser_proof_sha256": "acb3ed36cfc55d6f5ac75110c72c3a68d6f2c28049f06984757268fb3805fcdb",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 2,
+          "inspections": 20,
+          "leaf_count": 17,
+          "evidence_refs": 13,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 2,
+          "inspections": 20,
+          "leaf_count": 17,
+          "evidence_refs": 13,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_loaded.png": "b906e44ceaa5b90e38e4448ee78d21397d86c705e602e8e6010898c9b68be56b",
+        "desktop_top.png": "07f5c5ccd608945f3f14d0e776d39b4e0a4a731644755a920cb6bfb41421d8bd",
+        "mobile_loaded.png": "15499dce5fecc7d109d8d2adee29ca9367241d50dd2b1e16909d58abc702ae4c",
+        "mobile_top.png": "cfda31674212bd4e7c22348fff7ff5a80eba478bd4395817d0fd3a04e9db2c40"
+      }
+    },
+    {
+      "name": "primitive_rollback",
+      "source_sha256": "005c4643f5df366e8951df93a3b9b7a6e9937498efdb83b639e975b18b09e54a",
+      "page_sha256": "8ae10464970330836332c1b61be41dce0a52d803f36316d57a0ae80dcd77ab87",
+      "browser_proof_sha256": "67095968a338ce05cd0a931f5522b6a2e8c42fc0387800b427c66e1385d82b63",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 7,
+          "inspections": 77,
+          "leaf_count": 55,
+          "evidence_refs": 41,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 7,
+          "inspections": 77,
+          "leaf_count": 55,
+          "evidence_refs": 41,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "723a5870dfcc16331de31045774451a96e07e4bc960328ef409cb82933c5e993",
+        "desktop_instructions.png": "3b159817acaf52f107e2ce1bf57636c4d487e2d186b13e70b100d4ed0c6fff69",
+        "desktop_loaded.png": "aa9f92595f906bbce2ddfb179223984de189d168886e3880e9c76c11d8a521da",
+        "desktop_program.png": "368dc5a8552a282e71774a619eb9934294a3a309460b7d01d0e45faf9440d5a4",
+        "desktop_top.png": "2d70d9ca0e28bab14021448a4876b58757cf612013281800260c8e9998017694",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "f84d79a8db65bf31be8028f5cd6b67c7cf370128c860cfbe8845e5c5708f6c4d",
+        "mobile_program.png": "60520200fc091d4d55328dd7f46258b5127e9e3070d9d7e7c2d0d97a4f6e1288",
+        "mobile_top.png": "15df7c290e60645e93de87978adaa289469d6679145b80f48b9391fef708d24c"
+      }
+    },
+    {
+      "name": "search_exhausted",
+      "source_sha256": "26142b6a7a6378fb9388bf9d57be3e9bc603b1b11dbaec45f6773fc5f69f5384",
+      "page_sha256": "fd31e62e422d27bb8a00feab268657a37a4560190be6883fa3c74897abf8d8ab",
+      "browser_proof_sha256": "25d4092d712bac2cef81d5ad002e792ab1a51332eef46ccef756ead5bf520e5c",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 3,
+          "inspections": 28,
+          "leaf_count": 23,
+          "evidence_refs": 14,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 3,
+          "inspections": 28,
+          "leaf_count": 23,
+          "evidence_refs": 14,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_loaded.png": "8f3a6b761be62bf59101c5068f848bebb46bbd83a9881ff8e806d7b3a1c94c05",
+        "desktop_top.png": "3a6a8dd0749a64a0c7f50326e3ec3c8cf85183749d9792c39f343af1035277ff",
+        "mobile_loaded.png": "aeb3d027ea3d0eb5d9cb5bdf12c60d9e1d2064bc18d298c01eaab9b2874ccb6e",
+        "mobile_top.png": "c6c9a8226496540fa4e296d0a5994d97ce9e0209b46ce712d4daab48f558476a"
+      }
+    },
+    {
+      "name": "source_correction",
+      "source_sha256": "bf27665dd7cb5ed85b5b4fcb14518cdc97ff914e10b115068b3f3916d260530b",
+      "page_sha256": "f7e34da44857ee8e6885c9f2b524d6d7845d15d8f93aab06fa824493f1eeb95e",
+      "browser_proof_sha256": "8558ab5b926fbc9818e55eeac207863765e38c7ee9230332852358084d8a39fa",
+      "independent_reference_match": true,
+      "exact_records_match": true,
+      "exact_evidence_bodies_match": true,
+      "fixed_source_state_unchanged": true,
+      "requests": 0,
+      "errors": 0,
+      "geometry": {
+        "measured_geometry": false,
+        "overlap_certificates": 0,
+        "profile40_assigned": 0
+      },
+      "views": [
+        {
+          "viewport": "desktop",
+          "scope_paths": 11,
+          "inspections": 94,
+          "leaf_count": 49,
+          "evidence_refs": 35,
+          "min_font_px": 16,
+          "max_scroll_width": 1425,
+          "card_overlap_count": 0
+        },
+        {
+          "viewport": "mobile",
+          "scope_paths": 11,
+          "inspections": 94,
+          "leaf_count": 49,
+          "evidence_refs": 35,
+          "min_font_px": 16,
+          "max_scroll_width": 390,
+          "card_overlap_count": 0
+        }
+      ],
+      "screenshots": {
+        "desktop_bindings.png": "2d08e2d2f906b81f4891095b41190eb6561017e3888699a90591dd7ca20f7ea0",
+        "desktop_instructions.png": "117f60e5588e5bcb40b260899af9458429472d6bce376a580f6172b562d5d05e",
+        "desktop_loaded.png": "3d80f5d261d003b633c80196575c4c9562f188338beb47fc57d0d310d8506efd",
+        "desktop_program.png": "d887c6a5f849be82e2d3e5888e5f17804949f71f5adda45adb21cc07877a080e",
+        "desktop_top.png": "85a5aa499866a11569d571ef3e42a4c38d373d50224d73bb8e6473b12ec47f58",
+        "mobile_bindings.png": "d13c762722c6ed69a572f380fea59a0964e56980562722f338e6a14fb353e159",
+        "mobile_instructions.png": "f478eedb41aa8b563edf45a71d8b0753664d30f5426d43190d23828197f51556",
+        "mobile_loaded.png": "96a5455ea24f2b99e37fa4128191151dee2b0bb013b7adcd7c6c55775dd466fa",
+        "mobile_program.png": "60520200fc091d4d55328dd7f46258b5127e9e3070d9d7e7c2d0d97a4f6e1288",
+        "mobile_top.png": "d08eb204836d60438c8b61157be63652e6330851a5d31329fb44288b28a71e60"
+      }
+    }
+  ]
+}

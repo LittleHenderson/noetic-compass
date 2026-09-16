@@ -2,7 +2,7 @@
 
 ## Authority and source identity
 
-The active owner goal raises the total AWS cap to $400 and makes the full vision override any conflicting part of the earlier 12-hour campaign. Work after that campaign remains inside the same cap. The exact active-goal response is retained in `records/budget/OWNER_APPROVAL_SOURCE.json`.
+Historical campaign authorization snapshot: the original goal set a $400 cap and gave the full vision precedence over the earlier 12-hour campaign. `records/budget/OWNER_APPROVAL_SOURCE.json` retains that original authority. Later authorization and budget evidence are in `records/budget/OWNER_BUDGET_AMENDMENT_001.json`, `records/budget/campaign_ledger.json` and the ordered-encoder checkpoint records. These are historical/local records, not a fresh provider-capacity or billing check; reservations are not invoices.
 
 Source files were read in full. SHA-256 identifies the bytes, not proof of the claims they contain:
 
@@ -24,19 +24,19 @@ The scope below remains open until verified in an integrated system. Current evi
 | V01 | Fluent multimodal language, speech, images, diagrams, video, code, mathematics, documents, structured data; shared grounded meaning | No integrated broad capability established by the small selector pilot. Requires grounded input adapters and independent domain tests. |
 | V02 | Assemble task-appropriate neural CJT networks with typed Cause, evidence, neural operation, Effect, readiness, time, memory, verification, and plasticity contracts | Fixed native CJTs and accepted call execution exist. Learned network/program assembly is the next candidate. |
 | V03 | Synthesize executable CAS procedures from intent: sequence, branches, calls, iteration, repair, return, resume; explain/edit both CAS and plain language | META-1 selects 1 of 3 authored procedures. The audited META-2 generation experiment produced admitted programs but both trained arms solved 0/72 held-out tasks; rule solved 72/72. Learned composition remains open, as do branches/iteration/open-language synthesis. |
-| V04 | Recursive typed composition across CJTs, boards, subboards, goals and subgoals; distinct Noetic paths, seven Foundations and 28 Sub-Foundations; budget-governed depth | Static nested execution exists. New composition tests must withhold entire structures and deeper real operation paths. General recursion and full semantics remain open. |
-| V05 | Durable working, episodic, semantic, procedural memory with provenance, time, structure and truth labels; semantic/structural recall and dynamic working sets | Partial: source 8b5d8ac9 ran a saved B procedure in a fresh AWS process. The unchanged audit checked six native traces, matching outputs and five rejections; evidence commit 4f3a3743. This is fixed procedural reuse, not learned retrieval or integrated memory. Explicit tags remain authoritative. |
-| V06 | Lifelong instruction and skill learning; context versus durable memory versus neural skill; scoped changes, retention, versioning and rollback | Standalone v0.2 scoped updates and a separate learned selector exist. Teaching during suspended execution with a qualified identity transition is not implemented. |
+| V04 | Recursive typed composition across CJTs, boards, subboards, goals and subgoals; distinct Noetic paths, seven Foundations and 28 Sub-Foundations; budget-governed depth | Partial: accepted native dependency-order planning and finite compound construction/acquisition support bounded nested execution and exact parent returns. New composition/learning tests must withhold entire structures and deeper real operation paths. General recursion and full CAS semantics remain open. |
+| V05 | Durable working, episodic, semantic, procedural memory with provenance, time, structure and truth labels; semantic/structural recall and dynamic working sets | Partial: native0.4/0.5 retain scoped source correction/retraction and installed procedures across anchored episodes. Accepted0.6 adds scoped proof-backed result memory, logical use history and transitive freshness; current source bindings alter later tasks without resupplied scalars. Formal conclusions remain conditional on admitted sources. General retrieval, full memory classes/metadata and CMB-R1 remain open. |
+| V06 | Lifelong instruction and skill learning; context versus durable memory versus neural skill; scoped changes, retention, versioning and rollback | Partial: native0.2–0.5 acquire, qualify, install, retain and roll back bounded procedures during real suspended calls. Accepted0.6 adds checked result retention and later-task reuse with new generation disabled. This is symbolic reuse, not measured neural learning. General skill acquisition and protected held-out retention/transfer remain open. |
 | V07 | Construction-first CAS-SDG curricula: formal structure, wording, independent checking, contrasts and held-out transfer; target real weaknesses | META-1 has a bounded checked synthetic curriculum. META-2 extends structural holdouts. Generated fixtures alone are not independent truth or broad self-curriculum. |
-| V08 | Practical self-model and RPM Desire/Wisdom/Power diagnosis; acquire missing prerequisites, verify, resume exact caller and budget | Authored repair/return is demonstrated. Detecting and acquiring genuinely missing knowledge or a skill is not. |
+| V08 | Practical self-model and RPM Desire/Wisdom/Power diagnosis; acquire missing prerequisites, verify, resume exact caller and budget | Partial: native0.3–0.5 acquire bounded equation/procedure prerequisites and resume exact callers with conserved work and explicit failures. Accepted0.6 adds missing-formal-result acquisition and checked memory admission;141 saved prefixes reconstruct and continue in one fresh child process. General diagnosis, native Foundation semantics and broad self-model remain open. |
 | V09 | Keep relative allocation and absolute current distinct; actual bounded effects on compute, memory and plasticity; deadline/cost/verification governance | Relevant CAS-Ohm routing and native policy checks exist. Integrated adaptive competence and measured benefit need experiments. Policy units are not measured FLOPs, joules, or AWS dollars. |
-| V10 | Persistent goals, dependencies, unfinished calls and authorized project/tool work with evidence-backed completion | Restarted accepted call execution is demonstrated. General long-lived autonomous project execution remains open. |
+| V10 | Persistent goals, dependencies, unfinished calls and authorized project/tool work with evidence-backed completion | Partial: native0.3–0.6 journals restore bounded dependencies, acquisition frames, source/definition lineage, proof-memory, procedure heads and conserved budgets under external genesis/ingress/journal anchors. General long-lived project/tool execution, authenticated durable custody and cross-device continuity remain open. |
 | V11 | Specialized boards and coordinating agents, alternatives, reconciliation and permission-bound skill sharing | No integrated broad cooperating-board capability established. |
 | V12 | Researcher, engineer, teacher and creative roles with hypotheses, experiments, revisions and visible learned-skill growth | Small learning improvement exists. General role competence and scientific discovery remain unproven. |
-| V13 | Glass-brain workbench showing actual goals, calls, memory, flow, repair, results and version history; edit and rollback | Evidence records exist. A complete integrated workbench with these controls is not established. |
+| V13 | Glass-brain workbench showing actual goals, calls, memory, flow, repair, results and version history; edit and rollback | Partial: accepted compound/cube evidence viewers and a separate scoped-navigation extension expose retained records and declared nested interiors while execution identity stays fixed. Broader integrated goals/memory/flow, editing, simulation, learning and rollback controls remain open. Inspection is not recursive reasoning or learning. |
 | V14 | Persistent identity across phone, desktop and cloud; lightweight offline core, cloud learning, permitted state reconciliation | No cross-device continuity demonstration established. This laptop must not run neural workloads during development. |
 | V15 | Installable portable CJT skills with programs, compatible neural parts, I/O contracts, permissions, memory requirements, verification and lineage | Partial: the saved B package was retrieved in a fresh process and reused through the accepted native runtime, with software/model compatibility checks and unchanged permissions. It remains UNQUALIFIED. Learned package selection, qualification, model-version transition and the full portable skill contract remain open. |
-| V16 | Addressed local teaching; functional cognitive addresses distinct from execution IDs; repair only unsupported transitions and preserve neighbors | Named program references and explicit addresses are first candidate mechanisms. Scoped learning plus retention and resumed caller proof remain open. |
+| V16 | Addressed local teaching; functional cognitive addresses distinct from execution IDs; repair only unsupported transitions and preserve neighbors | Partial: bounded native procedure acquisition/qualification, exact saved-caller resumption and retained-neighbor checks exist. Functional cognitive addresses, neural scoped teaching, cross-capability retention and measured transferred learning remain open. |
 | V17 | Structural cross-domain transfer, native independent controls, full CAS/Noetic meanings | Requires explicit semantic versions and held-out cross-domain evaluations, not renaming ordinary units. TKS Foundations TF1..TF7 and CAS Drive rails DF1..DF7 must remain distinct. |
 | V18 | Physical analog CJT hardware and matched differential pairs with measured cutoff/active/saturation/breakdown behavior | Hardware fabrication and physical measurements are not established by the software prototype. This remains part of the ultimate scope, not a claim within the current AWS experiment. |
 
@@ -366,3 +366,57 @@ Why is a structural teacher witness and How still needs an action contract.
 All earlier negative neural recurrence results remain unchanged. No local
 neural execution, paid compute, AWS launch or provider inference was used here.
 The full V01-V18, 31-system and integrated 20-step charter remains open.
+## 2026-09-16 derived-result memory integration started (historical checkpoint)
+
+Current-state review confirmed that accepted0.5 retains source statements and
+procedures but cannot yet resolve a typed checked derived-result reference.
+The top-level summaries above now reflect already accepted0.3-0.5 evidence;
+their earlier shallow/same-process descriptions were historical, not current.
+
+The new versioned0.6 work connects protected mathematical proof checking to
+native result memory, missing-prerequisite frames and later compound execution.
+Implementation and acceptance are pending. The six-case frozen proof-gate probe
+passed with both solver entry points disabled; it is not an integrated0.6 pass.
+See spec/CNCM_DERIVED_MEMORY_v0.6.md and records/derived_memory_001/STATUS.md.
+
+The preservation baseline binds126 accepted source files, all four prior runtime
+profiles and367 recurrence/handoff evidence files. The original helper field-name
+failure remains retained. No neural/provider run, AWS launch or new learning
+claim was made. The complete V01-V18,31-system,integrated20-step charter is open.
+
+## 2026-09-16 Checked result memory and declared scoped navigation
+
+Accepted native0.6 now acquires a missing formal result through a saved-parent
+child, independently checks and stores it, resumes the exact task, and reuses
+checked results in later arithmetic. Corrections invalidate stale and transitive
+support; new generation/acquisition can be disabled independently. Ten actual
+episode outcomes and all141 saved cuts passed the source-bound final recipe.
+Every cut reconstructs and continues in one fresh child process, not a separate
+OS process per cut. The141 checks include commitment-before-storage recovery.
+
+The separate versioned scoped viewer enters declared procedure calls, input
+bindings, primitive instructions and retained evidence, with breadcrumbs and
+unchanged execution-state identity. Ten accepted compound0.5 documents cover
+65 scopes; final browser checks cover130 scope visits and1,244 inspections on
+desktop/mobile. Exact profile40 and overlap-certificate observations remain
+empty in those ten inputs and the four separately checked cube documents.
+The38-file outer output/rpa_scoped_001 delivery preserves both earlier packages.
+
+Full symbolic regression: 2237 JUnit-counted tests/subtests, zero failures,
+errors or skips, with all declared suite inputs unchanged. The focused checks
+passed107 memory tests and37 scoped-navigation tests. Failed development and
+browser probes remain retained. Records: derived_memory_001/STATUS.md and
+rpa_scoped_001/STATUS.md, including exact runtime/browser/suite receipts.
+
+All126 frozen prior source files, four earlier runtime profiles and367 prior
+recurrence/handoff evidence files remain unchanged. No neural/provider execution
+or AWS launch was performed for this checkpoint. This is bounded symbolic
+retention/reuse and inspection, not improved neural learning or full CNCM.
+
+The next learning gate is docs/CNCM_NEXT_LEARNING_EXPERIMENT_GATE.md: add a
+source-bound learner-compatible record adapter, pin the opt-in ordered encoder
+equally in controls, close inference answer leakage and freeze a genuinely
+separate topology/family panel before actual matched multi-seed training.
+The earlier recurrence result remains NOT_MET,0/3 positive; the later encoder
+diagnostic was zero-update and establishes no trained-transfer gain. The full
+V01–V18,31-system and integrated20-step charter remains open.

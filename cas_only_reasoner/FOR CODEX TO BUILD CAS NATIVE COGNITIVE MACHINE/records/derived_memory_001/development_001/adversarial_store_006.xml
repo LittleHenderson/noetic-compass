@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="4.865" timestamp="2026-09-16T09:08:49.918005-07:00" hostname="MSI"><testcase classname="tests.test_derived_memory_adversarial" name="test_postcommit_store_rejects_a_valid_proof_for_another_definition" time="4.497"><failure message="AssertionError: assert ()&#10; +  where () = StepResult(state=DerivedState(runtime_version='0.6.0', logical_tick=19, run_id='derived-run-ff59ae041b108ea7', seed=0,...ntroller', source_id='derived-memory-0.6', detail='proposal only; formal conditional scope'),)),), rejected_intents=()).rejected_intents">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000002125127B360&gt;
+
+    def test_postcommit_store_rejects_a_valid_proof_for_another_definition(monkeypatch):
+        """A faulty proof producer must not create an admitted durable record."""
+        import cncm.derived_kernel as kernel
+        from cncm.derived_model import DerivedIntentType as D
+        from cncm.derived_profile import DERIVED_WORK_COSTS
+        from cncm.derived_verification import checked_proof as protected_check
+        from cncm.native_model import NativeBudget
+        parameters = dict(a="2", b="3", c="5", d="7", e="35")
+        defined = definition(variable="x", parameters=tuple(sorted(parameters.items())))
+        machine = runtime_machine(defined)
+        machine.start(create_problem(parameters, definitions=(defined,), store_result=defined.ref,
+                                     problem_id="postcommit-foreign-proof"))
+        proposal = advance_until(machine, D.STORE_DERIVED)
+        assert machine.state.commitment_state.decision_status == "COMMITTED"
+        before = machine.state.native_budget
+        cost = DERIVED_WORK_COSTS[D.STORE_DERIVED.value]
+    
+        def foreign_proof(definition, inputs, value, profile_digest):
+            return protected_check(replace(definition, scope="foreign-context"), inputs, value, profile_digest)
+    
+        monkeypatch.setattr(kernel, "checked_proof", foreign_proof)
+        outcome = execute_proposal(machine, proposal)
+&gt;       assert outcome.rejected_intents
+E       AssertionError: assert ()
+E        +  where () = StepResult(state=DerivedState(runtime_version='0.6.0', logical_tick=19, run_id='derived-run-ff59ae041b108ea7', seed=0,...ntroller', source_id='derived-memory-0.6', detail='proposal only; formal conditional scope'),)),), rejected_intents=()).rejected_intents
+
+tests\test_derived_memory_adversarial.py:413: AssertionError</failure></testcase></testsuite></testsuites>

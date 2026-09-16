@@ -1,0 +1,1 @@
+{"boundary":"Named Python import gate; not provider/account telemetry.","forbidden_imports":["anthropic","boto3","botocore","httpx","jax","numpy","openai","requests","tensorflow","torch","transformers","vllm"],"observed_import_attempts":[]}

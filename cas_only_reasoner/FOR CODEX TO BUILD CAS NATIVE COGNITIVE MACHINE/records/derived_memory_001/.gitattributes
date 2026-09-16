@@ -1,0 +1,9 @@
+*.json -text -eol -whitespace
+*.jsonl -text -eol -whitespace
+*.xml -text -eol -whitespace
+*.txt -text -eol -whitespace
+*.py text eol=lf
+design_probe_001/*.py -text -eol -whitespace
+development_001/** -text -eol -whitespace
+ledger_reconciliation_001/** -text -eol -whitespace
+update_ledger_status.py -text -eol -whitespace

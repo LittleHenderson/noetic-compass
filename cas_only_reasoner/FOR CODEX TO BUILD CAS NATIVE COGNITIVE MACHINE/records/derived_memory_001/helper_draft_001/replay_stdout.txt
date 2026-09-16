@@ -1,0 +1,1 @@
+{"pid": 37868, "cuts": 141, "all_exact": true}

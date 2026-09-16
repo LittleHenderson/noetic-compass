@@ -1,0 +1,11 @@
+{"phase": "episode_replay_complete", "pid": 22596, "case": "acquisition", "episode": 0, "cuts": 27, "total_cuts_so_far": 27}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "acquisition", "episode": 1, "cuts": 12, "total_cuts_so_far": 39}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "acquisition", "episode": 2, "cuts": 5, "total_cuts_so_far": 44}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "acquisition", "episode": 3, "cuts": 17, "total_cuts_so_far": 61}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "acquisition", "episode": 4, "cuts": 12, "total_cuts_so_far": 73}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "stored_results", "episode": 0, "cuts": 24, "total_cuts_so_far": 97}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "stored_results", "episode": 1, "cuts": 13, "total_cuts_so_far": 110}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "stored_results", "episode": 2, "cuts": 5, "total_cuts_so_far": 115}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "stored_results", "episode": 3, "cuts": 13, "total_cuts_so_far": 128}
+{"phase": "episode_replay_complete", "pid": 22596, "case": "stored_results", "episode": 4, "cuts": 13, "total_cuts_so_far": 141}
+{"pid": 22596, "cuts": 141, "all_exact": true}
