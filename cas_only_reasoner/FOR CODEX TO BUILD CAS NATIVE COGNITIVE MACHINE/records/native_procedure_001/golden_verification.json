@@ -1,0 +1,1 @@
+{"command":"python -B tools/verify_goldens.py","errors":[],"fixture_count":14,"manifest_sha256":"8fb5171b303918620347355da5645df70bb28cf75af89275a6e4fac48407f674","math_contract_only_count":1,"math_executable_count":5,"math_fixture_count":6,"rrk_fixture_count":8,"schema_version":"cncm.golden-verification/0.2","valid":true}

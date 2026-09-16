@@ -54,3 +54,8 @@ Next work must implement the versioned single-writer state and acquisition
 transitions, qualified installation, exact caller continuation with conserved
 budget, semantic journal replay, retained neighboring behavior, and rollback.
 None of those gates is closed by this substrate.
+
+Independent source review on 2026-09-16 found no material blocker. Native
+installation must require both exact qualification reconstruction and
+`ENGINEERING_PANEL_PASSED`: authentic failed panel records also reconstruct.
+Failed checker calls must remain charged to the native work budget.

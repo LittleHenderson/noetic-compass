@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="21" time="1.125" timestamp="2026-09-16T01:10:28.861289-07:00" hostname="MSI"><testcase classname="tests.test_native_kernel" name="test_actual_acquire_apply_and_ordinary_reasoning_commit" time="0.178" /><testcase classname="tests.test_native_kernel" name="test_failed_wrong_add_qualification_before_selection_is_charged_and_retained" time="0.031" /><testcase classname="tests.test_native_kernel" name="test_forged_qualification_digest_is_charged_and_rejected" time="0.031" /><testcase classname="tests.test_native_kernel" name="test_selected_candidate_substitution_rejected_before_qualification" time="0.063" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget0-INSTALL]" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget1-INSTALL]" time="0.014" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget2-SELECT]" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget3-SELECT]" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes0]" time="0.014" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes1]" time="0.015" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes2]" time="0.017" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes3]" time="0.015" /><testcase classname="tests.test_native_kernel" name="test_stale_intent_does_not_run_work" time="0.072" /><testcase classname="tests.test_native_kernel" name="test_unsupported_executor_version_is_rejected_before_work" time="0.014" /><testcase classname="tests.test_native_kernel" name="test_wrong_return_frame_does_not_resume_or_refill" time="0.036" /><testcase classname="tests.test_native_kernel" name="test_suspended_parent_write_is_rejected" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_forged_native_proof_marker_is_not_ordinary_derivation_authority" time="0.006" /><testcase classname="tests.test_native_kernel" name="test_current_call_check_required_even_when_done_is_asserted" time="0.006"><failure message="cncm.model.ContractError: trusted internal SET_BRANCH_STATUS intent was rejected: COMMITMENT_GATES_FAILED: branch classification requires a current sealed decomposition">def test_current_call_check_required_even_when_done_is_asserted():
+        c = coordinator(asserted_done=True)
+        reasoner = CognitiveMachine()
+        packet = c.native_problem.reasoning
+&gt;       winner = reasoner._classify_and_compare(packet, c, ("branch-main",))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:297: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cncm\engine.py:692: in _classify_and_compare
+    self._execute_one(coordinator, "comparison_system", intent)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'cncm.engine.CognitiveMachine'&gt;
+coordinator = &lt;cncm.native_kernel.NativeCoordinator object at 0x000001E2D7EA0730&gt;
+component = 'comparison_system'
+intent = Intent(intent_id='intent-796ffb377e995551', intent_type=&lt;IntentType.SET_BRANCH_STATUS: 'SET_BRANCH_STATUS'&gt;, issuer_su...d_at_tick=0, provenance=(Provenance(source_type='operation', source_id='cdab', detail='shared-frame classification'),))
+
+    @classmethod
+    def _execute_one(
+        cls,
+        coordinator: TransactionCoordinator,
+        component: str,
+        intent: Intent,
+        *,
+        require_authorized: bool = True,
+    ):
+        result = coordinator.execute(
+            enabled_components=(component,),
+            scheduled_components=(component,),
+            intents=(intent,),
+        )
+        if (
+            require_authorized
+            and result.rejected_intents
+            and result.state.halt_status is not TerminalStatus.FAULT
+        ):
+            details = "; ".join(
+                f"{item.reason.value}: {item.detail}"
+                for item in result.rejected_intents
+            )
+&gt;           raise ContractError(
+                f"trusted internal {intent.intent_type.value} intent was rejected: {details}"
+            )
+E           cncm.model.ContractError: trusted internal SET_BRANCH_STATUS intent was rejected: COMMITMENT_GATES_FAILED: branch classification requires a current sealed decomposition
+
+cncm\engine.py:286: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_rpm_entry_budget_cannot_be_refilled_by_rehashed_state" time="0.071" /><testcase classname="tests.test_native_kernel" name="test_rollback_requires_quiescence_and_recorded_ancestor_and_keeps_artifact" time="0.126" /><testcase classname="tests.test_native_kernel" name="test_public_snapshot_import_is_rejected" time="0.005" /></testsuite></testsuites>

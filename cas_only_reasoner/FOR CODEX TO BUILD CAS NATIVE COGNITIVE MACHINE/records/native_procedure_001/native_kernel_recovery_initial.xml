@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="12" skipped="0" tests="34" time="1.997" timestamp="2026-09-16T01:16:48.949985-07:00" hostname="MSI"><testcase classname="tests.test_native_kernel" name="test_actual_acquire_apply_and_ordinary_reasoning_commit" time="0.148" /><testcase classname="tests.test_native_kernel" name="test_failed_wrong_add_qualification_before_selection_is_charged_and_retained" time="0.027" /><testcase classname="tests.test_native_kernel" name="test_forged_qualification_digest_is_charged_and_rejected" time="0.026" /><testcase classname="tests.test_native_kernel" name="test_selected_candidate_substitution_rejected_before_qualification" time="0.053" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget0-INSTALL]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget1-INSTALL]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget2-SELECT]" time="0.011" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget3-SELECT]" time="0.011" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes0]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes1]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes2]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes3]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_stale_intent_does_not_run_work" time="0.053" /><testcase classname="tests.test_native_kernel" name="test_unsupported_executor_version_is_rejected_before_work" time="0.011" /><testcase classname="tests.test_native_kernel" name="test_wrong_return_frame_does_not_resume_or_refill" time="0.029" /><testcase classname="tests.test_native_kernel" name="test_suspended_parent_write_is_rejected" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_forged_native_proof_marker_is_not_ordinary_derivation_authority" time="0.006" /><testcase classname="tests.test_native_kernel" name="test_current_call_check_required_even_when_done_is_asserted" time="0.015" /><testcase classname="tests.test_native_kernel" name="test_rpm_entry_budget_cannot_be_refilled_by_rehashed_state" time="0.056" /><testcase classname="tests.test_native_kernel" name="test_rollback_requires_quiescence_and_recorded_ancestor_and_keeps_artifact" time="0.100" /><testcase classname="tests.test_native_kernel" name="test_public_snapshot_import_is_rejected" time="0.004" /><testcase classname="tests.test_native_kernel" name="test_recovery_reproduces_malformed_raw_intent_rejection" time="0.017"><failure message="cncm.model.ContractError: native episode fields invalid">def test_recovery_reproduces_malformed_raw_intent_rejection():
+        machine = machine_at(0)
+        c = machine.coordinator
+        intent = native_intent(c, NativeIntentType.REQUEST_PROCEDURE_CALL, {"call": machine.problem.call.to_dict()})
+        result = execute(c, replace(intent, intent_type="MALFORMED_RAW_TYPE"))
+        assert result.rejected_intents[0].reason is RejectionReason.MALFORMED_MUTATION
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:378: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_reproduces_duplicate_intent_group_rejection" time="0.008"><failure message="cncm.model.ContractError: native episode fields invalid">def test_recovery_reproduces_duplicate_intent_group_rejection():
+        machine = machine_at(0)
+        c = machine.coordinator
+        intent = native_intent(c, NativeIntentType.REQUEST_PROCEDURE_CALL, {"call": machine.problem.call.to_dict()})
+        result = c.execute(enabled_components=(intent.issuer_subsystem,),
+            scheduled_components=(intent.issuer_subsystem,), intents=(intent, intent))
+        assert result.rejected_intents[0].reason is RejectionReason.DUPLICATE_ID
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:390: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[0]" time="0.007"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 0
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[2]" time="0.012"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 2
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[3]" time="0.050"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 3
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[4]" time="0.076"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 4
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[5]" time="0.077"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 5
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[6]" time="0.084"><failure message="cncm.model.ContractError: native episode fields invalid">stage = 6
+
+    @pytest.mark.parametrize("stage", [0, 2, 3, 4, 5, 6])
+    def test_recovery_of_real_partial_execution_preserves_debits_and_continues(stage):
+        machine = machine_at(stage)
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:398: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_keeps_failed_qualification_cost_and_does_not_install" time="0.029"><failure message="cncm.model.ContractError: native episode fields invalid">def test_recovery_keeps_failed_qualification_cost_and_does_not_install():
+        machine = machine_at(2)
+        result = install(machine.coordinator, make_candidate(combine="ADD_EXACT"))
+        assert result.rejected_intents
+&gt;       recovered = replay_machine(machine)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:409: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_rechecks_retained_qualification_instead_of_importing_head" time="0.075"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'transition'&#10;  Actual message: 'native episode fields invalid'">def test_recovery_rechecks_retained_qualification_instead_of_importing_head():
+        machine = machine_at(4)
+        import cncm.native_kernel as kernel
+        original = kernel.qualify_procedure
+        calls = []
+        def no_longer_passes(artifact):
+            calls.append(artifact.artifact_sha256)
+            report = original(artifact)
+            report["status"] = "ENGINEERING_PANEL_FAILED"
+            return report
+        with patch("cncm.native_kernel.qualify_procedure", side_effect=no_longer_passes):
+            with pytest.raises(ContractError, match="transition"):
+&gt;               replay_machine(machine)
+
+tests\test_native_kernel.py:430: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError
+
+During handling of the above exception, another exception occurred:
+
+    def test_recovery_rechecks_retained_qualification_instead_of_importing_head():
+        machine = machine_at(4)
+        import cncm.native_kernel as kernel
+        original = kernel.qualify_procedure
+        calls = []
+        def no_longer_passes(artifact):
+            calls.append(artifact.artifact_sha256)
+            report = original(artifact)
+            report["status"] = "ENGINEERING_PANEL_FAILED"
+            return report
+        with patch("cncm.native_kernel.qualify_procedure", side_effect=no_longer_passes):
+&gt;           with pytest.raises(ContractError, match="transition"):
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AssertionError: Regex pattern did not match.
+E             Expected regex: 'transition'
+E             Actual message: 'native episode fields invalid'
+
+tests\test_native_kernel.py:429: AssertionError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_rejects_rehashed_imported_complete_call_root" time="0.100"><failure message="AssertionError: Regex pattern did not match.&#10;  Expected regex: 'final state'&#10;  Actual message: 'native episode fields invalid'">def test_recovery_rejects_rehashed_imported_complete_call_root():
+        machine = machine_at(0)
+        completed = machine_at(6)
+        journal = deepcopy(machine.journal())
+        # This shape-valid imported state claims all installation/execution work while
+        # the corresponding coordinator trace is empty. Even a newly supplied digest
+        # cannot replace semantic transition replay from the trusted genesis.
+        journal["episodes"][0]["final_state"] = completed.state.to_dict()
+        assert NativeState.from_dict(journal["episodes"][0]["final_state"])
+        with pytest.raises(ContractError, match="final state"):
+&gt;           replay_machine(machine, reseal_journal(journal))
+
+tests\test_native_kernel.py:444: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError
+
+During handling of the above exception, another exception occurred:
+
+    def test_recovery_rejects_rehashed_imported_complete_call_root():
+        machine = machine_at(0)
+        completed = machine_at(6)
+        journal = deepcopy(machine.journal())
+        # This shape-valid imported state claims all installation/execution work while
+        # the corresponding coordinator trace is empty. Even a newly supplied digest
+        # cannot replace semantic transition replay from the trusted genesis.
+        journal["episodes"][0]["final_state"] = completed.state.to_dict()
+        assert NativeState.from_dict(journal["episodes"][0]["final_state"])
+&gt;       with pytest.raises(ContractError, match="final state"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AssertionError: Regex pattern did not match.
+E         Expected regex: 'final state'
+E         Actual message: 'native episode fields invalid'
+
+tests\test_native_kernel.py:443: AssertionError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_external_anchor_rejects_valid_but_truncated_prefix" time="0.066" /><testcase classname="tests.test_native_kernel" name="test_retained_prior_call_cannot_supply_current_call_authority" time="0.215"><failure message="cncm.model.ContractError: native episode fields invalid">def test_retained_prior_call_cannot_supply_current_call_authority():
+        from cncm.native_model import CallSpec
+        machine = machine_at(6)
+        machine.run()
+        prior = machine.state
+        packet = native_problem()
+        changed = replace(packet, call=CallSpec.create(call_id=packet.call.call_id, goal_id=packet.call.goal_id,
+            inputs={"a": "3", "b": "5", "c": "29"}))
+        machine.start(changed)
+        machine.advance()
+        assert machine.state.native_calls[0].status == "READY"
+        assert machine.coordinator._trusted_root_keys(machine.state, machine.state.branch_table[0]) == frozenset()
+        # A fabricated in-memory merge is not a recovery path; test the authority
+        # predicate itself rejects the prior run's receipt even for the same call ID.
+        forged = replace(machine.state, native_calls=prior.native_calls, branch_table=prior.branch_table).with_computed_hash()
+        with pytest.raises(ContractError, match="binding"):
+            machine.coordinator._trusted_root_keys(forged, forged.branch_table[0])
+        result = machine.run()
+        assert result.output == "8"
+        assert result.final_state.native_budget == NativeBudget(506, 127)
+&gt;       assert replay_machine(machine).journal() == machine.journal()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:475: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:137: in replay_native_journal
+    require(type(episode) is dict and set(episode) == {"problem", "initial_state_hash", "prior_episode_state_hash",
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native episode fields invalid'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native episode fields invalid
+
+cncm\native_recovery.py:26: ContractError</failure></testcase></testsuite></testsuites>

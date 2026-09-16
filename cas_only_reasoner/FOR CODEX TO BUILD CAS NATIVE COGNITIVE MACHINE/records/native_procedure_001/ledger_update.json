@@ -1,0 +1,16 @@
+[
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+    "before_sha256": "e41f3d038632da408adc7c3e3391dd990c01b0c451f9a4ce943bf5034fa8aa6c",
+    "after_sha256": "6ac4c82754148193ca08358be6e1d2d9adf43881d6598b5051c88386c500dbce",
+    "original_bytes_preserved": true,
+    "full_goal_complete": false
+  },
+  {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+    "before_sha256": "e41f3d038632da408adc7c3e3391dd990c01b0c451f9a4ce943bf5034fa8aa6c",
+    "after_sha256": "6ac4c82754148193ca08358be6e1d2d9adf43881d6598b5051c88386c500dbce",
+    "original_bytes_preserved": true,
+    "full_goal_complete": false
+  }
+]

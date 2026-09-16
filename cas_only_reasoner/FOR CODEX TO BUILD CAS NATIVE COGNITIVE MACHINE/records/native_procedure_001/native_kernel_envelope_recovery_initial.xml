@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="38" time="3.287" timestamp="2026-09-16T01:18:17.383357-07:00" hostname="MSI"><testcase classname="tests.test_native_kernel" name="test_actual_acquire_apply_and_ordinary_reasoning_commit" time="0.191" /><testcase classname="tests.test_native_kernel" name="test_failed_wrong_add_qualification_before_selection_is_charged_and_retained" time="0.031" /><testcase classname="tests.test_native_kernel" name="test_forged_qualification_digest_is_charged_and_rejected" time="0.032" /><testcase classname="tests.test_native_kernel" name="test_selected_candidate_substitution_rejected_before_qualification" time="0.069" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget0-INSTALL]" time="0.017" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget1-INSTALL]" time="0.015" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget2-SELECT]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_partial_work_budget_does_not_run_executor_or_checker[budget3-SELECT]" time="0.011" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes0]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes1]" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes2]" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_envelope_denied_before_work[changes3]" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_stale_intent_does_not_run_work" time="0.056" /><testcase classname="tests.test_native_kernel" name="test_unsupported_executor_version_is_rejected_before_work" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_wrong_return_frame_does_not_resume_or_refill" time="0.031" /><testcase classname="tests.test_native_kernel" name="test_suspended_parent_write_is_rejected" time="0.012" /><testcase classname="tests.test_native_kernel" name="test_forged_native_proof_marker_is_not_ordinary_derivation_authority" time="0.005" /><testcase classname="tests.test_native_kernel" name="test_current_call_check_required_even_when_done_is_asserted" time="0.013" /><testcase classname="tests.test_native_kernel" name="test_rpm_entry_budget_cannot_be_refilled_by_rehashed_state" time="0.053" /><testcase classname="tests.test_native_kernel" name="test_rollback_requires_quiescence_and_recorded_ancestor_and_keeps_artifact" time="0.096" /><testcase classname="tests.test_native_kernel" name="test_public_snapshot_import_is_rejected" time="0.003" /><testcase classname="tests.test_native_kernel" name="test_recovery_reproduces_malformed_raw_intent_rejection" time="0.022" /><testcase classname="tests.test_native_kernel" name="test_recovery_reproduces_duplicate_intent_group_rejection" time="0.019" /><testcase classname="tests.test_native_kernel" name="test_recovery_preserves_rejected_envelope_defects[content_id]" time="0.012"><failure message="cncm.model.ContractError: recovered intent does not reconstruct">corruption = 'content_id'
+
+    @pytest.mark.parametrize("corruption", ["content_id", "duplicate_mutation", "duplicate_precondition", "provenance_order"])
+    def test_recovery_preserves_rejected_envelope_defects(corruption):
+        machine = machine_at(0)
+        intent = native_intent(machine.coordinator, NativeIntentType.REQUEST_PROCEDURE_CALL,
+                               {"call": machine.problem.call.to_dict()})
+        if corruption == "content_id":
+            intent = replace(intent, intent_id="intent-" + "0" * 16)
+        elif corruption == "duplicate_mutation":
+            intent = replace(intent, proposed_mutation=intent.proposed_mutation + intent.proposed_mutation)
+        elif corruption == "duplicate_precondition":
+            intent = replace(intent, precondition=intent.precondition + intent.precondition)
+        else:
+            intent = replace(intent, provenance=(Provenance("zzz", "last"), Provenance("aaa", "first")))
+        outcome = execute(machine.coordinator, intent)
+        assert not outcome.authorized_intents
+        assert outcome.rejected_intents[0].reason is RejectionReason.MALFORMED_MUTATION
+&gt;       assert replay_machine(machine).journal() == machine.journal()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:411: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:163: in replay_native_journal
+    intents = _decode_proposal_batch(episode["proposal_batches"][event_index])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\native_recovery.py:99: in _decode_proposal_batch
+    intent = _decode_intent(row["intent"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\native_recovery.py:89: in _decode_intent
+    require(canonical_json(intent.to_dict()) == canonical_json(wire), "recovered intent does not reconstruct")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'recovered intent does not reconstruct'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: recovered intent does not reconstruct
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_preserves_rejected_envelope_defects[duplicate_mutation]" time="0.015"><failure message="cncm.model.ContractError: native transition does not reproduce saved event">corruption = 'duplicate_mutation'
+
+    @pytest.mark.parametrize("corruption", ["content_id", "duplicate_mutation", "duplicate_precondition", "provenance_order"])
+    def test_recovery_preserves_rejected_envelope_defects(corruption):
+        machine = machine_at(0)
+        intent = native_intent(machine.coordinator, NativeIntentType.REQUEST_PROCEDURE_CALL,
+                               {"call": machine.problem.call.to_dict()})
+        if corruption == "content_id":
+            intent = replace(intent, intent_id="intent-" + "0" * 16)
+        elif corruption == "duplicate_mutation":
+            intent = replace(intent, proposed_mutation=intent.proposed_mutation + intent.proposed_mutation)
+        elif corruption == "duplicate_precondition":
+            intent = replace(intent, precondition=intent.precondition + intent.precondition)
+        else:
+            intent = replace(intent, provenance=(Provenance("zzz", "last"), Provenance("aaa", "first")))
+        outcome = execute(machine.coordinator, intent)
+        assert not outcome.authorized_intents
+        assert outcome.rejected_intents[0].reason is RejectionReason.MALFORMED_MUTATION
+&gt;       assert replay_machine(machine).journal() == machine.journal()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:411: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:166: in replay_native_journal
+    require(canonical_json(outcome.trace_event.to_dict()) == canonical_json(wire),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native transition does not reproduce saved event'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native transition does not reproduce saved event
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_preserves_rejected_envelope_defects[duplicate_precondition]" time="0.013"><failure message="cncm.model.ContractError: native transition does not reproduce saved event">corruption = 'duplicate_precondition'
+
+    @pytest.mark.parametrize("corruption", ["content_id", "duplicate_mutation", "duplicate_precondition", "provenance_order"])
+    def test_recovery_preserves_rejected_envelope_defects(corruption):
+        machine = machine_at(0)
+        intent = native_intent(machine.coordinator, NativeIntentType.REQUEST_PROCEDURE_CALL,
+                               {"call": machine.problem.call.to_dict()})
+        if corruption == "content_id":
+            intent = replace(intent, intent_id="intent-" + "0" * 16)
+        elif corruption == "duplicate_mutation":
+            intent = replace(intent, proposed_mutation=intent.proposed_mutation + intent.proposed_mutation)
+        elif corruption == "duplicate_precondition":
+            intent = replace(intent, precondition=intent.precondition + intent.precondition)
+        else:
+            intent = replace(intent, provenance=(Provenance("zzz", "last"), Provenance("aaa", "first")))
+        outcome = execute(machine.coordinator, intent)
+        assert not outcome.authorized_intents
+        assert outcome.rejected_intents[0].reason is RejectionReason.MALFORMED_MUTATION
+&gt;       assert replay_machine(machine).journal() == machine.journal()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:411: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:166: in replay_native_journal
+    require(canonical_json(outcome.trace_event.to_dict()) == canonical_json(wire),
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'native transition does not reproduce saved event'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: native transition does not reproduce saved event
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_preserves_rejected_envelope_defects[provenance_order]" time="0.012"><failure message="cncm.model.ContractError: recovered intent does not reconstruct">corruption = 'provenance_order'
+
+    @pytest.mark.parametrize("corruption", ["content_id", "duplicate_mutation", "duplicate_precondition", "provenance_order"])
+    def test_recovery_preserves_rejected_envelope_defects(corruption):
+        machine = machine_at(0)
+        intent = native_intent(machine.coordinator, NativeIntentType.REQUEST_PROCEDURE_CALL,
+                               {"call": machine.problem.call.to_dict()})
+        if corruption == "content_id":
+            intent = replace(intent, intent_id="intent-" + "0" * 16)
+        elif corruption == "duplicate_mutation":
+            intent = replace(intent, proposed_mutation=intent.proposed_mutation + intent.proposed_mutation)
+        elif corruption == "duplicate_precondition":
+            intent = replace(intent, precondition=intent.precondition + intent.precondition)
+        else:
+            intent = replace(intent, provenance=(Provenance("zzz", "last"), Provenance("aaa", "first")))
+        outcome = execute(machine.coordinator, intent)
+        assert not outcome.authorized_intents
+        assert outcome.rejected_intents[0].reason is RejectionReason.MALFORMED_MUTATION
+&gt;       assert replay_machine(machine).journal() == machine.journal()
+               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_native_kernel.py:411: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_native_kernel.py:353: in replay_machine
+    return replay_native_journal(wire, trusted_genesis=native_problem(), profile=machine.profile,
+cncm\native_recovery.py:163: in replay_native_journal
+    intents = _decode_proposal_batch(episode["proposal_batches"][event_index])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\native_recovery.py:99: in _decode_proposal_batch
+    intent = _decode_intent(row["intent"])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+cncm\native_recovery.py:89: in _decode_intent
+    require(canonical_json(intent.to_dict()) == canonical_json(wire), "recovered intent does not reconstruct")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, reason = 'recovered intent does not reconstruct'
+
+    def require(condition, reason):
+        if not condition:
+&gt;           raise ContractError(reason)
+E           cncm.model.ContractError: recovered intent does not reconstruct
+
+cncm\native_recovery.py:26: ContractError</failure></testcase><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[0]" time="0.142" /><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[2]" time="0.144" /><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[3]" time="0.194" /><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[4]" time="0.223" /><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[5]" time="0.229" /><testcase classname="tests.test_native_kernel" name="test_recovery_of_real_partial_execution_preserves_debits_and_continues[6]" time="0.239" /><testcase classname="tests.test_native_kernel" name="test_recovery_keeps_failed_qualification_cost_and_does_not_install" time="0.070" /><testcase classname="tests.test_native_kernel" name="test_recovery_rechecks_retained_qualification_instead_of_importing_head" time="0.156" /><testcase classname="tests.test_native_kernel" name="test_recovery_rejects_rehashed_imported_complete_call_root" time="0.125" /><testcase classname="tests.test_native_kernel" name="test_external_anchor_rejects_valid_but_truncated_prefix" time="0.064" /><testcase classname="tests.test_native_kernel" name="test_retained_prior_call_cannot_supply_current_call_authority" time="0.503" /></testsuite></testsuites>

@@ -252,6 +252,55 @@ def boot_state(
 class TransactionCoordinator:
     """Validate, resolve, atomically apply, and trace typed intents."""
 
+    def _is_intent_type(self, value: Any) -> bool:
+        """The default runtime retains its original closed intent enum."""
+        return isinstance(value, IntentType)
+
+    def _allowed_intents_for(self, issuer: str):
+        return ALLOWED_INTENTS.get(issuer)
+
+    def _expected_capabilities_for(self, issuer: str, intent_type):
+        return EXPECTED_CAPABILITIES.get((issuer, intent_type), frozenset())
+
+    def _trusted_root_keys(self, state: MachineState, branch: BranchFrame) -> frozenset[str]:
+        # v0.1 never imports additional authority from a packet or proof marker.
+        return frozenset()
+
+    def _has_authoritative_support(self, state, branch, proposition_key):
+        return has_authoritative_support(branch, proposition_key,
+            trusted_root_keys=self._trusted_root_keys(state, branch))
+
+    def _decompose_query(self, state, branch):
+        return decompose_query(branch, self.problem.query, self.rules,
+            trusted_root_keys=self._trusted_root_keys(state, branch))
+
+    def _applicable_proofs(self, state, branch):
+        return applicable_proofs(branch, self.rules,
+            trusted_root_keys=self._trusted_root_keys(state, branch))
+
+    def _verify_proof_step(self, state, proof, branch):
+        return verify_proof_step(proof, branch, self.rules,
+            trusted_root_keys=self._trusted_root_keys(state, branch))
+
+    def _prepare_validation_work(self, state, proposed, enabled, scheduled, *, excluded_ids):
+        """Versioned validation work debit; default v0.1 has no such work.
+
+        The input is the original authoritative snapshot. An extension must
+        first validate its cheap envelope against that snapshot, then reserve
+        work before invoking any checker. Its returned debit survives semantic
+        rejection. excluded_ids covers malformed, duplicate and final-tick
+        proposals; those may not trigger expensive work.
+        """
+        return state, {}
+
+    def _trace_normalized_proposals(self, copied, malformed_copy_ids):
+        """Versioned hosts may retain normalization inputs for lossless replay."""
+        return None
+
+    def _validate_trace_proposal(self, intent):
+        """Optional stricter versioned wire normalization; default unchanged."""
+        return None
+
     def __init__(
         self,
         *,
@@ -288,7 +337,7 @@ class TransactionCoordinator:
                     if (
                         not isinstance(intent.intent_id, str)
                         or re.fullmatch(r"intent-[0-9a-f]{16}", intent.intent_id) is None
-                        or not isinstance(intent.intent_type, IntentType)
+                        or not self._is_intent_type(intent.intent_type)
                         or not isinstance(intent.issuer_subsystem, str)
                         or IDENTIFIER.fullmatch(intent.issuer_subsystem) is None
                         or not isinstance(intent.required_capability, str)
@@ -329,6 +378,7 @@ class TransactionCoordinator:
                     # Exercise the exact trace serialization path before the
                     # proposal is admitted.  This catches invalid raw enum and
                     # container fields as well as excessive nesting.
+                    self._validate_trace_proposal(intent)
                     canonical_json(intent.to_dict())
                 except (AttributeError, ContractError, RecursionError, TypeError, ValueError):
                     raw_intent_type = getattr(raw_intent, "intent_type", None)
@@ -372,6 +422,7 @@ class TransactionCoordinator:
                     )
                     malformed_copy_ids.add(intent.intent_id)
                 copied.append(intent)
+            self._trace_normalized_proposals(copied, malformed_copy_ids)
             by_intent_id: dict[str, list[Intent]] = {}
             for intent in copied:
                 by_intent_id.setdefault(intent.intent_id, []).append(intent)
@@ -397,6 +448,13 @@ class TransactionCoordinator:
             raise ContractError("tick budget is exhausted")
         invalid_final_tick_batch = state.budget.ticks_remaining == 1 and (
             len(proposed) != 1 or proposed[0].intent_type is not IntentType.HALT
+        )
+        excluded_ids = frozenset(malformed_copy_ids) | duplicate_ids
+        if invalid_final_tick_batch:
+            excluded_ids |= frozenset(intent.intent_id for intent in proposed)
+        work_state, work_denials = self._prepare_validation_work(
+            state, proposed, frozenset(enabled), frozenset(scheduled),
+            excluded_ids=excluded_ids,
         )
         validated: list[_ValidatedIntent] = []
         rejected: list[RejectedIntent] = []
@@ -428,6 +486,9 @@ class TransactionCoordinator:
                     )
                 )
                 continue
+            if intent.intent_id in work_denials:
+                rejected.append(work_denials[intent.intent_id])
+                continue
             decision = self._validate_intent(state, intent, frozenset(enabled), frozenset(scheduled))
             if isinstance(decision, RejectedIntent):
                 rejected.append(decision)
@@ -450,8 +511,8 @@ class TransactionCoordinator:
         rejected.extend(conflict_rejections)
         authorized, budget_rejections = self._enforce_batch_budgets(state, authorized)
         rejected.extend(budget_rejections)
-        next_state = state
-        mutation_keys: list[str] = []
+        next_state = work_state
+        mutation_keys: list[str] = [] if work_state is state else ["kernel/validation_work"]
         for item in sorted(authorized, key=lambda candidate: candidate.intent.intent_id):
             next_state = self._apply_intent(next_state, item.intent)
             mutation_keys.append(item.write_key)
@@ -527,12 +588,25 @@ class TransactionCoordinator:
         enabled_components: frozenset[str],
         scheduled_components: frozenset[str],
     ) -> _ValidatedIntent | RejectedIntent:
+        rejected = self._validate_envelope(state, intent, enabled_components, scheduled_components)
+        if rejected is not None:
+            return rejected
+        try:
+            return self._validate_typed_mutation(state, intent)
+        except (ContractError, KeyError, TypeError, ValueError) as exc:
+            return self._reject(intent, RejectionReason.MALFORMED_MUTATION, str(exc))
+
+    def _validate_envelope(
+        self, state: MachineState, intent: Intent,
+        enabled_components: frozenset[str], scheduled_components: frozenset[str],
+    ) -> RejectedIntent | None:
+        """Cheap authority/content checks, before a versioned work reservation."""
         if (
             not isinstance(intent.intent_id, str)
             or not isinstance(intent.issuer_subsystem, str)
             or not isinstance(intent.required_capability, str)
             or not isinstance(intent.target_scope, str)
-            or not isinstance(intent.intent_type, IntentType)
+            or not self._is_intent_type(intent.intent_type)
             or (intent.branch_id is not None and not isinstance(intent.branch_id, str))
             or (intent.goal_id is not None and not isinstance(intent.goal_id, str))
             or not isinstance(intent.created_at_tick, int)
@@ -543,10 +617,10 @@ class TransactionCoordinator:
             return self._reject(intent, RejectionReason.INTENT_TYPE_PROHIBITED, "v0.1 prohibits this intent type")
         if intent.issuer_subsystem not in enabled_components or intent.issuer_subsystem not in scheduled_components:
             return self._reject(intent, RejectionReason.UNAUTHORIZED_ISSUER, "issuer is not enabled and scheduled")
-        allowed = ALLOWED_INTENTS.get(intent.issuer_subsystem)
+        allowed = self._allowed_intents_for(intent.issuer_subsystem)
         if allowed is None or intent.intent_type not in allowed:
             return self._reject(intent, RejectionReason.UNAUTHORIZED_ISSUER, "issuer lacks the requested capability")
-        expected_capabilities = EXPECTED_CAPABILITIES.get((intent.issuer_subsystem, intent.intent_type), frozenset())
+        expected_capabilities = self._expected_capabilities_for(intent.issuer_subsystem, intent.intent_type)
         if intent.required_capability not in expected_capabilities:
             return self._reject(intent, RejectionReason.UNAUTHORIZED_ISSUER, "required capability is not granted")
         if intent.created_at_tick != state.logical_tick:
@@ -605,10 +679,7 @@ class TransactionCoordinator:
             return self._reject(intent, RejectionReason.MALFORMED_MUTATION, str(exc))
         if intent.intent_id != expected_id:
             return self._reject(intent, RejectionReason.MALFORMED_MUTATION, "intent_id is not content-derived")
-        try:
-            return self._validate_typed_mutation(state, intent)
-        except (ContractError, KeyError, TypeError, ValueError) as exc:
-            return self._reject(intent, RejectionReason.MALFORMED_MUTATION, str(exc))
+        return None
 
     def _validate_typed_mutation(self, state: MachineState, intent: Intent) -> _ValidatedIntent | RejectedIntent:
         mutation = intent.mutation_dict()
@@ -762,7 +833,7 @@ class TransactionCoordinator:
                     )
                 if not any(item.to_dict() == proof.to_dict() for item in expected_proofs):
                     return self._reject(intent, RejectionReason.INVALID_PROOF, "recall does not bind a verified episode")
-            elif not verify_proof_step(proof, branch, self.rules):
+            elif not self._verify_proof_step(state, proof, branch):
                 return self._reject(intent, RejectionReason.INVALID_PROOF, "proof reconstruction failed")
             return _ValidatedIntent(intent, f"branch/{branch.branch_id}/proposition/{proof.conclusion.key}")
 
@@ -776,7 +847,7 @@ class TransactionCoordinator:
             record = DecompositionRecord.from_dict(mutation["decomposition"])
             if record.candidate_id != branch.candidate_id:
                 return self._reject(intent, RejectionReason.MALFORMED_MUTATION, "candidate mismatch")
-            if record.to_dict() != decompose_query(branch, self.problem.query, self.rules).to_dict():
+            if record.to_dict() != self._decompose_query(state, branch).to_dict():
                 return self._reject(intent, RejectionReason.MALFORMED_MUTATION, "decomposition reconstruction failed")
             return _ValidatedIntent(intent, f"branch/{branch.branch_id}/decomposition")
 
@@ -825,15 +896,11 @@ class TransactionCoordinator:
                 return self._reject(intent, RejectionReason.BRANCH_NOT_WRITABLE, "branch lifecycle transition is closed")
             actual_contradictions = detect_contradictions(branch.propositions)
             constraints_satisfied = all(
-                has_authoritative_support(branch, item.key) for item in branch.hard_constraints
+                self._has_authoritative_support(state, branch, item.key) for item in branch.hard_constraints
             )
-            query_supported = has_authoritative_support(branch, self.problem.query.key)
+            query_supported = self._has_authoritative_support(state, branch, self.problem.query.key)
             if intent.required_capability == "classify_candidate":
-                expected_decomposition = decompose_query(
-                    branch,
-                    self.problem.query,
-                    self.rules,
-                )
+                expected_decomposition = self._decompose_query(state, branch)
                 if (
                     not branch.decompositions
                     or branch.decompositions[-1].to_dict() != expected_decomposition.to_dict()
@@ -851,14 +918,14 @@ class TransactionCoordinator:
                     else BranchStatus.BLOCKED
                 )
                 if not actual_contradictions:
-                    if applicable_proofs(branch, self.rules):
+                    if self._applicable_proofs(state, branch):
                         return self._reject(
                             intent,
                             RejectionReason.COMMITMENT_GATES_FAILED,
                             "branch cannot be classified before deterministic inference closure",
                         )
                     if expected_status is BranchStatus.BLOCKED:
-                        decomposition = decompose_query(branch, self.problem.query, self.rules)
+                        decomposition = self._decompose_query(state, branch)
                         if any(
                             resolver.target.key in decomposition.unknowns
                             and (
@@ -962,7 +1029,7 @@ class TransactionCoordinator:
                 return self._reject(intent, RejectionReason.MALFORMED_MUTATION, "winner is outside comparison set")
             ordered_ids = expected_branch_ids
             expected_metrics = tuple(
-                (branch_id, self._comparison_metric(branches[branch_id])) for branch_id in ordered_ids
+                (branch_id, self._comparison_metric(branches[branch_id], state=state)) for branch_id in ordered_ids
             )
             eligible = [
                 (metric, branch_id)
@@ -1011,11 +1078,7 @@ class TransactionCoordinator:
             if any(
                 not branches[branch_id].decompositions
                 or branches[branch_id].decompositions[-1].to_dict()
-                != decompose_query(
-                    branches[branch_id],
-                    self.problem.query,
-                    self.rules,
-                ).to_dict()
+                != self._decompose_query(state, branches[branch_id]).to_dict()
                 for branch_id in expected_branch_ids
             ):
                 return self._reject(
@@ -1047,7 +1110,7 @@ class TransactionCoordinator:
             branch = branches[frame.branch_id]
             if branch.status not in {BranchStatus.OPEN, BranchStatus.BLOCKED}:
                 return self._reject(intent, RejectionReason.BRANCH_NOT_WRITABLE, "RPM target branch lifecycle is closed")
-            if applicable_proofs(branch, self.rules):
+            if self._applicable_proofs(state, branch):
                 return self._reject(
                     intent,
                     RejectionReason.COMMITMENT_GATES_FAILED,
@@ -1064,7 +1127,7 @@ class TransactionCoordinator:
                     RejectionReason.COMMITMENT_GATES_FAILED,
                     "RPM cannot preempt an available exact episodic recall",
                 )
-            decomposition = decompose_query(branch, self.problem.query, self.rules)
+            decomposition = self._decompose_query(state, branch)
             expected_goal_id = content_id(
                 "goal-rpm",
                 {"parent": state.active_goal_id, "target": frame.blocked_prerequisite},
@@ -1187,7 +1250,7 @@ class TransactionCoordinator:
                     RejectionReason.COMMITMENT_GATES_FAILED,
                     "commitment conclusion must exactly match authoritative branch content",
                 )
-            if conclusion.key != self.problem.query.key or not has_authoritative_support(branch, conclusion.key):
+            if conclusion.key != self.problem.query.key or not self._has_authoritative_support(state, branch, conclusion.key):
                 return self._reject(intent, RejectionReason.COMMITMENT_GATES_FAILED, "query conclusion is unsupported")
             power = dict(state.domain_power_state)
             if not all(power.get(domain) == "GOOD" for domain in CANONICAL_DOMAINS[:3]) or power.get("O") != "ENABLED":
@@ -1199,9 +1262,9 @@ class TransactionCoordinator:
             winner = state.global_workspace.comparison_reports[-1].winner_branch_id
             computed_gates = {
                 "principled_gate": all(
-                    has_authoritative_support(branch, item.key) for item in branch.hard_constraints
+                    self._has_authoritative_support(state, branch, item.key) for item in branch.hard_constraints
                 ),
-                "derivation_complete": has_authoritative_support(branch, self.problem.query.key),
+                "derivation_complete": self._has_authoritative_support(state, branch, self.problem.query.key),
                 "comparison_stable": winner == branch.branch_id,
                 "rpm_sufficient": not state.rpm_stack,
                 "contradiction_free": not actual_contradictions,
@@ -1301,7 +1364,7 @@ class TransactionCoordinator:
                     or selected.status is not BranchStatus.COMMITTED
                     or state.commitment_state.conclusion is None
                     or state.commitment_state.conclusion.key != self.problem.query.key
-                    or not has_authoritative_support(selected, self.problem.query.key)
+                    or not self._has_authoritative_support(state, selected, self.problem.query.key)
                     or detect_contradictions(selected.propositions)
                     or comparison_winner != selected.branch_id
                     or state.rpm_stack
@@ -1331,10 +1394,10 @@ class TransactionCoordinator:
                 proof_search_exhausted = self._proof_search_exhausted(state)
                 pending_rpm_work = not proof_search_exhausted and any(
                     branch.status in {BranchStatus.OPEN, BranchStatus.BLOCKED}
-                    and not applicable_proofs(branch, self.rules)
+                    and not self._applicable_proofs(state, branch)
                     and any(
                         resolver.target.key
-                        in decompose_query(branch, self.problem.query, self.rules).unknowns
+                        in self._decompose_query(state, branch).unknowns
                         for resolver in self.resolvers
                     )
                     for branch in reasoning_branches
@@ -1346,16 +1409,16 @@ class TransactionCoordinator:
                 tick_budget_exhausted = state.budget.ticks_remaining <= 1
                 pending_parent_inference = not proof_search_exhausted and any(
                     branch.status in {BranchStatus.OPEN, BranchStatus.BLOCKED}
-                    and bool(applicable_proofs(branch, self.rules))
+                    and bool(self._applicable_proofs(state, branch))
                     for branch in reasoning_branches
                 )
                 try:
                     pending_rpm_inference = not proof_search_exhausted and any(
                         branch.status in {BranchStatus.OPEN, BranchStatus.BLOCKED}
-                        and not has_authoritative_support(branch, self.problem.query.key)
+                        and not self._has_authoritative_support(state, branch, self.problem.query.key)
                         and any(
                             resolver.target.key
-                            in decompose_query(branch, self.problem.query, self.rules).unknowns
+                            in self._decompose_query(state, branch).unknowns
                             and (
                                 (resolved := resolve_rpm_child(
                                     resolver,
@@ -1383,7 +1446,7 @@ class TransactionCoordinator:
                     and episode.conclusion.key == self.problem.query.key
                     and any(
                         episode.episode_id not in branch.recalled_memory_ids
-                        and not has_authoritative_support(branch, self.problem.query.key)
+                        and not self._has_authoritative_support(state, branch, self.problem.query.key)
                         for branch in reasoning_branches
                     )
                     for episode in state.episodic_memory
@@ -1526,12 +1589,13 @@ class TransactionCoordinator:
             IntentType.HALT: "halt_status",
         }.get(intent.intent_type, "prohibited")
 
-    @staticmethod
-    def _comparison_metric(branch: BranchFrame) -> tuple[int, ...]:
+    def _comparison_metric(self, branch: BranchFrame, *, state: MachineState | None = None) -> tuple[int, ...]:
+        if state is None:
+            state = self.store.snapshot()
         constraint_violations = sum(
             1
             for constraint in branch.hard_constraints
-            if not has_authoritative_support(branch, constraint.key)
+            if not self._has_authoritative_support(state, branch, constraint.key)
         )
         return (
             0 if branch.status is BranchStatus.ADMISSIBLE else 1,
@@ -1556,13 +1620,9 @@ class TransactionCoordinator:
         try:
             for branch in state.branch_table:
                 if branch.status in {BranchStatus.OPEN, BranchStatus.BLOCKED}:
-                    proofs = applicable_proofs(branch, self.rules)
+                    proofs = self._applicable_proofs(state, branch)
                     if not proofs:
-                        decomposition = decompose_query(
-                            branch,
-                            self.problem.query,
-                            self.rules,
-                        )
+                        decomposition = self._decompose_query(state, branch)
                         for resolver in self.resolvers:
                             if resolver.target.key in decomposition.unknowns:
                                 resolve_rpm_child(

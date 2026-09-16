@@ -51,7 +51,10 @@ def query_is_supported(branch: BranchFrame, query: Proposition) -> bool:
     return query.key in branch.proposition_map()
 
 
-def has_authoritative_support(branch: BranchFrame, proposition_key: str) -> bool:
+def has_authoritative_support(
+    branch: BranchFrame, proposition_key: str, *,
+    trusted_root_keys: frozenset[str] = frozenset(),
+) -> bool:
     """Return true only for asserted or verified, non-hypothetical proof support."""
     propositions = branch.proposition_map()
     eligible = {
@@ -64,13 +67,19 @@ def has_authoritative_support(branch: BranchFrame, proposition_key: str) -> bool
         for key, proposition in propositions.items()
         if proposition.evidence_status is EvidenceStatus.ASSERTED
     }
+    # Only a versioned coordinator may supply independently checked native
+    # roots. The v0.1 coordinator always supplies the empty default. These keys
+    # are not read from a caller's proof flag, provenance, or problem packet.
+    supported.update(trusted_root_keys & eligible)
     normal_steps: list[tuple[str, set[str]]] = []
     for step in sorted(branch.proof_steps, key=lambda item: item.step_id):
         if not step.verified or step.conclusion.key not in eligible:
             continue
         if step.operation in {InferenceOperation.RECALL, InferenceOperation.RPM_CHILD_RESULT}:
             supported.add(step.conclusion.key)
-        elif step.premise_keys:
+        elif step.operation in {
+            InferenceOperation.INFER_MODUS_PONENS, InferenceOperation.INFER_TRANSITIVE
+        } and step.premise_keys:
             normal_steps.append((step.conclusion.key, set(step.premise_keys)))
 
     dependents: dict[str, list[int]] = {}
@@ -188,6 +197,7 @@ def applicable_proofs(
     *,
     max_proofs: int = 1,
     max_match_expansions: int = MAX_MATCH_EXPANSIONS,
+    trusted_root_keys: frozenset[str] = frozenset(),
 ) -> tuple[ProofStep, ...]:
     """Select bounded canonical new Horn proofs without exhaustive materialization."""
     if max_proofs < 1 or max_match_expansions < 1:
@@ -217,7 +227,7 @@ def applicable_proofs(
             conclusion = conclusion.with_status(EvidenceStatus.DERIVED, provenance)
             identity = (conclusion.key, rule.rule_id, tuple(sorted(bindings.items())))
             if conclusion.key in existing and has_authoritative_support(
-                branch, conclusion.key
+                branch, conclusion.key, trusted_root_keys=trusted_root_keys
             ):
                 # An asserted or already-authoritative result needs no
                 # alternate proof.  Tainted derived results deliberately do:
@@ -252,6 +262,7 @@ def verify_proof_step(
     proof: ProofStep,
     branch: BranchFrame,
     rules: Iterable[Rule],
+    *, trusted_root_keys: frozenset[str] = frozenset(),
 ) -> bool:
     """Reconstruct a proof; never trust the incoming verified flag alone."""
     if proof.branch_id != branch.branch_id:
@@ -263,7 +274,7 @@ def verify_proof_step(
         return False
     return any(
         candidate.to_dict() == proof.to_dict()
-        for candidate in applicable_proofs(branch, rules)
+        for candidate in applicable_proofs(branch, rules, trusted_root_keys=trusted_root_keys)
     )
 
 
@@ -274,13 +285,16 @@ def _unify_consequent_to_query(
     return _unify_pattern(pattern, query, {})
 
 
-def decompose_query(branch: BranchFrame, query: Proposition, rules: Iterable[Rule]) -> DecompositionRecord:
+def decompose_query(
+    branch: BranchFrame, query: Proposition, rules: Iterable[Rule], *,
+    trusted_root_keys: frozenset[str] = frozenset(),
+) -> DecompositionRecord:
     known = branch.proposition_map()
     premises: set[str] = set()
     dependencies: set[str] = set()
     unknowns: set[str] = set()
     predicted: set[str] = set()
-    if query.key in known and has_authoritative_support(branch, query.key):
+    if query.key in known and has_authoritative_support(branch, query.key, trusted_root_keys=trusted_root_keys):
         query_proposition = known[query.key]
         supporting_steps = sorted(
             (
@@ -292,7 +306,7 @@ def decompose_query(branch: BranchFrame, query: Proposition, rules: Iterable[Rul
                     step.operation
                     in {InferenceOperation.RECALL, InferenceOperation.RPM_CHILD_RESULT}
                     or all(
-                        has_authoritative_support(branch, premise_key)
+                        has_authoritative_support(branch, premise_key, trusted_root_keys=trusted_root_keys)
                         for premise_key in step.premise_keys
                     )
                 )
@@ -333,7 +347,7 @@ def decompose_query(branch: BranchFrame, query: Proposition, rules: Iterable[Rul
             premises.add(required.key)
             if required.key not in known:
                 unknowns.add(required.key)
-    if not dependencies and not has_authoritative_support(branch, query.key):
+    if not dependencies and not has_authoritative_support(branch, query.key, trusted_root_keys=trusted_root_keys):
         unknowns.add(query.key)
     contradictions = detect_contradictions(branch.propositions)
     return DecompositionRecord(

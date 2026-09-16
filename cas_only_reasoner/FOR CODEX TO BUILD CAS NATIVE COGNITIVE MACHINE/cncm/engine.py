@@ -173,7 +173,7 @@ class CognitiveMachine:
                 and not repeat_limit_reached
             ):
                 branch = store.snapshot().branch_map()[branch_id]
-                if has_authoritative_support(branch, packet.query.key) or branch.contradictions:
+                if coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, packet.query.key) or branch.contradictions:
                     break
                 attempts_before = len(attempted_rpm)
                 resolved = self._resolve_missing_with_rpm(
@@ -373,7 +373,7 @@ class CognitiveMachine:
     ) -> bool:
         state = coordinator.store.snapshot()
         branch = state.branch_map()[branch_id]
-        if has_authoritative_support(branch, packet.query.key):
+        if coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, packet.query.key):
             return False
         episode = next(
             (
@@ -439,7 +439,7 @@ class CognitiveMachine:
             self._halt(coordinator, TerminalStatus.BUDGET_EXHAUSTED, diagnostics=("tick budget exhausted",))
             return
         branch = state.branch_map()[branch_id]
-        record = decompose_query(branch, packet.query, packet.rules)
+        record = coordinator._decompose_query(coordinator.store.snapshot(), branch)
         intent = self._intent(
             coordinator,
             intent_type=IntentType.RECORD_DECOMPOSITION,
@@ -464,7 +464,7 @@ class CognitiveMachine:
             state = coordinator.store.snapshot()
             branch = state.branch_map()[branch_id]
             try:
-                proofs = applicable_proofs(branch, packet.rules)
+                proofs = coordinator._applicable_proofs(coordinator.store.snapshot(), branch)
             except InferenceSearchExhausted:
                 self._halt(
                     coordinator,
@@ -530,7 +530,7 @@ class CognitiveMachine:
         attempted: set[tuple[str, str]],
     ) -> bool:
         branch = coordinator.store.snapshot().branch_map()[branch_id]
-        decomposition = decompose_query(branch, packet.query, packet.rules)
+        decomposition = coordinator._decompose_query(coordinator.store.snapshot(), branch)
         resolver = next(
             (
                 item
@@ -661,11 +661,11 @@ class CognitiveMachine:
             state = coordinator.store.snapshot()
             branch = state.branch_map()[branch_id]
             constraints_ok = all(
-                has_authoritative_support(branch, item.key) for item in branch.hard_constraints
+                coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, item.key) for item in branch.hard_constraints
             )
             if branch.contradictions:
                 desired = BranchStatus.CONTRADICTED
-            elif has_authoritative_support(branch, packet.query.key) and constraints_ok:
+            elif coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, packet.query.key) and constraints_ok:
                 desired = BranchStatus.ADMISSIBLE
             else:
                 desired = BranchStatus.BLOCKED
@@ -700,7 +700,7 @@ class CognitiveMachine:
             constraint_violations = sum(
                 1
                 for constraint in branch.hard_constraints
-                if not has_authoritative_support(branch, constraint.key)
+                if not coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, constraint.key)
             )
             metric = (
                 0 if branch.status is BranchStatus.ADMISSIBLE else 1,
@@ -793,9 +793,9 @@ class CognitiveMachine:
         power = dict(state.domain_power_state)
         gates = {
             "principled_gate": all(
-                has_authoritative_support(branch, item.key) for item in branch.hard_constraints
+                coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, item.key) for item in branch.hard_constraints
             ),
-            "derivation_complete": has_authoritative_support(branch, packet.query.key),
+            "derivation_complete": coordinator._has_authoritative_support(coordinator.store.snapshot(), branch, packet.query.key),
             "comparison_stable": bool(state.global_workspace.comparison_reports)
             and state.global_workspace.comparison_reports[-1].winner_branch_id == winner,
             "rpm_sufficient": not state.rpm_stack,
