@@ -1,0 +1,1036 @@
+{
+  "comparisons": [
+    {
+      "kind": "invariant",
+      "left": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "right": "551f6cf0feb46d5179f066aeb8c25bac663c3358b960eb0417ffa8a31185e700",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "right": "54c6a910f95387d0ab0f55e420aa70599bc1648f4b742e8c67355dd8f74e8096",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "right": "fdc4ca2a7593e38f1449a4a0df6bf690159775c5620267ec3ec9d53d626ac0e0",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "right": "6005f14196d7e8fd35ae287ea5bdfa4efd57e0faaf13fbc4292099f84911b3f4",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "right": "977dc525fcf36dd66bf32628d5f6098a74a53129962c76be07f102d479aa6e74",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "right": "9ff1653bf079d8d7749efe1bf0991d3bccf26ed95e4efff43d245bb4fcffe0b9",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "right": "5642bcdf47fb2703cc338410b40ae902fc92ab8cb04b351a88fa13c203fd948e",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "right": "cd1bc9bafc930c62945ab824dd0fe8a95b57f42c24dd31d67ba48e20dda573da",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "invariant",
+      "left": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "right": "16edfdef18c6c1379846b5cd91588ea68a82557c02d49382a44aeb5fc63c1220",
+      "root_family_id": "AUTHORED_KIT_001"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "right": "6dde9fc9bacc096712e68f8eec246718e2076286b57fe54f0ded13f1b4419185",
+      "root_family_id": "AUTHORED_KIT_001"
+    }
+  ],
+  "manifest": {
+    "comparison_sha256": "339a08ce49d702d598bad5deb886acda6b24324c459aa4e7f2b8e1d5aa4b9e68",
+    "families": 1,
+    "public_sha256": "506f62dada2763d9b9a4bc3acfc34fdefd4852e3832112ba8dfa25d9f3180c5c",
+    "rows": 12,
+    "target_sha256": "bae723a14b370847c9914854eb117920bba69c465e42602fcad35dceb67ae9cd"
+  },
+  "public": [
+    {
+      "options": [
+        "via:Toolbox",
+        "absent",
+        "direct"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"via:Toolbox\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "A complete authored containment graph is given. Distinguish direct containment from containment through a constituent.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: REACHED_VIA {\"candidate_id\": \"Wrench\", \"whole_id\": \"Kit\"}"
+      },
+      "record_id": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898"
+    },
+    {
+      "options": [
+        [
+          "Cloth",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Toolbox"
+        ],
+        [
+          "Toolbox",
+          "Wrench"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Cloth\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Cloth\", \"Toolbox\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "A complete authored containment graph is given. Distinguish direct containment from containment through a constituent.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: LIST_PARTS {\"whole_id\": \"Kit\"}"
+      },
+      "record_id": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd"
+    },
+    {
+      "options": [
+        "direct",
+        "via:Toolbox",
+        "absent"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"via:Toolbox\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "An authored packing sequence places Toolbox and Cloth in Kit, Wrench in Toolbox, and Bottle in Locker. This is a controlled state-action description, not a sensor observation.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: REACHED_VIA {\"candidate_id\": \"Wrench\", \"whole_id\": \"Kit\"}"
+      },
+      "record_id": "551f6cf0feb46d5179f066aeb8c25bac663c3358b960eb0417ffa8a31185e700"
+    },
+    {
+      "options": [
+        [
+          "Cloth",
+          "Toolbox"
+        ],
+        [
+          "Toolbox",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Wrench"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Cloth\", \"Toolbox\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Cloth\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "An authored packing sequence places Toolbox and Cloth in Kit, Wrench in Toolbox, and Bottle in Locker. This is a controlled state-action description, not a sensor observation.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: LIST_PARTS {\"whole_id\": \"Kit\"}"
+      },
+      "record_id": "9ff1653bf079d8d7749efe1bf0991d3bccf26ed95e4efff43d245bb4fcffe0b9"
+    },
+    {
+      "options": [
+        "via:Toolbox",
+        "absent",
+        "direct"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"via:Toolbox\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "Maya needs Wrench for a repair and says she is concerned about finding it. The supplied container relationships are unchanged. This describes the agent in the scene, not a feeling induced in the learner.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: REACHED_VIA {\"candidate_id\": \"Wrench\", \"whole_id\": \"Kit\"}"
+      },
+      "record_id": "54c6a910f95387d0ab0f55e420aa70599bc1648f4b742e8c67355dd8f74e8096"
+    },
+    {
+      "options": [
+        [
+          "Cloth",
+          "Toolbox"
+        ],
+        [
+          "Toolbox",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Wrench"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Cloth\", \"Toolbox\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Cloth\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "Maya needs Wrench for a repair and says she is concerned about finding it. The supplied container relationships are unchanged. This describes the agent in the scene, not a feeling induced in the learner.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: LIST_PARTS {\"whole_id\": \"Kit\"}"
+      },
+      "record_id": "5642bcdf47fb2703cc338410b40ae902fc92ab8cb04b351a88fa13c203fd948e"
+    },
+    {
+      "options": [
+        "via:Toolbox",
+        "absent",
+        "direct"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"via:Toolbox\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "The same complete inventory is described in a different order during a storage check. No containment relationship has changed.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: REACHED_VIA {\"candidate_id\": \"Wrench\", \"whole_id\": \"Kit\"}"
+      },
+      "record_id": "fdc4ca2a7593e38f1449a4a0df6bf690159775c5620267ec3ec9d53d626ac0e0"
+    },
+    {
+      "options": [
+        [
+          "Toolbox",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Toolbox"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Cloth\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Cloth\", \"Toolbox\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "The same complete inventory is described in a different order during a storage check. No containment relationship has changed.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Toolbox contains Wrench common=constituent,Wrench\nrel Locker contains Bottle common=constituent,Bottle\nQuestion: LIST_PARTS {\"whole_id\": \"Kit\"}"
+      },
+      "record_id": "cd1bc9bafc930c62945ab824dd0fe8a95b57f42c24dd31d67ba48e20dda573da"
+    },
+    {
+      "options": [
+        "absent",
+        "direct",
+        "via:Subfolder"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"via:Subfolder\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "The supplied folder hierarchy is compared only for its nested membership relation. No claim is made that files share tools physical functions.\nnode ProjectFolder kind=idea\nnode Subfolder kind=idea\nnode Note kind=idea\nnode Document kind=idea\nnode Archive kind=idea\nnode Receipt kind=idea\nrel ProjectFolder contains Subfolder common=constituent,Subfolder\nrel ProjectFolder contains Note common=constituent,Note\nrel Subfolder contains Document common=constituent,Document\nrel Archive contains Receipt common=constituent,Receipt\nQuestion: REACHED_VIA {\"candidate_id\": \"Document\", \"whole_id\": \"ProjectFolder\"}"
+      },
+      "record_id": "6005f14196d7e8fd35ae287ea5bdfa4efd57e0faaf13fbc4292099f84911b3f4"
+    },
+    {
+      "options": [
+        [
+          "Note",
+          "Subfolder"
+        ],
+        [
+          "Document",
+          "Subfolder"
+        ],
+        [
+          "Document",
+          "Note"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Note\", \"Subfolder\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Document\", \"Subfolder\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Document\", \"Note\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "The supplied folder hierarchy is compared only for its nested membership relation. No claim is made that files share tools physical functions.\nnode ProjectFolder kind=idea\nnode Subfolder kind=idea\nnode Note kind=idea\nnode Document kind=idea\nnode Archive kind=idea\nnode Receipt kind=idea\nrel ProjectFolder contains Subfolder common=constituent,Subfolder\nrel ProjectFolder contains Note common=constituent,Note\nrel Subfolder contains Document common=constituent,Document\nrel Archive contains Receipt common=constituent,Receipt\nQuestion: LIST_PARTS {\"whole_id\": \"ProjectFolder\"}"
+      },
+      "record_id": "16edfdef18c6c1379846b5cd91588ea68a82557c02d49382a44aeb5fc63c1220"
+    },
+    {
+      "options": [
+        "direct",
+        "via:Toolbox",
+        "absent"
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "\"direct\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "\"via:Toolbox\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "\"absent\"",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "Wrench is removed from Toolbox and placed directly into Kit. All other listed relationships remain unchanged.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Locker contains Bottle common=constituent,Bottle\nrel Kit contains Wrench common=constituent,Wrench\nQuestion: REACHED_VIA {\"candidate_id\": \"Wrench\", \"whole_id\": \"Kit\"}"
+      },
+      "record_id": "977dc525fcf36dd66bf32628d5f6098a74a53129962c76be07f102d479aa6e74"
+    },
+    {
+      "options": [
+        [
+          "Bottle",
+          "Toolbox",
+          "Wrench"
+        ],
+        [
+          "Cloth",
+          "Toolbox",
+          "Wrench"
+        ],
+        [
+          "Bottle",
+          "Cloth",
+          "Toolbox"
+        ]
+      ],
+      "public": {
+        "observations": [
+          {
+            "slot": 0,
+            "tag": "[\"Bottle\", \"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 1,
+            "tag": "[\"Cloth\", \"Toolbox\", \"Wrench\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "slot": 2,
+            "tag": "[\"Bottle\", \"Cloth\", \"Toolbox\"]",
+            "values": [
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "problem": "Wrench is removed from Toolbox and placed directly into Kit. All other listed relationships remain unchanged.\nnode Kit kind=idea\nnode Toolbox kind=idea\nnode Cloth kind=idea\nnode Wrench kind=idea\nnode Locker kind=idea\nnode Bottle kind=idea\nrel Kit contains Toolbox common=constituent,Toolbox\nrel Kit contains Cloth common=constituent,Cloth\nrel Locker contains Bottle common=constituent,Bottle\nrel Kit contains Wrench common=constituent,Wrench\nQuestion: LIST_PARTS {\"whole_id\": \"Kit\"}"
+      },
+      "record_id": "6dde9fc9bacc096712e68f8eec246718e2076286b57fe54f0ded13f1b4419185"
+    }
+  ],
+  "schema": "cas.perspective-resonance/0.1",
+  "status": "AUTHORED_REFERENCE_ONLY",
+  "teacher_targets": [
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:ae7ac101bf4e6892360c3eb763aaf599b8d46612fd9f727a6223897eaee774c4",
+      "expected_answer": "via:Toolbox",
+      "operation": "REACHED_VIA",
+      "record_id": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "via:Toolbox",
+      "variant_id": "formal"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:b01ef6303235b82514a4e672c1967ba91522e0d4ea01a8d1a6d01e9a86f4142a",
+      "expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "variant_id": "formal"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:f7ac67225eb0edf2cd735494a2313a5fa6132d7936c7889a207743ecdd61a27b",
+      "expected_answer": "via:Toolbox",
+      "operation": "REACHED_VIA",
+      "record_id": "551f6cf0feb46d5179f066aeb8c25bac663c3358b960eb0417ffa8a31185e700",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "via:Toolbox",
+      "variant_id": "packing"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:92d72c612a3241ee30de8b2d9786ced440c13324a45a424d00b2a73f28dfc31f",
+      "expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "9ff1653bf079d8d7749efe1bf0991d3bccf26ed95e4efff43d245bb4fcffe0b9",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "variant_id": "packing"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:d0156f7853ad54457ea6159ec8156cadd90fcc3c4ca1672b542d699157b6b691",
+      "expected_answer": "via:Toolbox",
+      "operation": "REACHED_VIA",
+      "record_id": "54c6a910f95387d0ab0f55e420aa70599bc1648f4b742e8c67355dd8f74e8096",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "via:Toolbox",
+      "variant_id": "purpose"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:05339d8f236691ee68b873456eece9f94e347c10502f50559bfcba16af0daad8",
+      "expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "5642bcdf47fb2703cc338410b40ae902fc92ab8cb04b351a88fa13c203fd948e",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "variant_id": "purpose"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:2e20b7de2b77c30876f24329c8987dcb91a59c0a411d79533ee036ff083b605f",
+      "expected_answer": "via:Toolbox",
+      "operation": "REACHED_VIA",
+      "record_id": "fdc4ca2a7593e38f1449a4a0df6bf690159775c5620267ec3ec9d53d626ac0e0",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "via:Toolbox",
+      "variant_id": "reworded"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:9d88e925f0d2795bcf07f67aa20fdaa1ea280430823cfea9f095819631c022c9",
+      "expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "cd1bc9bafc930c62945ab824dd0fe8a95b57f42c24dd31d67ba48e20dda573da",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "variant_id": "reworded"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Receipt",
+        "Cloth": "Note",
+        "Kit": "ProjectFolder",
+        "Locker": "Archive",
+        "Toolbox": "Subfolder",
+        "Wrench": "Document"
+      },
+      "exercise_id": "exercise:ce690f5efee32840a8ae9603b518cd7cc7644abd3955bf1ec5b1601b50105872",
+      "expected_answer": "via:Subfolder",
+      "operation": "REACHED_VIA",
+      "record_id": "6005f14196d7e8fd35ae287ea5bdfa4efd57e0faaf13fbc4292099f84911b3f4",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "via:Toolbox",
+      "variant_id": "folder"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Receipt",
+        "Cloth": "Note",
+        "Kit": "ProjectFolder",
+        "Locker": "Archive",
+        "Toolbox": "Subfolder",
+        "Wrench": "Document"
+      },
+      "exercise_id": "exercise:57a3d28b5aa1b52868a3f20e90349ec0444fe514f62b5753a10c7a2f1525cb12",
+      "expected_answer": [
+        "Note",
+        "Subfolder"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "16edfdef18c6c1379846b5cd91588ea68a82557c02d49382a44aeb5fc63c1220",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox"
+      ],
+      "variant_id": "folder"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:05b591fb7c735cb7924100ecfbc4893aee150f58dd961e2bd3b3857b94943986",
+      "expected_answer": "direct",
+      "operation": "REACHED_VIA",
+      "record_id": "977dc525fcf36dd66bf32628d5f6098a74a53129962c76be07f102d479aa6e74",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": "direct",
+      "variant_id": "rewired"
+    },
+    {
+      "base_to_view_map": {
+        "Bottle": "Bottle",
+        "Cloth": "Cloth",
+        "Kit": "Kit",
+        "Locker": "Locker",
+        "Toolbox": "Toolbox",
+        "Wrench": "Wrench"
+      },
+      "exercise_id": "exercise:d4dccc1af986152141e23211aea378be5a3a32a3c1d5a5cd88f474cd8c086d86",
+      "expected_answer": [
+        "Cloth",
+        "Toolbox",
+        "Wrench"
+      ],
+      "operation": "LIST_PARTS",
+      "record_id": "6dde9fc9bacc096712e68f8eec246718e2076286b57fe54f0ded13f1b4419185",
+      "root_family_id": "AUTHORED_KIT_001",
+      "semantic_expected_answer": [
+        "Cloth",
+        "Toolbox",
+        "Wrench"
+      ],
+      "variant_id": "rewired"
+    }
+  ]
+}

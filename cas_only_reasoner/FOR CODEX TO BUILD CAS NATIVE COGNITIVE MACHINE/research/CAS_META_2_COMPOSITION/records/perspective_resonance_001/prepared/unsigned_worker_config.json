@@ -1,0 +1,20 @@
+{
+  "adaptive_policy_enabled": false,
+  "candidate": "CAS_PERSPECTIVE_RESONANCE_001",
+  "comparison_conditions": [
+    "CANONICAL_REVISIT",
+    "CONNECTED_PERSPECTIVES"
+  ],
+  "data_file_sha256": "4b8ffd62dcbd55ff1fb79c43a6a134ac3b5af3a84ec7ed9fccd3bc1e0c9f2c04",
+  "data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+  "empirical_response_enabled": false,
+  "execution_enabled": false,
+  "initial_checkpoint_sha256": "854dffe7ff9fd02286d39817c01204a261118c444b41cdcc3bb97b6934f55b45",
+  "job": null,
+  "learning_rate": 0.003,
+  "max_wall_seconds": 3000,
+  "optimizer_updates": 960,
+  "perspective_bindings_file_sha256": "322e30974649fc2a556ae19983a868ba762815c4c1b8ca243a3bf606a85dcf9d",
+  "perspective_sources_file_sha256": "4d88f41bd26eb6616b9af105faaa521f87e028512f976f2c5c2ef9e0a62af662",
+  "training": true
+}

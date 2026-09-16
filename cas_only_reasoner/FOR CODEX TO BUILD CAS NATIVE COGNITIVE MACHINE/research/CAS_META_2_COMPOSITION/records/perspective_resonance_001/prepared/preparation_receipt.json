@@ -1,0 +1,10 @@
+{
+  "comparisons": 3,
+  "golden_rows": 12,
+  "neural_executions": 0,
+  "provider_calls": 0,
+  "report_regeneration": "IDENTICAL",
+  "source_aggregate_sha256": "781553f199a42adbe426ce240d4cf5037643b72abd3710e17576d5a80b84e373",
+  "status": "PURE_PREPARATION_COMPLETE",
+  "tokenizer_checked": true
+}

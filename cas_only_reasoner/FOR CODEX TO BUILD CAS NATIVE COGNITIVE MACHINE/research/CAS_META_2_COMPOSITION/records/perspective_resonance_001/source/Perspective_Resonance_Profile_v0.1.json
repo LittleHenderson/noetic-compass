@@ -1,0 +1,119 @@
+{
+  "schema_version": "cas.perspective-resonance/0.1",
+  "directive_id": "CAS_PERSPECTIVE_RESONANCE_001",
+  "status": "PROPOSED_IMPLEMENTATION_PLAN",
+  "source_owner": "Little Henderson",
+  "execution_enabled": false,
+  "parents": [
+    "CFC_LOOP_001",
+    "RPM_CFC_CONSTRUCTOR_001",
+    "CAS_RDCJT_001",
+    "CAS_COMPLEMENTARY_TEACHING_001"
+  ],
+  "mode": "OPT_IN_CONTENT_AND_OBSERVER_ADDENDUM",
+  "preserve_in_flight_work": true,
+  "model_loading_authorized": false,
+  "provider_calls_authorized": false,
+  "budget_reservation_authorized": false,
+  "new_trainable_parameters": 0,
+  "changes_to_existing_recurrence": false,
+  "new_faces_or_noetic_ids": false,
+  "signature": {
+    "canonical_object": "IdeaResponseProfile",
+    "display_alias": "vibratory_signature",
+    "scope": "MODEL_CHECKPOINT_CONTEXT_AND_MEASUREMENT_RELATIVE",
+    "physical_frequency_claimed": false,
+    "universal_signature_measured": false,
+    "single_resonance_score": null,
+    "distinct_axes": [
+      "concept_identity",
+      "native_flow",
+      "calibrated_activation_response",
+      "behavioral_competence",
+      "exposure_rhythm",
+      "cost"
+    ],
+    "all_face_embeddings_must_match": false,
+    "confidence_or_activation_is_mastery": false
+  },
+  "perspective_dimensions": [
+    "mental_formal",
+    "physical_action_record",
+    "emotional_purpose_context",
+    "context",
+    "analogy",
+    "counterexample"
+  ],
+  "native_flow": {
+    "enabled_by_default": false,
+    "binding_required": "ACTUAL_PINNED_NATIVE_PRODUCER",
+    "mode": "READ_ONLY_OBSERVER",
+    "native_status": "NOT_INSPECTED_IN_REPOSITORY",
+    "missing_status": "UNAVAILABLE_NO_NATIVE_FLOW_TAP",
+    "missing_blocks_teaching": false,
+    "quantity_kind": "SOFTWARE_DERIVED",
+    "producer_equation": null,
+    "preserve_native_unit_and_axes": true,
+    "normalize_attention_separate_from_absolute_flow": true,
+    "inferred_from_accuracy_or_loss": false
+  },
+  "empirical_response": {
+    "enabled_by_default": false,
+    "status": "UNMEASURED_OPTIONAL_PROFILE",
+    "dose_symbol": "a",
+    "response_symbol": "delta_y",
+    "resistance_symbol": "r_eff",
+    "units": {
+      "a": "alpha",
+      "delta_y": "activation",
+      "r_eff": "alpha_per_activation"
+    },
+    "prediction": "delta_y_hat = a / r_eff",
+    "observation": "delta_y = dot(u, z(x,a) - z(x,0))",
+    "measurement_proposal_not_existing_binding": true,
+    "native_route_resistance_equals_r_eff": false,
+    "calibration_families": [],
+    "calibration_holdout_families": [],
+    "final_audit_families": [],
+    "model_identity": null,
+    "test_point": null,
+    "direction_identity": null,
+    "intervention_port": null,
+    "dose_grid": null,
+    "fit_tolerance": null,
+    "uncertainty_method": null,
+    "same_sample_a_over_y_validation_allowed": false,
+    "requires_separate_authorized_numeric_profile": true
+  },
+  "adaptive_policy_enabled": false,
+  "direct_control_mutation": false,
+  "automatic_pass_increase": false,
+  "proposal_mode": "SHADOW_ONLY_USING_PERMITTED_DEVELOPMENT_EVIDENCE",
+  "comparison": {
+    "execution_profile_frozen": false,
+    "conditions": [
+      "CANONICAL_REVISIT",
+      "CONNECTED_PERSPECTIVES"
+    ],
+    "parent_schedule": "PIN_ONE_COMPATIBLE_COMPLEMENTARY_PROFILE_BEFORE_FREEZE",
+    "new_training_slots": 0,
+    "reference_only_counts_per_learner": {
+      "rounds": 16,
+      "supervised_decisions": 1152,
+      "optimizer_updates": 160
+    },
+    "actual_schedule_identity": null,
+    "actual_resource_envelope": null,
+    "new_family_claim_requires_structural_supply_check": true,
+    "effect_scope": "CONNECTED_PRESENTATION_PACKAGE_NOT_EACH_INGREDIENT",
+    "telemetry_alone_proves_learning": false,
+    "ohm_guided_controller_advantage_tested": false
+  },
+  "claim_states": {
+    "pure_fixture": "AUTHORED_REFERENCE_ARITHMETIC_ONLY",
+    "build_target": "PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED",
+    "neural_delivery": "NOT_RUN",
+    "learning_benefit": "UNMEASURED",
+    "calibration_validity": "UNMEASURED"
+  }
+}

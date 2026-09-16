@@ -1,0 +1,260 @@
+{
+  "component": {
+    "arm": "cas",
+    "correct": "via:Piston",
+    "encoded_correct_index": 0,
+    "encoded_options": [
+      "via:Piston",
+      "absent",
+      "direct"
+    ],
+    "family_id": "family:mechanical:03",
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "Pump",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Piston",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Valve",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Gasket",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "Piston"
+          ],
+          "kind": "contains",
+          "source": "Pump",
+          "target": "Piston"
+        },
+        {
+          "content": [
+            "constituent",
+            "Valve"
+          ],
+          "kind": "contains",
+          "source": "Piston",
+          "target": "Valve"
+        },
+        {
+          "content": [
+            "constituent",
+            "Gasket"
+          ],
+          "kind": "contains",
+          "source": "Valve",
+          "target": "Gasket"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "REACHED_VIA",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "via:Piston",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "absent",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "direct",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "problem": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nREACHED_VIA(Gasket, Pump): directly inside, reached through another constituent, or absent?\nChoose one supplied option.\n"
+    },
+    "question": {
+      "idea": "Pump",
+      "op": "REACHED_VIA",
+      "part": "Gasket"
+    },
+    "record_id": "8cab72fb07d4987bb7541348df12f4c603d1a602ffb6d42ab685ca7e497794b4",
+    "semantic_question_id": "2d049515b745e3e6590241be6475f8048df5081926ee713ee21ff99f85487d0e",
+    "task_profile": "cas.complementary-teaching/0.1"
+  },
+  "family_id": "family:mechanical:03",
+  "pair_id": "582a9ae215f3cdb2f9ec479d6e85e4fc40a538e5966748dc080adfa62ddbce2e",
+  "public_relevance": {
+    "candidate": "Gasket",
+    "kind": "candidate_membership_of_inventory",
+    "whole": "Pump"
+  },
+  "whole": {
+    "arm": "cas",
+    "correct": [
+      "Piston"
+    ],
+    "encoded_correct_index": 1,
+    "encoded_options": [
+      [
+        "Gasket",
+        "Piston",
+        "Valve"
+      ],
+      [
+        "Piston"
+      ],
+      [
+        "Gasket"
+      ]
+    ],
+    "family_id": "family:mechanical:03",
+    "graph": {
+      "nodes": [
+        {
+          "fields": [],
+          "identifier": "Pump",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Piston",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Valve",
+          "kind": "idea"
+        },
+        {
+          "fields": [],
+          "identifier": "Gasket",
+          "kind": "idea"
+        }
+      ],
+      "relations": [
+        {
+          "content": [
+            "constituent",
+            "Piston"
+          ],
+          "kind": "contains",
+          "source": "Pump",
+          "target": "Piston"
+        },
+        {
+          "content": [
+            "constituent",
+            "Valve"
+          ],
+          "kind": "contains",
+          "source": "Piston",
+          "target": "Valve"
+        },
+        {
+          "content": [
+            "constituent",
+            "Gasket"
+          ],
+          "kind": "contains",
+          "source": "Valve",
+          "target": "Gasket"
+        }
+      ],
+      "schema": "cas-meta2-graph-teaching-graph/1"
+    },
+    "op": "LIST_PARTS",
+    "public": {
+      "observations": [
+        {
+          "slot": 0,
+          "tag": "['Gasket', 'Piston', 'Valve']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 1,
+          "tag": "['Piston']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "slot": 2,
+          "tag": "['Gasket']",
+          "values": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      ],
+      "problem": "node Pump kind=idea\nnode Piston kind=idea\nnode Valve kind=idea\nnode Gasket kind=idea\nrel Pump --contains--> Piston\nrel Piston --contains--> Valve\nrel Valve --contains--> Gasket\nLIST_PARTS(Pump): what does it directly contain?\nChoose one supplied option.\n"
+    },
+    "question": {
+      "idea": "Pump",
+      "op": "LIST_PARTS"
+    },
+    "record_id": "b73c7c2683516cc01bb52a7068bf481f98ebeb080e7b890970bca34678ef41f6",
+    "semantic_question_id": "974d8902b915594711427e83f56b255a4e461ff75813979e3fd823573b186822",
+    "task_profile": "cas.complementary-teaching/0.1"
+  }
+}

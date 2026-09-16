@@ -1,0 +1,4892 @@
+{
+  "comparisons": [
+    {
+      "kind": "invariant",
+      "left": "f6586f8d8972282d1f60b7775fbf9f0ca986235f9d314ba5cda8b63a7ed16730",
+      "right": "5fefdf8d284f3fd9fa5c197e4ddec04a6d4a34e55eeb8d94c640ab294c3d98e0",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc"
+    },
+    {
+      "kind": "invariant",
+      "left": "22fd46d29d9cd983cd9acd81d5032e7e13894555a9ffeebedfbaee8ce090dc50",
+      "right": "a8aa1e7fca0939ba926893c05f698acc55ae4a9834b77e32f37da88a1e81b9cb",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc"
+    },
+    {
+      "kind": "invariant",
+      "left": "2d7007ad14da8ca2ba184d5ea4a64f7e7976d63a3d84351c70be59ccde4b3ddc",
+      "right": "6465d6f33da4daa039c755fbd78b09ad7e93c6ed5aa1f0880c4839e4a99669c9",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc"
+    },
+    {
+      "kind": "invariant",
+      "left": "3541902d5412627029268a9b21f013dfafe2e62d9d008fc459aad8d4b3544f90",
+      "right": "d8a5efe6361fa88794e5f577aa483b7c220a2e663934ebb58fa7c84923a87c33",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0"
+    },
+    {
+      "kind": "invariant",
+      "left": "507a591ca9939148b2ee8e8902090fb560d5509930edf648dca046747d9041c3",
+      "right": "929ff25d14680d8dfdbc6384828098fd667433d54b1416c1312fd3e93b699ab9",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0"
+    },
+    {
+      "kind": "invariant",
+      "left": "c2ea9a6f50875f3e91f4e64cbc76c455996ff575f4f72892123c79b347f935cf",
+      "right": "5e393c889428ee6057369162e030cb80e1a24b018be828843268bb372b9f62a3",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0"
+    },
+    {
+      "kind": "invariant",
+      "left": "954a40439a080b3ea412097efa71359de04c90f71ccb226cd0071289113c248c",
+      "right": "86c178c26dc294198c5389e23f28f73cac97850d02a4701e8b7911e2b27ff3a0",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89"
+    },
+    {
+      "kind": "invariant",
+      "left": "68acb53902766a5d11aabd3eff8bc92f9f0a369982d4bdc76e22ace6668dc0f2",
+      "right": "eb031b6070e348dae5ba5206426cd2baa67b659fe37886a8beb32b5349867545",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89"
+    },
+    {
+      "kind": "invariant",
+      "left": "43bc8168406d5ab0775edca92fdf98354ced0dbd868d24cb3754ffb640c8afee",
+      "right": "b2f621368955f51195a816c3f484f88e16153a2bd48e1e14bcf1daf42d3a7b53",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89"
+    },
+    {
+      "kind": "invariant",
+      "left": "8a7f2e803d2d2647946be565512a332b5c87d42859296d373492f4b4c49f65ba",
+      "right": "9bc5dc164f492b20ad650e47d1a39575ea0285ad057028cf2bb0605c948688d6",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73"
+    },
+    {
+      "kind": "invariant",
+      "left": "b60eedb3013122e935aeed0fd70ef9f096a7e88250f37b40fe125635d7524ef0",
+      "right": "d6ac3ee4d8a1966dfb5953025111381205781051eaf464ebe7050cbe66e07137",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73"
+    },
+    {
+      "kind": "invariant",
+      "left": "0f19bf171249fea97158913b3deb2a58d47657cd2f837b4d3f0dc503ac9bf5b7",
+      "right": "e629db29dc732ac8d599038c7140e2fc2bbe6ccb9aaabed6d0723c6817b6ef20",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73"
+    },
+    {
+      "kind": "invariant",
+      "left": "cfb1ca3f3c62a15335397e445f18b1a615025c760013c8b54e8bdcaac9a724a8",
+      "right": "2e78345824ad8dad61f5fc052a71b3fcc3c562f79c54cbfd235c08b2a139eaad",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c"
+    },
+    {
+      "kind": "invariant",
+      "left": "78e8f8263fbe89b13790689725cbb07481862ca6bf8cd794a8757e710a448590",
+      "right": "e7410285e2332338b8183c23da5fd2bcb90a8eb54c61f391e7d0d0c71c048e8a",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c"
+    },
+    {
+      "kind": "invariant",
+      "left": "892fc68f73e680c11f7e00fb297e831e10e2d5f991bd2b03bbdf7180e0f91451",
+      "right": "3c2f1577acff4aca0f62e7c1e073541c88643bbf3dbfb4b1992e9ecbbc299d0f",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c"
+    },
+    {
+      "kind": "invariant",
+      "left": "384625cdf99b63e0df8a91506b2de1b1d1d9255ad88bc0bc1cc4a25f58be3263",
+      "right": "381139129f57bf03b740c2cc3353ffe86db18d15ad672e0af3e2fbfdd072aed3",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c"
+    },
+    {
+      "kind": "invariant",
+      "left": "0d7b642ff88a4b7cbedef05fa7ada01dec28de440a8a3a7aa246f9e03456f31e",
+      "right": "681dcce3784a95066227f579dcd190b361ee58c79e106b65f1726d8bd0177ec9",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c"
+    },
+    {
+      "kind": "invariant",
+      "left": "81ad656a178336217eefd73f8c94940b366899b64c80f8ca4551ba4ca2ad7d68",
+      "right": "8ebcd5826ddafad22d58d1216c3061b8240fee651f1793ece218daedbb334aa5",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c"
+    },
+    {
+      "kind": "invariant",
+      "left": "bfb5b467bae865e1885592f2cf8dfa0f252b189673803105ba284de86caffd1c",
+      "right": "42da6439333c5098c3769e75a4cdee28eb58ffe29b7fea28f045831349ec4327",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6"
+    },
+    {
+      "kind": "invariant",
+      "left": "ddb20e26ca4f93cafbf48b94a2242586cee0cfc65c44f416e93f484e85832c61",
+      "right": "6858d0261fcc1db21bb5b06e1227494a4fe7ef3ed6ee26c4a7bc4df17328c452",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6"
+    },
+    {
+      "kind": "invariant",
+      "left": "57868a5134760c4e5ee2575df441b5707e1503e35c5eb64fee9e7e74a7db90fe",
+      "right": "abf1d4cdc97fea2a8d3fc5eebb86e1170279aa41d4677dff219e75377dcbfbd7",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6"
+    },
+    {
+      "kind": "invariant",
+      "left": "2f2a47a1bcbadd9c78b26d2d6883c2171949609c11ac0d9aacc1be8077b1dc10",
+      "right": "3e4b79a2a582366fef864933cceb308ae527a047990f2f646f88a091654d7c47",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b"
+    },
+    {
+      "kind": "invariant",
+      "left": "f368e8b03c8184994300c042b444973b97bce9de55b61b8cb4a9e0d3f59a8f4b",
+      "right": "7412f61a2bb15fae0f31e8eea1983d2dc93f2c5d0dd829bf2cde5b7c097a4a0e",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b"
+    },
+    {
+      "kind": "invariant",
+      "left": "10ef8e6a589270000ed5cc03c6e87fd2d72a30063f70ca93c7e7335d251db2df",
+      "right": "96f7193a23ec7e05c73741b0decbc40f0882c90765105ad3db6c63038cc7eb4f",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b"
+    },
+    {
+      "kind": "invariant",
+      "left": "a7960a34e12b63ea8fa0cdcdc78396e3bf0148ebcf27982c66d8dbf5124faf1b",
+      "right": "6f82b0b2d51ecb3f3c2f450a56cd36f54972a44a840b024afc1f6f93dc40fbb1",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048"
+    },
+    {
+      "kind": "invariant",
+      "left": "9cb23df24ab25bda71a74f3e2ba758d9c348f91180dab1f2147100b8271f8348",
+      "right": "bb5c2ac64ef33e9f6d42ef49a83ea272ce5b19c1a470e1681f5adaa8f4c38f6a",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048"
+    },
+    {
+      "kind": "invariant",
+      "left": "b7f302a0268e7a6a7488425a07777bcc976d62d04026a33ba8b6991dce1d5d62",
+      "right": "5e1a41e663b70c160e9e813bc5b38bbd6e4fdb0cdecb4d1cb95174caef80f414",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048"
+    },
+    {
+      "kind": "invariant",
+      "left": "5dfafd234bd5e2bdc0038523fb5032f728d1fa2dbeb5175a464274d149cb41b2",
+      "right": "b94e99480a3e19c915e7379b46b3f359ad3c022e387920c25079b391173d1b23",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862"
+    },
+    {
+      "kind": "invariant",
+      "left": "7bd9be939b42ec4075e161b7f916f758102bc84e4fe5e79f4b8c9c9627bb2fd6",
+      "right": "719e281e88d3cfd68feb0dc11759c95a08d6fd42a5506c94352e6e34493fd721",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862"
+    },
+    {
+      "kind": "invariant",
+      "left": "87d3017b20076346c2bdc6dd8ca54b7d339f9cc88e76df3d42a5e041d4456b01",
+      "right": "994773bccba7adbfeca00da3c4785e197a1ea16cfb70e68179543bcf5f6a486b",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862"
+    },
+    {
+      "kind": "invariant",
+      "left": "f312b05986a631b24db26df8452660c2bb2cdb7ab073d75217a90e0fe45e2a97",
+      "right": "9829cd9020b0ee9900511c89464c272c9f4ec826c826e47ab6067a88087ee4ea",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96"
+    },
+    {
+      "kind": "invariant",
+      "left": "302e0fe586241ec1b6c2c6b97dbebd55c098ac4e29d1cf7331040f0db3910c45",
+      "right": "7d7596e4838fbae07399966bf9ccbb00f912ccfb0497abf3e9dc377d1888819b",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96"
+    },
+    {
+      "kind": "invariant",
+      "left": "bb18f381ecbe8bfd02620eaa4d5f3fbbde75a699d7ae20a9a193628130e6718a",
+      "right": "53bca9cdfaeddb1d7cbfc1cbfbba2a7870a0518c09b19d22fe775e07c4eeedd3",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96"
+    },
+    {
+      "kind": "invariant",
+      "left": "373276fe8fcfdd88f796072f2c900af428c50f4e7174216af9595efee48dcb10",
+      "right": "fa0f5cc2a06bf5a27004d997c17d06235f61bbfec65db0c3d0bef46452fa1d6e",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63"
+    },
+    {
+      "kind": "invariant",
+      "left": "13f2daf81fb4905afa0b39443e2c0d351baab7880adf1c6bf0573c7504487616",
+      "right": "dd2f7e151142b8c0e9903752da04d2d0999230d8cb4fceba31ce0a12d3a5d5f6",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63"
+    },
+    {
+      "kind": "invariant",
+      "left": "2f360f8a2efcb24120d0adba944e4679cf4d37c0630026c5831e375cd5a2dd66",
+      "right": "2e15a3b1b03b5c30a5ff12a2bd2fab10f40d0a4cfc044c13931021d35cca520b",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63"
+    },
+    {
+      "kind": "invariant",
+      "left": "e8e9415be8220dd782f20f222fab72c785d60d29a01120dfbd8a229aa67b040e",
+      "right": "bf2f75392f7b7b50514587a39eb447d3570bd776c829bb5902c1cc966d1f1fb5",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe"
+    },
+    {
+      "kind": "invariant",
+      "left": "fc4b1b10e128095d82f4ae4163f59f81b9062cfcbd7922043775a9ab42c9b314",
+      "right": "f190ceaf5e2c8a4f6029ecc90bef2f70883ffb48c5847537a949131c57fa7ba6",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe"
+    },
+    {
+      "kind": "invariant",
+      "left": "e3191fbf82291ad1f27b4f1d801acf09c168b55f6353103b8dd7ae66501ed525",
+      "right": "c4e147dc836b6e42be8bd18d9ddf5f82cfa74461c9efb947c5ceb00ecfc38bec",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe"
+    },
+    {
+      "kind": "invariant",
+      "left": "51bf630fb9eaba9db1b8005dd182b1f429c39bbaee08942a02a32f965c6cd978",
+      "right": "fb21d0c28aa466491bc9c0e18824f0d199372efa749d0c3f21688ee3ebd1cb7f",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809"
+    },
+    {
+      "kind": "invariant",
+      "left": "e264ebfb8d51e673a6a1d08917afd670464c97f8b3b2b2d80108470c3eaefa65",
+      "right": "9a905aca5d7178160835e4410e62fd56d0ecbc9a9043619ad78490b9f6382a3d",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809"
+    },
+    {
+      "kind": "invariant",
+      "left": "7d41c585f401dddc03ab1d3563b457195df78a809dafcbb16464e6bf50420dbf",
+      "right": "2dc66d30ed7919be55f4d69cac9f5f756a98514c1d6622d35bdc0cccd15ffe52",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809"
+    },
+    {
+      "kind": "invariant",
+      "left": "79cd8d0e7303b01ce078b0b4e07fb034b83e0ac51f5ad5aa3c6aaeea8a22e67b",
+      "right": "9905b3310f13650530590b42692ad6539190031eccca3e1e9dc9b25c1177f58f",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323"
+    },
+    {
+      "kind": "invariant",
+      "left": "0ebc2ba7593013d7918e5fb08b03737028e3dc2a8fcd3ce259a2c2468098e31d",
+      "right": "348e1a2eef5b1efbfed8f92a4675d9d58a199039b91383a0de78f9ee5719c4fc",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323"
+    },
+    {
+      "kind": "invariant",
+      "left": "f89f3f86ee7f68bdb9e746e862d7b55c3e68b81214a8362d1bea9f18503848d1",
+      "right": "1f696221038d7de7aa0011620eea6f69f1ae5ed249e85fb8ae7f8ab175245293",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323"
+    },
+    {
+      "kind": "invariant",
+      "left": "25ff5937d14c1c719fe290bf94a1b622b5a58b3b14b6f6fe6ab7578f9a97aada",
+      "right": "f068f91d51d89d9c38e8749338bd74aea5a0917d386eedcc267eb5644b09dbe2",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412"
+    },
+    {
+      "kind": "invariant",
+      "left": "9c63437b4b4483a0193678ab55a585de45b265f47a5b11de80ddc312f2ba96f3",
+      "right": "9fed8c2bef0bb7373e026e5eb7bf6924e19b79793d272a83cfc4ade3fd190b1c",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412"
+    },
+    {
+      "kind": "invariant",
+      "left": "4801accb17c7766b99a621605ca1135021f7b2e7876967ef55e886f89d0101f4",
+      "right": "3354e675c3cd44db96c16e950a3b368351dd0c1a686b095ff0e2b2842ed4fbed",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412"
+    },
+    {
+      "kind": "invariant",
+      "left": "ee5d5dc011fb6917535cdb0d4e4f937b2778cf3b5171580450ce7aa6b351e870",
+      "right": "4763a91f2841449602079fed5dd5ee71c0f56687cfdfa3130ab42b5c478a770a",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f"
+    },
+    {
+      "kind": "invariant",
+      "left": "7445390274231b266c8fbf50bbc36f8a6b40ce0b449c742e718b353fd5a00d3f",
+      "right": "dffd8f879f87b7b63c71903e28bf838192349c4e54b8cf05d9bd89bfe7a590e4",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f"
+    },
+    {
+      "kind": "invariant",
+      "left": "39212b67ad251a5102bef67b4e6e9130e66e906967789c98686f07e78645a7d2",
+      "right": "01c26bf3d84610a95776b7dc0bfbf5c5f2e4cec9bb7850e4b750c194e62ba5bc",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f"
+    },
+    {
+      "kind": "invariant",
+      "left": "7d8c6d8a6995b230834801871a9d4c54e462b9cbe9a4b83e026fb273e9d7468a",
+      "right": "f9f8f3c9f3ac7273255192fdaee22f5c0203a45eaf316b05dbc081e5f93b13e2",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7"
+    },
+    {
+      "kind": "invariant",
+      "left": "4223210da38c28e1a3661962d519698c720ade9020c29c072755559763a28fa5",
+      "right": "9fa9775293838e212be37de5536fbba9e2c45e270197f2cca23cd3ea4e613e79",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7"
+    },
+    {
+      "kind": "invariant",
+      "left": "8908f6a07fc43560bdd67abcaac6b47a5326fe91d9cbde434f34bc047fd27cd8",
+      "right": "f85dfe0d27d101f0d73a4f4317c404a048f463b7df2ab5de2a2d8b724539a247",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7"
+    },
+    {
+      "kind": "invariant",
+      "left": "0e317f57832b76baead7812df09ea6ac07aafe37f8c01950c6eb287471c081f2",
+      "right": "29b7eebd22367210f9fb03df86214f5de23228236150bbfc0d281a342e00a646",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac"
+    },
+    {
+      "kind": "invariant",
+      "left": "cd23f6efe2bbdc06987e6ff8cce686ed8c27310243f731f70ff5696ee8fbdd2f",
+      "right": "de640e2cf16980d946ca8fb3538a0bda730d9bf44226a772753e204a9bfab59f",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac"
+    },
+    {
+      "kind": "invariant",
+      "left": "4ae0a85909165cf2e552e8f1c9dcb25eeacce543eb039be09f856d9b851a380a",
+      "right": "92dc790d41bca773ef47cff02ade51761eeb3c0a0af954415354cbda4ca2c64b",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac"
+    },
+    {
+      "kind": "invariant",
+      "left": "9c7a9540a3a9a5f4702723b80fac806192be77e47f059aebd94c5bba31f040d7",
+      "right": "eb0699af6295f704edcb2bb136490b58def3085825b9c39eaeb78186881c6b71",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c"
+    },
+    {
+      "kind": "invariant",
+      "left": "a260640dc7170fb2510ad1ad9effb7cb9267b929d8165d46fe5641e73d6c48ea",
+      "right": "167abc35576feb691111d3292d1b00ca4fd0e082c619844e4864b6febd675426",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c"
+    },
+    {
+      "kind": "invariant",
+      "left": "e1c7e2882a3d8217f2734c66503d55add28458596211fa60ef5330c9529109e3",
+      "right": "3f093bc2c57f58e5d30561c27541c30f32b25a79b48aa426177557379e3c903c",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c"
+    },
+    {
+      "kind": "invariant",
+      "left": "6fcffbd5c1b028f04b62fd1396e6dea37334b8bc4bf209db26f272d412ac48ca",
+      "right": "70ed1a76e136ce31979a4ac36b06e514c2afd1b80520b2bcfcea84519e548edd",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a"
+    },
+    {
+      "kind": "invariant",
+      "left": "485efd53372bba3584a6c6e23a7d3b4a5ae24be1e177579d8ef000e089ffacbc",
+      "right": "119a01fa4f918af8c8fbcf4f9dcdfcc9ec9733efe2561cbf6726df8a04eb8be8",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a"
+    },
+    {
+      "kind": "invariant",
+      "left": "8e4c8e67073d73602b894e8154f630ed8d435bc90db2ae7bd5e82f358947f94a",
+      "right": "ce0af08019da948b0873dfd928368358296b3ccdb2d5b516c1db59796afe6658",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a"
+    },
+    {
+      "kind": "invariant",
+      "left": "1f84df3dafb18d6c3c06f6f5131880111c3874d66f258d0b82e171f4941a22ca",
+      "right": "a40b334f758517283ff2007f0bae2e4dbebb7cfffe9f41e79b8d805b881b3d6f",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351"
+    },
+    {
+      "kind": "invariant",
+      "left": "673f4c09644ac20d783167c33e1f3036a15b9edac77eee7e370f2efa1968a937",
+      "right": "e62b1ef71c00083c34244ce422f28f2ddb49b93f3c4b0f3be29fc50ee231fd2d",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351"
+    },
+    {
+      "kind": "invariant",
+      "left": "e56d00bb73e6cbea748e7340afad9864b0de5e6ed8133372b9eeec0c705a011a",
+      "right": "4921a65fe3cbe76cb0ef8b938784446a60e1e9805a520f974193f479facdc6d3",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351"
+    },
+    {
+      "kind": "invariant",
+      "left": "a05690d90a4ec6ea6042ae1e15d7cb0fabef57ce9656d62179551f95ffdbaa46",
+      "right": "0bec8a6c0b0aa32bc333eaca332912e64752ba131afa860082ac2f54d2e76ce0",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259"
+    },
+    {
+      "kind": "invariant",
+      "left": "3866a87ac414c45a533c77fdc470b360c5051da9e43b8efac5d1c57d20db6399",
+      "right": "bba22a6a785f10fefe9db81d42a1b454b87f4956a06700c6841cb2102a04956c",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259"
+    },
+    {
+      "kind": "invariant",
+      "left": "46c6ebcdefac0894e695526d3767682f90882cf20397cc65efe660464112856c",
+      "right": "9c73774fec6fd3677abdc9f0ae7f777798105409a53b8707bb9e7045cd0022ae",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259"
+    },
+    {
+      "kind": "invariant",
+      "left": "684d8977f8b701609d4e5a9a7282b39ab96f6114951bc1f1dfb0046acb10b31b",
+      "right": "709913348690ee9a27a886b7ee699b7877173f19dcd8ff77d7f2a223a6a1eafe",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d"
+    },
+    {
+      "kind": "invariant",
+      "left": "e84452c1cbd789e6fcf22e31e838af78cd84d64f1a4ec9c295b7330f8158d283",
+      "right": "f53cf0343dd4ea7da4d3e4823314c5ee4a9441791cb547441c32d59f283f5647",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d"
+    },
+    {
+      "kind": "invariant",
+      "left": "4fe812fc2ab272780dcf8d1d0682637ef516baa32b11cacdfb0fea8f4fc4e7a3",
+      "right": "b3b14420763ffa0bfeff2e9268a7e17af7ec841b90e47d847e31a51beca8112e",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d"
+    },
+    {
+      "kind": "invariant",
+      "left": "4d47fe6ae24152fb10a33025d3228260b1eba308f74ac1c55ba49119bf1bd027",
+      "right": "87ef4652e43d8e055aee432465fea9bb44d2c281f30cfa532f1de279d1338711",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420"
+    },
+    {
+      "kind": "invariant",
+      "left": "3560971df7829882b3ecd337508fd671d67b98452ddbfa024c7b0ea4b2f84a96",
+      "right": "e17ba01782d4135a91abd6125dc83acafe0a47e4507d1d83b3fcac671761b7e0",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420"
+    },
+    {
+      "kind": "invariant",
+      "left": "22495a0c8cf207dd1e73e35bb4e405d9a6d31084069b7a6b4dfa86ce5125d3a3",
+      "right": "5f34e2cac3be3d9e969c1e917d918d7501786c739257c28757b9d5612ddcc856",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420"
+    },
+    {
+      "kind": "invariant",
+      "left": "3269454dfdba30adcfdd32028e3c3bf81b41174bc6972d950dfbce35e2f624db",
+      "right": "6b6af16ecbb481b199ad82ecb76855d2b5155915377af08c7ea825746385150e",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa"
+    },
+    {
+      "kind": "invariant",
+      "left": "eab9a23ca3b4e55439726bb6ca0147459b7ccda9f14c6135c19b38a386661923",
+      "right": "23d519a843c89ae873c6803fb182460e7d34dd410bb435e2b1eb6d4e5a46366e",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa"
+    },
+    {
+      "kind": "invariant",
+      "left": "9d7e9cd6218dce226043502c0ed26c3e79b5212fb6de391276fc48d09d6907cf",
+      "right": "1f5e3bc277a7145bd19a32a8be3954d74835fab1bed6a21ef780951db153fa31",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa"
+    },
+    {
+      "kind": "invariant",
+      "left": "ce25710c1d37dbf562dc1039844e3c1440c4db6109183d8dbd9a6dc9ad7f89f3",
+      "right": "88c4f02a61f035d6e916dc485999ba898980cd7739f38285b413c183218ee92a",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2"
+    },
+    {
+      "kind": "invariant",
+      "left": "df394a0a26da418242d1f7150e6fc295480644a08c6cee0e1bd514024886c9b1",
+      "right": "5460fe9ca4012e06f88117bded2a4d38045968e117d4f8e42cf639846c731172",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2"
+    },
+    {
+      "kind": "invariant",
+      "left": "ddae4132453445ac43e76733335229f5094013c1009c9accce86d2df8188a0bf",
+      "right": "5af80d5aa01a28d2b43fc52eaaf10bc61f492a163679d1143c18897ae9d249dc",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2"
+    },
+    {
+      "kind": "invariant",
+      "left": "4d3622e5062a245a17d9ea6b0561a2603f44e7ef721dea4068f373848b5cfc0b",
+      "right": "6d4cf0bfa92fb99a415e81f74f2ec4258068faa20b3795fff5c2d98b6b82119f",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6"
+    },
+    {
+      "kind": "invariant",
+      "left": "944581b361bec26a953662fe29639edab36d5f61fb0b045356be9de614924dcb",
+      "right": "40c121f020e1510a0278edfeff56896c114f92276da0f89d9a5d2a0112a410b2",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6"
+    },
+    {
+      "kind": "invariant",
+      "left": "8e206e0140a608a32b33d4d2a9af0398312ebfdbd36f50df31fb0d2bd102b6ec",
+      "right": "a14f42fc6afd6c752d09048789c5efb996e92721b90c598d7a0a5d65388cc258",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6"
+    },
+    {
+      "kind": "invariant",
+      "left": "baa748d52623b428301288ce60a1ed02f8b9141578336e022cd9997ee78a93fe",
+      "right": "56abe62ec24f8b77e21e55f7d9b8e206c3806f8cd88485beb8fafc44d87eb524",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1"
+    },
+    {
+      "kind": "invariant",
+      "left": "1e59a4ad1ce6a5883e468318b30ccc502f2190ce3ab2f1a93455ddc9a970f55c",
+      "right": "fbea3b999e5bf9ef461751508c82e7b44a982ae6a2d7aa2ae4fad0c7d2381435",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1"
+    },
+    {
+      "kind": "invariant",
+      "left": "e8bb83d76eb8ca9178ab0d10de0e249bdd56473ceacfc6face9042975074b8f3",
+      "right": "c108d756c310c58992ba55574a51a15148407afc8afb4eb3a774757b13585f35",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1"
+    },
+    {
+      "kind": "invariant",
+      "left": "e3e1c135a706b2fba1b510883f8e7ed228023391ff16b8ed07379cee4ef83aef",
+      "right": "9093b271521ac5a8961419117ddddd4062e400a5183f69f9ad18f6d1a5f867f4",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5"
+    },
+    {
+      "kind": "invariant",
+      "left": "5a7246944ad1b84fac00bf73744fb94636fa8a73afb32ae12ecd5fa6e3636e97",
+      "right": "a62de84974b8d21c76fba4c09a41735642597634eca8d9b3ac6cff964401c9d3",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5"
+    },
+    {
+      "kind": "invariant",
+      "left": "ba35712558eea34a8851f581fc8f5d1417477882cc589fd84f332c8e6f45ecfb",
+      "right": "bb226de67945de7ecca2a5e5cdebd52501e8dbd1feaef45fc55e0ea2ab4ca9d8",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "2d7007ad14da8ca2ba184d5ea4a64f7e7976d63a3d84351c70be59ccde4b3ddc",
+      "right": "a29090e9ae7ee68245675516e6116da136a26e60ef46a9b8c97e1ab5d98fd4e2",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "c2ea9a6f50875f3e91f4e64cbc76c455996ff575f4f72892123c79b347f935cf",
+      "right": "4e859db7e11870574242d38b4240c9b83d1eafb117c272f5cfb9faeacb455032",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "43bc8168406d5ab0775edca92fdf98354ced0dbd868d24cb3754ffb640c8afee",
+      "right": "de9e7ea940d3b152479619642545ee73f050d3a31c58ca0d07dc5f289c6a1993",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "0f19bf171249fea97158913b3deb2a58d47657cd2f837b4d3f0dc503ac9bf5b7",
+      "right": "c96cd27989a9ecb2b6b2675e7c813690fc358686abfcc39bc6b2b225f978d66b",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "892fc68f73e680c11f7e00fb297e831e10e2d5f991bd2b03bbdf7180e0f91451",
+      "right": "c79869b7784082236a9d7a250c26c4cd2c4676925c4f77fb869e94c50f90af27",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "81ad656a178336217eefd73f8c94940b366899b64c80f8ca4551ba4ca2ad7d68",
+      "right": "6c350aa524bc6d9c658bccf6db769281a2ec82a4a96dd4e3219f3305f952ef2c",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "57868a5134760c4e5ee2575df441b5707e1503e35c5eb64fee9e7e74a7db90fe",
+      "right": "38dc35c433c0595d1ab051f9abec4c3a573cf88abc99bb3a6ed41cff07646d38",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "10ef8e6a589270000ed5cc03c6e87fd2d72a30063f70ca93c7e7335d251db2df",
+      "right": "386f90cbcc982ecb6395080169cabfd3cb605316405452090d93ec36faf212ab",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "b7f302a0268e7a6a7488425a07777bcc976d62d04026a33ba8b6991dce1d5d62",
+      "right": "fde19063f1a11c82b19ed49a658023bba9d14c56aaaf2aef1e59be01776ec384",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "87d3017b20076346c2bdc6dd8ca54b7d339f9cc88e76df3d42a5e041d4456b01",
+      "right": "8a117c94641d491da7ad52fdd4906b5a642e4a6776859d2d6964d8f1d7a464cf",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "bb18f381ecbe8bfd02620eaa4d5f3fbbde75a699d7ae20a9a193628130e6718a",
+      "right": "707e0e118dff38ed90404583edafdac7d3ccb898bdcee36bb77aa6d0b54102b7",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "2f360f8a2efcb24120d0adba944e4679cf4d37c0630026c5831e375cd5a2dd66",
+      "right": "26c9a2b070c59d0242c04cb06afdf82818f67b711a8a5bfd8f0e24134f9da06b",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "e3191fbf82291ad1f27b4f1d801acf09c168b55f6353103b8dd7ae66501ed525",
+      "right": "a092116742226f4d2ab3d25acbe1622f34962569422d46c73a579bddbf272bf8",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "7d41c585f401dddc03ab1d3563b457195df78a809dafcbb16464e6bf50420dbf",
+      "right": "c3ca31944b20a69e88694d27db1aa4761849f63542ae9466c71fff8e770d5520",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "f89f3f86ee7f68bdb9e746e862d7b55c3e68b81214a8362d1bea9f18503848d1",
+      "right": "a39e0b91ff7066fa8e1ba30a8fa68db9d02a2424d81e9a4c50c0aa0fbac2afca",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "4801accb17c7766b99a621605ca1135021f7b2e7876967ef55e886f89d0101f4",
+      "right": "3a92d4aeb3ad447548c467bf3ca4e66b46d6f89842d891b80358d4e28bb6d5d5",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "39212b67ad251a5102bef67b4e6e9130e66e906967789c98686f07e78645a7d2",
+      "right": "92639813bbc7f87215b56856f62bbb38cffb0423eb19c5e76403b0d0d4c79e17",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "8908f6a07fc43560bdd67abcaac6b47a5326fe91d9cbde434f34bc047fd27cd8",
+      "right": "da790cbd0755550b8636796ae9b7a469dfb90476d2af2ac6c37790b5e77fae7b",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "4ae0a85909165cf2e552e8f1c9dcb25eeacce543eb039be09f856d9b851a380a",
+      "right": "247a677e79abb47812016ac19c6a95662bb5820b19b8816e36c5dbc6fadb91b0",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "e1c7e2882a3d8217f2734c66503d55add28458596211fa60ef5330c9529109e3",
+      "right": "19b8ee800c9e7e6f49a1d00b95585603c74e3581f800cf806936f107674e8cf5",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "8e4c8e67073d73602b894e8154f630ed8d435bc90db2ae7bd5e82f358947f94a",
+      "right": "4aa7c8db9d36e07ebf136fb22834ca025c04e4d7886a2ba87669c4057c07a9e5",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "e56d00bb73e6cbea748e7340afad9864b0de5e6ed8133372b9eeec0c705a011a",
+      "right": "dd0713a08096ab552c3ec8612b9ba60181f3dfd90470d79754e9e5660c62351b",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "46c6ebcdefac0894e695526d3767682f90882cf20397cc65efe660464112856c",
+      "right": "c04e15381df8a97be347d568d093cc7b7787e0f8f358d2c00b77d0bd96d1a3fb",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "4fe812fc2ab272780dcf8d1d0682637ef516baa32b11cacdfb0fea8f4fc4e7a3",
+      "right": "ba3700ac20b5ceb36bd7df8373e3e76e4e320691e9d7b961dce8deef0f75291b",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "22495a0c8cf207dd1e73e35bb4e405d9a6d31084069b7a6b4dfa86ce5125d3a3",
+      "right": "d5f165802d7d7b40d7f7aa18a6e7d83d9b71f8162c9c64cdc8fcd444ad68ab40",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "9d7e9cd6218dce226043502c0ed26c3e79b5212fb6de391276fc48d09d6907cf",
+      "right": "975efd431c171ddb245c293d77090f260738a1ca2450e8160043c9a2ed0a5ce3",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "ddae4132453445ac43e76733335229f5094013c1009c9accce86d2df8188a0bf",
+      "right": "62ac0d2361d11a60706e756a17d8107c27dab5a129e6791d9ab132238167af37",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "8e206e0140a608a32b33d4d2a9af0398312ebfdbd36f50df31fb0d2bd102b6ec",
+      "right": "345d52b0a403fcced76695c287a6c754e60b11e42f9644cb5ee9f1b3c0e2befd",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "e8bb83d76eb8ca9178ab0d10de0e249bdd56473ceacfc6face9042975074b8f3",
+      "right": "651aa9f91f690e7b30daab8264f7d6f66f541c6da5d6477abbe9b54979ab57fb",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1"
+    },
+    {
+      "kind": "changed_relation",
+      "left": "ba35712558eea34a8851f581fc8f5d1417477882cc589fd84f332c8e6f45ecfb",
+      "right": "84a2a0905d282e7fb3f01a0979e596cda885e3489f06bc4c0d0bab5936f799e8",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5"
+    }
+  ],
+  "teacher_targets": [
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cheese",
+        "door",
+        "roof"
+      ],
+      "record_id": "f6586f8d8972282d1f60b7775fbf9f0ca986235f9d314ba5cda8b63a7ed16730",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": [
+        "cheese",
+        "door",
+        "roof"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "22fd46d29d9cd983cd9acd81d5032e7e13894555a9ffeebedfbaee8ce090dc50",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "2d7007ad14da8ca2ba184d5ea4a64f7e7976d63a3d84351c70be59ccde4b3ddc",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "door",
+        "house"
+      ],
+      "record_id": "3541902d5412627029268a9b21f013dfafe2e62d9d008fc459aad8d4b3544f90",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": [
+        "door",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "507a591ca9939148b2ee8e8902090fb560d5509930edf648dca046747d9041c3",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "via:door",
+      "record_id": "c2ea9a6f50875f3e91f4e64cbc76c455996ff575f4f72892123c79b347f935cf",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": "via:door"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cheese",
+        "house"
+      ],
+      "record_id": "954a40439a080b3ea412097efa71359de04c90f71ccb226cd0071289113c248c",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": [
+        "cheese",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "cheese",
+      "record_id": "68acb53902766a5d11aabd3eff8bc92f9f0a369982d4bdc76e22ace6668dc0f2",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": "cheese"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "absent",
+      "record_id": "43bc8168406d5ab0775edca92fdf98354ced0dbd868d24cb3754ffb640c8afee",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cabin",
+        "house"
+      ],
+      "record_id": "8a7f2e803d2d2647946be565512a332b5c87d42859296d373492f4b4c49f65ba",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": [
+        "cabin",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "b60eedb3013122e935aeed0fd70ef9f096a7e88250f37b40fe125635d7524ef0",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "0f19bf171249fea97158913b3deb2a58d47657cd2f837b4d3f0dc503ac9bf5b7",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": [
+        "lettuce",
+        "roof"
+      ],
+      "record_id": "cfb1ca3f3c62a15335397e445f18b1a615025c760013c8b54e8bdcaac9a724a8",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": [
+        "lettuce",
+        "roof"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "78e8f8263fbe89b13790689725cbb07481862ca6bf8cd794a8757e710a448590",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "via:lettuce",
+      "record_id": "892fc68f73e680c11f7e00fb297e831e10e2d5f991bd2b03bbdf7180e0f91451",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": "via:lettuce"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": [
+        "bicycle",
+        "house"
+      ],
+      "record_id": "384625cdf99b63e0df8a91506b2de1b1d1d9255ad88bc0bc1cc4a25f58be3263",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": [
+        "bicycle",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "bicycle",
+      "record_id": "0d7b642ff88a4b7cbedef05fa7ada01dec28de440a8a3a7aa246f9e03456f31e",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": "bicycle"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "81ad656a178336217eefd73f8c94940b366899b64c80f8ca4551ba4ca2ad7d68",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "roof",
+        "walls",
+        "window"
+      ],
+      "record_id": "bfb5b467bae865e1885592f2cf8dfa0f252b189673803105ba284de86caffd1c",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": [
+        "roof",
+        "walls",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "ddb20e26ca4f93cafbf48b94a2242586cee0cfc65c44f416e93f484e85832c61",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "57868a5134760c4e5ee2575df441b5707e1503e35c5eb64fee9e7e74a7db90fe",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "knob",
+        "roof",
+        "window"
+      ],
+      "record_id": "2f2a47a1bcbadd9c78b26d2d6883c2171949609c11ac0d9aacc1be8077b1dc10",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": [
+        "knob",
+        "roof",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "f368e8b03c8184994300c042b444973b97bce9de55b61b8cb4a9e0d3f59a8f4b",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:bicycle",
+      "record_id": "10ef8e6a589270000ed5cc03c6e87fd2d72a30063f70ca93c7e7335d251db2df",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": "via:bicycle"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "door",
+        "frame"
+      ],
+      "record_id": "a7960a34e12b63ea8fa0cdcdc78396e3bf0148ebcf27982c66d8dbf5124faf1b",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": [
+        "door",
+        "frame"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "9cb23df24ab25bda71a74f3e2ba758d9c348f91180dab1f2147100b8271f8348",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "b7f302a0268e7a6a7488425a07777bcc976d62d04026a33ba8b6991dce1d5d62",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "panel",
+        "wheel",
+        "window"
+      ],
+      "record_id": "5dfafd234bd5e2bdc0038523fb5032f728d1fa2dbeb5175a464274d149cb41b2",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": [
+        "panel",
+        "wheel",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "7bd9be939b42ec4075e161b7f916f758102bc84e4fe5e79f4b8c9c9627bb2fd6",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "87d3017b20076346c2bdc6dd8ca54b7d339f9cc88e76df3d42a5e041d4456b01",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "cabin",
+        "platform"
+      ],
+      "record_id": "f312b05986a631b24db26df8452660c2bb2cdb7ab073d75217a90e0fe45e2a97",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": [
+        "cabin",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "302e0fe586241ec1b6c2c6b97dbebd55c098ac4e29d1cf7331040f0db3910c45",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:knob",
+      "record_id": "bb18f381ecbe8bfd02620eaa4d5f3fbbde75a699d7ae20a9a193628130e6718a",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": "via:knob"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "handle",
+        "panel",
+        "wheel"
+      ],
+      "record_id": "373276fe8fcfdd88f796072f2c900af428c50f4e7174216af9595efee48dcb10",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": [
+        "handle",
+        "panel",
+        "wheel"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "13f2daf81fb4905afa0b39443e2c0d351baab7880adf1c6bf0573c7504487616",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "2f360f8a2efcb24120d0adba944e4679cf4d37c0630026c5831e375cd5a2dd66",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "cart",
+        "platform"
+      ],
+      "record_id": "e8e9415be8220dd782f20f222fab72c785d60d29a01120dfbd8a229aa67b040e",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": [
+        "cart",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "fc4b1b10e128095d82f4ae4163f59f81b9062cfcbd7922043775a9ab42c9b314",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "e3191fbf82291ad1f27b4f1d801acf09c168b55f6353103b8dd7ae66501ed525",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "frame",
+        "handle",
+        "rim"
+      ],
+      "record_id": "51bf630fb9eaba9db1b8005dd182b1f429c39bbaee08942a02a32f965c6cd978",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": [
+        "frame",
+        "handle",
+        "rim"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "e264ebfb8d51e673a6a1d08917afd670464c97f8b3b2b2d80108470c3eaefa65",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:platform",
+      "record_id": "7d41c585f401dddc03ab1d3563b457195df78a809dafcbb16464e6bf50420dbf",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": "via:platform"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": [
+        "cart",
+        "pedals",
+        "platform"
+      ],
+      "record_id": "79cd8d0e7303b01ce078b0b4e07fb034b83e0ac51f5ad5aa3c6aaeea8a22e67b",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": [
+        "cart",
+        "pedals",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "none",
+      "record_id": "0ebc2ba7593013d7918e5fb08b03737028e3dc2a8fcd3ce259a2c2468098e31d",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "absent",
+      "record_id": "f89f3f86ee7f68bdb9e746e862d7b55c3e68b81214a8362d1bea9f18503848d1",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": [
+        "handle",
+        "wheel"
+      ],
+      "record_id": "25ff5937d14c1c719fe290bf94a1b622b5a58b3b14b6f6fe6ab7578f9a97aada",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": [
+        "handle",
+        "wheel"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "none",
+      "record_id": "9c63437b4b4483a0193678ab55a585de45b265f47a5b11de80ddc312f2ba96f3",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "direct",
+      "record_id": "4801accb17c7766b99a621605ca1135021f7b2e7876967ef55e886f89d0101f4",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "frame",
+        "handle"
+      ],
+      "record_id": "ee5d5dc011fb6917535cdb0d4e4f937b2778cf3b5171580450ce7aa6b351e870",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": [
+        "frame",
+        "handle"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "7445390274231b266c8fbf50bbc36f8a6b40ce0b449c742e718b353fd5a00d3f",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:frame",
+      "record_id": "39212b67ad251a5102bef67b4e6e9130e66e906967789c98686f07e78645a7d2",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": "via:frame"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "handle",
+        "lamp",
+        "shade"
+      ],
+      "record_id": "7d8c6d8a6995b230834801871a9d4c54e462b9cbe9a4b83e026fb273e9d7468a",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": [
+        "handle",
+        "lamp",
+        "shade"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "lamp",
+      "record_id": "4223210da38c28e1a3661962d519698c720ade9020c29c072755559763a28fa5",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": "lamp"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "8908f6a07fc43560bdd67abcaac6b47a5326fe91d9cbde434f34bc047fd27cd8",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "handle"
+      ],
+      "record_id": "0e317f57832b76baead7812df09ea6ac07aafe37f8c01950c6eb287471c081f2",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": [
+        "bulb",
+        "handle"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "cd23f6efe2bbdc06987e6ff8cce686ed8c27310243f731f70ff5696ee8fbdd2f",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "4ae0a85909165cf2e552e8f1c9dcb25eeacce543eb039be09f856d9b851a380a",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "rim",
+        "spokes"
+      ],
+      "record_id": "9c7a9540a3a9a5f4702723b80fac806192be77e47f059aebd94c5bba31f040d7",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": [
+        "bulb",
+        "rim",
+        "spokes"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "a260640dc7170fb2510ad1ad9effb7cb9267b929d8165d46fe5641e73d6c48ea",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:hub",
+      "record_id": "e1c7e2882a3d8217f2734c66503d55add28458596211fa60ef5330c9529109e3",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": "via:hub"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "hub"
+      ],
+      "record_id": "6fcffbd5c1b028f04b62fd1396e6dea37334b8bc4bf209db26f272d412ac48ca",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": [
+        "bulb",
+        "hub"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "485efd53372bba3584a6c6e23a7d3b4a5ae24be1e177579d8ef000e089ffacbc",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "8e4c8e67073d73602b894e8154f630ed8d435bc90db2ae7bd5e82f358947f94a",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "base",
+        "glass",
+        "shade"
+      ],
+      "record_id": "1f84df3dafb18d6c3c06f6f5131880111c3874d66f258d0b82e171f4941a22ca",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": [
+        "base",
+        "glass",
+        "shade"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "673f4c09644ac20d783167c33e1f3036a15b9edac77eee7e370f2efa1968a937",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "e56d00bb73e6cbea748e7340afad9864b0de5e6ed8133372b9eeec0c705a011a",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "cup",
+        "glass",
+        "lamp"
+      ],
+      "record_id": "a05690d90a4ec6ea6042ae1e15d7cb0fabef57ce9656d62179551f95ffdbaa46",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": [
+        "cup",
+        "glass",
+        "lamp"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "3866a87ac414c45a533c77fdc470b360c5051da9e43b8efac5d1c57d20db6399",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:cup",
+      "record_id": "46c6ebcdefac0894e695526d3767682f90882cf20397cc65efe660464112856c",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": "via:cup"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "glass",
+        "lamp"
+      ],
+      "record_id": "684d8977f8b701609d4e5a9a7282b39ab96f6114951bc1f1dfb0046acb10b31b",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": [
+        "bulb",
+        "glass",
+        "lamp"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "e84452c1cbd789e6fcf22e31e838af78cd84d64f1a4ec9c295b7330f8158d283",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "4fe812fc2ab272780dcf8d1d0682637ef516baa32b11cacdfb0fea8f4fc4e7a3",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": [
+        "cup",
+        "lamp",
+        "sandwich"
+      ],
+      "record_id": "4d47fe6ae24152fb10a33025d3228260b1eba308f74ac1c55ba49119bf1bd027",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": [
+        "cup",
+        "lamp",
+        "sandwich"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "none",
+      "record_id": "3560971df7829882b3ecd337508fd671d67b98452ddbfa024c7b0ea4b2f84a96",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "direct",
+      "record_id": "22495a0c8cf207dd1e73e35bb4e405d9a6d31084069b7a6b4dfa86ce5125d3a3",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": [
+        "bowl",
+        "filament",
+        "glass"
+      ],
+      "record_id": "3269454dfdba30adcfdd32028e3c3bf81b41174bc6972d950dfbce35e2f624db",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": [
+        "bowl",
+        "filament",
+        "glass"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "none",
+      "record_id": "eab9a23ca3b4e55439726bb6ca0147459b7ccda9f14c6135c19b38a386661923",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "via:bulb",
+      "record_id": "9d7e9cd6218dce226043502c0ed26c3e79b5212fb6de391276fc48d09d6907cf",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": "via:bulb"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bread",
+        "bulb",
+        "filling"
+      ],
+      "record_id": "ce25710c1d37dbf562dc1039844e3c1440c4db6109183d8dbd9a6dc9ad7f89f3",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": [
+        "bread",
+        "bulb",
+        "filling"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "df394a0a26da418242d1f7150e6fc295480644a08c6cee0e1bd514024886c9b1",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "absent",
+      "record_id": "ddae4132453445ac43e76733335229f5094013c1009c9accce86d2df8188a0bf",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bread",
+        "cup",
+        "filament"
+      ],
+      "record_id": "4d3622e5062a245a17d9ea6b0561a2603f44e7ef721dea4068f373848b5cfc0b",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": [
+        "bread",
+        "cup",
+        "filament"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "944581b361bec26a953662fe29639edab36d5f61fb0b045356be9de614924dcb",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "direct",
+      "record_id": "8e206e0140a608a32b33d4d2a9af0398312ebfdbd36f50df31fb0d2bd102b6ec",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bowl",
+        "filling"
+      ],
+      "record_id": "baa748d52623b428301288ce60a1ed02f8b9141578336e022cd9997ee78a93fe",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": [
+        "bowl",
+        "filling"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "1e59a4ad1ce6a5883e468318b30ccc502f2190ce3ab2f1a93455ddc9a970f55c",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "via:sandwich",
+      "record_id": "e8bb83d76eb8ca9178ab0d10de0e249bdd56473ceacfc6face9042975074b8f3",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": "via:sandwich"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bowl",
+        "bread",
+        "cup"
+      ],
+      "record_id": "e3e1c135a706b2fba1b510883f8e7ed228023391ff16b8ed07379cee4ef83aef",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": [
+        "bowl",
+        "bread",
+        "cup"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "filament",
+      "record_id": "5a7246944ad1b84fac00bf73744fb94636fa8a73afb32ae12ecd5fa6e3636e97",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": "filament"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "absent",
+      "record_id": "ba35712558eea34a8851f581fc8f5d1417477882cc589fd84f332c8e6f45ecfb",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cheese",
+        "door",
+        "roof"
+      ],
+      "record_id": "5fefdf8d284f3fd9fa5c197e4ddec04a6d4a34e55eeb8d94c640ab294c3d98e0",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": [
+        "cheese",
+        "door",
+        "roof"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "a8aa1e7fca0939ba926893c05f698acc55ae4a9834b77e32f37da88a1e81b9cb",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "6465d6f33da4daa039c755fbd78b09ad7e93c6ed5aa1f0880c4839e4a99669c9",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "door",
+        "house"
+      ],
+      "record_id": "d8a5efe6361fa88794e5f577aa483b7c220a2e663934ebb58fa7c84923a87c33",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": [
+        "door",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "929ff25d14680d8dfdbc6384828098fd667433d54b1416c1312fd3e93b699ab9",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "via:door",
+      "record_id": "5e393c889428ee6057369162e030cb80e1a24b018be828843268bb372b9f62a3",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": "via:door"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cheese",
+        "house"
+      ],
+      "record_id": "86c178c26dc294198c5389e23f28f73cac97850d02a4701e8b7911e2b27ff3a0",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": [
+        "cheese",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "cheese",
+      "record_id": "eb031b6070e348dae5ba5206426cd2baa67b659fe37886a8beb32b5349867545",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": "cheese"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "absent",
+      "record_id": "b2f621368955f51195a816c3f484f88e16153a2bd48e1e14bcf1daf42d3a7b53",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": [
+        "cabin",
+        "house"
+      ],
+      "record_id": "9bc5dc164f492b20ad650e47d1a39575ea0285ad057028cf2bb0605c948688d6",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": [
+        "cabin",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "none",
+      "record_id": "d6ac3ee4d8a1966dfb5953025111381205781051eaf464ebe7050cbe66e07137",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "e629db29dc732ac8d599038c7140e2fc2bbe6ccb9aaabed6d0723c6817b6ef20",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": [
+        "lettuce",
+        "roof"
+      ],
+      "record_id": "2e78345824ad8dad61f5fc052a71b3fcc3c562f79c54cbfd235c08b2a139eaad",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": [
+        "lettuce",
+        "roof"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "e7410285e2332338b8183c23da5fd2bcb90a8eb54c61f391e7d0d0c71c048e8a",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "via:lettuce",
+      "record_id": "3c2f1577acff4aca0f62e7c1e073541c88643bbf3dbfb4b1992e9ecbbc299d0f",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": "via:lettuce"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": [
+        "bicycle",
+        "house"
+      ],
+      "record_id": "381139129f57bf03b740c2cc3353ffe86db18d15ad672e0af3e2fbfdd072aed3",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": [
+        "bicycle",
+        "house"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "bicycle",
+      "record_id": "681dcce3784a95066227f579dcd190b361ee58c79e106b65f1726d8bd0177ec9",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": "bicycle"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "8ebcd5826ddafad22d58d1216c3061b8240fee651f1793ece218daedbb334aa5",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "roof",
+        "walls",
+        "window"
+      ],
+      "record_id": "42da6439333c5098c3769e75a4cdee28eb58ffe29b7fea28f045831349ec4327",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": [
+        "roof",
+        "walls",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "6858d0261fcc1db21bb5b06e1227494a4fe7ef3ed6ee26c4a7bc4df17328c452",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "abf1d4cdc97fea2a8d3fc5eebb86e1170279aa41d4677dff219e75377dcbfbd7",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "knob",
+        "roof",
+        "window"
+      ],
+      "record_id": "3e4b79a2a582366fef864933cceb308ae527a047990f2f646f88a091654d7c47",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": [
+        "knob",
+        "roof",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "7412f61a2bb15fae0f31e8eea1983d2dc93f2c5d0dd829bf2cde5b7c097a4a0e",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:bicycle",
+      "record_id": "96f7193a23ec7e05c73741b0decbc40f0882c90765105ad3db6c63038cc7eb4f",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": "via:bicycle"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "door",
+        "frame"
+      ],
+      "record_id": "6f82b0b2d51ecb3f3c2f450a56cd36f54972a44a840b024afc1f6f93dc40fbb1",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": [
+        "door",
+        "frame"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "bb5c2ac64ef33e9f6d42ef49a83ea272ce5b19c1a470e1681f5adaa8f4c38f6a",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "5e1a41e663b70c160e9e813bc5b38bbd6e4fdb0cdecb4d1cb95174caef80f414",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "panel",
+        "wheel",
+        "window"
+      ],
+      "record_id": "b94e99480a3e19c915e7379b46b3f359ad3c022e387920c25079b391173d1b23",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": [
+        "panel",
+        "wheel",
+        "window"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "719e281e88d3cfd68feb0dc11759c95a08d6fd42a5506c94352e6e34493fd721",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "994773bccba7adbfeca00da3c4785e197a1ea16cfb70e68179543bcf5f6a486b",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "cabin",
+        "platform"
+      ],
+      "record_id": "9829cd9020b0ee9900511c89464c272c9f4ec826c826e47ab6067a88087ee4ea",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": [
+        "cabin",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "7d7596e4838fbae07399966bf9ccbb00f912ccfb0497abf3e9dc377d1888819b",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:knob",
+      "record_id": "53bca9cdfaeddb1d7cbfc1cbfbba2a7870a0518c09b19d22fe775e07c4eeedd3",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": "via:knob"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "handle",
+        "panel",
+        "wheel"
+      ],
+      "record_id": "fa0f5cc2a06bf5a27004d997c17d06235f61bbfec65db0c3d0bef46452fa1d6e",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": [
+        "handle",
+        "panel",
+        "wheel"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "dd2f7e151142b8c0e9903752da04d2d0999230d8cb4fceba31ce0a12d3a5d5f6",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "2e15a3b1b03b5c30a5ff12a2bd2fab10f40d0a4cfc044c13931021d35cca520b",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "cart",
+        "platform"
+      ],
+      "record_id": "bf2f75392f7b7b50514587a39eb447d3570bd776c829bb5902c1cc966d1f1fb5",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": [
+        "cart",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "f190ceaf5e2c8a4f6029ecc90bef2f70883ffb48c5847537a949131c57fa7ba6",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "c4e147dc836b6e42be8bd18d9ddf5f82cfa74461c9efb947c5ceb00ecfc38bec",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": [
+        "frame",
+        "handle",
+        "rim"
+      ],
+      "record_id": "fb21d0c28aa466491bc9c0e18824f0d199372efa749d0c3f21688ee3ebd1cb7f",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": [
+        "frame",
+        "handle",
+        "rim"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "none",
+      "record_id": "9a905aca5d7178160835e4410e62fd56d0ecbc9a9043619ad78490b9f6382a3d",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "via:platform",
+      "record_id": "2dc66d30ed7919be55f4d69cac9f5f756a98514c1d6622d35bdc0cccd15ffe52",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": "via:platform"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": [
+        "cart",
+        "pedals",
+        "platform"
+      ],
+      "record_id": "9905b3310f13650530590b42692ad6539190031eccca3e1e9dc9b25c1177f58f",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": [
+        "cart",
+        "pedals",
+        "platform"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "none",
+      "record_id": "348e1a2eef5b1efbfed8f92a4675d9d58a199039b91383a0de78f9ee5719c4fc",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "absent",
+      "record_id": "1f696221038d7de7aa0011620eea6f69f1ae5ed249e85fb8ae7f8ab175245293",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": [
+        "handle",
+        "wheel"
+      ],
+      "record_id": "f068f91d51d89d9c38e8749338bd74aea5a0917d386eedcc267eb5644b09dbe2",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": [
+        "handle",
+        "wheel"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "none",
+      "record_id": "9fed8c2bef0bb7373e026e5eb7bf6924e19b79793d272a83cfc4ade3fd190b1c",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "direct",
+      "record_id": "3354e675c3cd44db96c16e950a3b368351dd0c1a686b095ff0e2b2842ed4fbed",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "frame",
+        "handle"
+      ],
+      "record_id": "4763a91f2841449602079fed5dd5ee71c0f56687cfdfa3130ab42b5c478a770a",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": [
+        "frame",
+        "handle"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "dffd8f879f87b7b63c71903e28bf838192349c4e54b8cf05d9bd89bfe7a590e4",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:frame",
+      "record_id": "01c26bf3d84610a95776b7dc0bfbf5c5f2e4cec9bb7850e4b750c194e62ba5bc",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": "via:frame"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "handle",
+        "lamp",
+        "shade"
+      ],
+      "record_id": "f9f8f3c9f3ac7273255192fdaee22f5c0203a45eaf316b05dbc081e5f93b13e2",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": [
+        "handle",
+        "lamp",
+        "shade"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "lamp",
+      "record_id": "9fa9775293838e212be37de5536fbba9e2c45e270197f2cca23cd3ea4e613e79",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": "lamp"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "f85dfe0d27d101f0d73a4f4317c404a048f463b7df2ab5de2a2d8b724539a247",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "handle"
+      ],
+      "record_id": "29b7eebd22367210f9fb03df86214f5de23228236150bbfc0d281a342e00a646",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": [
+        "bulb",
+        "handle"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "de640e2cf16980d946ca8fb3538a0bda730d9bf44226a772753e204a9bfab59f",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "92dc790d41bca773ef47cff02ade51761eeb3c0a0af954415354cbda4ca2c64b",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "rim",
+        "spokes"
+      ],
+      "record_id": "eb0699af6295f704edcb2bb136490b58def3085825b9c39eaeb78186881c6b71",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": [
+        "bulb",
+        "rim",
+        "spokes"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "167abc35576feb691111d3292d1b00ca4fd0e082c619844e4864b6febd675426",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:hub",
+      "record_id": "3f093bc2c57f58e5d30561c27541c30f32b25a79b48aa426177557379e3c903c",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": "via:hub"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "hub"
+      ],
+      "record_id": "70ed1a76e136ce31979a4ac36b06e514c2afd1b80520b2bcfcea84519e548edd",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": [
+        "bulb",
+        "hub"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "119a01fa4f918af8c8fbcf4f9dcdfcc9ec9733efe2561cbf6726df8a04eb8be8",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "ce0af08019da948b0873dfd928368358296b3ccdb2d5b516c1db59796afe6658",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "base",
+        "glass",
+        "shade"
+      ],
+      "record_id": "a40b334f758517283ff2007f0bae2e4dbebb7cfffe9f41e79b8d805b881b3d6f",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": [
+        "base",
+        "glass",
+        "shade"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "e62b1ef71c00083c34244ce422f28f2ddb49b93f3c4b0f3be29fc50ee231fd2d",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "4921a65fe3cbe76cb0ef8b938784446a60e1e9805a520f974193f479facdc6d3",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "cup",
+        "glass",
+        "lamp"
+      ],
+      "record_id": "0bec8a6c0b0aa32bc333eaca332912e64752ba131afa860082ac2f54d2e76ce0",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": [
+        "cup",
+        "glass",
+        "lamp"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "bba22a6a785f10fefe9db81d42a1b454b87f4956a06700c6841cb2102a04956c",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "via:cup",
+      "record_id": "9c73774fec6fd3677abdc9f0ae7f777798105409a53b8707bb9e7045cd0022ae",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": "via:cup"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": [
+        "bulb",
+        "glass",
+        "lamp"
+      ],
+      "record_id": "709913348690ee9a27a886b7ee699b7877173f19dcd8ff77d7f2a223a6a1eafe",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": [
+        "bulb",
+        "glass",
+        "lamp"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "none",
+      "record_id": "f53cf0343dd4ea7da4d3e4823314c5ee4a9441791cb547441c32d59f283f5647",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "b3b14420763ffa0bfeff2e9268a7e17af7ec841b90e47d847e31a51beca8112e",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": [
+        "cup",
+        "lamp",
+        "sandwich"
+      ],
+      "record_id": "87ef4652e43d8e055aee432465fea9bb44d2c281f30cfa532f1de279d1338711",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": [
+        "cup",
+        "lamp",
+        "sandwich"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "none",
+      "record_id": "e17ba01782d4135a91abd6125dc83acafe0a47e4507d1d83b3fcac671761b7e0",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "direct",
+      "record_id": "5f34e2cac3be3d9e969c1e917d918d7501786c739257c28757b9d5612ddcc856",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": [
+        "bowl",
+        "filament",
+        "glass"
+      ],
+      "record_id": "6b6af16ecbb481b199ad82ecb76855d2b5155915377af08c7ea825746385150e",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": [
+        "bowl",
+        "filament",
+        "glass"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "none",
+      "record_id": "23d519a843c89ae873c6803fb182460e7d34dd410bb435e2b1eb6d4e5a46366e",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "via:bulb",
+      "record_id": "1f5e3bc277a7145bd19a32a8be3954d74835fab1bed6a21ef780951db153fa31",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": "via:bulb"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bread",
+        "bulb",
+        "filling"
+      ],
+      "record_id": "88c4f02a61f035d6e916dc485999ba898980cd7739f38285b413c183218ee92a",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": [
+        "bread",
+        "bulb",
+        "filling"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "5460fe9ca4012e06f88117bded2a4d38045968e117d4f8e42cf639846c731172",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "absent",
+      "record_id": "5af80d5aa01a28d2b43fc52eaaf10bc61f492a163679d1143c18897ae9d249dc",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bread",
+        "cup",
+        "filament"
+      ],
+      "record_id": "6d4cf0bfa92fb99a415e81f74f2ec4258068faa20b3795fff5c2d98b6b82119f",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": [
+        "bread",
+        "cup",
+        "filament"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "40c121f020e1510a0278edfeff56896c114f92276da0f89d9a5d2a0112a410b2",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "direct",
+      "record_id": "a14f42fc6afd6c752d09048789c5efb996e92721b90c598d7a0a5d65388cc258",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bowl",
+        "filling"
+      ],
+      "record_id": "56abe62ec24f8b77e21e55f7d9b8e206c3806f8cd88485beb8fafc44d87eb524",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": [
+        "bowl",
+        "filling"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "none",
+      "record_id": "fbea3b999e5bf9ef461751508c82e7b44a982ae6a2d7aa2ae4fad0c7d2381435",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": "none"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "via:sandwich",
+      "record_id": "c108d756c310c58992ba55574a51a15148407afc8afb4eb3a774757b13585f35",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": "via:sandwich"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": [
+        "bowl",
+        "bread",
+        "cup"
+      ],
+      "record_id": "9093b271521ac5a8961419117ddddd4062e400a5183f69f9ad18f6d1a5f867f4",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": [
+        "bowl",
+        "bread",
+        "cup"
+      ]
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "filament",
+      "record_id": "a62de84974b8d21c76fba4c09a41735642597634eca8d9b3ac6cff964401c9d3",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": "filament"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "absent",
+      "record_id": "bb226de67945de7ecca2a5e5cdebd52501e8dbd1feaef45fc55e0ea2ab4ca9d8",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "filling": "filling",
+        "house": "house",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "absent",
+      "record_id": "a29090e9ae7ee68245675516e6116da136a26e60ef46a9b8c97e1ab5d98fd4e2",
+      "root_family_id": "complementary_35d34537c6c3de71791dd368b4dabd3c5a7e0315f47f1944c96397557c7364dc",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "4e859db7e11870574242d38b4240c9b83d1eafb117c272f5cfb9faeacb455032",
+      "root_family_id": "complementary_45e4576f6abed177717a2f08a556b039bdd5fa8d39ac356d5090978b984706c0",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bun": "bun",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "direct",
+      "record_id": "de9e7ea940d3b152479619642545ee73f050d3a31c58ca0d07dc5f289c6a1993",
+      "root_family_id": "complementary_516734279bae0a8d58905c7e212df2833e34e7424ba895c49b29dba55e815b89",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "patty": "patty",
+        "roof": "roof",
+        "walls": "walls"
+      },
+      "expected_answer": "absent",
+      "record_id": "c96cd27989a9ecb2b6b2675e7c813690fc358686abfcc39bc6b2b225f978d66b",
+      "root_family_id": "complementary_535ad9832fb3d66e2a3e88b4db2b828ed964f4ed970740b1e1cad96eee77fa73",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cabin": "cabin",
+        "cheese": "cheese",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "c79869b7784082236a9d7a250c26c4cd2c4676925c4f77fb869e94c50f90af27",
+      "root_family_id": "complementary_57dfafdf52c59969f03ef5d67ec15b3fff70d4a16c7dbdf7e5b8aad858c4166c",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "lettuce": "lettuce",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "6c350aa524bc6d9c658bccf6db769281a2ec82a4a96dd4e3219f3305f952ef2c",
+      "root_family_id": "complementary_68421931220a0a32af021c292469d83c4ede908f181e3909c8b71c43601c0e2c",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "house": "house",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "38dc35c433c0595d1ab051f9abec4c3a573cf88abc99bb3a6ed41cff07646d38",
+      "root_family_id": "complementary_6ac48f9670329869eb3ef0a3df7804796a6cf3c14e1fbe7181bd0ef20d0dfff6",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "roof": "roof",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "386f90cbcc982ecb6395080169cabfd3cb605316405452090d93ec36faf212ab",
+      "root_family_id": "complementary_6ca5d40061331b76d8071841f5fb596734cf6a815516eec9a2b27f5bf088409b",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "walls": "walls",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "fde19063f1a11c82b19ed49a658023bba9d14c56aaaf2aef1e59be01776ec384",
+      "root_family_id": "complementary_6e35442fa31aec753ef33a9b83a0b48a4155ea2fe3626bdfa408e67b5df9b048",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "door": "door",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "8a117c94641d491da7ad52fdd4906b5a642e4a6776859d2d6964d8f1d7a464cf",
+      "root_family_id": "complementary_70f15cb3b3690fead3234d1301fe4f878dd4754b510b245cc378fb5dab8e9862",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "knob": "knob",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "707e0e118dff38ed90404583edafdac7d3ccb898bdcee36bb77aa6d0b54102b7",
+      "root_family_id": "complementary_73ab922ecb4014592cd32ee1f6edcb3ec6db884d64d2aa73d9996b1700dbbe96",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "panel": "panel",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "26c9a2b070c59d0242c04cb06afdf82818f67b711a8a5bfd8f0e24134f9da06b",
+      "root_family_id": "complementary_743f1b99ff363ff5196b98299ffb88ef6ec3911a9a30bf1a60ea75d103caaa63",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cabin": "cabin",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "pedals": "pedals",
+        "platform": "platform",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "absent",
+      "record_id": "a092116742226f4d2ab3d25acbe1622f34962569422d46c73a579bddbf272bf8",
+      "root_family_id": "complementary_7b20393c79dfba3e60f194c423cc9c248c92f5893bcadfb2210c961b02699abe",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "wheel": "wheel",
+        "window": "window"
+      },
+      "expected_answer": "direct",
+      "record_id": "c3ca31944b20a69e88694d27db1aa4761849f63542ae9466c71fff8e770d5520",
+      "root_family_id": "complementary_7e7bb3afa4bee8c69c5741820551bd0d2d973f9d554929b7bed03261b2918809",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bicycle": "bicycle",
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "direct",
+      "record_id": "a39e0b91ff7066fa8e1ba30a8fa68db9d02a2424d81e9a4c50c0aa0fbac2afca",
+      "root_family_id": "complementary_807e0faf1b53b83eeae5a00392d462478014e44bb0b8a97b5a654e2912c16323",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "spokes": "spokes",
+        "wheel": "wheel"
+      },
+      "expected_answer": "absent",
+      "record_id": "3a92d4aeb3ad447548c467bf3ca4e66b46d6f89842d891b80358d4e28bb6d5d5",
+      "root_family_id": "complementary_8098e2136b08b99ef7e8084374787d1ad1a4bf8e582441bcedd78ba898874412",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "frame": "frame",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "92639813bbc7f87215b56856f62bbb38cffb0423eb19c5e76403b0d0d4c79e17",
+      "root_family_id": "complementary_8b58fea14ef7360a80ec40c35d82cc76d6b8b42271c362fe1b221df7c593f18f",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "pedals": "pedals",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "da790cbd0755550b8636796ae9b7a469dfb90476d2af2ac6c37790b5e77fae7b",
+      "root_family_id": "complementary_90968d874e93485ca98770598938473a223aeac5a2e9c7ea68e6594097021fc7",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cart": "cart",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "247a677e79abb47812016ac19c6a95662bb5820b19b8816e36c5dbc6fadb91b0",
+      "root_family_id": "complementary_97cfc441a7d548c07d4465423a50caf66e6f5940e777b33eb248c13d6fbfbcac",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "platform": "platform",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "19b8ee800c9e7e6f49a1d00b95585603c74e3581f800cf806936f107674e8cf5",
+      "root_family_id": "complementary_9b5cd8e730abaa3485d9f3503c6f165bf80a482382dfdb74bb348696e980cc6c",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "glass": "glass",
+        "handle": "handle",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "4aa7c8db9d36e07ebf136fb22834ca025c04e4d7886a2ba87669c4057c07a9e5",
+      "root_family_id": "complementary_a67ade48c2c969336a5b7f23d4b43cfa019257da86e52e202ea0ccc1bb4e131a",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "rim": "rim",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "absent",
+      "record_id": "dd0713a08096ab552c3ec8612b9ba60181f3dfd90470d79754e9e5660c62351b",
+      "root_family_id": "complementary_aa963c601c98cb9217ce239c664b461cd17625724667167d4d097e176398d351",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "hub": "hub",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "c04e15381df8a97be347d568d093cc7b7787e0f8f358d2c00b77d0bd96d1a3fb",
+      "root_family_id": "complementary_bcc81cab7e03cc8ec9c22d539c55a5d1a6ff6825b4ee6a72cbd99fa48f15e259",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "shade": "shade",
+        "spokes": "spokes"
+      },
+      "expected_answer": "direct",
+      "record_id": "ba3700ac20b5ceb36bd7df8373e3e76e4e320691e9d7b961dce8deef0f75291b",
+      "root_family_id": "complementary_d5e16916171842ff5feec8d55837fd9edd3a066ce2dea4c69e937be696da6b5d",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "glass": "glass",
+        "lamp": "lamp",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "absent",
+      "record_id": "d5f165802d7d7b40d7f7aa18a6e7d83d9b71f8162c9c64cdc8fcd444ad68ab40",
+      "root_family_id": "complementary_de1bea500b09b462b24dc727c1c11b73b5823be9ae58f5c891e67482d339b420",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich",
+        "shade": "shade"
+      },
+      "expected_answer": "direct",
+      "record_id": "975efd431c171ddb245c293d77090f260738a1ca2450e8160043c9a2ed0a5ce3",
+      "root_family_id": "complementary_e9d31aa7aa5f771b90209db45b5f4917091e9665a970076e25762efc92d977aa",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bulb": "bulb",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "direct",
+      "record_id": "62ac0d2361d11a60706e756a17d8107c27dab5a129e6791d9ab132238167af37",
+      "root_family_id": "complementary_eb9fb8c290b3a15b059389a56c1d6b7e8f989024571f27c29ae499bd20e998a2",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "base": "base",
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "absent",
+      "record_id": "345d52b0a403fcced76695c287a6c754e60b11e42f9644cb5ee9f1b3c0e2befd",
+      "root_family_id": "complementary_ec80ea25e2e2c7ada1970224544e0b1fb84fee37f7f631cde7abd0540cee3fa6",
+      "semantic_expected_answer": "absent"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "glass": "glass",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "direct",
+      "record_id": "651aa9f91f690e7b30daab8264f7d6f66f541c6da5d6477abbe9b54979ab57fb",
+      "root_family_id": "complementary_efeabbb256b218e9e78d7e21ec8925518b504a58957f4e7a138948cb8fb283b1",
+      "semantic_expected_answer": "direct"
+    },
+    {
+      "base_to_view_map": {
+        "bowl": "bowl",
+        "bread": "bread",
+        "bun": "bun",
+        "burger": "burger",
+        "cheese": "cheese",
+        "cup": "cup",
+        "filament": "filament",
+        "filling": "filling",
+        "patty": "patty",
+        "sandwich": "sandwich"
+      },
+      "expected_answer": "direct",
+      "record_id": "84a2a0905d282e7fb3f01a0979e596cda885e3489f06bc4c0d0bab5936f799e8",
+      "root_family_id": "complementary_fb8c5b5c1fcaff1bb1cd1a217ff2b498c41eba25ae74f500194e83b5b027d1d5",
+      "semantic_expected_answer": "direct"
+    }
+  ]
+}

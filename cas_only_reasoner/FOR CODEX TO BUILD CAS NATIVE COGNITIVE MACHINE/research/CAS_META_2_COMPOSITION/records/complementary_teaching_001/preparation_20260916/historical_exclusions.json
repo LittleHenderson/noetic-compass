@@ -1,0 +1,199 @@
+{
+  "schema": "cas.complementary-exclusions/0.1",
+  "complete": true,
+  "inventory_sha256": "86704d262fff4d39cae169cd8b463b21167f114fbd4c9136dcdd88215ea66f41",
+  "archives": [
+    {
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/source.zip",
+      "sha256": "abf38e1e1ae9b53d512c5c647d3943679023e8c9b985c2f186a50643d0a54b38",
+      "graph_records": 399,
+      "topologies": 67,
+      "errors": []
+    },
+    {
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/source.zip",
+      "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "graph_records": 399,
+      "topologies": 67,
+      "errors": []
+    },
+    {
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/source.zip",
+      "sha256": "d27a44e401a81d9a3e1f24dbd26ede9d308a76143aad2bbeb3e4b9b136d0bfb0",
+      "graph_records": 399,
+      "topologies": 67,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6face-20260911133305-9723735f/source.zip",
+      "sha256": "9723735f3bb7ee26ae1bf1292b56f2245c9f48f03bb45d4a7627d19afb604dc8",
+      "graph_records": 399,
+      "topologies": 67,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/face_grounding_001/receipt_cas-meta2-graph6read-20260912072648-0651a3a8/source.zip",
+      "sha256": "0651a3a81e47bce51fb4e14800a957d67ceca8ee5f5ceab0cbb9652715e6c723",
+      "graph_records": 399,
+      "topologies": 67,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/graph6_confirmation_package_002/source.zip",
+      "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+      "graph_records": 132,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909193638-98f993ab/source.zip",
+      "sha256": "71e72bae410ca3d90c57f067f2fa8507326fbcb24346f7166b4d343b0524b66d",
+      "graph_records": 42,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909195309-68ac4845/source.zip",
+      "sha256": "bce8325bcf12996b52917214ad65dad50b77802d79d09f996afc88d853ebc9b4",
+      "graph_records": 42,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909201205-f0da3fa3/source.zip",
+      "sha256": "82bcaf6c6d8eec5904381c6eb684645358aa89f16be276f116b3d1c5c2b8c55d",
+      "graph_records": 42,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909202533-7cb622f8/source.zip",
+      "sha256": "838f93a719b90fc262ffd682f414485d283e42debcbc928fe5cce80acdd63b58",
+      "graph_records": 42,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-competence-20260909210625-0a10f14d/source.zip",
+      "sha256": "2f3b027d57bc67e0d763b0b08ff433b53b1cb2d90e2c17ebca2e23004c52eff4",
+      "graph_records": 42,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910013000-e485b07c/source.zip",
+      "sha256": "b3d7d1be6c811f856ceb859db461752e6f90135d5e7e4240eecb06e98e0f8c50",
+      "graph_records": 132,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6conf-20260910023000-a387d882/source.zip",
+      "sha256": "b0f013fa052625e24ec2098fa41f6264b59527725203378cd117b2e7e46d0ee6",
+      "graph_records": 132,
+      "topologies": 4,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910053000-951cab20/source.zip",
+      "sha256": "8afb1f3fbcf5ff572c259e8e26878ef025361ac0a504d9ad612bff4ffc424464",
+      "graph_records": 207,
+      "topologies": 57,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910073000-210109c7/source.zip",
+      "sha256": "c24f2f9ce2d01a44ac79e46bfdc59788256200b6a2079c3223f8a6758a0f20f9",
+      "graph_records": 207,
+      "topologies": 57,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910093000-75387578/source.zip",
+      "sha256": "9d577421aaa8ef1e0a2e414660277b2ebf981da89af94cd6f90d5943f37200bc",
+      "graph_records": 207,
+      "topologies": 57,
+      "errors": []
+    },
+    {
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/receipt_cas-meta2-graph6curr-20260910133000-aecb5d07/source.zip",
+      "sha256": "fd9b4902ebf5aadfceab304797f69cdd8731f4ce3a09b82b57a8d63e8cbe2ac7",
+      "graph_records": 207,
+      "topologies": 57,
+      "errors": []
+    }
+  ],
+  "excluded_topologies": [
+    "05a6059dbe528687d8d95be17148d2cb6e738e871a5bfd9db05d920be05cc2c0",
+    "06e45743da87db41652b55a78de0d1d5a8eb999214d299078ad370fb253fc42a",
+    "0e25d3802b1e211609869ea190284a98f59ea1d6138cd8ee59679cc9c6aa50a2",
+    "0e41dee32cad0d2cec63fc81a1e11054d68d78d46dc96dfec5a19e86168cdd49",
+    "16988cd7c463faa9128ad1b8d9d2cbf7f5e246e6ee8c304aafb0401ad4ce85cf",
+    "178562c0b47074025b89613f3a0520e8199248bf4d46d0dd7a763ba5e7ac424f",
+    "1f046580009fea08eb3f7afd34ef3169c6d2980be790fd05abb67cfe023c9bfc",
+    "27627ec918ad4a3e642b3f009a57956b0862ef9d535202b5fb2cd829f79fc7b4",
+    "3034549e12ace6993934c0793c54e3bf8c2351d766fdda300a39a0bf2da80a76",
+    "321a820058d780ab5ffe26e4734bdba0522e0947e24f115c9945c4d1855f299b",
+    "33aa07cf7ed05463a177f44d6195b81079a9dff99cbdec664a78d1989f2f73de",
+    "3708d2efeaaae0f91b047bb203a7d63307a57b1d559beb2c6fa33d58afac0157",
+    "3a6d50105b6bb80098cdb9a1e426069a6e83638897f8e05c2819beba83ba7bae",
+    "3ed2d319aafcb8fc7437bd7fd72e9649d90863bed0b7095ff88f97c6b356293f",
+    "416bd2a9267786ca510e3aea1cbc9f7bc07d1656185e1a26445d98a2a3d48460",
+    "49d033ffd7f3f5480aa2ec1557beefb95541e2e6d6c1df1bdcec05c643f74d65",
+    "4a4f60842d244def57143dbead643e90cd07ff3a473d4b0d852ec742f7a777c6",
+    "4e88bfe775851d9698ae91b0640563261abc523f077a442a7b00cc1114730d63",
+    "4eab21489a2281cb42cb343cd5d3f20c91006f4e41a91f1287147905376bfefc",
+    "55b4672e081550258fe335db4f2971438468dd56bfc430edf229162f0771c374",
+    "593ca7fa57514192dd44196fe0403e222d0d18ca23c879e05c4c8d7f5d5197fd",
+    "5a7f39879c13e7530b0bbaffbfe197d1c762dc4cb2b7575badd5036762e779be",
+    "5e9d875184cb158a21c68dc062d6b5e7f626e6a6409670a89c41c7bff949b356",
+    "62e97b9473c77f1ba321752c3b5c2afb77d5efd9fc04b3f3c36b32d2f5fa3d86",
+    "6cb0658dee99f9306371e45fb09de21b44f2038b33ec5bcb0a52129f5b2939f4",
+    "6deb7360edb74e238abfbfbf228888ff56a0b74dde55f5c0d264722bcf2838e8",
+    "70483ca60666c9c4f4b6dc4f5dcf4b2c041cb4b8046db5d1c1e7e2653839cd17",
+    "71fba13989df9727bbbcdd18ff1ced080a052ff8ed2ef6bc6c7075c9e2d33b63",
+    "74cc95ccb1ddfea153770475ae3c5ca266c87c8a7f32cb4ca5d224923caf2fa2",
+    "814876fac7dad7eb8460480b0524ce90330f96b603c024cfb2afc23cc61a6ffe",
+    "8dc5061dfae96204bb13185d5e0a7f2b9265785e517ce0cb8f6e62c5ac364ffa",
+    "8ed4b0d8ba20bb5f60e0bee0895858819ec2c0da54594e1f8fb6a1fb6daed463",
+    "8fdc113a234d793a632c4a046e7a701a5ed0c97beef6d4907d75f723f8e02daf",
+    "931e8db08f4e5e24c7459d3f6121f45dacb4db0f0ea44e555eb4410171e1e9c6",
+    "941814a36b92e49048d2794ad7a173c87201e16f2aa8cc70098a8ecaf2c262ab",
+    "97df9b523d69f54360ffe625850c5b904e410ab9f5801d549856e1e5945a28e3",
+    "9c1179eaa3010854a8f54ad7990f3d40006a88a245be82acd306a0bcfca4e4ae",
+    "9e731370325af5ce2fc178fe71c32e7468bd5079c554c499917b812a488a454f",
+    "9f7c6283c36599f1858845eb9fd9960075daac60c442c824a7b62ebff4cff745",
+    "9f91c5133a97296f360895f69b8d860c9ca6081799cd36e918360013e588a1f1",
+    "a5f2269c51f4273d5c6a76e5acafae520756a20eeeb31ffa7f7963bd057d990e",
+    "a62c4771d02bdd00167f8f84471dfc76d9780bc1b458afce1d18113e3d2e2e11",
+    "ad4b2818942083489b4a922429fa2d36cfe91fc17ff0d579e8c4e796761bb894",
+    "ad623965bf12e1d5473adbf96c6578729e4c7b50e6267477d274780588d02866",
+    "b0a0a3ccd2b39f8203d4e100d7527c4840477edadd693943e2489766ae734ebb",
+    "b71befc3eca0caae545754f31f01c30f1c9115e9a749c0ad04d2170d2baafa05",
+    "bc3ccbf74f127fea18d2f2a5094eae1083917cb451292711346d019183f1d30f",
+    "bce09c1948447844d2b5e1565e99e669283227ae72ca7be1c88ce288066726e2",
+    "bde2bd34a78443d25cdc8ac2c90435a50c4e455b0bf1ca0e70fd1ad345d52553",
+    "c11516d843bd99d72c0e7001b949e9e3850008a729ba5cdd1287a0bbacd0d438",
+    "c1c7bbcd5a710b78252b9965173164c202b502865896340827055f3636677a51",
+    "c2701a488b3a49e5860fd429537b9c5e57232dbbc0c458e6e1284ba3c7b6c5f4",
+    "c2fe1c2d2d37fcdacb00b1314010b35ea2ebe290d4bf027d4e57e46d855cf6f7",
+    "d302a72a44f27de7f3bdcc35c4e084f6f051f8ae0daebc2548d5ee67b9f58a61",
+    "de54e99652a21bcfa6576e5d9fe17467820d4d1d8db07abed6263322c6ff8732",
+    "dfc1482c7bde0ee21a6e4a47555f5f624eba5cabe1296d9ed91f0f72138e286f",
+    "e77d179f5873d85fc14d6d6fe62b1df758ff48be44271dee757d4cc948d30545",
+    "e80b2f7b09b340308372fbfe5a0a4ef4a65ef664c997f4ec4b741fa229a312d5",
+    "e822939f38b3fe50760bf26b18c1375f07caaaba3b9cb95e79344b957d126852",
+    "e9ee3d0945fa38d0e1b20da13ff312239303c43dc2a4cae833c03bbbb8d0115e",
+    "ea09361474c162a832532f6d8be20d0d9e93c9c63c0ffb3ee40838260170a114",
+    "ea724622f1a7e00afc00c9d1939dfe845a1963c0275682d5639cc17e5c619d20",
+    "ea739849a6081b7c3fee05cdc9a0807b95f291f876d233657e190f9728d9e9cc",
+    "ee6805cd0bc8bc26e0c63b96c76890143a06063981d2fdd5cdf99e43591eb81f",
+    "f0e487a81de9af4d420730ddaed66958695f48ec2ef9d8cb1e1cace77f6d4a14",
+    "f54284d9f988849ecbcc7d107abb75a6e53e716c091822e439caba34b0e58167",
+    "fad7d16170dcee9120189fe893053a0f4f999d8e6fcfe8890f249003307783f8"
+  ],
+  "failures": [],
+  "rule": "All generated historical dataset/varied/45 final candidates and all face/rewired families; technical attempts conservatively exposed.",
+  "actual_neural_presentations": 0,
+  "actual_provider_calls": 0
+}

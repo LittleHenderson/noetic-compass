@@ -1595,3 +1595,34 @@ RESULT.md, RECOUNT.json and the final lifecycle receipt; records/
 rdcjt_handoff_20260916/RETENTION_APPLIED.json; records/publication_20260916/
 LEGACY_IMPORT_REPAIR.md. Successor profiles remain build-only; this entry
 changes no CAS Harness acceptance or production gate.
+
+## 2026-09-16 UTC - Complementary and perspective source builds frozen
+
+Implemented opt-in CAS_COMPLEMENTARY_TEACHING_001 and
+CAS_PERSPECTIVE_RESONANCE_001 compilers, real CUDA worker bindings, strict
+owner/package-bound launch adapters, evidence contracts, held-out analysis,
+checkpoint/resume handling and unsigned $7-per-job execution requests. Each
+complementary course has 1,152 presentations, 160 updates and 4,320 actual
+training core calls; nine matched courses compare ALT, MIXED and WHOLE.
+Perspective reuses the frozen ALT schedule with two conditions and three paired
+course-order seeds, adding no teaching slots. All courses begin from one
+chronologically selected retained student, not independent weight draws.
+
+Fifteen archived source packages establish conservative historical exclusions.
+Thirty unused graph topologies supply 90 final application questions, with six
+separate development families. The 8-10-node final structures are larger than
+the 3-4-node CFC teaching structures; size and structure both change. Earlier
+skill retention covers six-face recognition, not all capability retention.
+
+The complementary integration passes 118 pure tests (29 new); perspective
+passes 36 pure tests. Tokenizer checks cover every course and audit. No successor
+neural or provider execution occurred. Native routing telemetry and an approved
+intervention port are unavailable in this registered student, explicitly recorded
+as unavailable. Optional calibration and adaptive control remain disabled.
+Committed-source package verification is the next software gate; empirical
+benefit, numerical behavior and full runtime delivery remain unmeasured.
+
+Evidence: inner research/CAS_META_2_COMPOSITION/records/
+complementary_teaching_001/preparation_20260916/DESIGN.md and TASK_BINDINGS.json;
+perspective_resonance_001/DESIGN_TASK_BINDINGS.md and prepared/verification.json.
+This research source milestone changes no accepted model or CAS Harness gate.

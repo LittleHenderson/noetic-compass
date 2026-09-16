@@ -1,0 +1,273 @@
+{
+  "base_recurrent_profile": {
+    "additional_trainable_parameters": 0,
+    "all_modes_use_recurrence": true,
+    "change_recurrence_or_readout": false,
+    "compute_profile_id": "cas.cjt.compute.recurrent-depth/0.1",
+    "gradient_horizon": "entire declared K <= 8 unroll",
+    "implementation_id": "CAS_RDCJT_001",
+    "loss_location": "final scheduled pass only",
+    "new_pass_level_losses": false,
+    "optimizer_updates_per_training_batch": 1,
+    "primary_evaluation_depth": 8,
+    "runtime_source_commit": null,
+    "source_plan_sha256": "8bd914e7216326d4e80065caefe4e7ff520a973ae1252d9c037c19e299c8a8a0",
+    "source_profile_sha256": "67130b45be04ccb2e09c430f66a20a0d79755a6d26a801e63f5e4a769c9dea42"
+  },
+  "binding_state": "PLANNING_SLOTS_NOT_COMPILED_LESSONS",
+  "completion": {
+    "actual_neural_presentations": 0,
+    "actual_optimizer_updates": 0,
+    "actual_provider_calls": 0,
+    "actual_source_bindings_required": true,
+    "builder_ready_label": "COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED",
+    "current_handoff_is_repository_implementation": false,
+    "return_once_with_runnable_candidate_and_costed_request": true
+  },
+  "current_experiment_changed": false,
+  "evaluation": {
+    "adaptive_emphasis_policy_tested": false,
+    "bootstrap": {
+      "analysis_seed": 404,
+      "average_fixed_seed_rows_inside_family": true,
+      "interval": "percentile_95_per_contrast",
+      "keep_condition_seed_pairing": true,
+      "replicates": 10000,
+      "simultaneous_coverage_claimed": false,
+      "unit": "root_family"
+    },
+    "candidate_absolute_accuracy_minimum": 0.5,
+    "checkpoint_rule": "final state after 160 scheduled updates",
+    "ci_lower_must_exceed": 0,
+    "component_audit_identity_and_counts": null,
+    "current_RDCJT_panel_used_for_development": false,
+    "dataset_manifest_identity": null,
+    "earlier_skill_audit_identity_and_counts": null,
+    "global_promotion": false,
+    "horizontal_token_reasoning_reproduced": false,
+    "margin": 0.05,
+    "new_application_panel_proposed": {
+      "operations": [
+        "LIST_PARTS",
+        "FIND_SHARED_PART",
+        "REACHED_VIA"
+      ],
+      "root_families": 30,
+      "whole_questions": 90
+    },
+    "positive_paired_seeds_required": 2,
+    "prediction_before_evaluator_target_access": true,
+    "primary_contrast": "ALT_COMPONENT_WHOLE minus WHOLE_SUPPLEMENT",
+    "primary_depth": 8,
+    "retention": {
+      "component_references": [
+        "initial_same_profile_K8",
+        "final_MIXED_SAME_ITEMS_K8"
+      ],
+      "earlier_skill_references": [
+        "initial_same_profile_K8",
+        "final_WHOLE_SUPPLEMENT_K8"
+      ],
+      "kind": "observed_tolerance_not_statistical_noninferiority_guarantee",
+      "max_absolute_drop": 0.02,
+      "missing_audit_or_starting_competence": "RETENTION_UNASSESSED"
+    },
+    "root_family_split_includes_analogies_faces_and_renamings": true,
+    "same_final_inputs_for_all_conditions": true,
+    "semantic_duplicates_counted": true,
+    "separate_order_contrast": "ALT_COMPONENT_WHOLE minus MIXED_SAME_ITEMS"
+  },
+  "execution_enabled": false,
+  "execution_request_requirements": {
+    "global_wall_seconds": null,
+    "include_monitoring_in_cost": true,
+    "max_evidence_storage_bytes": null,
+    "max_gpu_memory_bytes": null,
+    "neural_environment": "separately owner-authorized AWS GPU; no local neural work",
+    "new_launcher_service": false,
+    "one_future_job_for_checks_training_evaluation_reload_collection": true,
+    "owner_authority_record": null,
+    "reservation_usd": null,
+    "reuse_existing_lifecycle_with_opt_in_dispatch": true,
+    "reuse_previous_reservation": false,
+    "unset_required_fields_block_execution": true,
+    "zero_automatic_retries": true
+  },
+  "future_adaptive_hook": {
+    "enabled": false,
+    "existing_component": "RPM constructor LEARNING_RECIPE",
+    "forbidden_inputs": [
+      "final_audit_targets",
+      "hidden_fault_labels",
+      "self_confidence_as_qualification"
+    ],
+    "inputs": "evidenced development or runtime qualification weakness with explicit scope",
+    "new_learned_controller": false
+  },
+  "implementation_id": "CAS_COMPLEMENTARY_TEACHING_001",
+  "monitoring": {
+    "actual_optimizer_updates_per_snapshot": 0,
+    "depth": 8,
+    "early_wrong_answers_are_not_mastery_failures": true,
+    "initial_snapshot": true,
+    "panel_counts_and_identities": null,
+    "panels": [
+      "development_components",
+      "development_whole_tasks",
+      "development_earlier_skills"
+    ],
+    "points": [
+      "after_common_return_before_supplement",
+      "after_supplement_update_1",
+      "after_supplement_update_2",
+      "after_maintenance"
+    ],
+    "preserve_training_rng_and_cursor": true,
+    "role": "record_only_no_selection_or_schedule_change",
+    "rounds": [
+      4,
+      8,
+      12,
+      16
+    ],
+    "snapshots_per_course": 17
+  },
+  "owner_execution_approved": false,
+  "schema_version": "cas.complementary-teaching-plan/0.1",
+  "state": {
+    "accepted_model_mutation": false,
+    "learning_rate_uses_global_update_cursor": true,
+    "mode_label_in_learner_input": false,
+    "one_continuing_student_per_condition_and_seed": true,
+    "optimizer_persists_across_teaching_modes": true,
+    "pass_teacher_subanswers_to_whole_query": false,
+    "planner_frozen": true,
+    "reset_latent_state_for_each_question": true,
+    "share_live_model_or_optimizer_across_conditions": false
+  },
+  "status": "PROPOSED_CANDIDATE_ADDENDUM",
+  "title": "Complementary Alternating Teaching for Recurrent CJTs v0.1",
+  "training": {
+    "adaptive_reallocation_enabled": false,
+    "all_nine_courses_planned": {
+      "batch_core_forward_calls": 5400,
+      "courses": 9,
+      "decision_presentations": 10368,
+      "optimizer_updates": 1440,
+      "sample_core_passes": 38880
+    },
+    "allowance_status": "proposed, neither optimal nor established sufficient",
+    "automatic_early_mastery_stop": false,
+    "automatic_retries": 0,
+    "base_checkpoint_identity": null,
+    "base_round_depths": [
+      1,
+      2,
+      4,
+      8,
+      2,
+      4,
+      8,
+      1,
+      4,
+      8,
+      1,
+      2,
+      8,
+      1,
+      2,
+      4
+    ],
+    "cfc_foundation_batches": [
+      {
+        "batch_sizes": [
+          8,
+          8,
+          8,
+          4
+        ],
+        "phase": "WITHIN_CUBE"
+      },
+      {
+        "batch_sizes": [
+          8,
+          4
+        ],
+        "phase": "ACROSS_FACE"
+      },
+      {
+        "batch_sizes": [
+          8
+        ],
+        "phase": "RETURN_TO_CUBE"
+      }
+    ],
+    "conditions": [
+      "ALT_COMPONENT_WHOLE",
+      "MIXED_SAME_ITEMS",
+      "WHOLE_SUPPLEMENT"
+    ],
+    "depth_rotation_offsets": {
+      "101": 0,
+      "202": 1,
+      "303": 2
+    },
+    "depth_same_across_conditions_within_seed": true,
+    "depth_same_across_modes_within_round": true,
+    "difference_from_base_recurrent_course": {
+      "decisions": 256,
+      "optimizer_updates": 32
+    },
+    "equal_input_token_cost_or_walltime_claimed": false,
+    "independent_weight_initializations_claimed": false,
+    "initialization_rule": "same compatible incumbent selected by predeclared provenance, not final-test ranking",
+    "maintenance_batch_sizes": [
+      8
+    ],
+    "maintenance_source": "permitted earlier training material; never retention audit",
+    "minimum_guided_rounds": 16,
+    "optimizer_profile_identity": null,
+    "paired_training_seeds": [
+      101,
+      202,
+      303
+    ],
+    "per_course_planned": {
+      "added_seven_stage_cycles": 0,
+      "batch_core_forward_calls": 600,
+      "complete_cfc_rounds": 16,
+      "decision_presentations": 1152,
+      "maintenance_decisions": 128,
+      "optimizer_updates": 160,
+      "sample_core_passes": 4320,
+      "supplemental_practice_units": 16,
+      "target_decisions": 1024
+    },
+    "rounds_per_course": 16,
+    "supplement": {
+      "ALT_COMPONENT_WHOLE": [
+        "all eight COMPONENT",
+        "all eight WHOLE"
+      ],
+      "MIXED_SAME_ITEMS": [
+        "pairs 0..3: interleave COMPONENT and WHOLE",
+        "pairs 4..7: interleave COMPONENT and WHOLE"
+      ],
+      "WHOLE_SUPPLEMENT": [
+        "all eight WHOLE",
+        "same eight WHOLE again"
+      ],
+      "batch_sizes": [
+        8,
+        8
+      ],
+      "component_items": 8,
+      "component_relevance_target_check_required_before_real_export": true,
+      "declared_pair_order": "cyclic permutation of slots 0..7 by (seed + one_based_round) mod 8",
+      "inputs_are_actual_data": false,
+      "permutation_uses_private_targets": false,
+      "whole_items": 8
+    },
+    "support_cubes_per_round": 4
+  }
+}

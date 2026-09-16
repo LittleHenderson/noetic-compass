@@ -1,0 +1,32 @@
+{
+  "schema": "cas-successor-source-validation/1",
+  "neural_execution": false,
+  "provider_calls": 0,
+  "suites": [
+    {
+      "path": "records/complementary_teaching_001/preparation_20260916/integration_pure_tests.xml",
+      "sha256": "f84514c2564d18ea094099e181eef5fb4273ec78baffec4b0d8cf2e54c84ec46",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "118",
+      "time": "37.525",
+      "timestamp": "2026-09-15T22:51:06.608720-07:00",
+      "hostname": "MSI"
+    },
+    {
+      "path": "records/perspective_resonance_001/pure_tests.xml",
+      "sha256": "a4f92d676514f0391014d5d421785a5c5381eea40a5bb08a12b79ea96f3c1c16",
+      "name": "pytest",
+      "errors": "0",
+      "failures": "0",
+      "skipped": "0",
+      "tests": "36",
+      "time": "0.378",
+      "timestamp": "2026-09-15T22:51:01.529118-07:00",
+      "hostname": "MSI"
+    }
+  ],
+  "verbatim_source_whitespace": "Original supplied Markdown hard-break spaces are preserved byte-for-byte; excluded only from formatting check."
+}

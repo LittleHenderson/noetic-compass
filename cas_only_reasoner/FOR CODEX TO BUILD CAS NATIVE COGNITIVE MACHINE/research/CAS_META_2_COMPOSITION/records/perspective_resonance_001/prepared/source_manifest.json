@@ -1,0 +1,102 @@
+{
+  "aggregate_sha256": "781553f199a42adbe426ce240d4cf5037643b72abd3710e17576d5a80b84e373",
+  "files": [
+    {
+      "bytes": 32969,
+      "path": "records/perspective_resonance_001/source/Connected_Perspective_Learning_and_CAS_Ohm_v0.1.md",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "089113adc7aa950779e958cf466cfca491877a79432b79e9548a47ab09bf54da"
+    },
+    {
+      "bytes": 8096,
+      "path": "records/perspective_resonance_001/source/Perspective_Family_Authoring_Example.json",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "f85d8a074273990d84f3efcd6201eada5e70307f62d6ab3cc0f1c098c1647bd6"
+    },
+    {
+      "bytes": 4003,
+      "path": "records/perspective_resonance_001/source/Perspective_Resonance_Profile_v0.1.json",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "bf7efed2e934926adbd1d2ca55b0bc51938059f41118332267c8709d2f345bec"
+    },
+    {
+      "bytes": 8570,
+      "path": "records/perspective_resonance_001/source/public_exercises.jsonl",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "047398c1a9d60923cf87d4b4a3767a52e28924cb9f16b58dd54a60f941ab8c28"
+    },
+    {
+      "bytes": 2865,
+      "path": "records/perspective_resonance_001/source/SOURCE_IDENTITIES.json",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "ccec813b30bace94db2602c8fbe8ed2db33b97fee009bd94f844b51b1a915617"
+    },
+    {
+      "bytes": 3209,
+      "path": "records/perspective_resonance_001/source/teacher_targets.jsonl",
+      "role": "READ_ONLY_USER_SOURCE_COPY",
+      "sha256": "34efcd7effa614b8b9afdbafcacb9b2001a4c16bcf0010846c3f7d6068e0b5ab"
+    },
+    {
+      "bytes": 33667,
+      "path": "cas_meta2/perspective_resonance.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "45e876dacbefc04db0bcdd0d6dea6341d3b1efd0d58b63787e9e9709a5a6496f"
+    },
+    {
+      "bytes": 13054,
+      "path": "tools/prepare_perspective_resonance.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "380d3208c63573b8d1a0b56500ace846e321094e6170acf77d77204057d5b828"
+    },
+    {
+      "bytes": 11327,
+      "path": "cas_meta2/perspective_worker.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "ba2e7a9a6619a62a9da9069eb701af441ff1a4cc2b3d0424de28f3b55566e914"
+    },
+    {
+      "bytes": 1231609,
+      "path": "records/complementary_teaching_001/preparation_20260916/data_manifest.json",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "4b8ffd62dcbd55ff1fb79c43a6a134ac3b5af3a84ec7ed9fccd3bc1e0c9f2c04"
+    },
+    {
+      "bytes": 9853,
+      "path": "aws/perspective_resonance_launch.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "213b43d11194180f10338b456086f135f4ab357030b5a93a79018508550374cb"
+    },
+    {
+      "bytes": 14874,
+      "path": "cas_meta2/complementary_teaching/course.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0"
+    },
+    {
+      "bytes": 23916,
+      "path": "cas_meta2/complementary_teaching/runner.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "93f256bbf9f4b86a55eda6fe500e5b6088855314fdaaf052b1e768d6200ea747"
+    },
+    {
+      "bytes": 22677,
+      "path": "cas_meta2/recurrent_cjt/learner.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "158c8c9a391a8b73aa138f830663f6726e4697e1b50ada414845cacac6bc5787"
+    },
+    {
+      "bytes": 20252,
+      "path": "cas_meta2/graph_teaching/real_framework.py",
+      "role": "EXACT_LOCAL_SOURCE_BINDING",
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "anchor": "homebase",
+      "bytes": 16546,
+      "path": "research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/neural.py",
+      "role": "PINNED_PRODUCER_WITH_NO_NATIVE_ROUTING_TAP",
+      "sha256": "03521d2b17311680fd91cde7076e4bf5b38393f0d6db115d47be20f63413fc96"
+    }
+  ]
+}

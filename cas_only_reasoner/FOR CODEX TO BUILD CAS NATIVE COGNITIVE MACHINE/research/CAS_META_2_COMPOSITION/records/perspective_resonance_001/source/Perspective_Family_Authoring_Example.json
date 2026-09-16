@@ -1,0 +1,338 @@
+{
+  "status": "AUTHORING_ONLY_NOT_DIRECT_LEARNER_INPUT",
+  "root_family_id": "AUTHORED_KIT_001",
+  "concept": "direct_and_indirect_containment",
+  "scope": "Only the supplied complete graph; not exhaustive real-world object properties",
+  "base_graph": {
+    "inventory_complete": true,
+    "nodes": [
+      "Kit",
+      "Toolbox",
+      "Cloth",
+      "Wrench",
+      "Locker",
+      "Bottle"
+    ],
+    "contains": [
+      [
+        "Kit",
+        "Toolbox"
+      ],
+      [
+        "Kit",
+        "Cloth"
+      ],
+      [
+        "Toolbox",
+        "Wrench"
+      ],
+      [
+        "Locker",
+        "Bottle"
+      ]
+    ]
+  },
+  "views": [
+    {
+      "variant_id": "formal",
+      "dimension": "mental_formal",
+      "description": "A complete authored containment graph is given. Distinguish direct containment from containment through a constituent.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "Kit",
+        "Toolbox": "Toolbox",
+        "Cloth": "Cloth",
+        "Wrench": "Wrench",
+        "Locker": "Locker",
+        "Bottle": "Bottle"
+      },
+      "relation_change": "NONE",
+      "preserves_scoped_relation": true,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "Kit",
+          "Toolbox",
+          "Cloth",
+          "Wrench",
+          "Locker",
+          "Bottle"
+        ],
+        "contains": [
+          [
+            "Kit",
+            "Toolbox"
+          ],
+          [
+            "Kit",
+            "Cloth"
+          ],
+          [
+            "Toolbox",
+            "Wrench"
+          ],
+          [
+            "Locker",
+            "Bottle"
+          ]
+        ]
+      },
+      "authored_actions": null
+    },
+    {
+      "variant_id": "packing",
+      "dimension": "physical_action_record",
+      "description": "An authored packing sequence places Toolbox and Cloth in Kit, Wrench in Toolbox, and Bottle in Locker. This is a controlled state-action description, not a sensor observation.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "Kit",
+        "Toolbox": "Toolbox",
+        "Cloth": "Cloth",
+        "Wrench": "Wrench",
+        "Locker": "Locker",
+        "Bottle": "Bottle"
+      },
+      "relation_change": "NONE",
+      "preserves_scoped_relation": true,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "Kit",
+          "Toolbox",
+          "Cloth",
+          "Wrench",
+          "Locker",
+          "Bottle"
+        ],
+        "contains": [
+          [
+            "Kit",
+            "Toolbox"
+          ],
+          [
+            "Kit",
+            "Cloth"
+          ],
+          [
+            "Toolbox",
+            "Wrench"
+          ],
+          [
+            "Locker",
+            "Bottle"
+          ]
+        ]
+      },
+      "authored_actions": [
+        {
+          "operation": "put_directly_in",
+          "item": "Toolbox",
+          "container": "Kit"
+        },
+        {
+          "operation": "put_directly_in",
+          "item": "Cloth",
+          "container": "Kit"
+        },
+        {
+          "operation": "put_directly_in",
+          "item": "Wrench",
+          "container": "Toolbox"
+        },
+        {
+          "operation": "put_directly_in",
+          "item": "Bottle",
+          "container": "Locker"
+        }
+      ]
+    },
+    {
+      "variant_id": "purpose",
+      "dimension": "emotional_purpose_context",
+      "description": "Maya needs Wrench for a repair and says she is concerned about finding it. The supplied container relationships are unchanged. This describes the agent in the scene, not a feeling induced in the learner.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "Kit",
+        "Toolbox": "Toolbox",
+        "Cloth": "Cloth",
+        "Wrench": "Wrench",
+        "Locker": "Locker",
+        "Bottle": "Bottle"
+      },
+      "relation_change": "NONE",
+      "preserves_scoped_relation": true,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "Kit",
+          "Toolbox",
+          "Cloth",
+          "Wrench",
+          "Locker",
+          "Bottle"
+        ],
+        "contains": [
+          [
+            "Kit",
+            "Toolbox"
+          ],
+          [
+            "Kit",
+            "Cloth"
+          ],
+          [
+            "Toolbox",
+            "Wrench"
+          ],
+          [
+            "Locker",
+            "Bottle"
+          ]
+        ]
+      },
+      "authored_actions": null
+    },
+    {
+      "variant_id": "reworded",
+      "dimension": "context",
+      "description": "The same complete inventory is described in a different order during a storage check. No containment relationship has changed.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "Kit",
+        "Toolbox": "Toolbox",
+        "Cloth": "Cloth",
+        "Wrench": "Wrench",
+        "Locker": "Locker",
+        "Bottle": "Bottle"
+      },
+      "relation_change": "NONE",
+      "preserves_scoped_relation": true,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "Kit",
+          "Toolbox",
+          "Cloth",
+          "Wrench",
+          "Locker",
+          "Bottle"
+        ],
+        "contains": [
+          [
+            "Kit",
+            "Toolbox"
+          ],
+          [
+            "Kit",
+            "Cloth"
+          ],
+          [
+            "Toolbox",
+            "Wrench"
+          ],
+          [
+            "Locker",
+            "Bottle"
+          ]
+        ]
+      },
+      "authored_actions": null
+    },
+    {
+      "variant_id": "folder",
+      "dimension": "analogy",
+      "description": "The supplied folder hierarchy is compared only for its nested membership relation. No claim is made that files share tools physical functions.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "ProjectFolder",
+        "Toolbox": "Subfolder",
+        "Cloth": "Note",
+        "Wrench": "Document",
+        "Locker": "Archive",
+        "Bottle": "Receipt"
+      },
+      "relation_change": "NONE",
+      "preserves_scoped_relation": true,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "ProjectFolder",
+          "Subfolder",
+          "Note",
+          "Document",
+          "Archive",
+          "Receipt"
+        ],
+        "contains": [
+          [
+            "ProjectFolder",
+            "Subfolder"
+          ],
+          [
+            "ProjectFolder",
+            "Note"
+          ],
+          [
+            "Subfolder",
+            "Document"
+          ],
+          [
+            "Archive",
+            "Receipt"
+          ]
+        ]
+      },
+      "authored_actions": null
+    },
+    {
+      "variant_id": "rewired",
+      "dimension": "counterexample",
+      "description": "Wrench is removed from Toolbox and placed directly into Kit. All other listed relationships remain unchanged.",
+      "status": "AUTHORED_ILLUSTRATION_NOT_MODEL_EXPERIENCE",
+      "base_to_view_map": {
+        "Kit": "Kit",
+        "Toolbox": "Toolbox",
+        "Cloth": "Cloth",
+        "Wrench": "Wrench",
+        "Locker": "Locker",
+        "Bottle": "Bottle"
+      },
+      "relation_change": "MOVE_WRENCH_TO_KIT",
+      "preserves_scoped_relation": false,
+      "graph": {
+        "inventory_complete": true,
+        "nodes": [
+          "Kit",
+          "Toolbox",
+          "Cloth",
+          "Wrench",
+          "Locker",
+          "Bottle"
+        ],
+        "contains": [
+          [
+            "Kit",
+            "Toolbox"
+          ],
+          [
+            "Kit",
+            "Cloth"
+          ],
+          [
+            "Locker",
+            "Bottle"
+          ],
+          [
+            "Kit",
+            "Wrench"
+          ]
+        ]
+      },
+      "authored_actions": null
+    }
+  ],
+  "model_or_neural_execution": false,
+  "physical_sensors_used": false,
+  "model_feelings_claimed": false,
+  "not_a_balanced_training_corpus": true
+}

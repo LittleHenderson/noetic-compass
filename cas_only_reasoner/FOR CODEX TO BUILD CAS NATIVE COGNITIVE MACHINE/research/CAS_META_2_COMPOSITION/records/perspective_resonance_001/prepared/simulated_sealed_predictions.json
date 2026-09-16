@@ -1,0 +1,85 @@
+{
+  "prediction_sha256": "2e1b9d31f895e9b3d7dc6e97e128191a548fd5f406d0bbed775ff1eb66585fd6",
+  "rows": [
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "f3b2535ac475304c496fd60aa922b25d01cee7ec42af1db102c9e26913bcc898",
+      "selected": "via:Toolbox"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "c6d87c3a54087e3bbcbf94c8b76f1e36b1060697f6f4f37c5752e274389899bd",
+      "selected": [
+        "Cloth",
+        "Toolbox"
+      ]
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "551f6cf0feb46d5179f066aeb8c25bac663c3358b960eb0417ffa8a31185e700",
+      "selected": "via:Toolbox"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "9ff1653bf079d8d7749efe1bf0991d3bccf26ed95e4efff43d245bb4fcffe0b9",
+      "selected": [
+        "Cloth",
+        "Toolbox"
+      ]
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "54c6a910f95387d0ab0f55e420aa70599bc1648f4b742e8c67355dd8f74e8096",
+      "selected": "via:Toolbox"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "5642bcdf47fb2703cc338410b40ae902fc92ab8cb04b351a88fa13c203fd948e",
+      "selected": [
+        "Cloth",
+        "Toolbox"
+      ]
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "fdc4ca2a7593e38f1449a4a0df6bf690159775c5620267ec3ec9d53d626ac0e0",
+      "selected": "via:Toolbox"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "cd1bc9bafc930c62945ab824dd0fe8a95b57f42c24dd31d67ba48e20dda573da",
+      "selected": [
+        "Cloth",
+        "Toolbox"
+      ]
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "6005f14196d7e8fd35ae287ea5bdfa4efd57e0faaf13fbc4292099f84911b3f4",
+      "selected": "via:Subfolder"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "16edfdef18c6c1379846b5cd91588ea68a82557c02d49382a44aeb5fc63c1220",
+      "selected": [
+        "Note",
+        "Subfolder"
+      ]
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "977dc525fcf36dd66bf32628d5f6098a74a53129962c76be07f102d479aa6e74",
+      "selected": "direct"
+    },
+    {
+      "provenance": "SIMULATED_CHECKER_ANSWERS_NOT_MODEL_OUTPUT",
+      "record_id": "6dde9fc9bacc096712e68f8eec246718e2076286b57fe54f0ded13f1b4419185",
+      "selected": [
+        "Cloth",
+        "Toolbox",
+        "Wrench"
+      ]
+    }
+  ],
+  "schema": "cas.perspective-resonance/0.1"
+}

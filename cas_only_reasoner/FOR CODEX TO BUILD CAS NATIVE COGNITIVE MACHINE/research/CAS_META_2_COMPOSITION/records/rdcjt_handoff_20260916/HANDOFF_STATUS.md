@@ -5,6 +5,22 @@ This record reconciles the supplied handoffs against commit
 `a93d8ce404a3ea3dbb3d6ea31ccd62cf1c797774`, retained bytes, and the subsequent
 non-neural repairs. It is not human approval of the money path.
 
+## Authorized continuation after this inspection
+
+The owner subsequently instructed: `I give you approval for it all ....GO!`.
+That exact instruction is recorded as `owner_instruction_in_session` in
+`../graph6_contrast_001/OWNER_AUTHORIZATION_001.json`. The earlier approval pause
+below is historical. One $7 zero-update AWS diagnostic has now completed with
+verified evidence collection and complete compute cleanup; see
+`../graph6_contrast_001/RESULT.md`. The canonical ledger is now revision 73,
+$424 reserved/$4,576 unreserved under the unchanged $5,000 cap. No extra
+recurrent-depth seed was run. All seven previously blocked legacy import suites
+now pass after static pins were updated to the reviewed budget file.
+
+Both named evidence buckets have non-expiring cleanup rules for abandoned
+multipart uploads. Their completed objects are unchanged. The stopped instance
+and 300 GiB disk remain retained after review. See `RETENTION_APPLIED.json`.
+
 ## Verified result
 
 | Seed | R1 correct | R8 correct | R8 minus R1 |

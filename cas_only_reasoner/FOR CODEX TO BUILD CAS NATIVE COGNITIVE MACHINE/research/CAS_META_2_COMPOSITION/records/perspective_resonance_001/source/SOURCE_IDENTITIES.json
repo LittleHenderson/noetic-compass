@@ -1,0 +1,81 @@
+{
+  "status": "READ_DOCUMENT_BASIS_NOT_NEURAL_EVIDENCE",
+  "local_supplied_sources": [
+    {
+      "name": "RPM_Guided_CAS_PCBA_Learning_Constructor_v0.1(1).md",
+      "bytes": 45926,
+      "sha256": "9b0a80e59a8fd76c30c9c37a69b085f2030f1eeb5ada38220bb4335ec9ce50be",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "Recurrent_Neural_CJT_Implementation_Plan_v0.1.md",
+      "bytes": 40886,
+      "sha256": "8bd914e7216326d4e80065caefe4e7ff520a973ae1252d9c037c19e299c8a8a0",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "Complementary_CJT_Teaching_Directive_v0.1.md",
+      "bytes": 36609,
+      "sha256": "8728d59f682bf787c4953c3ee5ed91420943e83720854b14301647ec9e9736bc",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "RESEARCH_PAPER_CAS_OHM_1_0_v0.2(1).pdf",
+      "bytes": 293406,
+      "sha256": "21a34501a0db0c3c65f9cd6d3149ef16bb93db2a31d626affe726ff6e72d69bf",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "CAS_Ohm_Quantification_Guide-1.pdf",
+      "bytes": 2610388,
+      "sha256": "89ae13c0a5d6208e328e9edc55f816609bb172076cc13093dccccf418145ce64",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "test_ohmic_attention.py",
+      "bytes": 11194,
+      "sha256": "29f82f69231aef0757671e024bc7f8b73e43236412b47e1f25e290577624e796",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    },
+    {
+      "name": "CMB_P0_FINDINGS.md",
+      "bytes": 10959,
+      "sha256": "aaee6ce31c3ebf70a8140cdec86af4eb3e4101e92d9565ac7964a6e70299c83a",
+      "scope": "SUPPLIED_BYTES_NOT_REPOSITORY_OR_RESULT_VERIFICATION"
+    }
+  ],
+  "library_sources_read_not_copied": [
+    {
+      "name": "Majik and the True Kabbalah the Book of Tootra.pdf",
+      "locators": [
+        "printed p.124",
+        "PDF p.129 / printed p.119"
+      ],
+      "file_id": "file_000000008ee071fda8b1da70118368b1",
+      "sha256": null
+    },
+    {
+      "name": "Cube_Face_Cube_Learning_Loop_v0.1.md",
+      "locators": [
+        "sections 1-6"
+      ],
+      "file_id": "file_000000002ad081fdb9588fdb815914f1",
+      "sha256": null
+    }
+  ],
+  "external_research": [
+    {
+      "title": "Learning and Transfer: A General Role for Analogical Encoding",
+      "url": "https://www.kellogg.northwestern.edu/academics-research/research/detail/2003/learning-and-transfer-a-general-role-for-analogical-encoding/",
+      "scope": "Human analogical comparison research, not CAS validation"
+    }
+  ],
+  "source_files_not_bundled": true,
+  "new_proposals": [
+    "perspective metadata",
+    "response profile",
+    "optional directional observation",
+    "two-condition content comparison",
+    "shadow recommendations"
+  ]
+}

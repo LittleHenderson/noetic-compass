@@ -1,0 +1,18 @@
+{
+  "actual_model_runs": 0,
+  "bindings_sha256": "322e30974649fc2a556ae19983a868ba762815c4c1b8ca243a3bf606a85dcf9d",
+  "duplicate_exposures_per_course": 900,
+  "fixed_records_package_inputs": 13,
+  "generated_json_newlines": "LF",
+  "parent_data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+  "planned_sample_passes": 171168,
+  "provider_calls": 0,
+  "pure_tests_passed": 36,
+  "request_sha256": "696870aa569412404f0d4305ec1be76aeeea3230c9d28e72fda0a28770da209c",
+  "source_manifest_sha256": "4d88f41bd26eb6616b9af105faaa521f87e028512f976f2c5c2ef9e0a62af662",
+  "status": "PURE_SOURCE_AND_CONFIG_VALIDATED",
+  "stored_execution_enabled": false,
+  "tokenizer_max_audit": 847,
+  "tokenizer_max_course": 995,
+  "unique_semantic_questions_per_course": 252
+}

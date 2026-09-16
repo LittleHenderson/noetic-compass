@@ -1,0 +1,87 @@
+{
+  "all_courses": {
+    "final_answers": 1944,
+    "initial_retention_answers": 1134,
+    "monitor_answers": 18360,
+    "numerical_gradient_answers": 18,
+    "optimizer_updates": 1440,
+    "reload_answers": 1944,
+    "state_isolation_answers": 54,
+    "teaching_decisions": 10368,
+    "total_inference_core_passes": 187632,
+    "training_batch_core_calls_planned": 5400,
+    "training_sample_core_passes": 38880
+  },
+  "candidate": "CAS_COMPLEMENTARY_TEACHING_001",
+  "claims": "COMPLEMENTARY_TEACHING_READY_NEURAL_UNTESTED only after package and pure validation; no benefit or production claim.",
+  "compute_count_scope": "600 training_batch_core_calls_planned per course are batched-equivalent update-depth units. Production loops each sample: 4320 actual training core calls per course, plus separately charged evaluation/numerical calls.",
+  "conditions": [
+    "ALT_COMPONENT_WHOLE",
+    "MIXED_SAME_ITEMS",
+    "WHOLE_SUPPLEMENT"
+  ],
+  "courses": 9,
+  "data_scope": "30 new topology families / 90 whole questions; 8-10 nodes versus 3-4 CFC nodes (explicit structural/size-transfer amendment)",
+  "execution_enabled": false,
+  "initializer_rule": "Earliest completed/rescued recurrent seed 20260912 by chronology, selected without score ranking; same frozen encoder and weights, new AdamW initialization for each course.",
+  "job": "cas-meta2-complementary-20260916000000-00000000",
+  "max_wall_seconds": 3000,
+  "optimizer_updates": 1440,
+  "owner_authorization": null,
+  "package": null,
+  "per_course": {
+    "final_answers": 216,
+    "initial_retention_answers": 126,
+    "monitor_answers": 2040,
+    "numerical_gradient_answers": 2,
+    "optimizer_updates": 160,
+    "reload_answers": 216,
+    "state_isolation_answers": 6,
+    "teaching_decisions": 1152,
+    "total_inference_core_passes": 20848,
+    "training_batch_core_calls_planned": 600,
+    "training_sample_core_passes": 4320
+  },
+  "resource_limits": {
+    "automatic_retries": 0,
+    "estimate_basis": "Existing bounded provider profile: 2 h x $2.52 + $1.48 ancillary = $6.52, rounded to $7 reservation; live preflight still required.",
+    "evidence_storage_bytes": 1073741824,
+    "experiment_wall_seconds": 3000,
+    "gpu_memory_bytes": 21474836480,
+    "install_collection_allowance_seconds": 600,
+    "instance_count": 1,
+    "instance_type": "g7.2xlarge",
+    "instance_wall_seconds": 7200,
+    "rate_ceiling_usd_hour": "2.52",
+    "region": "us-west-2",
+    "reservation_usd": "7.00",
+    "worker_wall_seconds": 3600
+  },
+  "retention_scope": "Six-face role-recognition audit; all-six application stability is not claimed.",
+  "schema": "cas.complementary-costed-request/0.1",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "signature": null,
+  "status": "UNSIGNED_EXECUTION_REQUEST",
+  "total_optimizer_steps": 1440,
+  "training": true,
+  "worker_config": {
+    "candidate": "CAS_COMPLEMENTARY_TEACHING_001",
+    "comparison_conditions": [
+      "ALT_COMPONENT_WHOLE",
+      "MIXED_SAME_ITEMS",
+      "WHOLE_SUPPLEMENT"
+    ],
+    "data_file_sha256": "4b8ffd62dcbd55ff1fb79c43a6a134ac3b5af3a84ec7ed9fccd3bc1e0c9f2c04",
+    "data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+    "execution_enabled": false,
+    "initial_checkpoint_sha256": "854dffe7ff9fd02286d39817c01204a261118c444b41cdcc3bb97b6934f55b45",
+    "job": "cas-meta2-complementary-20260916000000-00000000",
+    "learning_rate": 0.003,
+    "max_wall_seconds": 3000,
+    "training": true
+  }
+}

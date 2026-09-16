@@ -1,0 +1,300 @@
+{
+  "by_seed": [
+    {
+      "conditions": {
+        "CANONICAL_REVISIT": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 0,
+            "dimensions": {
+              "canonical": 1152
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "b3ae26ac5703be1175ece23f84faa025507e51ed2648e365113642af27d00742"
+        },
+        "CONNECTED_PERSPECTIVES": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 137560,
+            "dimensions": {
+              "analogy": 192,
+              "canonical": 128,
+              "context": 192,
+              "emotional_purpose_context": 192,
+              "mental_formal": 256,
+              "physical_action_record": 192
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "1e6d119dcb27ab950c30038fb95ca81455b8d0b27df57152c9b4c824f9f0f413"
+        }
+      },
+      "parent_schedule_sha256": "b3ae26ac5703be1175ece23f84faa025507e51ed2648e365113642af27d00742",
+      "seed": 101
+    },
+    {
+      "conditions": {
+        "CANONICAL_REVISIT": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 0,
+            "dimensions": {
+              "canonical": 1152
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "7365fc84a4c44ed1c965604e5f453a2fdf396ff41a53643a2efd479ab9d77a31"
+        },
+        "CONNECTED_PERSPECTIVES": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 137560,
+            "dimensions": {
+              "analogy": 192,
+              "canonical": 128,
+              "context": 192,
+              "emotional_purpose_context": 192,
+              "mental_formal": 256,
+              "physical_action_record": 192
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "b6139890bcb0f4884dacdb04d528af1497a00bf9de07c5ddc3c17c1daab8fdbb"
+        }
+      },
+      "parent_schedule_sha256": "7365fc84a4c44ed1c965604e5f453a2fdf396ff41a53643a2efd479ab9d77a31",
+      "seed": 202
+    },
+    {
+      "conditions": {
+        "CANONICAL_REVISIT": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 0,
+            "dimensions": {
+              "canonical": 1152
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "b33cb93daddaca3ed72fd1dfa354f7d1013221816b22e8fbb5dc9e3d25aefd38"
+        },
+        "CONNECTED_PERSPECTIVES": {
+          "counts": {
+            "batch_core_count_scope": "Batched-equivalent update-depth units only. Sequential production execution makes sample_core_passes_planned actual core invocations.",
+            "batch_core_forward_calls_planned": 600,
+            "by_role": {
+              "CFC_FOUNDATION": 768,
+              "COMPONENT": 128,
+              "MAINTENANCE": 128,
+              "WHOLE": 128
+            },
+            "decisions": 1152,
+            "duplicate_semantic_exposures": 900,
+            "optimizer_updates": 160,
+            "rounds": 16,
+            "sample_core_passes_planned": 4320,
+            "unique_semantic_questions": 252
+          },
+          "coverage": {
+            "added_utf8_bytes": 137560,
+            "dimensions": {
+              "analogy": 192,
+              "canonical": 128,
+              "context": 192,
+              "emotional_purpose_context": 192,
+              "mental_formal": 256,
+              "physical_action_record": 192
+            },
+            "exposure_rhythm": "Recorded parent slot order; no physical frequency claim.",
+            "families": 24,
+            "presentations": 1152,
+            "source_support": "One authored graph per question; repeated views are dependent.",
+            "token_count": null,
+            "token_count_status": "COUNT_WITH_BOUND_TOKENIZER_AT_PREPARATION",
+            "unique_semantic_questions": 252
+          },
+          "schedule_sha256": "62769690cff58a5309fc506efa1edf585942bc190ac48514afe75251a5b704b7"
+        }
+      },
+      "parent_schedule_sha256": "b33cb93daddaca3ed72fd1dfa354f7d1013221816b22e8fbb5dc9e3d25aefd38",
+      "seed": 303
+    }
+  ],
+  "parent_condition": "ALT_COMPONENT_WHOLE",
+  "parent_data_file_sha256": "4b8ffd62dcbd55ff1fb79c43a6a134ac3b5af3a84ec7ed9fccd3bc1e0c9f2c04",
+  "parent_data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+  "parent_profile": "cas.complementary-teaching/0.1",
+  "perspective_audit_counts": {
+    "perspective_canonical": 90,
+    "perspective_changed_relation": 30,
+    "perspective_cross_view": 90
+  },
+  "schema": "cas.perspective-resonance/0.1",
+  "source_selection": "PINNED_BEFORE_NEURAL_OUTCOMES",
+  "tokenizer": {
+    "audit": {
+      "maximum_tokens": 847,
+      "presentations": 210,
+      "total_tokens": 110717
+    },
+    "identity": "cdc7071ca2b56d0dbd4d8ba8881092d2fae865bd5a3b75065efe6a102efff13a",
+    "max_length": 1024,
+    "measurements": [
+      {
+        "byte_fallback_tokens": 7112,
+        "condition": "CANONICAL_REVISIT",
+        "maximum_tokens": 794,
+        "presentations": 1152,
+        "seed": 101,
+        "total_tokens": 325221
+      },
+      {
+        "byte_fallback_tokens": 90504,
+        "condition": "CONNECTED_PERSPECTIVES",
+        "maximum_tokens": 995,
+        "presentations": 1152,
+        "seed": 101,
+        "total_tokens": 438053
+      },
+      {
+        "byte_fallback_tokens": 7112,
+        "condition": "CANONICAL_REVISIT",
+        "maximum_tokens": 794,
+        "presentations": 1152,
+        "seed": 202,
+        "total_tokens": 325221
+      },
+      {
+        "byte_fallback_tokens": 90504,
+        "condition": "CONNECTED_PERSPECTIVES",
+        "maximum_tokens": 995,
+        "presentations": 1152,
+        "seed": 202,
+        "total_tokens": 438053
+      },
+      {
+        "byte_fallback_tokens": 7112,
+        "condition": "CANONICAL_REVISIT",
+        "maximum_tokens": 794,
+        "presentations": 1152,
+        "seed": 303,
+        "total_tokens": 325221
+      },
+      {
+        "byte_fallback_tokens": 90504,
+        "condition": "CONNECTED_PERSPECTIVES",
+        "maximum_tokens": 995,
+        "presentations": 1152,
+        "seed": 303,
+        "total_tokens": 438053
+      }
+    ],
+    "unchanged_original_fit": true
+  }
+}

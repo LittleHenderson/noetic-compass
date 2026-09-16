@@ -1,0 +1,88 @@
+{
+  "adaptive_policy_status": "SHADOW_ONLY_DISABLED",
+  "audit_allocation_per_learner": {
+    "audit_and_check_sample_passes": 24208,
+    "audit_decisions_total": 3018,
+    "development": 2040,
+    "final_and_reload": 852,
+    "inference_depth": 8,
+    "initial_retention": 126,
+    "numerical_check_forwards": 2,
+    "state_isolation_forwards": 6
+  },
+  "candidate": "CAS_PERSPECTIVE_RESONANCE_001",
+  "conditions": [
+    "CANONICAL_REVISIT",
+    "CONNECTED_PERSPECTIVES"
+  ],
+  "empirical_response_profile_status": "UNAVAILABLE_NO_APPROVED_INTERVENTION_PORT",
+  "execution_enabled": false,
+  "learners": 6,
+  "native_flow_binding_status": "UNAVAILABLE_NO_NATIVE_FLOW_TAP",
+  "observation": {
+    "adaptive_policy_enabled": false,
+    "behavioral_rows": "RETAIN_ACTUAL_PREDICTIONS_BEFORE_TARGET_JOIN",
+    "calibrated_response": "UNAVAILABLE_NO_APPROVED_INTERVENTION_PORT",
+    "calibration_forwards": 0,
+    "full_tensor_capture": false,
+    "native_flow": "UNAVAILABLE_NO_NATIVE_FLOW_TAP",
+    "observation_overhead": "MEASURE_ELAPSED_LOGGING_TIME_IN_WORKER"
+  },
+  "parent_bindings_sha256": "97ae763206efd9781b9ddc5ab59a609e0300600b19727cb94be0ae746ddd6589",
+  "parent_condition": "ALT_COMPONENT_WHOLE",
+  "parent_data_sha256": "086671a6dc0f4fa6c46dd205fc45fdfe0a0a0b55e3ecd636f13fa135a8f4b298",
+  "parent_profile": "cas.complementary-teaching/0.1",
+  "prior_reservation_reused": false,
+  "required_execution_gates": [
+    "exact source/package identities",
+    "parent fresh-root exclusions verified",
+    "pure and authorized GPU numerical checks",
+    "new budget reservation through shared ledger",
+    "signed exact job/source authority and cost cap"
+  ],
+  "required_source_package_files": [
+    "research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/neural.py",
+    "research/CAS_META_2_COMPOSITION/records/perspective_resonance_001/prepared/**",
+    "research/CAS_META_2_COMPOSITION/records/complementary_teaching_001/preparation_20260916/**",
+    "parent INITIAL_PATH checkpoint and frozen dependency wheels"
+  ],
+  "resource_allowance": {
+    "ancillary_allowance_usd": "1.96",
+    "automatic_retries": 0,
+    "experiment_seconds_max": 3000,
+    "instance_count": 1,
+    "instance_seconds_max": 7200,
+    "instance_type": "g7.2xlarge",
+    "local_neural_fallback": false,
+    "maximum_instance_compute_usd": "5.04",
+    "on_demand_rate_ceiling_usd": "2.52",
+    "provider": "AWS",
+    "region": "us-west-2",
+    "setup_collection_allowance_seconds": 600,
+    "total_cap_usd": "7.00",
+    "worker_seconds_max": 3600
+  },
+  "result_status": "PERSPECTIVE_RESONANCE_READY_NEURAL_UNTESTED",
+  "schema": "cas.perspective-resonance-unsigned-request/0.1",
+  "seeds": [
+    101,
+    202,
+    303
+  ],
+  "signature": null,
+  "source_manifest_file_sha256": "4d88f41bd26eb6616b9af105faaa521f87e028512f976f2c5c2ef9e0a62af662",
+  "total_training_audit_and_check_sample_passes": 171168,
+  "training": {
+    "continuing_optimizer": true,
+    "decisions_per_learner": 1152,
+    "decisions_total": 6912,
+    "extra_teaching_slots": 0,
+    "fresh_question_state": true,
+    "rounds_per_learner": 16,
+    "sample_core_passes_total": 25920,
+    "updates_per_learner": 160,
+    "updates_total": 960
+  },
+  "worker_config_file_sha256": "d3ca8a282e83d0b0bd6863b43b81de0bb0e75e203abeabba25b42fb31a888301",
+  "worker_entrypoint": "cas_meta2.perspective_worker.run"
+}
