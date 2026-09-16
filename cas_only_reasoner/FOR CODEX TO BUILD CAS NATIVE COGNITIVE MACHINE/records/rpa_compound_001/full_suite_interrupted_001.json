@@ -1,0 +1,9 @@
+{
+  "reason": "Real compound viewer acceptance found unhandled zero-event next-episode genesis; renderer must change, so stop obsolete full-suite run before final verification",
+  "full_suite_success": false,
+  "exec_session_id": 13277,
+  "schema_version": "cncm.interrupted-test-run/0.1",
+  "observed_utc": "2026-09-16T14:42:16.9844842Z",
+  "process_id": 27636,
+  "status": "INTERRUPTED_FOR_SOURCE_FIX"
+}

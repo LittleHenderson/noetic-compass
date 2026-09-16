@@ -1,0 +1,344 @@
+"""Read back an explicitly pinned, already-pushed compound RPA checkpoint.
+
+This helper only reads Git/GitHub and writes a new external receipt/download
+directory. It does not commit, push, run tests, replay the machine, deploy, or
+invoke models/providers. Receipt equality does not establish broader acceptance.
+"""
+from __future__ import annotations
+
+import argparse
+import base64
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+from hashlib import sha1, sha256
+import json
+from pathlib import Path, PurePosixPath
+import re
+import subprocess
+import sys
+from xml.etree import ElementTree
+
+
+OUTER_HOME = Path("C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE")
+WORKTREE = OUTER_HOME / "_worktrees/vision-next"
+HOME = WORKTREE / "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE"
+REPOSITORY = "LittleHenderson/noetic-compass"
+BRANCH = "codex/cncm-vision-next"
+PREVIOUS_COMMIT = "9597840c3a0344ea730c689bfc9ffc22401fe707"
+EXPECTED_PROFILES = {
+    "0.2": "c37aeb1e5cf3813585b2940037e6bc3793bf99dcf968026c0e38394a5886d607",
+    "0.3": "49f6c321472c6223b42a39ea21e402d2018ce5bd747acfd9266dc638aaf5be38",
+    "0.4": "6a27f94656b45a4c4732d1a185844517f382390d6e3d1ce4259b63861badcecf",
+    "0.5": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+}
+VIEW_SOURCES = (
+    "cncm/rpa_model.py", "cncm/rpa_compound_adapter.py", "tools/render_rpa_view.py",
+    "tools/render_compound_rpa_view.py", "tools/reproduce_compound_rpa.py",
+    "docs/CAS_RPA_PROJECT_FIT.md", "docs/CAS_RPA_MATHEMATICAL_REVIEW.md",
+    "docs/CAS_RPA_COMPOUND_EXTENSION_v0.1.md", "docs/CAS_RPA_COMPOUND_IMPLEMENTATION_v0.1.md",
+    "records/rpa_001/source_identity.json",
+)
+EXPECTED_PRIOR_ACCEPTANCE_SHA256 = "3f3ca9e9f3016df527ddbf218f7c0d26a41cc7d9baf01ca99f8d7632f6fcf66b"
+EXPECTED_PRIOR_RPA_SHA256 = "dcd8e3c99fdf0edd45f0e6ea56a6d9336fabac9761ac3056d29b223bf6339f62"
+PRIOR_ACCEPTANCE = "records/compound_procedure_001/acceptance_001/receipt.json"
+PRIOR_RPA = "records/rpa_001/demo2/receipt.json"
+
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
+
+
+def command(args):
+    return subprocess.run(args, cwd=WORKTREE, capture_output=True, check=True, timeout=60).stdout
+
+
+def api(endpoint):
+    return json.loads(command(["gh", "api", "repos/" + REPOSITORY + "/" + endpoint]))
+
+
+def checked_hex(value, length, description):
+    require(type(value) is str and re.fullmatch("[0-9a-f]{" + str(length) + "}", value),
+            description + " must be a complete lowercase hexadecimal digest")
+    return value
+
+
+def relative_name(value):
+    require(type(value) is str and value and "\\" not in value and ":" not in value,
+            "expected a canonical relative POSIX path")
+    path = PurePosixPath(value)
+    require(not path.is_absolute() and str(path) == value and all(part not in (".", "..") for part in path.parts),
+            "unsafe or noncanonical relative path: " + value)
+    return value
+
+
+def contained_file(name):
+    path = HOME / relative_name(name)
+    require(path.resolve().is_relative_to(HOME.resolve()), "file escapes the inner home: " + name)
+    require(path.is_file(), "required local file is missing: " + name)
+    return path
+
+
+def identities(rows, description):
+    require(type(rows) is list and rows, description + " must be a nonempty list")
+    result = {}
+    for row in rows:
+        require(type(row) is dict and set(row) == {"path", "bytes", "sha256"},
+                description + " contains an invalid identity row")
+        name = relative_name(row["path"])
+        require(name not in result, description + " contains a duplicate path: " + name)
+        require(type(row["bytes"]) is int and row["bytes"] >= 0, "invalid byte count: " + name)
+        checked_hex(row["sha256"], 64, "SHA-256 for " + name)
+        result[name] = (row["bytes"], row["sha256"])
+    return result
+
+
+def branch_head():
+    rows = command(["git", "ls-remote", "origin", "refs/heads/" + BRANCH]).decode().splitlines()
+    require(len(rows) == 1, "remote branch was missing or ambiguous")
+    value, ref = rows[0].split()
+    require(ref == "refs/heads/" + BRANCH, "unexpected remote reference")
+    return checked_hex(value, 40, "remote commit")
+
+
+def changed_files(commit, prefix):
+    raw = command(["git", "diff", "--name-status", "-z", "--no-renames", PREVIOUS_COMMIT,
+                   commit, "--", prefix + "/"])
+    fields = raw.decode("utf-8").split("\0")
+    require(fields[-1] == "", "unexpected Git diff path framing")
+    fields.pop()
+    require(len(fields) % 2 == 0, "unexpected Git diff entry framing")
+    rows = []
+    for index in range(0, len(fields), 2):
+        status, full_name = fields[index:index + 2]
+        require(status in {"A", "M", "D", "T"}, "unsupported changed-file status: " + status)
+        require(full_name.startswith(prefix + "/"), "changed path outside the inner home")
+        name = relative_name(full_name[len(prefix) + 1:])
+        rows.append({"status": status, "home_relative_path": name, "path": full_name})
+    require(rows, "the pinned checkpoint has no changes inside the inner home")
+    return rows
+
+
+def read_suite(raw):
+    root = ElementTree.fromstring(raw)
+    require(root.tag in {"testsuite", "testsuites"}, "unexpected full-suite XML root")
+    suites = list(root.iter("testsuite"))
+    require(suites and all(not list(row.iter("testsuite"))[1:] for row in suites),
+            "full-suite XML must contain non-nested test suites")
+    counts = {name: sum(int(row.get(name, "0")) for row in suites)
+              for name in ("tests", "failures", "errors", "skipped")}
+    require(counts["tests"] > 0 and counts["failures"] == counts["errors"] == counts["skipped"] == 0,
+            "full-suite XML is empty or records failures, errors, or skipped tests")
+    require(len(list(root.iter("testcase"))) == counts["tests"], "full-suite testcase count mismatch")
+    require(not any(list(root.iter(tag)) for tag in ("failure", "error", "skipped")),
+            "full-suite XML contains a failing, erroneous, or skipped testcase")
+    return counts
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--commit", required=True, help="Exact already-tested and pushed 40-character commit SHA")
+    parser.add_argument("--receipt-sha256", required=True, help="Externally retained acceptance receipt SHA-256")
+    parser.add_argument("--full-suite-sha256", required=True, help="Externally retained final full-suite XML SHA-256")
+    parser.add_argument("--acceptance", default="records/rpa_compound_001/acceptance_001",
+                        help="Acceptance directory, absolute or relative to the inner home")
+    parser.add_argument("--full-suite", default="records/rpa_compound_001/final_full_suite_tests.xml",
+                        help="Full-suite XML path relative to the inner home")
+    args = parser.parse_args()
+    commit = checked_hex(args.commit, 40, "pinned commit")
+    checked_hex(args.receipt_sha256, 64, "pinned acceptance receipt SHA-256")
+    checked_hex(args.full_suite_sha256, 64, "pinned full-suite SHA-256")
+    suite_name = relative_name(args.full_suite)
+    acceptance_path = Path(args.acceptance)
+    if not acceptance_path.is_absolute():
+        acceptance_path = HOME / acceptance_path
+    acceptance_path = acceptance_path.resolve()
+    require(acceptance_path.is_dir() and acceptance_path.is_relative_to((HOME / "records/rpa_compound_001").resolve()),
+            "acceptance directory must exist inside records/rpa_compound_001")
+    acceptance = acceptance_path.relative_to(HOME.resolve()).as_posix()
+    receipt_name = acceptance + "/receipt.json"
+
+    sys.path.insert(0, str(HOME))
+    from cncm.compound_profile import SOURCE_FILES, load_compound_profile
+    from cncm.native_profile import load_native_profile
+    from cncm.nested_profile import load_nested_profile
+    from cncm.semantic_profile import load_semantic_profile
+
+    def profiles():
+        return {"0.2": load_native_profile().profile_digest,
+                "0.3": load_nested_profile().profile_digest,
+                "0.4": load_semantic_profile().profile_digest,
+                "0.5": load_compound_profile().profile_digest}
+
+    started = datetime.now(timezone.utc)
+    helper_raw = Path(__file__).read_bytes()
+    require(Path(__file__).resolve().is_relative_to(OUTER_HOME.resolve()), "helper must stay inside outer home")
+    require(command(["git", "rev-parse", "HEAD"]).decode().strip() == commit, "local HEAD is not the pinned commit")
+    require(command(["git", "branch", "--show-current"]).decode().strip() == BRANCH, "local branch changed")
+    require(not command(["git", "status", "--porcelain", "--untracked-files=no"]).strip(),
+            "tracked working-tree or index changes must be resolved before publication read-back")
+    origin = command(["git", "remote", "get-url", "origin"]).decode().strip().removesuffix(".git").rstrip("/")
+    require(origin in ("https://github.com/" + REPOSITORY, "git@github.com:" + REPOSITORY,
+                       "ssh://git@github.com/" + REPOSITORY), "origin is not the expected repository")
+    command(["git", "merge-base", "--is-ancestor", PREVIOUS_COMMIT, commit])
+    require(commit != PREVIOUS_COMMIT, "new checkpoint must advance the previous compound commit")
+    require(branch_head() == commit and api("git/ref/heads/" + BRANCH)["object"]["sha"] == commit,
+            "remote branch does not equal the pinned commit")
+    remote_commit = api("git/commits/" + commit)
+    tree = command(["git", "rev-parse", commit + "^{tree}"]).decode().strip()
+    require(remote_commit["sha"] == commit and remote_commit["tree"]["sha"] == tree,
+            "GitHub commit/tree does not match the pinned local commit")
+    require(profiles() == EXPECTED_PROFILES, "a frozen runtime source profile changed")
+    profile = load_compound_profile()
+    profile_rows = {row[0]: (row[1], row[2]) for row in profile.source_files}
+    require(len(SOURCE_FILES) == len(set(SOURCE_FILES)) == len(profile_rows) == 87,
+            "expected exactly 87 compound runtime source files")
+
+    receipt_raw = contained_file(receipt_name).read_bytes()
+    require(sha256(receipt_raw).hexdigest() == args.receipt_sha256, "acceptance receipt does not match its external pin")
+    receipt = json.loads(receipt_raw)
+    require(receipt["schema_version"] == "cncm.rpa-compound-receipt/0.1"
+            and receipt["status"] == "REAL_COMPOUND_EVIDENCE_PROJECTED", "unexpected acceptance receipt type/status")
+    require(receipt["runtime_source_profile_digest"] == EXPECTED_PROFILES["0.5"], "acceptance runtime profile mismatch")
+    require(receipt["prior_acceptance_receipt_sha256"] == EXPECTED_PRIOR_ACCEPTANCE_SHA256
+            and receipt["prior_rpa_receipt_sha256"] == EXPECTED_PRIOR_RPA_SHA256, "prior receipt pins changed")
+    require(receipt["primary_cuts"] == 34 and receipt["failure_cuts"] == 41 and receipt["all_retained_cuts"] == 75,
+            "acceptance does not cover all 75 retained pause points")
+    require(receipt["prior_manifest_files_verified"] == 48 and len(receipt["examples"]) == 10,
+            "acceptance evidence inventory changed")
+    require(receipt["kernel_state_writes_by_viewer"] == 0 and receipt["model_or_provider_work"] is False
+            and receipt["measured_performance_advantage"] is False and receipt["full_goal_complete"] is False,
+            "acceptance boundary unexpectedly changed")
+    source_rows = identities(receipt["sources"], "acceptance sources")
+    require(len(source_rows) == 97 and set(source_rows) == set(SOURCE_FILES) | set(VIEW_SOURCES),
+            "receipt must bind exactly the 97 expected runtime/viewer sources")
+    require(all(source_rows[name] == identity for name, identity in profile_rows.items()),
+            "acceptance source identities disagree with the frozen compound profile")
+    manifest = identities(receipt["files"], "acceptance artifacts")
+    require("receipt.json" not in manifest, "receipt cannot include itself in its artifact manifest")
+    prior_sources = identities(receipt["prior_rpa_sources_unchanged"], "prior RPA sources")
+    require(len(prior_sources) == 7, "expected seven unchanged prior RPA sources")
+    expected = dict(source_rows)
+
+    def bind(name, identity):
+        if name in expected:
+            require(expected[name] == identity, "conflicting expected file identity: " + name)
+        expected[name] = identity
+
+    for name, identity in manifest.items():
+        bind(acceptance + "/" + name, identity)
+    for name, identity in prior_sources.items():
+        bind(name, identity)
+    bind(receipt_name, (len(receipt_raw), args.receipt_sha256))
+    for name, checksum in ((suite_name, args.full_suite_sha256),
+                           (PRIOR_ACCEPTANCE, EXPECTED_PRIOR_ACCEPTANCE_SHA256), (PRIOR_RPA, EXPECTED_PRIOR_RPA_SHA256)):
+        raw = contained_file(name).read_bytes()
+        require(sha256(raw).hexdigest() == checksum, "externally pinned file mismatch: " + name)
+        bind(name, (len(raw), checksum))
+    prefix = HOME.relative_to(WORKTREE).as_posix()
+    changes = changed_files(commit, prefix)
+    deleted = [row for row in changes if row["status"] == "D"]
+    require(not deleted, "checkpoint deletes retained inner-home files; preserve evidence before publication")
+    paths = sorted(set(expected) | {row["home_relative_path"] for row in changes})
+    stamp = started.strftime("%H%M%S%f")
+    target = Path(__file__).with_name("rpa-compound-" + commit[:8] + "-" + stamp + "-publication.json")
+    output = Path(__file__).with_name("rpa-compound-" + commit[:8] + "-readback-" + stamp)
+    require(not target.exists(), "read-back receipt already exists; refusing to overwrite")
+    output.mkdir(exist_ok=False)
+
+    def retrieve(item):
+        index, name = item
+        path = prefix + "/" + name
+        oid = command(["git", "rev-parse", commit + ":" + path]).decode().strip()
+        checked_hex(oid, 40, "blob SHA for " + name)
+        committed = command(["git", "cat-file", "blob", oid])
+        local = contained_file(name).read_bytes()
+        require(committed == local, "uncommitted or newline-different local bytes: " + name)
+        blob = api("git/blobs/" + oid)
+        require(blob["encoding"] == "base64" and blob["sha"] == oid, "GitHub blob identity/encoding mismatch: " + name)
+        raw = base64.b64decode("".join(blob["content"].split()), validate=True)
+        require(len(raw) == blob["size"], "GitHub blob byte length mismatch: " + name)
+        require(sha1(b"blob " + str(len(raw)).encode() + b"\0" + raw).hexdigest() == oid,
+                "Git SHA-1 object digest mismatch: " + name)
+        require(raw == committed == local, "remote/committed/local bytes differ: " + name)
+        checksum = sha256(raw).hexdigest()
+        if name in expected:
+            require(expected[name] == (len(raw), checksum), "pinned file size/SHA-256 mismatch: " + name)
+        destination = output / (str(index).zfill(4) + "-" + Path(name).name)
+        with destination.open("xb") as stream:
+            stream.write(raw)
+        return {"path": path, "home_relative_path": name, "git_blob": oid,
+                "bytes": len(raw), "sha256": checksum, "download": destination.name}, raw
+
+    try:
+        with ThreadPoolExecutor(max_workers=5) as pool:
+            downloads = list(pool.map(retrieve, enumerate(paths)))
+        rows = [row for row, _ in downloads]
+        raw_by_name = {row["home_relative_path"]: raw for row, raw in downloads}
+        require(raw_by_name[receipt_name] == receipt_raw, "acceptance receipt changed during read-back")
+        prior_rpa = json.loads(raw_by_name[PRIOR_RPA])
+        require(identities(prior_rpa["sources"], "historical RPA sources") == prior_sources,
+                "claimed unchanged RPA sources disagree with the pinned historical receipt")
+        test_counts = read_suite(raw_by_name[suite_name])
+        status = api("commits/" + commit + "/status?per_page=100")
+        runs = api("actions/runs?head_sha=" + commit + "&per_page=100")
+        require(status["sha"] == commit, "status observation is for another commit")
+        require(all(row["head_sha"] == commit for row in runs["workflow_runs"]), "workflow response contains another commit")
+        require(command(["git", "rev-parse", "HEAD"]).decode().strip() == commit, "local HEAD changed during read-back")
+        require(command(["git", "branch", "--show-current"]).decode().strip() == BRANCH, "local branch changed during read-back")
+        require(not command(["git", "status", "--porcelain", "--untracked-files=no"]).strip(), "tracked state changed during read-back")
+        require(branch_head() == commit and api("git/ref/heads/" + BRANCH)["object"]["sha"] == commit,
+                "remote branch changed during read-back")
+        require(profiles() == EXPECTED_PROFILES and load_compound_profile().to_dict() == profile.to_dict(),
+                "runtime sources changed during read-back")
+        require(Path(__file__).read_bytes() == helper_raw, "read-back helper changed during execution")
+        for row in rows:
+            require(sha256(contained_file(row["home_relative_path"]).read_bytes()).hexdigest() == row["sha256"],
+                    "local source/evidence changed during read-back: " + row["home_relative_path"])
+        record = {
+            "schema": "cncm.published-rpa-compound-checkpoint/1",
+            "started_utc": started.isoformat(), "observed_utc": datetime.now(timezone.utc).isoformat(),
+            "repository": REPOSITORY, "branch": BRANCH, "commit": commit, "previous_commit": PREVIOUS_COMMIT,
+            "git_tree": tree, "remote_branch_head": commit, "remote_head_rechecked_at_end": True,
+            "helper_path": str(Path(__file__).resolve()), "helper_sha256": sha256(helper_raw).hexdigest(),
+            "unchanged_runtime_source_profile_digests": EXPECTED_PROFILES,
+            "runtime_source_count": 87, "declared_source_count": len(source_rows),
+            "prior_rpa_source_count": len(prior_sources), "acceptance_artifact_count": len(manifest),
+            "changed_inner_home_files": changes, "download_directory": str(output),
+            "downloaded_byte_equal": rows, "files_verified": len(rows),
+            "acceptance_receipt": receipt_name, "acceptance_receipt_sha256": args.receipt_sha256,
+            "retained_acceptance_status": receipt["status"], "retained_cuts": receipt["all_retained_cuts"],
+            "retained_example_count": len(receipt["examples"]), "full_suite_xml": suite_name,
+            "full_suite_sha256": args.full_suite_sha256, "retained_full_suite_counts": test_counts,
+            "workflow_run_count": runs["total_count"], "workflow_runs_returned": len(runs["workflow_runs"]),
+            "workflow_listing_complete": runs["total_count"] == len(runs["workflow_runs"]),
+            "workflow_runs": [{key: row.get(key) for key in ("id", "name", "status", "conclusion", "head_sha", "html_url")}
+                              for row in runs["workflow_runs"]],
+            "combined_status_state": status["state"], "status_context_count": status["total_count"],
+            "statuses_returned": len(status["statuses"]),
+            "status_listing_complete": status["total_count"] == len(status["statuses"]),
+            "statuses": [{key: row.get(key) for key in ("context", "state", "description", "target_url")}
+                         for row in status["statuses"]],
+            "boundary": "Published-byte and retained-evidence binding check only. GitHub statuses/actions are current observations, not deployment or CI acceptance. This helper does not rerun tests or semantic replay, authenticate source principals, verify world facts, establish learning or complete the machine.",
+        }
+        with target.open("x", encoding="utf-8", newline="\n") as stream:
+            json.dump(record, stream, indent=2)
+            stream.write("\n")
+        print(json.dumps({"receipt": str(target), "receipt_sha256": sha256(target.read_bytes()).hexdigest(),
+                          "commit": commit, "files_verified": len(rows), "declared_sources": len(source_rows),
+                          "artifact_files": len(manifest), "changed_files": len(changes),
+                          "full_suite_counts": test_counts, "workflow_run_count": record["workflow_run_count"],
+                          "statuses": record["statuses"]}))
+    except Exception as error:
+        with (output / "readback_failure.json").open("x", encoding="utf-8", newline="\n") as stream:
+            json.dump({"schema": "cncm.rpa-compound-readback-failure/1", "commit": commit,
+                       "observed_utc": datetime.now(timezone.utc).isoformat(),
+                       "error_type": type(error).__name__, "message": str(error),
+                       "acceptance_receipt_sha256": args.receipt_sha256,
+                       "full_suite_sha256": args.full_suite_sha256}, stream, indent=2)
+            stream.write("\n")
+        raise
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,5 @@
+*.xml -text -whitespace
+*.json -text -eol -whitespace
+*.png -text
+*.html -text -eol
+*.txt -text -eol -whitespace

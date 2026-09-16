@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="30" time="103.927" timestamp="2026-09-16T07:32:38.626150-07:00" hostname="MSI"><testcase classname="tests.test_rpa_compound_view" name="test_actual_projection_renders_with_exact_embedded_data_and_hash_csp" time="30.982" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;0]" time="0.063" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;1]" time="0.060" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;2]" time="0.073" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;3]" time="0.077" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;4]" time="0.077" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;5]" time="0.103" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;6]" time="0.099" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;7]" time="0.091" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;8]" time="0.085" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;9]" time="0.086" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;10]" time="0.086" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;11]" time="0.085" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;12]" time="0.113" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;13]" time="0.478" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;14]" time="0.502" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;15]" time="0.427" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;16]" time="0.081" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;17]" time="0.089" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;18]" time="0.432" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;19]" time="1.305" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;20]" time="0.500" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;21]" time="0.443" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;22]" time="0.461" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;23]" time="10.123" /><testcase classname="tests.test_rpa_compound_view" name="test_closed_wire_rejects_conflicting_or_unsafe_claims[&lt;lambda&gt;24]" time="0.053" /><testcase classname="tests.test_rpa_compound_view" name="test_omitted_work_records_cannot_hide_a_real_charge" time="0.673" /><testcase classname="tests.test_rpa_compound_view" name="test_wire_parser_rejects_duplicate_keys_non_json_and_large_integer" time="0.002" /><testcase classname="tests.test_rpa_compound_view" name="test_cli_roundtrip_and_hostile_labels_are_inert" time="21.511" /><testcase classname="tests.test_rpa_compound_view" name="test_actual_browser_bfs_paging_evidence_injection_and_offline_behavior" time="33.174"><failure message="PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu\\Default\\DIPS'">page = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...s_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/_scratch/veb4o911e/view.html')
+screenshot_path = None
+
+    def run_browser_check(page, screenshot_path=None):
+        """Check an existing exact HTML export and optionally retain two screenshots.
+    
+        Raises when Chromium is missing or any assertion fails. All launched process
+        handles are owned and stopped; scratch profiles stay within the CNCM HOME.
+        """
+        if CHROME is None or shutil.which('node') is None:
+            raise RuntimeError('Chromium and Node are required for this browser check')
+        page = Path(page).resolve()
+        document = json.loads(parse(page.read_text(encoding='utf-8')).scripts[0]['text'])
+        scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='b', dir=scratch) as directory:
+            profile = Path(directory)
+            process = subprocess.Popen([str(CHROME), '--headless=new', '--disable-gpu', '--no-first-run',
+                '--no-default-browser-check', '--disable-background-networking', '--disable-extensions',
+                '--remote-debugging-port=0', '--user-data-dir=' + str(profile), 'about:blank'],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            target_websocket = None
+            try:
+                port_file = profile / 'DevToolsActivePort'
+                deadline = time.monotonic() + 15
+                while not port_file.exists() and time.monotonic() &lt; deadline and process.poll() is None:
+                    time.sleep(.05)
+                assert port_file.exists(), 'headless browser did not expose its local test port'
+                port = port_file.read_text().splitlines()[0]
+                with urllib.request.urlopen('http://127.0.0.1:' + port + '/json/list', timeout=5) as response:
+                    target = next(row for row in json.load(response) if row['type'] == 'page')
+                target_websocket = target['webSocketDebuggerUrl']
+                result = subprocess.run([shutil.which('node'), '--input-type=module', '-e', CDP_CHECK,
+                    target_websocket, page.as_uri(), '' if screenshot_path is None else str(Path(screenshot_path).resolve())],
+                    capture_output=True, text=True, encoding='utf-8', timeout=90)
+&gt;               assert result.returncode == 0, result.stderr
+E               AssertionError: file:///C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/_worktrees/vision-next/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:6
+E                 const evaluate=async expression=&gt;{const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(result.exceptionDetails)throw Error(JSON.stringify(result.exceptionDetails));return result.result.value;};
+E                                                                                                                                                                                  ^
+E                 
+E                 Error: {"exceptionId":1,"text":"Uncaught (in promise) TypeError: Cannot read properties of null (reading 'click')","lineNumber":28,"columnNumber":30,"scriptId":"6","stackTrace":{"callFrames":[{"functionName":"","scriptId":"6","url":"","lineNumber":27,"columnNumber":29}]},"exception":{"type":"object","subtype":"error","className":"TypeError","description":"TypeError: Cannot read properties of null (reading 'click')\n    at &lt;anonymous&gt;:28:30","objectId":"571683852170508596.2.1"}}
+E                     at evaluate (file:///C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/_worktrees/vision-next/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:6:162)
+E                     at async file:///C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/_worktrees/vision-next/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:13:13
+E                 
+E                 Node.js v24.11.1
+E                 
+E               assert 1 == 0
+E                +  where 1 = CompletedProcess(args=['C:\\Program Files\\nodejs\\node.EXE', '--input-type=module', '-e', '\nconst [url,pageUrl,scree...t/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:13:13\n\nNode.js v24.11.1\n').returncode
+
+tests\test_rpa_compound_view.py:259: AssertionError
+
+During handling of the above exception, another exception occurred:
+
+process = &lt;Popen: returncode: None args: ['C:\\Program Files\\Google\\Chrome\\Applicat...&gt;
+websocket_url = 'ws://127.0.0.1:57573/devtools/page/959B2A679BC6D151B8FA45277CCB859C'
+
+    def close_owned_browser(process, websocket_url):
+        """Let Chrome flush and stop its children before deleting its test profile."""
+        if process.poll() is not None:
+            return
+        if websocket_url:
+            close_script = r"""
+    const ws = new WebSocket(process.argv[1]);
+    await new Promise((resolve,reject)=&gt;{
+      const timer=setTimeout(()=&gt;reject(Error('Browser close timed out')),8000);
+      ws.onopen=()=&gt;ws.send(JSON.stringify({id:1,method:'Browser.close'}));
+      ws.onclose=()=&gt;{clearTimeout(timer);resolve();};
+      ws.onerror=error=&gt;{clearTimeout(timer);reject(error);};
+    });
+    """
+            try:
+                subprocess.run([shutil.which("node"), "--input-type=module", "-e", close_script,
+                    websocket_url], capture_output=True, text=True, timeout=10)
+            except subprocess.TimeoutExpired:
+                pass  # The bounded owned-process fallback still runs below.
+        try:
+&gt;           process.wait(timeout=10)
+
+tests\test_rpa_view.py:162: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python314\Lib\subprocess.py:1278: in wait
+    return self._wait(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = &lt;Popen: returncode: None args: ['C:\\Program Files\\Google\\Chrome\\Applicat...&gt;
+timeout = 10
+
+    def _wait(self, timeout):
+        """Internal implementation of wait() on Windows."""
+        if timeout is None:
+            timeout_millis = _winapi.INFINITE
+        elif timeout &lt;= 0:
+            timeout_millis = 0
+        else:
+            timeout_millis = int(timeout * 1000)
+        if self.returncode is None:
+            # API note: Returns immediately if timeout_millis == 0.
+            result = _winapi.WaitForSingleObject(self._handle,
+                                                 timeout_millis)
+            if result == _winapi.WAIT_TIMEOUT:
+&gt;               raise TimeoutExpired(self.args, timeout)
+E               subprocess.TimeoutExpired: Command '['C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe', '--headless=new', '--disable-gpu', '--no-first-run', '--no-default-browser-check', '--disable-background-networking', '--disable-extensions', '--remote-debugging-port=0', '--user-data-dir=C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu', 'about:blank']' timed out after 10 seconds
+
+C:\Python314\Lib\subprocess.py:1607: TimeoutExpired
+
+During handling of the above exception, another exception occurred:
+
+page = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...s_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/_scratch/veb4o911e/view.html')
+screenshot_path = None
+
+    def run_browser_check(page, screenshot_path=None):
+        """Check an existing exact HTML export and optionally retain two screenshots.
+    
+        Raises when Chromium is missing or any assertion fails. All launched process
+        handles are owned and stopped; scratch profiles stay within the CNCM HOME.
+        """
+        if CHROME is None or shutil.which('node') is None:
+            raise RuntimeError('Chromium and Node are required for this browser check')
+        page = Path(page).resolve()
+        document = json.loads(parse(page.read_text(encoding='utf-8')).scripts[0]['text'])
+        scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='b', dir=scratch) as directory:
+            profile = Path(directory)
+            process = subprocess.Popen([str(CHROME), '--headless=new', '--disable-gpu', '--no-first-run',
+                '--no-default-browser-check', '--disable-background-networking', '--disable-extensions',
+                '--remote-debugging-port=0', '--user-data-dir=' + str(profile), 'about:blank'],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+            target_websocket = None
+            try:
+                port_file = profile / 'DevToolsActivePort'
+                deadline = time.monotonic() + 15
+                while not port_file.exists() and time.monotonic() &lt; deadline and process.poll() is None:
+                    time.sleep(.05)
+                assert port_file.exists(), 'headless browser did not expose its local test port'
+                port = port_file.read_text().splitlines()[0]
+                with urllib.request.urlopen('http://127.0.0.1:' + port + '/json/list', timeout=5) as response:
+                    target = next(row for row in json.load(response) if row['type'] == 'page')
+                target_websocket = target['webSocketDebuggerUrl']
+                result = subprocess.run([shutil.which('node'), '--input-type=module', '-e', CDP_CHECK,
+                    target_websocket, page.as_uri(), '' if screenshot_path is None else str(Path(screenshot_path).resolve())],
+                    capture_output=True, text=True, encoding='utf-8', timeout=90)
+                assert result.returncode == 0, result.stderr
+                proof = json.loads(result.stdout)
+                for row in proof.pop('walks'):
+                    assert row['result'] == reference_walk(document['atlas'], row['config'])
+                pages = proof.pop('pages')
+                for row in pages:
+                    assert row == candidate_page(document, row['record_digest'], start=row['start'], count=row['count'])
+                proof.update(independent_bfs_cases=7 if len(document['atlas']['nodes'])&gt;1 else 6,
+                             exact_candidate_pages=len(pages), candidate_rows_checked=sum(row['returned'] for row in pages),
+                             page_sha256=sha256(page.read_bytes()).hexdigest())
+                return proof
+            finally:
+&gt;               close_owned_browser(process, target_websocket)
+
+tests\test_rpa_compound_view.py:271: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_rpa_view.py:165: in close_owned_browser
+    subprocess.run(["taskkill.exe", "/PID", str(process.pid), "/T", "/F"],
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+input = None, capture_output = True, timeout = 10, check = True
+popenargs = (['taskkill.exe', '/PID', '10044', '/T', '/F'],)
+kwargs = {'stderr': -1, 'stdout': -1}
+process = &lt;Popen: returncode: 128 args: ['taskkill.exe', '/PID', '10044', '/T', '/F']&gt;
+stdout = b'SUCCESS: The process with PID 10044 (child process of PID 10596) has been terminated.\r\n'
+stderr = b'ERROR: The process with PID 36296 (child process of PID 10044) could not be terminated.\r\nReason: There is no runni...34584 (child process of PID 10044) could not be terminated.\r\nReason: There is no running instance of the task.\r\r\n'
+retcode = 128
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['taskkill.exe', '/PID', '10044', '/T', '/F']' returned non-zero exit status 128.
+
+C:\Python314\Lib\subprocess.py:577: CalledProcessError
+
+During handling of the above exception, another exception occurred:
+
+path = 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_wor...xt\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu'
+dir_fd = None
+onexc = &lt;function TemporaryDirectory._rmtree.&lt;locals&gt;.onexc at 0x0000021167BBBED0&gt;
+
+    def _rmtree_unsafe(path, dir_fd, onexc):
+        if dir_fd is not None:
+            raise NotImplementedError("dir_fd unavailable on this platform")
+        try:
+            st = os.lstat(path)
+        except OSError as err:
+            onexc(os.lstat, path, err)
+            return
+        try:
+            if _rmtree_islink(st):
+                # symlinks to directories are forbidden, see bug #1669
+                raise OSError("Cannot call rmtree on a symbolic link")
+        except OSError as err:
+            onexc(os.path.islink, path, err)
+            # can't continue even if onexc hook returns
+            return
+        def onerror(err):
+            if not isinstance(err, FileNotFoundError):
+                onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except FileNotFoundError:
+                    continue
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+&gt;                   os.unlink(fullname)
+E                   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu\\Default\\DIPS'
+
+C:\Python314\Lib\shutil.py:701: PermissionError
+
+During handling of the above exception, another exception occurred:
+
+document = {'atlas': {'current_state_id': 'state-7705fc653ef55a561d67a637458984fa6a7ceecb19f58d8b671ab7fc68f9b34f', 'focus_node_i...'], 'policy_cost': {'checker_calls': 0, 'instructions': 0}, ...}], 'schema_version': 'cncm.rpa-compound-view/0.1', ...}
+
+    @pytest.mark.skipif(CHROME is None or shutil.which('node') is None, reason='Chromium and Node unavailable')
+    def test_actual_browser_bfs_paging_evidence_injection_and_offline_behavior(document):
+        changed = deepcopy(document)
+        changed['atlas']['nodes'][0]['label'] = '&lt;/script&gt;&lt;img src="https://invalid.example/leak" onerror="globalThis.viewerPwned=true"&gt;'
+        scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='v', dir=scratch) as directory:
+            page = Path(directory) / 'view.html'
+            page.write_text(viewer.render_compound_rpa_view(changed), encoding='utf-8', newline='\n')
+&gt;           proof = run_browser_check(page)
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_compound_view.py:283: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_rpa_compound_view.py:238: in run_browser_check
+    with tempfile.TemporaryDirectory(prefix='b', dir=scratch) as directory:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\tempfile.py:971: in __exit__
+    self.cleanup()
+C:\Python314\Lib\tempfile.py:975: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Python314\Lib\tempfile.py:955: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Python314\Lib\shutil.py:852: in rmtree
+    _rmtree_impl(path, dir_fd, onexc)
+C:\Python314\Lib\shutil.py:705: in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = &lt;built-in function unlink&gt;
+path = 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_wor...asoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu\\Default\\DIPS'
+exc = PermissionError(13, 'The process cannot access the file because it is being used by another process')
+
+    def onexc(func, path, exc):
+        if isinstance(exc, PermissionError):
+            if repeated and path == name:
+                if ignore_errors:
+                    return
+                raise
+    
+            try:
+                if path != name:
+                    _resetperms(_os.path.dirname(path))
+                _resetperms(path)
+    
+                try:
+&gt;                   _os.unlink(path)
+E                   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\_scratch\\bhbx74wyu\\Default\\DIPS'
+
+C:\Python314\Lib\tempfile.py:930: PermissionError</failure></testcase></testsuite></testsuites>

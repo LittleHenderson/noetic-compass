@@ -1,0 +1,106 @@
+{
+  "actual_transitive_project_imports_match_before_and_after": true,
+  "artifacts": {
+    "graph_derived_module_inventory.json": {
+      "bytes": 5130,
+      "sha256": "4fba3db262527864b152b022d2d38271ae98ff4f155753fcfee67521e312df0e"
+    },
+    "graph_derived_stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "graph_derived_stdout.txt": {
+      "bytes": 524,
+      "sha256": "695f8a633e3e8edc1fc4ad45f74c000838dea59b03db0e8f6e24a61e250e2e76"
+    },
+    "probe_graph_derived.py": {
+      "bytes": 1556,
+      "sha256": "537d4f0c909b615bd86910c334323c51a2642c2de19046e9a908266cc31e7d6a"
+    },
+    "probe_target_free.py": {
+      "bytes": 1410,
+      "sha256": "8796acda7725edba54a32c558284177c63cf011cbe73fde8d511a956fc77ada2"
+    },
+    "run_probes.py": {
+      "bytes": 5646,
+      "sha256": "27eba53415a9f1a556f494b9a0dd41f380df799854c3af2e76b25e7dbaa8c3a6"
+    },
+    "source_identity.json": {
+      "bytes": 4672,
+      "sha256": "bbcece4d532e3f027b7b901c24a93a7a2dd28692d3838e46ce6b9e82f7e79598"
+    },
+    "target_free_module_inventory.json": {
+      "bytes": 5130,
+      "sha256": "4fba3db262527864b152b022d2d38271ae98ff4f155753fcfee67521e312df0e"
+    },
+    "target_free_stderr.txt": {
+      "bytes": 2379,
+      "sha256": "75ec19b901e0e0706f946a6cec25f668e530f2eee2c2a71ae9040edfc4f74e74"
+    },
+    "target_free_stdout.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "completed_utc": "2026-09-16T14:39:41.483199+00:00",
+  "cube_rpa_bridge_implemented": false,
+  "delivered_neural_lessons": 0,
+  "learner_invocations": 0,
+  "learning_claim": false,
+  "neural_calls": 0,
+  "optimizer_updates": 0,
+  "provider_calls": 0,
+  "python": {
+    "executable": "C:\\Python314\\python.exe",
+    "version": "3.14.0 (tags/v3.14.0:ebf955d, Oct  7 2025, 10:15:03) [MSC v.1944 64 bit (AMD64)]"
+  },
+  "results": [
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-c",
+        "import hashlib,json,pathlib,sys\nsource=pathlib.Path(sys.argv[1])\ninventory=pathlib.Path(sys.argv[2])\ntry:\n exec(compile(source.read_text(encoding='utf-8'),str(source),'exec'),{'__name__':'__main__'})\nfinally:\n rows=[]\n for name,module in sorted(sys.modules.items()):\n  file=getattr(module,'__file__',None)\n  if name.startswith('cas_meta2') and file and str(file).endswith('.py'):\n   p=pathlib.Path(file).resolve(); raw=p.read_bytes()\n   rows.append({'module':name,'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})\n prohibited=sorted({'torch','numpy','boto3','botocore','requests','cas_cjt'} & set(sys.modules))\n with inventory.open('xb') as f:\n  f.write((json.dumps({'project_modules':rows,'prohibited_imports_present':prohibited},sort_keys=True,indent=2)+'\\n').encode('utf-8'))\n",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_cube_001\\design_probe_001\\probe_target_free.py",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_cube_001\\design_probe_001\\target_free_module_inventory.json"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "exit_code": 1,
+      "module_inventory": "target_free_module_inventory.json",
+      "name": "target_free",
+      "outcome": "EXPECTED_LEGACY_TARGET_FREE_FAILURE_REPRODUCED",
+      "script": "probe_target_free.py",
+      "script_identity": {
+        "bytes": 1410,
+        "sha256": "8796acda7725edba54a32c558284177c63cf011cbe73fde8d511a956fc77ada2"
+      },
+      "stderr": "target_free_stderr.txt",
+      "stdout": "target_free_stdout.txt"
+    },
+    {
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-c",
+        "import hashlib,json,pathlib,sys\nsource=pathlib.Path(sys.argv[1])\ninventory=pathlib.Path(sys.argv[2])\ntry:\n exec(compile(source.read_text(encoding='utf-8'),str(source),'exec'),{'__name__':'__main__'})\nfinally:\n rows=[]\n for name,module in sorted(sys.modules.items()):\n  file=getattr(module,'__file__',None)\n  if name.startswith('cas_meta2') and file and str(file).endswith('.py'):\n   p=pathlib.Path(file).resolve(); raw=p.read_bytes()\n   rows.append({'module':name,'path':str(p),'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})\n prohibited=sorted({'torch','numpy','boto3','botocore','requests','cas_cjt'} & set(sys.modules))\n with inventory.open('xb') as f:\n  f.write((json.dumps({'project_modules':rows,'prohibited_imports_present':prohibited},sort_keys=True,indent=2)+'\\n').encode('utf-8'))\n",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_cube_001\\design_probe_001\\probe_graph_derived.py",
+        "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_cube_001\\design_probe_001\\graph_derived_module_inventory.json"
+      ],
+      "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+      "exit_code": 0,
+      "module_inventory": "graph_derived_module_inventory.json",
+      "name": "graph_derived",
+      "outcome": "306_GRAPH_DERIVED_PUBLIC_COMPILATIONS_MATCH",
+      "script": "probe_graph_derived.py",
+      "script_identity": {
+        "bytes": 1556,
+        "sha256": "537d4f0c909b615bd86910c334323c51a2642c2de19046e9a908266cc31e7d6a"
+      },
+      "stderr": "graph_derived_stderr.txt",
+      "stdout": "graph_derived_stdout.txt"
+    }
+  ],
+  "schema_version": "cncm.rpa-cube-design-probe/0.1",
+  "source_commit_context": "9597840c3a0344ea730c689bfc9ffc22401fe707",
+  "source_inputs_match_before_and_after": true,
+  "started_utc": "2026-09-16T14:39:40.150364+00:00",
+  "status": "DESIGN_ONLY"
+}

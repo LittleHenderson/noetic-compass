@@ -1,0 +1,556 @@
+"""Offline compound0.5 evidence viewer. Display validation grants no authority."""
+from __future__ import annotations
+import argparse
+import base64
+from hashlib import sha256
+import json
+from pathlib import Path
+import re
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+from cncm.canonical import canonical_json, digest
+from tools.render_rpa_view import _exact, _string, _hash, _within_home, _unique_object, HOME
+SCHEMA = "cncm.rpa-compound-view/0.1"
+MAX_INPUT_BYTES = 32 * 1024 * 1024
+
+CSS = r"""
+:root{color-scheme:light;--ink:#18302c;--muted:#526963;--line:#d5e1db;--paper:#f2f5ef;--card:#fffefa;--green:#17614e;--gold:#b48129;--red:#a13f42;--blue:#41698c}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:3px solid #ddaa43;outline-offset:3px}button{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:8px 12px;color:var(--ink)}button:hover{background:#edf4ed}button[aria-pressed=true]{background:var(--green);color:white;border-color:var(--green)}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:750;color:var(--green)}header{padding:26px 32px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;align-items:center;background:var(--card)}h1{font-size:27px;line-height:1.15;letter-spacing:-.04em;margin:5px 0 8px}h2{font-size:16px;line-height:1.3;margin:0 0 10px}h3{font-size:13px;margin:18px 0 8px}.subtitle,.muted{color:var(--muted)}.subtitle{margin:0;max-width:780px}.badge{display:inline-block;border:1px solid var(--line);border-radius:30px;padding:5px 10px;font-size:11px;font-weight:750;letter-spacing:.035em;white-space:nowrap}.present{margin:22px 24px 0;background:#e2efe5;border:1px solid #b4cfbd;border-left:5px solid var(--green);border-radius:12px;padding:16px 20px;display:grid;grid-template-columns:1fr auto;gap:14px}.present h2{font-size:15px;margin:2px 0 4px}.present code{font-size:11px;overflow-wrap:anywhere}.result{padding-left:18px;border-left:1px solid #b4cfbd;text-align:right;max-width:400px}.result strong{display:block;font-size:20px;overflow-wrap:anywhere}.layout{display:grid;grid-template-columns:220px minmax(300px,1fr) 310px;gap:16px;padding:20px 24px}.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}.control label{display:block;font-size:12px;font-weight:650;margin:18px 0 6px}.control input,.control select{width:100%;border:1px solid #b8c9c0;border-radius:7px;padding:9px;background:white;color:var(--ink)}.switch{display:flex;gap:6px}.switch button{flex:1;padding:8px 5px;font-size:12px}.help{font-size:12px;color:var(--muted);margin:10px 0}.legend{padding:0;list-style:none;font-size:12px}.legend li{display:flex;gap:8px;align-items:center;margin:8px 0}.swatch{width:21px;height:0;border-top:2px solid var(--muted);flex-shrink:0}.canvas-panel{padding:0;overflow:hidden;display:flex;flex-direction:column;min-height:550px}.canvas-heading{padding:18px 20px 12px;display:flex;gap:12px;justify-content:space-between;border-bottom:1px solid var(--line)}.canvas-heading h2{margin-bottom:3px}.canvas-heading p{font-size:12px;margin:0}.canvas{overflow:auto;min-height:420px;flex:1;background:radial-gradient(#dbe5dd .7px,transparent .7px);background-size:18px 18px}svg{display:block;width:100%;min-height:420px}.node{cursor:pointer}.node rect{fill:#fffefa;stroke:#b8c9c0;stroke-width:1.3}.node[data-current=true] rect{stroke:#17614e;stroke-width:3;fill:#e2efe5}.node[data-focused=true] rect{stroke:#b48129;stroke-width:3}.node[data-current=true][data-focused=true] rect{stroke:#17614e;stroke-width:3;filter:drop-shadow(0 0 4px #c19739)}.node text{fill:#18302c;font-family:system-ui,sans-serif;pointer-events:none}.node .node-label{font-size:12px;font-weight:650}.node .node-status{font-size:10px;fill:#526963}.edge{fill:none;stroke-width:1.5;opacity:.7;cursor:pointer}.edge:hover{stroke-width:3;opacity:1}.canvas-note{padding:10px 20px;border-top:1px solid var(--line);font-size:11px;color:var(--muted)}.focus-tag{font-size:11px;color:#82601b;background:#fff2cd;display:inline-block;padding:3px 7px;border-radius:5px;margin-bottom:10px}.inspector-title{overflow-wrap:anywhere}dl{margin:0}dt{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:12px}dd{margin:3px 0 0;overflow-wrap:anywhere;font-size:12px}pre{font:11px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;background:#edf2ed;border:1px solid var(--line);padding:10px;border-radius:7px;max-height:320px;overflow:auto}details{margin-top:15px}summary{cursor:pointer;font-size:12px;font-weight:650}.below{display:grid;grid-template-columns:minmax(300px,1.7fr) minmax(270px,1fr);gap:16px;margin:0 24px 24px}.table-wrap{max-height:350px;overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;color:var(--muted);font-size:11px;font-weight:650;background:var(--card);position:sticky;top:0}td,th{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}td button{font-size:11px;padding:4px 7px}.accepted{color:var(--green)}.rejected{color:var(--red)}.actions{display:grid;gap:10px}.action-card{border:1px solid var(--line);border-radius:8px;padding:12px}.action-card strong{display:block;font-size:13px}.action-card p{font-size:12px;margin:6px 0}.action-card ul{padding-left:17px;font-size:12px;margin:6px 0}.relation-list{display:grid;gap:5px;max-height:200px;overflow:auto}.relation-list button{text-align:left;font-size:11px;padding:7px}.empty{color:var(--muted);font-size:12px;padding:12px 0}footer{padding:0 26px 24px;color:var(--muted);font-size:11px}.nowrap{white-space:nowrap}.scope{max-width:1000px;font-size:12px;margin:10px 0 0;overflow-wrap:anywhere}
+.canvas{height:620px;min-height:420px;flex:none}.canvas svg{min-height:0}.zoom-bar{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-bottom:1px solid var(--line);font-size:11px;color:var(--muted)}.zoom-buttons{display:flex;align-items:center;gap:5px}.zoom-buttons button{padding:4px 9px;font-size:12px}.zoom-buttons span{min-width:26px;text-align:center}
+@media(min-width:1600px){.layout{grid-template-columns:240px minmax(300px,1fr) 360px}}
+@media(max-width:1120px){.layout{grid-template-columns:190px minmax(260px,1fr)}.inspector{grid-column:1/-1}.inspector pre{max-height:240px}.below{grid-template-columns:1fr}.present{grid-template-columns:1fr}.result{border-left:0;padding:0;text-align:left}}
+@media(max-width:650px){header{padding:20px;align-items:flex-start}.layout{display:block;padding:14px}.panel{margin-bottom:14px}.present{margin:14px 14px 0}.below{display:block;margin:0 14px 14px}.control{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.control h2,.control .help,.control .legend-title,.control .legend{grid-column:1/-1}.control label{margin-top:10px}.canvas-heading{display:block}.canvas-heading button{margin-top:8px}.badge{white-space:normal}header>.badge{display:none}}
+
+.runtime-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px24px}.runtime-grid{margin:20px 24px}.runtime-grid pre{max-height:180px}.runtime-grid h2{font-size:15px}.candidate-panel{margin:0 24px 24px}.candidate-panel>select,textarea{width:100%;max-width:100%;font:11px/1.5 ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:7px}.page-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:14px 0}.page-controls input{display:block;width:95px;padding:7px;border:1px solid var(--line);border-radius:5px}.candidate-panel td{overflow-wrap:anywhere}.candidate-panel th:last-child{width:60%}fieldset{border:1px solid var(--line);border-radius:8px;margin:14px 0;padding:8px;font-size:11px}.control fieldset label{display:flex;align-items:center;gap:7px;font-size:11px;margin:8px 0}.control fieldset input{width:auto}.control button{margin-top:6px}.control>h3{margin-top:24px}textarea{resize:vertical}#navigation-error,#page-error{font-size:12px;overflow-wrap:anywhere}@media(max-width:1000px){.runtime-grid{grid-template-columns:1fr}.runtime-grid pre{max-height:160px}}@media(max-width:650px){.runtime-grid{margin:14px;gap:0}.candidate-panel{margin:0 14px 14px}.control>h3,.control>fieldset,.control>details,.control>#navigation-error,.control>#traversal-status{grid-column:1/-1}.page-controls{gap:7px}.candidate-panel th:last-child{width:auto}.candidate-panel table{table-layout:fixed}.runtime-grid .panel{margin-bottom:14px}}
+"""
+
+JS = r"""'use strict';
+(async () => {
+
+  // Preserve every integer from the validated JSON, including512-bit receipts.
+  function losslessParse(raw) {
+    let at=0;const space=()=>{while(/\s/.test(raw[at]||'')&&at<raw.length)at++;};
+    function value(){space();const c=raw[at];
+      if(c==='"'){const begin=at++;while(at<raw.length){if(raw[at]==='\\'){at+=2;continue;}if(raw[at++]==='"')return JSON.parse(raw.slice(begin,at));}throw Error('Unclosed JSON string');}
+      if(c==='['){at++;const out=[];space();if(raw[at]===']'){at++;return out;}while(true){out.push(value());space();const end=raw[at++];if(end===']')return out;if(end!==',')throw Error('Invalid JSON array');}}
+      if(c==='{'){at++;const out=Object.create(null);space();if(raw[at]==='}'){at++;return out;}while(true){space();if(raw[at]!=='"')throw Error('Invalid JSON key');const key=value();if(Object.hasOwn(out,key))throw Error('Duplicate JSON key');space();if(raw[at++]!==':')throw Error('Missing JSON colon');out[key]=value();space();const end=raw[at++];if(end==='}')return out;if(end!==',')throw Error('Invalid JSON object');}}
+      for(const [word,result] of [['true',true],['false',false],['null',null]])if(raw.startsWith(word,at)){at+=word.length;return result;}
+      const match=raw.slice(at).match(/^-?(?:0|[1-9]\d*)/);if(!match)throw Error('Invalid JSON value');at+=match[0].length;const integer=BigInt(match[0]);return integer<=BigInt(Number.MAX_SAFE_INTEGER)&&integer>=BigInt(Number.MIN_SAFE_INTEGER)?Number(integer):integer;
+    }
+    const result=value();space();if(at!==raw.length)throw Error('Trailing JSON data');return result;
+  }
+  function encode(value,indent=0,level=0){
+    if(typeof value==='bigint')return value.toString();
+    if(value===null||typeof value!=='object')return JSON.stringify(value);
+    const array=Array.isArray(value),entries=array?value.map(item=>encode(item,indent,level+1)):Object.keys(value).sort().map(key=>JSON.stringify(key)+':'+(indent?' ':'')+encode(value[key],indent,level+1));
+    const [open,close]=array?['[',']']:['{','}'];if(!entries.length)return open+close;
+    return indent?open+'\n'+' '.repeat((level+1)*indent)+entries.join(',\n'+' '.repeat((level+1)*indent))+'\n'+' '.repeat(level*indent)+close:open+entries.join(',')+close;
+  }
+  const canonical=value=>encode(value).replace(/[\u007f-\uffff]/g,c=>'\\u'+c.charCodeAt(0).toString(16).padStart(4,'0'));
+  async function digest(value){if(!globalThis.crypto?.subtle)throw Error('This browser cannot verify page cursors offline.');const bytes=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(canonical(value)));return [...new Uint8Array(bytes)].map(n=>n.toString(16).padStart(2,'0')).join('');}
+
+  const deepFreeze = value => { if(value && typeof value === 'object') { Object.values(value).forEach(deepFreeze); Object.freeze(value); } return value; };
+  const source = deepFreeze(losslessParse(document.getElementById('snapshot-data').textContent));
+  const atlas = source.atlas;
+  const nodes = new Map(atlas.nodes.map(n => [n.node_id, n]));
+  const $ = id => document.getElementById(id);
+  const text = (id, value) => { $(id).textContent = value; };
+  const pretty = value => encode(value,2);
+  const titleCase = value => value.replaceAll('_', ' ').toLowerCase().replace(/^./, c => c.toUpperCase());
+  const displayLabel = value => value.replace(/\b[A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+\b/g,titleCase);
+  const short = value => value.length > 28 ? value.slice(0, 25) + '…' : value;
+  const relationNames = {contains_part:'Contains part',refines_state:'Refines state',reachable_via:'Reachable via',overlaps_with:'Certified overlap',references_same_idea:'References same idea'};
+  const colors = {contains_part:'#627064',refines_state:'#41698c',reachable_via:'#17614e',overlaps_with:'#9a6ab0',references_same_idea:'#b48129'};
+  let focus = atlas.focus_node_id || atlas.current_state_id;
+  let layout = 'flower';
+  let query = '';
+  let rootId=atlas.current_state_id,maxDepth=3,maxNodes=48;
+  let selectedRelations=new Set(Object.keys(relationNames)),walk;
+  let pageState=null,pageSequence=0;
+  let zoom = null;
+  const dom = (tag, value, className) => { const el = document.createElement(tag); if(value !== undefined) el.textContent = value; if(className) el.className = className; return el; };
+  const svgElement = (tag, attrs={}) => {const el = document.createElementNS('http://www.w3.org/2000/svg', tag); for(const [key,value] of Object.entries(attrs)) el.setAttribute(key, String(value)); return el;};
+  const current = nodes.get(atlas.current_state_id);
+  text('current-label', displayLabel(current.label));
+  text('current-hash', source.native.current_state_hash);
+  text('terminal', titleCase(source.native.terminal_status));
+  text('output', source.native.conditional_output === null ? 'No checked output' : 'Conditional output: ' + source.native.conditional_output);
+  text('scope', source.native.scope);
+  text('source-profile', source.native.source_profile_digest);
+  text('journal-digest', source.native.journal_digest);
+  text('hypothesis', atlas.hypothesis_branch_id === null ? 'No hypothesis branch is selected.' : 'Hypothesis branch: ' + atlas.hypothesis_branch_id + '. This is separate from the current state.');
+  text('snapshot-count', atlas.nodes.length + ' nodes · ' + atlas.links.length + ' typed links');
+  for(const node of atlas.nodes) { const option = dom('option', displayLabel(node.label)); option.value = node.node_id; $('focus-select').append(option); }
+  $('focus-select').value = focus;
+
+  function detail(label, value) { $('detail-fields').append(dom('dt',label), dom('dd', value)); }
+  function inspectNode() {
+    const node = nodes.get(focus);
+    text('detail-type', focus === atlas.current_state_id ? 'Focus: current retained state' : 'Focus only · current state unchanged');
+    text('detail-title', displayLabel(node.label));
+    $('detail-fields').replaceChildren();
+    detail('Node identity', node.node_id); detail('Idea identity',node.idea_id);
+    detail('Status',titleCase(node.status)); detail('Kind',titleCase(node.kind));
+    detail('Record context',node.context.context_id);
+    for(const [key,value] of node.fields) detail(titleCase(key),value);
+    text('detail-json',pretty(node));
+    text('evidence-json',pretty(node.evidence_refs));
+    const linked = atlas.links.filter(l => l.source_id === focus || l.target_id === focus);
+    $('linked-relations').replaceChildren();
+    if(!linked.length) $('linked-relations').append(dom('p','No typed links for this node.','empty'));
+    for(const link of linked) {
+      const button = dom('button', (relationNames[link.relation] || link.relation) + ' · ' + nodes.get(link.source_id === focus ? link.target_id : link.source_id).label);
+      button.type='button';button.addEventListener('click',()=>inspectLink(link));$('linked-relations').append(button);
+    }
+  }
+  function inspectLink(link) {
+    text('detail-type','Link evidence · current state unchanged');
+    text('detail-title',relationNames[link.relation] || link.relation);
+    $('detail-fields').replaceChildren();
+    detail('From',nodes.get(link.source_id).label);detail('To',nodes.get(link.target_id).label);
+    detail('Transition status',link.transition_status || 'Not a transition');
+    detail('Certificate',link.certificate_id || 'No certificate supplied');
+    text('detail-json',pretty({link,certificate:atlas.overlap_certificates.find(c => c.certificate_id === link.certificate_id) || null}));
+    text('evidence-json',pretty(link.evidence_refs));
+  }
+  function centerFocus() {
+    const selected=[...document.querySelectorAll('.node')].find(n=>n.dataset.nodeId===focus);
+    if(!selected)return;
+    const canvas=$('atlas-canvas').parentElement,box=canvas.getBoundingClientRect(),node=selected.getBoundingClientRect();
+    canvas.scrollLeft+=node.left+node.width/2-box.left-canvas.clientWidth/2;
+    canvas.scrollTop+=node.top+node.height/2-box.top-canvas.clientHeight/2;
+  }
+  function setFocus(id) { focus=id; $('focus-select').value=id; inspectNode();draw();centerFocus(); }
+
+
+  function expand(){
+    const adjacency=new Map(atlas.nodes.map(n=>[n.node_id,[]]));
+    for(const link of [...atlas.links].sort((a,b)=>a.link_id<b.link_id?-1:a.link_id>b.link_id?1:0))if(selectedRelations.has(link.relation))adjacency.get(link.source_id).push(link);
+    const queue=[[rootId,0]],visited=[rootId],seen=new Set(visited),traversed=[],revisited=[],deferred=[];
+    for(let index=0;index<queue.length;index++){
+      const [id,depth]=queue[index],node=nodes.get(id);
+      if(node.expansion_ref!==null)deferred.push({source_id:id,link_id:null,target_id:null,reason:'generator_not_expanded',expansion_ref:node.expansion_ref});
+      for(const link of adjacency.get(id)){
+        if(seen.has(link.target_id)){traversed.push(link.link_id);revisited.push(link.link_id);}
+        else if(depth>=maxDepth)deferred.push({source_id:id,link_id:link.link_id,target_id:link.target_id,reason:'max_depth',expansion_ref:null});
+        else if(visited.length>=maxNodes)deferred.push({source_id:id,link_id:link.link_id,target_id:link.target_id,reason:'max_nodes',expansion_ref:null});
+        else{seen.add(link.target_id);visited.push(link.target_id);traversed.push(link.link_id);queue.push([link.target_id,depth+1]);}
+      }
+    }
+    return {root_id:rootId,max_depth:maxDepth,max_nodes:maxNodes,visited_node_ids:visited,traversed_link_ids:traversed,revisited_link_ids:revisited,deferred,nodes_used:visited.length,boundary:'finite supplied graph only; deferred does not mean impossible'};
+  }
+  function applyTraversal(){
+    try{const depth=Number($('depth-budget').value),budget=Number($('node-budget').value),root=$('root-select').value;
+      if(!Number.isInteger(depth)||depth<0||depth>32||!Number.isInteger(budget)||budget<1||budget>512||!nodes.has(root))throw Error('Use depth0–32 and a node budget1–512. The root uses one node.');
+      rootId=root;maxDepth=depth;maxNodes=budget;selectedRelations=new Set([...document.querySelectorAll('#relation-filters input:checked')].map(el=>el.value));
+      text('navigation-error','');zoom=null;draw();
+    }catch(error){text('navigation-error',error.message);}
+  }
+
+  function positions() {
+    const visited=walk.visited_node_ids.map(id=>nodes.get(id));
+    const result = new Map();
+    if(layout === 'graph') {
+      const cols = Math.max(2,Math.ceil(Math.sqrt(visited.length)));
+      const width = cols * 250 + 60, height = Math.max(460, Math.ceil(visited.length / cols) * 155 + 70);
+      visited.forEach((node,i)=>result.set(node.node_id,{x:155+(i%cols)*250,y:105+Math.floor(i/cols)*155}));
+      return {result,width,height};
+    }
+    const rest = visited.filter(n=>n.node_id!==rootId);
+    let offset=0,ring=1,maxRadius=0;
+    result.set(rootId,{x:0,y:0});
+    while(offset < rest.length) {
+      const count=Math.min(8*ring,rest.length-offset), radius=300*ring;
+      for(let i=0;i<count;i++) { const angle=-Math.PI/2 + (2*Math.PI*i/count); result.set(rest[offset+i].node_id,{x:Math.cos(angle)*radius,y:Math.sin(angle)*radius}); }
+      offset+=count;maxRadius=radius;ring++;
+    }
+    const width=Math.max(540,2*maxRadius+300),height=Math.max(460,2*maxRadius+180);
+    for(const point of result.values()) {point.x+=width/2;point.y+=height/2;}
+    return {result,width,height};
+  }
+  function draw() {
+    walk=expand();
+    const {result:points,width,height}=positions();
+    const svg=$('atlas-canvas');svg.replaceChildren();svg.setAttribute('viewBox',`0 0 ${width} ${height}`);
+    const canvas=svg.parentElement;
+    const automatic=zoom===null;
+    if(automatic)zoom=Math.max(1,Math.max(width/canvas.clientWidth,height/canvas.clientHeight));
+    svg.style.width=(canvas.clientWidth*zoom)+'px';svg.style.height=(canvas.clientHeight*zoom)+'px';
+    text('zoom-value',zoom===1?'Fit':(Math.round(zoom*10)/10)+'×');
+    svg.setAttribute('aria-label',(layout==='flower'?'NoeticFlower':'Graph')+' layout of the same retained atlas');
+    const shown = new Set(walk.visited_node_ids.map(id=>nodes.get(id)).filter(node=>!query || encode(node).toLowerCase().includes(query)).map(n=>n.node_id));
+    const defs=svgElement('defs');svg.append(defs);
+    for(const [relation,color] of Object.entries(colors)) {const marker=svgElement('marker',{id:'arrow-'+relation,viewBox:'0 0 10 10',refX:8,refY:5,markerWidth:5,markerHeight:5,orient:'auto-start-reverse'});marker.append(svgElement('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:color}));defs.append(marker);}
+    let visibleLinks=0;
+    for(const link of atlas.links) {
+      if(!walk.traversed_link_ids.includes(link.link_id))continue;
+      if(!shown.has(link.source_id)||!shown.has(link.target_id))continue;
+      visibleLinks++;
+      const a=points.get(link.source_id),b=points.get(link.target_id);
+      const dx=b.x-a.x,dy=b.y-a.y;
+      const scale=Math.max(Math.abs(dx)/108,Math.abs(dy)/40,1);
+      const x1=a.x+dx/scale,y1=a.y+dy/scale,x2=b.x-dx/scale,y2=b.y-dy/scale;
+      const same=link.source_id===link.target_id;
+      const path=svgElement('path',{d:same?`M ${a.x+90} ${a.y-20} C ${a.x+160} ${a.y-120}, ${a.x-160} ${a.y-120}, ${a.x-90} ${a.y-20}`:`M ${x1} ${y1} L ${x2} ${y2}`,class:'edge',stroke:colors[link.relation]||'#526963','marker-end':'url(#arrow-'+link.relation+')','data-link-id':link.link_id,tabindex:0,role:'button','aria-label':(relationNames[link.relation]||link.relation)+' from '+nodes.get(link.source_id).label+' to '+nodes.get(link.target_id).label});
+      if(link.transition_status==='candidate'||link.transition_status==='rejected')path.setAttribute('stroke-dasharray','6 5');
+      const title=svgElement('title');title.textContent=path.getAttribute('aria-label');path.append(title);
+      path.addEventListener('click',()=>inspectLink(link));path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();inspectLink(link);}});svg.append(path);
+    }
+    for(const node of atlas.nodes) {
+      if(!shown.has(node.node_id))continue;
+      const point=points.get(node.node_id);
+      const group=svgElement('g',{class:'node',transform:`translate(${point.x},${point.y})`,'data-node-id':node.node_id,'data-current':node.node_id===atlas.current_state_id,'data-focused':node.node_id===focus,tabindex:0,role:'button','aria-label':node.label+', '+node.status+(node.node_id===atlas.current_state_id?', current retained state':'')});
+      const title=svgElement('title');title.textContent=node.label+' — '+node.node_id;group.append(title,svgElement('rect',{x:-108,y:-40,width:216,height:80,rx:12}));
+      const label=svgElement('text',{x:0,y:-7,'text-anchor':'middle',class:'node-label'});label.textContent=short(displayLabel(node.label));group.append(label);
+      const status=svgElement('text',{x:0,y:14,'text-anchor':'middle',class:'node-status'});status.textContent=node.node_id===atlas.current_state_id?'CURRENT RETAINED STATE':titleCase(node.status)+' · '+titleCase(node.kind);group.append(status);
+      group.addEventListener('click',()=>setFocus(node.node_id));group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();setFocus(node.node_id);}});svg.append(group);
+    }
+    text('canvas-title',layout==='flower'?'NoeticFlower':'Ordinary graph');
+    text('view-status',shown.size+' visible / '+walk.nodes_used+' visited / '+atlas.nodes.length+' supplied nodes · '+visibleLinks+' visible links');
+    text('traversal-status',walk.traversed_link_ids.length+' traversed links · '+walk.revisited_link_ids.length+' revisits · '+walk.deferred.length+' deferred expansions · '+(walk.nodes_used-shown.size)+' text-filtered nodes');
+    text('traversal-json',pretty(walk));
+    text('filter-note',shown.has(atlas.current_state_id)?'The current retained state is marked in green.': 'The filter hides the current node; the retained state above is unchanged.');
+    $('flower-layout').setAttribute('aria-pressed',String(layout==='flower'));$('graph-layout').setAttribute('aria-pressed',String(layout==='graph'));
+    if(automatic)centerFocus();
+  }
+  for(const mode of ['flower','graph'])$(mode+'-layout').addEventListener('click',()=>{layout=mode;draw();centerFocus();});
+  const setZoom=value=>{zoom=Math.max(1,Math.min(16,value));draw();centerFocus();};
+  $('zoom-in').addEventListener('click',()=>setZoom(zoom+1));$('zoom-out').addEventListener('click',()=>setZoom(zoom-1));$('zoom-fit').addEventListener('click',()=>setZoom(1));
+  $('zoom-readable').addEventListener('click',()=>{zoom=null;draw();});
+  window.addEventListener('resize',draw);
+  $('focus-select').addEventListener('change',event=>setFocus(event.target.value));
+  $('filter').addEventListener('input',event=>{query=event.target.value.toLowerCase().trim();draw();});
+  $('return-current').addEventListener('click',()=>{query='';$('filter').value='';$('root-select').value=atlas.current_state_id;applyTraversal();setFocus(atlas.current_state_id);});
+  for(const relation of new Set(atlas.links.map(l=>l.relation))) {const row=dom('li');const swatch=dom('span',undefined,'swatch');swatch.style.borderColor=colors[relation];row.append(swatch,dom('span',relationNames[relation]||relation));$('legend').append(row);}
+
+  for(const item of source.timeline){
+    const event=item.event,accepted=event.authorized_intent_ids.length,rejected=event.rejected_intents.length;
+    const outcome=accepted&&rejected?'Partially accepted':rejected?'Rejected':'Accepted';
+    const row=dom('tr');row.dataset.eventHash=event.event_hash;
+    row.append(dom('td',(item.episode_index+1)+' / '+event.logical_tick),dom('td',event.proposed_intents.map(i=>titleCase(i.intent_type)).join(', ')||'No intent'),dom('td',outcome,rejected?'rejected':'accepted'));
+    row.append(dom('td',item.work.instructions_allocated+' / '+item.work.checker_calls_allocated));
+    row.append(dom('td',item.work.primitive_instructions+' / '+item.work.original_checks+' / '+item.work.linear_checks));
+    const cell=dom('td'),button=dom('button','Inspect');button.type='button';button.addEventListener('click',()=>{
+      text('detail-type','Historical event · retained present unchanged');text('detail-title','Episode '+(item.episode_index+1)+' · tick '+event.logical_tick);
+      $('detail-fields').replaceChildren();detail('Outcome',outcome);detail('Charged policy units',item.work.instructions_allocated+' instructions / '+item.work.checker_calls_allocated+' checker calls');
+      text('detail-json',pretty(item));text('evidence-json',pretty({event_hash:event.event_hash,work_record_digests:item.work_record_digests}));
+    });cell.append(button);row.append(cell);$('timeline-body').append(row);
+  }
+  if(!source.timeline.length)text('timeline-empty','No historical events in this export.');
+  for(const action of source.next_actions) {const card=dom('article',undefined,'action-card');card.append(dom('strong',titleCase(action.action)),dom('p',titleCase(action.readiness)),dom('span','Proposal only · cannot run here','badge'));const list=dom('ul');for(const blocker of action.blockers)list.append(dom('li',blocker));if(!action.blockers.length)list.append(dom('li','No blocker listed; this is not execution permission.'));card.append(list);$('actions').append(card);}
+  if(!source.next_actions.length)$('actions').append(dom('p','No next-action proposals in this export.','empty'));
+
+  for(const node of atlas.nodes){const option=dom('option',displayLabel(node.label));option.value=node.node_id;$('root-select').append(option);}
+  $('root-select').value=rootId;
+  for(const [key,label] of Object.entries(relationNames)){const row=dom('label'),input=dom('input');input.type='checkbox';input.value=key;input.checked=true;input.addEventListener('change',applyTraversal);row.append(input,document.createTextNode(label));$('relation-filters').append(row);}
+  for(const id of ['root-select','depth-budget','node-budget'])$(id).addEventListener('change',applyTraversal);
+  $('use-focus-root').addEventListener('click',()=>{$('root-select').value=focus;applyTraversal();centerFocus();});
+  text('runtime-call',pretty(source.native.current_call));text('runtime-program',pretty(source.native.current_program));text('runtime-frames',pretty(source.native.frames));
+  text('runtime-budget',pretty(source.native.budget));text('runtime-sources',pretty({source_heads:source.native.source_heads,source_bindings:source.native.source_bindings}));
+  text('dispatch-status',source.native.dispatch.eligible?'Registry dependencies present':'Registry dispatch blocked');
+  text('dispatch-details',pretty(source.native.dispatch));text('ingress-digest',source.native.ingress_digest);
+  const catalogs=new Map(source.native.evidence_catalog.reports.map(r=>[r.report_digest,r]));
+  const reportRows=source.native.candidate_reports.flatMap(report=>report.record_digests.map(record=>({report,record})));
+  for(const row of reportRows){const option=dom('option',row.report.total+' candidates · '+row.report.report_digest.slice(0,12)+' · record '+row.record.slice(0,8));option.value=row.record;$('report-select').append(option);}
+  function reportSelection(){return reportRows.find(row=>row.record===$('report-select').value);}
+  async function makeCursor(row,start,count){const body={schema_version:'cncm.rpa-compound-cursor/0.1',journal_digest:source.native.journal_digest,catalog_digest:source.native.evidence_catalog.catalog_digest,record_digest:row.record,report_digest:row.report.report_digest,start,count,total:row.report.total};return {...body,cursor_digest:await digest(body)};}
+  async function candidatePage(start,count,cursor=null){
+    const row=reportSelection();if(!row)throw Error('No construction report exists in this export.');
+    if(!Number.isInteger(start)||start<0||start>row.report.total||!Number.isInteger(count)||count<1||count>20)throw Error('Use a candidate start within the report and a page size1–20.');
+    const expected=await makeCursor(row,start,count);
+    if(cursor!==null&&canonical(cursor)!==canonical(expected))throw Error('Stale or mismatched cursor. Journal, catalog, record, report, range and digest must match.');
+    const candidates=catalogs.get(row.report.report_digest).body.candidates,stop=Math.min(start+count,row.report.total);
+    return {schema_version:'cncm.rpa-compound-page/0.1',journal_digest:source.native.journal_digest,catalog_digest:source.native.evidence_catalog.catalog_digest,
+      record_digest:row.record,report_digest:row.report.report_digest,start,count,returned:stop-start,total:row.report.total,
+      items:candidates.slice(start,stop).map((candidate,i)=>({index:start+i,candidate})),deferred:{before:[0,start],after:[stop,row.report.total]},
+      next_cursor:stop<row.report.total?await makeCursor(row,stop,count):null};
+  }
+  async function showPage(start,count,cursor=null){
+    const sequence=++pageSequence;$('candidate-panel').dataset.busy='true';
+    try{const page=await candidatePage(start,count,cursor);if(sequence!==pageSequence)return;pageState=page;
+      text('page-error','');$('page-start').value=String(page.start);$('page-size').value=String(page.count);
+      text('page-status','Showing candidate indices '+page.start+'–'+(page.start+page.returned)+' (end excluded) of '+page.total+'. '+(page.total-page.returned)+' deferred from this page.');
+      text('page-identity',pretty({journal_digest:page.journal_digest,catalog_digest:page.catalog_digest,record_digest:page.record_digest,report_digest:page.report_digest}));
+      $('candidate-body').replaceChildren();for(const item of page.items){const row=dom('tr'),button=dom('button','Inspect candidate '+item.index);button.type='button';button.addEventListener('click',()=>{
+        text('detail-type','Recorded construction attempt · page selection only');text('detail-title','Candidate '+item.index);$('detail-fields').replaceChildren();detail('Report',page.report_digest);detail('Record',page.record_digest);text('detail-json',pretty(item));text('evidence-json',pretty({record_digest:page.record_digest,report_digest:page.report_digest,index:item.index}));
+      });const cell=dom('td');cell.append(button);row.append(cell,dom('td',String(item.candidate.program.steps.length)+' primitive call(s)'),dom('td',item.candidate.program.program_digest));$('candidate-body').append(row);}
+      text('page-json',pretty(page));$('cursor-input').value=pretty(await makeCursor(reportSelection(),page.start,page.count));
+      $('page-next').disabled=page.next_cursor===null;$('page-prev').disabled=page.start===0;
+    }catch(error){if(sequence===pageSequence)text('page-error',error.message);}finally{if(sequence===pageSequence)$('candidate-panel').dataset.busy='false';}
+  }
+  $('page-apply').addEventListener('click',()=>showPage(Number($('page-start').value),Number($('page-size').value)));
+  $('report-select').addEventListener('change',()=>showPage(0,20));
+  $('page-next').addEventListener('click',()=>{if(pageState?.next_cursor){const cursor=pageState.next_cursor;showPage(cursor.start,cursor.count,cursor);}});
+  $('page-prev').addEventListener('click',()=>{if(pageState)showPage(Math.max(0,pageState.start-pageState.count),pageState.count);});
+  $('cursor-apply').addEventListener('click',()=>{try{const cursor=losslessParse($('cursor-input').value);showPage(cursor.start,cursor.count,cursor);}catch(error){text('page-error',error.message);}});
+  if(reportRows.length)await showPage(0,20);else{for(const el of $('candidate-panel').querySelectorAll('button,input,select,textarea'))el.disabled=true;text('page-status','No construction report exists at this retained state.');}
+
+  inspectNode();draw();document.documentElement.dataset.viewerReady='true';
+})().catch(error=>{document.documentElement.dataset.viewerReady='error';const target=document.getElementById('navigation-error');if(target)target.textContent='Display refused: '+error.message;});"""
+
+BODY = r"""
+<header><div><div class="eyebrow">CAS-RPA / RECURSIVE POSSIBILITY ATLAS</div><h1>Compound procedures. Visible evidence.</h1><p class="subtitle">Compound runtime0.5 · trace the program, its primitive dependency and the source values behind each conditional answer.</p></div><span class="badge">OFFLINE · READ ONLY</span></header>
+<section class="present" aria-label="Current retained state"><div><div class="eyebrow">Current retained state · fixed in this export</div><h2 id="current-label"></h2><code id="current-hash"></code><p class="scope" id="scope"></p></div><div class="result"><span id="terminal"></span><strong id="output"></strong><p class="help">A retained record, not a live session.</p></div></section>
+<main><section class="runtime-grid"><article class="panel"><h2 id="dispatch-status"></h2><p class="help">Registry dependency eligibility is not execution permission.</p><pre id="dispatch-details"></pre><h3>Retained call</h3><pre id="runtime-call"></pre></article><article class="panel"><h2>Program and saved callers</h2><p class="help">A recorded program stays inspectable after rollback. Its current heads decide dispatch eligibility.</p><pre id="runtime-program"></pre><details><summary>Current acquisition frames</summary><pre id="runtime-frames"></pre></details></article><article class="panel"><h2>Work and source status</h2><p class="help">Policy allocations, executed primitive instructions and independent substitution checks are distinct. Source attestations do not become world-fact verification.</p><pre id="runtime-budget"></pre><details><summary>Current source heads and bindings</summary><pre id="runtime-sources"></pre></details></article></section><div class="layout"><aside class="panel control"><h2>Explore the atlas</h2><div><label>Layout</label><div class="switch" role="group" aria-label="Atlas layout"><button id="flower-layout" type="button" aria-pressed="true">Flower</button><button id="graph-layout" type="button" aria-pressed="false">Graph</button></div></div><div><label for="filter">Filter visited nodes (text only)</label><input id="filter" type="search" placeholder="Label, status, evidence…" autocomplete="off"></div><div><label for="focus-select">Focus node</label><select id="focus-select"></select></div><p class="help">Focus changes what you inspect. It does not change the current state.</p><h3 class="legend-title">Recorded relationships</h3><ul id="legend" class="legend"></ul><p class="help">Dashed links are candidate or rejected transitions. Positions and petal overlap are layout only.</p><p class="help" id="hypothesis"></p><h3>Bounded graph expansion</h3><label for="root-select">Traversal root</label><select id="root-select"></select><button type="button" id="use-focus-root">Use focus as root</button><label for="depth-budget">Maximum link depth</label><input id="depth-budget" type="number" min="0" max="32" value="3"><label for="node-budget">Node budget (root counts1)</label><input id="node-budget" type="number" min="1" max="512" value="48"><fieldset id="relation-filters"><legend>Traverse relationships</legend></fieldset><p id="navigation-error" class="rejected" role="alert"></p><p class="help">These limits bound display traversal. Journal replay and candidate search are separate work.</p><p id="traversal-status" class="help"></p><details><summary>Exact expansion and deferred work</summary><pre id="traversal-json"></pre></details><details><summary>Source and journal identities</summary><h3>Source profile</h3><pre id="source-profile"></pre><h3>Journal</h3><pre id="journal-digest"></pre><h3>Source ingress</h3><pre id="ingress-digest"></pre></details></aside>
+<section class="panel canvas-panel" aria-label="Atlas"><div class="canvas-heading"><div><h2 id="canvas-title">NoeticFlower</h2><p id="snapshot-count"></p></div><button id="return-current" type="button">Focus current state</button></div><div class="zoom-bar"><span>Scroll to explore · Fit shows all</span><div class="zoom-buttons" role="group" aria-label="View zoom"><button id="zoom-out" type="button" aria-label="Zoom out">−</button><span id="zoom-value" aria-live="polite">Fit</span><button id="zoom-in" type="button" aria-label="Zoom in">+</button><button id="zoom-fit" type="button">Fit</button><button id="zoom-readable" type="button">Readable</button></div></div><div class="canvas"><svg id="atlas-canvas" role="group" aria-label="Retained atlas"></svg></div><div class="canvas-note"><span id="view-status" role="status" aria-live="polite"></span><br><span id="filter-note"></span></div></section>
+<aside class="panel inspector" aria-label="Evidence inspector"><span class="focus-tag" id="detail-type"></span><h2 class="inspector-title" id="detail-title"></h2><dl id="detail-fields"></dl><h3>Exact evidence references</h3><pre id="evidence-json"></pre><details open><summary>Exact selected record</summary><pre id="detail-json"></pre></details><h3>Related records</h3><div class="relation-list" id="linked-relations"></div></aside></div>
+<div class="below"><section class="panel"><h2>Recorded transitions</h2><p class="help">Historical events. Work shows charged instruction / checker-call policy units, not measured compute.</p><div class="table-wrap"><table><thead><tr><th>Episode / tick</th><th>Proposed transition</th><th>Outcome</th><th>Policy instructions / checks</th><th>Actual primitive / original / linear checks</th><th>Evidence</th></tr></thead><tbody id="timeline-body"></tbody></table></div><p class="empty" id="timeline-empty"></p></section><section class="panel"><h2>Next-action proposals</h2><p class="help">Readiness and blockers come from the export. This viewer grants no execution authority.</p><div id="actions" class="actions"></div></section></div><section class="panel candidate-panel" id="candidate-panel" data-busy="false"><h2>Construction evidence · bounded pages</h2><p class="help">The complete report is retained once in this file. A displayed page does not bound replay or search work. Deferred candidates are not failed candidates.</p><label for="report-select">Bound report and record</label><select id="report-select"></select><div class="page-controls"><label for="page-start">Start index <input id="page-start" type="number" min="0" value="0"></label><label for="page-size">Page size <input id="page-size" type="number" min="1" max="20" value="20"></label><button id="page-apply" type="button">Show range</button><button id="page-prev" type="button">Previous</button><button id="page-next" type="button">Next</button></div><p id="page-status" role="status"></p><p id="page-error" class="rejected" role="alert"></p><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Structure</th><th>Program digest</th></tr></thead><tbody id="candidate-body"></tbody></table></div><details><summary>Exact report identity and current page</summary><pre id="page-identity"></pre><pre id="page-json"></pre></details><details><summary>Digest-bound page cursor</summary><p class="help">A stale cursor is rejected. This control changes the evidence page only.</p><textarea id="cursor-input" aria-label="Page cursor" rows="6"></textarea><button id="cursor-apply" type="button">Read cursor</button></details></section></main>
+<footer>Both layouts use the same expansion, nodes, typed links, candidate page and evidence. No requests, native execution or saved-state writes occur in this page. A diagram is not proof of general reasoning or learning.</footer>
+"""
+
+def _list(value, label, maximum):
+    if type(value) is not list or len(value) > maximum:
+        raise ValueError(label + ': expected bounded list')
+
+
+def _integer(value, label, maximum=2**63-1, minimum=0):
+    if type(value) is not int or not minimum <= value <= maximum:
+        raise ValueError(label + ': expected bounded raw integer')
+
+
+def _tree(value):
+    pending, count, text_size = [(value,0)], 0, 0
+    while pending:
+        item, depth = pending.pop(); count += 1
+        if count > 1000000 or depth > 64:
+            raise ValueError('view structure exceeds bound')
+        if type(item) is dict:
+            if len(item) > 4096 or any(type(key) is not str for key in item):
+                raise ValueError('invalid view object')
+            text_size += sum(len(key.encode('utf-8')) for key in item)
+            pending.extend((child,depth+1) for child in item.values())
+        elif type(item) is list:
+            _list(item,'view array',4096)
+            pending.extend((child,depth+1) for child in item)
+        elif type(item) is str:
+            text_size += len(item.encode('utf-8'))
+        elif type(item) is int:
+            if item.bit_length() > 512: raise ValueError('view integer exceeds512bits')
+        elif item is not None and type(item) is not bool:
+            raise ValueError('view values must be exact JSON primitives')
+        if text_size > MAX_INPUT_BYTES: raise ValueError('view text exceeds byte bound')
+
+
+def _budget(value):
+    _exact(value,('instructions_remaining','checker_calls_remaining'),'policy budget')
+    for key in value: _integer(value[key],key)
+
+
+def validate_document(document):
+    """Check closed display wire and digest bindings, without executing a kernel.
+
+    A valid display object is not a replay authority, an authenticated principal,
+    an independently verified source fact or permission to dispatch a program.
+    """
+    _tree(document)
+    _exact(document,('schema_version','atlas','native','timeline','next_actions'),'compound view')
+    if document['schema_version'] != SCHEMA: raise ValueError('unsupported compound view version')
+    from cncm.rpa_model import AtlasSnapshot
+    from cncm.compound_model import CompoundCall, CompoundFrame
+    from cncm.compound_program import CallProgram
+    from cncm.compound_recovery import _decode_intent, _decode_proposal_batch
+    from cncm.semantic_model import MemoryRef, RecallBinding, SourceStatement
+    from cncm.native_model import _rational
+    from cncm.model import TerminalStatus, RejectionReason
+    from cncm.rpa_compound_adapter import validate_evidence_catalog, record_body_from_catalog, work_from_catalog
+    atlas = AtlasSnapshot.from_dict(document['atlas'])
+    native = document['native']
+    _exact(native,('runtime_version','source_profile_digest','journal_digest','ingress_digest',
+        'current_state_hash','terminal_status','conditional_output','claim_status','authority',
+        'dispatch','budget','source_heads','evidence_catalog','candidate_reports','scope',
+        'current_call','frames','parameters','source_bindings','current_program'),'compound native')
+    if native['runtime_version'] != '0.5.0' or native['authority'] != 'DISPLAY_ONLY':
+        raise ValueError('compound runtime/display authority mismatch')
+    if native['claim_status'] != 'CONDITIONAL_ON_RECORDED_SOURCE_BINDINGS':
+        raise ValueError('unsupported arithmetic claim status')
+    for key in ('source_profile_digest','journal_digest','ingress_digest','current_state_hash'): _hash(native[key],key)
+    TerminalStatus(native['terminal_status']); _string(native['scope'],'scope',16384)
+    if native['conditional_output'] is not None: _rational(native['conditional_output'],bits=512)
+    current = atlas.node_map()[atlas.current_state_id]
+    if dict(current.fields).get('state_hash') != native['current_state_hash']:
+        raise ValueError('current node/native state binding mismatch')
+    call = None if native['current_call'] is None else CompoundCall.from_dict(native['current_call'])
+    if native['conditional_output'] != (call.output if call else None):
+        raise ValueError('current call/output binding mismatch')
+    _list(native['frames'],'frames',8)
+    frames = [CompoundFrame.from_dict(row) for row in native['frames']]
+    if any(frame.depth != index+1 or call is None or frame.call_id != call.call_id for index,frame in enumerate(frames)):
+        raise ValueError('frame/call/depth binding mismatch')
+    _list(native['parameters'],'parameters',5)
+    if len(native['parameters'])!=5 or any(type(row) is not list or len(row)!=2 for row in native['parameters']) or [row[0] for row in native['parameters']]!=list('abcde'): raise ValueError('exact sorted parameter pairs required')
+    parameters=dict(native['parameters'])
+    for value in parameters.values():
+        MemoryRef.from_dict(value) if type(value) is dict else _rational(value)
+    _list(native['source_bindings'],'source bindings',48)
+    bindings = [RecallBinding.from_dict(row) for row in native['source_bindings']]
+    if len({row.ref for row in bindings}) != len(bindings): raise ValueError('duplicate source binding')
+    if call:
+        by_ref = {row.ref:row.value for row in bindings}
+        inputs = {key:by_ref.get(MemoryRef.from_dict(value)) if type(value) is dict else value for key,value in parameters.items()}
+        if inputs != call.inputs_dict(): raise ValueError('original parameter/call input binding mismatch')
+    _list(native['source_heads'],'source heads',256)
+    head_keys=set()
+    for row in native['source_heads']:
+        _exact(row,('schema_version','scope','key','source_id','statement_digest','value','status','action','previous_digest','source_ref'),'source head')
+        statement = SourceStatement.from_dict({key:value for key,value in row.items() if key != 'statement_digest'})
+        if statement.statement_digest != row['statement_digest']: raise ValueError('source head digest mismatch')
+        key=(statement.scope,statement.key,statement.source_id)
+        if key in head_keys: raise ValueError('duplicate source head')
+        head_keys.add(key)
+    dispatch = native['dispatch']
+    _exact(dispatch,('compound_head','primitive_head','program_present','pinned_primitive_sha256',
+        'primitive_present','pin_matches_current_head','eligible','blockers'),'dispatch')
+    for key in ('compound_head','primitive_head','pinned_primitive_sha256'):
+        if dispatch[key] is not None: _hash(dispatch[key],key)
+    for key in ('program_present','primitive_present','pin_matches_current_head','eligible'):
+        if type(dispatch[key]) is not bool: raise ValueError('dispatch flags must be raw booleans')
+    _list(dispatch['blockers'],'dispatch blockers',64)
+    for item in dispatch['blockers']: _string(item,'blocker')
+    program = None if native['current_program'] is None else CallProgram.from_dict(native['current_program'])
+    if dispatch['program_present'] != (program is not None): raise ValueError('program presence mismatch')
+    if program and (program.program_digest != dispatch['compound_head'] or program.primitive_sha256 != dispatch['pinned_primitive_sha256']):
+        raise ValueError('program/head/primitive pin mismatch')
+    if dispatch['pin_matches_current_head'] != (dispatch['pinned_primitive_sha256'] is not None and dispatch['pinned_primitive_sha256']==dispatch['primitive_head']):
+        raise ValueError('primitive pin-match flag mismatch')
+    if dispatch['eligible'] != (dispatch['program_present'] and dispatch['primitive_present'] and dispatch['pin_matches_current_head']):
+        raise ValueError('registry dependency eligibility mismatch')
+    blockers = []
+    if dispatch['compound_head'] is None: blockers.append('NO_ACTIVE_COMPOUND_HEAD')
+    elif program is None: blockers.append('ACTIVE_COMPOUND_ARTIFACT_MISSING')
+    if dispatch['primitive_head'] is None: blockers.append('NO_ACTIVE_PRIMITIVE_HEAD')
+    if program and not dispatch['primitive_present']: blockers.append('PINNED_PRIMITIVE_ARTIFACT_MISSING')
+    if program and dispatch['primitive_head'] != program.primitive_sha256: blockers.append('PINNED_PRIMITIVE_NOT_AUTHORIZED')
+    if dispatch['blockers'] != blockers or dispatch['eligible'] != (not blockers):
+        raise ValueError('dispatch blocker summary mismatch')
+    budget = native['budget']
+    _exact(budget,('episode_limits','remaining','ordinary_ticks_remaining','allocated_this_episode','actual_work_observed','units'),'budget')
+    if budget['units'] != 'CONSERVATIVE_POLICY_UNITS_NOT_FLOPS': raise ValueError('unsupported work units')
+    _budget(budget['episode_limits']); _budget(budget['remaining']); _integer(budget['ordinary_ticks_remaining'],'ticks')
+    _exact(budget['allocated_this_episode'],('instructions','checker_calls'),'allocation')
+    _exact(budget['actual_work_observed'],('primitive_instructions','original_checks','linear_checks'),'observed work')
+    for key,value in budget['allocated_this_episode'].items():
+        _integer(value,key)
+        if value != budget['episode_limits'][key+'_remaining'] - budget['remaining'][key+'_remaining']:
+            raise ValueError('episode policy allocation/remaining mismatch')
+    for key,value in budget['actual_work_observed'].items(): _integer(value,key)
+    catalog = native['evidence_catalog']; validate_evidence_catalog(catalog)
+    records = {row['record_digest']:row for row in catalog['records']}
+    reports = {row['report_digest']:row for row in catalog['reports']}
+    _list(native['candidate_reports'],'candidate report catalog',1024)
+    report_keys=set()
+    for row in native['candidate_reports']:
+        _exact(row,('report_digest','record_digests','total','page_size'),'candidate report')
+        _hash(row['report_digest'],'candidate report digest'); _integer(row['total'],'candidate total',420)
+        if row['page_size'] != 20 or type(row['page_size']) is not int: raise ValueError('unsupported candidate page size')
+        if row['report_digest'] in report_keys or row['report_digest'] not in reports: raise ValueError('duplicate/missing candidate report')
+        report_keys.add(row['report_digest']); _list(row['record_digests'],'report records',2048)
+        if not row['record_digests'] or len(set(row['record_digests'])) != len(row['record_digests']): raise ValueError('candidate record bindings empty/duplicated')
+        candidates = reports[row['report_digest']]['body'].get('candidates')
+        if type(candidates) is not list or len(candidates) != row['total']: raise ValueError('candidate total mismatch')
+        for key in row['record_digests']:
+            if key not in records or row['report_digest'] not in {ref['report_digest'] for ref in records[key]['report_refs']}:
+                raise ValueError('candidate report/record binding mismatch')
+    timeline = document['timeline']; _list(timeline,'timeline',1024)
+    previous=None; episode_index=-1; seen_events=set()
+    for row in timeline:
+        _exact(row,('episode_index','event','proposal_batch','work_record_digests','work'),'timeline row')
+        _integer(row['episode_index'],'episode index',15)
+        event=row['event']
+        _exact(event,('event_id','parent_event_id','logical_tick','run_id','runtime_version','pre_state_hash',
+            'enabled_components','scheduled_components','proposed_intents','authorized_intent_ids','rejected_intents',
+            'committed_mutations','post_state_hash','terminal_status','previous_event_hash','event_hash','sealed'),'event')
+        for key in ('event_id','run_id'): _string(event[key],key,256)
+        if event['parent_event_id'] is not None: _string(event['parent_event_id'],'parent event',256)
+        _integer(event['logical_tick'],'logical tick',1024,1)
+        if event['runtime_version']!='0.5.0' or event['sealed'] is not True: raise ValueError('unsealed/wrong-runtime event')
+        TerminalStatus(event['terminal_status'])
+        for key in ('pre_state_hash','post_state_hash','event_hash'): _hash(event[key],key)
+        if event['previous_event_hash'] != '': _hash(event['previous_event_hash'],'previous event hash')
+        if event['event_hash'] != digest({key:value for key,value in event.items() if key != 'event_hash'}):
+            raise ValueError('event digest mismatch')
+        if event['event_hash'] in seen_events: raise ValueError('duplicate event hash')
+        seen_events.add(event['event_hash'])
+        if row['episode_index']==episode_index:
+            if previous is None or event['run_id']!=previous['run_id'] or event['logical_tick']!=previous['logical_tick']+1 or event['pre_state_hash']!=previous['post_state_hash'] or event['previous_event_hash']!=previous['event_hash'] or event['parent_event_id']!=previous['event_id']:
+                raise ValueError('within-episode event chain mismatch')
+        else:
+            if row['episode_index']!=episode_index+1 or event['previous_event_hash']!='' or event['parent_event_id'] is not None or event['logical_tick']!=1:
+                raise ValueError('episode/event genesis mismatch')
+            episode_index=row['episode_index']
+        for key,limit in (('enabled_components',32),('scheduled_components',32),('authorized_intent_ids',8),('committed_mutations',64)):
+            _list(event[key],key,limit)
+            for value in event[key]: _string(value,key)
+        _list(event['proposed_intents'],'event intents',8)
+        for item in event['proposed_intents']: _decode_intent(item)
+        _decode_proposal_batch(row['proposal_batch'])
+        _list(event['rejected_intents'],'rejections',16)
+        proposed={item['intent_id'] for item in event['proposed_intents']}
+        if not set(event['authorized_intent_ids']) <= proposed: raise ValueError('authorized intent missing proposal')
+        for item in event['rejected_intents']:
+            _exact(item,('intent_id','reason','detail'),'rejection'); _string(item['intent_id'],'rejected id'); _string(item['detail'],'rejection detail',16384,empty=True); RejectionReason(item['reason'])
+            if item['intent_id'] not in proposed: raise ValueError('rejected intent missing proposal')
+        work=row['work']; _exact(work,('instructions_allocated','checker_calls_allocated','primitive_instructions','original_checks','linear_checks','basis'),'timeline work')
+        if work['basis']!='conservative_policy_units': raise ValueError('unsupported event policy basis')
+        for key,value in work.items():
+            if key!='basis': _integer(value,key)
+        _list(row['work_record_digests'],'work record references',16)
+        if len(set(row['work_record_digests'])) != len(row['work_record_digests']): raise ValueError('duplicate charged work record')
+        allocation={'instructions_allocated':0,'checker_calls_allocated':0}
+        for key in row['work_record_digests']:
+            if key not in records or records[key]['kind']!='WORK_RESERVATION': raise ValueError('unknown work reservation')
+            body=record_body_from_catalog(catalog,key)
+            if body.get('run_id')!=event['run_id'] or body.get('tick')!=event['logical_tick']-1 or body.get('intent_id') not in proposed: raise ValueError('event/work reservation binding mismatch')
+            for name in allocation: allocation[name]+=body[name]
+        if any(work[key]!=value for key,value in allocation.items()): raise ValueError('event policy allocation mismatch')
+        if work != work_from_catalog(catalog, row['work_record_digests'], event):
+            raise ValueError('event actual or allocated work mismatch')
+        previous=event
+    if timeline and timeline[-1]['event']['post_state_hash']!=native['current_state_hash']: raise ValueError('timeline/native present mismatch')
+    current_work = [row['work'] for row in timeline if row['episode_index'] == episode_index]
+    if budget['actual_work_observed'] != {key: sum(row[key] for row in current_work)
+                                        for key in ('primitive_instructions','original_checks','linear_checks')}:
+        raise ValueError('episode actual work summary mismatch')
+    actions=document['next_actions']; _list(actions,'next actions',64)
+    for row in actions:
+        _exact(row,('action','readiness','blockers','authority','proposal','policy_cost'),'next action')
+        if row['authority']!='PROPOSAL_ONLY': raise ValueError('view action cannot grant execution authority')
+        for key in ('action','readiness'): _string(row[key],key)
+        _list(row['blockers'],'action blockers',64)
+        for item in row['blockers']: _string(item,'blocker')
+        if row['proposal'] is not None: _decode_intent(row['proposal'])
+        _exact(row['policy_cost'],('instructions','checker_calls'),'proposal allocation')
+        for key,value in row['policy_cost'].items(): _integer(value,key)
+    raw=canonical_json(document)
+    if len(raw.encode('utf-8'))>MAX_INPUT_BYTES: raise ValueError('compound view exceeds byte limit')
+    return raw
+
+
+def render_compound_rpa_view(document):
+    raw=validate_document(document)
+    data=raw.replace('&','\\u0026').replace('<','\\u003c').replace('>','\\u003e')
+    script_hash=base64.b64encode(sha256(JS.encode()).digest()).decode('ascii')
+    csp="default-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'none'; style-src 'unsafe-inline'; script-src 'sha256-"+script_hash+"'"
+    return ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+        '<meta http-equiv="Content-Security-Policy" content="'+csp+'"><title>CNCM0.5 · Compound Recursive Possibility Atlas</title><style>'+CSS+'</style></head><body>'
+        +BODY+'<noscript>This offline evidence view needs JavaScript. The exact source JSON remains embedded.</noscript>'
+        '<script id="snapshot-data" type="application/json">'+data+'</script><script>'+JS+'</script></body></html>\n')
+
+
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('input',type=Path); parser.add_argument('output',type=Path)
+    args=parser.parse_args(argv); source,target=_within_home(args.input),_within_home(args.output)
+    if source==target or source.suffix.lower()!='.json' or target.suffix.lower()!='.html': raise ValueError('use distinct .json input and .html output')
+    if source.stat().st_size>MAX_INPUT_BYTES: raise ValueError('compound view exceeds byte limit')
+    document=json.loads(source.read_text(encoding='utf-8'),object_pairs_hook=_unique_object,
+        parse_constant=lambda value: (_ for _ in ()).throw(ValueError('non-JSON number')))
+    page=render_compound_rpa_view(document);target.parent.mkdir(parents=True,exist_ok=True)
+    target.write_text(page,encoding='utf-8',newline='\n')
+    print(json.dumps({'output':str(target),'bytes':len(page.encode()),'sha256':sha256(page.encode()).hexdigest(),'authority':'DISPLAY_ONLY'}))
+    return 0
+
+
+if __name__=='__main__': raise SystemExit(main())

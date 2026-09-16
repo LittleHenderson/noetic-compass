@@ -1,0 +1,134 @@
+"""Bind successful local checks and append the three canonical progress ledgers.
+
+Run only after the final test and browser processes finish. No publication,
+models, runtime transitions, or provider work is performed here.
+"""
+from pathlib import Path
+from hashlib import sha256
+import argparse
+import json
+from xml.etree import ElementTree as ET
+
+ROOT = Path(__file__).resolve().parents[2]
+OUTER = Path('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE')
+RECORDS = ROOT / 'records/rpa_compound_001'
+ACCEPTANCE_SHA = '73bcedec7a2cdd3a761dcc55cef59049bf643645c1ad8dd810ea503fd264cd55'
+BROWSER_SHA = 'c8bb53c521f456838696935d6855ffe6dbfd0a90d25da12a4a405945b3205d25'
+
+
+def checksum(path):
+    return sha256(path.read_bytes()).hexdigest()
+
+
+def read(path):
+    return json.loads(path.read_bytes())
+
+
+def write(path, value):
+    text = value if type(value) is str else json.dumps(value, indent=2) + '\n'
+    with path.open('x', encoding='utf-8', newline='\n') as stream:
+        stream.write(text)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--tests', required=True, type=int)
+    parser.add_argument('--subtests', required=True, type=int)
+    args = parser.parse_args()
+    assert ROOT.is_relative_to(OUTER) and args.tests > 0 and args.subtests >= 0
+    accepted = RECORDS / 'acceptance_002/receipt.json'
+    browser = RECORDS / 'browser_acceptance_005/receipt.json'
+    assert checksum(accepted) == ACCEPTANCE_SHA and checksum(browser) == BROWSER_SHA
+    receipt, browser_receipt = read(accepted), read(browser)
+    assert receipt['all_retained_cuts'] == 75 and len(receipt['examples']) == 10
+    for row in receipt['files']:
+        assert checksum(accepted.parent / row['path']) == row['sha256']
+    for row in receipt['sources']:
+        assert checksum(ROOT / row['path']) == row['sha256']
+    for row in browser_receipt['files']:
+        assert checksum(browser.parent / row['path']) == row['sha256']
+    assert browser_receipt['checked_pages'] == 10 and browser_receipt['page_requests'] == 0
+    for row in read(RECORDS / 'source_freeze_002.json')['sources']:
+        assert checksum(ROOT / row['path']) == row['sha256']
+    suite_path = RECORDS / 'final_full_suite_tests.xml'
+    suite = ET.parse(suite_path).getroot()
+    counts = {name: sum(int(s.get(name, '0')) for s in suite.iter('testsuite'))
+              for name in ('tests', 'errors', 'failures', 'skipped')}
+    assert counts == {'tests': args.tests + args.subtests, 'errors': 0, 'failures': 0, 'skipped': 0}
+    # Pytest counts successful subtests in the suite total but does not emit
+    # separate testcase elements for them. Match both independently observed
+    # terminal counts instead of equating the two XML representations.
+    assert len(list(suite.iter('testcase'))) == args.tests
+    assert not any(list(suite.iter(tag)) for tag in ('failure', 'error', 'skipped'))
+    delivery = read(RECORDS / 'delivery.json')
+    destination = Path(delivery['destination'])
+    for name in [row['path'] for row in receipt['files']] + ['receipt.json']:
+        assert (destination / name).read_bytes() == (accepted.parent / name).read_bytes()
+    proof = {'schema_version': 'cncm.rpa-compound-verification-summary/0.1',
+        'tests': args.tests, 'subtests': args.subtests, 'xml_counts': counts,
+        'xml_testcase_elements': args.tests,
+        'full_suite_xml_sha256': checksum(suite_path), 'acceptance_receipt_sha256': ACCEPTANCE_SHA,
+        'browser_receipt_sha256': BROWSER_SHA, 'all_retained_cuts': 75, 'saved_views': 10,
+        'source_files': 97, 'byte_equal_delivered_files': 36, 'full_goal_complete': False}
+    entry = f'''
+## 2026-09-16 CAS-RPA compound evidence workbench and cube teaching boundary
+
+The new read-only compound 0.5 adapter replays externally anchored journals
+before presenting their caller, saved acquisition frames, source bindings,
+construction, installation, dispatch conditions, work allocations and results.
+All 75 retained pause points project exactly: 34 acquisition/correction cuts
+and 41 explicit failure cuts. Ten offline examples cover both rollback paths,
+reuse and the distinct constructed/installed/resumed stages. Source labels such
+as TEST_FIXTURE remain conditional evidence, not independently verified facts.
+
+The evidence catalog retains each complete report once and binds every referring
+record. All 420 construction candidates are inspectable in bounded pages.
+Graph and flower views use identical records and directed depth/node budgets.
+Browser acceptance checks ten pages, 70 independent traversals, 148 candidate
+pages, desktop/mobile layout, unchanged current/source state and zero page
+network requests or exceptions. Full suite: {args.tests} tests plus {args.subtests}
+subtests, with zero failures, errors or skips. All four earlier runtime profiles
+and all seven receipt-bound original RPA sources remain unchanged.
+
+Evidence: records/rpa_compound_001/STATUS.md, acceptance_002/receipt.json and
+browser_acceptance_005/receipt.json in vision-next. The 36 delivered files under
+the outer homebase output/rpa_compound_001 are byte-identical to acceptance.
+Earlier cursor-type, episode-genesis and browser-helper failures remain retained.
+This establishes evidence inspection and traversal parity, not a reasoning or
+learning advantage, native CAS-profile measurement or an executing planner.
+
+The new user-supplied cube/idea-packet proposal has an exact implementation map
+in docs/CAS_RPA_CUBE_INTEGRATION_v0.1.md. A preserved pure probe found that the
+legacy target-free compiler call raises KeyError('correct'); a graph-derived
+teacher compatibility path reproduces all 306 existing question/view/assistance
+compilations. No learner was invoked. The next separate bridge must export only
+public learner inputs, retain teacher targets separately, bind exact input
+identity, and preserve REACHED_VIA as a containment query rather than an RPA
+state transition. The three negative recurrence runs remain unchanged.
+
+This advances bounded inspection/diagnosis portions of V08/V10/V13 and systems
+8/9/24/27/31 without completing them. The full V01-V18, 31-system and integrated
+20-step charter remains open, including general learning/construction, semantic
+proof, CMB-R1, language, Foundations, adaptive flow, tools, Foundry and evolution.
+No local neural run, paid compute or AWS launch was used for this checkpoint.
+'''
+    ledgers = [(OUTER / 'docs/CNCM_COMPLETE_REQUIREMENT_LEDGER.md', 'ac7a92c45d695126b9b959b41192da728974dd425a4584369d12bad04ef58644'),
+        (ROOT / 'docs/CNCM_COMPLETE_REQUIREMENT_LEDGER.md', 'ac7a92c45d695126b9b959b41192da728974dd425a4584369d12bad04ef58644'),
+        (ROOT / 'research/CAS_META_2_COMPOSITION/VISION_REQUIREMENTS.md', '5f388036b38e4f56a07cce163d2e577769ccc3fc477b13b1b6de2261cb2910b0')]
+    originals = [(path, path.read_bytes(), expected) for path, expected in ledgers]
+    assert all(sha256(raw).hexdigest() == expected for path, raw, expected in originals), 'ledger changed before append'
+    assert not (RECORDS / 'verification_summary.json').exists() and not (RECORDS / 'ledger_update.json').exists()
+    changes = []
+    for path, raw, expected in originals:
+        assert path.read_bytes() == raw
+        with path.open('ab') as stream:
+            stream.write(entry.encode('utf-8'))
+        assert path.read_bytes().startswith(raw)
+        changes.append({'path': str(path), 'before_sha256': expected, 'after_sha256': checksum(path), 'prior_bytes_preserved': True})
+    write(RECORDS / 'verification_summary.json', proof)
+    write(RECORDS / 'ledger_update.json', {'schema_version': 'cncm.ledger-append/0.1', 'changes': changes})
+    print(json.dumps(proof, indent=2))
+
+
+if __name__ == '__main__':
+    main()

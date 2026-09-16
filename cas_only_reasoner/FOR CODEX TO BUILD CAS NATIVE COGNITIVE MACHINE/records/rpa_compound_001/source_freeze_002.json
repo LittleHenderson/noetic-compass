@@ -1,0 +1,54 @@
+{
+  "schema_version": "cncm.rpa-compound-source-freeze/0.1",
+  "observed_utc": "2026-09-16T14:46:02.096663+00:00",
+  "sources": [
+    {
+      "path": "cncm/rpa_compound_adapter.py",
+      "bytes": 31337,
+      "sha256": "5793b49ba31ba3ea46b234e6d6e63fcd8e9f089a92cf8c622ac2d8e9779426e3"
+    },
+    {
+      "path": "tools/render_compound_rpa_view.py",
+      "bytes": 63171,
+      "sha256": "904a7f4d91b121e966998ee6791e3ec172d07b587158f4da0005cebc5945a2bc"
+    },
+    {
+      "path": "tools/reproduce_compound_rpa.py",
+      "bytes": 20231,
+      "sha256": "06edd06bdd754bc069c17fd10f2abb8c429587734c4c64a1dd61e4d5a8f216f8"
+    },
+    {
+      "path": "tests/test_rpa_compound_adapter.py",
+      "bytes": 9453,
+      "sha256": "94033b21bf292ce7b7c77717459cd47af00713a02d0f850fe526b61db0922abc"
+    },
+    {
+      "path": "tests/test_rpa_compound_adversarial.py",
+      "bytes": 27008,
+      "sha256": "447ebcf67389d9c5c4a97798941670d13b4d6652301aaf49f7de4ab0caef0a33"
+    },
+    {
+      "path": "tests/test_rpa_compound_view.py",
+      "bytes": 27495,
+      "sha256": "53280ec9e59acc109f3a9f7a5e3e7c0db85b2aff0f56668adb70a5763dae6a86"
+    },
+    {
+      "path": "tests/test_rpa_view.py",
+      "bytes": 15569,
+      "sha256": "24595bf35e660c9485235fccea950714c36501a8b0dc7f84f0a7f01f5ee3b4de"
+    },
+    {
+      "path": "docs/CAS_RPA_COMPOUND_IMPLEMENTATION_v0.1.md",
+      "bytes": 7596,
+      "sha256": "0fa580f010ccfd83fbd8c96ecb9f93ad518bcb8e6b8275a5fe9e31f732444832"
+    }
+  ],
+  "unchanged_runtime_profiles": {
+    "native0.2": "c37aeb1e5cf3813585b2940037e6bc3793bf99dcf968026c0e38394a5886d607",
+    "nested0.3": "49f6c321472c6223b42a39ea21e402d2018ce5bd747acfd9266dc638aaf5be38",
+    "semantic0.4": "6a27f94656b45a4c4732d1a185844517f382390d6e3d1ce4259b63861badcecf",
+    "compound0.5": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5"
+  },
+  "supersedes": "source_freeze_001.json",
+  "reason": "Fix exactzero-event nextepisode boundary and current-run work accounting; robust ownedbrowser cleanup and byte-equal shortpath loading"
+}

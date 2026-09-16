@@ -1,0 +1,20 @@
+{
+  "schema_version": "cncm.rpa-compound-verification-summary/0.1",
+  "tests": 1366,
+  "subtests": 591,
+  "xml_counts": {
+    "tests": 1957,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0
+  },
+  "xml_testcase_elements": 1366,
+  "full_suite_xml_sha256": "b7eeb34eb3cb76a0b88616f787088bcd6c612b365e402dc3bff785bae5cb773b",
+  "acceptance_receipt_sha256": "73bcedec7a2cdd3a761dcc55cef59049bf643645c1ad8dd810ea503fd264cd55",
+  "browser_receipt_sha256": "c8bb53c521f456838696935d6855ffe6dbfd0a90d25da12a4a405945b3205d25",
+  "all_retained_cuts": 75,
+  "saved_views": 10,
+  "source_files": 97,
+  "byte_equal_delivered_files": 36,
+  "full_goal_complete": false
+}

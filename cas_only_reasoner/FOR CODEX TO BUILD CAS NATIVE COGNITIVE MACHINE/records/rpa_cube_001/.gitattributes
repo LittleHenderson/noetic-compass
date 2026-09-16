@@ -1,0 +1,5 @@
+*.json -text -eol -whitespace
+*.txt -text -eol -whitespace
+*.py text eol=lf
+# Preserve exact receipt-bound diagnostic scripts.
+design_probe_001/*.py -text -whitespace

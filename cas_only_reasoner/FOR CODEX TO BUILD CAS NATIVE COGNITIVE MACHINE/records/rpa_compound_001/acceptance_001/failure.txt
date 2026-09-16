@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\tools\reproduce_compound_rpa.py", line 314, in <module>
+    reproduce(target)
+    ~~~~~~~~~^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\tools\reproduce_compound_rpa.py", line 225, in reproduce
+    view = project(prefix, genesis, ingress, retained["prefix_digest"], extensions[:episode_index], profile)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\tools\reproduce_compound_rpa.py", line 128, in project
+    assert validate_document(view) == canonical_json(view)
+           ~~~~~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\tools\render_compound_rpa_view.py", line 511, in validate_document
+    if timeline and timeline[-1]['event']['post_state_hash']!=native['current_state_hash']: raise ValueError('timeline/native present mismatch')
+                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: timeline/native present mismatch

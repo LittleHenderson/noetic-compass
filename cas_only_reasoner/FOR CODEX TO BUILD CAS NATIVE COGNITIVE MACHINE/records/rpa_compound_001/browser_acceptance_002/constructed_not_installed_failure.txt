@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "<stdin>", line 12, in <module>
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\tests\test_rpa_compound_view.py", line 267, in run_browser_check
+    assert result.returncode == 0, result.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: file:///C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/_worktrees/vision-next/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:10
+const navigation=await send('Page.navigate',{url:pageUrl});if(navigation.errorText)throw Error(navigation.errorText);
+                                                                                         ^
+
+Error: net::ERR_FILE_NOT_FOUND
+    at file:///C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/_worktrees/vision-next/cas_only_reasoner/FOR%20CODEX%20TO%20BUILD%20CAS%20NATIVE%20COGNITIVE%20MACHINE/[eval1]:10:90
+
+Node.js v24.11.1
+

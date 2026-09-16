@@ -1,0 +1,117 @@
+{
+  "schema_version": "cncm.rpa-cube-design-inputs/0.1",
+  "status": "DESIGN_ONLY",
+  "cncm_root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE",
+  "composition_root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION",
+  "attachment": {
+    "path": "C:/Users/wakil/.codex/attachments/57331104-5f2e-4668-a58d-548f319893ee/pasted-text.txt",
+    "bytes": 12137,
+    "sha256": "12ecb8736f4c3f98ba754c3b3b21cfb42538400939a915534596068ab6daf125"
+  },
+  "sources": [
+    {
+      "root": "CNCM",
+      "path": "cncm/rpa_model.py",
+      "bytes": 24726,
+      "sha256": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/graph.py",
+      "bytes": 6829,
+      "sha256": "1dfa2f67ab76847d0ae351d36f9e0ea6c6e1bea053640dd20ab898a550b63543"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/reference.py",
+      "bytes": 5412,
+      "sha256": "aab7af24638c842b7197e7468a168fdf05b9cd0dc951583eec5aa8590dc765ee"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/lessons.py",
+      "bytes": 19198,
+      "sha256": "deb271bb91e3c45a79fcf367e816ad6759a4945f3bdf6caaadc15f1770cf3fd6"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/adapter.py",
+      "bytes": 8472,
+      "sha256": "a373852553bf126e32923506f31662629591701f528524430903af3ef93a94b7"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/cube_node.py",
+      "bytes": 79970,
+      "sha256": "9d3363a960298715c0b13256593693dff7b07d70563b9a1b044d5d9042431e4a"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/cube_profile.py",
+      "bytes": 49852,
+      "sha256": "08493344a5daff10e2fcaed5a1711cdf5299a7fa3e332f5efb63a75e5ac8bfef"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/graph_teaching/real_framework.py",
+      "bytes": 20252,
+      "sha256": "82c177e8f70e6931d90a79b65defe9fe6848cce6ab690c67f890b12c4799cd3c"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/recurrent_cjt/learner.py",
+      "bytes": 22677,
+      "sha256": "158c8c9a391a8b73aa138f830663f6726e4697e1b50ada414845cacac6bc5787"
+    },
+    {
+      "root": "Composition",
+      "path": "cas_meta2/perspective_resonance.py",
+      "bytes": 33667,
+      "sha256": "45e876dacbefc04db0bcdd0d6dea6341d3b1efd0d58b63787e9e9709a5a6496f"
+    },
+    {
+      "root": "Composition",
+      "path": "records/perspective_resonance_001/DESIGN_TASK_BINDINGS.md",
+      "bytes": 9611,
+      "sha256": "22f6467ff2de9e0e4165b370e660379c18dfec91fd2609b227dc25a3b1ec3af5"
+    },
+    {
+      "root": "Composition",
+      "path": "records/complementary_teaching_001/preparation_20260916/DESIGN.md",
+      "bytes": 6344,
+      "sha256": "5c9c621a111ceb452e93f6f3cb088ea0dc026a0d989583800e9aeec0c3df0b83"
+    },
+    {
+      "root": "Composition",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Node_Schema_v0.1.md",
+      "bytes": 25974,
+      "sha256": "0f12fe19674658670668104e88e7d2c3afb9ad868b79734135c0ee6b89ad015b"
+    },
+    {
+      "root": "Composition",
+      "path": "records/teaching_cycle_001/graph_first_candidate_001/training_mode_001/cube_node_001/Cube_Node_Example_v0.1.json",
+      "bytes": 29971,
+      "sha256": "9e62538b807d0b7a6fc04890c4ee0504db53e45bc34b62504f001d7f0610eb32"
+    },
+    {
+      "root": "Composition",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260912152001-abf38e1e/curriculum_result.json",
+      "bytes": 11623,
+      "sha256": "5ed2188596df8888d5eb906f9f28988466630bc4e484eca67c89b5cf8f1d0edd"
+    },
+    {
+      "root": "Composition",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913183000-d27a44e4/curriculum_result.json",
+      "bytes": 8890,
+      "sha256": "b9aeaa2f8148e5286f079f5502fd87977d9a2c57f2cf3ee0fcb841aa1aee2e5c"
+    },
+    {
+      "root": "Composition",
+      "path": "records/recurrent_cjt_001/receipt_cas-meta2-rdcjt-20260913184000-d27a44e4/curriculum_result.json",
+      "bytes": 10384,
+      "sha256": "6367cabfc2b24b797fa9d6350285065770c5b08bcbc32f8c73c855047e804de9"
+    }
+  ],
+  "bundle_digest": "b3df2633ec6a49c6ad81d1572334ac00bcd123d09672d7a53a05979fc70b2c16"
+}
+

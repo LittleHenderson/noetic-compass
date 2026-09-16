@@ -1,0 +1,13 @@
+{
+  "schema_version": "cncm.rpa-compound-finalization-failure/0.1",
+  "failure": "AssertionError: testcase element count incorrectly expected to equal main tests plus subtests",
+  "assertion_line": 58,
+  "writes_before_failure": false,
+  "pytest_summary": "1366 passed, 591 subtests passed in 958.38s (0:15:58)",
+  "xml_suite_tests": 1957,
+  "xml_testcase_elements": 1366,
+  "xml_errors": 0,
+  "xml_failures": 0,
+  "xml_skipped": 0,
+  "full_suite_xml_sha256": "b7eeb34eb3cb76a0b88616f787088bcd6c612b365e402dc3bff785bae5cb773b"
+}

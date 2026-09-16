@@ -1,0 +1,373 @@
+"""Closed compound display wire and real offline Chromium navigation checks.
+
+run_browser_check is also the acceptance helper for delivered actual-source HTML.
+It never starts a runtime or alters a retained journal.
+"""
+from collections import deque
+from copy import deepcopy
+import base64
+from hashlib import sha256
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+import time
+import urllib.request
+
+import pytest
+
+from cncm.canonical import canonical_json
+from cncm.compound_model import CompoundProblem
+from cncm.compound_profile import load_compound_profile
+from cncm.compound_recovery import recover_compound_journal
+from cncm.model import ContractError
+from cncm.rpa_compound_adapter import compound_atlas_from_journal, candidate_page
+from tests.test_rpa_view import CHROME, close_owned_browser, parse
+from tools import render_compound_rpa_view as viewer
+
+
+@pytest.fixture(scope='module')
+def document():
+    source = viewer.PROJECT_ROOT / 'records/compound_procedure_001/acceptance_001'
+    read = lambda name: json.loads((source / name).read_text(encoding='utf-8'))
+    ingress = read('external_ingress.json')
+    journal = read('baseline_journal.json')
+    profile = load_compound_profile()
+    assert profile.profile_digest == '3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5'
+    return compound_atlas_from_journal(journal,
+        trusted_genesis=CompoundProblem.from_dict(read('genesis.json')),
+        trusted_ingress=tuple(ingress['initial_statement_digests']),
+        expected_journal_digest=read('baseline_anchor.json')['journal_digest'], profile=profile)
+
+
+def test_actual_projection_renders_with_exact_embedded_data_and_hash_csp(document):
+    before = canonical_json(document)
+    first = viewer.render_compound_rpa_view(document)
+    assert first == viewer.render_compound_rpa_view(document)
+    assert canonical_json(document) == before
+    parsed = parse(first)
+    assert len(parsed.scripts) == 2
+    assert json.loads(parsed.scripts[0]['text']) == document
+    assert document['native']['conditional_output'] == '3'
+    assert "connect-src 'none'" in parsed.csp
+    script_hash = base64.b64encode(sha256(parsed.scripts[1]['text'].encode()).digest()).decode()
+    assert "'sha256-" + script_hash + "'" in parsed.csp
+    assert "script-src 'unsafe-inline'" not in parsed.csp
+    assert viewer.MAX_INPUT_BYTES == 32 * 1024 * 1024
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda d: d.update(execute=True),
+    lambda d: d.update(schema_version='cncm.native-rpa-view/0.1'),
+    lambda d: d['native'].update(runtime_version='0.2.0'),
+    lambda d: d['native'].update(authority='EXECUTE'),
+    lambda d: d['native'].update(current_state_hash='0'*64),
+    lambda d: d['native'].update(claim_status='WORLD_FACT_VERIFIED'),
+    lambda d: d['native'].update(conditional_output='99'),
+    lambda d: d['native']['dispatch'].update(eligible=False),
+    lambda d: d['native']['dispatch'].update(pin_matches_current_head=False),
+    lambda d: d['native']['dispatch'].update(compound_head='0'*64),
+    lambda d: d['native']['dispatch'].update(primitive_present=1),
+    lambda d: d['native']['dispatch'].update(blockers=['UNSUPPORTED_FAILURE']),
+    lambda d: d['native']['budget']['allocated_this_episode'].update(instructions=0),
+    lambda d: d['native']['budget']['remaining'].update(checker_calls_remaining=True),
+    lambda d: d['native']['budget']['actual_work_observed'].update(primitive_instructions=0),
+    lambda d: d['native']['candidate_reports'][0].update(total=419),
+    lambda d: d['native']['candidate_reports'][0].update(page_size=21),
+    lambda d: d['native']['candidate_reports'][0].update(record_digests=['0'*64]),
+    lambda d: d['native']['source_heads'][0].update(status='INDEPENDENTLY_VERIFIED'),
+    lambda d: d['native']['parameters'][0].__setitem__(1, '99'),
+    lambda d: d['timeline'][0]['work'].update(instructions_allocated=True),
+    lambda d: d['timeline'][0]['work'].update(primitive_instructions=99),
+    lambda d: d['timeline'][0]['event'].update(post_state_hash='0'*64),
+    lambda d: d['timeline'][0]['work'].update(basis='measured_flops'),
+    lambda d: d['timeline'][0].update(episode_index=1),
+    lambda d: d['next_actions'][0].update(authority='EXECUTE'),
+    lambda d: d['atlas'].update(current_state_id='missing'),
+])
+def test_closed_wire_rejects_conflicting_or_unsafe_claims(document, mutate):
+    changed = deepcopy(document)
+    mutate(changed)
+    with pytest.raises((ValueError, ContractError)):
+        viewer.validate_document(changed)
+
+
+def test_omitted_work_records_cannot_hide_a_real_charge(document):
+    changed = deepcopy(document)
+    row = next(row for row in changed['timeline'] if row['work_record_digests'])
+    row['work_record_digests'] = []
+    row['work'] = {key: ('conservative_policy_units' if key == 'basis' else 0) for key in row['work']}
+    with pytest.raises((ValueError, ContractError)):
+        viewer.validate_document(changed)
+
+
+@pytest.fixture(scope='module')
+def correction_start():
+    source = viewer.PROJECT_ROOT / 'records/compound_procedure_001/acceptance_001'
+    read = lambda name: json.loads((source / name).read_text(encoding='utf-8'))
+    ingress = read('external_ingress.json')
+    genesis = CompoundProblem.from_dict(read('genesis.json'))
+    profile = load_compound_profile()
+    machine = recover_compound_journal(read('baseline_journal.json'), trusted_genesis=genesis,
+        trusted_ingress=tuple(ingress['initial_statement_digests']),
+        expected_journal_digest=read('baseline_anchor.json')['journal_digest'], profile=profile)
+    correction = CompoundProblem.from_dict(read('correction_journal.json')['episodes'][1]['problem'])
+    machine.start(correction, additional_trusted_ingress=tuple(ingress['extensions'][0]))
+    journal = machine.journal()
+    retained = next(row for row in read('all_cut_replay.json')['cuts'] if row['episode'] == 1 and row['cut'] == 0)
+    assert journal['journal_digest'] == retained['prefix_digest']
+    return compound_atlas_from_journal(journal, trusted_genesis=genesis,
+        trusted_ingress=tuple(ingress['initial_statement_digests']),
+        expected_journal_digest=retained['prefix_digest'], profile=profile,
+        trusted_ingress_extensions=(tuple(ingress['extensions'][0]),))
+
+
+def current_node(document):
+    return next(row for row in document['atlas']['nodes'] if row['node_id'] == document['atlas']['current_state_id'])
+
+
+def boundary_link(document):
+    return next(row for row in document['atlas']['links'] if row['target_id'] == document['atlas']['current_state_id']
+                and row['action_id'] == 'START_NEW_EPISODE')
+
+
+def test_real_correction_start_is_observed_genesis_without_recharging_previous_events(correction_start):
+    assert viewer.validate_document(correction_start) == canonical_json(correction_start)
+    native = correction_start['native']
+    assert correction_start['timeline'][-1]['event']['post_state_hash'] != native['current_state_hash']
+    assert native['current_call'] is None and native['frames'] == []
+    assert native['budget']['allocated_this_episode'] == {'instructions': 0, 'checker_calls': 0}
+    assert native['budget']['actual_work_observed'] == {'primitive_instructions': 0, 'original_checks': 0, 'linear_checks': 0}
+    assert boundary_link(correction_start)['transition_status'] == 'observed'
+
+
+@pytest.mark.parametrize('mutate', [
+    lambda d: d['atlas']['links'].remove(boundary_link(d)),
+    lambda d: boundary_link(d).update(transition_status='candidate'),
+    lambda d: boundary_link(d).update(evidence_refs=['0'*64]),
+    lambda d: boundary_link(d).update(source_id='state-' + d['timeline'][0]['event']['pre_state_hash']),
+    lambda d: current_node(d)['context'].update(record_version=1),
+    lambda d: current_node(d)['context'].update(observation_time='logical-tick:1'),
+    lambda d: current_node(d)['context'].update(context_id=d['timeline'][-1]['event']['run_id']),
+    lambda d: current_node(d)['fields'].append(['event_hash', '0'*64]),
+    lambda d: current_node(d).update(evidence_refs=['0'*64]),
+    lambda d: d['native']['budget']['actual_work_observed'].update(primitive_instructions=1),
+])
+def test_forged_or_missing_episode_boundary_is_rejected(correction_start, mutate):
+    changed = deepcopy(correction_start)
+    mutate(changed)
+    with pytest.raises((ValueError, ContractError)):
+        viewer.validate_document(changed)
+
+
+def test_wire_parser_rejects_duplicate_keys_non_json_and_large_integer():
+    with pytest.raises(ValueError, match='duplicate'):
+        json.loads('{"x":1,"x":2}', object_pairs_hook=viewer._unique_object)
+    for invalid in (float('nan'), 1.25, 2**512, {'bad': b'bytes'}):
+        with pytest.raises(ValueError):
+            viewer._tree(invalid)
+    with pytest.raises(ValueError, match='homebase'):
+        viewer._within_home(viewer.HOME.parent / 'escape.html')
+
+
+def test_cli_roundtrip_and_hostile_labels_are_inert(document):
+    changed = deepcopy(document)
+    hostile = '</script><script>globalThis.viewerPwned=true</script><img src="https://invalid.example/leak" onerror="globalThis.viewerPwned=true">'
+    changed['atlas']['nodes'][0]['label'] = hostile
+    changed['next_actions'][0]['blockers'] = [hostile]
+    page = viewer.render_compound_rpa_view(changed)
+    parsed = parse(page)
+    assert len(parsed.scripts) == 2 and hostile not in page
+    assert json.loads(parsed.scripts[0]['text']) == changed
+    scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+    scratch.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='c', dir=scratch) as directory:
+        source, target = Path(directory) / 'in.json', Path(directory) / 'out.html'
+        source.write_text(canonical_json(changed), encoding='utf-8')
+        assert viewer.main([str(source), str(target)]) == 0
+        assert target.read_text(encoding='utf-8') == page
+        with pytest.raises(ValueError, match='distinct'):
+            viewer.main([str(source), str(source)])
+
+
+def reference_walk(atlas, config):
+    """Independent ordinary directed BFS over the supplied wire, not Atlas.expand."""
+    by_id = {n['node_id']: n for n in atlas['nodes']}
+    visited, seen, traversed, revisited, deferred = [config['root']], {config['root']}, [], [], []
+    queue = deque([(config['root'], 0)])
+    edges = sorted(atlas['links'], key=lambda edge: edge['link_id'])
+    while queue:
+        current, depth = queue.popleft()
+        if by_id[current]['expansion_ref'] is not None:
+            deferred.append(dict(source_id=current, link_id=None, target_id=None,
+                                 reason='generator_not_expanded', expansion_ref=by_id[current]['expansion_ref']))
+        for edge in edges:
+            if edge['source_id'] != current or edge['relation'] not in config['relations']:
+                continue
+            target = edge['target_id']
+            if target in seen:
+                traversed.append(edge['link_id']); revisited.append(edge['link_id'])
+            elif depth >= config['depth'] or len(visited) >= config['count']:
+                deferred.append(dict(source_id=current, link_id=edge['link_id'], target_id=target,
+                                     reason='max_depth' if depth >= config['depth'] else 'max_nodes', expansion_ref=None))
+            else:
+                seen.add(target); visited.append(target); traversed.append(edge['link_id']); queue.append((target, depth + 1))
+    return dict(root_id=config['root'], max_depth=config['depth'], max_nodes=config['count'],
+                visited_node_ids=visited, traversed_link_ids=traversed, revisited_link_ids=revisited,
+                deferred=deferred, nodes_used=len(visited),
+                boundary='finite supplied graph only; deferred does not mean impossible')
+
+
+CDP_CHECK = r"""
+const [url,pageUrl,screenshotPath] = process.argv.slice(1), ws = new WebSocket(url);
+const pending=new Map(),exceptions=[],requests=[];let sequence=0;
+ws.onmessage=message=>{const row=JSON.parse(message.data);if(row.id){const item=pending.get(row.id);pending.delete(row.id);row.error?item.reject(Error(JSON.stringify(row.error))):item.resolve(row.result);}else if(row.method==='Runtime.exceptionThrown')exceptions.push(row.params);else if(row.method==='Network.requestWillBeSent' && /^https?:/.test(row.params.request.url))requests.push(row.params.request.url);};
+const send=(method,params={})=>new Promise((resolve,reject)=>{const id=++sequence;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}));});
+const evaluate=async expression=>{const result=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(result.exceptionDetails)throw Error(JSON.stringify(result.exceptionDetails));return result.result.value;};
+await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
+await send('Runtime.enable');await send('Network.enable');await send('Page.enable');
+await send('Emulation.setDeviceMetricsOverride',{width:1440,height:1100,deviceScaleFactor:1,mobile:false});
+const navigation=await send('Page.navigate',{url:pageUrl});if(navigation.errorText)throw Error(navigation.errorText);
+for(let i=0;i<150;i++){if(await evaluate('location.href === '+JSON.stringify(pageUrl)+" && ['true','error'].includes(document.documentElement.dataset.viewerReady)"))break;await new Promise(r=>setTimeout(r,50));}
+if(!await evaluate("document.documentElement.dataset.viewerReady==='true'"))throw Error('Initialization refused: '+JSON.stringify(await evaluate('({state:document.documentElement.dataset.viewerReady,error:document.getElementById("navigation-error")?.textContent})')));
+const proof=await evaluate(`(async()=>{
+ const $=id=>document.getElementById(id),check=(v,label)=>{if(!v)throw Error(label);};
+ const sourceText=$('snapshot-data').textContent,source=JSON.parse(sourceText),current=$('current-hash').textContent;
+ const immutable=['current-hash','source-profile','journal-digest','ingress-digest','runtime-call','runtime-program','runtime-frames','runtime-budget','runtime-sources','dispatch-details'].map(id=>[id,$(id).textContent]);
+ const ids=selector=>[...document.querySelectorAll(selector)].map(n=>n.dataset.nodeId||n.dataset.linkId).sort();
+ const snapshot=()=>({nodes:ids('.node'),links:ids('.edge'),walk:JSON.parse($('traversal-json').textContent)});
+ const original=snapshot(),initialHeight=document.querySelector('.node-label').getBoundingClientRect().height;
+ check(initialHeight>=11,'default labels are too small');
+ const boxes=[...document.querySelectorAll('.node rect')].map(n=>n.getBoundingClientRect());
+ for(let i=0;i<boxes.length;i++)for(let j=i+1;j<boxes.length;j++){const a=boxes[i],b=boxes[j];check(!(a.left<b.right-.5&&a.right>b.left+.5&&a.top<b.bottom-.5&&a.bottom>b.top+.5),'flower boxes overlap');}
+ $('graph-layout').click();check(JSON.stringify(snapshot())===JSON.stringify(original),'layouts differ in records or traversal');
+ const other=source.atlas.nodes.find(n=>n.node_id!==source.atlas.current_state_id);
+ if(other){$('focus-select').value=other.node_id;$('focus-select').dispatchEvent(new Event('change'));check(JSON.parse($('detail-json').textContent).node_id===other.node_id,'focus evidence mismatch');}
+ const focusedWalk=$('traversal-json').textContent;
+ $('filter').value='no-match-zzzzzz';$('filter').dispatchEvent(new Event('input'));check(ids('.node').length===0,'filter did not hide nodes');check($('traversal-json').textContent===focusedWalk,'text filter changed graph expansion');
+ $('return-current').click();check($('focus-select').value===source.atlas.current_state_id,'return focus failed');
+ const relations=[...document.querySelectorAll('#relation-filters input')].map(el=>el.value),walks=[];
+ const configurations=[{root:source.atlas.current_state_id,depth:0,count:1,relations},{root:source.atlas.current_state_id,depth:1,count:2,relations},{root:source.atlas.current_state_id,depth:2,count:5,relations},{root:source.atlas.current_state_id,depth:32,count:512,relations}, {root:source.atlas.current_state_id,depth:32,count:512,relations:['contains_part']},{root:source.atlas.current_state_id,depth:32,count:512,relations:[]}];
+ if(other)configurations.push({root:other.node_id,depth:32,count:512,relations});
+ for(const config of configurations){$('root-select').value=config.root;$('depth-budget').value=config.depth;$('node-budget').value=config.count;for(const el of document.querySelectorAll('#relation-filters input'))el.checked=config.relations.includes(el.value);$('node-budget').dispatchEvent(new Event('change'));const graph=snapshot();$('flower-layout').click();check(JSON.stringify(snapshot())===JSON.stringify(graph),'bounded layouts disagree');$('graph-layout').click();walks.push({config,result:graph.walk});}
+ const validWalk=$('traversal-json').textContent;$('depth-budget').value=-1;$('depth-budget').dispatchEvent(new Event('change'));check($('navigation-error').textContent.length>0,'invalid traversal accepted');check($('traversal-json').textContent===validWalk,'invalid traversal changed state');
+ const pages=[];
+ const waitPage=async()=>{for(let i=0;i<100;i++){if($('candidate-panel').dataset.busy!=='true')return;await new Promise(r=>setTimeout(r,10));}throw Error('page still busy');};
+ if(source.native.candidate_reports.length){
+   while(true){await waitPage();check(!$('page-error').textContent,'candidate page error');const page=JSON.parse($('page-json').textContent);pages.push(page);check(page.returned<=20,'page bound exceeded');if(!page.next_cursor)break;$('page-next').click();}
+   check(pages.length>0,'missing pages');const last=pages.at(-1);check(last.start+last.returned===last.total,'candidate coverage incomplete');
+   $('page-start').value=0;$('page-size').value=3;$('page-apply').click();await waitPage();
+   $('candidate-body').querySelector('button').click();check(JSON.parse($('detail-json').textContent).index===0,'candidate inspector mismatch');
+   const good=$('page-json').textContent,cursor=JSON.parse($('cursor-input').value);cursor.journal_digest='0'.repeat(64);$('cursor-input').value=JSON.stringify(cursor);$('cursor-apply').click();await waitPage();check($('page-error').textContent.includes('Stale'),'foreign cursor accepted');check($('page-json').textContent===good,'foreign cursor moved page');
+   $('page-start').value=0;$('page-size').value=21;$('page-apply').click();await waitPage();check($('page-error').textContent.length>0,'oversize page accepted');check($('page-json').textContent===good,'invalid page changed data');
+   const options=$('report-select').options;if(options.length>1){$('report-select').value=options[1].value;$('report-select').dispatchEvent(new Event('change'));await waitPage();check(JSON.parse($('page-json').textContent).record_digest===options[1].value,'second referring record lost');}
+   $('page-start').value=0;$('page-size').value=20;$('page-apply').click();await waitPage();
+ }else{check($('report-select').disabled && $('page-apply').disabled,'missing report has active paging');}
+ if(source.timeline.length){$('timeline-body').querySelector('button').click();check($('detail-type').textContent.includes('Historical event'),'historical evidence unlabeled');check($('detail-json').textContent.includes(source.timeline[0].event.event_hash),'historical event identity changed');}
+ check(!globalThis.viewerPwned&&!document.querySelector('img,iframe,form'),'hostile data executed');
+ check(!document.querySelector('#actions button'),'execution control present');
+ check(sourceText===$('snapshot-data').textContent,'embedded source changed');
+ for(const [id,before] of immutable)check($(id).textContent===before,'native/current/source field changed: '+id);
+ $('root-select').value=source.atlas.current_state_id;$('depth-budget').value=3;$('node-budget').value=48;for(const el of document.querySelectorAll('#relation-filters input'))el.checked=true;$('node-budget').dispatchEvent(new Event('change'));$('flower-layout').click();$('return-current').click();$('zoom-readable').click();
+ return {current_state_hash:current,nodes:source.atlas.nodes.length,links:source.atlas.links.length,events:source.timeline.length,initial_label_height_px:initialHeight,walks,pages,source_unchanged:true,matched_layouts:true,focus_filter_current_isolation:true,injection_inert:true};
+})()`);
+if(screenshotPath){const fs=await import('node:fs');await evaluate("document.querySelector('.layout').scrollIntoView();");const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(screenshotPath,Buffer.from(shot.data,'base64'));}
+await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+await evaluate("document.getElementById('zoom-readable').click()");
+proof.mobile_no_page_overflow=await evaluate('document.documentElement.scrollWidth<=390');
+proof.mobile_label_height_px=await evaluate("document.querySelector('.node-label').getBoundingClientRect().height");
+if(!proof.mobile_no_page_overflow)throw Error('Mobile page overflows: '+JSON.stringify(await evaluate('[...document.querySelectorAll("body *")].filter(x=>x.getBoundingClientRect().right>391 && !x.closest(".canvas,.table-wrap,pre")).map(x=>({tag:x.tagName,id:x.id,width:x.getBoundingClientRect().width})).slice(0,15)')));
+if(proof.mobile_label_height_px<11)throw Error('Mobile labels too small');
+if(screenshotPath){const fs=await import('node:fs');await evaluate("document.querySelector('.canvas-panel').scrollIntoView();");const shot=await send('Page.captureScreenshot',{format:'png'});fs.writeFileSync(screenshotPath.replace(/\.png$/,'_mobile.png'),Buffer.from(shot.data,'base64'));}
+if(exceptions.length)throw Error(JSON.stringify(exceptions));if(requests.length)throw Error('External requests: '+JSON.stringify(requests));
+proof.browser_exceptions=exceptions.length;proof.external_requests=requests.length;console.log(JSON.stringify(proof));ws.close();
+"""
+
+
+def run_browser_check(page, screenshot_path=None):
+    """Check an existing exact HTML export and optionally retain two screenshots.
+
+    Raises when Chromium is missing or any assertion fails. All launched process
+    handles are owned and stopped; scratch profiles stay within the CNCM HOME.
+    """
+    if CHROME is None or shutil.which('node') is None:
+        raise RuntimeError('Chromium and Node are required for this browser check')
+    page = Path(page).resolve()
+    document = json.loads(parse(page.read_text(encoding='utf-8')).scripts[0]['text'])
+    scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+    scratch.mkdir(parents=True, exist_ok=True)
+    # A delayed browser database flush may still hold a scratch file after the
+    # owned process exits. Preserve such scratch files rather than masking page
+    # assertions with a cleanup exception or deleting a file still in use.
+    with tempfile.TemporaryDirectory(prefix='b', dir=scratch, ignore_cleanup_errors=True) as directory:
+        profile = Path(directory)
+        assert profile.resolve().is_relative_to(scratch.resolve()) and not profile.is_symlink()
+        # Chrome's Windows file URL loader still refuses paths beyond MAX_PATH.
+        # Load exactly the same self-contained bytes at a short owned scratch
+        # name, and verify the copy. Source identity always names the input file.
+        browser_page = profile / 'v.html'
+        shutil.copyfile(page, browser_page)
+        assert browser_page.read_bytes() == page.read_bytes()
+        process = subprocess.Popen([str(CHROME), '--headless=new', '--disable-gpu', '--no-first-run',
+            '--no-default-browser-check', '--disable-background-networking', '--disable-extensions',
+            '--remote-debugging-port=0', '--user-data-dir=' + str(profile), 'about:blank'],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+        target_websocket = browser_websocket = None
+        try:
+            port_file = profile / 'DevToolsActivePort'
+            deadline = time.monotonic() + 15
+            while not port_file.exists() and time.monotonic() < deadline and process.poll() is None:
+                time.sleep(.05)
+            assert port_file.exists(), 'headless browser did not expose its local test port'
+            port_lines = port_file.read_text().splitlines()
+            port = port_lines[0]
+            browser_websocket = 'ws://127.0.0.1:' + port + port_lines[1]
+            with urllib.request.urlopen('http://127.0.0.1:' + port + '/json/list', timeout=5) as response:
+                target = next(row for row in json.load(response) if row['type'] == 'page')
+            target_websocket = target['webSocketDebuggerUrl']
+            result = subprocess.run([shutil.which('node'), '--input-type=module', '-e', CDP_CHECK,
+                target_websocket, browser_page.as_uri(), '' if screenshot_path is None else str(Path(screenshot_path).resolve())],
+                capture_output=True, text=True, encoding='utf-8', timeout=90)
+            assert result.returncode == 0, result.stderr
+            proof = json.loads(result.stdout)
+            for row in proof.pop('walks'):
+                assert row['result'] == reference_walk(document['atlas'], row['config'])
+            pages = proof.pop('pages')
+            for row in pages:
+                assert row == candidate_page(document, row['record_digest'], start=row['start'], count=row['count'])
+            proof.update(independent_bfs_cases=7 if len(document['atlas']['nodes'])>1 else 6,
+                         exact_candidate_pages=len(pages), candidate_rows_checked=sum(row['returned'] for row in pages),
+                         page_sha256=sha256(page.read_bytes()).hexdigest())
+            return proof
+        finally:
+            try:
+                close_owned_browser(process, browser_websocket)
+            except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+                # Windows taskkill may report already-exited child races even
+                # after terminating the owned parent. Allow its handle to finish
+                # shutting down; a still-live parent is killed by its exact owned
+                # handle, never by a re-enumerated or unrelated process name.
+                try:
+                    process.wait(timeout=30)
+                except subprocess.TimeoutExpired:
+                    process.kill()
+                    process.wait(timeout=30)
+            if 'proof' in locals():
+                proof['owned_browser_exit_code'] = process.returncode
+
+
+@pytest.mark.skipif(CHROME is None or shutil.which('node') is None, reason='Chromium and Node unavailable')
+def test_actual_browser_bfs_paging_evidence_injection_and_offline_behavior(document):
+    changed = deepcopy(document)
+    changed['atlas']['nodes'][0]['label'] = '</script><img src="https://invalid.example/leak" onerror="globalThis.viewerPwned=true">'
+    scratch = viewer.PROJECT_ROOT / 'records/rpa_compound_001/_scratch'
+    scratch.mkdir(parents=True, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='v', dir=scratch) as directory:
+        page = Path(directory) / 'view.html'
+        page.write_text(viewer.render_compound_rpa_view(changed), encoding='utf-8', newline='\n')
+        proof = run_browser_check(page)
+        assert proof['external_requests'] == proof['browser_exceptions'] == 0
+        assert proof['candidate_rows_checked'] == 420
+        assert proof['source_unchanged'] and proof['matched_layouts'] and proof['mobile_no_page_overflow']

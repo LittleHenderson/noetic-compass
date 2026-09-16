@@ -521,3 +521,44 @@ learning, protected held-out transfer or independently verified source facts.
 General procedure structures, semantic proof, CMB-R1, language, Foundations,
 flow, tools, Foundry, evolution and the full V01-V18/31-system/integrated 20-step
 vision retain open gates. No paid model/provider work or AWS launch was used.
+
+## 2026-09-16 CAS-RPA compound evidence workbench and cube teaching boundary
+
+The new read-only compound 0.5 adapter replays externally anchored journals
+before presenting their caller, saved acquisition frames, source bindings,
+construction, installation, dispatch conditions, work allocations and results.
+All 75 retained pause points project exactly: 34 acquisition/correction cuts
+and 41 explicit failure cuts. Ten offline examples cover both rollback paths,
+reuse and the distinct constructed/installed/resumed stages. Source labels such
+as TEST_FIXTURE remain conditional evidence, not independently verified facts.
+
+The evidence catalog retains each complete report once and binds every referring
+record. All 420 construction candidates are inspectable in bounded pages.
+Graph and flower views use identical records and directed depth/node budgets.
+Browser acceptance checks ten pages, 70 independent traversals, 148 candidate
+pages, desktop/mobile layout, unchanged current/source state and zero page
+network requests or exceptions. Full suite: 1366 tests plus 591
+subtests, with zero failures, errors or skips. All four earlier runtime profiles
+and all seven receipt-bound original RPA sources remain unchanged.
+
+Evidence: records/rpa_compound_001/STATUS.md, acceptance_002/receipt.json and
+browser_acceptance_005/receipt.json in vision-next. The 36 delivered files under
+the outer homebase output/rpa_compound_001 are byte-identical to acceptance.
+Earlier cursor-type, episode-genesis and browser-helper failures remain retained.
+This establishes evidence inspection and traversal parity, not a reasoning or
+learning advantage, native CAS-profile measurement or an executing planner.
+
+The new user-supplied cube/idea-packet proposal has an exact implementation map
+in docs/CAS_RPA_CUBE_INTEGRATION_v0.1.md. A preserved pure probe found that the
+legacy target-free compiler call raises KeyError('correct'); a graph-derived
+teacher compatibility path reproduces all 306 existing question/view/assistance
+compilations. No learner was invoked. The next separate bridge must export only
+public learner inputs, retain teacher targets separately, bind exact input
+identity, and preserve REACHED_VIA as a containment query rather than an RPA
+state transition. The three negative recurrence runs remain unchanged.
+
+This advances bounded inspection/diagnosis portions of V08/V10/V13 and systems
+8/9/24/27/31 without completing them. The full V01-V18, 31-system and integrated
+20-step charter remains open, including general learning/construction, semantic
+proof, CMB-R1, language, Foundations, adaptive flow, tools, Foundry and evolution.
+No local neural run, paid compute or AWS launch was used for this checkpoint.

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="5.768" timestamp="2026-09-16T07:32:20.143698-07:00" hostname="MSI"><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[False-start]" time="4.268" /><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[False-count]" time="0.210" /><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[False-total]" time="0.215"><failure message="Failed: DID NOT RAISE &lt;class 'cncm.model.ContractError'&gt;">views = &lt;function views.&lt;locals&gt;.get at 0x000001CDB560A820&gt;, field = 'total'
+reseal_cursor = False
+
+    @pytest.mark.parametrize("field", ["start", "count", "total"])
+    @pytest.mark.parametrize("reseal_cursor", [False, True])
+    def test_cursor_numeric_fields_reject_equal_float_aliases(views, field, reseal_cursor):
+        _, view = views("baseline")
+        key = construction_record(view)
+        cursor = candidate_page(view, key)["next_cursor"]
+        cursor[field] = float(cursor[field])
+        if reseal_cursor:
+            cursor["cursor_digest"] = digest({k: v for k, v in cursor.items() if k != "cursor_digest"})
+&gt;       with pytest.raises(ContractError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE &lt;class 'cncm.model.ContractError'&gt;
+
+tests\test_rpa_compound_adversarial.py:389: Failed</failure></testcase><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[True-start]" time="0.244" /><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[True-count]" time="0.231" /><testcase classname="tests.test_rpa_compound_adversarial" name="test_cursor_numeric_fields_reject_equal_float_aliases[True-total]" time="0.230" /></testsuite></testsuites>
