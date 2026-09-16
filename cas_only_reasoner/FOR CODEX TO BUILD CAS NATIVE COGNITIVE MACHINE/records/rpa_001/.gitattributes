@@ -1,0 +1,2 @@
+*.xml -text -whitespace
+*.json -text -eol -whitespace

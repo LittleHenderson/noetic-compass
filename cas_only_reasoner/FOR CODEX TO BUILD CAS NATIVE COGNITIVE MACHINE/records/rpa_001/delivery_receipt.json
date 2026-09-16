@@ -1,0 +1,37 @@
+{
+  "schema_version": "cncm.rpa-delivery/0.1",
+  "source_receipt_sha256": "dcd8e3c99fdf0edd45f0e6ea56a6d9336fabac9761ac3056d29b223bf6339f62",
+  "byte_equal_files": [
+    {
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\demo2\\missing_procedure.html",
+      "delivered": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\output\\rpa_001\\missing_procedure.html",
+      "bytes": 39977,
+      "sha256": "56afd3b20fb79331b3fd3f9677beda17839ed072f60a0367a766524f19e1fe03"
+    },
+    {
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\demo2\\checked_solution.html",
+      "delivered": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\output\\rpa_001\\checked_solution.html",
+      "bytes": 189496,
+      "sha256": "a0d04762f4966dc6a3e081137690c7f517afcc3d0c874137a1d2c7067ae7ff63"
+    },
+    {
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\demo2\\recovery_and_rollback.html",
+      "delivered": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\output\\rpa_001\\recovery_and_rollback.html",
+      "bytes": 228545,
+      "sha256": "3b663e995d1d3ae4d997b1f7a6aebaa323d036a55179503941d64ab2aee95936"
+    },
+    {
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CAS_RPA_PROJECT_FIT.md",
+      "delivered": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\output\\rpa_001\\CAS_RPA_PROJECT_FIT.md",
+      "bytes": 6305,
+      "sha256": "d7aa4821bb694a88f4c3d3178743a6e6677527a31bcc3d3a8434725a602e40d9"
+    },
+    {
+      "source": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CAS_RPA_MATHEMATICAL_REVIEW.md",
+      "delivered": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\output\\rpa_001\\CAS_RPA_MATHEMATICAL_REVIEW.md",
+      "bytes": 9244,
+      "sha256": "e3a0ffae40ea2a8f5c1d856536749e22e94447f206712c145acaed957a66dd0b"
+    }
+  ],
+  "scope": "Offline read-only evidence prototype; no deployed service."
+}

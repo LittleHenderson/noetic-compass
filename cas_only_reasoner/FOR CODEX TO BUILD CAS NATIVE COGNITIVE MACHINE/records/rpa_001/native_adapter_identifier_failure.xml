@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.338" timestamp="2026-09-16T01:37:42.153683-07:00" hostname="MSI"><testcase classname="tests.test_rpa_native_adapter" name="test_maximum_length_native_call_id_gets_a_bounded_view_identity" time="0.022"><failure message="cncm.model.ContractError: canonical idea identifier invalid">def test_maximum_length_native_call_id_gets_a_bounded_view_identity():
+        packet = native_problem()
+        original = packet.call.call_id
+        long_id = "c" + "x" * 127
+        def rename(value):
+            if type(value) is dict:
+                return {key: rename(item) for key, item in value.items()}
+            if type(value) is list:
+                return [rename(item) for item in value]
+            return long_id if value == original else value
+        packet = NativeProblem.from_dict(rename(packet.to_dict()))
+        machine = NativeMachine(simulated_profile())
+        machine.start(packet)
+&gt;       view = project(machine)
+               ^^^^^^^^^^^^^^^^
+
+tests\test_rpa_native_adapter.py:126: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_rpa_native_adapter.py:43: in project
+    return native_atlas_from_journal(journal, trusted_genesis=machine._episodes[0].problem,
+cncm\rpa_native_adapter.py:149: in native_atlas_from_journal
+    call_id = node("current-call", "Original caller", idea="call-"+state.run_id+"-"+spec.call_id,
+cncm\rpa_native_adapter.py:78: in node
+    value = AtlasNode(node_id=node_id, idea_id=idea or node_id, label=label,
+&lt;string&gt;:15: in __init__
+    ???
+cncm\rpa_model.py:172: in __post_init__
+    identifier(self.idea_id, "canonical idea")
+cncm\rpa_model.py:65: in identifier
+    require(type(value) is str and _ID.fullmatch(value) is not None, label + " identifier invalid")
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+condition = False, label = 'canonical idea identifier invalid'
+
+    def require(condition, label):
+        if not condition:
+&gt;           raise ContractError(label)
+E           cncm.model.ContractError: canonical idea identifier invalid
+
+cncm\rpa_model.py:61: ContractError</failure></testcase></testsuite></testsuites>

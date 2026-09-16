@@ -369,3 +369,37 @@ No new paid neural work was needed for this implementation. Existing budget
 reservations and negative experiments remain unchanged. The user's newly supplied
 CAS-RPA documents are being reviewed for a separate typed evidence/possibility
 view; their proposed geometry and namespace annotations grant no kernel authority.
+
+## 2026-09-16 CAS-RPA typed records and real native episode views
+
+Both supplied CAS-RPA PDFs were read in full and reviewed mathematically.
+The relationship model now has a bounded implementation: composition,
+refinement, recorded reachability, common-witness overlap and shared idea IDs
+retain distinct meanings. Recursive inspection has explicit depth/node caps
+and reports deferred work. Focus, hypotheses and the actual native state
+remain separate. The original native source profile is unchanged.
+
+A read-only adapter semantically replays native journals before constructing
+the atlas. The offline prototype shows the actual suspended missing-procedure
+caller, checked result7 and subsequent recovery/reuse/rollback/refusal.
+Flower and ordinary graph layouts use exactly the same records and budgets.
+Both preserve the current state; proposed next actions grant no permission.
+Browser checks cover focus/layout/filter behavior, readable labels, inert
+hostile strings, exact evidence inspection, no external requests and mobile
+layout. Full homebase verification passed571 tests plus462 subtests.
+
+Current evidence is records/rpa_001/STATUS.md, final_full_suite_tests.xml and
+demo2/receipt.json in vision-next. The exact project fit and first prototype
+are documented in docs/CAS_RPA_PROJECT_FIT.md; mathematical findings are in
+docs/CAS_RPA_MATHEMATICAL_REVIEW.md. The source register preserves the hashes
+of both original PDFs. Forty positive normalized components have39 independent
+dimensions; the centered inverse must restore its reference; a common witness
+is required for joint overlap. Pairwise overlap alone does not suffice.
+
+This advances inspection/diagnosis portions of V08/V10/V13 and systems8/9/24/
+27/31 without completing them. No measured40-coordinate native profile,
+Foundation-to-Drive mapping, general live planner, full sheaf/nerve, learned
+procedure synthesis, neural-flow closure or performance advantage is claimed.
+A fair held-out benefit study remains open. No new paid model/provider work
+was used. The full V01-V18,31-system and integrated20-step destination remains
+open; prior negative results and budget reservations remain unchanged.

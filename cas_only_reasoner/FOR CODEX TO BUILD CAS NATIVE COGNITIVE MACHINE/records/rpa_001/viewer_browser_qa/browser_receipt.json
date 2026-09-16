@@ -1,0 +1,62 @@
+{
+  "scope": "Read-only browser checks against three exported real native journals; no kernel mutation or full-machine acceptance claim.",
+  "results": [
+    {
+      "name": "missing_procedure",
+      "html": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\_scratch\\demo_smoke_001\\missing_procedure.html",
+      "inspected_copy": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\rpa_browser_qa_inputs\\missing_procedure.html",
+      "html_sha256": "b672e3fbd48ac38321d0cdc5c44a5bd68c9a345917803c0efa92c6936ad51575",
+      "copy_sha256": "b672e3fbd48ac38321d0cdc5c44a5bd68c9a345917803c0efa92c6936ad51575",
+      "screenshot": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\viewer_browser_qa\\missing_procedure.png",
+      "nodes": 10,
+      "links": 9,
+      "events": 2,
+      "current_state_hash": "eed49139fc8dbbf42ca1b42eba90d08ef104051bc6d772abdd9f944d108a2a17",
+      "source_unchanged": true,
+      "matched_layouts": true,
+      "focus_filter_current_isolation": true,
+      "injection_inert": true,
+      "mobile_no_page_overflow": true,
+      "browser_exceptions": 0,
+      "external_requests": 0
+    },
+    {
+      "name": "checked_solution",
+      "html": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\_scratch\\demo_smoke_001\\checked_solution.html",
+      "inspected_copy": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\rpa_browser_qa_inputs\\checked_solution.html",
+      "html_sha256": "6f3cef13466a32f05116256a6119d2ff101bf2b7dfb309b2de99df6fbd1efcbe",
+      "copy_sha256": "6f3cef13466a32f05116256a6119d2ff101bf2b7dfb309b2de99df6fbd1efcbe",
+      "screenshot": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\viewer_browser_qa\\checked_solution.png",
+      "nodes": 29,
+      "links": 28,
+      "events": 14,
+      "current_state_hash": "dcbcbd3110113eae7b83ec1804d96179daf0c47d13f82998247873ce5688196c",
+      "source_unchanged": true,
+      "matched_layouts": true,
+      "focus_filter_current_isolation": true,
+      "injection_inert": true,
+      "mobile_no_page_overflow": true,
+      "browser_exceptions": 0,
+      "external_requests": 0
+    },
+    {
+      "name": "recovery_and_rollback",
+      "html": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\_scratch\\demo_smoke_001\\recovery_and_rollback.html",
+      "inspected_copy": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\rpa_browser_qa_inputs\\recovery_and_rollback.html",
+      "html_sha256": "798cb038db2eb4c58b9c8f0a80184c5f7166a9023799bd7b0093471b7b62f9a3",
+      "copy_sha256": "798cb038db2eb4c58b9c8f0a80184c5f7166a9023799bd7b0093471b7b62f9a3",
+      "screenshot": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_001\\viewer_browser_qa\\recovery_and_rollback.png",
+      "nodes": 47,
+      "links": 46,
+      "events": 27,
+      "current_state_hash": "ad1cacfa062a859ac40a1efa3be90e8ecbef1bcd5e4f6ad8f6a254cc4009f02c",
+      "source_unchanged": true,
+      "matched_layouts": true,
+      "focus_filter_current_isolation": true,
+      "injection_inert": true,
+      "mobile_no_page_overflow": true,
+      "browser_exceptions": 0,
+      "external_requests": 0
+    }
+  ]
+}
