@@ -203,6 +203,34 @@ def imported_sources(root, members):
     return result
 
 
+def checked_inner_timeout(tree):
+    """Check the learner subprocess, independently of transport join timeouts."""
+    limits = [node for node in tree.body if isinstance(node, ast.Assign)
+              and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
+              and node.targets[0].id == "MAX_WALL_SECONDS"]
+    stores = [node for node in ast.walk(tree) if isinstance(node, ast.Name)
+              and isinstance(node.ctx, ast.Store) and node.id == "MAX_WALL_SECONDS"]
+    require(len(limits) == len(stores) == 1 and isinstance(limits[0].value, ast.Constant)
+            and type(limits[0].value.value) is int and limits[0].value.value == 1200,
+            "REHEARSAL_TIMEOUT_CONSTANT")
+    expected_argv = ast.dump(ast.parse("[python, '-B', str(runner), str(root)]", mode="eval").body)
+    calls = [node for node in ast.walk(tree) if isinstance(node, ast.Call)
+             and isinstance(node.func, ast.Attribute) and node.func.attr == "run"
+             and isinstance(node.func.value, ast.Name) and node.func.value.id == "subprocess"
+             and len(node.args) == 1 and ast.dump(node.args[0]) == expected_argv]
+    require(len(calls) == 1, "REHEARSAL_INNER_DISPATCH")
+    dispatch = calls[0]
+    bindings = [node for node in ast.walk(tree) if isinstance(node, ast.Assign)
+                and node.value is dispatch and len(node.targets) == 1
+                and isinstance(node.targets[0], ast.Name) and node.targets[0].id == "inner"]
+    timeout = [keyword.value for keyword in dispatch.keywords if keyword.arg == "timeout"]
+    require(len(bindings) == len(timeout) == 1 and isinstance(timeout[0], ast.Name)
+            and timeout[0].id == "MAX_WALL_SECONDS"
+            and not any(keyword.arg is None for keyword in dispatch.keywords),
+            "REHEARSAL_TIMEOUT_DISPATCH")
+    return {"subprocess_line": dispatch.lineno, "timeout_name": "MAX_WALL_SECONDS", "timeout_seconds": 1200}
+
+
 def child(args):
     evidence = Path(args.output).resolve()
     root = Path(args.extracted).resolve()
@@ -244,8 +272,7 @@ def child(args):
                  and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name)
                  and node.targets[0].id == "INNER_RUNNER" and isinstance(node.value, ast.Constant)]
         require(len(inner) == 1 and type(inner[0]) is str, "REHEARSAL_INNER_RUNNER_MISSING")
-        timeout = [node.value for node in ast.walk(tree) if isinstance(node, ast.keyword) and node.arg == "timeout"]
-        require(len(timeout) == 1 and ast.unparse(timeout[0]) == "MAX_WALL_SECONDS", "REHEARSAL_TIMEOUT_DISPATCH")
+        timeout_dispatch = checked_inner_timeout(tree)
         sys.argv = [str(root / WORKER) + "::INNER_RUNNER", str(root)]
         failure = None
         try:
@@ -275,6 +302,7 @@ def child(args):
         current_members(root, members)
         report.update(status="PASSED", source_sha=receipt["source_sha"], package_receipt_sha256=custody["receipt_sha256"],
                       actual_inner_runner_sha256=hashed(inner[0].encode()), actual_guard_failure=failure,
+                      timeout_dispatch=timeout_dispatch,
                       imported_modules=imports, imported_source_files=len({r["path"] for r in imports if "path" in r}),
                       source_members_unchanged=True, failure_envelope_sha256=hashed(envelope_raw),
                       guard_attempts=attempts, numeric_tensor_calls=0, learner_forward_calls=0, provider_calls=0,

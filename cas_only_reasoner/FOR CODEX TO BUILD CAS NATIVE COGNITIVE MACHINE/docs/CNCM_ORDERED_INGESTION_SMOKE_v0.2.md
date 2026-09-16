@@ -43,6 +43,23 @@ most 64 updates in 600 seconds. The hardware/bootstrap limits remain one
 g7.2xlarge in us-west-2, 3600/7200 seconds and one $7 reservation, with no automatic
 job retry. The canonical ledger path is explicitly required for execution.
 
+Pre-launch review found that the inherited instance deadline depended on the
+local supervisor. This provider extension arms and checks a systemd shutdown
+timer before downloading inputs, with a deadline 6900 seconds after guest boot.
+It also bounds the full bootstrap and worker command to 3600 seconds, with a
+30-second termination grace. EC2 is configured to terminate on guest shutdown.
+Normal exit schedules shutdown after an evidence-delivery grace; the hard timer
+stays armed. This survives loss of the local supervisor while the guest remains
+responsive. It does not cover failure before cloud-init, a frozen guest or host,
+or guarantee an exact provider invoice.
+
+The extension also requires an actual positive hourly price quote within the
+configured ceiling before reservation, and treats pending or unconfirmed
+instance termination as incomplete cleanup. Launch preparation rejects both
+staged and unstaged tracked changes. The isolated package rehearsal checks the
+specific learner subprocess timeout independently of the transport thread's
+join timeout. These changes preserve the historical shared launcher sources.
+
 A successful run establishes this bounded teaching/reload connection only.
 Learning speed, delayed retention and unseen transfer still require a separately
 frozen, matched multi-seed comparison against ordinary graph teaching. The older

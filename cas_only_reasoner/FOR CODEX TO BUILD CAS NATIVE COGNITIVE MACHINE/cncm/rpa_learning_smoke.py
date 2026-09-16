@@ -27,8 +27,13 @@ MAX_TREE_DEPTH = 16
 MAX_TENSOR_ELEMENTS = 4 * 1024 * 1024
 METADATA_FIELDS = frozenset({
     "schema_version", "kind", "seed", "model_context", "tokenizer", "ordered_profile",
-    "scope", "parameter_names", "training_requests", "source_binding", "prepared_ids",
+    "scope", "parameter_names", "training_requests", "source_binding", "prepared_ids", "legacy_input_ids",
     "optimizer_class", "learning_rate", "model_identity", "optimizer_identity", "projection_identity",
+})
+SOURCE_CONTEXT_FIELDS = frozenset({
+    "source_file_sha256", "source_bundle_digest", "source_receipt_digest", "source_namespace",
+    "source_context_id", "base_current_state_id", "rendering_schema",
+    "source_authorship_authenticated", "world_truth_established",
 })
 OUTPUT_FILES = (
     "origin.pt", "initial.pt", "final.pt", "initial_checkpoint.json", "final_checkpoint.json",
@@ -55,6 +60,23 @@ def _requests(value, maximum):
                 and type(row["question"]) is dict and row["assistance"] in {"guided", "unassisted"},
                 "SMOKE_REQUEST_FIELDS")
     require(len({canonical_json(row) for row in value}) == len(value), "SMOKE_DUPLICATE_REQUEST")
+
+
+def _source_context(binding, *, per_request=False):
+    fields = SOURCE_CONTEXT_FIELDS | ({"legacy_input_id"} if per_request else set())
+    require(type(binding) is dict and set(binding) == fields, "SMOKE_SOURCE_BINDING_FIELDS")
+    for field in ("source_file_sha256", "source_bundle_digest", "source_receipt_digest"):
+        _hex(binding[field])
+    for field in ("source_namespace", "source_context_id", "base_current_state_id"):
+        require(type(binding[field]) is str and 0 < len(binding[field]) <= 256, "SMOKE_SOURCE_BINDING_VALUE")
+    require(binding["rendering_schema"] == ingestion.RENDERING_SCHEMA
+            and binding["source_authorship_authenticated"] is False
+            and binding["world_truth_established"] is False, "SMOKE_SOURCE_BINDING_AUTHORITY")
+    if per_request:
+        require(type(binding["legacy_input_id"]) is str
+                and re.fullmatch(r"cube-input-[0-9a-f]{64}",binding["legacy_input_id"]) is not None,
+                "SMOKE_LEGACY_INPUT_ID")
+    return {field:deepcopy(binding[field]) for field in sorted(SOURCE_CONTEXT_FIELDS)}
 
 
 def validate_checkpoint_contract(metadata, *, expected=None):
@@ -99,8 +121,11 @@ def validate_checkpoint_contract(metadata, *, expected=None):
             and len(set(prepared)) == len(prepared)
             and all(type(value) is str and re.fullmatch(r"rpa-prepared-[0-9a-f]{64}", value)
                     for value in prepared), "SMOKE_PREPARED_IDENTITIES")
-    require(type(metadata["source_binding"]) is dict and bool(metadata["source_binding"]),
-            "SMOKE_SOURCE_BINDING_REQUIRED")
+    _source_context(metadata["source_binding"])
+    legacy_ids = metadata["legacy_input_ids"]
+    require(type(legacy_ids) is list and len(legacy_ids) == len(prepared)
+            and all(type(value) is str and re.fullmatch(r"cube-input-[0-9a-f]{64}",value)
+                    for value in legacy_ids), "SMOKE_LEGACY_INPUT_IDENTITIES")
     for field in ("model_identity", "optimizer_identity", "projection_identity"):
         _hex(metadata[field])
     require(len(canonical_json(metadata).encode()) <= 1024 * 1024, "SMOKE_METADATA_TOO_LARGE")
@@ -184,7 +209,17 @@ def _projection(torch, candidate):
 def _prepared(document, requests):
     _requests(requests,8)
     rows = [ingestion.prepare_public_lesson(document, **request) for request in requests]
-    require(all(row["source_binding"] == rows[0]["source_binding"] for row in rows), "SMOKE_SOURCE_CONTEXT_CHANGED")
+    # legacy_input_id names one compiled question, not the shared source.
+    # Keep every full row and its ordered identities; compare only source facts.
+    context = _source_context(rows[0]["source_binding"],per_request=True)
+    for request,row in zip(requests,rows):
+        require(type(row) is dict and set(row) == ingestion._PREPARED_KEYS
+                and row["schema_version"] == ingestion.PREPARED_SCHEMA, "SMOKE_PREPARED_FIELDS")
+        _same(row["request"],{**request,"view_id":document.to_dict()["view_id"]},"SMOKE_PREPARED_REQUEST")
+        _same(_source_context(row["source_binding"],per_request=True),context,"SMOKE_SOURCE_CONTEXT_CHANGED")
+        require(row["prepared_id"] == "rpa-prepared-" + digest({
+            key:value for key,value in row.items() if key not in {"teacher_sidecar","prepared_id"}}),
+            "SMOKE_PREPARED_ID_MISMATCH")
     return rows
 
 
@@ -198,8 +233,9 @@ def write_worker_checkpoint(torch, candidate, *, kind, training_requests, path):
         "model_context":deepcopy(candidate["model_context"]), "tokenizer":candidate["tokenizer"].to_dict(),
         "ordered_profile":deepcopy(candidate["ordered_profile"]), "scope":deepcopy(candidate["scope"]),
         "parameter_names":_parameter_names(candidate), "training_requests":deepcopy(training_requests),
-        "source_binding":deepcopy(prepared[0]["source_binding"]),
+        "source_binding":_source_context(prepared[0]["source_binding"],per_request=True),
         "prepared_ids":[row["prepared_id"] for row in prepared],
+        "legacy_input_ids":[row["source_binding"]["legacy_input_id"] for row in prepared],
         "optimizer_class":_optimizer_class(candidate["learner"].optimizer), "learning_rate":0.003,
         "model_identity":state_identity(torch,model), "optimizer_identity":state_identity(torch,optimizer),
         "projection_identity":state_identity(torch,projection)}
@@ -250,8 +286,10 @@ def reload_worker_candidate(torch, device, *, document, training_requests, check
     expected = validate_checkpoint_contract(metadata)
     prepared = _prepared(document,training_requests)
     _same(training_requests,expected["training_requests"],"SMOKE_RELOAD_TRAINING_REQUESTS")
-    _same(prepared[0]["source_binding"],expected["source_binding"],"SMOKE_RELOAD_SOURCE_BINDING")
+    _same(_source_context(prepared[0]["source_binding"],per_request=True),expected["source_binding"],"SMOKE_RELOAD_SOURCE_BINDING")
     _same([row["prepared_id"] for row in prepared],expected["prepared_ids"],"SMOKE_RELOAD_PREPARED_IDS")
+    _same([row["source_binding"]["legacy_input_id"] for row in prepared],expected["legacy_input_ids"],
+          "SMOKE_RELOAD_LEGACY_INPUT_IDS")
     raw = read_checkpoint_bytes(checkpoint)
     # Decode the exact bytes already checked, avoiding a second path-open race.
     loaded = torch.load(BytesIO(raw),map_location="cpu",weights_only=True)

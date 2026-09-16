@@ -1,0 +1,40 @@
+{
+  "before": {
+    "bytes": 22172,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\helper_fix_001\\rehearse_package_before.py.txt",
+    "sha256": "1a3b85aa4d77c360761e71de975199bca3b1a2ce44d75422a2bb4e26ffe4a18d"
+  },
+  "boundary": "Pure AST and package import/configuration checks; actual Windows refusal before CUDA; no model, numerical, provider, or network execution.",
+  "evidence": [
+    {
+      "bytes": 2204,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\helper_fix_001\\inspection.json",
+      "sha256": "cc92e2d56bcca8e5c38b33d53f3f234f433478e7ca24b582dfa22b9c46b0e644"
+    },
+    {
+      "bytes": 2039,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\helper_fix_001\\timeout_tests.json",
+      "sha256": "b90f0023a04ce9e2d25686092d64423f1e599d3f611c7dd29f347a5dd6f6e24c"
+    },
+    {
+      "bytes": 4483,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\helper_fix_001\\rehearsal\\receipt.json",
+      "sha256": "725529edf9d3d03daba668dc0c28201556bd785d4a222cde81fbe6b74a573546"
+    },
+    {
+      "bytes": 13142,
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\helper_fix_001\\rehearsal\\child_receipt.json",
+      "sha256": "c6acccea0803c27113ba314d9ec5179a39a0b5c0d8eaece8b29d8ea2bbfe9f5f"
+    }
+  ],
+  "fix": "Target exact inner runner subprocess and its integer 1200 constant; unrelated publisher join timeout remains permitted.",
+  "helper": {
+    "bytes": 23978,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\rehearse_package.py",
+    "sha256": "c8fb671bdd47811cf8ac319e5bc2b83ff60d1b49bb5b115f1d36a793a39eca88"
+  },
+  "package_members_unchanged": 211,
+  "schema": "cncm-rehearsal-helper-fix-summary/1",
+  "status": "PASSED",
+  "tests_passed": 14
+}

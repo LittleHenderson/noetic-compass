@@ -4,7 +4,11 @@ import builtins
 from copy import deepcopy
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
+import shlex
+import shutil
+import subprocess
 from unittest.mock import Mock
 from zipfile import ZipFile
 
@@ -271,3 +275,187 @@ def test_package_builder_selects_scoped_reader_by_default(tmp_path, monkeypatch)
     assert reader.call_count == 1
     assert reader.call_args.args[:2] == (fake, PACKAGE_REGRESSION_COMMIT)
     assert not output.exists()
+
+
+def isolated_provider(clients=None):
+    provider = launch.IngestionSmokeProvider(job=JOB, source_sha=SOURCE,
+        archive_sha256="b" * 64, manifest_sha256="c" * 64,
+        clients=clients or {}, ledger_path=Path("UNUSED_TEST_LEDGER"))
+    provider.worker_name = launch.WORKER_NAME
+    return provider
+
+
+def shell_path(path):
+    value = path.resolve().as_posix()
+    return "/" + value[0].lower() + value[2:] if os.name == "nt" else value
+
+
+@pytest.mark.parametrize("mode,expected_code,body_runs", [
+    ("success", 0, True), ("worker_failure", 19, True),
+    ("arm_failure", 20, False), ("inactive_timer", 21, False),
+    ("bootstrap_timeout", 124, False),
+])
+def test_guest_watchdog_arms_before_body_and_shutdown_survives_failure(
+        tmp_path, monkeypatch, mode, expected_code, body_runs):
+    # Execute the real wrapper in Bash with a closed PATH of inert shell stubs.
+    # The inherited bootstrap is replaced with printf/exit only: no AWS, model,
+    # systemd, shutdown, network, or real timeout command can be reached.
+    bash = (Path("C:/Program Files/Git/bin/bash.exe") if os.name == "nt"
+            else Path(shutil.which("bash") or "/nonexistent-bash"))
+    if not bash.is_file():
+        pytest.skip("Bash is required for inert bootstrap control-flow rehearsal")
+    bin_dir = tmp_path / "stub_bin"
+    bin_dir.mkdir()
+    log = tmp_path / "events.txt"
+    bodies = {
+        "shutdown": 'printf "shutdown:%s\\n" "$*" >> "$CAS_TEST_LOG"\nexit 0\n',
+        "systemd-run": 'printf "arm:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+            'if [ "$CAS_TEST_MODE" = arm_failure ]; then exit 20; fi\nexit 0\n',
+        "systemctl": 'printf "observe:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+            'if [ "$CAS_TEST_MODE" = inactive_timer ]; then exit 21; fi\nexit 0\n',
+        "timeout": 'printf "timeout:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+            'if [ "$CAS_TEST_MODE" = bootstrap_timeout ]; then exit 124; fi\n'
+            'shift 3\nexec "$@"\n',
+    }
+    for name, body in bodies.items():
+        path = bin_dir / name
+        path.write_text("#!/bin/bash\n" + body, encoding="utf-8", newline="\n")
+        path.chmod(0o755)
+    inherited = '#!/bin/bash\nprintf "body\\n" >> "$CAS_TEST_LOG"\n'
+    inherited += 'if [ "$CAS_TEST_MODE" = worker_failure ]; then exit 19; fi\n'
+    inherited += 'printf "evidence_uploaded\\n" >> "$CAS_TEST_LOG"\n'
+    monkeypatch.setattr(launch.lifecycle.CandidateProvider, "_user_data", lambda self, bucket: inherited)
+    script = isolated_provider()._user_data("INERT_TEST_BUCKET")
+    # Git Bash can prepend its utilities during process startup. Set PATH again
+    # inside the running shell so timeout also resolves to the inert stub.
+    guarded_script = "PATH=" + shlex.quote(shell_path(bin_dir)) + "; export PATH\n" + script
+    result = subprocess.run([str(bash), "--noprofile", "--norc"], input=guarded_script, text=True,
+        capture_output=True, timeout=15, cwd=tmp_path,
+        env={"PATH": shell_path(bin_dir), "CAS_TEST_LOG": shell_path(log), "CAS_TEST_MODE": mode,
+             "SYSTEMROOT": os.environ.get("SYSTEMROOT", ""), "WINDIR": os.environ.get("WINDIR", "")})
+    assert result.returncode == expected_code, result.stderr
+    events = log.read_text().splitlines()
+    assert events[0].startswith("arm:")
+    assert "--on-boot=6900s" in events[0] and "--poweroff now" in events[0]
+    assert events[-1] == "shutdown:--poweroff +1"
+    assert ("body" in events) is body_runs
+    if body_runs:
+        assert events[1].startswith("observe:is-active --quiet ")
+        assert events[2].startswith("observe:show ")
+        assert events[3].startswith("timeout:--signal=TERM --kill-after=30s 3600s /bin/bash")
+    if mode == "success":
+        assert events.index("evidence_uploaded") < len(events) - 1
+    assert not any("stop " in event or "disable " in event or "cancel " in event for event in events)
+
+
+def test_watchdog_wraps_actual_download_and_publisher_without_changing_body():
+    provider = isolated_provider()
+    original = launch.lifecycle.CandidateProvider._user_data(provider, "INERT_TEST_BUCKET")
+    script = provider._user_data("INERT_TEST_BUCKET")
+    begin = script.index("<<'CNCM_INGESTION_BOOTSTRAP_BODY'\n") + len("<<'CNCM_INGESTION_BOOTSTRAP_BODY'\n")
+    assert script[begin:].removesuffix("CNCM_INGESTION_BOOTSTRAP_BODY\n") == original.rstrip("\n") + "\n"
+    assert script.index("is-active --quiet") < script.index("aws s3api get-object")
+    assert script.index("CNCM_GUEST_WATCHDOG_ARMED") < script.index("aws s3api get-object")
+    assert "--on-boot=6900s" in script and "systemctl stop" not in script
+
+
+@pytest.mark.parametrize("state,pending,expected,complete", [
+    ("terminated", [], "CONFIRMED_TERMINATED", True),
+    ("running", [], "TERMINATION_NOT_CONFIRMED", False),
+    ("shutting-down", [], "TERMINATION_NOT_CONFIRMED", False),
+    ("missing", [], "TERMINATION_NOT_CONFIRMED", False),
+    ("exception", [], "TERMINATION_NOT_CONFIRMED", False),
+    ("terminated", ["i-0123456789abcdef0"], "TERMINATION_PENDING", False),
+])
+def test_cleanup_never_turns_requested_or_unobserved_termination_into_complete(
+        monkeypatch, state, pending, expected, complete):
+    instance = "i-0123456789abcdef0"
+    inherited = {"complete": True, "failures": [], "instances": {instance: "CONFIRMED_TERMINATED"},
+                 "instances_termination_pending": pending, "evidence_deleted": False}
+    cleanup = Mock(return_value=deepcopy(inherited))
+    monkeypatch.setattr(launch.lifecycle.CandidateProvider, "cleanup", cleanup)
+    ec2 = Mock()
+    ec2.describe_instances.return_value = {"Reservations": []} if state == "missing" else {
+        "Reservations": [{"Instances": [{"InstanceId": instance, "State": {"Name": state}}]}]}
+    if state == "exception":
+        ec2.describe_instances.side_effect = RuntimeError("INJECTED_OBSERVATION_FAILURE")
+    provider = isolated_provider({"ec2": ec2})
+    provider._instance_ids = [instance]
+    result = provider.cleanup(JOB, collection_verified=True)
+    cleanup.assert_called_once_with(JOB, collection_verified=True)
+    assert result["instances"][instance] == expected
+    assert result["complete"] is complete and result["evidence_deleted"] is False
+    if pending:
+        ec2.describe_instances.assert_not_called()
+    else:
+        ec2.describe_instances.assert_called_once_with(InstanceIds=[instance])
+    if not complete:
+        assert result["failures"] and result["instances_termination_pending"] == [instance]
+
+
+def test_launch_transport_timeout_without_instance_identity_keeps_cleanup_uncertain(monkeypatch):
+    inherited = {"complete": True, "failures": [], "instances": {},
+                 "instances_termination_pending": [], "evidence_deleted": False}
+    monkeypatch.setattr(launch.lifecycle.CandidateProvider, "cleanup",
+                        Mock(side_effect=lambda *args, **kwargs: deepcopy(inherited)))
+    provider = isolated_provider({"ec2": Mock()})
+    provider._event = Mock()
+    provider._launch_called = True
+    callback = Mock(side_effect=TimeoutError("INJECTED_RESPONSE_LOSS"))
+    # Earlier setup failure alone does not imply that compute was requested.
+    with pytest.raises(TimeoutError):
+        provider._effect("upload_source", callback, Key="fixture")
+    before = provider.cleanup(JOB)
+    assert before["complete"] is True and before["compute_identity_uncertain"] is False
+    with pytest.raises(TimeoutError):
+        provider._effect("run_instances", callback, ClientToken=JOB)
+    callback.assert_called_with(ClientToken=JOB)
+    assert provider._instance_ids == []
+    result = provider.cleanup(JOB)
+    assert result["complete"] is False and result["compute_identity_uncertain"] is True
+    assert "INSTANCE_IDENTITY_UNKNOWN_AFTER_LAUNCH_ATTEMPT" in result["failures"]
+    assert result["instances"] == {} and result["evidence_deleted"] is False
+    provider.clients["ec2"].describe_instances.assert_not_called()
+
+
+def price_provider(rates, *, request_id="EXPLICIT_TEST_QUOTE"):
+    frozen = launch.shared.RESOURCE_PLAN
+    ec2, sts, pricing = Mock(), Mock(), Mock()
+    sts.get_caller_identity.return_value = {"Account": frozen["account"]}
+    ec2.describe_images.return_value = {"Images": [{"State": "available"}]}
+    ec2.describe_instance_types.return_value = {"InstanceTypes": [
+        {"GpuInfo": {"Gpus": [{"Name": frozen["gpu_name_contains"]}]}}]}
+    ec2.describe_instances.return_value = {"Reservations": []}
+    dimensions = {str(index): {"unit": "Hrs", "pricePerUnit": {"USD": value}} for index, value in enumerate(rates)}
+    pricing.get_products.return_value = {"PriceList": [json.dumps({"terms": {"OnDemand": {
+        "test_term": {"priceDimensions": dimensions}}}})], "ResponseMetadata": {"RequestId": request_id}}
+    return isolated_provider({"ec2": ec2, "sts": sts, "pricing": pricing}), pricing
+
+
+@pytest.mark.parametrize("rates", [[], ["0"], ["-1"], ["NaN"], ["Infinity"], ["2.53"]])
+def test_empty_nonpositive_or_nonfinite_quote_refused_before_reservation(rates):
+    provider, pricing = price_provider(rates)
+    reserve = Mock(side_effect=AssertionError("Reservation forbidden"))
+    provider.reserve = reserve
+    with pytest.raises(ValueError, match="(INGESTION_.*HOURLY_RATE|CURRICULUM_PREFLIGHT_RATE_CEILING)"):
+        provider.preflight()
+    reserve.assert_not_called()
+    assert provider.clients["pricing"] is pricing
+
+
+def test_actual_hourly_quote_request_and_rate_are_retained_separately_from_ceiling():
+    provider, pricing = price_provider(["2.52"])
+    facts = provider.preflight()
+    assert facts["observed_on_demand_hourly_usd"] == ["2.52"]
+    assert facts["rate_ceiling_usd"] == "2.52"
+    assert facts["pricing_request_id"] == "EXPLICIT_TEST_QUOTE"
+    assert facts["pricing_query"] == pricing.get_products.call_args.kwargs
+    assert pricing.get_products.call_count == 1 and provider.clients["pricing"] is pricing
+    assert launch.shared.validate_preflight(facts) == facts
+
+
+def test_quote_without_provider_request_identity_is_refused():
+    provider, pricing = price_provider(["2.52"], request_id=None)
+    with pytest.raises(ValueError, match="INGESTION_PRICING_REQUEST_ID_REQUIRED"):
+        provider.preflight()
+    assert provider.clients["pricing"] is pricing

@@ -15,6 +15,13 @@ sys.path[:0] = [str(ROOT), str(COMP)]
 from aws import ingestion_smoke_launch as launch
 
 
+def require_clean_source(root, source):
+    launch.require(subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root).decode().strip() == source,
+                   "PREPARE_SOURCE_HEAD")
+    launch.require(not subprocess.check_output(["git", "diff", "HEAD", "--name-only"], cwd=root).strip(),
+                   "PREPARE_TRACKED_MODIFICATIONS")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package-receipt", required=True)
@@ -27,10 +34,7 @@ def main():
     launch.require(sha256(raw).hexdigest() == args.package_receipt_sha256, "PREPARE_PACKAGE_RECEIPT_PIN")
     package = json.loads(raw)
     source = package["source_sha"]
-    launch.require(subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip() == source,
-                   "PREPARE_SOURCE_HEAD")
-    launch.require(not subprocess.check_output(["git", "diff", "--name-only"], cwd=ROOT).strip(),
-                   "PREPARE_TRACKED_MODIFICATIONS")
+    require_clean_source(ROOT, source)
     archive = Path(package["archive"]).read_bytes()
     launch.require(len(archive) == package["archive_bytes"] and launch.digest(archive) == package["archive_sha256"],
                    "PREPARE_ARCHIVE_PIN")

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import ast
+from decimal import Decimal, InvalidOperation
 import importlib
 import io
 import json
@@ -247,6 +248,145 @@ def build_smoke_package(output, *, source_sha, git_bytes_fn=None, git_paths_fn=N
 
 
 class IngestionSmokeProvider(lifecycle.CandidateProvider):
+    def _effect(self, operation, callback, **arguments):
+        if operation == "run_instances":
+            def observed_launch(**supplied):
+                # Mark the actual callback boundary, not earlier setup effects.
+                # A transport error may arrive after EC2 accepted the request.
+                self._instance_launch_attempted = True
+                return callback(**supplied)
+            return super()._effect(operation, observed_launch, **arguments)
+        return super()._effect(operation, callback, **arguments)
+
+    def preflight(self):
+        """Retain the actual quote observed by the inherited identity checks."""
+        pricing = self.clients["pricing"]
+        observed = []
+        class ObservedPricing:
+            def get_products(_observer, **request):
+                require(not observed, "INGESTION_MULTIPLE_PRICING_QUERIES")
+                response = pricing.get_products(**request)
+                observed.append((request, response))
+                return response
+        self.clients["pricing"] = ObservedPricing()
+        try:
+            facts = super().preflight()
+        finally:
+            self.clients["pricing"] = pricing
+        require(len(observed) == 1, "INGESTION_PRICING_OBSERVATION_REQUIRED")
+        request, response = observed[0]
+        fields = {"instanceType": BOUNDS["instance_type"], "location": "US West (Oregon)",
+            "operatingSystem": "Linux", "tenancy": "Shared", "preInstalledSw": "NA",
+            "capacitystatus": "Used", "marketoption": "OnDemand", "operation": "RunInstances"}
+        expected = {"ServiceCode": "AmazonEC2", "Filters": [
+            {"Type": "TERM_MATCH", "Field": key, "Value": value} for key, value in fields.items()]}
+        require(canonical(request) == canonical(expected), "INGESTION_PRICING_QUERY_MISMATCH")
+        rates = []
+        for raw in response.get("PriceList", []):
+            for term in json.loads(raw).get("terms", {}).get("OnDemand", {}).values():
+                for dimension in term.get("priceDimensions", {}).values():
+                    if dimension.get("unit") == "Hrs":
+                        try:
+                            value = Decimal(str(dimension["pricePerUnit"]["USD"]))
+                        except (InvalidOperation, KeyError, ValueError) as error:
+                            raise ValueError("INGESTION_INVALID_OBSERVED_HOURLY_RATE") from error
+                        require(value.is_finite() and value > 0
+                                and value <= Decimal(shared.RESOURCE_PLAN["on_demand_rate_ceiling_usd"]),
+                                "INGESTION_INVALID_OBSERVED_HOURLY_RATE")
+                        rates.append(str(value))
+        require(rates and not response.get("NextToken"), "INGESTION_OBSERVED_HOURLY_RATE_REQUIRED")
+        request_id = response.get("ResponseMetadata", {}).get("RequestId")
+        require(type(request_id) is str and bool(request_id), "INGESTION_PRICING_REQUEST_ID_REQUIRED")
+        return {**facts, "observed_on_demand_hourly_usd": sorted(rates),
+            "pricing_request_id": request_id, "pricing_query": request,
+            "pricing_boundary": "Observed hourly compute quote; reservation includes declared ancillary allowance and is not a provider invoice."}
+
+    def _user_data(self, bucket):
+        """Arm a guest-owned deadline before the inherited download/worker path.
+
+        A responsive systemd guest survives loss of the local supervisor. This
+        cannot guard failure before cloud-init, guest/host freezes, or promise
+        an exact provider invoice. EC2 shutdown behavior remains terminate.
+        Normal worker uploads finish before EXIT schedules poweroff with a
+        one-minute receiver grace; the independent boot deadline stays armed.
+        """
+        require(re.fullmatch(JOB_PATTERN, self.job) is not None, "INGESTION_WATCHDOG_JOB")
+        original = super()._user_data(bucket)
+        delimiter = "CNCM_INGESTION_BOOTSTRAP_BODY"
+        require(delimiter not in original.splitlines(), "INGESTION_BOOTSTRAP_DELIMITER")
+        lines = [
+            "#!/bin/bash", "set -eu", "umask 077",
+            'cas_smoke_shutdown="$(command -v shutdown)"',
+            "cas_smoke_shutdown_on_exit() {",
+            "  cas_smoke_status=$?",
+            "  trap - EXIT HUP INT TERM",
+            '  "$cas_smoke_shutdown" --poweroff +1 || true',
+            '  exit "$cas_smoke_status"',
+            "}",
+            "trap cas_smoke_shutdown_on_exit EXIT",
+            "trap 'exit 129' HUP", "trap 'exit 130' INT", "trap 'exit 143' TERM",
+            'cas_smoke_systemd_run="$(command -v systemd-run)"',
+            'cas_smoke_systemctl="$(command -v systemctl)"',
+            'cas_smoke_timeout="$(command -v timeout)"',
+            'cas_smoke_unit="' + self.job + '-deadline"',
+            # Monotonic boot-relative deadline leaves five minutes inside the
+            # inherited 7,200-second resource plan. Never cancel this timer.
+            '"$cas_smoke_systemd_run" --unit="$cas_smoke_unit" --on-boot=6900s '
+            '--timer-property=AccuracySec=1s --property=Type=oneshot '
+            '"$cas_smoke_shutdown" --poweroff now',
+            '"$cas_smoke_systemctl" is-active --quiet "$cas_smoke_unit.timer"',
+            '"$cas_smoke_systemctl" show "$cas_smoke_unit.timer" --no-pager '
+            '--property=ActiveState --property=NextElapseUSecMonotonic',
+            'echo "CNCM_GUEST_WATCHDOG_ARMED unit=$cas_smoke_unit boot_deadline_seconds=6900"',
+            # Bound setup, worker, and its normal evidence publisher together.
+            # The inherited numeric child additionally retains its 1,200s cap.
+            '"$cas_smoke_timeout" --signal=TERM --kill-after=30s 3600s /bin/bash <<\'' + delimiter + "'",
+            original.rstrip("\n"), delimiter, "",
+        ]
+        return "\n".join(lines)
+
+    def cleanup(self, job, **kwargs):
+        """Keep pending/unknown termination distinct from observed termination."""
+        status = dict(super().cleanup(job, **kwargs))
+        status["instances"] = dict(status.get("instances", {}))
+        failures = list(status.get("failures", []))
+        pending = list(status.get("instances_termination_pending", []))
+        observations = {}
+        identity_unknown = getattr(self, "_instance_launch_attempted", False) and not self._instance_ids
+        status["compute_identity_uncertain"] = identity_unknown
+        if identity_unknown:
+            failures.append("INSTANCE_IDENTITY_UNKNOWN_AFTER_LAUNCH_ATTEMPT")
+        for instance_id in self._instance_ids:
+            if instance_id in pending:
+                status["instances"][instance_id] = "TERMINATION_PENDING"
+                failures.append("INSTANCE_TERMINATION_PENDING:" + instance_id)
+                continue
+            try:
+                response = self.clients["ec2"].describe_instances(InstanceIds=[instance_id])
+                instances = [item for reservation in response.get("Reservations", [])
+                             for item in reservation.get("Instances", [])]
+                require(len(instances) == 1 and instances[0].get("InstanceId") == instance_id,
+                        "INGESTION_TERMINATION_OBSERVATION_SCOPE")
+                state = instances[0].get("State", {}).get("Name")
+                observations[instance_id] = {"state": state}
+                if state == "terminated":
+                    status["instances"][instance_id] = "CONFIRMED_TERMINATED"
+                else:
+                    status["instances"][instance_id] = "TERMINATION_NOT_CONFIRMED"
+                    pending.append(instance_id)
+                    failures.append("INSTANCE_TERMINATION_NOT_CONFIRMED:" + instance_id)
+            except Exception as error:
+                # A transient NotFound response is not proof that compute is gone.
+                observations[instance_id] = {"error": type(error).__name__, "detail": str(error)[:500]}
+                status["instances"][instance_id] = "TERMINATION_NOT_CONFIRMED"
+                pending.append(instance_id)
+                failures.append("INSTANCE_TERMINATION_OBSERVATION_FAILED:" + instance_id)
+        status["post_cleanup_observations"] = observations
+        status["instances_termination_pending"] = sorted(set(pending))
+        status["failures"] = failures
+        status["complete"] = status.get("complete") is True and not failures and not pending
+        return status
+
     def bind_authority(self, authority):
         validate_authority(authority)
         for key in ("job", "source_sha", "archive_sha256", "manifest_sha256"):

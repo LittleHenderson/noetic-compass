@@ -1,4 +1,5 @@
 *.json -text -eol -whitespace
+*.sha256 -text -eol -whitespace
 *.jsonl -text -eol -whitespace
 *.xml -text -eol -whitespace
 *.txt -text -eol -whitespace

@@ -1,0 +1,42 @@
+{
+  "archive_sha256": "90bde3732e6839f311fa1820ec0a1829b03e8a63c3565fa675ecf433c47fcf3c",
+  "issue": "TIMEOUT_CHECK_INCLUDED_UNRELATED_PUBLISHER_JOIN",
+  "original_failure": {
+    "bytes": 395,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\package_rehearsal_001\\child_receipt.json",
+    "sha256": "9005c2cf6c6c1da7be4c01b0c8774de7d53bc6d9485b5381843383015bf1945c"
+  },
+  "original_helper": {
+    "bytes": 22172,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\rehearse_package.py",
+    "sha256": "1a3b85aa4d77c360761e71de975199bca3b1a2ce44d75422a2bb4e26ffe4a18d"
+  },
+  "original_receipt": {
+    "bytes": 3583,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\package_rehearsal_001\\receipt.json",
+    "sha256": "5f29247c6e528703446551d52ba9b8febdf0974129130896f4e64d4ac3a8481e"
+  },
+  "package_receipt": {
+    "bytes": 85077,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\learning_smoke_001\\package_rehearsal_001\\package_receipt.json",
+    "sha256": "7950b6463d343dcb6c71bb7c64bfbb7bee253d4b4c03ce72078daab7340e11f4"
+  },
+  "packaged_worker_sha256": "8073dafdc21c8b83c458d7fadbaff282060c8ccc3a1f2c52f3daf4ebb59c2584",
+  "schema": "cncm-rehearsal-helper-fix/1",
+  "timeout_calls": [
+    {
+      "function": "_publisher.join",
+      "line": 102,
+      "timeout": [
+        "30"
+      ]
+    },
+    {
+      "function": "subprocess.run",
+      "line": 75,
+      "timeout": [
+        "MAX_WALL_SECONDS"
+      ]
+    }
+  ]
+}

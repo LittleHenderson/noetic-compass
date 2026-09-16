@@ -1,0 +1,182 @@
+.....................................................FF..F.............. [ 98%]
+.                                                                        [100%]
+================================== FAILURES ===================================
+_ test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[success-0-True] _
+
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_smoke_provider_guard_001/test_guest_watchdog_arms_befor0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000210ADA8B700>
+mode = 'success', expected_code = 0, body_runs = True
+
+    @pytest.mark.parametrize("mode,expected_code,body_runs", [
+        ("success", 0, True), ("worker_failure", 19, True),
+        ("arm_failure", 20, False), ("inactive_timer", 21, False),
+        ("bootstrap_timeout", 124, False),
+    ])
+    def test_guest_watchdog_arms_before_body_and_shutdown_survives_failure(
+            tmp_path, monkeypatch, mode, expected_code, body_runs):
+        # Execute the real wrapper in Bash with a closed PATH of inert shell stubs.
+        # The inherited bootstrap is replaced with printf/exit only: no AWS, model,
+        # systemd, shutdown, network, or real timeout command can be reached.
+        bash = (Path("C:/Program Files/Git/bin/bash.exe") if os.name == "nt"
+                else Path(shutil.which("bash") or "/nonexistent-bash"))
+        if not bash.is_file():
+            pytest.skip("Bash is required for inert bootstrap control-flow rehearsal")
+        bin_dir = tmp_path / "stub_bin"
+        bin_dir.mkdir()
+        log = tmp_path / "events.txt"
+        bodies = {
+            "shutdown": 'printf "shutdown:%s\\n" "$*" >> "$CAS_TEST_LOG"\nexit 0\n',
+            "systemd-run": 'printf "arm:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = arm_failure ]; then exit 20; fi\nexit 0\n',
+            "systemctl": 'printf "observe:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = inactive_timer ]; then exit 21; fi\nexit 0\n',
+            "timeout": 'printf "timeout:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = bootstrap_timeout ]; then exit 124; fi\n'
+                'shift 3\nexec "$@"\n',
+        }
+        for name, body in bodies.items():
+            path = bin_dir / name
+            path.write_text("#!/bin/bash\n" + body, encoding="utf-8", newline="\n")
+            path.chmod(0o755)
+        inherited = '#!/bin/bash\nprintf "body\\n" >> "$CAS_TEST_LOG"\n'
+        inherited += 'if [ "$CAS_TEST_MODE" = worker_failure ]; then exit 19; fi\n'
+        inherited += 'printf "evidence_uploaded\\n" >> "$CAS_TEST_LOG"\n'
+        monkeypatch.setattr(launch.lifecycle.CandidateProvider, "_user_data", lambda self, bucket: inherited)
+        script = isolated_provider()._user_data("INERT_TEST_BUCKET")
+        result = subprocess.run([str(bash), "--noprofile", "--norc"], input=script, text=True,
+            capture_output=True, timeout=15, cwd=tmp_path,
+            env={"PATH": shell_path(bin_dir), "CAS_TEST_LOG": shell_path(log), "CAS_TEST_MODE": mode,
+                 "SYSTEMROOT": os.environ.get("SYSTEMROOT", ""), "WINDIR": os.environ.get("WINDIR", "")})
+        assert result.returncode == expected_code, result.stderr
+        events = log.read_text().splitlines()
+        assert events[0].startswith("arm:")
+        assert "--on-boot=6900s" in events[0] and "--poweroff now" in events[0]
+        assert events[-1] == "shutdown:--poweroff +1"
+        assert ("body" in events) is body_runs
+        if body_runs:
+            assert events[1].startswith("observe:is-active --quiet ")
+            assert events[2].startswith("observe:show ")
+>           assert events[3].startswith("timeout:--signal=TERM --kill-after=30s 3600s /bin/bash")
+E           AssertionError: assert False
+E            +  where False = <built-in method startswith of str object at 0x00000210ADB66C40>('timeout:--signal=TERM --kill-after=30s 3600s /bin/bash')
+E            +    where <built-in method startswith of str object at 0x00000210ADB66C40> = 'body'.startswith
+
+research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py:341: AssertionError
+_ test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[worker_failure-19-True] _
+
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_smoke_provider_guard_001/test_guest_watchdog_arms_befor1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000210ADA8BCB0>
+mode = 'worker_failure', expected_code = 19, body_runs = True
+
+    @pytest.mark.parametrize("mode,expected_code,body_runs", [
+        ("success", 0, True), ("worker_failure", 19, True),
+        ("arm_failure", 20, False), ("inactive_timer", 21, False),
+        ("bootstrap_timeout", 124, False),
+    ])
+    def test_guest_watchdog_arms_before_body_and_shutdown_survives_failure(
+            tmp_path, monkeypatch, mode, expected_code, body_runs):
+        # Execute the real wrapper in Bash with a closed PATH of inert shell stubs.
+        # The inherited bootstrap is replaced with printf/exit only: no AWS, model,
+        # systemd, shutdown, network, or real timeout command can be reached.
+        bash = (Path("C:/Program Files/Git/bin/bash.exe") if os.name == "nt"
+                else Path(shutil.which("bash") or "/nonexistent-bash"))
+        if not bash.is_file():
+            pytest.skip("Bash is required for inert bootstrap control-flow rehearsal")
+        bin_dir = tmp_path / "stub_bin"
+        bin_dir.mkdir()
+        log = tmp_path / "events.txt"
+        bodies = {
+            "shutdown": 'printf "shutdown:%s\\n" "$*" >> "$CAS_TEST_LOG"\nexit 0\n',
+            "systemd-run": 'printf "arm:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = arm_failure ]; then exit 20; fi\nexit 0\n',
+            "systemctl": 'printf "observe:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = inactive_timer ]; then exit 21; fi\nexit 0\n',
+            "timeout": 'printf "timeout:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = bootstrap_timeout ]; then exit 124; fi\n'
+                'shift 3\nexec "$@"\n',
+        }
+        for name, body in bodies.items():
+            path = bin_dir / name
+            path.write_text("#!/bin/bash\n" + body, encoding="utf-8", newline="\n")
+            path.chmod(0o755)
+        inherited = '#!/bin/bash\nprintf "body\\n" >> "$CAS_TEST_LOG"\n'
+        inherited += 'if [ "$CAS_TEST_MODE" = worker_failure ]; then exit 19; fi\n'
+        inherited += 'printf "evidence_uploaded\\n" >> "$CAS_TEST_LOG"\n'
+        monkeypatch.setattr(launch.lifecycle.CandidateProvider, "_user_data", lambda self, bucket: inherited)
+        script = isolated_provider()._user_data("INERT_TEST_BUCKET")
+        result = subprocess.run([str(bash), "--noprofile", "--norc"], input=script, text=True,
+            capture_output=True, timeout=15, cwd=tmp_path,
+            env={"PATH": shell_path(bin_dir), "CAS_TEST_LOG": shell_path(log), "CAS_TEST_MODE": mode,
+                 "SYSTEMROOT": os.environ.get("SYSTEMROOT", ""), "WINDIR": os.environ.get("WINDIR", "")})
+        assert result.returncode == expected_code, result.stderr
+        events = log.read_text().splitlines()
+        assert events[0].startswith("arm:")
+        assert "--on-boot=6900s" in events[0] and "--poweroff now" in events[0]
+        assert events[-1] == "shutdown:--poweroff +1"
+        assert ("body" in events) is body_runs
+        if body_runs:
+            assert events[1].startswith("observe:is-active --quiet ")
+            assert events[2].startswith("observe:show ")
+>           assert events[3].startswith("timeout:--signal=TERM --kill-after=30s 3600s /bin/bash")
+E           AssertionError: assert False
+E            +  where False = <built-in method startswith of str object at 0x00000210ADB654D0>('timeout:--signal=TERM --kill-after=30s 3600s /bin/bash')
+E            +    where <built-in method startswith of str object at 0x00000210ADB654D0> = 'body'.startswith
+
+research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py:341: AssertionError
+_ test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[bootstrap_timeout-124-False] _
+
+tmp_path = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_tmp/learning_smoke_provider_guard_001/test_guest_watchdog_arms_befor4')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000210ADBCFF50>
+mode = 'bootstrap_timeout', expected_code = 124, body_runs = False
+
+    @pytest.mark.parametrize("mode,expected_code,body_runs", [
+        ("success", 0, True), ("worker_failure", 19, True),
+        ("arm_failure", 20, False), ("inactive_timer", 21, False),
+        ("bootstrap_timeout", 124, False),
+    ])
+    def test_guest_watchdog_arms_before_body_and_shutdown_survives_failure(
+            tmp_path, monkeypatch, mode, expected_code, body_runs):
+        # Execute the real wrapper in Bash with a closed PATH of inert shell stubs.
+        # The inherited bootstrap is replaced with printf/exit only: no AWS, model,
+        # systemd, shutdown, network, or real timeout command can be reached.
+        bash = (Path("C:/Program Files/Git/bin/bash.exe") if os.name == "nt"
+                else Path(shutil.which("bash") or "/nonexistent-bash"))
+        if not bash.is_file():
+            pytest.skip("Bash is required for inert bootstrap control-flow rehearsal")
+        bin_dir = tmp_path / "stub_bin"
+        bin_dir.mkdir()
+        log = tmp_path / "events.txt"
+        bodies = {
+            "shutdown": 'printf "shutdown:%s\\n" "$*" >> "$CAS_TEST_LOG"\nexit 0\n',
+            "systemd-run": 'printf "arm:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = arm_failure ]; then exit 20; fi\nexit 0\n',
+            "systemctl": 'printf "observe:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = inactive_timer ]; then exit 21; fi\nexit 0\n',
+            "timeout": 'printf "timeout:%s\\n" "$*" >> "$CAS_TEST_LOG"\n'
+                'if [ "$CAS_TEST_MODE" = bootstrap_timeout ]; then exit 124; fi\n'
+                'shift 3\nexec "$@"\n',
+        }
+        for name, body in bodies.items():
+            path = bin_dir / name
+            path.write_text("#!/bin/bash\n" + body, encoding="utf-8", newline="\n")
+            path.chmod(0o755)
+        inherited = '#!/bin/bash\nprintf "body\\n" >> "$CAS_TEST_LOG"\n'
+        inherited += 'if [ "$CAS_TEST_MODE" = worker_failure ]; then exit 19; fi\n'
+        inherited += 'printf "evidence_uploaded\\n" >> "$CAS_TEST_LOG"\n'
+        monkeypatch.setattr(launch.lifecycle.CandidateProvider, "_user_data", lambda self, bucket: inherited)
+        script = isolated_provider()._user_data("INERT_TEST_BUCKET")
+        result = subprocess.run([str(bash), "--noprofile", "--norc"], input=script, text=True,
+            capture_output=True, timeout=15, cwd=tmp_path,
+            env={"PATH": shell_path(bin_dir), "CAS_TEST_LOG": shell_path(log), "CAS_TEST_MODE": mode,
+                 "SYSTEMROOT": os.environ.get("SYSTEMROOT", ""), "WINDIR": os.environ.get("WINDIR", "")})
+>       assert result.returncode == expected_code, result.stderr
+E       AssertionError: 
+E       assert 0 == 124
+E        +  where 0 = CompletedProcess(args=['C:\\Program Files\\Git\\bin\\bash.exe', '--noprofile', '--norc'], returncode=0, stdout='CNCM_G...WATCHDOG_ARMED unit=cas-meta2-ingestionsmoke-20260916000000-12345678-deadline boot_deadline_seconds=6900\n', stderr='').returncode
+
+research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py:332: AssertionError
+=========================== short test summary info ===========================
+FAILED research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py::test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[success-0-True]
+FAILED research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py::test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[worker_failure-19-True]
+FAILED research\CAS_META_2_COMPOSITION\tests\test_ingestion_smoke_launch.py::test_guest_watchdog_arms_before_body_and_shutdown_survives_failure[bootstrap_timeout-124-False]
+3 failed, 70 passed in 11.08s

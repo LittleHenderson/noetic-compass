@@ -18,6 +18,7 @@ if str(PILOT) not in sys.path:
 from cncm import rpa_learning_smoke as smoke
 from cncm import rpa_learning_adapter as adapter
 from cncm import rpa_cube_adapter as cube
+from cncm import rpa_learning_worker as worker
 from cncm.canonical import canonical_json
 from cncm.model import ContractError
 from cas_meta2.features_v2 import LosslessPublicTokenizer
@@ -58,7 +59,8 @@ def sample():
         'scope':{'allowed':['left.weight','merge.weight','right.weight'],'frozen':[],
                  'contract_id':'cas.cjt.operation.^6.decompose/0.2','role':'operation:^6'},
         'parameter_names':['left.weight','right.weight','merge.weight'],'training_requests':requests,
-        'source_binding':prepared['source_binding'],'prepared_ids':[prepared['prepared_id']],
+        'source_binding':{key:value for key,value in prepared['source_binding'].items() if key!='legacy_input_id'},
+        'prepared_ids':[prepared['prepared_id']],'legacy_input_ids':[prepared['source_binding']['legacy_input_id']],
         'optimizer_class':'torch.optim.adamw.AdamW','learning_rate':0.003,
         'model_identity':'c'*64,'optimizer_identity':'d'*64,'projection_identity':'e'*64}
     return document,requests,metadata
@@ -259,3 +261,116 @@ def test_smoke_failure_is_preserved_without_overwrite(sample,tmp_path,monkeypatc
         smoke.run_worker_smoke(None,'cuda',document=sample[0],training_requests=sample[1],
                                prediction_requests=sample[1],seed=7,output=output)
     assert (output/'failure.json').read_bytes()==raw
+
+
+@pytest.fixture(scope='module')
+def exact_material():
+    document,training,prediction=worker.smoke_material(ROOT)
+    rows=[adapter.prepare_public_lesson(document,**request) for request in training]
+    return document,training,prediction,rows
+
+
+def test_exact_three_operation_smoke_material_prepares_distinct_request_identities(exact_material):
+    document,training,prediction,expected=exact_material
+    rows=smoke._prepared(document,training)
+    assert rows==expected and len(rows)==3 and len(prediction)==6
+    assert [r['request']['operation'] for r in rows]==['LIST_PARTS','FIND_SHARED_PART','REACHED_VIA']
+    assert len({r['source_binding']['legacy_input_id'] for r in rows})==3
+    assert len({r['prepared_id'] for r in rows})==3
+    assert len({canonical_json(smoke._source_context(r['source_binding'],per_request=True)) for r in rows})==1
+
+
+@pytest.mark.parametrize('field,value',[
+    ('source_file_sha256','a'*64),('source_bundle_digest','b'*64),('source_receipt_digest','c'*64),
+    ('source_namespace','foreign'),('source_context_id','other-scene'),('base_current_state_id','other-current'),
+    ('rendering_schema','foreign-render'),('source_authorship_authenticated',True),('world_truth_established',True),
+    ('source_authorship_authenticated',0),('world_truth_established',0),
+])
+def test_mixed_real_source_context_or_authority_still_refused(exact_material,monkeypatch,field,value):
+    document,training,_,expected=exact_material
+    rows=deepcopy(expected);rows[1]['source_binding'][field]=value
+    cursor=iter(rows);monkeypatch.setattr(adapter,'prepare_public_lesson',lambda *a,**k:next(cursor))
+    with pytest.raises(ContractError,match='SMOKE_SOURCE_'):
+        smoke._prepared(document,training)
+
+
+def test_prepared_binding_refuses_unknown_field_and_stale_per_request_id(exact_material,monkeypatch):
+    document,training,_,expected=exact_material
+    for key,value,error in [('extra','unsupported','BINDING_FIELDS'),
+                            ('legacy_input_id','cube-input-'+'a'*64,'PREPARED_ID_MISMATCH')]:
+        rows=deepcopy(expected);rows[1]['source_binding'][key]=value
+        cursor=iter(rows);monkeypatch.setattr(adapter,'prepare_public_lesson',lambda *a,**k:next(cursor))
+        with pytest.raises(ContractError,match=error):smoke._prepared(document,training)
+
+
+def test_prepared_request_order_cannot_be_substituted(exact_material,monkeypatch):
+    document,training,_,expected=exact_material
+    cursor=iter([expected[1],expected[0],expected[2]])
+    monkeypatch.setattr(adapter,'prepare_public_lesson',lambda *a,**k:next(cursor))
+    with pytest.raises(ContractError,match='PREPARED_REQUEST'):smoke._prepared(document,training)
+
+
+def full_material_metadata(sample,exact_material):
+    _,training,_,rows=exact_material
+    metadata=deepcopy(sample[2]);metadata['training_requests']=deepcopy(training)
+    metadata['source_binding']=smoke._source_context(rows[0]['source_binding'],per_request=True)
+    metadata['prepared_ids']=[r['prepared_id'] for r in rows]
+    metadata['legacy_input_ids']=[r['source_binding']['legacy_input_id'] for r in rows]
+    return metadata
+
+
+def test_full_material_initial_checkpoint_preparation_uses_pure_explicit_mocks(
+        sample,exact_material,tmp_path,monkeypatch):
+    document,training,_,rows=exact_material
+    metadata=full_material_metadata(sample,exact_material)
+    tokenizer=LosslessPublicTokenizer.fit_train([row['public'] for row in rows],max_length=1024)
+    profile=ordered_encoder.profile_identity(tokenizer,d_model=64,seed=worker.SEED,projection_sha256='b'*64)
+    names=metadata['parameter_names'];model_state={name:MockTensor() for name in names}
+    optimizer_type=type('AdamW',(),{'__module__':'torch.optim.adamw',
+        'state_dict':lambda self:{'state':{},'param_groups':[{'params':[0,1,2],'lr':0.003}]}})
+    candidate={'document':document,'seed':worker.SEED,'tokenizer':tokenizer,'ordered_profile':profile,
+        'scope':metadata['scope'],'model_context':metadata['model_context'],
+        'learner':SimpleNamespace(device='cuda:0',optimizer=optimizer_type()),
+        'framework':SimpleNamespace(module=SimpleNamespace(state_dict=lambda:model_state,
+            named_parameters=lambda:iter(model_state.items())))}
+    payloads=[]
+    class SavingMockTorch(MockTorch):
+        @staticmethod
+        def save(payload,stream):
+            payloads.append(deepcopy(payload));stream.write(b'EXPLICIT_MOCK_CHECKPOINT_NOT_TORCH')
+    monkeypatch.setattr(smoke,'_guard',lambda *a:None)
+    monkeypatch.setattr(smoke,'_projection',lambda *a:MockTensor())
+    result=smoke.write_worker_checkpoint(SavingMockTorch,candidate,kind='INITIAL',training_requests=training,
+                                          path=tmp_path/'initial.mock')
+    assert (tmp_path/'initial.mock').read_bytes()==b'EXPLICIT_MOCK_CHECKPOINT_NOT_TORCH'
+    assert result['metadata']==payloads[0]['metadata']
+    assert 'legacy_input_id' not in result['metadata']['source_binding']
+    assert result['metadata']['legacy_input_ids']==[r['source_binding']['legacy_input_id'] for r in rows]
+    assert result['metadata']['prepared_ids']==[r['prepared_id'] for r in rows]
+    smoke.validate_checkpoint_contract(result['metadata'])
+
+
+@pytest.mark.parametrize('mutation,error',[
+    ('legacy_order','RELOAD_LEGACY_INPUT_IDS'),('prepared_order','RELOAD_PREPARED_IDS'),
+    ('source_namespace','RELOAD_SOURCE_BINDING')])
+def test_reload_binds_all_three_request_identities_before_decode(
+        sample,exact_material,monkeypatch,mutation,error):
+    document,training,_,_=exact_material
+    metadata=full_material_metadata(sample,exact_material)
+    if mutation=='legacy_order':metadata['legacy_input_ids'].reverse()
+    elif mutation=='prepared_order':metadata['prepared_ids'].reverse()
+    else:metadata['source_binding']['source_namespace']='foreign'
+    monkeypatch.setattr(smoke,'_guard',lambda *a:None)
+    calls=[]
+    runtime=SimpleNamespace(load=lambda *a,**k:calls.append('load'))
+    with pytest.raises(ContractError,match=error):
+        smoke.reload_worker_candidate(runtime,'cuda',document=document,training_requests=training,
+            checkpoint={},metadata=metadata)
+    assert calls==[]
+
+
+@pytest.mark.parametrize('value',[[],[True],['cube-input-bad'],('cube-input-'+'a'*64,)])
+def test_legacy_input_identity_list_shape_is_closed(sample,value):
+    metadata=deepcopy(sample[2]);metadata['legacy_input_ids']=value
+    with pytest.raises(ContractError,match='LEGACY_INPUT_IDENTITIES'):
+        smoke.validate_checkpoint_contract(metadata)
