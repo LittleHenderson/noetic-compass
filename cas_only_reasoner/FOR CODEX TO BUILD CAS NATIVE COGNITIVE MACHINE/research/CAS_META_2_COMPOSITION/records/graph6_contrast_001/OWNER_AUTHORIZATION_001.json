@@ -1,0 +1,32 @@
+{
+  "bounds": {
+    "automatic_retries": 0,
+    "jobs": 1,
+    "max_wall_seconds": 1200,
+    "optimizer_updates": 0,
+    "reservation_usd": "7.00",
+    "training": false
+  },
+  "design": {
+    "automatic_retries": 0,
+    "checkpoints": 6,
+    "install_allowance_seconds": 600,
+    "instance_seconds_max": 7200,
+    "max_wall_seconds": 1200,
+    "optimizer_updates": 0,
+    "probe_seed": 20260927,
+    "reservation_usd": "7.00",
+    "resource_plan_role": "Inherited hardware/cost lifecycle only; its historical training budget does not describe this job.",
+    "source_job": "cas-meta2-graph6curr-20260910133000-aecb5d07",
+    "source_result_sha256": "848db69bdb0eaefa4f702a4dd4361f779fbc9fbc13c7ca5609de071a8cbcd4d0",
+    "training": false
+  },
+  "evidence_contract_sha256": "ba98b76e6297b5e61314d0852ee0b43a7727f226f56018350f725cf9dedc8807",
+  "evidence_kind": "owner_instruction_in_session",
+  "inputs_sha256": "0b14c1c733f60d8d5611a96f71bc5b8e5460226a559b04224ef1539f7c2eb912",
+  "interpretation": "Standing approval to proceed with the retained six-checkpoint contrast diagnosis after code review and non-neural validation, within the existing campaign cap. This record authorizes one job.",
+  "owner_instruction_raw": "I give you approval for it all ....GO!",
+  "recorded_utc": "2026-09-16T05:24:04.000113+00:00",
+  "schema": "cas-graph6-contrast-owner/1",
+  "source_job": "cas-meta2-graph6curr-20260910133000-aecb5d07"
+}
