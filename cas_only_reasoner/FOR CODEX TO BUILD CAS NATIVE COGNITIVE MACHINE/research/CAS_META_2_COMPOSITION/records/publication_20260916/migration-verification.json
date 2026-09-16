@@ -1,0 +1,12 @@
+{
+  "schema": "cas-publication-migration-audit/v1",
+  "mapped_commits": 351,
+  "mapping_sha256": "bc6196f66ff2537c079e1a8e68284d7936618249e206ee3203a709f89ccbc1a5",
+  "all_commit_metadata_preserved_except_tree_and_mapped_parents": true,
+  "all_source_tree_changes_limited_to": [
+    ".gitattributes",
+    "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/CAS_META_2_COMPOSITION/records/aws_ablation_v4_002/cloud_artifacts.zip"
+  ],
+  "original_head": "06d95cb017266102001e0298d22d1a78ee93bc9d",
+  "migrated_head": "40dce98c931a246c45c427969a2ef38a95973ef5"
+}

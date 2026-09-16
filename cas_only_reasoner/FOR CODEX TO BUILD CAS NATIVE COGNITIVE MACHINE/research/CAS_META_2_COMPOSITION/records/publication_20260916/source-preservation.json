@@ -1,0 +1,37 @@
+{
+  "schema": "cas-publication-source-preservation/v1",
+  "original_source_sha": "06d95cb017266102001e0298d22d1a78ee93bc9d",
+  "migrated_source_sha": "40dce98c931a246c45c427969a2ef38a95973ef5",
+  "mapping_sha256": "bc6196f66ff2537c079e1a8e68284d7936618249e206ee3203a709f89ccbc1a5",
+  "full_original_bundle": {
+    "filename": "source-aaf96984.bundle",
+    "sha256": "b23e58c7dfd21f897c92c499778136ff54214a4e13e13618dec901e78d031b2b",
+    "bytes": 729531855,
+    "tip": "aaf969843c55bf681e3f2062377967b580f98d49"
+  },
+  "incremental_original_bundle": {
+    "filename": "source-final-incremental.bundle",
+    "sha256": "f169742506f9ffed68165baab22ff6069818f169dfbf85797a67d78b950c1b8f",
+    "bytes": 5381486,
+    "prerequisite": "aaf969843c55bf681e3f2062377967b580f98d49",
+    "tip": "06d95cb017266102001e0298d22d1a78ee93bc9d"
+  },
+  "full_and_incremental_bundles_independently_downloaded_from_github": true,
+  "original_final_sha_restored_in_separate_bare_repository": true,
+  "restored_original_commits": [
+    "aaf969843c55bf681e3f2062377967b580f98d49",
+    "fb4bb4a297d6c5a9268bd96d98eb983d934ef4f5",
+    "06d95cb017266102001e0298d22d1a78ee93bc9d"
+  ],
+  "original_worktree_rewritten": false,
+  "original_worktree_upstream_changed": false,
+  "continuation": {
+    "original_source_worktree": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1",
+    "retained_isolated_publication_clone": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\repo",
+    "source_history_remains_unmigrated": true,
+    "ordinary_source_push_fast_forwards_remote": false,
+    "supported_next_work": "Create a fresh clone of the migrated remote branch in a new directory inside the CNCM homebase; make future edits and commits there. Do not reset or relocate meta1.",
+    "fresh_clone_command": "git clone --single-branch --branch codex/cas-meta-2-composition https://github.com/LittleHenderson/noetic-compass.git <NEW_DIRECTORY_INSIDE_CNCM_HOMEBASE>",
+    "refresh_original_source_warning": "The one-shot prepare_final_publication.py is an audit record, not an idempotent refresh command. Later original-source changes require a new isolated migration, a new original-source backup and full mapping audit, and integration on top of the current published tip. Never force-push the unmigrated source branch."
+  }
+}

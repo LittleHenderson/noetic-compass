@@ -1,0 +1,11 @@
+{
+  "schema": "cas-publication-independent-lfs-download/v1",
+  "oid": "b23e58c7dfd21f897c92c499778136ff54214a4e13e13618dec901e78d031b2b",
+  "size": 729531855,
+  "file": "source-aaf96984.bundle",
+  "sha256_verified": true,
+  "downloaded_file": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\github-source-aaf96984.bundle",
+  "command_exit": 0,
+  "independent_lfs_cache": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_publication\\20260916\\github-lfs-cache",
+  "requested_object_absent_before_download": true
+}
