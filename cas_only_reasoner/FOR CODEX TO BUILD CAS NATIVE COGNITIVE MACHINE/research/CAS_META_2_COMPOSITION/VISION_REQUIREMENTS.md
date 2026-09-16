@@ -249,3 +249,37 @@ twelve authored atomic forms, alongside independently proved semantic facts
 and all remaining language/flow/tool/Foundry/learning requirements. The full
 V01-V18,31-system,integrated20-step vision remains open. No new paid model or
 provider work was used; prior negative experiments remain intact.
+
+## 2026-09-16 bounded native compound procedure construction
+
+Runtime 0.5 constructs a reusable one/two-call program for a*(b*x+c)+d=e.
+The task supplies five typed inputs and a query, without an answer or execution
+graph. A real compound acquisition frame may suspend again for its primitive;
+both return to the exact caller with conserved instruction/checker budget.
+All 420 canonical call structures are checked on four public development cases.
+One survivor receives separate 12-case qualification and governed installation.
+Each actual invocation is independently checked against the original expression.
+
+Final source profile: 3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5.
+Evidence: records/compound_procedure_001/STATUS.md and acceptance_001/receipt.json
+in vision-next. Full suite: 1232 tests plus 573 subtests; all 14 original fixtures reproduce.
+Earlier native 0.2/nested 0.3/semantic 0.4 source profiles remain unchanged.
+Fresh-process recovery resumes 75 exact journal cuts.
+New signed/fractional inputs reuse the installed structure with acquisition and
+qualification disabled. A later source correction changes a matched task from
+control 4 to 3 while preserving TEST_FIXTURE status and omitting the source scalar
+from the new request. Both compound and primitive rollback block future dispatch.
+
+Adversarial review repaired installation that could skip acquisition lineage
+and receipt handling that could accept a check for different inputs. Regressions
+preserve failure charges and prohibit unauthorized heads, outputs and commitment.
+The new CAS-RPA compound extension document maps these records and specifies
+the next read-only adapter; the existing viewer remains native 0.2 only. Both
+supplied PDFs and all old RPA receipt-bound sources remain unchanged.
+
+This advances bounded V03/V05/V06/V08/V10/V15 and systems7/8/9/18/20/31; none is
+complete. Finite public-panel construction does not prove general or neural
+learning, protected held-out transfer or independently verified source facts.
+General procedure structures, semantic proof, CMB-R1, language, Foundations,
+flow, tools, Foundry, evolution and the full V01-V18/31-system/integrated 20-step
+vision retain open gates. No paid model/provider work or AWS launch was used.

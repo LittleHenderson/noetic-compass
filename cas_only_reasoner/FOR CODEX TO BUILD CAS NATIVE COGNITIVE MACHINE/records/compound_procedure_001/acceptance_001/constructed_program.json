@@ -1,0 +1,1 @@
+{"primitive_sha256":"b69e5fd959a31dbfab27a1a05c32cbf4e221bc94a541c15686d30a3fec4ef9f0","program_digest":"5320d8b61af52415d1d0f04d331ec04f45088aa691ff4b1b15a27fc56ba5c78b","schema_version":"cncm.compound-call-program/0.1","steps":[{"a_ref":"a","b_ref":"d","c_ref":"e"},{"a_ref":"b","b_ref":"c","c_ref":"r0"}]}

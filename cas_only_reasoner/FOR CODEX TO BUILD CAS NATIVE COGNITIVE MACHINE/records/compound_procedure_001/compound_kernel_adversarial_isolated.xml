@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="8" time="19.186" timestamp="2026-09-16T03:23:28.125123-07:00" hostname="MSI"><testcase classname="tests.test_compound_kernel_adversarial" name="test_qualified_authored_candidate_cannot_bypass_current_run_selection_or_construction[SELECT_PRIMITIVE-INSTALL_PRIMITIVE-PRIMITIVE_SELECTION-cost0]" time="0.097" /><testcase classname="tests.test_compound_kernel_adversarial" name="test_qualified_authored_candidate_cannot_bypass_current_run_selection_or_construction[CONSTRUCT_COMPOUND-INSTALL_COMPOUND-CONSTRUCTION-cost1]" time="0.219" /><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[foreign_inputs]" time="2.875"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-1c079238238e5fc2', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C958AD1D0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C95923100&gt;
+fault = 'foreign_inputs'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-1c079238238e5fc2', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[foreign_call]" time="2.941"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-0492bff01538060d', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C959235C0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C943CBA80&gt;
+fault = 'foreign_call'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-0492bff01538060d', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[foreign_program]" time="3.019"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-763d59067f22a556', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C95923BB0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C95907890&gt;
+fault = 'foreign_program'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-763d59067f22a556', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[foreign_primitive]" time="3.186"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-5917a4c10b16dc97', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C95907AD0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C958F7350&gt;
+fault = 'foreign_primitive'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-5917a4c10b16dc97', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[bad_digest]" time="3.306"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-bab6bb9b972e5472', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C95982AD0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C95982CF0&gt;
+fault = 'bad_digest'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-bab6bb9b972e5472', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase><testcase classname="tests.test_compound_kernel_adversarial" name="test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge[rejected_original_check]" time="3.247"><failure message="AssertionError: current-call binding and checked subreceipts must be validated before applying output&#10;assert ()&#10; +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-e43132a21e54d4dc', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents">reusable = &lt;cncm.compound_engine.CompoundMachine object at 0x0000024C95983130&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000024C943EBD50&gt;
+fault = 'rejected_original_check'
+
+    @pytest.mark.parametrize('fault',['foreign_inputs','foreign_call','foreign_program','foreign_primitive','bad_digest','rejected_original_check'])
+    def test_receiver_rejects_foreign_or_corrupted_checked_receipts_and_preserves_charge(reusable,monkeypatch,fault):
+        import cncm.compound_kernel as kernel
+        machine=reusable
+        machine.start(task('receipt-'+fault))
+        proposal=advance_until(machine,C.APPLY_COMPOUND)
+        before=machine.state
+        real=kernel.check_program_call
+    
+        def faulty(program,primitive,inputs,**bindings):
+            if fault=='foreign_inputs':
+                return real(program,primitive,dict(inputs,e='41'),**bindings)
+            if fault=='foreign_call':
+                return real(program,primitive,inputs,**(bindings|{'call_id':'other-call'}))
+            result=deepcopy(real(program,primitive,inputs,**bindings))
+            if fault=='foreign_program':result['program_digest']='f'*64
+            elif fault=='foreign_primitive':result['primitive_sha256']='f'*64
+            elif fault=='bad_digest':
+                result['report_digest']='0'*64
+                return result
+            elif fault=='rejected_original_check':
+                check=result['original_check']
+                check['status']='REJECTED'
+                check['report_digest']=digest({k:v for k,v in check.items() if k!='report_digest'})
+            result['report_digest']=digest({k:v for k,v in result.items() if k!='report_digest'})
+            return result
+    
+        monkeypatch.setattr(kernel,'check_program_call',faulty)
+        outcome=execute(machine,proposal)
+&gt;       assert outcome.rejected_intents, 'current-call binding and checked subreceipts must be validated before applying output'
+E       AssertionError: current-call binding and checked subreceipts must be validated before applying output
+E       assert ()
+E        +  where () = StepResult(state=CompoundState(runtime_version='0.5.0', logical_tick=3, run_id='compound-run-e43132a21e54d4dc', seed=0...e_type='compound_controller', source_id='compound-construction-0.5', detail='proposal only'),)),), rejected_intents=()).rejected_intents
+
+tests\test_compound_kernel_adversarial.py:109: AssertionError</failure></testcase></testsuite></testsuites>

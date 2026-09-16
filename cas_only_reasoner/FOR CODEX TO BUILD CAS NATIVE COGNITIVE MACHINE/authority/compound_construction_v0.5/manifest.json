@@ -1,0 +1,103 @@
+{
+  "runtime_version": "0.5.0",
+  "authorities": {
+    "REQUEST_COMPOUND": [
+      "compound_controller",
+      "request_compound_call"
+    ],
+    "PUSH_COMPOUND_ACQUISITION": [
+      "rpm_controller",
+      "suspend_for_compound"
+    ],
+    "PUSH_PRIMITIVE_ACQUISITION": [
+      "rpm_controller",
+      "suspend_for_primitive"
+    ],
+    "SELECT_PRIMITIVE": [
+      "procedure_controller",
+      "select_compound_primitive"
+    ],
+    "INSTALL_PRIMITIVE": [
+      "procedure_controller",
+      "install_compound_primitive"
+    ],
+    "RETURN_PRIMITIVE": [
+      "rpm_controller",
+      "resume_compound_construction"
+    ],
+    "CONSTRUCT_COMPOUND": [
+      "compound_controller",
+      "construct_bounded_call_program"
+    ],
+    "INSTALL_COMPOUND": [
+      "procedure_controller",
+      "install_checked_call_program"
+    ],
+    "RETURN_COMPOUND": [
+      "rpm_controller",
+      "resume_compound_caller"
+    ],
+    "APPLY_COMPOUND": [
+      "compound_controller",
+      "apply_checked_call_program"
+    ],
+    "FAIL_COMPOUND": [
+      "rpm_controller",
+      "record_compound_failure"
+    ],
+    "ROLLBACK_COMPOUND": [
+      "procedure_controller",
+      "rollback_call_program"
+    ],
+    "ROLLBACK_PRIMITIVE": [
+      "procedure_controller",
+      "rollback_compound_primitive"
+    ]
+  },
+  "work_allocations": {
+    "SELECT_PRIMITIVE": {
+      "instructions": 144,
+      "checker_calls": 24
+    },
+    "INSTALL_PRIMITIVE": {
+      "instructions": 60,
+      "checker_calls": 10
+    },
+    "CONSTRUCT_COMPOUND": {
+      "instructions": 40320,
+      "checker_calls": 1680
+    },
+    "INSTALL_COMPOUND": {
+      "instructions": 288,
+      "checker_calls": 12
+    },
+    "APPLY_COMPOUND": {
+      "instructions": 24,
+      "checker_calls": 1
+    }
+  },
+  "construction_prefix_allocation": {
+    "instructions_per_candidate": 96,
+    "checker_calls_per_candidate": 4
+  },
+  "candidate_grammar_size": 420,
+  "development_cases": 4,
+  "qualification_cases": 12,
+  "expression_family": "a*(b*x+c)+d=e",
+  "maximum_calls": 2,
+  "input_bits": 128,
+  "intermediate_bits": 512,
+  "primitive_capability": "cncm.solve-linear/0.1",
+  "compound_capability": "cncm.solve-nested-affine/0.1",
+  "primitive_head_required_at_every_dispatch": true,
+  "failed_checks_charged": true,
+  "allocation_refunds": false,
+  "max_journal_bytes": 67108864,
+  "max_journal_events": 1024,
+  "max_episodes": 16,
+  "source_custody": "external initial statement digests and quiescent ordered extensions",
+  "conditional_arithmetic_only": true,
+  "external_actions": false,
+  "neural_learning": false,
+  "fixture_custody": "disjoint public engineering panels, not secret held-out evaluation"
+}

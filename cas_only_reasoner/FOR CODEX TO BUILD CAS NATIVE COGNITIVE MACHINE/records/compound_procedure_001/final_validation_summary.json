@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "-q",
+    "--junitxml=records/compound_procedure_001/final_full_suite_tests.xml",
+    "--tb=short"
+  ],
+  "pytest_exit_code": 0,
+  "tests_passed": 1232,
+  "subtests_passed": 573,
+  "xml_cases": 1805,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "duration_seconds": 449.81434609999997,
+  "source_profile_digest": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+  "source_unchanged": true,
+  "xml_sha256": "4e01095c5760da5068dd7efe6b33505e4e592f72df3ea0ffdd2a95de5028e786"
+}

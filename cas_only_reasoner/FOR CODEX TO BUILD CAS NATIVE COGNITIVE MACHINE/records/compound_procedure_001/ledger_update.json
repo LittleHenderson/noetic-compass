@@ -1,0 +1,37 @@
+{
+  "ledgers": [
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+      "before_sha256": "9f8db4a3127b498c5f0a2f3c5f7ed9fb825e97cb0d0cf4d41f009a729bdf0a37",
+      "after_sha256": "ac7a92c45d695126b9b959b41192da728974dd425a4584369d12bad04ef58644",
+      "original_bytes_preserved": true,
+      "full_goal_complete": false
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\docs\\CNCM_COMPLETE_REQUIREMENT_LEDGER.md",
+      "before_sha256": "9f8db4a3127b498c5f0a2f3c5f7ed9fb825e97cb0d0cf4d41f009a729bdf0a37",
+      "after_sha256": "ac7a92c45d695126b9b959b41192da728974dd425a4584369d12bad04ef58644",
+      "original_bytes_preserved": true,
+      "full_goal_complete": false
+    },
+    {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\VISION_REQUIREMENTS.md",
+      "before_sha256": "f60ed906a42018805a4c175709c218b4154cdda1f782e5c18ed04246657eaef8",
+      "after_sha256": "5f388036b38e4f56a07cce163d2e577769ccc3fc477b13b1b6de2261cb2910b0",
+      "original_bytes_preserved": true,
+      "full_goal_complete": false
+    }
+  ],
+  "acceptance_receipt": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\compound_procedure_001\\acceptance_001\\receipt.json",
+    "bytes": 9655,
+    "sha256": "3f3ca9e9f3016df527ddbf218f7c0d26a41cc7d9baf01ca99f8d7632f6fcf66b"
+  },
+  "full_suite": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\compound_procedure_001\\final_full_suite_tests.xml",
+    "bytes": 226137,
+    "sha256": "4e01095c5760da5068dd7efe6b33505e4e592f72df3ea0ffdd2a95de5028e786"
+  },
+  "source_profile_digest": "3a7c6f620782ce820145d5e119d8f64c2050008378a9fbfdf94adbd1a9dcfed5",
+  "acceptance_files_verified": 48
+}

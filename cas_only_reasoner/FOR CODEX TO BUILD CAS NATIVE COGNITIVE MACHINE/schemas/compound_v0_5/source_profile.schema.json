@@ -1,0 +1,5 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cas.local/schemas/compound_v0_5/source_profile.schema.json",
+  "$ref": "https://cas.local/schemas/compound_v0_5/contracts.schema.json#/$defs/source_profile"
+}

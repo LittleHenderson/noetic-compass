@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="3.383" timestamp="2026-09-16T03:12:32.395677-07:00" hostname="MSI"><testcase classname="tests.test_compound_recovery" name="test_evidence_binds_constructed_program_primitive_sources_and_conditional_output" time="3.007"><error message="failed on setup with &quot;AssertionError: assert (&lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;)&#10; +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = CompoundRunResult(problem=CompoundProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='compo...abd4d5b35ea', sealed=True)), trusted_ingress_digest='a32469bee01456d917b8c9ce9a151d5eca1042dfaa62f37d69e71f0b2293116f').terminal_status&#10; +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED&quot;">@pytest.fixture(scope="module")
+    def completed():
+        statement, profile = source(), simulated_profile()
+        ingress, packet = (statement.statement_digest,), problem(updates=(statement,))
+        machine = CompoundMachine(profile, trusted_ingress=ingress)
+        result = machine.run(packet)
+&gt;       assert result.terminal_status is TerminalStatus.CONCLUDED and result.output == "3"
+E       AssertionError: assert (&lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; is &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt;)
+E        +  where &lt;TerminalStatus.NEEDS_CAPABILITY: 'NEEDS_CAPABILITY'&gt; = CompoundRunResult(problem=CompoundProblem(reasoning=ProblemPacket(schema_version='cncm.problem/0.1', problem_id='compo...abd4d5b35ea', sealed=True)), trusted_ingress_digest='a32469bee01456d917b8c9ce9a151d5eca1042dfaa62f37d69e71f0b2293116f').terminal_status
+E        +  and   &lt;TerminalStatus.CONCLUDED: 'CONCLUDED'&gt; = TerminalStatus.CONCLUDED
+
+tests\test_compound_recovery.py:76: AssertionError</error></testcase></testsuite></testsuites>
