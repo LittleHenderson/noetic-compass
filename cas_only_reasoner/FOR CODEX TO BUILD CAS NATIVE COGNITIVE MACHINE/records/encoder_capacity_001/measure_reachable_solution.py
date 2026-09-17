@@ -294,6 +294,58 @@ def main():
         print(f"  frozen readout realisation of that same solution    {100*through:6.2f}%")
         print(f"  held-out rows where the two argmaxes agree          {100*agree:6.2f}%")
     print()
+    print("=" * 92)
+    print("C. THE SHIPPED MODULE, ON THE SAME REAL DATA AND THE SAME FOLDS")
+    print("=" * 92)
+    print()
+    print("cncm/analytic_decompose.py is the code that would run in the worker. The numbers")
+    print("above come from this script's own local linear algebra, so the module must be")
+    print("checked against the recorded figure on the real features rather than trusted.")
+    print()
+    try:
+        from cncm import analytic_decompose as ad
+    except Exception as error:  # noqa: BLE001 - report, never fall back silently
+        print(f"  cncm.analytic_decompose unavailable: {type(error).__name__}: {error}")
+        return 1
+
+    order = list(range(len(phi)))
+    buckets = [order[i::5] for i in range(5)]
+    module_correct = 0
+    local_correct = 0
+    worst_residual = 0.0
+    for fold in range(5):
+        test = sorted(buckets[fold])
+        held = set(test)
+        train = [i for i in order if i not in held]
+        module_W = ad.ridge_weights([phi[i] for i in train], [y[i] for i in train], nclass=nclass)
+        parameters = ad.decompose_from_free_readout(module_W, readout)
+        local_W = solve_primal([phi[i] for i in train], [y[i] for i in train], nclass)
+        # `forward` applies tanh itself, so the module's input is the raw encoded slot X and
+        # its feature is tanh(X) == phi. Passing phi would apply tanh twice.
+        worst_residual = max(
+            worst_residual,
+            ad.realisation_score_residual(module_W, readout, [X[i] for i in test]),
+        )
+        for i in test:
+            through = ad.frozen_readout_scores(readout, parameters, X[i])
+            if max(range(nclass), key=lambda c: through[c]) == y[i]:
+                module_correct += 1
+            if max(range(nclass), key=lambda c: scores(local_W, phi[i], nclass)[c]) == y[i]:
+                local_correct += 1
+    total = len(phi)
+    print(f"  local linear algebra, through the frozen readout   {100*local_correct/total:11.2f}%")
+    print(f"  cncm.analytic_decompose, through the frozen readout{100*module_correct/total:11.2f}%")
+    print(f"  max |free_c - through_c| over held-out rows        {worst_residual:11.3e}")
+    print()
+    if module_correct == local_correct:
+        print("  -> the shipped module reproduces the recorded figure exactly.")
+    else:
+        print(f"  -> DIFFERENCE of {abs(module_correct - local_correct)} question(s) of {total}.")
+        print("     The construction identity holds to the residual above, so any difference is")
+        print("     in the ridge solve itself: this script sums the Gram matrix in index order")
+        print("     while the module uses math.fsum, and near-tied argmaxes can flip on that.")
+        print("     The module's fsum form is the correctly-rounded one.")
+    print()
     return 0
 
 

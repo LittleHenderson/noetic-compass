@@ -695,6 +695,14 @@ contains.** Closed-form route: `ARCHITECTURE_CHANGE_SPEC_v0.2_ANALYTIC_DECOMPOSE
 codebook, no readout, no parameter list, no shape, no scope and no update ceiling — only the
 values the plastic block starts from.
 
+**And the construction is now code, not prose.** `cncm/analytic_decompose.py` implements it,
+and section C of `measure_reachable_solution.py` drives the same five folds over the same real
+features through that module: **63.83%**, matching this script's local linear algebra question
+for question, with the score-identity residual at **2.447e-14**. Two mistakes were made writing
+it and both were caught by its own tests — a row/column convention error (`Wᵀ φ`, not `W φ`;
+the wrong version gave a residual of 29.25) and a double-tanh error (the wrong version reported
+64.18%, for a reason unrelated to the construction). Both are now pinned by tests.
+
 ## What findings 13 and 14 do NOT claim
 
 - **63.83% is a single-field number.** It is focus-world alias decodability, one 64-way

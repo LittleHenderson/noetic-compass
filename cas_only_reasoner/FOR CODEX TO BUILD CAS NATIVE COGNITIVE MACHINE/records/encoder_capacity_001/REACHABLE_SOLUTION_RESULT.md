@@ -181,6 +181,42 @@ shape and no registered scope, and requires no GPU: fit `W` by ridge on `tanh(x)
 
 ---
 
+## The construction is now code, and it reproduces the recorded figure exactly
+
+Everything above was measured by `measure_reachable_solution.py` using its own local linear
+algebra. That is not the code that would run in a worker, so a second check was added in the
+same script: the same five folds, the same real features, driven through
+`cncm/analytic_decompose.py` — the module committed as the executable form of the proposal.
+
+| path | 5-fold CV through the frozen readout |
+|---|---:|
+| this script's local linear algebra | 63.83% |
+| `cncm.analytic_decompose` | **63.83%** |
+| max &#124;free_c − through_c&#124; over held-out rows | **2.447e-14** |
+
+The two agree question for question. The shipped module reproduces the recorded figure
+exactly, on the real 564-packet feature set, through the frozen readout rows.
+
+Two mistakes were made while writing that module and both were caught by its own tests. They
+are recorded here because both were the kind that produce a plausible wrong number rather than
+a crash:
+
+- A **row/column convention error**. `ridge_weights` returns a `d × nclass` matrix with
+  **column** `c` the class-`c` weight, so the score vector is `Wᵀ φ`, not `W φ`. The first
+  version used `W φ` and the score residual was **29.25** instead of 1e-14.
+- A **double-tanh error**. `forward` applies `tanh` itself, so passing a feature `φ = tanh(x)`
+  as the module's input applies it twice. The first version did that and reported **64.18%**
+  against the recorded 63.83%, for a reason that had nothing to do with the construction.
+  `realisation_agreement` and `realisation_score_residual` now take module inputs and apply
+  `tanh` on the free side only, and `test_forgetting_the_tanh_breaks_the_identity` pins the
+  difference so the mistake cannot be misread as a construction failure.
+
+`cncm/analytic_decompose.py` also carries `shuffled_label_control`, the arm-C null the spec
+requires, and a test asserts that a shuffled-label solve scores at most 4 of 64 on separable
+data. Without that bound a good arm-A number would not be interpretable.
+
+---
+
 ## What is NOT established here
 
 - **This is a single-field result, not a whole-answer result.** The 63.83% is focus-world

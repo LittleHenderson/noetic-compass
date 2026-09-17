@@ -4,6 +4,78 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - All four mandated corrections now live in the CNCM homebase; a seven-label collision found
+
+$0.00, pure standard library. No model, no GPU, no provider, no checkpoint.
+Modules: `cncm/simplex.py`, `cncm/noetica.py`, `cncm/analytic_decompose.py`.
+Tests: `tests/test_simplex_metric.py` (50), `tests/test_noetica_laws.py` (35),
+`tests/test_analytic_decompose.py` (31). Record: `records/noetica_corrections_001/STATUS.md`.
+
+Before this work the mandated mathematics existed ONLY in the Rust engine. Searching the
+homebase gave 0 hits for `fisher`, `simplex`, `geodesic`, `inversion`, `is_admissible`, and
+for section / retraction / counit. Correction 4 landed in the previous commit; Corrections
+1, 2 and 3 land here.
+
+CORRECTION 1 - PARTIAL, BLOCKED. The guard mechanism exists: ADMISSIBILITY holds one relation
+per operator with status, pairs, authority and digest, and is_admissible(operator, source,
+target) is the required guard. D0 is frozen verbatim from the instructions - exactly 40 pairs,
+all on the diagonal, over the 40 cognitive states. The other NINE relations are an unresolved
+authority decision (the same OPEN_SEMANTICS condition the ledger records for system 4) and are
+NOT invented. is_admissible RAISES UnregisteredAdmissibility for them rather than returning
+False: an undecided relation is not an empty one, and a guard that silently refuses everything
+is indistinguishable from a guard that works. admissibility_status() lets a caller tell the
+two refusals apart on purpose. There is also no call site - the CNCM has no operator
+application to guard - so what exists is the guard and the refusal semantics, not an applied
+correction. Reported as partial.
+
+CORRECTION 2 - IMPLEMENTED. epsilon after eta = id is ENFORCED and a violation raises
+SectionRetractionError; there is no permissive mode. eta after epsilon is MEASURED, never
+assumed: round_trip_is_identity is False whenever the realization carried context, and the
+witness reports the exact lost context. The law that does hold is idempotence, and that is
+what a gate may rely on. PrerequisiteGate caches initial satisfaction; a second satisfy()
+raises RefusesRecomputation, increments a counter, and leaves the cached value untouched.
+Realization does NOT disturb the cache - that asymmetry is the correction, made operational
+and asserted directly. Satisfaction is one-directional: enables("A0","D1") is True and
+enables("D1","A0") is False.
+
+CORRECTION 3 - IMPLEMENTED. covering_morphism builds epsilon : R(I) -> I with direction
+TOWARD_COVERED_OBJECT; is_covering accepts exactly that and raises UnitCoveringRefused on the
+unit direction, naming both labels, so Correction 3 cannot be silently inverted.
+
+A SEVEN-LABEL COLLISION, RECORDED NOT RESOLVED. P1..P7 each name BOTH a cognitive state
+(P<noetic>, from the 40-state listing P0-P9, C0-C9, E0-E9, O0-O9) AND a pathway node
+(P<purpose>, from the 22-pathway listing A0 + D1-D7 + W1-W7 + P1-P7). This is in the master
+instructions, not in the new code. No resolution rule is invented - inventing one is exactly
+the unfrozen meaning the ledger already flags. Instead the label domain is explicit:
+STATE_DOMAIN and PATHWAY_DOMAIN are named, every function taking a label takes its domain,
+AMBIGUOUS_LABELS reports the seven, and realize() REFUSES a realization whose domain does not
+match, so a pathway realization can never be realized as a cognitive state just because the
+labels look alike. Whether to rename, namespace or re-express is an authority decision.
+
+THE ARCHITECTURE PROPOSAL IS NOW CODE, NOT PROSE. cncm/analytic_decompose.py implements the
+arithmetic of ARCHITECTURE_CHANGE_SPEC_v0.2 (still PROPOSED, still unrun, still needing an
+owner record). parameters_for_map(T) gives left = I64, right = 0, merge = [T | 0] and
+identity_residual returns 0.0 - the identity forward(x) = T tanh(x) is EXACT. A test perturbs
+the right half of merge by 1e6 and confirms the output does not move, which is why it holds.
+decompose_from_free_readout solves T = R^-1 W^T and realisation_score_residual measures the
+violation of r_c . forward(x) = W_c . tanh(x) at order 1e-14; a singular readout is REFUSED,
+never approximated. shuffled_label_control implements the arm-C null, and a test asserts a
+wrong solve scores at most 4 of 64 on separable data, because without that bound a right solve
+proves nothing. scope_declaration() reports new_parameters = 0 and
+requires_owner_record_to_run = True. Section C of measure_reachable_solution.py drives the
+same five folds over the same 564 real features through that module: 63.83%, matching the
+recorded figure question for question, with the score-identity residual at 2.447e-14.
+
+TWO MISTAKES MADE AND CAUGHT BY THE TESTS, both now pinned. (1) A row/column convention error:
+ridge_weights returns d x nclass with column c the class-c weight, so the score vector is
+W^T phi and not W phi; the first version used W phi and the score residual was 29.25 instead of
+1e-14. (2) A double-tanh error: forward applies tanh itself, so passing phi = tanh(x) as the
+module input applies it twice; the first version did that and reported 64.18% against the
+recorded 63.83% for a reason that had nothing to do with the construction.
+
+Corrections 1, 2, 3 and 4 are now all present in the homebase. `inversions/` is still absent:
+the 7-axis scanner (54,463 bytes of Rust) has no counterpart here.
+
 ## 2026-09-17 UTC - The registered ^6 module can reach the solution exactly; the training never converged; the "40.7x chance" multiplier is corrected
 
 $0.00, pure standard library, no model, no GPU, no checkpoint, no provider. Two new

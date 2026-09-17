@@ -40,3 +40,17 @@ READING
   frozen readout realisation of that same solution     63.83%
   held-out rows where the two argmaxes agree          100.00%
 
+============================================================================================
+C. THE SHIPPED MODULE, ON THE SAME REAL DATA AND THE SAME FOLDS
+============================================================================================
+
+cncm/analytic_decompose.py is the code that would run in the worker. The numbers
+above come from this script's own local linear algebra, so the module must be
+checked against the recorded figure on the real features rather than trusted.
+
+  local linear algebra, through the frozen readout         63.83%
+  cncm.analytic_decompose, through the frozen readout      63.83%
+  max |free_c - through_c| over held-out rows          2.447e-14
+
+  -> the shipped module reproduces the recorded figure exactly.
+
