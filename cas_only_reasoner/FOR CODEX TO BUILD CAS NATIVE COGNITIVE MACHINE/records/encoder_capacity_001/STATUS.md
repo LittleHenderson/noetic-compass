@@ -113,6 +113,41 @@ finding that the 564 rows carry only 244 distinct expected answers (24 for each 
 analogy, context, definition, edge_account, parts and correspondence; 36 for
 role_set; 64 for reach).
 
+## Finding 4 — the design target this implies
+
+Sweeping packet length against the same measurement gives a parity point: the size
+at which the question signal `1−cos` finally clears the readout's cross-talk floor
+of `0.098408`.
+
+| packet rows n | 1−cos, k=4 | 1−cos, k=16 |
+| ---: | ---: | ---: |
+| 32 | 0.124084 | 0.508964 |
+| 64 | 0.063282 | 0.247589 |
+| **128** | 0.030479 | **0.123390** |
+| **256** | **0.015039** | 0.061110 |
+| 512 | 0.006952 | 0.028256 |
+| 794 | 0.004511 | 0.017769 |
+| 4096 | 0.000523 | 0.002153 |
+| 27718 | 0.000021 | 0.000085 |
+
+**The packet must be no more than roughly 8× the size of the query field** for the
+question signal to stand above the readout's own interference — about **128 rows
+for a 16-row query**, or about **256 rows for a 4-row query**.
+
+The course's packets are up to **27,818 tokens**, roughly **217× past that
+threshold**. This is not a tuning margin; it is two orders of magnitude.
+
+Two consequences for the architecture, in increasing order of interest:
+
+1. **Cheap:** give each question a packet containing only the focus world's own
+   declarations and relations, near the parity size. That is a data-construction
+   change, not a model change, and it is testable on the existing learner.
+2. **Architecturally right:** stop mean-pooling. A content-addressed read —
+   attention or a keyed lookup over token rows, so the query selects its own
+   evidence instead of being averaged into it — removes the `1/sqrt(n)` dilution
+   entirely and is the change that lets the architecture's structure do work rather
+   than being washed out before the trainable block sees it.
+
 ## What this explains, and what it predicts
 
 Consistent with every completed run:
