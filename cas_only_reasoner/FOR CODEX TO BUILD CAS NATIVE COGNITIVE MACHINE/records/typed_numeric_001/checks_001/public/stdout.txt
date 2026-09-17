@@ -1,0 +1,893 @@
+FFFFFFFFFFFFFFFF.............................................FF..        [100%]
+================================== FAILURES ===================================
+____________________ test_actual_source_exec_and_snapshot _____________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+
+    def test_actual_source_exec_and_snapshot(package):
+>       result = child(package, "import cncm.example\nassert cncm.example.VALUE==42\nprint(json.dumps(loader.snapshot()))")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+__________________ test_existing_bytecode_cannot_supply_code __________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+
+    def test_existing_bytecode_cannot_supply_code(package):
+>       result = child(package, "import cncm.example\nassert cncm.example.VALUE==42\nloader.snapshot()",
+            before="import py_compile\np=root/'cncm/example.py'\nraw=p.read_bytes()\np.write_text('VALUE=999\\n')\npy_compile.compile(str(p),doraise=True)\np.write_bytes(raw)")
+
+..\..\tests\test_typed_source_attestation.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()-SOURCE_] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = "import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()"
+reason = 'SOURCE_'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()-LOADED_ORIGIN] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = "import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()"
+reason = 'LOADED_ORIGIN'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()-UNATTESTED] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = "import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()"
+reason = 'UNATTESTED'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()-UNATTESTED] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = "import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()"
+reason = 'UNATTESTED'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import cncm.example,importlib\nimportlib.reload(cncm.example)-RELOAD_NOT_ADMITTED] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = 'import cncm.example,importlib\nimportlib.reload(cncm.example)'
+reason = 'RELOAD_NOT_ADMITTED'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[import cncm.undeclared-UNDECLARED_OR_AMBIGUOUS_MODULE] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = 'import cncm.undeclared', reason = 'UNDECLARED_OR_AMBIGUOUS_MODULE'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+_ test_import_or_snapshot_rejects_tampering[(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example-SOURCE_] _
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+code = "(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example"
+reason = 'SOURCE_'
+
+    @pytest.mark.parametrize("code,reason", [
+        ("import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()", "SOURCE_"),
+        ("import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()", "LOADED_ORIGIN"),
+        ("import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()", "UNATTESTED"),
+        ("import cncm.example,importlib\nimportlib.reload(cncm.example)", "RELOAD_NOT_ADMITTED"),
+        ("import cncm.undeclared", "UNDECLARED_OR_AMBIGUOUS_MODULE"),
+        ("(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example", "SOURCE_"),
+    ])
+    def test_import_or_snapshot_rejects_tampering(package, code, reason):
+>       result = child(package, code)
+                 ^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+__________________ test_preexisting_project_module_rejected ___________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+
+    def test_preexisting_project_module_rejected(package):
+>       result = child(package, "", before="import types\nsys.modules['cncm']=types.ModuleType('cncm')")
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:65: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+__________________ test_manifest_path_rejected[../escape.py] __________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+name = '../escape.py'
+
+    @pytest.mark.parametrize("name", ["../escape.py", "/escape.py", "cncm\\x.py", "cncm/./x.py", "C:/x.py"])
+    def test_manifest_path_rejected(package, name):
+        rows = package[1] + [{"path": name, "bytes": 0, "sha256": "0" * 64}]
+>       result = child(package, "", rows=sorted(rows, key=lambda r: r["path"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+___________________ test_manifest_path_rejected[/escape.py] ___________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+name = '/escape.py'
+
+    @pytest.mark.parametrize("name", ["../escape.py", "/escape.py", "cncm\\x.py", "cncm/./x.py", "C:/x.py"])
+    def test_manifest_path_rejected(package, name):
+        rows = package[1] + [{"path": name, "bytes": 0, "sha256": "0" * 64}]
+>       result = child(package, "", rows=sorted(rows, key=lambda r: r["path"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+___________________ test_manifest_path_rejected[cncm\\x.py] ___________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+name = 'cncm\\x.py'
+
+    @pytest.mark.parametrize("name", ["../escape.py", "/escape.py", "cncm\\x.py", "cncm/./x.py", "C:/x.py"])
+    def test_manifest_path_rejected(package, name):
+        rows = package[1] + [{"path": name, "bytes": 0, "sha256": "0" * 64}]
+>       result = child(package, "", rows=sorted(rows, key=lambda r: r["path"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+__________________ test_manifest_path_rejected[cncm/./x.py] ___________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+name = 'cncm/./x.py'
+
+    @pytest.mark.parametrize("name", ["../escape.py", "/escape.py", "cncm\\x.py", "cncm/./x.py", "C:/x.py"])
+    def test_manifest_path_rejected(package, name):
+        rows = package[1] + [{"path": name, "bytes": 0, "sha256": "0" * 64}]
+>       result = child(package, "", rows=sorted(rows, key=lambda r: r["path"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+____________________ test_manifest_path_rejected[C:/x.py] _____________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+name = 'C:/x.py'
+
+    @pytest.mark.parametrize("name", ["../escape.py", "/escape.py", "cncm\\x.py", "cncm/./x.py", "C:/x.py"])
+    def test_manifest_path_rejected(package, name):
+        rows = package[1] + [{"path": name, "bytes": 0, "sha256": "0" * 64}]
+>       result = child(package, "", rows=sorted(rows, key=lambda r: r["path"]))
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+____________________ test_duplicate_manifest_path_rejected ____________________
+
+package = (WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE...A_2_COMPOSITION/cas_meta2/__init__.py', 'sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}])
+
+    def test_duplicate_manifest_path_rejected(package):
+        rows = sorted(package[1] + [package[1][0]], key=lambda r: r["path"])
+>       result = child(package, "", rows=rows)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\..\tests\test_typed_source_attestation.py:78: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+..\..\tests\test_typed_source_attestation.py:31: in child
+    return subprocess.run([sys.executable, "-I", "-B", "-c", script, str(BOOTSTRAP), str(root),
+C:\Python314\Lib\subprocess.py:554: in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\subprocess.py:1038: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+C:\Python314\Lib\subprocess.py:1548: in _execute_child
+    sys.audit("subprocess.Popen", executable, args, cwd, env)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'subprocess.Popen'
+args = (None, 'C:\\Python314\\python.exe -I -B -c "import json,runpy,sys\nfrom pathlib import Path\napi=runpy.run_path(sys.ar..., \\"bytes\\": 0, \\"sha256\\": \\"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\\"}]"', None, None)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if not (type(command) is list and command[0] == sys.executable and command[1:3] == ["-I", "-B"]):
+>               violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_SUBPROCESS
+
+..\..\tools\reproduce_typed_numeric_candidate.py:78: AssertionError
+________ test_input_inventory_is_bounded_and_excludes_private_targets _________
+
+    def test_input_inventory_is_bounded_and_excludes_private_targets():
+>       rows = contract.input_inventory(HOME)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_typed_teaching_worker_contract.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\typed_teaching\worker_contract.py:146: in input_inventory
+    raw = path.read_bytes()
+          ^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:782: in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:776: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'open'
+args = ('C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_wo...CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\final_panel.py', 'r', 32896)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+>               violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_TARGET_READ
+
+..\..\tools\reproduce_typed_numeric_candidate.py:72: AssertionError
+_____________ test_config_freezes_material_source_and_full_course _____________
+
+    def test_config_freezes_material_source_and_full_course():
+>       config = contract.make_config(HOME, source_sha="a" * 40,
+            job="cas-meta2-typedcourse-20260916120000-aaaaaaaa", bucket="typed-engineering-test")
+
+tests\test_typed_teaching_worker_contract.py:72: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+cas_meta2\typed_teaching\worker_contract.py:161: in make_config
+    rows = input_inventory(root)
+           ^^^^^^^^^^^^^^^^^^^^^
+cas_meta2\typed_teaching\worker_contract.py:146: in input_inventory
+    raw = path.read_bytes()
+          ^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:782: in read_bytes
+    with self.open(mode='rb', buffering=0) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python314\Lib\pathlib\__init__.py:776: in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+event = 'open'
+args = ('C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_wo...CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\graph_teaching\\final_panel.py', 'r', 32896)
+
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or any(p in name for p in ("final_panel", "sealed_final", "hidden_targets")):
+>               violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               AssertionError: PROHIBITED_TARGET_READ
+
+..\..\tools\reproduce_typed_numeric_candidate.py:72: AssertionError
+=========================== short test summary info ===========================
+FAILED ..\..\tests\test_typed_source_attestation.py::test_actual_source_exec_and_snapshot
+FAILED ..\..\tests\test_typed_source_attestation.py::test_existing_bytecode_cannot_supply_code
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import cncm.example\n(root/'cncm/example.py').write_text('VALUE=43\\n')\nloader.snapshot()-SOURCE_]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import cncm.example\ncncm.example.__file__=str(root/'cncm/__init__.py')\nloader.snapshot()-LOADED_ORIGIN]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import types\nsys.modules['cncm.foreign']=types.ModuleType('cncm.foreign')\nloader.snapshot()-UNATTESTED]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import cncm.example\ndel sys.modules['cncm.example']\nloader.snapshot()-UNATTESTED]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import cncm.example,importlib\nimportlib.reload(cncm.example)-RELOAD_NOT_ADMITTED]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[import cncm.undeclared-UNDECLARED_OR_AMBIGUOUS_MODULE]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_import_or_snapshot_rejects_tampering[(root/'cncm/example.py').write_text('VALUE=43\\n')\nimport cncm.example-SOURCE_]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_preexisting_project_module_rejected
+FAILED ..\..\tests\test_typed_source_attestation.py::test_manifest_path_rejected[../escape.py]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_manifest_path_rejected[/escape.py]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_manifest_path_rejected[cncm\\x.py]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_manifest_path_rejected[cncm/./x.py]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_manifest_path_rejected[C:/x.py]
+FAILED ..\..\tests\test_typed_source_attestation.py::test_duplicate_manifest_path_rejected
+FAILED tests\test_typed_teaching_worker_contract.py::test_input_inventory_is_bounded_and_excludes_private_targets
+FAILED tests\test_typed_teaching_worker_contract.py::test_config_freezes_material_source_and_full_course
+18 failed, 47 passed in 10.82s

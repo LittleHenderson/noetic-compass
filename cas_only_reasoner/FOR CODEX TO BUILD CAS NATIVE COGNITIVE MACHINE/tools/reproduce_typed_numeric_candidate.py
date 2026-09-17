@@ -1,0 +1,152 @@
+"""Reproduce the pure typed numerical-candidate checks. Never executes tensors."""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from hashlib import sha256
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+HOME = Path(__file__).resolve().parents[1]
+COMP = HOME / "research/CAS_META_2_COMPOSITION"
+FILES = ["cncm/typed_source_attestation.py", "tests/test_typed_source_attestation.py",
+         "tools/reproduce_typed_numeric_candidate.py", "cas_reasoner.txt"]
+FILES += ["research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/" + name + ".py" for name in
+          ("__init__", "source", "answers", "checker", "focal", "course", "course_plan", "input_frames",
+           "slots", "tokenization", "binding", "encoder", "learner", "loss_plan", "worker_contract")]
+FILES += ["research/CAS_META_2_COMPOSITION/tests/test_typed_teaching_" + name + ".py"
+          for name in ("binding", "loss_plan", "worker_contract")]
+FILES += ["records/typed_course_001/checks_002/public_course.json",
+          "records/typed_course_001/checks_002/private_targets.json",
+          "records/typed_interface_001/checks_002/public_frames.jsonl",
+          "records/typed_interface_001/checks_002/training_tokenizer.json",
+          "records/typed_interface_001/checks_002/receipt.json",
+          "research/CAS_META_2_COMPOSITION/records/budget/campaign_ledger.json"]
+TESTS = ["../../tests/test_typed_source_attestation.py", "tests/test_typed_teaching_binding.py",
+         "tests/test_typed_teaching_loss_plan.py", "tests/test_typed_teaching_worker_contract.py"]
+GROUPS = {"public": [name for name in TESTS if "loss_plan" not in name],
+          "private_loss": [name for name in TESTS if "loss_plan" in name]}
+DENIED = {"torch", "numpy", "tensorflow", "jax", "casformer", "cas_cjt", "boto3", "botocore",
+          "openai", "anthropic", "requests", "httpx", "transformers"}
+
+
+def write(path, value):
+    raw = (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n").encode()
+    with path.open("xb") as stream:
+        stream.write(raw)
+    return sha256(raw).hexdigest()
+
+
+def inventory():
+    result = []
+    for name in sorted(FILES):
+        raw = (HOME / name).read_bytes()
+        result.append({"path": name, "bytes": len(raw), "sha256": sha256(raw).hexdigest()})
+    return result
+
+
+def test_child(output, group):
+    import builtins
+    sys.path.insert(0, str(HOME)); sys.path.insert(0, str(COMP))
+    os.environ["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
+    violations, child_processes, training_target_reads = [], [], []
+    approved_command = None
+    original_popen = subprocess.Popen
+    class CheckedPopen(original_popen):
+        def __init__(self, command, *args, **kwargs):
+            nonlocal approved_command
+            if not (type(command) is list and command[0] == sys.executable and command[1:4] == ["-I", "-B", "-c"]):
+                violations.append("subprocess-request"); raise AssertionError("PROHIBITED_SUBPROCESS")
+            approved_command = subprocess.list2cmdline(command) if os.name == "nt" else command
+            try:
+                super().__init__(command, *args, **kwargs)
+            finally:
+                approved_command = None
+    subprocess.Popen = CheckedPopen
+    original = builtins.__import__
+    def guarded(name, *args, **kwargs):
+        if name.split(".")[0] in DENIED or name == "cas_meta2.graph_teaching.final_panel":
+            violations.append("import:" + name)
+            raise AssertionError("PROHIBITED_NUMERIC_OR_PROVIDER_IMPORT:" + name)
+        return original(name, *args, **kwargs)
+    builtins.__import__ = guarded
+    def audit(event, args):
+        if event == "import" and str(args[0]).split(".")[0] in DENIED:
+            violations.append("audit-import:" + str(args[0])); raise AssertionError("PROHIBITED_IMPORT")
+        if event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+            name = str(args[0]).replace("\\", "/").lower()
+            permitted = str(HOME / "records/typed_course_001/checks_002/private_targets.json").replace("\\", "/").lower()
+            if "private_targets" in name and group == "private_loss" and name == permitted:
+                training_target_reads.append(name)
+            elif "private_targets" in name or (not name.endswith(".py") and any(p in name for p in ("final_panel", "sealed_final", "hidden_targets"))):
+                violations.append("read:" + name); raise AssertionError("PROHIBITED_TARGET_READ")
+        if event.startswith("socket.") and event not in {"socket.__new__", "socket.gethostname"}:
+            violations.append(event); raise AssertionError("PROHIBITED_NETWORK")
+        if event == "subprocess.Popen":
+            command = args[1]
+            if approved_command is None or command != approved_command:
+                violations.append("subprocess"); raise AssertionError("PROHIBITED_SUBPROCESS")
+            child_processes.append({"executable": sys.executable, "flags": ["-I", "-B"],
+                                    "purpose": "SYNTHETIC_MANIFEST_LOADER_TEST"})
+        if event in {"os.system", "os.startfile"}:
+            violations.append(event); raise AssertionError("PROHIBITED_EXECUTION")
+    sys.addaudithook(audit)
+    import pytest
+    result = pytest.main([*GROUPS[group], "-q", "-p", "no:cacheprovider", "--basetemp", str(output / "tmp"),
+                          "--junitxml", str(output / "tests.xml")])
+    unexpected = sorted({name.split(".")[0] for name in sys.modules} & DENIED)
+    write(output / "guard.json", {"violations": violations, "forbidden_loaded_modules": unexpected,
+          "synthetic_subprocesses": child_processes,
+          "test_group": group, "retained_training_target_reads": len(training_target_reads),
+          "retained_training_target_sha256": "a02a7d8acef3c88c21ab9d7f6d15ee77377904c464c26af5f6c6306a4a7e5977" if training_target_reads else None,
+          "private_loss_test_scope": "Synthetic scalar predictions with previously sealed training-only targets; never final-evaluation targets.",
+          "boundary": "Pure scalar/AST/source-custody checks. No real tensors, optimizer updates or provider calls."})
+    return int(result) or (1 if violations or unexpected else 0)
+
+
+def run(output):
+    output = Path(output).resolve()
+    assert output.is_relative_to(HOME / "records/typed_numeric_001") and not output.exists()
+    output.mkdir(parents=True)
+    before = inventory(); write(output / "inputs_before.json", before)
+    results, group_receipts = [], []
+    for group in GROUPS:
+        folder = output / group; folder.mkdir()
+        child = subprocess.run([sys.executable, "-B", str(Path(__file__).resolve()), "--test-child", str(folder), group],
+                               cwd=COMP, capture_output=True, timeout=1200)
+        (folder / "stdout.txt").write_bytes(child.stdout); (folder / "stderr.txt").write_bytes(child.stderr)
+        results.append(child.returncode)
+        suites = ET.parse(folder / "tests.xml").getroot() if (folder / "tests.xml").exists() else ET.fromstring('<testsuites><testsuite tests="0" errors="1" /></testsuites>')
+        counts = {key: sum(int(suite.get(key, "0")) for suite in suites.iter("testsuite"))
+                  for key in ("tests", "errors", "failures", "skipped")}
+        guards = json.loads((folder / "guard.json").read_bytes())
+        results.append(1 if guards["violations"] or guards["forbidden_loaded_modules"] else 0)
+        group_receipts.append({"group": group, "counts": counts,
+            "training_target_reads": guards["retained_training_target_reads"],
+            "guard_sha256": sha256((folder / "guard.json").read_bytes()).hexdigest(),
+            "tests_xml_sha256": sha256((folder / "tests.xml").read_bytes()).hexdigest() if (folder / "tests.xml").exists() else None})
+    after = inventory(); write(output / "inputs_after.json", after)
+    counts = {key: sum(row["counts"][key] for row in group_receipts) for key in ("tests", "errors", "failures", "skipped")}
+    passed = all(code == 0 for code in results) and before == after and not any(counts[k] for k in ("errors", "failures", "skipped"))
+    receipt = {"schema": "cncm.typed-numeric-candidate-pure-checks/0.1",
+        "status": "PURE_NUMERIC_CANDIDATE_PASS" if passed else "PURE_NUMERIC_CANDIDATE_FAILED",
+        "counts": counts, "inputs_unchanged": before == after, "input_pins": len(before),
+        "inputs_sha256": sha256((output / "inputs_before.json").read_bytes()).hexdigest(),
+        "tests": TESTS, "groups": group_receipts,
+        "observed_utc": datetime.now(timezone.utc).isoformat(), "neural_calls": 0, "optimizer_updates": 0,
+        "provider_calls": 0, "source_candidate_numerically_accepted": False,
+        "boundary": "New numerical implementation has pure source/math/custody tests only. End-to-end worker, numerical CUDA acceptance and learning comparison remain open."}
+    write(output / "receipt.json", receipt)
+    print(json.dumps(receipt))
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    if len(sys.argv) == 4 and sys.argv[1] == "--test-child" and sys.argv[3] in GROUPS:
+        raise SystemExit(test_child(Path(sys.argv[2]), sys.argv[3]))
+    if len(sys.argv) != 2:
+        raise SystemExit("usage: reproduce_typed_numeric_candidate.py NEW_RECORD_DIRECTORY")
+    raise SystemExit(run(sys.argv[1]))

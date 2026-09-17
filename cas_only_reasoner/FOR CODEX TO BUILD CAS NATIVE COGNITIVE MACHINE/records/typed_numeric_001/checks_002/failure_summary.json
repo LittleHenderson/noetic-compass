@@ -1,0 +1,1 @@
+{"boundary":"Runner-only failure; no model or provider execution.","cause":"Replacing subprocess.Popen with a function prevented asyncio.windows_utils from subclassing it during pytest initialization.","runner_snapshot_sha256":"277a6d6d48609154464ae0b96149ca01d9f0eefb37e1d99ac6875605b78572ae","status":"RUNNER_CONFIGURATION_FAILED_NO_ACCEPTANCE_RECEIPT","tests_ran":0}
