@@ -480,20 +480,64 @@ frozen codebook. `edge_account` additionally compounds 16 exact slots (Finding 6
 
 This is one coherent account of all eight kinds and it needs no encoder change.
 
-### The open question this raises, and the $0 test for it
+### The open question this raises, and its answer
 
-Nothing here yet shows that a trainable readout is *sufficient* — only that the
-frozen one is the binding constraint. Two things remain unknown and are cheap to
-check:
+Finding 12 answers it: **every one of the 65 world symbols is selectable.**
 
-1. Is the block unable to re-align, or merely slow? A capacity/step sweep would say,
-   but that needs a GPU.
-2. **Does the frozen codebook even permit it?** 90 unit Rademacher rows in 64
-   dimensions, minimum pairwise `|cos|` measured at 0 (Finding 1) and mean 0.098 —
-   so the directions are separable. **But the 65 world rows span at most 64
-   dimensions with 65 vectors, so they are linearly dependent by exactly one
-   relation.** Whether that admits an exact 64-way argmax for every input is a
-   concrete linear-algebra question answerable at $0.
+## Finding 12 — the codebook is capable, so the failure is in training, not architecture
+
+`measure_codebook_vertices.py`, exact arithmetic on the reconstructed rows.
+
+To emit world symbol `W_t` the hidden state must beat every other world row:
+`<h, r_t> > <h, r_s>`. That is possible exactly when `r_t` is a **vertex of the
+convex hull** of the world rows. If a row lay inside the hull of the others, no
+hidden state whatsoever could select it and that symbol would be **unreachable for
+any model, however trained**.
+
+Result — solved for each of the 65 rows by margin maximisation:
+
+| | count |
+| --- | ---: |
+| **selectable** | **65 of 65** |
+| **not selectable** | **0 of 65** |
+| margin (normalised by ‖h‖) | min **0.7573**, median 0.8418, max 0.9014 |
+
+With `h` set exactly to a world's own row, the worst runner-up margin is **0.5312**
+between `W2` and `W20`. The codebook is not degenerate, not collapsed, and not
+missing any symbol.
+
+### The diagnosis, now complete and consistent
+
+| layer | measured state | verdict |
+| --- | --- | --- |
+| encoder output (actual slot encoding) | focus decodable at **63.65%**, 40.7× chance | **adequate** |
+| frozen readout codebook | **65 of 65 symbols selectable**, margin ≥ 0.757 | **adequate** |
+| a learned 64×64 linear map into the frozen codebook | **63.65%** | the fix is representable |
+| the `^6` block actually trained, 160 updates | **1.24%**, below chance | **the failure** |
+
+**Nothing in the representation or the codebook is blocking. The learner simply
+fails to find a rotation that a free 64×64 linear map finds easily.**
+
+That also means the `^6` block is *capable in principle*: one pass of a linear core
+is exactly `h = W·e`, the same object the probe learns; and `tanh` is ≈ identity
+for small inputs, so `merge(cat(left(x), right(x)))` can express a linear map. The
+block is not structurally forbidden from doing it.
+
+### The quantified suspicion, and why it is about budget rather than shape
+
+The probe needed the **full 564 packets** to reach 63.65%; at 200 packets it reached
+only ~9% (Finding 9's curve). Fitting a 64×64 map is ~4,096 parameters. The learner
+receives **160 gradient steps on batches of 8** — about 1,280 presentations for a
+16,384-parameter model, roughly **0.08 presentations per parameter**, applied to a
+re-alignment whose own probe needed hundreds of samples to emerge.
+
+**The honest reading: this looks like an under-training result, not an architectural
+one.** That is the opposite of where this record started, and it follows from the
+measurements rather than from a preference.
+
+It is also cheap to distinguish, though not at $0: a longer-training run or a
+learning-rate/warmup change on the *unchanged* architecture would test it. **No such
+run is proposed here or authorized.**
 
 ## What this record does NOT claim
 
