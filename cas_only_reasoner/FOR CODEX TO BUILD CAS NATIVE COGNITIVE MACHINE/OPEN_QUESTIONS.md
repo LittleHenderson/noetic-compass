@@ -168,6 +168,15 @@
 - Status: `OPEN-SEMANTICS`
 - Question: The tier order `P ≻ C ≻ E ≻ O` is frozen. Does it mean that a state vector's mass must **decrease** from `P` toward `O`, and if so by how much before it is an inversion? `cncm/inversions.py` counts adjacent tier pairs where the lower tier carries strictly more mass than the tier above it, which makes equal tiers not an inversion, and reports the count with no threshold. Whether a count of 1 is a violation is undecided.
 
+### OS-026 — Is deriving the readings of a bound entity the task, or the removal of the task?
+
+- Status: `OPEN-SEMANTICS` / boundary decision
+- Scope: the five kinds whose answer is one determined fact about one entity — `edge_account` (16 slots), `role_set` (6), `parts` (4), `context` (5), `definition` (3). 299 of 564 questions.
+- Question: For four of those five kinds the query states `focus_world_id` directly and the world's declarations are in the packet. The machine is therefore being asked to **reproduce, by 64-way classification, an identifier the question supplies and the document declares.** Is that the intended task?
+- Measured evidence: `records/encoder_capacity_001/DECISION_STRUCTURE_RESULT.md`. `admissible_answer_count` is **1** for every question of those kinds, in both arms at both cursors — they are one fact to be got right in N places, not N questions. The recorded score decomposes exactly by decision shape: **265 one-decision questions score 174/265 = 65.66%** after teaching, and **299 many-decision questions score 15/299 = 5.02%**. The machine is better where the answer is one choice among several admissible answers than where the answer is uniquely determined.
+- The distinction that decides it (round 7 precedent): **task deletion** gives the machine the answer in its input and removes the task — pre-selecting the focus world's row into the encoding was withdrawn for exactly that. **A composition layer** leaves the machine to resolve *which* entity the question is about and only requires that the readings of that entity be derived and consistent.
+- v0.1 rule: `cncm/composition.py` is implemented as a component with its own 26 tests, is **not licensed to run**, is **not wired into any run**, and changes no registered contract. Deriving all 34 slots would make 299 of 564 questions a lookup of material the question already points at. Whether that is the intended task, an unintended consequence of the course contract's slot plan, or something the frozen contract already settles, is an **owner decision**, and neither the component nor its record pre-empts it.
+
 ## Non-blocking engineering freezes
 
 The v0.1 documents freeze single-thread scheduling, logical ticks, atomic state commits, stable ordering, branch isolation, authoritative-support filtering, exact terminal reconstruction, and canonical trace hashing. Changes to those choices require a new contract version, not an implementation-local interpretation.

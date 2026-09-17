@@ -4,6 +4,77 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The score decomposes EXACTLY by decision shape, and a composition layer answers it
+
+$0.00. Pure standard library for the measurement and for the new component.
+Script `records/encoder_capacity_001/measure_decision_structure.py` (result
+`decision_structure.txt`), record `DECISION_STRUCTURE_RESULT.md`; module `cncm/composition.py`,
+tests `tests/test_composition.py` (26), record `records/composition_layer_001/STATUS.md`.
+
+THE DECOMPOSITION IS EXACT. The eight question kinds split into two shapes, and the split
+accounts for the recorded score with NOTHING left over, at both cursors:
+
+  cursor 160 recorded total 189 = 174 (one decision) + 15 (many decisions about one entity)
+  cursor   0 recorded total  39 =  30 (one decision) +  9 (many decisions about one entity)
+
+  ONE DECISION  - correspondence, reach, analogy                265 q = 46.99%   11.32% -> 65.66%  (5.80x)
+    correspondence  88 q  one candidate; list enumerated IN CODE, 7-25 entries      0.00% -> 93.18%
+    reach          107 q  1 slot; whole and part supplied in the query             23.36% -> 75.70%
+    analogy         70 q  1 slot; a 64-way choice of isomorphic world               7.14% -> 15.71%
+
+  MANY INDEPENDENT DECISIONS ABOUT ONE ENTITY                   299 q = 53.01%    3.01% ->  5.02%  (1.67x)
+    edge_account    70 q  16 binary slots  the focus world's complete edge set      0.00% ->  0.00%
+    role_set        36 q   6 binary slots  roles in a supplied focal excerpt        0.00% ->  8.33%
+    parts           53 q   4 binary slots  the focus world's contained nodes       11.32% -> 22.64%
+    context         70 q   5 slots         the focus world's declared setting       4.29% ->  0.00%
+    definition      70 q   3 slots         the focus world's declared kind/function 0.00% ->  0.00%
+
+THE CORROBORATION IS RECORDED PER QUESTION. admissible_answer_count is [1] for EVERY question of
+all five many-decision kinds, in both arms at both cursors - no exceptions. analogy is [6, 9] and
+correspondence is [1, 2, 6]. A question with ONE admissible answer is not sixteen free choices; it
+is one fact that must come out right in sixteen places, and the schema says so.
+
+THE INVERSION IS THE POINT. The machine scores 65.66% where the answer is a single choice among
+SEVERAL admissible answers, and 5.02% where the answer is a UNIQUELY DETERMINED fact that the
+architecture nonetheless spreads over many independent per-slot decisions. Being told the answer
+is unique is the worse case, because uniqueness is exactly what this architecture cannot exploit:
+the forward pass emits one vector per slot and the readout takes an independent argmax per slot,
+so nothing forces slot 3 to agree with slot 1 and nothing knows the sixteen edge slots describe
+one graph. The gap between 65.66% and 5.02% is the size of that inability.
+
+THE COMPOSITION LAYER, IMPLEMENTED AS A COMPONENT. cncm/composition.py supplies the missing
+mechanism with two structural operations. BINDING: Binding.commit(role, entity) resolves an entity
+once and refuses a second, different value with BindingConflict - the measured defect (definition
+cites two different worlds in 70 of 70 answers) becomes a refusal instead of a quiet disagreement.
+DERIVATION: compose(kind, binding, structure, arguments) reports which slots were derived from the
+bound entity's declared structure and which stay the network's - edge_account 16 slots as one edge
+reading, context setting_ref and participants, definition kind_ref/function_ref/whole, parts
+contained_nodes, and role_set NOTHING because its answer reads a supplied argument rather than a
+reading of the bound entity. It does NOT resolve the entity: compose raises if the world role is
+unbound, with the reason stated in the error.
+
+TWO DEFECTS CAUGHT BY TESTS RATHER THAN INSPECTION, both recorded. The composition identity
+initially ignored which entity it was composed of: edge_account and parts derive node-pair
+readings in which the entity's identifier never appears, so two entities with coincidentally
+identical structure produced the SAME digest. Composition now carries the binding and a test pins
+the distinction. And _plain had no mapping branch, so edge_account's derived dict reached as_dict
+with nested tuples unconverted - the digest was unaffected because canonical.to_primitive handles
+mappings, which is exactly why it survived until a test rendered the value.
+
+THE BOUNDARY QUESTION, STATED AND NOT RESOLVED. For four of the five many-decision kinds the query
+states focus_world_id directly and the world's declarations are in the packet, so the machine is
+asked to reproduce by 64-way classification an identifier the question supplies. That is a defect
+in the decision structure AND a boundary problem. Round 7 already withdrew one variant that
+crossed the line - pre-selecting the focus world's row into the encoding - as task deletion. Task
+deletion gives the machine the answer in its input and removes the task; a composition layer
+leaves the machine to resolve which entity the question is about and only requires the readings to
+be derived and consistent. Whether deriving all 34 slots for 299 of 564 questions is the intended
+task, an unintended consequence of the slot plan, or something the frozen contract already
+decides, is an OWNER DECISION and this round does not pre-empt it.
+
+STATUS: implemented, 26 tests passing, NOT licensed to run, NOT wired into any run, changes no
+registered contract, adds no parameter, and authorises nothing.
+
 ## 2026-09-17 UTC - What the registered depth buys: untrained the recurrence is a fixed point, trained it is not
 
 $0.00. torch used only to deserialise checkpoints; all arithmetic on plain lists. Script
