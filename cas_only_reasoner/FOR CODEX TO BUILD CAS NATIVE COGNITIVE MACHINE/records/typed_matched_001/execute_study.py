@@ -30,7 +30,7 @@ def execute(study_path, expected_sha256):
             '--ledger-path', str(launch.CANONICAL_LEDGER)])
         assert code == 0, 'INCOMPLETE_ARM_STUDY_STOPPED'
         receipt = Path(job['receipt_dir'])
-        lifecycle = json.loads((receipt / 'curriculum_result.json').read_bytes())
+        lifecycle = json.loads((receipt / 'result.json').read_bytes())
         assert lifecycle['completed_deliverable'] is True and lifecycle['cleanup']['complete'] is True
         value = analysis.analyze_arm(receipt / 'collected/results/artifacts', ROOT)
         with (receipt / 'matched_analysis.json').open('xb') as stream: stream.write(launch.canonical(value))
