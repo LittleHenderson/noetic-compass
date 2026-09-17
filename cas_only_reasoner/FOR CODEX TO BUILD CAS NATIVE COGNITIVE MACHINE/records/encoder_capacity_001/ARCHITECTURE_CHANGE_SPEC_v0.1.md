@@ -289,8 +289,81 @@ selecting only the focus world does not leak the answer.
 ### Status of this spec
 
 - §2 (65 trainable parameters): **WITHDRAWN — blocked by the learner contract.**
-- §9 in-scope alternative (deterministic selection, zero new parameters):
-  **PLAUSIBLE, partly measured, not yet complete.**
+- §9 focus-selection variant (head rows + the focus world's row):
+  **WITHDRAWN — it LEAKS the answer. See §10.**
+- The one surviving candidate is **query-row encoding**, §10.
 - §5 predictions: unchanged and still standing as the test.
-- **Do not sign anything until the head-plus-focus-world variant is measured.**
-  That measurement is free.
+- **Nothing here is signable yet.** The leak in §10 has to be designed around
+  first.
+
+## 10. The focus-selection variant leaks, and the circular measurement that found it
+
+`measure_head_plus_focus.py`, all 564 packets, primal ridge (all encodings are
+64-dim). Target: the focus world's **alias** — the right target, because `context`
+and `definition` must emit the focus world's declaration reference, written as
+`W<alias>/decl/<field>`.
+
+| encoding | dims | CV accuracy | vs chance |
+| --- | ---: | ---: | ---: |
+| mean over all 75 rows (current) | 64 | 0.18% | 0.1× |
+| query row alone | 64 | 39.89% | 25.5× |
+| **focus world row alone** | 64 | **100.00%** | **64.0×** |
+| head rows pooled (9) | 64 | 4.43% | 2.8× |
+| **head + focus world row (10)** | 64 | **100.00%** | **64.0×** |
+| **query + focus world row (2)** | 64 | **100.00%** | **64.0×** |
+
+**The 100% is circular and must not be read as evidence.** I put the focus world's
+own row into the encoding and then asked a probe to recover which world it is. Of
+course it succeeds. This measures my selection, not the learner's ability, and it
+is not comparable with the current mean, which does not contain the focus.
+
+**Worse, working out *why* it is circular exposes the leak:**
+
+1. The answer for `context` is the focus world's setting reference, and the frame's
+   alias encoding writes that as `<alias>/decl/setting`. **The only variable part
+   of the answer is the alias.**
+2. The alias is a fixed function of sorted `world_id`, so it carries no content —
+   it is a name, not a fact.
+3. Therefore `context` and `definition` are, at bottom, **64-way world
+   identification problems dressed as retrieval problems**.
+4. Pre-selecting the focus world's row therefore **hands the model the very
+   quantity the answer varies on**, and the 100% shows it is trivially readable.
+
+That is the same class of error as "drop the 63 worlds": it does not make the task
+easier, it **deletes the task**. §9's recommended variant is **withdrawn**.
+
+### The second target, and why it says nothing
+
+A content target was meant to separate identity from content: the focus world's
+declared node count.
+
+| encoding | CV accuracy | majority-class baseline |
+| --- | ---: | ---: |
+| mean over all 75 rows | 79.61% | **81.25%** |
+| query row alone | 79.61% | 81.25% |
+| head rows pooled | 79.61% | 81.25% |
+| head + focus world row | 96.28% | 81.25% |
+| focus world row alone | 100.00% | 81.25% |
+
+Node counts are `{4: 52, 3: 12}`, so always answering "4" scores **81.25%**. Every
+non-circular encoding scores **79.61%, below the majority baseline.** This target
+carries no usable signal and no conclusion should be drawn from it.
+
+### What survives
+
+Exactly one candidate improves the encoding **without blocking and without
+leaking**:
+
+> **Encode the query row (or an aggregate in which the query dominates) instead of
+> the mean over all 75 rows.** Zero new parameters, so the registered-scope guard
+> is satisfied. No focus selection, so nothing is handed over. Measured effect:
+> focus decodability rises from **0.18% to 39.89%**, a factor of **221**.
+
+Its cost is that the world content is no longer in the encoding at all. If
+`context` and `definition` really are world-identification in disguise, that is
+enough and the change should move them off 0/70. If they need declaration content
+as well, then a change inside the registered `^6` contract is required, and that is
+a governed architectural decision for the owner rather than something to slip in.
+
+**This is the shape of the request to sign**, pending one more $0 check: that the
+query row can be produced and consumed without disturbing any pinned interface.

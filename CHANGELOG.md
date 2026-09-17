@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - My second proposed fix LEAKS the answer; one candidate survives
+
+$0, pure Python, primal ridge over 564 real packets. No model, GPU, checkpoint,
+provider or spend. Record: `records/encoder_capacity_001/`, spec section 10.
+
+Tried the variant the spec recommended last round - head rows plus the focus
+world's own row - targeting the focus world's ALIAS, which is the right target
+because context and definition must emit the focus world's declaration reference
+as W<alias>/decl/<field>.
+
+  mean over all 75 rows (current)   64 dims    0.18%    0.1x chance
+  query row alone                   64 dims   39.89%   25.5x
+  focus world row alone             64 dims  100.00%   64.0x
+  head rows pooled (9)              64 dims    4.43%    2.8x
+  head + focus world row (10)       64 dims  100.00%   64.0x
+  query + focus world row (2)       64 dims  100.00%   64.0x
+
+The 100% is CIRCULAR - I put the focus world's row in and asked which world it is -
+and working out why exposes a leak. The answer for context is <alias>/decl/setting,
+so its ONLY variable part is the alias; the alias is a fixed function of sorted
+world_id and carries no content. Context and definition are therefore 64-way world
+IDENTIFICATION problems dressed as retrieval problems, and pre-selecting the focus
+world hands the model the exact quantity the answer varies on. That is the same
+class of error as dropping the 63 worlds: it does not make the task easier, it
+deletes the task. The variant is WITHDRAWN.
+
+A content target (the focus world's declared node count) was meant to separate
+identity from content and says nothing: counts are {4: 52, 3: 12}, so the majority
+baseline is 81.25%, and every non-circular encoding scores 79.61% - BELOW it.
+
+One candidate survives, and it neither blocks nor leaks: encode the query row
+instead of the mean over all 75 rows. Zero new parameters, so the registered-scope
+guard is satisfied; no focus selection, so nothing is handed over; measured effect
+is focus decodability rising from 0.18% to 39.89%, a factor of 221. Its cost is
+that world content leaves the encoding entirely - which is enough if context and
+definition really are identification in disguise, and not enough if they need
+declaration content, in which case a change inside the registered ^6 contract is
+required and that is a governed decision for the owner.
+
+Spec status now: section 2 withdrawn (contract), section 9 withdrawn (leak), one
+candidate surviving. Nothing is signable yet.
+
 ## 2026-09-17 UTC - The defect named in one line, and a change spec: the encoder averages the question into its own evidence
 
 $0 standard-library measurement on real packets. No model, GPU, checkpoint,
