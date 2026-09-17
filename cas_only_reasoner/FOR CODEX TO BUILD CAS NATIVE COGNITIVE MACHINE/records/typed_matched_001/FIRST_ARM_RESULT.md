@@ -42,3 +42,5 @@ Evidence: `receipt_20260917_a/result.json`, `matched_analysis.json`, `independen
 ## Remaining comparison
 
 At 2026-09-17 08:14:35 UTC, the matching `MIXED_SAME_ITEMS` control was running on `i-025f80988385e8af2`. Four additional jobs remain queued for the other two seeds. The six-arm study uses the same frozen source and rules throughout. No CAS teaching advantage, general learning gain, protected-final performance or full-machine completion follows from this single arm.
+
+An early read of the control checkpoint metadata confirms matching model, optimizer, encoder and random-state identities, with zero prior updates. The full paired artifact audit is still required. See `paired_initial_state_20260917_001.json`.
