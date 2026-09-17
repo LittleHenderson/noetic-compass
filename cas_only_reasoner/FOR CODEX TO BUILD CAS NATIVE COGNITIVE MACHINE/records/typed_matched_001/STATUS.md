@@ -1,6 +1,8 @@
 # Matched teaching study
 
-Status at **2026-09-17 07:33:48 UTC: first GPU instance running; 0/6 completed arms**.
+Status at **2026-09-17 08:14:35 UTC: 1/6 arms completed and accepted; matched control running**.
+
+The first component-first arm improved on exposed questions (38/564 to 193/564), but scored 0/59 on unfamiliar graphs after teaching. Retention probes fell from 46/96 to 36/96; the initial score missed the preset 48/96 competence threshold, so retention is formally unassessed. See `FIRST_ARM_RESULT.md`. No paired comparison is complete yet.
 
 The study compares component-first teaching with mixing the same component/whole lessons. It holds the learner, initial state per seed, information and counted work fixed. This measures one teaching-order contrast, not general CAS architecture superiority.
 
@@ -38,3 +40,9 @@ This audit was added during the first running arm to verify the existing work co
 ## 2026-09-17 07:50:51 UTC observation
 
 The first arm has entered actual training and reports **20 of 160 main optimizer updates completed** at 787.10 worker seconds (`main_training`, progress index 53). Both before-teaching evaluations have finished. The same instance remains running and the supervisor session is live. This is partial execution evidence; 0/6 complete arms have been accepted and the paired outcomes remain pending. Five predeclared jobs are queued; no retry or schedule change has occurred.
+
+## First arm accepted; control started
+
+The first arm completed in 1,673.87 worker seconds. Its lifecycle reports `completed_deliverable: true`, all 397 required objects present, and confirmed termination of `i-0dcbfc8321769d483`. Independent checks verified all 584 collected files, 394 worker artifacts, exact declared work, 49 loaded project modules, three checkpoint reconstructions and both byte-identical last-update replays.
+
+The control job `cas-meta2-tmat-20260917072721-e6bdf305-m-20260917` is running on `i-025f80988385e8af2`, observed at 08:14:35 UTC. Four further predeclared jobs remain queued. The original controller continues sequentially, without a retry or experiment change.

@@ -1138,3 +1138,10 @@ Matched-study progress at 2026-09-17 07:43:35 UTC: the first worker finished all
 
 
 Matched-study observation at 2026-09-17 07:50:51 UTC: first arm reports 20/160 main optimizer updates completed after both before-teaching evaluations. Instance i-0dcbfc8321769d483 and the six-job supervisor remain live. This is partial training progress, not an accepted completed arm; paired results remain pending. See the timestamped live observation and records/typed_matched_001/STATUS.md in vision-next.
+
+
+## 2026-09-17 first matched-study arm accepted
+
+The first ALT_COMPONENT_WHOLE arm (model seed 20260917) completed: exposed-course accuracy 38/564 to 193/564, with 176 gained and 21 lost answers. Development transfer went 4/59 to 0/59 and remained 0/59 at every post-start checkpoint. Retention probes went 46/96 to 36/96; initial competence was below the frozen 48/96 threshold, so RETENTION_UNASSESSED applies. These are one-arm results, not evidence of an advantage over the control.
+
+All 584 collected files, 394 worker artifacts and 397 required objects are verified; actual work matches the 71,922-core-call/178-update plan. Loaded sources, three checkpoint reconstructions and two exact last-update replays passed independent checks. The first instance is confirmed terminated with cleanup complete. At 08:14:35 UTC the matched MIXED_SAME_ITEMS control was running on i-025f80988385e8af2; four further jobs remain queued. Source and endpoints are unchanged. See vision-next records/typed_matched_001/FIRST_ARM_RESULT.md and receipt_20260917_a. The full goal remains active and incomplete.
