@@ -4,6 +4,62 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - SIXTH SELF-CORRECTION: the panels were misread, and a headline I wrote this session was misleading
+
+$0.00, no new measurement - a reading correction against the run's own records.
+Record: `records/encoder_capacity_001/PANEL_MISREAD_CORRECTION.md`.
+
+WHAT WAS WRONG. UPDATE_TRAJECTORY_RESULT.md section A was headed "Accuracy did not improve at
+all" and reported 0/59, 0/59, 1/59, 1/59, 0/59 across the five development checkpoints. Every
+number was right. The framing was wrong in the direction that matters, because the 59-question
+panel is the DEVELOPMENT panel, not the course the learner was taught.
+
+THE PANELS, from the run's own worker_report.json design block:
+  exposed registry course   564 packets   registry_packets / initial_and_final_prediction_packets
+  development                59 packets   PUBLIC_DEVELOPMENT_TOPOLOGIES_NO_TRAINING_CORRECTIONS
+  retention                  96 packets   OTHER_QUESTION_TEACHING_SAME_PUBLIC_BANK
+
+WHAT EACH PANEL DID, arm MIXED_SAME_ITEMS, seed 20260919, from result.json summary:
+  exposed course    39/564 =  6.9149%  ->  189/564 = 33.5106%   +26.5957 pp, 4.85x
+  development        0/59  =  0.0000%  ->    0/59  =  0.0000%   0
+  retention         45/96  = 46.8750%  ->   34/96  = 35.4167%   -11.4583 pp
+learning_advantage_established = False. starting_competence_met = False.
+
+PER KIND on the exposed course, before -> after: correspondence 0/88 -> 82/88, reach 25/107 ->
+81/107, parts 6/53 -> 12/53, analogy 5/70 -> 11/70, role_set 0/36 -> 3/36, context 3/70 ->
+0/70, definition 0/70 -> 0/70, edge_account 0/70 -> 0/70. CORRESPONDENCE WENT FROM NOTHING TO
+93.18%. That is not a learner that failed to learn.
+
+WHAT THIS CHANGES.
+- The study's headline is UNCHANGED. MATCHED_STUDY_RESULT.md line 41 is explicit that 177 is
+  the same 59-question panel repeated with three model initializations, and the panel it
+  measures is the development panel, which is exactly the panel that did not improve. Negative
+  transfer stands.
+- The non-convergence finding is SHARPER and the under-training reading is WEAKER. The gradient
+  was still rising at the ceiling because the run was still fitting the EXPOSED course, 39/564
+  to 189/564, while the development panel sat at zero and retention fell 11.4583 pp. So "raise
+  max_updates and let it finish" is not the obvious next experiment: more updates on the same
+  exposed course would plausibly widen the exposed-versus-transfer gap rather than close it, and
+  the ceiling may be acting as a brake. One arm, one seed.
+- Three of eight question kinds - context, definition, edge_account - score EXACTLY ZERO before
+  and after teaching. That is three of the eight things the machine is asked to do.
+
+ALSO RECORDED, NOT RECONCILED. The same 59-question development panel carries two different
+pre-teaching numbers: summary.development_scores cursor 0 reads 0/59 = 0.0000%, while the
+study's transfer baseline reads 21/177 "in each method before teaching" = 7 per run. Same panel
+size, same development_boundary, different numbers. One of the two measures something other
+than what its name suggests and this round did NOT establish which. Filed as OS-025. Neither
+number is preferred and no third number is derived, because choosing the convenient one is how
+a disagreement becomes a false certainty.
+
+FILES CORRECTED: records/encoder_capacity_001/UPDATE_TRAJECTORY_RESULT.md (section A heading,
+reading, panel structure and per-kind table), records/encoder_capacity_001/STATUS.md (Finding
+13), OPEN_QUESTIONS.md (OS-022 downgraded, OS-025 added).
+
+This is the sixth self-correction in this record. The previous five were caught by measuring
+the thing a round had only assumed. This one was caught by reading the run's own design block
+instead of inferring the panel from a row count.
+
 ## 2026-09-17 UTC - The 7-axis inversion scanner: frozen structure enforced, thresholds NOT invented
 
 $0.00, pure standard library. Module `cncm/inversions.py`, tests `tests/test_inversion_axes.py`

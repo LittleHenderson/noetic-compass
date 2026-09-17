@@ -119,6 +119,55 @@
 - Compiler/SDG rule: The local compiler validates embedded CAS notation only. CAS-SDG may generate synthetic episodes, cues, candidates, perturbations, and ground truth, but generated records remain fixtures until independently compiler-checked and admitted by future capsule/evidence contracts.
 - CAS-Ohm rule: A proposed retrieval current or candidate weight is a native work-allocation quantity, not probability that an event occurred. Anchor conflicts, policy blocks, evidence labels, and verifier results remain separate hard constraints.
 
+### OS-019 — Admissibility relations `D1` through `D9`
+
+- Status: `OPEN-SEMANTICS`
+- Scope: operators `^1` through `^9`
+- Question: Which `(source, target)` pairs are valid for each operator? Correction 1 states the mechanism — each `CO-k` has an admissibility relation `Dk ⊆ I × I` — and freezes `D0 = {(I, I) : I ∈ I}`, the identity on the diagonal only. It states no pair for the other nine.
+- v0.1 rule: `cncm/noetica.py` implements the guard and the registry, freezes `D0` (exactly 40 diagonal pairs over the 40 cognitive states), and marks the other nine `NOT_FROZEN` with an empty pair set. `is_admissible` **raises** `UnregisteredAdmissibility` for them rather than returning `False`, because an undecided relation is not an empty one and a guard that silently refuses everything is indistinguishable from one that works. `admissibility_status`, `frozen_operators` and `unresolved_operators` let a caller tell the two refusals apart deliberately. No pair is invented for any of the nine.
+
+### OS-020 — Inversion axis thresholds, and stealth
+
+- Status: `OPEN-SEMANTICS`
+- Scope: axes `W`, `F`, `E`, `S`, and the state-vector reading of `N`; plus stealth
+- Question: How much state-vector involution imbalance, domain-tier inversion, drive-pair divergence, entropy deficit, or cross-domain sub-drive variance constitutes an inversion? And what is "stealth", named in the NCCS weights as "7 axes + stealth + compound severity"?
+- v0.1 rule: `cncm/inversions.py` measures every one of those quantities and supplies no limit for any of them. `frozen_limit` is `None` and `exceeds_frozen_limit` is `None` — not `False` — because "no limit exists" and "within the limit" are different answers. A caller applies its own threshold through `AxisMeasurement.exceeds(threshold)`. The compound axis is reachable only from a **frozen** limit, so no unfrozen reading can produce a compound finding. The module produces no NCCS component: the 15%-weighted inversion-resistance score would need thresholds that are not frozen, and `nccs_inversion_resistance` reads `NOT_PRODUCED`. Stealth is reported as `ABSENT_FROM_THE_INSTRUCTIONS`.
+- Contrast: axis `N` on dials **is** judged, because the instructions freeze one limit there (an involution pair cannot diverge by more than 4 dial points), and axis `A` is judged at 0 because the chain `A0 → Dn → Wn → Pn` is frozen and one-directional.
+
+### OS-021 — `P1` through `P7` name two different things
+
+- Status: `OPEN-SEMANTICS`
+- Scope: the 40-state listing and the 22-pathway listing
+- Question: `P1`-`P7` each denote **both** a cognitive state (`P<noetic>`, from `P0-P9, C0-C9, E0-E9, O0-O9`) and a capability-pathway node (`P<purpose>`, from `A0 + D1-D7 + W1-W7 + P1-P7`). Which naming is authoritative in a context where both are in scope, and should one set be renamed or namespaced?
+- v0.1 rule: The collision is real and is **not** resolved by inventing a rule. `cncm/noetica.py` names two label domains, `STATE_DOMAIN` and `PATHWAY_DOMAIN`, requires every function that takes a label to take its domain, and exposes `AMBIGUOUS_LABELS` (the seven) and `label_kinds(label)`. `realize` refuses a realization whose domain does not match, so a pathway realization can never be realized as a cognitive state just because the labels look alike.
+
+### OS-022 — Is the `max_updates <= 176` ceiling an architectural constant?
+
+- Status: `OPEN-ENGINEERING` / authority decision
+- Scope: `cas_meta2/typed_teaching/learner.py`, `TYPED_LEARNER_LIMITS`
+- Question: The registered learner contract admits `0 < max_updates <= 176`. Measured on the recorded run, the training objective had **not converged** when the run stopped at 160: the last update was the global minimum of the batch loss and the gradient norm was still climbing (ratio 1.378892, Spearman +0.317690, maximum at update 93 of 160). Is 176 a deliberate architectural constant, or a provisional bound that may be raised?
+- **Why raising it is no longer the obvious first move.** The loss was still falling because the run was still fitting the **exposed** course: 39/564 = 6.9149% → 189/564 = 33.5106%, with `correspondence` going 0/88 → 82/88. Over the same 160 updates the **development** panel stayed at 0/59 and **retention fell** from 45/96 = 46.8750% to 34/96 = 35.4167%. On this evidence more updates on the same exposed course would plausibly widen the exposed-versus-transfer gap rather than close it, so the ceiling may be acting as a brake. One arm, one seed; offered as a reading, not a result. Evidence: `records/encoder_capacity_001/PANEL_MISREAD_CORRECTION.md`.
+- v0.1 rule: Nothing raises it. It is treated as frozen, and no run that changes it may be launched without an owner-signed phase record.
+
+### OS-025 — Two pre-teaching baselines for the same 59-question development panel
+
+- Status: `OPEN-ENGINEERING` / measurement disagreement
+- Question: The same 59-question development panel carries two different pre-teaching numbers in `typed_matched_001/receipt_20260919_m`: `summary.development_scores` at cursor 0 reads **0/59 = 0.0000%**, while the study's transfer baseline reads **21/177 "in each method before teaching"**, and 177 = 59 × 3, i.e. 7 per run. `development_boundary` names the same panel in both cases (`PUBLIC_DEVELOPMENT_TOPOLOGIES_NO_TRAINING_CORRECTIONS_NO_FINAL_PANEL`).
+- Why it matters: the study's headline is that transfer degraded from 21/177 to 4/177 and 1/177. If the true pre-teaching development level is 0/59 rather than 7 per run, the headline's baseline is wrong and the degradation is measured from a different starting point.
+- v0.1 rule: **Not reconciled.** Neither number is preferred and no third number is derived. Both are recorded and the disagreement is left open, because choosing the convenient one is how a disagreement becomes a false certainty.
+
+### OS-023 — The loss is additive over fields while the score is conjunctive over the answer
+
+- Status: `OPEN-SPECIFICATION` / measured defect
+- Question: `_tensor_loss` averages a per-field loss over eleven fields; a scored question is correct only when the **whole** assembled answer matches the single admissible answer (`admissible_answer_count: 1`, rule `direct_contains_v1`). Measured consequence: over the 160 recorded updates, `correspondence` fell 79% and `reach` fell 52% in normalized terms while development accuracy moved from 0/59 to at most 1/59 and back to 0/59. Partial field improvement is structurally incapable of raising the score.
+- Question, restated as a decision: should the objective be made conjunctive, should per-field progress be reported against the all-or-nothing metric, or is the current objective correct and the metric simply strict?
+- v0.1 rule: Nothing changes. The mismatch is recorded as a measured defect with its evidence path and is not bundled into the analytic-initialisation proposal, which removes one cause of failure and not this one.
+
+### OS-024 — Domain precedence semantics for inversion axis `W`
+
+- Status: `OPEN-SEMANTICS`
+- Question: The tier order `P ≻ C ≻ E ≻ O` is frozen. Does it mean that a state vector's mass must **decrease** from `P` toward `O`, and if so by how much before it is an inversion? `cncm/inversions.py` counts adjacent tier pairs where the lower tier carries strictly more mass than the tier above it, which makes equal tiers not an inversion, and reports the count with no threshold. Whether a count of 1 is a violation is undecided.
+
 ## Non-blocking engineering freezes
 
 The v0.1 documents freeze single-thread scheduling, logical ticks, atomic state commits, stable ordering, branch isolation, authoritative-support filtering, exact terminal reconstruction, and canonical trace hashing. Changes to those choices require a new contract version, not an implementation-local interpretation.

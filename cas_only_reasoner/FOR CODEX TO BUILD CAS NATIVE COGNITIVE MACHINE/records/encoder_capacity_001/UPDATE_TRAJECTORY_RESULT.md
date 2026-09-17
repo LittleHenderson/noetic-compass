@@ -25,12 +25,30 @@ This record settles it from the run's own telemetry. Two questions:
 
 ---
 
-## A. Accuracy did not improve at all
+## A. The development panel did not improve — and that is not the whole story
 
-The run scored the **same frozen development curriculum** at five cursors, so the five
-scorings are directly comparable. Each question is scored by exact match against a single
-admissible answer (`admissible_answer_count: 1`, rule `direct_contains_v1`), so a scored
-question is right only if the whole assembled answer is right.
+> **CORRECTED. See `PANEL_MISREAD_CORRECTION.md`.** This section was originally headed
+> "Accuracy did not improve at all." Every number below is right; the heading was misleading in
+> the direction that matters. The 59-question **development** panel is not the course the
+> learner was taught. On the **exposed** course the same run improved from **39/564 = 6.9149%**
+> to **189/564 = 33.5106%** (+26.5957 pp, 4.85×), with `correspondence` going from 0/88 to
+> 82/88. The learner was not failing to learn. It was learning the exposed course and not
+> transferring. Read the corrected section below, not the heading above it.
+
+The run scored the **same frozen development curriculum** at five cursors, so the five scorings
+are directly comparable. Each question is scored by exact match against a single admissible
+answer (`admissible_answer_count: 1`, rule `direct_contains_v1`), so a scored question is right
+only if the whole assembled answer is right.
+
+The panels, from the run's own `design` block in `worker_report.json`:
+
+| panel | field | size | boundary as recorded |
+|---|---|---:|---|
+| exposed registry course | `registry_packets`, `initial_and_final_prediction_packets` | **564** | the course the learner was taught |
+| development | `development_packets` | **59** | `PUBLIC_DEVELOPMENT_TOPOLOGIES_NO_TRAINING_CORRECTIONS_NO_FINAL_PANEL` |
+| retention | `retention_packets` | **96** | `OTHER_QUESTION_TEACHING_SAME_PUBLIC_BANK_NO_PARTS_REACH_EDGE_CORRECTIONS_NOT_CONTENT_UNSEEN` |
+
+Development panel at the five checkpoints:
 
 | cursor | correct | total | accuracy |
 |---:|---:|---:|---:|
@@ -51,9 +69,37 @@ By kind (correct/total):
 
 The single correct answer appears at cursors 80 and 120 and is lost again by 160.
 
+### The other two panels, which this section originally omitted
+
+From `result.json` `summary`:
+
+| panel | before | after | change |
+|---|---:|---:|---:|
+| **exposed registry course (564)** | **39/564 = 6.9149%** | **189/564 = 33.5106%** | **+26.5957 pp, 4.85×** |
+| development (59) | 0/59 = 0.0000% | 0/59 = 0.0000% | 0 |
+| retention (96) | 45/96 = 46.8750% | 34/96 = 35.4167% | **−11.4583 pp** |
+
+`learning_advantage_established` is **False**. `starting_competence_met` is **False**.
+
+Per kind on the exposed course, before → after: correspondence 0/88 → **82/88**, reach 25/107 →
+**81/107**, parts 6/53 → 12/53, analogy 5/70 → 11/70, role_set 0/36 → 3/36, context 3/70 →
+**0/70**, definition 0/70 → 0/70, edge_account 0/70 → 0/70.
+
+**`correspondence` went from nothing to 93.18%.** Three of the eight question kinds — `context`,
+`definition`, `edge_account` — score exactly zero both before and after.
+
 **Limit on this reading.** 59 questions is a coarse instrument. Zero correct out of 59 is
-consistent with a true rate as high as about 5%, so this does not prove the rate is exactly
-zero. It does bound any improvement over the window to less than one question in 59.
+consistent with a true rate as high as about 5%, so this does not prove the development rate is
+exactly zero. It does bound any development-panel improvement over the window to less than one
+question in 59.
+
+### An unresolved disagreement about the development baseline
+
+The same 59-question development panel carries two different pre-teaching numbers: cursor 0 of
+`summary.development_scores` reads **0/59**, while the study's transfer baseline reads
+**21/177 "in each method before teaching"** — 177 = 59 × 3, so 7 per run. Both are described as
+pre-teaching, on the same panel size, with `development_boundary` naming the same panel. **This
+record has not established which is right**, and does not reconcile them by assertion.
 
 ---
 
@@ -149,21 +195,34 @@ helps nor hurts.
 
 Three defects are now separable and each is measured, not inferred.
 
-**D1 — the update ceiling is below the loss's convergence requirement.**
+**D1 — the update ceiling stopped the run while it was still fitting the exposed course.**
 Measured: at the point the contract forced the run to stop, the batch loss was at its
 global minimum and the gradient norm was still rising (ratio 1.378892, Spearman +0.317690,
 maximum at update 93 of 160). No convergence criterion was ever met. `max_updates <= 176`
 is a hard field of the registered learner contract, so raising the step count is a
 contract-and-authority change, not a tuning knob.
 
+**D1 is not an argument for raising the ceiling, and the panel structure is why.**
+The loss was still falling because the run was still improving on the **exposed** course:
+39/564 → 189/564, `correspondence` 0/88 → 82/88. Over the same 160 updates the **development**
+panel stayed at 0/59 and **retention fell** from 46.8750% to 35.4167%. On this evidence more
+updates on the same exposed course would plausibly widen the exposed-versus-transfer gap rather
+than close it. The ceiling may be acting as a brake. That is one arm on one seed and is offered
+as such, but it is the opposite of the reading this section originally invited, and the earlier
+section invited it by leaving the panel structure out. **This is the wording changed by
+`PANEL_MISREAD_CORRECTION.md`.**
+
 **D2 — the loss is additive over fields while the metric is conjunctive over the answer.**
-Measured: `correspondence` fell by 79% and `reach` by 52% in normalized terms, and the
-development accuracy over the same window moved from 0/59 to at most 1/59 and back to 0/59.
-A scored question is correct only when the entire assembled answer matches the single
-admissible answer. Partial field improvement is therefore **structurally incapable** of
-raising the score, and the training signal gives no extra weight to whichever field is
-currently binding. A useful objective would have to be conjunctive, or at least report
-per-field progress against the all-or-nothing metric.
+Measured: `correspondence` fell by 79% and `reach` by 52% in normalized terms, and over the same
+window the **exposed** course rose 6.9149% → 33.5106% while the **development** panel moved from
+0/59 to at most 1/59 and back to 0/59. A scored question is correct only when the entire
+assembled answer matches the single admissible answer. Field improvement therefore reached the
+exposed score and did not reach transfer, and the training signal gives no extra weight to
+whichever field is currently binding. Stated precisely: **eleven fields must all be right, three
+of eight question kinds (`context`, `definition`, `edge_account`) score exactly zero before and
+after, and improving two fields moved the exposed score by 26.5957 pp while moving transfer by
+nothing.** A useful objective would have to be conjunctive, or at least report per-field
+progress against the all-or-nothing metric.
 
 **D3 — the representation was never the limit, and neither is the codebook.**
 The closed-form solve on the same frozen features reaches 63.65% (40.7× chance) and all 65

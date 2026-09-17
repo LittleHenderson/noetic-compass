@@ -597,13 +597,33 @@ standard library, and both read bytes that were already on disk. Full write-ups:
 
 ## Finding 13 — the training objective had not converged when the contract stopped it
 
+> **CORRECTED by `PANEL_MISREAD_CORRECTION.md`.** The panel table below was originally headed
+> with the conclusion that accuracy did not improve. Right numbers, wrong framing: the 59-row
+> panel is the **development** panel, not the course the learner was taught. On the **exposed**
+> course the same run improved **39/564 = 6.9149% → 189/564 = 33.5106%** (+26.5957 pp, 4.85×),
+> `correspondence` **0/88 → 82/88**, while retention fell **45/96 → 34/96**. Read the corrected
+> account in that file rather than this summary.
+
 `measure_update_trajectory.py` reads all 160 `main_*_update.json` receipts and the five
 development scorings from `typed_matched_001/receipt_20260919_m`. Output:
 `update_trajectory.txt`.
 
+Panels, from the run's own `worker_report.json` `design` block:
+
+| panel | size | before | after |
+|---|---:|---:|---:|
+| exposed registry course | 564 | 39 = 6.9149% | **189 = 33.5106%** |
+| development | 59 | 0 = 0.0000% | 0 = 0.0000% |
+| retention | 96 | 45 = 46.8750% | 34 = 35.4167% |
+
+`learning_advantage_established` = False. Per-kind on the exposed course: correspondence
+0/88 → 82/88, reach 25/107 → 81/107, parts 6/53 → 12/53, analogy 5/70 → 11/70, role_set
+0/36 → 3/36, context 3/70 → 0/70, definition 0/70 → 0/70, edge_account 0/70 → 0/70.
+
+Development panel at cursors 0/40/80/120/160: 0/59, 0/59, 1/59, 1/59, 0/59.
+
 | quantity | value |
 | --- | ---: |
-| development accuracy at cursors 0 / 40 / 80 / 120 / 160 | 0/59, 0/59, 1/59, 1/59, 0/59 |
 | `raw_batch_loss`, first quarter (updates 0–39) mean | 1.586120 |
 | `raw_batch_loss`, last quarter (updates 120–159) mean | 0.995690 |
 | ratio | 0.627752 |
@@ -617,7 +637,10 @@ development scorings from `typed_matched_001/receipt_20260919_m`. Output:
 The registered contract caps updates at 176 (`learner.py`, `TYPED_LEARNER_LIMITS`) and this
 run stopped at 160. **The stopping point is the ceiling, not a schedule choice.** The loss
 was at its global minimum and the gradient norm was still **rising**. No convergence
-criterion was ever met.
+criterion was ever met — because the run was still fitting the exposed course, from 39/564 to
+189/564, while the development panel stayed at zero and retention fell 11.4583 pp. **More
+updates on the same course would plausibly widen that gap, so the ceiling is not the obvious
+thing to raise.**
 
 Per-field, normalized by `log(public_alphabet_size)` so a uniform prior sits at 1.0:
 
