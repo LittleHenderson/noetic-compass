@@ -122,32 +122,44 @@ def build(n_pkt):
 
 
 def ridge_cv(X, y, nclass=64, folds=5, lam=1.0):
+    """Ridge solved in the DUAL, so the cost is O(n^3) not O(d^3).
+
+    K = X X^T is n x n. With n = 200 that is a 200x200 inverse per fold, which is
+    trivial, whereas the primal form would need a 4,864 x 4,864 inverse for the
+    concatenated features and is infeasible in pure Python.
+    """
     n, d = len(X), len(X[0])
     order = list(range(n))
     buckets = [order[i::folds] for i in range(folds)]
     correct = 0
     for f in range(folds):
-        test = set(buckets[f])
-        tr = [i for i in order if i not in test]
-        XtX = [[0.0] * d for _ in range(d)]
-        for i in range(d):
-            for j in range(i, d):
-                s = sum(X[k][i] * X[k][j] for k in tr)
-                XtX[i][j] = s
-                XtX[j][i] = s
-        for i in range(d):
-            XtX[i][i] += lam
-        inv = mat_inv(XtX)
+        test = sorted(buckets[f])
+        tr = [i for i in order if i not in set(test)]
+        nt = len(tr)
+        K = [[0.0] * nt for _ in range(nt)]
+        for a in range(nt):
+            xa = X[tr[a]]
+            for b in range(a, nt):
+                s = sum(p * q for p, q in zip(xa, X[tr[b]]))
+                K[a][b] = s
+                K[b][a] = s
+        for a in range(nt):
+            K[a][a] += lam
+        inv = mat_inv(K)
         if inv is None:
             continue
-        XtY = [[0.0] * nclass for _ in range(d)]
-        for k in tr:
-            for i in range(d):
-                XtY[i][y[k]] += X[k][i]
-        W = [[sum(inv[i][k] * XtY[k][c] for k in range(d)) for c in range(nclass)]
-             for i in range(d)]
-        for i in sorted(test):
-            sc = [sum(X[i][j] * W[j][c] for j in range(d)) for c in range(nclass)]
+        # alpha = inv @ Y_train   (nt x nclass)
+        A = [[sum(inv[a][b] * (1.0 if y[tr[b]] == c else 0.0) for b in range(nt))
+              for c in range(nclass)] for a in range(nt)]
+        for i in test:
+            xi = X[i]
+            sc = [0.0] * nclass
+            for a in range(nt):
+                k = sum(p * q for p, q in zip(xi, X[tr[a]]))
+                if k:
+                    Aa = A[a]
+                    for c in range(nclass):
+                        sc[c] += k * Aa[c]
             if max(range(nclass), key=lambda c: sc[c]) == y[i]:
                 correct += 1
     return correct / n

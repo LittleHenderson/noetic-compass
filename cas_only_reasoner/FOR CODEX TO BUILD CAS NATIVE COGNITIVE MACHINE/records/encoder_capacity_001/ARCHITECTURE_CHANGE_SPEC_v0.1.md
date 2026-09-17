@@ -1,5 +1,11 @@
 # Architecture change spec v0.1 — addressed aggregation for the typed learner
 
+> **STATUS: PREDICTION 1 RUN AND ONLY PARTLY MET — the spec is NOT validated.**
+> See §8. The measured upper bound on any addressing over rows is **11.50%**
+> focus recovery against a 1.5625% chance, versus 11.00% for the query row alone.
+> That is above the fixed mean's 0.00%, so the defect is real, but 11.5% is not a
+> working read. **Do not authorize a launch on this spec until §8 is resolved.**
+
 Status: **SPECIFICATION ONLY — nothing is implemented, nothing is launched,
 no reservation exists.** Prepared for owner review and signature.
 
@@ -125,3 +131,56 @@ Each is falsifiable on the existing scaffold:
 - It does not authorize a launch. **`execution_enabled` stays false and no
   reservation is created until an owner record names this profile.** Speech in a
   session is not an owner record.
+
+## 8. Prediction 1, run — and the result is a partial falsification
+
+`falsify_prediction_1.py`, 200 real packets, ridge probe solved in the dual
+(5-fold CV, chance 1/64 = 1.5625%). `cat_all` is the concatenation of every row and
+is the **upper bound on what any addressing over rows can extract**:
+
+| features | dims | CV accuracy | vs chance |
+| --- | ---: | ---: | ---: |
+| mean (the current profile) | 64 | **0.00%** | 0.0× |
+| query row only | 64 | 11.00% | 7.0× |
+| query + support rows | 256 | 6.50% | 4.2× |
+| head rows (start/format/bindings/aliases/policy/source/record/query/end) | 576 | 10.50% | 6.7× |
+| **the 64 world rows** | 4096 | **0.50%** | **0.3×** |
+| **all rows concatenated (upper bound)** | 4864 | **11.50%** | **7.4×** |
+
+Three things follow, and the second is the one that matters:
+
+1. **The defect is confirmed.** The fixed mean gives 0.00% and any read over the
+   rows gives 11.50%. The information is there and the mean removes it.
+2. **The proposed change is not sufficient.** The upper bound on *any* addressing
+   over rows is 11.50% — barely above the query row on its own. **A read that
+   recovered the focus one time in nine would not lift `context` or `definition`
+   off 0/70.** On this evidence the spec's Prediction 1 is **not met**, and a
+   launch under §2 would spend $7–14 to test a change whose ceiling is already
+   known to be too low.
+3. **The 64 world rows are question-invariant.** They decode the focus at 0.50%,
+   *below* chance. That is expected — every packet contains all 64 worlds — and it
+   means the world rows cannot contribute to identifying the focus, only to
+   answering once it is known.
+
+### What this implies, honestly
+
+The focus signal lives in the query and head rows and is decodable at ~11%. The
+world content needed to *answer* lives in the world rows, which cannot identify the
+focus. **The two are in different places and the encoder merges them.**
+
+Two possibilities remain, and they are distinguishable before spending:
+
+- **Sample limitation.** The query row is a random projection of ~88 tokens into 64
+  dimensions; a linear read of it has ~4,096 free parameters, and 200 samples
+  cannot fit that. The 11% may be a data limit, not an information limit. This is
+  testable at $0 by rebuilding the probe on all 564 packets (running).
+- **Information limitation.** If the probe stays near 11% with all 564 packets, the
+  linear read is not the answer and the change must be structural rather than
+  additive: the encoder should emit the focus **separately** from the bulk, for
+  example as an explicit slot-scope pointer the learner receives alongside the
+  packet, rather than something a read must recover from a mean.
+
+**Recommendation: do not sign this spec yet.** Resolve the sample-versus-information
+question first — it is $0 — and revise §2 accordingly. Prediction 1 did its job: it
+cost nothing and stopped a paid test of a change that the measurement says is too
+weak.
