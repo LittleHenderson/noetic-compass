@@ -1,0 +1,27 @@
+{
+  "before": [
+    {
+      "Path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots.py",
+      "Hash": "3D79DB262708264DCD77CD7FB0296E7683849B5967B82D72FD3C51AB85F74487"
+    },
+    {
+      "Path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_typed_teaching_slot_cache.py",
+      "Hash": "4D1523FCFFCE8D43E357ACBF415B2D9E1BE79D4232D7B3BF6CD71106C7B6B1C5"
+    }
+  ],
+  "source_bytes_equal": true,
+  "boundary": "Pure syntax/cache tests only; no tensor/provider/private checker execution",
+  "exit_code": 0,
+  "after": [
+    {
+      "Path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots.py",
+      "Hash": "3D79DB262708264DCD77CD7FB0296E7683849B5967B82D72FD3C51AB85F74487"
+    },
+    {
+      "Path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\tests\\test_typed_teaching_slot_cache.py",
+      "Hash": "4D1523FCFFCE8D43E357ACBF415B2D9E1BE79D4232D7B3BF6CD71106C7B6B1C5"
+    }
+  ],
+  "schema": "typed-slot-cache-focused-run/0.1",
+  "elapsed_seconds": 483.1596265
+}

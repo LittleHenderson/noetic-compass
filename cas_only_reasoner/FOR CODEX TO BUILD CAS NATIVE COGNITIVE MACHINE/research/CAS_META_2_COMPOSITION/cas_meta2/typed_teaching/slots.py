@@ -6,10 +6,13 @@ Incorrect but well-formed answers stay available in every public universe.
 """
 from __future__ import annotations
 
+from collections import OrderedDict
 from copy import deepcopy
 from hashlib import sha256
+import json
 import math
 from pathlib import Path
+from threading import RLock
 
 from . import answers, course, source
 
@@ -20,6 +23,8 @@ SYMBOLS = ("PRESENT", "ABSENT", "DIRECT", "NO_MATCH", "MAPPING") + tuple(
     "N%d" % i for i in range(10)) + tuple("VIA_N%d" % i for i in range(10)) + tuple(
     "W%d" % i for i in range(65))
 MAX_ABS_SCORE = 1000000
+MAX_CACHE_ENTRIES = 1024
+MAX_CACHE_SERIALIZED_BYTES = 256 * 1024 ** 2
 DECISION_CONTRACT = {
     "independent": "argmax over each slot's declared symbol order; first wins exact ties",
     "correspondence": "NO_MATCH log probability = logsoftmax(mode)[NO_MATCH]; mapping log probability = logsoftmax(mode)[MAPPING] + sum(assigned node logits) - logsumexp(sum(assigned node logits) over ALL syntactic bijections)",
@@ -55,7 +60,7 @@ def alias_table(public):
         for i, world in enumerate(sorted(public["worlds"], key=lambda row: row["world_id"]))]}
 
 
-def compile_slots(packet):
+def _compile_slots_uncached(packet):
     """Compile all syntactic slots from the closed learner-visible packet."""
     checked = course.validate_model_packet(packet)
     public, record = checked["source"], checked["record"]
@@ -112,6 +117,115 @@ def compile_slots(packet):
         "decision_contract": deepcopy(DECISION_CONTRACT),
         "forced_candidate_count": 1 if kind == "correspondence" and len(candidate_rows) == 1 else 0}
     return {**body, "plan_digest": digest(body)}
+
+
+def _packet_bytes(packet):
+    # Match the public input-frame envelope, without imposing source-declaration
+    # text limits on role excerpts (which may contain up to 16384 UTF-8 bytes).
+    # The uncached compiler still applies every field-specific syntax check.
+    count, active = 0, set()
+    def walk(value, depth):
+        nonlocal count
+        count += 1
+        require(count <= 250000 and depth <= 32, "TYPED_SLOT_CACHE_TREE_BOUND")
+        require(type(value) in (dict, list, str, int, bool, type(None)), "TYPED_SLOT_CACHE_JSON_TYPE")
+        if type(value) in (dict, list):
+            require(id(value) not in active, "TYPED_SLOT_CACHE_CYCLE")
+            active.add(id(value))
+            if type(value) is dict:
+                require(all(type(key) is str for key in value), "TYPED_SLOT_CACHE_JSON_KEY")
+            for item in (value.values() if type(value) is dict else value):
+                walk(item, depth + 1)
+            active.remove(id(value))
+        elif type(value) is str:
+            require(len(value.encode("utf-8")) <= 8 * 1024 ** 2, "TYPED_SLOT_CACHE_STRING_BOUND")
+    walk(packet, 0)
+    raw = canonical(packet).encode()
+    require(len(raw) <= 8 * 1024 ** 2, "TYPED_SLOT_CACHE_PACKET_BOUND")
+    return raw
+
+
+class _SlotCache:
+    """Bound complete admitted plans, with no semantic/private dependency.
+
+    The byte bound counts retained canonical packet/profile/plan bytes. It is
+    not a Python heap/RSS cap. An oversized entry compiles without retention.
+    All profile identities remain on-disk metadata; loaded-source attestation
+    is still the worker's responsibility.
+    """
+    def __init__(self, *, max_entries=MAX_CACHE_ENTRIES, max_serialized_bytes=MAX_CACHE_SERIALIZED_BYTES):
+        require(type(max_entries) is int and 1 <= max_entries <= MAX_CACHE_ENTRIES,
+                "TYPED_SLOT_CACHE_ENTRY_BOUND")
+        require(type(max_serialized_bytes) is int and 1 <= max_serialized_bytes <= MAX_CACHE_SERIALIZED_BYTES,
+                "TYPED_SLOT_CACHE_BYTE_BOUND")
+        self.max_entries, self.max_bytes = max_entries, max_serialized_bytes
+        self.entries, self.serialized_bytes = OrderedDict(), 0
+        self.hits = self.misses = self.compiles = self.evictions = self.bypasses = 0
+        self.lock = RLock()
+
+    def compile(self, packet):
+        # Reject tuples/custom types/cycles/deep/oversize trees before JSON key
+        # construction; e.g. a tuple must not alias an already admitted list.
+        raw = _packet_bytes(packet)
+        profile_raw = canonical(profile()).encode()
+        key = (sha256(raw).digest(), sha256(profile_raw).digest())
+        with self.lock:
+            if key in self.entries:
+                saved_raw, saved_profile, plan, _ = self.entries[key]
+                require(saved_raw == raw and saved_profile == profile_raw, "TYPED_SLOT_CACHE_COLLISION")
+                self.hits += 1
+                self.entries.move_to_end(key)
+                return deepcopy(plan)
+            self.misses += 1
+            self.compiles += 1
+        # The admitted snapshot cannot later be mutated by the caller. Failed
+        # compilation is never cached. Neither record_id nor a subset is a key.
+        plan = _compile_slots_uncached(json.loads(raw))
+        require(canonical(plan["profile"]).encode() == profile_raw
+                and canonical(profile()).encode() == profile_raw
+                and plan["packet_digest"] == sha256(raw).hexdigest(), "TYPED_SLOT_CACHE_CONTEXT_CHANGED")
+        size = len(raw) + len(profile_raw) + len(canonical(plan).encode())
+        with self.lock:
+            if size > self.max_bytes:
+                self.bypasses += 1
+                return deepcopy(plan)
+            if key in self.entries:
+                self.serialized_bytes -= self.entries.pop(key)[3]
+            while self.entries and (len(self.entries) >= self.max_entries or self.serialized_bytes + size > self.max_bytes):
+                self.serialized_bytes -= self.entries.popitem(last=False)[1][3]
+                self.evictions += 1
+            self.entries[key] = (raw, profile_raw, deepcopy(plan), size)
+            self.serialized_bytes += size
+            return deepcopy(plan)
+
+    def info(self):
+        with self.lock:
+            return {"hits": self.hits, "misses": self.misses, "compiles": self.compiles,
+                "evictions": self.evictions, "oversize_bypasses": self.bypasses,
+                "entries": len(self.entries), "retained_serialized_bytes": self.serialized_bytes,
+                "max_entries": self.max_entries, "max_retained_serialized_bytes": self.max_bytes}
+
+    def clear(self):
+        with self.lock:
+            self.entries.clear()
+            self.serialized_bytes = 0
+            self.hits = self.misses = self.compiles = self.evictions = self.bypasses = 0
+
+
+_SLOT_CACHE = _SlotCache()
+
+
+def compile_slots(packet):
+    """Return an isolated syntax plan for exact public bytes/current profile."""
+    return _SLOT_CACHE.compile(packet)
+
+
+def slot_cache_info():
+    return _SLOT_CACHE.info()
+
+
+def clear_slot_cache():
+    _SLOT_CACHE.clear()
 
 
 def validate_plan(packet, plan):

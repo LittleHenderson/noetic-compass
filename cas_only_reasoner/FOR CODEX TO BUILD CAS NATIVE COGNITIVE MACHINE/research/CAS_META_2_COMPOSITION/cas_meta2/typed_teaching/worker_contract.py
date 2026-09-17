@@ -18,7 +18,9 @@ JOB_PATTERN = r"cas-meta2-typedcourse-\d{14}-[a-f0-9]{8}"
 SOURCE_SEED = 101
 MODEL_SEED = ENCODER_SEED = 20260916
 MAX_MEMBER_BYTES = 4 * 1024 ** 2
-MAX_WALL_SECONDS = 1800
+# Full encoding, baseline, teaching, final evaluation and replay share this cap.
+# The first GPU attempt exposed substantial CPU preprocessing/validation cost.
+MAX_WALL_SECONDS = 3300
 COURSE_PATH = "records/typed_course_001/checks_002/public_course.json"
 TOKENIZER_PATH = "records/typed_interface_001/checks_002/training_tokenizer.json"
 MATERIAL = {

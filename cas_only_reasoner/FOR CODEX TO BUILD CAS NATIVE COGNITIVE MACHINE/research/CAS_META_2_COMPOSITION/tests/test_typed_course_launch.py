@@ -61,7 +61,7 @@ def test_worker_contract_config_has_exact_full_course_bounds_and_bucket(authorit
 
 
 @pytest.mark.parametrize("key,value", [("extra", 1), ("training", 1), ("optimizer_updates_max", 162.0),
-    ("optimizer_updates_max", 163), ("max_wall_seconds", 1800.0), ("jobs", True), ("automatic_retries", 1),
+    ("optimizer_updates_max", 163), ("max_wall_seconds", 3300.0), ("jobs", True), ("automatic_retries", 1),
     ("reservation_usd", "8.00"), ("inputs_sha256", "0"*64), ("evidence_contract_sha256", "0"*64)])
 def test_authority_closed_and_exact_before_provider(authority, key, value):
     authority[key] = value
@@ -120,7 +120,7 @@ def test_actual_worker_dispatch_timeout_and_manifest_loader_order():
     values = {n.targets[0].id: ast.literal_eval(n.value) for n in tree.body if isinstance(n, ast.Assign)
         and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name)
         and n.targets[0].id in {"INNER_RUNNER", "MAX_WALL_SECONDS", "RESULT_SCHEMA"}}
-    assert values["MAX_WALL_SECONDS"] == 1800 and values["RESULT_SCHEMA"] == launch.RESULT_SCHEMA
+    assert values["MAX_WALL_SECONDS"] == 3300 and values["RESULT_SCHEMA"] == launch.RESULT_SCHEMA
     calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and ast.unparse(n.func) == "subprocess.run"
              and any(k.arg == "timeout" for k in n.keywords)]
     assert len(calls) == 1 and ast.unparse(calls[0].args[0]) == "[python, '-B', str(runner), str(root)]"
@@ -205,7 +205,7 @@ def test_guest_deadlines_config_and_manifest_pins_before_worker(authority):
     instance = provider(); instance.bind_authority(authority)
     script = instance._user_data(authority["worker_config"]["bucket"])
     assert script.index("is-active --quiet") < script.index("aws s3api get-object")
-    assert "--on-boot=6900s" in script and "--signal=TERM --kill-after=30s 3600s" in script
+    assert "--on-boot=6900s" in script and "--signal=TERM --kill-after=30s 4200s" in script
     assert "--poweroff +1" in script and "--poweroff now" in script
     assert launch.digest(launch.canonical(authority["worker_config"])) + "  /opt/cas-graph6curr/package/config.json" in script
     assert authority["manifest_sha256"] + "  /opt/cas-graph6curr/package/" + launch.shared.MANIFEST_NAME in script

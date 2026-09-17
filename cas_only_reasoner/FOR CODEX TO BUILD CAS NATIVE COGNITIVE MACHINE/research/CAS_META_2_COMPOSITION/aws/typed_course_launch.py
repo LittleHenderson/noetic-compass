@@ -41,7 +41,7 @@ JOB_PATTERN = contract.JOB_PATTERN
 SEED, MAX_WALL_SECONDS = contract.MODEL_SEED, contract.MAX_WALL_SECONDS
 EXPERIMENT = {"profile": "typed_full_course_v1", "candidate": CANDIDATE,
               "entrypoint": "cncm.typed_course_worker.run"}
-BOUNDS = {"training": True, "optimizer_updates_max": 162, "max_wall_seconds": 1800,
+BOUNDS = {"training": True, "optimizer_updates_max": 162, "max_wall_seconds": MAX_WALL_SECONDS,
           "jobs": 1, "automatic_retries": 0, "reservation_usd": "7.00",
           "instance_type": "g7.2xlarge", "region": "us-west-2"}
 DESIGN = json.loads(canonical(contract.DESIGN))
@@ -375,8 +375,9 @@ class TypedCourseProvider(lifecycle.CandidateProvider):
             '--property=ActiveState --property=NextElapseUSecMonotonic',
             'echo "CNCM_GUEST_WATCHDOG_ARMED unit=$cas_typed_unit boot_deadline_seconds=6900"',
             # Bound setup, worker, and its normal evidence publisher together.
-            # The inherited numeric child additionally retains its 1,800s cap.
-            '"$cas_typed_timeout" --signal=TERM --kill-after=30s 3600s /bin/bash <<\'' + delimiter + "'",
+            # The numeric child has a 3,300s cap; setup and publication fit inside
+            # this 4,200s bound, still below the existing 6,900s boot watchdog.
+            '"$cas_typed_timeout" --signal=TERM --kill-after=30s 4200s /bin/bash <<\'' + delimiter + "'",
             original.rstrip("\n"), delimiter, "",
         ]
         return "\n".join(lines)

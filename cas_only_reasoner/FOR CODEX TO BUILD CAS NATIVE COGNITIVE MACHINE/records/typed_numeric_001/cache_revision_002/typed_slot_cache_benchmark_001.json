@@ -1,0 +1,71 @@
+{
+  "boundary": "Uninstalled single-packet CPU prototype; synthetic public zero scores. No tensors, teacher, full-course benchmark, current-run source change, or GPU speed estimate.",
+  "cache_stats": {
+    "compiles": 5,
+    "entries": 2,
+    "evictions": 0,
+    "hits": 5,
+    "max_entries": 1024,
+    "max_retained_serialized_bytes": 268435456,
+    "misses": 5,
+    "oversize_bypasses": 0,
+    "retained_serialized_bytes": 553992
+  },
+  "checks": {
+    "all_three_consumers_hit_same_plan": true,
+    "bank_fact_miss_and_refusal": true,
+    "one_entry_lru_evicts": true,
+    "output_mutation_isolated": true,
+    "oversize_not_retained_no_semantic_change": true,
+    "private_extra_miss_and_refusal": true,
+    "profile_change_misses_and_recompiles": true,
+    "record_text_miss_and_refusal": true,
+    "tuple_json_alias_refused_before_hit": true
+  },
+  "kind": "correspondence",
+  "memory_boundary": "LRU1024 entries and256MiB of retained canonical packet/profile/plan bytes; Python object overhead means this is not an RSS cap. Oversize entries compile normally but are not cached.",
+  "prohibited_import_attempts": [],
+  "record_id": "typed-input-005b8315c7e3c2ca7583061bf1131ad5c5bbf4fd896155916b5007a2a214a942",
+  "source_pins": {
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\__init__.py": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\__init__.py": "a9cd4e93977921031a27e2410afca5c7b9314a8bf8914f4d0df2da545831cb95",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\course.py": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\course_plan.py": "bd73cb444dc2a5becb6322b4fa50de9c9f0bde288bd54a3c6ce2003bbb8aed88",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\focal.py": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\input_frames.py": "0077ab78c35124249ca324db52eeba03d4f992c69d5bac8695bd88e177a17326",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\slots.py": "0a655ac7273f6d605963e9d1ba6df42422391569cad998e021268bb139198838",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\tokenization.py": "be84607539d5375346d4bc0bc1321c7a59668e3edb2189bebf090a74ecbb7c1b",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\worker_contract.py": "02b0a56975bddc93560a1f3f4086c9c4eb3f914f7b912b2b7be24e0b441765f2"
+  },
+  "source_pins_before_after_equal": true,
+  "status": "PURE_SINGLE_PACKET_PROTOTYPE_PASS",
+  "timings": [
+    {
+      "operation": "uncached_compile",
+      "seconds": 0.3610830999996324
+    },
+    {
+      "operation": "cached_wrapper_cold",
+      "seconds": 0.2990757000002304
+    },
+    {
+      "operation": "cached_wrapper_repeat",
+      "seconds": 0.010679299999992509
+    },
+    {
+      "operation": "score_decisions_cache_hit",
+      "seconds": 0.010200499999882595
+    },
+    {
+      "operation": "assemble_answer_cache_hit",
+      "seconds": 0.03912069999978485
+    },
+    {
+      "operation": "validate_plan_cache_hit",
+      "seconds": 0.011457199999767909
+    }
+  ],
+  "total_seconds": 2.3035970999999336
+}

@@ -987,3 +987,35 @@ docs/CNCM_TYPED_INPUT_AND_SLOTS_v0.1.md.
 
 No new cloud reservation: canonical revision 76 remains $445 reserved and $4,555
 unreserved of $5,000. The full goal is PROGRESS, active and incomplete.
+
+
+## 2026-09-17: full typed-course GPU job launched
+
+Status: IN PROGRESS; complete training is not yet established.
+
+The committed worker and launcher passed 67 combined pure integration checks.
+Exact source commit: `857367899983783c8f048df195338c71bdcb8aa5`.
+Job `cas-meta2-typedcourse-20260917020901-85736789` launched instance
+`i-0b7a980f8110e686a` under one $7 reservation. Canonical budget revision 77
+records $452 reserved and $4,548 unreserved of the $5,000 campaign cap.
+The exact committed package rehearsal passed before launch. The source commit
+was pushed and the remote branch was observed at the same commit.
+
+The intended workload is 160 main optimizer updates plus two separately counted
+checkpoint replay updates, 564 exposed packets and 1,152 presentations. AWS
+received the initial checkpoint by 02:16:30 UTC. At the 02:20:23 UTC snapshot,
+no completed optimizer-update receipt or terminal result had been published.
+Instance existence and the initial checkpoint are not evidence of a completed
+course. The numeric child retains its 1,800-second cap; no automatic retry.
+
+The reservation's inherited descriptive training-plan fields still describe an
+older curriculum. The actual typed protocol is bound by the source-specific
+worker config, authority and package. Preserve this mismatch as a record limit;
+do not rewrite the receipt. Physical one-instance, $7 and 7,200-second resource
+bounds remain the intended bounds. See records/typed_numeric_001/INTEGRATION_EXECUTION_NOTES.md
+and records/typed_numeric_001/receipt_001.
+
+Next: collect the actual terminal result, count successful updates, recompute
+exposed accuracy gains and losses, verify checkpoint replay and observe cleanup.
+Matched learning advantage, untouched transfer, delayed retention and the full
+CNCM charter remain open. The earlier negative three-seed result is unchanged.

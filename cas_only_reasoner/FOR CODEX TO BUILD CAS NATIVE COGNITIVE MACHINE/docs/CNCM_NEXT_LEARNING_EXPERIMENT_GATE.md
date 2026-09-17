@@ -400,3 +400,35 @@ inspection. They identify bytes, not authentic execution or experimental success
 | S13 | `670fb5acc42a9aa13fd7b1ff3d91bdd1ded38399833095293bec572313bc1bc4` |
 | `HOME/cncm/derived_engine.py` | `2bc96b78a77e1af2ebe368bd9dc84e49d1553500815e3e5c8c07795ed995701b` |
 | `HOME/cncm/derived_verification.py` | `67a8452e71ebfcb82e1df42a545c90a2e78d7afa058aa1a2166c1d149071239a` |
+
+
+## 2026-09-17: full typed-course GPU job launched
+
+Status: IN PROGRESS; complete training is not yet established.
+
+The committed worker and launcher passed 67 combined pure integration checks.
+Exact source commit: `857367899983783c8f048df195338c71bdcb8aa5`.
+Job `cas-meta2-typedcourse-20260917020901-85736789` launched instance
+`i-0b7a980f8110e686a` under one $7 reservation. Canonical budget revision 77
+records $452 reserved and $4,548 unreserved of the $5,000 campaign cap.
+The exact committed package rehearsal passed before launch. The source commit
+was pushed and the remote branch was observed at the same commit.
+
+The intended workload is 160 main optimizer updates plus two separately counted
+checkpoint replay updates, 564 exposed packets and 1,152 presentations. AWS
+received the initial checkpoint by 02:16:30 UTC. At the 02:20:23 UTC snapshot,
+no completed optimizer-update receipt or terminal result had been published.
+Instance existence and the initial checkpoint are not evidence of a completed
+course. The numeric child retains its 1,800-second cap; no automatic retry.
+
+The reservation's inherited descriptive training-plan fields still describe an
+older curriculum. The actual typed protocol is bound by the source-specific
+worker config, authority and package. Preserve this mismatch as a record limit;
+do not rewrite the receipt. Physical one-instance, $7 and 7,200-second resource
+bounds remain the intended bounds. See records/typed_numeric_001/INTEGRATION_EXECUTION_NOTES.md
+and records/typed_numeric_001/receipt_001.
+
+Next: collect the actual terminal result, count successful updates, recompute
+exposed accuracy gains and losses, verify checkpoint replay and observe cleanup.
+Matched learning advantage, untouched transfer, delayed retention and the full
+CNCM charter remain open. The earlier negative three-seed result is unchanged.
