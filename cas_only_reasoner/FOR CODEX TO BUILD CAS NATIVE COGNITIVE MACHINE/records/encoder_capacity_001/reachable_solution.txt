@@ -1,0 +1,42 @@
+cached feature rows: 564
+registered readout rows: 90;  world-alias symbols: 65
+first aliases: ['W0', 'W1', 'W2', 'W3']  last: ['W63', 'W64']
+readout row L2 norm: min 1.000000000  max 1.000000000
+readout rows are linearly INDEPENDENT; max |R^T R^-T - I| = 2.798e-14
+
+building the real encoded slots (mean + slot query row, as line 212 does)...
+  200/564
+  400/564
+  slot queries built: 564   matched: 564
+  WARNING: 24 distinct focus classes present, not 64
+
+NULL BASELINES for this sample (report these, do not report 1/64 alone):
+  rows: 564   distinct focus worlds present: 24
+  per-class counts, ascending: [19, 19, 19, 19, 20, 20] ... [26, 26, 26, 26]
+  uniform among the 24 worlds present: 4.1667%
+  majority class (always answer the commonest):  4.6099%
+  uniform among all 64 worlds (the nominal chance): 1.5625%
+
+tanh distortion ||tanh(x)-x|| / ||x||: min 0.009792  mean 0.014927  max 0.022331
+encoded slot L2 norm: min 1.000000  max 1.000000
+
+============================================================================================
+TARGET: focus world alias.  chance = 1/64 = 1.5625%
+============================================================================================
+
+                             reachable class   dims    5-fold CV   vs chance
+------------------------------------------------------------------------------
+          free readout on the encoded slot x     64       63.65%       40.7x
+free readout on tanh(x)  <- ^6 can build this     64       63.83%       40.9x
+
+       through the FROZEN readout rows (T R)     64       63.83%       40.9x
+
+============================================================================================
+READING
+============================================================================================
+
+  baseline: free readout on the encoded slot           63.65%
+  ^6 class: free readout on tanh(x)                    63.83%
+  frozen readout realisation of that same solution     63.83%
+  held-out rows where the two argmaxes agree          100.00%
+

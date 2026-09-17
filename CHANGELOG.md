@@ -4,6 +4,84 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The registered ^6 module can reach the solution exactly; the training never converged; the "40.7x chance" multiplier is corrected
+
+$0.00, pure standard library, no model, no GPU, no checkpoint, no provider. Two new
+measurements over bytes already on disk, plus CAS Correction 4 implemented in the
+CNCM homebase. Records: `records/encoder_capacity_001/UPDATE_TRAJECTORY_RESULT.md`,
+`REACHABLE_SOLUTION_RESULT.md`, `ARCHITECTURE_CHANGE_SPEC_v0.2_ANALYTIC_DECOMPOSE_INIT.md`;
+code: `cncm/simplex.py`, `tests/test_simplex_metric.py`.
+
+WHAT THE 160 RECORDED UPDATES DID. Read from all 160 `main_*_update.json` receipts and
+the five development scorings of `typed_matched_001/receipt_20260919_m`:
+
+  development accuracy @0/@40/@80/@120/@160    0/59  0/59  1/59  1/59  0/59
+  raw_batch_loss, updates 0-39 mean            1.586120
+  raw_batch_loss, updates 120-159 mean         0.995690   (0.627752x)
+  global minimum                               0.277262 at update 159, THE LAST ONE
+  Spearman(block index, block mean)            -0.928571
+  exact permutation p, 8! orderings            0.000868
+  gradient L2 norm, first->last quarter        4.490157e-01 -> 6.191440e-01  (1.378892x)
+  Spearman(update index, gradient norm)        +0.317690
+  largest gradient norm                        1.528121e+00 at update 93
+
+The registered contract caps updates at 176 and this run stopped at 160, so the stopping
+point is the ceiling, not a schedule choice. The loss was at its global minimum and the
+gradient norm was still RISING. No convergence criterion was ever met.
+
+Per field, normalized so a uniform prior is 1.0: kind_ref 0.997035 -> 0.941146,
+setting_ref 0.995814 -> 0.953662, function_ref 0.999237 -> 0.959460 - the three 64-way
+reference fields stay within 4-6% of uniform after 160 updates. correspondence
+0.769966 -> 0.158806 and reach 0.917934 -> 0.444251 are the only fields that learn.
+whole went BACKWARDS, 1.100893 -> 1.619377, worse than uniform, consistent with the
+recorded negative transfer. world_id is flat at 0.504130 -> 0.503435.
+
+And the metric is conjunctive while the loss is additive: correspondence fell 79% and
+reach 52% over a window in which development accuracy moved 0/59 -> at most 1/59 -> 0/59.
+A scored question is right only if the whole assembled answer matches, so partial field
+improvement is structurally incapable of moving the score.
+
+WHAT THE MODULE CAN REACH. Score for class c is r_c . (T phi) = (T^T r_c) . phi, so a
+free-readout weight matrix W is realisable through the frozen readout by T^T = W (R^T)^-1.
+Measured: every readout row L2 norm exactly 1.000000000, rows linearly INDEPENDENT, max
+|R^T R^-T - I| = 2.798e-14. And left = I64, right = 0, merge = [T | 0] gives
+^6(x) = T tanh(x) as an identity. 5-fold CV on the 564 real encoded slots:
+
+  free readout on the encoded slot x              63.65%   13.81x strongest null
+  free readout on tanh(x)  <- ^6 can build this    63.83%   13.85x
+  through the FROZEN readout rows                  63.83%   13.85x
+  held-out rows where frozen and free argmax agree 100.00%
+  tanh distortion ||tanh(x)-x||/||x||              0.009792 / 0.014927 / 0.022331 min/mean/max
+
+So the representation is adequate, the codebook is adequate, the frozen readout is not a
+constraint, and the registered module can implement the solution EXACTLY with no new
+parameters, no shape change, no scope change and no contract change. The trained learner
+still reaches 1.24%. The gap is an optimisation gap inside a function class the
+architecture already contains.
+
+FIFTH SELF-CORRECTION. The same run measured class balance for the first time: among the
+564 rows only 24 of the 64 worlds occur, at 19-26 rows each. The strongest available null
+is the majority class at 4.6099%, not 1/64 = 1.5625%. The 63.65% figure is 13.81x the
+strongest null, NOT 40.7x. The multiplier is corrected in STATUS.md and the new record.
+The result is still far above every null; the stated multiple was not. The earlier form
+stands in the committed history rather than being quietly amended.
+
+PROPOSED, NOT RUN. `ARCHITECTURE_CHANGE_SPEC_v0.2_ANALYTIC_DECOMPOSE_INIT.md` - analytic
+initialisation of the registered ^6 block from the closed-form solve, with a 0-update arm,
+a 160-update arm, and a shuffled-label control. Supersedes nothing; v0.1 remains WITHDRAWN
+IN FULL. Requires an owner-signed phase record before any GPU launch. No run is authorised.
+
+CAS CORRECTION 4 IMPLEMENTED. `cncm/simplex.py` + `tests/test_simplex_metric.py`, 50 tests,
+provenance pinned to the Rust `cas-engine/src/metric/mod.rs` (23347 bytes, sha256
+66fcee7d8801e4fa9607789a802d495e01e528252f1375d2cf0bf154dfb72b10, re-verified by test).
+Open simplex with p_k > 0 enforced strictly, Fisher-Rao inner product, geodesic distance
+2*arccos(BC), tangent space sum-zero, three deliberate divergences from the Rust source
+recorded rather than silently carried over. Full suite: 2031 passed, 742 subtests passed.
+
+Corrections 1, 2 and 3 are still ABSENT from the homebase. That is the next item, and the
+admissibility relations themselves are not frozen, so the guard can only be built
+fail-closed pending an authority decision.
+
 ## 2026-09-17 UTC - My second proposed fix LEAKS the answer; one candidate survives
 
 $0, pure Python, primal ridge over 564 real packets. No model, GPU, checkpoint,

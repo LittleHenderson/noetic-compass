@@ -586,3 +586,127 @@ binding), `cas_meta2/typed_teaching/input_frames.py` (frame construction),
 
 Scripts in this directory: `measure_real_packets.py` (real frames, the authority
 for Findings 2–4) and `verify_encoder_capacity.py` (the synthetic model).
+
+---
+
+# ADDENDUM — what the 160 recorded updates did, and what the module can reach
+
+Two measurements were added after the correction above. Both cost $0.00, both are pure
+standard library, and both read bytes that were already on disk. Full write-ups:
+`UPDATE_TRAJECTORY_RESULT.md` and `REACHABLE_SOLUTION_RESULT.md`.
+
+## Finding 13 — the training objective had not converged when the contract stopped it
+
+`measure_update_trajectory.py` reads all 160 `main_*_update.json` receipts and the five
+development scorings from `typed_matched_001/receipt_20260919_m`. Output:
+`update_trajectory.txt`.
+
+| quantity | value |
+| --- | ---: |
+| development accuracy at cursors 0 / 40 / 80 / 120 / 160 | 0/59, 0/59, 1/59, 1/59, 0/59 |
+| `raw_batch_loss`, first quarter (updates 0–39) mean | 1.586120 |
+| `raw_batch_loss`, last quarter (updates 120–159) mean | 0.995690 |
+| ratio | 0.627752 |
+| global minimum `raw_batch_loss` | **0.277262 at update 159 — the last update** |
+| Spearman(block index, block mean), 8 blocks of 20 | −0.928571 |
+| exact one-sided permutation p, 8! orderings | **0.000868** |
+| mean gradient L2 norm, first quarter → last quarter | 4.490157e-01 → 6.191440e-01 (**1.378892×**) |
+| Spearman(update index, gradient norm) | **+0.317690** |
+| largest gradient norm over the run | 1.528121e+00 at update 93 |
+
+The registered contract caps updates at 176 (`learner.py`, `TYPED_LEARNER_LIMITS`) and this
+run stopped at 160. **The stopping point is the ceiling, not a schedule choice.** The loss
+was at its global minimum and the gradient norm was still **rising**. No convergence
+criterion was ever met.
+
+Per-field, normalized by `log(public_alphabet_size)` so a uniform prior sits at 1.0:
+
+| field | alphabet | norm head | norm tail |
+| --- | ---: | ---: | ---: |
+| correspondence | 7,25 | 0.769966 | 0.158806 |
+| reach | 5,6 | 0.917934 | 0.444251 |
+| kind_ref | 64 | 0.997035 | 0.941146 |
+| setting_ref | 64 | 0.995814 | 0.953662 |
+| function_ref | 64 | 0.999237 | 0.959460 |
+| whole | 3,4 | 1.100893 | **1.619377** |
+| world_id | 65 | 0.504130 | 0.503435 |
+
+Three readings. **The three 64-way reference fields remain within 4–6% of a uniform prior
+over 64 symbols after 160 updates.** `whole` moved *backwards*, past uniform — after
+training the model is reliably worse than a uniform guess on that field, consistent with the
+recorded negative transfer (6.5201% before teaching, 4/177 and 1/177 after). `world_id` is
+flat and already good, at 0.504130 → 0.503435.
+
+**And the metric is conjunctive while the loss is additive.** `correspondence` fell 79% and
+`reach` fell 52% in normalized terms over a window in which development accuracy moved from
+0/59 to at most 1/59 and back to 0/59. A scored question is correct only when the whole
+assembled answer matches the single admissible answer, so partial field improvement is
+**structurally incapable** of raising the score.
+
+## Finding 14 — the registered `^6` module can reach the closed-form solution exactly
+
+`measure_reachable_solution.py` (output: `reachable_solution.txt`). It rebuilds the real
+encoded slots for all 564 cached packets and runs 5-fold cross-validated ridge in the
+primal.
+
+**The frozen readout imposes no constraint.** Score for class `c` is
+`r_c · (T φ) = (Tᵀ r_c) · φ`, so realising a free-readout weight matrix `W` needs only
+`Tᵀ = W (Rᵀ)⁻¹`. Measured: all 90 registered readout rows present, 65 world-alias symbols,
+every row L2 norm **exactly 1.000000000**, rows linearly **INDEPENDENT**, max
+&#124;RᵀR⁻ᵀ − I&#124; = **2.798e-14**.
+
+**The registered module contains that map exactly.** Setting `left = I₆₄`, `right = 0`,
+`merge = [T | 0]` gives `^6(x) = T·tanh(x)` as an identity — the right branch contributes
+`tanh(0) = 0` and its half of `merge` is zero.
+
+| reachable class | 5-fold CV | vs 1/64 | vs strongest null |
+| --- | ---: | ---: | ---: |
+| free readout on the encoded slot `x` | 63.65% | 40.7× | 13.81× |
+| free readout on `tanh(x)` — what `^6` can build | **63.83%** | 40.9× | 13.85× |
+| through the **frozen** readout rows | **63.83%** | 40.9× | 13.85× |
+| held-out rows where frozen and free argmax agree | **100.00%** | — | — |
+
+tanh distortion ‖tanh(x) − x‖/‖x‖: min 0.009792, mean 0.014927, max 0.022331.
+
+## Fifth self-correction — the "40.7× chance" multiplier is overstated
+
+The same run measured class balance for the first time: among the 564 rows only **24** of
+the 64 worlds occur, at **19–26** rows each. So the strongest available null is the majority
+class at **4.6099%**, not 1/64 = 1.5625%.
+
+**The 63.65% figure is 13.81× the strongest null, not 40.7×.** The multiplier is corrected
+here and in `REACHABLE_SOLUTION_RESULT.md`. The result remains far above every null; the
+stated multiple does not. The earlier form stands in the committed history and is not
+quietly amended.
+
+## Where this leaves the architecture
+
+| | value |
+| --- | ---: |
+| representation — real encoded slot, free readout | 63.65% |
+| codebook — world symbols selectable | 65/65, min normalised margin 0.7573 |
+| frozen readout — a constraint? | no; 100.00% argmax agreement |
+| registered `^6` class — carries the solution? | yes, exactly, at 63.83% |
+| the trained learner, frozen readout, 160 updates | **1.24%** |
+
+**The gap is an optimisation gap inside a function class the architecture already
+contains.** Closed-form route: `ARCHITECTURE_CHANGE_SPEC_v0.2_ANALYTIC_DECOMPOSE_INIT.md`
+(**PROPOSED**, supersedes nothing; v0.1 remains WITHDRAWN IN FULL). It changes no encoder, no
+codebook, no readout, no parameter list, no shape, no scope and no update ceiling — only the
+values the plastic block starts from.
+
+## What findings 13 and 14 do NOT claim
+
+- **63.83% is a single-field number.** It is focus-world alias decodability, one 64-way
+  field. The learner's 1.24% and the arms' scores are whole-answer exact match over all
+  eleven fields, which is conjunctive. These are not like-for-like metrics.
+- **Nothing was executed.** Findings 13 and 14 read a past run and a cached feature set.
+  One arm, one seed for the telemetry (`MIXED_SAME_ITEMS`, seed 20260919).
+- **A falling training loss is not evidence that held-out accuracy would have risen.** The
+  `whole` field moving backwards is a warning against that reading.
+- **The 564-packet sample is the learner's own registry**, and only 24 of 64 worlds appear
+  in it. The 5-fold split is held out within the sample, so this is representability, not
+  generalisation on unseen data.
+- **The ridge solution is not trained.** Nothing here shows SGD could find it, or that
+  placing the block at it survives the registered training that follows.
+- **No GPU run is proposed or authorised by this addendum.**

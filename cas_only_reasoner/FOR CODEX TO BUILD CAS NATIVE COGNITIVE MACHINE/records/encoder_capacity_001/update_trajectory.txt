@@ -1,0 +1,84 @@
+==============================================================================
+A. ACCURACY TRAJECTORY ACROSS THE FIVE DEVELOPMENT CHECKPOINTS
+==============================================================================
+
+ cursor  correct   total   accuracy
+      0        0      59    0.0000%
+     40        0      59    0.0000%
+     80        1      59    1.6949%
+    120        1      59    1.6949%
+    160        0      59    0.0000%
+
+change over the window: +0.0000 percentage points
+n/a
+
+per kind (correct/total):
+            kind            @0           @40           @80          @120          @160
+           parts           0/6           0/6           0/6           0/6           0/6
+           reach          0/53          0/53          1/53          1/53          0/53
+
+==============================================================================
+B. OPTIMISATION STATE AT THE STOPPING POINT (160 recorded updates)
+==============================================================================
+
+update receipts read: 160
+
+raw_batch_loss, consecutive blocks of 20 updates:
+ block       steps       mean        min        max
+     0        0-19   1.613087   0.942343   2.221768
+     1       20-39   1.559153   0.644371   2.267041
+     2       40-59   1.530956   0.822199   2.584561
+     3       60-79   1.217111   0.577073   1.922803
+     4       80-99   1.270649   0.580367   2.230156
+     5     100-119   1.267108   0.537372   2.421186
+     6     120-139   1.012291   0.279819   1.820994
+     7     140-159   0.979089   0.277262   1.804005
+
+first quarter mean (updates 0-39):   1.586120
+last  quarter mean (updates 120-159):   0.995690
+ratio last/first quarter:            0.627752
+
+global minimum raw_batch_loss: 0.277262 at update 159
+last update raw_batch_loss:    0.277262
+last update is the minimum?    True
+
+trend tests:
+  Spearman(update index, raw_batch_loss) = -0.438668
+  Spearman(update index, gradient norm)  = +0.317690
+
+gradient L2 norm, first quarter mean: 4.490157e-01
+gradient L2 norm, last  quarter mean: 6.191440e-01
+ratio last/first quarter:             1.378892
+largest gradient norm over the run:   1.528121e+00 at update 93
+
+per field, raw_loss and normalized_loss (first quarter mean -> last quarter mean).
+normalized_loss is raw_loss / log(public_alphabet_size), so a uniform prior
+sits at 1.0. Means are over the field entries present across each batch's
+tasks, not a per-task average; entry counts differ because fields differ.
+
+           field  alphabet  entries   raw head   raw tail    ratio  norm head  norm tail
+  correspondence      7,25      208   2.273368   0.458806 0.201818   0.769966   0.158806
+           edges         2       80   0.670382   0.629649 0.939239   0.967157   0.908392
+    function_ref        64       80   4.155710   3.990282 0.960193   0.999237   0.959460
+        kind_ref        64       80   4.146553   3.914116 0.943945   0.997035   0.941146
+           nodes         2      213   0.696187   0.619635 0.890041   1.004385   0.893945
+    participants         2       80   0.728977   0.823562 1.129750   1.051692   1.188149
+           reach       5,6      315   1.602468   0.779164 0.486228   0.917934   0.444251
+           roles         2       96   0.675657   0.597681 0.884593   0.974767   0.862271
+     setting_ref        64       80   4.141473   3.966168 0.957671   0.995814   0.953662
+           whole       3,4       80   1.472184   2.146532 1.458060   1.100893   1.619377
+        world_id        65       80   2.104432   2.101532 0.998622   0.504130   0.503435
+
+uniform-prior reference: log(3) = 1.098612, log(64) = 4.158883
+
+block-mean trend (blocks of 20 updates, autocorrelation handled by blocking):
+  Spearman(block index, block mean) = -0.928571
+  descending pairs = 26/28
+  exact permutation p (one-sided, 40320 orderings) = 0.000868
+
+==============================================================================
+READING
+==============================================================================
+The registered contract caps updates at 176 and this run stopped at 160, so the stopping
+point is the ceiling, not a schedule choice. If the objective had converged there, the loss
+would be flat and the gradient norm would have decayed. Neither is true.
