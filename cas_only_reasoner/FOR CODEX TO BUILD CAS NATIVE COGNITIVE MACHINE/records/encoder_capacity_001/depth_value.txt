@@ -1,0 +1,60 @@
+loading checkpoints (deserialisation only)...
+building up to 120 world-typed reference slots...
+  probes: 120
+  NOTE: the encoded input is approximate (rebuild correlation +0.781). Every number
+        below compares depths against each other on the SAME input, so it is valid.
+
+============================================================================================
+cursor 0 � WHAT DOES DEPTH BUY?
+============================================================================================
+
+            comparison   mean logit cosine   argmax agreement
+--------------------------------------------------------------------------------------------
+          depth 1 vs 2            0.990148             85.00%
+          depth 1 vs 4            0.989352             80.00%
+          depth 1 vs 8            0.989381             80.00%
+          depth 2 vs 4            0.999693             95.00%
+          depth 2 vs 8            0.999695             95.00%
+          depth 4 vs 8            1.000000            100.00%
+
+logit scale by depth:
+  depth  1: mean +0.006715   sd 0.043412
+  depth  2: mean +0.007199   sd 0.045048
+  depth  4: mean +0.006979   sd 0.045008
+  depth  8: mean +0.006980   sd 0.045004
+
+============================================================================================
+cursor 160 � WHAT DOES DEPTH BUY?
+============================================================================================
+
+            comparison   mean logit cosine   argmax agreement
+--------------------------------------------------------------------------------------------
+          depth 1 vs 2            0.929298             41.67%
+          depth 1 vs 4            0.876005             26.67%
+          depth 1 vs 8            0.858026             23.33%
+          depth 2 vs 4            0.975797             66.67%
+          depth 2 vs 8            0.954439             54.17%
+          depth 4 vs 8            0.989746             82.50%
+
+logit scale by depth:
+  depth  1: mean +0.024480   sd 0.343673
+  depth  2: mean -0.005084   sd 0.630459
+  depth  4: mean -0.013529   sd 0.654277
+  depth  8: mean -0.013755   sd 0.658688
+
+============================================================================================
+READING
+============================================================================================
+
+Each row asks what the extra passes cost and what they buy. The prediction path runs
+depth 8 for every slot, so `depth 4 vs 8` is the row that decides whether the last four
+passes earn their place: they cost twice the block forward passes.
+
+A caution on the untrained checkpoint: at cursor 0 the logit sd is around 0.043 across
+64 symbols, so the scores are near-ties and the argmax is largely decided by the
+first-wins tie-break rather than by the vector. High depth-to-depth agreement there is
+an artifact of near-ties, not evidence that the recurrence is unnecessary.
+
+This is a relative measurement on a shared input, so the rebuild's 0.781 correlation
+does not weaken it. It says nothing about whether the answer is CORRECT.
+

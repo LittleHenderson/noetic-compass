@@ -4,6 +4,73 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - What the registered depth buys: untrained the recurrence is a fixed point, trained it is not
+
+$0.00. torch used only to deserialise checkpoints; all arithmetic on plain lists. Script
+`records/encoder_capacity_001/measure_depth_value.py` (result `depth_value.txt`); record
+`DEPTH_VALUE_RESULT.md`.
+
+This measurement uses NO absolute numbers, which is why it survives the reconstruction gap: the
+SAME input goes to the SAME saved block at depths (1, 2, 4, 8) and the depths are compared with
+each other. A wrong input moves all depths together and cannot manufacture or hide a difference
+between them. 120 world-typed reference slots from context and definition packets. The prediction
+path runs depth 8 for every slot.
+
+  cursor 0 (untrained)                logit cosine   argmax agreement
+    depth 1 vs 2                          0.990148          85.00%
+    depth 1 vs 8                          0.989381          80.00%
+    depth 2 vs 4                          0.999693          95.00%
+    depth 4 vs 8                          1.000000         100.00%
+
+  cursor 160 (trained)                logit cosine   argmax agreement
+    depth 1 vs 2                          0.929298          41.67%
+    depth 1 vs 4                          0.876005          26.67%
+    depth 1 vs 8                          0.858026          23.33%
+    depth 2 vs 4                          0.975797          66.67%
+    depth 2 vs 8                          0.954439          54.17%
+    depth 4 vs 8                          0.989746          82.50%
+
+  logit scale (within-slot sd over 64 symbols), mean over probes:
+    depth        1         2         4         8
+    cursor 0   0.043412  0.045048  0.045008  0.045004
+    cursor 160 0.343673  0.630459  0.654277  0.658688
+
+UNTRAINED, THE RECURRENCE IS A CONTRACTION TO A FIXED POINT. At cursor 0 depth 4 and depth 8 are
+BIT-IDENTICAL on this probe set: cosine 1.000000, argmax agreement 100.00%. The untrained
+iteration reaches its fixed point by about depth 4 and every further pass is a no-op. Caution: at
+cursor 0 the logit sd is ~0.043 across 64 symbols, so the scores are near-ties and the argmax is
+largely decided by the first-wins tie-break; the 85% and 95% agreements there are partly that
+artifact. The exactly-1.000000 cosine at depth 4 vs 8 is the load-bearing number because it is a
+statement about the vectors, not the argmax.
+
+TRAINING MOVES THE RECURRENCE OFF THAT FIXED POINT. At cursor 160 depth 4 vs 8 is no longer
+identical: cosine 0.989746 and the argmax differs in 17.5% of slots. Training did not merely
+rescale the block; it changed the DYNAMICAL REGIME, from an iteration that converged by depth 4 to
+one that is still moving at depth 8. The architecture does not declare that.
+
+THE LATE PASSES RESOLVE NEAR-TIES RATHER THAN SHARPEN THE READ. At cursor 160 the argmax changes
+in 58.3% of slots from depth 1 to 2, 33.3% from 2 to 4, and 17.5% from 4 to 8. But the logit SCALE
+saturates far earlier: sd 0.630459 -> 0.654277 -> 0.658688 from depth 2 to 8, +4.5% in total and
+only +0.67% across the last four passes. So across the last four passes the score spread barely
+moves while one answer in six flips - the late passes are reshuffling near-tied decisions rather
+than improving the read, at twice the block forward-pass cost.
+
+LABELLED AS A HYPOTHESIS: that near-tie reshuffling contributes to the recorded alias
+concentration (9 of 64 aliases, W36 at 44.3%), whose cause remains OPEN. A mechanism that flips
+one near-tie in six at constant score spread is a plausible contributor because near-tie
+resolution is where a systematic bias would show - but it is NOT established here.
+
+TWO QUESTIONS FOR THE ARCHITECTURE, neither answered: is depth 8 earning its cost, given it flips
+17.5% of answers for a 0.67% scale change - and whether those flips are right more often than
+wrong needs the sealed targets and an authorised run; and why does training make a contraction
+stop contracting, because if the recursion is meant to settle, something in the training is
+pushing it away from settling.
+
+NOT ESTABLISHED: the input is approximate (rebuild correlation +0.781), so no absolute logit and
+no accuracy follows; "correct" is not measured at any depth; 120 probes, one arm, one seed,
+world-typed reference slots only; the near-tie reading is an inference from two numbers and was
+not demonstrated by inspecting the score distribution directly. No GPU work was launched.
+
 ## 2026-09-17 UTC - The reconstruction gap: the encoder material matches exactly, the rebuild does not, and it cannot be settled here
 
 $0.00, no GPU work, no AWS. torch used only to deserialise checkpoints. Record
