@@ -1,5 +1,30 @@
 # Two separate defects, and the identification hypothesis is falsified
 
+> # WITHDRAWAL — Defect A below is an ARTIFACT. Read `READOUT_COLLAPSE_RESULT.md` instead.
+>
+> **Defect A as described in this file is withdrawn, and so is the falsification in the section
+> above it.** Both rest on `measure_world_consistency.py`, which counted every 64-hex world
+> identifier in an answer. A `definition` answer carries a third field, `whole`, whose world
+> component is **supplied, not decided**: the node-typed slot's symbols are `N0 … Nk`, nodes of
+> the focus world, and the assembly prepends the focus world's identifier because that is the
+> slot's scope. Verified on three packets — the node slot selected `N2`, `N2`, `N0` and `whole`
+> read `/n2`, `/n2`, `/n0`.
+>
+> So "70 of 70 `definition` answers name the focus world" was a tautology, not a measurement.
+> **Identification is not exonerated; it is the defect after all.**
+>
+> The clean measurement is in `measure_joint_binding.py`, which looks only at slots whose
+> alphabet is the 64 world aliases and where nothing supplied enters. Over 210 such slots, the
+> focus alias is ranked **6th or worse in 157 of them**, and the model emits only **9 of the 64
+> aliases at all**, with one alias accounting for **44.3%** of every world-typed decision.
+> `READOUT_COLLAPSE_RESULT.md` carries it.
+>
+> **Defect B below stands.** It was measured from the public slot plan alone and is untouched by
+> this error.
+>
+> **A binding fix is also withdrawn.** Jointly deciding the world across the slots that must
+> agree changes nothing — 10 of 140 questions either way.
+
 **Record:** `records/encoder_capacity_001/`
 **Scripts:** `measure_world_consistency.py` (output `world_consistency.txt`),
 `measure_answer_conjunction.py` (output `answer_conjunction.txt`)

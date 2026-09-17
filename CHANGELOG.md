@@ -4,6 +4,88 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - EIGHTH SELF-CORRECTION: the registered ^6 block COLLAPSES TO A CONSTANT, and my previous correction was an artifact
+
+$0.00, pure standard library, no model, no GPU, no target opened, no provider.
+Scripts `records/encoder_capacity_001/measure_joint_binding.py` (result `joint_binding.txt`) and
+the alias survey (`alias_survey.txt`); record `READOUT_COLLAPSE_RESULT.md`. The seventh
+correction is itself corrected here.
+
+THE ERROR I MADE. `measure_world_consistency.py` counted every 64-hex world identifier in an
+answer and reported that 70 of 70 definition answers name the focus world, which appeared to
+falsify the identification hypothesis and produced the whole "Defect A / referential
+consistency" story. A definition answer has THREE fields:
+
+    function_ref = world-6f7b0ac1f.../decl/function   <- a 64-way decision
+    kind_ref     = world-7afc0b967.../decl/kind       <- a 64-way decision
+    whole        = world-7afc0b967.../n2              <- a NODE decision; world SUPPLIED
+
+The world component of `whole` is supplied, not decided: the node-typed slot's symbols are
+N0..Nk, nodes OF the focus world, and the assembly prepends the focus world's identifier because
+that is the slot's scope. Verified on three packets - the node slot selected N2, N2, N0 and
+`whole` read /n2, /n2, /n0. So "names the focus world" was a tautology. DEFECT A IS WITHDRAWN,
+the falsification is withdrawn, and the identification hypothesis is RESTORED.
+
+THE CLEAN MEASUREMENT (measure_joint_binding.py) looks only at slots whose alphabet is the 64
+world aliases, where the world is genuinely decided. Over 210 such slots:
+
+  cursor    rank#1   #2-#5   #6 or worse   distinct aliases emitted   entropy
+       0         6      22           182                    26 of 64   4.164 bits
+     160        10      43           157                     9 of 64   2.516 bits
+
+At cursor 160 the machine emits W36 in 93 of 210 world-typed reference slots = 44.3%, and NEVER
+EMITS 55 OF THE 64 ALIASES AT ALL. The two world-typed slots of a definition question agree with
+each other 44.3% of the time - exactly the rate at which the first slot emits W36, against 1.56%
+chance for two independent picks. They are not making two decisions; they are emitting the same
+constant.
+
+TEACHING MADE IT WORSE, NOT BETTER: distinct aliases 26 -> 9, entropy 4.164 -> 2.516 bits,
+commonest emission 15.2% -> 44.3%, focus alias at rank 1 2.86% -> 4.76%. The trained block has
+collapsed onto an input-independent fixed point.
+
+THIS EXPLAINS THE WHOLE RECORD WITH NO FURTHER ASSUMPTIONS. Why the loss was still falling and
+the gradient norm rising at the contract ceiling: the run was descending INTO the collapse. Why
+the exposed course improved 6.9149% -> 33.5106% while transfer did not: correspondence and reach
+do not run through the 64-alias slots. Why definition and context are 0/70. Why more updates
+would make it worse (OS-022).
+
+A BINDING FIX IS ALSO WITHDRAWN. Jointly deciding the world across the slots that must agree was
+measured from the recorded scores and changes NOTHING: 10 of 140 questions either way at cursor
+160, 4 vs 6 at cursor 0. The two slots are not disagreeing about two worlds; they are both
+emitting the same wrong constant. There is no incoherence to repair. Referential consistency is
+not the missing piece.
+
+DEFECT B STANDS. It was measured from the public slot plan alone and is untouched by this error:
+edge_account is a conjunction over 16 binary edge-presence decisions, role_set over 6, parts
+over 4, and above roughly 10 bits of required answer content the machine has never once been
+right.
+
+THE CHAIN IS NOW CLOSED END TO END, every link a measurement:
+  information is present in the encoded slot   63.65% free readout, 5-fold CV
+  the frozen codebook can select every world   65/65 vertices, min margin 0.7573
+  the frozen readout is not a constraint       100.00% argmax agreement, residual 2.798e-14
+  the module can express the solution exactly  forward(x) = T tanh(x), residual 0.0
+  the trained block does not find it           COLLAPSES: 9 of 64 aliases, entropy 2.516 bits
+
+So the defect is neither capacity, representation, readout nor the step budget by itself. The
+training procedure drives the plastic block to an input-independent fixed point and more of the
+same training deepens it. This is the strongest evidence yet that the analytic initialisation is
+aimed at the right target, and it raises its priority: pinning the block at T = R^-1 W^T
+replaces a constant with a fitted input-dependent map that already reaches 63.83% on this exact
+quantity.
+
+P5 RESTORED AND MADE THE STRONGEST PREDICTION IN THE PHASE-0 RECORD, now keyed on the alias
+distribution rather than an aggregate score. Arm A must emit MORE THAN 9 distinct aliases,
+reduce the commonest alias BELOW 44.3%, and rank the focus alias first in MORE THAN 10 of 210
+slots - three direct readings of the recorded quantity, each falsifiable in one direction, none
+depending on the sealed target. G6 and G7 enforce them; G7 is the control that a wrong solve
+must not move the distribution either.
+
+NOT ESTABLISHED. Nothing was executed; one arm, one seed. "Constant" describes the READOUT'S
+ARGMAX, not the block's output vector - whether the vector is nearly constant or merely aligned
+with a few readout rows is unmeasured, and the two would need different repairs. The collapse is
+not attributed to any specific hyperparameter.
+
 ## 2026-09-17 UTC - SEVENTH SELF-CORRECTION: identification is falsified; the real defects are binding and composition
 
 $0.00, pure standard library, no model, no GPU, no target opened, no provider. Two new

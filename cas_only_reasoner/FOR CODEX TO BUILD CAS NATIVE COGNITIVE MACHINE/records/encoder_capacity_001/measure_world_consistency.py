@@ -1,5 +1,21 @@
 """Measure whether the recorded answers name the world the question was about.
 
+> # WITHDRAWN — THE MEASUREMENT IN THIS SCRIPT IS INVALID. See `READOUT_COLLAPSE_RESULT.md`.
+>
+> It collects every `world-<64 hex>` identifier in an answer's value and asks whether the focus
+> world is among them. A `definition` answer carries a third field, `whole`, whose world
+> component is **supplied rather than decided**: the node-typed slot's symbols are `N0 … Nk`,
+> nodes *of the focus world*, and the assembly prepends the focus world's identifier because
+> that is the slot's scope. Verified on three packets — the node slot selected `N2`, `N2`, `N0`
+> and `whole` read `/n2`, `/n2`, `/n0`.
+>
+> So "70 of 70 `definition` answers name the focus world" was a tautology. The script therefore
+> **cannot** distinguish a decision from a supplied identifier, and its output must not be used.
+> It is kept because deleting a wrong measurement is worse than labelling one.
+>
+> The replacement is `measure_joint_binding.py`, which restricts the test to slots whose
+> alphabet is the 64 world aliases, where the world is genuinely decided.
+
 Pure standard library. No torch, no device, no network. Reads only the frozen receipts of
 `typed_matched_001/receipt_20260919_m` and the frozen public course material, both already on
 disk.

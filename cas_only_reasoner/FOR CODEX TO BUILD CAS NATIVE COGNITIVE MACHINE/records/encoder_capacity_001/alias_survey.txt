@@ -1,0 +1,17 @@
+registry: 564
+  cursor 0: 150/564
+=== cursor 0: 210 world-typed reference slots ===
+  cursor 160: 150/564
+=== cursor 160: 210 world-typed reference slots ===
+=== cursor 0: 210 world-typed reference slots (context+definition) ===
+    focus alias ranked #1  : 6  (2.86%)
+    focus alias in top 5   : 28  (13.33%)   chance 7.81%
+    distinct aliases emitted: 26 of 64   entropy=4.164 bits (max 6.0)
+    most emitted: W49=32(15.2%), W8=26(12.4%), W6=22(10.5%), W22=19(9.0%), W26=12(5.7%), W21=11(5.2%), W43=9(4.3%), W3=9(4.3%)
+
+=== cursor 160: 210 world-typed reference slots (context+definition) ===
+    focus alias ranked #1  : 10  (4.76%)
+    focus alias in top 5   : 53  (25.24%)   chance 7.81%
+    distinct aliases emitted: 9 of 64   entropy=2.516 bits (max 6.0)
+    most emitted: W36=93(44.3%), W17=29(13.8%), W46=27(12.9%), W47=17(8.1%), W40=15(7.1%), W49=12(5.7%), W8=7(3.3%), W25=6(2.9%)
+

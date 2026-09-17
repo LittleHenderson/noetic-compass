@@ -1,0 +1,61 @@
+predictions: 564   scored: 564
+building the public slot plans and focus aliases...
+  public context built: 200/564
+  public context built: 400/564
+  built: 564
+
+====================================================================================================
+JOINT VERSUS INDEPENDENT WORLD DECISION � after 160 updates (cursor 160)
+====================================================================================================
+
+           kind    q  slots  indep focus   agree  any focus  joint focus  rescued
+----------------------------------------------------------------------------------------------------
+        context   70     70      7 ( 10.0%)  100.0%      10.0%        10.0%        0
+     definition   70    140      3 (  2.1%)   44.3%       4.3%         4.3%        3
+   edge_account    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+          parts    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+          reach    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+
+focus-world rank within each world-typed slot's own ranking:
+           kind     # 1     # 2     # 3     # 4     # 5      6+      n
+        context       7       0       1       6       5      51     70
+     definition       3       8       5       9       9     106    140
+
+one-world kinds together: 140 questions with world-typed slots
+  independent picks name the focus world at some slot : 10  (7.14%)
+  joint decision names the focus world                : 10  (7.14%)
+  questions where the joint decision rescues disagreeing slots: 3
+
+====================================================================================================
+JOINT VERSUS INDEPENDENT WORLD DECISION � before teaching (cursor 0)
+====================================================================================================
+
+           kind    q  slots  indep focus   agree  any focus  joint focus  rescued
+----------------------------------------------------------------------------------------------------
+        context   70     70      3 (  4.3%)  100.0%       4.3%         4.3%        0
+     definition   70    140      3 (  2.1%)   14.3%       4.3%         1.4%        1
+   edge_account    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+          parts    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+          reach    0      0      0 (  0.0%)    0.0%       0.0%         0.0%        0
+
+focus-world rank within each world-typed slot's own ranking:
+           kind     # 1     # 2     # 3     # 4     # 5      6+      n
+        context       3       0       0       3       0      64     70
+     definition       3       4       0      13       2     118    140
+
+one-world kinds together: 140 questions with world-typed slots
+  independent picks name the focus world at some slot : 6  (4.29%)
+  joint decision names the focus world                : 4  (2.86%)
+  questions where the joint decision rescues disagreeing slots: 1
+
+====================================================================================================
+WHAT THIS DOES AND DOES NOT SHOW
+====================================================================================================
+
+It shows what a joint decision over the slots that must agree would name, measured from
+the recorded scores. It does not score those answers: the target is sealed, and naming
+the focus world is necessary but not sufficient. `edge_account` is the standing proof of
+that � 70 of 70 of its answers already name the focus world and none is correct, so a
+fix to the reference slots cannot move it. The remaining defect for the set-valued kinds
+is a separate one and is not measured here.
+
