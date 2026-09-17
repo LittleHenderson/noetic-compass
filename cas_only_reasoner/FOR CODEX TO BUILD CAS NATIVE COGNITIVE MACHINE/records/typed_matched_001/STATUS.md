@@ -1,8 +1,16 @@
 # Matched teaching study
 
-Status at **2026-09-17 08:14:35 UTC: 1/6 arms completed and accepted; matched control running**.
+Status at **2026-09-17 11:45:51 UTC: 6/6 arms completed and independently verified; study execution finished**.
 
-The first component-first arm improved on exposed questions (38/564 to 193/564), but scored 0/59 on unfamiliar graphs after teaching. Retention probes fell from 46/96 to 36/96; the initial score missed the preset 48/96 competence threshold, so retention is formally unassessed. See `FIRST_ARM_RESULT.md`. No paired comparison is complete yet.
+See [the completed comparison](MATCHED_STUDY_RESULT.md). Component-first teaching led in two paired seeds and tied in one: mean family-balanced final transfer 3.7423% versus 0.3472%, and normalized learning-curve score 2.4788% versus 2.0544%. Absolute transfer was poor: 4/177 versus 1/177 correct across three runs of the same 59-question panel, down from 21/177 in each method before teaching. All three retention comparisons remain unassessed under the preset competence rule; all six raw probe scores fell. A useful or general learning advantage is not established.
+
+Independent audit: PASS for 3,504 collected files, 2,364 artifacts, 2,382 required objects, 18 checkpoint reconstructions, 12 exact replay updates and three paired initializations. All six lifecycle receipts confirm compute cleanup. The latest EC2 query returned the final two instances terminated; four older IDs were not returned. Campaign budget: revision 84, $501 reserved, $4,499 unreserved; six $7 reservations for this study, no retries. Private evidence archives retained.
+
+Next: diagnose the unfamiliar-graph collapse, zero-score question kinds and forgetting from saved outputs, then freeze a targeted correction and fresh matched test. The full CNCM goal remains active and incomplete.
+
+## Frozen protocol and historical observations
+
+The observations below preserve their original timestamps and do not describe current running jobs.
 
 The study compares component-first teaching with mixing the same component/whole lessons. It holds the learner, initial state per seed, information and counted work fixed. This measures one teaching-order contrast, not general CAS architecture superiority.
 
@@ -19,8 +27,8 @@ Study record: `admission_001/study.json`, SHA-256 `154dee19e678aa3520b4752810064
 Archive SHA-256: `2feff28c52fbbe5a230d4f1f32c936c9d9434bc514d5cf92d998fc917cbc72fc`.
 Pure tests: **166 passed**. These tests are preparation evidence, not learning results.
 
-First job: `cas-meta2-tmat-20260917072721-e6bdf305-a-20260917`.
-Instance: `i-0dcbfc8321769d483`, observed `running`.
+First job at launch: `cas-meta2-tmat-20260917072721-e6bdf305-a-20260917`.
+Instance at the 07:33:48 UTC launch observation: `i-0dcbfc8321769d483`, then `running`.
 The supervisor is `execute_study.py`; it stops on a failed/incomplete arm or cleanup failure. The frozen schedules and endpoints do not change after scores arrive. `live_readonly_monitor.py` records scoped provider observations without mutations.
 
 Campaign ledger after first reservation: revision 79, $466 reserved, $4,534 unreserved of $5,000. The actual hourly compute quote is $2.52; reservations are bounds, not invoices.

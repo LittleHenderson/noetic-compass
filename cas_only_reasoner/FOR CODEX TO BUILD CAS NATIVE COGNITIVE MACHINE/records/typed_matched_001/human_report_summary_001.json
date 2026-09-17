@@ -1,0 +1,109 @@
+{
+  "exposed_by_kind": {
+    "ALT_COMPONENT_WHOLE": {
+      "analogy": {
+        "after": 36,
+        "before": 25,
+        "total": 210
+      },
+      "context": {
+        "after": 0,
+        "before": 3,
+        "total": 210
+      },
+      "correspondence": {
+        "after": 250,
+        "before": 0,
+        "total": 264
+      },
+      "definition": {
+        "after": 0,
+        "before": 1,
+        "total": 210
+      },
+      "edge_account": {
+        "after": 0,
+        "before": 0,
+        "total": 210
+      },
+      "parts": {
+        "after": 46,
+        "before": 18,
+        "total": 159
+      },
+      "reach": {
+        "after": 246,
+        "before": 65,
+        "total": 321
+      },
+      "role_set": {
+        "after": 11,
+        "before": 2,
+        "total": 108
+      }
+    },
+    "MIXED_SAME_ITEMS": {
+      "analogy": {
+        "after": 32,
+        "before": 25,
+        "total": 210
+      },
+      "context": {
+        "after": 0,
+        "before": 3,
+        "total": 210
+      },
+      "correspondence": {
+        "after": 249,
+        "before": 0,
+        "total": 264
+      },
+      "definition": {
+        "after": 0,
+        "before": 1,
+        "total": 210
+      },
+      "edge_account": {
+        "after": 0,
+        "before": 0,
+        "total": 210
+      },
+      "parts": {
+        "after": 47,
+        "before": 18,
+        "total": 159
+      },
+      "reach": {
+        "after": 245,
+        "before": 65,
+        "total": 321
+      },
+      "role_set": {
+        "after": 11,
+        "before": 2,
+        "total": 108
+      }
+    }
+  },
+  "generated_utc": "2026-09-17T11:47:16.461023+00:00",
+  "mean_scores": {
+    "ALT_COMPONENT_WHOLE": {
+      "development_before": 0.06520061728395062,
+      "exposed_after": 589,
+      "exposed_before": 114,
+      "raw_final": 4,
+      "speed_auc": 0.024787808641975308,
+      "transfer": 0.03742283950617284
+    },
+    "MIXED_SAME_ITEMS": {
+      "development_before": 0.06520061728395062,
+      "exposed_after": 584,
+      "exposed_before": 114,
+      "raw_final": 1,
+      "speed_auc": 0.020543981481481483,
+      "transfer": 0.003472222222222222
+    }
+  },
+  "report_sha256": "1c0954c436d9dd1a14cf742cdb324e49659e5443a1cb97be3c7072dc33b13651",
+  "schema": "cncm.typed-matched-human-report-summary/0.1"
+}

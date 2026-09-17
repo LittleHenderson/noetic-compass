@@ -1,5 +1,16 @@
 # CNCM Complete Requirement Ledger
 
+## Latest result — 2026-09-17 completed matched study
+
+All six GPU arms completed and passed the independent audit. Component-first teaching exceeded the mixed-same-items control in two paired seeds and tied in one. Mean family-balanced transfer was 3.7423% versus 0.3472% (+3.3951 percentage points); normalized learning-curve scores were 2.4788% versus 2.0544% (+0.4244 points). Raw final development answers were 4/177 versus 1/177, on three runs of the same 59-question panel, down from 21/177 before teaching in each method. Both methods ended below the shared initial balanced score of 6.5201%.
+
+No retention pair met the frozen competence rule. All six probe scores fell after intervening teaching. Useful or general learning advantage remains OPEN. This tests one teaching-order contrast, not general CAS architecture superiority. The final panel remains untouched.
+
+Verification passed 3,504 collected files, 2,364 worker artifacts, 18 checkpoint reconstructions, 12 exact replay updates and all three initial-state pairs. Each arm executed 178 actual updates and 71,922 core forward calls. All six lifecycle receipts confirm compute cleanup; the 11:45:51 UTC scoped provider query independently returned the final two instances terminated, with four older IDs absent from the response. Campaign ledger revision 84 records $501 reserved and $4,499 unreserved; this study added six $7 reservations without retries.
+
+See `records/typed_matched_001/MATCHED_STUDY_RESULT.md`, `independent_complete_audit_001.json` and `completion_provider_observation_001.json` in the vision-next worktree. Next: diagnose the zero-score context/definition/edge-account outputs, unfamiliar-graph collapse and forgetting from saved predictions; then freeze a targeted correction and fresh matched test. Full CNCM remains active and incomplete. Earlier dated status entries below are historical.
+
+
 ## Scope boundary
 
 This ledger governs work in:

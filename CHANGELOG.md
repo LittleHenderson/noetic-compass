@@ -4,6 +4,83 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Matched teaching comparison completed: NULL between arms, NEGATIVE transfer within both
+
+The first completed matched teaching study, `CNCM_TYPED_MATCHED_LEARNING_001`
+(`records/typed_matched_001/`), ran six sequential GPU jobs: three paired model
+seeds (20260917, 20260918, 20260919) times two teaching orders over the same
+lesson multiset. Only the grouping/order of 256 supplementary presentations
+differs; the other 896 presentations are fixed. Each arm ran 160 main updates,
+16 intervening-teaching updates and two separately counted replays (178 actual
+updates, 1,296 training presentations, 71,922 core forward calls, 2,951
+predictions). Counted work is identical across arms. Worker source
+`e6bdf30524c0cea3da05e8c39899ca6fc059553d`; archive SHA-256
+`2feff28c52fbbe5a230d4f1f32c936c9d9434bc514d5cf92d998fc917cbc72fc`.
+
+BETWEEN ARMS: component-first led in two paired seeds and tied in one. Mean
+family-balanced learning-curve score 2.4788% versus 2.0544% (+0.4244 percentage
+points); mean family-balanced final transfer 3.7423% versus 0.3472% (+3.3951
+percentage points). The independent audit records the mean transfer difference
+as the exact rational 11/324, of which seed 20260919 supplies 27/324 and seed
+20260918 supplies 6/324: **81.8% of the mean transfer difference comes from one
+paired seed, and within it from a single parts question scored as 1 of 12
+balanced units.** In raw counts the whole difference is 4/177 versus 1/177
+correct across three runs of the same 59-question panel.
+
+WITHIN ARMS, AND LARGER THAN THE BETWEEN-ARM DIFFERENCE: both methods finished
+BELOW their shared pre-teaching development score of 6.5201%, falling to 3.7423%
+(component-first) and 0.3472% (mixed). Raw development answers fell from 21/177
+in each method before teaching to 4/177 and 1/177 after. Teaching on 3-4-node
+worlds degraded performance on the 8-10-node development topologies in both
+arms; this negative transfer is not a difference between the two orders.
+
+RETENTION: 0 of 3 pairs eligible under the frozen rule (at least 48/96 before
+the interval in both arms). Only the seed-20260918 control reached it. All six
+raw probe scores declined (46->36, 47->38, 47->34, 48->37, 47->34, 45->34).
+Retention remains UNASSESSED; this is not evidence that the methods retain
+equally.
+
+Exposed-course fit improved in all six runs (589/1692 versus 584/1692 across the
+same 564 questions repeated three times). Context, definition and edge-account
+answers remained 0 in both methods across all three seeds.
+
+CLAIM: `learning_advantage_established: false` in all six `matched_analysis.json`
+files and in `admission_001/paired_result.json`. This is one controlled
+teaching-order comparison conditional on one encoder and one course. It does not
+establish a useful or durable learning advantage, CAS architectural superiority,
+a final-panel result, or completion of the machine.
+
+Evidence: `records/typed_matched_001/MATCHED_STUDY_RESULT.md`, `STATUS.md`,
+`admission_001/study.json` (frozen before the first run),
+`independent_complete_audit_001.json` (status PASS: 2,364 artifacts, 3,504
+collected files, 2,382 required objects, 18 checkpoint reconstructions, 12 exact
+replays, 3 paired initializations). Budget: six $7 reservations, $42, no
+automatic retries. All six instances confirmed terminated. The earlier negative
+three-seed recurrence result remains unchanged.
+
+## 2026-09-17 UTC - Money path restored in the vision-next worktree
+
+The vision-next working copy committed a campaign ledger at revision 76 while
+its own `campaign_ledger.json.history/` held only entries 00000000-00000075.
+`budget.read_locked` therefore refused every read with
+`PENDING_OR_MISSING_BUDGET_HISTORY_FAIL_CLOSED`, making any paid launch from this
+tree impossible; six completed matched-study jobs had been reserved against the
+meta1 working copy instead. The two lineages were verified to be one chain:
+vision-next's 76 history entries and its head were byte-identical to meta1's, its
+head being exactly meta1's `00000076.json`. History entries 00000076-00000084 and
+the head were copied from meta1 unmodified. The pre-repair head is preserved at
+`records/budget/PRESERVED_vision_next_head_rev76_pre_ledger_repair.json`.
+
+Verified after repair: `read_locked` returns revision 84, cap $5000.00,
+reserved $501.00, unreserved $4499.00, 86 reservations, amendment bound. Four
+fail-closed negative controls were exercised against temporary copies and all
+refused correctly: corrupted head free space
+(`INCONSISTENT_CAMPAIGN_TOTALS`), head pinned to the old $400 cap
+(`LEDGER_CAP_CHANGED`), deleted newest history entry
+(`PENDING_OR_MISSING_BUDGET_HISTORY_FAIL_CLOSED`), and a mutated reservation
+status (`REFUNDS_OR_STATUS_MUTATIONS_FORBIDDEN`). No reservation, amount, cap or
+status was altered. The meta1 and vision-next budget trees now agree.
+
 ## 2026-09-16 UTC - Successor source packages verified
 
 Both build-only archives from source 12f25d301a0dfe9671929fa25b87bf580e71a177

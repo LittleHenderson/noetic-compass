@@ -1,0 +1,95 @@
+{
+  "account": "807562639912",
+  "all_returned_instances_terminated": true,
+  "all_six_lifecycle_termination_checks_passed": true,
+  "budget": {
+    "owner_task_cap_usd": "5000.00",
+    "remaining_unreserved_usd": "4499.00",
+    "revision": 84,
+    "total_reserved_usd": "501.00",
+    "updated_utc": "2026-09-17T10:55:41.083129+00:00"
+  },
+  "budget_boundary": "Reservations are spending bounds, not invoiced charges; no refund applied.",
+  "budget_ledger_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "budget_ledger_sha256": "e958b9af5dbec17361f3f07ada07d4f0c4f8a3da30e95a79339bd52155ed21bf",
+  "cleanup_boundary": "Fresh EC2 query requested all six IDs. An absent ID alone does not establish termination. All six saved lifecycle receipts confirm termination, role and security-group cleanup. Private evidence buckets retained.",
+  "instance_ids_not_returned_by_fresh_ec2_query": [
+    "i-025f80988385e8af2",
+    "i-07bb0b2f258fa24d7",
+    "i-08be663d12da12976",
+    "i-0dcbfc8321769d483"
+  ],
+  "instances": [
+    {
+      "instance_id": "i-0b1df34d89ef70d5a",
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-a-20260919",
+      "state": "terminated"
+    },
+    {
+      "instance_id": "i-0034bd0ea5fe003a5",
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-m-20260919",
+      "state": "terminated"
+    }
+  ],
+  "lifecycle_checks": [
+    {
+      "instances": {
+        "i-0dcbfc8321769d483": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-a-20260917",
+      "lifecycle_sha256": "c883cfa3d64166a40e2c1b0ddf94d9bc7aa3d4285d7cb321e2b0449d0087c939"
+    },
+    {
+      "instances": {
+        "i-025f80988385e8af2": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-m-20260917",
+      "lifecycle_sha256": "f7ce30d129c901110832991583471ecc129d62087e289fec68b0b21c5516ea6a"
+    },
+    {
+      "instances": {
+        "i-07bb0b2f258fa24d7": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-a-20260918",
+      "lifecycle_sha256": "1f21f7148ad721206b482cd57013875600cefed9096db1ec954592bf8bf4df22"
+    },
+    {
+      "instances": {
+        "i-08be663d12da12976": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-m-20260918",
+      "lifecycle_sha256": "d1e781c4fe0a24d05d0a36ecbbe294530a31154af8f4ee1a8dc0eeaabe81198b"
+    },
+    {
+      "instances": {
+        "i-0b1df34d89ef70d5a": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-a-20260919",
+      "lifecycle_sha256": "63809fdacd915fd9cc7ba1d21b53e46bbdb4a8fa9eae4fbc1b705efec2b720e8"
+    },
+    {
+      "instances": {
+        "i-0034bd0ea5fe003a5": "CONFIRMED_TERMINATED"
+      },
+      "job": "cas-meta2-tmat-20260917072721-e6bdf305-m-20260919",
+      "lifecycle_sha256": "d5d0c319734e5bd0adad3fc963088bb5121b17870e06db04dffee38fb8de3016"
+    }
+  ],
+  "observed_utc": "2026-09-17T11:45:51.313048+00:00",
+  "prior_observation_attempt": {
+    "outcome": "ASSERTION_FAILED",
+    "reason": "Expected all historical instance IDs to remain in DescribeInstances output; no receipt was written. Revised observation preserves missing IDs without inferring their state."
+  },
+  "provider_mutations": 0,
+  "region": "us-west-2",
+  "requested_instance_ids": [
+    "i-0dcbfc8321769d483",
+    "i-025f80988385e8af2",
+    "i-07bb0b2f258fa24d7",
+    "i-08be663d12da12976",
+    "i-0b1df34d89ef70d5a",
+    "i-0034bd0ea5fe003a5"
+  ],
+  "schema": "cncm.typed-matched-completion-provider-observation/0.1",
+  "status": "PASS"
+}

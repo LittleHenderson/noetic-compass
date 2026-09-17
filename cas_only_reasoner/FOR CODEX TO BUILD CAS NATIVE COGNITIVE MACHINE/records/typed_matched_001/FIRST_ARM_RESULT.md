@@ -1,5 +1,7 @@
 # First component-first training result
 
+Historical first-arm report. All six runs have now completed; see [the full matched comparison](MATCHED_STUDY_RESULT.md) for the current result. The running-control statements below describe the original observation time.
+
 **The first arm completed and its evidence passed verification. It improved on supplied lessons, but did not transfer to the unfamiliar graphs. The matched control is running; comparative results are pending.**
 
 | Measurement | Before | After |
