@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The corrected panels sharpen the proposal into one falsifiable prediction
+
+$0.00, no run. Document only: `records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md`
+(now P1-P5 and gates G1-G6). Still DRAFT, still unsigned, still authorises nothing.
+
+Reading the panel structure correctly (see the sixth self-correction) turned a diffuse proposal
+into one sharp prediction. Three of the eight question kinds score EXACTLY ZERO before AND after
+teaching, in both arms and across all three seeds:
+
+  context        3/70  ->  0/70
+  definition     0/70  ->  0/70
+  edge_account   0/70  ->  0/70
+
+That is 210 of 564 questions - 37% of the exposed course - that the machine has never once
+answered. Their answers are <alias>/decl/<field>, so their only variable part is the world
+alias, which is a fixed function of the sorted world identifier. They are 64-way
+world-IDENTIFICATION problems wearing retrieval clothes, scored by exact match. And the world_id
+field's normalized loss is essentially unmoved by teaching: 0.504130 -> 0.503435, against a
+uniform prior of 1.0 for a 65-symbol field. After 160 updates the machine identifies the world
+at roughly twice chance, and an exact-match 64-way identification at twice chance is answered
+correctly almost never - which is exactly the observed zero.
+
+The analytic initialisation raises precisely that quantity: 63.83% on the focus-world alias,
+13.85x the strongest available null. Hence:
+
+  P5: arm A moves at least one of context, definition, edge_account OFF EXACTLY ZERO, while the
+      recorded baseline and arm C leave all three at zero.
+
+P5 is now the load-bearing prediction, ahead of the aggregate-score prediction P1, because it
+keys on the three kinds the architecture has never reached, it is a RATE CHANGE FROM EXACTLY
+ZERO rather than a difference between two small numbers, and it is falsifiable in one
+direction. It is equally the prediction most likely to be wrong, and the draft says so: 63.83%
+is one field in isolation on fitted features, the three kinds also need correct assembly, and a
+partial move such as context 2/70 would falsify the "structurally unreachable" reading while
+still counting as a pass.
+
+New gate G6: arm C must leave all three kinds at exactly zero. A kind that has never been
+answered is exactly where an unrelated change can look like a mechanism, and the control is
+what separates the two. New reporting requirement: every arm reports the exposed course, the
+development panel and retention SEPARATELY, and no single aggregate - the recorded evidence for
+that requirement is the error this round corrected.
+
 ## 2026-09-17 UTC - SIXTH SELF-CORRECTION: the panels were misread, and a headline I wrote this session was misleading
 
 $0.00, no new measurement - a reading correction against the run's own records.
