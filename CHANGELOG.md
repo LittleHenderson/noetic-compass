@@ -4,6 +4,63 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The 7-axis inversion scanner: frozen structure enforced, thresholds NOT invented
+
+$0.00, pure standard library. Module `cncm/inversions.py`, tests `tests/test_inversion_axes.py`
+(34). Record: `records/noetica_corrections_001/STATUS.md`. Also staged, unsigned:
+`records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md`.
+
+`inversion` had 0 hits in the homebase. The 7-axis scanner was the last large piece of the Rust
+engine with no counterpart here. It is now implemented, and the way it is implemented is the
+point: the instructions FREEZE the structure and ONE limit, and state no thresholds for the
+rest.
+
+FROZEN AND ENFORCED: the involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9 and the
+self-duals CO-0, CO-1, CO-4, CO-7; dials are integers 3..9 non-overridably; an involution pair
+cannot diverge by more than 4 dial points; the drive pairs F1<->F7, F2<->F6, F3<->F5 with F4
+self-dual; the tiers P > C > E > O; the one-directional chain A0 -> Dn -> Wn -> Pn; and the
+compound rule "multiple axes simultaneously".
+
+NOT FROZEN, SO NOT INVENTED: how much state-vector involution imbalance, domain-tier
+inversion, drive-pair divergence, entropy deficit or cross-domain sub-drive variance is a
+violation. Each axis returns its raw measurement with frozen_limit = None and
+exceeds_frozen_limit = None - NOT False. "No limit exists" and "within the limit" are different
+answers, and collapsing them turns an undecided threshold into a silent pass. A caller wanting
+a severity supplies its own threshold via AxisMeasurement.exceeds() and owns that decision.
+
+NO NCCS SCORE IS PRODUCED. The 15% inversion-resistance component needs thresholds that have
+not been decided, so nccs_inversion_resistance reads NOT_PRODUCED: the module will not grant
+scoring authority to numbers it made up. The compound axis cannot be reached from an unfrozen
+reading either - a test drives every measured-only axis to an extreme (state at 1e9:1e-9, a
+drive at 1000, sub-drives at 0 and 1000) and confirms the compound flag stays False.
+
+AXIS E IS WHERE THE MANDATED MATHEMATICS PAYS OFF. The entropy deficit is 1 - H(p)/log 40
+computed on Correction 4's open simplex, and because every component of a CognitiveStateVector
+is strictly positive the entropy is always defined and always finite - tested at [1e-12]*40 and
+at [1e6] + [1e-6]*39. Axis A is judged at 0 because the chain is frozen, not because a number
+was chosen. Axis N is judged on dials and merely measured on the state vector, and the report
+lists those two readings separately so the measured one is not hidden behind the judged one.
+
+A REAL AMBIGUITY FOUND AND RESOLVED RATHER THAN ASSUMED. Building axis W exposed that
+cncm/simplex.py fixes no ordering of its 40 components, while cncm/noetica.py enumerates the
+states domain-major (P0-P9, C0-C9, E0-E9, O0-O9) per the instructions and inversions.py had
+assumed a noetic-major layout. The two orders disagree, and the disagreement would have been
+silent. Resolved by giving the mapping exactly one home: noetica.STATE_INDEX, state_at and
+index_of, with simplex.py carrying a pointer and stating it fixes no ordering of its own, and
+inversions.py reading masses by LABEL through STATE_INDEX rather than by arithmetic on
+indices. Tests assert the bijection onto 0-39, the count match against simplex.NUM_STATES, and
+that a state concentrated on C5 moves the C domain mass and the 5 Noetic mass and nothing else.
+
+STATUS: IMPLEMENTED as a diagnostic, NOT LICENSED as a scorer. Stealth, named in the NCCS
+weights as "7 axes + stealth + compound severity", has no definition in the instructions and
+is reported as ABSENT_FROM_THE_INSTRUCTIONS rather than guessed.
+
+ALSO STAGED, UNSIGNED: records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md is a
+ready-to-sign phase-0 record for the analytic-initialisation run: three arms (0 updates, 160
+updates, shuffled-label control), four frozen predictions, five hard gates, two $7
+reservations, and an empty signature block. It authorises nothing. Arms and seeds are left as
+owner decisions rather than assumed.
+
 ## 2026-09-17 UTC - All four mandated corrections now live in the CNCM homebase; a seven-label collision found
 
 $0.00, pure standard library. No model, no GPU, no provider, no checkpoint.

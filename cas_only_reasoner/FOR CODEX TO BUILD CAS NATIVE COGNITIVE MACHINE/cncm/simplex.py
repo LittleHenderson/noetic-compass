@@ -58,6 +58,11 @@ from .canonical import content_id, digest
 #: CAS cognitive states: 10 Noetics x 4 Domains (P, C, E, O).
 NUM_STATES = 40
 
+#: Component ``k`` of a state vector is the probability of ``COGNITIVE_STATES[k]``. This
+#: module deliberately fixes no ordering of its own: the listing, and therefore the index
+#: mapping, lives in :mod:`cncm.noetica` as ``COGNITIVE_STATES`` / ``STATE_INDEX`` /
+#: ``state_at``, so there is exactly one place the two can disagree and it is checked by test.
+
 #: Probabilities must sum to 1 within this tolerance (absolute).
 SUM_TOLERANCE = 1e-9
 

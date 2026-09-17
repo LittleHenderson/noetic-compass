@@ -58,10 +58,35 @@ SCHEMA_VERSION = "cncm.noetica/0.1"
 OPERATORS = tuple(f"^{index}" for index in range(len(CANONICAL_NOETICS)))
 
 #: The 40 Cognitive States, listed ``P0-P9, C0-C9, E0-E9, O0-O9``, which is how the master
-#: instructions enumerate them. This is the set the admissibility relation ranges over.
+#: instructions enumerate them. This is the set the admissibility relation ranges over, and
+#: **it is also the index authority for the 40 components of a state vector**: a
+#: :class:`cncm.simplex.CognitiveStateVector` component ``k`` is the probability of
+#: ``COGNITIVE_STATES[k]``. :mod:`cncm.simplex` deliberately says nothing about ordering, so
+#: the ordering is fixed here, once, rather than assumed at each use.
 COGNITIVE_STATES = tuple(
     f"{domain}{noetic}" for domain in CANONICAL_DOMAINS for noetic in CANONICAL_NOETICS
 )
+
+#: ``state label -> its index in a 40-component state vector``.
+STATE_INDEX: dict[str, int] = {
+    state: index for index, state in enumerate(COGNITIVE_STATES)
+}
+
+
+def state_at(index: int) -> str:
+    """The state label for a state-vector component index."""
+    if isinstance(index, bool) or not isinstance(index, int):
+        raise NoeticaError("a state index must be an integer")
+    if not 0 <= index < len(COGNITIVE_STATES):
+        raise NoeticaError(f"state index {index} is outside 0..{len(COGNITIVE_STATES) - 1}")
+    return COGNITIVE_STATES[index]
+
+
+def index_of(state: str) -> int:
+    """The state-vector component index for a state label."""
+    if state not in STATE_INDEX:
+        raise NoeticaError(f"{state!r} is not one of the 40 cognitive states")
+    return STATE_INDEX[state]
 
 #: The 22 Capability Pathways: A0 (Pure Desire) + D1-D7 + W1-W7 + P1-P7.
 DESIRE_ROOT = "A0"

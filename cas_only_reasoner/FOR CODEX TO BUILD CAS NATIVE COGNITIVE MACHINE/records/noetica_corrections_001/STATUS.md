@@ -1,10 +1,11 @@
 # The four mandated corrections in the CNCM homebase
 
 **Record:** `records/noetica_corrections_001/STATUS.md`
-**Modules:** `cncm/simplex.py` (Correction 4), `cncm/noetica.py` (Corrections 1, 2, 3)
+**Modules:** `cncm/simplex.py` (Correction 4), `cncm/noetica.py` (Corrections 1, 2, 3),
+`cncm/inversions.py` (7-axis scanner)
 **Architecture change as code:** `cncm/analytic_decompose.py`
 **Tests:** `tests/test_simplex_metric.py` (50), `tests/test_noetica_laws.py` (35),
-`tests/test_analytic_decompose.py` (31)
+`tests/test_inversion_axes.py` (34), `tests/test_analytic_decompose.py` (31)
 **Spend:** $0.00. Pure standard library. No model, no GPU, no provider, no checkpoint.
 
 ---
@@ -215,6 +216,95 @@ the loss or `max_updates` is claim-bearing and needs an owner-signed phase recor
 
 ---
 
+## `cncm/inversions.py` — the 7-axis scanner, judged only where a limit is frozen
+
+The 7-axis inversion scanner was absent from the homebase: `inversion` had **0 hits**. It is
+the last large piece of the Rust engine with no counterpart here. It is now implemented, and
+the way it is implemented is the point.
+
+### The instruction freezes the structure, and one limit. It does not freeze thresholds.
+
+Frozen, and therefore enforced:
+
+| item | value |
+|---|---|
+| involution pairs | `CO-2↔CO-3`, `CO-5↔CO-6`, `CO-8↔CO-9` |
+| self-duals | `CO-0`, `CO-1`, `CO-4`, `CO-7` |
+| dial bounds | integer `3..9`, non-overridable |
+| dial divergence limit | an involution pair cannot diverge by more than **4** points |
+| drive pairs | `F1↔F7`, `F2↔F6`, `F3↔F5`; `F4` self-dual |
+| domain tiers | `P ≻ C ≻ E ≻ O` |
+| pathway chain | `A0 → Dn → Wn → Pn`, one-directional |
+| compound | "multiple axes simultaneously" |
+
+**Not frozen:** how much state-vector involution imbalance, domain-tier inversion, drive-pair
+divergence, entropy deficit or cross-domain sub-drive variance constitutes a violation. The
+instructions name each quantity and state no limit for it.
+
+**No threshold is invented.** Each axis returns its raw measurement with `frozen_limit = None`,
+and `exceeds_frozen_limit` is `None` — **not `False`** — because "no limit exists" and "within
+the limit" are different answers and collapsing them turns an undecided threshold into a
+silent pass. A caller that wants a severity supplies its own threshold through
+`AxisMeasurement.exceeds(threshold)` and owns that decision.
+
+**No NCCS score is produced.** The 15% inversion-resistance component needs thresholds that
+have not been decided. A 15%-weighted number built on invented cut-offs would be a scoring
+capability with no authority behind it, so `nccs_inversion_resistance` reads
+`NOT_PRODUCED`.
+
+**The compound axis cannot be reached from an unfrozen reading.** `P` is `True` only when more
+than one axis exceeds a **frozen** limit. A test drives every measured-only axis to an extreme
+— a state concentrated at `1e9 : 1e-9`, a drive at 1000, sub-drives at 0 and 1000 — and
+confirms the compound flag stays `False`.
+
+Per axis:
+
+| axis | reading | limit |
+|---|---|---|
+| **N** | max &#124;dial(a) − dial(b)&#124; over the three frozen pairs | **4 dial points, frozen** |
+| **N** (state vector) | relative mass imbalance per pair | none |
+| **W** | count of adjacent tier inversions along `P ≻ C ≻ E ≻ O` | none |
+| **F** | max &#124;F_a − F_b&#124; over the frozen pairs | none |
+| **E** | `1 − H(p)/log 40`, from Correction 4 | none |
+| **S** | largest population variance of one drive over the four domains | none |
+| **A** | nodes satisfied before their prerequisites | **0, frozen by the chain** |
+| **P** | more than one axis over a frozen limit | frozen definition |
+
+Axis `E` is where this work pays off on the mandated mathematics: the entropy deficit is
+computed on the open simplex from `cncm/simplex.py`, and because every component of a
+`CognitiveStateVector` is strictly positive the entropy is always defined and always finite.
+A test drives it with `[1e-12] * 40` and `[1e6] + [1e-6] * 39` to confirm.
+
+Two readings of `N` are reported separately. `frozen_axes` names the axes that are **judged**
+(an axis counts as judged when any of its readings has a frozen limit); `unfrozen_readings`
+lists the specific readings without one, so `N`'s state-vector reading is not hidden behind
+`N`'s dial reading. A test asserts both.
+
+### The state-index authority, established rather than assumed
+
+Building axis `W` exposed a real ambiguity. `cncm/simplex.py` says nothing about which of its
+40 components corresponds to which state, and `inversions.py` initially assumed a noetic-major
+layout while `cncm/noetica.py` enumerates the states domain-major
+(`P0-P9, C0-C9, E0-E9, O0-O9`, per the instructions). Those two orders disagree, and the
+disagreement would have been silent.
+
+Resolved by giving the mapping exactly one home: `noetica.STATE_INDEX`, `noetica.state_at` and
+`noetica.index_of`, with `simplex.py` carrying a pointer to it and stating that it fixes no
+ordering of its own. `inversions.py` reads masses through `STATE_INDEX` by label rather than
+by arithmetic on indices, so it cannot assume a layout. A test asserts the bijection onto
+0–39, that the counts match `simplex.NUM_STATES`, and that a state concentrated on `C5` moves
+the `C` domain mass and the `5` Noetic mass and nothing else.
+
+### Status
+
+**IMPLEMENTED as a diagnostic. NOT LICENSED as a scorer.** The scanner measures and reports;
+it does not grade, and it deliberately refuses to emit the NCCS component that would require
+unfrozen thresholds. Stealth — named in the NCCS weights as "7 axes + stealth + compound
+severity" — has no definition in the instructions and is reported as
+`ABSENT_FROM_THE_INSTRUCTIONS` rather than guessed.
+
+---
+
 ## What this record does NOT claim
 
 - **Correction 1 is not applied.** The guard exists; there is nothing to guard. Nine of ten
@@ -223,9 +313,12 @@ the loss or `max_updates` is claim-bearing and needs an owner-signed phase recor
   narrow passing test, a visible interface or a schema is not proof that the complete machine
   exists. What exists here is four sets of laws, guards and one closed-form construction — not
   a working CASFormer.
-- **`inversions/` is still absent.** The 7-axis scanner (54,463 bytes of Rust) and `rpm/` have
-  no counterpart in the homebase beyond the gate above.
+- **`inversions/` is no longer absent.** The 7-axis scanner is implemented as a diagnostic in
+  `cncm/inversions.py`, with the frozen structure enforced and no threshold invented. It is not
+  licensed as a scorer.
 - **The label collision is recorded, not solved.** Whether `P1`-`P7` should be renamed, or
   namespaced, or whether the pathway graph should be re-expressed, is an authority decision.
+- **The stealth axis is not implemented.** The NCCS weights name it and the instructions do not
+  define it. It is reported as absent rather than invented.
 - **Nothing here was trained, executed or measured on a device.** Every number comes from
   arithmetic on bytes already on disk.
