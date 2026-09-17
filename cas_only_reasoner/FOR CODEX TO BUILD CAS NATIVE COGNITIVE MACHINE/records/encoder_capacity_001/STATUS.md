@@ -1,11 +1,48 @@
 # Frozen-encoder capacity: why six of eight question kinds never learn
 
-Status: **MEASURED ON REAL FROZEN PACKETS — $0, standard library and the project's
-own pure modules only. No torch, no GPU, no checkpoint, no provider, no spend.**
+> # CORRECTION — Findings 3 to 10 are built on a WRONG PREMISE and their conclusion is FALSE
+>
+> **The encoder is not the bottleneck. The frozen random-code READOUT is.**
+>
+> Findings 3–10 measured the *packet vector* and concluded the encoder averages the
+> question away before the learner sees it. **The learner never receives the packet
+> vector.** `encoder.encode_slot` line 212 gives it
+>
+> ```
+> normalize( (packet_vector + slot_query_row) / sqrt(2) )
+> ```
+>
+> and the **slot query row alone carries the focus world at 63.65% linear
+> decodability — 40.7× chance** — on the encoding the current encoder already
+> produces. The measured "0.18%" was an artefact of probing an object the learner
+> does not consume.
+>
+> **Consequences, all measured:**
+>
+> | what was measured | value | meaning |
+> | --- | ---: | --- |
+> | packet vector, current (Findings 3–9) | 0.18% | an object the learner never sees |
+> | **actual slot encoding, current** | **63.65%** | **the focus IS available to the learner** |
+> | actual slot encoding, my proposed change | 62.94% | my change achieves **nothing** |
+> | **actual slot encoding + the learner's FROZEN readout** | **1.24%** | **below chance** |
+> | actual slot encoding + a LEARNED linear readout | 63.65% | the information is present |
+>
+> The information is in the representation and the **frozen readout cannot extract
+> it**. A learned 64×64 linear map reaches 63.65%; argmax over the learner's 90
+> frozen Rademacher readout rows reaches 1.24%, *below* the 1.5625% chance level.
+>
+> **The change spec is WITHDRAWN in full.** It proposed an encoder change to fix a
+> defect that does not exist. The corrected diagnosis is in Finding 11.
+>
+> The wrong findings are kept below rather than deleted. Four self-corrections are
+> now recorded in this record, and each one was caught by measuring the thing the
+> previous round had only assumed.
+
+Status: **CORRECTED — the encoder is not the bottleneck; the frozen readout is.**
 
 Reproduce:
-`python -B measure_real_packets.py` (real frames) and
-`python -B verify_encoder_capacity.py` (the synthetic model it replaces).
+`python -B measure_real_slot_encoding.py` (the decisive measurement) and
+`verify_encoder_capacity.py` (the synthetic model it replaces).
 
 ## The question
 
@@ -396,6 +433,67 @@ Four conclusions, and the fourth is a correction to Finding 7:
 primal, which needs a 4,864 × 4,864 inverse for the concatenated features and will
 not finish in pure Python. It was rewritten in the dual (an n × n inverse, n = 564).
 Any future probe on concatenated features must use the dual form.
+
+## Finding 11 — the corrected diagnosis: a frozen random-code readout that cannot be read
+
+The decisive measurement, all 564 packets, primal ridge for the learned case
+(`measure_real_slot_encoding.py`), chance 1/64 = 1.5625%:
+
+| feature | read | CV accuracy | vs chance |
+| --- | --- | ---: | ---: |
+| packet vector, current encoder | learned linear | 0.18% | 0.1× |
+| packet vector, query row only | learned linear | 39.89% | 25.5× |
+| **actual slot encoding, current encoder** | **learned linear** | **63.65%** | **40.7×** |
+| actual slot encoding, proposed change | learned linear | 62.94% | 40.3× |
+| **actual slot encoding, current encoder** | **the learner's FROZEN readout** | **1.24%** | **0.8× — below chance** |
+
+**The information the learner needs is already in what it receives.** A learned
+linear map recovers the focus world from the current slot encoding 40.7× better than
+chance. The learner's own readout does worse than guessing.
+
+### What the frozen readout demands
+
+The readout is 90 fixed Rademacher rows, each 64 entries of ±0.125 chosen by a hash
+(`binding.row_bytes`, validated byte for byte in Finding 1). To emit the correct
+world symbol, the hidden state must align with that world's particular random
+direction. Nothing about those directions is related to the question or to the
+content — they are a random codebook.
+
+So the trainable `^6` block has to learn a re-alignment that carries the encoded
+focus onto 64 arbitrary Rademacher directions. A free 64×64 linear map does it
+(63.65%). The learner's block — `merge(cat(tanh(left(x)), tanh(right(x))))`, 16,384
+parameters, applied recurrently, trained for 160 updates — does not, and the readout
+it feeds is at 1.24%.
+
+**That is a statement about architecture, not about schedule.** It implies the
+project's decision to freeze *both* the projection and the readout — taken for
+reproducibility and for hash-verifiable rows — is what caps learning, and that no
+amount of teaching-order variation can move the three zero-score kinds.
+
+### Why three kinds are zero and two are not, under this diagnosis
+
+The kinds that work need fewer, coarser distinctions from the frozen codebook:
+`reach` is a 5–6-way choice and `correspondence` a 7–25-way one, both far from
+needing 64 arbitrary directions separated. The zero kinds — `context` (0/70) and
+`definition` (0/70) — must emit a **world symbol**, a 64-way choice through the
+frozen codebook. `edge_account` additionally compounds 16 exact slots (Finding 6).
+
+This is one coherent account of all eight kinds and it needs no encoder change.
+
+### The open question this raises, and the $0 test for it
+
+Nothing here yet shows that a trainable readout is *sufficient* — only that the
+frozen one is the binding constraint. Two things remain unknown and are cheap to
+check:
+
+1. Is the block unable to re-align, or merely slow? A capacity/step sweep would say,
+   but that needs a GPU.
+2. **Does the frozen codebook even permit it?** 90 unit Rademacher rows in 64
+   dimensions, minimum pairwise `|cos|` measured at 0 (Finding 1) and mean 0.098 —
+   so the directions are separable. **But the 65 world rows span at most 64
+   dimensions with 65 vectors, so they are linearly dependent by exactly one
+   relation.** Whether that admits an exact 64-way argmax for every input is a
+   concrete linear-algebra question answerable at $0.
 
 ## What this record does NOT claim
 

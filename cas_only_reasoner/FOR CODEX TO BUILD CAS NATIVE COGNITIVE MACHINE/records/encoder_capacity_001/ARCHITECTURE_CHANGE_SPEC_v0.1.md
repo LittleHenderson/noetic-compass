@@ -1,20 +1,27 @@
 # Architecture change spec v0.1 — addressed aggregation for the typed learner
 
-> **STATUS: PREDICTION 1 RUN AND MET — the spec is VALIDATED at the level of the
-> defect it addresses.** At full sample the current mean-pooled packet decodes the
-> focus world at **0.18%** (1 of 564; chance 1.5625%) while the row structure
-> decodes it at **70.92%** (45× chance). An earlier partial run on 200 packets gave
-> 11.50% and prompted a withdrawal; that run was **sample-limited**, and the
-> learning curve in §8 shows why. **The withdrawal is itself withdrawn.**
+> # WITHDRAWN IN FULL — built on a false premise
 >
-> This validates the *diagnosis*, not the outcome: the change still has to be run
-> to see whether the three zero-score kinds move. No launch is authorized.
+> The premise of this spec was that the encoder averages the question away before
+> the learner sees it, measured at 0.18% focus decodability. **That measurement was
+> of the wrong object.** The learner never receives the packet vector;
+> `encode_slot` gives it `normalize((packet_vector + slot_query_row)/√2)`, and
+> **that** carries the focus at **63.65%** — 40.7× chance — under the current
+> encoder. The proposed change moves it to 62.94%, i.e. **it achieves nothing.**
+>
+> The real bottleneck is the **frozen random-code readout**: argmax over the
+> learner's own 90 frozen Rademacher rows recovers the focus **1.24% of the time,
+> below the 1.5625% chance level**, while a learned linear map on the same input
+> reaches 63.65%.
+>
+> Every section below is retained only as a record of the wrong reasoning and the
+> measurements that killed it. **Nothing here should be signed, built or funded.**
+> See `STATUS.md` Finding 11 for the corrected diagnosis.
 
-Status: **SPECIFICATION ONLY — nothing is implemented, nothing is launched,
-no reservation exists.** Prepared for owner review and signature.
+Status: **WITHDRAWN — superseded by `STATUS.md` Finding 11.**
 
-Basis: `records/encoder_capacity_001/STATUS.md` Findings 3–9, all measured at $0 on
-saved public data.
+Basis that turned out to be inapplicable: `records/encoder_capacity_001/STATUS.md`
+Findings 3–10, measured at $0 on an object the learner does not consume.
 
 ## 1. The defect, in one paragraph
 
@@ -365,5 +372,81 @@ enough and the change should move them off 0/70. If they need declaration conten
 as well, then a change inside the registered `^6` contract is required, and that is
 a governed architectural decision for the owner rather than something to slip in.
 
-**This is the shape of the request to sign**, pending one more $0 check: that the
-query row can be produced and consumed without disturbing any pinned interface.
+**This is the shape of the request to sign**, pending the placement and dilution
+checks now recorded in §11 and the costed request in §12.
+
+## 11. Placement: one expression in one file, and no invariant is violated
+
+The surviving candidate is "encode the query row instead of the mean over all 75
+rows". Resolved against the real code, that is **one expression in one function**:
+
+`cas_meta2/typed_teaching/encoder.py`, `packet_entry`, line 164. Today:
+
+```python
+result = normalize(torch.stack(vectors).sum(dim=0) / math.sqrt(len(vectors))).detach()
+```
+
+Under the change the row whose scope is `["QUERY"]` is selected instead of summing
+all of them. The loop already builds every row's vector, so this is a recorded
+index and a different final expression — **three lines, no signature change, no new
+parameter, no other module touched.**
+
+### What this does and does not disturb
+
+| pinned thing | effect | verdict |
+| --- | --- | --- |
+| `worker_contract.MATERIAL` (course, tokenizer) | untouched | **no change** |
+| `learner.PARAMETERS` / `PARAMETER_SHAPES` (registered `^6` scope) | untouched | **no change** |
+| `learner.py` registered-scope assertions | untouched | **no change** |
+| readout, projection, tokenizer, binding, recurrence, loss, checker, course | untouched | **no change** |
+| `encoder.profile()` self-reported source hash | **changes**, by design | expected |
+| encoder `identity_digest` | **changes** | expected; old receipts keep theirs |
+| source manifest (one pin on `encoder.py`) | **changes** | new manifest |
+| package `source.zip` → `archive_sha256`, `manifest_sha256` in the authority | **changes** | new package, new authority |
+
+**Nothing is violated; several things are replaced.** A source change requires a new
+commit, package, manifest, authority, owner authorization and reservation — which is
+how every prior revision of this project was run. Comparability is preserved for the
+learner, course, checker and readout; it is **not** preserved for the encoder
+identity, and any before/after comparison must say so.
+
+### Residual concern, to measure before signing
+
+`encode_slot` line 212 combines the packet vector with the slot's own query row:
+
+```python
+result = normalize((entry["vector"] + query) / math.sqrt(2.0)).detach()
+```
+
+So the learner actually receives `normalize((query_row + slot_query_row)/√2)` — the
+frame's question row averaged with the slot's row, **one dilution step that the
+39.89% measurement does not include.** The improvement is from "one row in
+seventy-six" to "one row in two", so it should survive, but it is unmeasured.
+**That is the last open item and it costs nothing to close.**
+
+## 12. Costed execution request — UNSIGNED, no reservation
+
+*Prepared for owner review. Not signed. `execution_enabled` stays false. No
+reservation exists or has been created.*
+
+| field | value |
+| --- | --- |
+| candidate | `CNCM_TYPED_QUERYROW_ENCODER_001` |
+| basis | a new source revision of `encoder.py` only |
+| change | select the `QUERY` row instead of the mean over all rows |
+| new trainable parameters | **0** |
+| learner, course, tokenizer, checker, readout | **unchanged, byte-identical** |
+| predictions | §5, pre-registered before the run |
+| jobs | 1, with **2 budgeted** for a first-attempt retry |
+| instance | `g7.2xlarge`, `us-west-2` |
+| wall limits | 3,300 s child; 7,200 s instance |
+| reservation | **$7.00** per job; **$14.00** if both are used |
+| automatic retries | 0 |
+| ledger at authoring | revision 84, **$501.00 reserved, $4,499.00 unreserved** of $5,000 |
+| preconditions | (1) close the §11 line-212 dilution at $0; (2) new commit, package, manifest, authority; (3) an owner record naming this authority |
+| signature | **null** |
+
+**What it would and would not establish.** It would test whether not averaging the
+question away moves `context`, `definition` or `analogy` off their floor. It would
+**not** establish a learning advantage, a matched-control result, transfer or
+retention. A null on `edge_account` alone is not failure, per §5.4.
