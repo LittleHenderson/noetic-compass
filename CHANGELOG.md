@@ -4,6 +4,41 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The cheap encoder fixes were tested and FAILED; the mean-pool destroys the focus outright
+
+$0, pure Python over the real frozen rows. No model, GPU, checkpoint, provider or
+spend. Record: `records/encoder_capacity_001/`, scripts `measure_addressed_read.py`
+and `measure_real_packets.py`.
+
+Two remedies proposed in the previous entry were tested and **both failed**.
+
+1. An addressed read - scoring each world's row by <query, world_row> - was
+   proposed to replace the mean. Tested on 160 real packets, chance 1/64 = 1.56%:
+
+   | read | focus recovered | vs chance |
+   | --- | ---: | --- |
+   | query rows only | 10/160 = 6.25% | 4.0x chance (p < 0.001) |
+   | query + record + support | 8/160 = 5.00% | 3.2x chance (p < 0.01) |
+   | mean-pooled packet (current) | 0/160 = 0.00% | expected 2.5 |
+
+   Not a usable read at 6.25%, so the remedy fails. But the table is the sharpest
+   result in the record: **the mean-pooled packet recovers the focus world never,
+   while an untrained read over the raw rows recovers it 4x more often than
+   chance.** The information is present in the rows and destroyed by the pooling.
+
+2. Dropping the 63 non-focus worlds was proposed for a measured 5.8x
+   discrimination gain. It is **unsafe**: those worlds are the distractors that
+   make a 64-way answer meaningful, so for correspondence and analogy the answer
+   becomes identifiable by elimination. The gain comes from deleting the answer
+   space, not from cleaning the signal.
+
+What survives, and the only remedy the measurements support: stop collapsing the
+76-row structure into one 64-dimensional vector before the learner sees it. Expose
+the rows, or a bounded selected subset, with a learned addressing mechanism over
+them rather than pre-averaging. That is a genuine architectural change and it is
+the direction the evidence now points to. The two negative results are kept as
+load-bearing: they rule out the cheap fixes.
+
 ## 2026-09-17 UTC - Matched teaching comparison completed: NULL between arms, NEGATIVE transfer within both
 
 The first completed matched teaching study, `CNCM_TYPED_MATCHED_LEARNING_001`

@@ -112,6 +112,10 @@ record supersedes its recommendation.
 
 ## The architectural conclusion
 
+> **Superseded in part. The two remedies first written here were tested in
+> Finding 5 and both failed. The diagnosis below stands; the remedies do not.
+> Read Finding 5 before acting on anything in this section.**
+
 The encoder mean-pools a question, its worked supports, and a 64-world bank into a
 single 64-dimensional unit vector. Because the bank is identical in every packet,
 it forms a large common component; the question is a small perturbation on top.
@@ -125,22 +129,85 @@ frame (`context`, `definition`, `edge_account`) stay at exactly 0, and `world_id
 sat at normalized loss 0.47 from update 0 without moving. **More seeds and more
 updates cannot repair it: the signal is gone before the trainable block sees it.**
 
-The fix that follows from the ablation is architectural, not a schedule change:
+The two remedies originally proposed here, and their measured fate:
 
-1. **Do not sum the question and the evidence into one vector.** Keep a question
-   channel and an evidence channel, or let the question *select* its evidence
-   (attention or keyed lookup over rows) instead of being averaged with it. The
-   ablation shows both halves are individually adequate (`question rows only` and
-   `no other 63 worlds` each clear the floor on cross-kind) and that summing them
-   is what loses the signal.
-2. **Drop the irrelevant worlds.** The 63 worlds that are not the focus contribute
-   nothing to the answer and cost 5.8× on same-kind discrimination.
-3. Either change makes a **cheap decisive test possible without new data**: rebuild
-   the packet from the focus world's row plus the question rows, keep the learner
-   and course unchanged, and check whether `context`, `definition` and
-   `edge_account` leave 0.
+1. ~~Do not sum the question and the evidence into one vector; let the question
+   *select* its evidence by a keyed read.~~ **Failed.** Tested as a fixed
+   query-to-world-row dot product: 6.25% focus recovery against 1.56% chance. Not
+   a usable read. The rows must be *learned over*, not addressed by a fixed
+   function.
+2. ~~Drop the 63 irrelevant worlds.~~ **Failed, and unsafe.** It removes the
+   distractors that make a 64-way answer meaningful, so `correspondence` and
+   `analogy` answers become identifiable by elimination. The measured
+   discrimination gain comes from deleting the answer space.
 
-## Finding 5 — a falsification test the diagnosis partly passes
+**The remedy that survives, and the only one the measurements support:** stop
+collapsing the 76-row structure into one vector *before* the learner sees it.
+Expose the rows — or a bounded selected subset — with a learned addressing
+mechanism over them, instead of pre-averaging. The evidence that this is where the
+problem lies is the contrast in Finding 5: the mean-pooled packet recovers the
+focus world 0 times in 160, while an untrained read over the raw rows recovers it
+4× more often than chance. The information is in the rows and gone from the mean.
+
+## Finding 5 — my own proposed fix was tested and FAILED, and the reason matters
+
+The architectural conclusion below originally recommended two things. Both were
+tested against the real rows, and **both are wrong.** Recording that here rather
+than editing it away.
+
+**Recommendation tested: an addressed read.** The proposal was to replace
+`packet = unit_l2(sum of all row vectors)` with a read addressed by the query:
+score each world's row by `⟨query, world_row⟩` and take the argmax. This keeps
+every world present, so the answer space is unchanged and nothing leaks.
+
+Measured on 160 real packets (`measure_addressed_read.py`), chance = 1/64 = 1.56%
+(expected 2.5 hits by chance):
+
+| read | focus recovered | vs chance |
+| --- | ---: | --- |
+| query rows only | 10/160 = **6.25%** | 4.0× chance (binomial p < 0.001) |
+| query + record + support rows | 8/160 = **5.00%** | 3.2× chance (p < 0.01) |
+| **mean-pooled packet (what the course uses)** | **0/160 = 0.00%** | below chance; expected 2.5 |
+
+**This is the sharpest result in the record, and it is two findings at once:**
+
+1. **The mean-pooled packet recovers the focus world never — 0 out of 160.** The
+   quantity the learner most needs, which world the question is about, is not
+   merely diluted; at this resolution it is *gone*.
+2. **The information is nevertheless present in the rows.** An untrained linear
+   read over the query rows alone recovers it 4× more often than chance. The
+   signal exists in the representation and is destroyed by the pooling, not absent
+   from it.
+
+So the addressed read is **not a fix** — 6.25% is useless as a read. But it is
+evidence for where the problem is, which is worth more than the fix would have
+been: **the rows carry the focus; the mean does not.**
+
+**Recommendation tested: drop the 63 irrelevant worlds.** This is worse than
+ineffective, it is unsafe. The worlds that are not the focus are the *distractors*
+that make a 64-way answer meaningful. For `correspondence` and `analogy` the answer
+names a different world; removing the other worlds makes the answer identifiable
+by elimination. The ablation in Finding 3 measured a real discrimination gain, but
+that gain comes from deleting the answer space, not from cleaning the signal.
+
+**So the corrected conclusion is different, and stronger:**
+
+> The defect is not that the encoder uses the wrong read. It is that the encoder
+> **collapses a 76-row structure into a single 64-dimensional vector before any
+> learning happens.** Once collapsed, the structure that a learned read would need
+> is gone, and no fixed function recovers it.
+
+That reframes the fix as: **expose the row structure to the learner instead of
+pre-averaging it.** The current learner receives one 64-dim vector per slot
+(`learner.py`: a fixed slot plan feeding a `^6` block). It would instead receive
+the rows — 76 × 64, or a bounded selected subset — with a learned addressing
+mechanism over them. That is a genuine architectural change, and it is the one the
+measurements support.
+
+The negative results are load-bearing and are kept: they rule out the two cheap
+fixes and leave the expensive one as the only survivor.
+
+## Finding 6 — a falsification test the diagnosis partly passes
 
 The obvious test of any diagnosis is whether it predicts the outcome it was
 invented to explain. Joining the recorded answer alphabets (from the per-update
