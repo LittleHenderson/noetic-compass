@@ -11,6 +11,7 @@ from zipfile import ZipFile
 
 HOME = Path(__file__).resolve().parents[1]
 COMP = HOME / "research/CAS_META_2_COMPOSITION"
+OUTER_HOME = next(p for p in reversed(HOME.parents) if p.name == "FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE")
 
 
 def save(path, value):
@@ -52,7 +53,7 @@ def child(root, output):
     result_path = root / "results/result.json"
     result_raw = result_path.read_bytes()
     result = json.loads(result_raw)
-    assert result["failure"] == {"type": "ValueError", "detail": failure}
+    assert result["failure"] == {"schema": "cncm.typed-course-failure/0.1", "type": "ValueError", "detail": failure}
     assert (root / "results/result.json.sha256").read_text().strip() == sha256(result_raw).hexdigest()
     modules = []
     for name, module in sorted(sys.modules.copy().items()):
@@ -73,8 +74,13 @@ def run(package_path, output):
     package_raw = package_path.read_bytes(); package = json.loads(package_raw)
     raw = Path(package["archive"]).read_bytes()
     assert sha256(raw).hexdigest() == package["archive_sha256"] and len(raw) == package["archive_bytes"]
+    assert len(raw) <= launch.shared.MAX_ARCHIVE_BYTES
     assert output.is_relative_to(HOME / "records/typed_numeric_001") and not output.exists()
-    output.mkdir(parents=True); root = output / "extracted"; root.mkdir()
+    output.mkdir(parents=True)
+    root = OUTER_HOME / "_tmp" / ("tcr_" + sha256(str(output).encode()).hexdigest()[:12])
+    assert not root.exists() and root.resolve().is_relative_to(OUTER_HOME.resolve())
+    root.mkdir(parents=True)
+    save(output / "extraction.json", {"path": str(root), "archive_sha256": package["archive_sha256"]})
     with ZipFile(io.BytesIO(raw)) as archive:
         names = archive.namelist(); launch.shared.checked_names(names)
         assert len(names) <= launch.shared.MAX_MEMBER_COUNT

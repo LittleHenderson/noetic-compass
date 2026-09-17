@@ -6,6 +6,8 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import io
+from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[1]
 HOME = ROOT.parents[3]
@@ -53,6 +55,15 @@ def main():
     identity = {"job": job, "source_sha": source, "archive_sha256": package["archive_sha256"],
                 "manifest_sha256": package["manifest_sha256"]}
     config = launch.worker_config(job, source_sha=source)
+    with ZipFile(io.BytesIO(archive)) as archive_stream:
+        manifest_raw = archive_stream.read(launch.shared.MANIFEST_NAME)
+    launch.require(launch.digest(manifest_raw) == package["manifest_sha256"], "PREPARE_MANIFEST_PIN")
+    manifest = json.loads(manifest_raw)
+    launch.require(manifest["source_sha"] == source
+        and launch.canonical(manifest["inputs"]) == launch.canonical(config["inputs"])
+        and manifest["inputs_sha256"] == config["inputs_sha256"]
+        and launch.canonical(manifest["typed_design"]) == launch.canonical(config["design"]),
+        "PREPARE_COMMITTED_MANIFEST_CONFIG_BINDING")
     owner = {"schema": launch.OWNER_SCHEMA, "candidate": launch.CANDIDATE, **identity,
         "recorded_utc": now.isoformat(), "evidence_kind": "owner_instruction_in_session",
         "owner_instruction_raw": "I give you approval for it all ....GO!",
