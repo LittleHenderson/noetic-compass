@@ -1,0 +1,8 @@
+{
+  "failure": {
+    "message": "Command '['/opt/cas-graph6curr/package/venv/bin/python', '-B', '/opt/cas-graph6curr/package/_inner_runner.py', '/opt/cas-graph6curr/package']' timed out after 1800 seconds",
+    "type": "TimeoutExpired"
+  },
+  "job": "cas-meta2-typedcourse-20260917020901-85736789",
+  "schema": "cncm.typed-course-failure/0.1"
+}

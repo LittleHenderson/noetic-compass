@@ -1,0 +1,1 @@
+{"observed":{"InstanceInformationList":[]},"request":{"Filters":[{"Key":"InstanceIds","Values":["i-0b7a980f8110e686a"]}]},"request_id":"b9219898-5bd4-48cf-8034-6ad3152ad35d","scope":"READ_ONLY_JOB_SPECIFIC_RESPONSE_PROJECTION"}

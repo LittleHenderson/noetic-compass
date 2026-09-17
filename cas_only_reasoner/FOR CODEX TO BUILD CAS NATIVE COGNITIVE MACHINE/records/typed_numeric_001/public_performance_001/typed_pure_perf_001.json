@@ -1,0 +1,141 @@
+{
+  "bank_worlds": 64,
+  "binding_rows": 76,
+  "binding_tokens": 27818,
+  "boundary": "One real training-only packet on local CPU; syntactic zero scores only. No semantic target or numerical model execution. Not a GPU runtime estimate.",
+  "kind": "correspondence",
+  "material": {
+    "records/typed_course_001/checks_002/public_course.json": {
+      "bytes": 4165195,
+      "sha256": "cf7a718185172197a7441b4e87c603b1d7c7c2b06c42903ff27d34ce1cae0987"
+    },
+    "records/typed_interface_001/checks_002/training_tokenizer.json": {
+      "bytes": 447140,
+      "sha256": "bee9ab50688eb7ca4e63780810bf280bb1490fd58a1bc25f93f1ac24d19e533c"
+    }
+  },
+  "prohibited_import_attempts": [],
+  "record_id": "typed-input-005b8315c7e3c2ca7583061bf1131ad5c5bbf4fd896155916b5007a2a214a942",
+  "schema": "typed-pure-one-packet-performance/0.1",
+  "separate_single_compile_profile_call_counts": {
+    "cas_meta2.typed_teaching.course.profile": 1,
+    "cas_meta2.typed_teaching.course.validate_model_packet": 1,
+    "cas_meta2.typed_teaching.slots.compile_slots": 1,
+    "cas_meta2.typed_teaching.slots.profile": 1,
+    "cas_meta2.typed_teaching.source._bounded": 26,
+    "cas_meta2.typed_teaching.source.public_digest": 10,
+    "cas_meta2.typed_teaching.source.validate_public": 16
+  },
+  "slots": 4,
+  "sources": [
+    {
+      "bytes": 173,
+      "module": "cas_meta2",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/__init__.py",
+      "sha256": "07b7b2f1a52806b819e3820655fa578f3e5241ce2327695f157e542ce06a63da"
+    },
+    {
+      "bytes": 100,
+      "module": "cas_meta2.typed_teaching",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/__init__.py",
+      "sha256": "a9cd4e93977921031a27e2410afca5c7b9314a8bf8914f4d0df2da545831cb95"
+    },
+    {
+      "bytes": 13894,
+      "module": "cas_meta2.typed_teaching.answers",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/answers.py",
+      "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+    },
+    {
+      "bytes": 11165,
+      "module": "cas_meta2.typed_teaching.binding",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/binding.py",
+      "sha256": "5db99005d6df1b26988b6cb9ed78e57d020bafb78647626d826cae01add572dc"
+    },
+    {
+      "bytes": 20756,
+      "module": "cas_meta2.typed_teaching.course",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course.py",
+      "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+    },
+    {
+      "bytes": 19255,
+      "module": "cas_meta2.typed_teaching.course_plan",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course_plan.py",
+      "sha256": "bd73cb444dc2a5becb6322b4fa50de9c9f0bde288bd54a3c6ce2003bbb8aed88"
+    },
+    {
+      "bytes": 15105,
+      "module": "cas_meta2.typed_teaching.focal",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/focal.py",
+      "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+    },
+    {
+      "bytes": 20192,
+      "module": "cas_meta2.typed_teaching.input_frames",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/input_frames.py",
+      "sha256": "0077ab78c35124249ca324db52eeba03d4f992c69d5bac8695bd88e177a17326"
+    },
+    {
+      "bytes": 14097,
+      "module": "cas_meta2.typed_teaching.slots",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/slots.py",
+      "sha256": "0a655ac7273f6d605963e9d1ba6df42422391569cad998e021268bb139198838"
+    },
+    {
+      "bytes": 20601,
+      "module": "cas_meta2.typed_teaching.source",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py",
+      "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+    },
+    {
+      "bytes": 10630,
+      "module": "cas_meta2.typed_teaching.tokenization",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/tokenization.py",
+      "sha256": "be84607539d5375346d4bc0bc1321c7a59668e3edb2189bebf090a74ecbb7c1b"
+    },
+    {
+      "bytes": 9765,
+      "module": "cas_meta2.typed_teaching.worker_contract",
+      "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/worker_contract.py",
+      "sha256": "02b0a56975bddc93560a1f3f4086c9c4eb3f914f7b912b2b7be24e0b441765f2"
+    }
+  ],
+  "status": "PURE_ONLY_OBSERVED",
+  "syntactic_correspondence_candidates": 7,
+  "timings": [
+    {
+      "operation": "load_material",
+      "seconds": 0.047396999999818945
+    },
+    {
+      "operation": "model_packet",
+      "seconds": 0.21168349999970815
+    },
+    {
+      "operation": "slots.compile_slots.first",
+      "seconds": 0.29967050000004747
+    },
+    {
+      "operation": "slots.compile_slots.repeat",
+      "seconds": 0.3081333000000086
+    },
+    {
+      "operation": "slots.validate_plan",
+      "seconds": 0.2906932999999299
+    },
+    {
+      "operation": "binding.compile_packet",
+      "seconds": 0.5444901999999274
+    },
+    {
+      "operation": "slots.score_decisions.synthetic_zero_scores",
+      "seconds": 0.29087989999970887
+    },
+    {
+      "operation": "slots.assemble_answer.synthetic_decisions",
+      "seconds": 0.3128708999997798
+    }
+  ],
+  "total_seconds": 3.138491800000338
+}

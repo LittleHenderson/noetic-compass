@@ -1,0 +1,9 @@
+{"operation": "load_material", "seconds": 0.047396999999818945}
+{"operation": "model_packet", "seconds": 0.21168349999970815}
+{"operation": "slots.compile_slots.first", "seconds": 0.29967050000004747}
+{"operation": "slots.compile_slots.repeat", "seconds": 0.3081333000000086}
+{"operation": "slots.validate_plan", "seconds": 0.2906932999999299}
+{"operation": "binding.compile_packet", "seconds": 0.5444901999999274}
+{"operation": "slots.score_decisions.synthetic_zero_scores", "seconds": 0.29087989999970887}
+{"operation": "slots.assemble_answer.synthetic_decisions", "seconds": 0.3128708999997798}
+{"status": "PURE_ONLY_OBSERVED", "total_seconds": 3.138491800000338, "output": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_tmp\\typed_pure_perf_001.json"}

@@ -1,0 +1,16 @@
+{
+  "boundary": "Public prediction seal only; no correctness scoring or model decoding performed.",
+  "bucket": "cas-meta2-typedcourse-20260917020901-85736789-807562639912",
+  "bytes": 1772174,
+  "job": "cas-meta2-typedcourse-20260917020901-85736789",
+  "key": "results/artifacts/initial_predictions.json",
+  "observed_at": "2026-09-17T02:31:41.762618+00:00",
+  "operation": "s3.get_object",
+  "phase": "initial",
+  "provider_mutations": 0,
+  "request_id": "MB62N352826FQ004",
+  "row_count": 564,
+  "schema": "cncm.typed-course-prediction-seal/0.1",
+  "sha256": "66edebc98d78a1a915154cf5c76c9a3218afa5aae7db925e92f9cd9985e9cec5",
+  "unique_record_ids": 564
+}

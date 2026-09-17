@@ -779,3 +779,26 @@ Next: collect the actual terminal result, count successful updates, recompute
 exposed accuracy gains and losses, verify checkpoint replay and observe cleanup.
 Matched learning advantage, untouched transfer, delayed retention and the full
 CNCM charter remain open. The earlier negative three-seed result is unchanged.
+
+
+## 2026-09-17: first typed run timed out; corrected job launched
+
+Source `857367899983783c8f048df195338c71bdcb8aa5` reached 61 saved main updates
+and 440 teaching presentations, then the 1,800-second child limit stopped it.
+All 142 collected files and 61 batch/update joins passed the partial audit.
+Initial accuracy was 18/564; no final trained checkpoint or post-training score
+arrived. The extra sealed eight-presentation batch is not a completed update.
+This is incomplete execution, not a learning result. The first instance is
+confirmed terminated; role/security-group cleanup passed and evidence is retained.
+
+Corrected source `2a221243bf2f82f82bdce19514fe04bcb6b26bb0` has passed exact
+package rehearsal, 85 cache checks (all 564 plans equal), and 88 integration
+checks. It adds bounded slot-plan caching, progress records and intermediate
+checkpoints. The new numeric limit is 3,300 seconds with a 4,200-second bootstrap
+limit, within the unchanged 6,900/7,200-second shutdown/resource limits.
+The 160+2 update workload and zero automatic retries remain unchanged.
+Job `cas-meta2-typedcourse-20260917024221-2a221243` has launched instance
+`i-0016c39d90143e316`; full completion, final scoring and replay remain open.
+Canonical budget revision 78 is $459 reserved and $4,541 unreserved of $5,000.
+See records/typed_numeric_001/STATUS.md and the separate receipts for each job.
+The full vision and matched learning-advantage claim remain open.

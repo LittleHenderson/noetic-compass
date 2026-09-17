@@ -1,0 +1,1 @@
+{"observed":{"Contents":null,"IsTruncated":false,"KeyCount":0,"NextContinuationToken":null},"request":{"Bucket":"cas-meta2-typedcourse-20260917020901-85736789-807562639912","MaxKeys":1000,"Prefix":"results/"},"request_id":"061J76NNC2RJ5V2B","scope":"READ_ONLY_JOB_SPECIFIC_RESPONSE_PROJECTION"}
