@@ -4,46 +4,6 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
-## 2026-09-17 UTC - Frozen-encoder capacity measured: the packet mean destroys question-level signal
-
-$0 standard-library measurement, no model, GPU, checkpoint or provider use.
-Record: `records/encoder_capacity_001/STATUS.md` and `result.json`; reproduce with
-`verify_encoder_capacity.py`.
-
-Both frozen matrices were reconstructed from the documented row algorithm in
-`cas_meta2/typed_teaching/binding.py` and validated byte for byte against the
-SHA-256 the GPU worker recorded: readout `14da2c58…0ac667` (23,040 bytes) and
-projection `4481b1d2…9fefdd9` (980,224 bytes). Both exact.
-
-Two hypotheses were eliminated. The 65 world rows are a well-spread random frame
-(mean |cos| 0.101412, max 0.468750, zero duplicate rows), so the readout is not the
-bottleneck. The 3,829 token rows contain zero duplicates, so the projection is not
-the bottleneck either.
-
-The measured bottleneck is the packet mean. The rule is packet =
-unit_l2(sum(unit token rows)), so two questions about the same world that differ in
-k rows differ by only O(sqrt(k/n)) of the packet norm. At the course's recorded
-maximum frame length (27,818 tokens), differing in the entire 16-row query field
-moves the packet by 1-cos = 8.8e-05. The readout's own mean |cos| between
-unrelated symbols is 0.098408. The question-discriminating signal is therefore
-about 1,100x smaller than the readout's cross-talk, and even at the shortest
-frames measured (794 rows) it is 5.5x smaller.
-
-Corroboration from the course's own record: the shared 64-world bank is 219,105 of
-the 225,368 bytes of every packet (97.2%), so the question is 2.8% of the input
-before any pooling. That record also states unique_query_families: 24 against
-unique_public_packets: 564.
-
-This is consistent with every completed run: kinds fixed by the query's own scope
-(correspondence, reach) learn; kinds needing content retrieval from the frame
-(context, definition, edge_account) stay at exactly 0; and world_id sat at
-normalized loss 0.47 from update 0 and never moved. It predicts that more seeds or
-more updates cannot repair those kinds, and that the fix is architectural: stop
-mean-pooling the frame, or shrink the packet to the focus world's own content.
-
-No learning, capability or readiness claim is made. The trainable block was not
-tested; this record shows only that the encoder cannot deliver the signal.
-
 ## 2026-09-17 UTC - Matched teaching comparison completed: NULL between arms, NEGATIVE transfer within both
 
 The first completed matched teaching study, `CNCM_TYPED_MATCHED_LEARNING_001`
@@ -120,6 +80,63 @@ refused correctly: corrupted head free space
 (`PENDING_OR_MISSING_BUDGET_HISTORY_FAIL_CLOSED`), and a mutated reservation
 status (`REFUNDS_OR_STATUS_MUTATIONS_FORBIDDEN`). No reservation, amount, cap or
 status was altered. The meta1 and vision-next budget trees now agree.
+
+## 2026-09-17 UTC - Frozen-encoder capacity measured on REAL packets: the question is summed into its own evidence
+
+$0 standard-library measurement using the project's own pure modules. No model,
+GPU, checkpoint, provider or spend. Record: `records/encoder_capacity_001/`.
+
+Both frozen matrices were reconstructed from the documented row algorithm in
+`cas_meta2/typed_teaching/binding.py` and validated byte for byte against the
+SHA-256 the GPU worker recorded: readout `14da2c58…0ac667` (23,040 bytes) and
+projection `4481b1d2…9fefdd9` (980,224 bytes). Both exact.
+
+Three explanations were eliminated or confirmed against real data:
+
+- The 65 world rows are well spread (mean |cos| 0.101412, max 0.468750, no
+  duplicates); the 3,829 token rows have zero duplicates. Neither the readout nor
+  the projection is the bottleneck.
+- A real packet is 76 rows and about 27,600 tokens: 64 WORLD rows, 3 SUPPORT
+  rows, and 9 single rows (START, FORMAT, BINDINGS, ALIASES, POLICY, SOURCE,
+  RECORD, QUERY, END). Every packet carries all 64 worlds. Comparing two
+  different questions on the same world, **all 76 row scopes are identical at
+  every ordinal** - the difference is entirely inside rows.
+- Measured 1-cos between two real packets about the same world, against the
+  readout cross-talk floor of 0.098408:
+
+  | packet construction | same kind | different kind |
+  | --- | ---: | ---: |
+  | all 76 rows (what the course uses) | 0.008374 (12x low) | 0.024554 (4x low) |
+  | no other 63 worlds | 0.048536 (2x low) | 0.140158 (OK) |
+  | question rows only | 0.089208 (1x low) | 0.297050 (OK) |
+  | focus world row only | 0.000000 | 0.000000 |
+  | focus world + question rows | 0.054148 (2x low) | 0.157531 (OK) |
+
+The current encoding sits 12x below the readout's own interference on the hardest
+case - two questions of the same kind on the same world, which is exactly what
+`context` (0/70 in every run) consists of. Dropping the 63 irrelevant worlds
+improves that 5.8x. A focus-only packet erases the question entirely, because the
+world's own content is identical whichever question is asked; the question lives
+in the QUERY, RECORD and SUPPORT rows. But the world row is needed to answer
+context, definition and edge_account. The measured tension is therefore real: the
+evidence needed to answer dilutes the question that asks for it, because both are
+summed into one vector.
+
+This is consistent with every completed run - scope-fixed kinds (correspondence,
+reach) learn, content-retrieval kinds stay at exactly 0, and world_id sat at
+normalized loss 0.47 from update 0 without moving - and it means no number of
+seeds or updates can repair those kinds.
+
+Conclusion, and it is architectural rather than a schedule change: (1) do not sum
+the question and the evidence into one vector - keep the channels separate or let
+the question select its evidence; (2) drop the irrelevant worlds. Either is
+testable by rebuilding the packet with the same learner and course.
+
+Correction to the record: an earlier synthetic model in this same directory
+predicted 1-cos of order k/n and recommended shortening the packet. That model is
+directionally right and quantitatively wrong in both directions, and its remedy is
+wrong - the fix is not fewer rows but not summing question and evidence. The
+synthetic script is retained as the model; `measure_real_packets.py` supersedes it.
 
 ## 2026-09-16 UTC - Successor source packages verified
 

@@ -1,202 +1,156 @@
 # Frozen-encoder capacity: why six of eight question kinds never learn
 
-Status: **MEASURED — $0, standard library only, no model, GPU, checkpoint or provider used.**
+Status: **MEASURED ON REAL FROZEN PACKETS — $0, standard library and the project's
+own pure modules only. No torch, no GPU, no checkpoint, no provider, no spend.**
 
-Result: `result.json`. Reproduce with
-`python -B verify_encoder_capacity.py --json result.json`.
+Reproduce:
+`python -B measure_real_packets.py` (real frames) and
+`python -B verify_encoder_capacity.py` (the synthetic model it replaces).
 
-## What was asked
+## The question
 
-Every completed experiment in this project shows the same pattern: of the eight
-question kinds, only `correspondence` and `reach` ever move off chance, while
-`context`, `definition` and `edge_account` stay at exactly 0 in every run, on
-every seed, in both teaching arms. The matched study repeated this pattern
-independently. This record asks whether the frozen encoder can even carry the
-information those questions need.
+Every completed experiment shows the same pattern: of the eight question kinds
+only `correspondence` and `reach` move off chance, while `context`, `definition`
+and `edge_account` stay at exactly 0 in every run, every seed and both teaching
+arms. The matched study reproduced this independently. This record asks whether
+the frozen encoder can carry the information those questions need.
 
-## Method and its validity
+## Method, and why the numbers are trustworthy
 
-The frozen token projection and the frozen symbol readout are built by one pure
-function in `cas_meta2/typed_teaching/binding.py`:
+The frozen token projection and symbol readout are built by one pure function in
+`cas_meta2/typed_teaching/binding.py`. Reconstructing it reproduces both matrices
+byte for byte, validated against the SHA-256 the GPU worker recorded:
 
-```
-bits = int.from_bytes(sha256(canonical([ROW_ALGORITHM, seed, d_model, domain]))
-                      .digest()[:8], "little")
-row  = struct.pack("<64f", *(0.125 if (bits >> i) & 1 else -0.125 for i in range(64)))
-```
-
-That reproduces both matrices **byte for byte**. Both were validated against the
-SHA-256 the GPU worker recorded for the real bytes:
-
-| matrix | bytes | reconstructed SHA-256 | recorded | exact |
+| matrix | bytes | reconstructed | recorded | exact |
 | --- | ---: | --- | --- | --- |
 | readout (90 symbols) | 23040 | `14da2c58…0ac667` | `14da2c58…0ac667` | **yes** |
 | projection (3829 tokens) | 980224 | `4481b1d2…9fefdd9` | `4481b1d2…9fefdd9` | **yes** |
 
-The digest match is what licenses everything below: these are the exact rows the
-learner computed with, not a model of them.
+The real measurements then load the frozen course and tokenizer through the
+project's own `worker_contract.load_material`, build real model packets through
+`course.model_packet`, compile real frames through `input_frames.compile_packet`,
+and rebuild each line's row vector exactly as `binding.py` specifies (signed
+permutation per token position, then unit-normalize each row, then sum). Every
+figure below is computed from those real objects.
 
-## Finding 1 — the readout is NOT the bottleneck
+## Finding 1 — the readout and the projection are NOT the bottleneck
 
-A hypothesis worth testing was that the 65 world rows are too alike for a
-64-dimensional readout to separate, which would cap `world_id` permanently.
+A plausible hypothesis was that the 65 world rows are too alike for a
+64-dimensional readout to separate.
 
-False. The rows are a well-spread random frame:
+False. 90 symbol rows, mean `|cos|` **0.098408**, max `|cos|` **0.468750**, zero
+duplicates; 65 world rows mean `|cos|` **0.101412**. The projection has **zero
+duplicate rows across 3829 tokens**. Both are well-spread random frames.
 
-- 90 symbol rows, mean `|cos|` **0.098408**, max `|cos|` **0.468750**
-- 65 world rows, mean `|cos|` **0.101412**, max `|cos|` **0.468750**
-- **0 duplicate rows**; the projection also has **0 duplicates across 3829 tokens**
+## Finding 2 — the real packet is 76 rows and ~27,600 tokens
 
-An ideal hidden state set to a world's own row yields a worst-case runner-up
-logit of 0.469 against a self-logit of 1.0. That is a usable margin. The readout
-is fine.
+| scope family | rows |
+| --- | ---: |
+| `WORLD` | **64** |
+| `SUPPORT` | 3 |
+| `START`, `FORMAT`, `BINDINGS`, `ALIASES`, `POLICY`, `SOURCE`, `RECORD`, `QUERY`, `END` | 1 each |
 
-## Finding 2 — the token projection is NOT the bottleneck either
+Every packet carries **all 64 worlds**. The focus world is one of them. The
+course's own record states the shared bank is 219,105 of 225,368 bytes of every
+packet — 97.2%.
 
-3829 vocabulary entries map to 3829 distinct unit rows. No collisions. The
-`collision_free_claim: false` in the binding profile is accurate but the measured
-collision count is zero.
+Comparing two different questions on the same world: **all 76 row scopes are
+identical at every ordinal.** The difference between two questions is entirely
+*inside* rows, not between them.
 
-## Finding 3 — the packet mean destroys question-level signal
+## Finding 3 — measured on real packets, the question signal is below the readout's own interference
 
-This is the finding. The stated rule is
-`packet = unit_l2( sum(unit token rows) )`.
+`1−cos` between two real packets about the same world, against the readout
+cross-talk floor of `0.098408`:
 
-Two questions about the same world share all but a few token rows. Measured
-angle between two such packets, over the frame lengths this course actually uses:
+| packet construction | same kind | different kind |
+| --- | ---: | ---: |
+| **all 76 rows (what the course uses)** | **0.008374 — 12× low** | **0.024554 — 4× low** |
+| no other 63 worlds | 0.048536 — 2× low | 0.140158 — OK |
+| question rows only (`QUERY`+`RECORD`+`SUPPORT`) | 0.089208 — 1× low | 0.297050 — OK |
+| focus world row only | 0.000000 | 0.000000 |
+| focus world + question rows | 0.054148 — 2× low | 0.157531 — OK |
 
-| packet rows | differing rows k | cos(A,B) | 1−cos | ‖A−B‖ |
-| ---: | ---: | ---: | ---: | ---: |
-| 794 | 1 | 0.998893 | 0.001107 | 0.046732 |
-| 794 | 4 | 0.995499 | 0.004501 | 0.094128 |
-| 794 | 16 | 0.982086 | 0.017914 | 0.187986 |
-| 4096 | 16 | 0.997814 | 0.002186 | 0.065655 |
-| 27718 | 4 | 0.999978 | 0.000022 | 0.006545 |
-| 27718 | 16 | 0.999912 | 0.000088 | 0.013234 |
+Reading the table:
 
-At the course's own maximum frame length (27,818 tokens, recorded in the worker
-evidence), the entire query field can differ and the packet still moves by
-`1−cos = 8.8e-05`.
+- **The current encoding is 12× below the floor on the hardest and most
+  diagnostic case**: two questions of the *same kind* on the *same world*, which
+  are what `context` (0/70 in every run) actually consists of.
+- **Dropping the 63 irrelevant world rows improves same-kind discrimination 5.8×**
+  and pushes different-kind above the floor.
+- **The question does not live in the world row.** `focus world row only` gives
+  `1−cos = 0` — the world's own content is identical no matter which question is
+  asked about it, so a focus-only packet erases the question entirely.
+- **The question lives in the `QUERY`, `RECORD` and `SUPPORT` rows**, and that
+  variant is the best of all on both columns.
+- But the world row is *needed to answer* `context`, `definition` and
+  `edge_account`: those answers are the focus world's own declarations. So the
+  measured tension is real — **the evidence you need to answer dilutes the
+  question that asks for it**, because both are summed into one vector.
 
-Now compare that against the readout's own cross-talk between unrelated symbols:
-mean `|cos| = 0.098408`.
+*Caveat on the "floor" comparison.* It is a heuristic, not a theorem. It compares
+the packet difference between two questions against the mean `|cos|` between
+unrelated answer symbols. A difference smaller than that interference does not
+make learning impossible — it makes the model resolve a signal beneath its own
+cross-talk, which is what the eight-kind history shows happening.
 
-**The signal distinguishing two questions at full frame length is about 1,100×
-smaller than the interference between two unrelated answer symbols.** Even at the
-shortest frames measured (794 rows, the development panel), 16 differing rows give
-`1−cos = 0.0179` — still 5.5× below the readout's noise floor.
+## Finding 4 — the synthetic model, and what it got wrong
 
-The mechanism is ordinary dilution. The differing rows contribute `O(sqrt(k))` to
-a sum whose norm is `O(sqrt(n))`, so the discriminating component is
-`O(sqrt(k/n))` of the packet. The measured `‖A−B‖` column tracks `sqrt(k/n)`
-closely across the whole table. The packet is a mean, and the mean is dominated by
-the bulk of the frame rather than by the query.
+`verify_encoder_capacity.py` models the packet as a mean of random token rows and
+predicts `1−cos ≈ k/n` for k differing rows of n. It gave **0.000085** at 27,718
+tokens for a 16-row query, and a sweep suggesting the packet must stay under about
+128 rows.
 
-### The course's own counts corroborate the dilution
+Against real packets that model is **directionally right and quantitatively
+wrong in both directions**. Real cross-kind differences (0.008–0.050) match the
+`k/n` estimate for 1–4 differing rows of 76, so the mechanism is confirmed. But
+real same-world same-kind differences are `1.5e-04`, far below any whole-row
+estimate, because the difference is *sub-row*. And the "make the packet shorter"
+remedy is wrong: **the fix is not fewer rows, it is not summing evidence and
+question into one vector.** The synthetic record is retained as the model; this
+record supersedes its recommendation.
 
-The frozen course record states, in `records/typed_course_001/checks_002/public_course.json`:
+## The architectural conclusion
 
-```
-"materialized_input_bytes_max": 225368,
-"source_bank_bytes": 219105,
-```
+The encoder mean-pools a question, its worked supports, and a 64-world bank into a
+single 64-dimensional unit vector. Because the bank is identical in every packet,
+it forms a large common component; the question is a small perturbation on top.
+The learner then has to pick among 90 answer symbols whose mutual interference
+(`0.098408`) exceeds the perturbation by 4× to 12×.
 
-The shared bank of 64 worlds is **219,105 of the 225,368 bytes** — **97.2%** — of
-every packet. The question itself is the remaining 2.8%. Every packet carries the
-whole bank, so the token rows that distinguish one question from another are a few
-percent of the input by construction, before any pooling.
+This is consistent with everything the project has measured: kinds whose answer is
+fixed by the *query's own scope* (`correspondence`, `reach`) learn, because the
+slot query is a separate short vector; kinds requiring *content retrieval* from the
+frame (`context`, `definition`, `edge_account`) stay at exactly 0, and `world_id`
+sat at normalized loss 0.47 from update 0 without moving. **More seeds and more
+updates cannot repair it: the signal is gone before the trainable block sees it.**
 
-The same record also states `"unique_public_packets": 564` alongside
-`"unique_query_families": 24`. The course is 564 presentations over **24 query
-families**; this is the project's own count and matches the independently measured
-finding that the 564 rows carry only 244 distinct expected answers (24 for each of
-analogy, context, definition, edge_account, parts and correspondence; 36 for
-role_set; 64 for reach).
+The fix that follows from the ablation is architectural, not a schedule change:
 
-## Finding 4 — the design target this implies
+1. **Do not sum the question and the evidence into one vector.** Keep a question
+   channel and an evidence channel, or let the question *select* its evidence
+   (attention or keyed lookup over rows) instead of being averaged with it. The
+   ablation shows both halves are individually adequate (`question rows only` and
+   `no other 63 worlds` each clear the floor on cross-kind) and that summing them
+   is what loses the signal.
+2. **Drop the irrelevant worlds.** The 63 worlds that are not the focus contribute
+   nothing to the answer and cost 5.8× on same-kind discrimination.
+3. Either change makes a **cheap decisive test possible without new data**: rebuild
+   the packet from the focus world's row plus the question rows, keep the learner
+   and course unchanged, and check whether `context`, `definition` and
+   `edge_account` leave 0.
 
-Sweeping packet length against the same measurement gives a parity point: the size
-at which the question signal `1−cos` finally clears the readout's cross-talk floor
-of `0.098408`.
+## What this record does NOT claim
 
-| packet rows n | 1−cos, k=4 | 1−cos, k=16 |
-| ---: | ---: | ---: |
-| 32 | 0.124084 | 0.508964 |
-| 64 | 0.063282 | 0.247589 |
-| **128** | 0.030479 | **0.123390** |
-| **256** | **0.015039** | 0.061110 |
-| 512 | 0.006952 | 0.028256 |
-| 794 | 0.004511 | 0.017769 |
-| 4096 | 0.000523 | 0.002153 |
-| 27718 | 0.000021 | 0.000085 |
-
-**The packet must be no more than roughly 8× the size of the query field** for the
-question signal to stand above the readout's own interference — about **128 rows
-for a 16-row query**, or about **256 rows for a 4-row query**.
-
-The course's packets are up to **27,818 tokens**, roughly **217× past that
-threshold**. This is not a tuning margin; it is two orders of magnitude.
-
-Two consequences for the architecture, in increasing order of interest:
-
-1. **Cheap:** give each question a packet containing only the focus world's own
-   declarations and relations, near the parity size. That is a data-construction
-   change, not a model change, and it is testable on the existing learner.
-2. **Architecturally right:** stop mean-pooling. A content-addressed read —
-   attention or a keyed lookup over token rows, so the query selects its own
-   evidence instead of being averaged into it — removes the `1/sqrt(n)` dilution
-   entirely and is the change that lets the architecture's structure do work rather
-   than being washed out before the trainable block sees it.
-
-## What this explains, and what it predicts
-
-Consistent with every completed run:
-
-- Answers fixed by the **query's own scope** — carried by the separate, short slot
-  query vector `(unit packet + unit slot query)/sqrt(2)` rather than by the packet
-  — can be learned. These are `correspondence` (which candidate) and `reach`
-  (which reach rule).
-- Answers requiring **content retrieval from the frame** — the focus world's own
-  declarations, participants and edges, which occupy roughly a 1/64 slice of a
-  mean-pooled vector — cannot be. These are `context`, `definition`,
-  `edge_account`, and weakly `parts` and `role_set`.
-- `world_id` sat at normalized loss ≈ 0.47 at update 0 and never moved across 160
-  updates. That is the signature of a bulk statistic being read out, not of the
-  query being read out. The model captured the frame's gross bias and had no
-  gradient path to the focus.
-- No number of seeds and no amount of training can repair this, because the
-  information is destroyed before the trainable block sees it. This is consistent
-  with the matched study failing to find an advantage and with the earlier
-  per-field loss record showing six of eleven fields never leaving chance.
-
-Predictions this record makes, each testable on the existing artifacts:
-
-1. Loss on `setting_ref`, `function_ref`, `kind_ref` will not improve if frames are
-   shortened, because the same world content is present in every packet either way
-   — unless the frame is shortened by *removing the other 63 worlds*, which is a
-   different change.
-2. Making the packet a **mean over a much smaller slice** (only the focus world's
-   own declarations and relations) should move those fields off chance. That is
-   the cheapest decisive experiment available.
-3. Replacing mean-pooling with a **content-addressed read** — attention or a
-   keyed lookup over token rows instead of a sum — should also work, and is the
-   architecturally interesting fix.
-
-## Limits of this record
-
-- The measurement uses **random token rows** for the bulk, not the real frames.
-  Real frames repeat tokens (the 64-world bank, repeated declarations, worked
-  supports), which can only *amplify* a differing token's contribution if that
-  token is repeated. The numbers above are therefore a first-order model, and the
-  real dilution should be treated as of the same order, not as an exact figure for
-  any specific packet.
-- The frame-length values (794, 4096, 27718) are taken from recorded worker
-  evidence (maximum frame text 54,830 bytes; maximum complete input 27,818
-  tokens), not re-derived by tokenizing the course here.
-- No claim is made about the trainable block. This record shows the encoder cannot
-  deliver the signal; it does not show the block could not use it if delivered.
-- The split of the eight kinds into "scope-fixed" and "content-retrieval" is a
-  reading of the evidence offered here as a hypothesis, not a measurement.
+- It does not test the trainable block. It shows the encoder cannot deliver the
+  signal; it does not show the block could not use it if delivered.
+- It makes no learning, capability or readiness claim.
+- The "12× below floor" figure is a comparison against a heuristic interference
+  level, not a proof that learning is impossible at that ratio.
+- The `1−cos = 0` for focus-only is a real measurement of identical vectors, not a
+  rounding artefact; the two packets genuinely share the same focus-world row.
+- The split of the eight kinds into scope-fixed and content-retrieval remains a
+  reading of the evidence, offered as a hypothesis.
 
 ## Evidence
 
@@ -204,12 +158,11 @@ Predictions this record makes, each testable on the existing artifacts:
 | --- | --- |
 | frozen readout (recorded by the GPU worker) | `14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667` |
 | frozen projection (recorded by the GPU worker) | `4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9` |
-| `result.json` | see file |
 
-Source of the row algorithm:
-`research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/binding.py` lines 198–216.
-Source of the recurrence:
-`research/CAS_META_2_COMPOSITION/cas_meta2/recurrent_cjt/recurrence.py` lines 182–215.
+Sources: `cas_meta2/typed_teaching/binding.py` lines 106–216 (row algorithm and
+binding), `cas_meta2/typed_teaching/input_frames.py` (frame construction),
+`cas_meta2/typed_teaching/worker_contract.py` (frozen-course loader),
+`cas_meta2/recurrent_cjt/recurrence.py` lines 182–215 (the recurrence).
 
-This record makes no learning, capability or readiness claim. It is a measurement
-of a frozen encoder, performed on saved public data with no neural execution.
+Scripts in this directory: `measure_real_packets.py` (real frames, the authority
+for Findings 2–4) and `verify_encoder_capacity.py` (the synthetic model).
