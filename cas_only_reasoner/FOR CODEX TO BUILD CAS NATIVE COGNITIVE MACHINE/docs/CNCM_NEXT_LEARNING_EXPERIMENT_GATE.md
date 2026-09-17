@@ -2,6 +2,17 @@
 
 Status: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
 
+2026-09-16 newest interface extension: complete reversible public frames,
+training-only tokenization and fixed-slot scalar answer decoding now pass 245
+guarded checks with 27 unchanged input pins. All 564 question packets and 1,152
+presentations remain. Maximum complete input is 27,818 tokens under the newly
+selected 32,768 cap; each schedule has 4,613 presentation slots. These are pure
+input/work counts, not measured neural compute. See
+records/typed_interface_001/STATUS.md and docs/CNCM_TYPED_INPUT_AND_SLOTS_v0.1.md.
+The scoped numerical encoder, worker-only learner, fresh identities, gradient/
+reload/cost acceptance and matched learning study remain open. Earlier stages
+below retain their historical evidence boundaries.
+
 2026-09-16 newest extension: the complete typed training course and its separate
 source-based answer checker now pass 248 guarded pure checks with 25 unchanged
 input pins. All 1,152 presentations, 160 groups and 1,152 worked-support exposures

@@ -1,0 +1,2 @@
+# Regenerable pytest scratch is separate from retained acceptance artifacts.
+/checks_*/tmp/

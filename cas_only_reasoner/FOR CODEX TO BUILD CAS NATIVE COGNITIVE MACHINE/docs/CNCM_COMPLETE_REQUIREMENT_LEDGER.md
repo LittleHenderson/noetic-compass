@@ -939,3 +939,51 @@ See docs/CNCM_TYPED_FULL_COURSE_v0.1.md and records/typed_course_001/STATUS.md.
 No new cloud job or reservation: canonical revision 76 remains $445 reserved and
 $4,555 unreserved of $5,000. Earlier CUDA smokes and the negative three-seed
 recurrence result remain unchanged. Goal PROGRESS, still active.
+
+
+## 2026-09-16: complete public input, fixed slots and training-only tokenizer
+
+Status: PARTIAL — PURE_INPUT_SLOTS_TOKENIZATION_PASS; no new neural execution.
+
+The new reversible text codec keeps every public source world, declaration,
+relation, completeness/order rule, query, role catalog and worked support.
+All aliases and factored tables are in the text itself. The scalar reference
+decoder retains all syntactic choices for eight answer kinds, including every
+allowed bijection and NO_MATCH. It never consults the semantic checker or
+repairs a wrong answer. This does not yet implement the numerical encoder,
+learned decoder loss or worker.
+
+The corrected guarded aggregate passed 245 checks with 27 unchanged input pins,
+no forbidden imports/reads/execution attempts and zero model/optimizer/cloud
+calls. Receipt: records/typed_interface_001/checks_002/receipt.json, SHA-256
+400467b8f530644edadcaa2d43212291f922ef05deac10d6e05814644e9818c9.
+The 245 includes 72 earlier contract checks; do not sum overlapping stage counts
+as independent learning evidence. A previous 237-pass run is retained unchanged
+with exact source/test snapshots; review then prompted eight memory-bound
+regressions and the accepted encoding/decoding resource-limit repair.
+
+All 564 packets retain the full 64-world bank. The maximum frame text is 54,830
+bytes versus maximum original packet 225,368 bytes. Exact training-only lexical
+counts including markers span 26,751–27,818; the newly selected cap is 32,768,
+with 3,829 vocabulary entries and complete UTF-8 fallback. This is a new profile,
+not compatibility with the legacy three-option encoder or checkpoint.
+
+All nine regenerated source schedules join by exact complete intent/lineage to
+the existing frozen public registry, retaining 1,152 presentations and 160 groups.
+Each has 4,613 presentation slots and 31,179,114 input-token occurrences before
+cache reuse. Planned slot/core passes are 17,178 / 17,508 / 17,219 for source
+seeds 101 / 202 / 303 and match all orders within a seed. These are pure
+measurements/plans, not GPU time, complete backward/evaluation/reload work or
+model trials. Ordinary dependency-graph ordering still equals component-first.
+
+Next: build and numerically verify scoped encoding and the worker-only learner,
+fresh source/model/projection/readout/optimizer identities, gradients, cache and
+checkpoint/RNG/cursor reconstruction, and complete measured costs. Then freeze
+and run learning-speed, untouched-family transfer and delayed-retention contrasts.
+Larger correspondence graphs, interactions, temporal processes and the complete
+CNCM charter remain open. Earlier CUDA smokes and negative recurrence results
+remain unchanged. See records/typed_interface_001/STATUS.md and
+docs/CNCM_TYPED_INPUT_AND_SLOTS_v0.1.md.
+
+No new cloud reservation: canonical revision 76 remains $445 reserved and $4,555
+unreserved of $5,000. The full goal is PROGRESS, active and incomplete.
