@@ -1,0 +1,36 @@
+loading checkpoints (deserialisation only)...
+building up to 120 world-typed reference slots...
+  probes: 120
+
+============================================================================================
+cursor 0 � REPRODUCTION AND WHERE THE CONSTANCY ENTERS
+============================================================================================
+
+   encoded slots (the block's nominal input): mean cosine   0.5107   rms from mean   0.08707   mean norm   1.00000
+                                after 1 pass: mean cosine   0.5600   rms from mean   0.02868   mean norm   0.34489
+                              after 8 passes: mean cosine   0.5782   rms from mean   0.02903   mean norm   0.35654
+
+  emitted aliases after 8 passes: 16 distinct of 64
+  most emitted: W36=34(28.3%), W58=28(23.3%), W7=24(20.0%), W49=12(10.0%), W21=3(2.5%), W15=3(2.5%)
+
+============================================================================================
+cursor 160 � REPRODUCTION AND WHERE THE CONSTANCY ENTERS
+============================================================================================
+
+   encoded slots (the block's nominal input): mean cosine   0.5107   rms from mean   0.08707   mean norm   1.00000
+                                after 1 pass: mean cosine   0.5342   rms from mean   0.25073   mean norm   2.76704
+                              after 8 passes: mean cosine   0.4903   rms from mean   0.48876   mean norm   5.42227
+
+  emitted aliases after 8 passes: 15 distinct of 64
+  most emitted: W8=22(18.3%), W46=16(13.3%), W40=14(11.7%), W49=13(10.8%), W47=10(8.3%), W52=10(8.3%)
+
+============================================================================================
+READING
+============================================================================================
+
+The recorded distribution at cursor 160 was 9 distinct aliases over the 210
+world-typed reference slots with W36 at 44.3%. If the reproduction here shows the
+same shape, the three spreads above say where the input dependence is lost: at the
+encoded slot, at the block, or at the recurrence that carries the block's own output
+back into its input eight times.
+

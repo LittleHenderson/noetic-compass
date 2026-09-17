@@ -1,5 +1,31 @@
 # The registered `^6` block collapses to a constant, and teaching deepens the collapse
 
+> # WITHDRAWAL — the MECHANISM in this file is withdrawn. Read `COLLAPSE_CLAIM_WITHDRAWN.md`.
+>
+> The *recorded fact* below stands: at cursor 160 the model emits only 9 of the 64 world aliases
+> across the 210 world-typed reference slots, `W36` accounts for 44.3% of them, and the two
+> world-typed slots of a `definition` question agree at exactly that rate. That was read from
+> the recorded decisions and nothing here retracts it.
+>
+> The **cause** claimed here does not stand. "The trained block has collapsed onto an
+> input-independent fixed point" is refuted by three checks against the saved weights:
+>
+> - the weights **grew**, 1.54× to 1.91×, and the effective linear map's operator norm went
+>   **0.361559 → 7.135410 (19.73×)**;
+> - the trained block is **more** input-sensitive than the initial one: over 2,598 real encoded
+>   slots, mean pairwise cosine fell 0.563576 → 0.491361 and rms-from-mean rose 0.028791 →
+>   0.280260;
+> - a full pure-Python rebuild of the learner's forward pass, recurrence included, gives
+>   **15 distinct aliases with `W8` at 18.3%** where the record shows **9 with `W36` at 44.3%**,
+>   so it does not reproduce and does not validate.
+>
+> **The recorded concentration is a fact; its cause is OPEN.** Defect A in
+> `TWO_DEFECTS_RESULT.md` was already withdrawn as an artifact of counting a supplied
+> identifier. **Defect B stands**, and so does every other measurement in this record.
+>
+> This file is kept rather than deleted, because deleting a wrong mechanism is worse than
+> labelling one.
+
 **Record:** `records/encoder_capacity_001/`
 **Scripts:** `measure_joint_binding.py` (output `joint_binding.txt`), plus the alias survey in
 `alias_survey.txt`

@@ -4,6 +4,66 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - NINTH SELF-CORRECTION: the collapse claim is unsupported; the recorded fact stands and its cause is OPEN
+
+$0.00. torch used ONLY to deserialise frozen checkpoints; all arithmetic on plain Python lists.
+Scripts `records/encoder_capacity_001/measure_block_collapse.py` (result `block_collapse.txt`)
+and `measure_recurrence_collapse.py` (result `recurrence_collapse.txt`); record
+`COLLAPSE_CLAIM_WITHDRAWN.md`; mechanism annotated on `READOUT_COLLAPSE_RESULT.md`.
+
+The eighth correction reported a real recorded fact - at cursor 160 the model emits only 9 of the
+64 world aliases across the 210 world-typed reference slots, W36 accounts for 44.3% of them, and
+the two world-typed slots of a definition question agree at exactly that rate - and offered a
+cause: the trained block collapsed onto an input-independent fixed point. THE FACT STANDS. THE
+CAUSE DOES NOT. Three checks against the saved weights:
+
+1. THE WEIGHTS GREW, THEY DID NOT SHRINK.
+     left.weight       4.624080 ->  7.132143  (1.542392x)
+     right.weight      4.575654 ->  7.097140  (1.551066x)
+     merge left half   3.257300 ->  6.227643  (1.911903x)
+     merge right half  3.225275 ->  5.946896  (1.843842x)
+     effective linear map operator norm  0.361559 -> 7.135410  (19.73x)
+   With operator norm 7.14 and unit-norm inputs, tanh saturates; the module is closer to
+   merge @ sign(...) than to shrinkage.
+
+2. THE TRAINED BLOCK IS MORE INPUT-SENSITIVE, NOT LESS. Over 2,598 real encoded slot vectors
+   through both checkpoints: mean pairwise cosine 0.563576 -> 0.491361 (fell), rms-from-mean
+   0.028791 -> 0.280260 (rose 9.7x), mean norm 0.350351 -> 3.060109, rms/norm 0.0822 -> 0.0916.
+   The trained block distinguishes its inputs MORE than the initial one does.
+
+3. THE RECONSTRUCTION DOES NOT REPRODUCE THE RECORDED DISTRIBUTION. A full pure-Python rebuild of
+   the learner's forward pass - encoded slot, then recurrence.run_passes with lambda_=0.5,
+   epsilon=1e-6, depth=8 carrying the block's own output back into its input each pass, then the
+   frozen readout argmax - gives over 120 world-typed reference slots:
+     cursor   0: 16 distinct aliases of 64, most emitted W36=28.3%, spread rms/norm 0.0814
+     cursor 160: 15 distinct aliases of 64, most emitted W8=18.3%,  spread rms/norm 0.0901
+   The record shows 9 distinct with W36 at 44.3%. It does not reproduce, so it does not validate
+   and cannot locate the cause. The reconstruction misses at least one thing about how the
+   learner runs; what that is has NOT been found.
+
+WHAT SURVIVES: the recorded concentration is a fact read from the recorded decisions - 9 of 64
+aliases, W36 at 44.3%, focus alias ranked 6th or worse in 157 of 210 world-typed slots. Its
+CAUSE IS OPEN. The two candidates - an input-independent component in the block, or something in
+the real forward pass the reconstruction does not capture - are not distinguished. Defect B
+stands. Defect A was already withdrawn as an artifact. Every other measurement stands: 63.65%
+representation, 65/65 codebook, 2.798e-14 readout residual, 0.0 module realisation residual,
+1.24% trained, non-convergence at the ceiling.
+
+The limits section of the eighth correction was right to flag exactly this risk, and it has now
+been measured and answered: the output vector is neither constant nor aligned with a few readout
+rows; it is spread and input-dependent.
+
+CONSEQUENCE. P5 and G6/G7 in the phase-0 record are KEPT, with their justification restated. They
+key on the emitted-alias distribution - more than 9 distinct aliases, commonest below 44.3%,
+focus alias ranked first in more than 10 of 210 slots - which are direct readings of a recorded
+quantity and do not depend on why the concentration happens. What changes is the interpretation:
+a pass would no longer read as "the collapse was repaired", because no collapse was established,
+but as "the analytic solve moves the readout off a concentrated distribution", with the mechanism
+left open.
+
+This is the ninth self-correction in this record. Three of the last four were caught by checking
+a claim against the artifact it was drawn from rather than against a restatement of it.
+
 ## 2026-09-17 UTC - EIGHTH SELF-CORRECTION: the registered ^6 block COLLAPSES TO A CONSTANT, and my previous correction was an artifact
 
 $0.00, pure standard library, no model, no GPU, no target opened, no provider.

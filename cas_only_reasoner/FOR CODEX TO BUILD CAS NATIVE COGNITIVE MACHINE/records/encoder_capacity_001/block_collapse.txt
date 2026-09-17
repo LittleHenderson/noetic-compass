@@ -1,0 +1,44 @@
+loading the two checkpoints (deserialisation only)...
+
+============================================================================================
+1. WEIGHT SCALE
+============================================================================================
+
+                matrix       cursor 0     cursor 160      ratio
+--------------------------------------------------------------------------------------------
+           left.weight       4.624080       7.132143   1.542392
+          right.weight       4.575654       7.097140   1.551066
+       merge left half       3.257300       6.227643   1.911903
+      merge right half       3.225275       5.946896   1.843842
+
+============================================================================================
+2. EFFECTIVE LINEAR MAP  x -> (merge_left @ left + merge_right @ right) x
+============================================================================================
+
+    cursor 0: Frobenius =     2.601930   operator norm =     0.361559
+  cursor 160: Frobenius =    24.621360   operator norm =     7.135410
+
+building real encoded slot vectors from the frozen public material...
+  encoded slots built: 200/564
+  encoded slots built: 400/564
+  probe inputs: 2598
+
+============================================================================================
+3. INPUT SENSITIVITY � the same probe inputs through both checkpoints
+============================================================================================
+
+  checkpoint  probes  sampled   mean cosine   rms from mean   mean norm
+--------------------------------------------------------------------------------------------
+    cursor 0    2598      217      0.563576        0.028791    0.350351
+  cursor 160    2598      217      0.491361        0.280260    3.060109
+
+============================================================================================
+READING
+============================================================================================
+
+A block that still reads its input produces outputs that differ across inputs: a mean
+pairwise cosine well below 1 and an rms-from-mean that is a sizeable fraction of the
+mean norm. A block that has collapsed produces near-identical outputs whatever it is
+given: cosine approaching 1 and rms-from-mean near zero. Compare the two checkpoints
+and the recorded behaviour follows or it does not.
+

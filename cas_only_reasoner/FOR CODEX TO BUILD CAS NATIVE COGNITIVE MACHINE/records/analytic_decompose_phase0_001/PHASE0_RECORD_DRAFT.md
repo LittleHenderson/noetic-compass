@@ -95,15 +95,20 @@ evaluation set. If arm C scores materially above chance, arm A's result is void.
 are predicted to be roughly neutral on an already-solved field, and negative on the fields the
 solve does not touch.
 
-**P5 — RESTORED, and now the strongest prediction in this record. Arm A raises focus-world
-identification, and the reference slots are measurably collapsed.**
+**P5 — RESTORED. Arm A moves the emitted-alias distribution, and the recorded distribution is
+the measurable target.**
 
-> **History.** P5 was withdrawn in round 10 after `measure_world_consistency.py` appeared to
-> show that `definition` and `edge_account` name the focus world in 70 of 70 answers, which
-> would have made identification irrelevant. That measurement was **wrong**: a `definition`
-> answer carries a third field, `whole`, whose world component is *supplied* by the node slot's
-> scope rather than decided, so "names the focus world" was a tautology. The withdrawal is
-> itself withdrawn. Details in `records/encoder_capacity_001/READOUT_COLLAPSE_RESULT.md`.
+> **Justification restated after the ninth self-correction.** P5 was first withdrawn when
+> `measure_world_consistency.py` appeared to show that identification was already solved; that
+> measurement was an artifact of counting a *supplied* world identifier. It was then justified by
+> a "collapse" mechanism that has since been **refuted** — the block grew, it did not collapse,
+> and a pure-Python rebuild of the forward pass does not reproduce the recorded distribution
+> (`records/encoder_capacity_001/COLLAPSE_CLAIM_WITHDRAWN.md`).
+>
+> **What P5 now rests on is only the recorded fact**, which is not in dispute: at cursor 160 the
+> model emits **9 of the 64 world aliases** across the 210 world-typed reference slots, **`W36`
+> accounts for 44.3%** of them, and the focus alias is ranked 6th or worse in **157** of the 210.
+> The cause of that concentration is **open**, and P5 does not depend on it.
 
 The clean measurement (`measure_joint_binding.py`) looks only at slots whose alphabet is the 64
 world aliases — the slots where the world is genuinely decided. Over 210 such slots, across the
@@ -114,43 +119,25 @@ world aliases — the slots where the world is genuinely decided. Over 210 such 
 | 0 (before teaching) | 6 | 22 | **182** | 26 of 64 | 4.164 bits |
 | 160 (after teaching) | 10 | 43 | **157** | **9 of 64** | **2.516 bits** |
 
-At cursor 160 the machine emits **`W36` in 93 of 210 world-typed reference slots = 44.3%**, and
-**never emits 55 of the 64 aliases at all**. The two world-typed slots of a `definition`
-question agree with each other 44.3% of the time — exactly the rate at which the first slot
-emits `W36`. They are not making two decisions; they are emitting the same constant.
+Teaching made the distribution **more concentrated and not more accurate**: distinct aliases
+26 → 9, entropy 4.164 → 2.516 bits, commonest emission 15.2% → 44.3%, focus alias at rank 1
+2.86% → 4.76%.
 
-**Teaching made this worse, not better:** distinct aliases 26 → 9, entropy 4.164 → 2.516 bits,
-commonest emission 15.2% → 44.3%. The block has collapsed onto an input-independent fixed point.
+> **P5: arm A emits more than 9 distinct world aliases across the 210 world-typed reference
+> slots, reduces the commonest single alias below 44.3%, and ranks the focus alias first in more
+> than 10 of 210 slots.**
 
-> **P5: arm A raises focus-world identification above the recorded baseline, and that is
-> measured directly as the emitted-alias distribution — not as an aggregate score.**
+Each is a direct reading of the recorded quantity the analytic solve was fitted to raise, each
+is falsifiable in one direction, and none depends on the sealed target or on any mechanism.
 
-Specifically, arm A is predicted to:
+**What a pass would and would not mean.** It would mean the analytic solve moves the block's
+readout behaviour off a concentrated distribution. It would **not** mean a collapse was repaired,
+because no collapse was established. The mechanism stays open either way.
 
-- emit **more than 9** distinct world aliases across the reference slots, and
-- reduce the commonest single alias below **44.3%** of emissions, and
-- rank the focus alias first in **more than 10 of 210** slots.
-
-Each of those three is a direct reading of the recorded quantity the analytic solve was fitted
-to raise, each is falsifiable in one direction, and none of them depends on the sealed target.
-
-**Why this is now the load-bearing prediction.** The chain is closed end to end: the information
-is in the slot (63.65%), the codebook can select every world (65/65), the frozen readout is not
-a constraint (residual 2.798e-14), the module can express the solution exactly (residual 0.0),
-and the trained block collapses to a constant instead of finding it. Arm A replaces the
-constant with the fitted map. If the collapse is what blocks the machine, arm A moves these
-three numbers; if it does not move them, the collapse reading is wrong.
-
-**A binding fix is NOT part of this.** Jointly deciding the world across the slots that must
-agree was measured and changes nothing — 10 of 140 questions either way, because the two slots
-are not disagreeing, they are both emitting the same wrong constant. Referential consistency is
-not the missing piece.
-
-**What P5 does not establish.** It keys on the identification slots. `edge_account` and `parts`
-fail for a separate measured reason — a conjunction over independent binary decisions
-(`TWO_DEFECTS_RESULT.md` Defect B, which stands) — and a strong P5 would say nothing about them.
-A reader who sees the alias distribution repaired must not read it as progress on the 140
-questions those two kinds contribute.
+**What P5 does not cover.** `edge_account` and `parts` fail for a separate measured reason — a
+conjunction over independent binary decisions (`TWO_DEFECTS_RESULT.md` Defect B, which stands) —
+and a strong P5 would say nothing about them. A reader who sees the alias distribution repaired
+must not read it as progress on the 140 questions those two kinds contribute.
 
 ## 5. Hard gates
 
@@ -165,12 +152,14 @@ caveats".
 | **G3** | arm B ≥ arm A − 1 question | FAIL is a finding about the training, and is reported as one rather than tuned away. |
 | **G4** | every arm's encoder, readout and scope digests equal the registered ones | FAIL. The run is void regardless of scores. |
 | **G5** | no fitting material appears in any evaluation set | FAIL. Leakage; the run is void. |
-| **G6** | arm A emits strictly more than 9 distinct world aliases across the 210 world-typed reference slots, and the commonest single alias is below 44.3% of emissions | FAIL. The collapse reading is wrong and the analytic solve does not touch what blocks the machine. Report and stop rather than tuning. |
+| **G6** | arm A emits strictly more than 9 distinct world aliases across the 210 world-typed reference slots, and the commonest single alias is below 44.3% of emissions | FAIL. The analytic solve does not move the recorded concentration. Report and stop rather than tuning. |
 | **G7** | arm C leaves the emitted-alias distribution at or below the recorded baseline (≤ 9 distinct, ≥ 44.3% commonest) | FAIL. If the wrong solve also moves the distribution, the movement is not evidence about the solve. |
 
-G6 and G7 are direct readings of the recorded quantity, on the identification slots only, and
+G6 and G7 are direct readings of a recorded quantity, on the identification slots only, and
 neither depends on the sealed target. Baseline for both: **9 distinct aliases of 64, commonest
 alias `W36` at 44.3% of 210 slots, focus alias ranked #1 in 10 of 210**, measured at cursor 160.
+The cause of the concentration is open; these gates test whether the solve moves it, not why it
+is there.
 
 **Aggregate reporting requirement.** Because teaching moves the exposed course and the
 development panel in opposite directions on this architecture, every arm must report all three
