@@ -4,6 +4,88 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - SEVENTH SELF-CORRECTION: identification is falsified; the real defects are binding and composition
+
+$0.00, pure standard library, no model, no GPU, no target opened, no provider. Two new
+measurements over frozen receipts and public packets plus the frozen public course.
+Scripts `records/encoder_capacity_001/measure_world_consistency.py` and
+`measure_answer_conjunction.py`; results `TWO_DEFECTS_RESULT.md`; P5 WITHDRAWN from
+`records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md`.
+
+The focus world is PUBLIC - it is a field of each packet's own query - so last round's
+identification hypothesis was testable for $0 against already-recorded answers. It is FALSE:
+
+  kind             answers naming the focus world   correct
+  definition                70/70 = 100.00%            0
+  edge_account              70/70 = 100.00%            0
+  context                   54/70 =  77.14%            0
+  parts                     43/53 =  81.13%           12
+  reach                     89/107 = 83.18%           81
+  analogy                    7/70 =  10.00%           11
+
+definition and edge_account name the focus world in EVERY answer and are correct in NONE.
+Across the five one-world kinds, focus-naming went 87.57% -> 88.11% from cursor 0 to cursor 160
+while correctness went 7.41% -> 24.54%. Identification moved 0.54 points; correctness moved
+17.13. Identification was already there before teaching began. P5 is therefore withdrawn BEFORE
+IT WAS EVER RUN - the $0 measurement killed it and saved a GPU job. G6 is withdrawn with it;
+G1-G5 stand.
+
+TWO REAL DEFECTS, MEASURED.
+
+DEFECT A - THE ARCHITECTURE HAS NO REFERENTIAL CONSISTENCY. A definition answer cites the focus
+world's declared kind AND its declared function; _ARGUMENTS["definition"] is empty, so both must
+resolve to the focus world, and answers.declaration_ref builds both from one world_id. All 70
+answers cite the focus world for one reference and a DIFFERENT world for the other
+(focus_plus = 70, focus_only = 0). context shows the same shape, 47 of 70. And of the only three
+context answers ever correct - all three at cursor 0 - all three named the focus world and
+nothing else. The forward pass produces ONE vector per slot and the frozen readout takes an
+independent argmax per slot, so nothing can force two slots to agree and there is nowhere to put
+a binding. Referential consistency is structural and must be built, not learned.
+
+DEFECT B - SET-VALUED ANSWERS ARE CLASSIFIED INSTEAD OF COMPUTED. Measured per kind from the
+public slot plans:
+
+  kind            slots  binary  wide   free bits   before    after
+  correspondence      5       1     0        9.0    0.00%   93.18%
+  reach               1       0     0        2.6   23.36%   75.70%
+  parts               4       4     0        4.0   11.32%   22.64%
+  analogy             1       0     1        6.0    7.14%   15.71%
+  role_set            6       6     0        6.0    0.00%    8.33%
+  context             5       4     1       10.0    4.29%    0.00%
+  definition          3       0     2       14.0    0.00%    0.00%
+  edge_account       16      16     0       16.0    0.00%    0.00%
+
+Above roughly 10 bits of required answer content the machine has NEVER ONCE been right, on 210
+of 564 questions, before or after teaching. edge_account is a conjunction over 16 binary
+edge-presence decisions and its `edges` field normalized loss barely moved all run, 0.967157 ->
+0.908392 against a uniform prior of 1.0.
+
+THE LAW. correspondence is the ONLY kind whose decision carries a correspondence_candidate_id -
+88 of 88, and 82 of 88 of those are correct; not one of the other 476 questions has one. Its
+candidates are enumerated BY CODE (answers.correspondence_candidates), so the hard part,
+composing a graph bijection, is computed rather than learned, and the machine is left with one
+choice from 25 items. analogy is a single 64-way choice with NO enumerated candidates and scores
+15.71%. THE MACHINE REACHES 75-93% EXACTLY WHEN THE COMPOSITION IS DONE IN CODE AND IT IS ASKED
+TO MAKE ONE CHOICE, AND 0% EXACTLY WHEN THE COMPOSITION MUST BE DONE BY THE NETWORK ACROSS
+INDEPENDENT PER-SLOT DECISIONS. Exact-match rate is the product of per-slot accuracies, and that
+product is indistinguishable from zero past a handful of bits.
+
+WHAT SURVIVES. The analytic initialisation is not refuted; its scope narrows. It raises focus
+naming from the frozen readout's 1.24% to 63.83%, so it is predicted to help context, analogy
+and role_set and to leave definition, edge_account and parts unmoved. Those three are exactly
+the three never answered. The analytic initialisation does not reach the part of the machine
+that is broken, and the phase-0 record no longer says it does.
+
+WHERE THE PAYOFF IS, ORDERED. (1) a binding mechanism for referential consistency - without it
+every kind citing more than one declaration is unreachable by construction; (2) set-valued
+answers read off the declared structure instead of classified element by element; (3) analytic
+initialisation of the world-naming slot, already built and validated, now correctly sized as the
+smallest of the three.
+
+Also added to the phase-0 draft: every arm must report all eight kinds separately and must
+report, per kind, how many answers named the focus world. An aggregate hides both the zeroes and
+the reason for them.
+
 ## 2026-09-17 UTC - The corrected panels sharpen the proposal into one falsifiable prediction
 
 $0.00, no run. Document only: `records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md`

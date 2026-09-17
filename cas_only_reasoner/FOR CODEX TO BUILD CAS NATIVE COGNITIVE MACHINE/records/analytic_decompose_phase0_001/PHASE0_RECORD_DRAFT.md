@@ -95,46 +95,69 @@ evaluation set. If arm C scores materially above chance, arm A's result is void.
 are predicted to be roughly neutral on an already-solved field, and negative on the fields the
 solve does not touch.
 
-**P5 — the load-bearing prediction: arm A moves `context`, `definition` and `edge_account` off
-exactly zero.**
+**P5 — WITHDRAWN, FALSIFIED BY ALREADY-RECORDED DATA. The original text is kept below and is
+wrong.**
 
-Three of the eight question kinds score **exactly zero before and after teaching**, in both
-arms and across all three seeds: `context` (0/70 and 3/70), `definition` (0/70 and 0/70),
-`edge_account` (0/70 and 0/70) on the exposed 564-question course. That is 210 of 564 questions
-— **37% of the course** — that the machine has never once answered.
+> **Withdrawn.** The original P5 claimed that arm A moves `context`, `definition` and
+> `edge_account` off exactly zero because those kinds are 64-way world-identification problems
+> and the analytic solve raises identification from 1.24% to 63.83%. **Already-recorded data
+> falsifies the premise.** The focus world is public, so the hypothesis was testable for $0:
+> `records/encoder_capacity_001/measure_world_consistency.py` reads every packet's focus world
+> from the frozen public material and checks whether the recorded answer names it.
+>
+> | kind | answers naming the focus world | correct |
+> |---|---:|---:|
+> | **definition** | **70/70 = 100.00%** | **0** |
+> | **edge_account** | **70/70 = 100.00%** | **0** |
+> | context | 54/70 = 77.14% | 0 |
+>
+> `definition` and `edge_account` name the focus world in **every** answer and are correct in
+> **none**. Identification is not their defect, so raising identification cannot be what moves
+> them. Across all five one-world kinds, focus-naming went from 87.57% at cursor 0 to 88.11% at
+> cursor 160 while correctness went from 7.41% to 24.54%: identification moved 0.54 points,
+> correctness moved 17.13. Identification was already there before teaching began.
+>
+> **The measured alternative is two different defects** —
+> `records/encoder_capacity_001/TWO_DEFECTS_RESULT.md`:
+>
+> - **Defect A, no referential consistency.** All 70 `definition` answers cite the focus world
+>   *plus at least one other world*, for two references that must denote the same world. The
+>   forward pass gives one vector per slot and an independent argmax per slot, so nothing can
+>   force two slots to agree. Measured: `focus_plus = 70, focus_only = 0` for `definition`.
+> - **Defect B, conjunction classified instead of computed.** `edge_account` is a conjunction
+>   over **16** binary edge-presence decisions, each near chance (`edges` normalized loss
+>   0.967157 → 0.908392 against a uniform prior of 1.0), and it has never been answered.
+>
+> **What replaces P5.** The analytic initialisation's scope narrows and is stated precisely: it
+> raises focus-world naming from the frozen readout's 1.24% to 63.83%, so it is predicted to
+> help `context` (77.14% naming, 0 correct), `analogy` (10.00% naming — the worst measured) and
+> `role_set` (0% naming, 3/36), and to leave `definition`, `edge_account` and `parts` unmoved.
+> **Those three are exactly the three that have never been answered.** The analytic
+> initialisation does not reach the part of the machine that is broken, and this record no
+> longer claims it does.
+>
+> **G6 is withdrawn with P5**, since it existed only to control P5's mechanism. **G1 to G5
+> stand.**
 
-Why this is predicted to be the same defect: those kinds' answers are `<alias>/decl/<field>`,
-so their only variable part is the world alias, and the alias is a fixed function of the sorted
-world identifier. They are **64-way world-identification problems wearing retrieval clothes**,
-scored by exact match. The `world_id` field's normalized loss is essentially unmoved by
-teaching — **0.504130 → 0.503435**, against a uniform prior of 1.0 for a 65-symbol field — so
-after 160 updates the machine identifies the world at roughly twice chance. An exact-match
-64-way identification at twice chance is answered correctly almost never, which is exactly the
-observed zero.
+The withdrawn text follows, kept so the error is visible rather than deleted:
 
-The analytic initialisation raises precisely this quantity: the closed-form solve on the real
-encoded slots reaches **63.83%** on the focus-world alias, **13.85×** the strongest available
-null. So:
-
-> **P5: arm A moves at least one of `context`, `definition`, `edge_account` off exactly zero,
-> while the recorded baseline and arm C leave all three at zero.**
-
-This is the prediction worth freezing hardest. It keys on the three kinds the architecture has
-never reached rather than on the aggregate score, it is a **rate change from exactly zero**
-rather than a difference between two small numbers, and it is falsifiable in one direction: if
-all three stay at zero in arm A, the identification reading of this defect is wrong and the
-whole-answer ceiling is not where this spec says it is.
-
-**P5 is also the prediction most likely to be wrong, and it should be read that way.** The
-63.83% is a single field in isolation on features the solve was fitted to; the three kinds
-require that field *and* correct assembly of the surrounding answer; and the analytic solve
-touches the `^6` block only, not the slot plan or the assembly. A partial move — say `context`
-2/70 — is the most likely outcome and still falsifies the "structurally unreachable" reading.
-
-**What P5 would not establish.** Even a strong P5 would not show the machine understands
-anything about the world it names. It would show that a 64-way identification step which was
-being answered at chance is now being answered well, in a task whose only variable part is that
-step. That is a real capability and it is a narrow one, and the two must not be conflated.
+> Three of the eight question kinds score **exactly zero before and after teaching**, in both
+> arms and across all three seeds: `context` (0/70 and 3/70), `definition` (0/70 and 0/70),
+> `edge_account` (0/70 and 0/70) on the exposed 564-question course. That is 210 of 564
+> questions — **37% of the course** — that the machine has never once answered.
+>
+> Why this is predicted to be the same defect: those kinds' answers are `<alias>/decl/<field>`,
+> so their only variable part is the world alias, and the alias is a fixed function of the
+> sorted world identifier. They are **64-way world-identification problems wearing retrieval
+> clothes**, scored by exact match. The `world_id` field's normalized loss is essentially
+> unmoved by teaching — **0.504130 → 0.503435**, against a uniform prior of 1.0 for a 65-symbol
+> field — so after 160 updates the machine identifies the world at roughly twice chance.
+>
+> **Why it was wrong.** The 0.504130 figure is real, and so is the flatness. But "the field's
+> loss is flat" and "the answers are wrong because of that field" are different claims, and the
+> second does not follow from the first. Reading the answers settled it in one pass: the
+> machine names the focus world in 70 of 70 `definition` answers and 70 of 70 `edge_account`
+> answers. The flat `world_id` field is not the binding constraint on those kinds.
 
 ## 5. Hard gates
 
@@ -149,17 +172,19 @@ caveats".
 | **G3** | arm B ≥ arm A − 1 question | FAIL is a finding about the training, and is reported as one rather than tuned away. |
 | **G4** | every arm's encoder, readout and scope digests equal the registered ones | FAIL. The run is void regardless of scores. |
 | **G5** | no fitting material appears in any evaluation set | FAIL. Leakage; the run is void. |
-| **G6** | arm C leaves `context`, `definition` and `edge_account` all at exactly zero | FAIL. If the control moves a never-answered kind, P5's mechanism is not what it claims and arm A's P5 result is uninterpretable. |
-
-G6 exists because P5 keys on a rate change from exactly zero, and a kind that has never been
-answered is exactly the place where an unrelated change can look like a mechanism. The control
-is what separates the two.
+| ~~G6~~ | ~~arm C leaves `context`, `definition` and `edge_account` all at exactly zero~~ | **WITHDRAWN with P5.** It existed only to control P5's mechanism, and that mechanism is falsified. |
 
 **Aggregate reporting requirement.** Because teaching moves the exposed course and the
 development panel in opposite directions on this architecture, every arm must report all three
 panels separately — exposed course, development, retention — and must not report a single
 aggregate. The recorded evidence for that requirement is
 `records/encoder_capacity_001/PANEL_MISREAD_CORRECTION.md` and the error it corrects.
+
+**Per-kind reporting requirement.** Every arm must report all eight question kinds separately
+and must report, per kind, the number of answers naming the focus world. The recorded evidence
+is `records/encoder_capacity_001/TWO_DEFECTS_RESULT.md`: three kinds have never been answered,
+two of them while naming the focus world in 100% of their answers, and an aggregate would hide
+both the zeroes and the reason.
 
 No automatic retries. A failure is retained as a result. Negative results are not deleted.
 
@@ -177,12 +202,18 @@ No automatic retries. A failure is retained as a result. Negative results are no
 
 | outcome | reading |
 |---|---|
-| G1 passes, G3 passes | The optimisation gap was the blocker for this field. The architecture change is worth carrying into the registered curriculum. |
-| G1 passes, G3 fails | The initialisation helps and the registered training destroys it. That is a finding about the loss and the update ceiling, and it is the more interesting of the two. |
-| G1 fails, G2 passes | The construction is exact and still does not help. The conjunctive-metric defect is then the leading explanation, and the next work is the objective, not the initialisation. |
-| **P5 passes** | **The three never-answered kinds were a 64-way identification problem, and identification is now solved. 37% of the course becomes reachable and the whole-answer ceiling moves.** This is the outcome that would matter most, and it is not the same as G1 passing: P5 can pass while G1 fails, because the aggregate is dominated by kinds the solve does not touch. |
-| P5 fails, G1 passes | The gain came from the kinds that already worked. Real but narrow. |
+| G1 passes, G3 passes | The optimisation gap was the blocker for the world-naming slot. Worth carrying into the registered curriculum — and worth exactly that much, not more. |
+| G1 passes, G3 fails | The initialisation helps and the registered training destroys it. A finding about the loss and the update ceiling. |
+| G1 fails, G2 passes | The construction is exact and still does not help. The blocked kinds are then confirmed to be blocked by composition and binding, not by identification, and the next work is `TWO_DEFECTS_RESULT.md`, not this proposal. |
+| **Any outcome on P5** | **P5 is withdrawn.** It was falsified before the run by $0 measurement. A run that changes `context`, `definition` or `edge_account` would not confirm it, because the mechanism it named is not the mechanism that operates. |
 | G2 fails | The construction is not measuring what it claims. Stop and re-derive before spending again. |
+
+**What this run can and cannot decide.** It decides whether a closed-form initialisation of the
+world-naming slot buys anything. It **cannot** decide anything about `definition`,
+`edge_account` or `parts`, because the defects there are referential consistency and
+conjunction-over-decisions, and this change touches neither. A reader who sees a single high
+number from this run must not read it as progress on the 210 questions the machine has never
+answered.
 
 ## 8. What this record does NOT claim or authorise
 

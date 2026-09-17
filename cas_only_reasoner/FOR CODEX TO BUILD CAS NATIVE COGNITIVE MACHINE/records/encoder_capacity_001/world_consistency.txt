@@ -1,0 +1,64 @@
+predictions at cursor 160: 564
+predictions at cursor   0: 564
+scored rows: 564
+
+reading the public focus world for every registry packet...
+  focus worlds read: 200/564
+  focus worlds read: 400/564
+  focus worlds read: 564
+
+==================================================================================================
+WORLD IDENTITY IN THE RECORDED ANSWERS � after 160 updates (cursor 160)
+==================================================================================================
+
+           kind   focus  focus+   other   none   focus%  correct  corr|focus
+--------------------------------------------------------------------------------------------------
+        analogy       7       0      63      0   10.00%       11           0   (two worlds expected)
+        context       7      47      16      0   77.14%        0           0
+ correspondence       0      88       0      0  100.00%       82          82   (two worlds expected)
+     definition       0      70       0      0  100.00%        0           0
+   edge_account      70       0       0      0  100.00%        0           0
+          parts      43       0       0     10   81.13%       12          12
+          reach      89       0       0     18   83.18%       81          68
+       role_set       0       0       0     36    0.00%        3           0   (two worlds expected)
+
+the five one-world kinds together (370 readable answers):
+  named the focus world at all    : 326  (88.11%)
+    of those, correct             : 80  (24.54%)
+  named only other worlds         : 16  (4.32%)
+  named no world at all           : 28  (7.57%)
+  correct, any naming             : 93  (25.14%)
+  among answers that did NOT name the focus world, 13 of 44 are correct (29.55%)
+
+==================================================================================================
+WORLD IDENTITY IN THE RECORDED ANSWERS � before teaching (cursor 0)
+==================================================================================================
+
+           kind   focus  focus+   other   none   focus%  correct  corr|focus
+--------------------------------------------------------------------------------------------------
+        analogy       6       0      64      0    8.57%        5           0   (two worlds expected)
+        context       3      67       0      0  100.00%        3           3
+ correspondence       0       0       0     88    0.00%        0           0   (two worlds expected)
+     definition       0      70       0      0  100.00%        0           0
+   edge_account      70       0       0      0  100.00%        0           0
+          parts      52       0       0      1   98.11%        6           6
+          reach      62       0       0     45   57.94%       25          15
+       role_set       0       0       0     36    0.00%        0           0   (two worlds expected)
+
+the five one-world kinds together (370 readable answers):
+  named the focus world at all    : 324  (87.57%)
+    of those, correct             : 24  (7.41%)
+  named only other worlds         : 0  (0.00%)
+  named no world at all           : 46  (12.43%)
+  correct, any naming             : 34  (9.19%)
+  among answers that did NOT name the focus world, 10 of 46 are correct (21.74%)
+
+==================================================================================================
+WHAT THIS MEASURES, AND WHAT IT DOES NOT
+==================================================================================================
+
+Naming the focus world is NECESSARY and not SUFFICIENT. An answer can name the focus
+world and still be wrong about the edges, the nodes or the declarations. A kind that
+names the focus world in every answer while never being correct therefore has a
+different defect, and this measurement does not diagnose that one.
+

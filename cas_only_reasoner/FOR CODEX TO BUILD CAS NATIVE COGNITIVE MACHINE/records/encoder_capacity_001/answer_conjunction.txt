@@ -1,0 +1,51 @@
+scored questions: 564
+building the public slot plan for every registry packet...
+  slot plans built: 200/564
+  slot plans built: 400/564
+  slot plans built: 564
+
+========================================================================================================
+WHAT EACH KIND'S ANSWER REQUIRES
+========================================================================================================
+
+           kind    n  slots med  slots max  binary med  wide med  bits med  bits max    before     after
+--------------------------------------------------------------------------------------------------------
+ correspondence   88          5          5           1         0       9.0       9.0     0.00%    93.18%
+          reach  107          1          1           0         0       2.6       2.6    23.36%    75.70%
+          parts   53          4          4           4         0       4.0       4.0    11.32%    22.64%
+        analogy   70          1          1           0         1       6.0       6.0     7.14%    15.71%
+       role_set   36          6          6           6         0       6.0       6.0     0.00%     8.33%
+        context   70          5          5           4         1      10.0      10.0     4.29%     0.00%
+     definition   70          3          3           0         2      14.0      14.0     0.00%     0.00%
+   edge_account   70         16         16          16         0      16.0      16.0     0.00%     0.00%
+
+========================================================================================================
+THE STRUCTURE AGAINST THE OUTCOME
+========================================================================================================
+
+           kind  decisions (median)  binary share  free bits     after   reading
+--------------------------------------------------------------------------------------------------------
+ correspondence                   5           20%        9.0    93.18%   mixed assembly
+          reach                   1            0%        2.6    75.70%   one decision from a candidate list
+          parts                   4          100%        4.0    22.64%   conjunction over ~4 binary decisions
+        analogy                   1            0%        6.0    15.71%   one decision from a candidate list
+       role_set                   6          100%        6.0     8.33%   conjunction over ~6 binary decisions
+        context                   5           80%       10.0     0.00%   mixed assembly
+     definition                   3            0%       14.0     0.00%   2 wide identifications + assembly
+   edge_account                  16          100%       16.0     0.00%   conjunction over ~16 binary decisions
+
+========================================================================================================
+READING
+========================================================================================================
+
+The two kinds that work are the two whose answer is a single decision from a candidate
+list. The kinds that fail are the ones whose answer is a conjunction of many decisions,
+or requires several independent wide identifications, or both. `edge_account` is the
+extreme case: its answer is a conjunction of edge-presence decisions over all node
+pairs, every one of which must be right, and it has never been answered correctly.
+
+This is a statement about the shape of the task, measured from public data. It is not
+an accuracy model: `free bits` is a lower bound on the information the answer carries,
+not a prediction of how often the machine will get it right, and no per-slot accuracy
+has been measured here.
+
