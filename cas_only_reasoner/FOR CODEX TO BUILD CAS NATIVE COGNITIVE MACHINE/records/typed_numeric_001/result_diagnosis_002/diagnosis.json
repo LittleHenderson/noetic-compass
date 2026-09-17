@@ -1,0 +1,684 @@
+{
+  "examples": {
+    "analogy": [
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "world_id": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881"
+        },
+        "initial_recorded_correct": true,
+        "initial_value": {
+          "world_id": "world-c0deeff53ef44cc90eabb1328f30debda31faca741ebf6f84dba204b988ed122"
+        },
+        "record_id": "typed-input-329d4c6eceba26e76e14be3298d1db0ee7bef0323dfef9640385d7fdc7479c63"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "world_id": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00"
+        },
+        "initial_recorded_correct": true,
+        "initial_value": {
+          "world_id": "world-c0deeff53ef44cc90eabb1328f30debda31faca741ebf6f84dba204b988ed122"
+        },
+        "record_id": "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "world_id": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00"
+        },
+        "initial_recorded_correct": true,
+        "initial_value": {
+          "world_id": "world-64f3f6b1e6f96b8f45782ea081f86fd8dd7a8afc5a1bbff93a4e45d54648d864"
+        },
+        "record_id": "typed-input-4ffb71835e32c454abb30ffb9648affc43f32ec27d2e5842ec2339db4dfe86b3"
+      }
+    ],
+    "context": [
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "participants": [
+            "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18/n2"
+          ],
+          "setting_ref": "world-534bcf92ac8ad7bf18c32bab11937fa7fc56500517132c983464b88bd20be61b/decl/setting"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "participants": [
+            "world-af512d9c360257da1ea06a78ccad93dc39d0ec0a092a75687c15ead42706cd18/n1"
+          ],
+          "setting_ref": "world-1dadb0d720fcebf93dea7002f175f1d312782588562a63632e5325a0e22b600d/decl/setting"
+        },
+        "record_id": "typed-input-004c1e2f7f8326e6001b769b7a4112b413752dc824529c0a9c643572087f1983"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "participants": [
+            "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n0",
+            "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/n1"
+          ],
+          "setting_ref": "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc/decl/setting"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "participants": [],
+          "setting_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/setting"
+        },
+        "record_id": "typed-input-07847f2dfc3c62ba5ef336896dc9475bc5006ef40e4d684bbf3c0d808a2b6596"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "participants": [
+            "world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n2"
+          ],
+          "setting_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/setting"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "participants": [],
+          "setting_ref": "world-97707d3f4630b7c1b058a35bc545c8879a0470dc10c8d0f20f94a2cf4e3be03e/decl/setting"
+        },
+        "record_id": "typed-input-086dfeeb98ca0f062bb65ff5b7d4827107d9d6ca44ad538949b7424a61c54748"
+      }
+    ],
+    "definition": [
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "function_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/function",
+          "kind_ref": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/decl/kind",
+          "whole": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "function_ref": "world-63fb2248e209590ff7c35993d24dba121d707a280a862ae1164faba0c147f8c8/decl/function",
+          "kind_ref": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/decl/kind",
+          "whole": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"
+        },
+        "record_id": "typed-input-0245afcca3fe65f5586f723362e44815baab6c982272dc3f1a60487e8da1e53b"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "function_ref": "world-26c5b4744590e780483efe4fceeb8d0603087cc8279377499660ce5b5342aaa5/decl/function",
+          "kind_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/kind",
+          "whole": "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f/n2"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "function_ref": "world-8982878474a0749967ffb062ce7a1fe94ed737ea95f7dc1f26ca44e6596f5525/decl/function",
+          "kind_ref": "world-1dadb0d720fcebf93dea7002f175f1d312782588562a63632e5325a0e22b600d/decl/kind",
+          "whole": "world-8b0ea8c9ab7cb8163ab134284f920f5da62202cd2ee52fb30132fa379d415c7f/n1"
+        },
+        "record_id": "typed-input-02597b1f41b5b555434e0bea57dfe34216143a034e77ac8dc1a0268a7b97c20e"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "function_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/function",
+          "kind_ref": "world-6f7b0ac1ffb248914d625bf066dd4a253d99b6f54b73f8ea6b28caea9579cb00/decl/kind",
+          "whole": "world-d5f47ceac97e3cba99b5e0a53d6ea348e512c5555dd246b27394db07aced5bda/n0"
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "function_ref": "world-66275db05bcfc2385b82600b859fd8d28f144d1ec5ab94d1fa5da781712a4128/decl/function",
+          "kind_ref": "world-780dd69609c411f812e9973934c5958205d2b42c45df886dc4441d0b66b8a4d3/decl/kind",
+          "whole": "world-d5f47ceac97e3cba99b5e0a53d6ea348e512c5555dd246b27394db07aced5bda/n1"
+        },
+        "record_id": "typed-input-06b36e61728b84a036fbae79a569b279ef8aa18bfdd826ca928cdb046cf59159"
+      }
+    ],
+    "edge_account": [
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "edges": [
+            {
+              "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1",
+              "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0"
+            },
+            {
+              "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2",
+              "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"
+            },
+            {
+              "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3",
+              "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"
+            },
+            {
+              "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3",
+              "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3"
+            }
+          ]
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "edges": [
+            {
+              "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2",
+              "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"
+            }
+          ]
+        },
+        "record_id": "typed-input-0a34f84eb28a8c8aecc4bc268d40dcedb513c1d6988535d92e446a2c31e497ec"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "edges": [
+            {
+              "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0",
+              "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0"
+            },
+            {
+              "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0",
+              "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"
+            },
+            {
+              "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0",
+              "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"
+            },
+            {
+              "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1",
+              "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"
+            }
+          ]
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "edges": [
+            {
+              "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1",
+              "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0"
+            }
+          ]
+        },
+        "record_id": "typed-input-0a6c4a8b0b7517efb52e12107e08d41016496bd9f42561f4b57f6c4af3b9d26c"
+      },
+      {
+        "final_recorded_correct": false,
+        "final_value": {
+          "edges": [
+            {
+              "source": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n2",
+              "target": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n0"
+            }
+          ]
+        },
+        "initial_recorded_correct": false,
+        "initial_value": {
+          "edges": [
+            {
+              "source": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n0",
+              "target": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n2"
+            },
+            {
+              "source": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n1",
+              "target": "world-5f34dc67186ad4c02afd4a26ea3397193d7da0ecbf8aef59945adcc60c1a08d7/n0"
+            }
+          ]
+        },
+        "record_id": "typed-input-0be24cc0af2b1a7ccbe358c7f2806ef757dd0c9ccc0e15f1ba64553948c5475d"
+      }
+    ]
+  },
+  "hypotheses_not_established": [
+    "Cross-world declaration mismatches suggest weak linking of the requested world to global declaration choices; this does not establish whether encoding, core capacity, readout, optimization, or curriculum caused it.",
+    "Analogy gains and losses may reflect interference or changed output preference across training; only two saved evaluation points were examined, so no particular update or mechanism is identified."
+  ],
+  "input_bytes_unchanged": true,
+  "inputs": [
+    {
+      "bytes": 40073,
+      "path": "receipt_002/collected/results/artifacts/manifest.json",
+      "sha256": "fa70129d99d1a3abf7a58f5475dae42efee5e1097092c1113132a83cf6cea5cf"
+    },
+    {
+      "bytes": 1460,
+      "path": "completed_review_002/receipt.json",
+      "sha256": "d873885bb28c8d39df9f76f38e7690a7ad0f69100b31e90da1aeba702e6701e6"
+    },
+    {
+      "bytes": 62470,
+      "path": "completed_review_002/stdout.json",
+      "sha256": "080a63b4e79db61a51f23ee7e4c88f92baf66fcdb86a3afb1a27f049650f305d"
+    },
+    {
+      "bytes": 1772174,
+      "path": "receipt_002/collected/results/artifacts/initial_predictions.json",
+      "sha256": "f2b5e8b6a841c71cf82b16df8d950db6ecf4aa657de738d36f0a5fbc8b9db781"
+    },
+    {
+      "bytes": 599857,
+      "path": "receipt_002/collected/results/artifacts/initial_scoring.json",
+      "sha256": "8aa6bdcc3f113192646e76b649fe50fb08faff661f42c9492e9d7e3eb755a1ec"
+    },
+    {
+      "bytes": 1852372,
+      "path": "receipt_002/collected/results/artifacts/final_predictions.json",
+      "sha256": "3f6349f92ee502f014cc61ded337b2eb70be3a1700bfce26ae4c4a8857e2b5ae"
+    },
+    {
+      "bytes": 708460,
+      "path": "receipt_002/collected/results/artifacts/final_scoring.json",
+      "sha256": "364fae1e1c26f4dbc9736e5daf45876be0e13c1156a3f58d08cf2b7390dbb53f"
+    }
+  ],
+  "job": "cas-meta2-typedcourse-20260917024221-2a221243",
+  "limits": [
+    "All70 cases per selected kind are already-exposed training material, not held-out transfer.",
+    "Correctness is taken from saved scoring receipts; no semantic checker was rerun.",
+    "Reference-world comparisons are consistency counts between emitted fields, not newly computed partial correctness scores.",
+    "Self-edge and answer-size counts describe emitted syntax only; no graph repair or new scoring was performed.",
+    "No tensors, checkpoints, providers, neural execution, or new experiment were used.",
+    "No causal claim or matched learning advantage follows from these output patterns."
+  ],
+  "observed": {
+    "analogy": {
+      "phases": {
+        "final": {
+          "distinct_answer_values": 6,
+          "distinct_selected_worlds": 6,
+          "no_match_answers": 0,
+          "recorded_correct": 10,
+          "records": 70,
+          "top_world_aliases": [
+            {
+              "count": 42,
+              "value": "W36"
+            },
+            {
+              "count": 14,
+              "value": "W21"
+            },
+            {
+              "count": 6,
+              "value": "W40"
+            },
+            {
+              "count": 3,
+              "value": "W49"
+            },
+            {
+              "count": 3,
+              "value": "W47"
+            }
+          ]
+        },
+        "initial": {
+          "distinct_answer_values": 16,
+          "distinct_selected_worlds": 15,
+          "no_match_answers": 5,
+          "recorded_correct": 12,
+          "records": 70,
+          "top_world_aliases": [
+            {
+              "count": 14,
+              "value": "W25"
+            },
+            {
+              "count": 10,
+              "value": "W23"
+            },
+            {
+              "count": 9,
+              "value": "W28"
+            },
+            {
+              "count": 7,
+              "value": "W55"
+            },
+            {
+              "count": 5,
+              "value": "NO_MATCH"
+            }
+          ]
+        }
+      },
+      "recorded_exact_answer_metrics": {
+        "final_accuracy": 0.14285714285714285,
+        "final_correct": 10,
+        "gained": 10,
+        "initial_accuracy": 0.17142857142857143,
+        "initial_correct": 12,
+        "lost": 12,
+        "net_correct_change": -2,
+        "total": 70,
+        "unchanged_correct": 0,
+        "unchanged_incorrect": 48
+      },
+      "turnover": {
+        "changed_answer_count": 70,
+        "gained_final_aliases": [
+          {
+            "count": 6,
+            "value": "W36"
+          },
+          {
+            "count": 4,
+            "value": "W21"
+          }
+        ],
+        "gained_record_ids": [
+          "typed-input-0e7f54633dc16b4de85b9a0881fc99ec94f6a2d18d271fb121c8bf408746dff2",
+          "typed-input-54b5dfe702fa51ccf0eb498d097ae229215079104bf10ee9f991687a55368f94",
+          "typed-input-87b82e2926ff95fb80f0999352fbdbf5085128a4b272d6197a0d1b51609b7d4d",
+          "typed-input-8c5a211e761bd9277abdab44e0539552a89994ed3e84d7b9baae720dc04dacd7",
+          "typed-input-acd6ad08263ba7edfc77acbe10b276699d7bf8841b93cd3f1b33c899246e7166",
+          "typed-input-ae75ab10de5443f781be369e28f442e66e3f610d54e68da69a18fbbd55675810",
+          "typed-input-b17505a6d74343bf6a1f6416b61c3003d8dbf0aa5d1c0eb1b754d81bdc6ba341",
+          "typed-input-c9104fe71112ef6aff5ba94c5706ac3f17ef48005084b7b5bf98a17cb1f7c8ce",
+          "typed-input-e09715c2112667db0c6ef33f4c5e9bcfb092a19c66080ce767bc2489c4fb8644",
+          "typed-input-e94314215086e07f0aa4835dc05980a32798b07b48038b6b78d17dddbc3db00c"
+        ],
+        "lost_final_aliases": [
+          {
+            "count": 7,
+            "value": "W36"
+          },
+          {
+            "count": 3,
+            "value": "W21"
+          },
+          {
+            "count": 2,
+            "value": "W40"
+          }
+        ],
+        "lost_record_ids": [
+          "typed-input-329d4c6eceba26e76e14be3298d1db0ee7bef0323dfef9640385d7fdc7479c63",
+          "typed-input-480597fe1c2106878612eaedd52a12a8aec8daaaefb1e8b640f7889a93b1f916",
+          "typed-input-4ffb71835e32c454abb30ffb9648affc43f32ec27d2e5842ec2339db4dfe86b3",
+          "typed-input-63c29b86b3946d0debaf34f2c4c88b409a2006323f4eb21809db621ca8585905",
+          "typed-input-6541593dddc444cf51af7aee403fe7a2508dbc183a38281230801ebf03a2b541",
+          "typed-input-78a0fd1056296cf7be52f208c957baf7f39e5b8612d0ff492f07de7d25c7d5e1",
+          "typed-input-83b140d539340f56829dc9aa997bcf259171c8271ebce017f73a066ef673b3ec",
+          "typed-input-86e48b1657fd0456c8178696ce69224b775ace27fac8ef5d05156b36d9b1e14a",
+          "typed-input-b85d2ff84778c86ee8100005046b33b27065e5a0a0415b15682ad2676ede4d1a",
+          "typed-input-cb63eb689045256ef361f41c0be205b3afae5f62c69abccfc9bbc73be6489364",
+          "typed-input-d9f92747052128a90c221bd9d2c2775ded05116099ce090968c244fc24f57926",
+          "typed-input-e6765a4fe7baee75b6fd381d275d6a47c0a78fd407e04d4704315660bec2f6a0"
+        ],
+        "unchanged_correct_record_ids": []
+      }
+    },
+    "context": {
+      "phases": {
+        "final": {
+          "emitted_participants_total": 90,
+          "nonempty_participant_records": 57,
+          "participant_count_histogram": {
+            "0": 13,
+            "1": 28,
+            "2": 25,
+            "3": 4
+          },
+          "recorded_correct": 0,
+          "records": 70,
+          "setting_points_outside_emitted_participant_world": 51,
+          "top_setting_world_aliases": [
+            {
+              "count": 39,
+              "value": "W36"
+            },
+            {
+              "count": 8,
+              "value": "W21"
+            },
+            {
+              "count": 7,
+              "value": "W17"
+            },
+            {
+              "count": 6,
+              "value": "W40"
+            },
+            {
+              "count": 3,
+              "value": "W7"
+            }
+          ]
+        },
+        "initial": {
+          "emitted_participants_total": 10,
+          "nonempty_participant_records": 10,
+          "participant_count_histogram": {
+            "0": 60,
+            "1": 10
+          },
+          "recorded_correct": 0,
+          "records": 70,
+          "setting_points_outside_emitted_participant_world": 10,
+          "top_setting_world_aliases": [
+            {
+              "count": 12,
+              "value": "W25"
+            },
+            {
+              "count": 7,
+              "value": "W44"
+            },
+            {
+              "count": 5,
+              "value": "W5"
+            },
+            {
+              "count": 5,
+              "value": "W20"
+            },
+            {
+              "count": 4,
+              "value": "W36"
+            }
+          ]
+        }
+      },
+      "recorded_exact_answer_metrics": {
+        "final_accuracy": 0.0,
+        "final_correct": 0,
+        "gained": 0,
+        "initial_accuracy": 0.0,
+        "initial_correct": 0,
+        "lost": 0,
+        "net_correct_change": 0,
+        "total": 70,
+        "unchanged_correct": 0,
+        "unchanged_incorrect": 70
+      }
+    },
+    "definition": {
+      "phases": {
+        "final": {
+          "both_declaration_refs_same_world_as_emitted_whole": 0,
+          "emitted_whole_node_suffixes": {
+            "n0": 19,
+            "n1": 2,
+            "n2": 49
+          },
+          "function_ref_same_world_as_emitted_whole": 0,
+          "kind_and_function_refs_different_worlds": 41,
+          "kind_ref_same_world_as_emitted_whole": 6,
+          "recorded_correct": 0,
+          "records": 70,
+          "top_declaration_world_aliases": [
+            {
+              "count": 83,
+              "value": "W36"
+            },
+            {
+              "count": 15,
+              "value": "W17"
+            },
+            {
+              "count": 14,
+              "value": "W21"
+            },
+            {
+              "count": 12,
+              "value": "W47"
+            },
+            {
+              "count": 6,
+              "value": "W8"
+            }
+          ]
+        },
+        "initial": {
+          "both_declaration_refs_same_world_as_emitted_whole": 0,
+          "emitted_whole_node_suffixes": {
+            "n0": 34,
+            "n1": 13,
+            "n2": 16,
+            "n3": 7
+          },
+          "function_ref_same_world_as_emitted_whole": 5,
+          "kind_and_function_refs_different_worlds": 66,
+          "kind_ref_same_world_as_emitted_whole": 2,
+          "recorded_correct": 0,
+          "records": 70,
+          "top_declaration_world_aliases": [
+            {
+              "count": 17,
+              "value": "W28"
+            },
+            {
+              "count": 15,
+              "value": "W25"
+            },
+            {
+              "count": 11,
+              "value": "W4"
+            },
+            {
+              "count": 10,
+              "value": "W54"
+            },
+            {
+              "count": 9,
+              "value": "W55"
+            }
+          ]
+        }
+      },
+      "recorded_exact_answer_metrics": {
+        "final_accuracy": 0.0,
+        "final_correct": 0,
+        "gained": 0,
+        "initial_accuracy": 0.0,
+        "initial_correct": 0,
+        "lost": 0,
+        "net_correct_change": 0,
+        "total": 70,
+        "unchanged_correct": 0,
+        "unchanged_incorrect": 70
+      }
+    },
+    "edge_account": {
+      "phases": {
+        "final": {
+          "binary_decisions": {
+            "ABSENT": 765,
+            "PRESENT": 264
+          },
+          "edge_count_histogram": {
+            "0": 1,
+            "1": 4,
+            "2": 13,
+            "3": 14,
+            "4": 21,
+            "5": 4,
+            "6": 6,
+            "7": 4,
+            "8": 3
+          },
+          "emitted_edges_total": 264,
+          "recorded_correct": 0,
+          "records": 70,
+          "records_with_self_edges": 41,
+          "self_edges_total": 65,
+          "top_local_pairs": [
+            {
+              "count": 29,
+              "value": "n0->n2"
+            },
+            {
+              "count": 21,
+              "value": "n1->n0"
+            },
+            {
+              "count": 21,
+              "value": "n0->n0"
+            },
+            {
+              "count": 20,
+              "value": "n0->n3"
+            },
+            {
+              "count": 19,
+              "value": "n2->n0"
+            }
+          ]
+        },
+        "initial": {
+          "binary_decisions": {
+            "ABSENT": 960,
+            "PRESENT": 69
+          },
+          "edge_count_histogram": {
+            "0": 22,
+            "1": 30,
+            "2": 16,
+            "3": 1,
+            "4": 1
+          },
+          "emitted_edges_total": 69,
+          "recorded_correct": 0,
+          "records": 70,
+          "records_with_self_edges": 17,
+          "self_edges_total": 20,
+          "top_local_pairs": [
+            {
+              "count": 10,
+              "value": "n2->n1"
+            },
+            {
+              "count": 10,
+              "value": "n1->n3"
+            },
+            {
+              "count": 8,
+              "value": "n1->n0"
+            },
+            {
+              "count": 8,
+              "value": "n2->n2"
+            },
+            {
+              "count": 6,
+              "value": "n0->n2"
+            }
+          ]
+        }
+      },
+      "recorded_exact_answer_metrics": {
+        "final_accuracy": 0.0,
+        "final_correct": 0,
+        "gained": 0,
+        "initial_accuracy": 0.0,
+        "initial_correct": 0,
+        "lost": 0,
+        "net_correct_change": 0,
+        "total": 70,
+        "unchanged_correct": 0,
+        "unchanged_incorrect": 70
+      }
+    }
+  },
+  "schema": "cncm.typed-course-output-pattern-diagnosis/0.1",
+  "source_sha": "2a221243bf2f82f82bdce19514fe04bcb6b26bb0",
+  "status": "READ_ONLY_RECORDED_OUTPUT_PATTERNS"
+}

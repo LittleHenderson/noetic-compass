@@ -1,0 +1,1 @@
+{"checks_completed":1879,"detail":"package exact member manifest","helper":{"bytes":23699,"path":"records/typed_numeric_001/independent_review_002/review.py","sha256":"992a83fbd300787b9372003226108935da9fde5975b073670603f1e1a6230e64"},"status":"REVIEW_FAILED","type":"AssertionError"}

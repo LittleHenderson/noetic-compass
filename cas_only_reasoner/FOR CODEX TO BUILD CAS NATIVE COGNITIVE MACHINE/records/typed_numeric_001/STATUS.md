@@ -1,6 +1,47 @@
 # Typed numerical training status
 
-## Current execution: corrected attempt launched
+## Current result: full training and cloud cleanup completed
+
+Job `cas-meta2-typedcourse-20260917024221-2a221243` completed successfully from
+source `2a221243bf2f82f82bdce19514fe04bcb6b26bb0`. The launcher returned
+`AWS_CANDIDATE_FINISHED`, `completed_deliverable: true`, with all 347 required
+files present and 504 collected files. The worker delivered all 160 main updates,
+1,152 teaching presentations and two additional last-update replays. Its elapsed
+time was 1,451.214547069 seconds; the complete launcher lifecycle took
+2,071.3503071 seconds. Both checkpoint restores and replay branches passed.
+
+Exact-answer accuracy on the exposed course rose from **18/564 (3.19%) to
+196/564 (34.75%)**: 195 newly correct, 17 lost, one unchanged correct and 351
+unchanged incorrect. Correspondence and reach account for most gains; analogy
+declined, and context, definition and edge_account remain zero. This is one
+completed exposed-course run, not a matched learning advantage or transfer result.
+
+The local byte/join review verified all 344 worker artifacts. See
+`TRAINING_RESULT.md`, `completed_review_002/stdout.json` and its pinned receipt.
+No local tensors, checkpoint decoding or semantic checker rerun were used.
+The independent review also passed: 504 collected files, 347 required objects,
+222 declared inputs, loaded-source consistency and complete replay-update joins.
+Its receipt is `independent_review_002/receipt.json`. The initial saved-output
+diagnosis is complete in `result_diagnosis_002/DIAGNOSIS.md`; it records inconsistent
+reference combinations and concentrated world choices without claiming a cause.
+
+The launcher confirms instance `i-0016c39d90143e316` terminated, role removed,
+security group deleted and no cleanup failures. An independent provider read at
+2026-09-17T03:25:03.825194Z also observed `terminated`, saved under
+`monitoring_002_20260917T032503825194Z/`. The private evidence archive remains
+retained; it was not deleted and independent backup verification is not claimed.
+
+Canonical budget was re-read at 03:23:25 UTC: revision 78, $459 reserved,
+$4,541 unreserved of the $5,000 cap. This is reservation accounting, not a bill;
+neither attempt was automatically refunded. Source SHA identifies the executed
+code; later publication commits contain the results, not a new numerical run.
+
+Next: preserve this engineering baseline, test the causes behind the observed
+zero-score patterns and losses, and freeze distinct matched teaching arms for paired-seed
+learning-speed, transfer and retention tests. The full CNCM goal remains active
+and incomplete; the earlier negative three-seed recurrence result is unchanged.
+
+## Earlier execution record: corrected attempt launched
 
 The first full-course attempt ran source `857367899983783c8f048df195338c71bdcb8aa5`
 and timed out after 1,800 seconds. It saved 61 completed optimizer updates and

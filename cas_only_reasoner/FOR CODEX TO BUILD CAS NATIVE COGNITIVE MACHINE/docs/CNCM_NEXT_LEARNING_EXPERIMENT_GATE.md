@@ -455,3 +455,49 @@ Job `cas-meta2-typedcourse-20260917024221-2a221243` has launched instance
 Canonical budget revision 78 is $459 reserved and $4,541 unreserved of $5,000.
 See records/typed_numeric_001/STATUS.md and the separate receipts for each job.
 The full vision and matched learning-advantage claim remain open.
+
+
+## 2026-09-17: full typed-course GPU training completed
+
+Status: COMPLETED ENGINEERING RUN; matched learning advantage remains OPEN.
+
+Executed source `2a221243bf2f82f82bdce19514fe04bcb6b26bb0`, job
+`cas-meta2-typedcourse-20260917024221-2a221243`, completed all 160 main updates
+and 1,152 presentations, plus two independently restored replay updates.
+The worker ran for 1,451.214547069 seconds and recorded 60,202 core forward calls.
+Initial/final checkpoint reconstruction and both last-update replays passed in
+the same process on the same GPU worker. All 344 worker artifacts passed the
+local byte/hash and recorded-join review. The launcher delivered all 347 required
+files and collected 504 files, returning AWS_CANDIDATE_FINISHED with
+completed_deliverable true and no missing required objects.
+
+Exposed exact-answer accuracy: 18/564 (3.19%) to 196/564 (34.75%), with 195 gains
+and 17 losses. Only one initially correct answer remained correct. Correspondence
+and reach improved strongly; analogy declined and context, definition and
+edge_account remained zero. This is exposed-course fit, not untouched transfer,
+delayed retention, superiority to a control or completion of the CNCM charter.
+
+The GPU instance i-0016c39d90143e316 is confirmed terminated by the launcher and
+an independent provider read at 03:25:03 UTC. Role/security-group cleanup passed;
+the private evidence archive is retained. The failed first attempt and its
+61 completed updates remain recorded separately. Budget re-read at 03:23:25 UTC:
+revision 78, $459 reserved and $4,541 unreserved of $5,000, without refunds.
+
+See records/typed_numeric_001/TRAINING_RESULT.md, STATUS.md,
+completed_review_002 and receipt_002/result.json. No tensors or model checkpoint
+decoding ran locally. The old reservation-description mismatch is preserved;
+actual execution is bound to the source-specific config and authority.
+
+Next: preserve this completed baseline, diagnose the zero-score kinds and losses,
+then freeze a genuinely distinct equal-information/equal-budget teaching contrast
+for paired-seed speed, transfer and retention tests. Ordinary dependency-graph
+ordering currently equals component-first and is not a distinct arm by name.
+Earlier negative three-seed recurrence evidence is unchanged. Full goal active
+and incomplete.
+
+
+Initial saved-output diagnosis is now complete in
+records/typed_numeric_001/result_diagnosis_002/DIAGNOSIS.md. It records reference
+inconsistencies and concentrated world choices; causal explanations remain open.
+The independent byte/source/replay audit passed all 504 collected files, 347
+required objects and 222 declared inputs: independent_review_002/receipt.json.

@@ -1,0 +1,64 @@
+{
+  "artifacts": [
+    {
+      "bytes": 8305,
+      "path": "diagnose.py",
+      "sha256": "a2184ce1970be4023ba1de81ca9e75f0ddefefe0502b959a02ac248e73572ea4"
+    },
+    {
+      "bytes": 24808,
+      "path": "diagnosis.json",
+      "sha256": "18409302d95aa96a616d87a36e4077267df5c68827478b428c9faedd6e9ebb50"
+    },
+    {
+      "bytes": 2758,
+      "path": "DIAGNOSIS.md",
+      "sha256": "b6cd4c2ba7199495a6d087005bbdc1992bb9b53d2e1375d8f2036f17c20220e8"
+    }
+  ],
+  "causal_explanation_established": false,
+  "inputs": [
+    {
+      "bytes": 40073,
+      "path": "receipt_002/collected/results/artifacts/manifest.json",
+      "sha256": "fa70129d99d1a3abf7a58f5475dae42efee5e1097092c1113132a83cf6cea5cf"
+    },
+    {
+      "bytes": 1460,
+      "path": "completed_review_002/receipt.json",
+      "sha256": "d873885bb28c8d39df9f76f38e7690a7ad0f69100b31e90da1aeba702e6701e6"
+    },
+    {
+      "bytes": 62470,
+      "path": "completed_review_002/stdout.json",
+      "sha256": "080a63b4e79db61a51f23ee7e4c88f92baf66fcdb86a3afb1a27f049650f305d"
+    },
+    {
+      "bytes": 1772174,
+      "path": "receipt_002/collected/results/artifacts/initial_predictions.json",
+      "sha256": "f2b5e8b6a841c71cf82b16df8d950db6ecf4aa657de738d36f0a5fbc8b9db781"
+    },
+    {
+      "bytes": 599857,
+      "path": "receipt_002/collected/results/artifacts/initial_scoring.json",
+      "sha256": "8aa6bdcc3f113192646e76b649fe50fb08faff661f42c9492e9d7e3eb755a1ec"
+    },
+    {
+      "bytes": 1852372,
+      "path": "receipt_002/collected/results/artifacts/final_predictions.json",
+      "sha256": "3f6349f92ee502f014cc61ded337b2eb70be3a1700bfce26ae4c4a8857e2b5ae"
+    },
+    {
+      "bytes": 708460,
+      "path": "receipt_002/collected/results/artifacts/final_scoring.json",
+      "sha256": "364fae1e1c26f4dbc9736e5daf45876be0e13c1156a3f58d08cf2b7390dbb53f"
+    }
+  ],
+  "job": "cas-meta2-typedcourse-20260917024221-2a221243",
+  "model_execution": false,
+  "provider_calls": false,
+  "schema": "cncm.typed-course-output-diagnosis-receipt/0.1",
+  "semantic_checker_rerun": false,
+  "source_sha": "2a221243bf2f82f82bdce19514fe04bcb6b26bb0",
+  "status": "RECORDED_OUTPUT_PATTERNS_ONLY"
+}

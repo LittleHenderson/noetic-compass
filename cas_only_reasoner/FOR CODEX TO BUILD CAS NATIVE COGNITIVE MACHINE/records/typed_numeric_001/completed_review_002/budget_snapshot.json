@@ -1,0 +1,12 @@
+{
+  "authority_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\meta1\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\budget\\campaign_ledger.json",
+  "boundary": "Reservation ledger, not billed cost; authority ledger unchanged.",
+  "ledger_sha256": "a5b9c58d27dc7307b8f7b964afedea7e6c41caf9d2167c43ab73dc62cb3d93f3",
+  "no_automatic_refund": true,
+  "observed_at_utc": "2026-09-17T03:23:25.453982+00:00",
+  "owner_task_cap_usd": "5000.00",
+  "remaining_unreserved_usd": "4541.00",
+  "revision": 78,
+  "schema": "cncm.read-only-budget-observation/0.1",
+  "total_reserved_usd": "459.00"
+}

@@ -1,0 +1,33 @@
+{
+  "artifacts": [
+    {
+      "bytes": 9696,
+      "path": "completed_review_002/summarize_typed_course_delivery.py",
+      "sha256": "3c7149932ad4f7472fb88bb78d2204f9d38e627076fabd3be7a6b34b13b6a0e8"
+    },
+    {
+      "bytes": 62470,
+      "path": "completed_review_002/stdout.json",
+      "sha256": "080a63b4e79db61a51f23ee7e4c88f92baf66fcdb86a3afb1a27f049650f305d"
+    },
+    {
+      "bytes": 0,
+      "path": "completed_review_002/stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "checkpoints_decoded_local": false,
+  "job": "cas-meta2-typedcourse-20260917024221-2a221243",
+  "learning_advantage_established": false,
+  "numeric_model_execution_local": false,
+  "observed_at_utc": "2026-09-17T03:20:39.719753+00:00",
+  "schema": "cncm.typed-course-read-only-review/0.1",
+  "scope": "Exposed training-set accuracy change and recorded same-process mechanics; no held-out or matched learning advantage. JSON/byte joins checked without running the semantic checker or decoding checkpoints.",
+  "semantic_checker_rerun_local": false,
+  "source_sha": "2a221243bf2f82f82bdce19514fe04bcb6b26bb0",
+  "status": "PASS_RECORDED_BYTES_AND_JOINS",
+  "subprocess_exit_code": 0,
+  "verified_worker_artifact_count": 344,
+  "worker_manifest_sha256": "fa70129d99d1a3abf7a58f5475dae42efee5e1097092c1113132a83cf6cea5cf",
+  "worker_report_sha256": "c63bf1d7ddbd4880ff98a6d865631948672e0e96ec6d235c57cf5df6f313de21"
+}

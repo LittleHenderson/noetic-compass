@@ -1,0 +1,38 @@
+{
+  "cleanup_complete": true,
+  "collected_files": 504,
+  "completed_deliverable": true,
+  "evidence": [
+    {
+      "bytes": 513588,
+      "path": "receipt_002/result.json",
+      "sha256": "99c201b282c2a13555780a7f5ef066ff654d200a2372904e884af8801ab7de62"
+    },
+    {
+      "bytes": 128062,
+      "path": "receipt_002/collected_inventory.json",
+      "sha256": "af4b125b3e88cfaf506a04069cf4eee095b15d6d50ccefa5dc996b78dd42816e"
+    },
+    {
+      "bytes": 43494,
+      "path": "receipt_002/evidence_contract.json",
+      "sha256": "bca65fbdbf83b3ef66151825805a8ac493835902239565016f2d81039a81c247"
+    },
+    {
+      "bytes": 17772,
+      "path": "monitoring_002_20260917T032503825194Z/receipt.json",
+      "sha256": "eb16073fd4ef8589bdb623fdd8d33408e4eed8be76a57a33ece36ca5bdab9347"
+    }
+  ],
+  "independent_backup_verified": false,
+  "instance_state_independently_observed": "terminated",
+  "job": "cas-meta2-typedcourse-20260917024221-2a221243",
+  "lifecycle_elapsed_seconds": 2071.3503071,
+  "observed_at_utc": "2026-09-17T03:26:58.866047+00:00",
+  "private_archive_retained": true,
+  "required_files": 347,
+  "roles_removed": true,
+  "schema": "cncm.typed-course-completion-note/0.1",
+  "security_group_deleted": true,
+  "status": "AWS_CANDIDATE_FINISHED"
+}
