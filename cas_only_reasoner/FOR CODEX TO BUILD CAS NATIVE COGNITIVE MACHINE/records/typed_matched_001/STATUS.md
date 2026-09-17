@@ -34,3 +34,7 @@ The first instance remains running. All 564 initial input checks and cache check
 The supplementary public-only work audit independently derived identical phase counts for both frozen schedules: 71,922 core forward calls, 11,482 slot forwards, 2,951 predictions, 1,296 training presentations and 178 updates per complete arm. Main teaching remains 17,178 core calls and 160 updates. `independent_work_plan_001.json` has SHA-256 `3e4f31ddb56c1b8088fc7918fecb57a09fcab96ad75e7696d464a99dba3c6205`.
 
 This audit was added during the first running arm to verify the existing work contract. It introduces no teaching change or new scoring endpoint. These are expected counts; acceptance still requires matching measured counters from completed worker evidence.
+
+## 2026-09-17 07:50:51 UTC observation
+
+The first arm has entered actual training and reports **20 of 160 main optimizer updates completed** at 787.10 worker seconds (`main_training`, progress index 53). Both before-teaching evaluations have finished. The same instance remains running and the supervisor session is live. This is partial execution evidence; 0/6 complete arms have been accepted and the paired outcomes remain pending. Five predeclared jobs are queued; no retry or schedule change has occurred.
