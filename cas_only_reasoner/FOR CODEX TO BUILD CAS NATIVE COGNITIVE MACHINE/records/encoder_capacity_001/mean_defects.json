@@ -1,0 +1,53 @@
+{
+  "packets": 10,
+  "per_family": {
+    "ALIASES": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 6852.0
+    },
+    "BINDINGS": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 76.0
+    },
+    "END": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 1.0
+    },
+    "FORMAT": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 26.0
+    },
+    "POLICY": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 144.0
+    },
+    "QUERY": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 87.9
+    },
+    "RECORD": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 239.2
+    },
+    "SOURCE": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 509.0
+    },
+    "START": {
+      "rows_per_packet": 1.0,
+      "tokens_per_packet": 1.0
+    },
+    "SUPPORT": {
+      "rows_per_packet": 2.1,
+      "tokens_per_packet": 594.4
+    },
+    "WORLD": {
+      "rows_per_packet": 64.0,
+      "tokens_per_packet": 18846.0
+    }
+  },
+  "row_weight": 0.013315579227696406,
+  "rows_per_packet": 75.1,
+  "schema": "cncm.encoder-mean-defects/0.1",
+  "tokens_per_packet": 27376.5
+}

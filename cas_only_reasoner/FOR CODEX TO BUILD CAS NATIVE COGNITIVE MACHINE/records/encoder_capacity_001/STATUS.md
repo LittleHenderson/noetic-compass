@@ -307,6 +307,47 @@ Limits, stated plainly:
 - The probe is trained on the same 564-question course it is evaluated on, so it is
   a decodability test, not a generalisation result.
 
+## Finding 8 — three compounding defects, and the third is nameable in one line
+
+`measure_mean_defects.py`, 10 real packets. The packet is
+`unit_l2( sum of unit row vectors )`, so **every row carries weight `1/75` no
+matter how many tokens it holds.** Measured weight against content:
+
+| scope family | rows/pkt | weight | tokens/pkt | token share | mismatch |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| WORLD | 64.00 | 85.22% | 18,846 | 68.84% | 0.8× |
+| **ALIASES** | **1.00** | **1.33%** | **6,852** | **25.03%** | **18.8×** |
+| SUPPORT | 2.10 | 2.80% | 594 | 2.17% | 0.8× |
+| SOURCE | 1.00 | 1.33% | 509 | 1.86% | 1.4× |
+| RECORD | 1.00 | 1.33% | 239 | 0.87% | 0.7× |
+| POLICY | 1.00 | 1.33% | 144 | 0.53% | 0.4× |
+| QUERY | 1.00 | 1.33% | 88 | 0.32% | 0.2× |
+| BINDINGS | 1.00 | 1.33% | 76 | 0.28% | 0.2× |
+| FORMAT | 1.00 | 1.33% | 26 | 0.09% | 0.1× |
+| START | 1.00 | 1.33% | **1** | 0.004% | 0.0× |
+| END | 1.00 | 1.33% | 1 | 0.004% | 0.0× |
+| **total** | **75.10** | 100% | **27,376** | 100% | |
+
+**Defect 1 — within-row mean.** Each row is `unit_l2(sum of its own tokens)`, so a
+token is diluted by its row's length before any row pooling begins: one part in
+~88 for a `QUERY` row, ~298 for a `WORLD` row.
+
+**Defect 2 — unweighted row mean.** A **single-token `START` marker and the entire
+6,852-token alias table receive identical influence, `1/75 = 1.33%`.** The alias
+table is a quarter of the packet by content and contributes 1.33% of its signal —
+an 18.8× mismatch. The question itself is 88 tokens, 0.32% of the packet.
+
+**Defect 3 — no content addressing.** The aggregation is a fixed unweighted sum,
+identical in form for every question. Nothing in it depends on what is being asked,
+so **no amount of training can make it selective.** This is the one-line statement
+of the architectural defect:
+
+> The encoder aggregates 75 rows with fixed uniform weights before any learning
+> happens, so a question is averaged into its own evidence.
+
+All three compound. None is repairable by seeds, schedule or more updates. The
+change that follows is specified in `ARCHITECTURE_CHANGE_SPEC_v0.1.md`.
+
 ## What this record does NOT claim
 
 - It does not test the trainable block. It shows the encoder cannot deliver the

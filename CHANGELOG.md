@@ -4,6 +4,51 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The defect named in one line, and a change spec: the encoder averages the question into its own evidence
+
+$0 standard-library measurement on real packets. No model, GPU, checkpoint,
+provider or spend. Record: `records/encoder_capacity_001/STATUS.md` Finding 8 and
+`ARCHITECTURE_CHANGE_SPEC_v0.1.md`.
+
+The packet is `unit_l2(sum of unit row vectors)`, so every row carries weight 1/75
+whatever it holds. Measured over 10 real packets:
+
+  scope       rows/pkt   weight   tokens/pkt   token share   mismatch
+  WORLD          64.00    85.22%      18,846        68.84%       0.8x
+  ALIASES         1.00     1.33%       6,852        25.03%      18.8x
+  QUERY           1.00     1.33%          88         0.32%       0.2x
+  START           1.00     1.33%           1       0.004%       0.0x
+  total          75.10   100.00%      27,376       100.00%
+
+Three compounding defects, none repairable by training, seeds or schedule:
+
+1. WITHIN-ROW MEAN. Each row is unit_l2(sum of its own tokens), so a token is
+   diluted by its row length before row pooling starts.
+2. UNWEIGHTED ROW MEAN. A single-token START marker and the entire 6,852-token
+   alias table receive identical influence, 1.33%. The alias table is a quarter of
+   the packet by content and contributes 1.33% of its signal - an 18.8x mismatch.
+3. NO CONTENT ADDRESSING. The aggregation is a fixed unweighted sum, identical in
+   form for every question, so nothing in it depends on what is being asked.
+
+The one-line statement: the encoder aggregates 75 rows with fixed uniform weights
+before any learning happens, so a question is averaged into its own evidence.
+
+ARCHITECTURE_CHANGE_SPEC_v0.1 specifies the minimal change: insert one learned
+addressing step before the recurrence, `alpha = softmax(rows @ w / tau)` and
+`encoded = normalize(sum alpha_r * rows_r)`, replacing the fixed uniform mean.
+65 new trainable parameters, total 16,384 -> 16,449 (+0.40%). Everything
+downstream - recurrence, ^6 block, readout, loss, checker - is unchanged, and the
+existing profile stays the default so no receipt, checkpoint or test changes
+meaning.
+
+The spec states five falsifiable predictions before any run and names prediction 1
+as the cheap falsifier to run first. It also records the alternatives that were
+measured and rejected: dropping the non-focus worlds (unsafe - they are the
+distractors that make a 64-way answer meaningful), and a fixed content-addressed
+read (measured at 6.25% focus recovery against 1.56% chance).
+
+No launch is authorized. execution_enabled stays false and no reservation exists.
+
 ## 2026-09-17 UTC - The cheap encoder fixes were tested and FAILED; the mean-pool destroys the focus outright
 
 $0, pure Python over the real frozen rows. No model, GPU, checkpoint, provider or
