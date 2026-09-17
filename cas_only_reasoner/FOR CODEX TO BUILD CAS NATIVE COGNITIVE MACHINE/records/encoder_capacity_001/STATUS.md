@@ -140,6 +140,62 @@ The fix that follows from the ablation is architectural, not a schedule change:
    and course unchanged, and check whether `context`, `definition` and
    `edge_account` leave 0.
 
+## Finding 5 — a falsification test the diagnosis partly passes
+
+The obvious test of any diagnosis is whether it predicts the outcome it was
+invented to explain. Joining the recorded answer alphabets (from the per-update
+loss records), the declared slot counts, and the observed exact-answer accuracy
+across the whole matched study (both arms, three seeds, 1,692 rows per phase):
+
+| kind | slots | answer alphabet | after | outcome |
+| --- | --- | ---: | ---: | --- |
+| correspondence | 1+nodes | 7, **25** | 94.51% | learned |
+| reach | 1 | 5, **6** | 76.48% | learned |
+| parts | nodes | 2 | 29.25% | learned |
+| analogy | 1 | **65** | 16.19% | weak |
+| role_set | 6 | 2 | 10.19% | weak |
+| definition | 3 | 3, 4, **64** | 0.00% | failed |
+| context | 1+nodes | 2, **64** | 0.00% | failed |
+| edge_account | nodes^2 | 2 | 0.00% | failed |
+
+**Factor one, and it holds without exception: every kind whose answer requires
+naming one of the 64/65 world symbols fails or is weak** (definition 0.00%,
+context 0.00%, analogy 16.19%; mean 5.40%). Every kind whose answer is a small
+structural choice does better (correspondence 94.51%, reach 76.48%, parts 29.25%;
+the group mean is 42.08% but that includes edge_account — see below).
+
+This is exactly what the dilution predicts. A world name is a 64-way choice, and
+to make it the model must discriminate two packets at `1−cos ≈ 1.5e-04` against a
+readout whose unrelated symbols interfere at `0.098408`. A reach rule is a 5- or
+6-way choice and survives the same dilution.
+
+**Factor two, and the diagnosis alone does not explain it: `edge_account` has a
+binary alphabet and still scores exactly 0.00%.** The reason is conjunction
+length. `edge_account` declares `nodes²` slots — up to 16 independent binary
+decisions for a 4-node world — and exact-answer scoring requires all of them
+correct. `parts` declares `nodes` slots and reaches 29.25%; `role_set` declares 6
+and reaches 10.19%. Exact accuracy over a conjunction falls geometrically in the
+slot count, so an identical per-slot weakness produces 29% on a five-slot kind and
+0% on a sixteen-slot one.
+
+So the honest statement is a two-factor account, not one:
+
+1. **Answers needing a 64-way world symbol cannot be made** from a mean-pooled
+   packet — the discrimination they need is 4× to 12× below the readout's own
+   interference.
+2. **Exact-answer scoring over many-slot conjunctions compounds any per-slot
+   weakness geometrically**, so multi-slot kinds fail even when their alphabet is
+   small.
+
+Neither factor is repairable by training, seeds or schedule. Both are encoder
+properties. The two fixes in the architectural conclusion address factor one
+directly and factor two indirectly, by raising per-slot accuracy.
+
+Note on the test: this is a retrospective check against outcomes the diagnosis was
+built to explain, so it is corroboration and not independent confirmation. The
+kind with the cleanest falsifying power, `edge_account`, is the one the single
+factor failed on, and that is recorded above rather than smoothed over.
+
 ## What this record does NOT claim
 
 - It does not test the trainable block. It shows the encoder cannot deliver the
