@@ -48,6 +48,12 @@ rose slightly. **The trained block distinguishes its inputs more than the initia
 
 ### Check 3 — the reconstruction does not reproduce the recorded distribution
 
+> **Downgraded. See `RECONSTRUCTION_GAP.md`.** This check used the pure-Python rebuild, which is
+> now measured to reach only **+0.781 correlation** with the recorded logit vector and cannot be
+> validated in this environment at all: the reference encoder raises `TYPED_ENCODER_CUDA_ONLY` on
+> CPU and the installed torch is `2.11.0+cpu`. **Checks 1 and 2 do not use the rebuild and carry
+> the refutation on their own**, so the withdrawal below stands; this check is supporting only.
+
 `measure_recurrence_collapse.py` rebuilds the learner's whole forward pass in pure Python from
 the source: the encoded slot, then `recurrence.run_passes` with `lambda_ = 0.5`,
 `epsilon = 1e-6`, `depth = 8`, carrying `^6`'s own output back into its input each pass, then

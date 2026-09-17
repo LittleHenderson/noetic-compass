@@ -4,6 +4,72 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The reconstruction gap: the encoder material matches exactly, the rebuild does not, and it cannot be settled here
+
+$0.00, no GPU work, no AWS. torch used only to deserialise checkpoints. Record
+`records/encoder_capacity_001/RECONSTRUCTION_GAP.md`; the rebuild in
+`measure_recurrence_collapse.py` is annotated NOT VALIDATED.
+
+The previous round refuted a "collapse" mechanism partly on a pure-Python rebuild that did not
+reproduce the recorded alias distribution. Either the rebuild was wrong or the record was. This
+round chased that down.
+
+THE ENCODER MATERIAL IS BYTE-IDENTICAL TO THE RECORDED RUN. Rebuilding the frozen encoder
+identity locally from worker_contract.load_material matches the worker's recorded identity in
+`encoding_checks.json` on EVERY field:
+  identity_digest   a00930c51a06adc88ad0194b0439c076a2ddd7096eb8329be5ffc4d4935fc68b   exact
+  projection sha256 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9  [3829,64]  exact
+  readout sha256    14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667  [90,64]    exact
+  tokenizer_digest  5ce5aa8b26334eb517c820ebae66216fe20439d1f91ede0ada6e64cc03edf798   exact
+  seed 20260916, d_model 64                                                          exact
+So the projection rows, readout rows, tokenizer and seed are not the difference.
+
+THE REFERENCE ENCODER REFUSES TO RUN HERE, AND CANNOT. build_frozen_typed_encoder raises
+TYPED_ENCODER_CUDA_ONLY for a CPU device, and the installed runtime is torch 2.11.0+cpu with
+torch.cuda.is_available() == False and device_count() == 0. That is the guard working as designed
+- it fails closed rather than silently falling back - and it means the rebuild CANNOT BE VALIDATED
+IN THIS ENVIRONMENT AT ALL. Closing the gap needs a CUDA environment and launching GPU work needs
+an owner record, which does not exist.
+
+THE REBUILD REACHES 78% OF THE RECORDED STRUCTURE. Against the recorded `scores` for one
+context question's 64-alias slot - and the recorded `scores` field IS the logit vector, since
+_forward stores float(logits[i]) directly and the recorded `selected` is that vector's argmax:
+  mine     mean +0.061979  sd 0.867230  min -1.772876  max +1.708160
+  recorded mean -0.097628  sd 0.712338  min -1.722596  max +1.308992
+  correlation +0.781143
+At slot level the rebuild agreed on 5 of 14 recorded decisions - binary slots mostly matched, the
+64-way slots did not, which is what a 0.78 correlation predicts. The remaining difference is
+UNFOUND after reading the source line by line: token indices, row binding (gather then mul(signs)
+then sum(dim=0) then normalize), row and packet normalisation (the /sqrt(count) and /sqrt(rows)
+are absorbed by the trailing normalize), slot encoding, the block (linear_weight_mode defaults to
+"standard", so plain nn.Linear), the recurrence (lambda_=0.5, epsilon=1e-6, depth=8, reinjected
+and feedback matched term for term), and the checkpoint (final.pt, cursor 160, matching
+model_revision 160 on every recorded prediction).
+
+THE RECURRENCE IS NEITHER CHAOTIC NOR AMPLIFYING. Perturbing the encoded vector by a relative
+amount and re-running the pass:
+  1e-6  cos +1.00000  no flip   at every depth 1, 2, 4, 8
+  1e-4  cos +1.00000  no flip   at every depth
+  1e-2  cos +0.99993 to +0.99996, no flip
+  1e-1  cos +0.99221 to +0.99533, flip only at depth 8
+A 10% change in the input moves the logit vector by cos 0.995. And the logit scale settles after
+two passes: sd 0.47975 (depth 1) -> 0.83679 -> 0.86503 -> 0.86723. Two consequences: float32 vs
+float64 round-off CANNOT explain a correlation of 0.78, because the system is not an amplifier;
+and the registered recurrence is numerically stable, with depths 2, 4 and 8 giving materially the
+same logits.
+
+WHAT THIS DOES TO THE PREVIOUS REFUTATION. Of its three checks only the third used the rebuild:
+  weights grew, operator norm 0.361559 -> 7.135410 (19.73x)      no rebuild   STANDS
+  trained block MORE input-sensitive (cos .5636->.4914, rms x9.7) no rebuild   STANDS
+  rebuilt pass gives 15 distinct aliases                          REBUILD     DOWNGRADED
+The collapse refutation therefore stands on rebuild-independent evidence; the third check is now
+labelled a 78%-correlation approximation and is not relied on.
+
+STILL OPEN: the cause of the recorded alias concentration (9 of 64 aliases, W36 at 44.3%). This
+round narrowed where it is NOT - not in the encoder material, not in round-off, not in recurrence
+amplification - and did not find where it is. Closing it needs an owner-authorised CUDA
+environment.
+
 ## 2026-09-17 UTC - NINTH SELF-CORRECTION: the collapse claim is unsupported; the recorded fact stands and its cause is OPEN
 
 $0.00. torch used ONLY to deserialise frozen checkpoints; all arithmetic on plain Python lists.

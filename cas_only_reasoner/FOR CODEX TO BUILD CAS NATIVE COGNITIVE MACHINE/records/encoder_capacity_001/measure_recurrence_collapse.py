@@ -1,5 +1,16 @@
 """Reproduce the learner's forward pass in pure Python and find where the constant comes from.
 
+> # NOT VALIDATED — this rebuild reaches only +0.781 correlation with the recorded logits.
+> See `RECONSTRUCTION_GAP.md`. The encoder material is byte-identical to the recorded run
+> (identity digest `a00930c5…` matches exactly), the recurrence is neither chaotic nor
+> amplifying, and yet the rebuilt logit vector correlates at `+0.781143` with the recorded
+> `scores` and its top-1 differs. **The remaining difference is unfound.** The reference encoder
+> cannot be used to settle it here: `build_frozen_typed_encoder` raises `TYPED_ENCODER_CUDA_ONLY`
+> on CPU and the installed torch is `2.11.0+cpu` with no CUDA device.
+>
+> Every number this script prints is therefore approximate and must be labelled as such. It must
+> not be treated as the machine.
+
 Pure standard library. `torch` is used **only to deserialise** the frozen checkpoints; every
 matrix is pulled out as plain floats and all arithmetic after that is on lists.
 
