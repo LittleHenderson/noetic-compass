@@ -348,6 +348,55 @@ of the architectural defect:
 All three compound. None is repairable by seeds, schedule or more updates. The
 change that follows is specified in `ARCHITECTURE_CHANGE_SPEC_v0.1.md`.
 
+## Finding 9 — the full-sample probe and the learning curve: the information is there and the mean destroys it
+
+Finding 7 used 200 packets. Rebuilt at the full 564, and swept against sample size
+(`falsify_prediction_1.py`; ridge probe solved in the dual, 5-fold CV, chance
+1/64 = 1.5625%).
+
+**Full sample, all 564 packets:**
+
+| features | dims | CV accuracy | vs chance |
+| --- | ---: | ---: | ---: |
+| **mean-pooled packet (the current profile)** | 64 | **0.18%** | **0.1×** |
+| query row only | 64 | 39.89% | 25.5× |
+| query + support rows | 256 | 25.53% | 16.3× |
+| **head rows (no world rows)** | 576 | **70.92%** | **45.4×** |
+| the 64 world rows | 4096 | 0.89% | 0.6× |
+| all rows concatenated | 4864 | 64.89% | 41.5× |
+
+**Learning curve — the row features are sample-limited; the mean is not:**
+
+| n samples | mean (64d) | query (64d) | head (576d) |
+| ---: | ---: | ---: | ---: |
+| 50 | 0.00% | 0.00% | 0.00% |
+| 100 | 1.00% | 5.00% | 3.00% |
+| 200 | 2.50% | 12.00% | 9.00% |
+| 300 | 2.67% | 20.33% | 29.00% |
+| 400 | 1.00% | 28.25% | 44.50% |
+| 500 | 0.20% | 38.60% | **64.60%** |
+
+Four conclusions, and the fourth is a correction to Finding 7:
+
+1. **The current profile decodes the focus world 1 time in 564** (0.18%, against
+   8.8 expected by chance). The row structure decodes it **400 times in 564**
+   (70.92%). The defect is confirmed and quantified.
+2. **The row features climb steeply with data and are still rising at the full
+   sample.** Finding 7's 11.00% was a **sample limitation, not an information
+   limitation.** The spec that was withdrawn on that basis is restored.
+3. **Adding the world rows to a read HURTS: 70.92% → 64.89%.** The 4,096
+   question-invariant world-row dimensions dilute the signal even at the read. This
+   is the dilution effect measured directly, and it says identification should
+   address the head rows while the world rows supply content.
+4. **The 64 world rows decode at 0.89%, below chance.** They are identical in every
+   packet, so they cannot identify the focus at all — only help answer once it is
+   known.
+
+**Silent failure avoided:** `falsify_prediction_1.py` originally solved ridge in the
+primal, which needs a 4,864 × 4,864 inverse for the concatenated features and will
+not finish in pure Python. It was rewritten in the dual (an n × n inverse, n = 564).
+Any future probe on concatenated features must use the dual form.
+
 ## What this record does NOT claim
 
 - It does not test the trainable block. It shows the encoder cannot deliver the
