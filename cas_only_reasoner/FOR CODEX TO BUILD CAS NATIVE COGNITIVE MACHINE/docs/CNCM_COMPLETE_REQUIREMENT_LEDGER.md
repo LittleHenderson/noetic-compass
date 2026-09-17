@@ -1132,3 +1132,6 @@ The initial automatic approval rejection concerned private-package destination t
 Earlier completed-course results and the negative three-seed recurrence result remain preserved. No matched learning advantage is established yet.
 
 Full-machine goal remains active and incomplete. Detailed study evidence resides in the vision-next worktree.
+
+
+Matched-study progress at 2026-09-17 07:43:35 UTC: the first worker finished all 564 initial input/cache checks and entered before-teaching prediction. The independent public-only work audit confirms equal planned phase counts: 71,922 core calls, 2,951 predictions and 178 updates per complete arm. This supplementary audit checks the already frozen work contract; it changes no endpoint or teaching schedule. Measured matched results remain pending. See vision-next records/typed_matched_001/STATUS.md and independent_work_plan_001.json.
