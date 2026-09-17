@@ -535,9 +535,30 @@ re-alignment whose own probe needed hundreds of samples to emerge.
 one.** That is the opposite of where this record started, and it follows from the
 measurements rather than from a preference.
 
-It is also cheap to distinguish, though not at $0: a longer-training run or a
-learning-rate/warmup change on the *unchanged* architecture would test it. **No such
-run is proposed here or authorized.**
+**But the comparison is not apples-to-apples, and that limit must be stated.** The
+probe's 63.65% comes from a **closed-form ridge solve** on 564 samples; the learner
+reaches its 1.24% by **stochastic gradient descent in 160 steps**. So this record
+establishes **representability** — a linear map into the frozen codebook exists and
+is easy to find in closed form — and it does **not** establish that SGD in 160 steps
+could find it. The under-training reading is a well-motivated hypothesis, not a
+measured fact.
+
+What *is* measured and does carry the argument:
+
+- the encoder delivers the focus at 40.7× chance before any learning;
+- the codebook can express all 65 symbols with margin ≥ 0.757;
+- a 64×64 map into that codebook reaches 40.7× chance in closed form;
+- the trained block reaches 0.8× chance, below guessing.
+
+So the gap is between "a map exists" and "this optimiser found it in this budget",
+and that gap is where the next question lives — not in the encoder, which is what
+five rounds of this record wrongly blamed.
+
+It is cheap to distinguish, though not at $0: a longer-training or
+learning-rate/warmup run on the **unchanged** architecture would test it, and so
+would a short diagnostic that reports the training loss curve and the achieved
+focus decodability at each checkpoint. **No such run is proposed here or
+authorized.**
 
 ## What this record does NOT claim
 
