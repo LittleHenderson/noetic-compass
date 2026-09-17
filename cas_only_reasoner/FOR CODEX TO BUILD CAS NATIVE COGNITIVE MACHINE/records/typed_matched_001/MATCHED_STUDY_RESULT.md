@@ -1,6 +1,8 @@
 # Completed matched teaching comparison
 
-All six GPU runs completed and passed the independent evidence audit. Component-first teaching scored higher than the mixed control in two of three matched pairs and tied in one. The differences are small and absolute performance on unfamiliar graphs is poor. Both methods finished below their shared pre-teaching development score. A useful, durable learning advantage has not been established.
+**Headline: teaching made both methods worse at unfamiliar graphs, and that damage is larger than the difference between the two teaching orders.** Both arms finished well below their own pre-teaching development score: 6.5201% before teaching, 3.7423% (component-first) and 0.3472% (mixed) after. In raw answers, development fell from 21/177 correct in each method to 4/177 and 1/177. The between-arm difference is +0.4244 percentage points on the learning curve and +3.3951 percentage points on transfer, and it rests on very few answers (see below).
+
+All six GPU runs completed and passed the independent evidence audit. Component-first teaching scored higher than the mixed control in two of three matched pairs and tied in one. The differences are small and absolute performance on unfamiliar graphs is poor. A useful, durable learning advantage has not been established. This negative transfer — not the order contrast — is the study's largest measured effect and the thing most worth diagnosing next.
 
 ## What was compared
 
@@ -17,6 +19,24 @@ This is one controlled teaching-order comparison. It does not compare CAS archit
 | Eligible retention comparisons | 0 of 3 pairs | 0 of 3 pairs | Unassessed |
 
 Both methods started at 6.5201% on the family-balanced development measure. The final transfer scores are below that starting point. The observed relative advantage therefore does not establish improved unfamiliar-problem performance over the initial learner.
+
+### How thin the between-arm difference is
+
+The independent audit records the mean transfer difference as the exact rational **11/324**, and the mean learning-curve difference as **11/2592**. Decomposing the transfer difference by pair:
+
+| Pair | Transfer difference | Share of the mean |
+| --- | ---: | ---: |
+| seed 20260917 | 0 | 0% |
+| seed 20260918 | 1/54 (6/324) | 18.2% |
+| seed 20260919 | 1/12 (27/324) | 81.8% |
+
+**81.8% of the mean transfer difference comes from one paired seed**, and within that seed it is **a single parts question**: the balanced measure gives the one parts question per family half the family's weight, so one such question is worth 1 of 12 balanced units. In raw counts the entire between-arm difference is **4/177 versus 1/177 correct** across three runs of the same 59-question panel — three answers.
+
+Consequences to carry forward:
+
+- Do not describe the transfer result as a 3.4-point advantage. It is 11/324 of the balanced space, driven by three raw answers, one of which supplies most of it.
+- The learning-curve difference (+0.4244 pp, 11/2592) is smaller still and rests on the same seeds.
+- Any follow-up should prespecify a panel where a single question cannot dominate the primary measure. The current weighting makes one parts answer worth more than one reach answer by construction.
 
 Raw final answers were **4/177 for component-first versus 1/177 for the control**, down from **21/177 in each method before teaching**. This is the same 59-question panel repeated with three model initializations, not 177 different problems. The panel contains six development topologies (8–10 nodes) after training on 3–4-node worlds. Development answers supplied no training corrections; the protected final panel was not opened for this study.
 
