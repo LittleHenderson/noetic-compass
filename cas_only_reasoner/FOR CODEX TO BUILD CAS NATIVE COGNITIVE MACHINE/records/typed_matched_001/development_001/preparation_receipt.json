@@ -1,0 +1,243 @@
+{
+  "artifact": {
+    "bytes": 13416938,
+    "path": "public_development.json",
+    "sha256": "134aec0641fabc6597ba754a0ea480bb10393e3c417aa6ffea18b7500723aca4"
+  },
+  "boundary": "Public development preparation only; no answers, model, provider or final questions.",
+  "counts": {
+    "bank_worlds": 64,
+    "families": 6,
+    "packets": 59,
+    "parts": 6,
+    "reach": 53,
+    "worlds_per_packet": 65
+  },
+  "max_token_count": 28281,
+  "profile": {
+    "course_profile": {
+      "data_files": [],
+      "files": [
+        {
+          "bytes": 14874,
+          "path": "cas_meta2/complementary_teaching/course.py",
+          "sha256": "dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0"
+        },
+        {
+          "bytes": 21020,
+          "path": "cas_meta2/graph_teaching/face_corpus.py",
+          "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+        },
+        {
+          "bytes": 7201,
+          "path": "cas_meta2/graph_teaching/face_roles.py",
+          "sha256": "463227f82faa2409dbd156481ae4dbc736c627d73510333f61df5f75a6c2fdc3"
+        },
+        {
+          "bytes": 15904,
+          "path": "cas_meta2/graph_teaching/face_schedule.py",
+          "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+        },
+        {
+          "bytes": 37159,
+          "path": "cas_meta2/graph_teaching/face_tasks.py",
+          "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+        },
+        {
+          "bytes": 20730,
+          "path": "cas_meta2/recurrent_cjt/course.py",
+          "sha256": "95c248c45cccae38ac7b301f74866fe3400a589bd8c1c15b074d4b36fb83caa7"
+        },
+        {
+          "bytes": 18437,
+          "path": "cas_meta2/recurrent_cjt/recurrence.py",
+          "sha256": "45278c0455b042e5515a73eb629a0ae90c31d41ae373ad3527e11a9cae49d17c"
+        },
+        {
+          "bytes": 19976,
+          "path": "cas_meta2/rpm_cfc_constructor/diagnosis.py",
+          "sha256": "e9591c2830056b124dc50bc65f0188dfbb4e401c42cf2c035f04c08b5efafee8"
+        },
+        {
+          "bytes": 100,
+          "path": "cas_meta2/typed_teaching/__init__.py",
+          "sha256": "a9cd4e93977921031a27e2410afca5c7b9314a8bf8914f4d0df2da545831cb95"
+        },
+        {
+          "bytes": 13894,
+          "path": "cas_meta2/typed_teaching/answers.py",
+          "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+        },
+        {
+          "bytes": 13934,
+          "path": "cas_meta2/typed_teaching/checker.py",
+          "sha256": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e"
+        },
+        {
+          "bytes": 20756,
+          "path": "cas_meta2/typed_teaching/course.py",
+          "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+        },
+        {
+          "bytes": 19255,
+          "path": "cas_meta2/typed_teaching/course_plan.py",
+          "sha256": "bd73cb444dc2a5becb6322b4fa50de9c9f0bde288bd54a3c6ce2003bbb8aed88"
+        },
+        {
+          "bytes": 15105,
+          "path": "cas_meta2/typed_teaching/focal.py",
+          "sha256": "cd2761b5c5dced4af5e4acc0a6b55a384555b2cb9bb3b90442f8673d1754e70a"
+        },
+        {
+          "bytes": 20601,
+          "path": "cas_meta2/typed_teaching/source.py",
+          "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+        }
+      ],
+      "identity_scope": "ON_DISK_SOURCE_NOT_LOADED_WORKER_ATTESTATION",
+      "plan_source_profile": {
+        "files": [
+          {
+            "bytes": 12080,
+            "path": "cncm/rpa_learning_match.py",
+            "sha256": "2cd2bfa7a5dbff5502df070259370e4f6207f047551245de191bd8d6177ff4fb"
+          },
+          {
+            "bytes": 14874,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/complementary_teaching/course.py",
+            "sha256": "dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0"
+          },
+          {
+            "bytes": 7201,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_roles.py",
+            "sha256": "463227f82faa2409dbd156481ae4dbc736c627d73510333f61df5f75a6c2fdc3"
+          },
+          {
+            "bytes": 15904,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_schedule.py",
+            "sha256": "d9174d9905af7b6cbb8dbe6fa80c695fbc6a48a65c7a08d837eca2ecedb5b2c1"
+          },
+          {
+            "bytes": 37159,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/graph_teaching/face_tasks.py",
+            "sha256": "9065997e63fca65318016f844578234fb60ebdc0d91b48e12b2836272fb7a3ab"
+          },
+          {
+            "bytes": 20730,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/recurrent_cjt/course.py",
+            "sha256": "95c248c45cccae38ac7b301f74866fe3400a589bd8c1c15b074d4b36fb83caa7"
+          },
+          {
+            "bytes": 18437,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/recurrent_cjt/recurrence.py",
+            "sha256": "45278c0455b042e5515a73eb629a0ae90c31d41ae373ad3527e11a9cae49d17c"
+          },
+          {
+            "bytes": 19976,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/rpm_cfc_constructor/diagnosis.py",
+            "sha256": "e9591c2830056b124dc50bc65f0188dfbb4e401c42cf2c035f04c08b5efafee8"
+          },
+          {
+            "bytes": 19255,
+            "path": "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/course_plan.py",
+            "sha256": "bd73cb444dc2a5becb6322b4fa50de9c9f0bde288bd54a3c6ce2003bbb8aed88"
+          }
+        ],
+        "profile_digest": "f119b404ade028f8f8c98e14f02ebb8f817700cb280a2022ad2d76cf90a870f7",
+        "schema": "cas.typed-teaching-course-source-profile/0.1",
+        "source_role": "PRESERVED_SELECTOR_CODE_AND_LITERAL_DECLARATIONS_NOT_LEGACY_TASK_EXECUTION",
+        "training_source_profile": {
+          "data_files": [],
+          "files": [
+            {
+              "bytes": 100,
+              "path": "cas_meta2/typed_teaching/__init__.py",
+              "sha256": "a9cd4e93977921031a27e2410afca5c7b9314a8bf8914f4d0df2da545831cb95"
+            },
+            {
+              "bytes": 20601,
+              "path": "cas_meta2/typed_teaching/source.py",
+              "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+            },
+            {
+              "bytes": 21020,
+              "path": "cas_meta2/graph_teaching/face_corpus.py",
+              "sha256": "69820d38be4981cfe3684306d86ab8c19e55d2d0dc1e6dc3a4267609dc7b0507"
+            }
+          ],
+          "final_target_files_read": false,
+          "pin_role": "ON_DISK_GENERATOR_AND_CONTRACT_BYTES_NOT_LOADED_RUNTIME_ATTESTATION",
+          "profile_digest": "a2beeb50fba36cb7de837f3ad6d5dfe6845ef005fd1bf84369f38b370108a85a",
+          "schema": "cas.typed-teaching-source-profile/0.1"
+        }
+      },
+      "profile_digest": "b13a2ad2598dd1494d42714b30cdcd7ba340d1094a2d277f81b6940ff29766dc",
+      "schema": "cas.typed-teaching-course-source-profile/0.1"
+    },
+    "files": [
+      {
+        "bytes": 15483,
+        "path": "cas_meta2/typed_teaching/development.py",
+        "sha256": "14837366e23d9bb2b89a3ac6aeafeb8d423eff99031a1cec9ba76560dd4df1ca"
+      },
+      {
+        "bytes": 20601,
+        "path": "cas_meta2/typed_teaching/source.py",
+        "sha256": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+      },
+      {
+        "bytes": 13894,
+        "path": "cas_meta2/typed_teaching/answers.py",
+        "sha256": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c"
+      },
+      {
+        "bytes": 20756,
+        "path": "cas_meta2/typed_teaching/course.py",
+        "sha256": "cbb1b5aea97567f21cb15ca2def5332ea3175abd10e8a6a48b9e3edd9e0e41e6"
+      },
+      {
+        "bytes": 20192,
+        "path": "cas_meta2/typed_teaching/input_frames.py",
+        "sha256": "0077ab78c35124249ca324db52eeba03d4f992c69d5bac8695bd88e177a17326"
+      },
+      {
+        "bytes": 19341,
+        "path": "cas_meta2/typed_teaching/slots.py",
+        "sha256": "3d79db262708264dcd77cd7fb0296e7683849b5967b82d72fd3c51ab85f74487"
+      },
+      {
+        "bytes": 11165,
+        "path": "cas_meta2/typed_teaching/binding.py",
+        "sha256": "5db99005d6df1b26988b6cb9ed78e57d020bafb78647626d826cae01add572dc"
+      },
+      {
+        "bytes": 10630,
+        "path": "cas_meta2/typed_teaching/tokenization.py",
+        "sha256": "be84607539d5375346d4bc0bc1321c7a59668e3edb2189bebf090a74ecbb7c1b"
+      }
+    ],
+    "policy": {
+      "bank": "ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS",
+      "comparison": "Parts/reach development structure-and-size transfer only; not all-eight-kind transfer",
+      "labels": "Dev<family-index>Node<sorted-structural-node-index>; no legacy labels or target menus",
+      "legacy_parity": "Topology identities only; not legacy18-question/text/difficulty/answer parity",
+      "novelty": "Excluded under pinned historical inventory; not authenticated absolute historical nonexposure",
+      "questions": "PARTS_ROOT_AND_REACH_FROM_ROOT_TO_EVERY_OTHER_PUBLIC_NODE",
+      "reach_rule": "first_direct_constituent_lexical_v1",
+      "root": "LEXICAL_FIRST_AUTHORED_NODE_WITH_ZERO_INDEGREE",
+      "selection": "EXACT_SIX_RETAINED_PUBLIC_DEVELOPMENT_TOPOLOGY_IDS; NO_ANSWER_CLASS_QUERY_SELECTION",
+      "semantics": "Complete supplied DAG snapshot; authored declarations; no world truth or temporal-process claim",
+      "split": "development",
+      "supports": "NONE_EQUAL_FOR_BOTH_STUDY_ARMS",
+      "target_boundary": "NO_MAIN_TARGETS_IN_FACTORY; SCORE_ONLY_AFTER_DURABLE_PUBLIC_PREDICTION_SEALS",
+      "tokenizer": "UNCHANGED_RETAINED_TRAINING_FIT_UTF8_BYTE_FALLBACK_32768_NO_TRUNCATION"
+    },
+    "profile_digest": "2f6ab6089749139ba4b15567c25c925a2eaf6f98b09eaac1b12e6c58f52ffbbf",
+    "schema": "cas.typed-development-profile/0.1",
+    "source_authority": "PINNED_FILES_NOT_EXTERNAL_AUTHENTICITY"
+  },
+  "profile_before_after_equal": true,
+  "prohibited_import_attempts": [],
+  "seconds": 24.03315289999955,
+  "status": "PUBLIC_DEVELOPMENT_PREPARATION_PASS"
+}

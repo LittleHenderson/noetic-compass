@@ -1536,7 +1536,8 @@ def validate_reservation_scope(ledger_document, amount=RESERVATION_USD):
     return {"amount": str(amount)}
 
 
-def validate_reserved_transition(before, after, receipt, request):
+def validate_reserved_transition(before, after, receipt, request, *, expected_plan=None):
+    expected_plan = reservation_plan() if expected_plan is None else expected_plan
     prior, current = before["ledger"], after["ledger"]
     require(current["revision"] == prior["revision"] + 1, "RESERVATION_REVISION_MISMATCH")
     require(current["reservations"][:-1] == prior["reservations"], "RESERVATION_NOT_APPEND_ONLY")
@@ -1548,8 +1549,8 @@ def validate_reserved_transition(before, after, receipt, request):
     require(entry["status"] == budget.STATUS
             and budget.amount(entry["reserved_usd"]) == budget.amount(RESERVATION_USD),
             "RESERVATION_AMOUNT_FROZEN")
-    require(entry["plan"] == reservation_plan()
-            and entry["plan_sha256"] == budget.digest(budget.encoded(reservation_plan())),
+    require(entry["plan"] == expected_plan
+            and entry["plan_sha256"] == budget.digest(budget.encoded(expected_plan)),
             "RESERVATION_RESOURCE_PLAN_MISMATCH")
     require(receipt.get("ledger_sha256") == after["ledger_sha256"],
             "RESERVATION_RECEIPT_HASH_MISMATCH")

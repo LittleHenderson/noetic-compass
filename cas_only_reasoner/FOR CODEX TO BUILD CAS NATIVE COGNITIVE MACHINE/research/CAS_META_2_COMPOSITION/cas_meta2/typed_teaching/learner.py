@@ -91,7 +91,7 @@ class TypedCourseLearner:
                 and 0 < values[0] <= 1 and 0 <= values[1] <= 1 and 0 < values[2] <= 1
                 and all(0 <= x < 1 for x in values[3:]), "TYPED_OPTIMIZER_RANGE")
         require(type(limits) is dict and set(limits) == {"max_updates", "max_core_calls", "max_wall_seconds"}
-                and type(limits["max_updates"]) is int and 0 < limits["max_updates"] <= 160
+                and type(limits["max_updates"]) is int and 0 < limits["max_updates"] <= 176
                 and type(limits["max_core_calls"]) is int and 0 < limits["max_core_calls"] <= 1000000
                 and type(limits["max_wall_seconds"]) in (int, float) and 0 < limits["max_wall_seconds"] <= 3600, "TYPED_LEARNER_LIMITS")
         require(type(run_context) is dict and set(run_context) == {"run_id", "course_sha256", "condition", "source_seed"}

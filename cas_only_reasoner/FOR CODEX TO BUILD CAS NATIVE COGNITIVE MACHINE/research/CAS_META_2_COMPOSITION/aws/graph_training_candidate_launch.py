@@ -687,7 +687,7 @@ def require_owner_record_bounds(record, authority, *, owner_sha256, receipts_roo
 def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
             receipt_dir=None, owner_authorization_path=None,
             validate_request_fn=None, validate_authority_fn=None,
-            evidence_contract=None):
+            evidence_contract=None, validate_reserved_transition_fn=None):
     """One reservation, one launch, verified collection, then cleanup.
 
     The two validators are injectable so a later experiment can reuse this proven
@@ -700,6 +700,7 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
     """
     validate_request_fn = validate_request_fn or validate_request
     validate_authority_fn = validate_authority_fn or validate_authority
+    validate_reserved_transition_fn = validate_reserved_transition_fn or validate_reserved_transition
     validate_request_fn(request)
     validate_authority_fn(authority)
     owner_path = (Path(owner_authorization_path) if owner_authorization_path is not None
@@ -774,7 +775,7 @@ def execute(request, authority, provider, *, ledger_path=LEDGER_PATH,
         write_evidence(directory / "preflight.json", canonical(preflight))
         reservation = provider.reserve(RESERVATION_USD)
         ledger_after = read_ledger(ledger_path)
-        validate_reserved_transition(ledger_before, ledger_after, reservation, request)
+        validate_reserved_transition_fn(ledger_before, ledger_after, reservation, request)
         require(reservation.get("aws_side_reservation", {}).get("status") == "RECORDED",
                 "AWS_RESERVATION_RECORD_REQUIRED")
         write_evidence(directory / "reservation.json", canonical(reservation))

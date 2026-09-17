@@ -1,6 +1,38 @@
 # Next learning experiment gate
 
-Status: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
+Status: **FULL_EXPOSED_TYPED_COURSE_COMPLETED — MATCHED_LEARNING_STUDY_NOT_RUN**.
+
+On 2026-09-17, source `2a221243bf2f82f82bdce19514fe04bcb6b26bb0`
+completed the full typed-course GPU run: all 1,152 teaching presentations and
+160 main optimizer updates, plus two separately counted last-update replays.
+Initial/final checkpoint reconstruction and both replay branches passed in the
+same process on the same GPU worker. All 344 worker artifacts and 347 required
+delivery objects passed the recorded byte/hash and join checks. See
+`records/typed_numeric_001/TRAINING_RESULT.md`, `STATUS.md` and
+`independent_review_002/receipt.json` (SHA-256
+`216e2d808494a9d1c4516ac9a2b8ba69c1f4e38cf7637c3a7da0f9d3dd8b682b`).
+
+Exact-answer accuracy on the exposed 564-question course rose from **18/564
+(3.19%) to 196/564 (34.75%)**, with 195 gains and 17 losses. This establishes
+improved fit to this exposed course in one run. Context, definition and
+edge-account questions still scored zero; analogy declined. It does not establish
+an advantage over a matched control, untouched-family transfer, delayed retention
+or completion of the CNCM charter. The earlier failed full-course attempt and the
+negative three-seed recurrence criterion remain unchanged.
+
+The connection and full-course execution gates are now observed for this exact
+source and workload. The next learning gate remains a genuinely distinct,
+preregistered comparison with paired fresh initialization, equal information and
+budgets, and separately reported learning speed, transfer and retention. Ordinary
+dependency-graph ordering currently equals component-first ordering; different
+names alone do not supply a control. The matched study has not run.
+
+## Historical implementation and smoke sequence
+
+The following dated preparation and smoke records retain their original scope.
+Their statements that full-course numerical execution was open describe those
+earlier checkpoints, not the completed run above. Historical status before that
+run: **ORDERED_MECHANICAL_SMOKE_OBSERVED — MATCHED_LEARNING_STUDY_NOT_RUN**.
 
 2026-09-16 newest interface extension: complete reversible public frames,
 training-only tokenization and fixed-slot scalar answer decoding now pass 245

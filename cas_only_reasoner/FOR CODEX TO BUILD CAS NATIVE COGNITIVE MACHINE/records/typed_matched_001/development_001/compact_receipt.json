@@ -1,0 +1,34 @@
+{
+  "compact": {
+    "bytes": 685549,
+    "path": "records\\typed_matched_001\\development_001\\compact_development.json",
+    "sha256": "5780ffacf3f36ed6d17522fc875212f5239c98f11ba1dda3c56b9967309200b4"
+  },
+  "current_constructor": {
+    "bytes": 19011,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\cas_meta2\\typed_teaching\\development.py",
+    "sha256": "c46d9db5ba5f829e41cb806b0245fe09de8fa1391e82ed893a8b1161693dd021"
+  },
+  "family_count": 6,
+  "final_questions_constructed": 0,
+  "main_targets_constructed": 0,
+  "numeric_execution": false,
+  "original": {
+    "bytes": 13416938,
+    "path": "records\\typed_matched_001\\development_001\\public_development.json",
+    "sha256": "134aec0641fabc6597ba754a0ea480bb10393e3c417aa6ffea18b7500723aca4"
+  },
+  "original_constructor": {
+    "bytes": 15483,
+    "path": "records\\typed_matched_001\\development_001\\development_source_original.py",
+    "sha256": "14837366e23d9bb2b89a3ac6aeafeb8d423eff99031a1cec9ba76560dd4df1ca"
+  },
+  "original_receipt": {
+    "bytes": 10437,
+    "path": "records\\typed_matched_001\\development_001\\preparation_receipt.json",
+    "sha256": "6e49777556f88c1a9fe6e517a6465fbb5cd5faae6613cbaa7f65da9c6d4c170a"
+  },
+  "questions": 59,
+  "schema": "cncm.typed-matched-compact-receipt/0.1",
+  "status": "LOSSLESS_PUBLIC_PACKET_EXPANSION_VERIFIED"
+}
