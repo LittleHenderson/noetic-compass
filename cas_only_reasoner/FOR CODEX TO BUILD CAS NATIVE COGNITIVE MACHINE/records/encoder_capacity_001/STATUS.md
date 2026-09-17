@@ -263,6 +263,50 @@ built to explain, so it is corroboration and not independent confirmation. The
 kind with the cleanest falsifying power, `edge_account`, is the one the single
 factor failed on, and that is recorded above rather than smoothed over.
 
+## Finding 7 — the decisive test: the mean-pooled packet carries ZERO linearly decodable focus, and decodability falls monotonically as rows are summed
+
+Findings 3–6 measure how far apart packets are. This one asks the question that
+actually matters: **can a trained read recover the focus world from what the
+learner is given?**
+
+Method: build real row vectors for 200 packets, then fit a closed-form ridge probe
+(64 classes, one output per world alias) with 5-fold cross-validation. Chance is
+1/64 = 1.5625%. Pure Python, no torch, no GPU. Script `linear_probe.py`.
+
+| features given to the probe | dims | CV accuracy | vs chance |
+| --- | ---: | ---: | ---: |
+| **mean-pooled packet (what the course uses)** | 64 | **0.00%** | **0.0×** |
+| query row only | 64 | **11.00%** | **7.0×** |
+| query + record + support rows | 64 | 3.50% | 2.2× |
+| mean + query concatenated | 128 | 8.50% | 5.4× |
+
+**Two results, and together they are the argument for the architectural change:**
+
+1. **The mean-pooled packet decodes the focus world 0 times in 200.** Not "poorly"
+   — at this resolution a trained linear read finds *nothing* about which world the
+   question concerns. That is the single quantity `context`, `definition` and
+   `analogy` all require.
+2. **Decodability falls monotonically as rows are summed.** Query row alone: 11.0%.
+   Sum the query with 3 more rows: 3.5%. Sum it with all 76: 0.0%. Concatenating
+   instead of summing recovers 8.5%. **The act of pooling is what destroys the
+   information**, and it destroys it in proportion to how much is pooled.
+
+This is the cleanest evidence in the record for the corrected conclusion. The
+information is present in the representation — a probe finds it at 7× chance — and
+the mean removes it. Nothing about training, seeds or schedule can recover what the
+encoder has already averaged away.
+
+Limits, stated plainly:
+
+- 200 packets and 64 classes is a small probe. The absolute numbers are indicative,
+  not precise, and a linear probe is a lower bound on what a learned nonlinear read
+  could extract. The **contrast** between the rows and the mean is the finding, not
+  the absolute decodability.
+- The mean-pooled figure of 0.00% means "no linearly decodable information at this
+  sample size and regularisation", not a proof of zero mutual information.
+- The probe is trained on the same 564-question course it is evaluated on, so it is
+  a decodability test, not a generalisation result.
+
 ## What this record does NOT claim
 
 - It does not test the trainable block. It shows the encoder cannot deliver the
