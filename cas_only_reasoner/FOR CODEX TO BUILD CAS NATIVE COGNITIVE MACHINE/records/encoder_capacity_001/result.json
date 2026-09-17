@@ -1,0 +1,104 @@
+{
+  "projection_geometry": {
+    "distinct_token_rows": 3829,
+    "duplicate_token_rows": 0,
+    "vocabulary": 3829
+  },
+  "question_discrimination": [
+    {
+      "differing_rows": 1,
+      "mean_cos": 0.9988932062076349,
+      "mean_distance": 0.04673158478705692,
+      "one_minus_cos": 0.0011067937923651128,
+      "packet_rows": 794
+    },
+    {
+      "differing_rows": 4,
+      "mean_cos": 0.9954990470881822,
+      "mean_distance": 0.09412785465257234,
+      "one_minus_cos": 0.004500952911817846,
+      "packet_rows": 794
+    },
+    {
+      "differing_rows": 16,
+      "mean_cos": 0.9820858163924263,
+      "mean_distance": 0.1879856223821113,
+      "one_minus_cos": 0.017914183607573686,
+      "packet_rows": 794
+    },
+    {
+      "differing_rows": 1,
+      "mean_cos": 0.9998651326228535,
+      "mean_distance": 0.016325580622921023,
+      "one_minus_cos": 0.0001348673771465192,
+      "packet_rows": 4096
+    },
+    {
+      "differing_rows": 4,
+      "mean_cos": 0.9994813644795054,
+      "mean_distance": 0.03202189291572522,
+      "one_minus_cos": 0.0005186355204945814,
+      "packet_rows": 4096
+    },
+    {
+      "differing_rows": 16,
+      "mean_cos": 0.9978136292415564,
+      "mean_distance": 0.06565504354556938,
+      "one_minus_cos": 0.0021863707584436343,
+      "packet_rows": 4096
+    },
+    {
+      "differing_rows": 1,
+      "mean_cos": 0.9999946653271092,
+      "mean_distance": 0.003255138549857033,
+      "one_minus_cos": 5.334672890766612e-06,
+      "packet_rows": 27718
+    },
+    {
+      "differing_rows": 4,
+      "mean_cos": 0.9999783322429378,
+      "mean_distance": 0.006545299669663534,
+      "one_minus_cos": 2.1667757062249215e-05,
+      "packet_rows": 27718
+    },
+    {
+      "differing_rows": 16,
+      "mean_cos": 0.9999117336830026,
+      "mean_distance": 0.0132339773177445,
+      "one_minus_cos": 8.826631699743182e-05,
+      "packet_rows": 27718
+    }
+  ],
+  "readout_geometry": {
+    "duplicate_rows": 0,
+    "max_abs_cos": 0.46875,
+    "mean_abs_cos": 0.09840823970037453,
+    "pairs": 4005,
+    "symbols": 90,
+    "world_max_abs_cos": 0.46875,
+    "world_mean_abs_cos": 0.10141225961538461,
+    "world_pairs": 2080
+  },
+  "reconstruction": {
+    "projection": {
+      "bytes": 980224,
+      "exact": true,
+      "recorded": "4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9",
+      "sha256": "4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9",
+      "vocabulary": 3829
+    },
+    "readout": {
+      "bytes": 23040,
+      "exact": true,
+      "recorded": "14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667",
+      "sha256": "14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667"
+    }
+  },
+  "schema": "cncm.frozen-encoder-capacity/0.1",
+  "verdict": {
+    "largest_1_minus_cos": 0.017914183607573686,
+    "long_frame_rows": 27718,
+    "smallest_1_minus_cos": 5.334672890766612e-06,
+    "statement": "Two packets differing only in the query field have cosine 0.982086 to 0.999995 (1-cos 0.017914 to 0.000005). The discriminating component of the encoding is O(sqrt(k/n)) of the packet norm, so question-level signal is mean-pooled away at a rate set by frame length."
+  }
+}

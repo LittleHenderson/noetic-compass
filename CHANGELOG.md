@@ -4,6 +4,46 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Frozen-encoder capacity measured: the packet mean destroys question-level signal
+
+$0 standard-library measurement, no model, GPU, checkpoint or provider use.
+Record: `records/encoder_capacity_001/STATUS.md` and `result.json`; reproduce with
+`verify_encoder_capacity.py`.
+
+Both frozen matrices were reconstructed from the documented row algorithm in
+`cas_meta2/typed_teaching/binding.py` and validated byte for byte against the
+SHA-256 the GPU worker recorded: readout `14da2c58…0ac667` (23,040 bytes) and
+projection `4481b1d2…9fefdd9` (980,224 bytes). Both exact.
+
+Two hypotheses were eliminated. The 65 world rows are a well-spread random frame
+(mean |cos| 0.101412, max 0.468750, zero duplicate rows), so the readout is not the
+bottleneck. The 3,829 token rows contain zero duplicates, so the projection is not
+the bottleneck either.
+
+The measured bottleneck is the packet mean. The rule is packet =
+unit_l2(sum(unit token rows)), so two questions about the same world that differ in
+k rows differ by only O(sqrt(k/n)) of the packet norm. At the course's recorded
+maximum frame length (27,818 tokens), differing in the entire 16-row query field
+moves the packet by 1-cos = 8.8e-05. The readout's own mean |cos| between
+unrelated symbols is 0.098408. The question-discriminating signal is therefore
+about 1,100x smaller than the readout's cross-talk, and even at the shortest
+frames measured (794 rows) it is 5.5x smaller.
+
+Corroboration from the course's own record: the shared 64-world bank is 219,105 of
+the 225,368 bytes of every packet (97.2%), so the question is 2.8% of the input
+before any pooling. That record also states unique_query_families: 24 against
+unique_public_packets: 564.
+
+This is consistent with every completed run: kinds fixed by the query's own scope
+(correspondence, reach) learn; kinds needing content retrieval from the frame
+(context, definition, edge_account) stay at exactly 0; and world_id sat at
+normalized loss 0.47 from update 0 and never moved. It predicts that more seeds or
+more updates cannot repair those kinds, and that the fix is architectural: stop
+mean-pooling the frame, or shrink the packet to the focus world's own content.
+
+No learning, capability or readiness claim is made. The trainable block was not
+tested; this record shows only that the encoder cannot deliver the signal.
+
 ## 2026-09-17 UTC - Matched teaching comparison completed: NULL between arms, NEGATIVE transfer within both
 
 The first completed matched teaching study, `CNCM_TYPED_MATCHED_LEARNING_001`
