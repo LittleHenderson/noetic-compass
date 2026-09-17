@@ -70,12 +70,19 @@ existing shape assertion extends to them.
 
 ## 3. Why this shape and not another
 
+> **BLOCKER FOUND AFTER THIS SECTION WAS WRITTEN — see §9.** The 65 new trainable
+> parameters proposed in §2 are **rejected by the existing learner contract**. The
+> trainable scope is fixed by the project's own discipline to the registered
+> `^6` operation, so §2 as written cannot be constructed. §9 records the guard and
+> the in-scope alternative under test.
+
 | alternative | why rejected |
 | --- | --- |
 | Drop the non-focus worlds | **unsafe** — they are the distractors that make a 64-way answer meaningful; `correspondence` and `analogy` become identifiable by elimination |
 | Fixed content-addressed read (dot product against world rows) | **measured and failed** — 6.25% focus recovery against 1.56% chance, not a usable read |
 | Weight rows by token count | fixes the 18.8× alias mismatch but leaves the aggregation content-blind, so defect 3 remains |
 | Attend over tokens instead of rows | stronger, but a larger change; keep as v0.2 once v0.1 is shown to help |
+| **Add an addressing parameter (this spec, §2)** | **BLOCKED by the learner contract — see §9** |
 
 The chosen shape is the **smallest change that makes the aggregation depend on the
 question**, which is precisely defect 3 and the one no amount of training can
@@ -193,3 +200,97 @@ operating on the head rows with the world rows fetched by the resulting address.
 authorization.** The self-correction is recorded rather than removed: the first
 run's low number was a real measurement of a sample-limited quantity, and the fix
 was more data, not a different theory.
+
+## 9. BLOCKER: §2 as written cannot be constructed — and the in-scope alternative
+
+Reading the learner contract after writing §2 found a guard that forbids it.
+
+`cas_meta2/typed_teaching/learner.py:84-86`:
+
+```python
+require(set(parameters) == set(PARAMETERS) and all(
+    tuple(p.shape) == PARAMETER_SHAPES[name] ... ), "TYPED_LEARNER_PARAMETER_SHAPE")
+```
+
+`cas_meta2/graph_teaching/trainer.py:79-91`:
+
+```python
+def scope_parameters(framework, model):
+    """Freeze everything except the admit-listed operator.^6 group."""
+    ...
+    require(self.scope == {"allowed": list(PARAMETERS), "frozen": [], ...})
+```
+
+**The trainable scope is fixed by the project's own discipline to the registered
+`^6` operation, `cas.cjt.operation.^6.decompose/0.2`, and to exactly its three
+matrices.** A fourth parameter — the 65-parameter address proposed in §2 — is
+rejected at construction with `TYPED_LEARNER_PARAMETER_SHAPE`. That rejection is
+correct behaviour, not a bug: it is the rule that says a CAS type must alter the
+mechanism rather than be a label.
+
+So §2 must be replaced by something inside the discipline: **the addressing has to
+be deterministic and frozen, because nothing outside `^6` may be plastic.**
+
+### The in-scope alternative, and its measurement
+
+Address deterministically with a vector the encoder already computes — the `QUERY`
+row — and aggregate the head rows by softmax attention. **Zero new parameters, same
+64-dimensional interface, no change to `PARAMETERS`, `PARAMETER_SHAPES`, the
+optimizer, the recurrence, the readout or the checker.**
+
+Measured at the full 564 packets (`measure_inscope_addressing.py`):
+
+| encoded input | dims | CV accuracy | vs chance |
+| --- | ---: | ---: | ---: |
+| **mean over all 75 rows (current)** | 64 | **0.18%** | **0.1×** |
+| query row alone | 64 | 39.89% | 25.5× |
+| head-row concatenation (needs a learned read) | 576 | 70.92% | 45.4× |
+| query-addressed aggregate, τ→0 | 64 | 39.89% | 25.5× |
+| query-addressed aggregate, τ=0.25 | 64 | 38.83% | 24.9× |
+| query-addressed aggregate, τ=1.0 | 64 | 17.20% | 11.0× |
+| query-addressed aggregate, τ=2.0 | 64 | 9.40% | 6.0× |
+
+At small τ the softmax saturates onto the query row, so the aggregate converges to
+the query row itself. **The subset results confirm this is the whole effect** — at
+τ=0.25, pooling the query with any subset lands in a narrow band regardless of
+which rows are added:
+
+| aggregated rows | CV accuracy |
+| --- | ---: |
+| `QUERY` alone | 39.89% |
+| `QUERY`+`RECORD` | 39.36% |
+| `QUERY`+`RECORD`+`SOURCE` | 39.72% |
+| `QUERY`+`POLICY`+`SOURCE`+`RECORD`+`ALIASES` | 39.18% |
+| all nine head rows | 38.83% |
+
+So the honest reading is **not** that attention is the fix: it is that **the
+question stops being averaged away.** Using the question row rather than the
+whole-packet mean lifts focus decodability from 0.18% to 39.89% — a factor of 221 —
+for free. A genuine soft mixture (τ=1.0) gives only 17.20%, worse than the query
+row alone.
+
+### The residual tension this does not resolve
+
+The query row carries the **focus** and not the **world content**; the world rows
+carry the content and, being identical in every packet, carry no focus at all
+(0.89%, below chance). **Encoding the query row fixes identification and removes
+the evidence.** `context` and `definition` need both.
+
+The variant that supplies both — head rows plus the focus world's own row, ten rows
+instead of seventy-five, with the other 63 worlds excluded as the distractors they
+are — **is the recommended shape but is NOT yet measured.** The cache used here
+stores the world rows concatenated rather than the focus world's row, so the
+variant is skipped with a message. **It is the first thing to run next, at $0,
+before any signature.** The world row is public (`query.focus_world_id`), so the
+encoder can select it deterministically with no new parameters; the alias a world
+must be named by is a fixed function of its id, not of which worlds are present, so
+selecting only the focus world does not leak the answer.
+
+### Status of this spec
+
+- §2 (65 trainable parameters): **WITHDRAWN — blocked by the learner contract.**
+- §9 in-scope alternative (deterministic selection, zero new parameters):
+  **PLAUSIBLE, partly measured, not yet complete.**
+- §5 predictions: unchanged and still standing as the test.
+- **Do not sign anything until the head-plus-focus-world variant is measured.**
+  That measurement is free.
