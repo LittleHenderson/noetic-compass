@@ -1,0 +1,20 @@
+====================================================================================================
+CONTEXT PARTICIPANTS � does the packet's own cardinality rule help?
+====================================================================================================
+
+                   run    q  indep, mach set  top3, mach set  indep, TRUE set  top3, TRUE set      lift  bits indep  bits top3
+--------------------------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a   70         0.0000%        0.0000%         0.0000%       37.1429% +37.1429%   39.7004%  62.1723%
+    receipt_20260917_m   70         0.0000%        0.0000%         0.0000%       41.4286% +41.4286%   39.3258%  63.2959%
+    receipt_20260918_a   70         0.0000%        0.0000%         0.0000%       32.8571% +32.8571%   38.5768%  61.0487%
+    receipt_20260918_m   70         0.0000%        0.0000%         0.0000%       32.8571% +32.8571%   40.0749%  61.0487%
+    receipt_20260919_a   70         0.0000%        0.0000%         0.0000%       25.7143% +25.7143%   41.5730%  59.1760%
+    receipt_20260919_m   70         0.0000%        0.0000%         0.0000%       25.7143% +25.7143%   40.8240%  59.1760%
+--------------------------------------------------------------------------------------------------------------------------------
+          ALL SIX RUNS  420         0.0000%                        0.0000%       32.6190% +32.6190%   40.0125%  60.9863%
+
+mach set = `setting_ref` left at the machine's own choice
+TRUE set = `setting_ref` set to the truth, so the participant bits are isolated
+top-3    = force exactly k PRESENT, k from the packet's own
+           `PRIMARY_AUTHORED_LABELS_FIRST_THREE` basis, the rest ABSENT
+bits     = per-slot accuracy on the participant slots alone

@@ -244,6 +244,50 @@ yields 1.4% of answers; the same readout at 90% per slot yields 18.5%. `context`
 its four participant bits — `setting_ref` is worth **exactly +0.0000**. And `definition` already reads
 at **48.5714%**, the strongest many-decision kind.
 
+**Limit 8 — the composer ignores declared structure, and enforcing it is the first fix that works on
+the trained machine's own scores.** `context` answers are the focus world's setting plus its
+participants, and `answers.answer_space` declares `participants_basis =
+PRIMARY_AUTHORED_LABELS_FIRST_THREE` — measured over all 420 `context` questions in six runs, the
+truth cardinality is **exactly 3, every time**. So four participant slots are not four free bits; they
+are a choice of which one node is absent. `score_decisions` never reads the declaration and takes an
+independent `max` per slot.
+
+Enforcing the declared cardinality on the **recorded** score table — force exactly three PRESENT by
+the three highest `PRESENT − ABSENT` margins — with `setting_ref` held at the truth to isolate the
+bits:
+
+| run | bits, independent | bits, top-3 | exact, independent | exact, top-3 |
+|---|---|---|---|---|
+| 20260917_a | 39.7004% | **62.1723%** | 0.0000% | **37.1429%** |
+| 20260917_m | 39.3258% | **63.2959%** | 0.0000% | **41.4286%** |
+| 20260918_a | 38.5768% | **61.0487%** | 0.0000% | **32.8571%** |
+| 20260918_m | 40.0749% | **61.0487%** | 0.0000% | **32.8571%** |
+| 20260919_a | 41.5730% | **59.1760%** | 0.0000% | **25.7143%** |
+| 20260919_m | 40.8240% | **59.1760%** | 0.0000% | **25.7143%** |
+| **ALL SIX** | **40.0125%** | **60.9863%** | **0.0000%** | **32.6190%** |
+
+**+20.9738 points per bit and 0.0000% → 32.6190% per answer, six for six.** The machine's threshold is
+badly calibrated — 40.0125% per bit against a 78.6517% constant — but its **ranking** is well above
+chance: ordered by margin, the truly-absent node lands outside the top three **60.9863%** of the time.
+**A declared constraint converts an absolute-threshold problem into a ranking problem.**
+
+**This is the first fix in this record that works on the trained machine's own scores** — round 30's
+fitted readout was a substituted, hypothetical readout and cost more than it gained. It needs no new
+information path, no capacity, no weights, no encoder change. **And it corrects round 27's refusal of
+round 26:** there *is* something for the composer to do, not a joint likelihood but a declared
+constraint. The bits were at chance *as thresholds* and are well above chance *as rankings*.
+
+**The generalisation is architectural and untried.** Every kind carries declared structure in the
+packet that nothing reads: `edge_account` (the focus world's `contains`, whose size is declared per
+world), `parts` (direct targets of the supplied `whole`), `role_set`
+(`ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES`), `definition` (`FOCUS_WORLD_DECLARATION_IDENTITY` — one
+world's declaration, not three free choices). **The architecture already declares, per kind, what a
+legal answer is. Nothing reads it.** Source: `DECLARED_CONSTRAINT_RESULT.md`.
+
+**NOT LICENSED:** that a run would score 32.6190%. `setting_ref` is given the truth in that arm — the
+machine's own `setting_ref` accuracy is 0.0000% on these questions — so **two things are needed, not
+one**, and only one of them is measured.
+
 ## 5. The fixes, and what each is measured to be worth
 
 **Fix A — analytic initialisation of the `^6` block. BUILT AND VALIDATED.**

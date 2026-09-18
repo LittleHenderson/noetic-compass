@@ -4,6 +4,68 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Enforcing a constraint the packet ALREADY DECLARES lifts context from 0.0000% to 32.6190%, six for six
+
+$0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
+`records/encoder_capacity_001/DECLARED_CONSTRAINT_RESULT.md`; `MACHINE_STATE_001/STATUS.md` extended
+with Limit 8.
+
+THE OBSERVATION. Rounds 31/32 measured each answer field's worth by giving it the truth: context
++ participant truth 75.7143% (+71.4286), + setting_ref truth 4.2857% (+0.0000). So context's entire
+bit-level deficit is its four participant bits, and the recorded decoder decides them with an
+independent max per slot. BUT THE PACKET DECLARES THE CONSTRAINT: answers.answer_space sets
+participants_basis = PRIMARY_AUTHORED_LABELS_FIRST_THREE for every world, and checker._derive_values
+reads sorted(focus["declarations"]["participants"]). Measured over all 420 context questions in six
+runs, the truth cardinality is EXACTLY 3, EVERY TIME. Four participant slots are not four free bits -
+they are a choice of which ONE node is absent. The composer was never told.
+
+THE MEASUREMENT. On the RECORDED score table, with setting_ref held at the truth to isolate the bits:
+
+                       bits, independent   bits, top-3   exact, independent   exact, top-3
+    20260917_a              39.7004%        62.1723%          0.0000%           37.1429%
+    20260917_m              39.3258%        63.2959%          0.0000%           41.4286%
+    20260918_a              38.5768%        61.0487%          0.0000%           32.8571%
+    20260918_m              40.0749%        61.0487%          0.0000%           32.8571%
+    20260919_a              41.5730%        59.1760%          0.0000%           25.7143%
+    20260919_m              40.8240%        59.1760%          0.0000%           25.7143%
+    ALL SIX                 40.0125%        60.9863%          0.0000%           32.6190%
+
++20.9738 POINTS PER BIT AND 0.0000% -> 32.6190% PER ANSWER, SIX FOR SIX. The machine's threshold is
+badly calibrated - 40.0125% per bit against a 78.6517% constant - but its RANKING is well above
+chance: ordered by margin, the truly-absent node lands outside the top three 60.9863% of the time. A
+DECLARED CONSTRAINT CONVERTS AN ABSOLUTE-THRESHOLD PROBLEM INTO A RANKING PROBLEM.
+
+FIRST FIX THAT WORKS ON THE TRAINED MACHINE'S OWN SCORES. Round 30's fitted readout was a
+substituted, hypothetical readout and cost more than it gained overall. This uses the recorded scores
+exactly as the run produced them, and it needs no new information path, no capacity, no weights, no
+encoder change. It is structural and free: the constraint is a field of the packet the machine
+already receives, and score_decisions never reads it.
+
+IT CORRECTS ROUND 27'S REFUSAL OF ROUND 26. Round 26 found the architecture composes jointly for
+exactly one kind and proposed extending the joint branch; round 27 refused, because three of four
+binary kinds read their bits at or below chance and a composer cannot compose what was never read.
+Round 32 corrects the correction: THERE IS SOMETHING FOR THE COMPOSER TO DO - not a joint likelihood
+but a DECLARED CONSTRAINT. The bits were at chance AS THRESHOLDS and are well above chance AS
+RANKINGS, and a declared cardinality is what converts one into the other.
+
+THE GENERALISATION IS ARCHITECTURAL AND UNTRIED. Every kind carries declared structure in the packet
+that nothing reads: edge_account (the focus world's `contains`, size declared per world), parts
+(direct targets of the supplied `whole`), role_set (ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES),
+definition (FOCUS_WORLD_DECLARATION_IDENTITY - one world's declaration, not three free choices). THE
+ARCHITECTURE ALREADY DECLARES, PER KIND, WHAT A LEGAL ANSWER IS. NOTHING READS IT.
+
+A DESIGN FLAW THIS FILE CAUGHT IN ITSELF. The first version held setting_ref at the machine's choice
+and read 0.0000% for every arm in all six runs - the same signature that exposed the edge-direction
+bug. context has TWO fields, so with setting_ref wrong no participant decoding can be correct and the
+arm measured nothing. Fixed by holding setting_ref at the truth; both arms are printed in the
+artifact so the confound is visible rather than smoothed away.
+
+NOT LICENSED: that a run would score 32.6190%. setting_ref is GIVEN THE TRUTH in that arm - the
+machine's own setting_ref accuracy is 0.0000% on these questions - so TWO things are needed, not one,
+and only one of them is measured. Nothing was changed in score_decisions or any tested module.
+
+2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - A directed edge was read as undirected for five rounds, and the fix proves the answer assembly is CORRECT
 
 $0.00. Pure Python, standard library only. No torch, no device, no model, no training, no new run.
