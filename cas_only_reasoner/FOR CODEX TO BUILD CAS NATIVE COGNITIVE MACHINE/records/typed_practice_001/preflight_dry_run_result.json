@@ -1,0 +1,58 @@
+{
+ "boundary": "Stand-in learner, torch, encoder, framework, attestor and answer checker. Proves control flow, counts, artifacts, logs, reloads, replays, delivery and the gate reader; proves nothing about numerics or AWS packaging.",
+ "create_only_publisher_simulation": {
+  "20260917": {
+   "conflicts": [],
+   "direct_writes_under_results": [],
+   "files": 443,
+   "partial_left": [],
+   "scans": 1147,
+   "staging_left": []
+  },
+  "20260918": {
+   "conflicts": [],
+   "direct_writes_under_results": [],
+   "files": 443,
+   "partial_left": [],
+   "scans": 452,
+   "staging_left": []
+  },
+  "20260919": {
+   "conflicts": [],
+   "direct_writes_under_results": [],
+   "files": 443,
+   "partial_left": [],
+   "scans": 577,
+   "staging_left": []
+  }
+ },
+ "expected_integrity_failures": [
+  "I3:20260917",
+  "I3:20260918",
+  "I3:20260919"
+ ],
+ "gate_population": {
+  "eligible_questions": 45,
+  "excluded_records": 79,
+  "held_questions": 50,
+  "held_records": 127,
+  "shortcut_questions": 5,
+  "trained_records": 358
+ },
+ "label_on_stand_in": "VOID",
+ "main_updates_per_seed": 1470,
+ "observed_integrity_failures": [
+  "I3:20260917",
+  "I3:20260918",
+  "I3:20260919"
+ ],
+ "run_utc_date": "2026-09-18",
+ "schema": "cncm.typed-practice-preflight-dry-run/0.2",
+ "supersedes": "two earlier dry runs of superseded designs (query-level; world-level with twins), both PREFLIGHT_PASS",
+ "verdict": "PREFLIGHT_PASS",
+ "worker_seconds_per_seed": {
+  "20260917": 314.8,
+  "20260918": 138.3,
+  "20260919": 156.7
+ }
+}

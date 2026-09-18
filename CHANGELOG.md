@@ -4,6 +4,38 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-18 UTC - The practice study is built, reviewed twice and dry-run clean; not yet launched
+
+$0.00. No AWS call, no torch, no GPU. Owner approval (verbatim, AskUserQuestion): "Practice test
+(Recommended)" - the same machine and random start as the matched study, ten passes over the course, about
+one in five questions held back and never trained on, three seeds, up to $45.
+
+WHAT IT ASKS: after training on other worlds, do the neurons answer questions about worlds they never
+practised on? That is the owner's "learning at the neuron level" test.
+
+TWO ADVERSARIAL PRE-FLIGHT REVIEWS CHANGED THE DESIGN BEFORE ANY SPEND (records/typed_practice_001/
+PREFLIGHT_REVIEW.md). Run-killers fixed: a pass log growing under results/ would have met the create-only
+evidence publisher and failed every job at the final upload after ~2 hours; a single network blip on the
+operator's machine would have terminated a healthy instance. Leaks fixed: rule twins, answers inside worked
+supports, a same-world answer prior, a look-alike trained world, analogy answers naming held worlds, and
+supports reaching held worlds through their arguments. Gate fixed: questions not records, each seed on its
+own, a registered input-blind shortcut, gains in >= 2 kinds and >= 2 held worlds.
+
+FINAL DESIGN (docs/CNCM_TYPED_PRACTICE_STUDY_v0.1.md): five course worlds with no shape twin anywhere in the
+bank, 127 held records / 50 questions, all eight kinds; 79 records that mention a held world anywhere,
+including in their correct answers, excluded; 358 trained; 147 updates per pass, 1,470 main + 16
+interference + 2 replays = 1,488; 45 gate questions after a 5-question shortcut. The split is frozen as
+constants (the worker never reads a correct answer before training) and a test re-derives it with the
+answer checker. The registered learner is unchanged; a subclass raises only the update and wall ceilings.
+$15.00 reserved per job, 4-hour envelope, ~1.5 h expected.
+
+DRY RUN (stand-in learner, real everything else): PREFLIGHT_PASS in all three seeds - 1,470 updates each,
+every evaluation, checkpoint, reload and replay; a create-only publisher simulation saw 0 conflicts in
+2,176 scans; 0 writes under results/ not named *.partial; the gate reader gave I1/I2/I4 PASS and I3 FAIL,
+as expected for a stand-in. records/typed_practice_001/preflight_dry_run_result.json.
+
+NOT YET: no job reserved or launched. No learning claim of any kind.
+
 ## 2026-09-18 UTC - Owner ruling on what counts as progress; rounds 32-33 audited; a ranking bug in the constraint layer fixed
 
 $0.00. Pure Python on recorded scores. No torch, no GPU, no model, no training, no new run.
