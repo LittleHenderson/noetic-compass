@@ -51,6 +51,15 @@ D = ad.D_MODEL
 CACHE = Path(r"C:\Users\wakil\AppData\Local\Temp\cncm_analysis\rowdb.pkl")
 DEFAULT_FOLDS = 5
 
+#: The registered recurrence's own constants, from `cas_meta2/recurrent_cjt/recurrence.py`.
+LAMBDA = 0.5
+EPSILON = 1e-6
+PREDICTION_DEPTH = 8
+
+#: How many recurrence-aware refinement rounds the fit performs. Two is where the fixed point has
+#: settled: round 1 and round 2 differ by 0.18 points in `recurrence_aware_fit.txt`.
+DEFAULT_REFINEMENTS = 2
+
 
 class PreparationRefused(RuntimeError):
     """The requested preparation would be circular or would not reproduce the recorded figure."""
@@ -140,15 +149,31 @@ def fit_folds(
     *,
     folds: int = DEFAULT_FOLDS,
     lam: float = ad.DEFAULT_RIDGE_LAMBDA,
+    refinements: int = DEFAULT_REFINEMENTS,
 ) -> list:
     """One registered parameter set per fold, each fitted on the other folds.
 
     Returns a list of dicts, each with the fold index, the held-out row indices, the parameter
     digest and the parameters themselves. **No fold's parameters are fitted on the rows it is
     evaluated on.**
+
+    With ``refinements > 0`` the fit is **recurrence-aware**, which
+    `records/encoder_capacity_001/recurrence_aware_fit.txt` measures to be worth 17.2 points:
+
+    * round 0 fits on ``tanh(encoded)`` — what the block would see if there were no recurrence.
+      The run never feeds it that, and scoring it through the registered recurrence costs 19.15
+      points (63.83% -> 44.68%).
+    * each refinement re-fits on ``tanh(incoming)`` for every ``incoming`` the *current*
+      parameters actually feed the block across the registered depth. That recovers the loss:
+      **44.68% -> 61.88% on the first refinement and 62.06% on the second**, at a cost of about
+      one point when read directly.
+
+    The refinement is a fixed point, and it converges: round 1 and round 2 differ by 0.18 points.
     """
     if folds < 2:
         raise PreparationRefused("cross-validation needs at least two folds")
+    if refinements < 0:
+        raise PreparationRefused("refinements must be zero or more")
     order = list(range(len(encoded)))
     buckets = [order[index::folds] for index in range(folds)]
     fitted = []
@@ -162,11 +187,26 @@ def fit_folds(
             lam=lam,
         )
         parameters = ad.decompose_from_free_readout(weights, readout)
+
+        for _ in range(refinements):
+            inputs, targets = [], []
+            for index in train:
+                incomings, _final = recurrence_states(parameters, encoded[index])
+                for incoming in incomings:
+                    inputs.append(incoming)
+                    targets.append(classes[index])
+            weights = ad.ridge_weights(
+                [ad.tanh_vector(vector) for vector in inputs], targets,
+                nclass=len(readout), lam=lam,
+            )
+            parameters = ad.decompose_from_free_readout(weights, readout)
+
         fitted.append({
             "fold": fold,
             "rows_fitted_on": len(train),
             "rows_held_out": len(buckets[fold]),
             "held_out_indices": sorted(buckets[fold]),
+            "refinements": refinements,
             "parameter_digest": parameters.digest(),
             "parameters": parameters,
         })
@@ -258,13 +298,8 @@ def evaluate_folds(fitted: list, encoded: list, readout: list) -> float:
     return correct / total if total else 0.0
 
 
-LAMBDA = 0.5
-EPSILON = 1e-6
-PREDICTION_DEPTH = 8
-
-
-def through_recurrence(parameters, encoded, depth: int = PREDICTION_DEPTH):
-    """Run the registered recurrence over one slot's encoded vector.
+def recurrence_states(parameters, encoded, depth: int = PREDICTION_DEPTH):
+    """Run the registered recurrence over one slot and return every ``incoming`` the block sees.
 
     `recurrence.run_passes` with ``state=None``, ``lambda_ = 0.5``, ``epsilon = 1e-6`` and the
     registered prediction depth of 8. For the analytic parameters the block is ``T @ tanh(x)``
@@ -273,12 +308,20 @@ def through_recurrence(parameters, encoded, depth: int = PREDICTION_DEPTH):
     """
     current = [0.0] * D
     input_rms = math.sqrt(math.fsum(value * value for value in encoded) / len(encoded))
+    incomings, final = [], None
     for _ in range(depth):
         state_rms = math.sqrt(math.fsum(value * value for value in current) / len(current))
         scale = LAMBDA * input_rms / math.sqrt(input_rms ** 2 + state_rms ** 2 + EPSILON ** 2)
         incoming = [base + scale * carry for base, carry in zip(encoded, current)]
+        incomings.append(incoming)
         current = parameters.forward(incoming)
-    return current
+        final = current
+    return incomings, final
+
+
+def through_recurrence(parameters, encoded, depth: int = PREDICTION_DEPTH):
+    """The state the registered recurrence ends on for one slot's encoded vector."""
+    return recurrence_states(parameters, encoded, depth)[1]
 
 
 def evaluate_through_recurrence(fitted: list, encoded: list, readout: list) -> float:
@@ -325,6 +368,8 @@ def alias_distribution_through_recurrence(
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--folds", type=int, default=DEFAULT_FOLDS)
+    parser.add_argument("--refinements", type=int, default=DEFAULT_REFINEMENTS,
+                        help="recurrence-aware refinement rounds; 0 reproduces the naive fit")
     parser.add_argument("--report", action="store_true",
                         help="print the preparation report (default action)")
     parser.add_argument("--write-parameters", type=Path, default=None,
@@ -345,8 +390,10 @@ def main(argv=None) -> int:
     readout = readout_rows()
     symbols = tuple(f"W{c}" for c in range(len(readout)))
 
-    print(f"fitting {args.folds} folds, each out-of-fold...")
-    fitted = fit_folds(encoded, classes, readout, folds=args.folds)
+    print(f"fitting {args.folds} folds, each out-of-fold"
+          f"{'' if args.refinements == 0 else f', with {args.refinements} recurrence-aware refinement round(s)'}...")
+    fitted = fit_folds(encoded, classes, readout, folds=args.folds,
+                       refinements=args.refinements)
     for entry in fitted:
         entry["_classes"] = classes
 

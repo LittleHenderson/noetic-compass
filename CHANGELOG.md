@@ -4,6 +4,67 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The recurrence's 19.15-point cost was an aiming error; fixing it recovers 17.38
+
+$0.00. Pure standard library. No model, no GPU, no target opened. Script
+`records/encoder_capacity_001/measure_recurrence_aware_fit.py` (result `recurrence_aware_fit.txt`),
+record `RECURRENCE_AWARE_FIT_RESULT.md`; applied in `tools/prepare_analytic_arm.py`, now
+recurrence-aware by default; P6 revised in `PHASE0_RECORD_DRAFT.md`.
+
+THE DEPTH PROFILE SAYS EXACTLY WHERE THE LOSS ENTERS. Naive fit, out-of-fold over the 564 slots:
+  depth      0        1        2        4        8
+  acc    63.83%   63.83%   44.86%   43.62%   44.68%
+Depth 1 is IDENTICAL to depth 0, and exactly as expected: at depth 1 the state is still zero, so
+state_rms = 0 and the carry term 0.5*rms(e)/sqrt(rms(e)^2+0+eps^2)*0 is zero, so incoming IS the
+encoded slot. The block sees what the solve fitted it on and the score is unchanged. THE LOSS
+HAPPENS ON PASS 2, when the carry first becomes non-zero: 63.83% -> 44.86% in one step. Passes 4
+and 8 neither recover nor worsen it. The recursion degrades the initialisation once and then sits
+there; it is neither diverging nor converging to something better.
+
+THE HYPOTHESIS WAS THAT THIS IS AN AIMING ERROR, AND IT IS. The closed-form solve fits T so that
+T tanh(encoded) reads well, but the run never evaluates the block on the encoded slot - it
+evaluates it on `incoming`, the encoded slot PLUS a scaled carry of the block's own previous
+output, eight times over. Re-fitting on `tanh(incoming)` for every incoming the current parameters
+actually feed the block, scored through the recurrence on the same held-out rows:
+  round 0   depth 0 63.83%   depth 8 44.68%   fitted on encoded slots
+  round 1   depth 0 62.77%   depth 8 61.88%   fitted on recurrence states
+  round 2   depth 0 62.94%   depth 8 62.06%   fitted on recurrence states
+44.68% -> 61.88% on the first refinement, 62.06% on the second: +17.38 POINTS. And it is a genuine
+fixed point - rounds 1 and 2 differ by 0.18 points. The cost of aiming correctly is about ONE
+point read directly (63.83% -> 62.94%).
+
+THE CORRECTED STATEMENT. The registered recurrence does not intrinsically cost 19 points. It
+costs 19 points WHEN THE BLOCK IS FITTED ON AN INPUT THE RUN NEVER FEEDS IT. Fit for the
+functional the run computes and the residual cost is 0.88 points (62.94% direct, 62.06% through
+the recurrence). This is an architectural finding about how the plastic block must be
+initialised, not a property of the recursion. fit_folds(..., refinements=2) is now the default;
+--refinements 0 reproduces the naive fit for comparison.
+
+ARM A AFTER THE FIX, through the recurrence - the reading that resembles what a run would do:
+  cross-validated accuracy               62.06%   (was 44.68%)
+  focus alias ranked #1 (of 564)           350     (was 252)
+  commonest alias share                    6.9%    (was 11.3%)
+  distinct aliases emitted (of 64)          24      (unchanged)
+That is 50.0x the trained learner's 1.24%, 39.7x chance, and 13.46x the strongest null. G6 passes
+on both readings: 24 distinct aliases, commonest at 7.3% direct or 6.9% through the recurrence,
+against the recorded baseline of 9 distinct with W36 at 44.3%.
+
+P6 REVISED. It first predicted a recurrence cost of 10-30 points, measured on the naive fit. The
+revised P6 predicts a residual cost UNDER 2 POINTS with the recurrence-aware fit, and a run
+showing a cost above 5 points means the refinement is not transferring to the real forward pass
+and the tool must be revisited before the result is interpreted. PREPARATION_RESULT.md is marked
+superseded in part: its depth profile and diagnosis stand, its headline numbers do not.
+
+NOT ESTABLISHED: a construction measurement, not a run - nothing launched, no reservation, no
+device, no AWS. The encoded slots are rebuilt (RECONSTRUCTION_GAP.md measures +0.781 correlation
+with the recorded logits); for the analytic parameters the block itself is exact (identity
+residual 0.000e+00), so that approximation enters only through the input. The figures are on ONE
+field - focus-world alias decodability, a single 64-way choice - NOT the whole-answer exact-match
+metric the course scores. Fitting and evaluation are both on the learner's own 564-packet registry
+with only 24 of 64 worlds present; the fit is out-of-fold, which is what makes the numbers
+admissible at all. The refinement is not proven optimal. This does not touch the five
+many-decision kinds, whose defect is separate.
+
 ## 2026-09-17 UTC - Arm A is staged and end-to-end runnable; the registered recurrence costs it 19.15 points
 
 $0.00. Pure standard library. No model, no GPU, no provider, no target opened. Tool

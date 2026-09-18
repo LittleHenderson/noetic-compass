@@ -1,5 +1,15 @@
 # Arm A preparation — what the construction gives, and what the recurrence takes back
 
+> ## SUPERSEDED IN PART — `RECURRENCE_AWARE_FIT_RESULT.md`
+>
+> The finding below stands: with the **naive** fit the registered recurrence costs 19.15 points
+> (63.83% direct, 44.68% through the recurrence). **That cost was an aiming error and it is
+> fixed.** The solve fitted `T` on an input the run never feeds the block; re-fitting on the
+> states the block is actually given recovers it to **62.94% direct, 62.06% through the
+> recurrence** — a residual cost of **0.88 points**. `tools/prepare_analytic_arm.py` now performs
+> that refinement by default, and `preparation_report.txt` carries the recurrence-aware numbers.
+> Read this file for the depth profile and the diagnosis; read the other one for the result.
+
 **Status:** PREPARATION REPORT. **Not a run. Nothing is licensed.**
 **Tool:** `tools/prepare_analytic_arm.py`  **Output:** `preparation_report.txt`
 **Depends on:** `cncm/analytic_decompose.py`, `PHASE0_RECORD_DRAFT.md`

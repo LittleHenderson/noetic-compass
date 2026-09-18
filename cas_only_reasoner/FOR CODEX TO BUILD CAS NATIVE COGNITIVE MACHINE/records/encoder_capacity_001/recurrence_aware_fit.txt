@@ -1,0 +1,44 @@
+loading the cached rows and rebuilding the encoded slots...
+  encoded slots: 200/564
+  encoded slots: 400/564
+  slots: 564   classes present: 24
+
+====================================================================================================
+1. THE DEPTH PROFILE OF THE RECORDED SOLVE
+====================================================================================================
+
+  depth   correct   total    accuracy
+----------------------------------------------------------------------------------------------------
+      0       360     564      63.83%
+      1       360     564      63.83%
+      2       253     564      44.86%
+      4       246     564      43.62%
+      8       252     564      44.68%
+
+====================================================================================================
+2. FITTING FOR THE RECURRENCE � a fixed-point refinement, scored through depth 8
+====================================================================================================
+
+  T_0 is the recorded solve. Each refinement re-fits on the states the CURRENT
+  parameters actually feed the block, then is scored through the recurrence.
+
+  round     depth 0     depth 8   what was fitted on
+----------------------------------------------------------------------------------------------------
+      0      63.83%      44.68%   encoded slots
+      1      62.77%      61.88%   recurrence states (round 1)
+      2      62.94%      62.06%   recurrence states (round 2)
+
+====================================================================================================
+READING
+====================================================================================================
+
+If the depth profile falls monotonically, the registered recursion degrades the
+initialisation pass by pass rather than converging elsewhere. If a refinement round
+scores above the recorded 44.68% through depth 8, the solve was aimed at a functional
+the run does not compute, and aiming it correctly is a $0 architecture improvement.
+If no refinement beats it, the recurrence's cost is not an aiming error.
+
+Every number here is out-of-fold on the learner's own 564-packet registry, and the
+encoded slots are rebuilt (RECONSTRUCTION_GAP.md measures that rebuild at +0.781
+correlation with the recorded logits). This is a construction measurement, not a run.
+

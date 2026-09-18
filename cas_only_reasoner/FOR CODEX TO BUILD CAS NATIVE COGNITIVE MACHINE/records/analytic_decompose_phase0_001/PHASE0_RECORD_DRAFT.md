@@ -145,32 +145,47 @@ was measured and changes nothing — 10 of 140 questions either way, because in 
 the two slots are not disagreeing: they emit the same wrong constant. Referential consistency is
 not the missing piece. See `joint_binding.txt`.
 
-**P6 — the registered recurrence costs arm A between 10 and 30 percentage points.**
+**P6 — the recurrence-aware fit costs arm A under 2 points, where the naive fit cost 19.15.**
 
-Preparation, not a run: `tools/prepare_analytic_arm.py` (output `preparation_report.txt`, record
-`PREPARATION_RESULT.md`) evaluates the construction out-of-fold at both readings.
+> **P6 superseded.** It first predicted the recurrence would cost arm A between 10 and 30 points,
+> measured on the **naive** fit. That fit had an aiming error and the error is now fixed; see
+> `records/encoder_capacity_001/RECURRENCE_AWARE_FIT_RESULT.md`.
 
-| reading | focus-world alias accuracy, out-of-fold |
-|---|---:|
-| direct `^6(x) = T·tanh(x)` | **63.83%** |
-| **through the registered depth-8 recurrence** | **44.68%** |
+The naive solve fits `T` so that `T·tanh(encoded)` reads well, but the run never evaluates the
+block on the encoded slot — it evaluates it on `incoming`, the encoded slot **plus a scaled carry
+of the block's own previous output**, eight times. Scored out-of-fold at each registered depth:
 
-The recurrence is not neutral to this initialisation. It costs **19.15 percentage points**, and
-the focus alias falls from rank 1 in 360 of 564 slots to 252 of 564. That is consistent with
-`DEPTH_VALUE_RESULT.md`, which measured on the trained block that depths 4 and 8 differ in 17.5%
-of answers while the logit spread moves by 0.67%.
+| depth | 0 | 1 | 2 | 4 | 8 |
+|---|---:|---:|---:|---:|---:|
+| naive fit | 63.83% | **63.83%** | 44.86% | 43.62% | **44.68%** |
 
-> **P6: through the registered recurrence, arm A reads the focus world above the recorded
-> baseline, and the recurrence costs it between 10 and 30 percentage points.**
+Depth 1 equals depth 0 exactly, because at depth 1 the state is still zero and `incoming` is the
+encoded slot. **The loss happens on pass 2** and the later passes neither recover nor worsen it.
 
-A run landing outside that window means the recurrence reading in the preparation tool is not
-capturing the real forward pass, and the tool must be revisited before the result is interpreted.
+Re-fitting on the states the block is actually given recovers it, and converges:
 
-**The honest prediction is therefore not 63.83%. It is 44.68% through the recurrence**, which is
-still 36.0× the trained learner's 1.24%, 28.6× chance, and 9.69× the strongest null.
+| round | depth 0 | depth 8 | fitted on |
+|---:|---:|---:|---|
+| 0 | 63.83% | 44.68% | encoded slots |
+| 1 | 62.77% | 61.88% | recurrence states |
+| 2 | **62.94%** | **62.06%** | recurrence states |
 
-**G6 is unaffected.** Both readings predict it passing: 24 distinct aliases with the commonest at
-6.4% (direct) or 11.3% (through the recurrence), against the recorded baseline of 9 distinct with
+`tools/prepare_analytic_arm.py` now performs this refinement by default (`refinements=2`;
+`--refinements 0` reproduces the naive fit).
+
+> **P6, revised: through the registered depth-8 recurrence, arm A reads the focus world above the
+> recorded baseline, and the recurrence-aware fit leaves a residual cost of under 2 points.**
+> Preparation values: **62.94% direct, 62.06% through the recurrence** — a residual cost of
+> **0.88 points**, against 19.15 for the naive fit, a recovery of **+17.38 points**.
+
+A run showing a recurrence cost above 5 points means the refinement is not transferring to the
+real forward pass and the tool must be revisited before the result is interpreted.
+
+**The honest prediction is therefore 62.06% through the registered recurrence** — 50.0× the
+trained learner's 1.24%, 39.7× chance, and 13.46× the strongest null.
+
+**G6 is unaffected and passes on both readings**: 24 distinct aliases with the commonest at 7.3%
+(direct) or 6.9% (through the recurrence), against the recorded baseline of 9 distinct with
 `W36` at 44.3%.
 
 ## 5. Hard gates
