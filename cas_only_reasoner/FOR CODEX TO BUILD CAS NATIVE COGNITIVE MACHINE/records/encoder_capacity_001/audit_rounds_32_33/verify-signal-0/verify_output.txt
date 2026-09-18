@@ -1,0 +1,34 @@
+runs ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+
+receipt_20260917_a: {'absent_rank0': 26, 'absent_rank2': 18, 'absent_rank3': 13, 'auc_lt': 26, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 13, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 127, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 26}
+  mean AUC 0.438596  PRESENT-only AUC 0.233918  cross AUC 0.435088
+  topk exact assembled 26/70 = 37.1429%  random-subset expectation 27.25/70 = 38.9286%
+
+receipt_20260917_m: {'absent_rank0': 26, 'absent_rank2': 15, 'absent_rank3': 16, 'auc_lt': 26, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 16, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 130, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 29}
+  mean AUC 0.456140  PRESENT-only AUC 0.216374  cross AUC 0.432916
+  topk exact assembled 29/70 = 41.4286%  random-subset expectation 27.25/70 = 38.9286%
+
+receipt_20260918_a: {'absent_rank0': 19, 'absent_rank1': 4, 'absent_rank2': 24, 'absent_rank3': 10, 'auc_lt': 23, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 10, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 124, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 23}
+  mean AUC 0.479532  PRESENT-only AUC 0.257310  cross AUC 0.451796
+  topk exact assembled 23/70 = 32.8571%  random-subset expectation 27.25/70 = 38.9286%
+
+receipt_20260918_m: {'absent_rank0': 19, 'absent_rank1': 2, 'absent_rank2': 26, 'absent_rank3': 10, 'auc_lt': 21, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 10, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 124, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 23}
+  mean AUC 0.491228  PRESENT-only AUC 0.257310  cross AUC 0.450961
+  topk exact assembled 23/70 = 32.8571%  random-subset expectation 27.25/70 = 38.9286%
+
+receipt_20260919_a: {'absent_rank0': 19, 'absent_rank1': 2, 'absent_rank2': 31, 'absent_rank3': 5, 'auc_lt': 21, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 5, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 119, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 18}
+  mean AUC 0.461988  PRESENT-only AUC 0.321637  cross AUC 0.466249
+  topk exact assembled 18/70 = 25.7143%  random-subset expectation 27.25/70 = 38.9286%
+
+receipt_20260919_m: {'absent_rank0': 19, 'absent_rank2': 33, 'absent_rank3': 5, 'auc_lt': 19, 'auto': 13, 'auto_exact': 13, 'eval': 57, 'exact_eval': 5, 'n3k3': 13, 'n4k3': 57, 'nadm=1': 70, 'p_den': 171, 'p_hits': 119, 'q': 70, 'rand_exact_x': 27.25, 'ties_boundary': 0, 'topk_exact_assembled': 18}
+  mean AUC 0.473684  PRESENT-only AUC 0.321637  cross AUC 0.462740
+  topk exact assembled 18/70 = 25.7143%  random-subset expectation 27.25/70 = 38.9286%
+
+POOLED {'absent_rank0': 128, 'absent_rank1': 8, 'absent_rank2': 147, 'absent_rank3': 59, 'auc_lt': 136, 'auto': 78, 'auto_exact': 78, 'eval': 342, 'exact_eval': 59, 'n3k3': 78, 'n4k3': 342, 'nadm=1': 420, 'p_den': 1026, 'p_hits': 743, 'q': 420, 'rand_exact_x': 163.5, 'ties_boundary': 0, 'topk_exact_assembled': 137}
+mean within-q AUC 0.466862 over 342; PRESENT-only 0.268031
+cross AUC pooled 0.450666
+precision@k 743/1026 = 72.4172%
+exact top-k (4-slot) 59/342 = 17.2515%
+topk exact assembled 137/420 = 32.6190%
+random-subset expectation 163.5/420 = 38.9286%
+absent slot position counts {(4, 0): 138, (4, 1): 30, (4, 2): 102, (4, 3): 72}

@@ -1,0 +1,30 @@
+receipt_20260917_a: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 26/70 = 37.1429%
+   pooled AUC of margin, true vs false participants = 0.4351
+   round-32 'bits top3' formula (TP only / all bits) = 166/267 = 62.1723%; true per-bit accuracy after top-k (TP+TN) = 179/267 = 67.0412%
+receipt_20260917_m: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 29/70 = 41.4286%
+   pooled AUC of margin, true vs false participants = 0.4329
+   round-32 'bits top3' formula (TP only / all bits) = 169/267 = 63.2959%; true per-bit accuracy after top-k (TP+TN) = 185/267 = 69.2884%
+receipt_20260918_a: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 23/70 = 32.8571%
+   pooled AUC of margin, true vs false participants = 0.4518
+   round-32 'bits top3' formula (TP only / all bits) = 163/267 = 61.0487%; true per-bit accuracy after top-k (TP+TN) = 173/267 = 64.7940%
+receipt_20260918_m: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 23/70 = 32.8571%
+   pooled AUC of margin, true vs false participants = 0.4510
+   round-32 'bits top3' formula (TP only / all bits) = 163/267 = 61.0487%; true per-bit accuracy after top-k (TP+TN) = 173/267 = 64.7940%
+receipt_20260919_a: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 18/70 = 25.7143%
+   pooled AUC of margin, true vs false participants = 0.4662
+   round-32 'bits top3' formula (TP only / all bits) = 158/267 = 59.1760%; true per-bit accuracy after top-k (TP+TN) = 163/267 = 61.0487%
+receipt_20260919_m: q=70 (n,k_truth,k_packet,basis) counts={(3, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 13, (4, 3, 3, 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'): 57}
+   random-rank-with-k expected participant-set exact = 38.9286%  (sum 1/C(n,k) = 27.2500 of 70)
+   recorded top-k participant-set exact = 18/70 = 25.7143%
+   pooled AUC of margin, true vs false participants = 0.4627
+   round-32 'bits top3' formula (TP only / all bits) = 158/267 = 59.1760%; true per-bit accuracy after top-k (TP+TN) = 163/267 = 61.0487%

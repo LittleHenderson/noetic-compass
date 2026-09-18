@@ -1,5 +1,7 @@
 # EDGE_DIRECTION_CORRECTION — a directed edge was being read as undirected, and every `edge_account` number from round 27 to round 31 carried it
 
+> **Audited 2026-09-18 — see `AUDIT_ROUNDS_32_33_RESULT.md` §1.** The bug and the fix are REAL. The fitted readout's corrected `77.8426%` per slot is below always-ABSENT (`79.7862%`) and finds 47 of 208 edges; "below chance in four of six" is six of six; "no composition defect left to explain" is NOT LICENSED (1 correct answer in 70; the slot-mix prediction is `3.4289%`, not `1.82%`).
+
 **Round 32. Self-correction #12. Own analysis, not the harness.**
 **$0.00. Pure Python. No torch, no GPU, no model, no training, no new run.**
 

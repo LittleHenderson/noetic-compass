@@ -227,6 +227,23 @@ def test_the_two_rules_do_not_fight():
     assert sum(1 for symbol in out.values() if symbol == "PRESENT") == 2
 
 
+def test_cardinality_ranks_by_the_margin_not_by_present_alone():
+    """PRESENT alone favours n1; the margin PRESENT - ABSENT favours n2. The margin must win.
+
+    Regression test for the round-37 defect: `_apply_cardinality` ranked by the PRESENT score alone,
+    against its own docstring, which cost 20 `parts` and 18 `edge_account` answers on the recorded runs.
+    """
+    focus = "world-aaa"
+    worlds = [world("world-aaa", "W0", "0", [(0, 1)], [0, 1, 2])]
+    p = packet("parts", focus, {"whole": f"{focus}/0"}, worlds)
+    plan = node_plan(focus, worlds)
+    scores = flat_scores(plan)
+    scores["n1"]["PRESENT"], scores["n1"]["ABSENT"] = 5.0, 4.9    # margin +0.1
+    scores["n2"]["PRESENT"], scores["n2"]["ABSENT"] = 3.0, 0.0    # margin +3.0
+    out = ac.apply_constraints(p, plan, scores, select_all(plan, "ABSENT"))
+    assert sorted(sid for sid, symbol in out.items() if symbol == "PRESENT") == ["n2"]
+
+
 def test_parts_cardinality_matches_the_declared_out_edges():
     focus = "world-aaa"
     worlds = [world("world-aaa", "W0", "0", [(0, 1), (0, 2)], [0, 1, 2])]

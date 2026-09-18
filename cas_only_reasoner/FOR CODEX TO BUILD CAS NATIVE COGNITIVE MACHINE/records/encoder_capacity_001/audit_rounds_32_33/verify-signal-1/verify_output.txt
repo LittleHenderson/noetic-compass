@@ -1,0 +1,41 @@
+runs ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+
+receipt_20260917_a: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 16, 'bits': 207, 'asis_bits': 153, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 106, 'pk_den': 120, 'topk_exact': 39, 'topk_exact_assembled': 39, 'rand_exact_num': 0, 'auc1': 39, 'auclt': 2, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.8757861635220126  posAUC 0.38522012578616355
+  topk exact 39/53 = 73.5849%  asis exact 16/53 = 30.1887%  asis bits 153/207 = 73.9130%  P@k 106/120 = 88.3333%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+receipt_20260917_m: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 17, 'bits': 207, 'asis_bits': 152, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 106, 'pk_den': 120, 'topk_exact': 39, 'topk_exact_assembled': 39, 'rand_exact_num': 0, 'auc1': 39, 'auclt': 2, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.8757861635220126  posAUC 0.38522012578616355
+  topk exact 39/53 = 73.5849%  asis exact 17/53 = 32.0755%  asis bits 152/207 = 73.4300%  P@k 106/120 = 88.3333%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+receipt_20260918_a: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 14, 'bits': 207, 'asis_bits': 148, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 105, 'pk_den': 120, 'topk_exact': 39, 'topk_exact_assembled': 39, 'rand_exact_num': 0, 'auc1': 39, 'auclt': 8, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.8443396226415094  posAUC 0.38522012578616355
+  topk exact 39/53 = 73.5849%  asis exact 14/53 = 26.4151%  asis bits 148/207 = 71.4976%  P@k 105/120 = 87.5000%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+receipt_20260918_m: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 18, 'bits': 207, 'asis_bits': 153, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 105, 'pk_den': 120, 'topk_exact': 39, 'topk_exact_assembled': 39, 'rand_exact_num': 0, 'auc1': 39, 'auclt': 8, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.839622641509434  posAUC 0.38522012578616355
+  topk exact 39/53 = 73.5849%  asis exact 18/53 = 33.9623%  asis bits 153/207 = 73.9130%  P@k 105/120 = 87.5000%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+receipt_20260919_a: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 16, 'bits': 207, 'asis_bits': 151, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 107, 'pk_den': 120, 'topk_exact': 40, 'topk_exact_assembled': 40, 'rand_exact_num': 0, 'auc1': 40, 'auclt': 2, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.8852201257861635  posAUC 0.38522012578616355
+  topk exact 40/53 = 75.4717%  asis exact 16/53 = 30.1887%  asis bits 151/207 = 72.9469%  P@k 107/120 = 89.1667%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+receipt_20260919_m: {'q': 53, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 53, 'whole_true': 0, 'n4k3': 23, 'asis_exact': 12, 'bits': 207, 'asis_bits': 146, 'true_bits': 120, 'ties_at_boundary': 0, 'pk_hits': 107, 'pk_den': 120, 'topk_exact': 40, 'topk_exact_assembled': 40, 'rand_exact_num': 0, 'auc1': 40, 'auclt': 2, 'revpos_exact': 17, 'fwdpos_exact': 9, 'n3k1': 5, 'n4k2': 21, 'n4k1': 4}
+  meanAUC 0.8852201257861635  posAUC 0.38522012578616355
+  topk exact 40/53 = 75.4717%  asis exact 12/53 = 22.6415%  asis bits 146/207 = 70.5314%  P@k 107/120 = 89.1667%
+  E[random exact] 0.2248427672955975  E[random exact excl whole] 0.6383647798742138
+
+POOLED {'q': 318, 'nadm>1': 0, 'k_mismatch': 0, 'whole_in_slots': 318, 'whole_true': 0, 'n4k3': 138, 'asis_exact': 93, 'bits': 1242, 'asis_bits': 903, 'true_bits': 720, 'ties_at_boundary': 0, 'pk_hits': 636, 'pk_den': 720, 'topk_exact': 236, 'topk_exact_assembled': 236, 'rand_exact_num': 0, 'auc1': 236, 'auclt': 24, 'revpos_exact': 102, 'fwdpos_exact': 54, 'n3k1': 30, 'n4k2': 126, 'n4k1': 24}
+mean within-q AUC 0.8676624737945493 over 318
+pos AUC 0.38522012578616355  reversed-pos AUC 0.6147798742138365
+topk exact 236/318 = 74.2138% assembled 236/318 = 74.2138%
+asis exact 93/318 = 29.2453%
+P@k 636/720 = 88.3333%  random k/n expectation 62.84722222222222
+E random exact 22.48427672955975  E random exact excluding whole 63.83647798742138
+reversed-plan-order exact 102/318 = 32.0755%  forward 54/318 = 16.9811%
+cross-question AUC 0.8631758194976585

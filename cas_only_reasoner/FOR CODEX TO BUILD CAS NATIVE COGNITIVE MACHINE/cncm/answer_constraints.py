@@ -104,16 +104,22 @@ def _field_slots(plan: dict, field: str) -> list:
     return [slot for slot in plan["slots"] if slot["field"] == field]
 
 
-def _rank(slot_ids: list, scores: dict, symbol: str) -> list:
-    """Slot ids ordered by ``symbol``'s score, highest first. Ties broken by slot id for determinism."""
-    return sorted(slot_ids, key=lambda sid: (-scores[sid][symbol], sid))
+def _margin_rank(slot_ids: list, scores: dict) -> list:
+    """Slot ids ordered by PRESENT minus ABSENT, highest first. Ties broken by slot id for determinism.
+
+    The margin, not the PRESENT score alone. The committed round-37 version ranked by PRESENT alone,
+    against this function's own docstring, and it cost 20 of 318 ``parts`` answers (257 -> 277) and all
+    18 of 420 ``edge_account`` answers (0 -> 18) on the recorded scores. Found by an independent audit;
+    see `AUDIT_ROUNDS_32_33_RESULT.md`.
+    """
+    return sorted(slot_ids, key=lambda sid: (-(scores[sid]["PRESENT"] - scores[sid]["ABSENT"]), sid))
 
 
 def _apply_cardinality(selected: dict, slots: list, scores: dict, k: int) -> None:
     """Force exactly ``k`` of ``slots`` to PRESENT, choosing the ``k`` best by PRESENT minus ABSENT."""
     if k < 0 or k > len(slots):
         return
-    ranked = _rank([slot["slot_id"] for slot in slots], scores, "PRESENT")
+    ranked = _margin_rank([slot["slot_id"] for slot in slots], scores)
     for rank, slot_id in enumerate(ranked):
         selected[slot_id] = "PRESENT" if rank < k else "ABSENT"
 
@@ -230,10 +236,12 @@ def score_decisions(packet: dict, scores: dict, *, declared_constraints: bool = 
     anything is decided. With ``declared_constraints=True`` it applies :func:`apply_constraints` to
     the result.
 
-    Measured on the recorded six-run score table, enabling the layer gives **+6.6194 points pooled**
-    (34.6631% -> 41.2825%), **+12.4861** on the many-decision half and **+0.0000** on the one-decision
-    half, and the gain is world-invariant. See `CONSTRAINT_LAYER_RESULT.md` and
-    `WIRING_AND_INVARIANCE_RESULT.md`.
+    Measured on the recorded six-run score table with the margin-ranking fix, enabling the layer gives
+    **+7.7423 points pooled** (34.6631% -> 42.4054%), **+14.6042** on the many-decision half and
+    **+0.0000** on the one-decision half (`constraint_layer_corrected.txt`; the round-37 figures +6.6194
+    and +12.4861 carried the PRESENT-alone ranking bug). By the owner's ruling of 2026-09-18 this is a
+    rule-layer gain on saved scores, reported separately from anything the neurons learn. See
+    `AUDIT_ROUNDS_32_33_RESULT.md`, `CONSTRAINT_LAYER_RESULT.md` and `WIRING_AND_INVARIANCE_RESULT.md`.
 
     Why a flag rather than a new function: the encoder's input does not include the decision contract
     (`binding._query_spec` reads kind, field, group, scope, coordinates and symbols only), so with the

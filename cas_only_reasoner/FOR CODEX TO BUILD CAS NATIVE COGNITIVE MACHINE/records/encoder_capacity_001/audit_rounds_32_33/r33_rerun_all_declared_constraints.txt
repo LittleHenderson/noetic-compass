@@ -1,0 +1,40 @@
+runs: 6
+
+====================================================================================================
+DO THE OTHER DECLARED CONSTRAINTS WORK? — recorded scores, six runs
+====================================================================================================
+
+                   run           kind    q   independent   constrained       lift
+----------------------------------------------------------------------------------------------------
+    receipt_20260917_a   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260917_a          parts   53     30.1887%     73.5849%  +43.3962%
+    receipt_20260917_a     definition   70      0.0000%      7.1429%   +7.1429%
+
+    receipt_20260917_m   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260917_m          parts   53     32.0755%     73.5849%  +41.5094%
+    receipt_20260917_m     definition   70      0.0000%      7.1429%   +7.1429%
+
+    receipt_20260918_a   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260918_a          parts   53     26.4151%     73.5849%  +47.1698%
+    receipt_20260918_a     definition   70      0.0000%     22.8571%  +22.8571%
+
+    receipt_20260918_m   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260918_m          parts   53     33.9623%     73.5849%  +39.6226%
+    receipt_20260918_m     definition   70      0.0000%     14.2857%  +14.2857%
+
+    receipt_20260919_a   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260919_a          parts   53     30.1887%     75.4717%  +45.2830%
+    receipt_20260919_a     definition   70      0.0000%      4.2857%   +4.2857%
+
+    receipt_20260919_m   edge_account   70      0.0000%      0.0000%   +0.0000%
+    receipt_20260919_m          parts   53     22.6415%     75.4717%  +52.8302%
+    receipt_20260919_m     definition   70      0.0000%      5.7143%   +5.7143%
+
+----------------------------------------------------------------------------------------------------
+          ALL SIX RUNS   edge_account  420      0.0000%      0.0000%   +0.0000%
+          ALL SIX RUNS          parts  318     29.2453%     74.2138%  +44.9686%
+          ALL SIX RUNS     definition  420      0.0000%     10.2381%  +10.2381%
+
+edge_account  force exactly len(focus['contains']) PRESENT slots, top-k by margin
+parts         force exactly the declared count of edges from the supplied `whole`
+definition    force the three fields to one world's declaration triple, argmax over the bank

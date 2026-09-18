@@ -1,5 +1,7 @@
 # ALL_DECLARED_CONSTRAINTS_RESULT — `parts` goes 29.2453% → 74.2138% on declared structure alone, truth-free
 
+> **Audited 2026-09-18 — see `AUDIT_ROUNDS_32_33_RESULT.md` §2.** The numbers reproduce. "Truth-free" means the checker is never called, but `k` is the true answer's size (`53/53`, `70/70`) and a plain reader of the input scores `100.0000%`. `parts` carries a real ranking signal on practised questions (+23.2704 points over the same rules with a random pick). "No signal at all" and "a constraint cannot create evidence" were withdrawn in round 34 (`AUDIT_RESPONSE_AND_SELFLINKS.md`). `+31` per run is NOT LICENSED and, by the owner's ruling of 2026-09-18, is a rule-layer gain, not progress of the machine.
+
 **Round 33. The generalisation of round 32 measured across three more kinds.**
 **$0.00. Pure standard library. No torch, no GPU, no model, no training, no new run.**
 

@@ -1,5 +1,7 @@
 # DECLARED_CONSTRAINT_RESULT — enforcing a constraint the packet already declares lifts `context` from 0.0000% to 32.6190%
 
+> **FLAG_FOR_HUMAN_REVIEW — audit 2026-09-18 (`AUDIT_ROUNDS_32_33_RESULT.md` §2.3).** With the same count rule, a RANDOM choice of three participants scores `163.5/420 = 38.9286%`; the machine's margin ranking scores `137/420 = 32.6190%`. The ranking AUC is `0.466862`, below 0.5 in all six runs, and 78 of the 137 correct answers are forced by the count alone (3 slots, 3 true). The lift below is the count rule plus `setting_ref` held at the truth; it is **not** evidence that the machine's scores rank well. The figure `60.9863%` is true positives over all slots (`977/1602`), not per-bit accuracy. No significance test was run (57 unique questions per run).
+
 **Round 32. The first fix measured to work on the trained machine's own recorded scores.**
 **$0.00. Pure standard library. No torch, no GPU, no model, no training, no new run.**
 

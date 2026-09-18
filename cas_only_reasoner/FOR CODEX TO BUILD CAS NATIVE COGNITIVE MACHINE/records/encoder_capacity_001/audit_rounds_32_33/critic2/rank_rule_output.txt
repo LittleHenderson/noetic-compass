@@ -1,0 +1,21 @@
+loaded 0.1
+receipt_20260917_a [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 39), (('parts', 'margin', 'excl'), 46), (('parts', 'none', 'excl'), 19), (('parts', 'present', 'all'), 23), (('parts', 'present', 'excl'), 40), (('parts', 'q'), 53)]
+receipt_20260917_m [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 39), (('parts', 'margin', 'excl'), 46), (('parts', 'none', 'excl'), 19), (('parts', 'present', 'all'), 22), (('parts', 'present', 'excl'), 41), (('parts', 'q'), 53)]
+receipt_20260918_a [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 39), (('parts', 'margin', 'excl'), 47), (('parts', 'none', 'excl'), 15), (('parts', 'present', 'all'), 26), (('parts', 'present', 'excl'), 44), (('parts', 'q'), 53)]
+receipt_20260918_m [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 39), (('parts', 'margin', 'excl'), 46), (('parts', 'none', 'excl'), 18), (('parts', 'present', 'all'), 26), (('parts', 'present', 'excl'), 44), (('parts', 'q'), 53)]
+receipt_20260919_a [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 40), (('parts', 'margin', 'excl'), 46), (('parts', 'none', 'excl'), 17), (('parts', 'present', 'all'), 27), (('parts', 'present', 'excl'), 44), (('parts', 'q'), 53)]
+receipt_20260919_m [(('edge_account', 'margin', 'all'), 0), (('edge_account', 'margin', 'excl'), 3), (('edge_account', 'none', 'excl'), 3), (('edge_account', 'present', 'all'), 0), (('edge_account', 'present', 'excl'), 0), (('edge_account', 'q'), 70), (('parts', 'margin', 'all'), 40), (('parts', 'margin', 'excl'), 46), (('parts', 'none', 'excl'), 13), (('parts', 'present', 'all'), 27), (('parts', 'present', 'excl'), 44), (('parts', 'q'), 53)]
+POOLED
+('edge_account', 'margin', 'all') 0
+('edge_account', 'margin', 'excl') 18
+('edge_account', 'none', 'excl') 18
+('edge_account', 'present', 'all') 0
+('edge_account', 'present', 'excl') 0
+('edge_account', 'q') 420
+('parts', 'margin', 'all') 236
+('parts', 'margin', 'excl') 277
+('parts', 'none', 'excl') 101
+('parts', 'present', 'all') 151
+('parts', 'present', 'excl') 257
+('parts', 'q') 318
+secs 293.9

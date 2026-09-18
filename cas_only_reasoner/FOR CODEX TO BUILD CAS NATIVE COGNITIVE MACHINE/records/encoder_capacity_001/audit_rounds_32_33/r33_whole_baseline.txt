@@ -1,0 +1,5 @@
+parts question-runs: 318   whole is a candidate slot: 318/318   whole is a true part: 0/318
+  count k + random pick (no scores)                    expected 71.5000/318 = 22.4843%
+  count k + skip the whole + random pick (no scores)   expected 203.0000/318 = 63.8365%
+  count k + machine margin top-k (round 33)            236/318 = 74.2138%
+  count k + skip the whole + machine top-k             277/318 = 87.1069%

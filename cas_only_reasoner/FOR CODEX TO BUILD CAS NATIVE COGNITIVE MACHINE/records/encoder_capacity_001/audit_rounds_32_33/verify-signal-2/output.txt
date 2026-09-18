@@ -1,0 +1,16 @@
+runs ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+anomalies {}
+receipt_20260917_a: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.539381 posAUC=0.564953 offdiagAUC=0.560913 AUC<0.5 25/70 P@k 48/208=23.0769% exact 0/70 randExact=0.6419% thr 646/1029=62.7794% topkbits 709/1029=68.9018% xAUC=0.510546 ties=0 diagInTop=55
+receipt_20260917_m: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.545290 posAUC=0.564953 offdiagAUC=0.563558 AUC<0.5 31/70 P@k 48/208=23.0769% exact 0/70 randExact=0.6419% thr 652/1029=63.3625% topkbits 709/1029=68.9018% xAUC=0.511191 ties=0 diagInTop=52
+receipt_20260918_a: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.573675 posAUC=0.564953 offdiagAUC=0.591650 AUC<0.5 21/70 P@k 44/208=21.1538% exact 0/70 randExact=0.6419% thr 677/1029=65.7920% topkbits 701/1029=68.1244% xAUC=0.549184 ties=0 diagInTop=52
+receipt_20260918_m: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.575232 posAUC=0.564953 offdiagAUC=0.584623 AUC<0.5 18/70 P@k 44/208=21.1538% exact 0/70 randExact=0.6419% thr 682/1029=66.2779% topkbits 701/1029=68.1244% xAUC=0.550923 ties=0 diagInTop=47
+receipt_20260919_a: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.572557 posAUC=0.564953 offdiagAUC=0.573330 AUC<0.5 24/70 P@k 55/208=26.4423% exact 0/70 randExact=0.6419% thr 677/1029=65.7920% topkbits 723/1029=70.2624% xAUC=0.546595 ties=0 diagInTop=47
+receipt_20260919_m: q=70 shapes={'n16k4': 11, 'n9k2': 13, 'n16k3': 46} meanAUC=0.573976 posAUC=0.564953 offdiagAUC=0.576207 AUC<0.5 24/70 P@k 56/208=26.9231% exact 0/70 randExact=0.6419% thr 693/1029=67.3469% topkbits 725/1029=70.4568% xAUC=0.550121 ties=0 diagInTop=45
+POOLED q 420
+meanAUC=0.563352 posAUC=0.564953 offdiagAUC=0.575047 AUC<0.5 143/420
+P@k 295/1248=23.6378%
+exact 0/420 randExact=0.6419% (expected count 2.6958); off-diag random exact=1.5685% (count 6.5879)
+thr 4027/6174=65.2251% topkbits 4268/6174=69.1286% always-absent 4926/6174=79.7862% xAUC=0.535416 diagInTop=298
+unique questions 70; random P@k = 20.5061%
+position ranker (unique qs) P@k 50/208=24.0385% exact 0/70
+true-edge positions (n,index):count [((9, 1), 8), ((9, 2), 5), ((9, 3), 2), ((9, 5), 5), ((9, 6), 3), ((9, 7), 3), ((16, 1), 19), ((16, 2), 17), ((16, 3), 15), ((16, 4), 14), ((16, 6), 19), ((16, 7), 31), ((16, 8), 10), ((16, 9), 10), ((16, 11), 13), ((16, 12), 19), ((16, 13), 6), ((16, 14), 9)]

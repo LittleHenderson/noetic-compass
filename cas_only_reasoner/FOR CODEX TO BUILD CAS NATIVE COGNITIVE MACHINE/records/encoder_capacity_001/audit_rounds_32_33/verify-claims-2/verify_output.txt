@@ -1,0 +1,54 @@
+runs: ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+truth-selection assembled == admissible for every question: OK
+
+[edge_account] questions/run=70 (n, k, |truth|) counts: {(16, 4, 4): 11, (9, 2, 2): 13, (16, 3, 3): 46}
+   k == |truth| in 70/70
+   random-with-k expected exact = 0.6419%
+   random-with-k expected per-bit = 67.8625%
+   truth PRESENT rate = 208/1029 = 20.2138%; chance p^2+(1-p)^2 = 67.7444%; always-ABSENT = 821/1029 = 79.7862%
+
+[parts] questions/run=53 (n, k, |truth|) counts: {(4, 3, 3): 23, (3, 1, 1): 5, (4, 2, 2): 21, (4, 1, 1): 4}
+   k == |truth| in 53/53
+   random-with-k expected exact = 22.4843%
+   random-with-k expected per-bit = 56.9243%
+   truth PRESENT rate = 120/207 = 57.9710%; chance p^2+(1-p)^2 = 51.2707%; always-ABSENT = 87/207 = 42.0290%
+  receipt_20260917_a edge_account q=70 selected_per_bit=646/1029 = 62.7794% argmax_per_bit=646/1029 = 62.7794% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5105 (perm p=0.2674) mean_within_AUC=0.5394 (perm p=0.0550, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=709/1029 = 68.9018% topk_true_found=48/208 = 23.0769%
+  receipt_20260917_a        parts q=53 selected_per_bit=153/207 = 73.9130% argmax_per_bit=153/207 = 73.9130% indep_exact=16/53 = 30.1887%
+                                  pooled_AUC=0.8536 (perm p=0.0005) mean_within_AUC=0.8758 (perm p=0.0005, n_q=53)
+                                  topk_exact=39/53 = 73.5849% topk_per_bit=179/207 = 86.4734% topk_true_found=106/120 = 88.3333%
+  receipt_20260917_m edge_account q=70 selected_per_bit=652/1029 = 63.3625% argmax_per_bit=652/1029 = 63.3625% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5112 (perm p=0.2489) mean_within_AUC=0.5453 (perm p=0.0220, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=709/1029 = 68.9018% topk_true_found=48/208 = 23.0769%
+  receipt_20260917_m        parts q=53 selected_per_bit=152/207 = 73.4300% argmax_per_bit=152/207 = 73.4300% indep_exact=17/53 = 32.0755%
+                                  pooled_AUC=0.8537 (perm p=0.0005) mean_within_AUC=0.8758 (perm p=0.0005, n_q=53)
+                                  topk_exact=39/53 = 73.5849% topk_per_bit=179/207 = 86.4734% topk_true_found=106/120 = 88.3333%
+  receipt_20260918_a edge_account q=70 selected_per_bit=677/1029 = 65.7920% argmax_per_bit=677/1029 = 65.7920% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5492 (perm p=0.0115) mean_within_AUC=0.5737 (perm p=0.0005, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=701/1029 = 68.1244% topk_true_found=44/208 = 21.1538%
+  receipt_20260918_a        parts q=53 selected_per_bit=148/207 = 71.4976% argmax_per_bit=148/207 = 71.4976% indep_exact=14/53 = 26.4151%
+                                  pooled_AUC=0.8683 (perm p=0.0005) mean_within_AUC=0.8443 (perm p=0.0005, n_q=53)
+                                  topk_exact=39/53 = 73.5849% topk_per_bit=177/207 = 85.5072% topk_true_found=105/120 = 87.5000%
+  receipt_20260918_m edge_account q=70 selected_per_bit=682/1029 = 66.2779% argmax_per_bit=682/1029 = 66.2779% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5509 (perm p=0.0075) mean_within_AUC=0.5752 (perm p=0.0005, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=701/1029 = 68.1244% topk_true_found=44/208 = 21.1538%
+  receipt_20260918_m        parts q=53 selected_per_bit=153/207 = 73.9130% argmax_per_bit=153/207 = 73.9130% indep_exact=18/53 = 33.9623%
+                                  pooled_AUC=0.8696 (perm p=0.0005) mean_within_AUC=0.8396 (perm p=0.0005, n_q=53)
+                                  topk_exact=39/53 = 73.5849% topk_per_bit=177/207 = 85.5072% topk_true_found=105/120 = 87.5000%
+  receipt_20260919_a edge_account q=70 selected_per_bit=677/1029 = 65.7920% argmax_per_bit=677/1029 = 65.7920% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5466 (perm p=0.0120) mean_within_AUC=0.5726 (perm p=0.0005, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=723/1029 = 70.2624% topk_true_found=55/208 = 26.4423%
+  receipt_20260919_a        parts q=53 selected_per_bit=151/207 = 72.9469% argmax_per_bit=151/207 = 72.9469% indep_exact=16/53 = 30.1887%
+                                  pooled_AUC=0.8701 (perm p=0.0005) mean_within_AUC=0.8852 (perm p=0.0005, n_q=53)
+                                  topk_exact=40/53 = 75.4717% topk_per_bit=181/207 = 87.4396% topk_true_found=107/120 = 89.1667%
+  receipt_20260919_m edge_account q=70 selected_per_bit=693/1029 = 67.3469% argmax_per_bit=693/1029 = 67.3469% indep_exact=0/70 = 0.0000%
+                                  pooled_AUC=0.5501 (perm p=0.0085) mean_within_AUC=0.5740 (perm p=0.0015, n_q=70)
+                                  topk_exact=0/70 = 0.0000% topk_per_bit=725/1029 = 70.4568% topk_true_found=56/208 = 26.9231%
+  receipt_20260919_m        parts q=53 selected_per_bit=146/207 = 70.5314% argmax_per_bit=146/207 = 70.5314% indep_exact=12/53 = 22.6415%
+                                  pooled_AUC=0.8711 (perm p=0.0005) mean_within_AUC=0.8852 (perm p=0.0005, n_q=53)
+                                  topk_exact=40/53 = 75.4717% topk_per_bit=181/207 = 87.4396% topk_true_found=107/120 = 89.1667%
+
+POOLED six runs edge_account: topk_per_bit=4268/6174 = 69.1286% selected_per_bit=4027/6174 = 65.2251% topk_true_found=295/1248 = 23.6378%
+
+POOLED six runs parts: topk_per_bit=1074/1242 = 86.4734% selected_per_bit=903/1242 = 72.7053% topk_true_found=636/720 = 88.3333%

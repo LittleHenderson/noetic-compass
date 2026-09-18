@@ -1,0 +1,353 @@
+#################### signal
+SUMMARY: I measured how well the machine's recorded margins (PRESENT score minus ABSENT score) sort the true slots above the false ones inside each question. I did this for all six recorded runs. Script: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/signal/signal_audit.py. Output: .../r33_audit/signal/signal_audit_output.txt. All numbers below are mine unless marked as the record's.
+
+Plain summary:
+- parts: the ranking signal is real and strong. Pooled within-question AUC is 0.867662 (0.5 means no signal). The round-33 parts result stands, and it comes from ranking, not from the constraint alone. With the same true count k but a random order, the expected exact rate is only 22.4843%, which is below the as-is 29.2453%.
+- edge_account: there is almost no ranking signal. Pooled AUC is 0.563352, and ranking slots by their position in the plan gives 0.564953 with no model at all. So "no signal" is roughly right, but "no signal at all" slightly overstates it. The chat summary's "below chance in four of six runs" is wrong. The bits are below chance in all six runs, and the record itself (ALL_DECLARED_CONSTRAINTS_RESULT.md line 64-65) says "all six".
+- context (round 32), the biggest problem: the margins rank the true participants WORSE than random. Pooled AUC is 0.466862. The 32.6190% exact score equals 137/420, which is 78 questions that are automatically right (3 slots, all 3 true) plus 59/342 on the 4-slot questions. A random order would get 25.0000% on the 4-slot questions, for 163.5/420 = 38.9286% in total. So round 32's lift comes entirely from the cardinality rule and those automatic questions. None of it comes from the ranking. That breaks claim 5's thesis ("at chance as thresholds, useful as rankings") for the very kind it was built on. Round 32's "60.9863%" number is also mislabelled: it is 977/1602, the true members found in the top 3 divided by all slots. It is not per-bit accuracy, and it is not "the absent node lands outside the top three".
+
+Claim status: parts ranking signal REAL (measured). edge_account "no signal at all" OVERSTATED but close. "Four of six" REFUTED (it is six of six). Claim 5 REFUTED for context: rankings there are below random. Claim 5 holds for parts only.
+--- signal-1 [REFUTED] Claim 5 / round 32: context's lift 0.0000% -> 32.6190% shows the bits are 'useful as rankings', and a declared constraint turns the ranking into answers
+   EVID: Measured by me. Context participant margins rank true members BELOW random. Pooled mean within-question AUC is 0.466862 over 342 questions. Per run: 0.438596, 0.456140, 0.479532, 0.491228, 0.461988, 0.473684. All six are under 0.5. AUC<0.5 in 136/342 questions. Slot shapes are n=3,k=3 for 78 questions (13 per run) and n=4,k=3 for 342 (57 per run). On the 4-slot questions, the top-3 by margin is the exact true set in 59/342 = 17.2515%. A random order would get 25.0000%. Per run: 13, 16, 10, 10, 5, 5 of 57. Precision@k is 743/1026 = 72.4172%, against a random 75.0000%. Round 32's 32.6190% = 137/420 = 78 automatic (n=3, k=3: every slot forced PRESENT) + 59. A random order with the same k gives (78 + 85.5)/420 = 163.5/420 = 38.9286%, which BEATS the machine's ranking. Across questions, context's AUC is 0.450666.
+   HOW: For each question, I read the recorded final_predictions scores (PRESENT minus ABSENT) on field 'participant'. I got the truth from checker.derive_target and computed pairwise AUC (ties 0.5). The 4-slot questions (random = 1/C(4,3)) are kept separate from the 3-slot ones, where AUC is undefined and top-3 cannot be wrong. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/signal/signal_audit.py
+--- signal-2 [CONFIRMED] Claims 1 and 4: parts 'had a real signal', and the constraint turned it into answers (29.2453% -> 74.2138%)
+   EVID: Measured by me. Pooled mean within-question AUC is 0.867662 over 318 questions. Per run: 0.875786, 0.875786, 0.844340, 0.839623, 0.885220, 0.885220. AUC=1 in 39-40 of 53 per run. AUC<0.5 in 24/318. Precision@k is 636/720 = 88.3333%, against a random k/n of 62.8472%. Top-k exact is 236/318 = 74.2138%, which reproduces the record, and per run 39/53 = 73.5849% or 40/53 = 75.4717%. Random-order top-k exact would be only 22.4843%, below the as-is 29.2453%. So the lift is ranking evidence, not the cardinality alone. Ranking slots by their plan order gives AUC 0.385220, so the margins are not a slot-order artifact. Across questions, parts' AUC is 0.863176. The margins separate true from false even without a per-question k; only the threshold is misplaced. Checked against the best constant in bits_read.txt (numbers from the record's file): per-bit 73.9130/73.4300/71.4976/73.9130/72.9469/70.5314% against always-PRESENT 57.9710% (the best constant) and chance 51.2707%. That beats the best constant by +12.5604 to +15.9420 points in all six runs.
+   HOW: The same script, on field 'node'. I checked the per-bit numbers by reading records/encoder_capacity_001/bits_read.txt. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/signal/signal_audit.py
+--- signal-3 [OVERSTATED] Claim 4: edge_account's margins 'carry no signal at all'
+   EVID: Measured by me. As a ranking there is a weak signal above 0.5, and it is no better than slot order. Pooled mean within-question AUC is 0.563352 over 420 questions. Per run: 0.539381, 0.545290, 0.573675, 0.575232, 0.572557, 0.573976. AUC<0.5 in 143/420. Ranking slots by their plan position alone, with no model, gives AUC 0.564953. Precision@k is 295/1248 = 23.6378%, against a random k/n of 20.5061%. Top-k exact is 0/420, where a random order would be expected to get 0.6419% (about 2.7 questions). Slot shapes: n=16,k=3 (46 per run), n=16,k=4 (11 per run), n=9,k=2 (13 per run). Per-bit under top-k is 4268/6174 = 69.1286%. Per-bit with a threshold (margin>0) is 4027/6174 = 65.2251%. Always-ABSENT scores 79.7862%. Across questions, the AUC is 0.535416. The honest wording: no signal beyond a trivial position ranker. That is not literally 'no signal at all'.
+   HOW: The same script, on field 'edge', with directed (source, target) truth pairs as in measure_bits_read.true_symbols. The position baseline ranks slots by their index in the compiled plan. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/signal/signal_audit.py
+--- signal-4 [PARTLY_TRUE] Claim 4 figures: edge_account at 62.7794%-67.3469% per bit against 67.7444% chance, 'below chance in four of six runs'
+   EVID: From the record's bits_read.txt, read by me. edge_account per-bit (selected): 62.7794, 63.3625, 65.7920, 66.2779, 65.7920, 67.3469%. Chance is 67.7444% and the best constant (always-ABSENT) is 79.7862% in every run. All SIX runs are below chance, not four. Against the best constant the gaps are -17.0068, -16.4237, -13.9942, -13.5083, -13.9942, -12.4393 points. My own threshold recount gives 646/1029, 652/1029, 677/1029, 682/1029, 677/1029, 693/1029, the same numbers. The committed record (ALL_DECLARED_CONSTRAINTS_RESULT.md lines 64-65) correctly says 'below chance in all six runs'. Only the chat summary says 'four of six'. The range and the chance value are right. The count in the summary is wrong.
+   HOW: I read records/encoder_capacity_001/bits_read.txt and counted runs below 67.7444%. I cross-checked with the per-bit threshold counts from my script and grepped the committed record text. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/signal/signal_audit.py
+   OBS: Round 32's figure '60.9863%' (DECLARED_CONSTRAINT_RESULT.md section 4: 'the truly-absent node lands outside the top three 60.9863% of the time instead of 40.0125%') is mislabelled. It equals 977/1602 = (78x3 + 743)/1602: true members in the top-k divided by ALL participant slots. It ignores correct ABSENT calls, so it is neither per-bit accuracy nor the absent node's placement. Measured by me: the absent node ranks last in 59/342 = 17.2515% of 4-slot questions, against a random 25.0000%. True per-bit accuracy under top-3 is 1036/1602 = 64.6692%, below always-PRESENT at 78.6517%. On the 4-slot questions alone it is 802/1368 = 58.6257%, below the random-order expectation of 62.5000%.
+   OBS: Round 32 says the context threshold 'over-asserts PRESENT'. The direction is backwards. Counted by me from the recorded scores (margin>0): the machine asserts PRESENT on only 88-99 of 267 participant slots per run (pooled 559/1602), while the truth PRESENT rate is 1260/1602 = 78.6517%. It under-asserts PRESENT.
+   OBS: Every question in context has true k=3 (420/420). So round 32's k, which comes from len(truth['participants']), agrees with the declared PRIMARY_AUTHORED_LABELS_FIRST_THREE rule here. The truth assist in round 32 is setting_ref alone. But 78/420 context questions have only 3 participant slots, so the 3-of-3 constraint answers them without reading any score.
+   OBS: The rule 'a constraint can reorder evidence; it cannot create it' fits parts and edge_account. Context contradicts it in the other direction: there the constraint produced all 137 correct answers on its own (78 automatic + 59 from a ranking that is worse than random). So context's +32.6190 is a measure of the constraint plus setting_ref held at the truth. It is not a measure of the machine's evidence. It should not stand as the first side of the 'measured on both sides' rule.
+   OBS: Not audited here (outside the 'signal' label): the truth-free claim, the +31 exam arithmetic, and the definition joint-candidate claim. One flag for another auditor: assemble_answer resolves 'whole' through packet['record']['source_world_id'] (slots.py around line 316). The definition arm maps whole through each candidate world's own node aliases. Check that these agree.
+   >> VERIFY signal-1: refuted=False reproduced=True
+      nums: All numbers below were measured by me with fresh code (verify.py), from the recorded final_predictions.json scores (PRESENT logit minus ABSENT logit on the 'participant' slots) and truth from checker.derive_target. The context question is picked by the final_scoring.json kind. Six runs x 70 context questions = 420. Every question has exactly one admissible answer (nadm=1 in 420/420).
+- Slot shapes: n=3,k=3 is 78 (13 per run). n=4,k=3 is 342 (57 per run). No other shapes.
+- Pooled mean within-question AUC over the 342 four-slot questions (exact fractions, ties count 0.5): 0.466862. Per run: 0.438596, 0.456140, 0.479532, 0.491228, 0.461988, 0.473684. All six are below 0.5.
+- AUC < 0.5 in 136/342. Where the one absent node lands in the margin ranking (rank 0 = highest): rank0 128, rank1 8, rank2 147, rank3 59. That gives 128+8 = 136, which matches.
+- Top-3 by margin is the exact true set in 59/342 = 17.2515% (rank3 count). A random choice gets 25.0000%. Per run: 13, 16, 10, 10, 5, 5 of 57.
+- Precision@k: 743/1026 = 72.4172%. Random: 75.0000%.
+- Pooled cross-question AUC: 0.450666.
+- Exact answers, re-assembled with the project's own slots.assemble_answer (setting_ref held at the truth, top-3 forced): 137/420 = 32.6190%. Per run: 26, 29, 23, 23, 18, 18 of 70 (37.1429%, 41.4286%, 32.8571%, 32.8571%, 25.7143%, 25.7143%). This equals round 32's recorded figures. The split is 78 automatic (the n=3 questions: 78/78 correct) + 59.
+- Random baseline, computed by listing every size-3 subset and assembling each one: 163.5/420 = 38.9286% (27.25/70 per run). That beats the machine's 137/420 pooled. It also beats 4 of the 6 runs individually. Runs 20260917_a (26) and 20260917_m (29) beat 27.25.
+- Extra check (mine): ranking by the PRESENT logit alone is worse still. Its pooled within-question AUC is 0.268031.
+- Boundary ties at the rank-3/rank-4 cut: 0.
+      disc: None. Every number in the auditor's finding matches mine exactly. The one addition is mine: the absent node is ranked first by margin in 128/342 questions, so context's margins are anti-correlated with the truth, not merely uninformative. And the "below random" wording has no significance test behind it, because the six runs share the same 57 questions each.
+      notes: Verdict: the auditor's finding holds. I set refuted=false. Every number the auditor gave matches my independent re-measurement exactly: 0.466862, the six per-run AUCs, 136/342, 78 and 342, 59/342 = 17.2515%, 13/16/10/10/5/5, 743/1026 = 72.4172%, 137 = 78+59, 163.5/420 = 38.9286%, and 0.450666.
+
+Things I checked that could have broken the finding. None did.
+(1) Slot mapping. Every true participant has its own participant slot. Slot coordinates are unique. Every participant slot has exactly the symbols {PRESENT, ABSENT}. So the truth labels line up with the slots.
+(2) Eligibility. I picked context questions by the final_scoring kind. The auditor picked them by the packet's query kind. Both give 70 per run.
+(3) Combinatorics. Instead of assuming the random rate is 1/C(4,3), I counted it: I assembled every size-3 subset through slots.assemble_answer and compared each against the admissible set. The result is exactly 163.5/420. Only one answer is admissible per question, so no second answer rescues a wrong top-3.
+(4) Artifacts. My assembled top-3 count reproduces round 32's recorded per-run results exactly (declared_cardinality.txt). So the auditor and I read the same scores the record read.
+(5) Alternative ranking. Ranking by the PRESENT logit alone does not rescue claim 5. It is worse (AUC 0.268031).
+
+Caveats on the auditor's wording. These do not overturn the finding.
+(a) "Below random" is a point estimate. It was not tested for significance. The six runs score the same 57 questions each, so they are not six independent samples. The safe statement: the margin ranking does NOT beat random for context, and top-3 exact is below the random rate in the pooled total and in 4 of 6 runs.
+(b) The absent node is ranked highest by margin in 128/342 = 37.4269% of questions, above the random 25%. So the margins carry some anti-signal, not zero. This does not support claim 5. Round 32's +32.6190% lift comes from the cardinality rule itself: the 78 three-node questions are correct automatically, and a random size-3 choice would do better on the rest. It does not come from the bits being "useful as rankings" for context.
+
+Scope: claim 5's "useful as rankings" is REFUTED for context only. For parts, the auditor's own output shows within-question AUC 0.867662 and top-k exact 236/318 = 74.2138% against a random 22.4843%. That is a real ranking signal. I did not re-measure parts.
+
+Files: script C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-signal-0/verify.py. Output: .../verify-signal-0/verify_output.txt. I made no repo changes and ran no git writes.
+   >> VERIFY signal-2: refuted=False reproduced=True
+      nums: All numbers below were measured by me with fresh code on the six recorded runs (parts, field 'node', 53 questions per run, 318 pooled).
+
+Question shapes, the same in every run: n4k3 = 23, n4k2 = 21, n4k1 = 4, n3k1 = 5. No question has k=0 or k=n, so all 318 are evaluated. The declared k (edges in focus['contains'] whose source is the whole) equals the true answer size in 318/318 questions (0 mismatches). Every question has exactly 1 admissible answer.
+
+- Mean within-question AUC, pooled: 0.867662 over 318. Per run: 0.875786, 0.875786, 0.844340, 0.839623, 0.885220, 0.885220. Matches the auditor.
+- AUC = 1: 39, 39, 39, 39, 40, 40 of 53 (236/318 pooled). AUC < 0.5: 24/318. Matches.
+- Precision@k: 636/720 = 88.3333%. Random k/n expectation: 62.8472%. Matches.
+- Top-k exact: 236/318 = 74.2138%. Per run: 39/53 = 73.5849% (x4) and 40/53 = 75.4717% (x2). I rebuilt each answer with slots.assemble_answer and got the same 236/318. Boundary ties at rank k: 0.
+- Scores used as-is: 93/318 = 29.2453% exact. Per-bit: 903/1242. Per run: 153, 152, 148, 153, 151, 146 of 207 = 73.9130%, 73.4300%, 71.4976%, 73.9130%, 72.9469%, 70.5314%. This matches bits_read.txt.
+- Random-order top-k exact (expected): 22.4843%. Matches.
+- Slot-position AUC (earlier slot ranked higher): 0.385220. Matches. Its mirror, later slot ranked higher, is 0.614780.
+- Cross-question AUC: 0.863176. Matches.
+- Best constant, from the record's file: always-PRESENT 57.9710%, chance 51.2707%. The machine beats the best constant by +12.5604 to +15.9420 points. Matches.
+
+What the auditor did not measure (my numbers):
+- The supplied `whole` is one of the candidate slots in 318/318 questions. It is never a true part (0/318).
+- A truth-free rule with no scores at all: never pick the whole, then pick k of the rest at random. Its expected exact rate is 203/318 = 63.8365%.
+- In 138/318 questions (the n4k3 cases), removing the whole leaves exactly k nodes. Those answers are fully fixed with no scores. Top-k on the margins gets only 114/138 of them, because it puts the whole inside the top k in 60/318 questions overall.
+- The margins do carry signal beyond this rule. In the 180 questions where the whole is excluded and the answer is still not fixed:
+  - AUC among the non-whole nodes is 103/120 = 0.858333.
+  - AUC = 1 in 139/180; AUC < 0.5 in 10/180.
+  - Top-k exact is 122/180. Random would give 65/180.
+- Top-k on the margins with the whole excluded: 277/318 = 87.1069%.
+- Using plan order alone (last k slots): 102/318 = 32.0755%. That beats the as-is decoder's 93/318. First k slots: 54/318 = 16.9811%.
+      disc: No number differs. Every figure in signal-2 reproduced exactly: AUC 0.867662; per-run AUCs; AUC=1 counts; 24/318 below 0.5; 636/720 = 88.3333% against 62.8472%; 236/318 = 74.2138%; 39/53 and 40/53; 22.4843%; position AUC 0.385220; cross-question AUC 0.863176; +12.5604 to +15.9420.
+
+One inference is overstated. The auditor wrote "So the lift is ranking evidence, not the cardinality alone." That compares only against random ordering with k known (22.4843%). It leaves out a second truth-free rule that costs nothing: the supplied `whole` is always a candidate slot and is never its own part (0/318).
+
+k plus "not the whole" gives an expected 203/318 = 63.8365% with no scores at all. That covers 110 of the 143 questions of lift (34.5912 of the 44.9686 points, 76.92% of it). The margins add only 33/318 = 10.3774 points above that baseline.
+
+So the ranking signal is REAL: AUC 0.858333 on the non-trivial questions, even with the whole excluded. But most of the claimed +44.9686 lift is structure, not evidence. Under the owner's own mechanism-free-baseline rule, a win is uninterpretable until it beats the cheapest method without the mechanism. This one does beat that method, but only by about 10.38 points.
+
+One more point on the auditor's position check. AUC 0.385220 means reversed plan order reaches AUC 0.614780. Taking the last k slots by plan order gives 102/318 = 32.0755%, which beats the as-is 29.2453%. This does not make the margins an order artifact (0.8677 is well above 0.6148). But plan order does carry a weak signal of its own.
+      notes: Verdict: the finding holds. Refuted = false. All the auditor's numbers reproduce exactly from independent code. I used exact fractions for AUC and rebuilt answers through slots.assemble_answer. I found no slot-mapping error. Parts slots map one-to-one to node refs via coordinates[0]. The eligibility rule is right: none of the 318 questions is all-true or all-false. The combinatorics are right: 1/C(n,k) and k/n.
+
+The caveat to carry forward: the claim "the constraint turned ranking evidence into answers (29.2453% -> 74.2138%)" is only about 23% ranking evidence. The rest comes from two truth-free facts: the declared k, and "the whole is not its own part." Those two alone give 63.8365%. Declared k plus excluding the whole plus top-k on the margins gives 87.1069%.
+
+A reminder from the prior audit still applies. The packet's focus['contains'] holds the parts answer outright. So a one-line reading of the packet scores 100%. "Truth-free" is literally true, but it is not a sign of capability.
+
+Scripts and outputs are in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-signal-1/:
+- verify.py and verify_output.txt: the direct re-measure.
+- verify_whole.py and verify_whole_output.txt: the whole-exclusion baseline.
+
+No repo file was changed.
+   >> VERIFY signal-3: refuted=False reproduced=True
+      nums: All numbers below were measured by me (verify-signal-2) with fresh code. Truth sets come from checker.derive_target, as directed (source, target) pairs. There are 70 unique edge_account questions and six runs, so 420 question-runs. Every number matches the auditor exactly.
+- Slot shapes per run: n=16,k=3 in 46 questions; n=16,k=4 in 11; n=9,k=2 in 13.
+- Mean within-question AUC per run: 0.539381, 0.545290, 0.573675, 0.575232, 0.572557, 0.573976. Pooled: 0.563352.
+- AUC<0.5 in 143/420 (per run: 25, 31, 21, 18, 24, 24 of 70).
+- Plan-position ranker AUC: 0.564953 (the same in every run).
+- Precision@k: 295/1248 = 23.6378%. Random k/n = 20.5061%.
+- Exact set under top-k: 0/420 = 0.0000%. Random-ranking expectation = 0.6419%, an expected 2.6958 questions.
+- Per bit under top-k: 4268/6174 = 69.1286%.
+- Per bit with a threshold (margin>0): 4027/6174 = 65.2251% (per run: 62.7794%, 63.3625%, 65.7920%, 66.2779%, 65.7920%, 67.3469%).
+- Always-ABSENT: 4926/6174 = 79.7862%.
+- Cross-question AUC: 0.535416.
+- Boundary ties at the k-th rank: 0 in every run.
+Extra measurements, also by me:
+- The slot set is all n^2 ordered pairs, self-loops included. No true edge is a self-loop.
+- The margin ranker's top-k still puts 298 of 1248 picks on self-loop slots (23.8782%). Those picks can never be correct.
+- Random choice among off-diagonal slots only would get 1.5685% exact, an expected 6.5879 of 420. The margin ranker gets 0/420.
+- AUC restricted to off-diagonal slots: 0.575047 pooled.
+- The position ranker's top-k gets precision@k 50/208 = 24.0385% on the 70 unique questions. The model gets 295/1248 = 23.6378%.
+      disc: No number differs from the auditor. The only difference is emphasis:
+- Per run, the model's AUC beats the position ranker in 4 of 6 runs. Only the pooled figure is equal or slightly below.
+- The auditor did not mention the self-loop issue. That makes the round-33 wording "no signal" closer to right in practice: top-k exact is 0/420, while a random choice over off-diagonal slots would be expected to get 6.5879.
+      notes: Verdict: the finding holds and I could not refute it. Every number the auditor reported reproduces exactly from independent code, with 4-decimal agreement and the same raw counts. I found no slot-mapping errors:
+- Every question-run's score keys match the plan's slot_ids exactly.
+- Each question has exactly one admissible answer.
+- Every true pair is present in the slot set.
+- len(focus["contains"]) equals the true edge count in all 420.
+- The recorded independent decisions equal the per-slot argmax (ties go to ABSENT) in all 420.
+The combinatorics check out. The expected random exact-match rate is the sum of 1/C(n,k) over questions, divided by 420, which gives 0.6419%. The random precision@k is the sum of k^2/n over the sum of k, which gives 20.5061%.
+
+Two nuances. Neither overturns the finding.
+(1) "No better than slot order" is true for the pooled numbers: 0.563352 against 0.564953. Per run it is mixed. The model's AUC is above the position ranker's in 4 of 6 runs (0.573675, 0.575232, 0.572557, 0.573976 against 0.564953) and below it in 2 (0.539381, 0.545290).
+(2) The picture is, if anything, worse for the round-33 claim than the auditor said:
+- The inventory includes self-loop slots that are never true, yet the ranker spends 298 of 1248 top-k picks on them.
+- A truth-free rule that just drops self-loops and picks at random would be expected to get 6.5879 of 420 exact.
+- The ranker gets 0/420. That is below even the fully random expectation of 2.6958.
+So "no signal at all" is literally overstated, because there is a weak ranking signal with AUC about 0.56. But that signal is not usable. It is no better than a trivial position or structure prior, and exact-set recovery under top-k is below random.
+
+Scope limit: I did not re-run the other kinds or claims. The script prints only edge_account, and the auditor's parts and context numbers were not re-checked here.
+
+All work was read-only. No repo files were touched and no model was run.
+
+Script: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-signal-2/verify.py
+Output: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-signal-2/output.txt
+   >> VERIFY signal-4: refuted=False reproduced=True
+      nums: All numbers below are measured by me (verify-signal-3) from the six final_predictions.json files. Truth was read straight from focus["contains"], and it matched checker.derive_target on every question (truth_mismatch = 0 in all runs). edge_account has 70 questions and 1029 bits per run, of which 208 are true PRESENT. Per-bit accuracy, and it is the same whether I read the submitted answer, decisions.selected, or margin>0: 646/1029 = 62.7794% (17_a), 652/1029 = 63.3625% (17_m), 677/1029 = 65.7920% (18_a), 682/1029 = 66.2779% (18_m), 677/1029 = 65.7920% (19_a), 693/1029 = 67.3469% (19_m). The chance rate p^2+(1-p)^2 is 67.7444% and the best constant (always-ABSENT) is 79.7862%. Gaps to the constant: -17.0068, -16.4237, -13.9942, -13.5083, -13.9942, -12.4393. Runs below 67.7444%: 6/6. Exact answers: 0/70 in every run. parts has 53 questions and 207 bits per run, 120 true PRESENT: 153/207 = 73.9130%, 152/207 = 73.4300%, 148/207 = 71.4976%, 153/207 = 73.9130%, 151/207 = 72.9469%, 146/207 = 70.5314%. Its chance rate is 51.2707%. Extra baseline, measured by me: a chance rate that uses the machine's own PRESENT rate (p*q + (1-p)(1-q)). For edge_account the machine said PRESENT on 323, 315, 292, 293, 308, 288 of 1029 bits. That gives a baseline of 61.0866%, 61.5498%, 62.8813%, 62.8234%, 61.9550%, 63.1129%. The machine scores ABOVE this baseline in 6/6 runs, by +1.6928, +1.8127, +2.9107, +3.4545, +3.8370, +4.2341 points.
+      disc: No number differs. The auditor's range, chance rate, gaps and per-run counts match mine exactly. One claim about where the text lives is WRONG. The auditor said "the committed record correctly says 'below chance in all six runs'; only the chat summary says 'four of six'". That is false. In commit b9457909, ALL_DECLARED_CONSTRAINTS_RESULT.md line 65 says "below chance in four of six runs". The commit message says it too (message line 25). The words "all six" exist only as an UNCOMMITTED edit in the working tree, per `git diff b9457909`. HEAD is still b9457909. So the wrong count went into the committed record and the commit message, not just the chat summary. It has not yet been fixed in any commit.
+      notes: Verdict: the finding holds. All six runs are below chance, not four; my count is 6/6. So the count of four in the round-33 claim is wrong, and the auditor is right about that. The auditor was wrong about one thing: where the error lives. The committed record at b9457909 also says "four of six", and so does the commit message. Only an uncommitted working-tree edit says "all six". A second issue goes beyond the finding, and it bears on claim 4 ("no signal at all"). The chance rate p^2+(1-p)^2 assumes a random guesser that says PRESENT at the TRUE rate (20.2138%). This machine says PRESENT far more often, on 27.9883% to 31.3897% of bits. A random guesser that says PRESENT at the machine's own rate would score 61.0866% to 63.1129%. The machine beats that in all 6 runs, by +1.6928 to +4.2341 points. So "below chance" depends on which chance rate you pick. The bits sit below the best constant (-12.4393 to -17.0068), but they are not shown to carry zero ranking signal. What IS measured is that the constraint gives 0 exact answers. "No signal at all" is overstated; "too weak for the constraint to produce any exact answer" is supported. Nothing in the repo was modified. Pure stdlib plus the project's pure modules. Output: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-signal-3/verify_bits_output.txt
+#################### claims
+SUMMARY: I audited the round-33 prose claims against the code, the checker and the six recorded runs. Everything was read-only and standard-library only. Two of my scripts are in C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/claims/: audit_claims.py produces audit_claims_output.txt, and audit_context_r32.py produces audit_context_r32_output.txt.
+
+The record's headline numbers are right. I recomputed them myself: parts is 236/318 = 74.2138% (39/53 in four runs, 40/53 in two), definition is 43/420 = 10.2381%, and edge_account is 0/420. The +31.00 per run is exact (186/6), and so is 226.5/564. Commit b9457909 touched only CHANGELOG.md, records/MACHINE_STATE_001/STATUS.md and three new files in records/encoder_capacity_001. Nothing under test changed.
+
+What the numbers MEAN is overstated in four ways:
+(1) "Truth-free" is true only in the narrow sense that the decoders never call the checker. They do read the answer. The number k they enforce is literally the size of the answer. It is computed from the same focus["contains"] list, with the same source==whole filter, that checker._derive_values uses. The machine's input packet carries every world in full. A decoder that just reads the packet (no checker) gets 53/53 on parts, 70/70 on edge_account, 70/70 on definition and 70/70 on context.
+(2) "Bits at chance as thresholds, useful as rankings" is not true of any single kind. For context (round 32), the scores rank the participants WORSE than a coin: AUC 0.4329-0.4662. The top-3 constraint scores 137/420 = 32.6190%, below the 38.9286% that a RANDOM ranking with the same constraint would get. For parts, the ranking signal is real (AUC 0.8536-0.8711, against 22.4843% for random-with-k), but parts was never at chance as thresholds.
+(3) edge_account does not carry "no signal at all". It carries a weak one (AUC 0.5105-0.5509, above 0.5 in six of six runs). Its exact-match zero is what you would expect for 16-slot answers even with some signal. It is below chance in six of six runs, not four.
+(4) The record, STATUS and CHANGELOG present 34.66% -> 40.16% as the "largest concrete movement on the objective so far" while also labelling it NOT LICENSED. The record also uses one status word outside the allowed list: OPEN.
+--- F1-truth-free-is-answer-reading [PARTLY_TRUE] Claim 2: the arms are 'truth-free' - 'the cardinalities are read from the packet the machine already receives; definition's candidates are the world bank. Nothing was given the answer.'
+   EVID: Measured by me: k equals the true answer's size in 53/53 = 100.0000% of parts questions and 70/70 = 100.0000% of edge_account questions. That means k is the exact size of the answer, not an outside rule. Script lines 108 and 112 compute k from focus["contains"]. checker._derive_values (checker.py lines 184-191) builds the parts answer as sorted(b for a,b in _edges(focus) if a == whole), and the edge_account answer as all of _edges(focus). _edges reads world["contains"], the same list. course.model_packet (course.py line 290) hands the model _public(bank, ...), which is every world in the bank, including the focus world's full 'contains', 'declared_whole' and 'declarations'. A decoder that just reads the packet, with no checker, gets 53/53 on parts, 70/70 on edge_account, 70/70 on definition and 70/70 on context (all 100.0000%). The declaration named for definition, FOCUS_WORLD_DECLARATION_IDENTITY, says the answer is the FOCUS world's triple. The query carries focus_world_id in 70/70 questions. Enforcing that declaration in full therefore gives 70/70. The round-33 arm drops the focus part and takes the best of 62.7143 legal bank worlds on average (64 in the bank). A uniform pick among those would score 1.5971%; the arm scores 10.2381% = 43/420. Separately, validate_model_packet's docstring says 'No semantic teacher or graph solving at inference'. Filtering contains by source==whole at decode time is exactly graph reading. So putting this k into score_decisions would conflict with the decoder's own stated contract. Round 32's script goes further: it takes k from the checker's output, k = len(truth["participants"]).
+   HOW: Read the script, checker.py, course.py and slots.py. Ran my own course-only pass over the 564 recorded record ids (identical in all six runs): compared k with the size of the true answer, and scored a packet-reading decoder against checker.derive_target's admissible set. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/claims/audit_claims.py
+--- F2-rankings-rule-fails-on-context [REFUTED] Claim 5: 'the bits are at chance as thresholds and useful as rankings, and a declared constraint converts one into the other'. Also the claim that round 32's context result (0.0000% -> 32.6190%) is declared structure 'of the same sort' as round 33's.
+   EVID: All numbers measured by me. CONTEXT (round 32): the scores rank true participants BELOW false ones. Pooled AUC is 0.4351, 0.4329, 0.4518, 0.4510, 0.4662 and 0.4627 across the six runs, all below 0.5. (AUC = the chance that a random true participant is scored above a random false one; 0.5 means no ranking signal.) Every question has k = 3: 13 questions have 3 slots and 57 have 4. A RANDOM ranking with the top-3 rule would score 27.2500/70 = 38.9286% exact. The recorded top-3 scores 137/420 = 32.6190%, which is below that random figure. The 13 three-slot questions are answered by k alone (13/70 = 18.5714%), which covers 78 of the 137 correct answers. On the 342 four-slot questions the scores get 59/342 = 17.2515%, below the 25% a coin would get. So context's entire lift comes from the constraint; the scores carry no useful ranking there. Round 32's 'bits top3' figure, 977/1602 = 60.9863%, counts only true positives. The real per-bit accuracy after top-3 is 1036/1602 = 64.6692%, still below the record's own 66.4184% chance rate. PARTS: here the ranking signal is real. AUC is 0.8536-0.8711, and top-k gets 236/318 = 74.2138% against 22.4843% for random-with-k. But parts was NOT at chance as thresholds: the record's own figures are 70.5314%-73.9130% per bit against 51.2707% chance. So the 'at chance as thresholds, useful as rankings' pattern holds for no kind. Round 32's k is a fixed number (3 for every question). Round 33's k changes per question (1, 2 or 3 for parts; 2, 3 or 4 for edge_account) and is the size of that question's answer. Calling them 'the same sort' is not accurate.
+   HOW: Recomputed round 32's top-k on the recorded scores, computed the random-with-k expectation analytically (average of 1/C(n,k)), and computed pooled AUC of the PRESENT-minus-ABSENT margin, per run, for context, parts and edge_account. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/claims/audit_context_r32.py
+--- F3-edge-account-negative-misexplained [OVERSTATED] Claims 4 and 7: edge_account's margins 'carry no signal at all' and are 'below chance in four of six runs'; and round 30's 77.8426% per slot means 'the ingredients exist'.
+   EVID: The record's own bits_read.txt shows 62.7794%, 63.3625%, 65.7920%, 66.2779%, 65.7920% and 67.3469% against 67.7444% chance. That is below chance in SIX of six runs, not four. Measured by me: the scores do rank weakly. Pooled AUC is 0.5105, 0.5112, 0.5492, 0.5509, 0.5466 and 0.5501, and the mean within-question AUC is 0.5394-0.5752. Both are above 0.5 in six of six runs. That is weak signal, not 'no signal at all'. The exact-match zero was expected anyway. Questions have 16 slots with k = 3 or 4, or 9 slots with k = 2, so random-with-k gets only 0.6419% exact. Top-k did raise per-bit accuracy to 709/1029 = 68.9018% (two runs), 701/1029 = 68.1244% (two runs), 723/1029 = 70.2624% and 725/1029 = 70.4568%. That is 4268/6174 = 69.1286% pooled: above the 67.7444% chance rate, but below always-ABSENT at 79.7862%. So the zero reflects a strict exact-match bar plus weak evidence, not 'a constraint cannot create evidence' shown on both sides. Claim 7 contradicts the prior audit's fact: 77.8426% is below always-ABSENT's 79.7862% on the same 1029 slots, and it finds only 47/208 = 22.5962% of true edges. 'The ingredients exist' is not supported.
+   HOW: Read bits_read.txt. Computed AUC, per-bit accuracy after top-k, and the random-with-k expectation on the recorded scores. | C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/claims/audit_claims.py
+--- F4-framing-and-status-words [OVERSTATED] Claim 3 and the record's framing: +31 questions per run moves the mean from 34.66% to 40.16%, and the move is presented as progress while also labelled NOT LICENSED. Also status vocabulary, internal consistency, and what the commit touched.
+   EVID: The arithmetic is exact (checked by me). Parts: (236-93)/6 = 23.8333 per run. Definition: 43/6 = 7.1667 per run. Total 186/6 = 31.0000. Then (195.5+31)/564 = 226.5/564 = 40.1596%. The framing overstates it. The record says 'This is the largest concrete movement on the objective so far'. The CHANGELOG says 'THIS IS THE LARGEST CONCRETE MOVEMENT ON THE OBJECTIVE SO FAR'. The record title reads '...truth-free' and the commit title ends 'the mean moves to 40.16%'. Yet the same record says 'NOT LICENSED: that a run would realise +31 questions', and its REAL line covers '§4's arithmetic'. Measured by me: a packet reader reaches 100.0000% on parts and definition, which is +107.5 per run on those two kinds alone. So the +31 is a partial read of an answer that is already in the input, not new capability. Status words: the record's status list uses 'OPEN', which is not in the allowed vocabulary. It also uses ad-hoc labels ('truth-free', 'truth-assisted', 'clean negative'). STATUS.md and the CHANGELOG use only NOT LICENSED as a formal status. Internal contradiction: the record says parts 'becomes the strongest many-decision kind in the machine', while the report to the owner says it is 'ahead of everything except correspondence, reach and the fitted definition'. The script docstring says other fields are 'held at the truth', but the code keeps the machine's own independent choices. Commit b9457909 changed exactly five files: CHANGELOG.md, records/MACHINE_STATE_001/STATUS.md, and ALL_DECLARED_CONSTRAINTS_RESULT.md, all_declared_constraints.txt and measure_all_declared_constraints.py in records/encoder_capacity_001. Nothing under test changed (CONFIRMED).
+   HOW: git show --stat b9457909, git show on CHANGELOG.md and STATUS.md (read-only), a read of the record, and my own recount of per-run correct answers. | None
+   OBS: Confirmed by me: the per-run constrained parts results reproduce exactly: 39/53 = 73.5849% in 20260917_a, 20260917_m, 20260918_a and 20260918_m, and 40/53 = 75.4717% in 20260919_a and 20260919_m. The six runs contain the same 564 record ids: 70 context, 88 correspondence, 107 reach, 70 definition, 36 role_set, 53 parts, 70 analogy, 70 edge_account.
+   OBS: The parts result is so stable across runs (39 or 40 of 53 every time) partly because k decides a lot on its own. Random-with-k already gets 22.4843% exact. The (slots, k) mix is: 3 slots/k=1 in 5 questions, 4/1 in 4, 4/2 in 21, 4/3 in 23.
+   OBS: Context's setting_ref also follows FOCUS_WORLD_DECLARATION_IDENTITY (checker.py line 183). Reading query.focus_world_id would set it without the checker. So round 32's label 'truth-assisted, NOT LICENSED as a score' could be dropped by the same packet reading. That shows again that the 'declared constraints' are partial reads of an answer already in the input.
+   OBS: In the definition arm, a non-focus world's 'whole' alias comes from THAT world's node table (N0..N3), but assemble_answer reads it against the FOCUS world's node table. Non-focus candidates therefore become mixed triples. Accuracy is unaffected (their kind_ref is wrong anyway), but the enumerated triples do not match what the docstring says.
+   OBS: The commit message body contains '\.00 spent', which looks like '$0.00' mangled by the shell.
+   >> VERIFY F1-truth-free-is-answer-reading: refuted=False reproduced=True
+      nums: All numbers below were measured by me, with a fresh script over the 564 recorded record ids. The ids are identical in all six runs, and every record has the same kind in every run. Per-run question counts: parts 53, edge_account 70, definition 70, context 70.
+- k equals the size of the true answer. parts: 53/53 = 100.0000%, using k = count of focus["contains"] edges whose source is the whole (script line 112). edge_account: 70/70 = 100.0000%, using k = len(focus["contains"]) (script line 108). No contains list has duplicate pairs (0/53 and 0/70), so the frozenset in checker._edges never makes the two counts differ.
+- k distribution. parts: k=1 9/53, k=2 21/53, k=3 23/53. edge_account: k=2 13/70, k=3 46/70, k=4 11/70. context: participants length 3 in 70/70.
+- Every one of these questions has exactly one admissible answer (100.0000% for each of the four kinds).
+- A packet-only decoder, with no checker call, reads the answer straight from the focus world. It scores parts 53/53, edge_account 70/70, definition 70/70 and context 70/70, all 100.0000%.
+- The query carries focus_world_id in 70/70 definition questions. That id equals record.source_world_id and packet.source.focus_world_id in 100.0000% of questions for all four kinds.
+- definition: the bank has 64 worlds in 70/70 questions. Legal candidates per question: mean 62.7143 (sum 4390), min 58, max 64. The focus world is a legal candidate in 70/70. A uniform pick would score 1.5971% (6.7080 expected out of 420).
+- Re-running the round-33 definition arm gives 43/420 = 10.2381%, with 0 errors. Per run: 5, 5, 16, 10, 3, 4. The arm is correct exactly when its argmax picks the focus world (43/420). Forcing the focus world's triple instead scores 420/420 = 100.0000%.
+      disc: None. My numbers match the auditor's to 4 decimals: 53/53, 70/70, 70/70 and 70/70 packet-reader accuracy; mean 62.7143 legal candidates out of 64 bank worlds; 1.5971% uniform rate; 43/420 = 10.2381% for the arm; query carries focus_world_id in 70/70. Two things I add. First, the answer is in the learner-visible input text itself (input_frames.py lines 270-272), not only in the packet. Second, the definition arm is correct exactly in the 43/420 cases where its argmax lands on the focus world, and forcing the focus triple gives 420/420.
+      notes: The auditor's finding holds (verdict PARTLY_TRUE). Every number I re-measured matches theirs exactly. I found no slot-mapping error, no off-by-one, and no eligibility mistake.
+
+It is only partly true for this reason. The round-33 arms really do not call checker.derive_target to get k, or to get the definition candidates. So "no checker label was used" is correct.
+
+But k is not an outside rule. It is the exact size of the answer, computed from the same focus["contains"] list the checker uses to build that answer. That match holds in 53/53 parts questions and 70/70 edge_account questions.
+
+I also confirmed something stronger than the auditor stated. The answer-bearing fields are in the text the learner actually sees, not just in the packet. See input_frames.py lines 270-272. The learner text includes declared_whole, declarations (everything except participants_basis, so the participants list is included), and every contains edge.
+
+So "nothing was given the answer" is misleading. The machine's input already contains the answer to these four kinds. A trivial packet reader scores 100.0000% on all four.
+
+On definition, the declared rule FOCUS_WORLD_DECLARATION_IDENTITY, applied in full, scores 420/420. The round-33 arm drops the "focus" half of that rule and scores 43/420 = 10.2381%. That is above a 1.5971% uniform pick, so the recorded scores carry some ranking signal. But calling this arm the declaration "enforced" overstates it.
+
+Round-32 check: measure_declared_cardinality.py line 131 sets k = len(truth["participants"]), which is taken from the checker's output.
+
+The docstring of course.validate_model_packet does say "No semantic teacher or graph solving at inference." Whether filtering contains by source == whole counts as "graph solving" is a matter of interpretation. The auditor's conflict claim is plausible, but it is not a measured fact.
+
+My output file is C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-claims-0/verify_output.txt
+   >> VERIFY F2-rankings-rule-fails-on-context: FAILED (no verdict)
+   >> VERIFY F3-edge-account-negative-misexplained: refuted=False reproduced=True
+      nums: All measured by me (verify-claims-2) with fresh code on the six recorded runs, unless marked "record".
+
+Per-bit accuracy of the recorded `selected` decisions on edge_account. Truth has 1029 slots per run. Values below are listed in run order 17_a, 17_m, 18_a, 18_m, 19_a, 19_m:
+- 646/1029 = 62.7794%
+- 652/1029 = 63.3625%
+- 677/1029 = 65.7920%
+- 682/1029 = 66.2779%
+- 677/1029 = 65.7920%
+- 693/1029 = 67.3469%
+- Chance is p^2+(1-p)^2 with p = 208/1029 = 20.2138%, which gives 67.7444%. So the machine is below chance in 6 of 6 runs. It never matches or beats it.
+- `selected` equals the argmax on every slot.
+- Pooled over six runs: 4027/6174 = 65.2251%.
+- Always-ABSENT scores 821/1029 = 79.7862%.
+
+Pooled AUC of the PRESENT-minus-ABSENT margin, per run, with the permutation p-value from shuffling labels within each question (2000 permutations):
+- 0.5105 (p=0.2674)
+- 0.5112 (p=0.2489)
+- 0.5492 (p=0.0115)
+- 0.5509 (p=0.0075)
+- 0.5466 (p=0.0120)
+- 0.5501 (p=0.0085)
+
+Mean within-question AUC, per run, with the same kind of p-value:
+- 0.5394 (p=0.0550)
+- 0.5453 (p=0.0220)
+- 0.5737 (p=0.0005)
+- 0.5752 (p=0.0005)
+- 0.5726 (p=0.0005)
+- 0.5740 (p=0.0015)
+
+Top-k by margin on edge_account:
+- Exact answers: 0/70 = 0.0000% in all six runs.
+- Per-bit accuracy: 709/1029 = 68.9018% in two runs, 701/1029 = 68.1244% in two runs, 723/1029 = 70.2624%, and 725/1029 = 70.4568%.
+- Pooled per-bit: 4268/6174 = 69.1286%.
+- True edges found: 48/208, 48/208, 44/208, 44/208, 55/208 and 56/208. Pooled that is 295/1248 = 23.6378%.
+
+Question shapes: 46 questions have (n=16, k=3), 11 have (16, 4) and 13 have (9, 2). k equals the true answer size in 70/70.
+
+A random pick of exactly k slots:
+- Expected exact rate: 0.6419% (exact Fraction arithmetic).
+- Expected per-bit accuracy: 67.8625%. The auditor did not compute this baseline.
+
+parts, for contrast:
+- Selected per-bit: 153/207 = 73.9130%, 152/207 = 73.4300%, 148/207 = 71.4976%, 153/207 = 73.9130%, 151/207 = 72.9469%, 146/207 = 70.5314%.
+- Pooled AUC: 0.8536, 0.8537, 0.8683, 0.8696, 0.8701, 0.8711 (all p=0.0005).
+- Top-k exact: 39/53 = 73.5849% in four runs and 40/53 = 75.4717% in two runs.
+- Top-k per-bit, pooled: 1074/1242 = 86.4734%.
+- Random-with-k expected exact: 22.4843%.
+
+Claim 7 (read from the record files, not re-fitted by me): field_bottleneck.txt gives the fitted readout 77.8426% on the edge_account edge field over 1029 slots. bits_read.txt gives always-ABSENT 79.7862% on the same 1029 slots. I did not re-measure the 47/208 figure.
+      disc: None of the auditor's numbers differ from mine. Every figure matches exactly: the per-bit accuracies, all 12 AUCs, the top-k per-bit counts, 4268/6174 = 69.1286%, and 0.6419%.
+
+Four refinements. None of them overturns the finding.
+
+(1) The "four of six" wording is in the committed record. Commit b9457909 says "below chance in four of six runs". An uncommitted working-copy edit, made by another session, now reads "all six runs". The auditor's correction is right against the committed claim, and the author has since conceded it.
+
+(2) The auditor says the ranking signal is "above 0.5 in six of six runs". That is true of the point estimates. But in the two 20260917 runs the pooled AUC is not distinguishable from 0.5: p=0.2674 and p=0.2489. In run 17_a the within-question AUC is borderline too, at p=0.0550. So "weak signal" is well supported in four runs and marginal in two. "No signal at all" is still too strong for the other four runs, where p is 0.0005 to 0.0120.
+
+(3) The auditor compared 69.1286% against the 67.7444% p^2 chance rate. The fair baseline for a decoder that picks exactly k slots is 67.8625%. Top-k still beats it, by 1.2661 points pooled.
+
+(4) New in my run: top-k on the machine's own scores finds 295/1248 = 23.6378% of true edges. That is about the same as the fitted readout's 47/208 = 22.5962% from the prior audit. So on this measure the fitted readout shows no evidence of better "ingredients".
+      notes: In plain terms: I tried to knock down the auditor's finding by measuring everything again with my own code. I could not. The finding holds.
+
+- **Checks on my own method.** For all 123 questions per run (70 edge_account and 53 parts), I rebuilt the true answer from my slot-to-truth mapping. I fed it through the project's own `slots.assemble_answer`. Every result matched what `checker.derive_target` accepts. So there is no slot-mapping or edge-direction error. The edge truth is directed, which is consistent with the fix in EDGE_DIRECTION_CORRECTION.md. The truth PRESENT rate is 208/1029, not the doubled count the old bug produced.
+- **Ties.** No ties fell at the top-k cut-off, so the sort order did not change any result.
+- **The auditor's core points stand.**
+  - Below chance in 6 of 6 runs, not 4 of 6.
+  - The scores rank weakly. That is not "no signal at all".
+  - The exact-match zero is expected under a strict all-slots-right bar. A random pick of exactly k slots would get only 0.6419% exact.
+  - Top-k per-bit, 69.1286%, sits between chance and the always-ABSENT constant of 79.7862%.
+  - The fitted readout's 77.8426% is below always-ABSENT's 79.7862% on the same 1029 slots. So "the ingredients exist" is not supported.
+- **Where the finding should be softened.** The weak signal is not established in every run. In the two 20260917 runs the pooled AUC has p≈0.25. The six runs also share the same questions, so they are not six independent replications.
+- **Scope.** I did not re-measure the fitted readout's 47/208.
+- **Nothing in the repo was changed.** I made read-only git calls (log, show, diff), and my scripts only read files. I never ran git add, commit, stash, checkout, reset or clean.
+- **Files**, all in `C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-claims-2/`:
+  - script: `verify_edge_account.py`
+  - output: `verify_output.txt`
+   >> VERIFY F4-framing-and-status-words: refuted=False reproduced=True
+      nums: All numbers below were measured by me (verify-claims-3), using my own code on the six recorded runs (final_scoring.json and final_predictions.json).
+
+- Run totals, read from final_scoring: 193, 192, 200, 203, 196, 189 of 564. Sum 1173. Mean 391/2 = 195.5, which is 1173/3384 = 34.6631%.
+- The parts arm, over all six runs:
+  - independent 93/318 = 29.2453%
+  - constrained 236/318 = 74.2138%
+  - per run constrained: 39/53, 39/53, 39/53, 39/53, 40/53, 40/53 (73.5849% for the first four, 75.4717% for the last two)
+  - per run independent: 16, 17, 14, 18, 16, 12 out of 53
+  - no ties at the top-k cut-off (0 cases)
+- The definition arm: independent 0/420 = 0.0000%, constrained 43/420 = 10.2381%. Per run: 5, 5, 16, 10, 3, 4 out of 70. Whenever the constrained choice was correct, the world it picked was the focus world (43/420 = 10.2381%).
+- The edge_account arm: independent 0/420 and constrained 0/420, both 0.0000%.
+- Sanity checks:
+  - My own per-slot argmax equals the recorded decisions in 318/318 parts, 420/420 definition and 420/420 edge_account questions.
+  - My independent correct/wrong matches the recorded "correct" flag in every case (100.0000%).
+- Claim 3 arithmetic:
+  - parts gains 143/6 = 23.8333 questions per run
+  - definition gains 43/6 = 7.1667 per run
+  - total gain 31.0000 per run exactly
+  - new mean 453/2 = 226.5, which is 40.1596% of 564
+  - the six offline run totals would be 221, 219, 241, 234, 223, 221 (39.1844%, 38.8298%, 42.7305%, 41.4894%, 39.5390%, 39.1844%)
+- A packet reader (reads the answer straight from the packet) scores 100.0000% on all three kinds: 318/318 parts, 420/420 definition, 420/420 edge_account.
+  - Its gain on parts plus definition is 215/2 = 107.5000 questions per run, which matches the auditor's +107.5.
+  - Adding edge_account gives 355/2 = 177.5000 per run.
+  - The constraint gain covers only 186/645 = 28.8372% of the parts plus definition gap to the reader.
+- Recorded accuracy per kind, all six runs, from final_scoring:
+  - correspondence 499/528 = 94.5076%
+  - reach 491/642 = 76.4798%
+  - parts 93/318 = 29.2453%
+  - analogy 68/420 = 16.1905%
+  - role_set 22/216 = 10.1852%
+  - context, definition and edge_account each 0/420 = 0.0000%
+- Commit b9457909 changed exactly 5 files, all additions (445 insertions): CHANGELOG.md, records/MACHINE_STATE_001/STATUS.md, ALL_DECLARED_CONSTRAINTS_RESULT.md, all_declared_constraints.txt and measure_all_declared_constraints.py.
+      disc: No number differs. Every number in the auditor's finding reproduces exactly: 236-93 = 143, 143/6 = 23.8333, 43/6 = 7.1667, 31.0000, 226.5/564 = 40.1596%, a packet reader at 100.0000%, +107.5 per run, and the 5-file commit.
+
+Two parts of the finding's reasoning are wrong or overstated:
+
+1. **REFUTED: the vocabulary point.** The auditor says 'OPEN' is not in the allowed vocabulary. That is wrong. The spec sheet's own legend lists `OPEN` as a status word: C:/Users/wakil/OneDrive/Desktop/tksCAS/docs/CAS_HARNESS_SPEC_SHEET.md, section 3 (CLAIM-STATUS LEGEND), line 66, defined as "Never run, or run and not yet adjudicated". The nine-word list in CLAUDE.md is shorter than the real legend. The auditor is still right that the labels 'truth-free', 'truth-assisted' and 'clean negative' are not legend words.
+
+2. **Partly overstated: the "internal contradiction".**
+   - Correspondence (94.5076%) and reach (76.4798%) both score higher than constrained parts (74.2138%).
+   - So the record's unqualified line "parts becomes the strongest many-decision kind in the machine" is overstated. Correspondence has many slots and still scores higher.
+   - But calling it a contradiction depends on what "many-decision" means. Reach has only one slot. Correspondence is decoded as one joint candidate. The owner report lists those same kinds as exceptions, so the two texts can be read as consistent.
+   - I did not check the "fitted definition" figure.
+
+3. **Minor: the docstring point has no effect on any number.**
+   - The docstring says the other fields are "held at the truth" while the code keeps the machine's own independent choices. That is correct.
+   - But parts has only 'node' slots and edge_account has only 'edge' slots. For definition, the arm overwrites all three of its fields.
+   - So in this script no field is actually held at anything. The mismatch does not change any number.
+
+The core of the finding still stands:
+- The +31 per run is offline arithmetic that the record itself marks NOT LICENSED.
+- Yet the title, the commit message and the CHANGELOG present it as "the mean moves to 40.16%" and "THE LARGEST CONCRETE MOVEMENT ON THE OBJECTIVE SO FAR".
+- A packet reader gets 100.0000% on the same kinds.
+      notes: What I did:
+- Wrote my own script. It reuses only the HOME and sys.path setup from the round-33 script.
+- Called worker_contract.load_material, course.model_packet, slots.compile_slots, checker.derive_target and slots.assemble_answer. No torch, no GPU, no test suite, nothing written in the repo.
+- Built the per-slot argmax myself, taking the first maximum in symbol order.
+- Checked every argmax decision against the recorded decisions: they match 808/808.
+- The top-k decoder picks k from focus["contains"] edges whose source is the supplied whole.
+- The definition decoder scores each bank world's (declared_whole alias, world alias, world alias) triple and takes the argmax.
+- The packet reader fills slots straight from focus["contains"] and focus's declared_whole, then assembles the answer.
+
+Verdict: the finding holds on every number, so refuted=false.
+- The arithmetic of claim 3 is exact.
+- Its framing is overstated: offline, NOT LICENSED, and a packet reader reaches 100.0000%.
+- One sub-claim is wrong: `OPEN` IS in the spec sheet legend (§3 line 66).
+- The contradiction point is partly a matter of how "many-decision" is read.
+- The docstring point is true but has no effect on any number.
+
+Output: C:/Users/wakil/AppData/Local/Temp/claude/C--Users-wakil-OneDrive-Desktop-tksCAS-cas-only-reasoner/12c87ae7-c1f0-44b3-9b95-de65d5efbd48/scratchpad/r33_audit/verify-claims-3/verify_f4_output.txt
+critic: None

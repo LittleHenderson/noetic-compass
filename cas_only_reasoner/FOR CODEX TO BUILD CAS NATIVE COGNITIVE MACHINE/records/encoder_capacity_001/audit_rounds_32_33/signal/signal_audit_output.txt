@@ -1,0 +1,124 @@
+runs: ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+
+==============================================================================================================
+KIND edge_account  field edge   (measured by this audit)
+==============================================================================================================
+receipt_20260917_a: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.539381  (AUC=1 in 0/70, AUC<0.5 in 25/70, AUC<=0.5 in 33/70)   slot-position baseline AUC = 0.564953
+    precision@k = 48/208 = 23.0769%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 646/1029 = 62.7794%   per-bit under top-k (evaluated qs) = 709/1029 = 68.9018%   cross-question AUC = 0.510546
+receipt_20260917_m: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.545290  (AUC=1 in 0/70, AUC<0.5 in 31/70, AUC<=0.5 in 33/70)   slot-position baseline AUC = 0.564953
+    precision@k = 48/208 = 23.0769%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 652/1029 = 63.3625%   per-bit under top-k (evaluated qs) = 709/1029 = 68.9018%   cross-question AUC = 0.511191
+receipt_20260918_a: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.573675  (AUC=1 in 0/70, AUC<0.5 in 21/70, AUC<=0.5 in 24/70)   slot-position baseline AUC = 0.564953
+    precision@k = 44/208 = 21.1538%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 677/1029 = 65.7920%   per-bit under top-k (evaluated qs) = 701/1029 = 68.1244%   cross-question AUC = 0.549184
+receipt_20260918_m: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.575232  (AUC=1 in 0/70, AUC<0.5 in 18/70, AUC<=0.5 in 18/70)   slot-position baseline AUC = 0.564953
+    precision@k = 44/208 = 21.1538%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 682/1029 = 66.2779%   per-bit under top-k (evaluated qs) = 701/1029 = 68.1244%   cross-question AUC = 0.550923
+receipt_20260919_a: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.572557  (AUC=1 in 0/70, AUC<0.5 in 24/70, AUC<=0.5 in 25/70)   slot-position baseline AUC = 0.564953
+    precision@k = 55/208 = 26.4423%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 677/1029 = 65.7920%   per-bit under top-k (evaluated qs) = 723/1029 = 70.2624%   cross-question AUC = 0.546595
+receipt_20260919_m: q=70 evaluated=70 skipped(all-true/all-false)=0  shapes [n=16 k=3:46, n=16 k=4:11, n=9 k=2:13]
+    mean within-question AUC = 0.573976  (AUC=1 in 0/70, AUC<0.5 in 24/70, AUC<=0.5 in 24/70)   slot-position baseline AUC = 0.564953
+    precision@k = 56/208 = 26.9231%   random expectation k/n = 20.5061%
+    exact set under top-k(true k) = 0/70 = 0.0000%   random-ranking expectation = 0.6419%   boundary ties = 0
+    per-bit threshold(margin>0) = 693/1029 = 67.3469%   per-bit under top-k (evaluated qs) = 725/1029 = 70.4568%   cross-question AUC = 0.550121
+POOLED six runs: q=420 evaluated=420 skipped=0
+    mean within-question AUC = 0.563352  (AUC<0.5 in 143/420)   slot-position baseline AUC = 0.564953
+    precision@k = 295/1248 = 23.6378%   random = 20.5061%
+    exact under top-k = 0/420 = 0.0000%   random-ranking expectation = 0.6419%
+    per-bit under top-k = 4268/6174 = 69.1286%
+    cross-question AUC (threshold-free, pooled) = 0.535416
+    per-bit threshold(margin>0) = 4027/6174 = 65.2251%   true-PRESENT rate = 1248/6174 = 20.2138%
+
+==============================================================================================================
+KIND parts  field node   (measured by this audit)
+==============================================================================================================
+receipt_20260917_a: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.875786  (AUC=1 in 39/53, AUC<0.5 in 2/53, AUC<=0.5 in 7/53)   slot-position baseline AUC = 0.385220
+    precision@k = 106/120 = 88.3333%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 39/53 = 73.5849%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 153/207 = 73.9130%   per-bit under top-k (evaluated qs) = 179/207 = 86.4734%   cross-question AUC = 0.853640
+receipt_20260917_m: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.875786  (AUC=1 in 39/53, AUC<0.5 in 2/53, AUC<=0.5 in 7/53)   slot-position baseline AUC = 0.385220
+    precision@k = 106/120 = 88.3333%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 39/53 = 73.5849%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 152/207 = 73.4300%   per-bit under top-k (evaluated qs) = 179/207 = 86.4734%   cross-question AUC = 0.853736
+receipt_20260918_a: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.844340  (AUC=1 in 39/53, AUC<0.5 in 8/53, AUC<=0.5 in 10/53)   slot-position baseline AUC = 0.385220
+    precision@k = 105/120 = 87.5000%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 39/53 = 73.5849%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 148/207 = 71.4976%   per-bit under top-k (evaluated qs) = 177/207 = 85.5072%   cross-question AUC = 0.868295
+receipt_20260918_m: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.839623  (AUC=1 in 39/53, AUC<0.5 in 8/53, AUC<=0.5 in 11/53)   slot-position baseline AUC = 0.385220
+    precision@k = 105/120 = 87.5000%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 39/53 = 73.5849%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 153/207 = 73.9130%   per-bit under top-k (evaluated qs) = 177/207 = 85.5072%   cross-question AUC = 0.869636
+receipt_20260919_a: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.885220  (AUC=1 in 40/53, AUC<0.5 in 2/53, AUC<=0.5 in 6/53)   slot-position baseline AUC = 0.385220
+    precision@k = 107/120 = 89.1667%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 40/53 = 75.4717%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 151/207 = 72.9469%   per-bit under top-k (evaluated qs) = 181/207 = 87.4396%   cross-question AUC = 0.870115
+receipt_20260919_m: q=53 evaluated=53 skipped(all-true/all-false)=0  shapes [n=3 k=1:5, n=4 k=1:4, n=4 k=2:21, n=4 k=3:23]
+    mean within-question AUC = 0.885220  (AUC=1 in 40/53, AUC<0.5 in 2/53, AUC<=0.5 in 6/53)   slot-position baseline AUC = 0.385220
+    precision@k = 107/120 = 89.1667%   random expectation k/n = 62.8472%
+    exact set under top-k(true k) = 40/53 = 75.4717%   random-ranking expectation = 22.4843%   boundary ties = 0
+    per-bit threshold(margin>0) = 146/207 = 70.5314%   per-bit under top-k (evaluated qs) = 181/207 = 87.4396%   cross-question AUC = 0.871073
+POOLED six runs: q=318 evaluated=318 skipped=0
+    mean within-question AUC = 0.867662  (AUC<0.5 in 24/318)   slot-position baseline AUC = 0.385220
+    precision@k = 636/720 = 88.3333%   random = 62.8472%
+    exact under top-k = 236/318 = 74.2138%   random-ranking expectation = 22.4843%
+    per-bit under top-k = 1074/1242 = 86.4734%
+    cross-question AUC (threshold-free, pooled) = 0.863176
+    per-bit threshold(margin>0) = 903/1242 = 72.7053%   true-PRESENT rate = 720/1242 = 57.9710%
+
+==============================================================================================================
+KIND context  field participant   (measured by this audit)
+==============================================================================================================
+receipt_20260917_a: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.438596  (AUC=1 in 13/57, AUC<0.5 in 26/57, AUC<=0.5 in 26/57)   slot-position baseline AUC = 0.438596
+    precision@k = 127/171 = 74.2690%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 13/57 = 22.8070%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 106/267 = 39.7004%   per-bit under top-k (evaluated qs) = 140/228 = 61.4035%   cross-question AUC = 0.435088
+receipt_20260917_m: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.456140  (AUC=1 in 16/57, AUC<0.5 in 26/57, AUC<=0.5 in 26/57)   slot-position baseline AUC = 0.438596
+    precision@k = 130/171 = 76.0234%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 16/57 = 28.0702%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 105/267 = 39.3258%   per-bit under top-k (evaluated qs) = 146/228 = 64.0351%   cross-question AUC = 0.432916
+receipt_20260918_a: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.479532  (AUC=1 in 10/57, AUC<0.5 in 23/57, AUC<=0.5 in 23/57)   slot-position baseline AUC = 0.438596
+    precision@k = 124/171 = 72.5146%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 10/57 = 17.5439%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 103/267 = 38.5768%   per-bit under top-k (evaluated qs) = 134/228 = 58.7719%   cross-question AUC = 0.451796
+receipt_20260918_m: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.491228  (AUC=1 in 10/57, AUC<0.5 in 21/57, AUC<=0.5 in 21/57)   slot-position baseline AUC = 0.438596
+    precision@k = 124/171 = 72.5146%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 10/57 = 17.5439%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 107/267 = 40.0749%   per-bit under top-k (evaluated qs) = 134/228 = 58.7719%   cross-question AUC = 0.450961
+receipt_20260919_a: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.461988  (AUC=1 in 5/57, AUC<0.5 in 21/57, AUC<=0.5 in 21/57)   slot-position baseline AUC = 0.438596
+    precision@k = 119/171 = 69.5906%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 5/57 = 8.7719%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 111/267 = 41.5730%   per-bit under top-k (evaluated qs) = 124/228 = 54.3860%   cross-question AUC = 0.466249
+receipt_20260919_m: q=70 evaluated=57 skipped(all-true/all-false)=13  shapes [n=3 k=3:13, n=4 k=3:57]
+    mean within-question AUC = 0.473684  (AUC=1 in 5/57, AUC<0.5 in 19/57, AUC<=0.5 in 19/57)   slot-position baseline AUC = 0.438596
+    precision@k = 119/171 = 69.5906%   random expectation k/n = 75.0000%
+    exact set under top-k(true k) = 5/57 = 8.7719%   random-ranking expectation = 25.0000%   boundary ties = 0
+    per-bit threshold(margin>0) = 109/267 = 40.8240%   per-bit under top-k (evaluated qs) = 124/228 = 54.3860%   cross-question AUC = 0.462740
+POOLED six runs: q=420 evaluated=342 skipped=78
+    mean within-question AUC = 0.466862  (AUC<0.5 in 136/342)   slot-position baseline AUC = 0.438596
+    precision@k = 743/1026 = 72.4172%   random = 75.0000%
+    exact under top-k = 59/342 = 17.2515%   random-ranking expectation = 25.0000%
+    per-bit under top-k = 802/1368 = 58.6257%
+    cross-question AUC (threshold-free, pooled) = 0.450666
+    per-bit threshold(margin>0) = 641/1602 = 40.0125%   true-PRESENT rate = 1260/1602 = 78.6517%

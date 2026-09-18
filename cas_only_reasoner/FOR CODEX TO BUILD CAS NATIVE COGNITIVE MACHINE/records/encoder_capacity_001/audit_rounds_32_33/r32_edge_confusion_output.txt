@@ -1,0 +1,11 @@
+captured stdout of r32_edge_confusion.py, run 2026-09-18 against receipt_20260919_m (the fit of measure_field_bottleneck.py, 5-fold by question)
+edge slots: 1029   truly PRESENT: 208   truly ABSENT: 821
+  truly PRESENT -> said PRESENT 47, said ABSENT 161   (edges found: 22.5962%)
+  truly ABSENT  -> said ABSENT  754, said PRESENT 67   (non-edges right: 91.8392%)
+  per-slot accuracy        : 77.8426%
+  always-ABSENT per slot   : 79.7862%
+  balanced accuracy        : 57.2177%   (coin flip = 50.0000%)
+  said PRESENT in total    : 114 times, right 47 of those (41.2281%)
+  self-loop slots (a->a)   : {('ABSENT', 'PRESENT'): 35, ('ABSENT', 'ABSENT'): 232}
+  questions: 70   fully right: 1   questions with zero true edges: 0
+  wrong-slot histogram     : [(0, 1), (1, 1), (2, 21), (3, 21), (4, 12), (5, 10), (6, 4)]

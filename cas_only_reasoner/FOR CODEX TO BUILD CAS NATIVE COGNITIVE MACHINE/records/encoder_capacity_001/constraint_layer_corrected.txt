@@ -1,0 +1,33 @@
+runs: 6
+
+receipt_20260917_a:  MANY  21 ->  59 of 299   ALL 193 -> 231 of 564
+receipt_20260917_m:  MANY  22 ->  59 of 299   ALL 192 -> 229 of 564
+receipt_20260918_a:  MANY  17 ->  72 of 299   ALL 200 -> 255 of 564
+receipt_20260918_m:  MANY  21 ->  68 of 299   ALL 203 -> 250 of 564
+receipt_20260919_a:  MANY  19 ->  59 of 299   ALL 196 -> 236 of 564
+receipt_20260919_m:  MANY  15 ->  60 of 299   ALL 189 -> 234 of 564
+
+====================================================================================================
+THE DECLARED-CONSTRAINT LAYER, EVERY QUESTION, SIX RUNS
+====================================================================================================
+
+           kind     q  unconstrained  constrained      lift  selections changed
+----------------------------------------------------------------------------------------------------
+        analogy   420      16.1905%    16.1905%  +0.0000%            0.0000%
+        context   420       0.0000%     4.0476%  +4.0476%           97.8571%
+ correspondence   528      94.5076%    94.5076%  +0.0000%            0.0000%
+     definition   420       0.0000%    10.2381% +10.2381%           97.6190%
+   edge_account   420       0.0000%     4.2857%  +4.2857%           92.6190%
+          parts   318      29.2453%    87.1069% +57.8616%           67.6101%
+          reach   642      76.4798%    76.4798%  +0.0000%            0.0000%
+       role_set   216      10.1852%    10.1852%  +0.0000%            0.0000%
+----------------------------------------------------------------------------------------------------
+   ONE DECISION  1590      66.5409%    66.5409%  +0.0000%
+ MANY DECISIONS  1794       6.4103%    21.0145% +14.6042%
+            ALL  3384      34.6631%    42.4054%  +7.7423%
+
+unconstrained = slots.score_decisions, the run's own rule
+constrained   = cncm.answer_constraints.apply_constraints on the same scores
+Both arms read the RECORDED scores. No target enters either decoder; the truth is used
+only to score the result.
+exit 0

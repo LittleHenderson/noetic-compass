@@ -1,0 +1,51 @@
+runs ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+identical id sets: True size 564
+kind consistent across runs: True
+kind counts {'analogy': 70, 'context': 70, 'parts': 53, 'definition': 70, 'edge_account': 70, 'role_set': 36, 'reach': 107, 'correspondence': 88}
+
+[context] q = 70
+  contains_has_dup_pairs: 0/70 = 0.0000%
+  focus_eq_record_source_world_eq_packet_focus: 70/70 = 100.0000%
+  n_admissible==1: 70/70 = 100.0000%
+  packet_reader_correct: 70/70 = 100.0000%
+  participants_len_3: 70/70 = 100.0000%
+  query_has_focus_world_id: 70/70 = 100.0000%
+
+[definition] q = 70
+  contains_has_dup_pairs: 0/70 = 0.0000%
+  focus_eq_record_source_world_eq_packet_focus: 70/70 = 100.0000%
+  n_admissible==1: 70/70 = 100.0000%
+  packet_reader_correct: 70/70 = 100.0000%
+  query_has_focus_world_id: 70/70 = 100.0000%
+
+[parts] q = 53
+  contains_has_dup_pairs: 0/53 = 0.0000%
+  focus_eq_record_source_world_eq_packet_focus: 53/53 = 100.0000%
+  k==len(truth.nodes): 53/53 = 100.0000%
+  k_hist_1: 9/53 = 16.9811%
+  k_hist_2: 21/53 = 39.6226%
+  k_hist_3: 23/53 = 43.3962%
+  n_admissible==1: 53/53 = 100.0000%
+  packet_reader_correct: 53/53 = 100.0000%
+  query_has_focus_world_id: 53/53 = 100.0000%
+
+[edge_account] q = 70
+  contains_has_dup_pairs: 0/70 = 0.0000%
+  focus_eq_record_source_world_eq_packet_focus: 70/70 = 100.0000%
+  k==len(truth.edges): 70/70 = 100.0000%
+  k_hist_2: 13/70 = 18.5714%
+  k_hist_3: 46/70 = 65.7143%
+  k_hist_4: 11/70 = 15.7143%
+  n_admissible==1: 70/70 = 100.0000%
+  packet_reader_correct: 70/70 = 100.0000%
+  query_has_focus_world_id: 70/70 = 100.0000%
+
+[definition candidates] questions 70
+bank sizes {64: 70}
+legal candidates: mean 62.7143 (sum 4390), min 58 max 64
+focus world is a legal candidate: 70/70 = 100.0000%
+uniform pick expected exact rate: 1.5971%  (expected per 420: 6.7080)
+
+round-33 definition arm re-run: 43/420 = 10.2381% | picked focus world 43/420 = 10.2381% | errors 0
+per run correct: {'receipt_20260917_a': 5, 'receipt_20260917_m': 5, 'receipt_20260918_a': 16, 'receipt_20260918_m': 10, 'receipt_20260919_a': 3, 'receipt_20260919_m': 4}
+force-FOCUS-triple arm: 420/420 = 100.0000%

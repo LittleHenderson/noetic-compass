@@ -1,5 +1,7 @@
 # CONSTRAINT_LAYER_RESULT — +6.6194 points overall, +12.4861 on the many-decision half, and the one-decision half is untouched
 
+> **Superseded in part, 2026-09-18 — ranking bug.** The committed `_apply_cardinality` ranked by the PRESENT score alone, against its own docstring ("PRESENT minus ABSENT"). With the margin: `parts` 257/318 -> 277/318, `edge_account` 0/420 -> 18/420. Fixed as `_margin_rank` with a regression test; re-measured in `constraint_layer_corrected.txt`; see `AUDIT_ROUNDS_32_33_RESULT.md` §3 and §5. The `edge_account` "cannot create evidence" reading below rested on the bug. By the owner's ruling of 2026-09-18 this layer's gains are rule-layer gains, reported separately from learned gains.
+
 **Round 37. The declared-constraint layer is built as tested code, and measured end to end.**
 **$0.00. Pure standard library plus the project's pure modules. No torch, no GPU, no model, no
 training, no new run.**

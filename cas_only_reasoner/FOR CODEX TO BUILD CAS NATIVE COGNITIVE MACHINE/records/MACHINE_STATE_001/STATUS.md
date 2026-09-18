@@ -219,6 +219,13 @@ module (Fix C, OS-027); `/memory` appears as a `target_path` in the recorded `aw
 lifecycle receipt. **Round 30 is the first evidence that the second group is not decorative.**
 
 **Limit 7 — there is no composition defect left, and the whole deficit is one scalar per kind.**
+
+> **Audited 2026-09-18 (`AUDIT_ROUNDS_32_33_RESULT.md` §1).** "No composition defect left" is NOT
+> LICENSED: the measured exact rates rest on 1 to 3 correct questions (`1/70` has a 95% range of
+> `0.04%`-`7.70%`), and the `edge_account` prediction with its real slot mix is `3.4289%`, not `1.82%`.
+> The fitted readout here is a ridge fit on the frozen encoder, not the trained machine; its `77.8426%`
+> is below always-ABSENT (`79.7862%`). "`setting_ref` is worth exactly +0.0000" holds for the fit
+> only; the machine's own `setting_ref` is `0.0000%` (Limit 8).
 Round 31/32 asked what each field of an answer is worth by giving that field the true symbol and
 re-assembling through the project's own `assemble_answer`, and the answer is unambiguous:
 
@@ -259,6 +266,13 @@ at **48.5714%**, the strongest many-decision kind.
 > "there is no composition defect left to explain", which the evidence does not support.
 
 **Limit 8 — the composer ignores declared structure, and enforcing it is the first fix that works on
+
+> **FLAG_FOR_HUMAN_REVIEW — audit 2026-09-18 (`AUDIT_ROUNDS_32_33_RESULT.md` §2.3).** The `context`
+> lift below is no better than random: with the same count rule a random choice of three scores
+> `163.5/420 = 38.9286%`, the machine's ranking `137/420 = 32.6190%` (AUC `0.466862`). The later
+> `parts` result carries a real ranking signal (+23.2704 points on equal information, practised
+> questions only). By the owner's ruling (section 6) these are rule-layer gains, not machine progress.
+> The layer's ranking bug (PRESENT alone instead of the margin) is fixed; see section 6.
 the trained machine's own scores.** `context` answers are the focus world's setting plus its
 participants, and `answers.answer_space` declares `participants_basis =
 PRIMARY_AUTHORED_LABELS_FIRST_THREE` — measured over all 420 `context` questions in six runs, the
@@ -523,6 +537,14 @@ points**, and `swapped` coordinates are byte-identical, so order is discarded), 
 hypothesis behind it is refuted by `context` sharing `parts`' arity and failing.
 
 ## 6. The decisions waiting
+
+**RULED 2026-09-18 by the owner — what counts as progress.** Verbatim: **"IT MUST BE LEARNING LEARNING
+AT THE NEURON LEVEL THE ARCHITECTURE SHOULD BE SERVING THIS PURPOSE. EVERYTHING SHOULD BE SERVING THIS
+PURPOSE."** Applied: a gain from a hand-written rule over saved scores (the declared-constraint layer,
+fitted readouts, closed-form weights at zero updates) is **not** progress of the machine. It is
+reported separately and never added to a learned gain. The test of progress is what training changes
+in the plastic weights, read on questions the machine was not taught (development panel) and on
+retention. Source: `records/encoder_capacity_001/AUDIT_ROUNDS_32_33_RESULT.md` §0.
 
 **Decision 1 — sign the phase-0 record, or not.** `records/analytic_decompose_phase0_001/PHASE0_RECORD_DRAFT.md`
 is complete, runnable end-to-end, and unsigned. It needs: arms approved (A/B/C), seeds approved

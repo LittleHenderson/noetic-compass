@@ -1,0 +1,8 @@
+captured stdout of r33_structure.py, run 2026-09-18 against receipt_20260919_m (question structure only; no machine scores used)
+parts         questions 53  (n,k) {(3, 1): 5, (4, 1): 4, (4, 2): 21, (4, 3): 23}
+              forced by count alone (C(n,k)=1): 0/53   random top-k expected exact: 11.9167/53 = 22.4843%
+edge_account  questions 70  (n,k) {(9, 2): 13, (16, 3): 46, (16, 4): 11}
+              forced by count alone (C(n,k)=1): 0/70   random top-k expected exact: 0.4493/70 = 0.6419%
+context       questions 70  (n,k) {(3, 3): 13, (4, 3): 57}
+              forced by count alone (C(n,k)=1): 13/70   random top-k expected exact: 27.2500/70 = 38.9286%
+definition: worlds per packet -> {64: 70}

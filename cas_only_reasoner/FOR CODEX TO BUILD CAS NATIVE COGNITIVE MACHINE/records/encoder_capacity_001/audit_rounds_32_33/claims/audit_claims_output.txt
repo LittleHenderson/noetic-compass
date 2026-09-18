@@ -1,0 +1,55 @@
+runs: ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+same record ids in all runs: True
+kind counts: {'context': 70, 'correspondence': 88, 'reach': 107, 'definition': 70, 'role_set': 36, 'parts': 53, 'analogy': 70, 'edge_account': 70}
+
+==== COURSE-ONLY FACTS (per question; same set of records in every run) ====
+
+[edge_account] questions per run = 70
+   randk_expected_x1e6: expected exact rate = 0.6419%
+   admissible_count_1: 70/70 = 100.0000%
+   k0_or_kn_(answer_forced_by_k_alone): 0/70 = 0.0000%
+   k_equals_len_truth_value: 70/70 = 100.0000%
+   k_equals_true_answer_size: 70/70 = 100.0000%
+   n_16_k_3: 46/70 = 65.7143%
+   n_16_k_4: 11/70 = 15.7143%
+   n_9_k_2: 13/70 = 18.5714%
+   packet_read_correct: 70/70 = 100.0000%
+
+[parts] questions per run = 53
+   randk_expected_x1e6: expected exact rate = 22.4843%
+   admissible_count_1: 53/53 = 100.0000%
+   k0_or_kn_(answer_forced_by_k_alone): 0/53 = 0.0000%
+   k_equals_len_truth_value: 53/53 = 100.0000%
+   k_equals_true_answer_size: 53/53 = 100.0000%
+   n_3_k_1: 5/53 = 9.4340%
+   n_4_k_1: 4/53 = 7.5472%
+   n_4_k_2: 21/53 = 39.6226%
+   n_4_k_3: 23/53 = 43.3962%
+   packet_read_correct: 53/53 = 100.0000%
+
+[definition] questions per run = 70
+   uniform_pick_expected_x1e6: expected exact rate = 1.5971%
+   admissible_count_1: 70/70 = 100.0000%
+   bank_worlds_total_sum: total 4480, mean 64.0000
+   focus_is_a_legal_candidate: 70/70 = 100.0000%
+   legal_candidates_sum: total 4390, mean 62.7143
+   packet_read_correct: 70/70 = 100.0000%
+   query_carries_focus_world_id: 70/70 = 100.0000%
+
+[context] questions per run = 70
+   admissible_count_1: 70/70 = 100.0000%
+   packet_read_correct: 70/70 = 100.0000%
+
+==== RECORDED SCORES: ranking signal (AUC of PRESENT-ABSENT margin), per run ====
+  receipt_20260917_a         parts q=53 pooled_AUC=0.8536 mean_within_question_AUC=0.8758 (n_q_with_both=53) topk_exact(recomputed)=39/53 = 73.5849% random_rank_with_k_exact(1 draw)=12/53 = 22.6415% per_bit_after_topk=179/207 = 86.4734%
+  receipt_20260917_a  edge_account q=70 pooled_AUC=0.5105 mean_within_question_AUC=0.5394 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=1/70 = 1.4286% per_bit_after_topk=709/1029 = 68.9018%
+  receipt_20260917_m         parts q=53 pooled_AUC=0.8537 mean_within_question_AUC=0.8758 (n_q_with_both=53) topk_exact(recomputed)=39/53 = 73.5849% random_rank_with_k_exact(1 draw)=12/53 = 22.6415% per_bit_after_topk=179/207 = 86.4734%
+  receipt_20260917_m  edge_account q=70 pooled_AUC=0.5112 mean_within_question_AUC=0.5453 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=0/70 = 0.0000% per_bit_after_topk=709/1029 = 68.9018%
+  receipt_20260918_a         parts q=53 pooled_AUC=0.8683 mean_within_question_AUC=0.8443 (n_q_with_both=53) topk_exact(recomputed)=39/53 = 73.5849% random_rank_with_k_exact(1 draw)=20/53 = 37.7358% per_bit_after_topk=177/207 = 85.5072%
+  receipt_20260918_a  edge_account q=70 pooled_AUC=0.5492 mean_within_question_AUC=0.5737 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=0/70 = 0.0000% per_bit_after_topk=701/1029 = 68.1244%
+  receipt_20260918_m         parts q=53 pooled_AUC=0.8696 mean_within_question_AUC=0.8396 (n_q_with_both=53) topk_exact(recomputed)=39/53 = 73.5849% random_rank_with_k_exact(1 draw)=12/53 = 22.6415% per_bit_after_topk=177/207 = 85.5072%
+  receipt_20260918_m  edge_account q=70 pooled_AUC=0.5509 mean_within_question_AUC=0.5752 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=2/70 = 2.8571% per_bit_after_topk=701/1029 = 68.1244%
+  receipt_20260919_a         parts q=53 pooled_AUC=0.8701 mean_within_question_AUC=0.8852 (n_q_with_both=53) topk_exact(recomputed)=40/53 = 75.4717% random_rank_with_k_exact(1 draw)=16/53 = 30.1887% per_bit_after_topk=181/207 = 87.4396%
+  receipt_20260919_a  edge_account q=70 pooled_AUC=0.5466 mean_within_question_AUC=0.5726 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=0/70 = 0.0000% per_bit_after_topk=723/1029 = 70.2624%
+  receipt_20260919_m         parts q=53 pooled_AUC=0.8711 mean_within_question_AUC=0.8852 (n_q_with_both=53) topk_exact(recomputed)=40/53 = 75.4717% random_rank_with_k_exact(1 draw)=12/53 = 22.6415% per_bit_after_topk=181/207 = 87.4396%
+  receipt_20260919_m  edge_account q=70 pooled_AUC=0.5501 mean_within_question_AUC=0.5740 (n_q_with_both=70) topk_exact(recomputed)=0/70 = 0.0000% random_rank_with_k_exact(1 draw)=0/70 = 0.0000% per_bit_after_topk=725/1029 = 70.4568%

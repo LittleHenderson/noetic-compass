@@ -1,0 +1,43 @@
+runs ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+receipt_20260917_a {'total': 564, 'correct_field': 193, 'correct_rows': 193, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 5, 'definition_con_pick_is_focus': 5, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 16, 'parts_ind_vs_record_agree': 53, 'parts_con': 39, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+receipt_20260917_m {'total': 564, 'correct_field': 192, 'correct_rows': 192, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 5, 'definition_con_pick_is_focus': 5, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 17, 'parts_ind_vs_record_agree': 53, 'parts_con': 39, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+receipt_20260918_a {'total': 564, 'correct_field': 200, 'correct_rows': 200, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 16, 'definition_con_pick_is_focus': 16, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 14, 'parts_ind_vs_record_agree': 53, 'parts_con': 39, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+receipt_20260918_m {'total': 564, 'correct_field': 203, 'correct_rows': 203, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 10, 'definition_con_pick_is_focus': 10, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 18, 'parts_ind_vs_record_agree': 53, 'parts_con': 39, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+receipt_20260919_a {'total': 564, 'correct_field': 196, 'correct_rows': 196, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 3, 'definition_con_pick_is_focus': 3, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 16, 'parts_ind_vs_record_agree': 53, 'parts_con': 40, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+receipt_20260919_m {'total': 564, 'correct_field': 189, 'correct_rows': 189, 'definition_rec_dec_match': 70, 'definition_q': 70, 'definition_ind': 0, 'definition_ind_vs_record_agree': 70, 'definition_con': 4, 'definition_con_pick_is_focus': 4, 'definition_reader': 70, 'parts_rec_dec_match': 53, 'parts_q': 53, 'parts_ind': 12, 'parts_ind_vs_record_agree': 53, 'parts_con': 40, 'parts_reader': 53, 'edge_account_rec_dec_match': 70, 'edge_account_q': 70, 'edge_account_ind': 0, 'edge_account_ind_vs_record_agree': 70, 'edge_account_con': 0, 'edge_account_reader': 70}
+
+==== RUN TOTALS ====
+recorded correct per run: [193, 192, 200, 203, 196, 189] rows-count: [193, 192, 200, 203, 196, 189] sum 1173 mean 391/2 -> 1173/3384 = 34.6631%
+
+==== PER-KIND ACCURACY, all six runs, recorded final_scoring ====
+  correspondence  499/528 = 94.5076%
+  reach           491/642 = 76.4798%
+  parts           93/318 = 29.2453%
+  analogy         68/420 = 16.1905%
+  role_set        22/216 = 10.1852%
+  context         0/420 = 0.0000%
+  definition      0/420 = 0.0000%
+  edge_account    0/420 = 0.0000%
+
+==== ROUND-33 ARMS (my code) ====
+parts: q=318 independent 93/318 = 29.2453% | constrained 236/318 = 74.2138% | packet_reader 318/318 = 100.0000% | indep_agrees_recorded 318/318 = 100.0000% | recorded_decisions==argmax 318/318 = 100.0000%
+   per run constrained: ['39/53 = 73.5849%', '39/53 = 73.5849%', '39/53 = 73.5849%', '39/53 = 73.5849%', '40/53 = 75.4717%', '40/53 = 75.4717%']
+   per run independent: ['16/53 = 30.1887%', '17/53 = 32.0755%', '14/53 = 26.4151%', '18/53 = 33.9623%', '16/53 = 30.1887%', '12/53 = 22.6415%']
+definition: q=420 independent 0/420 = 0.0000% | constrained 43/420 = 10.2381% | packet_reader 420/420 = 100.0000% | indep_agrees_recorded 420/420 = 100.0000% | recorded_decisions==argmax 420/420 = 100.0000%
+   per run constrained: ['5/70 = 7.1429%', '5/70 = 7.1429%', '16/70 = 22.8571%', '10/70 = 14.2857%', '3/70 = 4.2857%', '4/70 = 5.7143%']
+   per run independent: ['0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%']
+edge_account: q=420 independent 0/420 = 0.0000% | constrained 0/420 = 0.0000% | packet_reader 420/420 = 100.0000% | indep_agrees_recorded 420/420 = 100.0000% | recorded_decisions==argmax 420/420 = 100.0000%
+   per run constrained: ['0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%']
+   per run independent: ['0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%', '0/70 = 0.0000%']
+definition constrained picked the focus world: 43/420 = 10.2381%
+parts top-k boundary ties: 0
+
+==== CLAIM 3 ARITHMETIC ====
+parts gain/run 143/6 23.8333
+definition gain/run 43/6 7.1667
+total gain/run 31 31.0000
+new mean 453/2 226.5000 40.1596% old 195.5000 34.6631%
+per-run offline totals: [221, 219, 241, 234, 223, 221] ['39.1844%', '38.8298%', '42.7305%', '41.4894%', '39.5390%', '39.1844%']
+packet-reader gain/run on parts+definition: 215/2 107.5000
+packet-reader gain/run on parts+definition+edge_account: 355/2 177.5000
+fraction of reader headroom (parts+definition) realised by the constraint gain: 186/645 = 28.8372%

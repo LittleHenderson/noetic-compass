@@ -4,6 +4,34 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-18 UTC - Owner ruling on what counts as progress; rounds 32-33 audited; a ranking bug in the constraint layer fixed
+
+$0.00. Pure Python on recorded scores. No torch, no GPU, no model, no training, no new run.
+Record `records/encoder_capacity_001/AUDIT_ROUNDS_32_33_RESULT.md`; scripts and raw outputs in
+`records/encoder_capacity_001/audit_rounds_32_33/`.
+
+OWNER RULING, verbatim: "IT MUST BE LEARNING LEARNING AT THE NEURON LEVEL THE ARCHITECTURE SHOULD BE
+SERVING THIS PURPOSE." A gain from a hand-written rule over saved scores is not machine progress and is
+never added to a learned gain. Written into MACHINE_STATE_001/STATUS.md section 6.
+
+AUDIT. All headline numbers of rounds 32 and 33 reproduce. What they mean does not all hold:
+"truth-free" decoders read the answer's size from the list the answer is built from (53/53, 70/70);
+parts carries a REAL ranking signal on practised questions (+23.2704 points on equal information);
+round 32's context result is FLAG_FOR_HUMAN_REVIEW - 137/420 = 32.6190% against a random choice's
+163.5/420 = 38.9286%; "below chance in four of six" is six of six; "no composition defect left" and
+"the ingredients exist" are NOT LICENSED.
+
+BUG FIXED. cncm/answer_constraints.py ranked by the PRESENT score alone, against its own docstring
+("PRESENT minus ABSENT"). Fixed as _margin_rank with a regression test that fails on the old code.
+Re-measured, six runs: parts 80.8176% -> 87.1069%, edge_account 0.0000% -> 4.2857%, all 41.2825% ->
+42.4054%. A rule-layer figure, not a learned one. The buggy output is kept in constraint_layer.txt.
+
+LEARNING FACTS, read from all six result.json files: the machine has 16,384 plastic weights and made
+160 updates; practised questions rose 37-39 -> 189-203 of 564; the 59-question new panel never
+improved; retention fell in all six; learning_advantage_established = False six of six.
+
+2192 tests, 767 subtests, green.
+
 ## 2026-09-17 UTC - The course uses 24 focus worlds, none polarised, so the machine is not memorising WORLDS — and round 38's wording is narrowed
 
 $0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
