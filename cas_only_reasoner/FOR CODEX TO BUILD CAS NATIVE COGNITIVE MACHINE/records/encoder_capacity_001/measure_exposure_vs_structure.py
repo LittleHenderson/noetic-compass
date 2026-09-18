@@ -200,7 +200,18 @@ def main() -> int:
     print("4. THE CONSTRAINT LAYER'S GAIN, SPLIT BY WORLD HALF — it reads only the packet")
     print("=" * 100)
     print()
-    halves = defaultdict(lambda: Counter())
+    # Plain integer counters, not Counters inside a defaultdict. The round-39 version used
+    # `halves[half]["base_n"] += 1` and reported zero observations with zero failure counters, and
+    # `diagnose_section4.py` showed the per-record logic itself is sound. This formulation is the one
+    # that was verified, so it is the one used.
+    stats = {0: {"records": 0, "obs": 0, "missing": 0, "undecided": 0, "base": 0, "fixed": 0},
+             1: {"records": 0, "obs": 0, "missing": 0, "undecided": 0, "base": 0, "fixed": 0}}
+    # A FIXED partition: worlds sorted by id, split at the median. Round 39 used `hash(world) % 2`,
+    # which is salted per process, so the halves were not the same partition twice.
+    worlds_sorted = sorted({row["world"] for row in records})
+    cut = worlds_sorted[len(worlds_sorted) // 2]
+    print(f"worlds {len(worlds_sorted)}  cut at {cut[:28]}...")
+    print()
     for row in records:
         record_id = row["record_id"]
         packet = course.model_packet(frozen_course, record_id)
@@ -208,17 +219,17 @@ def main() -> int:
         target = checker.derive_target(packet["source"], packet["record"]["query"])
         admissible = {json.dumps(item["value"], sort_keys=True)
                       for item in target["admissible_answers"]}
-        half = hash(row["world"]) % 2
-        halves[half]["records"] += 1
+        half = 0 if row["world"] < cut else 1
+        stats[half]["records"] += 1
         for receipt in receipts:
             scores = scores_for[receipt.name].get(record_id)
             if scores is None:
-                halves[half]["missing"] += 1
+                stats[half]["missing"] += 1
                 continue
             try:
                 base = slots.score_decisions(packet, scores)
             except Exception:                                         # noqa: BLE001
-                halves[half]["undecided"] += 1
+                stats[half]["undecided"] += 1
                 continue
             fixed = dict(base)
             fixed["selected"] = answer_constraints.apply_constraints(
@@ -229,25 +240,41 @@ def main() -> int:
                     hit = json.dumps(value, sort_keys=True) in admissible
                 except Exception:                                     # noqa: BLE001
                     hit = False
-                halves[half][f"{label}_hits"] += 1 if hit else 0
-            halves[half][f"{label}_n"] += 1
+                stats[half][label] += 1 if hit else 0
+            stats[half]["obs"] += 1
     print(f"{'half':>6} {'records':>8} {'obs':>6} {'unconstrained':>14} {'constrained':>12}"
           f" {'gain':>9} {'missing':>8} {'undecided':>10}")
     print("-" * 100)
-    for key in sorted(halves):
-        cell = halves[key]
-        observations = cell["base_n"]
-        if not observations:
+    for key in sorted(stats):
+        cell = stats[key]
+        if not cell["obs"]:
             print(f"{key:>6} {cell['records']:8d} {0:6d} {'--':>14} {'--':>12} {'--':>9}"
                   f" {cell['missing']:8d} {cell['undecided']:10d}   NO OBSERVATIONS")
             continue
-        base = cell["base_hits"] / observations
-        fixed = cell["fixed_hits"] / cell["fixed_n"] if cell["fixed_n"] else float("nan")
-        print(f"{key:>6} {cell['records']:8d} {observations:6d} {base:13.4%} {fixed:11.4%}"
+        base = cell["base"] / cell["obs"]
+        fixed = cell["fixed"] / cell["obs"]
+        print(f"{key:>6} {cell['records']:8d} {cell['obs']:6d} {base:13.4%} {fixed:11.4%}"
               f" {fixed - base:+9.4%} {cell['missing']:8d} {cell['undecided']:10d}")
     print()
-    print("If the layer's gain is the same on both halves, it is carried by the packet and not by")
-    print("which worlds happened to be seen more often.")
+    print("Worlds split by sorted world id, so the halves are a fixed partition and not one that")
+    print("changes with the process hash seed.")
+    print()
+
+    print("=" * 100)
+    print("5. EXPOSURE WITHIN KIND — the confound §4 could not remove")
+    print("=" * 100)
+    print()
+    print(f"{'kind':>15} {'q':>5} {'spearman(exposure, correct)':>28} {'exposure range':>16}")
+    print("-" * 100)
+    for kind in sorted({row["kind"] for row in records}):
+        members = [row for row in records if row["kind"] == kind]
+        rho_kind = spearman([(row["exposure"], row["correct"]) for row in members])
+        lo = min(row["exposure"] for row in members)
+        hi = max(row["exposure"] for row in members)
+        print(f"{kind:>15} {len(members):5d} {rho_kind:+28.4f} {f'{lo}..{hi}':>16}")
+    print()
+    print("A within-kind positive correlation is evidence for exposure carrying accuracy; a value")
+    print("near zero removes exposure as the explanation for the overall +0.1451.")
     return 0
 
 

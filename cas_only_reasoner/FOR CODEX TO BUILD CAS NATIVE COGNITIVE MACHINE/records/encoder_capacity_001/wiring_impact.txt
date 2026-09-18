@@ -1,0 +1,40 @@
+====================================================================================================
+THE REGISTERED DECISION CONTRACT, as it stands
+====================================================================================================
+
+{
+  "candidate_order": "NO_MATCH first; then all target-ref permutations in lexical order against lexical source refs",
+  "candidate_ties": "first candidate wins exact scalar ties",
+  "correspondence": "NO_MATCH log probability = logsoftmax(mode)[NO_MATCH]; mapping log probability = logsoftmax(mode)[MAPPING] + sum(assigned node logits) - logsumexp(sum(assigned node logits) over ALL syntactic bijections)",
+  "correspondence_forced": "No syntactic bijections: NO_MATCH log probability 0; report forced decision",
+  "independent": "argmax over each slot's declared symbol order; first wins exact ties",
+  "loss_contract": "field mean, then task mean, then batch mean; correspondence is ONE whole-candidate valid-set field, not node marginals; membership binary loss and private valid-set loss are worker work, not implemented here",
+  "score_scalar": "finite exact Python int or float, excluding bool; absolute value <= 1000000",
+  "semantic_repair": false
+}
+
+====================================================================================================
+WHAT CHANGES WHEN THE CONTRACT TEXT CHANGES � all 564 packets, every kind
+====================================================================================================
+
+  kinds covered                        8  ['analogy', 'context', 'correspondence', 'definition', 'edge_account', 'parts', 'reach', 'role_set']
+  packets compared                     564
+  slots compared                       2598
+
+  plan_digest changed, packets            564 of 564
+  slot_id set changed, packets              0 of 564
+  encoder query spec changed, slots         0 of 2598
+  encoder query BYTES changed, slots        0 of 2598
+
+THE ENCODER'S ENTIRE INPUT IS UNCHANGED.
+  Every encoded vector, every score, and every recorded prediction's `scores` are
+  therefore unchanged. What changes is plan_digest and the DECISIONS.
+
+  So wiring the constraint layer does NOT invalidate the model, the encoder, the
+  readout or the block, and it does NOT require a new baseline for them. Rounds 36
+  and 37 described it as changing the contract and its digest, which is true, and
+  implied that was expensive, which this measurement does not support.
+
+Caveat: `binding.compile_packet` may itself read `slots.DECISION_CONTRACT`; it does not
+here, which is what makes the encoder input invariant, but that is a property of the
+current code and would need re-checking if the packet compilation changed.
