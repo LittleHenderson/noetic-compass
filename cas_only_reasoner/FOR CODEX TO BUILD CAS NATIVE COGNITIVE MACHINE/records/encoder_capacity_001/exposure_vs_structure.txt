@@ -1,0 +1,80 @@
+presentations: 1152
+first element: {"occurrence_id": "typed-occurrence-c745b391096ecba5c41359dcb23e5e67789c97da368b5f1c65144655be032442", "record_id": "typed-input-7dbffa3c40543eff40f90a340ca44d036637b4fb6939e63cc73c5d0e5271a962"}
+
+distinct records presented: 564
+exposure counts: {1: 384, 2: 36, 3: 78, 4: 8, 5: 17, 6: 16, 7: 2, 8: 12, 11: 6, 14: 4, 17: 1}
+
+records: 564   exposure range 1..17
+
+====================================================================================================
+1. EXPOSURE � mean recorded correctness by how often the question was presented
+====================================================================================================
+
+ presentations  questions   mean correctness
+----------------------------------------------------------------------------------------------------
+             1        384          31.4236%
+             2         36          24.5370%
+             3         78          35.2564%
+             4          8          12.5000%
+             5         17          86.2745%
+             6         16          18.7500%
+             7          2         100.0000%
+             8         12          68.0556%
+            11          6          83.3333%
+            14          4          91.6667%
+            17          1         100.0000%
+
+Spearman correlation, exposure vs correctness (all 564): +0.1451
+
+====================================================================================================
+2. WORLD SIZE � mean recorded correctness by the focus world's node count
+====================================================================================================
+
+  nodes  questions   mean correctness
+----------------------------------------------------------------------------------------------------
+      3        115          39.4203%
+      4        449          33.4447%
+
+   by kind and size:
+              analogy nodes  3  q   16  18.7500%
+              analogy nodes  4  q   54  15.4321%
+              context nodes  3  q   13   0.0000%
+              context nodes  4  q   57   0.0000%
+       correspondence nodes  3  q   18  100.0000%
+       correspondence nodes  4  q   70  93.0952%
+           definition nodes  3  q   15   0.0000%
+           definition nodes  4  q   55   0.0000%
+         edge_account nodes  3  q   13   0.0000%
+         edge_account nodes  4  q   57   0.0000%
+                parts nodes  3  q    5  26.6667%
+                parts nodes  4  q   48  29.5139%
+                reach nodes  3  q   28  82.1429%
+                reach nodes  4  q   79  74.4726%
+             role_set nodes  3  q    7   0.0000%
+             role_set nodes  4  q   29  12.6437%
+
+====================================================================================================
+3. WORLD IDENTITY � is accuracy carried per world?
+====================================================================================================
+
+worlds: 24
+  worlds with 100% of their questions correct: 0
+  worlds with   0% of their questions correct: 0
+  worlds strictly between: 24
+  best world 48.3333% over 20 questions, worst 15.0000% over 20
+
+  even split by world index into two halves, mean correctness:
+     half 0:  269 questions   33.2094%
+     half 1:  295 questions   35.9887%
+
+====================================================================================================
+4. THE CONSTRAINT LAYER'S GAIN, SPLIT BY WORLD HALF � it reads only the packet
+====================================================================================================
+
+  half  records    obs  unconstrained  constrained      gain  missing  undecided
+----------------------------------------------------------------------------------------------------
+     0      269      0             --           --        --        0          0   NO OBSERVATIONS
+     1      295      0             --           --        --        0          0   NO OBSERVATIONS
+
+If the layer's gain is the same on both halves, it is carried by the packet and not by
+which worlds happened to be seen more often.

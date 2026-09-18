@@ -4,6 +4,61 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The course uses 24 focus worlds, none polarised, so the machine is not memorising WORLDS — and round 38's wording is narrowed
+
+$0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
+training, no new run. Script `records/encoder_capacity_001/measure_exposure_vs_structure.py`. Record
+`EXPOSURE_VS_STRUCTURE_RESULT.md`.
+
+THE COURSE USES 24 FOCUS WORLDS, NOT THE BANK'S 64, about 20 questions each. AND ACCURACY IS NOT
+CARRIED PER WORLD:
+
+    worlds: 24
+      worlds with 100% of their questions correct: 0
+      worlds with   0% of their questions correct: 0
+      worlds strictly between: 24
+      best world 48.3333% over 20 questions, worst 15.0000% over 20 questions
+      split by world: half 0  288 q  35.3588%    half 1  276 q  33.9372%
+
+NO WORLD IS POLARISED. All 24 sit between 15.0000% and 48.3333%, a 33.3-point band centred on the
+overall 34.6631%. A machine that memorised answers world by world would show worlds near 100% and
+worlds near 0%. THAT IS DIRECT EVIDENCE AGAINST PER-WORLD MEMORISATION.
+
+ROUND 38's WORDING IS THEREFORE NARROWED AND ITS STRONGER FORM WITHDRAWN. Round 38 read the
+development panel's 0 of 59 as "it answers from memorised layout rather than structure". Per-world
+accuracy is UNIFORM, so the memorisation is NOT world-attached - it is at the SLOT AND LAYOUT level
+(the shape of a pair, the arity of a slot), shared across worlds rather than attached to them. That
+is consistent with the packet being inert per slot, with W36 in six runs, and with edge_account at
+54.6353% balanced. AND IT MEANS "UNSEEN WORLD" IS NOT BY ITSELF WHY THE PANEL FAILS: the panel
+differs in WORLD SIZE (ten nodes against four) and in WHO AUTHORED THE DECLARATIONS
+(NEW_CALLER_AUTHORED_DEVELOPMENT_FACTS_NOT_WORLD_TRUTH).
+
+AND WORLD SIZE DOES NOT EXPLAIN THE IN-COURSE FAILURES - smaller worlds score BETTER:
+
+    3-node focus worlds   115 questions   39.4203%
+    4-node focus worlds   449 questions   33.4447%
+
+by kind: correspondence 100.0000% (3 nodes, 18 q) against 93.0952% (4 nodes, 70 q); reach 82.1429%
+against 74.4726%. Structurally sensible - fewer pairs, fewer permutations - and it means SIZE IS NOT
+THE AXIS ON WHICH THE MACHINE FAILS INSIDE THE COURSE. The panel is a 2.5x extrapolation and nothing
+here measures out there.
+
+EXPOSURE IS WEAKLY ASSOCIATED AND CONFOUNDED. 1,152 presentations over 564 questions; exposure counts
+run 1..17. Spearman correlation exposure vs correctness = +0.1451. REAL BUT WEAK, AND NOT READABLE AS
+MEMORISATION - exposure is confounded with KIND, since the high-exposure cells are 1 to 17 questions
+each and their rates track which kinds they contain. A within-kind correlation is the measurement that
+would settle it and is NOT computed. OPEN.
+
+ONE MEASUREMENT FAILED AND IS RECORDED AS FAILED. The world-invariance test of the constraint layer -
+split the worlds in half, show the gain is the same on both - produced NO OBSERVATIONS: `records`
+counts correctly at 269 and 295, but `obs` is zero AND SO ARE THE `missing` AND `undecided` COUNTERS,
+meaning the inner loop over the six receipts incremented nothing, not even its own failure counters.
+THE CAUSE IS NOT IDENTIFIED. It is a defect in the measuring script, recorded rather than removed.
+ROUND 37's WORLD-INVARIANCE CLAIM THEREFORE REMAINS ASSERTED AND UNTESTED.
+
+NOT LICENSED: any inference about the ten-node development panel from in-course data. 2186 tests, 767
+subtests, green.
+
 ## 2026-09-17 UTC - The held-out panel is unmeasurable from this receipt (closed with a reason), and the constraint layer is structure-independent
 
 $0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
