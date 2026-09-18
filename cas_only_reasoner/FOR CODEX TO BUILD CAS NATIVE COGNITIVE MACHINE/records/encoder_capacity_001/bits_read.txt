@@ -1,0 +1,86 @@
+runs: ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+
+receipt_20260917_a: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+receipt_20260917_m: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+receipt_20260918_a: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+receipt_20260918_m: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+receipt_20260919_a: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+receipt_20260919_m: pipeline validation agree=229 disagree=0  of 229 binary questions (564 total)
+
+================================================================================================================
+BITS READ PER KIND, FINAL CURSOR � the distinction between 'reads most' and 'reads none'
+================================================================================================================
+
+                   run            kind    q   bits   selected     argmax  exact(sel)   chance  always-A  always-P  vs best const
+----------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a    edge_account   70   1029  53.2556%  53.2556%    0.0000% 51.8326%  59.5724%  40.4276%      -6.3168%
+    receipt_20260917_a           parts   53    207  73.9130%  73.9130%   30.1887% 51.2707%  42.0290%  57.9710%     +15.9420%
+    receipt_20260917_a        role_set   36    216  65.7407%  65.7407%   13.8889% 68.6728%  80.5556%  19.4444%     -14.8148%
+    receipt_20260917_a         context   70    267  39.7004%  39.7004%    0.0000% 66.4184%  21.3483%  78.6517%     -38.9513%
+
+    receipt_20260917_m    edge_account   70   1029  53.4500%  53.4500%    0.0000% 51.8326%  59.5724%  40.4276%      -6.1224%
+    receipt_20260917_m           parts   53    207  73.4300%  73.4300%   32.0755% 51.2707%  42.0290%  57.9710%     +15.4589%
+    receipt_20260917_m        role_set   36    216  68.5185%  68.5185%   13.8889% 68.6728%  80.5556%  19.4444%     -12.0370%
+    receipt_20260917_m         context   70    267  39.3258%  39.3258%    0.0000% 66.4184%  21.3483%  78.6517%     -39.3258%
+
+    receipt_20260918_a    edge_account   70   1029  52.9640%  52.9640%    0.0000% 51.8326%  59.5724%  40.4276%      -6.6084%
+    receipt_20260918_a           parts   53    207  71.4976%  71.4976%   26.4151% 51.2707%  42.0290%  57.9710%     +13.5266%
+    receipt_20260918_a        role_set   36    216  68.0556%  68.0556%    8.3333% 68.6728%  80.5556%  19.4444%     -12.5000%
+    receipt_20260918_a         context   70    267  38.5768%  38.5768%    0.0000% 66.4184%  21.3483%  78.6517%     -40.0749%
+
+    receipt_20260918_m    edge_account   70   1029  52.8669%  52.8669%    0.0000% 51.8326%  59.5724%  40.4276%      -6.7055%
+    receipt_20260918_m           parts   53    207  73.9130%  73.9130%   33.9623% 51.2707%  42.0290%  57.9710%     +15.9420%
+    receipt_20260918_m        role_set   36    216  70.8333%  70.8333%    8.3333% 68.6728%  80.5556%  19.4444%      -9.7222%
+    receipt_20260918_m         context   70    267  40.0749%  40.0749%    0.0000% 66.4184%  21.3483%  78.6517%     -38.5768%
+
+    receipt_20260919_a    edge_account   70   1029  52.3810%  52.3810%    0.0000% 51.8326%  59.5724%  40.4276%      -7.1914%
+    receipt_20260919_a           parts   53    207  72.9469%  72.9469%   30.1887% 51.2707%  42.0290%  57.9710%     +14.9758%
+    receipt_20260919_a        role_set   36    216  68.0556%  68.0556%    8.3333% 68.6728%  80.5556%  19.4444%     -12.5000%
+    receipt_20260919_a         context   70    267  41.5730%  41.5730%    0.0000% 66.4184%  21.3483%  78.6517%     -37.0787%
+
+    receipt_20260919_m    edge_account   70   1029  53.5471%  53.5471%    0.0000% 51.8326%  59.5724%  40.4276%      -6.0253%
+    receipt_20260919_m           parts   53    207  70.5314%  70.5314%   22.6415% 51.2707%  42.0290%  57.9710%     +12.5604%
+    receipt_20260919_m        role_set   36    216  69.4444%  69.4444%    8.3333% 68.6728%  80.5556%  19.4444%     -11.1111%
+    receipt_20260919_m         context   70    267  40.8240%  40.8240%    0.0000% 66.4184%  21.3483%  78.6517%     -37.8277%
+
+chance       = p^2 + (1-p)^2 for p = the truth PRESENT rate of that kind's slots
+always-A/P   = what a decoder that always answered that symbol would have earned
+vs best const= the machine's per-bit accuracy minus the better of those two constants
+
+================================================================================================================
+BITS-CORRECT HISTOGRAM, FINAL CURSOR, ALL RUNS � bucketed by fraction of the question's slots
+================================================================================================================
+
+edge_account   (420 questions, slot counts {9: 13, 16: 57})
+    30% correct    20    4.76%  ##
+    40% correct   124   29.52%  ###############
+    50% correct    54   12.86%  ######
+    60% correct   164   39.05%  ####################
+    70% correct    45   10.71%  #####
+    80% correct    13    3.10%  ##
+
+parts   (318 questions, slot counts {3: 5, 4: 48})
+     0% correct     2    0.63%  
+    20% correct    22    6.92%  ###
+    30% correct     4    1.26%  #
+    50% correct    62   19.50%  ##########
+    70% correct    16    5.03%  ###
+    80% correct   119   37.42%  ###################
+   100% correct    93   29.25%  ###############
+
+role_set   (216 questions, slot counts {6: 36})
+    20% correct     2    0.93%  
+    30% correct     9    4.17%  ##
+    50% correct    52   24.07%  ############
+    70% correct    76   35.19%  ##################
+    80% correct    55   25.46%  #############
+   100% correct    22   10.19%  #####
+
+context   (420 questions, slot counts {3: 13, 4: 57})
+     0% correct   137   32.62%  ################
+    20% correct    50   11.90%  ######
+    30% correct    13    3.10%  ##
+    50% correct    78   18.57%  #########
+    70% correct     4    0.95%  
+    80% correct   138   32.86%  ################
+

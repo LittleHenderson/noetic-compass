@@ -4,6 +4,100 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Three of the four many-decision kinds read their own bits at or below chance, and the block throws away a signal that is linearly present in its own input
+
+$0.00. Pure Python, standard library only. No torch, no device, no model, no training, no new run.
+Records `records/encoder_capacity_001/BITS_READ_RESULT.md` and `BINDING_VARIANTS_RESULT.md`;
+`MACHINE_STATE_001/STATUS.md` extended with Limits 4 and 5; two candidate fixes tested and refused.
+
+PER-BIT MEASUREMENT, AND IT VALIDATES ITSELF. "0 correct in 70 questions" cannot distinguish "reads
+the bits and loses the answer" from "never read the bits". The answer to every many-decision question
+is a VISIBLE FIELD of the packet (`focus["contains"]`, `focus["declarations"]`), so the true symbol
+of every binary slot follows from a re-derivation by the project's own checker through the same
+mapping `slots.assemble_answer` uses, walked backwards. That derivation must reproduce the run's own
+`correct` flag: agree=229 disagree=0, in ALL SIX RUNS, six-for-six. Nothing private was opened.
+
+    kind           per-bit (final cursor)     chance      best constant   vs constant       exact answers
+    edge_account   52.3810% - 53.5471%       51.8326%    59.5724%        -6.03 to -7.19    0.0000% all six
+    parts          70.5314% - 73.9130%       51.2707%    57.9710%        +12.56 to +15.94  22.6415%-33.9623%
+    role_set       65.7407% - 70.8333%       68.6728%    80.5556%        -9.72 to -14.81   8.3333%-13.8889%
+    context        38.5768% - 41.5730%       66.4184%    78.6517%        -37.08 to -40.07  0.0000% all six
+
+`selected` equals `argmax` in every row of every run, so this is a READOUT property, not a decoder
+artifact. Bits-correct histograms: edge_account (420 q) NEVER reaches 100% and never reaches 0%,
+pinned in a 30%-80% band with 68.57% of the mass at 40% or 60%. parts reaches 100% in 93 of 318
+questions; role_set in 22 of 216. context is bimodal, 137 q at 0% and 138 at 80%. THE ROUND-26
+READING IS WITHDRAWN: the many-decision kinds are not mis-composed, they are unread, and for two of
+them a constant answer would have scored strictly better.
+
+THE FROZEN ENCODER, REBUILT AND CHECKSUM-GATED. `encoder.encode_slot` is deterministic and every byte
+it consumes comes from the pure-Python `binding` module, so it can be rebuilt exactly and CHECKED
+against the run's published digests. Both reproduce: projection (3829,64)
+sha256 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9, readout (90,64)
+sha256 14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667. The script aborts if either
+fails. THE RECONSTRUCTION IS THE ENCODER, NOT A PROXY.
+
+THE PACKET IS INERT PER SLOT. `encoder.py:212` is the whole slot encoding,
+normalize((packet + query)/sqrt(2)); `learner.py:153` reads it out linearly. So the packet's
+contribution to a slot's decision is ONE CONSTANT PER QUESTION. Measured as `before == name-alone` -
+the fraction of slots where the frozen readout's decision on normalize(packet+query) is IDENTICAL to
+its decision with the packet deleted:
+
+    edge_account 51.6035% before the block (chance 51.8326%)   before == name-alone 100.0000%
+    context      49.0637% before the block (chance 66.4184%)   before == name-alone 100.0000%
+    parts        47.8261% before the block (chance 51.2707%)   before == name-alone  97.1014%
+    role_set     53.2407% before the block (chance 68.6728%)   before == name-alone  94.4444%
+
+The packet changes NOT ONE DECISION in 1,296 slots across two kinds. Identical in all six runs, as it
+must be - this is architecture, not training.
+
+BUT THAT IS NOT THE BOTTLENECK, AND THE REAL ONE IS BIGGER. For these kinds the answer is a function
+of the slot's OWN NAME (the world alias is in every slot descriptor and each world's declarations are
+fixed across the course), and the name carries it. Ridge LDA on the slot vector and a plain lookup
+keyed on (scope alias, coordinates), 5-fold by question:
+
+    kind           q: LDA      enc: LDA    lookup      block       best constant
+    edge_account   62.3033%    62.9181%    96.4508%    53.5471%    59.5724%
+    parts          87.1525%    86.6700%    85.4437%    70.5314%    57.9710%
+    context        96.3758%    94.2490%    98.5926%    40.8240%    78.6517%
+    role_set       60.6376%    60.4577%    68.2540%    69.4444%    80.5556%
+
+context sits at 96.3758% under a plain LINEAR probe of `encoded` - the exact quantity the block is
+handed - and at 40.8240% after the block. A -55.55 POINT loss, landing BELOW the 78.6517% a constant
+answer earns. THE BLOCK DISCARDS A LINEARLY AVAILABLE SIGNAL. That is the larger and cheaper defect.
+
+TWO CANDIDATE FIXES TESTED AND REFUSED, BEFORE SPENDING A RUN. (1) Round 28 proposed naming a
+pair-valued slot as ONE token instead of two coordinates. Measured: pair_token 60.2719% against
+real 62.3033% - WORSE by 2.03 points. And `swapped` coordinates score 62.3033%, identical to four
+decimal places, so the binding DISCARDS COORDINATE ORDER at the linear level. (2) The arity
+hypothesis behind it is refuted independently: `context` participants carry ONE node ref per slot,
+exactly like `parts`, and context fails at 40.8240% against a 78.6517% constant while parts succeeds
+at 70.5314% against a 57.9710% constant. Slot arity does not separate success from failure.
+
+PER-BIT HEADROOM DOES NOT BECOME ANSWER-LEVEL HEADROOM - MEASURED, AND IT GOES THE WRONG WAY. A
+memoriser fitted on four fifths of the exposed course and scored on the held-out fifth, assembling
+answers with the project's own `slots.assemble_answer`:
+
+    ONE DECISION   265 q   50.1887% -> 45.7627%   -4.4260
+    MANY DECISIONS 299 q    5.0167% ->  4.0134%   -1.0033
+    ALL            564 q   26.2411% -> 19.5378%   -6.7033
+
+context reads its bits at 98.5926% under the same fit and scores 0.0000% on whole answers. Whole-answer
+accuracy compounds over EVERY field, and for context and definition the binding constraint is the
+ALIAS-VALUED field (setting_ref, whole, kind_ref, function_ref), not the binary slots. NO SCORE
+PROJECTION IS OFFERED from any of this.
+
+WITHDRAWN: the 63.8% projection (`174 + 299 x 0.6206`) in MACHINE_STATE_001/STATUS.md. Round 27 showed
+Fix B has nothing to derive; round 29 showed per-bit recoverability does not convert. No route to
+63.8% is established and none is proposed.
+
+ADVERSE AND HONEST: the development panel (59 questions, ZERO overlap with the exposed course, machine
+score 0/59 at every cursor) CANNOT be scored by this work. Its records are absent from the frozen
+course, so `course.model_packet` raises `TYPED_COURSE_RECORD_UNKNOWN` and its targets cannot be
+derived. That panel is the one that matters most and it stays unmeasured.
+
+Nothing was wired into a run. No code under test was changed: 2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - The architecture has exactly ONE composition mechanism, hard-coded for ONE kind, and it is the kind that works
 
 $0.00. Pure standard library. JSON and source reading only. No torch, no device, no target opened.

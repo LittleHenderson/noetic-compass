@@ -1,0 +1,33 @@
+FROZEN-BYTE GATE: projection MATCH  readout MATCH
+
+================================================================================================================
+IS THE LABEL LINEARLY DECODABLE, AND IS IT MEMORISABLE? 5-fold by question
+================================================================================================================
+
+          kind            variant  slots    q: LDA   enc: LDA   q: lookup   enc: lookup    block
+----------------------------------------------------------------------------------------------------------------
+  edge_account               real   1029  62.3033%   62.9181%    96.4508%      96.4508% 53.5471%
+  edge_account         pair_token   1029  60.2719%   60.3998%    96.4508%      96.4508% 53.5471%
+  edge_account  pair_token_sorted   1029  63.3721%   63.0098%    96.4508%      96.4508% 53.5471%
+  edge_account            swapped   1029  62.3033%   62.9181%    96.4508%      96.4508% 53.5471%
+
+         parts               real    207  87.1525%   86.6700%    85.4437%      85.4437% 70.5314%
+         parts         pair_token    207  87.1525%   86.6700%    85.4437%      85.4437% 70.5314%
+         parts  pair_token_sorted    207  87.1525%   86.6700%    85.4437%      85.4437% 70.5314%
+         parts            swapped    207  87.1525%   86.6700%    85.4437%      85.4437% 70.5314%
+
+       context               real    267  96.3758%   94.2490%    98.5926%      98.5926% 40.8240%
+       context         pair_token    267  96.3758%   94.2490%    98.5926%      98.5926% 40.8240%
+       context  pair_token_sorted    267  96.3758%   94.2490%    98.5926%      98.5926% 40.8240%
+       context            swapped    267  96.3758%   94.2490%    98.5926%      98.5926% 40.8240%
+
+      role_set               real    216  60.6376%   60.4577%    68.2540%      68.2540% 69.4444%
+      role_set         pair_token    216  60.6376%   60.4577%    68.2540%      68.2540% 69.4444%
+      role_set  pair_token_sorted    216  60.6376%   60.4577%    68.2540%      68.2540% 69.4444%
+      role_set            swapped    216  60.6376%   60.4577%    68.2540%      68.2540% 69.4444%
+
+q   = the slot vector alone (`binding.row_bytes` of the slot's query spec)
+enc = the encoder's own output, normalize(packet + slot), which is what the block is handed
+lookup = majority label per (scope alias, coordinates) key seen in the training folds,
+         falling back to the training majority when the key is unseen
+block = the recorded per-bit accuracy of the trained machine, for reference

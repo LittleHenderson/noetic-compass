@@ -1,0 +1,30 @@
+questions: 564
+
+==========================================================================================================
+EXACT-ANSWER ACCURACY � 5-fold by question, fit on four fifths of the exposed course
+==========================================================================================================
+
+           kind     q   recorded     lookup      lift  key coverage  slot agreement
+----------------------------------------------------------------------------------------------------------
+          reach   107   75.7009%   75.7009%  +0.0000%     100.0000%       100.0000%
+ correspondence    88   59.0909%       nan%     +nan%          nan%            nan%
+        context    70    0.0000%    0.0000%  +0.0000%      92.5816%        88.7240%
+        analogy    70    0.0000%    0.0000%  +0.0000%      94.2857%        90.0000%
+   edge_account    70    0.0000%    0.0000%  +0.0000%      90.4762%        95.1409%
+     definition    70    0.0000%    0.0000%  +0.0000%      94.2857%        92.3810%
+          parts    53   22.6415%   18.8679%  -3.7736%      71.4976%        78.7440%
+       role_set    36    8.3333%    5.5556%  -2.7778%      50.0000%        90.2778%
+----------------------------------------------------------------------------------------------------------
+   ONE DECISION   265   50.1887%   45.7627%  -4.4260%
+ MANY DECISIONS   299    5.0167%    4.0134%  -1.0033%
+----------------------------------------------------------------------------------------------------------
+            ALL   564   26.2411%   19.5378%  -6.7033%
+
+recorded = the machine's own exact-answer accuracy, recomputed from its submitted answers
+lookup   = the same, using symbols memorised from the other four fifths
+lift     = lookup minus recorded, in points
+correspondence is reported but not scored: its answer is a candidate id, not a symbol
+           per slot, and a symbol lookup cannot express it.
+
+REGIME: seen world, unseen question. Not a claim about unseen worlds, and not about the
+development panel, whose packets are absent from the frozen course.

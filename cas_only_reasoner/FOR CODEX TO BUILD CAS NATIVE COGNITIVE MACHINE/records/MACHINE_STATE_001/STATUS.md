@@ -1,4 +1,4 @@
-# The machine, measured — consolidated state after rounds 7 to 21
+# The machine, measured — consolidated state after rounds 7 to 29
 
 **Record:** `records/MACHINE_STATE_001/STATUS.md`
 **Spend across every figure here:** **$0.00.** Every number is read from bytes already on disk, from
@@ -122,11 +122,64 @@ nothing knows that sixteen edge slots describe one graph. Stated sharply: **the 
 where the answer is one choice among *several* admissible answers (65.66%) than where it is a
 *uniquely determined fact* (5.02%).**
 
+> **Rounds 27–29 changed the diagnosis of this limit, and the change is adverse to the composition
+> reading.** Per-bit measurement (`BITS_READ_RESULT.md`) grades each binary slot against a truth
+> re-derived by the project's own checker, validated at **229/229 with zero disagreements in all six
+> runs**. On the final cursor, per-bit accuracy against chance and against the best constant answer:
+>
+> | kind | per-bit | chance | best constant | vs constant | exact answers |
+> |---|---|---|---|---|---|
+> | `edge_account` | 52.3810% – 53.5471% | 51.8326% | 59.5724% | **−6.03 to −7.19** | **0.0000%, all six runs** |
+> | `parts` | 70.5314% – 73.9130% | 51.2707% | 57.9710% | **+12.56 to +15.94** | 22.6415% – 33.9623% |
+> | `role_set` | 65.7407% – 70.8333% | 68.6728% | 80.5556% | **−9.72 to −14.81** | 8.3333% – 13.8889% |
+> | `context` | 38.5768% – 41.5730% | 66.4184% | 78.6517% | **−37.08 to −40.07** | **0.0000%, all six runs** |
+>
+> **Three of the four kinds read their own bits at or below chance, and two of them would have done
+> better by answering a constant.** `edge_account` never once got a 16-slot question's bits all right
+> in 420 questions; `parts` reached 100% in 93 of 318. **So for three kinds there is nothing for a
+> composer to compose** — which withdraws the round-26 reading of this limit, and with it the plan to
+> extend the joint candidate branch beyond `correspondence`.
+
 **Limit 3 — the update budget stopped the run mid-descent.** The loss was at its global minimum and
 the gradient norm still rising at the contract ceiling (ratio 1.378892, Spearman +0.317690, maximum
 at update 93 of 160). It was still fitting the exposed course — 39/564 to 189/564 — while the
 development panel stayed at zero and retention fell 11.4583 points. **More updates on the same
 course would plausibly widen that gap, so the ceiling may be acting as a brake.**
+
+**Limit 4 — the packet is invisible per slot before the block, and the block then destroys a signal
+that is linearly present in its own input.** `encoder.py:212` is the whole slot encoding,
+`normalize((packet + query)/√2)`, and `learner.py:153` reads it out linearly, so the packet's
+contribution to a slot's decision is one constant per question. Measured on a pure-Python rebuild of
+the frozen encoder that **reproduces both published sha256s exactly** (`projection 4481b1d2…fdd9`,
+`readout 14da2c58…c667`):
+
+| kind | before the block | chance | best constant | after the block | `before == name-alone` |
+|---|---|---|---|---|---|
+| `edge_account` | 51.6035% | 51.8326% | 59.5724% | 52.3810% – 53.5471% | **100.0000%** |
+| `parts` | 47.8261% | 51.2707% | 57.9710% | 70.5314% – 73.9130% | 97.1014% |
+| `context` | 49.0637% | 66.4184% | 78.6517% | 38.5768% – 41.5730% | **100.0000%** |
+| `role_set` | 53.2407% | 68.6728% | 80.5556% | 65.7407% – 70.8333% | 94.4444% |
+
+`before == name-alone` is the fraction of slots where the frozen readout's decision on
+`normalize(packet + query)` is **identical** to its decision with the packet deleted. For
+`edge_account` and `context` it is **100.0000%** — the packet changes nothing in 1,296 slots — and it
+is identical in all six runs, as it must be: this is architecture, not training.
+
+**But that is not the bottleneck.** For these kinds the answer is a function of the slot's own name
+(the world alias is in every slot descriptor and each world's declarations are fixed across the whole
+course), and the name carries it: a plain lookup keyed on it reads the bits at **96.4508%**
+(`edge_account`) and **98.5926%** (`context`), and a linear probe of `encoded` reads `context` at
+**96.3758%** where the block reads **40.8240%** — a **−55.55-point** loss that lands below the
+78.6517% a constant earns. **So the block discards a linearly available signal, and that is the
+larger and cheaper defect.** Source: `BINDING_VARIANTS_RESULT.md`.
+
+**Limit 5 — per-bit headroom does not become answer-level headroom.** Turning the 96–98% per-bit
+reading into whole answers was measured, not assumed: a memoriser fitted on four fifths of the
+exposed course and scored on the held-out fifth gains **−6.7033 points** at the answer level
+(26.2411% → 19.5378%), and `context` scores **0.0000%** on whole answers while reading its bits at
+98.5926%. Whole-answer accuracy compounds over every field, and for `context` and `definition` the
+binding constraint is the **alias-valued** field (`setting_ref`, `whole`, `kind_ref`, `function_ref`),
+not the binary slots. **No score projection is offered from any of this.**
 
 ## 5. The fixes, and what each is measured to be worth
 
@@ -155,10 +208,22 @@ a real 4,096-parameter module that produces a proposal-only bias delta and is **
 run's module. **Blocked on: OS-027.** *Offered as a hypothesis only* — nothing shows a bias would
 remove the concentration.
 
-**A projection, labelled as one.** If Fix A restored the world-naming slot *and* Fix B derived the
-many-decision readings perfectly given a correct binding, the exposed course would land near
-`174 + 299 × 0.6206 ≈ 360 / 564 = 63.8%`, against 33.51% now. **That assumes perfect derivation,
-which is not established, and it is a bound under stated assumptions, not a prediction.**
+**A projection, WITHDRAWN in round 27.** This record previously carried: if Fix A restored the
+world-naming slot *and* Fix B derived the many-decision readings perfectly given a correct binding,
+the exposed course would land near `174 + 299 × 0.6206 ≈ 360 / 564 = 63.8%`. **That is withdrawn.**
+Round 27 measured three of the four binary kinds reading their own bits at or below chance and two of
+them worse than a constant, so Fix B has nothing to derive; and round 29 measured that per-bit
+recoverability does not convert into answer-level accuracy (Limit 5). **No route to 63.8% is
+established, and none is proposed.**
+
+**What rounds 27–29 put in its place — a location, not a projection.** Two defects, in order of size,
+both measured: (i) the block discards a linear signal present in its own input, worst on `context`
+(−55.55 points); (ii) the packet is inert per slot before the block, so any conjunction must be
+synthesised by the recurrence, and it is synthesised for `parts` alone. **Neither has a tested fix.**
+Two candidate fixes were tested and refused:
+`BINDING_VARIANTS_RESULT.md` §2 refutes re-naming a pair-valued slot as a single token (**−2.03
+points**, and `swapped` coordinates are byte-identical, so order is discarded), and the arity
+hypothesis behind it is refuted by `context` sharing `parts`' arity and failing.
 
 ## 6. The decisions waiting
 

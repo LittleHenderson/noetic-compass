@@ -1,0 +1,207 @@
+================================================================================================================
+FROZEN-BYTE GATE � is this reconstruction the encoder, or a proxy?
+================================================================================================================
+
+  projection  shape   (3829, 64) (want   (3829, 64))  MATCH
+              sha256 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9
+              wanted 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9
+     readout  shape     (90, 64) (want     (90, 64))  MATCH
+              sha256 14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667
+              wanted 14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667
+
+Both frozen byte strings reproduce exactly. The transform below is the encoder.
+
+runs: ['receipt_20260917_a', 'receipt_20260917_m', 'receipt_20260918_a', 'receipt_20260918_m', 'receipt_20260919_a', 'receipt_20260919_m']
+
+receipt_20260917_a        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           39.7004%   (-38.9513% vs constant)
+   before == recorded   40.4494%    before == name-alone  100.0000%
+
+receipt_20260917_a   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           53.2556%   (-6.3168% vs constant)
+   before == recorded   48.5909%    before == name-alone  100.0000%
+
+receipt_20260917_a          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           73.9130%   (+15.9420% vs constant)
+   before == recorded   55.5556%    before == name-alone   97.1014%
+
+receipt_20260917_a       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           65.7407%   (-14.8148% vs constant)
+   before == recorded   48.6111%    before == name-alone   94.4444%
+
+receipt_20260917_m        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           39.3258%   (-39.3258% vs constant)
+   before == recorded   40.8240%    before == name-alone  100.0000%
+
+receipt_20260917_m   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           53.4500%   (-6.1224% vs constant)
+   before == recorded   49.1740%    before == name-alone  100.0000%
+
+receipt_20260917_m          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           73.4300%   (+15.4589% vs constant)
+   before == recorded   56.0386%    before == name-alone   97.1014%
+
+receipt_20260917_m       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           68.5185%   (-12.0370% vs constant)
+   before == recorded   49.5370%    before == name-alone   94.4444%
+
+receipt_20260918_a        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           38.5768%   (-40.0749% vs constant)
+   before == recorded   46.0674%    before == name-alone  100.0000%
+
+receipt_20260918_a   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           52.9640%   (-6.6084% vs constant)
+   before == recorded   52.7697%    before == name-alone  100.0000%
+
+receipt_20260918_a          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           71.4976%   (+13.5266% vs constant)
+   before == recorded   53.1401%    before == name-alone   97.1014%
+
+receipt_20260918_a       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           68.0556%   (-12.5000% vs constant)
+   before == recorded   50.0000%    before == name-alone   94.4444%
+
+receipt_20260918_m        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           40.0749%   (-38.5768% vs constant)
+   before == recorded   47.5655%    before == name-alone  100.0000%
+
+receipt_20260918_m   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           52.8669%   (-6.7055% vs constant)
+   before == recorded   53.0612%    before == name-alone  100.0000%
+
+receipt_20260918_m          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           73.9130%   (+15.9420% vs constant)
+   before == recorded   53.6232%    before == name-alone   97.1014%
+
+receipt_20260918_m       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           70.8333%   (-9.7222% vs constant)
+   before == recorded   50.9259%    before == name-alone   94.4444%
+
+receipt_20260919_a        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           41.5730%   (-37.0787% vs constant)
+   before == recorded   43.0712%    before == name-alone  100.0000%
+
+receipt_20260919_a   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           52.3810%   (-7.1914% vs constant)
+   before == recorded   50.8260%    before == name-alone  100.0000%
+
+receipt_20260919_a          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           72.9469%   (+14.9758% vs constant)
+   before == recorded   53.6232%    before == name-alone   97.1014%
+
+receipt_20260919_a       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           68.0556%   (-12.5000% vs constant)
+   before == recorded   50.0000%    before == name-alone   94.4444%
+
+receipt_20260919_m        context   70 q,   267 slots
+   chance 66.4184%   best constant 78.6517%
+   BEFORE block, frozen readout on `encoded`    49.0637%   (-17.3547% vs chance)
+   slot name alone, no packet term              49.0637%
+   packet term alone, no slot term              26.9663%
+   AFTER block, what the run recorded           40.8240%   (-37.8277% vs constant)
+   before == recorded   42.3221%    before == name-alone  100.0000%
+
+receipt_20260919_m   edge_account   70 q,  1029 slots
+   chance 51.8326%   best constant 59.5724%
+   BEFORE block, frozen readout on `encoded`    51.6035%   (-0.2291% vs chance)
+   slot name alone, no packet term              51.6035%
+   packet term alone, no slot term              54.5190%
+   AFTER block, what the run recorded           53.5471%   (-6.0253% vs constant)
+   before == recorded   51.6035%    before == name-alone  100.0000%
+
+receipt_20260919_m          parts   53 q,   207 slots
+   chance 51.2707%   best constant 57.9710%
+   BEFORE block, frozen readout on `encoded`    47.8261%   (-3.4447% vs chance)
+   slot name alone, no packet term              47.8261%
+   packet term alone, no slot term              42.0290%
+   AFTER block, what the run recorded           70.5314%   (+12.5604% vs constant)
+   before == recorded   51.2077%    before == name-alone   97.1014%
+
+receipt_20260919_m       role_set   36 q,   216 slots
+   chance 68.6728%   best constant 80.5556%
+   BEFORE block, frozen readout on `encoded`    53.2407%   (-15.4321% vs chance)
+   slot name alone, no packet term              49.5370%
+   packet term alone, no slot term              80.5556%
+   AFTER block, what the run recorded           69.4444%   (-11.1111% vs constant)
+   before == recorded   49.5370%    before == name-alone   94.4444%
+

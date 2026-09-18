@@ -1,0 +1,25 @@
+================================================================================================================
+FROZEN-BYTE GATE � is this reconstruction the encoder, or a proxy?
+================================================================================================================
+
+  projection  shape   (3829, 64) (want   (3829, 64))  MATCH
+              sha256 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9
+              wanted 4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9
+     readout  shape     (90, 64) (want     (90, 64))  MATCH
+              sha256 14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667
+              wanted 14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667
+
+Both frozen byte strings reproduce exactly. The transform below is the encoder.
+
+runs: ['receipt_20260919_m']
+
+receipt_20260919_m   70 questions, 1029 edge slots
+   truth PRESENT rate                      40.4276%
+   chance  p^2+(1-p)^2                     51.8326%
+   best constant answer                    59.5724%
+   BEFORE the block: frozen readout on `encoded`    51.6035%
+   the slot's name alone, no packet term            51.6035%
+   AFTER the block: what the run recorded           53.5471%
+   before == recorded                      51.6035%
+   before == name-alone                   100.0000%
+
