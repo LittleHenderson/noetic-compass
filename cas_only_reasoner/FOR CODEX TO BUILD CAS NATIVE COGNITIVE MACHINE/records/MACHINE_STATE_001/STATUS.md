@@ -433,10 +433,45 @@ real; with 90 rows and 64 columns only the projection is reachable, and there th
 inert per slot), round 30 (the fit rides on the slot's *name*), round 36 (the name-derived fit cannot
 be expressed through the readout either). Source: `RECTANGULAR_REALISATION_RESULT.md`.
 
-**FLAG_FOR_HUMAN_REVIEW.** The measured components are exhausted: the constraint layer is mined
-(+36.83 truth-free, rounds 32–35) and the one way of improving the readout without changing it is
-closed. What remains is a change to a frozen component — the readout or the encoder's binding — and
-that is a decision, not a measurement. This record does not authorise it.
+**Round 37 built the constraint layer as tested code and measured it end to end.** Of the three
+options below, the third needs no re-baselining — it touches only the decoder — so it was taken.
+`cncm/answer_constraints.py` (new, additive, off by default; 16 tests, `2186 passed` overall) reads
+the packet's declared legality conditions and corrects the decision table. It does **not** modify
+`slots.score_decisions`, the encoder, the readout or the block.
+
+Every question, every kind, **six runs, on the recorded scores**:
+
+| kind | q | unconstrained | **constrained** | lift | selections changed |
+|---|---|---|---|---|---|
+| **`parts`** | 318 | 29.2453% | **80.8176%** | **+51.5723%** | 71.0692% |
+| `definition` | 420 | 0.0000% | **10.2381%** | **+10.2381%** | 97.6190% |
+| `context` | 420 | 0.0000% | **4.0476%** | **+4.0476%** | 97.8571% |
+| `edge_account` | 420 | 0.0000% | **0.0000%** | **+0.0000%** | 97.8571% |
+| correspondence / reach / analogy / role_set | 1806 | — | — | **+0.0000%** | **0.0000%** |
+| **ONE DECISION** | 1590 | 66.5409% | 66.5409% | **+0.0000%** | |
+| **MANY DECISIONS** | 1794 | 6.4103% | **18.8963%** | **+12.4861%** | |
+| **ALL** | 3384 | **34.6631%** | **41.2825%** | **+6.6194%** | |
+
+Per run: 193→222, 192→221, 200→249, 203→245, 196→231, 189→229 — **mean +37.3 of 564, six for six.**
+
+**The property that makes this different from every previous attempt: the one-decision half is
+unchanged at +0.0000%, and `selections changed` is 0.0000% for all four kinds the layer does not
+constrain. There is no trade-off.** Round 30's fitted readout gained 7–11 points on one half and cost
+44.1510 on the other. This gains **12.4861** and costs **nothing**.
+
+`parts` reaches **80.8176%**, beating its cardinality rule (74.2138%) and its self-part rule
+(31.7610%) applied separately — round 35 refused to add those figures because the combination was
+unmeasured, and this is that combination. `edge_account` does not move, even with both rules applied
+and 97.8571% of its selections changed: its balanced reading is 54.6353%, and a constraint can reorder
+evidence but not create it. Source: `CONSTRAINT_LAYER_RESULT.md`.
+
+**WITHDRAWN:** round 34's +36.83 per-run projection — pieces added on paper overlap, and the measured
+per-kind attribution differs.
+
+**FLAG_FOR_HUMAN_REVIEW — the wiring, and it is the only thing left.** Everything else on this list
+required re-baselining; this does not. The layer ran **offline against recorded scores**. To count it
+must be wired into the run's decision step, which changes the decision contract and its digest. That
+is an owner decision, and this record does not take it.
 **The open item is now sharp and singular. `parts`' constraint decoder reaches 74.2138% while
 `context`'s best truth-free decoder reaches 4.0476% and `edge_account`'s reaches 4.2857%** — the same
 gap round 27 measured, where `parts` reads its bits at 70.5314%–73.9130% against a 51.2707% chance rate

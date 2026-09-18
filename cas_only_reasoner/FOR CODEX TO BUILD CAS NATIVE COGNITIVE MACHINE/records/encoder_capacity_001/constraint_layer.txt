@@ -1,0 +1,32 @@
+runs: 6
+
+receipt_20260917_a:  MANY  21 ->  50 of 299   ALL 193 -> 222 of 564
+receipt_20260917_m:  MANY  22 ->  51 of 299   ALL 192 -> 221 of 564
+receipt_20260918_a:  MANY  17 ->  66 of 299   ALL 200 -> 249 of 564
+receipt_20260918_m:  MANY  21 ->  63 of 299   ALL 203 -> 245 of 564
+receipt_20260919_a:  MANY  19 ->  54 of 299   ALL 196 -> 231 of 564
+receipt_20260919_m:  MANY  15 ->  55 of 299   ALL 189 -> 229 of 564
+
+====================================================================================================
+THE DECLARED-CONSTRAINT LAYER, EVERY QUESTION, SIX RUNS
+====================================================================================================
+
+           kind     q  unconstrained  constrained      lift  selections changed
+----------------------------------------------------------------------------------------------------
+        analogy   420      16.1905%    16.1905%  +0.0000%            0.0000%
+        context   420       0.0000%     4.0476%  +4.0476%           97.8571%
+ correspondence   528      94.5076%    94.5076%  +0.0000%            0.0000%
+     definition   420       0.0000%    10.2381% +10.2381%           97.6190%
+   edge_account   420       0.0000%     0.0000%  +0.0000%           97.8571%
+          parts   318      29.2453%    80.8176% +51.5723%           71.0692%
+          reach   642      76.4798%    76.4798%  +0.0000%            0.0000%
+       role_set   216      10.1852%    10.1852%  +0.0000%            0.0000%
+----------------------------------------------------------------------------------------------------
+   ONE DECISION  1590      66.5409%    66.5409%  +0.0000%
+ MANY DECISIONS  1794       6.4103%    18.8963% +12.4861%
+            ALL  3384      34.6631%    41.2825%  +6.6194%
+
+unconstrained = slots.score_decisions, the run's own rule
+constrained   = cncm.answer_constraints.apply_constraints on the same scores
+Both arms read the RECORDED scores. No target enters either decoder; the truth is used
+only to score the result.

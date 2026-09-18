@@ -4,6 +4,69 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The declared-constraint layer is built and tested: +6.6194 points overall, +12.4861 on the many-decision half, and the one-decision half is UNTOUCHED
+
+$0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
+training, no new run. Code: `cncm/answer_constraints.py` (new, additive, off by default). Tests:
+`tests/test_answer_constraints.py` (16 new). Record:
+`records/encoder_capacity_001/CONSTRAINT_LAYER_RESULT.md`.
+
+WHAT WAS BUILT. slots.score_decisions has two branches - an independent per-slot max, and a joint
+candidate MAP for correspondence alone. Every other kind is decided slot by slot with no knowledge of
+what the packet says a legal answer looks like, AND THE PACKET SAYS IT PER KIND. The new layer reads
+it, under three rules each with its own measurement behind it: self-links and self-parts are ABSENT
+(zero self-links in 649,728 declared edges); declared cardinality from focus["contains"], the
+supplied whole, and PRIMARY_AUTHORED_LABELS_FIRST_THREE; and FOCUS_WORLD_DECLARATION_IDENTITY by
+enumerating the bank. It does NOT modify slots.score_decisions, the encoder, the readout or the block.
+
+MEASURED END TO END, every question, every kind, six runs:
+
+           kind     q  unconstrained  constrained      lift  selections changed
+        analogy   420      16.1905%    16.1905%  +0.0000%            0.0000%
+        context   420       0.0000%     4.0476%  +4.0476%           97.8571%
+ correspondence   528      94.5076%    94.5076%  +0.0000%            0.0000%
+     definition   420       0.0000%    10.2381% +10.2381%           97.6190%
+   edge_account   420       0.0000%     0.0000%  +0.0000%           97.8571%
+          parts   318      29.2453%    80.8176% +51.5723%           71.0692%
+          reach   642      76.4798%    76.4798%  +0.0000%            0.0000%
+       role_set   216      10.1852%    10.1852%  +0.0000%            0.0000%
+   ONE DECISION  1590      66.5409%    66.5409%  +0.0000%
+ MANY DECISIONS  1794       6.4103%    18.8963% +12.4861%
+            ALL  3384      34.6631%    41.2825%  +6.6194%
+
+Per run: 193->222, 192->221, 200->249, 203->245, 196->231, 189->229. MEAN +37.3 QUESTIONS PER RUN,
+195.5/564 = 34.6631% -> 232.9/564 = 41.2825%. Six for six, every run improves.
+
+THE PROPERTY THAT MAKES THIS DIFFERENT FROM EVERY PREVIOUS ATTEMPT: THE ONE-DECISION HALF IS
+UNCHANGED, +0.0000%, and `selections changed` is 0.0000% for analogy, correspondence, reach and
+role_set. SO THERE IS NO TRADE-OFF. Round 30's fitted readout raised the many-decision half 7-11
+points and cost the one-decision half 44.1510; net, a loss. This raises the many-decision half
+12.4861 and costs the other half EXACTLY NOTHING. AND IT NEEDS NO NEW BASELINE - model, encoder,
+readout and block all untouched, so a run using it stays comparable to every existing run except in
+the decision contract's digest. It is the one option on round 36's list that does not require
+re-baselining, which is why it was taken.
+
+parts REACHES 80.8176%, against 74.2138% for the cardinality rule alone and 31.7610% for the
+self-part rule alone. ROUND 35 EXPLICITLY REFUSED TO ADD THOSE TWO FIGURES because the combination
+was unmeasured. This is that combination measured, and IT BEATS BOTH RULES APPLIED SEPARATELY.
+edge_account DOES NOT MOVE - 0.0000% -> 0.0000% - even with both rules applied and 97.8571% of its
+selections changed, consistent with its 54.6353% balanced reading: a constraint can reorder evidence
+but not create it.
+
+A BUG THE REAL DATA CAUGHT. The first end-to-end run raised KeyError: 'alias' - THE PACKET'S WORLD
+NODES CARRY ref, kind AND label, NOT alias; aliases live in the plan's alias table. The unit tests
+had passed because my own fixture put alias on the packet's nodes, which real packets never do. Both
+were fixed, and THE FIXTURE IS NOW DELIBERATELY FAITHFUL. Fourth time in four rounds that running
+against real artifacts found something a hand-built fixture hid.
+
+WITHDRAWN: round 34's +36.83 per run projection. Pieces added on paper overlap; the measured
+combination is +37.3 from the module but the per-kind attribution differs - parts gains more
+(+51.5723, not +44.9686) and edge_account gains nothing.
+
+NOT LICENSED: that a run realises +6.6194 points. The layer ran OFFLINE against recorded scores. To
+count it must be wired into the run's decision step, which changes the decision contract and its
+digest - an owner decision this round does not take. FLAG_FOR_HUMAN_REVIEW: the wiring.
+
 ## 2026-09-17 UTC - The rectangular solve is built and tested, and what it measures closes a route
 
 $0.00. Pure Python, project's pure modules only. No torch, no device, no model, no training, no new
