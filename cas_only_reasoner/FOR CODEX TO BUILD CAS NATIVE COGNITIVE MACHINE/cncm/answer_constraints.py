@@ -54,6 +54,7 @@ __all__ = [
     "apply_constraints",
     "declared_answer_shape",
     "node_positions",
+    "score_decisions",
 ]
 
 #: The kinds this layer has a measured constraint for. Others are returned untouched.
@@ -219,3 +220,37 @@ def apply_constraints(packet: dict, plan: dict, scores: dict, selected: dict) ->
         _one_world_joint(packet, plan, scores, out)
 
     return out
+
+
+def score_decisions(packet: dict, scores: dict, *, declared_constraints: bool = False) -> dict:
+    """Drop-in replacement for :func:`cas_meta2.typed_teaching.slots.score_decisions`.
+
+    With ``declared_constraints=False`` -- the default -- this is **exactly** the run's own decoder and
+    returns byte-identical output, which is what makes it safe to put in place of the original before
+    anything is decided. With ``declared_constraints=True`` it applies :func:`apply_constraints` to
+    the result.
+
+    Measured on the recorded six-run score table, enabling the layer gives **+6.6194 points pooled**
+    (34.6631% -> 41.2825%), **+12.4861** on the many-decision half and **+0.0000** on the one-decision
+    half, and the gain is world-invariant. See `CONSTRAINT_LAYER_RESULT.md` and
+    `WIRING_AND_INVARIANCE_RESULT.md`.
+
+    Why a flag rather than a new function: the encoder's input does not include the decision contract
+    (`binding._query_spec` reads kind, field, group, scope, coordinates and symbols only), so with the
+    flag off nothing anywhere changes -- not one digest, not one score. Measured across all 564 packets
+    and 2,598 slots in `measure_wiring_impact.py`. Enabling it is the owner's call; making it
+    *available* while off changes nothing.
+
+    The run's decoder is imported **here**, not at module load. The rules above operate on plain packet
+    and plan dictionaries and must stay usable without `cas_meta2` on the path; only this drop-in needs
+    it.
+    """
+    from cas_meta2.typed_teaching import slots as _slots
+
+    plan = _slots.compile_slots(packet)
+    decisions = _slots.score_decisions(packet, scores)
+    if not declared_constraints:
+        return decisions
+    corrected = dict(decisions)
+    corrected["selected"] = apply_constraints(packet, plan, scores, decisions["selected"])
+    return corrected

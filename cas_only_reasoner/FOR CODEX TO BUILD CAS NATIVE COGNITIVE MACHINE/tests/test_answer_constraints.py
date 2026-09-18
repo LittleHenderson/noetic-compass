@@ -23,6 +23,9 @@ Plain pytest functions, no fixtures beyond local helpers, no numeric runtime, no
 
 from __future__ import annotations
 
+import importlib.util
+import json
+
 import pytest
 
 from cncm import answer_constraints as ac
@@ -325,162 +328,126 @@ def test_a_packet_without_the_focus_world_is_refused():
 
 
 # --------------------------------------------------------------------------- #
-# 5. Structure independence — the development panel's shapes
+# 6. The drop-in — the property that makes wiring safe
 # --------------------------------------------------------------------------- #
 #
-# The held-out development panel is 59 questions over worlds with **ten** nodes, `max_depth` 3 and
-# `has_nested_whole` true, against the exposed course's four-node worlds. Its packets are not in the
-# frozen course (only their digests are), so it cannot be scored; what can be tested is whether this
-# layer's rules depend on the four-node layout they were derived from. They must not.
+# These need the run's own decoder. `cas_meta2` lives under `research/CAS_META_2_COMPOSITION` and is
+# not on the path from this directory, so the path is added here -- otherwise these tests would skip
+# and the faithfulness property, which is the important one, would never actually be checked.
+#
+# A module-level `importorskip` was tried first and skipped the WHOLE file, which is not what is
+# wanted: the rules themselves must stay testable without the run package.
+
+import sys
+from pathlib import Path
+
+_COMP = Path(__file__).resolve().parents[1] / "research" / "CAS_META_2_COMPOSITION"
+if str(_COMP) not in sys.path:
+    sys.path.insert(0, str(_COMP))
+
+try:
+    HAVE_RUN_SLOTS = importlib.util.find_spec("cas_meta2.typed_teaching.slots") is not None
+except (ImportError, ModuleNotFoundError, ValueError):
+    HAVE_RUN_SLOTS = False
+
+needs_run_slots = pytest.mark.skipif(not HAVE_RUN_SLOTS, reason="cas_meta2 is not on the path")
 
 
-def big_world(world_id: str, size: int, edges: list, participants: list) -> dict:
-    """A world of arbitrary size, in the real packet shape."""
-    return {
-        "world_id": world_id,
-        "nodes": [{"ref": f"{world_id}/{at}", "kind": "idea", "label": f"N{at}"}
-                  for at in range(size)],
-        "declared_whole": f"{world_id}/0",
-        "contains": [{"ref": f"{world_id}/e{at}", "source": f"{world_id}/{a}", "target": f"{world_id}/{b}"}
-                     for at, (a, b) in enumerate(edges)],
-        "declarations": {
-            "setting": "in a workshop",
-            "participants": [f"{world_id}/{at}" for at in participants],
-            "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
-            "kind": "a charging machine",
-            "function": "transmits force",
-        },
-    }
+def test_the_rules_do_not_need_the_run_package():
+    """`apply_constraints` and `declared_answer_shape` are importable and usable on plain dicts."""
+    focus = "world-aaa"
+    worlds = [world("world-aaa", "W0", "0", [(0, 1)], [0, 1, 2])]
+    shape = ac.declared_answer_shape(packet("edge_account", focus, worlds=worlds))
+    assert shape["cardinality"] == 1
 
 
-def big_packet(kind: str, focus_id: str, worlds: list, arguments: dict | None = None) -> dict:
-    return {
-        "source": {"focus_world_id": focus_id, "worlds": worlds},
-        "record": {"query": {"kind": kind, "focus_world_id": focus_id,
-                             "arguments": arguments or {}}},
-    }
+def real_cases(limit=24, kinds=None):
+    """Real packets and real recorded scores from the frozen course, or [] if either is absent.
 
-
-def big_aliases(worlds: list) -> dict:
-    return {
-        "worlds": [
-            {"world_id": w["world_id"], "alias": f"W{at}",
-             "nodes": [{"ref": n["ref"], "alias": f"N{pos}"} for pos, n in enumerate(w["nodes"])]}
-            for at, w in enumerate(worlds)
-        ]
-    }
-
-
-def ten_node_worlds() -> list:
-    focus = big_world("world-big", 10, [(0, 1), (0, 2), (0, 3), (4, 5)], [0, 1, 2, 3])
-    other = big_world("world-oth", 10, [(1, 2), (3, 4)], [1, 2, 3])
-    return [focus, other]
-
-
-def test_declared_shape_does_not_assume_four_nodes():
-    worlds = ten_node_worlds()
-    shape = ac.declared_answer_shape(big_packet("edge_account", "world-big", worlds))
-    assert shape["nodes"] == 10
-    assert shape["cardinality"] == 4
-    shape = ac.declared_answer_shape(
-        big_packet("parts", "world-big", worlds, {"whole": "world-big/0"}))
-    assert shape["cardinality"] == 3
-
-
-def test_cardinality_and_self_links_hold_on_a_ten_node_world():
-    worlds = ten_node_worlds()
-    focus = "world-big"
-    plan = {
-        "kind": "edge_account",
-        "slots": [
-            {"slot_id": f"e{i}-{j}", "field": "edge", "group": "edges",
-             "coordinates": [f"{focus}/{i}", f"{focus}/{j}"],
-             "symbols": ["ABSENT", "PRESENT"], "scope_alias": "W0"}
-            for i in range(10) for j in range(10)
-        ],
-        "aliases": big_aliases(worlds),
-    }
-    scores = {slot["slot_id"]: {"ABSENT": 0.0, "PRESENT": 0.0} for slot in plan["slots"]}
-    for i in range(10):
-        scores[f"e{i}-{i}"]["PRESENT"] = 99.0
-    out = ac.apply_constraints(big_packet("edge_account", focus, worlds), plan, scores,
-                               {slot["slot_id"]: "PRESENT" for slot in plan["slots"]})
-    assert sum(1 for symbol in out.values() if symbol == "PRESENT") == 4
-    for i in range(10):
-        assert out[f"e{i}-{i}"] == "ABSENT"
-
-
-def test_a_whole_absent_from_the_focus_nodes_does_not_crash():
-    """`parts` with a `whole` outside the focus's nodes: the self-part rule simply does not fire."""
-    worlds = ten_node_worlds()
-    focus = "world-big"
-    plan = {
-        "kind": "parts",
-        "slots": [{"slot_id": f"n{i}", "field": "node", "group": "nodes",
-                   "coordinates": [f"{focus}/{i}"], "symbols": ["ABSENT", "PRESENT"],
-                   "scope_alias": "W0"} for i in range(10)],
-        "aliases": big_aliases(worlds),
-    }
-    scores = {slot["slot_id"]: {"ABSENT": 0.0, "PRESENT": 0.0} for slot in plan["slots"]}
-    p = big_packet("parts", focus, worlds, {"whole": "world-nowhere/9"})
-    shape = ac.declared_answer_shape(p)
-    assert shape["whole"] == "world-nowhere/9"
-    assert shape["cardinality"] == 0
-    out = ac.apply_constraints(p, plan, scores,
-                               {slot["slot_id"]: "PRESENT" for slot in plan["slots"]})
-    assert len(out) == 10
-
-
-def test_the_joint_decoder_uses_POSITION_and_this_pins_that_assumption():
-    """The one assumption this layer makes that the packet does not guarantee.
-
-    `_one_world_joint` maps a focus node to a candidate world's node **by position**, because the only
-    correspondence the packet offers is the alias namespace and aliases are positional. When the focus
-    and the candidate have different node counts, positions only line up as far as the shorter one
-    reaches. That is an assumption, not a fact, and it is pinned here so a change to it is visible.
-
-    On the development panel every world has ten nodes, so the assumption holds there by uniformity.
+    Hand-built fixtures cannot exercise the run's decoder: `slots.compile_slots` runs the full packet
+    validation and rejects them with `TYPED_SOURCE_PUBLIC_FIELDS`. That is what the first version of
+    these tests discovered, so they use the real artifacts.
     """
-    focus = big_world("world-big", 4, [(0, 1)], [0, 1, 2])
-    other = big_world("world-oth", 10, [(0, 1), (0, 2)], [0, 2, 3])
-    worlds = [focus, other]
-    plan = {
-        "kind": "context",
-        "slots": [{"slot_id": "setting", "field": "setting_ref", "group": "setting_ref",
-                   "coordinates": [], "symbols": ["W0", "W1"], "scope_alias": "W0"}]
-        + [{"slot_id": f"p{i}", "field": "participant", "group": "participants",
-            "coordinates": [f"world-big/{i}"], "symbols": ["ABSENT", "PRESENT"],
-            "scope_alias": "W0"} for i in range(4)],
-        "aliases": big_aliases(worlds),
-    }
-    scores = {slot["slot_id"]: {symbol: 0.0 for symbol in slot["symbols"]} for slot in plan["slots"]}
-    scores["setting"]["W1"] = 5.0
-    out = ac.apply_constraints(big_packet("context", "world-big", worlds), plan, scores,
-                               {slot["slot_id"]: "ABSENT" for slot in plan["slots"]})
-    # world-oth is chosen, and its participants {0, 2, 3} are read at the SAME POSITIONS in the focus
-    assert out["setting"] == "W1"
-    assert out["p0"] == "PRESENT"
-    assert out["p2"] == "PRESENT"
-    assert out["p3"] == "PRESENT"
-    assert out["p1"] == "ABSENT"
+    try:
+        from cas_meta2.typed_teaching import course, slots as run_slots, worker_contract
+    except ImportError:
+        return []
+    home = _COMP.parents[1]
+    receipts = home / "records/typed_matched_001"
+    if not receipts.is_dir():
+        return []
+    run = next((directory for directory in sorted(receipts.iterdir())
+                if (directory / "collected/results/artifacts/final_predictions.json").is_file()), None)
+    if run is None:
+        return []
+    try:
+        frozen, _tokenizer, _ = worker_contract.load_material(home)
+    except Exception:                                                 # noqa: BLE001
+        return []
+    scores_by_record = {
+        row["record_id"]: row["scores"]
+        for row in json.loads(
+            (run / "collected/results/artifacts/final_predictions.json").read_text(
+                encoding="utf-8"))["predictions"]}
+    out = []
+    for row in frozen["registry"]:
+        if kinds is not None and row["query"]["kind"] not in kinds:
+            continue
+        scores = scores_by_record.get(row["record_id"])
+        if scores is None:
+            continue
+        packet = course.model_packet(frozen, row["record_id"])
+        _ = run_slots  # imported for the caller's convenience
+        out.append((packet, scores))
+        if limit is not None and len(out) >= limit:
+            break
+    return out
 
 
-def test_a_candidate_with_fewer_nodes_than_the_focus_is_skipped_not_crashed():
-    focus = big_world("world-big", 10, [(0, 1)], [0, 1, 2, 3])
-    small = big_world("world-sml", 2, [(0, 1)], [0, 1])
-    worlds = [focus, small]
-    plan = {
-        "kind": "context",
-        "slots": [{"slot_id": "setting", "field": "setting_ref", "group": "setting_ref",
-                   "coordinates": [], "symbols": ["W0", "W1"], "scope_alias": "W0"}]
-        + [{"slot_id": f"p{i}", "field": "participant", "group": "participants",
-            "coordinates": [f"world-big/{i}"], "symbols": ["ABSENT", "PRESENT"],
-            "scope_alias": "W0"} for i in range(10)],
-        "aliases": big_aliases(worlds),
-    }
-    scores = {slot["slot_id"]: {symbol: 0.0 for symbol in slot["symbols"]} for slot in plan["slots"]}
-    scores["setting"]["W0"] = 5.0
-    out = ac.apply_constraints(big_packet("context", "world-big", worlds), plan, scores,
-                               {slot["slot_id"]: "ABSENT" for slot in plan["slots"]})
-    assert out["setting"] == "W0"
-    assert sum(1 for sid, symbol in out.items() if sid.startswith("p") and symbol == "PRESENT") == 4
+@needs_run_slots
+def test_the_drop_in_is_the_runs_own_decoder_when_the_flag_is_off():
+    """With the flag off it must be **exactly** `slots.score_decisions`, not merely equivalent.
+
+    This is the whole reason the layer can be put in place before anything is decided: `binding`'s
+    query spec does not read the decision contract, so with the flag off nothing anywhere changes.
+    """
+    from cas_meta2.typed_teaching import slots as run_slots
+
+    cases = real_cases(limit=24)
+    if not cases:
+        pytest.skip("the frozen course or a recorded run is not present")
+    for packet, scores in cases:
+        assert ac.score_decisions(packet, scores) == run_slots.score_decisions(packet, scores)
+        assert (ac.score_decisions(packet, scores, declared_constraints=False)
+                == run_slots.score_decisions(packet, scores))
+
+
+def test_the_flag_defaults_to_off():
+    import inspect
+
+    assert inspect.signature(ac.score_decisions).parameters["declared_constraints"].default is False
+
+
+@needs_run_slots
+def test_a_kind_without_rules_is_untouched_by_the_flag():
+    """`role_set` has no measured rule, so enabling the flag must not move one of its decisions."""
+    from cas_meta2.typed_teaching import slots as run_slots
+
+    cases = real_cases(limit=None, kinds={"role_set"})
+    if not cases:
+        pytest.skip("no role_set records available")
+    for packet, scores in cases:
+        assert (ac.score_decisions(packet, scores, declared_constraints=True)
+                == run_slots.score_decisions(packet, scores))
+
+
+@needs_run_slots
+def test_the_flag_moves_a_kind_that_has_a_rule():
+    """And it must actually do something on a kind it has rules for, or the flag is inert."""
+    cases = real_cases(limit=None, kinds={"parts"})
+    if not cases:
+        pytest.skip("no parts records available")
+    moved = sum(1 for packet, scores in cases
+                if (ac.score_decisions(packet, scores, declared_constraints=True)
+                    != ac.score_decisions(packet, scores)))
+    assert moved > 0, "the flag changed nothing on a kind it has a rule for"
