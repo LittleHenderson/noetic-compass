@@ -4,6 +4,66 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Architecture inventory: the architecture declares four operations and exactly one is canonical
+
+$0.00. Read-only inspection of the reference wheel. No forward pass, no device, no target, no
+provider. Reproducer `records/architecture_inventory_001/verify_inventory.py` (output `inventory.txt`),
+record `STATUS.md`; OS-027 bounded by it. Extends `records/bias_role_001/STATUS.md`.
+
+WHAT THE ARCHITECTURE DECLARES. Read from cas_cjt.neural.OPERATION_REGISTRATIONS and
+RegisteredOperationBank(CASformerConfig(d_model=64,...)):
+  op   name                    admission                          parameters  module
+  ^6   decompose               CANONICAL_ADMITTED                      16384  _DecomposeTransform
+  ^2   experimental_attract    EXPERIMENTAL_OPEN_SEMANTICS              8192  _AttractTransform
+  ^3   experimental_avert      EXPERIMENTAL_OPEN_SEMANTICS              8192  _AvertTransform
+  ^8   experimental_trigger    EXPERIMENTAL_CONFLICTED_SEMANTICS        8192  _TriggerTransform
+                                                                       40960  bank total
+All four are executable - bank.executable_registration resolves for each.
+
+WHAT THE RUN EXERCISES. ^6 alone, 16,384 of 40,960 parameters = 40.0%. The other 24,576 = 60.0%
+belong to operations the wheel itself marks EXPERIMENTAL_OPEN_SEMANTICS or
+EXPERIMENTAL_CONFLICTED_SEMANTICS. THE RUN'S CHOICE IS WELL FOUNDED AND THIS IS WHAT MAKES THAT
+PRECISE: ^6 is the only operation whose semantics are frozen, and the other three carry exactly the
+condition this project's ledger records as OPEN-SEMANTICS, under which implementation must not
+derive behaviour from invented meaning.
+
+THIS BOUNDS WHAT "FULL POTENTIAL" CAN MEAN. 60% of the declared plastic capacity is unreachable for
+a reason that is NOT engineering: not missing code (the modules exist and are executable), not
+missing capacity (the parameters are there), but UNFROZEN OR CONTESTED SEMANTICS the project has
+explicitly declined to invent. The honest statement is: of the architecture's declared plastic
+capacity, 40% is canonical and exercised and 60% is experimental and correctly left alone. The
+binding constraint on "full potential" right now is the ONTOLOGY, not the implementation.
+
+A SECOND INDEPENDENT CONFIRMATION OF THE SAME PATTERN. Correction 1 required admissibility relations
+Dk for each of the ten operators; the instructions freeze D0 alone, and the homebase implements the
+guard with D0 frozen and D1-D9 refused as unresolved. THE SAME SHAPE APPEARS HERE AT THE OPERATION
+LEVEL: one operation canonically admitted, three carrying open or conflicted semantics. Two
+independent artifacts - the master instructions and the reference wheel - agree that the CAS
+ontology is only partially frozen and that the machine's reach is bounded by that.
+
+^8 IS MARKED CONFLICTED AND THE PROJECT'S OWN INSTRUCTIONS SAY WHY. The wheel marks ^8
+EXPERIMENTAL_CONFLICTED_SEMANTICS, stronger than "open", and the master instructions' anti-drift
+annotations document the exact drift: "^8 Above/Cause is associative TRIGGERING, not analytical
+reasoning... Deductive causal analysis is a compound of ^6 Male and ^9 Below/Effect, not ^8. This
+catches Scheme-B Causal Reasoning drift that appeared in compiler code, cas-engine docstrings, and
+multiple chapter examples." The wheel's marker and the instructions' annotation are the same finding
+recorded independently, so the architecture is SELF-CONSISTENT about declining to use ^8 - a point
+in its favour rather than a gap.
+
+WHERE THE ADMITTED-BUT-UNUSED CAPACITY ACTUALLY IS. Excluding the three experimental operations,
+exactly one genuinely admitted plastic role remains unused and it belongs to the CANONICAL
+operation's own contract: the ^6 contract (digest 6bfc2602...) admits
+('operation:^6','bias_update_head'); the run uses operation:^6 at 16,384 parameters and not
+bias_update_head at 4,096 (64x64), because the run's module is a bare _DecomposeTransform and the
+head lives on NeuralCJT. So OS-027 is the ONLY live question here: the 24,576 experimental
+parameters are correctly untouched, and the 4,096 admitted-but-absent ones are the open decision.
+
+NOT ESTABLISHED: nothing was executed - modules were instantiated so their parameters could be
+counted; parameter counts are not capability; the inventory is a snapshot of the INSTALLED WHEEL, not
+the repository, and the reproducer compares against the recorded list and prints "THE RECORD IS
+STALE" if it changes; no claim that the three experimental operations would help if their semantics
+were frozen; no claim that bias_update_head would help.
+
 ## 2026-09-17 UTC - The concentration is the training's, the readout is nearly uniform, and the analytic fit does not share it
 
 $0.00. torch used only to deserialise checkpoints and read the frozen public course. Script

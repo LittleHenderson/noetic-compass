@@ -1,0 +1,46 @@
+====================================================================================================
+REGISTERED OPERATIONS
+====================================================================================================
+
+  op                   name                        admission   params                 module
+----------------------------------------------------------------------------------------------------
+  ^6              decompose               CANONICAL_ADMITTED    16384    _DecomposeTransform
+  ^2   experimental_attract      EXPERIMENTAL_OPEN_SEMANTICS     8192      _AttractTransform
+  ^3     experimental_avert      EXPERIMENTAL_OPEN_SEMANTICS     8192        _AvertTransform
+  ^8   experimental_trigger EXPERIMENTAL_CONFLICTED_SEMANTICS     8192      _TriggerTransform
+
+  operation inventory matches the record : True
+
+====================================================================================================
+WHAT THE RUN EXERCISES
+====================================================================================================
+
+  registered operations          : 4  (^2, ^3, ^6, ^8)
+  CANONICALLY ADMITTED           : 1  (^6)
+  experimental / open / conflicted: 3  (^2, ^3, ^8)
+
+  registered plastic parameters  : 40960
+    canonical ^6 alone           : 16384  (40.0%)
+    experimental operations      : 24576  (60.0%)
+
+  the run's module (_DecomposeTransform) parameters: ['left.weight', 'right.weight', 'merge.weight']
+  equals the typed learner's asserted scope: True
+  NeuralCJT bias_update_head: ['bias_update_head.weight'], 4096 parameters
+
+====================================================================================================
+THE FINDING
+====================================================================================================
+
+  The architecture declares 4 operations and 40960 plastic parameters.
+  EXACTLY ONE is CANONICALLY ADMITTED: ^6, at 16384 parameters (40.0%).
+  The other 3 are EXPERIMENTAL_OPEN_SEMANTICS or
+  EXPERIMENTAL_CONFLICTED_SEMANTICS - the condition this project's own ledger records as
+  OPEN-SEMANTICS, where implementation must not derive behaviour from invented meaning.
+
+  So the run exercises ^6 alone, and that choice is well founded: it is the only operation
+  whose semantics are frozen. The unreached 24576 parameters are
+  unreached because of UNFROZEN SEMANTICS, not because of missing engineering.
+
+  bias_update_head remains the one genuinely admitted-but-unused plastic role belonging
+  to the canonical operation's own contract. See OS-027.
+
