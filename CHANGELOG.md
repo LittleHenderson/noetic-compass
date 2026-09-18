@@ -4,6 +4,67 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The concentration is six for six, every run converges on W36, and two explanations are dead
+
+$0.00. torch used only to deserialise the six runs' checkpoints. No device, no target opened, no run
+launched. Scripts `measure_all_runs_concentration.py` (all_runs_concentration.txt) and
+`measure_target_prior.py` (target_prior.txt); record `ALL_RUNS_CONCENTRATION_RESULT.md`;
+`MACHINE_STATE_001/STATUS.md` updated.
+
+THE RECORDED CONCENTRATION HOLDS IN ALL SIX RUNS, read from the workers' own predictions with nothing
+reconstructed:
+  receipt            arm  seed   cursor 0                            cursor 160
+  20260917_a         ALT  17     27, W61 17.6%, 4.203 bits           11, W36 60.0%, 2.184 bits
+  20260917_m         MIX  17     27, W61 17.6%, 4.203 bits           11, W36 54.8%, 2.312 bits
+  20260918_a         ALT  18     18, W46 37.6%, 2.989 bits           11, W36 49.0%, 2.540 bits
+  20260918_m         MIX  18     18, W46 37.6%, 2.989 bits           10, W36 48.6%, 2.528 bits
+  20260919_a         ALT  19     26, W49 15.2%, 4.164 bits            9, W36 47.6%, 2.354 bits
+  20260919_m         MIX  19     26, W49 15.2%, 4.164 bits            9, W36 44.3%, 2.516 bits
+(uniform over 64 aliases is 64 distinct, 1.6%, 6.000 bits)
+
+TWO CONSISTENCY CHECKS THE DATA PASSES EXACTLY. Within a seed the two arms have BYTE-IDENTICAL
+cursor-0 distributions - 17_a and 17_m both 27/W61/17.6%/4.203, 18_a and 18_m both 18/W46/37.6%/2.989,
+19_a and 19_m both 26/W49/15.2%/4.164 - because the arm changes curriculum ORDER, not initial
+weights, and the measurement shows exactly that. Across seeds the cursor-0 distributions DIFFER (27,
+18, 26 distinct; W61, W46, W49), so the three initialisations really are different. AND THEN ALL SIX
+CONVERGE ON THE SAME ALIAS: three independent initialisations, two curriculum orders, one
+destination, W36, at 44.3% to 60.0% of every world-typed reference slot.
+
+THE TASK-FREE CONCENTRATION HOLDS IN ALL SIX TOO. 210 random unit vectors through each run's
+initial.pt and final.pt, no encoder involved: training narrows the readout in EVERY run, from 53-57
+distinct aliases to 27-32 and from 5.4-5.6 bits to 3.4-3.8. The training effect found on one run is
+general. But the task-free commonest alias is W40 or W47, NOT W36 - so the concentration and the
+PARTICULAR DESTINATION are two different facts, and the second is specific to the real inputs.
+
+TWO EXPLANATIONS OF W36, BOTH DEAD. The obvious candidate: the loss rewards raising the target
+symbol's rank, so a block outputting the MARGINAL PRIOR would converge on the commonest target alias.
+Measured from the run's own schedule and the public course:
+  every presentation across the 160 main batches  1152 presentations  24 distinct  entropy 4.547  commonest W15 at 5.8%
+  the 564 distinct training packets                564 presentations  24 distinct  entropy 4.574  commonest W35 at 4.6%
+  the registry the model is scored on              564 presentations  24 distinct  entropy 4.574  commonest W35 at 4.6%
+** W36 IS NOT A TRAINING TARGET AT ALL ** - it does not appear among the 24 distinct target aliases,
+in any batch, at any weight. The second candidate, that W36's row is what a CONSTANT output favours:
+all-ones gives W20; the mean of all 64 alias rows gives W37; the mean of the training target rows
+gives W27 weighted and unweighted. NONE IS W36. Against the mean of all rows W36 ranks 56th of 64;
+against the mean of the target rows, 22nd of 64.
+
+SO THE ALIAS EVERY RUN CONVERGES ON IS NEITHER A TARGET NOR A PLAUSIBLE CONSTANT. The convergence is
+real, robust across six runs, and UNEXPLAINED. It is a stronger and stranger fact than the one it
+replaces: an alias the machine was never taught, never rewarded for, and which no constant direction
+favours, is the destination of three independent initialisations under two curricula. Two candidates
+were eliminated by direct measurement; nothing replaced them. This record narrows the question and
+does not answer it.
+
+WHAT CHANGES: the concentration is no longer a one-run finding, and neither is the training effect
+behind it; MACHINE_STATE_001 limit 1 now carries the six-run figures and the W36 result.
+
+NOT ESTABLISHED: the convergence still has no explanation; nothing was scored - concentration is a
+distributional fact and the targets are sealed, and a concentrated readout is not automatically a
+wrong one; the task-free measurements are exact for the block but say nothing about the course; the
+target frequency is for 20260919_m's schedule - the other five runs use the same 564 packets in
+different orders so the 24-alias target set is the same, but presentation weights were not recomputed
+per run; the six runs are three seeds by two arms of ONE study. No GPU work launched.
+
 ## 2026-09-17 UTC - The decision-shape decomposition holds in ALL SIX runs, and three kinds are 0 in 1,260 attempts
 
 $0.00. Pure standard library. No torch, no device, no network, no target opened. Script

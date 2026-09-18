@@ -100,13 +100,20 @@ problem in one line.
 
 ## 4. The three limits, each measured
 
-**Limit 1 — the trained readout mapping concentrates.** At cursor 160 the model emits only **9 of the
-64 world aliases** across the 210 world-typed reference slots, with **`W36` at 44.3%**, and 55
-aliases never emitted at all. On 210 task-free random inputs the trained block narrows the readout
-from **58 distinct aliases to 44** at depth 1 and from **57 to 27** at depth 8, while the untrained
-block leaves it spread. The frozen readout's own geometry is near-uniform (identity probe: 59
-distinct, 3.3% commonest). **So the concentration is the training's, and it is worst precisely where
-the task lives.**
+**Limit 1 — the trained readout mapping concentrates, and every run converges on the same alias.** At
+cursor 160 the model emits only **9 to 11 of the 64 world aliases** across the 210 world-typed
+reference slots, and **all six runs end with `W36` as the commonest** — shares **44.3% to 60.0%** —
+from three independent initialisations under two curricula. On 210 task-free random inputs the
+trained block narrows the readout in **every** run (53–57 distinct aliases to 27–32; 5.4–5.6 bits to
+3.4–3.8), while the untrained block leaves it spread and the frozen readout's own geometry is
+near-uniform (identity probe: 59 distinct, 3.3% commonest). **So the concentration is the training's
+and it is general.**
+
+**And `W36` is neither a training target nor a constant optimum.** The course presents **24** distinct
+target aliases over 1,152 presentations, commonest `W15` at 5.8%, and **`W36` does not appear among
+them at all**. The constant directions give `W20` (all-ones), `W37` (mean of all rows) and `W27`
+(mean of target rows) — none is `W36`, against which it ranks 56th and 22nd respectively. **The
+convergence is real, robust across six runs, and unexplained.**
 
 **Limit 2 — the answer assembly has no composition.** The 299 many-decision questions score **5.02%**
 against the 265 one-decision questions' **65.66%**. The forward pass emits one vector per slot and the

@@ -1,0 +1,35 @@
+building focus aliases for the public registry...
+  focus aliases: 200/564
+  focus aliases: 400/564
+  records: 564
+
+====================================================================================================
+ALIAS FREQUENCY AMONG TRAINING TARGETS
+====================================================================================================
+
+  every presentation across the 160 main batches
+    presentations 1152   distinct aliases 24   entropy 4.547 bits   (max 6.000)
+    most frequent: W15=67(5.8%), W24=64(5.6%), W22=64(5.6%), W51=61(5.3%), W16=55(4.8%), W27=55(4.8%), W32=55(4.8%), W10=52(4.5%)
+    commonest is W15;  ** W36 IS NOT PRESENT AT ALL **
+
+  the 564 distinct training packets
+    presentations 564   distinct aliases 24   entropy 4.574 bits   (max 6.000)
+    most frequent: W35=26(4.6%), W22=26(4.6%), W16=26(4.6%), W32=26(4.6%), W59=26(4.6%), W15=26(4.6%), W17=26(4.6%), W27=26(4.6%)
+    commonest is W35;  ** W36 IS NOT PRESENT AT ALL **
+
+  the whole 24-packet registry (what the model is scored on)
+    presentations 564   distinct aliases 24   entropy 4.574 bits   (max 6.000)
+    most frequent: W35=26(4.6%), W32=26(4.6%), W59=26(4.6%), W17=26(4.6%), W16=26(4.6%), W22=26(4.6%), W27=26(4.6%), W15=26(4.6%)
+    commonest is W35;  ** W36 IS NOT PRESENT AT ALL **
+
+====================================================================================================
+READING
+====================================================================================================
+
+  commonest training target : W15
+  commonest registry target : W35
+  the alias every run converges on : W36
+
+  -> W36 IS NOT the commonest target. The PRIOR HYPOTHESIS IS DEAD and the
+     convergence on W36 in all six runs needs another explanation.
+

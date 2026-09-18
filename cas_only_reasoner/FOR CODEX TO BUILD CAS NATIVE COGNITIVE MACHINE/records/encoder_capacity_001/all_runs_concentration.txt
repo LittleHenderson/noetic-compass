@@ -1,0 +1,66 @@
+building the world-typed slot map from the frozen public course...
+  plans built: 200/564
+  plans built: 400/564
+  packets with world-typed slots: 140
+
+================================================================================================================
+1. THE RECORDED DISTRIBUTION � read from the workers' own predictions, no rebuild
+================================================================================================================
+
+               receipt  arm      seed  cursor  distinct  commonest    share   entropy
+----------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a  ALT  20260917       0        27        W61    17.6%     4.203
+    receipt_20260917_a  ALT  20260917     160        11        W36    60.0%     2.184
+    receipt_20260917_m  MIX  20260917       0        27        W61    17.6%     4.203
+    receipt_20260917_m  MIX  20260917     160        11        W36    54.8%     2.312
+    receipt_20260918_a  ALT  20260918       0        18        W46    37.6%     2.989
+    receipt_20260918_a  ALT  20260918     160        11        W36    49.0%     2.540
+    receipt_20260918_m  MIX  20260918       0        18        W46    37.6%     2.989
+    receipt_20260918_m  MIX  20260918     160        10        W36    48.6%     2.528
+    receipt_20260919_a  ALT  20260919       0        26        W49    15.2%     4.164
+    receipt_20260919_a  ALT  20260919     160         9        W36    47.6%     2.354
+    receipt_20260919_m  MIX  20260919       0        26        W49    15.2%     4.164
+    receipt_20260919_m  MIX  20260919     160         9        W36    44.3%     2.516
+
+================================================================================================================
+2. THE TASK-FREE DISTRIBUTION � 210 random unit vectors, no encoder involved
+================================================================================================================
+
+               receipt  arm      seed  cursor  depth  distinct  commonest    share   entropy
+----------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a  ALT  20260917       0      1        54        W34     5.2%     5.436
+    receipt_20260917_a  ALT  20260917       0      8        53        W24     5.7%     5.454
+    receipt_20260917_a  ALT  20260917     160      1        41        W47    13.3%     4.764
+    receipt_20260917_a  ALT  20260917     160      8        27        W40    21.4%     3.642
+    receipt_20260917_m  MIX  20260917       0      1        54        W34     5.2%     5.436
+    receipt_20260917_m  MIX  20260917       0      8        53        W24     5.7%     5.454
+    receipt_20260917_m  MIX  20260917     160      1        42        W47    12.4%     4.826
+    receipt_20260917_m  MIX  20260917     160      8        28        W47    20.0%     3.721
+    receipt_20260918_a  ALT  20260918       0      1        61        W56     4.3%     5.713
+    receipt_20260918_a  ALT  20260918       0      8        56        W56     4.8%     5.584
+    receipt_20260918_a  ALT  20260918     160      1        43        W47    16.7%     4.663
+    receipt_20260918_a  ALT  20260918     160      8        31        W47    27.6%     3.427
+    receipt_20260918_m  MIX  20260918       0      1        61        W56     4.3%     5.713
+    receipt_20260918_m  MIX  20260918       0      8        56        W56     4.8%     5.584
+    receipt_20260918_m  MIX  20260918     160      1        43        W47    17.1%     4.658
+    receipt_20260918_m  MIX  20260918     160      8        32        W40    27.6%     3.520
+    receipt_20260919_a  ALT  20260919       0      1        58        W44     4.8%     5.586
+    receipt_20260919_a  ALT  20260919       0      8        57        W36     4.8%     5.535
+    receipt_20260919_a  ALT  20260919     160      1        43        W47    11.0%     4.845
+    receipt_20260919_a  ALT  20260919     160      8        28        W40    26.2%     3.715
+    receipt_20260919_m  MIX  20260919       0      1        58        W44     4.8%     5.586
+    receipt_20260919_m  MIX  20260919       0      8        57        W36     4.8%     5.535
+    receipt_20260919_m  MIX  20260919     160      1        44        W47    10.0%     4.853
+    receipt_20260919_m  MIX  20260919     160      8        27        W40    25.2%     3.752
+
+  uniform over 64 aliases would be 64 distinct, 1.6% commonest, 6.000 bits
+
+================================================================================================================
+READING
+================================================================================================================
+
+The recorded block above is exact and is the primary reading. It shows whether the
+concentration at cursor 160 holds in every run or only in the one first measured. The
+task-free block below shows whether the SAME change is produced by training in every run,
+with inputs that carry no task information at all.
+
