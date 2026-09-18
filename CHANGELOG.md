@@ -4,6 +4,67 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The architecture has exactly ONE composition mechanism, hard-coded for ONE kind, and it is the kind that works
+
+$0.00. Pure standard library. JSON and source reading only. No torch, no device, no target opened.
+Record `records/encoder_capacity_001/COMPOSITION_BRANCH_RESULT.md`; `ARGMAX_CHECK_RESULT.md`
+corrected; OS-026 restated.
+
+THE MECHANISM, IN FULL. cas_meta2/typed_teaching/slots.py, score_decisions, lines 283-296:
+    if plan["kind"] != "correspondence":
+        return _decision(plan, {slot["slot_id"]: max(slot["symbols"],
+                            key=lambda symbol: scores[slot["slot_id"]][symbol])
+                            for slot in plan["slots"]})
+    winner = max(_candidate_scores(plan, scores), key=lambda row: row["log_probability"])
+    return _decision(plan, {}, winner["candidate_id"])
+TWO BRANCHES AND NOTHING ELSE. Every kind except correspondence is decided by a PLAIN INDEPENDENT
+PER-SLOT max. correspondence is decided by a JOINT MAP OVER CANDIDATE BIJECTIONS - _candidate_scores
+computes, per candidate, log P(NO_MATCH) + log P(MAPPING) + SUM_pairs log P(pair), normalised
+hierarchically - and returns selected = {} with the whole decision in correspondence_candidate_id.
+THE ARCHITECTURE'S ONLY COMPOSITION MECHANISM IS THREE LINES OF A BRANCH, APPLIED TO EXACTLY ONE OF
+THE EIGHT QUESTION KINDS.
+
+THE ATTRIBUTION, NOW EXACT. Round 25 found 422 non-argmax `selected` values per run-file and
+attributed them to "forced slots and the joint correspondence candidate". MEASURED BY KIND: every one
+of the 422 is a CORRESPONDENCE slot and every one is MISSING FROM `selected`; no other kind
+contributes a single one (analogy 0/70, context 0/337, definition 0/210, edge_account 0/1029, parts
+0/207, reach 0/107, role_set 0/216). "Forced slots" is WRONG and that clause is withdrawn: a forced
+slot has one symbol whose argmax is itself, so it matches. The cause is score_decisions returning
+selected = {} for correspondence.
+
+THE SHARPEST STATEMENT OF THE ARCHITECTURAL GAP SO FAR. Beside the measured after-rates:
+  correspondence  joint MAP over candidate bijections  93.18%
+  reach           plain per-slot max                    75.70%
+  parts           plain per-slot max                    22.64%
+  analogy         plain per-slot max                    15.71%
+  role_set        plain per-slot max                     8.33%
+  context         plain per-slot max                     0.00%
+  definition      plain per-slot max                     0.00%
+  edge_account    plain per-slot max                     0.00%
+and these hold in ALL SIX RUNS. THE ONE KIND THE CONTRACT COMPOSES JOINTLY IS THE ONE KIND THAT
+WORKS. This is not a correlation - it is a three-line branch in the code, and the kinds on the
+independent side include all three that have never once been answered in 1,260 attempts.
+
+WHAT THIS DOES TO FIX B. It is no longer an invention; it is THE GENERALISATION OF A MECHANISM THE
+CONTRACT ALREADY HAS, ALREADY APPLIES, AND HAS ALREADY PROVEN. The joint branch does exactly what
+cncm/composition.py proposes, in miniature: form a joint score over the whole answer rather than a
+per-slot one; take one winner for the entity the answer is about; assemble the rest from that winner
+rather than deciding each part independently.
+
+AND IT RESTATES THE BOUNDARY QUESTION MORE SHARPLY. OS-026 asked "should composition be added?" -
+but composition is already in the contract. The question is now: SHOULD THE JOINT DECISION THAT
+ALREADY EXISTS FOR correspondence BE EXTENDED TO THE KINDS WHOSE ANSWERS ARE READINGS OF ONE ENTITY?
+That is a question about an existing mechanism rather than a proposed one, and it is still an
+authority decision. OS-026 is restated in those terms.
+
+NOT ESTABLISHED: nothing was executed beyond reading recorded JSON and the source; correspondence's
+93.18% is NOT shown to be CAUSED by the joint branch - the branch and the score are both facts and
+the causal link is an inference from it being the only kind on that side, with no ablation run or
+proposed; the other kinds' failures are not shown to be caused by the per-slot max either, since the
+decision-shape, identification and composition analyses are separate evidence; _candidate_scores'
+normalisation was read but not verified numerically; one run's predictions were tabulated by kind.
+No GPU work launched.
+
 ## 2026-09-17 UTC - Self-check: `selected` IS the argmax on every slot this record measures, and the contract already composes for exactly one kind
 
 $0.00. Pure standard library, JSON only. No torch, no device, no target opened. Script

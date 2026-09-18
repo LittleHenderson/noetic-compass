@@ -52,6 +52,14 @@ across the runs.
 **The mismatches are confined to alphabet sizes 2, 3 and 4, and they are near-total at 3 and 4.**
 Sizes 5, 6, 64 and 65 have none at all.
 
+> **CORRECTED — see `COMPOSITION_BRANCH_RESULT.md`.** This record attributed the mismatches to
+> *"forced slots and the **joint** correspondence candidate".* **The joint candidate is right; the
+> forced slots are wrong.** Measured by kind, **every one of the 422 mismatches is a `correspondence`
+> slot and every one is *missing from* `selected`** — no other kind contributes a single one, and a
+> forced slot has one symbol whose argmax is itself, so it matches. The cause is
+> `score_decisions` returning `selected = {}` for `correspondence` and putting the whole decision in
+> `correspondence_candidate_id`.
+
 Those are the slots the decision contract does **not** resolve by independent per-slot argmax —
 forced slots and the **joint** correspondence candidate. `score_decisions` assigns the correspondence
 mapping rows from a single joint candidate decision rather than row by row, so the per-row argmax is
