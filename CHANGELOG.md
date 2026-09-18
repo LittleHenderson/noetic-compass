@@ -4,6 +4,57 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - parts goes 29.2453% -> 74.2138% on declared structure alone, truth-free, and the mean moves to 40.16%
+
+$0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
+`records/encoder_capacity_001/ALL_DECLARED_CONSTRAINTS_RESULT.md`; `MACHINE_STATE_001/STATUS.md`
+Limit 8 extended.
+
+Round 32 showed that forcing `context`'s DECLARED participant cardinality lifts it 0.0000% ->
+32.6190%. Round 33 generalised it to three more kinds, and two of the arms use NO TRUTH AT ALL - the
+cardinalities are read from the packet the machine already receives, and definition's candidates are
+the bank.
+
+    kind           declaration enforced                                      indep      constrained    lift
+    parts          the declared out-edge count of the supplied `whole`      29.2453%   74.2138%    +44.9686%
+    definition     FOCUS_WORLD_DECLARATION_IDENTITY, argmax over the bank    0.0000%   10.2381%    +10.2381%
+    edge_account   the declared edge count of focus["contains"]              0.0000%    0.0000%     +0.0000%
+
+SIX RUNS EACH. parts lands between 73.5849% and 75.4717% in ALL SIX and becomes the STRONGEST
+many-decision kind in the machine. definition moves off zero - the joint-candidate mechanism working
+on a kind other than correspondence for the first time.
+
+    parts        53 x (0.742138 - 0.292453) = +23.83 questions per run
+    definition   70 x (0.102381 - 0.000000) =  +7.17 questions per run
+                                              +31.00 questions per run
+
++31 QUESTIONS PER RUN against the six recorded 193/192/200/203/196/189 of 564 - the mean moves from
+195.5/564 = 34.66% to 226.5/564 = 40.16%. context's +32.62 is NOT counted, because that arm holds
+setting_ref at the truth. THIS IS THE LARGEST CONCRETE MOVEMENT ON THE OBJECTIVE SO FAR, and it comes
+from reading declarations the packet already carries: no new capacity, no weights, no encoder change,
+no training, no GPU, no information the machine was not already given.
+
+edge_account IS THE CLEAN NEGATIVE AND IT STATES THE RULE. The constraint is identical in form to the
+two that worked and it does nothing, because that kind's margins carry no signal - round 27 measured
+62.7794%-67.3469% per bit against a 67.7444% chance rate, below chance in FOUR of six runs. A
+CONSTRAINT CAN REORDER EVIDENCE; IT CANNOT CREATE IT. parts had a real signal (51.2707% chance,
+70.5314%-73.9130% per bit) and the constraint turned it into answers. The rule is now measured on
+both sides.
+
+THE ARCHITECTURAL STATEMENT. The architecture declares its own legality conditions per kind -
+PRIMARY_AUTHORED_LABELS_FIRST_THREE, the declared edge counts, FOCUS_WORLD_DECLARATION_IDENTITY,
+ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES - and score_decisions reads NONE of them. Its two branches
+are an independent per-slot max and a joint candidate MAP for correspondence alone. Every constraint
+above is a third thing: a LEGALITY CONDITION ON THE ANSWER AS A WHOLE, stated in the packet,
+available at test time, costing nothing. A CONSTRAINT LAYER IS A DIFFERENT MECHANISM FROM A
+COMPOSITION LAYER, AND IT IS THE ONE THE MEASUREMENTS SUPPORT. Round 26 proposed extending the joint
+branch; round 27 refused it because the bits were at chance; rounds 32-33 resolve it - the bits are
+at chance AS THRESHOLDS and useful AS RANKINGS.
+
+NOT LICENSED: that a run realises +31 questions. The decoders were applied OFFLINE to the recorded
+scores and score_decisions is untouched. Nothing changed in any tested module. 2157 tests, 762
+subtests, last green.
+
 ## 2026-09-17 UTC - Enforcing a constraint the packet ALREADY DECLARES lifts context from 0.0000% to 32.6190%, six for six
 
 $0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record

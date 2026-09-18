@@ -288,6 +288,41 @@ legal answer is. Nothing reads it.** Source: `DECLARED_CONSTRAINT_RESULT.md`.
 machine's own `setting_ref` accuracy is 0.0000% on these questions — so **two things are needed, not
 one**, and only one of them is measured.
 
+**Round 33 generalised it to three more kinds, and two of them are truth-free.**
+
+| kind | declaration enforced | independent | **constrained** | lift |
+|---|---|---|---|---|
+| **`parts`** | the declared out-edge count of the supplied `whole` | 29.2453% | **74.2138%** | **+44.9686%** |
+| `definition` | `FOCUS_WORLD_DECLARATION_IDENTITY` — one world's triple, argmax over the bank | 0.0000% | **10.2381%** | **+10.2381%** |
+| `edge_account` | the declared edge count of `focus["contains"]` | 0.0000% | **0.0000%** | **+0.0000%** |
+
+Six runs each. `parts` lands between 73.5849% and 75.4717% in **all six**, and becomes the strongest
+many-decision kind in the machine. **Neither arm uses any truth**: the cardinalities are read from the
+packet the machine already receives and `definition`'s candidates are the bank.
+
+```
+parts        53 x (0.742138 - 0.292453) = +23.83 questions per run
+definition   70 x (0.102381 - 0.000000) =  +7.17 questions per run
+                                          +31.00 questions per run
+```
+
+**+31 questions per run against the six recorded 193/192/200/203/196/189 of 564 — the mean moves from
+195.5/564 = 34.66% to 226.5/564 = 40.16%.** `context`'s +32.62 points are **not** counted, because
+that arm holds `setting_ref` at the truth.
+
+**`edge_account` is the clean negative, and it states the rule.** The constraint is identical in form
+to the two that worked and it does nothing, because that kind's margins carry no signal — round 27
+measured 62.7794%–67.3469% per bit against a **67.7444%** chance rate, below chance in four of six
+runs. **A constraint can reorder evidence; it cannot create it.** `parts` had a real signal
+(51.2707% chance, 70.5314%–73.9130% per bit) and the constraint turned it into answers.
+
+**So the architecture declares its own legality conditions per kind — `PRIMARY_AUTHORED_LABELS_FIRST_THREE`,
+the declared edge counts, `FOCUS_WORLD_DECLARATION_IDENTITY`, `ALL_AND_ONLY_SOURCE_GROUNDED_FOCAL_ROLES`
+— and `score_decisions` reads none of them.** A constraint layer is a **different mechanism** from a
+composition layer, and it is the one the measurements support. Source:
+`ALL_DECLARED_CONSTRAINTS_RESULT.md`. **NOT LICENSED:** that a run realises +31 questions — the
+decoders were applied offline to the recorded scores, and `score_decisions` is untouched.
+
 ## 5. The fixes, and what each is measured to be worth
 
 **Fix A — analytic initialisation of the `^6` block. BUILT AND VALIDATED.**
