@@ -1,0 +1,39 @@
+FROZEN-BYTE GATE: projection MATCH  readout MATCH
+
+========================================================================================================
+1. DOES THE PACKET REACH THE PER-SLOT DECISION? � the round-29 test, on each binding
+========================================================================================================
+
+For each slot: sign(d . encoded(packet, slot)) against sign(d . slot_vector) � that is,
+the frozen readout's decision WITH the packet against the same decision WITHOUT it.
+The column is the fraction of slots where the two AGREE.
+
+           kind   slots    additive    bilinear   bilinear x4
+--------------------------------------------------------------------------------------------------------
+        context     267   100.0000%    98.1273%      90.2622%
+     definition      70   100.0000%   100.0000%      87.1429%
+   edge_account    1029   100.0000%    96.9874%      88.0466%
+          parts     207    97.1014%    94.2029%      84.5411%
+       role_set     216    94.4444%    93.5185%      83.3333%
+
+100.0000% is the additive binding's signature: the packet moves every slot the same way,
+so it can never change one decision relative to another. Round 29 measured exactly that
+at 100.0000% for edge_account and context. A rate below 100% means the packet now enters
+the per-slot decision, which is what the neurons need in order to learn from it.
+========================================================================================================
+2. LINEAR DECODABILITY OF THE TRUE SYMBOL � ridge LDA, five folds by question
+========================================================================================================
+
+           kind   slots    additive    bilinear   bilinear x4    chance
+--------------------------------------------------------------------------------------------------------
+        context     267    94.2490%    94.5647%      89.7412%  66.4184%
+     definition      70        nan%        nan%          nan% 100.0000%
+   edge_account    1029    67.7176%    67.3909%      67.2516%  67.7444%
+          parts     207    86.6700%    87.3718%      86.9872%  51.2707%
+       role_set     216    60.4577%    59.9392%      59.7116%  68.6728%
+
+chance = p^2 + (1-p)^2 for p = the truth PRESENT rate of that kind's slots.
+
+NOT MEASURED: any trained result. This is the encoder's geometry, which is deterministic,
+compared exactly from the checksum-gated frozen bytes. Decodability is the ceiling for a
+linear readout and a proxy for what a gradient could find -- it is not a run's score.
