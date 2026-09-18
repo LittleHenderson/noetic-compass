@@ -366,6 +366,79 @@ def decompose_from_free_readout(
     return parameters_for_map(T)
 
 
+def decompose_from_free_readout_rectangular(
+    free_weights: Sequence[Sequence[float]],
+    readout_rows: Sequence[Sequence[float]],
+    *,
+    core_width: int = D_MODEL,
+    ridge: float = 0.0,
+) -> tuple:
+    """The same construction for a readout with **more rows than the core width**.
+
+    :func:`decompose_from_free_readout` requires ``nclass == core_width`` so that ``R`` is square
+    and ``T = R^-1 W^T`` exists. The registered readout is ``[90, 64]`` -- one row per symbol,
+    sixty-four columns for the core -- so that function **refuses the real readout**, and every
+    measurement of the analytic initialisation so far has had to work on a 64-row submatrix.
+
+    With ``R`` of shape ``nclass x core_width`` and ``nclass > core_width`` no ``T`` can satisfy
+    ``R T = W^T`` for arbitrary ``W``: ``R T`` always lands in the column space of ``R``, which has
+    dimension at most ``core_width``. The minimum-norm least-squares solution,
+
+        ``T = (R^T R)^-1 R^T W^T``
+
+    makes ``R T`` the **orthogonal projection of ``W^T`` onto that column space**, and it is exact
+    precisely when ``W``'s transpose already lies there. So this function does not pretend to
+    realise every free readout; it realises the part that is reachable and **reports the residual**,
+    which is the honest statement of what the frozen readout costs.
+
+    Returns ``(parameters, report)``. ``report`` carries ``residual`` (the largest absolute entry of
+    ``R T - W^T``), ``exact`` (whether that residual is zero), and the shapes involved. Raises
+    :class:`AnalyticDecomposeError` when the readout has fewer rows than the core width, when the
+    widths disagree, or when the normal equations are singular and no ridge was supplied.
+    """
+    nclass = len(free_weights[0]) if free_weights else 0
+    W = _matrix(free_weights, core_width, nclass, "free_weights")
+    R = _matrix(readout_rows, len(readout_rows), len(readout_rows[0]), "readout_rows")
+    if len(R) < core_width:
+        raise AnalyticDecomposeError(
+            f"a rectangular readout needs at least {core_width} rows; got {len(R)}"
+        )
+    if len(R[0]) != core_width:
+        raise AnalyticDecomposeError(
+            f"readout rows are {len(R[0])} wide but the core width is {core_width}"
+        )
+    if len(R) != nclass:
+        raise AnalyticDecomposeError(
+            f"free weights imply {nclass} classes but the readout has {len(R)} rows"
+        )
+    gram = matmul(transpose(R), R)
+    if ridge:
+        gram = tuple(
+            tuple(gram[i][j] + (ridge if i == j else 0.0) for j in range(core_width))
+            for i in range(core_width)
+        )
+    T = solve(gram, matmul(transpose(R), transpose(W)))
+    if T is None:
+        raise AnalyticDecomposeError(
+            "the normal equations R^T R are singular; the construction is unavailable and no "
+            "approximation is substituted"
+        )
+    achieved = matmul(R, T)
+    wanted = transpose(W)
+    residual = max(
+        abs(achieved[i][j] - wanted[i][j]) for i in range(nclass) for j in range(core_width)
+    )
+    report = {
+        "readout_shape": (len(R), len(R[0])),
+        "core_width": core_width,
+        "nclass": nclass,
+        "ridge": ridge,
+        "residual": residual,
+        "exact": residual == 0.0,
+    }
+    return parameters_for_map(T), report
+
+
 def free_readout_scores(
     free_weights: Sequence[Sequence[float]], value: Sequence[float]
 ) -> tuple:

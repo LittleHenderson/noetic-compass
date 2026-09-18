@@ -4,6 +4,70 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The rectangular solve is built and tested, and what it measures closes a route
+
+$0.00. Pure Python, project's pure modules only. No torch, no device, no model, no training, no new
+run. Code: `cncm/analytic_decompose.decompose_from_free_readout_rectangular` (new). Tests:
+`tests/test_analytic_decompose_rectangular.py` (13 new, 189 passing with the existing module tests).
+Record: `records/encoder_capacity_001/RECTANGULAR_REALISATION_RESULT.md`.
+
+THE STEP THAT WAS OWED. decompose_from_free_readout builds ^6 parameters with T = R^-1 Wt so the
+frozen readout R behaves as a chosen free readout W. It REQUIRES nclass == core_width, and the
+registered readout is [90, 64] - so it REFUSES the real readout, and every analytic measurement since
+round 22 has had to work on a 64-row submatrix. The new function takes nclass > core_width via
+
+    T = (RtR)^-1 Rt Wt        minimum-norm least squares
+
+and it CANNOT realise every W: R T always lands in the column space of R, dimension at most
+core_width. So it realises the ORTHOGONAL PROJECTION of Wt onto that space and REPORTS THE RESIDUAL.
+13 tests defend it, including registered shapes, forward(x) = T tanh(x), five refusal paths, numerical
+agreement with the square construction when nclass == D, exactness when Wt = R B, and - the test that
+matters - that in the unreachable case R T lies in the column space while Wt - R T is ORTHOGONAL TO
+EVERY COLUMN OF R, with the reported residual equal to the largest entry of that leftover.
+
+THE MEASUREMENT IS A NEGATIVE, AND IT IS THE NUMBER THAT WAS MISSING. Round 30 fitted a free readout
+on tanh(encoded) and scored the many-decision half at 5.0167% -> 12.0401% with definition at
+48.5714% - a SUBSTITUTED readout, not the machine's. Whether it could be installed was open. Now
+measured, five folds by question, 299 questions, real [90, 64] readout:
+
+    fold 0: residual 0.1475689756   exact False
+    fold 1: residual 0.1440038168   exact False
+    fold 2: residual 0.1442578014   exact False
+    fold 3: residual 0.1850843724   exact False
+    fold 4: residual 0.1716314452   exact False
+
+    kind             q   recorded   direct W   through T   T - direct
+    edge_account    70     0.0000%    1.4286%     0.0000%    -1.4286%
+    role_set        36     8.3333%    8.3333%    11.1111%    +2.7778%
+    parts           53    22.6415%    3.7736%     3.7736%    +0.0000%
+    context         70     0.0000%    4.2857%     0.0000%    -4.2857%
+    definition      70     0.0000%   48.5714%     8.5714%   -40.0000%
+    MANY           299     5.0167%   14.3813%     4.0134%   -10.3679%
+
+THE REGISTERED PATH LANDS AT 4.0134% - BELOW THE RUN'S OWN 5.0167%. The residual is never exactly
+zero in any fold. ROUND 30's FITTED-READOUT GAIN IS AN IDEALISATION THAT CANNOT BE INSTALLED, and
+definition alone loses 40.0000 points. FIX A CANNOT IMPROVE THE MANY-DECISION HALF BY THIS ROUTE AND
+NO GPU RUN SHOULD BE SPENT TRYING. The square requirement was never arbitrary: with R square,
+R T = Wt is EXACTLY satisfiable, which is why Fix A's 62.94%/62.06% on focus identification is real;
+with 90 rows and 64 columns only the projection is reachable, and the projection is where the gain
+dies.
+
+THREE INDEPENDENT MEASUREMENTS NOW NAME THE SAME COMPONENT: THE FROZEN READOUT. Round 29 found the
+packet inert per slot in the pre-block decision; round 30 found a fitted readout could exploit the
+slot's NAME; round 36 finds the name-derived fit cannot be expressed through the frozen readout
+either.
+
+WITHDRAWN: round 30's fitted-readout gains as a SCORE prospect. 12.0401% and 16.0535% are idealised;
+the installable figure is 4.0134%.
+
+FLAG_FOR_HUMAN_REVIEW. The measured components are exhausted - the constraint layer is mined (+36.83
+questions per run truth-free, rounds 32-35, and round 35 bounded the "declared by absence" class at
+eight cells) and the one way of improving the readout without changing it is now closed. What remains
+is a change to a frozen component, the readout or the encoder's binding. That is a decision, not a
+measurement, and this round does not authorise it.
+
+2157 tests plus 13 new, 762 subtests, green. No existing tested behaviour changed.
+
 ## 2026-09-17 UTC - The "declared by absence" class is exactly eight cells, and it is now exhausted
 
 $0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record

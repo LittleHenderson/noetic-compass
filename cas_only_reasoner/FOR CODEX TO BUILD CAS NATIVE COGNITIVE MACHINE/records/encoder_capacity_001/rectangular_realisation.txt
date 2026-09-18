@@ -1,0 +1,32 @@
+FROZEN-BYTE GATE: MATCH
+registered readout shape: (90, 64)
+
+questions: 299
+
+fold 0: residual 0.1475689756   exact False
+fold 1: residual 0.1440038168   exact False
+fold 2: residual 0.1442578014   exact False
+fold 3: residual 0.1850843724   exact False
+fold 4: residual 0.1716314452   exact False
+
+================================================================================================
+EXACT-ANSWER ACCURACY � recorded vs idealised readout vs the registered path
+================================================================================================
+
+           kind    q   recorded   direct W   through T  T - direct
+------------------------------------------------------------------------------------------------
+   edge_account   70    0.0000%    1.4286%     0.0000%    -1.4286%
+       role_set   36    8.3333%    8.3333%    11.1111%    +2.7778%
+          parts   53   22.6415%    3.7736%     3.7736%    +0.0000%
+        context   70    0.0000%    4.2857%     0.0000%    -4.2857%
+     definition   70    0.0000%   48.5714%     8.5714%   -40.0000%
+------------------------------------------------------------------------------------------------
+               recorded (the run itself)    5.0167%   (15 of 299)
+         direct free readout (idealised)   14.3813%   (43 of 299)
+         through the registered ^6 block    4.0134%   (12 of 299)
+
+construction residual: max 0.1850843724   exact in 0 of 5 folds
+
+direct    = W^T . tanh(encoded), the idealised readout round 30 measured
+through_T = R . (T . tanh(encoded)) with T from the registered construction,
+            which is the path a real run would take

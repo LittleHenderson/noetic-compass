@@ -407,6 +407,36 @@ against the **independent** baseline while its cardinality decoder already reach
 overlap, their combination is unmeasured, and they are not added.** The total stays **+36.83 per run**.
 Source: `STRUCTURAL_CONSTANTS_RESULT.md`.
 
+**Round 36 built the rectangular solve and closed a route.** `decompose_from_free_readout` requires
+`nclass == core_width`, so it refuses the registered `[90, 64]` readout. The new
+`decompose_from_free_readout_rectangular` takes `nclass > core_width` via
+`T = (RᵀR)⁻¹RᵀWᵀ` and reports the residual. 13 new tests; 189 passing. **But it cannot realise every
+`W`** — `R T` lands in the column space of `R`, so it realises the orthogonal projection only.
+
+Measured on the real readout, five folds, 299 many-decision questions:
+
+| | MANY DECISIONS |
+|---|---|
+| recorded (the run itself) | 5.0167% (15 of 299) |
+| **direct free readout (idealised)** | **14.3813% (43 of 299)** |
+| **through the registered `^6` block** | **4.0134% (12 of 299)** |
+
+residual 0.1440–0.1851, **exact in 0 of 5 folds**; `definition` collapses 48.5714% → 8.5714%.
+
+**Round 30's fitted-readout gain is an idealisation that cannot be installed.** The registered path
+lands *below* the run's own score. **`Fix A` cannot improve the many-decision half by this route and
+no GPU run should be spent trying.** The square requirement was never arbitrary: with `R` square,
+`R·T = Wᵀ` is exactly satisfiable, which is why `Fix A`'s 62.94%/62.06% on focus identification is
+real; with 90 rows and 64 columns only the projection is reachable, and there the gain dies.
+
+**Three independent measurements now name the same component — the frozen readout.** Round 29 (packet
+inert per slot), round 30 (the fit rides on the slot's *name*), round 36 (the name-derived fit cannot
+be expressed through the readout either). Source: `RECTANGULAR_REALISATION_RESULT.md`.
+
+**FLAG_FOR_HUMAN_REVIEW.** The measured components are exhausted: the constraint layer is mined
+(+36.83 truth-free, rounds 32–35) and the one way of improving the readout without changing it is
+closed. What remains is a change to a frozen component — the readout or the encoder's binding — and
+that is a decision, not a measurement. This record does not authorise it.
 **The open item is now sharp and singular. `parts`' constraint decoder reaches 74.2138% while
 `context`'s best truth-free decoder reaches 4.0476% and `edge_account`'s reaches 4.2857%** — the same
 gap round 27 measured, where `parts` reads its bits at 70.5314%–73.9130% against a 51.2707% chance rate
