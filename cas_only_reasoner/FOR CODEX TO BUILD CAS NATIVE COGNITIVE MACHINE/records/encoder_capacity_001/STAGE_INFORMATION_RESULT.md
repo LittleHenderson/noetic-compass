@@ -1,5 +1,23 @@
 # The `^6` block's architecture costs 26 points of decodability, trained or not
 
+> # WITHDRAWAL — the headline is FALSE. Read `INFORMATION_LOSS_WITHDRAWN.md`.
+>
+> **"The `^6` architecture discards 42% of the focus world's linearly available information" is
+> refuted**, and so is the claim that the analytic initialisation works by bypassing an information
+> loss.
+>
+> Every number below was measured with a **fixed ridge penalty of λ = 1.0**. A penalty sweep
+> (`check_information_loss.py`) shows that at λ = 1e-4 the block reads **66.31% untrained and 66.31%
+> trained** — *higher* than the raw encoded slot's 64.72%. The block **preserves** the information and
+> is merely ill-conditioned: its effective linear map's singular values span 1.1e4, and a fixed λ
+> misreads it.
+>
+> **What survives:** the saturation sweep (no trained parameter, unaffected), and the finding that
+> **training changes the block's information content essentially not at all** — at λ = 1e-4, 66.31%
+> versus 66.31%. That finding is now cleaner than it was.
+>
+> The table below is kept because the numbers are correct *at λ = 1*; the reading of them is not.
+
 **Record:** `records/encoder_capacity_001/`
 **Script:** `measure_information_through_stages.py` (output `information_through_stages.txt`)
 **Spend:** $0.00. `torch` used only to deserialise checkpoints; ridge classification in the primal.

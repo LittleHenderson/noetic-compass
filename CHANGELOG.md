@@ -4,6 +4,66 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - TENTH SELF-CORRECTION: the "26-point information loss" was my probe's penalty, not the block
+
+$0.00. torch used only to deserialise checkpoints. Script
+`records/encoder_capacity_001/check_information_loss.py` (result `information_loss_check.txt`),
+record `INFORMATION_LOSS_WITHDRAWN.md`; `STAGE_INFORMATION_RESULT.md` annotated WITHDRAWN.
+
+WHAT WAS CLAIMED. Last round reported that the registered ^6 architecture reduces focus-world
+decodability from 63.83% to 37.3%, called it a 26.5-point loss, and concluded the block "discards 42%
+of the focus world's linearly available information" - and explained the analytic initialisation as
+"bypassing that loss". THAT CONCLUSION DOES NOT FOLLOW FROM THE MEASUREMENT AND IT IS FALSE. The
+probe used a FIXED RIDGE PENALTY OF LAMBDA = 1.0 on every feature set, and an invertible linear map
+followed by a mildly nonlinear tanh preserves information; what it changes is CONDITIONING.
+
+THE CHECK THAT REFUTES IT - a penalty sweep, same features, same folds:
+  features            l=1e-06   l=0.0001    l=0.01     l=0.1       l=1      l=10
+  x (encoded slot)     64.54%     64.54%    64.54%    64.72%    63.65%    56.03%
+  tanh(x)              64.72%     64.72%    64.72%    64.72%    63.83%    56.03%
+  ^6_untrained(x)      65.07%     66.31%    60.99%    51.06%    37.23%    21.81%
+  ^6_trained(x)        66.49%     66.31%    61.17%    55.32%    37.41%    19.86%
+AT LAMBDA = 1e-4 THE BLOCK READS 66.31% AND 66.31%. At lambda = 1e-6, 65.07% and 66.49% - HIGHER
+than the raw encoded slot's 64.72%. The block does NOT discard information; it preserves all of it
+and at a suitable penalty slightly more. The 37% was the probe misreading an ill-conditioned space.
+
+WHITENING CONFIRMS IT. Standardising each set to unit variance and classifying at lambda=1: x 66.31%,
+tanh(x) 66.13%, ^6_untrained(x) 65.96%, ^6_trained(x) 56.38%. The untrained block's output is
+informative and merely badly scaled.
+
+AND THE MAP IS NOT RANK DEFICIENT. Singular values of merge_left@left + merge_right@right:
+untrained largest 0.707129, smallest 6.265253e-05, ratio 1.129e4, rank holding 99% of the sum 56 of
+64; trained largest 14.851412, smallest 3.353687e-03, ratio 4.428e3, rank 49 of 64. Full rank,
+badly conditioned - information is stretched unevenly, not destroyed.
+
+WHAT SURVIVES. The saturation sweep stands: it involved no trained parameter, decodability is flat to
+slightly rising from s=1 to s=32 and only degrades past s=64, so scalar saturation is not a
+mechanism. And the "training changes nothing" finding is STRENGTHENED: at lambda=1e-4 the untrained
+and trained blocks read 66.31% and 66.31%, identical to two decimal places.
+
+WHAT THE TRAINED MACHINE'S 1.24% THEREFORE IS NOT: it is not information loss in the block. The
+information is present at 66.3% through the trained block, and it is present for the FROZEN readout
+too - REACHABLE_SOLUTION_RESULT.md measured that the frozen rows realise ANY linear classifier
+exactly, at residual 2.798e-14. A linear read of ^6_trained(x) at lambda=1e-4 reaches 66.31%; the
+trained machine reaches 1.24%. So the failure is entirely in how the frozen readout's argmax is
+arranged, which is what CONCENTRATION_SOURCE_RESULT.md measured independently. THE RECORD IS BACK TO
+TWO DEFECTS FOR THE WORLD-NAMING SLOT, NOT THREE: the trained readout mapping concentrates, and the
+answer assembly has no composition. No information-loss defect exists.
+
+WHY THIS IS WORTH RECORDING AS A METHOD NOTE. The check was run BEFORE the claim propagated, on my
+own headline, by asking what the probe would do if the claim were false. A penalty sweep and a
+whitening step cost nothing and take one round. The failure mode to name: A FIXED HYPERPARAMETER
+APPLIED ACROSS FEATURE SETS TURNS A CONDITIONING DIFFERENCE INTO AN APPARENT CAPABILITY DIFFERENCE.
+The record's other probes use lambda = 1.0 too, and any of them comparing feature sets of different
+scaling inherits the same risk.
+
+NOT ESTABLISHED: preserved information does not mean the trained machine works - it reads 1.24%, and
+preservation and usability are different claims; lambda -> 0 is not a free lunch and the sweep
+identifies conditioning rather than recommending a value; the whitened ^6_trained(x) row is 56.38%,
+below the untrained block's 65.96%, so the two checks agree on the untrained block and are less clear
+on the trained one; one quantity, one representative slot per packet, rebuilt inputs; one arm, one
+seed. No GPU work launched.
+
 ## 2026-09-17 UTC - The ^6 block's architecture costs 26 points of decodability, trained or not
 
 $0.00. torch used only to deserialise checkpoints; ridge classification solved in the primal. Script
