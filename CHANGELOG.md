@@ -4,6 +4,78 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The ^6 block's architecture costs 26 points of decodability, trained or not
+
+$0.00. torch used only to deserialise checkpoints; ridge classification solved in the primal. Script
+`records/encoder_capacity_001/measure_information_through_stages.py` (result
+`information_through_stages.txt`), record `STAGE_INFORMATION_RESULT.md`.
+
+5-fold cross-validated ridge classification of the focus-world alias through each stage. Chance is
+1/64 = 1.5625%.
+  x - the encoded slot itself                          63.65%   40.74x
+  tanh(x) - the analytic first stage                   63.83%   40.85x
+  tanh(left_untrained @ x)                             51.95%   33.25x
+  tanh(left_trained @ x)                               48.40%   30.98x
+  ^6_untrained(x) - the full block                     37.23%   23.83x
+  ^6_trained(x) - the full block                       37.41%   23.94x
+
+Scalar saturation sweep, involving NO trained parameter:
+  s      0.25    1.00    8.00   16.00   32.00   64.00   128.00
+  acc   52.84%  63.83%  65.78%  65.07%  65.43%  60.11%   56.74%
+
+SATURATION IS NOT THE MECHANISM. The sweep is flat to slightly RISING from s=1 to s=32, peaking at
+65.78% at s=8 where the mean absolute pre-activation is 0.82 - well into tanh's curved region. It
+only degrades past s=64. So scalar saturation of the encoded slot does not discard the class
+information, and the hypothesis that the trained block's 19.73x growth in effective operator norm
+destroyed it by saturating tanh is REFUTED.
+
+TRAINING CHANGES THE BLOCK'S INFORMATION CONTENT ALMOST NOT AT ALL: ^6_untrained(x) 37.23% versus
+^6_trained(x) 37.41%, a difference of 0.18 percentage points. On how much linearly decodable
+information the block preserves about the focus world, 160 AdamW updates changed essentially
+nothing. Whatever training did - and CONCENTRATION_SOURCE_RESULT.md shows it concentrated the
+readout from 57 distinct aliases to 27 on task-free inputs - it did NOT do it by destroying
+information in the block. The trained block's 1.24% readout performance against the untrained's
+~6.9% overall is a change in WHAT THE FROZEN READOUT EMITS, not in what the block carries.
+
+THE BLOCK'S OWN ARCHITECTURE IS THE LOSS, AND IT IS LARGE. x 63.65% -> tanh(x) 63.83% (the
+elementwise tanh costs nothing) -> tanh(left @ x) 48.40-51.95% (one 64x64 matrix and a tanh costs
+12-15 points) -> full ^6 37.2-37.4% (the merge costs 12-15 more). THE REGISTERED ^6 ARCHITECTURE
+REDUCES THE FOCUS WORLD'S LINEAR DECODABILITY FROM 63.83% TO 37.3% - A LOSS OF 26.5 POINTS - AND IT
+DOES SO WHETHER ITS WEIGHTS ARE TRAINED OR RANDOM. That gives a CEILING for the trained run which
+nothing in that run could have exceeded: a free linear readout on ^6_trained(x) reaches 37.41%, so
+no readout of any kind, however well trained, could have read the focus world through this block
+above roughly 37%. The learner reached 1.24%.
+
+THIS IS WHY THE ANALYTIC INITIALISATION WORKS. It sets left = I64, right = 0, merge = [T | 0], so
+^6(x) = T tanh(x): the right branch contributes tanh(0) = 0 and its half of merge is zero, so the
+two-branch merge COLLAPSES TO A SINGLE LINEAR MAP with no lossful composition. And tanh(x) measures
+63.83%, identical to the input. So the analytic initialisation does not merely fit a good T - IT
+BYPASSES THE BLOCK'S INFORMATION LOSS ENTIRELY, which is a second independent reason it reaches
+62.94% direct where the trained block's ceiling is 37%.
+
+THE TRAINED MACHINE FAILS TWICE OVER: the block costs it 26 points before the readout is consulted,
+and the frozen readout then extracts almost none of the 37 that remain, because training
+concentrated its emissions.
+
+WHAT IT MEANS FOR THE ARCHITECTURE. A 64 -> 64 -> 128 -> 64 block with two tanh branches and a
+merge, as registered, DISCARDS 42% OF THE FOCUS WORLD'S LINEARLY AVAILABLE INFORMATION. That is a
+measured architectural cost, present at initialisation and unchanged by training - not a training
+defect, not a loss defect, not an encoder defect. The analytic initialisation is in effect the
+degenerate case of that architecture in which the second branch is switched off, and it is worth 26
+points. That is a strong hint that the two-branch structure is not earning its cost on this task.
+
+NO CHANGE IS PROPOSED. This record measures a cost; it does not propose removing the branch, and any
+such change is a contract question - the ^6 contract fixes neural_transform_id = cas.op.decompose.v1.
+
+NOT ESTABLISHED: nothing was scored by the machine's own checker - these are free-readout
+decodability figures, not the whole-answer metric; the encoded slot is rebuilt at +0.781 correlation
+with the recorded logits, so the comparisons BETWEEN rows are valid and no absolute number is the
+machine's; 37.41% is a ceiling for a LINEAR readout, not for every readout, and nothing establishes
+that 37% is the maximum attainable; the loss is measured on one quantity, the focus-world alias at
+one representative slot per packet; one arm, one seed; no claim that the two-branch structure is
+wrong, since it may carry information this measurement does not probe and it is what
+cas.op.decompose.v1 defines. No GPU work launched.
+
 ## 2026-09-17 UTC - Architecture inventory: the architecture declares four operations and exactly one is canonical
 
 $0.00. Read-only inspection of the reference wheel. No forward pass, no device, no target, no
