@@ -63,9 +63,25 @@ Three panels, all from the run's own `result.json`:
 
 *(174 + 15 = 189 exactly; 30 + 9 = 39 exactly.)*
 
-**Three kinds have never once been answered**, before or after teaching: `context` 0/70,
-`definition` 0/70, `edge_account` 0/70. `admissible_answer_count` is **1** for every question of all
-five many-decision kinds — they are one fact to be got right in N places, not N questions.
+**And the decomposition holds in all six runs of the study**, not just this one
+(`ALL_RUNS_RESULT.md`). Three seeds × two arms, worst-case gap **56.79 percentage points**, six of
+six:
+
+| | min | max | mean |
+|---|---:|---:|---:|
+| one-decision, after | 64.15% | 69.06% | **66.54%** |
+| many-decision, one entity, after | 5.02% | 7.36% | **6.41%** |
+| gap | **56.79 pp** | **63.37 pp** | **60.13 pp** |
+
+**Three kinds have never once been answered.** `context` 0/70, `definition` 0/70 and
+`edge_account` 0/70 — and they are **0.00% in every one of the six runs**, which is **1,260
+individual question-attempts and not one correct answer**, across two arm conditions and three
+independent model initialisations. `admissible_answer_count` is **1** for every question of all five
+many-decision kinds — they are one fact to be got right in N places, not N questions.
+
+**And the study's own contrast is small next to this.** The arm condition moves the one-decision half
+by **under 1.2 points** on every matched seed pair, while the decision shape moves it by 57 to 63
+points. **The decision shape is the dominant variable by a factor of about fifty.**
 
 ## 3. The chain from input to answer, every link measured
 
@@ -192,5 +208,8 @@ figure), `INPUT_INDEPENDENCE_RESULT.md`.
   valid; no absolute number from those probes is the machine's.
 - **Ten self-corrections are recorded**, four of them on claims made in earlier rounds of this same
   work. Three of the last five were caught by checking a claim against the artifact it came from.
-- **One arm, one seed** (`MIXED_SAME_ITEMS`, `20260919`) underlies every recorded figure. The other
-  five runs of the study were not decomposed, probed or swept.
+- **One arm, one seed underlies the probes, but not the central claim.** The decision-shape
+  decomposition and the three never-answered kinds hold across **all six runs** of the study
+  (`ALL_RUNS_RESULT.md`). The concentration measurements, the stage probes, the penalty sweeps and
+  the arm-A preparation rest on `receipt_20260919_m` alone, because those need the checkpoints and
+  the cached features, which exist only for that run.

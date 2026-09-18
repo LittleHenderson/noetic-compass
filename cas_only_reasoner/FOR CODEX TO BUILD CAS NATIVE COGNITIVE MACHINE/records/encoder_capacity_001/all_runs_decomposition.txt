@@ -1,0 +1,58 @@
+receipts with a result.json: 6
+
+================================================================================================================
+THE SIX RUNS
+================================================================================================================
+
+               receipt                condition       seed    initial      final  declared match
+----------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a      ALT_COMPONENT_WHOLE   20260917   38/564    193/564              True
+    receipt_20260917_m         MIXED_SAME_ITEMS   20260917   38/564    192/564              True
+    receipt_20260918_a      ALT_COMPONENT_WHOLE   20260918   37/564    200/564              True
+    receipt_20260918_m         MIXED_SAME_ITEMS   20260918   37/564    203/564              True
+    receipt_20260919_a      ALT_COMPONENT_WHOLE   20260919   39/564    196/564              True
+    receipt_20260919_m         MIXED_SAME_ITEMS   20260919   39/564    189/564              True
+
+================================================================================================================
+THE DECOMPOSITION, RUN BY RUN
+================================================================================================================
+
+               receipt      seed  arm |           ONE DECISION |   MANY DECISIONS, ONE ENTITY |      gap
+                                      |     before       after |       before           after |    after
+----------------------------------------------------------------------------------------------------------------
+    receipt_20260917_a  20260917  ALT |     12.08%      64.91% |        2.01%           7.02% |   57.88pp
+    receipt_20260917_m  20260917  MIX |     12.08%      64.15% |        2.01%           7.36% |   56.79pp
+    receipt_20260918_a  20260918  ALT |     10.57%      69.06% |        3.01%           5.69% |   63.37pp
+    receipt_20260918_m  20260918  MIX |     10.57%      68.68% |        3.01%           7.02% |   61.66pp
+    receipt_20260919_a  20260919  ALT |     11.32%      66.79% |        3.01%           6.35% |   60.44pp
+    receipt_20260919_m  20260919  MIX |     11.32%      65.66% |        3.01%           5.02% |   60.64pp
+
+================================================================================================================
+ACROSS ALL SIX
+================================================================================================================
+
+  one-decision  after : min 64.15%   max 69.06%   mean 66.54%
+  many-decision after : min 5.02%   max 7.36%   mean 6.41%
+  gap (one - many)    : min 56.79pp  max 63.37pp  mean 60.13pp
+  runs where one-decision exceeds many-decision: 6 of 6
+
+  every kind's after-rate, by run:
+             kind      17_a      17_m      18_a      18_m      19_a      19_m
+          analogy    10.00%     7.14%    22.86%    22.86%    18.57%    15.71%  <- one decision
+          context     0.00%     0.00%     0.00%     0.00%     0.00%     0.00%  <- many, one entity
+   correspondence    96.59%    96.59%    93.18%    93.18%    94.32%    93.18%  <- one decision
+       definition     0.00%     0.00%     0.00%     0.00%     0.00%     0.00%  <- many, one entity
+     edge_account     0.00%     0.00%     0.00%     0.00%     0.00%     0.00%  <- many, one entity
+            parts    30.19%    32.08%    26.42%    33.96%    30.19%    22.64%  <- many, one entity
+            reach    74.77%    74.77%    79.44%    78.50%    75.70%    75.70%  <- one decision
+         role_set    13.89%    13.89%     8.33%     8.33%     8.33%     8.33%  <- many, one entity
+
+================================================================================================================
+READING
+================================================================================================================
+
+The claim being tested is that the two shapes separate, in every run, by a wide margin.
+A single count of runs where the one-decision group leads is reported above, together with
+the worst case, because a claim that holds in six of six is a different kind of claim from
+one that holds in five.
+
