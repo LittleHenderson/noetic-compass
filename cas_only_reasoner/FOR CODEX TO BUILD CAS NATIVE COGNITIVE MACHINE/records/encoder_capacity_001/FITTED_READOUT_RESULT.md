@@ -6,6 +6,27 @@ no training, no new run.**
 
 Script: `measure_fitted_readout_score.py`. Raw output: `fitted_readout_score.txt`.
 
+> ## CORRECTION — round 32. The `edge_account` row below is superseded.
+>
+> The per-slot truth for `edge_account` read a **directed** edge as **undirected**
+> (`tuple(sorted((source, target)))`), doubling the apparent edge count. Found in round 31 via an
+> impossible reading, diagnosed by `probe_edge_reachability.py`, fixed, re-run. Full account:
+> `EDGE_DIRECTION_CORRECTION.md`.
+>
+> | `edge_account`, fitted readout | as published below | **corrected** |
+> |---|---|---|
+> | per-slot accuracy | 59.9611% | **77.8426%** |
+> | exact answers | 2.8571% / 4.2857% | **1.4286%** (fitted on the five many-decision kinds, λ = 1.0) |
+> | **given its one true field** | not measured | **100.0000%** |
+>
+> `parts` and `context` also move slightly because the fit is shared and `edge_account`'s labels are
+> fit inputs: `parts` 15.0943% → 3.7736%, `context` 4.2857% → 4.2857% (participants per-slot
+> 55.0562% → 52.8090%). See `EDGE_DIRECTION_CORRECTION.md` §5.
+>
+> **The conclusions below stand, and one is strengthened:** the answer assembly is correct — giving
+> any single-field kind its one true field yields **100.0000%** for `edge_account`, `role_set` and
+> `parts` alike.
+
 ---
 
 ## 0. What was measured

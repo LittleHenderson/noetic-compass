@@ -1,4 +1,4 @@
-# The machine, measured — consolidated state after rounds 7 to 30
+# The machine, measured — consolidated state after rounds 7 to 32
 
 **Record:** `records/MACHINE_STATE_001/STATUS.md`
 **Spend across every figure here:** **$0.00.** Every number is read from bytes already on disk, from
@@ -129,16 +129,24 @@ where the answer is one choice among *several* admissible answers (65.66%) than 
 >
 > | kind | per-bit | chance | best constant | vs constant | exact answers |
 > |---|---|---|---|---|---|
-> | `edge_account` | 52.3810% – 53.5471% | 51.8326% | 59.5724% | **−6.03 to −7.19** | **0.0000%, all six runs** |
+> | `edge_account` | **62.7794% – 67.3469%** | **67.7444%** | **79.7862%** | **−12.4393 to −17.0068** | **0.0000%, all six runs** |
 > | `parts` | 70.5314% – 73.9130% | 51.2707% | 57.9710% | **+12.56 to +15.94** | 22.6415% – 33.9623% |
 > | `role_set` | 65.7407% – 70.8333% | 68.6728% | 80.5556% | **−9.72 to −14.81** | 8.3333% – 13.8889% |
 > | `context` | 38.5768% – 41.5730% | 66.4184% | 78.6517% | **−37.08 to −40.07** | **0.0000%, all six runs** |
 >
 > **Three of the four kinds read their own bits at or below chance, and two of them would have done
-> better by answering a constant.** `edge_account` never once got a 16-slot question's bits all right
-> in 420 questions; `parts` reached 100% in 93 of 318. **So for three kinds there is nothing for a
-> composer to compose** — which withdraws the round-26 reading of this limit, and with it the plan to
-> extend the joint candidate branch beyond `correspondence`.
+> better by answering a constant.** `edge_account` is **below chance in four of the six runs** and
+> never once got a 16-slot question's bits all right in 420 questions; `parts` reached 100% in 93 of
+> 318. **So for three kinds there is nothing for a composer to compose** — which withdraws the
+> round-26 reading of this limit, and with it the plan to extend the joint candidate branch beyond
+> `correspondence`.
+>
+> **The `edge_account` row was corrected in round 32.** Through rounds 27–31 that kind's per-slot
+> truth read a directed edge as undirected, doubling the apparent edge count. The published figures
+> were 52.3810%–53.5471% per bit against a 51.8326% chance rate and a 59.5724% constant. The
+> correction makes the machine look better in absolute terms and **worse against its baselines**:
+> the deficit against a constant roughly doubles, from −6.03/−7.19 to **−12.4393/−17.0068**. The
+> conclusion is unchanged and strengthened. Full account: `EDGE_DIRECTION_CORRECTION.md`.
 
 **Limit 3 — the update budget stopped the run mid-descent.** The loss was at its global minimum and
 the gradient norm still rising at the contract ceiling (ratio 1.378892, Spearman +0.317690, maximum
@@ -209,6 +217,32 @@ depends on *relative* score structure that a one-hot ridge fit does not preserve
 The run uses one; the `bias_update_head` is a real 4,096-parameter module absent from the run's
 module (Fix C, OS-027); `/memory` appears as a `target_path` in the recorded `aws_saved_repair_v8_001`
 lifecycle receipt. **Round 30 is the first evidence that the second group is not decorative.**
+
+**Limit 7 — there is no composition defect left, and the whole deficit is one scalar per kind.**
+Round 31/32 asked what each field of an answer is worth by giving that field the true symbol and
+re-assembling through the project's own `assemble_answer`, and the answer is unambiguous:
+
+| kind | field given the truth | accuracy |
+|---|---|---|
+| `edge_account` | `edge` | **100.0000%** |
+| `role_set` | `role` | **100.0000%** |
+| `parts` | `node` | **100.0000%** |
+| `context` | `participant` | **75.7143%** (+71.4286) |
+| `context` | `setting_ref` | 4.2857% (**+0.0000**) |
+
+**Every single-field kind reaches 100% when its own field is correct.** The assembly is right, the
+task is reachable, and exact-answer accuracy is simply **per-slot accuracy raised to the slot count**:
+
+```
+edge_account   0.778426^16                     =  1.82%   measured 1.4286%
+role_set       0.694444^6                      = 11.22%   measured 8.3333%
+context        0.528090^4 x 0.757143           =  5.88%   measured 4.2857%
+```
+
+**So the target is one measurable number per kind.** `edge_account` at 77.8426% per slot over 16 slots
+yields 1.4% of answers; the same readout at 90% per slot yields 18.5%. `context`'s deficit is entirely
+its four participant bits — `setting_ref` is worth **exactly +0.0000**. And `definition` already reads
+at **48.5714%**, the strongest many-decision kind.
 
 ## 5. The fixes, and what each is measured to be worth
 

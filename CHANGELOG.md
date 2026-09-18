@@ -4,6 +4,75 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - A directed edge was read as undirected for five rounds, and the fix proves the answer assembly is CORRECT
+
+$0.00. Pure Python, standard library only. No torch, no device, no model, no training, no new run.
+Record `records/encoder_capacity_001/EDGE_DIRECTION_CORRECTION.md`; three result records carry
+correction pointers; `MACHINE_STATE_001/STATUS.md` extended with Limit 7 and its `edge_account` rows
+corrected.
+
+THE BUG, FOUND BY AN IMPOSSIBLE READING. Round 31's field decomposition gave each kind its one true
+field and re-assembled. role_set and parts reached 100.0000%. edge_account reported 0.0000% - and
+edge_account has exactly ONE field, so that arm hands the answer over outright. A kind that scores
+0.0000% WHEN GIVEN THE ANSWER is unreachable, not hard. probe_edge_reachability.py then printed, for
+a world with 4 declared edges:
+
+    true PRESENT slots: 8 of 16   (truth has 4 edges)
+    only in assembled: [(n1,n0), (n2,n1), (n2,n3), (n3,n0)]     only in truth: []
+
+CAUSE: `tuple(sorted((row["source"], row["target"])))` in the per-slot truth. checker._edges is
+frozenset((source, target)) - an ORDERED pair - and assemble_answer emits slot["coordinates"] as
+[source, target]. Sorting collapsed the two directions onto one key, marking (a,b) AND (b,a) PRESENT
+and exactly doubling the edge count. Fixed to the directed tuple in measure_bits_read.py,
+measure_field_bottleneck.py, measure_binding_ceiling.py, measure_fitted_readout_score.py and
+measure_binding_variants.py, all patched in place. Re-run of the same probe: "true PRESENT slots: 4
+of 16", "assembled == admissible_answers[0] ? True", on two questions. SCOPE: edge_account only -
+the other three binary kinds key on a SINGLE coordinate, where sorting cannot conflate anything.
+
+WHY THE 229/229 VALIDATION DID NOT CATCH IT, AND COULD NOT. That check compared the machine's
+SUBMITTED ANSWER to the answer the project's checker derives, and passed six-for-six, twice. It
+validated the TRUTH DERIVATION, correctly. It never touched true_symbol, the mapping built on top of
+it. A VALIDATION THAT CONFIRMS YOUR ORACLE DOES NOT VALIDATE THE LAYER YOU BUILD ON IT. What caught
+it was not a validation but an impossible result; contradictions are cheaper detectors than
+validations. Both lessons are now standing practice.
+
+CORRECTED NUMBERS, edge_account per bit, six runs:
+
+                       as published (rounds 27-31)   corrected
+    per-bit accuracy   52.3810% - 53.5471%          62.7794% - 67.3469%
+    truth PRESENT      40.4276%                     20.2138%
+    chance             51.8326%                     67.7444%
+    best constant      59.5724%                     79.7862%
+    vs best constant   -6.0253 to -7.1914           -12.4393 to -17.0068
+    exact answers      0.0000%, all six             0.0000%, all six (unchanged)
+
+THE MACHINE LOOKS BETTER IN ABSOLUTE TERMS AND WORSE AGAINST ITS BASELINES: below chance in FOUR of
+the six runs, and 12.4393 to 17.0068 points below a constant answer - the deficit against a constant
+roughly DOUBLES from the published figure. The round-27 conclusion is unchanged in direction and
+stronger in degree. The corrected histogram still never reaches 0% or 100% in 420 questions.
+
+AND THE FIX PROVES SOMETHING BETTER THAN IT COST. Giving each single-field kind its one true field
+and re-assembling through the project's OWN assemble_answer:
+
+    edge_account  + edge truth         100.0000%
+    role_set      + role truth         100.0000%
+    parts         + node truth         100.0000%
+    context       + participant truth   75.7143%   (+71.4286)
+    context       + setting_ref truth    4.2857%   (+0.0000)
+
+EVERY SINGLE-FIELD KIND IS PERFECT WHEN ITS FIELD IS CORRECT. The assembly is right, the task is
+reachable, and there is NO COMPOSITION DEFECT LEFT TO EXPLAIN. Exact-answer accuracy is simply
+per-slot accuracy raised to the slot count: edge_account 0.778426^16 = 1.82% against 1.4286%
+measured; role_set 0.694444^6 = 11.22% against 8.3333%; context 0.528090^4 x 0.757143 = 5.88%
+against 4.2857%.
+
+SO THE TARGET IS ONE MEASURABLE SCALAR PER KIND. edge_account at 77.8426% per slot over 16 slots
+yields 1.4% of answers; the same readout at 90% per slot yields 18.5%. context's entire deficit is
+its four participant bits - setting_ref is worth EXACTLY +0.0000. definition already reads at
+48.5714%, the strongest many-decision kind.
+
+Nothing was wired into a run. No code under test was changed: 2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - A fitted readout lifts half the exam and costs more than it gains, and the constraint is that there is only ONE map
 
 $0.00. Pure Python, standard library only. No torch, no device, no learned run weights, no forward

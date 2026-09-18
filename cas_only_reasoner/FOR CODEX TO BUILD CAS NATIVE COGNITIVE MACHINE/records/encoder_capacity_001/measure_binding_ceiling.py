@@ -139,7 +139,7 @@ def true_symbols(kind: str, plan: dict, answer: dict) -> dict:
     """PRESENT/ABSENT per set-valued slot, read out of the derived answer."""
     value = answer["value"]
     if kind == "edge_account":
-        present = {tuple(sorted((row["source"], row["target"]))) for row in value["edges"]}
+        present = {(row["source"], row["target"]) for row in value["edges"]}
     elif kind == "parts":
         present = set(value["nodes"])
     elif kind == "role_set":
@@ -154,7 +154,7 @@ def true_symbols(kind: str, plan: dict, answer: dict) -> dict:
         if slot["field"] != field:
             continue
         if kind == "edge_account":
-            key = tuple(sorted((slot["coordinates"][0], slot["coordinates"][1])))
+            key = (slot["coordinates"][0], slot["coordinates"][1])
         else:
             key = slot["coordinates"][0]
         out[slot["slot_id"]] = "PRESENT" if key in present else "ABSENT"

@@ -1,0 +1,52 @@
+FROZEN-BYTE GATE: projection MATCH  readout MATCH
+questions: 299   slots: 1999
+
+========================================================================================================
+PER-FIELD SLOT ACCURACY OF THE FITTED READOUT (argmax, 5-fold by question)
+========================================================================================================
+
+  edge_account            ALL   1029 slots   77.8426%
+  edge_account           edge   1029 slots   77.8426%
+
+      role_set            ALL    216 slots   69.4444%
+      role_set           role    216 slots   69.4444%
+
+         parts            ALL    207 slots   50.7246%
+         parts           node    207 slots   50.7246%
+
+       context            ALL    337 slots   57.5668%
+       context    participant    267 slots   52.8090%
+       context    setting_ref     70 slots   75.7143%
+
+    definition            ALL    210 slots   70.4762%
+    definition   function_ref     70 slots   64.2857%
+    definition       kind_ref     70 slots   72.8571%
+    definition          whole     70 slots   74.2857%
+
+========================================================================================================
+WHAT EACH FIELD IS WORTH � exact-answer accuracy when that field is given the truth
+========================================================================================================
+
+edge_account  (70 questions)
+                       fitted    1.4286%
+          fitted + edge truth  100.0000%   +98.5714%
+
+role_set  (36 questions)
+                       fitted    8.3333%
+          fitted + role truth  100.0000%   +91.6667%
+
+parts  (53 questions)
+                       fitted    3.7736%
+          fitted + node truth  100.0000%   +96.2264%
+
+context  (70 questions)
+                       fitted    4.2857%
+   fitted + participant truth   75.7143%   +71.4286%
+   fitted + setting_ref truth    4.2857%    +0.0000%
+
+definition  (70 questions)
+                       fitted   48.5714%
+   fitted + function_ref truth   58.5714%   +10.0000%
+      fitted + kind_ref truth   51.4286%    +2.8571%
+         fitted + whole truth   58.5714%   +10.0000%
+

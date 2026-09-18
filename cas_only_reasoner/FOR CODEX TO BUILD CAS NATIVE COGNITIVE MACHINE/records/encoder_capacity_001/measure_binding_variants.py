@@ -215,7 +215,7 @@ def main() -> int:
         pv = packet_vector(packet, tokenizer, projection)
 
         if kind == "edge_account":
-            labels = {tuple(sorted((row["source"], row["target"]))) for row in truth["edges"]}
+            labels = {(row["source"], row["target"]) for row in truth["edges"]}
         elif kind == "parts":
             labels = set(truth["nodes"])
         elif kind == "role_set":
@@ -227,7 +227,7 @@ def main() -> int:
             if slot["field"] != SET_FIELD[kind]:
                 continue
             if kind == "edge_account":
-                key = tuple(sorted((slot["coordinates"][0], slot["coordinates"][1])))
+                key = (slot["coordinates"][0], slot["coordinates"][1])
             else:
                 key = slot["coordinates"][0]
             label = "PRESENT" if key in labels else "ABSENT"
@@ -279,7 +279,7 @@ def main() -> int:
 
 def spec_key(slot, kind):
     if kind == "edge_account":
-        return tuple(sorted((slot["coordinates"][0], slot["coordinates"][1])))
+        return (slot["coordinates"][0], slot["coordinates"][1])
     return slot["coordinates"][0]
 
 

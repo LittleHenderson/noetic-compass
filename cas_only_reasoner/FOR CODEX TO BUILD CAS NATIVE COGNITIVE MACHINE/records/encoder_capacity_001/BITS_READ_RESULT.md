@@ -7,6 +7,29 @@ model, no training, no new run.**
 Script: `measure_bits_read.py`. Raw output: `bits_read.txt`.
 Companion mechanism test (refuted): `measure_slot_evidence.py`, `slot_evidence.txt`.
 
+> ## CORRECTION — round 32. Every `edge_account` number below is superseded.
+>
+> This record read a **directed** edge as **undirected**: it tested
+> `tuple(sorted((source, target)))`, which conflates `(a,b)` with `(b,a)` and doubles the apparent
+> edge count. Found in round 31 via an impossible reading (`edge_account` scored 0.0000% when given
+> the answer), diagnosed by `probe_edge_reachability.py`, and fixed. Full account:
+> `EDGE_DIRECTION_CORRECTION.md`.
+>
+> | `edge_account` | as published below | **corrected** |
+> |---|---|---|
+> | per-bit accuracy, six runs | 52.3810% – 53.5471% | **62.7794% – 67.3469%** |
+> | truth PRESENT rate | 40.4276% | **20.2138%** |
+> | chance | 51.8326% | **67.7444%** |
+> | best constant | 59.5724% | **79.7862%** |
+> | machine − best constant | −6.0253 to −7.1914 | **−12.4393 to −17.0068** |
+> | exact answers | 0.0000%, all six | 0.0000%, all six (**unchanged**) |
+>
+> **The conclusion is unchanged in direction and stronger in degree.** The machine reads
+> `edge_account` at 62.7794%–67.3469% where chance is 67.7444% — **below chance in four of six runs**
+> — and 12.4393 to 17.0068 points below a constant answer. Every `parts`, `role_set`, `context` and
+> `definition` figure in this record is unaffected. `bits_read.txt` on disk is the **corrected** run.
+> The corrected `edge_account` histogram never reaches 0% or 100% in 420 questions either.
+
 ---
 
 ## 1. What was owed

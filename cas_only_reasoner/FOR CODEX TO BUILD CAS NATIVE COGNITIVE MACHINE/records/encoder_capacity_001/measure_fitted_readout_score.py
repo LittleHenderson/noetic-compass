@@ -127,8 +127,8 @@ def true_symbol(kind, slot, value, packet, plan) -> str:
     node_alias = {node["ref"]: node["alias"] for world in worlds for node in world["nodes"]}
     world_alias = {world["world_id"]: world["alias"] for world in worlds}
     if kind == "edge_account":
-        present = {tuple(sorted((row["source"], row["target"]))) for row in value["edges"]}
-        key = tuple(sorted((slot["coordinates"][0], slot["coordinates"][1])))
+        present = {(row["source"], row["target"]) for row in value["edges"]}
+        key = (slot["coordinates"][0], slot["coordinates"][1])
         return "PRESENT" if key in present else "ABSENT"
     if kind == "parts":
         return "PRESENT" if slot["coordinates"][0] in set(value["nodes"]) else "ABSENT"

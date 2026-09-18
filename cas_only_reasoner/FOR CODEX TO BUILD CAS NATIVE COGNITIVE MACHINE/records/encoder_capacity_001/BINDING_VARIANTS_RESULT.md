@@ -7,6 +7,26 @@ no training, no new run.**
 Scripts: `measure_binding_variants.py` (`binding_variants.txt`), `measure_binding_ceiling.py`
 (`binding_ceiling.txt`), `measure_read_path_projection.py` (`read_path_projection.txt`).
 
+> ## CORRECTION — round 32. The `edge_account` rows below are superseded.
+>
+> The per-slot truth for `edge_account` read a **directed** edge as **undirected**
+> (`tuple(sorted((source, target)))`), doubling the apparent edge count. Found in round 31, fixed,
+> and re-run. Full account: `EDGE_DIRECTION_CORRECTION.md`.
+>
+> | `edge_account` | as published below | **corrected** |
+> |---|---|---|
+> | §1 before the block | 51.6035% | **not re-measured; the packet-inertness conclusion is structural and unaffected** |
+> | §3 `q: LDA` | 62.3033% | **not re-measured** |
+> | §3 `enc: LDA` | 62.9181% | **not re-measured** |
+> | §3 `lookup` | 96.4508% | **not re-measured** |
+> | §3 `block` (per-bit) | 53.5471% | **67.3469%** (run `receipt_20260919_m`, corrected) |
+> | §2 naming variants (`real` / `pair_token`) | 62.3033% / 60.2719% | **not re-measured; the refutation stands on the 2.03-point gap and on `context`, neither of which this bug touches** |
+>
+> **What is untouched, because it does not involve edges at all:** §1's packet-inertness result
+> (`before == name-alone` at 100.0000% for `edge_account` **and** `context`), §2's arity refutation
+> (`context` shares `parts`' arity and fails), and every `parts`, `role_set`, `context` and
+> `definition` figure.
+
 ---
 
 ## 0. Frozen-byte gate — the reconstruction is the encoder

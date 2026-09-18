@@ -84,7 +84,12 @@ def true_symbols(kind: str, plan: dict, answer: dict) -> dict:
     value = answer["value"]
     field = SET_FIELD[kind]
     if kind == "edge_account":
-        present = {tuple(sorted((row["source"], row["target"]))) for row in value["edges"]}
+        # DIRECTED. `checker._edges` is `frozenset((edge["source"], edge["target"]))` -- an ordered
+        # pair -- and `assemble_answer` emits `slot["coordinates"]` as `[source, target]`. Sorting
+        # the pair makes it undirected, which marks BOTH (a,b) and (b,a) PRESENT and doubles the
+        # apparent edge count. That error ran from round 27 to round 31; see
+        # EDGE_DIRECTION_CORRECTION.md.
+        present = {(row["source"], row["target"]) for row in value["edges"]}
     elif kind == "parts":
         present = set(value["nodes"])
     elif kind == "role_set":
@@ -98,7 +103,7 @@ def true_symbols(kind: str, plan: dict, answer: dict) -> dict:
         if slot["field"] != field:
             continue
         if kind == "edge_account":
-            key = tuple(sorted((slot["coordinates"][0], slot["coordinates"][1])))
+            key = (slot["coordinates"][0], slot["coordinates"][1])
         else:
             key = slot["coordinates"][0]
         out[slot["slot_id"]] = "PRESENT" if key in present else "ABSENT"
