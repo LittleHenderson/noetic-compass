@@ -322,3 +322,165 @@ def test_a_packet_without_the_focus_world_is_refused():
     p["record"]["query"]["focus_world_id"] = "world-zzz"
     with pytest.raises(KeyError):
         ac.declared_answer_shape(p)
+
+
+# --------------------------------------------------------------------------- #
+# 5. Structure independence — the development panel's shapes
+# --------------------------------------------------------------------------- #
+#
+# The held-out development panel is 59 questions over worlds with **ten** nodes, `max_depth` 3 and
+# `has_nested_whole` true, against the exposed course's four-node worlds. Its packets are not in the
+# frozen course (only their digests are), so it cannot be scored; what can be tested is whether this
+# layer's rules depend on the four-node layout they were derived from. They must not.
+
+
+def big_world(world_id: str, size: int, edges: list, participants: list) -> dict:
+    """A world of arbitrary size, in the real packet shape."""
+    return {
+        "world_id": world_id,
+        "nodes": [{"ref": f"{world_id}/{at}", "kind": "idea", "label": f"N{at}"}
+                  for at in range(size)],
+        "declared_whole": f"{world_id}/0",
+        "contains": [{"ref": f"{world_id}/e{at}", "source": f"{world_id}/{a}", "target": f"{world_id}/{b}"}
+                     for at, (a, b) in enumerate(edges)],
+        "declarations": {
+            "setting": "in a workshop",
+            "participants": [f"{world_id}/{at}" for at in participants],
+            "participants_basis": "PRIMARY_AUTHORED_LABELS_FIRST_THREE",
+            "kind": "a charging machine",
+            "function": "transmits force",
+        },
+    }
+
+
+def big_packet(kind: str, focus_id: str, worlds: list, arguments: dict | None = None) -> dict:
+    return {
+        "source": {"focus_world_id": focus_id, "worlds": worlds},
+        "record": {"query": {"kind": kind, "focus_world_id": focus_id,
+                             "arguments": arguments or {}}},
+    }
+
+
+def big_aliases(worlds: list) -> dict:
+    return {
+        "worlds": [
+            {"world_id": w["world_id"], "alias": f"W{at}",
+             "nodes": [{"ref": n["ref"], "alias": f"N{pos}"} for pos, n in enumerate(w["nodes"])]}
+            for at, w in enumerate(worlds)
+        ]
+    }
+
+
+def ten_node_worlds() -> list:
+    focus = big_world("world-big", 10, [(0, 1), (0, 2), (0, 3), (4, 5)], [0, 1, 2, 3])
+    other = big_world("world-oth", 10, [(1, 2), (3, 4)], [1, 2, 3])
+    return [focus, other]
+
+
+def test_declared_shape_does_not_assume_four_nodes():
+    worlds = ten_node_worlds()
+    shape = ac.declared_answer_shape(big_packet("edge_account", "world-big", worlds))
+    assert shape["nodes"] == 10
+    assert shape["cardinality"] == 4
+    shape = ac.declared_answer_shape(
+        big_packet("parts", "world-big", worlds, {"whole": "world-big/0"}))
+    assert shape["cardinality"] == 3
+
+
+def test_cardinality_and_self_links_hold_on_a_ten_node_world():
+    worlds = ten_node_worlds()
+    focus = "world-big"
+    plan = {
+        "kind": "edge_account",
+        "slots": [
+            {"slot_id": f"e{i}-{j}", "field": "edge", "group": "edges",
+             "coordinates": [f"{focus}/{i}", f"{focus}/{j}"],
+             "symbols": ["ABSENT", "PRESENT"], "scope_alias": "W0"}
+            for i in range(10) for j in range(10)
+        ],
+        "aliases": big_aliases(worlds),
+    }
+    scores = {slot["slot_id"]: {"ABSENT": 0.0, "PRESENT": 0.0} for slot in plan["slots"]}
+    for i in range(10):
+        scores[f"e{i}-{i}"]["PRESENT"] = 99.0
+    out = ac.apply_constraints(big_packet("edge_account", focus, worlds), plan, scores,
+                               {slot["slot_id"]: "PRESENT" for slot in plan["slots"]})
+    assert sum(1 for symbol in out.values() if symbol == "PRESENT") == 4
+    for i in range(10):
+        assert out[f"e{i}-{i}"] == "ABSENT"
+
+
+def test_a_whole_absent_from_the_focus_nodes_does_not_crash():
+    """`parts` with a `whole` outside the focus's nodes: the self-part rule simply does not fire."""
+    worlds = ten_node_worlds()
+    focus = "world-big"
+    plan = {
+        "kind": "parts",
+        "slots": [{"slot_id": f"n{i}", "field": "node", "group": "nodes",
+                   "coordinates": [f"{focus}/{i}"], "symbols": ["ABSENT", "PRESENT"],
+                   "scope_alias": "W0"} for i in range(10)],
+        "aliases": big_aliases(worlds),
+    }
+    scores = {slot["slot_id"]: {"ABSENT": 0.0, "PRESENT": 0.0} for slot in plan["slots"]}
+    p = big_packet("parts", focus, worlds, {"whole": "world-nowhere/9"})
+    shape = ac.declared_answer_shape(p)
+    assert shape["whole"] == "world-nowhere/9"
+    assert shape["cardinality"] == 0
+    out = ac.apply_constraints(p, plan, scores,
+                               {slot["slot_id"]: "PRESENT" for slot in plan["slots"]})
+    assert len(out) == 10
+
+
+def test_the_joint_decoder_uses_POSITION_and_this_pins_that_assumption():
+    """The one assumption this layer makes that the packet does not guarantee.
+
+    `_one_world_joint` maps a focus node to a candidate world's node **by position**, because the only
+    correspondence the packet offers is the alias namespace and aliases are positional. When the focus
+    and the candidate have different node counts, positions only line up as far as the shorter one
+    reaches. That is an assumption, not a fact, and it is pinned here so a change to it is visible.
+
+    On the development panel every world has ten nodes, so the assumption holds there by uniformity.
+    """
+    focus = big_world("world-big", 4, [(0, 1)], [0, 1, 2])
+    other = big_world("world-oth", 10, [(0, 1), (0, 2)], [0, 2, 3])
+    worlds = [focus, other]
+    plan = {
+        "kind": "context",
+        "slots": [{"slot_id": "setting", "field": "setting_ref", "group": "setting_ref",
+                   "coordinates": [], "symbols": ["W0", "W1"], "scope_alias": "W0"}]
+        + [{"slot_id": f"p{i}", "field": "participant", "group": "participants",
+            "coordinates": [f"world-big/{i}"], "symbols": ["ABSENT", "PRESENT"],
+            "scope_alias": "W0"} for i in range(4)],
+        "aliases": big_aliases(worlds),
+    }
+    scores = {slot["slot_id"]: {symbol: 0.0 for symbol in slot["symbols"]} for slot in plan["slots"]}
+    scores["setting"]["W1"] = 5.0
+    out = ac.apply_constraints(big_packet("context", "world-big", worlds), plan, scores,
+                               {slot["slot_id"]: "ABSENT" for slot in plan["slots"]})
+    # world-oth is chosen, and its participants {0, 2, 3} are read at the SAME POSITIONS in the focus
+    assert out["setting"] == "W1"
+    assert out["p0"] == "PRESENT"
+    assert out["p2"] == "PRESENT"
+    assert out["p3"] == "PRESENT"
+    assert out["p1"] == "ABSENT"
+
+
+def test_a_candidate_with_fewer_nodes_than_the_focus_is_skipped_not_crashed():
+    focus = big_world("world-big", 10, [(0, 1)], [0, 1, 2, 3])
+    small = big_world("world-sml", 2, [(0, 1)], [0, 1])
+    worlds = [focus, small]
+    plan = {
+        "kind": "context",
+        "slots": [{"slot_id": "setting", "field": "setting_ref", "group": "setting_ref",
+                   "coordinates": [], "symbols": ["W0", "W1"], "scope_alias": "W0"}]
+        + [{"slot_id": f"p{i}", "field": "participant", "group": "participants",
+            "coordinates": [f"world-big/{i}"], "symbols": ["ABSENT", "PRESENT"],
+            "scope_alias": "W0"} for i in range(10)],
+        "aliases": big_aliases(worlds),
+    }
+    scores = {slot["slot_id"]: {symbol: 0.0 for symbol in slot["symbols"]} for slot in plan["slots"]}
+    scores["setting"]["W0"] = 5.0
+    out = ac.apply_constraints(big_packet("context", "world-big", worlds), plan, scores,
+                               {slot["slot_id"]: "ABSENT" for slot in plan["slots"]})
+    assert out["setting"] == "W0"
+    assert sum(1 for sid, symbol in out.items() if sid.startswith("p") and symbol == "PRESENT") == 4

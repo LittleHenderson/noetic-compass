@@ -1,0 +1,468 @@
+====================================================================================================
+protocol_material['development']
+====================================================================================================
+dict[17]
+  'admission':
+    list[59]
+      dict[11]
+        'family_index':
+          int 0
+        'frame_digest':
+          str 'f5e2b91d6f5b3ead3681dad7686f16df4f667e686a4a14aee3c9ae32974b0dbf'
+        'kind':
+          str 'parts'
+        'packet_sha256':
+          str '48574790c67423fe05363fcc21079d8ce73ef5d9ee50f0b6043b0fb162cff7e1'
+        'record_id':
+          str 'typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864'
+        'sequence_digest':
+          str '9d28e70b4789ad16393d05ac6cd51d4a7a7446535d720988ad122961bbd8ba61'
+        'slot_plan_digest':
+          str '0ed9fcceb1a6f059279c2e56d199c84c7392a5624efc2b18fe098c9c12696938'
+        'slots':
+          int 10
+        'source_digest':
+          str '48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914'
+        'token_count':
+          int 28193
+        'topology':
+          str '006a321ca7e633c0e263ce941a0c44a11135c604d3263dbbaa585dd6cec57a58'
+  'counts':
+    dict[6]
+      'bank_worlds':
+        int 64
+      'families':
+        int 6
+      'packets':
+        int 59
+      'parts':
+        int 6
+      'reach':
+        int 53
+      'worlds_per_packet':
+        int 65
+  'development_digest':
+    str 'c0453072dcee653a9edb98142a816d5107a7dde5858d344440c7b176e8a76bf7'
+  'families':
+    list[6]
+      dict[10]
+        'declarations_authority':
+          str 'NEW_CALLER_AUTHORED_DEVELOPMENT_FACTS_NOT_WORLD_TRUTH'
+        'declared_root_label':
+          str 'Dev1Node7'
+        'index':
+          int 0
+        'record_ids':
+          list[10]
+            str 'typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864'
+        'root_ref':
+          str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n7'
+        'shape':
+          dict[4]
+            'p0_0':
+              list[2]
+                str 'n0_0'
+            'w0':
+              list[1]
+                str 'p0_0'
+            'w1':
+              list[1]
+                str 'p1_0'
+            'w2':
+              list[3]
+                str 'p2_0'
+        'split':
+          str 'development'
+        'stats':
+          dict[7]
+            'has_nested_whole':
+              bool True
+            'has_shared_part':
+              bool False
+            'max_depth':
+              int 3
+            'max_direct_parts':
+              int 3
+            'nodes':
+              int 10
+            'relations':
+              int 7
+            'wholes':
+              int 4
+        'topology':
+          str '006a321ca7e633c0e263ce941a0c44a11135c604d3263dbbaa585dd6cec57a58'
+        'world_id':
+          str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e'
+  'final_questions_constructed':
+    int 0
+  'inputs':
+    list[6]
+      dict[3]
+        'bytes':
+          int 64695
+        'path':
+          str 'research/CAS_META_2_COMPOSITION/records/learning_panel_001/supply.json'
+        'sha256':
+          str '6290e13a4f40e0b61da6ede65c55b90939380f1ef79bcfe6a5b98269dde8d193'
+  'main_targets_constructed':
+    int 0
+  'max_token_count':
+    int 28281
+  'neural_calls':
+    int 0
+  'packets':
+    list[59]
+      dict[2]
+        'record':
+          dict[9]
+            'cue':
+              NoneType None
+            'instruction':
+              str 'Return exactly the nodes directly contained by the specified whole in this complete supplied snapshot.'
+            'query':
+              dict[7]
+                'arguments':
+                  dict[1]
+                    'whole':
+                      str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e/n7'
+                'focus_world_id':
+                  str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e'
+                'kind':
+                  str 'parts'
+                'query_id':
+                  str 'typed-query-8ba3957637452c9145ed9e3f2bd31b2ff0128e685069b59b447a645d9b96c797'
+                'rule':
+                  str 'direct_contains_v1'
+                'schema':
+                  str 'cas.typed-teaching-query/0.1'
+                'source_digest':
+                  str '48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914'
+            'record_id':
+              str 'typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864'
+            'role_catalog':
+              dict[6]
+                '1':
+                  str 'declared whole kind and function'
+                '2':
+                  str 'declared setting and participants'
+                '3':
+                  str 'cross-domain containment-pattern comparison'
+                '4':
+                  str 'explicit node correspondence'
+                '5':
+                  str 'constituents and structural relations'
+                '6':
+                  str 'complete static structural account; temporal process requires additional evidence'
+            'schema':
+              str 'cas.typed-teaching-model-packet/0.1'
+            'source_digest':
+              str '48ea281664ca68b4e5bfcb4913ad58ac18a06c86fe6b28da1c78463f5113b914'
+            'source_world_id':
+              str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e'
+            'supports':
+              list[0]
+        'source':
+          dict[3]
+            'bank':
+              dict[5]
+                'bank_digest':
+                  str '0f563762a70e67513ca3e6996d988afd4421dd90fe63e1a04942a31a79e9c388'
+                'complete_within_supplied_bank':
+                  bool True
+                'coverage':
+                  str 'ALL_AND_ONLY_CALLER_SUPPLIED_MEMBERS'
+                'selection':
+                  str 'NO_COMPILER_TARGET_FILTERING_OR_FOCUS_DEPENDENCE'
+                'world_ids':
+                  list[64]
+                    str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2'
+            'focus_world_id':
+              str 'world-684620458740010349dd5179b29ff9b6f814313df6787ddd535f5cc335d1763e'
+            'worlds':
+              list[65]
+                dict[9]
+                  'branch_order':
+                    dict[4]
+                      'canonical_account_order':
+                        list[3]
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e0'
+                      'order_basis':
+                        str 'SERIALIZATION_ONLY_NOT_TEMPORAL'
+                      'process_order':
+                        NoneType None
+                      'source_order':
+                        list[3]
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e2'
+                  'contains':
+                    list[3]
+                      dict[3]
+                        'ref':
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e2'
+                        'source':
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2'
+                        'target':
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3'
+                  'contains_inventory_complete':
+                    bool True
+                  'declarations':
+                    dict[7]
+                      'domain':
+                        str 'grammatical'
+                      'function':
+                        str 'carries the relation between List and Item'
+                      'kind':
+                        str 'a list pattern'
+                      'participants':
+                        list[3]
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2'
+                      'participants_basis':
+                        str 'PRIMARY_AUTHORED_LABELS_FIRST_THREE'
+                      'primary_labels':
+                        list[3]
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2'
+                      'setting':
+                        str 'in an edited sentence'
+                  'declared_whole':
+                    str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2'
+                  'inventory_scope':
+                    str 'EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD'
+                  'nodes':
+                    list[4]
+                      dict[3]
+                        'kind':
+                          str 'idea'
+                        'label':
+                          str 'Determiner'
+                        'ref':
+                          str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n0'
+                  'source_status':
+                    dict[4]
+                      'authorship_authenticated':
+                        bool False
+                      'declaration_basis':
+                        str 'CALLER_SUPPLIED_SOURCE'
+                      'field_origins':
+                        dict[8]
+                          'branch_order':
+                            str 'PRESENTATION_CONVENTIONS_ONLY'
+                          'contains':
+                            str 'SUPPLIED_GRAPH_DECLARATIONS_MAY_BE_TEMPLATE_DERIVED'
+                          'domain':
+                            str 'AUTHORED_DOMAIN_DECLARATION'
+                          'function':
+                            str 'DECLARED_PHRASE_OR_RENDERED_AUTHORED_DOMAIN_TEMPLATE'
+                          'kind':
+                            str 'AUTHORED_KIND_DECLARATION'
+                          'participants':
+                            str 'PRESENTATION_DERIVED_PRIMARY_THREE_LABELS'
+                          'primary_labels':
+                            str 'FIRST_THREE_CALLER_SUPPLIED_LABELS'
+                          'setting':
+                            str 'AUTHORED_DOMAIN_DECLARATION'
+                      'world_truth_established':
+                        bool False
+                  'world_id':
+                    str 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2'
+  'policy':
+    dict[14]
+      'bank':
+        str 'ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS'
+      'comparison':
+        str 'Parts/reach development structure-and-size transfer only; not all-eight-kind transfer'
+      'labels':
+        str 'Dev<family-index>Node<sorted-structural-node-index>; no legacy labels or target menus'
+      'legacy_parity':
+        str 'Topology identities only; not legacy18-question/text/difficulty/answer parity'
+      'novelty':
+        str 'Excluded under pinned historical inventory; not authenticated absolute historical nonexposure'
+      'questions':
+        str 'PARTS_ROOT_AND_REACH_FROM_ROOT_TO_EVERY_OTHER_PUBLIC_NODE'
+      'reach_rule':
+        str 'first_direct_constituent_lexical_v1'
+      'root':
+        str 'LEXICAL_FIRST_AUTHORED_NODE_WITH_ZERO_INDEGREE'
+      'selection':
+        str 'EXACT_SIX_RETAINED_PUBLIC_DEVELOPMENT_TOPOLOGY_IDS; NO_ANSWER_CLASS_QUERY_SELECTION'
+      'semantics':
+        str 'Complete supplied DAG snapshot; authored declarations; no world truth or temporal-process claim'
+      'split':
+        str 'development'
+      'supports':
+        str 'NONE_EQUAL_FOR_BOTH_STUDY_ARMS'
+  'profile':
+    dict[6]
+      'course_profile':
+        dict[6]
+          'data_files':
+            list[0]
+          'files':
+            list[15]
+              dict[3]
+                'bytes':
+                  int 14874
+                'path':
+                  str 'cas_meta2/complementary_teaching/course.py'
+                'sha256':
+                  str 'dd6cc2687cabc8354beda5993d82f634d8350d288b258a5d9bf38c9488082ec0'
+          'identity_scope':
+            str 'ON_DISK_SOURCE_NOT_LOADED_WORKER_ATTESTATION'
+          'plan_source_profile':
+            dict[5]
+              'files':
+                list[9]
+                  dict[3]
+                    'bytes':
+                      int 12080
+                    'path':
+                      str 'cncm/rpa_learning_match.py'
+                    'sha256':
+                      str '2cd2bfa7a5dbff5502df070259370e4f6207f047551245de191bd8d6177ff4fb'
+              'profile_digest':
+                str 'f119b404ade028f8f8c98e14f02ebb8f817700cb280a2022ad2d76cf90a870f7'
+              'schema':
+                str 'cas.typed-teaching-course-source-profile/0.1'
+              'source_role':
+                str 'PRESERVED_SELECTOR_CODE_AND_LITERAL_DECLARATIONS_NOT_LEGACY_TASK_EXECUTION'
+              'training_source_profile':
+                dict[6]
+                  'data_files':
+                    list[0]
+                  'files':
+                    list[3]
+                      dict[3]
+                        'bytes':
+                          int 100
+                        'path':
+                          str 'cas_meta2/typed_teaching/__init__.py'
+                        'sha256':
+                          str 'a9cd4e93977921031a27e2410afca5c7b9314a8bf8914f4d0df2da545831cb95'
+                  'final_target_files_read':
+                    bool False
+                  'pin_role':
+                    str 'ON_DISK_GENERATOR_AND_CONTRACT_BYTES_NOT_LOADED_RUNTIME_ATTESTATION'
+                  'profile_digest':
+                    str 'a2beeb50fba36cb7de837f3ad6d5dfe6845ef005fd1bf84369f38b370108a85a'
+                  'schema':
+                    str 'cas.typed-teaching-source-profile/0.1'
+          'profile_digest':
+            str 'b13a2ad2598dd1494d42714b30cdcd7ba340d1094a2d277f81b6940ff29766dc'
+          'schema':
+            str 'cas.typed-teaching-course-source-profile/0.1'
+      'files':
+        list[8]
+          dict[3]
+            'bytes':
+              int 15483
+            'path':
+              str 'cas_meta2/typed_teaching/development.py'
+            'sha256':
+              str '14837366e23d9bb2b89a3ac6aeafeb8d423eff99031a1cec9ba76560dd4df1ca'
+      'policy':
+        dict[14]
+          'bank':
+            str 'ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS'
+          'comparison':
+            str 'Parts/reach development structure-and-size transfer only; not all-eight-kind transfer'
+          'labels':
+            str 'Dev<family-index>Node<sorted-structural-node-index>; no legacy labels or target menus'
+          'legacy_parity':
+            str 'Topology identities only; not legacy18-question/text/difficulty/answer parity'
+          'novelty':
+            str 'Excluded under pinned historical inventory; not authenticated absolute historical nonexposure'
+          'questions':
+            str 'PARTS_ROOT_AND_REACH_FROM_ROOT_TO_EVERY_OTHER_PUBLIC_NODE'
+          'reach_rule':
+            str 'first_direct_constituent_lexical_v1'
+          'root':
+            str 'LEXICAL_FIRST_AUTHORED_NODE_WITH_ZERO_INDEGREE'
+          'selection':
+            str 'EXACT_SIX_RETAINED_PUBLIC_DEVELOPMENT_TOPOLOGY_IDS; NO_ANSWER_CLASS_QUERY_SELECTION'
+          'semantics':
+            str 'Complete supplied DAG snapshot; authored declarations; no world truth or temporal-process claim'
+          'split':
+            str 'development'
+          'supports':
+            str 'NONE_EQUAL_FOR_BOTH_STUDY_ARMS'
+      'profile_digest':
+        str '2f6ab6089749139ba4b15567c25c925a2eaf6f98b09eaac1b12e6c58f52ffbbf'
+      'schema':
+        str 'cas.typed-development-profile/0.1'
+      'source_authority':
+        str 'PINNED_FILES_NOT_EXTERNAL_AUTHENTICITY'
+
+====================================================================================================
+protocol_material['schedule']
+====================================================================================================
+dict[2]
+  'batches':
+    list[160]
+      dict[7]
+        'cursor':
+          int 0
+        'depth':
+          int 1
+        'occurrence_ids':
+          list[8]
+            str 'typed-occurrence-c745b391096ecba5c41359dcb23e5e67789c97da368b5f1c65144655be032442'
+        'phase':
+          str 'WITHIN_CUBE'
+        'presentation_ids':
+          list[8]
+            str 'course-presentation-0000'
+        'record_ids':
+          list[8]
+            str 'typed-input-7dbffa3c40543eff40f90a340ca44d036637b4fb6939e63cc73c5d0e5271a962'
+        'round':
+          int 1
+  'stats':
+    dict[14]
+      'actual_compute_measured':
+        bool False
+      'batches_digest':
+        str '1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275'
+      'condition':
+        str 'MIXED_SAME_ITEMS'
+      'contrast_distinct':
+        bool True
+      'groups':
+        int 160
+      'occurrence_lineage_digest':
+        str 'af610db271459da2ea29774002b213949dc87b31b055163e1b1bd7b2d7860db9'
+      'ordinary_graph_equals_alt':
+        bool True
+      'packet_depth_multiset_digest':
+        str '2394e804d393f1e8f30fefd897ecf915a56645c9364450220ac4131dedf06982'
+      'planned_slot_core_passes':
+        int 17178
+      'presentation_slots':
+        int 4613
+      'presentations':
+        int 1152
+      'source_plan_digest':
+        str '8c1132d0882ebd74d35d7634ee6deda84f9b9eb8316c6b6e26fb275d2268c297'
+
+a development record_id: typed-input-0cd5786cbec5560790abdf15217d9e0f28a7af62109171832a7d816670dea864
+
+frozen course registry size: 564
+development record in the registry? False
+
+
+top-level keys of `frozen_course`:
+   'bank': dict 3
+   'batches': list 160
+   'condition': str 19
+   'counts': dict 17
+   'course_digest': str 64
+   'plan': dict 14
+   'prepared_digest': str 64
+   'presentations': list 1152
+   'readiness': dict 9
+   'registry': list 564
+   'schema': str 29
+   'semantic_policy': dict 11
+   'source_profile': dict 6
+   'source_seed': int 
+   'teacher_boundary': str 53
+
+--- attempting a development packet ---
+model_packet FAILED: ValueError: TYPED_COURSE_RECORD_UNKNOWN

@@ -4,6 +4,60 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The held-out panel is unmeasurable from this receipt (closed with a reason), and the constraint layer is structure-independent
+
+$0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
+training, no new run. Script `records/encoder_capacity_001/probe_development_source.py`. Record
+`DEVELOPMENT_PANEL_AND_ROBUSTNESS.md`. `tests/test_answer_constraints.py` now 21 tests, all passing.
+
+CLOSED, WITH THE REASON STATED EXACTLY. The development panel is 59 questions with ZERO overlap with
+the exposed course, and the machine scores 0 of 59 at every cursor. Since round 24 it has been
+recorded as unmeasured. It is unmeasurable from this receipt:
+
+    frozen course registry size: 564
+    development record in the registry?  False
+    model_packet FAILED: ValueError: TYPED_COURSE_RECORD_UNKNOWN
+
+protocol_material["development"] carries 'admission': list[59] of dicts holding packet_sha256,
+source_digest, slot_plan_digest, frame_digest, sequence_digest, topology, kind, record_id, slots,
+token_count - DIGESTS, NOT PACKETS. No `source` object, no `query`. Without the packet there is no
+public snapshot and checker.derive_target needs one. The targets are not derivable by any means
+available here.
+
+BUT THE PROBE ESTABLISHED WHAT THE PANEL IS, AND IT EXPLAINS THE 0 OF 59.
+
+    counts: bank_worlds 64, families 6, packets 59, parts 6, reach 53, worlds_per_packet 65
+    families: 6 families of 10, 'split': 'development',
+              'declarations_authority': 'NEW_CALLER_AUTHORED_DEVELOPMENT_FACTS_NOT_WORLD_TRUTH'
+              'stats': nodes 10, relations 7, wholes 3, max_depth 3, has_nested_whole True
+
+THE PANEL IS ONLY TWO KINDS - 6 parts AND 53 reach - OVER WORLDS WITH TEN NODES, DEPTH 3 AND NESTED
+WHOLES, CALLER-AUTHORED. The exposed course is four-node worlds. THAT IS A DISTRIBUTION SHIFT AND IT
+LANDS ON EXACTLY THE TWO KINDS WHERE THE MACHINE LOOKS STRONGEST: reach 76.4798% on the exposed course
+against 0 of 53 on the panel; parts 80.8176% with the constraint layer against 0 of 6. THE MACHINE'S
+APPARENT STRENGTH ON THOSE TWO KINDS DOES NOT SURVIVE A CHANGE OF WORLD SIZE - consistent with
+everything else measured, and with six runs converging on the same W36. A readout that memorises
+layout scores zero on a layout it has never seen.
+
+AND THE CONSTRAINT LAYER IS STRUCTURE-INDEPENDENT, NOW TESTED RATHER THAN ASSERTED. Five new tests,
+passing first run: a ten-node world reports the right cardinalities; exactly 4 PRESENT out of 100 edge
+slots with no self-link, so the rules are not written for a 4x4 grid; a `whole` outside the focus's
+nodes yields cardinality 0 without crashing; a candidate with fewer nodes is skipped; and the
+positional node correspondence is PINNED BY TEST. No rule in cncm/answer_constraints.py depends on the
+four-node layout it was mined from - the cardinalities come from the packet, the self-link rule
+compares two coordinates, the joint decoder enumerates the bank. THE LAYER WOULD APPLY UNCHANGED TO
+THE PANEL'S TEN-NODE WORLDS, which is the one thing about that panel establishable without its packets.
+
+ONE NAMED ASSUMPTION. _one_world_joint maps a focus node to a candidate node BY POSITION, because the
+only correspondence the packet offers is the positional alias namespace. It holds on both panels by
+uniformity and is the module's only such assumption; it is now pinned by a test so changing it is a
+visible act.
+
+NOT LICENSED: that the layer would SCORE well on the development panel. Structure independence is
+necessary and now tested; it is not sufficient, because that panel's scores also depend on the
+per-slot readout underneath, and the readout is what fails there. NO CLAIM IS MADE ABOUT A
+DEVELOPMENT SCORE.
+
 ## 2026-09-17 UTC - The declared-constraint layer is built and tested: +6.6194 points overall, +12.4861 on the many-decision half, and the one-decision half is UNTOUCHED
 
 $0.00. Pure standard library plus the project's pure modules. No torch, no device, no model, no
