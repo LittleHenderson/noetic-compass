@@ -1,0 +1,27 @@
+====================================================================================================
+STRUCTURAL SCAN � cells with the SAME symbol in every world of the bank
+====================================================================================================
+
+  CONSTANT          ('edge_account', 'edge', (0, 0))  ->    ABSENT   (4480 observations)
+  CONSTANT          ('edge_account', 'edge', (1, 1))  ->    ABSENT   (4480 observations)
+  CONSTANT          ('edge_account', 'edge', (2, 2))  ->    ABSENT   (4480 observations)
+  CONSTANT          ('edge_account', 'edge', (3, 3))  ->    ABSENT   (2964 observations)
+  CONSTANT                 ('parts', 'node', (0, 0))  ->    ABSENT   (960 observations)
+  CONSTANT                 ('parts', 'node', (1, 1))  ->    ABSENT   (1472 observations)
+  CONSTANT                 ('parts', 'node', (2, 2))  ->    ABSENT   (640 observations)
+  CONSTANT                 ('parts', 'node', (3, 3))  ->    ABSENT   (260 observations)
+
+cells scanned: 36   constant: 8   mixed: 28
+
+====================================================================================================
+WHAT HARD-CODING THE STRUCTURAL CONSTANTS IS WORTH � recorded scores, six runs
+====================================================================================================
+
+           kind     q   independent constants applied    hard-coded       lift
+----------------------------------------------------------------------------------------------------
+   edge_account   420      0.0000%          1602      4.2857%   +4.2857%
+          parts   318     29.2453%           318     31.7610%   +2.5157%
+        context   420      0.0000%             0      0.0000%   +0.0000%
+
+A cell is CONSTANT when every one of the 64 worlds in the bank gives it the same symbol.
+Those are properties of the task, not of the run, so hard-coding them costs nothing.

@@ -382,6 +382,37 @@ defect left" is **withdrawn**, for the reasons given under Limit 7.
 
 mean **195.5/564 = 34.66% → 232.3/564 = 41.19%**. Source: `AUDIT_RESPONSE_AND_SELFLINKS.md`.
 
+**Round 35 turned the audit's lucky find into a construction, and bounded it.** Scanning every
+structural slot cell over all 64 worlds of the bank — keyed by kind, field, and node **positions within
+their own world** — finds **exactly 8 cells whose symbol is the same in every world**:
+
+```
+  ('edge_account', 'edge', (0,0)) (1,1) (2,2) (3,3)   ->  ABSENT
+  (       'parts', 'node', (0,0)) (1,1) (2,2) (3,3)   ->  ABSENT
+  cells scanned: 36   constant: 8   mixed: 28
+```
+
+**Every constant is a self-link or a self-part, all ABSENT, and `context` has none at all** — its
+participant cells are genuinely mixed across the worlds. **The class is bounded and now exhausted.**
+
+| kind | q | independent | constants applied | hard-coded | lift |
+|---|---|---|---|---|---|
+| `edge_account` | 420 | 0.0000% | 1602 | **4.2857%** | **+4.2857%** |
+| `parts` | 318 | 29.2453% | 318 | **31.7610%** | **+2.5157%** |
+| `context` | 420 | 0.0000% | 0 | 0.0000% | **+0.0000%** |
+
+`edge_account`'s +4.2857% **reproduces round 34's ad-hoc self-link result exactly**, from an
+independently built measurement — an unplanned cross-check both pass. `parts`' +2.5157% is measured
+against the **independent** baseline while its cardinality decoder already reaches 74.2138%: **the two
+overlap, their combination is unmeasured, and they are not added.** The total stays **+36.83 per run**.
+Source: `STRUCTURAL_CONSTANTS_RESULT.md`.
+
+**The open item is now sharp and singular. `parts`' constraint decoder reaches 74.2138% while
+`context`'s best truth-free decoder reaches 4.0476% and `edge_account`'s reaches 4.2857%** — the same
+gap round 27 measured, where `parts` reads its bits at 70.5314%–73.9130% against a 51.2707% chance rate
+and the other two do not read at all. **The constraint layer is now as good as the readout underneath
+it, and the readout is the binding constraint.**
+
 ## 5. The fixes, and what each is measured to be worth
 
 **Fix A — analytic initialisation of the `^6` block. BUILT AND VALIDATED.**

@@ -4,6 +4,54 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The "declared by absence" class is exactly eight cells, and it is now exhausted
+
+$0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
+`records/encoder_capacity_001/STRUCTURAL_CONSTANTS_RESULT.md`.
+
+The round-34 audit found the self-link opening by luck. Round 35 turned it into a CONSTRUCTION: scan
+every structural slot cell over all 64 worlds in the bank and find every cell whose symbol is the same
+in every world. Those cells need no reader at all.
+
+    CONSTANT          ('edge_account', 'edge', (0, 0))  ->  ABSENT   (4480 observations)
+    CONSTANT          ('edge_account', 'edge', (1, 1))  ->  ABSENT   (4480 observations)
+    CONSTANT          ('edge_account', 'edge', (2, 2))  ->  ABSENT   (4480 observations)
+    CONSTANT          ('edge_account', 'edge', (3, 3))  ->  ABSENT   (2964 observations)
+    CONSTANT                 ('parts', 'node', (0, 0))  ->  ABSENT    (960 observations)
+    CONSTANT                 ('parts', 'node', (1, 1))  ->  ABSENT   (1472 observations)
+    CONSTANT                 ('parts', 'node', (2, 2))  ->  ABSENT    (640 observations)
+    CONSTANT                 ('parts', 'node', (3, 3))  ->  ABSENT    (260 observations)
+
+    cells scanned: 36   constant: 8   mixed: 28
+
+EVERY CONSTANT IS A SELF-LINK OR A SELF-PART, ALL ABSENT, AND CONTEXT HAS NONE AT ALL. Its
+participant cells are genuinely mixed across the 64 worlds. THE CLASS IS BOUNDED AND NOW EXHAUSTED -
+no further free wins of this kind exist, and the temptation the audit's lead created is closed.
+
+    kind           q    independent   constants applied   hard-coded       lift
+    edge_account  420      0.0000%            1602           4.2857%     +4.2857%
+    parts         318     29.2453%             318          31.7610%     +2.5157%
+    context       420      0.0000%               0           0.0000%     +0.0000%
+
+edge_account's +4.2857% REPRODUCES ROUND 34's AD-HOC SELF-LINK RESULT EXACTLY - the systematic scan
+was built independently of that test and lands on the same figure from the same 18 of 420 questions.
+AN UNPLANNED CROSS-CHECK THAT BOTH MEASUREMENTS PASS.
+
+parts' +2.5157% is measured against the INDEPENDENT baseline, while the round-33 cardinality decoder
+already reaches 74.2138% on that kind. THE TWO OVERLAP AND THEIR COMBINATION IS UNMEASURED, so they
+are NOT added. The truth-free total is UNCHANGED at +36.83 questions per run: parts +23.83 of 53,
+definition +7.17 of 70, edge_account +3.00 of 70, context +2.83 of 70. Mean 195.5/564 = 34.66% ->
+232.3/564 = 41.19%.
+
+THE OPEN ITEM IS NOW SHARP. parts' cardinality decoder reaches 74.2138% while context's best
+truth-free decoder reaches 4.0476% and edge_account's reaches 4.2857%. That is the same gap round 27
+measured: parts reads its bits at 70.5314%-73.9130% against a 51.2707% chance rate and the other two
+do not. THE CONSTRAINT LAYER IS NOW AS GOOD AS THE READOUT UNDERNEATH IT, AND THE READOUT IS THE
+BINDING CONSTRAINT.
+
+NOT LICENSED: that a run realises any of it. All decoders ran offline against recorded scores;
+score_decisions is untouched. 2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - An independent audit accepted, zero self-links in 649,728 declared edges, and the honest metric for edges
 
 $0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
