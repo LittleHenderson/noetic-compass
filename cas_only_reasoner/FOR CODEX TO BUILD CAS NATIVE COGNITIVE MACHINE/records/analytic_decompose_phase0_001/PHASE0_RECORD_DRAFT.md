@@ -135,9 +135,43 @@ readout behaviour off a concentrated distribution. It would **not** mean a colla
 because no collapse was established. The mechanism stays open either way.
 
 **What P5 does not cover.** `edge_account` and `parts` fail for a separate measured reason — a
-conjunction over independent binary decisions (`TWO_DEFECTS_RESULT.md` Defect B, which stands) —
-and a strong P5 would say nothing about them. A reader who sees the alias distribution repaired
-must not read it as progress on the 140 questions those two kinds contribute.
+conjunction over independent binary decisions (`DECISION_STRUCTURE_RESULT.md`, and Defect B in
+`TWO_DEFECTS_RESULT.md`, which stands) — and a strong P5 would say nothing about them. A reader
+who sees the alias distribution repaired must not read it as progress on the questions those
+kinds contribute.
+
+**A binding fix is NOT part of this.** Jointly deciding the world across the slots that must agree
+was measured and changes nothing — 10 of 140 questions either way, because in the recorded run
+the two slots are not disagreeing: they emit the same wrong constant. Referential consistency is
+not the missing piece. See `joint_binding.txt`.
+
+**P6 — the registered recurrence costs arm A between 10 and 30 percentage points.**
+
+Preparation, not a run: `tools/prepare_analytic_arm.py` (output `preparation_report.txt`, record
+`PREPARATION_RESULT.md`) evaluates the construction out-of-fold at both readings.
+
+| reading | focus-world alias accuracy, out-of-fold |
+|---|---:|
+| direct `^6(x) = T·tanh(x)` | **63.83%** |
+| **through the registered depth-8 recurrence** | **44.68%** |
+
+The recurrence is not neutral to this initialisation. It costs **19.15 percentage points**, and
+the focus alias falls from rank 1 in 360 of 564 slots to 252 of 564. That is consistent with
+`DEPTH_VALUE_RESULT.md`, which measured on the trained block that depths 4 and 8 differ in 17.5%
+of answers while the logit spread moves by 0.67%.
+
+> **P6: through the registered recurrence, arm A reads the focus world above the recorded
+> baseline, and the recurrence costs it between 10 and 30 percentage points.**
+
+A run landing outside that window means the recurrence reading in the preparation tool is not
+capturing the real forward pass, and the tool must be revisited before the result is interpreted.
+
+**The honest prediction is therefore not 63.83%. It is 44.68% through the recurrence**, which is
+still 36.0× the trained learner's 1.24%, 28.6× chance, and 9.69× the strongest null.
+
+**G6 is unaffected.** Both readings predict it passing: 24 distinct aliases with the commonest at
+6.4% (direct) or 11.3% (through the recurrence), against the recorded baseline of 9 distinct with
+`W36` at 44.3%.
 
 ## 5. Hard gates
 

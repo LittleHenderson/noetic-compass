@@ -4,6 +4,69 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Arm A is staged and end-to-end runnable; the registered recurrence costs it 19.15 points
+
+$0.00. Pure standard library. No model, no GPU, no provider, no target opened. Tool
+`tools/prepare_analytic_arm.py`, output
+`records/analytic_decompose_phase0_001/preparation_report.txt`, record `PREPARATION_RESULT.md`;
+P6 added to `PHASE0_RECORD_DRAFT.md`. Still DRAFT, still unsigned, still authorises nothing.
+
+THE CIRCULAR VERSION IS REFUSED BY NAME. The tempting shape - fit one T on all 564 registry
+packets and evaluate on all 564 - is same-sample reconstruction. refuse_whole_course_fit always
+raises with the reason, citing the phase-0 record's section 3.1 and the OS-017 neural rule.
+`--whole-course-fit` exists only to hit that guard, and it does.
+
+THE PREPARATION, 5 folds, 451 fitted / 113 held out per fold, two readings:
+
+                                     direct forward   through recurrence
+  cross-validated accuracy                    63.83%              44.68%
+  distinct aliases emitted (of 64)               24                  24
+  commonest alias share                        6.4%               11.3%
+  focus alias ranked #1 (of 564)                360                 252
+  focus alias #6 or worse                        81                 132
+
+  worst identity residual        0.000e+00   (forward(x) = T tanh(x) holds exactly)
+  worst realisation residual     2.435e-14
+  registered shapes hold         True
+  per-fold digests               4b86e13e, f9583ccd, 27be70ea, 2b7ab673, 9462d3e2
+
+G6 WOULD PASS ON BOTH READINGS. Against the recorded baseline at cursor 160 - 9 distinct aliases,
+W36 at 44.3% - the construction gives 24 distinct with the commonest at 6.4% (direct) or 11.3%
+(through the recurrence). Denominators differ and the comparison is of shape, not like-for-like
+counts: the preparation scores 564 representative slots, one per packet, while 9-of-64 and 44.3%
+are over the 210 world-typed reference slots of the context and definition packets.
+
+THE RECURRENCE TAKES BACK 19.15 PERCENTAGE POINTS, AND THAT IS THE NEW NUMBER. Run without the
+recurrence the analytic parameters read the focus world at 63.83%; run THROUGH the registered
+depth-8 recurrence the same parameters read it at 44.68%, with the focus alias falling from rank
+1 in 360 of 564 slots to 252. The recurrence is not neutral to this initialisation - it is
+actively costly. That lines up with DEPTH_VALUE_RESULT.md, which measured on the TRAINED block
+that depths 4 and 8 differ in 17.5% of answers while the logit spread moves by 0.67%: the late
+passes reshuffle near-tied decisions rather than sharpening the read. Here it is visible from the
+other side - applying the recurrence to a known-good input degrades it.
+
+So the honest prediction is NOT 63.83%. It is 44.68% through the registered recurrence, which is
+still 36.0x the trained learner's 1.24%, 28.6x chance, and 9.69x the strongest null.
+
+P6, frozen: through the registered recurrence, arm A reads the focus world above the recorded
+baseline and the recurrence costs it between 10 and 30 percentage points. A run outside that
+window means the recurrence reading here is not capturing the real forward pass and the tool must
+be revisited before the result is interpreted.
+
+THE RECURRENCE READING IS THE CLOSER PREDICTION and it is approximate. For the analytic parameters
+the block is exact (residual 0.000e+00), but the encoded slot is rebuilt and
+RECONSTRUCTION_GAP.md measures that rebuild at +0.781 correlation with the recorded logits. The
+direct reading does not inherit that approximation; the recurrence reading does. Neither is a run.
+
+NOT ESTABLISHED: this is a preparation report, not a result - no arm launched, no reservation, no
+device, no AWS. The accuracy figures are on ONE field, focus-world alias decodability, a single
+64-way choice, NOT the whole-answer exact-match metric the course scores; the two must never be
+presented together as an improvement. Fitting and evaluation are both on the learner's own
+564-packet registry (only 24 of 64 worlds present), out-of-fold only. No claim about
+edge_account, parts, context, definition or role_set - this arm touches the world-naming slot
+only, and the five many-decision kinds are a different defect (DECISION_STRUCTURE_RESULT.md).
+--write-parameters writes parameters, not authorisation.
+
 ## 2026-09-17 UTC - The score decomposes EXACTLY by decision shape, and a composition layer answers it
 
 $0.00. Pure standard library for the measurement and for the new component.

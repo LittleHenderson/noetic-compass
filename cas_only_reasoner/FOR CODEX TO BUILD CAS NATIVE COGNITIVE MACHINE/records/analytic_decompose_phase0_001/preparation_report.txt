@@ -1,0 +1,53 @@
+loading cached feature rows...
+  rows: 564
+rebuilding the real encoded slots from the frozen public material...
+  slot queries built: 200/564
+  slot queries built: 400/564
+  encoded slots: 564
+fitting 5 folds, each out-of-fold...
+
+============================================================================================
+ARM A PREPARATION REPORT
+============================================================================================
+
+  Read this as a PREPARATION report, not a result. It measures the CONSTRUCTION on
+  out-of-fold rows. It is not a run: no arm has been launched and nothing is licensed.
+
+  folds                        5
+  rows fitted/held per fold    451/113
+  registered shapes hold       True
+  worst identity residual      0.000e+00
+  worst realisation residual   2.435e-14
+
+                           reading   direct forward   through recurrence
+--------------------------------------------------------------------------------------------
+          cross-validated accuracy           63.83%               44.68%
+  distinct aliases emitted (of 64)               24                   24
+             commonest alias share             6.4%                11.3%
+    focus alias ranked #1 (of 564)              360                  252
+           focus alias #6 or worse               81                  132
+
+  G6 as written in the phase-0 record: `arm A emits strictly more than 9 distinct world
+  aliases across the 210 world-typed reference slots, and the commonest single alias is
+  below 44.3% of emissions`.
+        direct: 24 distinct, 6.4% commonest -> G6 would PASS
+    recurrence: 24 distinct, 11.3% commonest -> G6 would PASS
+
+  DENOMINATORS DIFFER. The preparation scores 564 representative slots, one per
+  packet. The recorded 9-of-64 and 44.3% figures are over the 210 world-typed
+  reference slots of the context and definition packets. The comparison is of shape,
+  not of like-for-like counts.
+
+  THE RECURRENCE READING IS THE CLOSER PREDICTION of what a run would do, because a
+  run applies `run_passes` at depth 8. It is not exact: the encoded slot is rebuilt,
+  and `RECONSTRUCTION_GAP.md` measures that rebuild at +0.781 correlation with the
+  recorded logits. For the analytic parameters the block itself is exact.
+
+    fold 0: fitted on 451, held 113, digest 4b86e13e74793a33
+    fold 1: fitted on 451, held 113, digest f9583ccd2b07bd77
+    fold 2: fitted on 451, held 113, digest 27be70ead1bf7bc8
+    fold 3: fitted on 451, held 113, digest 2b7ab673e5941368
+    fold 4: fitted on 452, held 112, digest 9462d3e2522eef8d
+
+  nothing written (pass --write-parameters to emit the per-fold artifacts)
+
