@@ -62,7 +62,7 @@ The cardinality constraint is identical in form to the one that lifted `context`
 `parts` by 44.97. It fails here for a stated reason: **forcing the top-k PRESENT only helps if the
 true members are ranked near the top, and `edge_account`'s margins carry no signal at all.** Round 27
 measured that kind reading its bits at 62.7794%–67.3469% against a **67.7444%** chance rate — below
-chance in four of six runs — and 12.4393 to 17.0068 points below a constant. **A constraint can
+chance in all six runs — and 12.4393 to 17.0068 points below a constant. **A constraint can
 reorder evidence; it cannot create it.**
 
 `parts`, by contrast, had a real signal (29.2453% of answers already correct, and 70.5314%–73.9130%

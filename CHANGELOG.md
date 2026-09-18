@@ -4,6 +4,69 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - An independent audit accepted, zero self-links in 649,728 declared edges, and the honest metric for edges
+
+$0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
+`records/encoder_capacity_001/AUDIT_RESPONSE_AND_SELFLINKS.md`.
+
+AN EXTERNAL AUDIT of rounds 27-33 confirmed the direction bug and the fix, and found that several
+conclusions drawn from the corrected numbers went further than the evidence. THE SUBSTANTIVE FINDINGS
+ARE ACCEPTED AND EVERY ONE IS CORRECTED IN PLACE:
+
+  - "below chance in FOUR of the six runs" was WRONG - it is ALL SIX (62.7794%-67.3469%, all under
+    67.7444%). Corrected in five files. My error made the result look less bad than it is.
+  - The 1.82% compounding prediction was wrong: 13 of the 70 edge questions have 9 slots, not 16, so
+    the mixture is (57 x 0.778426^16 + 13 x 0.778426^9)/70 = 3.43%. Corrected in three files.
+  - 5.8886% was shown as 5.88%; now 5.89%.
+  - STATUS.md contradicted itself on setting_ref. Fixed, with the correction recorded under Limit 7.
+  - The after-fix probe output had never been saved. edge_reachability_after_fix.txt now exists.
+  - "CORRECTED"/"UNCHANGED"/"NEW" are not the spec sheet's status words. The response record uses the
+    sheet's vocabulary.
+
+THE METRIC CHANGED, and the audit was right to insist. After the direction fix only 20.2138% of edge
+slots are PRESENT, so ALWAYS ANSWERING ABSENT EARNS 79.7862% FOR FREE; a per-slot figure near 65% is
+below a constant, not a near-miss. Measured properly over 6,174 edge slots in six runs:
+
+    edges FOUND       460 of 1248   36.8590%
+    FALSE ALARMS     1359 of 4926   27.5883%
+    balanced accuracy              54.6353%   (coin flip = 50%)
+    plain per-slot   65.2251%      (always-ABSENT = 79.7862%)
+
+THE MACHINE'S REAL EDGE-READING IS 54.6353% BALANCED, 4.6353 points above a coin flip.
+
+AND THE AUDIT'S OWN LEAD PAID OFF. It noted the fitted readout marks self-links (X->X) PRESENT and
+that none is a real edge. Verified across the WHOLE COURSE: 216,576 world declarations, 649,728
+declared edges, ZERO SELF-LINKS. The task never presents one. The recorded machine calls 472 of 1,602
+self-link slots PRESENT (29.4632%) - every one a false alarm by construction. Forcing them ABSENT,
+truth-free, six runs:
+
+    independent (the run's own rule)      0.0000%  (0 of 420)   per-slot 65.2251%
+    self-links forced ABSENT              4.2857% (18 of 420)   per-slot 72.8701%
+    self-links ABSENT + declared card.    4.2857% (18 of 420)   per-slot 74.3440%
+
+TWO OVERCLAIMS WITHDRAWN. Round 33's "a constraint can reorder evidence; it cannot create it" is
+WITHDRAWN: edge_account's cardinality constraint failed because it was the WRONG constraint, not
+because there was nothing to reorder - a different declared constraint moves the kind off zero, and
+its balanced accuracy is above chance. The corrected rule: A DECLARED CONSTRAINT HELPS IN PROPORTION
+TO HOW LITTLE IT ASKS OF A WEAK READER. And "there is no composition defect left" is WITHDRAWN - the
+100% substitution arms are given the truth, so they show the assembly can build the true answer and
+the task is not impossible; they say NOTHING about the machine, and the per-kind rates rest on 1-3
+correct questions each (1/70 has a 95% interval of 0.04%-7.70%).
+
+TWO MORE TRUTH-FREE RESULTS from the one-world joint decoder (enumerate the bank, score each world's
+implied answer, argmax): context 0.0000% -> 4.0476%, edge_account 0.0000% -> 6.1905%, six runs each.
+And it measured what forced round 32's arm to hold setting_ref at the truth: THE RECORDED MACHINE'S
+setting_ref SLOT IS RIGHT ONLY 10.7143% OF THE TIME against a 1.5625% chance rate for a 64-way
+choice. It is reading the world, far too weakly.
+
+TRUTH-FREE GAINS NOW SUMMED, all six runs: parts +23.83 of 53, definition +7.17 of 70, edge_account
++3.00 of 70, context +2.83 of 70 = +36.83 PER RUN OF 564. Against the six recorded 193/192/200/203/
+196/189 the mean moves from 195.5/564 = 34.66% to 232.3/564 = 41.19%. context's round-32 +32.6190 is
+NOT counted - that arm held setting_ref at the truth.
+
+NOT LICENSED: that a run realises any of it. Every decoder ran offline against recorded scores;
+score_decisions is untouched. 2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - parts goes 29.2453% -> 74.2138% on declared structure alone, truth-free, and the mean moves to 40.16%
 
 $0.00. Pure standard library. No torch, no device, no model, no training, no new run. Record
@@ -36,7 +99,7 @@ no training, no GPU, no information the machine was not already given.
 
 edge_account IS THE CLEAN NEGATIVE AND IT STATES THE RULE. The constraint is identical in form to the
 two that worked and it does nothing, because that kind's margins carry no signal - round 27 measured
-62.7794%-67.3469% per bit against a 67.7444% chance rate, below chance in FOUR of six runs. A
+62.7794%-67.3469% per bit against a 67.7444% chance rate, below chance in all six runs. A
 CONSTRAINT CAN REORDER EVIDENCE; IT CANNOT CREATE IT. parts had a real signal (51.2707% chance,
 70.5314%-73.9130% per bit) and the constraint turned it into answers. The rule is now measured on
 both sides.
@@ -175,8 +238,8 @@ and re-assembling through the project's OWN assemble_answer:
 
 EVERY SINGLE-FIELD KIND IS PERFECT WHEN ITS FIELD IS CORRECT. The assembly is right, the task is
 reachable, and there is NO COMPOSITION DEFECT LEFT TO EXPLAIN. Exact-answer accuracy is simply
-per-slot accuracy raised to the slot count: edge_account 0.778426^16 = 1.82% against 1.4286%
-measured; role_set 0.694444^6 = 11.22% against 8.3333%; context 0.528090^4 x 0.757143 = 5.88%
+per-slot accuracy raised to the slot count: edge_account 0.778426^16 = 3.43% against 1.4286%
+measured; role_set 0.694444^6 = 11.22% against 8.3333%; context 0.528090^4 x 0.757143 = 5.89%
 against 4.2857%.
 
 SO THE TARGET IS ONE MEASURABLE SCALAR PER KIND. edge_account at 77.8426% per slot over 16 slots

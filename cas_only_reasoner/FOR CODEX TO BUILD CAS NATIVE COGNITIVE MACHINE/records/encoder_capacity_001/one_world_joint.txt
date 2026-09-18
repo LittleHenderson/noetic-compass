@@ -1,0 +1,32 @@
+runs: 6
+
+====================================================================================================
+ONE-WORLD JOINT DECODER � recorded scores, six runs, NO truth in any decoder
+====================================================================================================
+
+                   run           kind    q   independent      joint       lift  setting slot
+----------------------------------------------------------------------------------------------------
+    receipt_20260917_a        context   70      0.0000%   0.0000%   +0.0000%      12.8571%
+    receipt_20260917_a   edge_account   70      0.0000%   8.5714%   +8.5714%              
+
+    receipt_20260917_m        context   70      0.0000%   0.0000%   +0.0000%      10.0000%
+    receipt_20260917_m   edge_account   70      0.0000%   8.5714%   +8.5714%              
+
+    receipt_20260918_a        context   70      0.0000%   4.2857%   +4.2857%       8.5714%
+    receipt_20260918_a   edge_account   70      0.0000%   7.1429%   +7.1429%              
+
+    receipt_20260918_m        context   70      0.0000%   8.5714%   +8.5714%      12.8571%
+    receipt_20260918_m   edge_account   70      0.0000%   4.2857%   +4.2857%              
+
+    receipt_20260919_a        context   70      0.0000%   5.7143%   +5.7143%      10.0000%
+    receipt_20260919_a   edge_account   70      0.0000%   4.2857%   +4.2857%              
+
+    receipt_20260919_m        context   70      0.0000%   5.7143%   +5.7143%      10.0000%
+    receipt_20260919_m   edge_account   70      0.0000%   4.2857%   +4.2857%              
+
+----------------------------------------------------------------------------------------------------
+          ALL SIX RUNS        context  420      0.0000%   4.0476%   +4.0476%      10.7143%
+          ALL SIX RUNS   edge_account  420      0.0000%   6.1905%   +6.1905%              
+
+joint = enumerate the bank, score each world's implied answer, take the argmax
+setting slot = the recorded machine's per-slot accuracy on context.setting_ref

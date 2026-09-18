@@ -135,7 +135,7 @@ where the answer is one choice among *several* admissible answers (65.66%) than 
 > | `context` | 38.5768% – 41.5730% | 66.4184% | 78.6517% | **−37.08 to −40.07** | **0.0000%, all six runs** |
 >
 > **Three of the four kinds read their own bits at or below chance, and two of them would have done
-> better by answering a constant.** `edge_account` is **below chance in four of the six runs** and
+> better by answering a constant.** `edge_account` is **below chance in all six runs** and
 > never once got a 16-slot question's bits all right in 420 questions; `parts` reached 100% in 93 of
 > 318. **So for three kinds there is nothing for a composer to compose** — which withdraws the
 > round-26 reading of this limit, and with it the plan to extend the joint candidate branch beyond
@@ -234,15 +234,29 @@ re-assembling through the project's own `assemble_answer`, and the answer is una
 task is reachable, and exact-answer accuracy is simply **per-slot accuracy raised to the slot count**:
 
 ```
-edge_account   0.778426^16                     =  1.82%   measured 1.4286%
+edge_account   0.778426^16                     =  3.43%   measured 1.4286%
 role_set       0.694444^6                      = 11.22%   measured 8.3333%
-context        0.528090^4 x 0.757143           =  5.88%   measured 4.2857%
+context        0.528090^4 x 0.757143           =  5.89%   measured 4.2857%
 ```
 
 **So the target is one measurable number per kind.** `edge_account` at 77.8426% per slot over 16 slots
-yields 1.4% of answers; the same readout at 90% per slot yields 18.5%. `context`'s deficit is entirely
-its four participant bits — `setting_ref` is worth **exactly +0.0000**. And `definition` already reads
+yields 1.4% of answers; the same readout at 90% per slot yields 18.5%. And `definition` already reads
 at **48.5714%**, the strongest many-decision kind.
+
+> **Round 34 corrected the `context` reading that stood here.** It said "`context`'s deficit is
+> entirely its four participant bits — `setting_ref` is worth **exactly +0.0000**". That was true only
+> of the **analyst's fitted readout**, and it was misleading: an arm reports +0.0000 because that fit
+> *already* reads `setting_ref` at 75.7143%, which then **caps `context` at 75.7143%** once the
+> participants are fixed. It is not a field that costs nothing.
+>
+> On the **trained machine** the number is the opposite: `setting_ref` is right only **10.7143%** of
+> the time against a 1.5625% chance rate for a 64-way choice. So `context` needs **both** fields
+> repaired — two things, not one — and neither is done. Measured in round 34 by
+> `measure_one_world_joint.py`; see `AUDIT_RESPONSE_AND_SELFLINKS.md` §5.
+>
+> **The per-kind rates above rest on 1 to 3 correct questions each** (1/70 has a 95% interval of
+> 0.04%–7.70%), so they are **consistent with** pure compounding, not proof of it. Downgraded from
+> "there is no composition defect left to explain", which the evidence does not support.
 
 **Limit 8 — the composer ignores declared structure, and enforcing it is the first fix that works on
 the trained machine's own scores.** `context` answers are the focus world's setting plus its
@@ -312,7 +326,7 @@ that arm holds `setting_ref` at the truth.
 
 **`edge_account` is the clean negative, and it states the rule.** The constraint is identical in form
 to the two that worked and it does nothing, because that kind's margins carry no signal — round 27
-measured 62.7794%–67.3469% per bit against a **67.7444%** chance rate, below chance in four of six
+measured 62.7794%–67.3469% per bit against a **67.7444%** chance rate, below chance in all six
 runs. **A constraint can reorder evidence; it cannot create it.** `parts` had a real signal
 (51.2707% chance, 70.5314%–73.9130% per bit) and the constraint turned it into answers.
 
@@ -322,6 +336,51 @@ the declared edge counts, `FOCUS_WORLD_DECLARATION_IDENTITY`, `ALL_AND_ONLY_SOUR
 composition layer, and it is the one the measurements support. Source:
 `ALL_DECLARED_CONSTRAINTS_RESULT.md`. **NOT LICENSED:** that a run realises +31 questions — the
 decoders were applied offline to the recorded scores, and `score_decisions` is untouched.
+
+**Round 34 added a fourth declared constraint and the honest metric for edges.**
+
+**Self-links are declared by absence.** Across the whole course — **216,576 world declarations,
+649,728 declared edges — there are ZERO self-links.** The task never presents one. The recorded
+machine calls **472 of 1,602 self-link slots PRESENT** (29.4632%), every one a false alarm by
+construction. Forcing them ABSENT, truth-free, six runs:
+
+| decoder | exact answers | per-slot |
+|---|---|---|
+| independent (the run's own rule) | 0.0000% (0 of 420) | 65.2251% |
+| **self-links forced ABSENT** | **4.2857% (18 of 420)** | **72.8701%** |
+| self-links ABSENT + declared cardinality | 4.2857% (18 of 420) | **74.3440%** |
+
+**And the metric changed, on the strength of an independent audit. Per-slot accuracy is not a target
+here:** after the direction fix only 20.2138% of edge slots are PRESENT, so always answering ABSENT
+earns **79.7862%** for free. Measured properly, over 6,174 edge slots in six runs:
+
+```
+  edges FOUND       460 of 1248   36.8590%
+  FALSE ALARMS     1359 of 4926   27.5883%
+  balanced accuracy              54.6353%   (coin flip = 50%)
+  plain per-slot   65.2251%      (always-ABSENT = 79.7862%)
+```
+
+**The machine's real edge-reading is 54.6353% balanced. Every edge figure in this record now uses that.**
+
+**Round 34 also withdrew two round-33/34 overclaims.** "A constraint can reorder evidence; it cannot
+create it" is **withdrawn**: `edge_account`'s cardinality constraint failed because it was the *wrong*
+constraint, not because there was nothing to reorder — a different declared constraint moves the kind
+off zero, and its balanced accuracy is above chance. The corrected rule is that **a declared
+constraint helps in proportion to how little it asks of a weak reader.** And "there is no composition
+defect left" is **withdrawn**, for the reasons given under Limit 7.
+
+**Truth-free gains now measured, all six runs:**
+
+| kind | mechanism | lift per run |
+|---|---|---|
+| `parts` | declared out-edge count of `whole` | **+23.83** of 53 |
+| `definition` | `FOCUS_WORLD_DECLARATION_IDENTITY` | **+7.17** of 70 |
+| `edge_account` | self-links are never PRESENT | **+3.00** of 70 |
+| `context` | one-world joint decode | **+2.83** of 70 |
+| | | **+36.83 per run of 564** |
+
+mean **195.5/564 = 34.66% → 232.3/564 = 41.19%**. Source: `AUDIT_RESPONSE_AND_SELFLINKS.md`.
 
 ## 5. The fixes, and what each is measured to be worth
 

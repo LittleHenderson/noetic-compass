@@ -25,7 +25,7 @@ Companion mechanism test (refuted): `measure_slot_evidence.py`, `slot_evidence.t
 > | exact answers | 0.0000%, all six | 0.0000%, all six (**unchanged**) |
 >
 > **The conclusion is unchanged in direction and stronger in degree.** The machine reads
-> `edge_account` at 62.7794%–67.3469% where chance is 67.7444% — **below chance in four of six runs**
+> `edge_account` at 62.7794%–67.3469% where chance is 67.7444% — **below chance in all six runs**
 > — and 12.4393 to 17.0068 points below a constant answer. Every `parts`, `role_set`, `context` and
 > `definition` figure in this record is unaffected. `bits_read.txt` on disk is the **corrected** run.
 > The corrected `edge_account` histogram never reaches 0% or 100% in 420 questions either.

@@ -93,7 +93,7 @@ artifacts are reproducible.
 | exact answers | 0.0000%, all six | 0.0000%, all six |
 
 **The machine looks better in absolute terms and worse against its baselines.** It reads at
-62.7794%–67.3469% where chance is 67.7444% — **below chance in four of the six runs** — and
+62.7794%–67.3469% where chance is 67.7444% — **below chance in all six runs** — and
 12.4393–17.0068 points below the trivial constant. The round-27 conclusion (that this kind is not
 reading its bits) is unchanged in direction and **stronger in degree**.
 
@@ -167,6 +167,6 @@ about the machine.
 - **NEW, and the strongest statement in this record:** giving any single-field kind its one true
   field yields **100.0000%**. The answer assembly is correct, the task is reachable, and the entire
   deficit is per-slot readout accuracy. Exact-answer accuracy is per-slot accuracy raised to the slot
-  count — `edge_account` 0.778426¹⁶ = 1.82% against 1.4286% measured; `role_set` 0.694444⁶ = 11.22%
-  against 8.3333%; `context` 0.528090⁴ × 0.757143 = 5.88% against 4.2857%. **There is no composition
+  count — `edge_account` 0.778426¹⁶ = 3.43% against 1.4286% measured; `role_set` 0.694444⁶ = 11.22%
+  against 8.3333%; `context` 0.528090⁴ × 0.757143 = 5.89% against 4.2857%. **There is no composition
   defect left to explain.**

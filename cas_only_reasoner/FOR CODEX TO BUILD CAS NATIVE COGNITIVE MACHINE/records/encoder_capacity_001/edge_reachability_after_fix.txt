@@ -1,0 +1,28 @@
+====================================================================================================
+record typed-input-0a34f84eb28a8c8aecc4bc268d40dcedb513...
+====================================================================================================
+admissible answers: 1
+focus declared `contains`: [{"ref": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/e1", "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3"}, {"ref": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/e0", "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"}, {"ref": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/e2", "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}, {"ref": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/e3", "source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}]
+
+truth value: {"edges": [{"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}]}
+truth edge order: [('n0', 'n1'), ('n0', 'n3'), ('n1', 'n2'), ('n3', 'n2')]
+
+true PRESENT slots: 4 of 16   (truth has 4 edges)
+assembled  : {"edges": [{"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n0", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n1", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}, {"source": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n3", "target": "world-689870789829dc1765028a17523ef4d5839cd1d135a811f17131f4eddc3cc02f/n2"}]}
+assembled edge order: [('n0', 'n1'), ('n0', 'n3'), ('n1', 'n2'), ('n3', 'n2')]
+
+assembled == admissible_answers[0] ?  True
+====================================================================================================
+record typed-input-0a6c4a8b0b7517efb52e12107e08d4101649...
+====================================================================================================
+admissible answers: 1
+focus declared `contains`: [{"ref": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/e0", "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"}, {"ref": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/e1", "source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"}]
+
+truth value: {"edges": [{"source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"}, {"source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"}]}
+truth edge order: [('n0', 'n1'), ('n1', 'n2')]
+
+true PRESENT slots: 2 of 9   (truth has 2 edges)
+assembled  : {"edges": [{"source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n0", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1"}, {"source": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n1", "target": "world-7afc0b967564edb89050f99eeb409560cb401de94fda9bd901d97ee16a5be881/n2"}]}
+assembled edge order: [('n0', 'n1'), ('n1', 'n2')]
+
+assembled == admissible_answers[0] ?  True

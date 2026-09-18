@@ -1,0 +1,27 @@
+runs: 6
+world declarations inspected: 216576
+declared edges: proper 649728   self-links 0
+
+====================================================================================================
+THE RECORDED MACHINE ON EDGE SLOTS � all six runs, 6,174 slots
+====================================================================================================
+
+  true edges (PRESENT)            1248   of 6174 slots
+  true non-edges (ABSENT)         4926
+  edges FOUND                      460   36.8590%   of real edges
+  edges MISSED                     788   63.1410%
+  FALSE ALARMS                    1359   27.5883%   of non-edges
+  balanced accuracy             54.6353%   (coin flip = 50%)
+  plain per-slot accuracy       65.2251%   (always-ABSENT = 79.7862%)
+
+  self-link slots                 1602   true self-edges 0
+  self-links called PRESENT        472   29.4632% of them
+
+====================================================================================================
+DECODERS ON THE RECORDED SCORES
+====================================================================================================
+
+          independent (the run's own rule)   exact  0.0000%  (0 of 420)
+                  self-links forced ABSENT   exact  4.2857%  (18 of 420)  bits 72.8701%
+  self-links ABSENT + declared cardinality   exact  4.2857%  (18 of 420)  bits 74.3440%
+
