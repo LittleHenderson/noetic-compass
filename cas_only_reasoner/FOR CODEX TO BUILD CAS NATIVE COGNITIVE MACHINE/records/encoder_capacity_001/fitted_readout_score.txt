@@ -1,0 +1,28 @@
+FROZEN-BYTE GATE: projection MATCH  readout MATCH
+questions: 564   labelled slots: 2598
+admissible-set sizes: {1: 461, 2: 15, 6: 36, 9: 52}
+
+========================================================================================================
+EXACT-ANSWER ACCURACY OF A FITTED LINEAR READOUT, 5-fold by question
+========================================================================================================
+
+                   readout      lam  edge_acc    parts  role_set   context  definition     MANY      ALL
+--------------------------------------------------------------------------------------------------------
+         frozen (recorded)     None   0.0000% 22.6415%   8.3333%   0.0000%     0.0000%  5.0167% 33.5106%
+         fitted on tanh(x)      1.0   4.2857% 15.0943%  11.1111%   2.8571%    25.7143% 11.7057% 16.1348%
+         fitted on tanh(x)     0.01   4.2857% 15.0943%  11.1111%   2.8571%    27.1429% 12.0401% 16.4894%
+               fitted on x      1.0   4.2857% 15.0943%   8.3333%   2.8571%    27.1429% 11.7057% 16.1348%
+               fitted on x     0.01   4.2857% 15.0943%  11.1111%   2.8571%    27.1429% 12.0401% 16.4894%
+
+========================================================================================================
+THE ANSWER TO THE QUESTION THIS FILE EXISTS FOR
+========================================================================================================
+
+recorded MANY DECISIONS     5.0167%      recorded ALL    33.5106%
+best fitted readout        12.0401%      best ALL        16.4894%   (fitted on tanh(x), lam=0.01)
+lift on MANY DECISIONS     +7.0234%
+lift on ALL               -17.0213%
+
+The decision path after the readout is the run's own: `slots.score_decisions` then
+`slots.assemble_answer`. Only the readout is substituted, by the construction
+`decompose_from_free_readout` installs. A lift here is the measured target for a run.

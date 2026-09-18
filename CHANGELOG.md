@@ -4,6 +4,74 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - A fitted readout lifts half the exam and costs more than it gains, and the constraint is that there is only ONE map
+
+$0.00. Pure Python, standard library only. No torch, no device, no learned run weights, no forward
+pass of the block, no training, no new run. Record
+`records/encoder_capacity_001/FITTED_READOUT_RESULT.md`; `MACHINE_STATE_001/STATUS.md` extended with
+Limit 6.
+
+THE BRIDGE ROUND 29 LEFT UNBUILT. Round 29 measured that a fitted linear readout reads the
+many-decision bits far better than the trained block (context 96.3758% against 40.8240%) and
+separately that a memoriser converts into -6.7033 points at the answer level. Those are different
+readouts, and the one that matters - the construction `decompose_from_free_readout` installs,
+score_c = W[:,c] . tanh(x) with W = (XtX + lam I)^-1 Xt Y - had never been scored. Now it is:
+features tanh(normalize(packet + slot)) rebuilt exactly from the checksum-gated frozen bytes, and the
+score table handed to the project's OWN `slots.score_decisions` and `slots.assemble_answer`. Only the
+readout is substituted.
+
+THE HARNESS VALIDATED ITSELF. Its `frozen (recorded)` row is not a fit - it re-scores the run's own
+submitted answers - and it reproduces the run exactly: MANY DECISIONS 5.0167% against the recorded
+5.02%, ALL 33.5106% to four decimals, admissible-set sizes {1: 461, 2: 15, 6: 36, 9: 52} summing to
+564. An earlier draft compared answers to `admissible_answers[0]` only and reported analogy at 0.00%
+and correspondence at 59.0909%; caught and fixed to admissible-SET membership before shipping.
+
+THE RESULT, TWO RUNS.
+
+    family            q    recorded     corr IN the fit   corr EXCLUDED
+    ONE DECISION    265     65.6604%          21.5094%            -
+    MANY DECISIONS  299      5.0167%          12.0401%       16.0535%
+    ALL             564     33.5106%          16.4894%       18.6170%
+
+FIRST CHANGE MEASURED TO LIFT THE MANY-DECISION HALF: +7.0234 points with correspondence sharing the
+fit, +11.0368 without. definition goes from 0 of 70 to 18-31 of 70 (0.0000% -> 25.7143%-44.2857%);
+edge_account 0.0000% -> 4.2857%; context 0.0000% -> 2.8571%; role_set 8.3333% -> 11.1111%. parts FALLS
+7.5472 points. Lambda is not load-bearing: 0.1 through 0.0001 give an identical 15.3846% on MANY, and
+tanh(x) and x give identical numbers at every lambda.
+
+AND IT IS A NET LOSS: -17.0213 points overall, because the one-decision half falls 44.1510 points.
+Putting correspondence into the same solve costs the many-decision half 4.0 points, because its
+64-symbol vocabularies dominate a single 90-class ridge fit.
+
+THE ARCHITECTURAL CONSEQUENCE, WHICH IS THE POINT. T = R^-1 Wt is a SINGLE 64x64 map and the machine
+has ONE block and ONE readout. One shared map cannot serve both families: fit it for the
+many-decision kinds and the one-decision kinds lose 44.1510 points; fit it for both and it is worse
+than the tuned machine on both halves. correspondence's 93.18%-96.59% depends on RELATIVE score
+structure that a one-hot ridge fit does not preserve - so the frozen readout plus the trained block is
+a better score generator for the joint candidate decoder than a one-hot ridge readout is. That is a
+separate and unexpected finding.
+
+AND THE CONTRACT ALREADY ADMITS TWO PLASTICITY GROUPS: ('operation:^6', 'bias_update_head'). The run
+uses one. The bias_update_head is a real 4,096-parameter module absent from the run's module (Fix C,
+OS-027), and /memory appears as a target_path in the recorded aws_saved_repair_v8_001 lifecycle
+receipt. THIS IS THE FIRST EVIDENCE THAT THE SECOND GROUP IS NOT DECORATIVE: one shared map is
+measurably the constraint, and the exam splits cleanly into two families needing different score
+structure.
+
+ALSO ESTABLISHED: the closer an answer is to a verbatim packet field, the worse the machine does, read
+straight off `checker._derive_values`. edge_account, context and definition - whose answers ARE
+verbatim packet fields - score 0.0000% each, 210 of 564 questions; parts (one filter step) scores
+22.6415%; role_set (derivation) 8.3333%. THE MACHINE HAS NO READ PATH AND THE TASKS THAT REQUIRE ONE
+ARE PRECISELY THE TASKS IT FAILS ENTIRELY.
+
+NOT LICENSED: that a run would realise either figure - the readouts are fitted out-of-fold on the same
+564 questions, and `decompose_from_free_readout` today REFUSES the real readout because it requires
+nclass == core_width while the frozen readout is [90, 64]. The rectangular solve is an engineering
+step, untaken. OPEN: why definition responds to a fitted readout (+25.71 to +44.29) and context barely
+does (+2.86 to +4.29), when both are verbatim-field kinds of the same size and same slot arity.
+
+Nothing was wired into a run. No code under test was changed: 2157 tests, 762 subtests, last green.
+
 ## 2026-09-17 UTC - Three of the four many-decision kinds read their own bits at or below chance, and the block throws away a signal that is linearly present in its own input
 
 $0.00. Pure Python, standard library only. No torch, no device, no model, no training, no new run.

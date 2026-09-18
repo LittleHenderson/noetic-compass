@@ -1,4 +1,4 @@
-# The machine, measured — consolidated state after rounds 7 to 29
+# The machine, measured — consolidated state after rounds 7 to 30
 
 **Record:** `records/MACHINE_STATE_001/STATUS.md`
 **Spend across every figure here:** **$0.00.** Every number is read from bytes already on disk, from
@@ -179,7 +179,36 @@ exposed course and scored on the held-out fifth gains **−6.7033 points** at th
 (26.2411% → 19.5378%), and `context` scores **0.0000%** on whole answers while reading its bits at
 98.5926%. Whole-answer accuracy compounds over every field, and for `context` and `definition` the
 binding constraint is the **alias-valued** field (`setting_ref`, `whole`, `kind_ref`, `function_ref`),
-not the binary slots. **No score projection is offered from any of this.**
+not the binary slots.
+
+**Limit 6 — the architecture has ONE block and ONE readout, and the exam needs two different score
+structures.** A **fitted** linear readout of `tanh(encoded)` — the exact construction
+`decompose_from_free_readout` installs, `score_c = W[:,c]·tanh(x)` — scored through the project's own
+`score_decisions` and `assemble_answer`, five folds by question. Harness validated: its
+`frozen (recorded)` row reproduces the run's own exposed-course score at **33.5106%** and its
+many-decision rate at **5.0167%**.
+
+| family | q | recorded | fitted readout, correspondence in the fit | correspondence excluded |
+|---|---|---|---|---|
+| ONE DECISION | 265 | **65.6604%** | **21.5094%** | — |
+| MANY DECISIONS | 299 | **5.0167%** | **12.0401%** | **16.0535%** |
+| ALL | 564 | **33.5106%** | **16.4894%** | 18.6170% |
+
+**This is the first change measured to lift the many-decision half (+7.0234 points, or +11.0368 with
+`correspondence` excluded), and it is a net loss overall (−17.0213 points).** `definition` goes from
+**0 of 70 to 18–31 of 70**; `parts` falls 7.55 points. Splitting the fit across both task families
+costs the many-decision half 4.0 points, because `correspondence`'s 64-symbol vocabularies dominate a
+single 90-class ridge fit.
+
+**The binding constraint is that `T = R⁻¹Wᵀ` is a single 64×64 map.** One shared map cannot serve
+both families: fit it for the many-decision kinds and the one-decision kinds lose 44.1510 points; fit
+it for both and it is worse than the tuned machine on both halves. `correspondence`'s 93.18%–96.59%
+depends on *relative* score structure that a one-hot ridge fit does not preserve.
+
+**And the contract already admits two plasticity groups** — `('operation:^6', 'bias_update_head')`.
+The run uses one; the `bias_update_head` is a real 4,096-parameter module absent from the run's
+module (Fix C, OS-027); `/memory` appears as a `target_path` in the recorded `aws_saved_repair_v8_001`
+lifecycle receipt. **Round 30 is the first evidence that the second group is not decorative.**
 
 ## 5. The fixes, and what each is measured to be worth
 
