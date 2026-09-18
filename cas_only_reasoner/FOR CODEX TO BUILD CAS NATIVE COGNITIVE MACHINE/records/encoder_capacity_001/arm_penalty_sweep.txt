@@ -1,0 +1,33 @@
+rebuilding the encoded slots...
+  encoded slots: 200/564
+  encoded slots: 400/564
+  slots: 564   classes present: 24
+
+====================================================================================================
+PENALTY SWEEP � naive fit and 1 recurrence-aware refinement round(s)
+====================================================================================================
+
+   penalty                    fit     depth 0     depth 8
+----------------------------------------------------------------------------------------------------
+    0.0001                  naive      64.72%      45.74%
+    0.0001             refined x1      63.48%      61.70%
+
+      0.01                  naive      64.72%      45.21%
+      0.01             refined x1      63.48%      61.70%
+
+         1                  naive      63.83%      44.68%
+         1             refined x1      62.77%      61.88%
+
+====================================================================================================
+READING
+====================================================================================================
+
+  best depth 0 : 64.72%  at penalty 0.0001, naive
+  best depth 8 : 61.88%  at penalty 1, refined x1
+
+The record's published arm-A figures are 62.94% direct and 62.06% through the recurrence,
+both at penalty 1.0 with 2 refinement rounds. If the curve is flat, the penalty is not a
+material choice and those figures stand. If it moves materially, the arm's prediction must
+be restated at the better penalty -- and the selection is mildly optimistic because the
+best penalty is chosen on the same out-of-fold numbers that are reported.
+

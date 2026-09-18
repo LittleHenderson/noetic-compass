@@ -4,6 +4,55 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The ridge penalty does not change arm A's prediction (verification after the tenth correction)
+
+$0.00. Pure standard library. No torch, no device, no target opened. Script
+`records/encoder_capacity_001/sweep_arm_penalty.py` (result `arm_penalty_sweep.txt`), record
+`ARM_PENALTY_VERIFIED.md`; the phase-0 draft now carries the verification beside P6.
+
+WHY IT WAS RUN. The tenth self-correction found that a FIXED RIDGE PENALTY OF LAMBDA = 1.0 applied
+across differently-scaled feature sets turns a conditioning difference into an apparent capability
+difference, and that the record's other probes use the same fixed value. The arm-A figures were
+measured at lambda = 1.0, so the number the whole proposal rests on needed the same check applied
+rather than the lesson only recorded.
+
+THE SWEEP, three orders of magnitude of penalty, out-of-fold, at depth 0 and through the registered
+depth-8 recurrence:
+  penalty      fit          depth 0   depth 8
+    0.0001     naive         64.72%    45.74%
+    0.0001     refined x1    63.48%    61.70%
+      0.01     naive         64.72%    45.21%
+      0.01     refined x1    63.48%    61.70%
+         1     naive         63.83%    44.68%
+         1     refined x1    62.77%    61.88%
+
+THE CURVE IS FLAT WHERE IT MATTERS: naive depth 0 spans 0.89 points; naive depth 8 spans 1.06;
+refined depth 0 spans 0.71; REFINED DEPTH 8 SPANS 0.18 POINTS (61.70% to 61.88%). THE PUBLISHED
+FIGURES STAND - 62.94% direct and 62.06% through the recurrence at lambda = 1.0 with two refinement
+rounds are not penalty artifacts. At one refinement round the depth-8 figure is 61.88%, within 0.18
+points, so the refinement has converged for practical purposes after one round. And the recurrence's
+cost is robust too: the naive fit's depth-8 figure is 44.68-45.74% across the sweep, so the aiming
+error is 18.98 to 19.51 points at EVERY penalty tested.
+
+THE CONTRAST IS THE USEFUL PART. The same kind of sweep moves the TRAINED BLOCK'S decodability by
+29.08 points (37.23% -> 66.49%) and moves the ARM'S refined fit by 0.18 points. THE ARM'S FEATURES
+ARE WELL-CONDITIONED WHERE THE TRAINED BLOCK'S ARE NOT - a second independent reading of the same
+asymmetry the record keeps finding. It also BOUNDS the tenth correction's lesson: NOT EVERY PROBE IN
+THIS RECORD IS VULNERABLE TO IT. Probes comparing differently-scaled feature sets are, and one was,
+and it was caught. Probes that fit and score within one feature space, as this one does, are not.
+
+VERIFICATION HONESTY: the best row is mildly optimistic because the best penalty is selected on the
+same out-of-fold numbers that are reported, which is why the SHAPE of the curve is the reading
+offered rather than the argmax - with a 0.18-point spread the choice is immaterial and no selection
+is being relied on.
+
+NOT ESTABLISHED: this measures the construction, not a run - no arm launched, no reservation, no
+device, no AWS; ONE refinement round, not two (the published 62.06% uses two; the one-round 61.88%
+is within 0.18 points); the encoded slots are rebuilt at +0.781 correlation with the recorded
+logits; the figures are on ONE field, focus-world alias decodability, not the whole-answer metric;
+only three penalties were swept, not the nine of the tenth correction's check; one arm, one seed;
+and no claim that the flatness would hold for a different loss, feature map or task.
+
 ## 2026-09-17 UTC - TENTH SELF-CORRECTION: the "26-point information loss" was my probe's penalty, not the block
 
 $0.00. torch used only to deserialise checkpoints. Script

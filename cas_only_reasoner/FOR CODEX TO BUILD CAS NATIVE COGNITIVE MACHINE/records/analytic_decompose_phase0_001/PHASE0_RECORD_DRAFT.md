@@ -184,6 +184,15 @@ real forward pass and the tool must be revisited before the result is interprete
 **The honest prediction is therefore 62.06% through the registered recurrence** — 50.0× the
 trained learner's 1.24%, 39.7× chance, and 13.46× the strongest null.
 
+**And the figures are not penalty artifacts.** The tenth self-correction found that a fixed ridge
+penalty can turn a conditioning difference into an apparent capability difference, so the arm's
+numbers were swept (`records/encoder_capacity_001/ARM_PENALTY_VERIFIED.md`). Over three orders of
+magnitude of penalty the refined fit's depth-8 accuracy spans **0.18 points** (61.70% to 61.88%) and
+the direct figure spans 0.89. The same sweep moves the *trained block's* decodability by **29.08
+points**. **Arm A's features are well-conditioned where the trained block's are not**, which is a
+second independent reading of the same asymmetry. With one refinement round instead of two the
+depth-8 figure is 61.88%, within 0.18 points.
+
 **G6 is unaffected and passes on both readings**: 24 distinct aliases with the commonest at 7.3%
 (direct) or 6.9% (through the recurrence), against the recorded baseline of 9 distinct with
 `W36` at 44.3%.
