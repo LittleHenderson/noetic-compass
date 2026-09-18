@@ -1,5 +1,29 @@
 # CNCM-RRK v0.1 Handoff
 
+> ## READ FIRST for the measurable state of the machine: `records/MACHINE_STATE_001/STATUS.md`
+>
+> Everything below describes the **deterministic reference kernel** — the bounded symbolic
+> demonstrator, its playground, and the isolated `research/CASFORMER_v0_1` package that "the runtime
+> does not import and [that] has no CNCM authority".
+>
+> **That description predates the measurement work of rounds 7 to 21 and is now incomplete.** The
+> CASformer has since been run on a frozen typed course under a registered contract, and a large
+> body of measured results now exists about what it does and what limits it:
+>
+> - the exposed course scores **189/564 = 33.5106%** after teaching, against **39/564 = 6.9149%**
+>   before, and the score decomposes **exactly** by the shape of the decision each question kind
+>   requires — **65.66%** where a kind needs one decision, **5.02%** where it needs many independent
+>   decisions about one entity;
+> - the information is present at every stage of the forward pass (the encoded slot carries the
+>   focus world at **63.65%**; the block preserves it at **66.31%** at a suitable ridge penalty) and
+>   the trained machine reads **1.24%** anyway;
+> - a closed-form initialisation of the registered `^6` block reads **62.06%** through the registered
+>   recurrence — **50.0×** the trained learner — and is staged in an unsigned phase-0 record;
+> - **three owner decisions** are waiting, and none of them is an engineering blocker.
+>
+> **`records/MACHINE_STATE_001/STATUS.md` is the single place to read all of it**, with every figure
+> traceable to the record that measured it. It cost **$0.00** and no run was launched to produce it.
+
 This directory contains a working, bounded CAS Native Cognitive Machine reference demonstrator. It executes strict typed symbolic problems deterministically, mediates all state changes through authorized intents, reconstructs proofs and control identities, retains a sealed hash-linked trace, and emits a self-checking evidence packet.
 
 The bounded CNCM runtime is not complete CAS/TKS semantics, full CCDL, general-English understanding, a neural runtime, AGI, production software, or a CAS Reasoning Qualification Standard (CRQS) evaluator. This homebase also contains an isolated, untrained `research/CASFORMER_v0_1` neural reference package; the runtime does not import it and it has no CNCM authority.

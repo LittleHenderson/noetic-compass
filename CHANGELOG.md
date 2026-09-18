@@ -4,6 +4,51 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Consolidated machine state: one document for the three decisions waiting on the owner
+
+$0.00. No run, no device, no target. New record `records/MACHINE_STATE_001/STATUS.md`; the stale
+`README_HANDOFF.md` now carries a READ FIRST pointer to it.
+
+WHY. Twenty-one rounds produced a deep and well-evidenced picture across roughly thirty records, and
+there was NO SINGLE DOCUMENT a reader could open to see the machine's current state. README_HANDOFF.md
+described the deterministic reference kernel and still called the CASformer "an isolated, UNTRAINED
+research package that the runtime does not import and [that] has no CNCM authority" - true when
+written, and incomplete since. The owner has three decisions waiting and no consolidated place to
+make them from.
+
+WHAT THE DOCUMENT CONTAINS, in eight sections: what the machine is (identities, parameter counts,
+contract status, runtime); what it does now (three panels, the exact decision-shape decomposition,
+the three never-answered kinds); the chain from input to answer with every link measured; the three
+limits; the fixes with what each is measured to be worth; the three decisions waiting; where every
+number comes from; and what is not established.
+
+THE DECISIONS, FRAMED. (1) Sign the phase-0 record or not - it is complete and runnable end to end
+and unsigned; it needs arms, seeds and a reservation amount, with $4,499.00 unreserved. (2) OS-026:
+for four of the five many-decision kinds the query states focus_world_id directly, so is reproducing
+by 64-way classification an identifier the question supplies the intended task, or is a composition
+layer the removal of it? (3) OS-027: the ^6 contract admits two plasticity groups and the learner
+asserts a scope of exactly three matrices - legitimate narrowing, or a stranded admitted mechanism?
+None is an engineering blocker and no work of mine pre-empts any of them.
+
+TWO FIGURES RE-DERIVED FROM SOURCE WHILE WRITING, not quoted from an earlier round: the CODEBOOK
+(65 of 65 symbols selectable, min normalised margin 0.7573, median 0.8418, max 0.9014) and the
+LEDGER, read directly from campaign_ledger.json - revision 84, owner_task_cap_usd 5000.00,
+total_reserved_usd 501.00, remaining_unreserved_usd 4499.00, 86 reservations all
+RESERVED_NO_AUTOMATIC_REFUND, no_automatic_refund true.
+
+ONE PROJECTION, LABELLED AS ONE. If Fix A restored the world-naming slot AND Fix B derived the
+many-decision readings perfectly given a correct binding, the exposed course would land near
+174 + 299 x 0.6206 = 360/564 = 63.8% against 33.51% now. That assumes perfect derivation, which is
+NOT established, and the document says so in the same sentence.
+
+NOT ESTABLISHED, and stated in the document: no run was launched in any round summarised; the
+accuracy figures for Fixes A and B are on ONE field each and are not the whole-answer metric the
+course scores, so the two must never be presented together as an improvement; nothing shows either
+fix would raise the recorded score; the concentration is not shown to be harmful; the encoded slot
+used by several probes is a rebuild at +0.781 correlation; ten self-corrections are recorded, four
+of them on claims made in earlier rounds of this same work; and one arm, one seed underlies every
+recorded figure.
+
 ## 2026-09-17 UTC - The ridge penalty does not change arm A's prediction (verification after the tenth correction)
 
 $0.00. Pure standard library. No torch, no device, no target opened. Script
