@@ -4,6 +4,58 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - Self-check: `selected` IS the argmax on every slot this record measures, and the contract already composes for exactly one kind
+
+$0.00. Pure standard library, JSON only. No torch, no device, no target opened. Script
+`records/encoder_capacity_001/check_selected_is_argmax.py` (result `selected_argmax_check.txt`),
+record `ARGMAX_CHECK_RESULT.md`.
+
+WHY IT WAS OVERDUE. Three rounds are built on reading `decisions.selected` from the workers'
+prediction files and treating it as the readout's argmax: READOUT_COLLAPSE_RESULT.md measured the
+concentration that way, ALL_RUNS_CONCENTRATION_RESULT.md extended it to all six runs, and
+measure_target_prior.py eliminated two explanations on the same basis. `_forward` writes `scores` as
+the raw logits and derives `decisions` through `slots.score_decisions`, and the declared contract
+says "argmax over each slot's declared symbol order; first wins exact ties" - A CLAIM ABOUT CODE that
+this record was treating as a fact. It had been spot checked once, on one slot, early on.
+
+THE RESULT. All six runs, both prediction files, every slot - 31,176 slots:
+  every one of the twelve file-runs, identical: 2,598 slots, 2,176 match, 422 mismatch, 210 world-typed, 210 match
+  TOTAL: 31,176 slots, 26,112 match, 5,064 mismatch, 2,520 world-typed, 2,520 match
+ON THE WORLD-TYPED SLOTS - THE ONES EVERY CONCENTRATION MEASUREMENT USES - `selected` IS THE ARGMAX
+IN 2,520 OF 2,520 CASES. Every concentration figure in this record is measuring exactly what it
+claims. ZERO TIES across all 31,176 slots, so the first-wins tie-break question does not arise.
+
+WHERE THE 5,064 OTHER MISMATCHES ARE, by slot alphabet size:
+  size 2:   21,684 slots, 1,056 mismatches,  4.87%
+  size 3:      828 slots,   648 mismatches, 78.26%
+  size 4:    4,020 slots, 3,360 mismatches, 83.58%
+  size 5:      336 slots,     0 mismatches,  0.00%
+  size 6:      948 slots,     0 mismatches,  0.00%
+  size 64:   2,520 slots,     0 mismatches,  0.00%
+  size 65:     840 slots,     0 mismatches,  0.00%
+The mismatches are confined to alphabet sizes 2, 3 and 4 and are near-total at 3 and 4. Those are the
+slots the decision contract does NOT resolve by independent per-slot argmax - forced slots and the
+JOINT correspondence candidate. score_decisions assigns the correspondence mapping rows from a single
+joint candidate decision rather than row by row. The counts are identical in every run and every file
+- 2,598 / 2,176 / 422 twelve times over - because THE SLOT PLAN IS IDENTICAL ACROSS RUNS; the
+mismatch pattern is a property of the plan, not of any model.
+
+WHAT THIS ADDS BEYOND THE CHECK PASSING. It locates the one place the architecture already composes,
+and it is the one kind that works. The decision-shape decomposition found that correspondence scores
+93.18% while every kind spread over independent per-slot decisions scores near zero; the decision
+contract explains why - CORRESPONDENCE IS THE ONE KIND DECIDED JOINTLY RATHER THAN PER-SLOT, which is
+exactly the 422-slots-per-run signature this table exposes. So the check does not merely confirm a
+measurement: it shows, in the workers' own recorded decisions, that the machine's one successful
+composition case is a joint decision over a candidate list, and that the other kinds receive no such
+treatment. That is the decision-shape finding's mechanism, visible in the contract's own behaviour.
+
+NOT ESTABLISHED: nothing was scored - two recorded fields were compared against each other; the rule
+producing the mismatching `selected` values was not read, and they are attributed to forced slots and
+the joint correspondence candidate on the strength of the decision contract's description and the
+alphabet-size pattern, without tracing `score_decisions`; no claim the non-argmax rule is right or
+wrong; only `decisions.selected` and `scores` were compared; one study, six runs, one course. No GPU
+work launched.
+
 ## 2026-09-17 UTC - The concentration is six for six, every run converges on W36, and two explanations are dead
 
 $0.00. torch used only to deserialise the six runs' checkpoints. No device, no target opened, no run
