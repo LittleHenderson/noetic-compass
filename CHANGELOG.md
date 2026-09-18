@@ -4,6 +4,74 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The alias concentration has three separable causes, and training is the largest
+
+$0.00. torch used only to deserialise checkpoints; all arithmetic on plain lists. Script
+`records/encoder_capacity_001/measure_input_independence.py` (result `input_independence.txt`),
+record `INPUT_INDEPENDENCE_RESULT.md`; `COLLAPSE_CLAIM_WITHDRAWN.md` annotated PARTLY RESOLVED.
+
+THIS TEST NEVER TOUCHES THE ENCODER, so it escapes the +0.781 reconstruction gap entirely. The
+block, the recurrence and the frozen readout are all exact for the saved weights and the frozen
+rows, so feeding INVENTED inputs through them is exact arithmetic on the real trained parameters.
+210 inputs per regime, both checkpoints, depth 1 and depth 8:
+
+  checkpoint  depth                     regime   distinct  commonest  share  entropy
+   cursor 0      1   pseudo-random unit vectors        58       W44    4.8%    5.586
+   cursor 0      1   one constant vector                1       W58  100.0%    0.000
+   cursor 0      8   pseudo-random unit vectors        57       W36    4.8%    5.535
+   cursor 0      8   one constant vector                1       W58  100.0%    0.000
+ cursor 160      1   pseudo-random unit vectors        44       W47   10.0%    4.853
+ cursor 160      1   one constant vector                1       W26  100.0%    0.000
+ cursor 160      8   pseudo-random unit vectors        27       W40   25.2%    3.752
+ cursor 160      8   one constant vector                1       W40  100.0%    0.000
+
+For reference: uniform over 64 aliases is 64 distinct, 1.6%, 6.000 bits. The recorded distribution
+over the real world-typed reference slots at cursor 160 is 9 distinct, W36 at 44.3%, 2.516 bits. The
+constant-input row is the control: one input, one output, 1 distinct, 100%, and what it says when
+told nothing differs between checkpoints (W58 untrained, W40 trained).
+
+THE ANSWER TO THE OPEN QUESTION. Random unit vectors carry no task information, so they isolate what
+the WEIGHTS do alone, and the chain is monotone:
+  uniform, no machine at all                    64 distinct   1.6%   6.000
+  untrained block, one pass                     58 distinct   4.8%   5.586
+  + the recurrence                              57 distinct   4.8%   5.535
+  + TRAINING the block                          44 distinct  10.0%   4.853
+  + the recurrence again                        27 distinct  25.2%   3.752
+  + the real encoded slots (recorded)            9 distinct  44.3%   2.516
+TRAINING ALONE moves the readout from 58 distinct aliases to 44 and from 4.8% to 10.0% on the
+commonest, on inputs it has never seen. The recurrence takes it to 27 and 25.2%; the real inputs
+take it the rest of the way. So the concentration is NOT caused by the inputs and NOT by the
+encoder. The largest single contributor is the training, visible with inputs carrying no information
+whatsoever.
+
+THE APPARENT CONTRADICTION FROM ROUNDS 10 AND 11 IS RESOLVED. Round 10 claimed the trained block
+collapsed onto an input-independent fixed point. Round 11 refuted that: the weights GREW (effective
+operator norm 0.361559 -> 7.135410, x19.73) and the block became MORE input-sensitive (mean pairwise
+cosine 0.563576 -> 0.491361, rms-from-mean 0.028791 -> 0.280260), and the claim was withdrawn. BOTH
+MEASUREMENTS ARE CORRECT AND THIS TABLE SHOWS HOW THEY FIT: the trained block's output vector varies
+MORE across inputs while the READOUT'S ARGMAX varies LESS - 58 distinct aliases to 44 at depth 1
+and 57 to 27 at depth 8, on identical random inputs. Training makes the output larger and more
+variable AND pushes it into a region where the frozen readout's argmax is decided by fewer of its
+rows. The vector spreads; what the readout says narrows. Round 10 was wrong about the mechanism and
+right about the effect.
+
+WHAT IT MEANS FOR THE ARCHITECTURE. The concentration is a property of the trained weights,
+measured on task-free inputs, which places it in the plastic block and its interaction with the
+frozen readout. It is NOT an encoder defect, so no encoder change addresses it; NOT a data-coverage
+defect, so more course variety does not address it; and it IS visible at depth 1, so it is the
+block's own doing with the recurrence as an amplifier rather than the origin. It does NOT say the
+concentration is harmful - a concentrated readout is not automatically a wrong one, and nothing here
+measures correctness, because the targets are sealed. What it says is that the machine's answer at a
+world-typed slot is substantially determined BEFORE ITS INPUT IS CONSULTED, and an architecture
+review should account for that.
+
+NOT ESTABLISHED: nothing was scored - concentration is a distributional fact, not an error rate;
+regimes 2 and 3 are invented inputs that isolate the weights and are not a claim about the course;
+the causes are separated but not attributed quantitatively and the stages are not independent; one
+arm, one seed (MIXED_SAME_ITEMS, 20260919); depth 1 and 8 only; the commonest alias under random
+inputs is W40, not the recorded W36, so the weights' own preference and the recorded outcome are
+related but not identical, and the difference is the input's contribution. No GPU work launched.
+
 ## 2026-09-17 UTC - The ^6 contract admits two plastic groups and a write_bias requirement; the run used one
 
 $0.00. Read-only inspection of the reference wheel and the frozen contract. No model executed, no

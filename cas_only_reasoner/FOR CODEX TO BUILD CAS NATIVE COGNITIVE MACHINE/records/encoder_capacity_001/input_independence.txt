@@ -1,0 +1,38 @@
+loading checkpoints (deserialisation only)...
+probe count per regime: 210
+
+========================================================================================================
+ALIAS DISTRIBUTION BY INPUT REGIME � recorded baseline at cursor 160: 9 distinct, W36 at 44.3%
+========================================================================================================
+
+ checkpoint  depth                     regime  distinct  commonest    share   entropy
+--------------------------------------------------------------------------------------------------------
+   cursor 0      1 pseudo-random unit vectors        58        W44     4.8%     5.586
+   cursor 0      1 ONE constant vector, repeated         1        W58   100.0%    -0.000
+   cursor 0      8 pseudo-random unit vectors        57        W36     4.8%     5.535
+   cursor 0      8 ONE constant vector, repeated         1        W58   100.0%    -0.000
+ cursor 160      1 pseudo-random unit vectors        44        W47    10.0%     4.853
+ cursor 160      1 ONE constant vector, repeated         1        W26   100.0%    -0.000
+ cursor 160      8 pseudo-random unit vectors        27        W40    25.2%     3.752
+ cursor 160      8 ONE constant vector, repeated         1        W40   100.0%    -0.000
+
+  (a uniform distribution over 64 aliases would be 64 distinct, 1.6% commonest,
+   6.000 bits of entropy)
+
+========================================================================================================
+READING
+========================================================================================================
+
+  cursor 0, depth 8, ONE constant vector: 1 distinct, W58 at 100.0%
+  cursor 160, depth 8, ONE constant vector: 1 distinct, W40 at 100.0%
+
+The constant-input row is the decisive one. With every slot given the SAME vector, any
+spread at all comes from the readout's own geometry, and the commonest alias is what the
+machine says when it is told nothing. If the random-input rows concentrate like the
+recorded distribution, the concentration is not caused by the inputs; if they stay
+spread, the inputs are doing the work and the cause lies in the encoder, which this test
+does not model.
+
+Compare the random-input rows against the recorded cursor-160 baseline of 9 distinct
+with W36 at 44.3%, and against the cursor-0 baseline of 26 distinct with W49 at 15.2%.
+

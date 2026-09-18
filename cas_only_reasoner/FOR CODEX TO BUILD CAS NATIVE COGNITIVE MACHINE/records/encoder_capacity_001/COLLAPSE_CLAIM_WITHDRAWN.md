@@ -1,5 +1,30 @@
 # Ninth self-correction — the "collapse" claim is unsupported, and the cause is open
 
+> ## PARTLY RESOLVED — `INPUT_INDEPENDENCE_RESULT.md`
+>
+> The withdrawal below stands: the **mechanism** claimed (the block's output vector becoming nearly
+> constant) is refuted, the weights grew and the block became more input-sensitive. **But the
+> effect it was trying to describe is real, and is now measured with no encoder in the loop.**
+>
+> Feeding 210 **pseudo-random unit vectors** — inputs carrying no task information — through the
+> saved weights and the frozen readout:
+>
+> | | distinct aliases | commonest share | entropy |
+> |---|---:|---:|---:|
+> | untrained block, depth 1 | **58** | 4.8% | 5.586 |
+> | untrained block, depth 8 | 57 | 4.8% | 5.535 |
+> | **trained block, depth 1** | **44** | 10.0% | 4.853 |
+> | **trained block, depth 8** | **27** | **25.2%** | 3.752 |
+> | recorded, real slots | 9 | 44.3% | 2.516 |
+>
+> Training alone narrows the readout's variety from 58 distinct aliases to 44 at depth 1 and from 57
+> to 27 at depth 8, on inputs it has never seen.
+>
+> **So round 10 was wrong about the mechanism and right about the effect.** The output vector is not
+> constant — it spreads *more* after training — while the readout's argmax concentrates. The vector
+> spreads; what the readout says narrows. Both measurements are correct and they are not in
+> conflict.
+
 **Record:** `records/encoder_capacity_001/`
 **Scripts:** `measure_block_collapse.py` (output `block_collapse.txt`),
 `measure_recurrence_collapse.py` (output `recurrence_collapse.txt`)
