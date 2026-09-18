@@ -1,0 +1,57 @@
+============================================================================================
+THE FROZEN ^6 CONTRACT
+============================================================================================
+
+                 contract_id = 'cas.cjt.operation.^6.decompose/0.2'
+            contract_version = 1
+                operation_id = '^6'
+              operation_name = 'decompose'
+             ontology_status = <OntologyStatus.CANONICAL_ADMITTED: 'CANONICAL_ADMITTED'>
+        accepted_cause_kinds = (<CauseKind.IDEA: 'IDEA'>, <CauseKind.PROPOSITION: 'PROPOSITION'>, <CauseKind.EFFECT: 'EFFECT'>, <CauseKind.RPM_SUBGOAL
+    accepted_schema_versions = ('cas.neural-cjt.cause/0.2',)
+    permitted_evidence_ports = ('AUTHORED_TARGET', 'MEMORY', 'PROVENANCE')
+         neural_transform_id = 'cas.op.decompose.v1'
+            effect_schema_id = 'cas.neural-cjt.candidate-effect-content/0.2:DECOMPOSITION_SIGNAL'
+            memory_interface = ('READ_REFERENCES', 'PROPOSE_WRITE')
+        readiness_profile_id = 'PROTOTYPE_DWP_PRODUCT/0.1'
+               legal_actions = ('PROPOSE_EFFECT',)
+            legal_bias_paths = ('/memory', '/rpm', '/operating', '/theta')
+     temporal_transition_law = 'EFFECT_TO_CAUSE_ONLY_AFTER_COMMIT'
+                 verifier_id = 'independent-effect-verifier'
+            verifier_version = 1
+             verifier_digest = '0de372aebd2def84aa106d821be3c2b5e9ff832ab2be072a3c35c85902389585'
+           plasticity_groups = ('operation:^6', 'bias_update_head')
+     governance_requirements = ('execute', 'publish_effect', 'write_bias', 'learn')
+             contract_digest = '6bfc2602cfa2c78669fab832aa3a4c2bfc4193f2a54f1947036c6ae3a80e4168'
+
+  contract digest matches the record : True
+  plasticity groups match the record : True
+
+============================================================================================
+WHAT THE RUN'S MODULE CONTAINS
+============================================================================================
+
+  bank module type   : _DecomposeTransform
+  bank module params : ['left.weight', 'right.weight', 'merge.weight']
+  equals the typed learner's asserted scope : True
+
+  NeuralCJT parameters : 30
+  bias_update_head     : ['bias_update_head.weight']
+  the run's module contains it : False
+
+============================================================================================
+THE FINDING
+============================================================================================
+
+  The contract admits 2 plasticity groups: ('operation:^6', 'bias_update_head').
+  Its governance requirements include write_bias, with legal bias paths ('/memory', '/rpm', '/operating', '/theta').
+  The run's module exposes exactly 3 parameters, none of which is bias_update_head,
+  and the typed learner asserts that narrower set as its entire scope with "frozen": [].
+
+  So bias_update_head is not frozen in the run - it is ABSENT from the run's module. The
+  role is admitted by the contract and unreachable from the typed-teaching path, because
+  that path builds a bare _DecomposeTransform rather than a NeuralCJT.
+
+  NO CHANGE IS PROPOSED. Whether the learner's narrowing is legitimate or a defect that
+  strands an admitted mechanism is an authority decision. See OS-027.
+

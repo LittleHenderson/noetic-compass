@@ -4,6 +4,67 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The ^6 contract admits two plastic groups and a write_bias requirement; the run used one
+
+$0.00. Read-only inspection of the reference wheel and the frozen contract. No model executed, no
+forward pass, no device, no target, no provider. Record `records/bias_role_001/STATUS.md`,
+reproducer `verify_bias_role.py` (output `verification.txt`), filed as OS-027.
+
+WHAT THE CONTRACT SAYS. `cas_cjt.state.make_operation_contract("^6")` - the frozen contract the
+typed-matched run declared, digest 6bfc2602cfa2c78669fab832aa3a4c2bfc4193f2a54f1947036c6ae3a80e4168
+- read directly from the installed wheel:
+  plasticity_groups        ('operation:^6', 'bias_update_head')          TWO groups
+  governance_requirements  ('execute', 'publish_effect', 'write_bias', 'learn')
+  legal_bias_paths         ('/memory', '/rpm', '/operating', '/theta')   FOUR paths
+  legal_actions            ('PROPOSE_EFFECT',)
+  contract_digest          6bfc2602cfa2c78669fab832aa3a4c2bfc4193f2a54f1947036c6ae3a80e4168
+
+WHAT THE RUN DID. real_framework.py states the choice in its own docstring: "this run uses ONLY
+operation:^6 (the module's own parameters); bias_update_head stays frozen." But the module it builds
+is a bare _DecomposeTransform, so:
+  RegisteredOperationBank(cfg).modules_by_operation[^6]  type _DecomposeTransform
+    params ['left.weight', 'right.weight', 'merge.weight']   - equals the learner's asserted scope
+  NeuralCJT(cfg)  30 parameters, including ['bias_update_head.weight']
+  does the run's module contain bias_update_head?  False
+So bias_update_head is NOT FROZEN IN THE RUN - IT IS ABSENT FROM THE RUN'S MODULE. The role is
+admitted by the contract and unreachable from the typed-teaching path, because that path constructs
+_DecomposeTransform directly rather than a NeuralCJT. And the typed learner asserts the narrower set
+as its entire scope with "frozen": [] (TYPED_LEARNER_REGISTERED_SCOPE).
+
+WHAT bias_update_head IS. A 64x64 linear map on NeuralCJT that turns the candidate effect into a
+PROPOSAL-ONLY bias delta; the contract's legal_actions is ('PROPOSE_EFFECT',), so the mechanism
+proposes a bias change and does not apply one.
+
+WHY IT IS WORTH RECORDING. The defect this project has measured most precisely is A BIAS. At cursor
+160 the frozen readout emits only 9 of 64 world aliases across the 210 world-typed reference slots,
+with W36 at 44.3% of them and 55 aliases never emitted at all - a systematic, input-independent
+preference for particular symbols, which is what a bias is. Its cause is still OPEN. A write_bias
+mechanism, with four legal bias paths, is admitted by the very contract that governs the operation,
+and the run never exercised it. OFFERED AS A HYPOTHESIS ONLY: nothing shows a bias would remove the
+concentration, and nothing shows the concentration is a bias in the contract's sense. The two facts
+are recorded side by side because they are striking together; they have not been shown to be the
+same thing.
+
+THE TENSION, STATED AND NOT RESOLVED. The contract admits ('operation:^6','bias_update_head'); the
+learner asserts the scope is exactly the three _DecomposeTransform matrices with "frozen": [].
+Either the narrowing is legitimate - in which case the contract's second group is admitted but
+unusable from this path and that should be said plainly - or the assertion strands an admitted
+mechanism. That is an authority decision. Filed as OS-027.
+
+NO CHANGE IS PROPOSED. Wiring bias_update_head in would change what the run optimises, would require
+changing the learner's own scope assertion, and would put the run's declared scope in tension with
+its own contract. Contract question before engineering question.
+
+NOT ESTABLISHED: nothing executed; bias_update_head was not tested and is not claimed to help; the
+run's narrower scope may be exactly right and real_framework.py documents the choice deliberately -
+the record does not say the choice was wrong, it says the consequence is that an admitted role is
+unreachable and nothing in this tree reports having decided which reading applies. NeuralCJT's other
+27 parameters were not examined. No claim about governance_requirements semantics.
+
+The reproducer self-checks: it compares the contract digest and plasticity groups against the
+recorded values and prints "THE RECORD IS STALE" if the contract ever changes, so
+records/bias_role_001/STATUS.md cannot silently go out of date.
+
 ## 2026-09-17 UTC - The recurrence's 19.15-point cost was an aiming error; fixing it recovers 17.38
 
 $0.00. Pure standard library. No model, no GPU, no target opened. Script
