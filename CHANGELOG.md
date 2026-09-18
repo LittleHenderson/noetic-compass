@@ -4,6 +4,71 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-17 UTC - The concentration is the training's, the readout is nearly uniform, and the analytic fit does not share it
+
+$0.00. torch used only to deserialise checkpoints and read the frozen public course. Script
+`records/encoder_capacity_001/measure_concentration_source.py` (result `concentration_source.txt`),
+record `CONCENTRATION_SOURCE_RESULT.md`.
+
+210 pseudo-random unit vectors - inputs carrying no task information - through four
+parameterisations on the same recurrence, the same frozen readout, the same inputs. THE ENCODER IS
+NEVER TOUCHED, so the +0.781 reconstruction gap limits nothing here.
+
+  parameterisation                    depth  distinct  commonest  share  entropy
+  identity - NO BLOCK AT ALL, f(x)=x      1        59         W5    3.3%    5.752
+  identity - NO BLOCK AT ALL              8        59         W5    3.3%    5.752
+  untrained, cursor 0                     1        58        W44    4.8%    5.586
+  untrained, cursor 0                     8        57        W36    4.8%    5.535
+  trained, cursor 160                     1        44        W47   10.0%    4.853
+  trained, cursor 160                     8        27        W40   25.2%    3.752
+  analytic - arm A                        1        24        W15   10.0%    4.394
+  analytic - arm A                        8        24        W22    8.6%    4.404
+  uniform, no machine at all               -        64          -    1.6%    6.000
+  RECORDED, real slots, cursor 160         8         9        W36   44.3%    2.516
+
+THE FROZEN READOUT'S GEOMETRY IS NEARLY UNIFORM. The identity row involves NO PARAMETER - f(x) = x
+and the argmax is taken directly - and gives 59 distinct aliases, 3.3% commonest, 5.752 bits,
+against the uniform 64 / 1.6% / 6.000. So the frozen Rademacher readout is NOT inherently biased
+toward a few symbols; whatever concentration the machine shows is produced by the parameters, not by
+the codebook's geometry. That rules out one whole family of explanations and is why the identity row
+was worth running.
+
+TRAINING IS THE CAUSE AND THE RECURRENCE AMPLIFIES IT. The untrained block leaves the distribution
+nearly as spread as the identity (58 -> 57 distinct, 4.8%). The trained block more than doubles the
+commonest share at depth 1 (4.8% -> 10.0%) and the recurrence more than doubles it again
+(10.0% -> 25.2%). All of it on inputs the block has never seen.
+
+THE ANALYTIC FIT DOES NOT SHARE IT. Same inputs, depth 8: trained gives 27 distinct with the
+commonest at 25.2% and 3.752 bits; ANALYTIC gives 24 distinct with the commonest at 8.6% and 4.404
+bits. The counts are comparable and the SHARES ARE NOT - 25.2% against 8.6%, 0.65 bits apart. The
+trained block returns to one alias a quarter of the time whatever it is given; the analytic
+parameters do so under a tenth of the time. And the analytic fit is STABLE THROUGH THE RECURRENCE
+where the trained block is not: trained 4.853 -> 3.752 bits (-1.101), analytic 4.394 -> 4.404
+(+0.010). The recurrence costs the analytic fit nothing at all on task-free inputs.
+
+AND THE TRAINED BLOCK COLLAPSES FURTHER ON REAL INPUTS WHILE THE ANALYTIC FIT DOES NOT:
+  trained, depth 8    task-free 27 distinct / 25.2%   real 9 distinct / 44.3% (recorded)
+  analytic, depth 8   task-free 24 distinct /  8.6%   real 24 distinct /  6.9% (out-of-fold)
+The analytic fit behaves the SAME on both. The trained block behaves very differently - spread-ish on
+invented inputs, severely concentrated on real ones. So the trained block's concentration is driven
+specifically by the TASK DISTRIBUTION: it loses variety precisely where the task lives.
+
+WHAT THIS DOES FOR ARM A. G6's prediction is now supported by an ENCODER-FREE measurement, not only
+by the rebuilt encoder, and both directions agree: the analytic parameters do not concentrate the
+way the trained block does. It also adds a prediction the preparation could not make - the
+recurrence costs the analytic fit +0.010 bits and the trained block -1.101 bits, so if arm A runs
+and the recurrence turns out costly for it, that contradicts this measurement and not merely the
+approximate rebuild.
+
+NOT ESTABLISHED: nothing was scored - entropy and share are distributional facts and say nothing
+about correctness, and THE TARGETS ARE SEALED. A SPREAD READOUT IS NOT AUTOMATICALLY A RIGHT ONE:
+the analytic fit spreads while reaching 62.06% and the trained block concentrates while reaching
+1.24%, but nothing here shows the spread CAUSES the accuracy. The task-free inputs are invented. The
+analytic T here is a single fold's fit, not the arm's per-fold artifact. The four rows are not
+independent - each adds to the one above. One arm, one seed. Depth 1 and 8 only. And the
+concentration is still not shown to be HARMFUL; nothing here establishes that reducing it improves
+anything. No GPU work launched.
+
 ## 2026-09-17 UTC - The alias concentration has three separable causes, and training is the largest
 
 $0.00. torch used only to deserialise checkpoints; all arithmetic on plain lists. Script

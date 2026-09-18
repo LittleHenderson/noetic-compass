@@ -1,0 +1,37 @@
+building the four parameterisations...
+  encoded slots: 200/564
+  encoded slots: 400/564
+  identity, untrained, trained, analytic � ready
+
+task-free inputs: 210 pseudo-random unit vectors
+
+========================================================================================================
+ALIAS DISTRIBUTION BY PARAMETERISATION, ON IDENTICAL TASK-FREE INPUTS
+========================================================================================================
+
+  parameterisation  depth  distinct  commonest    share   entropy
+--------------------------------------------------------------------------------------------------------
+identity (no block)      1        59         W5     3.3%     5.752
+identity (no block)      8        59         W5     3.3%     5.752
+untrained cursor 0      1        58        W44     4.8%     5.586
+untrained cursor 0      8        57        W36     4.8%     5.535
+trained cursor 160      1        44        W47    10.0%     4.853
+trained cursor 160      8        27        W40    25.2%     3.752
+  analytic (arm A)      1        24        W15    10.0%     4.394
+  analytic (arm A)      8        24        W22     8.6%     4.404
+
+  uniform over 64 aliases                : 64 distinct, 1.6% commonest, 6.000 bits
+  RECORDED, real slots, cursor 160       : 9 distinct, W36 at 44.3%, 2.516 bits
+
+========================================================================================================
+READING
+========================================================================================================
+
+The identity row involves no parameter at all: `f(x) = x`, so anything concentrating there
+comes from the frozen readout's own geometry and no weight change can be blamed for it.
+Rows below it add, in turn, the untrained block, the training, and the closed-form fit.
+
+If the analytic row stays spread while the trained row concentrates, the concentration is a
+defect of the trained block specifically, and arm A's G6 prediction is supported by an
+encoder-free measurement rather than only by the approximate rebuild.
+
