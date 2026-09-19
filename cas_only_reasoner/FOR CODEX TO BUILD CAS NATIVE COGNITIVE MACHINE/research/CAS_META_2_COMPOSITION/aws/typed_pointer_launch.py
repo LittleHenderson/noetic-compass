@@ -146,6 +146,12 @@ def smoke_request_literal(request=None):
     return literal, plan
 
 
+def validated_smoke_request(request):
+    """`(request, literal, plan)` for a request that is not yet module state. The checks, without the side effect."""
+    literal, plan = smoke_request_literal(request)
+    return request, literal, plan
+
+
 def set_smoke_request(request=None):
     """The ONLY way `SMOKE_REQUEST` becomes anything but `None`. An explicit act of this module's caller.
 
@@ -160,9 +166,49 @@ def set_smoke_request(request=None):
     if request is None:
         SMOKE_REQUEST = None
         return SMOKE_REQUEST
-    literal, _ = smoke_request_literal(request)      # both checks, before this call touches module state
+    _, literal, _ = validated_smoke_request(request)     # both checks, before this call touches module state
     SMOKE_REQUEST = request
     return literal
+
+
+def configure_reduced_schedule(literal=None):
+    """THE ONE PROCESS-BOUNDARY ENTRY POINT for the shrunken-schedule request. `(literal, plan)` or `(None, None)`.
+
+    WHY THIS EXISTS, AND WHAT IT COSTS TO GET WRONG. `set_smoke_request` sets an IN-PROCESS global, and a module
+    global cannot cross a process boundary. `prepare_smoke.py` freezes a smoke authority whose
+    `evidence_contract_sha256` is the SMOKE contract's digest, but the launch is a DIFFERENT process: with nothing
+    having called `set_smoke_request` there, `job_evidence_contract()` resolved to the REGISTERED contract and
+    `validate_authority` refused the smoke authority with `POINTER_AUTHORITY_BINDING:evidence_contract_sha256` --
+    exactly the refusal the first real launch hit on 2026-09-19. The refusal was free (it precedes the reservation)
+    but the launch could never have succeeded.
+
+    This function is therefore the SINGLE path both callers use: `main()` with `--reduced-schedule <literal>`, and
+    `prepare_smoke.py` when it validates what it is about to freeze. `literal` is the exact JSON `main()` accepts;
+    `None` means "no smoke was asked for" and leaves every byte of the generated source and package unchanged.
+    """
+    if literal is None:
+        set_smoke_request(None)
+        return None, None
+    try:
+        request = json.loads(literal)
+    except (TypeError, ValueError) as error:
+        raise ValueError("POINTER_REDUCED_SCHEDULE_LITERAL:" + type(error).__name__) from error
+    global SMOKE_REQUEST
+    _, literal_returned, plan = validated_smoke_request(request)   # the caller's OWN refusal path, before state
+    SMOKE_REQUEST = request                                       # now, and only now, module state
+    return literal_returned, plan
+
+
+def reduced_schedule_record():
+    """What this process is running, for the run's own evidence: `None`, or the literal plus its plan."""
+    if SMOKE_REQUEST is None:
+        return None
+    literal, plan = smoke_request_literal()
+    return {"reduced_schedule_literal": literal, "claim_bearing": False,
+            "plan": {key: plan[key] for key in (
+                "passes", "updates", "prelast", "evaluations", "evaluation_phases", "phase_a", "phase_b",
+                "ablations", "retention", "interference", "replays", "reload", "reloads", "checkpoints",
+                "ablation_phases")}}
 
 
 # THE BUCKET IS EXACTLY 63 CHARACTERS, the maximum `[a-z0-9][a-z0-9-]{1,61}[a-z0-9]` allows (RK4).
@@ -698,6 +744,25 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
         # produced.
         self.failure_statuses = ("WORKER_FAILED", "REMOTE_WORKER_FAILED", "TYPED_POINTER_FAILED")
 
+    def configure_evidence(self, directory, contract=None):
+        """The inherited hook, plus THIS RUN's reduced-schedule record so the launch is reproducible.
+
+        Overridden rather than reimplemented: the parent does the directory and contract work, and this adds one
+        file to the same evidence directory -- written here because this is the one point every launch reaches
+        before the reservation. A claim-bearing run records `None`, so its receipt says plainly that no shrunken
+        schedule was requested.
+        """
+        state = super().configure_evidence(directory, contract)
+        target = Path(directory).resolve()
+        require(target.is_dir(), "POINTER_EVIDENCE_DIRECTORY")
+        shared.write_evidence(target / "reduced_schedule.json", canonical({
+            "schema": "cncm.typed-pointer-reduced-schedule/0.1", "job": self.job,
+            "reduced_schedule": reduced_schedule_record(),
+            "how_it_crossed_the_process_boundary": ("typed_pointer_launch.main(--reduced-schedule), which calls "
+                                                    "configure_reduced_schedule() before any validation"),
+            "ambient_environment_read": False}))
+        return state
+
     def _worker_config(self, bucket):
         require(hasattr(self, "bound_config"), "POINTER_AUTHORITY_NOT_BOUND")
         require(self.region == BOUNDS["region"], "POINTER_PROVIDER_REGION")
@@ -758,18 +823,30 @@ def main(argv=None):
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--package")
     parser.add_argument("--source-sha")
+    # THE CROSS-PROCESS CARRY FOR THE SHRUNKEN SCHEDULE. `prepare_smoke.py` prints this exact literal; nothing else
+    # sets it, and ambient environment is read nowhere. Absent, every path behaves as if the opt-in did not exist.
+    parser.add_argument("--reduced-schedule")
     for field in ("request", "request-sha256", "authority", "authority-sha256", "receipt-dir", "owner-authorization",
                   "ledger-path"):
         parser.add_argument("--" + field)
     parser.add_argument("--profile", default="default")
     args = parser.parse_args(argv)
+    if args.reduced_schedule is not None:
+        # A package must be built with the opt-in UNSET: the generated source is one of its members, so building a
+        # package under a reduced request would change the bytes every job installs.
+        require(not args.package, "POINTER_REDUCED_SCHEDULE_WITH_PACKAGE")
+        reduced_literal, reduced_plan = configure_reduced_schedule(args.reduced_schedule)
+    else:
+        reduced_literal, reduced_plan = configure_reduced_schedule(None)
+    require(SMOKE_REQUEST is None or reduced_literal is not None, "POINTER_REDUCED_SCHEDULE_NOT_CONFIGURED")
     if args.package:
         require(not args.execute and args.source_sha, "POINTER_PACKAGE_ARGUMENTS")
         print(json.dumps(build_pointer_package(args.package, source_sha=args.source_sha)))
         return 0
     if not args.execute:
         print(json.dumps({"status": "PLAN_ONLY", "design": DESIGN, "bounds": BOUNDS, "provider_calls": 0,
-                          "reservation_created": False, "smoke_request": SMOKE_REQUEST}))
+                          "reservation_created": False, "reduced_schedule_literal": reduced_literal,
+                          "reduced_schedule_plan": reduced_plan}))
         return 0
     require(all(getattr(args, key) for key in ("request", "request_sha256", "authority", "authority_sha256",
                                                "receipt_dir", "owner_authorization", "ledger_path")), "POINTER_EXPLICIT_INPUTS")
