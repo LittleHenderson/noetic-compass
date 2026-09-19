@@ -68,6 +68,15 @@ PLAN item 4). Differences, each deliberate:
   REPORT-ONLY: a failure inside them is recorded and the job continues, and `deliver` then drops exactly
   the names those checks could not produce from the set it requires, so a reported check can never fail
   an otherwise complete job.
+  **BECAUSE REPORT-ONLY ALSO MEANS "A DEGRADED CHECK DOES NOT FAIL THE JOB", THE REPORT MUST SAY SO OUT
+  LOUD** (review R2, MAJOR 2). `run()` publishes `report["degraded_checks"]`, the sorted names of every
+  one of the three whose own `status` is not `COMPLETE`, together with `report["report_only_status"]`,
+  which carries each check's own status and `None` for a check that never produced its artifact at all --
+  so "the ablations ran and failed" and "the ablations never started" are different readings, and `None`
+  is a MISSING status rather than a new status word. `run()` reads those statuses and does not restate
+  them, exactly as it reads `pointer_contract.PASSES`. Both keys reach `worker_report.json` (the whole
+  report) and `measurements.json` (the `summary` list in `deliver`). An EMPTY `degraded_checks` is the
+  claim that all three ran to completion, and nothing else is.
 
 - THE PASS COUNT COMES FROM `pointer_contract.PASSES`, read, never restated. `design["schedule"]` is the
   registered ten-pass schedule; a SHRUNKEN run for the smoke job is expressed by an explicit environment
@@ -125,10 +134,23 @@ PHASE_B_POINTER_CHECKPOINTS = ("initial", "pass_01", "final")
 EVALUATION_DEPTH = 8
 CHECKPOINT_CHECK_STATUSES = ("COMPLETE", "FAILED", "SKIPPED")
 # DG8. One component at a time, reset to its `initial.pt` weights on a restored copy of `final`.
+#
+# These four rows say WHICH component a container key belongs to -- a semantic decision no key set can
+# supply. They are NOT the coverage check. `_ablation_components` derives every component's names from the
+# container's own live `state_dict()` and refuses if any key is matched by NO row or by more than one, so a
+# rename in `pointer_learner` can never silently shrink the ablated set (review R2, BLOCKER 3).
+#
+# The old `round_mix` row listed seven names from an abandoned design, SIX of which matched nothing at all
+# (`round_state_norm`, `round_parent_norm`, `round_child_norm`, `self_mix`, `parent_mix`, `child_mix`):
+# the three mix scalars had become ONE 3-element `Parameter` (`pointer_learner.py:670-674`). The old check
+# was a count of names matching the ROWS, so the surviving `round_rate` satisfied it, `node_encode.weight`
+# and `round_mix` were left unablated, the coverage `require` fired BEFORE the baseline evaluation, and all
+# ten ablation artifacts were then dropped from the required set while the job still reported success.
 ABLATION_COMPONENTS = (
     ("core_block", ("left.weight", "right.weight", "merge.weight")),
-    ("round_mix", ("round_state_norm", "round_parent_norm", "round_child_norm", "self_mix", "parent_mix",
-                   "child_mix", "round_rate")),
+    # The shared round: the per-half node encoder belongs with the round mixing, exactly as the row above
+    # groups the three `^6` tensors. All three names EXIST in the live container.
+    ("round_mix", ("node_encode.weight", "round_mix", "round_rate")),
     ("heads", ("node_head.", "edge_head.", "role_head.", "role_embedding", "pointer_key.",
                "reach_option_head.", "mode_option_head.", "world_head.")),
     ("query_and_readout", ("query_projection.", "query_norm.", "attention_key.", "world_projection.",
@@ -143,6 +165,20 @@ REDUCED_SCHEDULE_ENV = "CNCM_POINTER_REDUCED_SCHEDULE"
 REDUCED_SCHEDULE_KEYS = frozenset({"passes", "updates", "evaluations", "phase_a", "reloads", "phase_b",
                                    "ablations", "retention", "interference", "replays"})
 OWNER_PROJECTION_THRESHOLD_SECONDS = 11000
+# DG9. The MEASURED non-worker overhead of one AWS pointer job: the instance seconds that are not the
+# worker's own clock -- boot, package install and delivery. `pre_design/AWS_SMOKE_S10_PLAN.md:29` measures it
+# as 6,064 s of instance time minus the practice worker's own 5,465.811116456 s of `elapsed_seconds`, which
+# is 598.188883544 s; that plan writes the same measurement rounded as "598.2 s". Nothing is rounded here.
+# The owner's threshold is a number about INSTANCE time, so this term is what makes the comparison honest
+# (review R2, MAJOR 1).
+PRACTICE_INSTANCE_SECONDS = 6064
+PRACTICE_WORKER_CLOCK_SECONDS = 5465.811116456
+MEASURED_NON_WORKER_OVERHEAD_SECONDS = PRACTICE_INSTANCE_SECONDS - PRACTICE_WORKER_CLOCK_SECONDS
+# The three REPORT-ONLY checks, in phase order, each with the `ctx` key its own artifact report lives under.
+# `run()` publishes which of them did NOT reach `COMPLETE` (review R2, MAJOR 2).
+REPORT_ONLY_CHECKS = (("checkpoint_check_phase_a", "phase_a"),
+                      ("checkpoint_check_phase_b", "phase_b"),
+                      ("ablations", "ablations"))
 canonical, require = contract.canonical, contract.require
 # RK6. EVERY module the checkpoint check needs is imported HERE, at module import time -- outside any
 # `try` anywhere in this file -- so a missing module fails the job before the first phase instead of
@@ -1253,12 +1289,67 @@ def _checkpoint_check_phase_b(ctx):
 # ======================================================================================================
 # 11. PHASE: ablations (review DG8).
 # ======================================================================================================
-def _reset_component(torch, pointer_module, learner, initial_state, prefixes):
-    """Reset ONE component to its `initial.pt` values on a restored copy, and prove the rest is untouched."""
+def _ablation_components(state_keys):
+    """`({component: (names)}, coverage reading)` derived from the container's own keys, or a refusal.
+
+    CONSTRUCTIVE, not a count against a hand-maintained list (review R2, BLOCKER 3). `ABLATION_COMPONENTS`
+    still decides WHICH component a key belongs to, because that is a semantic choice no key set can supply;
+    what is derived here -- from the container's actual `state_dict()` keys -- is which keys each component
+    actually owns. Two conditions are refused, and only these two:
+
+      * a key matched by NO component -> `POINTER_ABLATION_COVERAGE:<key>` (the key would never be ablated,
+        which is the defect this replaces: the evidence would be silently partial);
+      * a key matched by MORE THAN ONE component -> `POINTER_ABLATION_AMBIGUOUS:<key>:<components>` (the
+        evidence would be double-counted and the "other components are byte-unchanged" proof would be void);
+      * a component that owns no key at all -> `POINTER_ABLATION_COMPONENT_EMPTY:<component>` (refused here
+        rather than after the baseline evaluation, so nothing is spent on a component that cannot be reset).
+
+    Each refusal carries the counts in its OWN code, so the published `failure.detail` of a refused job still
+    says how many of how many keys were covered. A row whose prefixes match nothing is NOT refused on that
+    ground alone: if every key is still owned by exactly one component the ablated set is complete and the
+    evidence is real, so refusing would block a legitimate job over cruft. Dead prefixes are recorded as
+    EVIDENCE instead, in `dead_prefixes`.
+    """
+    require(bool(state_keys) and all(type(name) is str for name in state_keys),
+            "POINTER_ABLATION_STATE_EMPTY")
+    components = {component: tuple(sorted(name for name in state_keys
+                                          if any(name == prefix or name.startswith(prefix)
+                                                 for prefix in prefixes)))
+                  for component, prefixes in ABLATION_COMPONENTS}
+    reading = {"state_dict_keys": len(state_keys),
+               "per_component_counts": {component: len(names) for component, names in components.items()},
+               "per_component_state_keys": {component: list(names) for component, names in components.items()},
+               "dead_prefixes": sorted(component + ":" + prefix
+                                       for component, prefixes in ABLATION_COMPONENTS for prefix in prefixes
+                                       if not any(name == prefix or name.startswith(prefix)
+                                                  for name in state_keys))}
+    reading["covered_keys"] = len({name for names in components.values() for name in names})
+    reading["uncovered_keys"] = sorted(set(state_keys) - {name for names in components.values() for name in names})
+    counts = ":covered=" + str(reading["covered_keys"]) + ":of=" + str(len(state_keys))
+    for component, names in components.items():
+        require(bool(names), "POINTER_ABLATION_COMPONENT_EMPTY:" + component + counts)
+    for name in sorted(state_keys):
+        owners = sorted(component for component, names in components.items() if name in names)
+        require(bool(owners), "POINTER_ABLATION_COVERAGE:" + name + counts)
+        require(len(owners) == 1, "POINTER_ABLATION_AMBIGUOUS:" + name + ":" + ",".join(owners) + counts)
+    reading["every_key_covered_by_exactly_one_component"] = (
+        reading["covered_keys"] == len(state_keys) and len(reading["uncovered_keys"]) == 0)
+    require(reading["every_key_covered_by_exactly_one_component"],
+            "POINTER_ABLATION_COVERAGE" + counts)
+    return components, reading
+
+
+def _reset_component(torch, pointer_module, learner, initial_state, names):
+    """Reset ONE component's `names` to their `initial.pt` values, and prove the rest is byte-untouched.
+
+    `names` is the DERIVED member list of one row of `ABLATION_COMPONENTS` (`_ablation_components`), not the
+    row's prefixes: the reset then acts on exactly the keys the coverage check proved are owned, with no
+    second, independent prefix interpretation that could disagree with it.
+    """
     state = dict(learner.module.state_dict())
-    names = sorted(name for name in state
-                   if any(name == prefix or name.startswith(prefix) for prefix in prefixes))
+    names = sorted(names)
     require(bool(names), "POINTER_ABLATION_COMPONENT_EMPTY")
+    require(all(name in state for name in names), "POINTER_ABLATION_COMPONENT_NAME")
     registered_to_internal = {registered: internal
                               for internal, registered in pointer_module._registered_names(learner.module).items()}
     parameters = dict(learner.module.named_parameters())
@@ -1300,10 +1391,12 @@ def _ablations(ctx):
         require(type(initial) is dict and "model_state" in initial, "POINTER_ABLATION_INITIAL")
         initial_state = dict(initial["model_state"])
         require(set(initial_state) == set(ctx["main"].module.state_dict()), "POINTER_ABLATION_INITIAL_KEYS")
-        covered = sorted({name for name in initial_state
-                          if any(name == prefix or name.startswith(prefix)
-                                 for _component, prefixes in ABLATION_COMPONENTS for prefix in prefixes)})
-        require(len(covered) == len(initial_state), "POINTER_ABLATION_COVERAGE")
+        # CONSTRUCTIVE coverage (review R2, BLOCKER 3): every key of the LIVE container must be owned by
+        # exactly one component, derived from the keys themselves. This runs BEFORE the baseline evaluation
+        # on purpose, so an unowned key refuses the ablations family up front instead of after the spend.
+        components, report["coverage"] = _ablation_components(sorted(ctx["main"].module.state_dict()))
+        require(all(name in initial_state for names in components.values() for name in names),
+                "POINTER_ABLATION_INITIAL_NAME")
         restore_pin = ctx["checkpoint_pins"]["final"]
         restored = _restore_pointer(ctx, path=artifacts / "final.pt", pin=restore_pin, encoder=ctx["encoder"])
         _, baseline = _evaluate(restored, ctx["held_packets"], "ablation_baseline", artifacts,
@@ -1314,13 +1407,13 @@ def _ablations(ctx):
                               "kind_splits": _split_score(baseline, {"held_back": ctx["held_set"]})}
         del restored
         rows = {}
-        for name, prefixes in ABLATION_COMPONENTS:
+        for name, _prefixes in ABLATION_COMPONENTS:
             _deadline(ctx["started"])
             ctx["phase"]("ablation_" + name)
             began = time.monotonic()
             restored = _restore_pointer(ctx, path=artifacts / "final.pt", pin=restore_pin,
                                         encoder=ctx["encoder"])
-            reset = _reset_component(torch, pointer_module, restored, initial_state, prefixes)
+            reset = _reset_component(torch, pointer_module, restored, initial_state, components[name])
             _, scored = _evaluate(restored, ctx["held_packets"], "ablation_" + name, artifacts,
                                   started=ctx["started"], progress=ctx["phase"], work=ctx["work"])
             accuracy = scored["correct"] / scored["total"]
@@ -1370,8 +1463,51 @@ def _effective_required(ctx):
     return tuple(name for name in names if name not in dropped), sorted(dropped)
 
 
+def _report_only_status(ctx):
+    """Each report-only check's OWN `status`, and `None` when it never produced its artifact at all.
+
+    `None` is a MISSING status, never a new status word: it is what makes "the check ran, and failed"
+    distinguishable from "the check never started", which a job that reports only `SUCCESS_STATUS` cannot
+    otherwise tell (review R2, MAJOR 2). `run()` reads these, it never restates them.
+    """
+    return {name: (ctx.get(key) or {}).get("status") for name, key in REPORT_ONLY_CHECKS}
+
+
+def _degraded_checks(ctx):
+    """The report-only checks that did NOT reach `COMPLETE`, sorted. EMPTY means all three ran to completion.
+
+    Report-only is kept: a degraded check is RECORDED here and the job still succeeds. This list is the only
+    thing that separates a job that ran its ablations from one that never started them.
+    """
+    statuses = _report_only_status(ctx)
+    return sorted(name for name, status in statuses.items() if status != "COMPLETE")
+
+
 def _phase_timings(ctx):
-    """DG9: this job measures its own cost, exactly, and projects the registered one."""
+    """DG9: this job measures its own cost, exactly, and projects the registered one.
+
+    `projected_worker_seconds` is the WORKER CLOCK and keeps that meaning: the registered training,
+    evaluation and phase-A seconds plus this job's measured worker-side glue. It is NOT the number the owner
+    pays for. The owner pays INSTANCE seconds, so two terms the old projection omitted are now explicit
+    (review R2, MAJOR 1):
+
+      * the MEASURED non-worker overhead -- boot, package install and delivery, 598.188883544 s
+        (`MEASURED_NON_WORKER_OVERHEAD_SECONDS`; the float64 result of that subtraction is
+        598.1888835440004, and the last four digits are the binary-representation tail, not a round),
+        which is instance time that never reaches this clock; and
+      * any registered phase this job did not run. Its seconds sit inside `unmeasured` only when it actually
+        ran, and this file never estimates an unmeasured phase, so those phases are named in
+        `unmeasured_instance_terms` instead of being estimated, and the instance projection is then a LOWER
+        BOUND by exactly those terms.
+
+    `projected_instance_seconds` is the new quantity, and `within_owner_threshold` is decided against IT,
+    not against the worker projection -- `OWNER_PROJECTION_THRESHOLD_SECONDS` is a spend boundary, and
+    crossing it requires a NEW owner approval, so a true reading must be true of the quantity being paid
+    for. A lower bound that is under the threshold does not authorize the spend: `within_owner_threshold` is
+    therefore also false whenever `unmeasured_instance_terms` is non-empty, and the raw comparison on the
+    measured terms alone stays available, named, in
+    `within_owner_threshold_on_the_measured_instance_terms_only`.
+    """
     report = ctx["report"]
     stats, plan = ctx["stats"], ctx["plan"]
     pass_summaries = report.get("pass_summaries", [])
@@ -1388,12 +1524,17 @@ def _phase_timings(ctx):
     phase_a_count = len(phase_a.get("checkpoints", {}))
     registered_updates = PASSES * stats["updates_per_pass"]
     elapsed = report.get("elapsed_seconds", time.monotonic() - ctx["started"])
+    # The registered phases this plan did NOT run. Their cost is in this job's `unmeasured` only if they ran.
+    unmeasured_terms = sorted((["checkpoint_check_phase_b"] if not plan["phase_b"] else [])
+                              + (["ablations"] if not plan["ablations"] else []))
     projection = None
     if seconds_per_update is not None and phase_a_count:
         unmeasured = elapsed - training - sum(evaluation_seconds) - phase_a_seconds
         projected_seconds = (unmeasured + registered_updates * seconds_per_update
                              + (seconds_per_evaluation or 0.0) * len(FULL_PLAN["evaluation_phases"])
                              + phase_a_seconds / phase_a_count * len(PHASE_A_CHECKPOINTS))
+        projected_instance_seconds = projected_seconds + MEASURED_NON_WORKER_OVERHEAD_SECONDS
+        within_on_the_measured_terms_only = projected_instance_seconds <= OWNER_PROJECTION_THRESHOLD_SECONDS
         projection = {"registered_passes": PASSES, "registered_main_updates": registered_updates,
                       "registered_evaluations": len(FULL_PLAN["evaluation_phases"]),
                       "measured_updates": measured_updates, "seconds_per_update": seconds_per_update,
@@ -1404,11 +1545,26 @@ def _phase_timings(ctx):
                       "projected_phase_b_seconds": None,
                       "measured_other_seconds": unmeasured,
                       "projected_worker_seconds": projected_seconds,
+                      "non_worker_overhead_seconds": MEASURED_NON_WORKER_OVERHEAD_SECONDS,
+                      "non_worker_overhead_source": (
+                          "measured, not estimated: 6,064 s of practice instance time minus 5,465.811116456 s "
+                          "of practice worker clock (records/typed_practice_001/receipt_20260917/"
+                          "checkpoints/worker_report.json); pre_design/AWS_SMOKE_S10_PLAN.md:29 writes the "
+                          "same measurement rounded as \"598.2 s\""),
+                      "projected_instance_seconds": projected_instance_seconds,
+                      "instance_seconds_max": contract.INSTANCE_SECONDS_MAX,
                       "worker_deadline_seconds": contract.WORKER_DEADLINE_SECONDS,
                       "headroom_seconds": contract.WORKER_DEADLINE_SECONDS - projected_seconds,
                       "within_deadline": projected_seconds < contract.WORKER_DEADLINE_SECONDS,
+                      "within_instance_seconds_max":
+                          projected_instance_seconds < contract.INSTANCE_SECONDS_MAX,
                       "owner_threshold_seconds": OWNER_PROJECTION_THRESHOLD_SECONDS,
-                      "within_owner_threshold": projected_seconds <= OWNER_PROJECTION_THRESHOLD_SECONDS,
+                      "owner_threshold_applies_to": "projected_instance_seconds",
+                      "unmeasured_instance_terms": unmeasured_terms,
+                      "projected_instance_seconds_is_a_lower_bound": bool(unmeasured_terms),
+                      "within_owner_threshold_on_the_measured_instance_terms_only":
+                          within_on_the_measured_terms_only,
+                      "within_owner_threshold": (within_on_the_measured_terms_only and not unmeasured_terms),
                       "projection_complete": bool(plan["phase_b"]),
                       "projection_incomplete_because": (None if plan["phase_b"] else
                                                         "PHASE B DID NOT RUN IN THIS JOB; an unmeasured phase "
@@ -1416,7 +1572,9 @@ def _phase_timings(ctx):
     body = {"schema": "cncm.typed-pointer-phase-timings/0.1", "phases": ctx["timings"],
             "worker_clock_seconds": elapsed, "worker_deadline_seconds": contract.WORKER_DEADLINE_SECONDS,
             "instance_seconds_max": contract.INSTANCE_SECONDS_MAX, "max_wall_seconds": contract.MAX_WALL_SECONDS,
-            "practice_reference": {"worker_clock_seconds": 5465.811116456, "instance_seconds": 6064,
+            "non_worker_overhead_seconds": MEASURED_NON_WORKER_OVERHEAD_SECONDS,
+            "practice_reference": {"worker_clock_seconds": PRACTICE_WORKER_CLOCK_SECONDS,
+                                   "instance_seconds": PRACTICE_INSTANCE_SECONDS,
                                    "worker_deadline_seconds": contract.WORKER_DEADLINE_SECONDS,
                                    "source": "records/typed_practice_001/receipt_20260917/checkpoints/"
                                              "worker_report.json elapsed_seconds"},
@@ -1447,7 +1605,8 @@ def deliver(results, artifacts, report, *, failed):
         "checkpoint_reload_verified", "scores", "development_scores", "retention_scores", "pass_summaries",
         "initial_model_identity", "whole_container_identity", "model_identity", "phase_timings",
         "schedule_plan_mode", "claimed_bearing_run", "claim_bearing", "checkpoint_check_phase_a_status",
-        "checkpoint_check_phase_b_status", "ablation_status", "artifacts_dropped_from_the_required_set")}
+        "checkpoint_check_phase_b_status", "ablation_status", "artifacts_dropped_from_the_required_set",
+        "degraded_checks", "degraded_checks_absent_means", "report_only_status")}
     summary.update(learning_on_held_back_established=False, boundary=BOUNDARY)
     _publish(artifacts / "measurements.json", summary)
     entries = []
@@ -1580,6 +1739,14 @@ def run(config, root, results, artifacts, attestor=None):
             ctx["ablations"] = _ablations(ctx)
             report["ablation_status"] = ctx["ablations"]["status"]
 
+        # Review R2, MAJOR 2. The three report-only checks record their own failure INSIDE their artifact by
+        # design, so the job's own status cannot carry it. These two fields do: which of them did not reach
+        # `COMPLETE`, and each one's own status with `None` for a check that never started. Report-only is
+        # preserved -- a degraded check is recorded and the job still succeeds.
+        report["report_only_status"] = _report_only_status(ctx)
+        report["degraded_checks"] = _degraded_checks(ctx)
+        report["degraded_checks_absent_means"] = "EVERY_REPORT_ONLY_CHECK_REACHED_COMPLETE"
+
         with _timed(ctx["timings"], "final_source_verification"):
             phase("final_source_verification")
             _final_source_verification(ctx)
@@ -1607,6 +1774,11 @@ def run(config, root, results, artifacts, attestor=None):
         except Exception as salvage_error:                        # noqa: BLE001 - never mask the failure
             report["staging_salvage_failure"] = type(salvage_error).__name__
         report["staging_salvaged"] = salvaged
+        # The same two readings on the FAILED envelope: a check that never started reports `None`, and it is
+        # named in `degraded_checks` rather than left absent (review R2, MAJOR 2).
+        report["report_only_status"] = _report_only_status(ctx)
+        report["degraded_checks"] = _degraded_checks(ctx)
+        report["degraded_checks_absent_means"] = "EVERY_REPORT_ONLY_CHECK_REACHED_COMPLETE"
         report.update(status=FAILED_STATUS, elapsed_seconds=time.monotonic() - started,
                       failure={"schema": FAILURE_SCHEMA, "type": type(error).__name__,
                                "detail": str(error)[:1000]},
