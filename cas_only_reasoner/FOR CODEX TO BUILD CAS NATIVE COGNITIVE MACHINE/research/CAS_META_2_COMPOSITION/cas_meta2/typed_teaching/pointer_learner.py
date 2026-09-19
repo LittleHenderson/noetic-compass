@@ -691,8 +691,16 @@ def _build_container(torch, framework, device):
                 torch.zeros(2, DIRECTED_PAIR_WIDTH, device=device, dtype=torch.float32))
             torch.nn.init.normal_(self.directed_pair_embedding, mean=0.0, std=1.0)
             # ---- phase three: the heads. Small, and none of them sees raw adjacency but the edge head. ----
+            # `2 * WIDTH`, NOT `NODE_FEATURE_COUNT + WIDTH`. `GraphForward.__init__` builds the node head's input
+            # as `cat((self.hidden, self.query_value))` -- the node's hidden state followed by the encoded query --
+            # which is WIDTH + WIDTH columns. Declaring `NODE_FEATURE_COUNT + WIDTH` (8 + 64 = 72) left the head
+            # unable to accept what the forward pass feeds it, and it stayed hidden until the first real training
+            # step on AWS: `runtimeError: mat1 and mat2 shapes cannot be multiplied (244x128 and 72x64)` inside
+            # `node_head`, after preflight, after phase A, after the model build. The sibling heads were always
+            # right -- `edge_head` uses `2 * WIDTH + DIRECTED_PAIR_WIDTH` and `role_head` uses three WIDTHs -- which
+            # is what marks this line as the outlier rather than the forward pass.
             self.node_head = torch.nn.Sequential(
-                torch.nn.Linear(NODE_FEATURE_COUNT + WIDTH, WIDTH, bias=False), torch.nn.GELU(),
+                torch.nn.Linear(2 * WIDTH, WIDTH, bias=False), torch.nn.GELU(),
                 torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, 2, bias=True)).to(device)
             self.edge_head = torch.nn.Sequential(
                 torch.nn.Linear(2 * WIDTH + DIRECTED_PAIR_WIDTH, WIDTH, bias=False), torch.nn.GELU(),
@@ -1045,7 +1053,16 @@ class GraphForward:
         self.edge_rows = model.edge_head(edge_input)
         node_input = torch.cat((self.hidden, self.query_value.reshape(1, WIDTH).expand(
             self.hidden.shape[0], WIDTH)), dim=1)
-        require(node_input.shape == (self.hidden.shape[0], WIDTH + WIDTH), "POINTER_NODE_HEAD_INPUT")
+        # THE GUARD THAT WOULD HAVE CAUGHT IT -- and the reason the first version did not. This line used to
+        # assert only that `node_input` was `WIDTH + WIDTH` wide. That invariant HELD while the head was built for
+        # `NODE_FEATURE_COUNT + WIDTH` and could not accept it, so the guard passed and the failure simply moved
+        # one line down onto `model.node_head(node_input)` -- where it stayed hidden until the first real training
+        # step on AWS (`mat1 and mat2 shapes cannot be multiplied (244x128 and 72x64)`). A guard that restates the
+        # shape it was handed is not a check on the wiring. Comparing against the MODULE'S OWN `in_features` is.
+        require(node_input.shape == (self.hidden.shape[0], 2 * WIDTH), "POINTER_NODE_HEAD_INPUT")
+        require(int(model.node_head[0].in_features) == int(node_input.shape[1]),
+                "POINTER_NODE_HEAD_WIDTH:%d!=%d" % (int(model.node_head[0].in_features),
+                                                    int(node_input.shape[1])))
         self.node_rows = model.node_head(node_input)
 
     def _encode_query(self):
