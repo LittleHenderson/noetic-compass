@@ -121,11 +121,32 @@ GATE_VOID_SOURCE = 'records/typed_pointer_001/evaluate_gates.py:139'
 # course_p01, development_p00, development_p01. Pass 0 is the COLD course pass in any job.
 #
 # `replays: true` requires `passes in evaluations` and `prelast` (`updates >= 2`), both satisfied; `reloads: true`
-# exercises the restore path the checkpoint fixes exist for. `phase_b`, `ablations`, `retention` and `interference`
-# are off: they are the expensive halves (phase B is report-only and the smoke plan's own section 3 skips the
-# ablations), and `retention` is refused unless `interference` is on. NOTE the key-name trap recorded at
-# `pre_design/AWS_SMOKE_S10_PLAN.md:249-270`: the accepted key is the PLURAL `reloads` and its value must be a BOOL
-# -- a list of checkpoint names is refused with `POINTER_PLAN_FLAGS`.
+# exercises the restore path the checkpoint fixes exist for.
+#
+# THE KEY-NAME TRAP, MEASURED 2026-09-19 THROUGH THE WORKER'S OWN `schedule_plan()`, NOT READ OFF PROSE.
+# A rendered form of this request as `"reloads": ["initial", "final"]` is REFUSED with
+# `TYPED_MATCHED:POINTER_PLAN_FLAGS`, and the singular `"reload"` is refused with
+# `POINTER_REDUCED_SCHEDULE_KEYS` because it is not in `REDUCED_SCHEDULE_KEYS` at all -- so the PLURAL key is the
+# only one accepted and its value must be a single BOOL. Measured refusals, reproduced here:
+#   reloads as a list            -> POINTER_PLAN_FLAGS
+#   singular "reload"            -> POINTER_REDUCED_SCHEDULE_KEYS
+#   updates: 1                   -> POINTER_PLAN_REPLAY_UPDATES
+#   evaluations: [0]             -> POINTER_PLAN_RELOAD_EVALUATIONS
+#   {}                           -> POINTER_REDUCED_SCHEDULE_EMPTY
+#   an unknown key               -> POINTER_REDUCED_SCHEDULE_KEYS
+#   phase_a with a name outside PHASE_A_CHECKPOINTS ('prelast') -> POINTER_PLAN_PHASE_A
+# `phase_a` is verified by import to be exactly ('initial', 'pass_01', 'final'), so every name below is legal.
+#
+# WHY EVERY FLAG IS WRITTEN OUT INSTEAD OF OMITTED, WITH THE MEASUREMENT THAT DECIDES IT. Omitting a key does not
+# disable it: the request is layered over the REGISTERED plan, so an omitted flag keeps the registered value. The
+# reviewer's verified-working three-key form `{"passes":1,"updates":8,"evaluations":[0,1],"reloads":true}` is
+# accepted, and it produces **61 artifact names**, because it silently inherits `phase_b: True`, `ablations: True`,
+# `retention: True` and `interference: True` -- adding the retention evaluation phases, the five ablation phases
+# and the held-back set. The form below produces **40 artifact names** and four evaluation phases, which is what
+# the smoke plan's own section 3 prescribes ("phase B skipped ... it is the expensive half", "ablations skipped").
+# It is the same request, made explicit, so nothing the planner reads can drift underneath it. Should the costed
+# scope ever change, the reviewer's three-key form is the measured alternative -- it is NOT a shorter way to say
+# this one.
 #
 # With `updates` set, the claim test fails on `plan["updates"] is None` alone, so `claim_bearing` is False and
 # `schedule_plan.json` records `"mode": "REGISTERED" if claim_bearing else "REDUCED"` -- i.e. `"REDUCED"`, which the
@@ -173,18 +194,47 @@ def validate_reduced_schedule():
     """Run `SMOKE_REDUCED_SCHEDULE` through the WORKER'S OWN `schedule_plan()` and return the accepted plan.
 
     This is the $0 assertion that stops a mis-formed request from being discovered on the instance, after the boot
-    and the package install have been paid for. It is the worker's own rule set, not a copy of it: a request whose
-    plan is refused (`POINTER_PLAN_RELOAD_EVALUATIONS`, `POINTER_PLAN_REPLAY_UPDATES`, `POINTER_PLAN_FLAGS`,
-    `POINTER_PLAN_RETENTION_REQUIRES_INTERFERENCE`, ...) fails here, and so does a request that came back
-    `claim_bearing`, which would mean the smoke had asked for the REGISTERED plan through the smoke path.
+    and the package install have been paid for. Nothing is re-implemented: the worker's own function runs, and
+    every check below reads the plan IT returned. A request whose plan is refused
+    (`POINTER_PLAN_RELOAD_EVALUATIONS`, `POINTER_PLAN_REPLAY_UPDATES`, `POINTER_PLAN_FLAGS`,
+    `POINTER_PLAN_RETENTION_REQUIRES_INTERFERENCE`, `POINTER_PLAN_PHASE_A`, ...) fails here; so does a request that
+    came back `claim_bearing`, which would mean the smoke had asked for the REGISTERED plan through the smoke path.
+
+    EVERY INTENDED VALUE IS PINNED, because the refusal the reviewer reproduced is only the loudest failure mode.
+    The quieter one is a request that is ACCEPTED and means something else -- the reviewer's own measurements show
+    it: `{"passes":1,"updates":8,"evaluations":[0,1],"reloads":true}` is accepted and produces 61 artifact names,
+    because every flag it omits (`phase_b`, `ablations`, `retention`, `interference`) falls back to the REGISTERED
+    plan's value and silently re-enables the expensive halves and the held-back retention phase. `updates` alone
+    would also be torn: `plan["updates"]` comes back as the TRUNCATED count, not what the request asked for.
     """
     worker = launch._probe()
     literal = launch.canonical(SMOKE_REDUCED_SCHEDULE).decode('utf-8').rstrip('\n')
     plan, claim_bearing = worker.schedule_plan(source=literal)
     assert not claim_bearing, 'SMOKE_SCHEDULE_IS_CLAIM_BEARING'
-    assert plan['updates'] == SMOKE_REDUCED_SCHEDULE['updates'], 'SMOKE_SCHEDULE_UPDATES'
-    assert SMOKE_REDUCED_SCHEDULE['passes'] in SMOKE_REDUCED_SCHEDULE['evaluations'], 'SMOKE_SCHEDULE_LAST_EVALUATION'
-    assert 0 in SMOKE_REDUCED_SCHEDULE['evaluations'], 'SMOKE_SCHEDULE_FIRST_EVALUATION'
+    # Only the settings the smoke MEANS to make. Anything omitted from the request is inherited from the
+    # registered plan, which is how a "smaller" request grows into phase B, ablations, interference and
+    # retention; so each one is named here and asserted, not assumed.
+    intended = {'passes': int(1), 'main_updates': int(8), 'evaluations': [0, 1], 'prelast': True,
+                'phase_a': ['initial', 'pass_01', 'final'], 'reload': True, 'replays': True,
+                'phase_b': False, 'ablations': False, 'retention': False, 'interference': False}
+    actual = {'passes': plan['passes'], 'main_updates': plan['passes'] * worker.contract.DESIGN[
+                  'schedule_stratified_updates_per_pass'] if plan['updates'] is None else plan['updates'],
+              'evaluations': plan['evaluations'], 'prelast': plan['prelast'], 'phase_a': plan['phase_a'],
+              'reload': plan['reload'], 'replays': plan['replays'], 'phase_b': plan['phase_b'],
+              'ablations': plan['ablations'], 'retention': plan['retention'],
+              'interference': plan['interference']}
+    for key, expected in intended.items():
+        assert actual[key] == expected, 'SMOKE_SCHEDULE_%s:%r!=%r' % (key.upper(), actual[key], expected)
+    assert SMOKE_REDUCED_SCHEDULE['updates'] == intended['main_updates'], 'SMOKE_SCHEDULE_UPDATES_REQUEST'
+    assert plan['evaluations'] == sorted(set(SMOKE_REDUCED_SCHEDULE['evaluations'])), 'SMOKE_SCHEDULE_EVALUATION_SET'
+    # The two rules the schedule has to satisfy, stated against the PLAN rather than against the request:
+    assert 0 in plan['evaluations'] and plan['passes'] in plan['evaluations'], \
+        'SMOKE_SCHEDULE_RELOAD_EVALUATIONS'
+    assert plan['reloads'] == ["initial", "final"], 'SMOKE_SCHEDULE_RELOAD_SET:%r' % (plan['reloads'],)
+    assert plan['evaluation_phases'] == ('course_p00', 'course_p01', 'development_p00', 'development_p01'), \
+        'SMOKE_SCHEDULE_EVALUATION_PHASES:%r' % (plan['evaluation_phases'],)
+    assert plan['checkpoints'] == ('initial', 'pass_01', 'prelast', 'final'), \
+        'SMOKE_SCHEDULE_CHECKPOINTS:%r' % (plan['checkpoints'],)
     return literal, plan
 
 
@@ -386,6 +436,18 @@ def prepare(seed=None):
              'reduced_schedule_request': SMOKE_REDUCED_SCHEDULE,
              'reduced_schedule_request_literal': literal,
              'reduced_schedule_worker_plan': plan,
+             'reduced_schedule_plan_flags': {key: plan[key] for key in (
+                 'passes', 'updates', 'prelast', 'evaluations', 'evaluation_phases', 'phase_a', 'phase_b',
+                 'ablations', 'retention', 'interference', 'replays', 'reload', 'reloads', 'checkpoints',
+                 'ablation_phases')},
+             'reduced_schedule_artifact_names': len(launch._probe().expected_artifact_names(plan)),
+             'reduced_schedule_written_out_in_full_because_omitted_flags_inherit_the_registered_plan': True,
+             'reduced_schedule_three_key_alternative_measured': {
+                 'request': {'passes': 1, 'updates': 8, 'evaluations': [0, 1], 'reloads': True},
+                 'accepted': True, 'claim_bearing': False, 'artifact_names': 61,
+                 'inherits': {'phase_b': True, 'ablations': True, 'retention': True, 'interference': True},
+                 'note': 'accepted and working, but it re-enables phase B, the ablations, retention and the '
+                         'held-back set, which this plan section 3 skips; NOT a shorter way to say the request above'},
              'reduced_schedule_claim_bearing': False,
              'reduced_schedule_opt_in': 'typed_pointer_launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)',
              'reduced_schedule_package_opt_in_was_none_when_built': True,
