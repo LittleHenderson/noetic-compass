@@ -4,6 +4,46 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (later still) - Pointer build inputs prepared and the ^6 start premise measured
+
+$0.00. No AWS call, no training. Dev-only local GPU use for one probe, not claim-bearing.
+
+INTERFACE CONTRACTS EXTRACTED (two read-only spec sub-agents, no existing file touched):
+`records/typed_pointer_001/pre_design/INTERFACE_SPEC_SHARED.md` (1,415 lines) and
+`INTERFACE_SPEC_PIPELINE.md` (1,919 lines). Every claim carries a file:line anchor. They resolved five source-level
+errors in the design draft before any code was written, the important one being that DG4's intended check CANNOT pass
+as the review worded it: `model_state_identity` digests the whole `module.state_dict()` (learner.py:111, :306), so a
+pointer container can never equal the practice study's start value; the ^6 sub-block must be digested on its own three
+tensors. Also: `restore_checkpoint` compares the module-level `profile()` (learner.py:336) over a transitive list of 22
+files, so a new learner must ship its own `profile()`; two different encoder identity digests exist (predictions carry
+`15d67197...`, the identity dict carries `a00930c5...`); `matched._framework` lives in
+`cncm/typed_matched_worker.py:43`; and the `whole` slot's symbol order equals alias order in the frozen bank today
+(0 of 64 worlds differ).
+
+^6 START PREMISE MEASURED (local RTX 4070, dev only, not claim-bearing). The hand-off claims that for the same seed the
+^6 block starts from exactly the practice study's weights. Built `matched._framework(torch, "cuda", seed)` and compared
+against each `receipt_<seed>/checkpoints/initial.pt` using the learner's OWN identity algorithm. The algorithm is sound:
+recomputing `state_identity` over the checkpoint's own `model_state` returns its recorded value exactly
+(`91279389cfc22df46415dd56a26b1285fb3ef1ecd59e3aaccef553564528c12e` for seed 20260919). The fresh build does NOT
+reproduce it, but the worst absolute per-tensor difference is 7.450580596923828e-09 and `right.weight[0,0]` is
+bit-identical at 0.11040803790092468 — the same weights, differing only in the last bits. Because `state_identity` is a
+byte-exact hash, DG4's I3 and smoke S5 are therefore **in-job checks on the AWS instance only** and must not be run
+locally. The practice study's own I3 passed on AWS, which is what establishes bit-exactness there. Record:
+`records/typed_pointer_001/pre_design/measurements/framework_probe/FINDINGS.md`.
+
+CONTRACT PINS GENERATED. `records/typed_pointer_001/pre_design/contract_pins/checkpoint_pins.json` carries the exact
+MATERIAL rows for the 18 shipped checkpoints: 18 files, **15,259,777 bytes** (9 `.pt` = 15,053,349 bytes, 9 sidecars),
+all nine sidecar sha256 values agree with the real file bytes, 3 distinct `run_identity_digest` values (one per seed) and
+9 distinct `model_state_identity` values. The byte total matches the pipeline review's figure exactly. The new contract
+must list these paths in MATERIAL or the launcher rejects them (`PRACTICE_SOURCE_MEMBER_SCOPE`, RK5).
+
+ALSO VERIFIED: the pipeline review's measurements re-ran clean (held digest `668e6ce73c426d1fcf8f2391e1a08d90c045ffb37fba95fc64e2658f5369ab1d`,
+excluded `b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621`, batches
+`daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857`; all 9 restore-identity checks true; eligible 45 =
+10 DIRECT_READ + 29 RELATIONAL + 6 role_set; `p = 0.0009765625` at b=10 c=0). Test baseline established: **89 passed in
+328.56 s**, run with the system Python from the CNCM root — the CUDA torch lives in `~/venvs/cas-gpu`, which has no
+pytest, so pure tests and GPU smoke use different interpreters.
+
 ## 2026-09-19 UTC (later) - Pointer hand-off verified and its claim state corrected; owner settled all three open decisions
 
 $0.00. No AWS call, no torch, no launch.
