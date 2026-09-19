@@ -1,0 +1,21 @@
+18 checkpoint rows in MATERIAL                             PASS  got 18
+every pin row equals checkpoint_pins.json                  PASS  []
+total checkpoint bytes 15259777                            PASS  got 15259777
+pin rows carry exactly bytes+sha256                        PASS  []
+pattern accepts the pointer job                            PASS  
+pattern rejects the practice job                           PASS  
+bucket <= 63 chars and valid                               PASS  len=63
+MIN_PASSING_B == 7                                         PASS  7
+2**-7 <= 0.01                                              PASS  0.0078125000
+tiers unchanged                                            PASS  
+held digest matches practice                               PASS  
+excluded digest matches practice                           PASS  
+batches digest matches practice                            PASS  
+split counts 127/358/79                                    PASS  127/358/79
+empty REMOVALS -> composition equals verified values       PASS  {"parts": 5, "edge_account": 5, "reach": 9, "correspondence": 5, "analogy": 5}
+empty REMOVALS -> removals_measured is False               PASS  
+empty REMOVALS -> population_complete is False             PASS  
+empty REMOVALS -> known removals recorded but not applied  **FAIL**  total=29
+
+VERDICT: FAILURES  (18 checks, 1 failed)
+   FAILED: empty REMOVALS -> known removals recorded but not applied
