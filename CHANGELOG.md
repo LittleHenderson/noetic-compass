@@ -4,6 +4,59 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (pre-flight, $0) - CORRECTION: R1-1 IS fixed; my acceptance test went stale and I reported a fixed blocker as open
+
+**I was wrong, and this row exists to correct the record.**
+
+For roughly ten goal rounds I reported R1's BLOCKER 1 — "the label's key test cannot fail" — as **still open**,
+based on a mutation that swapped `population_ids` for `eligible_all` at the call site inside `evaluate()`. That
+mutation kept printing `SELFTEST_PASS`. **It kept passing because it had become a no-op.**
+
+When the gate reader agent refactored the call path, `population_ids` stopped appearing at the call site at all.
+My substitution therefore rewrote a string that no longer existed, changed nothing, and "passed" — which I read as
+the fix failing. **I was testing my own stale test, not their fix.** A reader who checks the mechanism
+(`ast`-parsed the file for calls into the label path) found it immediately: `self_test()` now *does* call
+`evaluate()`, and `evaluate()` calls a factored `primary_keys(...)`.
+
+**The fix is real, and it is stronger than a test.** `evaluate_gates.py:341-366`:
+
+```python
+def primary_keys(contract, population, eligible, kind_of):
+    if population is None:
+        return []
+    tier = contract.DESIGN.get('primary_label_tier')
+    members = set(contract.TIERS.get(tier, ()))
+    keys = sorted(question for question in population['question_ids'] if kind_of.get(question) in members)
+    if set(keys) != set(population['question_ids']) or not set(keys) <= set(eligible):
+        return []
+    return keys
+```
+
+Every path out of it is fail-closed. No population → `[]`. A key set that is not **exactly** the population →
+`[]`. A key set outside the eligible boundary → `[]`. And the tier is read from the **contract**, so a contract
+registering a different tier yields an **empty** set rather than a wider one — which is precisely the FP1
+regression (label keyed on the all-kinds result or on DIRECT_READ) made **structurally impossible** rather than
+merely detected. `evaluate()` can no longer hand `label_decision` any other question set, whatever anyone edits.
+
+**What went wrong in my process, recorded because the process is the repeatable part.** I wrote a byte-mutation
+test and then treated its verdict as authoritative across a refactor of the very code it mutated. A mutation test
+is only valid against the exact shape it was written for; when the shape changes it does not fail loudly, it
+**silently stops testing**. The correct habit, now adopted: before trusting a mutation result, confirm the mutated
+string still exists at the mutated site, and assert the mutation actually changed the file. I did the second half
+of that check at the start — `assert tier_line in pinned` — and did not do it at the call site, which is exactly
+where it mattered.
+
+**The corrected standing of the two reviews:**
+
+| | |
+|---|---|
+| R2 | **all findings closed** — B1, B2, B3, M1, M2, M3, M4 |
+| R1 | **all findings closed** — R1-1, R1-2, R1-3, R1-4, R1-6, R1-7, R1-8, R1-9, R1-10, R1-11, R1-15 |
+
+Nothing is left open from either adversarial review. **No gate was weakened to reach this state**: population 18,
+`MIN_PASSING_B` 7, `REMOVALS` 11, and the frozen population digest are all unchanged, and the reader's fixes were
+additive or fail-closed throughout.
+
 ## 2026-09-19 UTC (pre-flight, $0) - R1 returns NO-GO as well: the label's key test cannot fail, and Phase A's ordering evidence is a hardcoded literal
 
 **No spend. No AWS call. No study run.** Review R1 (leaks, shortcuts and custody) reported. Verdict **NO-GO**:
