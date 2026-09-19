@@ -83,9 +83,14 @@ Decisions already taken:
 - **The node rank feature IS included** (resolves DG3). Rationale: without it the machine trains on contradictory
   targets for the order-dependent reach questions, and those questions are answerable only by that order. A
   **rank-only, no-learning baseline is registered** and the questions it solves are removed from the gate population.
-- **`OPEN:` whether node LABEL words survive at all.** Lens B is measuring whether held-world labels occur in
-  training; the outgoing agent recommends dropping them (no rule uses them, and they add a memorisation channel).
-  Do not finalise this line until lens B reports.
+- **`RESOLVED 2026-09-19: node LABEL words are DROPPED from the input.`** Lens B has reported and the evidence is
+  one-sided. `checker.py:97` states in terms that *"node labels, root choice and archetypes do not vote"* — the only
+  mention of a label in the checker, and it says they are unused. All **20 of 20** held-world node labels occur in
+  trained record text (7,160 occurrences; the reader would embed them 30,420 times across the schedule), which is the
+  same family of memorisation channel the old machine had. And for the two kinds where genuine relational learning
+  would be measured, labels carry nothing: `correspondence` paired worlds share **no** label (0 of 20 held, 0 of 54
+  trained), and 123 of 123 correct `analogy` candidates have zero label overlap. So the node carries its raw flags,
+  its registered rank, and its adjacency, and no words.
 
 ## 3. `cas_meta2/typed_teaching/pointer_learner.py` (torch only when called)
 

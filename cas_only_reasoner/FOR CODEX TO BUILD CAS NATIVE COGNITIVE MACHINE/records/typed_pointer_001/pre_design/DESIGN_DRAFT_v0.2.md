@@ -415,10 +415,25 @@ course never teaches; it is reported as "unpractised rule" and is never gated on
 baseline is registered, AND the questions that baseline solves are removed from the gate population before the run
 (`INTERFACE_SPEC_POINTER.md:85`). This is the DG3 resolution in full: feature, baseline, removal.
 
-PENDING on lens B (leaks/shortcuts/vacuity): whether node LABEL words survive in the input at all. The outgoing agent
-recommends dropping them, because no rule uses them and they only add a memorisation channel and a tokenizer-time cost
-(`records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md:202-204`). `INTERFACE_SPEC_POINTER.md:86-88` marks this `OPEN:` and
-instructs: do not finalise this line until lens B reports.
+**RESOLVED 2026-09-19 — node LABEL words are DROPPED from the input.** The question was held open pending lens B, and
+lens B has now reported. Four independent measurements agree, and one of them is decisive on its own:
+
+1. **No answer rule can use them.** `checker.py:97` says so in terms, as the docstring of the isomorphism enumerator:
+   *"Enumerate every mapping; node labels, root choice and archetypes do not vote."* That is the only mention of a
+   label anywhere in the checker.
+2. **They are a memorisation channel for held worlds.** All **20 of 20** held-world node labels occur somewhere in
+   trained record text — 7,160 (label, trained record) occurrences — and the reader would embed a held-world label
+   **30,420** times across the schedule (`measurements/learnability_review/lb10_labels_out.txt`).
+3. **They carry no signal for the kinds that matter.** The paired worlds of a `correspondence` question share **no**
+   node label (0 of 20 held, 0 of 54 trained, 0 of 14 excluded), and **123 of 123** correct `analogy` candidates have
+   zero label overlap with the focus world (`lb14_order_and_labels_out.txt`).
+4. **Cost is not the argument, but it agrees.** Uncached, the full run needs 284,900 label encodes at a measured
+   0.0219 s per call = **6,225 s** of a 12,300 s deadline; a 230-entry cache costs 5.0 s. So caching would fix the
+   cost — which is why the cost alone would not have justified dropping them. The leak is what justifies it.
+
+So the node carries its raw flags, its registered rank, and its adjacency — and no words. This also removes the
+tokenizer-time risk from the input path entirely: only the 136 distinct declaration strings and the `role_set`
+excerpt remain to be tokenised, and both are cached once.
 
 PENDING on lens A (leaks/shortcuts/vacuity): the complete removal list for the gate population, beyond the known FP2
 and DG3 entries. See §6.
