@@ -373,6 +373,14 @@ network module directly (venv `~/venvs/cas-gpu`, dev only); WSL2 Ubuntu exists (
 - A "reported, not gating" phase can still kill a job (RK6).
 - `python -O` strips `assert`: every stop in a spend path must be an explicit check.
 - Bash heredocs with quotes break easily on this machine: write scripts to the scratchpad and run them.
+- **The worktree lives under OneDrive, and files can transiently vanish from a directory listing.** On 2026-09-19
+  `pointer_inputs.py` was present at 25,627 bytes, then absent from both `Test-Path` and `Get-ChildItem`, then present
+  again **with the same size and the same modification timestamp**. It was never deleted: OneDrive had placed it as a
+  cloud-only placeholder. Two consequences. (a) **Do not conclude a file is lost from one failed listing** — re-check,
+  and compare size and mtime before reacting; the module's compiled bytecode in `__pycache__/` is further evidence it
+  existed and imported. (b) **Snapshot every new file with a commit the moment it first appears.** An uncommitted
+  hour of work is one sync glitch from being unrecoverable, and committing an in-flight file cannot disturb the agent
+  writing it — the agent's later edits simply show as modifications.
 
 ---
 
