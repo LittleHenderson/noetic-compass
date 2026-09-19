@@ -181,7 +181,7 @@ def verify_bootstrap_embedding():
     return sha256(bootstrap.encode('utf-8')).hexdigest(), line
 
 
-def smoke_documents(job, identity, *, seed):
+def smoke_documents(job, identity, *, seed, contract_document):
     """The three admission documents for ONE smoke job, built from the launcher's own constants."""
     config = launch.worker_config(job, source_sha=identity['source_sha'])
     bucket = job + '-' + launch.shared.RESOURCE_PLAN['account']
@@ -202,22 +202,44 @@ def smoke_documents(job, identity, *, seed):
     authority = {'schema': launch.AUTHORITY_SCHEMA, 'job': job,
                  **{key: identity[key] for key in ('source_sha', 'archive_sha256', 'manifest_sha256')},
                  **launch.BOUNDS, 'candidate': launch.CANDIDATE, 'owner_authorization_sha256': owner_sha256,
-                 'inputs_sha256': launch.frozen_inputs_hash(),
+                 'inputs_sha256': launch.frozen_inputs_hash(identity['source_sha']),
                  'design_sha256': launch.digest(launch.canonical(launch.DESIGN)),
-                 'evidence_contract_sha256': launch.run_evidence.contract_digest(launch.evidence_contract()),
+                 'evidence_contract_sha256': launch.run_evidence.contract_digest(contract_document),
                  'worker_config': config}
     return owner, request, authority
 
 
-def validate_documents(directory_writer, owner, request, authority):
+def smoke_contract(plan, literal):
+    """The SMOKE's evidence contract -- the REDUCED plan's names -- for this job's authority.
+
+    THE LAUNCHER'S REGISTERED CONTRACT CANNOT BE USED HERE, and this is the fix for review R2's B2.
+    `launch.evidence_contract()` lists the REGISTERED 10-pass plan's names (99 of them plus the envelope and
+    manifest), while a reduced smoke writes only the reduced plan's names. `run_evidence.verify_byte_integrity`
+    then found the rest missing, set `INCOMPLETE`, `completed_deliverable` came back false, `main()` returned exit
+    code 1 for a PERFECT run, and `execute_study.py`'s `stop_unless(code == 0, 'INCOMPLETE_JOB')` stopped the
+    study at the first job. The correction is the same one the smoke plan's section 5 already made on the WORKER
+    side: the requirement is the plan the job actually runs.
+
+    NOTHING IS RELAXED. The names come from `worker.expected_artifact_names(plan)` -- the worker's own function,
+    the same one that derives its recorded `required_artifacts` -- every name is still required, and both
+    `verify_byte_integrity` and `completed_deliverable` are untouched. The three claim-bearing jobs keep the
+    registered contract unchanged: `prepare_study.py` still writes
+    `contract_digest(launch.evidence_contract())` into their authorities, and `SMOKE_REQUEST` is `None` in their
+    process, so `job_evidence_contract()` hands them exactly that contract back.
+    """
+    return launch.evidence_contract(plan, source=literal)
+
+
+def validate_documents(directory_writer, owner, request, authority, contract_document):
     """The launcher's OWN three validators, called in `main()`'s and `execute()`'s order.
 
     `validate_owner` reads the owner record from a path and hashes its BYTES, so the record is written first
     by the caller's own writer and then read back. An admission set that does not pass here cannot pass the
-    launcher.
+    launcher. The authority is validated against the SMOKE's contract, which is the contract
+    `job_evidence_contract()` will hand this job at launch time while `SMOKE_REQUEST` is set.
     """
     launch.validate_request(request)
-    launch.validate_authority(authority)
+    launch.validate_authority(authority, contract_document)
     launch.validate_owner(directory_writer, authority)
 
 
@@ -243,21 +265,25 @@ def dry_run(seed=None):
     # `worker_config`) is the real one and is checked for real.
     placeholder = 'f' * 64
     identity = {'source_sha': source_sha, 'archive_sha256': placeholder, 'manifest_sha256': placeholder}
-    owner, request, authority = smoke_documents(job, identity, seed=seed)
     # Both of the smoke's own $0 checks, in the same order `prepare()` runs them: the schedule through the
     # worker's own `schedule_plan()`, then the environment line through the generated bootstrap.
     literal, plan = validate_reduced_schedule()
     launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)
     bootstrap_sha256, assignment = verify_bootstrap_embedding()
+    contract_document = smoke_contract(plan, literal)
+    owner, request, authority = smoke_documents(job, identity, seed=seed, contract_document=contract_document)
     scratch = HERE / '_smoke_dry_run_owner.json'
     scratch.write_bytes(launch.canonical(owner))
     try:
         launch.validate_request(request)
-        launch.validate_authority(authority)
+        launch.validate_authority(authority, contract_document)
         launch.validate_owner(scratch, authority)
     finally:
         scratch.unlink()
-    print(json.dumps({'validated_by': ['launch.validate_request', 'launch.validate_authority',
+    assert contract_document['required_count'] < launch.evidence_contract()['required_count'], \
+        'SMOKE_CONTRACT_NOT_SMALLER_THAN_THE_REGISTERED_CONTRACT'
+    print(json.dumps({'validated_by': ['launch.validate_request',
+                                       'launch.validate_authority(authority, smoke_contract(plan, literal))',
                                        'launch.validate_owner'],
                       'job': job, 'seed': seed, 'source_sha': source_sha,
                       'bucket': job + '-' + launch.shared.RESOURCE_PLAN['account'],
@@ -271,7 +297,14 @@ def dry_run(seed=None):
                       'reduced_schedule': SMOKE_REDUCED_SCHEDULE, 'reduced_schedule_literal': literal,
                       'reduced_schedule_worker_plan': plan,
                       'generated_bootstrap_sha256': bootstrap_sha256,
-                      'generated_bootstrap_reduced_schedule_line': assignment}, sort_keys=True), flush=True)
+                      'generated_bootstrap_reduced_schedule_line': assignment,
+                      'smoke_evidence_contract_required_count': contract_document['required_count'],
+                      'registered_evidence_contract_required_count':
+                          launch.evidence_contract()['required_count'],
+                      'smoke_evidence_contract_sha256':
+                          launch.run_evidence.contract_digest(contract_document),
+                      'registered_evidence_contract_sha256':
+                          launch.run_evidence.contract_digest(launch.evidence_contract())}, sort_keys=True), flush=True)
 
 
 def prepare(seed=None):
@@ -300,9 +333,10 @@ def prepare(seed=None):
     directory.mkdir()
     identity = {'source_sha': package['source_sha'], 'archive_sha256': package['archive_sha256'],
                 'manifest_sha256': package['manifest_sha256']}
-    owner, request, authority = smoke_documents(job, identity, seed=seed)
+    owner, request, authority = smoke_documents(job, identity, seed=seed,
+                                                contract_document=smoke_contract(plan, literal))
     owner_pin = write(directory / 'owner.json', owner)
-    validate_documents(directory / 'owner.json', owner, request, authority)
+    validate_documents(directory / 'owner.json', owner, request, authority, smoke_contract(plan, literal))
     jobs = [{'job': job, 'condition': contract.CONDITION, 'model_seed': seed,
              'bucket': job + '-' + launch.shared.RESOURCE_PLAN['account'],
              'request': write(directory / 'request.json', request),
@@ -329,6 +363,16 @@ def prepare(seed=None):
              'reduced_schedule_package_opt_in_was_none_when_built': True,
              'generated_bootstrap_sha256': bootstrap_sha256,
              'generated_bootstrap_reduced_schedule_line': assignment,
+             'evidence_contract': 'SMOKE_REDUCED_PLAN_NAMES_NOT_THE_REGISTERED_TEN_PASS_CONTRACT',
+             'evidence_contract_sha256': launch.run_evidence.contract_digest(smoke_contract(plan, literal)),
+             'evidence_contract_required_count': smoke_contract(plan, literal)['required_count'],
+             'registered_evidence_contract_sha256':
+                 launch.run_evidence.contract_digest(launch.evidence_contract()),
+             'registered_evidence_contract_required_count': launch.evidence_contract()['required_count'],
+             'evidence_contract_launcher_side': 'typed_pointer_launch.job_evidence_contract()',
+             'exit_code_rule': ('launch.main() returns 0 IF AND ONLY IF completed_deliverable is true, which '
+                                'needs byte_verdict COMPLETE_VERIFIED against THIS contract; the registered '
+                                'contract was the reason a perfect reduced run returned 1'),
              'reduced_schedule_gate_void_path': GATE_VOID_PATH, 'gate_void_source': GATE_VOID_SOURCE,
              'estimate': SMOKE_ESTIMATE, 'reservation_per_job_usd': launch.RESERVATION_USD,
              'maximum_new_reservation_usd': MAXIMUM_NEW_RESERVATION_USD,

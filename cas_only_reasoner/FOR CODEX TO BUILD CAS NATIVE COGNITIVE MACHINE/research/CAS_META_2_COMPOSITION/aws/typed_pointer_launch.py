@@ -17,6 +17,7 @@ Source/package admission is pure. Only explicit execute enters provider code.
 from __future__ import annotations
 
 import ast
+from hashlib import sha1
 import io
 import json
 from pathlib import Path
@@ -217,12 +218,103 @@ def _probe():
     return probe
 
 
-def frozen_inputs():
-    return contract.input_inventory(PROJECT)
+# ==================================================================================================================
+# THE INPUT INVENTORY IS READ FROM THE COMMIT, NOT FROM THE WORKING TREE (review R2, MAJOR 3).
+#
+# `contract.input_inventory(root)` reads the WORKING TREE, while `git_package_bytes` fetches every package member
+# with `git show <commit>:<GIT_PREFIX><name>`. On a dirty tree those disagree, and the dangerous direction is
+# silent: `authority["inputs_sha256"]` is bound at freeze time and re-derived by `validate_authority` from
+# whatever the working tree says, while the packaged config carries the same rows -- so a manifest could admit
+# working-tree hashes while the package carries `git show` bytes, and both would still validate.
+#
+# The rows below are therefore read out of GIT at the commit the package is built from, so "committed" and
+# "admitted" are the same bytes BY CONSTRUCTION, and the authority, the worker config and the package manifest all
+# come from this one source. `contract.input_inventory(PROJECT)` is still read for the ROW LIST (the material
+# pins are the contract's own), and every row it claims is then verified against the commit: the blob must exist,
+# and the commit's bytes must hash to the digest and length the inventory declares. A working-tree edit that
+# changes an admitted file therefore CANNOT be admitted silently -- it fails here, before a package is written.
+#
+# The sha256 is computed over git's own object bytes (`blob <len>\0<content>`), which is what git hashes, so the
+# check compares the object git stores against the digest the inventory declares rather than trusting either side.
+# ==================================================================================================================
+_INVENTORY_CACHE = {}
+# Git resolves a PATHS PEC relative to the working directory, while `<commit>:<path>` is resolved from the
+# repository root. `PROJECT` is this package's directory, three levels below the worktree root, so `ls-tree`
+# run there matches nothing and would report every row as missing. The repository root is therefore resolved
+# once, from git itself, and every inventory command runs there.
+GIT_ROOT = Path(shared._run_git(["-c", "core.autocrlf=false", "rev-parse", "--show-toplevel"],
+                                PROJECT).decode("utf-8").strip())
+require(GIT_ROOT.is_dir(), "POINTER_GIT_ROOT")
 
 
-def frozen_inputs_hash():
-    return digest(canonical(frozen_inputs()))
+def _git_object_id(raw):
+    """Git's own object id for these bytes: SHA-1 over `blob <len>\\0<content>`. READ ONLY."""
+    return sha1(b"blob %d\0" % len(raw) + raw).hexdigest()
+
+
+def _committed_rows(source_sha, root=None, *, repository=None):
+    """The input inventory of `source_sha`, with every row's bytes read from the COMMIT."""
+    repository = GIT_ROOT if repository is None else repository
+    rows = contract.input_inventory(PROJECT if root is None else root)
+    names = [row["path"] for row in rows]
+    require(len(set(names)) == len(names), "POINTER_INVENTORY_ROWS_NOT_UNIQUE")
+    require(all(type(row["path"]) is str and type(row["bytes"]) is int and type(row["sha256"]) is str
+                for row in rows), "POINTER_INVENTORY_ROW_SHAPE")
+    blobs = {}
+    for name in names:
+        # ONE command does both jobs: it proves the commit CARRIES the row and returns the commit's bytes for it,
+        # so a row the commit does not have is refused before any further work.
+        try:
+            blobs[name] = shared._run_git(["-c", "core.autocrlf=false", "show",
+                                           source_sha + ":" + shared.GIT_PREFIX + name], repository)
+        except ValueError as error:
+            raise ValueError("POINTER_INVENTORY_BLOB_MISSING:%s:%s" % (name, str(error)[:200])) from error
+    # Take the blob id and size from git's own tree rather than from the bytes just read, so one side of the
+    # comparison is git's record of the commit and the other is the content that tree names. The pathspec is the
+    # inventory's OWN top-level directories, derived rather than assumed, so a new directory cannot be missed.
+    trees = tuple(sorted({name.split("/")[0] + "/" for name in names}))
+    sizes = {}
+    listing = shared._run_git(["-c", "core.autocrlf=false", "ls-tree", "-r", "-l", "-z", source_sha,
+                               "--"] + [shared.GIT_PREFIX + tree for tree in trees], repository)
+    for entry in listing.split(b"\0"):
+        if not entry:
+            continue
+        meta, _, path = entry.partition(b"\t")
+        fields = meta.split()
+        sizes[path.decode("utf-8").removeprefix(shared.GIT_PREFIX)] = (fields[2].decode("ascii"), int(fields[3]))
+    out = []
+    for row in rows:
+        path = row["path"]
+        require(path in blobs and path in sizes, "POINTER_INVENTORY_BLOB_MISSING:" + path)
+        raw = blobs[path]
+        object_id, size = sizes[path]
+        # A row whose declared length is not the commit's is a WORKING-TREE edit that the tree would otherwise
+        # admit: report it as that, with both numbers, instead of as a length mismatch.
+        require(size == row["bytes"],
+                "POINTER_INVENTORY_WORKING_TREE_DIVERGED:%s:inventory=%d,commit=%d"
+                % (path, row["bytes"], size))
+        require(len(raw) == size, "POINTER_INVENTORY_BLOB_LENGTH:" + path)
+        require(_git_object_id(raw) == object_id, "POINTER_INVENTORY_OBJECT_ID_MISMATCH:" + path)
+        require(digest(raw) == row["sha256"], "POINTER_INVENTORY_NOT_COMMITTED:" + path)
+        out.append({**row, "committed_content_sha256": digest(raw)})
+    return out
+
+
+def frozen_inputs(source_sha=None):
+    """The inventory rows for `source_sha` (default: the current HEAD), read from that commit.
+
+    Called with no argument it is the inventory of HEAD, which is what a freeze binds; the return shape is
+    unchanged from `contract.input_inventory`, plus the byte digest of the committed content.
+    """
+    commit = source_sha or shared._run_git(["-c", "core.autocrlf=false", "rev-parse", "HEAD"], PROJECT).decode().strip()
+    require(type(commit) is str and shared.HEX40.fullmatch(commit), "POINTER_INVENTORY_COMMIT")
+    if commit not in _INVENTORY_CACHE:
+        _INVENTORY_CACHE[commit] = _committed_rows(commit)
+    return [dict(row) for row in _INVENTORY_CACHE[commit]]
+
+
+def frozen_inputs_hash(source_sha=None):
+    return digest(canonical(frozen_inputs(source_sha)))
 
 
 def worker_config(job, *, source_sha):
@@ -247,7 +339,13 @@ def _check_bounds(document, code):
         require(type(document.get(key)) is type(expected) and document[key] == expected, code + ":" + key)
 
 
-def validate_authority(authority):
+def validate_authority(authority, evidence_contract=None):
+    """The authority's own fields, plus the three byte bindings RK9 requires.
+
+    `evidence_contract` is the contract THIS job will run under, and it defaults to the registered 10-pass one.
+    The smoke path passes its reduced contract (`smoke_evidence_contract()`), because the authority it froze
+    carries that contract's digest; the three claim-bearing jobs keep the default, whose bytes are unchanged.
+    """
     identity = {"job", "source_sha", "archive_sha256", "manifest_sha256"}
     fields = identity | set(BOUNDS) | {"schema", "candidate", "owner_authorization_sha256", "inputs_sha256",
                                        "design_sha256", "evidence_contract_sha256", "worker_config"}
@@ -260,8 +358,10 @@ def validate_authority(authority):
     # The three bindings that enforce RK9: the live code inventory (now including the eighteen
     # checkpoints through the pointer contract), the pointer design bytes, and the pointer evidence
     # contract, which is itself derived from the pointer worker's EXPECTED_ARTIFACTS.
-    for key, expected in (("inputs_sha256", frozen_inputs_hash()), ("design_sha256", digest(canonical(DESIGN))),
-                          ("evidence_contract_sha256", run_evidence.contract_digest(evidence_contract()))):
+    contract = evidence_contract if evidence_contract is not None else globals()["evidence_contract"]()
+    for key, expected in (("inputs_sha256", frozen_inputs_hash(authority["source_sha"])),
+                          ("design_sha256", digest(canonical(DESIGN))),
+                          ("evidence_contract_sha256", run_evidence.contract_digest(contract))):
         require(authority[key] == expected, "POINTER_AUTHORITY_BINDING:" + key)
     expected = worker_config(authority["job"], source_sha=authority["source_sha"])
     require(type(authority["worker_config"]) is dict and canonical(authority["worker_config"]) == canonical(expected),
@@ -346,24 +446,77 @@ def render_worker():
     return ast.unparse(ast.fix_missing_locations(tree)) + "\n"
 
 
-def evidence_contract():
+def evidence_contract(plan=None, *, source=None):
+    """The pre-run evidence contract for ONE plan. With `plan=None` this is the REGISTERED 10-pass contract.
+
+    THE PLAN IS AN ARGUMENT BECAUSE A REDUCED RUN WRITES FEWER NAMES FROM THE DESIGN (review R2, B2). This
+    function used to take no argument and list `_probe().EXPECTED_ARTIFACTS`, which is
+    `expected_artifact_names(FULL_PLAN)` for the registered ten passes. A smoke job runs the reduced plan and
+    writes only that plan's names, so `run_evidence.verify_byte_integrity` found the rest missing, set
+    `INCOMPLETE`, and `completed_deliverable` came back false -- a PERFECT reduced run returned exit code 1 and
+    `execute_study.py`'s `stop_unless(code == 0, 'INCOMPLETE_JOB')` stopped the study. The smoke plan's own
+    section 5 had already corrected this on the WORKER side (the worker checks the plan it actually ran); this is
+    the same correction on the LAUNCHER side.
+
+    NOTHING IS RELAXED: the requirement list is still every name the plan produces, `verify_byte_integrity` still
+    requires all of them, and `completed_deliverable` still requires `COMPLETE_VERIFIED`. The three claim-bearing
+    jobs keep the no-argument form, whose bytes are unchanged: `plan=None` resolves to `_probe().FULL_PLAN`, which
+    IS the plan `EXPECTED_ARTIFACTS` was derived from, and the note text is recomputed from the plan's own
+    numbers, which reproduce the previously hard-coded ones exactly (1,470 main, 16 interference, 2 replay).
+
+    `source` is the literal JSON request the generated bootstrap carries, when a smoke asked for one; it is
+    recorded in the contract so the frozen requirement names the schedule it belongs to.
+    """
+    worker = _probe()
+    plan = worker.FULL_PLAN if plan is None else plan
     names = {"results/result.json": "terminal envelope", "results/result.json.sha256": "envelope digest",
              "results/artifacts/manifest.json": "artifact inventory"}
     names.update({"results/artifacts/" + name: "complete typed-pointer worker evidence"
-                  for name in _probe().EXPECTED_ARTIFACTS})
-    return run_evidence.contract(EXPERIMENT["profile"], [
+                  for name in worker.expected_artifact_names(plan)})
+    parts = [plan["passes"] * contract.DESIGN["schedule_stratified_updates_per_pass"]
+             - (contract.INTERFERENCE_UPDATES if plan["interference"] else 0)
+             - (contract.REPLAY_UPDATES if plan["replays"] else 0),
+             contract.INTERFERENCE_UPDATES if plan["interference"] else 0,
+             contract.REPLAY_UPDATES if plan["replays"] else 0]
+    document = run_evidence.contract(EXPERIMENT["profile"], [
         run_evidence.requirement(key, title, kind="json" if key.endswith(".json") else "file")
         for key, title in names.items()], notes=[
             "%d passes: %d main, %d interference and %d validation replay updates, %d actual total."
-            % (contract.PASSES, OPTIMIZER_UPDATES_MAX - contract.INTERFERENCE_UPDATES - contract.REPLAY_UPDATES,
-               contract.INTERFERENCE_UPDATES, contract.REPLAY_UPDATES, OPTIMIZER_UPDATES_MAX),
+            % (plan["passes"], parts[0], parts[1], parts[2], parts[0] + parts[1] + parts[2]),
             "No held-back record enters a training batch; all declared checkpoints must arrive.",
             "One seed only; the three-seed gate reading is a separate deterministic program."])
+    if source is not None:
+        document["reduced_schedule_source"] = source
+        document["claim_bearing"] = False
+    return document
 
 
-def package_data_files():
+def smoke_plan(source=None):
+    """`(plan, literal)` for the reduced schedule the smoke opt-in asks for. Refuses if no smoke was asked for."""
+    literal, plan = smoke_request_literal(source)
+    return plan, literal
+
+
+def smoke_evidence_contract(source=None):
+    """The SMOKE's own evidence contract: the names the REDUCED plan produces, and nothing else.
+
+    Deliberately NOT the registered contract: the full name list is bound into the three claim-bearing jobs'
+    authorities by `prepare_study.py`, and swapping it for them is exactly what must not happen. This contract is
+    reached only while `SMOKE_REQUEST` is set, so a claim-bearing run cannot pick it up.
+    """
+    plan, literal = smoke_plan(source)
+    return evidence_contract(plan, source=literal)
+
+
+def package_data_files(rows=None):
+    """Every member name the package carries: the packaging sources, the wheel requirements and the input rows.
+
+    The rows come from the SAME commit-read inventory the authority binds (`frozen_inputs`), so the file set and
+    the admitted byte set cannot disagree.
+    """
+    rows = frozen_inputs() if rows is None else rows
     return tuple(sorted(set(shared.PILOT + name for name in PACKAGING_SOURCES)
-                        | {shared.WORKER_REQUIREMENTS} | {item["path"] for item in frozen_inputs()}))
+                        | {shared.WORKER_REQUIREMENTS} | {item["path"] for item in rows}))
 
 
 def git_package_bytes(root, commit, name):
@@ -533,8 +686,8 @@ class TypedPointerProvider(matched.TypedMatchedProvider):
         ]
         return "\n".join(lines)
 
-    def bind_authority(self, authority):
-        validate_authority(authority)
+    def bind_authority(self, authority, evidence_contract=None):
+        validate_authority(authority, evidence_contract)
         for key in ("job", "source_sha", "archive_sha256", "manifest_sha256"):
             require(getattr(self, key) == authority[key], "POINTER_PROVIDER_BINDING:" + key)
         self.bound_config = json.loads(canonical(authority["worker_config"]))
@@ -569,18 +722,33 @@ def validate_reserved_transition(before, after, receipt, request, *, expected_pl
     return receipt
 
 
+def job_evidence_contract():
+    """The contract THIS PROCESS's run will be held to.
+
+    `SMOKE_REQUEST is None` -- the state every claim-bearing job runs in -- returns the REGISTERED 10-pass
+    contract, byte for byte what this launcher has always built, so the three claim-bearing authorities' pinned
+    `evidence_contract_sha256` values still validate. With the opt-in set, the smoke's own reduced contract is
+    returned, and it is the ONLY thing that changes for a smoke: same `verify_byte_integrity`, same
+    `completed_deliverable`, same `main()` exit-code rule.
+    """
+    return evidence_contract() if SMOKE_REQUEST is None else smoke_evidence_contract()
+
+
 def execute(request, authority, provider, *, receipt_dir, owner_authorization_path, ledger_path):
+    contract_for_this_job = job_evidence_contract()
     validate_request(request)
-    validate_authority(authority)
+    validate_authority(authority, contract_for_this_job)
     validate_owner(owner_authorization_path, authority)
     ledger_path = validate_ledger_path(ledger_path)
     require(Path(provider.ledger_path).resolve() == ledger_path, "POINTER_PROVIDER_LEDGER_MISMATCH")
     require(isinstance(provider, TypedPointerProvider), "POINTER_PROVIDER_REQUIRED")
-    provider.bind_authority(authority)
+    provider.bind_authority(authority, contract_for_this_job)
     return lifecycle.execute(request, authority, provider, ledger_path=ledger_path,
         receipt_dir=receipt_dir, owner_authorization_path=owner_authorization_path,
-        validate_request_fn=validate_request, validate_authority_fn=validate_authority,
-        evidence_contract=evidence_contract(), validate_reserved_transition_fn=lambda before, after, receipt, request:
+        validate_request_fn=validate_request,
+        validate_authority_fn=lambda document: validate_authority(document, contract_for_this_job),
+        evidence_contract=contract_for_this_job,
+        validate_reserved_transition_fn=lambda before, after, receipt, request:
             validate_reserved_transition(before, after, receipt, request, expected_plan=provider.reservation_plan()))
 
 
@@ -601,7 +769,7 @@ def main(argv=None):
         return 0
     if not args.execute:
         print(json.dumps({"status": "PLAN_ONLY", "design": DESIGN, "bounds": BOUNDS, "provider_calls": 0,
-                          "reservation_created": False}))
+                          "reservation_created": False, "smoke_request": SMOKE_REQUEST}))
         return 0
     require(all(getattr(args, key) for key in ("request", "request_sha256", "authority", "authority_sha256",
                                                "receipt_dir", "owner_authorization", "ledger_path")), "POINTER_EXPLICIT_INPUTS")
@@ -609,8 +777,9 @@ def main(argv=None):
     require(digest(request_raw) == args.request_sha256 and digest(authority_raw) == args.authority_sha256,
             "POINTER_REQUEST_AUTHORITY_FILE_HASH")
     request, authority = json.loads(request_raw), json.loads(authority_raw)
+    contract_for_this_job = job_evidence_contract()
     validate_request(request)
-    validate_authority(authority)
+    validate_authority(authority, contract_for_this_job)
     validate_owner(args.owner_authorization, authority)
     ledger_path = validate_ledger_path(args.ledger_path)
     provider = TypedPointerProvider(job=request["job"], source_sha=request["source_sha"],

@@ -559,6 +559,75 @@ VERIFIED_KNOWN_REMOVALS = {"flag_rule": {"parts": 3}, "rank_rule": {"reach": 2}}
 # because the run printed those ids and a later agent must not mistake them for removals.
 UNRECONCILED_REMOVAL_READINGS = {"parts_adjacency": 5, "edge_account_adjacency": 5, "reach_rank_only": 4,
                                  "rank_last_pointing_not_removed": 5}
+# ---------------------------------------------------------------------------------------------------
+# THE TWO ZERO-LEARNING FLOORS INSIDE THE FROZEN POPULATION. Adversarial review R1 item 6 found this contract
+# claiming the rank-solvable questions "are removed instead". They are NOT: all five are inside the frozen 18.
+# These two recorded sets are what lets that be COMPUTED from the population rather than asserted again.
+#
+#   * RANK_LAST_SOLVED_QUESTION_IDS -- what an "always point at the alphabetically last node ref" rule answers,
+#     reading NO adjacency and learning NOTHING. The rule is the leaks lens's `rank_last_policy`
+#     (`pre_design/measurements/leaks_review/lk6_gate_population.py:173-193`): the last ref of the focus
+#     world's sorted refs, in every node slot, `VIA` for `reach`. It solves 5 of the 45 eligible held questions
+#     -- `parts` 1/5 and `reach` 4/9 (review LK7) -- and ALL FIVE are inside the frozen population, in 2 kinds
+#     and 2 held worlds. No rank rule is in `REMOVALS`, so nothing removed them: the 2 `reach` questions
+#     `REMOVALS["order_rule"]` takes are the DG3 ORDER-dependence removals, a DIFFERENT set.
+#   * ORACLE_ONE_HOP_SOLVED_QUESTION_IDS -- what the checker's own adjacency rule answers when applied to the
+#     input (`lk6_gate_population.py:266-290`): `parts` = children of the whole argument, `edge_account` = the
+#     focus world's full adjacency, `reach` = DIRECT iff the part is a child. It solves 11 of the eligible 45,
+#     of which 7 are inside the frozen population. That is the ceiling the label must be read BESIDE and never
+#     subtracted: applying that rule to the input IS the skill under test (protocol section 4.4, confirmed by
+#     the owner), so `MIN_PASSING_B` stays 7 and `REMOVALS` gains nothing.
+#
+# Both sets were re-derived BY IMPORT from those rules and scored by the private checker on this frozen course,
+# and both re-derivations are re-run by `tests/test_typed_pointer_study.py` and by
+# `records/typed_pointer_001/holdout_audit.py`, so neither is a claim nobody checked. The COUNTS INSIDE THE
+# POPULATION are never written down here: `zero_learning_floor` intersects these sets with the population
+# `relational_population` has just derived, so a changed population or a changed removal list moves the number.
+# ---------------------------------------------------------------------------------------------------
+RANK_LAST_SOLVED_QUESTION_IDS = (
+    "typed-query-369885551a553d5fa430a4f0389a1e547fb4b7a6234e85d2c9aace042f4fd46f",
+    "typed-query-404166e8b8180ddc5758d193239cd0f8a5f91804f2f87bc6141ab9f782157005",
+    "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+    "typed-query-aa62bbee865ac5ca1a350bb48564cea189bedbba60867d0f94250d10ed95f217",
+    "typed-query-f341afc7254139140ecbc5edaba9fd164bac26896c217e61e9c9c5b5ac8b5d82")
+ORACLE_ONE_HOP_SOLVED_QUESTION_IDS = (
+    "typed-query-0dcbaf897c1b84ec4febc2e82ee4f58002d9397ab835fea95f0a9ffb847b0226",
+    "typed-query-29e8f3c3bf9dd513de24e16b4cf7436352f07bc1c3d80d7151ebdfa2030043b8",
+    "typed-query-35a5228878433ecea2de7adce40d9a596c42bbb9704ad6678d376769e44370de",
+    "typed-query-4a0342c26f982758689611569bebd798f324a52a3b8ee25cb5f016b394e17509",
+    "typed-query-6caa13d8bd54f96e3b8981d4cd9cfbef5986ea0d621e2f4833b336507b88d353",
+    "typed-query-6d9f6280ddb8dc463bfb557617353b7857fba6cfda057403516a79d8a5ec1249",
+    "typed-query-786bbcba487ecf70442672d83b1d36b6ab7ed062e996abf3c04569f67d203ceb",
+    "typed-query-a14f184d8f6cc4f3b80a87998515fe3c707c2dfb4f92a2358f1233fc43fba1d9",
+    "typed-query-c7ee82d21b69bf37a34cadf033ed59ddb829ceec26d3459ecca3b239c29f16ab",
+    "typed-query-d51fda7f878d7656bdebb87867573769bc53bc3299bb3e2af514eb9a4274b445",
+    "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7")
+require(len(set(RANK_LAST_SOLVED_QUESTION_IDS)) == len(RANK_LAST_SOLVED_QUESTION_IDS)
+        and len(set(ORACLE_ONE_HOP_SOLVED_QUESTION_IDS)) == len(ORACLE_ONE_HOP_SOLVED_QUESTION_IDS)
+        and bool(set(RANK_LAST_SOLVED_QUESTION_IDS) & set(ORACLE_ONE_HOP_SOLVED_QUESTION_IDS)),
+        "ZERO_LEARNING_FLOOR_IDS")
+require(all(value.startswith("typed-query-") and len(value) == len("typed-query-") + 64
+            for value in RANK_LAST_SOLVED_QUESTION_IDS + ORACLE_ONE_HOP_SOLVED_QUESTION_IDS),
+        "ZERO_LEARNING_FLOOR_ID_FORM")
+
+
+def zero_learning_floor(question_ids):
+    """The measured zero-learning floors INSIDE a population, COMPUTED from that population's question ids.
+
+    R1 item 6: a rule that learns nothing already answers this many questions of the gate's own population, so
+    the label has to be read beside the number. NOTHING IS REMOVED HERE and no threshold moves: the returned
+    counts are an intersection of two recorded measurements with the population the caller derived.
+    """
+    ids = set(question_ids)
+    rank = sorted(set(RANK_LAST_SOLVED_QUESTION_IDS) & ids)
+    oracle = sorted(set(ORACLE_ONE_HOP_SOLVED_QUESTION_IDS) & ids)
+    union = sorted(set(rank) | set(oracle))
+    return {"rank_last_questions": rank, "rank_last_total": len(rank),
+            "oracle_one_hop_questions": oracle, "oracle_one_hop_total": len(oracle),
+            "union_questions": union, "union_total": len(union),
+            "rank_last_eligible_total": len(RANK_LAST_SOLVED_QUESTION_IDS),
+            "oracle_one_hop_eligible_total": len(ORACLE_ONE_HOP_SOLVED_QUESTION_IDS),
+            "population_total": len(ids)}
 # CNCM root. TWO uses, and neither of them assumes a working directory:
 #   * `_practice_gates` locates the practice study's own gate reader lazily -- `records/` is analysis
 #     territory, outside the packaged source scope, so that one is loaded on first use and never at import;
@@ -650,8 +719,10 @@ def relational_population(frozen):
           reused through `records/typed_practice_001/evaluate_gates.py:eligible_questions` rather than
           re-derived;
       (b) subtract every question solved by a registered FLAG rule (`REMOVALS["flag_rule"]`, review FP2) or
-          a registered RANK/ORDER rule (`REMOVALS["rank_rule"]`, review DG3);
-      (c) return the surviving question ids, their per-kind counts, their per-world counts, and a digest.
+          a registered ORDER rule (`REMOVALS["order_rule"]`, review DG3);
+      (c) return the surviving question ids, their per-kind counts, their per-world counts, a digest, and the
+          measured ZERO-LEARNING FLOOR inside those ids (`zero_learning_floor`, review R1 item 6) -- the
+          number a rule that learns nothing already answers, reported and never subtracted.
 
     THE VERIFIED INPUTS a later agent must reconcile against (measured 2026-09-19, recorded here rather
     than re-derived): 45 eligible held questions = 10 DIRECT_READ (definition 5 + context 5) + 29
@@ -668,10 +739,13 @@ def relational_population(frozen):
     NOT THE LAST WORD ON THESE NUMBERS, and the guard is deliberately the only thing reconciling them.
     `DESIGN_DRAFT_v0.2.md:649-656` (section 6.4, "PENDING on the gate") measures that the input's own
     `contains` adjacency already answers 5 of 5 eligible held `parts` and 5 of 5 `edge_account` with no
-    learned weights at all, and HEAD `6cb0b348` records a rank-only single-flag rule (R10) solving 4 of the
-    9 eligible held `reach`, overlap against DG3 unmeasured. That would leave three kinds (reach, analogy,
-    correspondence) and about 19 eligible questions -- a narrower RELATIONAL tier than the 29 measured
-    here, which changes what the owner confirmed by name and therefore is NOT this module's decision.
+    learned weights at all. THE OVERLAP IS NO LONGER UNMEASURED (review R1 item 6): the rank-only single-flag
+    rule (R10) solves 4 of the 9 eligible held `reach` plus 1 of the 5 `parts`, and all 5 of those questions
+    are still in the frozen population -- measured, and computed by `zero_learning_floor` on every call.
+    That leaves the two zero-learning classes R1 reported: 7 of the 18 from the one-hop adjacency rules and 11
+    of the 18 from their union with the rank rule, which is the number the gate reader prints beside the label.
+    It is a ceiling the label is read beside; it is NOT a removal and it moves no threshold, because applying
+    that rule to the input IS the skill under test (protocol section 4.4) and `MIN_PASSING_B` stays 7.
    """
     rules = _removals()
     empty = not any(rules[rule] for rule in REMOVAL_RULES)
@@ -729,6 +803,9 @@ def relational_population(frozen):
         "digest": digest(surviving),
         "removals_measured": not empty,
         "population_complete": not empty,
+        # R1 item 6: what a zero-learning rule already answers INSIDE this population, COMPUTED from the
+        # surviving ids above. Reported, never subtracted: the population and `MIN_PASSING_B` are untouched.
+        "zero_learning_floor": zero_learning_floor(surviving),
         "verified_inputs": {"eligible_total": VERIFIED_ELIGIBLE_TOTAL,
                             "eligible_relational": VERIFIED_ELIGIBLE_RELATIONAL,
                             "by_kind": deepcopy(VERIFIED_RELATIONAL_BY_KIND),
@@ -794,19 +871,30 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "machine": "POINTER",
     "input_unit": "ONE_FOCUS_WORLD_READ_AS_A_DIRECTED_GRAPH",
     "answer_form": "POINTER_INTO_THE_QUESTION_INPUT",
-    # DECIDED 2026-09-19: the node rank feature is EXCLUDED and the order-dependent questions are removed.
+    # DECIDED 2026-09-19: the node rank FEATURE is EXCLUDED. CORRECTED 2026-09-19 (adversarial review R1,
+    # item 6): this comment and `node_rank_decision_status` used to say the rank-solvable QUESTIONS were
+    # "removed instead". They were NOT, and the claim was false: all five of them are inside the frozen
+    # population. What is measurably true is below, and the count is computed, never asserted here.
     #
     # Both review lenses agree, from opposite directions. The leaks lens (LK7) measured the
     # alphabetically-last-node rule solving 5 of 45 eligible questions by itself (parts 1/5, reach 4/9) and
     # stated the preference plainly: take the removal option so the vacuity law survives. The learnability
-    # lens (LB1) reached the same fork from the hidden-ref-order side (5/26 held reach records).
+    # lens (LB1) reached the same fork from the hidden-ref-order side (5/26 held reach records). The REMOVAL
+    # option was NOT taken -- `REMOVAL_RULES` has four classes and none of them is rank, and the 2 `reach`
+    # questions `REMOVALS["order_rule"]` takes are the DG3 ORDER-dependence removals, a different set.
     #
-    # Adopting rank would take the population from 18 to 13 and raise the required improvement share from
-    # 7/18 = 0.3889 to 7/13 = 0.5385, AND would withdraw the draft's own vacuity paragraph, because the rank
-    # IS the node alias: 244 of 244 node refs have their sorted position equal to their own stored index.
-    # So the feature is off and the questions it would have solved are removed instead.
+    # WHAT IS MEASURABLY TRUE (measured by import on this frozen course, re-derived by the test suite and by
+    # `records/typed_pointer_001/holdout_audit.py`, and computed by `zero_learning_floor` on every call): the
+    # rank-last rule solves 5 of the eligible 45 and ALL 5 are in the population, parts 1 and reach 4, in 2
+    # kinds and 2 held worlds; the one-hop adjacency rules solve 7 of the population in 2 kinds and 5 worlds;
+    # and their union covers 11 of the 18. A reader must therefore NOT read this population as rank-free.
+    #
+    # Had the removal option been taken, the population would have fallen from 18 to 13 and the required share
+    # would have risen from 7/18 = 0.3889 to 7/13 = 0.5385, and that would have withdrawn the draft's own
+    # vacuity paragraph, because the rank IS the node alias: 244 of 244 node refs have their sorted position
+    # equal to their own stored index. Those are the reasons the FEATURE is off -- not a claim of removal.
     "node_rank_feature": False,
-    "node_rank_decision_status": "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD",
+    "node_rank_decision_status": "EXCLUDED_2026_09_19_RANK_FEATURE_OFF_RANK_SOLVABLE_QUESTIONS_NOT_REMOVED",
     "head_set": "OPEN_LENS_B_EXPRESSIVITY_TABLE",
     "core_rounds": PLANNED_WORK_ROUNDS,
     "planned_work": deepcopy(PLANNED_WORK),

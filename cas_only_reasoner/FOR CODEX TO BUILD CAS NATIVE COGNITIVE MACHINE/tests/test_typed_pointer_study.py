@@ -197,12 +197,15 @@ def test_planned_work_formula_is_self_consistent_against_the_real_schedule(mater
     assert contract.DESIGN["primary_label_tier"] == "RELATIONAL"
     assert contract.DESIGN["tiers"]["RELATIONAL"] == list(contract.RELATIONAL)
     assert set(contract.DESIGN["tiers"]) == set(contract.TIERS)
-    # The rank feature is EXCLUDED, decided 2026-09-19 once both lenses had reported: adopting it would take
-    # the population from 18 to 13 and raise the required share from 7/18 to 7/13, and rank IS the node alias
-    # (244 of 244 refs), so the order-dependent questions are removed instead.
+    # The rank FEATURE is EXCLUDED, decided 2026-09-19 once both lenses had reported: had the removal option
+    # been taken the population would have fallen from 18 to 13 and the required share risen from 7/18 to
+    # 7/13, and rank IS the node alias (244 of 244 refs). CORRECTED 2026-09-19 (adversarial review R1, item 6):
+    # the removal option was NOT taken, so the rank-solvable questions are still INSIDE the population. That is
+    # re-derived from the rule by `test_the_zero_learning_floor_...` below, never read off this status string.
     assert contract.DESIGN["node_rank_feature"] is False
     assert contract.DESIGN["node_rank_decision_status"] == (
-        "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD")
+        "EXCLUDED_2026_09_19_RANK_FEATURE_OFF_RANK_SOLVABLE_QUESTIONS_NOT_REMOVED")
+    assert "REMOVED_INSTEAD" not in contract.DESIGN["node_rank_decision_status"]
     assert contract.DESIGN["owner_approval"].count("2026-09-19") == 1
     for phrase in ("Accept both, carry on.", "Approve the smoke job (Recommended)",
                    "require the relational kinds."):
@@ -501,6 +504,121 @@ def test_removals_subtract_exactly_the_listed_questions_and_fail_closed(material
 
 
 # ---------------------------------------------------------------------------------------------------
+# R1 ITEM 6 -- THE ZERO-LEARNING FLOOR INSIDE THE FROZEN POPULATION. The contract used to say the
+# rank-solvable questions "are removed instead" and that claim was false: all five are INSIDE the frozen 18,
+# so the population may not be read as rank-free. These two helpers re-derive both sets FROM THE RULES with
+# the private checker -- the same rules the leaks lens measured (`rank_last_policy` at
+# `pre_design/measurements/leaks_review/lk6_gate_population.py:173-193`, and the three one-hop oracle rules at
+# `:266-290`) -- so the contract's recorded ids and its computed floor are checked against a MEASUREMENT
+# rather than against themselves.
+# ---------------------------------------------------------------------------------------------------
+def _rule_solved_questions(frozen, rule):
+    """`{query_id}` answered correctly by `rule` on EVERY held-back record of that question."""
+    from cas_meta2.typed_teaching import checker, answers, course
+    held_questions = contract.held_back_questions(frozen)
+    by_id = {row["record_id"]: row for row in frozen["registry"]}
+    packets = {record: course.model_packet(frozen, record)
+               for records in held_questions.values() for record in records}
+    solved = set()
+    for question, records in held_questions.items():
+        correct = True
+        for record in records:
+            row = by_id[record]
+            value = rule(frozen, row)
+            if value is None:
+                correct = False
+                break
+            packet = packets[record]
+            answer = answers.make_answer(packet["source"], row["query"], value)
+            if not checker.check_answer(packet["source"], row["query"], answer)["correct"]:
+                correct = False
+                break
+        if correct:
+            solved.add(question)
+    return solved
+
+
+def _rank_last_rule(frozen, row):
+    """Point at the alphabetically LAST node ref (`VIA` for `reach`): reads no adjacency, learns nothing."""
+    query = row["query"]
+    world = next(w for w in frozen["bank"]["worlds"] if w["world_id"] == query["focus_world_id"])
+    ref = sorted(node["ref"] for node in world["nodes"])[-1]
+    if query["kind"] == "parts":
+        return {"nodes": [ref]}
+    if query["kind"] == "reach":
+        return {"state": "VIA", "via": ref}
+    return None
+
+
+def _one_hop_rule(frozen, row):
+    """The checker's own adjacency rule applied to the input: children / the whole adjacency / the child test."""
+    from cas_meta2.typed_teaching import checker, course
+    query = row["query"]
+    world = next(w for w in frozen["bank"]["worlds"] if w["world_id"] == query["focus_world_id"])
+    whole = query["arguments"].get("whole") or world["declared_whole"]
+    if query["kind"] == "parts":
+        return {"nodes": sorted(checker._adjacency(world)[whole])}
+    if query["kind"] == "edge_account":
+        return checker._derive_values(course.model_packet(frozen, row["record_id"])["source"], query)[0][0]
+    if query["kind"] == "reach":
+        part = query["arguments"].get("part")
+        return ({"state": "DIRECT", "via": None} if part in checker._adjacency(world)[whole]
+                else {"state": "ABSENT", "via": None})
+    return None
+
+
+def test_the_zero_learning_floor_inside_the_population_is_measured_not_asserted(material, population):
+    frozen = material[0]
+    eligible = set(population["eligible_questions"])
+    ids = set(population["question_ids"])
+    kind_of = {row["query"]["query_id"]: row["query"]["kind"] for row in frozen["registry"]}
+    world_of = {row["query"]["query_id"]: row["source_world_id"] for row in frozen["registry"]}
+    rank = sorted(_rule_solved_questions(frozen, _rank_last_rule) & eligible)
+    one_hop = sorted(_rule_solved_questions(frozen, _one_hop_rule) & eligible)
+    # (1) the contract's recorded sets ARE this measurement, re-derived here from the rules.
+    assert list(contract.RANK_LAST_SOLVED_QUESTION_IDS) == rank
+    assert list(contract.ORACLE_ONE_HOP_SOLVED_QUESTION_IDS) == one_hop
+    # (2) the counts inside the population are COMPUTED from the population, so they move with it.
+    floor = population["zero_learning_floor"]
+    assert floor["rank_last_questions"] == sorted(set(rank) & ids)
+    assert floor["oracle_one_hop_questions"] == sorted(set(one_hop) & ids)
+    assert floor["rank_last_total"] == len(set(rank) & ids)
+    assert floor["oracle_one_hop_total"] == len(set(one_hop) & ids)
+    assert floor["union_questions"] == sorted((set(rank) | set(one_hop)) & ids)
+    assert floor["union_total"] == len((set(rank) | set(one_hop)) & ids)
+    assert floor["rank_last_eligible_total"] == len(rank) == 5
+    assert floor["oracle_one_hop_eligible_total"] == len(one_hop) == 11
+    assert floor["population_total"] == population["total"]
+    # (3) THE FINDING: all five rank-solvable questions are INSIDE the label population and NONE was removed.
+    assert population["total"] == 18
+    assert floor["rank_last_total"] == 5 and floor["oracle_one_hop_total"] == 7 and floor["union_total"] == 11
+    assert set(floor["rank_last_questions"]) <= ids
+    assert not set(rank) & set(population["removed_questions"])
+    assert not set(floor["rank_last_questions"]) & set(population["removed_questions"])
+    rank_kinds = {kind: sum(1 for q in floor["rank_last_questions"] if kind_of[q] == kind)
+                  for kind in contract.RELATIONAL}
+    assert {kind: count for kind, count in rank_kinds.items() if count} == {"parts": 1, "reach": 4}
+    assert len([k for k, c in rank_kinds.items() if c]) == 2
+    assert len({world_of[q] for q in floor["rank_last_questions"]}) == 2
+    oracle_kinds = {kind: sum(1 for q in floor["oracle_one_hop_questions"] if kind_of[q] == kind)
+                    for kind in contract.RELATIONAL}
+    assert {kind: count for kind, count in oracle_kinds.items() if count} == {"parts": 2, "edge_account": 5}
+    assert len({world_of[q] for q in floor["oracle_one_hop_questions"]}) == 5
+    assert len({world_of[q] for q in floor["union_questions"]}) == 5
+    # (4) the contract's recorded raw reading and the computed count are the same number.
+    assert population["verified_inputs"]["unreconciled_removal_readings"][
+        "rank_last_pointing_not_removed"] == floor["rank_last_total"]
+    # (5) nothing here moved the gate: the population, its digest, the removals and the threshold are untouched.
+    assert population["total"] == contract.VERIFIED_POPULATION == 18
+    assert population["digest"] == contract.VERIFIED_POPULATION_DIGEST
+    assert len(population["removed_questions"]) == 11 and contract.MIN_PASSING_B == 7
+    assert "rank_rule" not in contract.REMOVAL_RULES
+    # (6) and the false claim is gone from the field that carried it.
+    assert "REMOVED_INSTEAD" not in contract.DESIGN["node_rank_decision_status"]
+    assert contract.DESIGN["node_rank_decision_status"].endswith("NOT_REMOVED")
+
+
+# ---------------------------------------------------------------------------------------------------
 # P9, P10, the read-cost bound and the digest pin, for the pure public-input reader.
 #
 # The imports, constants and helpers live HERE, below the tests that were already in this file, so nothing
@@ -776,7 +894,7 @@ def test_p9_input_digest_over_all_564_records_is_reproducible(material, monkeypa
     frozen = material[0]
     assert contract.DESIGN["node_rank_feature"] is False
     assert contract.DESIGN["node_rank_decision_status"] == (
-        "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD")
+        "EXCLUDED_2026_09_19_RANK_FEATURE_OFF_RANK_SOLVABLE_QUESTIONS_NOT_REMOVED")
     first = _sweep(frozen)
     assert len(first) == 564
     assert _source.digest(first) == ALL_RECORDS_DIGEST_RANK_OUT
