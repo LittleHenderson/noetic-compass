@@ -36,7 +36,10 @@ The first three were given in the session that picked up the hand-off
 1. **Two corrections — accepted.** Owner answer verbatim: *"Accept both, carry on."* The two corrections are: (a) the
    in-job checkpoint check costs about $0.38–$0.63 per job, not "no extra cost"; (b) pointer answers alone cannot work,
    because the INPUT must change too.
-2. **The short AWS smoke job for the end-to-end worker test S10 — approved.** Well under $1.
+2. **The short AWS smoke job for the end-to-end worker test S10 — approved.** Well under $1. Owner selected the
+   option labelled verbatim *"Approve the smoke job (Recommended)"*. Its cost model and shrunken schedule are in
+   `pre_design/AWS_SMOKE_S10_PLAN.md`: the measured non-worker overhead is 598.2 s of boot, package install and
+   delivery, costing $0.42 on its own, so the approved $1 leaves the smoke a worker clock of at most about 830 s.
 3. **Gate change — confirmed.** Owner answer verbatim: *"Yes — require the relational kinds."*
    `LEARNS_NEW_WORLDS` will require gains on the RELATIONAL kinds (parts, edge_account, reach, correspondence,
    analogy). The all-kinds result is reported alongside as a flag, not as the label.
@@ -940,27 +943,40 @@ its arithmetic is a false-negative trap. The primary population, from
 | STRICT variant (also removing the 11 oracle one-hop questions) | 16, share 7/16 = 0.4375 |
 | with the rank feature instead of the removal | 18, share 7/18 = 0.3889 |
 
-### 6.6 The feasibility of the gate at 23
+### 6.6 The feasibility of the gate at the frozen population of 18
+
+> **SUPERSEDED 2026-09-19 by `REVIEW_SYNTHESIS.md` §11.1, and the correction is recorded here rather than deleted.**
+> This section was written against a population of **23**. The gate population is now **18**, because the five
+> inexpressible `correspondence` questions are removed from the label (§11.1). An earlier revision of this section
+> quoted **0.6723** at a 40 % improvement; that was wrong by about 2.7× and **optimistically so**. The figures below
+> are the corrected ones.
 
 From `pre_design/GATE_FEASIBILITY.md` §5. This is pure arithmetic on the frozen gate rule — no material load, no
 torch, no AWS, $0 — and it says how often the gate would print `LEARNS_NEW_WORLDS` **if** the machine genuinely
 improved on a given fraction of the honest relational questions. It is a statement about the test, not about the
 machine, and **nothing has been run**.
 
-| scenario | N | P(all three seeds) at 30 % true improvement | at 40 % | at 50 % |
+**The number that governs is the IMPROVABLE population, not the headline one.** Five of the 23 (`correspondence`)
+cannot be answered by the drafted head at all, so they can never contribute a gain and enter neither `b` nor `c`.
+They are dead weight in the denominator and nothing else.
+
+| scenario | improvable N | P(all three seeds) at 30 % | at 40 % | at 50 % |
 |---|---|---|---|---|
-| **FROZEN: 29 − 6 removals** | **23** | **0.1757** | **0.6723** | **0.9489** |
+| **FROZEN and honest: 23 − 5 inexpressible** | **18** | **0.0216** | **0.2450** | **0.6839** |
+| the same 23 read as if all were improvable — WRONG | 23 | 0.1757 | 0.6723 | 0.9489 |
 | rank adopted instead of removing the order-dependent questions | 18 | 0.0374 | 0.3313 | 0.7697 |
 | a strict population also removing the adjacency-solved questions | 16 | 0.0067 → 0.0114 | 0.2286 → 0.3313 | 0.7389 → 0.7697 |
 
-**Required share at the frozen population: 7/23 = 0.3043.** Single-seed figures at N = 23: 0.1598 at 20 %, 0.3463 at
-25 %, **0.5601 at 30 %**, 0.7466 at 35 %, 0.8760 at 40 % (`GATE_FEASIBILITY.md` §5).
+**Required share at the frozen population: 7/18 = 0.3889.** Single-seed figures at N = 18: **0.2783 at 30 %**,
+0.4509 at 35 %, **0.6257 at 40 %**, 0.8811 at 50 %.
 
-Read against the honest population the source's own conclusion is that **the gate is tight but NOT hopeless**: at 23,
-a genuine 30 % improvement passes all three seeds about 18 % of the time and a 40 % improvement about 67 %. The
-source states plainly that every figure above is an **upper bound**, because it assumes no losses (at `c = 1` the
-smallest passing `b` is **10**, at `c = 2` it is **12**, at `c = 3` it is **14**), ignores the ≥ 2 kinds and ≥ 2
-worlds rules, treats clustered questions as independent, and assumes a uniform improvement.
+Every figure above is an **upper bound**: it assumes no losses (at `c = 1` the smallest passing `b` is **10**, at
+`c = 2` it is **12**, at `c = 3` it is **14**), ignores the ≥ 2 kinds and ≥ 2 worlds rules, treats clustered
+questions as independent, and assumes a uniform improvement.
+
+**This document has now been wrong twice optimistically and once pessimistically on this table** (floors of N = 11
+and N = 13, then an N = 23 read as fully improvable). Only the recomputation against the frozen population should be
+relied on.
 
 ---
 
