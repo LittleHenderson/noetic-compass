@@ -102,6 +102,43 @@ if isinstance(pop, dict) and not raised:
 else:
     check("population returns while REMOVALS is empty", not raised, detail)
 
+# --- the parameterised schedule: faithful at 10 passes, free at others ---------------------------------
+pb, pstats = pc.pointer_schedule(frozen, pc.practice.PASSES)
+check("pointer_schedule(10) reproduces the practice batches digest",
+      pstats["batches_digest"] == "daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857",
+      pstats["batches_digest"][:16])
+check("pointer_schedule(10) has 147 updates/pass and 818 presentations/pass",
+      (pstats["updates_per_pass"], pstats["presentations_per_pass"]) == (147, 818),
+      "%d / %d" % (pstats["updates_per_pass"], pstats["presentations_per_pass"]))
+check("pointer_schedule(10) matches the practice pointer_schedule line for line",
+      pstats == stats, "" if pstats == stats else "differs from practice stats")
+
+try:
+    long_batches, long_stats = pc.pointer_schedule(frozen, 20)
+    ok20 = (long_stats["main_updates"] == 2940 and long_stats["passes"] == 20
+            and long_stats["batches_digest"] != pstats["batches_digest"]
+            and len(long_batches) == 2940)
+    detail20 = "main=%d digest=%s" % (long_stats["main_updates"], long_stats["batches_digest"][:12])
+except Exception as exc:                                     # noqa: BLE001
+    ok20, detail20 = False, "%s: %s" % (type(exc).__name__, str(exc)[:100])
+check("pointer_schedule(20) runs and differs from the 10-pass digest", ok20, detail20)
+
+check("ceiling permits 24 passes and refuses 25",
+      pc.LEARNER_MAX_UPDATES_CEILING == 24 * 147 + 16
+      and 24 * 147 + 16 <= pc.LEARNER_MAX_UPDATES_CEILING,
+      "ceiling=%d, 24 passes=%d" % (pc.LEARNER_MAX_UPDATES_CEILING, 24 * 147 + 16))
+
+try:
+    pc.pointer_schedule(frozen, 25)
+    refused = False
+except Exception:                                            # noqa: BLE001
+    refused = True
+check("pointer_schedule refuses more than MAX_PASSES_PERMITTED", refused)
+
+check("the practice ceiling would have capped this study at 13 passes",
+      pc.practice.LEARNER_MAX_UPDATES_CEILING == 2048 and 13 * 147 + 16 <= 2048 < 14 * 147 + 16,
+      "practice ceiling=%d" % pc.practice.LEARNER_MAX_UPDATES_CEILING)
+
 print()
 failed = [n for n, ok, _ in results if not ok]
 print("VERDICT: %s  (%d checks, %d failed)" % ("ALL PASS" if not failed else "FAILURES", len(results), len(failed)))

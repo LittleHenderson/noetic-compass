@@ -57,13 +57,30 @@ BUCKET_SUFFIX = "-807562639912"
 CONDITION = practice.CONDITION
 MODEL_SEEDS = practice.MODEL_SEEDS
 SOURCE_SEED, ENCODER_SEED = practice.SOURCE_SEED, practice.ENCODER_SEED
-PASSES = practice.PASSES
+PASSES = practice.PASSES           # 10, INHERITED AND NOT FREEZABLE AS-IS -- see the note below.
 PASS_CHECKPOINTS = practice.PASS_CHECKPOINTS
 FULL_COURSE_CHECKPOINTS = practice.FULL_COURSE_CHECKPOINTS
 INTERFERENCE_UPDATES, INTERFERENCE_BATCH = practice.INTERFERENCE_UPDATES, practice.INTERFERENCE_BATCH
 REPLAY_UPDATES = practice.REPLAY_UPDATES
-# Registered envelope carried over from the practice study. Cost for the new machine is UNMEASURED (DG9).
-LEARNER_MAX_UPDATES_CEILING = practice.LEARNER_MAX_UPDATES_CEILING
+# ----------------------------------------------------------------------------------------------------------------
+# TRAINING LENGTH IS A DELIBERATE, MEASURED CHOICE -- DO NOT INHERIT 10 PASSES BY DEFAULT.
+#
+# The practice study stopped at 10 passes with the loss still falling, monotonically, and having used only
+# 5,465.811116 s of a 12,300 s worker deadline (44.4%). Ten passes was a protocol choice, not convergence.
+# See records/typed_pointer_001/pre_design/LEARNING_LEVERS.md, which is the authority for this comment.
+#
+# The practice ceiling below was 2048, which caps this study at 13 passes
+# (13 x 147 + 16 = 1927 <= 2048; 14 passes = 2074 and is REFUSED). Training length is the cheapest available
+# improvement to the neurons, so that ceiling is RAISED here -- a new candidate is entitled to its own registered
+# limit -- to permit up to MAX_PASSES_PERMITTED passes and no more.
+#
+# PASSES itself must be set from the smoke job's MEASURED per-update cost, not guessed, and the same measurement
+# must re-check MAX_CORE_CALLS: the pointer machine calls the registered ^6 block once per node per round
+# (~4 nodes x 8 rounds = 32 calls per world read) against the old machine's 8, so the core-call budget may bind
+# before the update budget does. Both are recorded in DESIGN and must be reconciled before the study is frozen.
+# ----------------------------------------------------------------------------------------------------------------
+MAX_PASSES_PERMITTED = 24
+LEARNER_MAX_UPDATES_CEILING = MAX_PASSES_PERMITTED * 147 + INTERFERENCE_UPDATES   # 3544, permits 24 passes
 MAX_CORE_CALLS = practice.MAX_CORE_CALLS
 WORKER_DEADLINE_SECONDS = practice.WORKER_DEADLINE_SECONDS
 MAX_WALL_SECONDS = practice.MAX_WALL_SECONDS
@@ -75,7 +92,77 @@ digest = source.digest
 split = practice.split
 held_worlds = practice.held_worlds
 held_back_questions = practice.held_back_questions
-practice_schedule = practice.practice_schedule
+practice_schedule = practice.practice_schedule    # kept for reference/tests; use pointer_schedule below
+
+
+def pointer_schedule(frozen, passes=None):
+    """`passes` repetitions of the MIXED course, keeping only trained records. Returns (batches, stats).
+
+    A faithful clone of `practice_contract.practice_schedule` (`practice_contract.py:130-172`) with ONE difference:
+    the pass count is a parameter, and the update bound is THIS contract's ceiling rather than the practice one.
+
+    Why it cannot simply be imported. The practice function hard-codes `PASSES = 10` and then enforces
+    `main_updates + INTERFERENCE_UPDATES <= practice.LEARNER_MAX_UPDATES_CEILING`, which is 2048. That caps the study
+    at 13 passes and refuses 14. Training length is the cheapest available improvement to the neurons -- the practice
+    run stopped at pass 10 with the loss still falling and 44.4 % of its deadline unused -- so the pointer study must
+    be able to run longer. See `pre_design/LEARNING_LEVERS.md`.
+
+    FIDELITY REQUIREMENT, tested: with `passes == practice.PASSES` this must reproduce the practice study's own
+    `batches_digest` exactly, `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857`, and its
+    `updates_per_pass` 147 and `presentations_per_pass` 818. So the per-pass construction, the occurrence-id digest
+    domain and the presentation-id prefix are deliberately kept identical to the practice study's; only the number of
+    repetitions is a parameter. A different pass count therefore produces a different `batches_digest`, which is
+    expected and must be recorded in the protocol.
+
+    `OPEN:` the value of `PASSES` itself. It is set from the smoke job's MEASURED per-update cost, not guessed.
+    """
+    count = PASSES if passes is None else passes
+    require(type(count) is int and 1 <= count <= MAX_PASSES_PERMITTED,
+            "POINTER_PASSES_BOUND:" + str(count))
+    base, base_stats = matched.schedule(frozen, CONDITION)
+    held, trained, excluded = split(frozen)
+    keep_set = set(trained)
+    one_pass = []
+    for batch in base:
+        keep = [at for at, key in enumerate(batch["record_ids"]) if key in keep_set]
+        if not keep:
+            continue
+        one_pass.append({"round": batch["round"], "phase": batch["phase"], "depth": batch["depth"],
+                         "source_cursor": batch["cursor"],
+                         "record_ids": [batch["record_ids"][at] for at in keep],
+                         "occurrence_ids": [batch["occurrence_ids"][at] for at in keep],
+                         "presentation_ids": [batch["presentation_ids"][at] for at in keep]})
+    batches = []
+    for number in range(1, count + 1):
+        for batch in one_pass:
+            occurrences = ["typed-occurrence-" + source.digest({"domain": "typed-practice-v1", "pass": number,
+                                                               "occurrence": occurrence})
+                           for occurrence in batch["occurrence_ids"]]
+            batches.append({**deepcopy(batch), "cursor": len(batches), "pass": number,
+                            "occurrence_ids": occurrences,
+                            "presentation_ids": ["practice-p%02d-%s" % (number, p)
+                                                 for p in batch["presentation_ids"]]})
+    require(all(key in keep_set for b in batches for key in b["record_ids"]), "HOLDOUT_TRAINED")
+    require(all(len(b["occurrence_ids"]) == len(set(b["occurrence_ids"])) for b in batches), "OCCURRENCE_UNIQUE")
+    counts = matched._slot_counts(frozen)
+    held_ids = set(held)
+    stats = {"condition": CONDITION, "source_seed": SOURCE_SEED, "passes": count, "holdout_unit": "FOCUS_WORLD",
+             "held_worlds": held_worlds(frozen), "updates_per_pass": len(one_pass), "main_updates": len(batches),
+             "presentations_per_pass": sum(len(b["record_ids"]) for b in one_pass),
+             "presentations": sum(len(b["record_ids"]) for b in batches),
+             "planned_slot_core_passes": sum(counts[k] * b["depth"] for b in batches for k in b["record_ids"]),
+             "presentation_slots": sum(counts[k] for b in batches for k in b["record_ids"]),
+             "held_back_records": len(held), "trained_records": len(trained), "excluded_records": len(excluded),
+             "held_back_questions": len(held_back_questions(frozen)),
+             "held_back_kinds": dict(sorted(Counter(r["query"]["kind"] for r in frozen["registry"]
+                                                    if r["record_id"] in held_ids).items())),
+             "held_back_record_ids_digest": source.digest(held), "excluded_record_ids_digest": source.digest(excluded),
+             "source_schedule_digest": base_stats["batches_digest"], "batches_digest": source.digest(batches),
+             "actual_compute_measured": False}
+    require(0 < stats["main_updates"] + INTERFERENCE_UPDATES <= LEARNER_MAX_UPDATES_CEILING,
+            "POINTER_UPDATE_BOUND:%d>%d" % (stats["main_updates"] + INTERFERENCE_UPDATES,
+                                            LEARNER_MAX_UPDATES_CEILING))
+    return deepcopy(batches), stats
 interference_batches = practice.interference_batches
 retention_packets = practice.retention_packets
 development_packets = practice.development_packets
@@ -469,7 +556,7 @@ def make_config(root, *, source_sha, job, bucket, model_seed):
             "JOB_PARAMETERS")
     require(type(bucket) is str and re.fullmatch(BUCKET_PATTERN, bucket), "BUCKET")
     frozen, _, development = load_material(root)
-    _, stats = practice_schedule(frozen)
+    _, stats = pointer_schedule(frozen)
     held, _, excluded = split(frozen)
     retention = list(retention_packets(frozen))
     interference = interference_batches(frozen)
