@@ -676,7 +676,12 @@ def build_pointer_package(output, *, source_sha, git_bytes_fn=None):
                    for row in rows]
     manifest["inputs"] = bare_inputs
     manifest["inputs_sha256"] = digest(canonical(bare_inputs))
-    manifest["inputs_committed_content_sha256"] = {row["path"]: row["committed_content_sha256"] for row in rows}
+    # GUARDED, and it must stay that way: whether `rows` still carries the committed-content digest depends on
+    # which path built them, and an unguarded subscript here raised KeyError inside a spend path on the first
+    # re-freeze after it was added. Where the field is absent there is nothing to preserve, and `inputs` above is
+    # already the contract's projection.
+    manifest["inputs_committed_content_sha256"] = {row["path"]: row["committed_content_sha256"]
+                                                  for row in rows if "committed_content_sha256" in row}
     manifest["transport"] = {"implementation": "aws.run_evidence.render_transport",
         "replaced_functions": transport["replaced"], "publisher_wired": transport["publisher_wired"],
         "marker_last": True, "predeclared_contract_sha256": run_evidence.contract_digest(evidence_contract())}
