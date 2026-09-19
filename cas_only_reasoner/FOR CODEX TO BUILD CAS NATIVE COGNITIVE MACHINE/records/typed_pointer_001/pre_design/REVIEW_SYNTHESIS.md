@@ -457,6 +457,39 @@ The four 64/65-symbol slots and the wide `mapping_target` are where the output s
 
 ## 10. What is still outstanding
 
+### 🔴 THE REMOVAL TABLE IS INCOMPLETE — `lk6_gate_population.py` CRASHED PART-WAY
+
+`measurements/leaks_review/lk6_gate_population_out.txt` is a **truncated** run, not a finished population. It
+completed REMOVAL 1 and REMOVAL 2 and then raised on REMOVAL 3:
+
+```
+REMOVAL 1 -- registered input-blind shortcut       removes  0 eligible: {}
+REMOVAL 2 -- FP2 parts(declared_whole)             removes  3 eligible: {'parts': 3}
+            reach flag rule                        removes  0
+            edge flag rule                         removes  0
+REMOVAL 3 -- DG3 node-order-dependent questions    ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
+```
+
+The crash is in the reviewer's own relabelling harness: it rebuilds a relabelled public source and
+`source.validate_public` rejects the reconstruction (`source.py:254`, `TYPED_SOURCE_WORLD_RECONSTRUCTION`). It is a
+defect in the probe, **not** a property of the study.
+
+**So the definitive removal list does not exist yet, and no population may be quoted as final.** What the truncated
+run does establish, and they are consistent with the other tables:
+
+- the registered input-blind shortcut removal takes **0** of the 45 eligible questions;
+- the FP2 flag rule takes **3** (`parts`), the `reach` flag rule **0**, the `edge_account` flag rule **0**;
+- the RELATIONAL tier is 29 (analogy 5, correspondence 5, edge_account 5, parts 5, reach 9) over five held worlds
+  (5, 5, 7, 6, 6).
+
+**Three classes of removal are still not reconciled**, and they were found by different lenses:
+1. the **flag rules** (leak lens `lk2`, learnability LB2 — which says **4**, not 3);
+2. the **one-hop adjacency read**, which the leak lens measured as solving `parts` **5/5** and `edge_account` **5/5**
+   (`lk1_answer_carriers_out.txt` lines 58-66) — this is *not* a flag rule, and it is absent from REMOVAL 2;
+3. the **rank and constant channels** on `reach` (R10 at 4/9, and DG3's 2/9).
+
+Until those are reconciled into one list, the honest population is an interval, not a number.
+
 - The leaks lens had not yet reported its shortcut-policy table (pointer-space policies), its permutation-vacuity
   list, its other pipeline-routes check, or its final removal list and minimum b.
 - The learnability lens had not yet reported its per-kind expressivity table, the colour-refinement/1-WL limits, the

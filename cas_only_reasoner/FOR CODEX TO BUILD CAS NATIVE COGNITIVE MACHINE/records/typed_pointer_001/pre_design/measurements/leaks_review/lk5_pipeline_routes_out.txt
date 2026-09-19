@@ -1,0 +1,103 @@
+  packet cache: reused lk_cache_packets.pkl (564 packets)
+  admissible cache: reused lk_cache_admissible.json (cache built by lk0_material.py (checker.derive_target + evaluate_gates.eligible_questions))
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 4.5 s (frozen/encoder 3.0 s, packets 0.6 s, rest 0.9 s)
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  held questions 50 trained questions 189
+  eligible 45 shortcut-removed 5
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+
+PART 1 -- the depth schedule coordinate
+  learner._forward accepts depth in (1,2,4,8) only (learner.py:128); every evaluation calls predict(., 8)
+  (typed_practice_worker.py:145); DESIGN_DRAFT_v0.1 says 'depth (=8, the worker's existing argument)'.
+  batch depth distribution {(1, 1): 38, (1, 2): 37, (1, 4): 34, (1, 8): 38}
+  TRAINING PRESENTATIONS by depth and kind:
+    depth 1: {'analogy': 100, 'context': 130, 'correspondence': 340, 'definition': 120, 'edge_account': 150, 'parts': 400, 'reach': 570, 'role_set': 180}
+    depth 2: {'analogy': 70, 'context': 120, 'correspondence': 370, 'definition': 110, 'edge_account': 130, 'parts': 450, 'reach': 560, 'role_set': 190}
+    depth 4: {'analogy': 90, 'context': 100, 'correspondence': 360, 'definition': 110, 'edge_account': 100, 'parts': 430, 'reach': 480, 'role_set': 190}
+    depth 8: {'analogy': 150, 'context': 120, 'correspondence': 440, 'definition': 120, 'edge_account': 140, 'parts': 440, 'reach': 700, 'role_set': 220}
+  interference batches (16) are definition+context only, and they run AFTER the pass-10 evaluation
+  (typed_practice_worker.py:355-358 exports 'final' and evaluates pass 10; :366-385 then runs retention
+  and interference), so they cannot enter the gated checkpoints.
+    kind role_set       trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind definition     trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind context        trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind analogy        trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind correspondence trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind parts          trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind edge_account   trained only at depths [1, 2, 4, 8] (min 1, max 8)
+    kind reach          trained only at depths [1, 2, 4, 8] (min 1, max 8)
+  presentations at depth < 8 per kind (of all presentations): {'role_set': '560/780', 'definition': '340/460', 'context': '350/470', 'analogy': '260/410', 'correspondence': '1070/1510', 'parts': '1280/1720', 'edge_account': '380/520', 'reach': '1610/2310'}
+
+PART 2 -- the joint correspondence loss
+  correspondence records / training presentations / admissible mappings {'held': '20 / 0 / 24', 'trained': '54 / 1510 / 135', 'excluded': '14 / 0 / 34'}
+  the loss term is a valid-SET logsumexp over public candidates (learner.py:202-220), and the valid set
+  comes from the private target (loss_plan.py:100-105) -- it is applied to TRAINED records only.
+  trained records whose text names a held world: 0
+  distinct correspondence target worlds in the trained set: 11
+  any of them a held world: False
+  analogy answers naming a held world in the trained set: 0
+  NO_MATCH is never the admissible correspondence answer (measured in lk1), so the mode slot is a
+  constant: a machine that learns 'always MAPPING' converts every correspondence record into a
+  mapping guess. Chance per record = admissible mappings / syntactic candidates.
+
+PART 3 -- the world-choice candidate lists
+  held-eligible questions whose answer names a WORLD: 15 of 45 {'analogy': 5, 'context': 5, 'definition': 5}
+  of those, solved by the flag copy (is_focus_world + the declaration text): 5 definition + 5 context = 10
+  answer alphabet: definition kind_ref/function_ref 64 symbols, context setting_ref 64, analogy world_id 65
+  the input supplies every world's kind/function/setting declaration TEXT, so definition and context are
+  a text-matching task over the input, not a graph task (measured in lk1/lk2: 10/10 solved, no learning).
+  analogy keeps the whole 64-world bank as candidates: the domain word removes the 16 same-domain worlds,
+  leaving 48; the admissible answer set is 6-9 worlds, so one guess is right with probability 6/65..9/65.
+
+PART 4 -- the choice of evaluation checkpoints
+  typed_practice_worker.py:326 evaluates pass 0; :357-358 evaluates passes 2,4,6,8,10
+  FULL_COURSE_CHECKPOINTS = (0,1,10) so held-back questions are read from the COURSE evaluations at
+  0, 1 and 10 and from the dedicated held-back evaluations at 2,4,6,8 (evaluate_gates.py:201-203).
+  The primary gate G_LEARN compares pass 0 with pass 10 only (evaluate_gates.py:216); the held-back
+  trajectory at 2/4/6/8 is reported but gates NOTHING. MORE_PRACTICE compares 1 with 10.
+  'final' is exported before retention/interference (typed_practice_worker.py:355-358), so the 'retained'
+  checkpoint is outside every gate.
+  records per held-back question {1: 20, 3: 14, 4: 15, 5: 1}
+  held-back questions decided by a single record: 20 of 50 {'parts': 4, 'reach': 10, 'role_set': 6}
+  eligible ones: 15
+  analogy questions: 5 eligible; the admissible answer set is 6-9 worlds out of 65, so a single record
+  can be right by guessing (measured chance band 6/65..9/65 per record).
+
+PART 5 -- the shortcut-removal rule itself
+  the registered removal uses the most common FIRST admissible trained answer per kind: True
+  registered removal size 5 | recomputed from the same rule 5 | equal: True
+  questions removed if the shortcut is the most common ANY admissible trained answer: 5
+  extra questions that rule would remove: []
+  per-kind constant ceilings (best single alias-form constant answer, trained estimate):
+    role_set       all held 0/6 | eligible 0/6 | constant {"roles": [2], "status": "UNIQUE"}
+    definition     all held 0/5 | eligible 0/5 | constant {"function_ref": "W32/decl/function", "kind_ref": "W32/decl/kind", "whole": "N0"}
+    context        all held 0/5 | eligible 0/5 | constant {"participants": ["N0", "N1", "N3"], "setting_ref": "W59/decl/setting"}
+    analogy        all held 0/5 | eligible 0/5 | constant {"world_id": "W18"}
+    correspondence all held 0/5 | eligible 0/5 | constant {"pairs": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N0"}, {"source": "N2", "target": "N2"}, {"source": "N3", "target": "N3"}], "status": "MAPPING"}
+    parts          all held 0/5 | eligible 0/5 | constant {"nodes": ["N0", "N2", "N3"]}
+    edge_account   all held 0/5 | eligible 0/5 | constant {"edges": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N2"}]}
+    reach          all held 5/14 | eligible 0/9 | constant {"state": "DIRECT", "via": null}
+  the removal is recomputed at gate time and is NOT frozen as an explicit id list; any later change to
+  the split, the checker or the alias order silently changes the population. Freeze it (P13).
+
+PART 6 -- what an untrained machine already answers (proxy: equal logits -> first declared symbol)
+  equal-logit answers (every slot's first declared symbol) as a zero-information p0 proxy:
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19
+    reach          held-eligible 1/9 | held-all 1/14 | trained 1/50
+  these are right at p0 by construction, so they cannot be scored as gains; they only add right-to-wrong risk.
+
+PART 7 -- the reported label versus the reported tiers
+  G_LEARN_p0_to_p10 (the label) is computed on the 45 eligible questions over all eight kinds
+  (evaluate_gates.py:216). A flag copier gets definition 5/5 + context 5/5 there, so b=10, c=0 and
+  p = 2**-10 = 0.0009765625 <= 0.01, with two kinds and five held worlds. The label is printed from
+  that test alone; the tier split is prose. Until the primary label is the RELATIONAL test, the
+  pipeline's own reading can be satisfied with no relational competence at all.

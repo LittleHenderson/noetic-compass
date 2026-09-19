@@ -1,0 +1,50 @@
+  packet cache: reused lk_cache_packets.pkl (564 packets)
+  admissible cache: reused lk_cache_admissible.json (cache built by lk0_material.py (checker.derive_target + evaluate_gates.eligible_questions))
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 6.0 s (frozen/encoder 3.9 s, packets 0.8 s, rest 1.3 s)
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  held-back questions 50 | registered input-blind removals 5
+  eligible population 45
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+  RELATIONAL tier (as the draft defines it) 29 {'analogy': 5, 'correspondence': 5, 'edge_account': 5, 'parts': 5, 'reach': 9}
+  DIRECT_READ tier 10 {'context': 5, 'definition': 5}
+  TEXT tier 6 {'role_set': 6}
+  RELATIONAL by held world {'world-22704554': 5, 'world-28f61f2d': 5, 'world-4090ec49': 7, 'world-6e1fcbda': 6, 'world-98c6352d': 6}
+
+REMOVAL 1 -- the registered input-blind shortcut (already applied before the gate)
+  registered most-common-trained-answer removal                    removes  0 eligible: {}
+
+REMOVAL 2 -- flag-solved RELATIONAL questions (FP2 and its analogues; no relation is read)
+  FP2: parts(declared_whole) = participants - declared_whole       removes  3 eligible: {'parts': 3}
+  reach flag rule: DIRECT if whole==declared_whole and part is a participant removes  0 eligible: {}
+  edge flag rule: edges = declared_whole -> participants - whole   removes  0 eligible: {}
+
+REMOVAL 3 -- DG3 node-order-dependent questions (a name-blind machine cannot know the answer)
+Traceback (most recent call last):
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\records\typed_pointer_001\pre_design\measurements\leaks_review\lk6_gate_population.py", line 163, in <module>
+    new_query = answers.compile_query(new_public, kind=kind, rule=q["rule"],
+                                     arguments={**deepcopy(q["arguments"]),
+                                                **{f: pi[q["arguments"][f]] for f in ("whole", "part")
+                                                   if f in q["arguments"]}},
+                                     focus_world_id=focus)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\answers.py", line 114, in compile_query
+    body = _query_body(public, kind=kind, rule=rule, arguments=arguments,
+                       focus_world_id=focus_world_id)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\answers.py", line 79, in _query_body
+    worlds = _worlds(public)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\answers.py", line 70, in _worlds
+    source.validate_public(public)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 370, in validate_public
+    return validate_public_source(public)
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 314, in validate_public_source
+    worlds = [_validate_world(world) for world in public["worlds"]]
+              ~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 254, in _validate_world
+    require(canonical(world) == canonical(expected), "TYPED_SOURCE_WORLD_RECONSTRUCTION")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wakil\OneDrive\Desktop\tksCAS\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\_worktrees\vision-next\cas_only_reasoner\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\research\CAS_META_2_COMPOSITION\cas_meta2\typed_teaching\source.py", line 48, in require
+    raise ValueError(reason)
+ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
