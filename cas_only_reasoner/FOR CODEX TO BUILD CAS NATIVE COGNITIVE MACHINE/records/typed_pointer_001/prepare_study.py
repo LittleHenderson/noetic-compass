@@ -7,8 +7,23 @@ owner record per job carrying the owner's FIVE decisions VERBATIM (DG9: one owne
 inherited lifecycle allows one job per owner record).
 
 WHAT THE FIVE LABELS ARE, AND WHERE THEY COME FROM. The recorded labels are the exact selected option labels the
-owner chose on 2026-09-19, recorded verbatim in `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md` section 0.2 items 1-5
-(`:52`, `:57`, `:61`, `:64-67`, `:69`). They are NOT paraphrased and the third keeps its em dash.
+owner chose on 2026-09-19. **Their authority is `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md` SECTION 0.2, ITEMS 1-5** --
+the section and item are the citation; the line numbers are only a dated hint and have already moved twice, so
+they are given once, below, with the date and the document digest they were read at. A bare line list silently
+rots; an item number inside a named section does not. The labels are NOT paraphrased and the third keeps its em
+dash.
+
+    read 2026-09-19 at protocol sha256 3cb002ed948b7101e27458e52152788af419fb8dc6b7664173d98bb92ffa3d41
+    (the digest this freeze-time record was given; `prepare_smoke.py` records the value it reads at run time).
+    UNCERTAIN, recorded rather than resolved: the copy in THIS worktree is 98536 bytes with sha256
+    `81afe89eb2ffa8f0ad02b13407acfe768463ca8287fa6d6c6c1dfc395dc7f08f`, and the line numbers below were
+    CONFIRMED against that copy by scanning for each label; the 96332-byte `3cb002ed...` revision is not in this
+    worktree's history. The section-and-item citation holds either way; the digest is the owner's to reconcile:
+      item 1  "Accept both, carry on."                                        :52
+      item 2  "Approve the smoke job (Recommended)"                           :57
+      item 3  "Yes — require the relational kinds."                           :86
+      item 4  "Run it as the transfer test, label honestly (Recommended)"     :89-92   (the label wraps)
+      item 5  "Stratify AND train longer (Recommended)"                       :94
 
 THIS PARAGRAPH RECORDED A CONTRACT DEFECT FOR ONE DAY, AND THAT DEFECT IS FIXED. It used to say: item 3 was
 byte-present inside `pointer_contract.DESIGN["owner_approval"]` with two ASCII hyphens where the protocol document

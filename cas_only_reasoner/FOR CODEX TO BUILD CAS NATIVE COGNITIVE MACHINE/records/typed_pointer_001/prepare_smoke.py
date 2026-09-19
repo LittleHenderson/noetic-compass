@@ -22,10 +22,19 @@ allows (`typed_pointer_launch.py:55-61`). The seed is the one `--seed` names; th
 `contract.MODEL_SEEDS`, and only that seed's owner record, hand-off note and receipt directory ever exist for
 a single smoke launch -- one job, one owner record, which is the rule the inherited lifecycle enforces (DG9).
 
-THE OWNER LABEL IS READ, NEVER RETYPED. `smoke_owner_labels()` takes the owner's exact recorded option label
-from the string `pointer_contract.DESIGN["owner_approval"]` carries, and fails if the label is not present in
-it. The label is also recorded verbatim in the protocol document at
-`docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:57`. Nothing here restates either text.
+THE OWNER LABEL IS READ, NEVER RETYPED. `smoke_label()` takes the owner's exact recorded option label from the
+string `pointer_contract.DESIGN["owner_approval"]` carries, and fails if the label is not present in it. The
+label is also recorded verbatim in the protocol document, `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md`, **section 0.2
+item 2** -- the section and item are the authority; the line number is a dated hint that has already moved twice,
+so it is recorded with the date it was read and both the line and the protocol's own digest travel in `smoke.json`.
+
+THE RESERVATION IS `$15.00`, AND NOTHING HERE CALLS IT SMALL. The launcher reserves
+`typed_pointer_launch.RESERVATION_USD` for every job of this study, and `budget.py` exposes no release, refund or
+settle function, so the smoke's commitment is the same $15.00 cap commitment as the three claim-bearing jobs.
+What the owner approved for the smoke is a CASH COST of about $1 (`SMOKE_ESTIMATE`, whose 771 s worker clock and
+598.2 s of non-worker overhead are the plan's own measured figures), and what the launcher actually commits is
+$15.00 of the campaign cap -- recorded as a commitment, never described as small. The ledger row is the
+launcher's business (`budget.reserve_budget` is the only writer); this script never touches it.
 
 THE APPROVAL AND ITS LATER RE-CONFIRMATION ARE RECORDED AS TWO SEPARATE FACTS. The approval's own capture
 date is `OWNER_ANSWERED_UTC_DATE`; the smoke instruction was re-confirmed by the owner on the same date with
@@ -143,6 +152,21 @@ def smoke_label():
     label = OWNER_DECISIONS[SMOKE_LABEL_INDEX]
     assert text.count(label) == 1, 'SMOKE_LABEL_NOT_RECORDED_VERBATIM_IN_THE_CONTRACT:' + label
     return label
+
+
+def label_location():
+    """`(locator, lines)` for the smoke label in the protocol document: FOUND, not assumed.
+
+    The locator is the document's own section-and-item address, which is the authority. The `lines` are a bonus:
+    they are computed from the file read at this run, together with the file's digest, so the record states where
+    the label was when the freeze happened. Scanning for it by hand earlier found it on :57 -- and the same
+    document's section 0.2 has already been renumbered twice, which is exactly why the line numbers are a dated
+    observation in the record rather than the citation.
+    """
+    text = PROTOCOL.read_text(encoding='utf-8')
+    lines = [number for number, line in enumerate(text.splitlines(), 1) if smoke_label() in line]
+    assert lines, 'SMOKE_LABEL_NOT_IN_THE_PROTOCOL'
+    return 'docs/CNCM_TYPED_POINTER_STUDY_v0.1.md section 0.2 item 2', lines
 
 
 def validate_reduced_schedule():
@@ -348,9 +372,13 @@ def prepare(seed=None):
              'package_archive_sha256': package['archive_sha256'],
              'package_manifest_sha256': package['manifest_sha256'], 'package_archive': package['archive'],
              'protocol_sha256': sha256(PROTOCOL.read_bytes()).hexdigest(),
+             'protocol_bytes_read': len(PROTOCOL.read_bytes()),
              'plan_sha256': sha256((HERE / 'pre_design/AWS_SMOKE_S10_PLAN.md').read_bytes()).hexdigest(),
              'owner_label_verbatim': smoke_label(), 'owner_label_source': 'pointer_contract.DESIGN["owner_approval"]',
-             'owner_label_protocol_line': 'docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:57',
+             'owner_label_protocol_locator': label_location()[0],
+             'owner_label_protocol_lines_read_at_this_freeze': label_location()[1],
+             'owner_label_protocol_line_is_a_dated_hint_not_the_citation': True,
+             'owner_label_protocol_read_utc_date': OWNER_ANSWERED_UTC_DATE,
              'owner_reconfirmation_raw': OWNER_RECONFIRMATION_RAW,
              'owner_reconfirmation_utc_date': OWNER_RECONFIRMATION_UTC_DATE,
              'owner_decisions_in_contract_text': owner['owner_decisions_in_contract_text'],
@@ -375,6 +403,10 @@ def prepare(seed=None):
                                 'contract was the reason a perfect reduced run returned 1'),
              'reduced_schedule_gate_void_path': GATE_VOID_PATH, 'gate_void_source': GATE_VOID_SOURCE,
              'estimate': SMOKE_ESTIMATE, 'reservation_per_job_usd': launch.RESERVATION_USD,
+             'reservation_is_a_cap_commitment_not_a_charge': True,
+             'reservation_has_no_release_path': 'aws/budget.py exposes only reserve_budget, no refund or settle',
+             'estimated_cash_cost_usd': SMOKE_ESTIMATE['usd_at_2_52_per_hour'],
+             'estimated_instance_seconds': SMOKE_ESTIMATE['instance_seconds'],
              'maximum_new_reservation_usd': MAXIMUM_NEW_RESERVATION_USD,
              'jobs_execute_sequentially': True, 'automatic_retries': 0, 'jobs': jobs}
     pin = write(OUTPUT / 'smoke.json', smoke)
