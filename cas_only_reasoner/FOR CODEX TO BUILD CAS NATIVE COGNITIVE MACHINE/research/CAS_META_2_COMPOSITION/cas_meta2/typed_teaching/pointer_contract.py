@@ -665,12 +665,19 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "machine": "POINTER",
     "input_unit": "ONE_FOCUS_WORLD_READ_AS_A_DIRECTED_GRAPH",
     "answer_form": "POINTER_INTO_THE_QUESTION_INPUT",
-    # INTERFACE_SPEC_POINTER.md:83-85 registers the node rank feature as INCLUDED (resolving DG3). The
-    # registered value is kept here exactly as pinned; its status is recorded separately because HEAD
-    # 6cb0b348 REOPENED the decision (a rank-only rule eats 4 of the 9 eligible held reach questions) and
-    # pointer_inputs.py must not be built on either branch until lens A reports.
-    "node_rank_feature": True,
-    "node_rank_decision_status": "REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A",
+    # DECIDED 2026-09-19: the node rank feature is EXCLUDED and the order-dependent questions are removed.
+    #
+    # Both review lenses agree, from opposite directions. The leaks lens (LK7) measured the
+    # alphabetically-last-node rule solving 5 of 45 eligible questions by itself (parts 1/5, reach 4/9) and
+    # stated the preference plainly: take the removal option so the vacuity law survives. The learnability
+    # lens (LB1) reached the same fork from the hidden-ref-order side (5/26 held reach records).
+    #
+    # Adopting rank would take the population from 18 to 13 and raise the required improvement share from
+    # 7/18 = 0.3889 to 7/13 = 0.5385, AND would withdraw the draft's own vacuity paragraph, because the rank
+    # IS the node alias: 244 of 244 node refs have their sorted position equal to their own stored index.
+    # So the feature is off and the questions it would have solved are removed instead.
+    "node_rank_feature": False,
+    "node_rank_decision_status": "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD",
     "head_set": "OPEN_LENS_B_EXPRESSIVITY_TABLE",
     "core_rounds": PLANNED_WORK_ROUNDS,
     "planned_work": deepcopy(PLANNED_WORK),

@@ -101,7 +101,20 @@ progress.
 - **You are NOT the research governor.** Do not pick a replacement hypothesis after a failed gate; a failed hard gate is a
   FAILURE, never "PASS with caveats"; the claim status is what the frozen gate program prints; owner approval must be an
   executable signed record (one `owner.json` per job, as the practice study did).
-- **GPU-first.** No neural work on local CPU. Local RTX 4070 = smoke/dev only. Every claim-bearing run on AWS GPU (not Bedrock).
+- **GPU-first, and AWS is the venue — not the laptop.** No neural work on local CPU **or on the local GPU**. Owner
+  order 2026-09-19, verbatim: *"STOP SAY FOCUSING ON '$0.00 spent. Nothing on AWS.' BECAUSE WE ULTIMATELY NEED AWS TO
+  GET TO THE BEST VERSION OF OUR BUILD/PRODUCT AND WE ALWAYS ALWAYS US AWS BECAUSE IT FASTER THAN RUNNING LOCALLY AND
+  SAVES US LOCAL PROCESSING POWER FOR OTHER THINGS IF NECESSARY IT'S A FUCKING LAPTOP SO IT GPU IS NOT THAT STRONG
+  PLEASE REMEMBER THIS SO USE AWS"*.
+  What this changes in practice:
+  - **The local RTX 4070 is not a smoke-test venue.** The whole GPU smoke, S1–S9 **and** S10, runs on AWS. The
+    laptop's GPU is weak and its power belongs to other work.
+  - **Do not present "nothing spent" as a virtue.** Spending the approved envelope on AWS to get a better machine
+    faster is the point, not a risk to be avoided. $0 is a status, not an achievement.
+  - **Never spend without the owner's approval**, which is unchanged — the envelope is ~$13 expected and $45 reserved,
+    plus the approved sub-$1 smoke. Ask before exceeding it; do not ask for permission to use what is already
+    approved.
+  - Every claim-bearing run stays on AWS GPU (not Bedrock). Bedrock remains teacher-language only.
 - **Never write to `CAS_RRK_v0.1`.** Never delete a negative result. Numbers exact, never rounded.
 - **Every result** → `CHANGELOG.md` + a dated spec-sheet change-log row with an artifact path, in the same commit. Run pytest
   before committing code. Commit and push after every unit of work. Back up successful run receipts to `D:\tksCAS-archive\`.
