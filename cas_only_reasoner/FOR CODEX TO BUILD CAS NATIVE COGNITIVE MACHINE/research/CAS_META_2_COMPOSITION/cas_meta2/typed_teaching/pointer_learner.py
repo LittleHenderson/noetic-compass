@@ -726,8 +726,15 @@ def _build_container(torch, framework, device):
             self.reach_option_head = torch.nn.Sequential(
                 torch.nn.Linear(2 * WIDTH + 4, WIDTH, bias=False), torch.nn.GELU(),
                 torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, REACH_OPTION_COUNT, bias=True)).to(device)
+            # `3 * WIDTH`, and the whole point is that BOTH this head and the reshape in `_mode_options` used to
+            # say `2 * WIDTH + 2 * WIDTH` -- they agreed with each other and disagreed with the tensor, which is
+            # `cat((query_value, focus_world, target_world))` = three WIDTH-wide vectors. `_mode_options`'
+            # docstring always described it correctly: "scored against `q`, the focus world vector and the target
+            # world vector". Two places restating the same wrong number is why the guard pattern in this module
+            # never caught anything: a check that recomputes the constant cannot detect the constant being wrong.
+            # `_mode_options` now derives its width and checks it against this head, so the two cannot part again.
             self.mode_option_head = torch.nn.Sequential(
-                torch.nn.Linear(2 * WIDTH + 2 * WIDTH, WIDTH, bias=False), torch.nn.GELU(),
+                torch.nn.Linear(3 * WIDTH, WIDTH, bias=False), torch.nn.GELU(),
                 torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, MODE_OPTION_COUNT, bias=True)).to(device)
             self.world_head = torch.nn.Sequential(
                 torch.nn.Linear(WORLD_CANDIDATE_WIDTH, WIDTH, bias=False), torch.nn.GELU(),
@@ -1149,7 +1156,16 @@ class GraphForward:
         """`NO_MATCH` and `MAPPING` scored against `q`, the focus world vector and the target world vector."""
         torch, model = self.torch, self.model
         value = torch.cat((self.query_value, self.worlds[self.focus_position],
-                           self.worlds[position])).reshape(1, 2 * WIDTH + 2 * WIDTH)
+                           self.worlds[position])).reshape(1, -1)
+        # DERIVED, NEVER RESTATED. This line used to reshape to `2 * WIDTH + 2 * WIDTH` = 256 while concatenating
+        # THREE WIDTH-wide tensors = 192, so the first mode-option scoring on a real run raised
+        # `shape '[1, 256]' is invalid for input of size 192`. `-1` plus a check against the head's own
+        # `in_features` has no second number to drift from -- which is the whole lesson of the four other width
+        # defects in this module. The sibling `_reach_options` directly above was always right (`2 * WIDTH + 4`
+        # for two vectors and the four degree terms), which is what marks this one as the outlier.
+        require(int(value.shape[1]) == int(model.mode_option_head[0].in_features),
+                "POINTER_MODE_OPTION_HEAD_WIDTH:%d!=%d" % (int(value.shape[1]),
+                                                           int(model.mode_option_head[0].in_features)))
         return model.mode_option_head(value).reshape(-1)
 
     def _world_scores(self, field, symbols):
