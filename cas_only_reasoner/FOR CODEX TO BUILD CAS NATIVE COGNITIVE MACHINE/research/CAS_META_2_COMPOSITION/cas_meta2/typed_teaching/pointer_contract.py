@@ -134,23 +134,34 @@ INSTANCE_SECONDS_MAX = practice.INSTANCE_SECONDS_MAX
 # ----------------------------------------------------------------------------------------------------------------
 STRATIFIED = True
 
-# The NEW DIGEST of the stratified schedule, measured 2026-09-19 on this frozen course at
-# `pointer_schedule(frozen)` (the default: stratified, `PASSES` passes) and pinned so a later drift is visible
-# rather than discovered after a spend. Two constants, because they answer two different questions:
+# THE TWO DIGESTS OF THE STRATIFIED SCHEDULE. They are two different KINDS of constant, and that difference is
+# what adversarial review R2 item M4 found wrong here (fixed 2026-09-19):
 #
-#   * STRATIFIED_BATCHES_DIGEST -- the whole default schedule, the number a reader should quote as "the new
-#     digest". It is what
-#     `test_the_stratified_cost_is_the_measured_1176_presentations_and_the_digest_is_pinned` pins.
-#   * STRATIFIED_PASS_DIGEST -- the SINGLE stratified pass, digest of the slot list `_stratified_pass` returns
-#     with its generated ids. This is the one the module can check for itself on every call: it does not depend
-#     on the pass count, so `pointer_schedule` recomputes it and refuses to return a schedule whose composition
-#     has silently moved (`POINTER_STRATIFY_DIGEST`). The practice digest for comparison stays
-#     `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857` at ten passes (`stratified=False`).
+#   * STRATIFIED_PASS_DIGEST -- the SINGLE stratified pass, the digest of the slot list `_stratified_pass`
+#     returns with its generated ids. It is PASS-COUNT INDEPENDENT by construction, so `pointer_schedule`
+#     recomputes it on every call and refuses to return a schedule whose composition has silently moved
+#     (`POINTER_STRATIFY_DIGEST`). A frozen literal is the right thing for this one.
+#   * STRATIFIED_BATCHES_DIGEST -- the WHOLE default schedule. This one is a FUNCTION OF `PASSES`: the pass
+#     number is inside every occurrence id and every presentation id, so a different pass count is a different
+#     schedule with a different digest. It is therefore DERIVED at import time from whatever `PASSES` is, in
+#     the block below `CNCM`, and is never written down as a literal.
+#   * STRATIFIED_BATCHES_DIGEST_AT_10_PASSES -- the ten-pass literal, KEPT FOR THE RECORD: the identity
+#     measured 2026-09-19 on this frozen course, and the evidence that a different pass count really does give
+#     a different digest. It is checked against the derivation at import (at EVERY pass count, not only at ten)
+#     and again by `tests/test_typed_pointer_study.py` and `records/typed_pointer_001/holdout_audit.py`.
 #
-# A different pass count gives a different whole-schedule digest, because the pass number is inside every
-# occurrence and presentation id; that is expected, and the single-pass digest is pass-count independent by
-# construction.
-STRATIFIED_BATCHES_DIGEST = "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304"
+# WHY THE WHOLE-SCHEDULE DIGEST MAY NOT BE FROZEN. Protocol section 6
+# (`docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:686-699`) requires `PASSES` to be set from the AWS smoke job's
+# MEASURED per-update cost, and `PASSES` above inherits the practice study's ten as a STARTING POINT only.
+# Freezing `1c67edd7...` as `STRATIFIED_BATCHES_DIGEST` made this contract contradict itself: the moment
+# `PASSES` was set as the protocol demands, the test that pinned it went red and `holdout_audit.py` exited 1
+# with `SOURCE_SCHEDULE_IS_NOT_THE_BASE_SCHEDULE` -- a MISLEADING failure that looks like a real schedule
+# problem and would stall a launch the owner has already pre-approved.
+#
+# The practice digest for comparison stays
+# `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857` at ten passes (`stratified=False`).
+TEN_PASSES = 10                     # the practice study's own count: what the recorded literal below measured
+STRATIFIED_BATCHES_DIGEST_AT_10_PASSES = "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304"
 STRATIFIED_PASS_DIGEST = "80ae7121ff75f687e9c6c88593e2ed7d3f6024173d3577243ed05049c8859056"
 
 # Reused UNCHANGED by import: the hold-out must stay byte-identical to the practice study (test P1).
@@ -548,9 +559,56 @@ VERIFIED_KNOWN_REMOVALS = {"flag_rule": {"parts": 3}, "rank_rule": {"reach": 2}}
 # because the run printed those ids and a later agent must not mistake them for removals.
 UNRECONCILED_REMOVAL_READINGS = {"parts_adjacency": 5, "edge_account_adjacency": 5, "reach_rank_only": 4,
                                  "rank_last_pointing_not_removed": 5}
-# CNCM root, used only to locate the practice study's own gate reader lazily (see _practice_gates).
+# CNCM root. TWO uses, and neither of them assumes a working directory:
+#   * `_practice_gates` locates the practice study's own gate reader lazily -- `records/` is analysis
+#     territory, outside the packaged source scope, so that one is loaded on first use and never at import;
+#   * `_import_time_stratified_digests` reads the FROZEN COURSE to derive the whole-schedule digest for the
+#     current `PASSES`. That course is a pinned MATERIAL row, and every MATERIAL row IS shipped to the worker
+#     at this same relative path (`worker_contract.py:135-150`), with the sources loaded from their real paths
+#     (`cncm/typed_source_attestation.py:94`), so `parents[4]` is the run root in the packaged worker too. That
+#     is why THIS read is safe at import while the pins JSON is not: the pins JSON is NOT a MATERIAL row, so a
+#     packaged worker is not shipped it, and an import-time read of it would fail the job before any work was
+#     done (see the CHECKPOINT_PINS note below).
 CNCM = Path(__file__).resolve().parents[4]
 _GATES_MODULE = None
+
+
+def stratified_batches_digest(frozen, passes=None, stratified=None):
+    """The WHOLE-schedule digest for `passes` (default `PASSES`), computed exactly as `pointer_schedule` does.
+
+    ONE function, so the contract, its test and `records/typed_pointer_001/holdout_audit.py` cannot drift
+    apart: all three ask `pointer_schedule` for the schedule and read the digest it computed over it. Every
+    bound `pointer_schedule` enforces (the `POINTER_PASSES_BOUND` range, the composition digest, the coverage
+    check, the update ceiling) therefore applies here too, with no second copy of the rules.
+    """
+    _, stats = pointer_schedule(frozen, passes, stratified)
+    return stats["batches_digest"]
+
+
+def _import_time_stratified_digests():
+    """`{pass count: whole-schedule digest}` for the current `PASSES`, plus the recorded ten.
+
+    DERIVED, NOT FROZEN (review R2, M4). The schedule is built from the frozen course at this module's own
+    root by the same call `pointer_schedule` makes for a launch, so `STRATIFIED_BATCHES_DIGEST` follows
+    `PASSES` by construction and never has to be re-measured by hand when `PASSES` is set from the smoke job.
+
+    Ten is ALWAYS computed as well, whatever `PASSES` is, for two reasons: the recorded ten-pass identity stays
+    checkable at EVERY pass count rather than only at ten, and a later change to the stratified composition
+    fails closed HERE at import instead of being discovered after a spend.
+    """
+    frozen = load_material(CNCM)[0]
+    return {count: stratified_batches_digest(frozen, count) for count in sorted({PASSES, TEN_PASSES})}
+
+
+_STRATIFIED_BATCHES_DIGESTS = _import_time_stratified_digests()
+STRATIFIED_BATCHES_DIGEST = _STRATIFIED_BATCHES_DIGESTS[PASSES]
+# The ten-pass record must still reproduce, at ANY `PASSES` ...
+require(_STRATIFIED_BATCHES_DIGESTS[TEN_PASSES] == STRATIFIED_BATCHES_DIGEST_AT_10_PASSES,
+        "POINTER_STRATIFIED_DIGEST_AT_10_PASSES")
+# ... and at any pass count other than ten the digest must have MOVED. That is the invariant the defect broke:
+# the whole-schedule digest is a FUNCTION of the pass count, not a constant measured once and frozen.
+require(PASSES == TEN_PASSES or STRATIFIED_BATCHES_DIGEST != STRATIFIED_BATCHES_DIGEST_AT_10_PASSES,
+        "POINTER_STRATIFIED_DIGEST_PASS_COUNT")
 
 
 def _practice_gates():
@@ -764,6 +822,9 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     # decision (see `owner_approval`). `schedule_stratified_absent_updates_as_is` is the as-is branch's own
     # measurement (REVIEW_SYNTHESIS.md section 4.7), kept beside it so the comparison travels with the field
     # rather than having to be re-derived; under stratification every one of those eight counts is 0.
+    # `schedule_stratified_batches_digest` is the DERIVED whole-schedule digest for the registered `PASSES`
+    # (review R2, M4), never the ten-pass literal: a shipped design that carried a ten-pass digest while the
+    # job ran another pass count would be a false statement about the job.
     "schedule_stratified": STRATIFIED,
     "schedule_stratified_decision": "OWNER_DECISION_STRATIFY_AND_TRAIN_LONGER_RECOMMENDED",
     "schedule_stratified_updates_per_pass": 147, "schedule_stratified_presentations_per_pass": 1176,

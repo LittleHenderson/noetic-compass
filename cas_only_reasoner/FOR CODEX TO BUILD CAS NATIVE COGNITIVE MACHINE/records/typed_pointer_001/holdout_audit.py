@@ -25,9 +25,18 @@ re-derive, against the values the CONTRACT records, and against the three values
 
 The third is the SOURCE schedule: `pointer_contract.pointer_schedule` draws its stratified pass from
 `matched_contract.schedule(frozen, CONDITION)` and records that base schedule's own `batches_digest` as
-`source_schedule_digest` (`pointer_contract.py:314`). It is the digest of the practice study's unstratified
-MIXED order, NOT of the stratified pointer schedule (`1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304`),
-so a re-derivation that silently switched to the stratified order would be caught here.
+`source_schedule_digest` (`pointer_contract.py`). It is the digest of the practice study's unstratified MIXED
+order, NOT of the stratified pointer schedule, so a re-derivation that silently switched to the stratified
+order would be caught here.
+
+THIS STUDY'S OWN STRATIFIED DIGEST IS NOT COMPARED AGAINST A LITERAL (review R2, item M4). It is a FUNCTION of
+the registered `PASSES` -- protocol section 6 sets `PASSES` from the smoke job's measured per-update cost, and
+the pass number is inside every occurrence and presentation id -- so the audit RE-DERIVES it from the contract
+and checks it against the schedule this module built. The ten-pass value is kept as the record,
+`1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304`, and the contract's own ten-pass
+derivation is checked against it whatever `PASSES` is. Freezing the whole-schedule digest as a literal is what
+used to turn a legal `PASSES` into a false `SOURCE_SCHEDULE_IS_NOT_THE_BASE_SCHEDULE` failure -- a misleading
+signal that looks like a real schedule problem and would stall a launch.
 
 Local, post-hoc and pre-run audit only. It imports the private checker (it reads correct answers), which is why
 the worker never runs it: the contract carries the frozen result, and a test asserts that this module re-derives
@@ -51,8 +60,11 @@ EXPECTED_DIGESTS = {
     'excluded': 'b82108e14554a9fe746a7cfcb1e2cb181a99a3019dc39a3596805f10934c2621',
     'source_schedule': '1772c0a53933aa92ea7dfb6b2ce53dcd1089cb3634b089427caba3369977d275',
 }
-# The stratified pointer schedule's own digest, recorded BESIDE the source schedule so the two cannot be confused.
-STRATIFIED_BATCHES_DIGEST = '1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304'
+# The TEN-PASS stratified digest, recorded BESIDE the source schedule so the two cannot be confused. It is the
+# RECORD, not the value this audit compares the built schedule against: the whole-schedule digest is a FUNCTION
+# of the registered `PASSES` (protocol section 6 sets `PASSES` from the smoke job's measured per-update cost),
+# so the audit re-derives it from the contract for whatever `PASSES` is (review R2, M4).
+STRATIFIED_BATCHES_DIGEST_AT_10_PASSES = '1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304'
 
 
 def shape_signature(world):
@@ -104,14 +116,25 @@ def source_schedule_digest(frozen):
 
 
 def observed(frozen, derived):
-    """The three digests as THIS module's rules derive them."""
+    """The digests as THIS module's rules derive them."""
     from cas_meta2.typed_teaching import pointer_contract as contract
     return {'held': contract.digest(derived['held']), 'excluded': contract.digest(derived['excluded']),
-            'source_schedule': source_schedule_digest(frozen)}
+            'source_schedule': source_schedule_digest(frozen),
+            'stratified_schedule': stratified_schedule_digest(frozen)}
+
+
+def stratified_schedule_digest(frozen, passes=None):
+    """The STRATIFIED schedule's digest AS THIS MODULE DERIVES IT: the contract's own call, re-made.
+
+    Never a literal. `passes` defaults to the registered `PASSES`, because the whole-schedule digest is a
+    function of the pass count (review R2, M4): the pass number is inside every occurrence and presentation id.
+    """
+    from cas_meta2.typed_teaching import pointer_contract as contract
+    return contract.stratified_batches_digest(frozen, passes)
 
 
 def contract_reading(frozen):
-    """The same three digests as the CONTRACT records them, re-derived from the contract's own calls."""
+    """The same digests as the CONTRACT records them, re-derived from the contract's own calls."""
     from cas_meta2.typed_teaching import pointer_contract as contract
     held, _, excluded = contract.split(frozen)
     _, stats = contract.pointer_schedule(frozen)
@@ -119,7 +142,11 @@ def contract_reading(frozen):
             'source_schedule': stats['source_schedule_digest'],
             'recorded_held': stats['held_back_record_ids_digest'],
             'recorded_excluded': stats['excluded_record_ids_digest'],
-            'stratified_batches_digest': stats['batches_digest']}
+            'stratified_batches_digest': stats['batches_digest'],
+            'derived_stratified_batches_digest': contract.STRATIFIED_BATCHES_DIGEST,
+            'derived_stratified_batches_digest_at_10_passes':
+                contract.stratified_batches_digest(frozen, contract.TEN_PASSES),
+            'passes': contract.PASSES}
 
 
 def audit(frozen):
@@ -132,9 +159,18 @@ def audit(frozen):
         'matches_the_contract': {key: seen[key] == recorded[key] for key in EXPECTED_DIGESTS},
         'contract_recorded_ids_digest': {'held': recorded['recorded_held'] == seen['held'],
                                         'excluded': recorded['recorded_excluded'] == seen['excluded']},
-        'stratified_schedule_is_a_different_digest':
-            recorded['stratified_batches_digest'] == STRATIFIED_BATCHES_DIGEST
-            and recorded['stratified_batches_digest'] != seen['source_schedule'],
+        # M4. This study's own stratified digest is re-derived for the REGISTERED pass count and checked against
+        # the schedule built here, the digest the contract reports for it, and the constant the contract derived
+        # at import. Never against a frozen ten-pass literal -- that is what made a legal `PASSES` fail.
+        'passes': recorded['passes'],
+        'stratified_digest_is_the_derived_one_for_the_registered_passes':
+            seen['stratified_schedule'] == recorded['stratified_batches_digest']
+            == recorded['derived_stratified_batches_digest'],
+        # The ten-pass identity is KEPT as the record, and stays checkable whatever `PASSES` is.
+        'stratified_digest_at_10_passes_matches_the_record':
+            recorded['derived_stratified_batches_digest_at_10_passes'] == STRATIFIED_BATCHES_DIGEST_AT_10_PASSES,
+        # ... and the base MIXED schedule is still a DIFFERENT digest from this study's stratified one.
+        'stratified_schedule_is_a_different_digest': seen['stratified_schedule'] != seen['source_schedule'],
         'held_worlds': derived['held_worlds'],
         'answer_only_exposed': derived['answer_only_exposed'],
         'exposure_counts': derived['exposure_counts'],
@@ -149,6 +185,10 @@ def failed(result):
     bad += ['CONTRACT:%s' % key for key in EXPECTED_DIGESTS if not result['matches_the_contract'][key]]
     bad += ['CONTRACT_ID_DIGEST:%s' % key for key in result['contract_recorded_ids_digest']
             if not result['contract_recorded_ids_digest'][key]]
+    if not result['stratified_digest_is_the_derived_one_for_the_registered_passes']:
+        bad.append('STRATIFIED_DIGEST_IS_NOT_THE_DERIVED_ONE_FOR_PASSES_%d' % result['passes'])
+    if not result['stratified_digest_at_10_passes_matches_the_record']:
+        bad.append('STRATIFIED_TEN_PASS_DIGEST_MOVED')
     if not result['stratified_schedule_is_a_different_digest']:
         bad.append('SOURCE_SCHEDULE_IS_NOT_THE_BASE_SCHEDULE')
     return bad

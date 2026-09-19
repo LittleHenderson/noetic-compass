@@ -98,7 +98,15 @@ def test_holdout_and_schedule_are_byte_identical_to_the_practice_study(material)
     assert stats["source_schedule_digest"] == SOURCE_SCHEDULE_DIGEST
     assert stats["held_back_records"] == len(held) == 127 and stats["trained_records"] == len(trained) == 358
     assert stats["main_updates"] == 1470 and stats["presentations"] == 8180
-    assert contract.PASSES == practice.PASSES == 10 and contract.MODEL_SEEDS == practice.MODEL_SEEDS
+    # PASSES is deliberately NOT asserted equal to the practice study's: protocol section 6 sets it from the AWS
+    # smoke job's MEASURED per-update cost, so freezing it at 10 in an assertion is the defect itself (review R2,
+    # M4). What IS fixed, and what this replaces the old `== practice.PASSES == 10` with: the practice study's own
+    # count is ten, ten is the count the recorded whole-schedule digest was measured at, and this study's own
+    # value is a legal one that its DESIGN reports.
+    assert contract.MODEL_SEEDS == practice.MODEL_SEEDS
+    assert practice.PASSES == contract.TEN_PASSES == 10
+    assert type(contract.PASSES) is int and 1 <= contract.PASSES <= contract.MAX_PASSES_PERMITTED
+    assert contract.DESIGN["passes"] == contract.PASSES
 
 
 def test_job_and_bucket_are_within_the_bucket_rule_for_all_three_seeds():
@@ -226,15 +234,23 @@ def test_planned_work_formula_is_self_consistent_against_the_real_schedule(mater
 
 # ---------------------------------------------------------------------------------------------------
 # STRATIFICATION (owner decision 2026-09-19: the option labelled "Stratify AND train longer
-# (Recommended)"). The single pass now carries one record of EVERY kind in every update. These four
+# (Recommended)"). The single pass now carries one record of EVERY kind in every update. These five
 # tests are the mechanism: the fidelity property is still exact on the unstratified branch, the
 # stratified branch really does cover all eight kinds in all 147 updates, its cost is the measured
-# 1176 presentations per pass, and its digest is pinned so a later drift is visible rather than
-# discovered after a spend. The as-is absence counts this decision answers are in
-# records/typed_pointer_001/pre_design/REVIEW_SYNTHESIS.md section 4.7 and in the contract's DESIGN.
+# 1176 presentations per pass, the single-pass composition digest is pinned (it is pass-count
+# independent, so a literal is correct there), and the WHOLE-schedule digest is checked to be the
+# DERIVATION for the registered pass count rather than a frozen ten-pass literal (review R2, M4), so a
+# later drift is still visible without the registered `PASSES` being frozen to make it so. The as-is
+# absence counts this decision answers are in records/typed_pointer_001/pre_design/REVIEW_SYNTHESIS.md
+# section 4.7 and in the contract's DESIGN.
 # ---------------------------------------------------------------------------------------------------
-STRATIFIED_BATCHES_DIGEST = "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304"
+STRATIFIED_BATCHES_DIGEST_AT_10_PASSES = "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304"
 STRATIFIED_PASS_DIGEST = "80ae7121ff75f687e9c6c88593e2ed7d3f6024173d3577243ed05049c8859056"
+# THE WHOLE-SCHEDULE DIGEST IS A FUNCTION OF `PASSES`, NOT A LITERAL (review R2, item M4). Protocol section 6
+# requires `PASSES` to be set from the AWS smoke job's measured per-update cost, so the digest of the schedule
+# moves with it: the literal above is the TEN-PASS RECORD, kept as evidence, and `contract.STRATIFIED_BATCHES_DIGEST`
+# is the derivation for whatever `PASSES` is. Before the fix the constant WAS this literal, so setting `PASSES`
+# turned this file red and made `records/typed_pointer_001/holdout_audit.py` exit 1.
 # REVIEW_SYNTHESIS.md section 4.7, measured by pre_design/lb11_economics.py: the as-is MIXED pass of
 # 147 updates leaves each kind ABSENT from this many of them. Stratifying drives all eight to zero.
 AS_IS_ABSENT_UPDATES = {"role_set": 115, "analogy": 112, "context": 107, "definition": 105,
@@ -242,6 +258,15 @@ AS_IS_ABSENT_UPDATES = {"role_set": 115, "analogy": 112, "context": 107, "defini
 AS_IS_UPDATES_PER_PASS = 147
 AS_IS_PRESENTATIONS_PER_PASS = 818
 STRATIFIED_PRESENTATIONS_PER_PASS = 1176
+
+
+def _other_passes():
+    """A LEGAL pass count that is not this contract's own, so "the digest moved" comparisons stay meaningful.
+
+    Never a fixed 7: if `PASSES` were itself 7 the comparison would hold vacuously, which is the same defect
+    one level down. The bound is 1 <= count <= MAX_PASSES_PERMITTED (24) either way.
+    """
+    return 7 if contract.PASSES != 7 else 8
 
 
 def test_the_non_stratified_branch_keeps_the_practice_fidelity_property_exactly(material):
@@ -270,7 +295,8 @@ def test_the_stratified_default_puts_every_kind_in_every_update_at_the_same_upda
     assert contract.STRATIFIED is True and contract.DESIGN["schedule_stratified_decision"] == \
         "OWNER_DECISION_STRATIFY_AND_TRAIN_LONGER_RECOMMENDED"
     assert stats["updates_per_pass"] == AS_IS_UPDATES_PER_PASS == 147
-    assert stats["passes"] == contract.PASSES == 10 and stats["main_updates"] == 1470
+    assert stats["passes"] == contract.PASSES
+    assert stats["main_updates"] == contract.PASSES * AS_IS_UPDATES_PER_PASS
     first = [batch for batch in batches if batch["pass"] == 1]
     assert len(first) == 147
     kinds_of = {row["record_id"]: row["query"]["kind"] for row in material[0]["registry"]}
@@ -298,28 +324,55 @@ def test_the_stratified_default_puts_every_kind_in_every_update_at_the_same_upda
     assert [len(batch["record_ids"]) for batch in one_pass] == [8] * 147
 
 
-def test_the_stratified_cost_is_the_measured_1176_presentations_and_the_digest_is_pinned(material):
-    # +43.8 % presentations for the same update count: 818 -> 1176 per pass, and a digest of its own.
+def test_the_stratified_cost_is_the_measured_1176_presentations_and_the_digest_follows_passes(material):
+    # +43.8 % presentations for the same update count: 818 -> 1176 per pass, and a digest of its own that is
+    # the derivation for the REGISTERED pass count, not the recorded ten-pass literal (review R2, M4).
     batches, stats = contract.pointer_schedule(material[0])
     assert stats["presentations_per_pass"] == STRATIFIED_PRESENTATIONS_PER_PASS == 1176
-    assert stats["presentations"] == 11760
+    assert stats["presentations"] == STRATIFIED_PRESENTATIONS_PER_PASS * contract.PASSES
     assert AS_IS_PRESENTATIONS_PER_PASS + 358 == STRATIFIED_PRESENTATIONS_PER_PASS
     increase = STRATIFIED_PRESENTATIONS_PER_PASS / AS_IS_PRESENTATIONS_PER_PASS - 1
     assert 0.437 < increase < 0.439                    # 43.8 %, not rounded into 44 % or 0.44
     assert stats["updates_per_pass"] == AS_IS_UPDATES_PER_PASS     # the update count does NOT move
-    # The stratified digest differs from the practice one, and both are pinned exactly.
+    # The stratified digest differs from the practice one, and the contract constant IS the derivation: the
+    # schedule built here, the contract's own value and the value its DESIGN carries all agree.
     assert stats["batches_digest"] != BATCHES_DIGEST
-    assert stats["batches_digest"] == STRATIFIED_BATCHES_DIGEST
     assert stats["batches_digest"] == contract.STRATIFIED_BATCHES_DIGEST
     assert stats["batches_digest"] == contract.DESIGN["schedule_stratified_batches_digest"]
     assert contract.DESIGN["schedule_stratified_presentations_per_pass"] == 1176
     assert contract.DESIGN["schedule_stratified_updates_per_pass"] == 147
-    # A different pass count still differs, and the ceiling still binds at 24 passes.
-    other, other_stats = contract.pointer_schedule(material[0], 7)
-    assert other_stats["batches_digest"] not in (BATCHES_DIGEST, STRATIFIED_BATCHES_DIGEST)
-    assert other_stats["main_updates"] == 7 * 147 == 1029
+    # A DIFFERENT pass count is a different schedule and a different digest -- which is the fix: `other` is
+    # chosen against `PASSES` rather than hard-coded, so this comparison cannot go vacuous.
+    other = _other_passes()
+    other_batches, other_stats = contract.pointer_schedule(material[0], other)
+    assert other_stats["passes"] == other != contract.PASSES
+    assert other_stats["batches_digest"] not in (BATCHES_DIGEST, contract.STRATIFIED_BATCHES_DIGEST)
+    assert other_stats["main_updates"] == other * AS_IS_UPDATES_PER_PASS
     with pytest.raises(ValueError, match="POINTER_PASSES_BOUND"):
         contract.pointer_schedule(material[0], contract.MAX_PASSES_PERMITTED + 1)
+
+
+def test_the_whole_schedule_digest_is_derived_from_the_pass_count_and_ten_is_still_pinned(material):
+    # M4, the defect itself. The WHOLE-schedule digest is a function of `PASSES`, because the pass number is
+    # inside every occurrence id and every presentation id. At the ten passes the study was measured at it must
+    # equal the recorded literal; at any other legal pass count it must NOT. Before this fix the constant WAS
+    # the literal, so setting `PASSES` as protocol section 6 requires turned this file red and made
+    # `records/typed_pointer_001/holdout_audit.py` exit 1 -- a misleading signal that would stall a launch.
+    frozen = material[0]
+    derived = contract.stratified_batches_digest(frozen)            # the derivation, for the registered PASSES
+    assert contract.STRATIFIED_BATCHES_DIGEST == derived            # the constant IS the derivation, not a literal
+    assert contract.DESIGN["schedule_stratified_batches_digest"] == derived
+    # The recorded ten-pass identity is preserved AND independently checkable at every pass count, not only at 10.
+    assert contract.TEN_PASSES == 10 and contract.practice.PASSES == contract.TEN_PASSES
+    at_ten = contract.stratified_batches_digest(frozen, contract.TEN_PASSES)
+    assert at_ten == STRATIFIED_BATCHES_DIGEST_AT_10_PASSES
+    # The constant tracks `PASSES` exactly: it is the recorded literal IFF the registered count is ten, and the
+    # digest really does move at another count.
+    assert (derived == at_ten) is (contract.PASSES == contract.TEN_PASSES)
+    other = _other_passes()
+    assert contract.PASSES != other
+    at_other = contract.stratified_batches_digest(frozen, other)
+    assert at_other != at_ten and at_other != derived
 
 
 def test_every_stratified_batch_carries_exactly_eight_records_and_eight_kinds(material):
