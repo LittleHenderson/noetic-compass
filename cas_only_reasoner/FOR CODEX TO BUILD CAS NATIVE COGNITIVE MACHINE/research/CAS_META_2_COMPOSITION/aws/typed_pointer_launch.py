@@ -409,9 +409,18 @@ def inputs_hash_cross_check(source_sha=None):
     worker compared the packaged manifest against the CONFIG (the contract's side) and correctly REFUSED. Nothing
     tested that the two sides are the same number. This does, so a future divergence of this shape is caught at
     freeze time for $0 instead of on an instance for about $0.40 and a $15.00 cap commitment.
+
+    THE JOB NAME AND THE `source_sha` MUST AGREE, because `contract.make_config` requires the name's eight hex
+    characters to BE `source_sha[:8]` (`JOB_PARAMETERS`). The first version of this guard passed a placeholder job
+    name with a real commit, so it raised `TYPED_MATCHED:JOB_PARAMETERS` and the guard could never run at all --
+    a guard that cannot run is the same as no guard. With no commit it now uses sixteen zeros for BOTH, which is
+    self-consistent and needs no commit to exist.
     """
-    config_hash = worker_config("cas-meta2-tpntr-00000000000000-00000000-m-20260917",
-                                source_sha=source_sha or "0" * 40)["inputs_sha256"]
+    job_sha = source_sha or "0" * 8
+    require(job_sha == "0" * 8 or (type(job_sha) is str and shared.HEX40.fullmatch(job_sha) is not None),
+            "POINTER_CROSS_CHECK_SOURCE")
+    config_hash = worker_config("cas-meta2-tpntr-00000000000000-" + job_sha[:8] + "-m-20260917",
+                                source_sha=job_sha)["inputs_sha256"]
     launcher_hash = frozen_inputs_hash(source_sha)
     require(config_hash == launcher_hash,
             "POINTER_CONFIG_INPUTS_HASH:%s!=%s" % (config_hash[:16], launcher_hash[:16]))
