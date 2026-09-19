@@ -1,2 +1,3 @@
-# Review scratch: keep bytecode caches local. Scripts and their raw stdout are published.
+# Review scratch: keep bytecode and regenerable caches local. Scripts and their raw stdout are published.
 __pycache__/
+*.pkl
