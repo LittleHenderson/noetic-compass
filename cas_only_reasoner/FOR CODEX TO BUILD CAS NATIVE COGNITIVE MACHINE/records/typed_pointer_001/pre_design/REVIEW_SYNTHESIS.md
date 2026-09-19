@@ -609,10 +609,100 @@ This is the substance of what the owner decided on 2026-09-19: **run it as the t
   recurrence-stability result, the optimiser adequacy analysis, or its predicted false negatives.
 - Both must be folded in before the protocol is frozen.
 
-## 11. Owner decision this creates
+## 11. The three queued conflicts, RESOLVED 2026-09-19
+
+The v0.2 fold-in agent flagged five conflicts and refused to paper over them. Three need a decision and are settled
+here; the other two are recorded as `UNCERTAIN` and left.
+
+### 12.1 `correspondence` is REMOVED from the gate population — population becomes **18**
+
+The learnability lens instructs (LB12, LB13, LB15) that correspondence be recorded as a **known false negative** and
+removed from the RELATIONAL gate population until a joint edge-aware scorer is built and measured. The leaks lens's
+run retains all five of its questions in the 23.
+
+**Decision: remove them. The RELATIONAL gate population is 18.**
+
+The reason this is not a weakening of the gate, and it is worth stating precisely because it removes five questions:
+**it changes nothing about the difficulty.** A question the drafted head cannot answer can never contribute a gain,
+so it enters neither `b` nor `c`. With correspondence in, the machine must still produce 7 gains from the same 18
+answerable questions; with it out, exactly the same. The required share of what the machine can actually move is
+**7/18 = 0.3889** either way.
+
+What removing it buys is honesty of reporting: the population then contains only questions the architecture can
+answer, so a negative label cannot be blamed on a kind that was never reachable, and the inexpressibility is
+recorded as an architectural finding about the **head design** (LB12/LB13) rather than silently charged against the
+learning.
+
+| | value |
+|---|---|
+| RELATIONAL tier before removals | 29 |
+| removals | **11** — the 6 above **plus** the 5 inexpressible `correspondence` questions |
+| **gate population** | **18** — analogy 5, edge_account 5, parts 2, reach 6 |
+| minimum passing `b` at c = 0, p ≤ 0.01 | **7** |
+| required share | **7/18 = 0.3889** |
+| feasibility, all three seeds | **0.0216** at 30 %, **0.2450** at 40 %, **0.6839** at 50 % |
+
+`correspondence` is still **run and reported** — the head scores it, the predictions are sealed, and the result is
+published as a declared false negative. It is excluded from the **label**, not from the study.
+
+### 12.2 The 25-versus-23 conflict is a difference of REMOVAL STAGE, not a contradiction
+
+The learnability lens says "with correspondence removed the relational population is 25/29"; the leaks lens's
+`lk6_gate_population_out.txt` says 23. They are not disagreeing about the same quantity:
+
+| source | what it removed | population |
+|---|---|---|
+| learnability LB2 | 4 flag-solved questions | 29 − 4 = **25** |
+| leaks `lk6` | 6 questions across **all** rule classes (FP2 3, order dependence 2, PRESENT-for-all 1) | 29 − 6 = **23** |
+| **this document** | 6, plus the 5 inexpressible `correspondence` | **18** |
+
+The leaks run is authoritative because it enumerates every rule class rather than one. The learnability figure counts
+only flag rules and does not include the order-dependence or the PRESENT-for-all removals.
+
+### 12.3 The contract's `node_rank_feature` flag must be set FALSE
+
+`pointer_contract.py` on disk carries `"node_rank_feature": True` with
+`"node_rank_decision_status": "REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A"`. Both lenses have since
+reported and the decision is **exclude** — see §10.2. The flag and its status string must be changed, and the
+`pointer_inputs.py` reader's switch follows it automatically because it reads the contract. **This edit is pending
+only because another agent is mid-edit on that file**; it must be made before the protocol is frozen and the frozen
+flag recorded in the protocol.
+
+### 12.4 The two left unresolved
+
+- `UNCERTAIN:` the `reach` question id ending `2077da4b16f7` is attributed by LB2 to "the stated flags alone" and by
+  `lk6_gate_population_out.txt:31` to the PRESENT-for-all policy, while the `reach` flag rule removes 0 at `:21`. It
+  is the same question either way and it is removed under both readings, so the population is unaffected; only the
+  attribution is undetermined.
+- `CONFLICT:` v0.2's preamble still describes the document as unbuilt and the two lenses as never captured, and line
+  8 records HEAD `7b1ffca7` while HEAD has moved. Cosmetic but false; queued for the protocol freeze rather than
+  edited mid-flight.
+
+## 12. The owner decision this created — ANSWERED
+
+*This section was written when the question was still open. It is kept for the record; the answer is below it.*
 
 One consolidated question is owed to the owner, and it should be asked **once**, when both lenses have reported:
 the relational tier the owner confirmed by name included two kinds whose answers the input hands over. Narrowing the
 tier to the three kinds whose answers are genuinely not in the input makes a pass *harder* and the label *honest*,
 but it also shrinks the population to about 17 questions with a floor of 7 improvements per seed. The owner should
 confirm that trade knowingly rather than have it applied silently.
+
+**ANSWERED 2026-09-19.** The question was put with two decisions and both were answered:
+
+1. **What the study is for** → the owner selected the option labelled **"Run it as the transfer test, label honestly
+   (Recommended)"**. So the relational tier is gated exactly as confirmed, a `NO_TRANSFER` outcome is expected and
+   acceptable, and graph-reading learning is reported separately as the learning result.
+2. **How training is configured** → the owner selected the option labelled **"Stratify AND train longer
+   (Recommended)"**. So the schedule is stratified (every kind in every update, +43.8 % presentations at the same
+   update count) and the training length runs to convergence within the raised ceiling.
+
+A third decision followed in this round without needing the owner, because it changes the difficulty by **nothing**:
+`correspondence` is removed from the label's population as a declared known false negative (§12.1). The machine must
+still produce 7 gains from the same 18 answerable questions either way.
+
+The question as originally posed was also **wrong on one number** and the correction is recorded rather than hidden:
+it said "the three kinds whose answers are genuinely not in the input", but both of those kinds turned out to be
+untestable on this corpus — `correspondence` because the drafted head cannot express it, `analogy` because a
+same-shape-different-domain rule solves 17 of 17 held records. What survives is **graph reading**, which is what the
+owner's decision and the oracle-ceiling rule in §10.1.1 both point at.
