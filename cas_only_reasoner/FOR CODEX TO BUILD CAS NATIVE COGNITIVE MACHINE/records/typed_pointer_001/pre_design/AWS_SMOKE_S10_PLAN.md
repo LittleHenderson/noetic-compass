@@ -4,8 +4,11 @@
 > three claim-bearing jobs: the end-to-end test of the worker on the real instance, which also produces the timing
 > projection the owner's budget item depends on.
 
-**Owner approval, 2026-09-19, verbatim:** *"Approve the smoke job."* The option offered was: *"It costs well under
-$1, a few minutes. The project rule is to run the worker end to end before every paid launch."*
+**Owner approval, 2026-09-19.** The owner selected the option whose exact label was *"Approve the smoke job
+(Recommended)"*. The option as offered was: *"It costs well under $1, a few minutes. The project rule is to run the
+worker end to end before every paid launch."* The question asked was: *"The worker only runs on the AWS GPU, so
+testing it end to end before the real launch needs a short AWS job. It costs well under $1, a few minutes. The
+project rule is to run the worker end to end before every paid launch. Approve it?"*
 
 ## 1. Why it cannot be done locally
 

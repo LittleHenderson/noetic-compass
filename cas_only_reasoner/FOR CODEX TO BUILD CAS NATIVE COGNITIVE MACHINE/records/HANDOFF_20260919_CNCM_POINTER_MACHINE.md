@@ -384,7 +384,10 @@ network module directly (venv `~/venvs/cas-gpu`, dev only); WSL2 Ubuntu exists (
    cost". (b) Pointer answers alone cannot work: the INPUT must change too, so the machine reads one world as a small graph
    instead of a blend of all 64 worlds. Owner answer verbatim: *"Accept both, carry on."*
 2. **Short AWS smoke job for the end-to-end worker test S10 — ✅ APPROVED.** Well under $1. It doubles as the timing
-   measurement for S7/DG9 and must run before the paid launch.
+   measurement for S7/DG9 and must run before the paid launch. Owner selected the option labelled verbatim
+   *"Approve the smoke job (Recommended)"*. Cost model and shrunken schedule:
+   `pre_design/AWS_SMOKE_S10_PLAN.md` — the measured non-worker overhead is 598.2 s (boot, install, delivery) costing
+   $0.42 on its own, so the approved $1 leaves the smoke a worker clock of at most about 830 s.
 3. **Gate change — ✅ CONFIRMED.** `LEARNS_NEW_WORLDS` will require gains on the RELATIONAL kinds (parts, edge_account,
    reach, correspondence, analogy), because copying one input flag otherwise passes the old gate (FP1: b=10, c=0,
    p=0.0009765625). Owner answer verbatim: *"Yes — require the relational kinds."* The all-kinds result is reported
