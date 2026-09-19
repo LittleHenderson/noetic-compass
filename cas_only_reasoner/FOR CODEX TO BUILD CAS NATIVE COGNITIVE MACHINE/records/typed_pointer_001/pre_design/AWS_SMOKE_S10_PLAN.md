@@ -94,6 +94,26 @@ install and the same instance:
 None of S1–S9 trains anything, so together they add only a few minutes and leave the total **under the approved
 $1**. They are not claim-bearing and are recorded as plumbing.
 
+### 3.2 AWS is not merely preferred here — it is the ONLY venue, by construction
+
+Measured 2026-09-19 from the built code, and it confirms the owner's order rather than merely agreeing with it:
+
+- `PointerCourseLearner.__init__` (`pointer_learner.py:1177-1180`) calls `execution_guard()` and then requires
+  `re.fullmatch(r"cuda(?::[0-9]+)?", device)` **and** `torch.cuda.is_available()`, or raises
+  `TYPED_LEARNER_CUDA_REQUIRED`.
+- `execution_guard()` (`teaching_cycle/gpu_adapter.py`) requires `platform.system() == "Linux"`
+  (`LINUX_WORKER_REQUIRED`) and `CAS_META2_RUN_TEACHING_CYCLE == "1"` (`EXPLICIT_ENABLE_REQUIRED`).
+
+So the learner **cannot be constructed on this Windows laptop at all**, and it cannot be constructed on CPU
+anywhere. There is no local fallback to weigh against AWS; the guard is the reason the project's GPU-first rule is
+enforceable rather than advisory.
+
+**One thing to be straight about.** While building the learner, a sub-agent ran a **shape-only** check on the local
+GPU by monkey-patching `execution_guard` to a no-op inside a throwaway script in `_scratch/`. The guard's own code is
+untouched, no training ran, and the check took seconds — but it predates the owner's AWS-first order and it is the
+kind of thing that should not become a habit. **The equivalent check is S1 in the table above, and it belongs in the
+AWS job.** No further local GPU work is planned.
+
 **A concrete reason this matters, from this session.** Checking a single flag required a material load that **timed
 out at 120 s on the laptop** — and the same load is what every test file does. The local machine is not just slower;
 it is slow enough to make ordinary verification awkward.
