@@ -1,0 +1,158 @@
+{
+  "20260917": {
+    "FRESH_EQUALS_RECORDED_START": false,
+    "SANITY_ALGORITHM_MATCHES": true,
+    "checkpoint_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "checkpoint_raw_digest": "5c37080d44dd6e918010f32f03efa1520d59005af42ae4393b59de1aff733142",
+    "fresh_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "fresh_raw_digest": "5e438f764afa6ff4066ba3a4883084226df396a5158f67d7cc32b0eac7bcdb32",
+    "fresh_state_identity": "4a65a4fe6b053470f8e1ecf9c2f3b37bc7f50b49a65a92aecb0c510d9898005b",
+    "per_tensor": {
+      "left.weight": {
+        "checkpoint[0,0]": 0.025378882884979248,
+        "fresh[0,0]": 0.025378882884979248,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      "merge.weight": {
+        "checkpoint[0,0]": -0.0701078474521637,
+        "fresh[0,0]": -0.0701078474521637,
+        "max_abs_diff": 7.450580596923828e-09,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      "right.weight": {
+        "checkpoint[0,0]": -0.00868748128414154,
+        "fresh[0,0]": -0.00868748128414154,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      }
+    },
+    "recomputed_from_checkpoint": "82d2037ca88593233f1176913b91f54d419ebacd23f5abc4e12bd71795feb794",
+    "recorded_model_state_identity": "82d2037ca88593233f1176913b91f54d419ebacd23f5abc4e12bd71795feb794",
+    "same_key_set": true
+  }
+}
+{
+  "20260918": {
+    "FRESH_EQUALS_RECORDED_START": false,
+    "SANITY_ALGORITHM_MATCHES": true,
+    "checkpoint_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "checkpoint_raw_digest": "395dc4af4e9f84bab529322b525ba7a4ae167059e9b52cb35179df722ae83c6e",
+    "fresh_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "fresh_raw_digest": "83a5fc856ab7d9b54cf515320b951ad7715628a039c95dd889c8e918e9401b93",
+    "fresh_state_identity": "96bc52e5f278b8a74ae9530846b443d32d4be37f8aa3a96dc17f9a8960c54205",
+    "per_tensor": {
+      "left.weight": {
+        "checkpoint[0,0]": -0.06250932812690735,
+        "fresh[0,0]": -0.06250932812690735,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      "merge.weight": {
+        "checkpoint[0,0]": 0.05195833742618561,
+        "fresh[0,0]": 0.051958344876766205,
+        "max_abs_diff": 7.450580596923828e-09,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      "right.weight": {
+        "checkpoint[0,0]": -0.04450623691082001,
+        "fresh[0,0]": -0.04450623691082001,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      }
+    },
+    "recomputed_from_checkpoint": "35081019e8b56f0c0c14aa8168262c23dab4c662c385ddcf26edc794a179b706",
+    "recorded_model_state_identity": "35081019e8b56f0c0c14aa8168262c23dab4c662c385ddcf26edc794a179b706",
+    "same_key_set": true
+  }
+}
+{
+  "20260919": {
+    "FRESH_EQUALS_RECORDED_START": false,
+    "SANITY_ALGORITHM_MATCHES": true,
+    "checkpoint_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "checkpoint_raw_digest": "27bec8ad269c5adab0a1195b9f1a3426b2536e1236ec97002bfe03fef9273932",
+    "fresh_keys": [
+      "left.weight",
+      "merge.weight",
+      "right.weight"
+    ],
+    "fresh_raw_digest": "b3980e093fc508a12cef4ba5f7224f53ff8ff1d98f28c3fd33d6b1ebd31eadbe",
+    "fresh_state_identity": "afdf255725e4640ae9d34fb6ba55edcc1a0b0087e54a6e1a460280652340f802",
+    "per_tensor": {
+      "left.weight": {
+        "checkpoint[0,0]": -0.04053603112697601,
+        "fresh[0,0]": -0.04053603112697601,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      "merge.weight": {
+        "checkpoint[0,0]": 0.06075766310095787,
+        "fresh[0,0]": 0.06075765937566757,
+        "max_abs_diff": 7.450580596923828e-09,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      "right.weight": {
+        "checkpoint[0,0]": 0.11040803790092468,
+        "fresh[0,0]": 0.11040803790092468,
+        "max_abs_diff": 0.0,
+        "shape": [
+          64,
+          64
+        ]
+      }
+    },
+    "recomputed_from_checkpoint": "91279389cfc22df46415dd56a26b1285fb3ef1ecd59e3aaccef553564528c12e",
+    "recorded_model_state_identity": "91279389cfc22df46415dd56a26b1285fb3ef1ecd59e3aaccef553564528c12e",
+    "same_key_set": true
+  }
+}
+
+SUMMARY
+{"fresh_equals_recorded_start": false, "max_abs_diff_worst": 7.450580596923828e-09, "sanity": true, "seed": 20260917}
+{"fresh_equals_recorded_start": false, "max_abs_diff_worst": 7.450580596923828e-09, "sanity": true, "seed": 20260918}
+{"fresh_equals_recorded_start": false, "max_abs_diff_worst": 7.450580596923828e-09, "sanity": true, "seed": 20260919}
