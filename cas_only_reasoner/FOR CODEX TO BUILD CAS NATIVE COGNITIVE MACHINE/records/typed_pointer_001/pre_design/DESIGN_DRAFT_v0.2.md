@@ -894,7 +894,15 @@ no-learning rule, so the unit of evidence is the question (`evaluate_gates.py:52
 | node-order dependence | **2** (all `reach`) | 2 ids |
 | rank-last pointing | **5** (`parts` 1, `reach` 4) | 5 ids |
 | PRESENT-for-all | **1** (`reach`) | 1 id |
-| **total** | **6** at the frozen population; **11** if the rank feature were adopted | **11 ids printed across the rules** |
+| **total** | **6** from these rule classes; **11** if the rank feature were adopted | **11 ids printed across the rules** |
+
+> **AMENDED 2026-09-19 — the gate population is 18, not the 23 this table was written against.** The six removals
+> above are the **shortcut-rule** classes. A **seventh, different class** was then applied: the five
+> `correspondence` questions are removed because the drafted head **cannot express** a bijection at all (LB12, LB13,
+> LB15), which is an architectural limit of the head and not a shortcut. The union is therefore **11 removals** and a
+> gate population of **18** — analogy 5, edge_account 5, parts 2, reach 6 — with the required share **7/18 = 0.3889**.
+> See `REVIEW_SYNTHESIS.md` §11.1. `correspondence` is still run, scored and published; it leaves the **label**, not
+> the study.
 
 **How to read the table, because the arithmetic is easy to mis-take.** The **6 total** is the union of the rules that
 apply **without** the rank feature: 3 (FP2 `parts`) + 2 (node-order dependence) + 1 (PRESENT-for-all). The rank-last
