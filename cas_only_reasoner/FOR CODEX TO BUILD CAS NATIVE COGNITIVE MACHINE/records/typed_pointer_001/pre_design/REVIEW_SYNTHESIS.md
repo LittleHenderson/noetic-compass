@@ -308,6 +308,53 @@ read it there rather than through a pooling that is gradient-starved for topolog
 None of this weakens the gate or changes the claim rules. It is aimed squarely at the primary objective: giving the
 neurons a readout through which the structure they learn can actually reach the answer.
 
+## 5.6 🔴 THE INITIALISATION AND NORMALISATION PLACEMENT DECIDE WHETHER THE MACHINE CAN LEARN AT ALL
+
+Learnability lens findings **LB9** and **LB13**, `DESIGN_REVIEW_LEARNABILITY_LENS.md` STABILITY section. The draft
+says "RMS normalisation per round" without defining the placement, and it never pins the `^6` initialisation. Both
+were simulated at the real node counts with gradients carried by hand through all 8 shared rounds.
+
+**The draft's implied placement is the dangerous one.** Spectral norm of `d(Σ final node states) / d(initial node
+states)` after 8 shared rounds:
+
+| placement | 3 nodes | 4 nodes | 10 nodes |
+|---|---|---|---|
+| **after the update** — the draft's reading | 18.59 → **135.1** | 21.93 → **127.0** | 22.04 → **140.2** |
+| **before the update (inputs)** | 2.202 → **8.240** | 4.463 → **13.84** | 4.980 → **14.83** |
+| none | 2.217 → 6.790 | 4.492 → 10.63 | 4.965 → 11.19 |
+
+**127–140 is an exploding gradient.** Placing the norm at the inputs instead brings it to **8.2–14.8**, and no
+normalisation at all gives 6.8–11.2.
+
+**Saturation is the forward risk, and the natural initialisation is the worst choice.** The `^6` block is
+`W2 * tanh(W1 x)`, so where `|z| > 2` its derivative is below 0.071 and the block is effectively a constant:
+
+| initialisation | placement | fraction of pre-activations with `|z| > 2` |
+|---|---|---|---|
+| He-normal / over-large, no norm | none | **75.30–98.03 %** |
+| any, output norm | after update | **48.02–91.83 %** |
+| He-normal with output norm — the natural choice | after update | **48.02–57.21 %** — *the worst case* |
+| **torch-default with output norm** | after update | **7.65–13.42 %** — the only moderate figure |
+
+**And K = 8 is not a settled point.** The per-round update magnitude for a 4-node world at torch-default with output
+normalisation runs 0.279, 0.288, 0.309, 0.325, 0.333, 0.338, 0.341, **0.343** — still *growing* toward its fixed
+point. The states have not settled after 8 rounds, so "the answer at depth 8" is the answer at an arbitrary phase of
+an unconverged recurrence, and a depth ablation over K = 1, 2, 4, 8 selects **different functions**, not merely more
+compute. That must be registered as a property of the study, not treated as a compute knob.
+
+### DECISIONS recorded
+
+1. **Pin the `^6` initialisation** to the torch-default scheme the lens measured as moderate, and assert the
+   measured pass-0 saturation fraction in the worker. Leaving it unspecified is a silent false-negative generator:
+   with He-normal the block is constant and its gradient near zero, and nothing in the run would say why.
+2. **Place the RMS normalisation at the INPUTS of each round, not after the update.** The after-update placement
+   drives the 8-round Jacobian to 127–140; the input placement gives 8.2–14.8.
+3. **Record that K = 8 is an unconverged phase**, and that the depth ablation therefore compares functions rather
+   than compute budgets.
+4. `UNCERTAIN:` the saturation fraction for **torch-default with the INPUT placement** is not among the figures the
+   lens printed — it printed torch-default with the *output* placement (7.65–13.42 %). The worker's pass-0 assertion
+   must measure the combination actually built rather than assume this number carries over.
+
 ## 6. The single-flag table, and the rule that reopens the rank decision
 
 `measurements/leaks_review/lk2_single_flag_out.txt`. Best no-learning rule per kind, scored by the private checker,
