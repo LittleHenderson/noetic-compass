@@ -221,10 +221,18 @@ DIRECTED_PAIR_WIDTH = 8
 # mean ++ max ++ 4 degree/flag features ++ the learned attention pool: three full-width vectors and four
 # scalars, so the mean is present AND the wiring the review measured it losing is present beside it.
 WORLD_VECTOR_WIDTH = 3 * WIDTH + 4
-# The per-candidate width of the world-choice scorer: the query key and the query value, each transformed to
-# WIDTH, plus 4 for the is_focus / is_target flags, plus the candidate's declaration embedding -- the shape
-# AND the domain text, which is what an `analogy` answer needs together (17 of 17 held).
-WORLD_CANDIDATE_WIDTH = 2 * WIDTH + 4 + DECL_VECTOR_WIDTH
+# The per-candidate width of the world-choice scorer. CORRECTED: the query key and the query value are each a
+# DOT PRODUCT with the candidate -- `key @ candidate` and `value @ candidate`, one scalar each, exactly as
+# `_world_scores`' own docstring says -- so the two terms contribute 2 columns, not 2 * WIDTH. Plus 4 for the
+# is_focus / is_target flags, plus the candidate's declaration embedding: the shape AND the domain text, which is
+# what an `analogy` answer needs together (17 of 17 held).
+#
+# This constant previously read `2 * WIDTH + 4 + DECL_VECTOR_WIDTH`, written for a form the code does not
+# implement, and `_world_scores` therefore refused on every prediction with POINTER_WORLD_CANDIDATE_WIDTH. It
+# stayed hidden through the whole build and phase A because nothing scores a world until the first evaluation,
+# and it cost a third AWS run to find. This is the same class as the node-head width: a declared width drifting
+# from the thing it describes.
+WORLD_CANDIDATE_WIDTH = 2 + 4 + DECL_VECTOR_WIDTH
 SLOT_DECLARATION_FIELD = {"kind_ref": "kind", "function_ref": "function", "setting_ref": "setting",
                           "world_id": "domain"}
 REACH_OPTION_COUNT = 2                                      # ABSENT, DIRECT
@@ -237,7 +245,10 @@ ROLE_IDS = 6                                                # the six independen
 BLOCK_NAMES = {name: "_block_" + name.replace(".", "_") for name in PARAMETERS}
 require(set(BLOCK_NAMES) == set(PARAMETERS) and len(set(BLOCK_NAMES.values())) == len(PARAMETERS)
         and all("." not in name for name in BLOCK_NAMES.values()), "POINTER_BLOCK_NAMES")
-require(WORLD_CANDIDATE_WIDTH == 2 * WIDTH + 4 + DECL_VECTOR_WIDTH
+# The self-check must assert what the CONSTANT now is, and it must agree with `_world_scores`' own construction:
+# two dot products, four flags, one declaration embedding. Re-deriving the old `2 * WIDTH` form here is what let
+# the constant and the code disagree while both looked self-consistent.
+require(WORLD_CANDIDATE_WIDTH == 2 + 4 + DECL_VECTOR_WIDTH
         and WORLD_VECTOR_WIDTH == 3 * WIDTH + 4, "POINTER_WIDTH_ARITHMETIC")
 
 # EXACTLY as REVIEW_SYNTHESIS.md sections 5.5 and 5.6 printed them. Never rounded.
