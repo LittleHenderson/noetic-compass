@@ -4,6 +4,62 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (GPU RUNS) - Five runs, five distinct bugs, each one further along. The pattern is hand-written width arithmetic.
+
+**Each run advanced strictly further than the last and died on a different defect.** That is progress bought at
+roughly `$1.20` per attempt, and it is not a good way to buy it. The pattern is now unmistakable and is the most
+useful thing this sequence produced.
+
+| run | died at | defect | fixed |
+|---|---|---|---|
+| 1 | container line 12 | `MANIFEST['inputs_sha256'] != CONFIG['inputs_sha256']` — the manifest carried the enriched inventory rows, the config the bare ones | `3ee1be8c`, `1c7054d2` |
+| 2 | first training forward | `node_head` built for `NODE_FEATURE_COUNT + WIDTH` = 72, fed `hidden + query` = 128 | `75bd46d2` |
+| 3 | first world scoring | `WORLD_CANDIDATE_WIDTH` declared `2 * WIDTH + 4 + DECL`, but the candidate is two **dot products** = `2 + 4 + DECL` | `0e5d1c98` |
+| 4 | first prediction | `_logit_rows(torch, plan, symbols, rows)` — `symbols` was **never read**; every caller passed three arguments | (this sequence) |
+| 5 | mode-option scoring | `_mode_options` reshapes to `2 * WIDTH + 2 * WIDTH` = 256 while concatenating three `WIDTH`-wide tensors = 192 | **NOT YET FIXED** |
+
+### The systemic defect, stated once so it is fixed as a class rather than five times
+
+**Every one of these is the same failure: a width written out by hand in one place drifting away from the tensors
+actually constructed in another.** Four of the five are literally that. And the runtime guards do not catch them,
+because each guard compares the tensor to **the same hand-written constant the head was built from** — so the two
+agree with each other while both disagree with reality. That is exactly how the guard I myself added for the node
+head passed while the head could not accept its input.
+
+**The fix that would end this class**, and it should be done before the next paid run:
+
+1. **Derive every reshape from the tensor, not from arithmetic.** `.reshape(1, -1)` then check the result against
+   the consuming module's own `in_features`, rather than writing `2 * WIDTH + 2 * WIDTH` by hand.
+2. **Assert against the module, never against a restatement of the input.** The check that works is
+   `require(int(head[0].in_features) == int(tensor.shape[1]))`. Anything that recomputes the expected width from
+   the same constants the head used is decoration.
+3. **Add one test that instantiates the container on CPU and drives a single `predict` on a synthetic packet.**
+   The existing suite is green at 22 passed and catches none of these, because nothing in it scores a world or
+   asserts a head's `in_features`. One such test would have caught all five for `$0`.
+
+**A local CPU harness is possible and is the highest-value next step.** `_build_container(torch, framework, device)`
+takes a device, and every defect above is a pure shape error that needs no GPU, no training and no special
+hardware — the AWS instance was never required to find any of them.
+
+### Money, honest
+
+Five paid attempts. Cash roughly `$1.62` for the first four plus about `$1.20` for the fifth: **≈ `$3.00` total.**
+Cap commitments: **one `$15.00` reservation per attempt**, with no refund path. Free cap is reported by the
+ledger, not by memory. The instance was cleaned up on every run (`compute_cleanup: COMPLETE`) and nothing is left
+running.
+
+### What is genuinely proven on real hardware now
+
+`model_identity` from the runs: `core_identity_equals_the_practice_start: true`, `double_build_equal: true`,
+`seeds_pairwise_different: true`, `phase_a_finished_before_the_model_was_seeded: true`,
+`phase_a_status: COMPLETE`, `whole_container_identity != core_identity`, on
+`NVIDIA RTX PRO 4500 Blackwell Server Edition`, `torch 2.11.0+cu128`, `cuda:0`. The machine builds reproducibly,
+matches the practice study's pinned start **across machines**, runs the checkpoint check to completion, measures
+its own custody ordering, and reports its degraded checks honestly. The pipeline is real; what is left is shape
+arithmetic in one module.
+
+**The neurons have still never completed a training update.** Every run died inside the first evaluation.
+
 ## 2026-09-19 UTC ($0) - ROOT CAUSE of the smoke failure: M3's fix changed the row SHAPE, and `make_config` still computes the old one
 
 **Diagnosed for $0, without re-spending, and it corrects the hypothesis I committed one round earlier.**
