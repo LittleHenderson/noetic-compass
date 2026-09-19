@@ -174,26 +174,23 @@ correspondence questions admit exactly 1 of 24 permutations, `lb12_correspondenc
 That matters for the main goal: these two kinds, with **54 and 36 trained records** behind them, are where a genuine
 transferable relational skill would show, and where a gain would be hard to fake.
 
-### 6.4 R10 re-derived, and the constant-answer policy it exposed
+### 6.4 R10 re-derived and confirmed — and a claim of mine withdrawn
 
-R10 was re-derived independently and **confirmed at exactly 4 of 9**. Re-deriving it exposed something the lens's
-summary table does not show: **every** admissible held `reach` answer is `VIA n3`, `VIA n1` or `ABSENT` — four want
-`n3`, four want `n1`, one wants `ABSENT`, and nothing else appears.
+R10 was re-derived independently and **confirmed at exactly 4 of 9**.
 
-So **"always answer `VIA n1`", a constant that reads nothing at all, also solves 4 of the 9** — on the complementary
-set to R10.
+**Withdrawn claim.** This section previously added that a constant `VIA n1` answer is a *second* no-learning policy
+also scoring 4 of 9, and concluded that registering both would collapse `reach` to 1 question and the relational tier
+to 11. **That was wrong and is withdrawn.** The lens's completed policy table
+(`lk3_pointer_policies_out.txt` lines 113-139) fits a majority-symbol baseline the only honest way — on the **trained**
+records' answers — and it scores **0 of 45** held-eligible and **0 of 9** on `reach`, because the trained majority for
+`reach` is `DIRECT`, not `VIA n1`. The 4 × `VIA n1` breakdown of the held answers can only be reached by reading the
+held answers, which the custody rule forbids; that is the answer key, not a baseline.
 
-| policy | reads | solves |
-|---|---|---|
-| R10, rank == highest | the rank flag | 4 / 9 |
-| constant `VIA n1` | **nothing** | 4 / 9 |
-| the two together | — | **8 / 9** |
+**Corrected position:** `reach` loses R10's 4 and DG3's 2, overlap unmeasured → **3 to 5** remaining, and the
+relational tier is **13 to 15**. The §7 table already used those figures and stands.
 
-If a removal list registers both, the honest `reach` population is **1 question**, the relational tier is **11**, and
-the label would rest on `analogy` and `correspondence` alone. This is a floor, not a forecast: the gate is a paired
-test on discordant questions, so part of a prior is absorbed by the design. Deciding it needs the paired arithmetic
-with pass-0's actual answers in hand — which is the required-removals table lens A is building. The population table
-in §7 must be read as a bound in both directions, not as a number.
+The lesson is worth keeping: a skew is only a confound if a baseline can reach it **from training data**. My error was
+computing arithmetic over the held answers and then treating the result as a policy.
 
 ## 7. The rank decision, reopened
 

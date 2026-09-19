@@ -27,23 +27,37 @@ and the admissible answers:
 | `…27bd014c` | 1 | `VIA n1` | no |
 | `…da4b16f7` | 1 | `ABSENT` | no |
 
-## The part the lens's table does not show: a constant answer also scores 4 of 9
+## ⚠️ CORRECTION, 2026-09-19: the "constant `VIA n1`" policy is NOT a legitimate baseline
 
-Read the `admissible answer` column again. Every one of the nine answers is `VIA n3`, `VIA n1` or `ABSENT` — there is
-no other value. Four questions want `n3`, four want `n1`, one wants `ABSENT`.
+**This section previously claimed that a constant `VIA n1` answer is a second no-learning policy scoring 4 of 9, and
+concluded that registering both it and R10 would collapse the `reach` tier to 1 question. That conclusion was WRONG
+and is withdrawn.** The arithmetic was right; the inference from it was not.
 
-So **"always answer `VIA n1`" — a constant, reading nothing at all, not even the rank — also solves 4 of the 9**, on
-the *complementary* set of questions to R10. Two different no-learning policies each score 4 of 9:
+The leak lens's completed pointer-policy table (`lk3_pointer_policies_out.txt` lines 113-139) settles it. It fits a
+**majority-symbol-per-slot** baseline honestly — on the **trained** records' correct answers, which is the only
+information a baseline is allowed to use — and that baseline scores **0 of 45** held-eligible questions, and **0 of 9**
+on `reach`. The trained majority answer for `reach` is `DIRECT`, not `VIA n1`.
 
-| policy | reads | solves | which questions |
-|---|---|---|---|
-| R10, rank == highest | the rank flag | 4 / 9 | the four `VIA n3` |
-| constant `VIA n1` | **nothing** | 4 / 9 | the four `VIA n1` |
-| R10 ∪ constant | — | **8 / 9** | all but the single `ABSENT` |
+The held-eligible `reach` answers do break down as 4 × `VIA n3`, 4 × `VIA n1`, 1 × `ABSENT`. But **knowing that is
+exactly what the custody rule forbids**: it can only be learned by reading the held-back answers. A baseline derived
+that way is not a mechanism-free baseline, it is the answer key. And no honest training signal points at `VIA n1` —
+training points at `DIRECT`.
 
-The reach answers in this course are strongly skewed toward two symbols. That is a property of the corpus, and the
-project's own standing rule is that *a win is uninterpretable until it beats the cheapest method without the
-mechanism*. A skewed prior is the cheapest method there is.
+So the correct list of legitimate no-learning baselines for `reach` is:
+
+| baseline | can be fitted without held answers? | held-eligible `reach` |
+|---|---|---|
+| R10, rank == highest | **yes** — a rule, reading one input flag | **4 / 9** |
+| majority symbol, fitted on trained records | yes | 0 / 9 |
+| untrained tie rule (first declared symbol) | yes | 1 / 9 |
+| constant `VIA n1` | **NO — requires the held answers** | (4 / 9, not registerable) |
+
+**Corrected `reach` population:** 9 minus R10's 4 minus DG3's 2, with the overlap unmeasured → **3 to 5**, not 1.
+The relational tier is therefore **13 to 15**, not 11.
+
+The general lesson, recorded because it is easy to repeat: a skewed answer distribution is only a confound if a
+baseline can reach it **from training data**. Checking the arithmetic against the held answers and then calling it a
+baseline reads the answer key and calls it a policy.
 
 ## Why this matters, and what it does not yet settle
 
