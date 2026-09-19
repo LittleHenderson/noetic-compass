@@ -38,6 +38,13 @@ fail I1, and make this a PREFLIGHT_FAIL for a reason that could never be fixed a
 expected failure set is a bug found for $0, and this script also refuses a run whose REPORT-ONLY phases
 (phase A, phase B, ablations) came back anything but COMPLETE.
 
+ONE JOB PER CONTAINER, at $0. The three seeds do NOT share the private checker's presence: `fresh_container()`
+drops `cas_meta2.typed_teaching.checker` from `sys.modules` between jobs, because the worker's phase-A custody
+check is `"cas_meta2.typed_teaching.checker" in sys.modules` (`cncm/typed_pointer_worker.py:732`) and AWS gives
+every job its own container. Without that boundary the first job's phase A is COMPLETE and every later job's is
+FAILED with `POINTER_PHASE_A_CUSTODY` -- which is what the first run of this script measured, and which is a
+property of the harness's process model, not of the study.
+
     python preflight_dry_run.py SCRATCH_DIR
 """
 from __future__ import annotations
@@ -806,6 +813,20 @@ def install_stand_ins():
     return torch
 
 
+def fresh_container():
+    """The per-JOB container boundary, at $0: discard the private checker from this interpreter.
+
+    The worker's own custody rule is `"cas_meta2.typed_teaching.checker" in sys.modules`
+    (`cncm/typed_pointer_worker.py:732`), and phase A refuses to run once that module is imported. On AWS each
+    job is its own container, so the flag is False for every job; three jobs in ONE interpreter would leave it
+    True for job 2 and job 3, and their phase A would be recorded FAILED for a reason that says nothing about
+    the study -- seed 20260917 was COMPLETE and seed 20260918 FAILED with `POINTER_PHASE_A_CUSTODY` on the first
+    run of this script. Dropping the module between jobs reproduces exactly what a fresh container starts with,
+    and `install_checker_stand_in` re-installs its stand-in on the fresh module at the next job's first use.
+    """
+    sys.modules.pop('cas_meta2.typed_teaching.checker', None)
+
+
 class CreateOnlyPublisher:
     """The live evidence publisher's rule, at $0: each new name under results/ is stored once and never
     replaced; names ending .partial/.tmp are skipped; a stored name whose bytes later differ is a conflict
@@ -884,6 +905,7 @@ def main(scratch):
     source_sha = "d" * 40
     jobs, timings, publishing, phases = [], {}, {}, {}
     for seed in contract.MODEL_SEEDS:
+        fresh_container()
         job = "cas-meta2-tpntr-20260919000000-dddddddd-m-%d" % seed
         receipt = scratch / ("receipt_%d" % seed)
         results = receipt / "collected/results"

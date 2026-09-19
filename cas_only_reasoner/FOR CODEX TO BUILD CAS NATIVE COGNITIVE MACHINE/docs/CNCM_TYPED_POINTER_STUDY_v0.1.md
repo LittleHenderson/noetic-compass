@@ -414,7 +414,7 @@ population while it is empty (`RELATIONAL_POPULATION_UNRECONCILED`, `pointer_con
 frozen per-question `query_id` lists of §4.2 go into `REMOVALS["flag_rule"]` and `REMOVALS["rank_rule"]`, and the
 five `correspondence` removals are registered as their own class. `RELATIONAL_POPULATION` in
 `INTERFACE_SPEC_POINTER.md:46` is marked `OPEN:` and stays open until that edit lands. **Still unset at HEAD
-`e3ee21c1`: both `REMOVALS["flag_rule"]` and `REMOVALS["rank_rule"]` are the empty placeholder.**
+`e3ee21c1`: both `REMOVALS["flag_rule"]` and `REMOVALS["rank_rule"]` are the empty placeholder. AMENDED 2026-09-19 (R1-11): that is HISTORY ONLY. `pointer_contract.py` at HEAD `7d237b93` has `REMOVAL_RULES = ("flag_rule", "order_rule", "present_rule", "inexpressible")` with `REMOVALS` populated with those four classes — there is no `rank_rule`, which survives only in the historical `VERIFIED_KNOWN_REMOVALS = {"flag_rule": {"parts": 3}, "rank_rule": {"reach": 2}}` — and `VERIFIED_POPULATION = 18`. `RELATIONAL_POPULATION` at `INTERFACE_SPEC_POINTER.md:46` is therefore marked SUPERSEDED rather than `OPEN:`. **The present-tense sentences above are superseded; `pointer_contract.py` governs.**
 
 **RECONCILED 2026-09-19 (R1-15) — the per-world spread is NOT in conflict.** The two sources agree exactly; the apparent disagreement was a **sorted-order misread**. `INTERFACE_SPEC_POINTER.md:46` lists the
 RELATIONAL per-held-world figures as `world-98c6352d` 6, `world-28f61f2d` 5, `world-6e1fcbda` 6, `world-22704554` 5, `world-4090ec49` 7, summing to 29; the leaks run's own output gives

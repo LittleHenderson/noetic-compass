@@ -8,15 +8,23 @@ inherited lifecycle allows one job per owner record).
 
 WHAT THE FIVE LABELS ARE, AND WHERE THEY COME FROM. The recorded labels are the exact selected option labels the
 owner chose on 2026-09-19, recorded verbatim in `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md` section 0.2 items 1-5
-(`:52`, `:57`, `:61`, `:64-67`, `:69`). They are NOT paraphrased and the third keeps its em dash. Three of the five
-are ALSO byte-present inside `pointer_contract.DESIGN["owner_approval"]`; the other two are not, so this script
-RECORDS the discrepancy (`owner_decisions_in_contract_text`) instead of hiding it or refusing the freeze for it:
+(`:52`, `:57`, `:61`, `:64-67`, `:69`). They are NOT paraphrased and the third keeps its em dash.
 
-* item 3, `"Yes — require the relational kinds."`, is written there with two ASCII hyphens
-  (`pointer_contract.py:706`), not the em dash the protocol document prints at `:61`;
-* item 4, `"Run it as the transfer test, label honestly (Recommended)"`, is absent from that field entirely
-  (it appears at `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:64` and `:147`, and at
-  `records/typed_pointer_001/pre_design/REVIEW_SYNTHESIS.md:693`).
+THIS PARAGRAPH RECORDED A CONTRACT DEFECT FOR ONE DAY, AND THAT DEFECT IS FIXED. It used to say: item 3 was
+byte-present inside `pointer_contract.DESIGN["owner_approval"]` with two ASCII hyphens where the protocol document
+prints an em dash (`pointer_contract.py:706`), and item 4 was absent from that field entirely. Both readings were
+true of the contract as it stood, and this script RECORDED them rather than refusing the freeze. The contract was
+then corrected (`pointer_contract.py:702-714`, "CORRECTED 2026-09-19 (pre-flight, $0)"): all FIVE labels are now
+byte-for-byte present, including `"Yes — require the relational kinds."` with a real em dash. That module stays
+pure ASCII -- it carries the em dash as an ASCII source escape, and a byte scan reports 0 characters above U+007F.
+Measured by import on the corrected tree, `owner_decisions_in_contract_text()` returns `[True, True, True, True,
+True]`.
+
+The check is NOT removed, and it is not a comment about history. It is how a future contract edit that drops or
+paraphrases one of the five labels becomes visible in the very owner records this script writes, instead of being
+inherited silently. Its docstring used to warn of the opposite failure -- that the freeze must not be refused for a
+discrepancy it is meant to record -- so it now states what a `False` in that list means: the contract and the
+protocol document have diverged again, and the owner record must be read by hand before the freeze is used.
 
 The `assert` calls below are the practice freeze's own, kept unchanged: this script launches NOTHING (its docstring
 is the practice study's: package and rehearsal only), and the rehearsal is a Windows refusal test that must not
