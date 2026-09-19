@@ -1,0 +1,2 @@
+# Review scratch: keep bytecode caches local. Scripts and their raw stdout are published.
+__pycache__/
