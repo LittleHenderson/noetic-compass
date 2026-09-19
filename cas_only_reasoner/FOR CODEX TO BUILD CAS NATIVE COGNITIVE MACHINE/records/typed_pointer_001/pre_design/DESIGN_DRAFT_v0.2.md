@@ -490,6 +490,35 @@ that step. It logs per update which parameters received gradients. This is the R
 The head set is `OPEN:` on lens B's expressivity table (`INTERFACE_SPEC_POINTER.md:110-113`). What is already fixed:
 K = 8, RMS each round, dense and one-hot matmuls, deterministic mode.
 
+> **🔴 MEASURED 2026-09-19 — the world-choice row above is a learning risk, and K = 8 is not yet justified.**
+> `measurements/learnability_review/lb16_pooling_resolution_out.txt` and `lb17_pool_gradient_out.txt` measured what the
+> mean-pooled `g_w` actually contains.
+>
+> The message passing works at the **node** level. Mean cosine between node states, `rms_after=output`: EDGE pairs
+> 0.585565 against NON-edge pairs 0.197146 at four rounds — a gap of **0.388418**; two rounds already separate them.
+> So the recurrence does encode the wiring.
+>
+> **Mean pooling then destroys it.** With random per-node features, two worlds with *different* shapes sit
+> **0.831003** apart while two draws of the *same* shape sit **1.213181** apart — a ratio of **0.68**, so different
+> shapes are closer together than same-shape samples. Nearest-centroid recovers **8–13 of 123**. The pure-shape signal
+> in `g_w` is **3–8 %** of its magnitude, rising only to **13–16 %** with the three real flag dimensions.
+>
+> That matters because `analogy world_id` and `correspondence`'s target selection are world-choice slots scored
+> against `g_w`, and those are the two kinds that are otherwise the clean tests. **A readout that cannot see shape
+> cannot learn shape, however long it trains.** This is now the most plausible way the study still fails to learn
+> once the input defect is fixed.
+>
+> Four changes follow, none of which touch the gate:
+> 1. score structural answers at the node level, never after pooling — the `correspondence` `mapping_target` head must
+>    read `h_v` and never `g_w`;
+> 2. replace mean pooling with a readout that keeps more of the wiring — over 3–4 nodes, candidate options that cost
+>    almost nothing are concatenating the **rank-sorted** node states (rank is already a registered input, so the sort
+>    is well defined), a sum of outer products, or attention pooling with a learned query;
+> 3. choose K and the normalisation placement from the measured table rather than by inheritance — `rms_after=output`
+>    peaks at **K = 4** (gap 0.388418) while `rms_after=none` keeps growing to **K = 8** (gap 0.406388);
+> 4. add a local, $0 smoke test that asserts the readout separates two *different* shapes by more than two draws of
+>    the *same* shape. **Today it does not**, and that test is the guard against this failure returning unnoticed.
+
 **Output.** The same `{slot_id: {symbol: logit}}` shape the old learner produced, one logit for EVERY declared symbol
 in `slot["symbols"]` order, so `slots.score_decisions`, `slots.assemble_answer`, the private checker, the
 seal-before-targets discipline and the scoring all stay unchanged. World-choice slots must carry all 64 `W0..W63`
