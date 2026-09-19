@@ -504,9 +504,18 @@ K = 8, RMS each round, dense and one-hot matmuls, deterministic mode.
 > in `g_w` is **3–8 %** of its magnitude, rising only to **13–16 %** with the three real flag dimensions.
 >
 > That matters because `analogy world_id` and `correspondence`'s target selection are world-choice slots scored
-> against `g_w`, and those are the two kinds that are otherwise the clean tests. **A readout that cannot see shape
-> cannot learn shape, however long it trains.** This is now the most plausible way the study still fails to learn
-> once the input defect is fixed.
+> against `g_w`, and those are the two kinds that are otherwise the clean tests. `lb18_analogy_structure_out.txt`
+> sharpens it: **all 17 held analogy records require shape AND domain together** (`correct set == isomorphic AND
+> different domain` in 17 of 17), and a shape test alone leaves **24** candidates it cannot reject. So analogy needs
+> the machine to read shape and combine it with the domain word, and shape is the half this readout is weak at.
+>
+> **Claim state, corrected 2026-09-19.** MEASURED in a numpy simulation of this recurrence with **untrained** weights;
+> ANALYSED from the gradient path (`lb17`: `d g_w / d h_v^{k} = (1/N) · d h_v^{K} / d h_v^{k}`, with the map's
+> spectral norm measured near 1 by LB13, so the pooled vector receives each node's own local update — its own feature
+> plus a normalised neighbour sum — dominated by features rather than topology). **NOT measured on a trained model:
+> no pointer machine exists yet.** So this is a design risk with a stated mechanism, not a verdict, and the sentence
+> *"a readout that cannot see shape cannot learn shape, however long it trains"* is withdrawn as an overstatement.
+> The test in point 4 below is what would settle it.
 >
 > Four changes follow, none of which touch the gate:
 > 1. score structural answers at the node level, never after pooling — the `correspondence` `mapping_target` head must

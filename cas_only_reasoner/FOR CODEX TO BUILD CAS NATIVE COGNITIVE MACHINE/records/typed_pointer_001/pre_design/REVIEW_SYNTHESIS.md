@@ -155,9 +155,29 @@ mostly a summary of *which nodes have which flags*, not of *how the world is wir
 **Why this matters for the goal.** Every world-choice slot scores `<W [q; g_focus], g_w>` — a comparison of pooled
 vectors. Those slots include `analogy` (`world_id`, 65 symbols) and `correspondence`'s target selection, which are
 exactly the two kinds this review found to be the *clean, hard* tests where a genuine transferable relational skill
-would show. A readout that cannot see shape cannot learn shape, no matter how long it trains and no matter how good
-the input is. **This is the most plausible way the pointer study still fails to learn, after the input defect is
-fixed.**
+would show. And `lb18_analogy_structure_out.txt` sharpens it: **all 17 held analogy records require shape AND domain
+together** (`correct set == isomorphic AND different domain` in 17 of 17), while a shape test alone leaves **24**
+alternative candidates it cannot reject. So analogy needs the machine to read shape *and* combine it with the domain
+word — and shape is the half the pooled readout is weak at.
+
+**Claim state — corrected 2026-09-19, and this matters.** The numbers above are (a) **MEASURED** in a numpy
+simulation of the draft's exact recurrence at unit level with **untrained** weights, and (b) **ANALYSED** from the
+gradient path. `lb17`'s header shows the argument is stronger than "random weights happened to do this": it derives
+`d g_w / d h_v^{k} = (1/N) · d h_v^{K} / d h_v^{k}`, cites a measured spectral norm of that map near **1** from LB13,
+and concludes that the pooled vector receives per node essentially that node's own local update — **its own feature
+plus a normalised sum of its neighbours' features, still dominated by the O(1) features rather than by a topology
+readout.** So training cannot easily make `g_w` shape-sensitive.
+
+**What this is NOT:** a measurement on a trained model. **No pointer machine exists yet**, so nothing here is trained
+evidence, and the sentence *"a readout that cannot see shape cannot learn shape, however long it trains"* — which an
+earlier revision of this section used — **overstated it and is withdrawn.** The precise statement is: the pooled
+readout **starts** unable to separate shapes, and its gradient path is feature-dominated by construction; whether
+training overcomes that is **untested**, and settling it is exactly what the local $0 smoke test in point 4 below
+would do. Calling it "the most plausible way the study still fails to learn" is a judgement about risk, not a
+finding.
+
+What survives unchanged is the actionable part: the structure **is** present in the node states (gap 0.388418), so
+read it there rather than through a pooling that is gradient-starved for topology.
 
 **What to do about it — a design change, not a tweak.** The node-level signal exists, so keep it and read it out:
 
