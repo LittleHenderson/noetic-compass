@@ -128,15 +128,17 @@ def _smoke_request_form(request):
 
 
 def smoke_request_literal(request=None):
-    """The literal the generated source carries for an accepted request, or `None` when no smoke was asked for.
+    """The literal the generated source carries for an accepted request. `(literal, plan)` for an accepted one.
 
     Two checks, both before anything is emitted: the cheap local form check, then the WORKER'S OWN rules run
     through the worker's own `schedule_plan()`. `reloads` is the plural key and must carry a BOOL -- the worker
-    enforces that at `cncm/typed_pointer_worker.py:211-213` and a list of checkpoint names is refused with
-    `POINTER_PLAN_FLAGS` -- and a reload-enabled plan must carry an evaluation at pass 0 AND at pass `passes`
-    (`cncm/typed_pointer_worker.py:222-224`). A request whose plan came back `claim_bearing` would mean the caller
-    asked for the REGISTERED plan through the smoke path, which is refused outright. Returns the plan alongside the
+    enforces that in its `_plan` and a list of checkpoint names is refused with `POINTER_PLAN_FLAGS` -- and a
+    reload-enabled plan must carry an evaluation at pass 0 AND at pass `passes`
+    (`POINTER_PLAN_RELOAD_EVALUATIONS`). A request whose plan came back `claim_bearing` would mean the caller asked
+    for the REGISTERED plan through the smoke path, which is refused outright. Returns the plan alongside the
     literal so a caller can record exactly what the instance will run.
+
+    `request` is the parsed request dict -- the module global when omitted -- never a JSON string.
     """
     request = SMOKE_REQUEST if request is None else request
     require(request is not None, "POINTER_SMOKE_NOT_REQUESTED")
@@ -360,7 +362,42 @@ def frozen_inputs(source_sha=None):
 
 
 def frozen_inputs_hash(source_sha=None):
-    return digest(canonical(frozen_inputs(source_sha)))
+    """The number `contract.make_config` puts in `inputs_sha256`, computed over the COMMIT's bytes.
+
+    THE PROJECTION MATTERS, and getting it wrong cost a real AWS job. `frozen_inputs()` returns
+    `contract.input_inventory`'s rows PLUS `committed_content_sha256` -- the digest of the committed content,
+    which is load-bearing evidence and must stay. But that extra field must NOT enter THIS digest:
+    `pointer_contract.make_config` computes its `inputs_sha256` as `sha256(canonical(input_inventory(root)))`
+    (`pointer_contract.py:970`, `:978`), with no such field in the rows.
+
+    Hashing the enriched rows here produced a DIFFERENT number from the config's, and the worker's bootstrap
+    compares exactly those two -- `MANIFEST['inputs_sha256'] == CONFIG['inputs_sha256']` in the generated
+    `_inner_runner.py`. So a real smoke job booted a `g7.2xlarge`, installed the package, and refused at
+    container line 12 with `TYPED_BOOTSTRAP:MANIFEST_INPUT_INDEX_HASH` -- before the encoder, before phase A,
+    before any training. Both numbers mean the same thing; only this projection makes them equal in value.
+
+    Do not "simplify" this back to `digest(canonical(frozen_inputs(source_sha)))`.
+    """
+    rows = [{key: value for key, value in row.items() if key != "committed_content_sha256"}
+            for row in frozen_inputs(source_sha)]
+    return digest(canonical(rows))
+
+
+def inputs_hash_cross_check(source_sha=None):
+    """`(config_hash, launcher_hash, authorities_agree)` -- the guard that was missing.
+
+    Every internal check here was self-consistent while the two numbers disagreed: `validate_authority` compares
+    the authority's `inputs_sha256` against `frozen_inputs_hash` (both the launcher's side) and PASSED, while the
+    worker compared the packaged manifest against the CONFIG (the contract's side) and correctly REFUSED. Nothing
+    tested that the two sides are the same number. This does, so a future divergence of this shape is caught at
+    freeze time for $0 instead of on an instance for about $0.40 and a $15.00 cap commitment.
+    """
+    config_hash = worker_config("cas-meta2-tpntr-00000000000000-00000000-m-20260917",
+                                source_sha=source_sha or "0" * 40)["inputs_sha256"]
+    launcher_hash = frozen_inputs_hash(source_sha)
+    require(config_hash == launcher_hash,
+            "POINTER_CONFIG_INPUTS_HASH:%s!=%s" % (config_hash[:16], launcher_hash[:16]))
+    return config_hash, launcher_hash, True
 
 
 def worker_config(job, *, source_sha):
@@ -537,20 +574,24 @@ def evidence_contract(plan=None, *, source=None):
     return document
 
 
-def smoke_plan(source=None):
+def smoke_plan(request=None):
     """`(plan, literal)` for the reduced schedule the smoke opt-in asks for. Refuses if no smoke was asked for."""
-    literal, plan = smoke_request_literal(source)
+    literal, plan = smoke_request_literal(request)
     return plan, literal
 
 
-def smoke_evidence_contract(source=None):
+def smoke_evidence_contract(request=None):
     """The SMOKE's own evidence contract: the names the REDUCED plan produces, and nothing else.
 
     Deliberately NOT the registered contract: the full name list is bound into the three claim-bearing jobs'
     authorities by `prepare_study.py`, and swapping it for them is exactly what must not happen. This contract is
     reached only while `SMOKE_REQUEST` is set, so a claim-bearing run cannot pick it up.
+
+    `request` is the parsed request (the module global when omitted). It is NOT a JSON string -- `smoke_plan` and
+    `smoke_request_literal` take the request dict, and `configure_reduced_schedule` is what turns a command-line
+    literal into one.
     """
-    plan, literal = smoke_plan(source)
+    plan, literal = smoke_plan(request)
     return evidence_contract(plan, source=literal)
 
 
