@@ -416,9 +416,8 @@ def inputs_hash_cross_check(source_sha=None):
     a guard that cannot run is the same as no guard. With no commit it now uses sixteen zeros for BOTH, which is
     self-consistent and needs no commit to exist.
     """
-    job_sha = source_sha or "0" * 8
-    require(job_sha == "0" * 8 or (type(job_sha) is str and shared.HEX40.fullmatch(job_sha) is not None),
-            "POINTER_CROSS_CHECK_SOURCE")
+    job_sha = source_sha or "0" * 40
+    require(type(job_sha) is str and shared.HEX40.fullmatch(job_sha) is not None, "POINTER_CROSS_CHECK_SOURCE")
     config_hash = worker_config("cas-meta2-tpntr-00000000000000-" + job_sha[:8] + "-m-20260917",
                                 source_sha=job_sha)["inputs_sha256"]
     launcher_hash = frozen_inputs_hash(source_sha)

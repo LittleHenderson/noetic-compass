@@ -1890,10 +1890,22 @@ def self_test():
           'same reader reports %r, so the field is measured rather than written'
           % (reading.get('correspondence', {}).get('still_run_and_reported'), p12.get('dropped'),
              (p12.get('unscored_reading') or {}).get('correspondence', {}).get('still_run_and_reported')))
+    source = Path(__file__).read_bytes()
+    mine = {
+        'file': str(Path(__file__).resolve()),
+        'bytes': len(source), 'lines': source.count(b'\n'), 'crlf_lines': source.count(b'\r\n'),
+        'sha256': sha256(source).hexdigest(),
+        'evaluate_calls_by_this_suite': evaluate_calls_by_this_suite,
+        'note': ('a reading of this result is a reading of the revision named by this sha256. Adversarial readings '
+                 'have been taken against stale copies (45 and 47 checks, 112,596 and 116,356 bytes) while the '
+                 'repaired revision was larger: compare this sha256 and byte count before drawing a conclusion.'),
+    }
     print(json.dumps({'self_test': checks, 'passed': sum(1 for row in checks if row['pass']),
-                      'failed': [row['check'] for row in checks if not row['pass']]}, indent=1, sort_keys=True))
+                      'failed': [row['check'] for row in checks if not row['pass']],
+                      'self_test_source': mine}, indent=1, sort_keys=True))
     if all(row['pass'] for row in checks):
-        print('SELFTEST_PASS %d checks' % len(checks))
+        print('SELFTEST_PASS %d checks (evaluate() driven %d times by this suite)'
+              % (len(checks), evaluate_calls_by_this_suite))
         return 0
     print('SELFTEST_FAIL')
     return 1
