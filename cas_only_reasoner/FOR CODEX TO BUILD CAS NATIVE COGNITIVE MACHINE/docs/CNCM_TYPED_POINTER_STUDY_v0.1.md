@@ -81,8 +81,8 @@ selected labels are recorded verbatim and are copied into every job's `owner.jso
    > **The owner has since given standing pre-approval for all future jobs**, and the smoke proceeds at the
    > launcher's `$15.00` reservation with a cash cost of about `$1`. The $15.00 is a **cap commitment, not a
    > charge** — no money leaves the account — but it is not returned either, so it is recorded as a real commitment
-   > rather than described as "small". Ledger at this amendment: cap `5000.00`, reserved `501.00`, unreserved
-   > `4499.00`.
+   > rather than described as "small". Ledger, read from the CANONICAL `meta1` path, NOT the CNCM snapshot:
+   > cap `5000.00`, reserved `546.00`, unreserved `4454.00`, revision 87. See §11 for why that distinction bites.
 3. **The gate change — confirmed.** Owner answer verbatim: *"Yes — require the relational kinds."*
    `LEARNS_NEW_WORLDS` requires gains on the RELATIONAL kinds. The all-kinds result is reported alongside as a flag,
    never as the label.
