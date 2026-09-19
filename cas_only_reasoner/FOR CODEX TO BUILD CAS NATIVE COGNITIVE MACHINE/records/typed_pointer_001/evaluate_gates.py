@@ -764,6 +764,21 @@ def scoring_rows(artifacts, names):
     return rows, failures
 
 
+# ------------------------------------------------------------------------------------------------------------------
+# R1's BLOCKER 1, AS A MEASUREMENT. The defect was that `self_test()` never drove `evaluate()`, so a mutation of the
+# call site INSIDE `evaluate()` could not be seen by any check, however many were added: the suite supplied the step
+# it appeared to test. Two mechanisms make that impossible to repeat, and both are visible in `--self-test`'s output:
+#   * `EVALUATE_CALLS` counts every call to `evaluate()` in this process, and the suite asserts that ITS OWN drive
+#     reached `evaluate()` at least twice (the complete fixture and the unscored one). A suite that stopped driving
+#     it now FAILS a named check instead of looking green, and the count is printed in the result line;
+#   * the printed result carries `self_test_source`: the byte count and sha256 of the file that actually ran, so a
+#     reading can be matched to the revision it came from. Adversarial readings of this file have been taken against
+#     stale copies (45 and 47 checks, 112,596 and 116,356 bytes) while the fixed revision was 130,038 bytes; naming
+#     the revision in the output is the only way that ambiguity can be settled from the output alone.
+# ------------------------------------------------------------------------------------------------------------------
+EVALUATE_CALLS = []
+
+
 def evaluate(study_path, preloaded=None):
     """The reading for one study file. A reading is ALWAYS printed: never a bare traceback, never empty stdout.
 
@@ -780,6 +795,7 @@ def evaluate(study_path, preloaded=None):
     so `evaluate(study_path)` - the form the CLI, `execute_study.py` and `preflight_dry_run.py` all use - derives
     its own context and can never be handed one.
     """
+    EVALUATE_CALLS.append(str(study_path))  # R1 BLOCKER 1: the suite's own drive must reach THIS function
     try:
         from cas_meta2.typed_teaching import pointer_contract as contract
     except Exception as error:  # the contract is the reader's own dependency; a broken import is still a reading
@@ -1743,7 +1759,12 @@ def self_test():
           % (malformed_reading.get('label'), list(LABELS)))
 
     # ---- P12: `evaluate()` itself, on a synthetic COMPLETE three-seed study whose all-kinds gate PASSES -------
+    # `calls_before` is the whole point of R1's BLOCKER 1 as a MEASUREMENT: the suite must reach `evaluate()`, not
+    # just the helpers it contains, because a mutation of the call site inside `evaluate()` is invisible to a check
+    # that never runs it. The count is asserted below AND printed in the result line.
+    calls_before = len(EVALUATE_CALLS)
     p12 = p12_run(contract)
+    evaluate_calls_by_this_suite = len(EVALUATE_CALLS) - calls_before
     reading, facts, p12_error = p12['reading'], p12['facts'], p12['error']
     gates = reading.get('gates', {})
     integrity = gates.get('integrity', {})
@@ -1836,6 +1857,16 @@ def self_test():
                       'still_run_and_reported_by_seed', {}).values()),
           'per-seed scored/eligible = %r' % (reading.get('correspondence', {})
                                              .get('still_run_and_reported_by_seed'),))
+    check('self_test_actually_drives_evaluate_and_the_label_path_inside_it',
+          evaluate_calls_by_this_suite >= 2
+          and reading.get('label') == 'NO_TRANSFER_TO_NEW_WORLDS'
+          and list(reading.get('label_key_population') or []) == sorted(population.get('question_ids', []))
+          and (p12.get('unscored_reading') or {}).get('label') != 'LEARNS_NEW_WORLDS',
+          'this suite called `evaluate()` %d time(s) for its two drives and the label those readings printed is '
+          'the label the CALL SITE inside `evaluate()` produced. R1\'s BLOCKER 1 was that `self_test()` never '
+          'reached this function at all, so a substitution at its call site could not be seen by any check; if '
+          'this count ever drops to 0 the suite fails HERE instead of looking green.'
+          % (evaluate_calls_by_this_suite,))
     check('p12_fixture_is_under_temp_and_writes_nothing_in_the_repository',
           bool(facts.get('base'))
           and str(Path(facts.get('base', '')).parent) == str(Path(tempfile.gettempdir()))
