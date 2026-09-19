@@ -138,6 +138,17 @@ DG4_FIELDS = ('core_identity', 'whole_container_identity', 'second_independent_w
 # beside the real status, written as the unconditional literal `True`, so no reader branch could ever fail on it.
 # A flag that cannot vary is not evidence, so it is required as a flag here and corroborated against the phase-A
 # artifact by `phase_a_failures`.
+#
+# R1-2, RECORDED AS A KNOWN TAUTOLOGY AND NOT REMOVED. `identical_start_with_and_without_the_checkpoint_check` is
+# definitionally the same comparison as `core_identity_equals_the_practice_start` (the job writes both from the
+# same two identities with the same operator, and its own artifact says so), so it CANNOT vary independently of
+# it. Consequence, stated here so no later reader mistakes it for separate evidence: the reader's
+# `DG4_CHECK_INDEPENDENT_START` code measures nothing beyond `I3:<seed>:DG4_FLAG:*`,
+# `I3:<seed>:DG4_SIX_IDENTITY` and `I3:<seed>:DG4_START_TARGET`, which already cover the same values. It is kept
+# because a job that STOPS recording the flag must fail closed rather than pass, which is the whole point of FIX 2,
+# and it is named as a tautology rather than silently left looking like evidence. The DG4 checks in that record
+# that CAN vary independently are the second independent whole build, the three-seed identity map, and the
+# whole-container form being a different number from the three-tensor form (V3).
 DG4_FLAGS = ('core_identity_equals_the_practice_start', 'double_build_equal', 'seeds_pairwise_different',
              'identical_start_with_and_without_the_checkpoint_check',
              'whole_container_form_is_a_different_number',
@@ -221,6 +232,9 @@ VOID_PATHS = (
     ('READER:<reason>',
      'the reading itself raised before it could be completed, so no label can be claimed: the error is printed '
      'inside a VOID reading instead of escaping as a traceback (R1, FIX 3)'),
+    ('LABEL_KEY_SET:<seed>:DIVERGED:<test>!=<derived>',
+     'the test that sets the label ran over a different question set from the one `primary_keys` derived, so the '
+     'label would not be keyed on the RELATIONAL population (R1, FIX 1)'),
     ('I1:<seed>:<Error>', 'reading that job receipt raised OSError/ValueError/KeyError/TypeError'),
     ('I1:<seed>:SCORING:<Error>', 'a scoring file could not be read'),
     ('I1:<seed>:SCORING_PHASES_MISSING', 'the manifest holds no <prefix>_pNN_scoring.json'),
@@ -272,7 +286,13 @@ def question_outcomes(record_correct, questions):
 
 def seed_test(before, after, keys, kind_of, world_of=None):
     """One seed's pre-registered test on questions: b > c, exact p <= ALPHA, improvements in >= 2 kinds
-    and, when worlds are given, in >= 2 worlds."""
+    and, when worlds are given, in >= 2 worlds.
+
+    The returned dict CARRIES THE KEY SET THE TEST RAN OVER as `keys`. That is not decoration: it is what makes
+    the label's unit of evidence MEASURED rather than intended, so a reader (and the self-test) can see which
+    questions the test that set the label actually used, even if a later edit changes the expression at the call
+    site (R1, FIX 1).
+    """
     test = paired(before, after, keys)
     b, c = test['wrong_to_right'], test['right_to_wrong']
     p = binomial_upper_tail(b, b + c)
@@ -282,7 +302,8 @@ def seed_test(before, after, keys, kind_of, world_of=None):
     passed = b > c and p <= ALPHA and len(kinds) >= MIN_IMPROVED_KINDS
     if world_of is not None:
         passed = passed and len(worlds) >= MIN_IMPROVED_WORLDS
-    test.update(p_one_sided=str(p), p_float=float(p), improved_kinds=kinds, improved_worlds=worlds, passed=passed)
+    test.update(p_one_sided=str(p), p_float=float(p), improved_kinds=kinds, improved_worlds=worlds, passed=passed,
+                keys=list(keys))
     return test
 
 
@@ -301,6 +322,20 @@ def label_decision(complete, primary_passed):
     if primary_passed:
         return 'LEARNS_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_PASSED_ALL_SEEDS'
     return 'NO_TRANSFER_TO_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_FAILED'
+
+
+def label_key_divergence_failures(seed, test_keys, label_keys):
+    """The label's test must have run over EXACTLY the key set `primary_keys` derived, or the reading is VOID.
+
+    This is the invariant that makes "the key set is computed in exactly one place" enforceable rather than
+    descriptive. A substitution at the ONE call site that picks the set the label's test uses - the mutation R1
+    used, and the one an adversarial review will try again - changes what the test ran over; without this guard
+    that substitution could leave every recorded key set intact and still move the label, which is precisely how a
+    test that cannot fail is built. Named `LABEL_KEY_SET:<seed>:DIVERGED`, and it can only ever WITHHOLD a label.
+    """
+    if list(test_keys) == list(label_keys):
+        return []
+    return ['LABEL_KEY_SET:%d:DIVERGED:%d!=%d' % (seed, len(list(test_keys)), len(list(label_keys)))]
 
 
 def primary_keys(contract, population, eligible, kind_of):
@@ -471,6 +506,9 @@ def reader_void(reason, error=None):
         'min_passing_b': MIN_PASSING_B_REDERIVED, 'min_passing_b_rederived': MIN_PASSING_B_REDERIVED,
         'label': 'VOID', 'label_rule': code, 'label_tier': None, 'label_key_test': PRIMARY_TEST,
         'label_key_population': [], 'label_key_kinds': [],
+        'label_key_population_source': 'READING_NOT_COMPLETED',
+        'label_key_population_derived_by_primary_keys': [],
+        'label_key_population_agrees_with_primary_keys': False,
         'label_vocabulary': list(LABELS),
         'label_precedence': ['1. the reading could not be completed, so no label can be claimed'],
         'flags': {}, 'seeds': {},
@@ -801,12 +839,13 @@ def _evaluate(study_path, contract):
             failures.append('POPULATION_ELIGIBLE:ELIGIBLE_BY_KIND')
 
     # ---- THE LABEL'S KEY SET, in exactly one place (R1, FIX 1) --------------------------------------------
-    # `primary_keys` is the only expression in this program that names the label's unit of evidence, the primary
+    # `primary_keys` is the only expression in this program that NAMES the label's unit of evidence, the primary
     # test below runs over exactly this list, and the list is echoed into the reading as `label_key_population`
     # so R1's P12 can assert on it. `eligible_all` is passed in only as the OUTER BOUNDARY, so nothing wider than
-    # the derived population can ever be returned.
+    # the derived population can ever be returned. `label_key_divergence_failures` then makes that a checked
+    # invariant rather than a convention: if the test the label is keyed on ran over anything else, the reading is
+    # VOID and the label cannot be earned.
     label_keys = primary_keys(contract, population, eligible_all, kind_of)
-    label_key_kinds = sorted({kind_of[question] for question in label_keys if question in kind_of})
 
     # ---- the zero-learning floors INSIDE the label's population: reported, never subtracted (R1, FIX 4/FIX 5) -
     # The ceiling numerators in `ORACLE_CEILINGS` count ELIGIBLE questions; four of those eleven are already
@@ -946,6 +985,7 @@ def _evaluate(study_path, contract):
                                'records': len(held_questions[key]),
                                'admissible_answers': len(admissible_answers(frozen, by_id[held_questions[key][0]]))})
         primary = seed_test(heldq[start], heldq[final], label_keys, kind_of, world_of)
+        failures.extend(label_key_divergence_failures(seed, primary['keys'], label_keys))
         entry = {
             'checkpoints': checkpoints, 'full_course_checkpoints': full,
             'start_checkpoint': start, 'first_checkpoint': first, 'final_checkpoint': final,
@@ -997,6 +1037,18 @@ def _evaluate(study_path, contract):
     if len(six_identities) == len(seed_order) and len(set(six_identities.values())) != len(six_identities):
         failures.append('I3:SEEDS_NOT_PAIRWISE_DIFFERENT')
 
+    # ---- THE LABEL'S KEY SET AS MEASURED FROM THE TEST THAT SET THE LABEL (R1, FIX 1) ---------------------
+    # `label_keys` is what `primary_keys` DERIVED; this is the set the primary test each seed actually RAN ON,
+    # read back out of the test dicts. Both are reported, so the two cannot silently diverge: a substitution at
+    # the call site moves the measured set even when it leaves the derived one untouched, which is exactly the
+    # mutation that used to leave the suite green.
+    measured_key_sets = [list(entry[PRIMARY_TEST]['keys']) for entry in seeds.values()
+                         if isinstance(entry.get(PRIMARY_TEST), dict) and 'keys' in entry[PRIMARY_TEST]]
+    label_key_population = list(measured_key_sets[0]) if measured_key_sets else list(label_keys)
+    label_key_kinds = sorted({kind_of[question] for question in label_key_population if question in kind_of})
+    label_key_population_agrees = bool(measured_key_sets) and all(
+        keys == list(label_keys) for keys in measured_key_sets)
+
     complete = not failures and len(seeds) == len(seed_order)
     primary_passed = complete and all(entry[PRIMARY_TEST]['passed'] for entry in seeds.values())
     label, rule = label_decision(complete, primary_passed)
@@ -1033,9 +1085,14 @@ def _evaluate(study_path, contract):
         'label': label, 'label_rule': rule, 'label_tier': contract.DESIGN.get('primary_label_tier'),
         'label_key_test': PRIMARY_TEST, 'label_vocabulary': list(LABELS),
         # THE LABEL'S KEY SET, echoed so that which questions the label is keyed on is a MEASURED number in the
-        # reading and not an inference from the prose (R1, FIX 1 / P12). Every id here came out of `primary_keys`.
-        'label_key_population': label_keys,
-        'label_key_population_size': len(label_keys),
+        # reading and not an inference from the prose (R1, FIX 1 / P12). `label_key_population` is read back out of
+        # the primary test each seed ran; `..._derived_by_primary_keys` is what the derivation returned.
+        'label_key_population': label_key_population,
+        'label_key_population_size': len(label_key_population),
+        'label_key_population_source': ('PRIMARY_TEST_KEYS_AS_RUN' if measured_key_sets
+                                        else 'PRIMARY_KEYS_NO_SEED_REACHED_THE_PRIMARY_TEST'),
+        'label_key_population_derived_by_primary_keys': label_keys,
+        'label_key_population_agrees_with_primary_keys': label_key_population_agrees,
         'label_key_kinds': label_key_kinds,
         'label_key_tiers_disjoint_from': {tier: sorted(set(label_key_kinds) & set(contract.TIERS[tier]))
                                           for tier in contract.TIERS if tier != contract.DESIGN.get(
@@ -1481,7 +1538,10 @@ def self_test():
                                                          str(seeds[2]): 'f' * 64}), target, seeds))
           and any('DG4_CHECK_INDEPENDENT_START' in code for code in dg4_failures(
               seeds[0], dict(good, identical_start_with_and_without_the_checkpoint_check=False), target, seeds)),
-          'the second build, the three-seed difference map and the with/without-check equality each raise their own code')
+          'the second build, the three-seed difference map and the with/without-check equality each raise their own '
+          'code; R1-2: the last of those three is a KNOWN TAUTOLOGY against DG4_SIX_IDENTITY, kept only so a job '
+          'that drops the flag fails closed, and the checks in that record that CAN vary independently are '
+          'DG4_DOUBLE_BUILD, DG4_SEED_IDENTITIES and DG4_NOT_DISTINCT_FORM')
     check('dg4_whole_container_form_must_be_a_different_number',
           any('DG4_NOT_DISTINCT_FORM' in code for code in dg4_failures(
               seeds[0], dict(good, whole_container_identity=target), target, seeds)),
@@ -1617,14 +1677,25 @@ def self_test():
           % (reading.get('label'), reading.get('label_rule')))
     check('p12_label_key_set_is_the_relational_population',
           keys is not None and list(keys) == sorted(population.get('question_ids', []))
+          and list(keys) == list(reading.get('label_key_population_derived_by_primary_keys') or [])
+          and reading.get('label_key_population_agrees_with_primary_keys') is True
+          and reading.get('label_key_population_source') == 'PRIMARY_TEST_KEYS_AS_RUN'
           and population.get('total') == contract.VERIFIED_POPULATION
           and len(keys) == len(population.get('question_ids', []))
           and len(keys) != reading.get('eligible_questions')
           and len(keys) != reading.get('eligible_by_tier', {}).get('DIRECT_READ'),
-          'label_key_population = %d ids equal to the derived population %r; the ALL-KINDS eligible set is %r ids '
-          'and a DIRECT_READ-only key set %r ids, so a swap to either is caught here'
+          'the set the label test RAN ON = %d ids, equal to the derived population %r and to what `primary_keys` '
+          'returned; the ALL-KINDS eligible set is %r ids and a DIRECT_READ-only key set %r ids, so a swap to '
+          'either is caught here - the measured set moves even when the derived one does not'
           % (len(keys or []), population.get('by_kind'), reading.get('eligible_questions'),
              reading.get('eligible_by_tier', {}).get('DIRECT_READ')))
+    check('label_key_divergence_guard_can_fire',
+          label_key_divergence_failures(1, ['a', 'b'], ['a', 'b']) == []
+          and any('DIVERGED' in code for code in label_key_divergence_failures(1, [], ['a', 'b']))
+          and any('DIVERGED' in code for code in label_key_divergence_failures(1, ['a', 'b', 'c'], ['a', 'b']))
+          and any(code.startswith('LABEL_KEY_SET:') for code, _ in VOID_PATHS),
+          'the invariant "the label test ran over exactly the set `primary_keys` derived" is a named VOID path, '
+          'and it fires on both a wider and a narrower key set')
     check('p12_label_key_set_is_disjoint_from_DIRECT_READ_and_TEXT',
           set(reading.get('label_key_kinds', None) or []) <= set(contract.RELATIONAL)
           and set(reading.get('label_key_kinds') or []).isdisjoint(set(contract.DIRECT_READ) | set(contract.TEXT))
