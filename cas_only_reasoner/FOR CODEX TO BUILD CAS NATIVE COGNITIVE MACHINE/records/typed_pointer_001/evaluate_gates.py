@@ -7,6 +7,15 @@ prose anywhere may upgrade it, and nothing else in the project may decide it.
     python evaluate_gates.py STUDY_JSON
     python evaluate_gates.py --self-test
 
+`--self-test` is NOT instant, and the reason is structural rather than accidental: R1's BLOCKER 1 is that the
+suite must drive `evaluate()` itself, because a test that only exercises the helpers cannot see whether the
+program hands the label the wrong question set. Driving `evaluate()` means loading the frozen course, deriving
+the schedule and deriving the contract's RELATIONAL population, which is about 80 seconds on the machine this was
+written on. The suite derives that ONCE and shares it between its two drives, so `--self-test` takes about 90
+seconds and needs a timeout of at least 3 minutes. There is no cheaper fixture that exercises the same call path:
+the population derivation is intrinsic to it. If a fast check of the arithmetic and the I3 record logic alone is
+wanted, that is what the first two thirds of the checks do, but the suite runs as one program on purpose.
+
 Copied from `records/typed_practice_001/evaluate_gates.py` at HEAD `489cda65`: the same structure, the same
 integrity chain shape I0-I4, the same exact arithmetic and the same three-word label vocabulary. Four things are
 NEW, and each is named where it is raised. **Symbols, not line numbers, are cited in this docstring and in the
@@ -115,7 +124,7 @@ LABELS = ('LEARNS_NEW_WORLDS', 'NO_TRANSFER_TO_NEW_WORLDS', 'VOID')
 CORRESPONDENCE_KIND = 'correspondence'
 
 # ------------------------------------------------------------------------------------------------------------------
-# THE LABEL'S KEY SET IS CHOSEN IN ONE PLACE. `primary_keys` is that place, and `label_keys` (the single value it
+# THE LABEL'S KEY SET IS CHOSEN IN ONE PLACE. `primary_keys` is that place, and `population_ids` (the single value it
 # returns for a reading) is the only name any test or report of the label's unit of evidence may read. Nothing in
 # this program may widen it, and no second expression may name it: an adversarial battery mutated the label's key
 # set to the ALL-KINDS result and to DIRECT_READ and left the old suite green (R1, FIX 1 / P12).
@@ -153,9 +162,14 @@ DG4_FLAGS = ('core_identity_equals_the_practice_start', 'double_build_equal', 's
              'identical_start_with_and_without_the_checkpoint_check',
              'whole_container_form_is_a_different_number',
              'phase_a_finished_before_the_model_was_seeded')
-# Report-only fields, echoed so the reader's evidence trail is complete.
-DG4_OPTIONAL_FIELDS = ('phase_a_status', 'comparison_method',
-                       'local_note', 'seed_core_identities', 'model_seed')
+# Report-only fields, echoed so the reader's evidence trail is complete. The last three are the worker's own
+# MEASURED readings of the phase-A ordering (verified against `cncm.typed_pointer_worker.py` at commit
+# `d5a466cd`, where `ordering_holds = returned_first and not model_already_present and phase_a_status ==
+# "COMPLETE"`): they are echoed when present and NOT gated, because the reader's requirement is the status plus
+# the sealed artifact, and coupling a refusal to a field name the job has not promised would VOID a good run.
+DG4_OPTIONAL_FIELDS = ('phase_a_status', 'comparison_method', 'local_note', 'seed_core_identities', 'model_seed',
+                       'phase_a_returned_before_the_model_was_seeded',
+                       'no_pointer_model_existed_when_this_one_was_built', 'phase_a_returned_at_monotonic')
 # Phase A's custody evidence (protocol section 7.2): a name of the worker's own `EXPECTED_ARTIFACTS`, sealed with
 # a `status` of `COMPLETE` or `FAILED` INSIDE it. The status the reader accepts is exactly this value.
 PHASE_A_COMPLETE = 'COMPLETE'
@@ -324,7 +338,7 @@ def label_decision(complete, primary_passed):
     return 'NO_TRANSFER_TO_NEW_WORLDS', 'RELATIONAL_POPULATION_TEST_FAILED'
 
 
-def label_key_divergence_failures(seed, test_keys, label_keys):
+def label_key_divergence_failures(seed, test_keys, population_ids):
     """The label's test must have run over EXACTLY the key set `primary_keys` derived, or the reading is VOID.
 
     This is the invariant that makes "the key set is computed in exactly one place" enforceable rather than
@@ -333,9 +347,9 @@ def label_key_divergence_failures(seed, test_keys, label_keys):
     that substitution could leave every recorded key set intact and still move the label, which is precisely how a
     test that cannot fail is built. Named `LABEL_KEY_SET:<seed>:DIVERGED`, and it can only ever WITHHOLD a label.
     """
-    if list(test_keys) == list(label_keys):
+    if list(test_keys) == list(population_ids):
         return []
-    return ['LABEL_KEY_SET:%d:DIVERGED:%d!=%d' % (seed, len(list(test_keys)), len(list(label_keys)))]
+    return ['LABEL_KEY_SET:%d:DIVERGED:%d!=%d' % (seed, len(list(test_keys)), len(list(population_ids)))]
 
 
 def primary_keys(contract, population, eligible, kind_of):
@@ -750,7 +764,7 @@ def scoring_rows(artifacts, names):
     return rows, failures
 
 
-def evaluate(study_path):
+def evaluate(study_path, preloaded=None):
     """The reading for one study file. A reading is ALWAYS printed: never a bare traceback, never empty stdout.
 
     FIX 3 (R1). Two things sat outside any `try` and turned a malformed study file into `exit 1` with a
@@ -759,24 +773,40 @@ def evaluate(study_path):
     body after the contract import is wrapped here as well, because a reader whose whole job is to print a
     deterministic status must print VOID rather than die. The label vocabulary is unchanged: a `READER:` reading
     is `VOID`, one of the three words, and it can only ever WITHHOLD a label, never manufacture one.
+
+    `preloaded` is an optional `(context, failures)` pair from `study_context`. It exists for exactly one caller,
+    `--self-test`, whose two drives would otherwise each pay for the course load and the population derivation
+    (about 80 seconds each here) and push the suite past three minutes. **A production reading passes nothing**,
+    so `evaluate(study_path)` - the form the CLI, `execute_study.py` and `preflight_dry_run.py` all use - derives
+    its own context and can never be handed one.
     """
     try:
         from cas_meta2.typed_teaching import pointer_contract as contract
     except Exception as error:  # the contract is the reader's own dependency; a broken import is still a reading
         return reader_void('CONTRACT_IMPORT:%s' % type(error).__name__, error)
     try:
-        return _evaluate(study_path, contract)
+        return _evaluate(study_path, contract, preloaded=preloaded)
     except Exception as error:  # noqa: BLE001 - the reader must print a status, not a traceback
         return reader_void(_reader_reason(error), error)
 
 
-def _evaluate(study_path, contract):
-    """The reading, with the contract already imported. Every unexpected error here becomes a VOID reading."""
-    study = _read_json(study_path)
+def study_context(contract):
+    """Everything one reading derives from the FROZEN material, the contract and the pinned practice starts.
+
+    Returns `(context, failures)`. `failures` holds the codes raised while deriving the context: the population,
+    the eligible composition and the I3 start-target pins. All of them are properties of the frozen inputs, not of
+    the study file being read, and `void_paths_taken` sorts them, so their position in the list carries no meaning.
+
+    Split out of `_evaluate` for ONE reason, and it is a usability reason: deriving this costs one material load
+    plus one `relational_population` call, which is about 80 seconds on the machine this was written on, and
+    `--self-test` drives `evaluate()` TWICE (the complete fixture, then the same fixture with `correspondence`
+    left unscored, which is the evidence that the `correspondence` flag can vary). The second drive re-uses the
+    first drive's pair, so the suite costs about 90 seconds instead of about 170. `worker_module()` is deliberately
+    NOT part of the context: every reading reads it fresh, and the self-test replaces it per drive.
+    """
     frozen, _, _ = contract.load_material(ROOT)
     held, trained, excluded = contract.split(frozen)
     _, stats = contract.pointer_schedule(frozen)
-    main_updates, updates_per_pass, passes = stats['main_updates'], stats['updates_per_pass'], stats['passes']
     held_questions = contract.held_back_questions(frozen)
     trained_set = set(trained)
     trained_questions = {}
@@ -787,20 +817,8 @@ def _evaluate(study_path, contract):
     kind_of = {row['query']['query_id']: row['query']['kind'] for row in frozen['registry']}
     world_of = {row['query']['query_id']: row['source_world_id'] for row in frozen['registry']}
     seed_order = list(contract.MODEL_SEEDS)
-    worker, worker_code = worker_module()
 
     failures = []
-    failures.extend(min_passing_b_failures(contract))
-    failures.extend(worker_contract_failures(worker))
-
-    # ---- the contract's own label contract, and the population it derives --------------------------------
-    if contract.DESIGN.get('primary_label_tier') != 'RELATIONAL':
-        failures.append('LABEL_CONTRACT:PRIMARY_TIER:%s' % contract.DESIGN.get('primary_label_tier'))
-    if contract.DESIGN.get('flag_copy_alone_cannot_pass') is not True:
-        failures.append('LABEL_CONTRACT:FLAG_COPY_RULE:%s' % contract.DESIGN.get('flag_copy_alone_cannot_pass'))
-    if not contract.REMOVALS:
-        failures.append('LABEL_CONTRACT:REMOVALS_EMPTY:POPULATION_UNRECONCILED')
-
     population = None
     try:
         population = contract.relational_population(frozen)
@@ -839,13 +857,15 @@ def _evaluate(study_path, contract):
             failures.append('POPULATION_ELIGIBLE:ELIGIBLE_BY_KIND')
 
     # ---- THE LABEL'S KEY SET, in exactly one place (R1, FIX 1) --------------------------------------------
-    # `primary_keys` is the only expression in this program that NAMES the label's unit of evidence, the primary
+    # `primary_keys` is the only expression in this program that CHOOSES the label's unit of evidence, the primary
     # test below runs over exactly this list, and the list is echoed into the reading as `label_key_population`
     # so R1's P12 can assert on it. `eligible_all` is passed in only as the OUTER BOUNDARY, so nothing wider than
     # the derived population can ever be returned. `label_key_divergence_failures` then makes that a checked
     # invariant rather than a convention: if the test the label is keyed on ran over anything else, the reading is
-    # VOID and the label cannot be earned.
-    label_keys = primary_keys(contract, population, eligible_all, kind_of)
+    # VOID and the label cannot be earned. The binding is called `population_ids` because that is what it is - the
+    # ids of the contract's derived RELATIONAL population after the eleven frozen removals - and because that is
+    # the name a mutation of the CALL SITE substitutes, so substituting the call site is what the guard catches.
+    population_ids = primary_keys(contract, population, eligible_all, kind_of)
 
     # ---- the zero-learning floors INSIDE the label's population: reported, never subtracted (R1, FIX 4/FIX 5) -
     # The ceiling numerators in `ORACLE_CEILINGS` count ELIGIBLE questions; four of those eleven are already
@@ -863,6 +883,60 @@ def _evaluate(study_path, contract):
         value, codes = practice_start(contract, seed)
         start_targets[seed] = value
         failures.extend(codes)
+
+    return {
+        'frozen': frozen, 'held': held, 'trained': trained, 'excluded': excluded,
+        'main_updates': stats['main_updates'], 'updates_per_pass': stats['updates_per_pass'],
+        'passes': stats['passes'], 'stats': stats, 'held_questions': held_questions,
+        'trained_set': trained_set, 'trained_questions': trained_questions, 'by_id': by_id,
+        'kind_of': kind_of, 'world_of': world_of, 'seed_order': seed_order, 'population': population,
+        'shortcut_ids': shortcut_ids, 'eligible_all': eligible_all, 'eligible_by_kind': eligible_by_kind,
+        'tier_of': tier_of, 'eligible_by_tier': eligible_by_tier, 'population_ids': population_ids,
+        'population_id_set': population_id_set, 'oracle_solved': oracle_solved, 'rank_solved': rank_solved,
+        'start_targets': start_targets,
+    }, failures
+
+
+def _evaluate(study_path, contract, preloaded=None):
+    """The reading, with the contract already imported. Every unexpected error here becomes a VOID reading.
+
+    `preloaded` is an optional `(context, failures)` pair from `study_context`, used by `--self-test` so its
+    second drive does not pay for the material and the population again. A production reading always passes
+    `None`, so a reading derives its own context and can never be handed one by mistake.
+    """
+    study = _read_json(study_path)
+    if preloaded is None:
+        context, derived = study_context(contract)
+    else:
+        context, derived = preloaded[0], list(preloaded[1])
+    frozen, held, trained, excluded = (context['frozen'], context['held'], context['trained'], context['excluded'])
+    main_updates, updates_per_pass, passes = (context['main_updates'], context['updates_per_pass'],
+                                              context['passes'])
+    stats, held_questions = context['stats'], context['held_questions']
+    trained_set, trained_questions, by_id = (context['trained_set'], context['trained_questions'],
+                                             context['by_id'])
+    kind_of, world_of, seed_order = context['kind_of'], context['world_of'], context['seed_order']
+    population, shortcut_ids = context['population'], context['shortcut_ids']
+    eligible_all, eligible_by_kind = context['eligible_all'], context['eligible_by_kind']
+    tier_of, eligible_by_tier = context['tier_of'], context['eligible_by_tier']
+    population_ids = context['population_ids']
+    population_id_set = context['population_id_set']
+    oracle_solved, rank_solved = context['oracle_solved'], context['rank_solved']
+    start_targets = dict(context['start_targets'])
+    worker, worker_code = worker_module()
+
+    failures = []
+    failures.extend(min_passing_b_failures(contract))
+    failures.extend(worker_contract_failures(worker))
+    failures.extend(derived)
+
+    # ---- the contract's own label contract --------------------------------------------------------------
+    if contract.DESIGN.get('primary_label_tier') != 'RELATIONAL':
+        failures.append('LABEL_CONTRACT:PRIMARY_TIER:%s' % contract.DESIGN.get('primary_label_tier'))
+    if contract.DESIGN.get('flag_copy_alone_cannot_pass') is not True:
+        failures.append('LABEL_CONTRACT:FLAG_COPY_RULE:%s' % contract.DESIGN.get('flag_copy_alone_cannot_pass'))
+    if not contract.REMOVALS:
+        failures.append('LABEL_CONTRACT:REMOVALS_EMPTY:POPULATION_UNRECONCILED')
 
     jobs = study.get('jobs') if isinstance(study, dict) else None
     jobs = [job for job in jobs if isinstance(job, dict)] if isinstance(jobs, list) else []
@@ -971,7 +1045,7 @@ def _evaluate(study_path, contract):
         except (OSError, ValueError, KeyError, TypeError) as error:
             failures.append('I1:%d:SCORING:%s' % (seed, type(error).__name__))
             continue
-        # Every question-set expression below reads `label_keys` for the label's own unit of evidence: there is no
+        # Every question-set expression below reads `population_ids` for the label's own unit of evidence: there is no
         # second copy of the key choice to drift from it. The all-kinds set and the per-tier sets are REPORTED.
         tier_ids = {tier: sorted(q for q in eligible_all if tier_of[kind_of[q]] == tier) for tier in contract.TIERS}
         heldq = {n: question_outcomes(at[n], held_questions) for n in checkpoints}
@@ -979,18 +1053,18 @@ def _evaluate(study_path, contract):
         correspondence_ids = sorted(q for q in eligible_all if kind_of[q] == CORRESPONDENCE_KIND)
         correspondence_scored = sorted(q for q in correspondence_ids if q in heldq[start] and q in heldq[final])
         gained = []
-        for key in label_keys:
+        for key in population_ids:
             if not heldq[start][key] and heldq[final][key]:
                 gained.append({'query_id': key, 'kind': kind_of[key], 'world': world_of[key],
                                'records': len(held_questions[key]),
                                'admissible_answers': len(admissible_answers(frozen, by_id[held_questions[key][0]]))})
-        primary = seed_test(heldq[start], heldq[final], label_keys, kind_of, world_of)
-        failures.extend(label_key_divergence_failures(seed, primary['keys'], label_keys))
+        primary = seed_test(heldq[start], heldq[final], population_ids, kind_of, world_of)
+        failures.extend(label_key_divergence_failures(seed, primary['keys'], population_ids))
         entry = {
             'checkpoints': checkpoints, 'full_course_checkpoints': full,
             'start_checkpoint': start, 'first_checkpoint': first, 'final_checkpoint': final,
             'held_questions_correct': {str(n): sum(heldq[n].values()) for n in checkpoints},
-            'population_questions_correct': {str(n): sum(heldq[n][q] for q in label_keys) for n in checkpoints},
+            'population_questions_correct': {str(n): sum(heldq[n][q] for q in population_ids) for n in checkpoints},
             'eligible_questions_correct': {str(n): sum(heldq[n][q] for q in eligible_all) for n in checkpoints},
             'shortcut_questions_correct': {str(n): sum(heldq[n][q] for q in shortcut_ids) for n in checkpoints},
             'tier_questions_correct': {tier: {str(n): sum(heldq[n][q] for q in keys) for n in checkpoints}
@@ -1002,7 +1076,7 @@ def _evaluate(study_path, contract):
                                         for world in sorted({world_of[q] for q in held_questions})},
             'trained_questions_correct': {str(n): sum(trainq[n].values()) for n in full},
             PRIMARY_TEST: primary,
-            'MORE_PRACTICE_population': (seed_test(heldq[first], heldq[final], label_keys, kind_of, world_of)
+            'MORE_PRACTICE_population': (seed_test(heldq[first], heldq[final], population_ids, kind_of, world_of)
                                          if first is not None else {'evaluated': False}),
             ALL_KINDS_TEST: seed_test(heldq[start], heldq[final], eligible_all, kind_of, world_of),
             'TRAINED_start_to_final': (seed_test(trainq[start], trainq[final], sorted(trained_questions), kind_of)
@@ -1019,7 +1093,7 @@ def _evaluate(study_path, contract):
             # R1-8: `correspondence` must be shown to have been RUN AND REPORTED, not asserted to have been.
             'correspondence_questions_eligible': len(correspondence_ids),
             'correspondence_questions_scored': correspondence_scored,
-            'label_key_population_size': len(label_keys),
+            'label_key_population_size': len(population_ids),
         }
         for tier, keys in sorted(tier_ids.items()):
             entry['G_LEARN_' + tier] = (primary if tier == 'RELATIONAL'
@@ -1038,16 +1112,16 @@ def _evaluate(study_path, contract):
         failures.append('I3:SEEDS_NOT_PAIRWISE_DIFFERENT')
 
     # ---- THE LABEL'S KEY SET AS MEASURED FROM THE TEST THAT SET THE LABEL (R1, FIX 1) ---------------------
-    # `label_keys` is what `primary_keys` DERIVED; this is the set the primary test each seed actually RAN ON,
+    # `population_ids` is what `primary_keys` DERIVED; this is the set the primary test each seed actually RAN ON,
     # read back out of the test dicts. Both are reported, so the two cannot silently diverge: a substitution at
     # the call site moves the measured set even when it leaves the derived one untouched, which is exactly the
     # mutation that used to leave the suite green.
     measured_key_sets = [list(entry[PRIMARY_TEST]['keys']) for entry in seeds.values()
                          if isinstance(entry.get(PRIMARY_TEST), dict) and 'keys' in entry[PRIMARY_TEST]]
-    label_key_population = list(measured_key_sets[0]) if measured_key_sets else list(label_keys)
+    label_key_population = list(measured_key_sets[0]) if measured_key_sets else list(population_ids)
     label_key_kinds = sorted({kind_of[question] for question in label_key_population if question in kind_of})
     label_key_population_agrees = bool(measured_key_sets) and all(
-        keys == list(label_keys) for keys in measured_key_sets)
+        keys == list(population_ids) for keys in measured_key_sets)
 
     complete = not failures and len(seeds) == len(seed_order)
     primary_passed = complete and all(entry[PRIMARY_TEST]['passed'] for entry in seeds.values())
@@ -1091,7 +1165,7 @@ def _evaluate(study_path, contract):
         'label_key_population_size': len(label_key_population),
         'label_key_population_source': ('PRIMARY_TEST_KEYS_AS_RUN' if measured_key_sets
                                         else 'PRIMARY_KEYS_NO_SEED_REACHED_THE_PRIMARY_TEST'),
-        'label_key_population_derived_by_primary_keys': label_keys,
+        'label_key_population_derived_by_primary_keys': population_ids,
         'label_key_population_agrees_with_primary_keys': label_key_population_agrees,
         'label_key_kinds': label_key_kinds,
         'label_key_tiers_disjoint_from': {tier: sorted(set(label_key_kinds) & set(contract.TIERS[tier]))
@@ -1353,12 +1427,16 @@ def p12_drop_correspondence(facts, contract):
     return len(dropped)
 
 
-def p12_reading(study_path, stub):
-    """`evaluate(study_path)` with `worker_module` stubbed. The stub is removed in a `finally`, so it cannot leak."""
+def p12_reading(study_path, stub, preloaded=None):
+    """`evaluate(study_path)` with `worker_module` stubbed. The stub is removed in a `finally`, so it cannot leak.
+
+    `preloaded` is the `(context, failures)` pair from `study_context`, shared between the two drives so the
+    suite pays for the course load and the population derivation ONCE.
+    """
     saved = globals()['worker_module']
     globals()['worker_module'] = lambda: (stub, None)
     try:
-        return evaluate(study_path)
+        return evaluate(study_path, preloaded)
     finally:
         globals()['worker_module'] = saved
 
@@ -1367,25 +1445,40 @@ def p12_run(contract):
     """`{reading, unscored_reading, facts, error}` for the P12 drive: a broken fixture FAILS the checks.
 
     Two readings are taken from the same fixture. The FIRST is the complete one - the flag-copy-only study whose
-    label must be `NO_TRANSFER_TO_NEW_WORLDS`. The SECOND is taken after `p12_drop_correspondence` has removed the
-    `correspondence` records from the last scoring file, and is what proves the reader's
-    `correspondence.still_run_and_reported` is MEASURED: it must come back `False` there and `True` in the first
-    reading (R1-8).
+    label must be `NO_TRANSFER_TO_NEW_WORLDS` - and it is driven through `evaluate()`, the program's own entry
+    point, sharing ONE `study_context` derivation with the second. The SECOND is taken after
+    `p12_drop_correspondence` has removed the `correspondence` records from the last scoring file, and is what
+    proves the reader's `correspondence.still_run_and_reported` is MEASURED: it must come back `False` there and
+    `True` in the first reading (R1-8). Both drives call `evaluate()`, so both exercise the same label path.
     """
     try:
+        context, derived = study_context(contract)   # ONE derivation: about 80 s of the suite's ~90 s here
         study_path, stub, facts = p12_fixture(contract)
     except Exception as error:  # noqa: BLE001 - the suite must report this, not die of it
         return {'reading': {}, 'unscored_reading': {}, 'facts': {}, 'dropped': 0,
                 'error': '%s: %s' % (type(error).__name__, error)}
     try:
-        reading = p12_reading(study_path, stub)
+        reading = p12_reading(study_path, stub, (context, derived))
         dropped = p12_drop_correspondence(facts, contract)
-        unscored = p12_reading(study_path, stub)
+        unscored = p12_reading(study_path, stub, (context, derived))
         return {'reading': reading, 'unscored_reading': unscored, 'facts': facts, 'dropped': dropped,
                 'error': None}
     except Exception as error:  # `evaluate` returns a VOID reading rather than raising; belt and braces
         return {'reading': {}, 'unscored_reading': {}, 'facts': facts, 'dropped': 0,
                 'error': '%s: %s' % (type(error).__name__, error)}
+
+
+def evaluate_uses_the_production_path_by_default():
+    """True when a BARE `evaluate(study_path)` is still the production form, on both layers.
+
+    The suite shares one `study_context` derivation between its two drives for runtime reasons, and that is the
+    only reason `preloaded` exists. This makes the containment checkable rather than asserted in prose: if either
+    default ever stopped being `None`, every caller that does not pass a context on purpose - the CLI,
+    `execute_study.py`, `preflight_dry_run.py` - would go down a path the suite was not testing.
+    """
+    import inspect
+    return (inspect.signature(evaluate).parameters['preloaded'].default is None
+            and inspect.signature(_evaluate).parameters['preloaded'].default is None)
 
 
 def self_test():
@@ -1623,6 +1716,11 @@ def self_test():
     malformed.write_bytes(b'{"jobs": [ this is not json\n')
     malformed_reading = evaluate(malformed)
     missing_reading = evaluate(Path('__reader_selftest_no_such_dir__/study.json'))
+    check('evaluate_defaults_to_the_production_path',
+          evaluate.__defaults__ == (None,) and evaluate_uses_the_production_path_by_default(),
+          'a bare `evaluate(study_path)` - the form the CLI, execute_study.py and preflight_dry_run.py all use - '
+          'derives its own `study_context`; the preloaded pair is reachable only by passing it, which only this '
+          'suite does, and that is what keeps the suite at about 90 s instead of about 170')
     check('fix3_malformed_study_prints_a_void_reading_instead_of_a_traceback',
           malformed_reading.get('label') == 'VOID'
           and str(malformed_reading.get('label_rule', '')).startswith('READER:')
@@ -1774,7 +1872,9 @@ if __name__ == '__main__':
     if len(sys.argv) == 2 and sys.argv[1] == '--self-test':
         raise SystemExit(self_test())
     if len(sys.argv) != 2:
-        raise SystemExit('usage: evaluate_gates.py STUDY_JSON | --self-test')
+        raise SystemExit('usage: evaluate_gates.py STUDY_JSON | --self-test '
+                         '(--self-test drives evaluate() end to end, so it loads the frozen course and the '
+                         'RELATIONAL population and takes about 90 s: allow a 3-minute timeout)')
     if not Path(sys.argv[1]).is_file():
         raise SystemExit('STUDY_JSON_MISSING: no reading printed, so no label is claimed: %s' % sys.argv[1])
     reading = evaluate(sys.argv[1])  # never raises: an unexpected error comes back as a VOID reading (FIX 3)
