@@ -112,7 +112,57 @@ The wide output spaces are worth naming: `analogy` `world_id` has **65** symbols
 world scorer is an embedding scorer rather than a classifier, so this is not automatically fatal — but it is the
 place to look first if those kinds show no movement.
 
-## 6. What is still outstanding
+## 6. The node rank feature is the public node alias — and that reopens a decision I had made
+
+`lk1_answer_carriers_out.txt` Parts G and H:
+
+- `checker._nodes = sorted(node['ref'])` (`checker.py:72-73`) and `slots.alias_table` N0..N9 = the sorted refs
+  (`slots.py:55-60`), so "rank among the world's sorted node refs" IS the alphabetical position of the hidden ref.
+- **Node refs whose position in the sorted ref list equals their own stored index (`n<i>` == position `i`):
+  244 of 244.** The alias table example printed by the reviewer is `[('N0', '0'), ('N1', '1'), ('N2', '2'), ('N3', '3')]`.
+- Reach records whose answer changes under a node-name relabelling: held **5/26**, trained **11/71**, excluded **2/10**.
+
+So the rank feature is the node's own public index, and it is not new information smuggled in: the node's ref
+already ends in `n<i>`, and the reach answer space is literally `VIA_<node>`, so any machine that can point at a node
+already carries node identity. The reviewer's concern is not that rank leaks a secret; it is that:
+
+1. the input list in design v0.1 says in terms **"NO node alias index"**, so including rank contradicts a written
+   exclusion the design did not revisit, and
+2. the draft's vacuity paragraph leans on the machine being permutation-equivariant over node order, and a per-node
+   index weakens that argument and changes what engineering test S9 can assert.
+
+`INTERFACE_SPEC_POINTER.md` §2 already records the decision to include rank, with a registered rank-only no-learning
+baseline and removal of the questions that baseline solves. What was **missing** is the consequence: the input list's
+"no node alias index" line must be amended, and the vacuity/symmetry paragraph must stop resting on equivariance that
+the design has chosen to give up. **This must be resolved explicitly in v0.2 §5 and §6, and S9 re-specified, before
+the protocol is frozen** — not left as an unremarked contradiction between two documents.
+
+Note this does **not** change the gate population: the 2 eligible held `reach` questions that the order decides are
+removed whether rank is in or out (`DG3`). The choice affects the training signal (with rank, those targets stop being
+contradictory) and the engineering claims, not the bar.
+
+## 7. Slot-plan symbol alphabets, from the leaks lens (`lk1_answer_carriers_out.txt` Part F)
+
+The answer spaces a head must cover, with the record counts in parentheses:
+
+```
+analogy          world_id        65 symbols  (70)
+definition       kind_ref        64          (70)
+definition       function_ref    64          (70)
+context          setting_ref     64          (70)
+correspondence   mapping_target  3 or 4      (54 / 280)
+definition       whole           3 or 4      (15 / 55)
+reach            reach           6 or 5      (79 / 28)
+role_set         role            2           (216)
+parts            node            2           (207)
+context          participant     2           (267)
+edge_account     edge            2           (1029)
+correspondence   mode            2           (88)
+```
+
+The four 64/65-symbol slots and the wide `mapping_target` are where the output space, not the input, is hardest.
+
+## 8. What is still outstanding
 
 - The leaks lens had not yet reported its shortcut-policy table (pointer-space policies), its permutation-vacuity
   list, its other pipeline-routes check, or its final removal list and minimum b.
