@@ -245,6 +245,32 @@ learning, and it must be recorded as such.
 > `archive_sha256` and `manifest_sha256`, and those pins must not move. The request is validated against the
 > worker's own `REDUCED_SCHEDULE_KEYS`, and it must still satisfy `typed_pointer_worker.py:190` (an evaluation at
 > pass `0` **and** at pass `passes`).
+>
+> **AND THE REQUEST FORM MATTERS, measured 2026-09-19 at $0 before the launch.** Every candidate was put through
+> the worker's real `schedule_plan()`. **The exact request R2's review rendered as working — `reloads=[initial,
+> final]` — is REFUSED**:
+>
+> ```
+> REFUSED  {"passes":1,"updates":8,"evaluations":[0,1],"reloads":["initial","final"]}  TYPED_MATCHED:POINTER_PLAN_FLAGS
+> OK       {"passes":1,"updates":8,"evaluations":[0,1],"reloads":true}    claim_bearing=False  61 artifact names
+> OK       {"passes":1,"updates":8,"evaluations":[0,1],"reloads":false}   claim_bearing=False  58 artifact names
+> OK       {"passes":2,"updates":8,"evaluations":[0,2]}                   claim_bearing=False  63 artifact names
+> REFUSED  {"passes":1,"updates":1,"evaluations":[0,1]}                  TYPED_MATCHED:POINTER_PLAN_REPLAY_UPDATES
+> REFUSED  {"passes":1,"updates":8,"evaluations":[0]}                    TYPED_MATCHED:POINTER_PLAN_RELOAD_EVALUATIONS
+> ```
+>
+> The cause is a genuine key-name trap. `schedule_plan()` takes the request key **`reloads`** (plural, and in
+> `REDUCED_SCHEDULE_KEYS`) but the value it must carry is a single **bool**, enforced at
+> `cncm/typed_pointer_worker.py:184-185`: `for value in (phase_b, ablations, retention, interference, replays,
+> reload): require(type(value) is bool, "POINTER_PLAN_FLAGS")`. Sending a list of checkpoint names fails. Separately,
+> `schedule_plan`'s flag loop iterates the name **`reload`**, which is **not** in `REDUCED_SCHEDULE_KEYS` — so only
+> the plural form is accepted at all. `phase_a` must likewise be a list whose every name is in
+> `PHASE_A_CHECKPOINTS`. **Had this been discovered on the instance it would have cost the boot and package install
+> (~$0.42) for nothing**, which is exactly what a $0 freeze-time assertion prevents: `prepare_smoke.py` must call the
+> worker's own `schedule_plan()` and refuse unless it returns `claim_bearing is False` with the intended plan.
+>
+> Those measured name counts — **61 / 58 / 63** against the launcher's contract requiring **102** — are also the
+> concrete size of the gap described in the section-6 amendment below.
 - The owner's approval covers this step; no new approval is needed unless the projection in §4.2 crosses 11,000 s.
 - The smoke's job name uses the same `tpntr` study token, and its artifacts are sealed exactly like a real job's.
 
