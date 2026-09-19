@@ -9,14 +9,12 @@ c = 0 at p <= 0.01. Pure Python, no torch, no network, read-only on every existi
 import json
 import sys
 from collections import Counter
-from copy import deepcopy
 from fractions import Fraction
-from itertools import permutations
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from lk0_material import KINDS, Material, SIDES, flags_for  # noqa: E402
+from lk0_material import KINDS, Material, SIDES, flags_for, order_dependent  # noqa: E402
 
 assert "torch" not in sys.modules
 sys.stdout.reconfigure(line_buffering=True)
@@ -97,80 +95,8 @@ r_edge_flag = show("edge flag rule: edges = declared_whole -> participants - who
 
 print()
 print("REMOVAL 3 -- DG3 node-order-dependent questions (a name-blind machine cannot know the answer)")
-SAMPLED = ("analogy", "correspondence")
-
-
-def relabel_world(w, pi):
-    new = deepcopy(w)
-    new["nodes"] = [{**n, "ref": pi[n["ref"]]} for n in w["nodes"]]
-    new["contains"] = [{**e, "source": pi[e["source"]], "target": pi[e["target"]]} for e in w["contains"]]
-    new["declared_whole"] = pi[w["declared_whole"]]
-    new["declarations"] = {**w["declarations"],
-                           "participants": [pi[p] for p in w["declarations"]["participants"]],
-                           "primary_labels": [pi[p] for p in w["declarations"]["primary_labels"]]}
-    return new
-
-
-def relabel_public(public, focus_id, pi):
-    return {**public, "worlds": [relabel_world(w, pi) if w["world_id"] == focus_id else w
-                                 for w in public["worlds"]]}
-
-
-def apply_pi(value, pi):
-    if type(value) is dict:
-        return {k: apply_pi(v, pi) for k, v in value.items()}
-    if type(value) is list:
-        return [apply_pi(v, pi) for v in value]
-    if type(value) is str and value in pi:
-        return pi[value]
-    return value
-
-
-def comparable(kind, value):
-    if kind == "role_set":
-        return ("roles", tuple(value["roles"]), value["status"])
-    if kind == "definition":
-        return ("definition", value["whole"], value["kind_ref"], value["function_ref"])
-    if kind == "context":
-        return ("context", value["setting_ref"], tuple(sorted(value["participants"])))
-    if kind == "parts":
-        return ("parts", tuple(sorted(value["nodes"])))
-    if kind == "edge_account":
-        return ("edges", tuple(sorted((e["source"], e["target"]) for e in value["edges"])))
-    if kind == "reach":
-        return ("reach", value["state"], value["via"])
-    if kind == "analogy":
-        return ("analogy", value["world_id"])
-    return ("corr", value["status"], tuple(sorted((p["source"], p["target"]) for p in value["pairs"])))
-
-
-dep_questions = set()
-for row in frozen["registry"]:
-    kind, rid = row["query"]["kind"], row["record_id"]
-    if side[rid] == "excluded":
-        continue
-    q = row["query"]
-    focus = q["focus_world_id"]
-    public = packets[rid]["source"]
-    refs = sorted(n["ref"] for n in worlds[focus]["nodes"])
-    base = [a["value"] for a in checker.derive_target(public, q)["admissible_answers"]]
-    orders = ([tuple(reversed(refs))] if kind in SAMPLED else list(permutations(refs)))
-    for order in orders:
-        pi = dict(zip(refs, order))
-        if all(pi[r] == r for r in refs):
-            continue
-        new_public = relabel_public(public, focus, pi)
-        new_query = answers.compile_query(new_public, kind=kind, rule=q["rule"],
-                                         arguments={**deepcopy(q["arguments"]),
-                                                    **{f: pi[q["arguments"][f]] for f in ("whole", "part")
-                                                       if f in q["arguments"]}},
-                                         focus_world_id=focus)
-        fresh = {canonical(comparable(kind, a["value"]))
-                 for a in checker.derive_target(new_public, new_query)["admissible_answers"]}
-        expected = {canonical(comparable(kind, apply_pi(v, pi))) for v in base}
-        if fresh != expected:
-            dep_questions.update(qq for qq, records in m.held_questions.items() if rid in records)
-            break
+dep_by_record = order_dependent(m)
+dep_questions = {q for q, records in m.held_questions.items() if any(dep_by_record.get(r, False) for r in records)}
 r_order = show("private answer not invariant under renaming the focus world's node refs", dep_questions)
 print("     all held-back questions affected (eligible or not):", len(dep_questions), "of", len(m.held_questions))
 
@@ -228,7 +154,43 @@ def argument_node_policy(k, r):
     return None
 
 
-r_rank0 = show("point at the alphabetically first node (rank 0) in every node slot", solved_questions(rank0_policy))
+def rank_first_policy(k, r):
+    f = flags(r)
+    ref = f["rank0"]
+    if k == "parts":
+        return {"nodes": [ref]}
+    if k == "reach":
+        return {"state": "VIA", "via": ref}
+    if k == "edge_account":
+        return {"edges": []}
+    if k == "correspondence":
+        return rank0_policy(k, r)
+    if k == "analogy":
+        return {"world_id": None}
+    return None
+
+
+def rank_last_policy(k, r):
+    """Point at the node with the HIGHEST rank, i.e. the alphabetically last node ref."""
+    f = flags(r)
+    ref = f["refs"][-1]
+    if k == "parts":
+        return {"nodes": [ref]}
+    if k == "reach":
+        return {"state": "VIA", "via": ref}
+    if k == "edge_account":
+        return {"edges": []}
+    if k == "correspondence":
+        return rank0_policy(k, r)
+    if k == "analogy":
+        return {"world_id": None}
+    return None
+
+
+r_rankfirst = show("point at the alphabetically FIRST node (rank 0) in every node slot",
+                   solved_questions(rank_first_policy))
+r_ranklast = show("point at the alphabetically LAST node (highest rank) in every node slot",
+                  solved_questions(rank_last_policy))
 r_present = show("PRESENT for every node / every edge slot; ABSENT for reach; NO_MATCH for the rest",
                  solved_questions(present_all_policy))
 r_argument = show("point at the query's argument node (the declared whole when the question names none)",
@@ -329,32 +291,33 @@ o_reach = show("reach = DIRECT iff part is a child, else ABSENT (one adjacency h
 
 print()
 print("GATE ARITHMETIC")
-removals = (set(m.shortcut_hit) | r_fp2 | r_reach_flag | r_edge_flag | r_order | r_rank0 | r_present
-            | r_argument | r_constant)
+removals = (set(m.shortcut_hit) | r_fp2 | r_reach_flag | r_edge_flag | r_order | r_rankfirst | r_ranklast
+            | r_present | r_argument | r_constant)
+removals_with_rank = removals
+removals_no_rank = removals - r_ranklast
 oracle = o_parts | o_edge | o_reach
-rel_removed = {q for q in removals if q in rel}
-strict_removed = rel_removed | {q for q in oracle if q in rel}
-pop = sorted(set(rel) - rel_removed)
-pop_strict = sorted(set(rel) - strict_removed)
-print("  RELATIONAL tier as designed                                  %d" % len(rel))
-print("  minus removals (flags, order dependence, pointing, constant)  %d" % len(rel_removed))
-print("  PRIMARY RELATIONAL POPULATION                                 %d" % len(pop),
-      dict(sorted(Counter(kind_of[q] for q in pop).items())))
-print("  its spread over the held worlds", dict(sorted(Counter(world_of[q][:14] for q in pop).items())))
-print("  minus the one-hop adjacency/oracle-solved questions as well   %d" % len(strict_removed - rel_removed))
-print("  STRICT POPULATION                                             %d" % len(pop_strict),
-      dict(sorted(Counter(kind_of[q] for q in pop_strict).items())))
-print("  strict spread over the held worlds", dict(sorted(Counter(world_of[q][:14] for q in pop_strict).items())))
-for name, population in (("PRIMARY", pop), ("STRICT", pop_strict)):
-    n = len(population)
+for name, group in (("WITHOUT the optional rank feature (section 2.1 as written)", removals_no_rank),
+                    ("WITH the optional rank feature (DG3 option A)", removals_with_rank)):
+    rel_removed = {q for q in group if q in rel}
+    pop = sorted(set(rel) - rel_removed)
+    print("  %s" % name)
+    print("    RELATIONAL tier 29 minus %d = %d %s" % (len(rel_removed), len(pop),
+          dict(sorted(Counter(kind_of[q] for q in pop).items()))))
+    print("    spread over held worlds", dict(sorted(Counter(world_of[q][:14] for q in pop).items())))
+    n = len(pop)
     minimum = next(b for b in range(0, n + 1) if eg.binomial_upper_tail(b, b) <= Fraction(1, 100))
-    print("  %s: n = %d; minimum passing b with c = 0 at p <= 0.01 is b = %d" % (name, n, minimum))
-    print("      check: 2**-%d = %s = %.7f <= 0.01 ; 2**-%d = %s = %.7f > 0.01"
-          % (minimum, Fraction(1, 2 ** minimum), float(Fraction(1, 2 ** minimum)),
-             minimum - 1, Fraction(1, 2 ** (minimum - 1)), float(Fraction(1, 2 ** (minimum - 1)))))
-    print("      required share of the population: %d/%d = %.4f" % (minimum, n, minimum / n if n else 0.0))
-    print("      gate also needs gains in >= 2 kinds and >= 2 held worlds: kinds available %s, worlds %d"
-          % (sorted({kind_of[q] for q in population}), len({world_of[q] for q in population})))
+    print("    n = %d; minimum passing b with c = 0 at p <= 0.01 is b = %d = 2**-%d = %s = %.7f"
+          % (n, minimum, minimum, Fraction(1, 2 ** minimum), float(Fraction(1, 2 ** minimum))))
+    print("    required share of the population %d/%d = %.4f" % (minimum, n, minimum / n if n else 0.0))
+    strict_removed = rel_removed | {q for q in oracle if q in rel}
+    pop_strict = sorted(set(rel) - strict_removed)
+    ns = len(pop_strict)
+    minimum_strict = next(b for b in range(0, ns + 1) if eg.binomial_upper_tail(b, b) <= Fraction(1, 100))
+    print("    STRICT (also removing the one-hop adjacency questions) n = %d %s -> minimum b = %d (share %d/%d = %.4f)"
+          % (ns, dict(sorted(Counter(kind_of[q] for q in pop_strict).items())), minimum_strict, minimum_strict, ns,
+             minimum_strict / ns if ns else 0.0))
+    print("    kinds with gains available %s | held worlds %d"
+          % (sorted({kind_of[q] for q in pop}), len({world_of[q] for q in pop})))
 print()
 print("  ALL-EIGHT-KINDS population for reference:")
 pop_all = sorted(set(m.eligible) - (removals & set(q for q in m.eligible)))
@@ -362,8 +325,9 @@ print("    eligible %d minus removals %d = %d" % (len(m.eligible), len(set(m.eli
 print()
 print("  removal ids by rule (eligible questions only, for the frozen removal list):")
 for label, group in (("registered shortcut", set(m.shortcut_hit)), ("FP2 parts", r_fp2), ("reach flag", r_reach_flag),
-                     ("edge flag", r_edge_flag), ("order dependence", r_order), ("rank-0 pointing", r_rank0),
-                     ("PRESENT-for-all", r_present), ("argument-node pointing", r_argument),
+                     ("edge flag", r_edge_flag), ("order dependence", r_order), ("rank-0 pointing", r_rankfirst),
+                     ("rank-last pointing (needs the rank feature)", r_ranklast), ("PRESENT-for-all", r_present),
+                     ("argument-node pointing", r_argument),
                      ("best constant", r_constant), ("oracle one-hop (STRICT only)", oracle)):
     g = sorted(q for q in group if q in m.eligible_set)
     print("    %-28s %2d %s" % (label, len(g), g))

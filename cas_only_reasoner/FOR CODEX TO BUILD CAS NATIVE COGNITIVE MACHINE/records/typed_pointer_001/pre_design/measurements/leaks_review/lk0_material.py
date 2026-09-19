@@ -16,6 +16,8 @@ import json
 import sys
 import time
 from collections import Counter
+from copy import deepcopy
+from itertools import permutations
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -188,6 +190,112 @@ def flags_for(m):
                 "F": q["focus_world_id"], "T": q["arguments"].get("target_world_id"),
                 "WA": q["arguments"].get("whole"), "PA": q["arguments"].get("part"),
                 "rank0": refs[0] if refs else None, "rankN": refs[-1] if refs else None, "rankgt0": refs[1:]}
+    return flags
+
+
+ORDER_CACHE = HERE / "lk_cache_order.json"
+SAMPLED_KINDS = ("analogy", "correspondence")
+
+
+def _relabel_world(w, pi):
+    new = deepcopy(w)
+    new["nodes"] = [{**n, "ref": pi[n["ref"]]} for n in w["nodes"]]
+    new["contains"] = [{**e, "source": pi[e["source"]], "target": pi[e["target"]]} for e in w["contains"]]
+    new["declared_whole"] = pi[w["declared_whole"]]
+    new["declarations"] = {**w["declarations"],
+                           "participants": [pi[p] for p in w["declarations"]["participants"]],
+                           "primary_labels": [pi[p] for p in w["declarations"]["primary_labels"]]}
+    return new
+
+
+def _apply_pi(value, pi):
+    if type(value) is dict:
+        return {k: _apply_pi(v, pi) for k, v in value.items()}
+    if type(value) is list:
+        return [_apply_pi(v, pi) for v in value]
+    if type(value) is str and value in pi:
+        return pi[value]
+    return value
+
+
+def _comparable(kind, value):
+    """The answer as a name-order-free tuple, so a renamed answer can be compared fairly."""
+    if kind == "role_set":
+        return ("roles", tuple(value["roles"]), value["status"])
+    if kind == "definition":
+        return ("definition", value["whole"], value["kind_ref"], value["function_ref"])
+    if kind == "context":
+        return ("context", value["setting_ref"], tuple(sorted(value["participants"])))
+    if kind == "parts":
+        return ("parts", tuple(sorted(value["nodes"])))
+    if kind == "edge_account":
+        return ("edges", tuple(sorted((e["source"], e["target"]) for e in value["edges"])))
+    if kind == "reach":
+        return ("reach", value["state"], value["via"])
+    if kind == "analogy":
+        return ("analogy", value["world_id"])
+    if kind == "correspondence":
+        return ("corr", value["status"], tuple(sorted((p["source"], p["target"]) for p in value["pairs"])))
+    raise AssertionError(kind)
+
+
+def order_dependent(m, force=False):
+    """{record_id: bool} -- is the private answer NOT invariant under renaming the focus world's node refs?
+
+    A pointer machine that treats nodes symmetrically cannot know a name-determined answer, so these
+    records are a ceiling (pipeline review DG3). The public validator rebuilds node refs positionally
+    (source.py:254 TYPED_SOURCE_WORLD_RECONSTRUCTION), so the renaming is applied and scored with the
+    private rule functions directly, exactly as pre_design/measurements/pipeline_review/r4 does for reach.
+    role_set is invariant by construction (its answer is a function of the excerpt text alone, measured in
+    lk1), so it is not enumerated here.
+    """
+    key = m.checker.checker_profile()["profile_digest"]
+    wanted = set(m.by_id) - m.excluded_set
+    if ORDER_CACHE.is_file() and not force:
+        payload = json.loads(ORDER_CACHE.read_bytes().decode("utf-8"))
+        if payload.get("checker_profile_digest") == key and set(payload.get("flags", {})) == wanted:
+            return payload["flags"]
+    began = time.monotonic()
+    flags = {}
+    for row in m.frozen["registry"]:
+        rid = row["record_id"]
+        if rid in m.excluded_set:
+            continue
+        q = row["query"]
+        kind = q["kind"]
+        if kind == "role_set":
+            flags[rid] = False
+            continue
+        focus = q["focus_world_id"]
+        public = m.packets[rid]["source"]
+        world = m.worlds[focus]
+        refs = sorted(n["ref"] for n in world["nodes"])
+        base, _, _ = m.checker._derive_values(public, q)
+        base = [v for v in base]
+        orders = ([tuple(reversed(refs))] if kind in SAMPLED_KINDS else list(permutations(refs)))
+        dep = False
+        for order in orders:
+            pi = dict(zip(refs, order))
+            if all(pi[r] == r for r in refs):
+                continue
+            new_public = {**public, "worlds": [_relabel_world(w, pi) if w["world_id"] == focus else w
+                                               for w in public["worlds"]]}
+            new_query = {**q, "arguments": {**q["arguments"],
+                                            **{f: pi[q["arguments"][f]] for f in ("whole", "part")
+                                               if f in q["arguments"]}}}
+            fresh, _, _ = m.checker._derive_values(new_public, new_query)
+            if ({m.canonical(_comparable(kind, v)) for v in fresh}
+                    != {m.canonical(_comparable(kind, _apply_pi(v, pi))) for v in base}):
+                dep = True
+                break
+        flags[rid] = dep
+    partial = ORDER_CACHE.with_name(ORDER_CACHE.name + ".partial")
+    partial.write_bytes(json.dumps({"schema": "cncm.leaks-review-order-cache/0.1",
+                                    "checker_profile_digest": key, "flags": flags},
+                                   sort_keys=True, separators=(",", ":")).encode("utf-8") + b"\n")
+    partial.replace(ORDER_CACHE)
+    print("  order-dependence cache: computed for %d records in %.1f s, written to %s"
+          % (len(flags), time.monotonic() - began, ORDER_CACHE.name))
     return flags
 
 

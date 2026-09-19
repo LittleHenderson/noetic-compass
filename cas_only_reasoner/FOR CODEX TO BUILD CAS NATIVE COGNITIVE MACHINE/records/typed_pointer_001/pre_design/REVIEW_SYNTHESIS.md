@@ -462,16 +462,49 @@ The four 64/65-symbol slots and the wide `mapping_target` are where the output s
 
 ### 10.1 The frozen removal list and the resulting population
 
+`lk6_gate_population.py` was **fixed after its earlier crash** and now prints the complete table, including the exact
+`typed-query-…` ids for every removal — which is what the contract's frozen removal list needs.
+
+| removal | takes | ids printed |
+|---|---|---|
+| 1. registered input-blind shortcut | **0** | — |
+| 2. FP2 `parts(declared_whole) = participants − declared_whole` | **3** (`parts`) | 3 ids |
+| 3. DG3 node-order dependence | **2** (`reach`) | 2 ids |
+| 4. rank-last pointing (a zero-learning policy the machine can imitate) | **5** (`parts` 1, `reach` 4) | 5 ids |
+| 4. PRESENT-for-all | **1** (`reach`) | 1 id |
+| | **6 total** | **11 ids across the rules** |
+
+### 10.1.1 The distinction that matters: ORACLE rules are CEILINGS, not removals
+
+The same run separates a fifth class, and the reasoning is the reviewer's own and it is right:
+
+> **ORACLE RULES (reported, NOT removed by default: applying the checker's own rule to the input IS the skill under
+> test; these are the ceiling baselines the label must be compared against)**
+> `parts` = children of the whole argument (one adjacency hop) → removes 5 eligible
+> `edge_account` = the full adjacency of the focus world (one-hop copy) → removes 5 eligible
+> `reach` = DIRECT iff part is a child, else ABSENT (one adjacency hop) → removes 1 eligible
+
+**This settles the tension between the two lenses.** The leaks lens measured those one-hop rules as leaks and wanted
+the questions out; this run keeps them **in** and makes the rule a **ceiling** instead. The argument is sound and it
+matches the owner's decision: applying the checker's own rule to the input *is the skill under test*. A machine that
+learns to read a world's structure and answer about it has learned the thing the study is asking about. So the one-hop
+rule is the number to beat and the number to report beside the label — not a reason to delete the questions.
+
+**Decision: the PRIMARY population of 23 is the gate.** STRICT (16) would remove exactly the questions that test the
+skill, leaving only the kinds this corpus cannot test.
+
 | | value |
 |---|---|
 | eligible held questions | 45 |
 | RELATIONAL tier before removals | 29 |
 | removals | **6** — FP2 `parts` 3, node-order dependence 2, PRESENT-for-every-node 1 |
-| **RELATIONAL population** | **23** — analogy 5, correspondence 5, edge_account 5, parts 2, reach 6 |
+| **RELATIONAL population (PRIMARY)** | **23** — analogy 5, correspondence 5, edge_account 5, parts 2, reach 6 |
 | spread over the five held worlds | 4 / 4 / 7 / 5 / 3 |
 | kinds and worlds available for the ≥ 2 / ≥ 2 rule | 5 and 5 |
 | minimum passing `b` at c = 0, p ≤ 0.01 | **7** (2⁻⁷ = 1/128 = 0.0078125; 2⁻⁶ = 1/64 = 0.0156250 fails) |
 | required share of the population to improve | **7/23 = 0.3043** |
+| STRICT variant (also removing the 11 oracle one-hop questions) | 16, share 7/16 = 0.4375 |
+| with the rank feature instead | 18, share 7/18 = 0.3889 |
 
 **This corrects design v0.2, which says "29 − 3 − 2 = 24".** It is short by the PRESENT-for-every-node removal;
 the figure is **23, not 24**. Recorded as a required edit.

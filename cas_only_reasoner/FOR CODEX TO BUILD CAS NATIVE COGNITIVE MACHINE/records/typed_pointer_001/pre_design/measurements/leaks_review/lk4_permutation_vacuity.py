@@ -8,13 +8,11 @@ symmetrically cannot know a name-determined answer. Pure Python, no torch, no ne
 """
 import sys
 from collections import Counter
-from copy import deepcopy
-from itertools import permutations
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
-from lk0_material import KINDS, Material, SIDES, flags_for  # noqa: E402
+from lk0_material import KINDS, Material, SIDES, flags_for, order_dependent  # noqa: E402
 
 assert "torch" not in sys.modules
 sys.stdout.reconfigure(line_buffering=True)
@@ -48,102 +46,27 @@ print("  (3) the shared decoder breaks ties by symbol order (slots.py:293: 'argm
 print("      symbol order; first wins exact ties'), so equal logits always emit the first declared symbol.")
 
 
-def relabel_world(w, pi):
-    new = deepcopy(w)
-    new["nodes"] = [{**n, "ref": pi[n["ref"]]} for n in w["nodes"]]
-    new["contains"] = [{**e, "source": pi[e["source"]], "target": pi[e["target"]]} for e in w["contains"]]
-    new["declared_whole"] = pi[w["declared_whole"]]
-    new["declarations"] = {**w["declarations"],
-                           "participants": [pi[p] for p in w["declarations"]["participants"]],
-                           "primary_labels": [pi[p] for p in w["declarations"]["primary_labels"]]}
-    return new
-
-
-def relabel_public(public, focus_id, pi):
-    return {**public, "worlds": [relabel_world(w, pi) if w["world_id"] == focus_id else w
-                                 for w in public["worlds"]]}
-
-
-def apply_pi(value, pi):
-    if type(value) is dict:
-        return {k: apply_pi(v, pi) for k, v in value.items()}
-    if type(value) is list:
-        return [apply_pi(v, pi) for v in value]
-    if type(value) is str and value in pi:
-        return pi[value]
-    return value
-
-
-def comparable(kind, value):
-    """The answer as a name-order-free tuple, so a renamed answer can be compared fairly."""
-    if kind == "role_set":
-        return ("roles", tuple(value["roles"]), value["status"])
-    if kind == "definition":
-        return ("definition", value["whole"], value["kind_ref"], value["function_ref"])
-    if kind == "context":
-        return ("context", value["setting_ref"], tuple(sorted(value["participants"])))
-    if kind == "parts":
-        return ("parts", tuple(sorted(value["nodes"])))
-    if kind == "edge_account":
-        return ("edges", tuple(sorted((e["source"], e["target"]) for e in value["edges"])))
-    if kind == "reach":
-        return ("reach", value["state"], value["via"])
-    if kind == "analogy":
-        return ("analogy", value["world_id"])
-    if kind == "correspondence":
-        return ("corr", value["status"], tuple(sorted((p["source"], p["target"]) for p in value["pairs"])))
-    raise AssertionError(kind)
-
-
-def renameings(kind, refs):
-    if kind in SAMPLED:
-        for order in (tuple(reversed(refs)), *permutations(refs)):
-            if order != tuple(refs):
-                yield order
-                return
-        return
-    for order in permutations(refs):
-        if order != tuple(refs):
-            yield order
-
-
 print()
 print("PART B -- is the private answer name-blind? (renaming the focus world's node refs, then re-deriving)")
-print("  exhaustive for role_set/definition/context/parts/edge_account/reach; one renaming for analogy/correspondence")
-dep_by_record = {}
-order_dependent = Counter()
+print("  exhaustive renaming for role_set/definition/context/parts/edge_account/reach, one renaming for")
+print("  analogy/correspondence; scored with the private rule functions because the public validator rebuilds")
+print("  node refs positionally (source.py:254 TYPED_SOURCE_WORLD_RECONSTRUCTION), so no free renaming exists")
+print("  in the public model -- which is itself the reason a pointer machine cannot see a name.")
+dep_by_record = order_dependent(m)
+order_dependent_counts = Counter()
 kind_total = Counter()
 for row in frozen["registry"]:
-    kind, rid, s = row["query"]["kind"], row["record_id"], side[row["record_id"]]
-    if s == "excluded":
+    rid = row["record_id"]
+    if rid in m.excluded_set:
         continue
-    q = row["query"]
-    focus = q["focus_world_id"]
-    public = packets[rid]["source"]
-    refs = sorted(n["ref"] for n in worlds[focus]["nodes"])
-    base = [a["value"] for a in checker.derive_target(public, q)["admissible_answers"]]
-    dep = False
-    for order in renameings(kind, refs):
-        pi = dict(zip(refs, order))
-        new_query = answers.compile_query(
-            (new_public := relabel_public(public, focus, pi)), kind=kind, rule=q["rule"],
-            arguments={**deepcopy(q["arguments"]), **{f: pi[q["arguments"][f]] for f in ("whole", "part")
-                                                       if f in q["arguments"]}},
-            focus_world_id=focus)
-        fresh = {canonical(comparable(kind, a["value"]))
-                 for a in checker.derive_target(new_public, new_query)["admissible_answers"]}
-        expected = {canonical(comparable(kind, apply_pi(v, pi))) for v in base}
-        if fresh != expected:
-            dep = True
-            break
-    dep_by_record[rid] = dep
-    kind_total[(s, kind)] += 1
-    order_dependent[(s, kind)] += dep
+    kind = row["query"]["kind"]
+    kind_total[(side[rid], kind)] += 1
+    order_dependent_counts[(side[rid], kind)] += bool(dep_by_record[rid])
 print("  records whose private answer is NOT invariant under renaming (a name-blind machine cannot know it):")
 for s in ("held", "trained"):
     for kind in NODE_KINDS:
         if kind_total[(s, kind)]:
-            print("    %-8s %-14s %d/%d" % (s, kind, order_dependent[(s, kind)], kind_total[(s, kind)]))
+            print("    %-8s %-14s %d/%d" % (s, kind, order_dependent_counts[(s, kind)], kind_total[(s, kind)]))
 
 print()
 print("PART C -- which held-back questions the renaming dependence removes")
@@ -156,7 +79,6 @@ print("  ELIGIBLE held-back questions affected", len(elig_dep), "of", len(m.elig
       dict(sorted(Counter(kind_of[q] for q in elig_dep).items())))
 print("  eligible question ids", elig_dep)
 print("  held-back question ids affected (all)", dep_questions)
-
 print()
 print("PART D -- VACUOUS: checks and reported numbers that cannot fail, with the reason")
 VACUOUS = (
