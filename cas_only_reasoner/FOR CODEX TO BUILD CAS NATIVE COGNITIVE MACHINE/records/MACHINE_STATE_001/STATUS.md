@@ -538,11 +538,27 @@ hypothesis behind it is refuted by `context` sharing `parts`' arity and failing.
 
 ## 6. The decisions waiting
 
-**MEASURED 2026-09-19 ($0) — why nothing transferred: the old input makes it impossible.** Every packet holds all 64 worlds in
+**MEASURED 2026-09-19 ($0) — why nothing transferred.** Every packet holds all 64 worlds in
 one near-identical blend (nearest trained packet to a held packet: cosine median 0.999065); the only slot-specific input is a
 SHA-256 code of the slot's name, new for every held slot (0 of 617 held names occur in training). A linear probe fitted on
-trained worlds reads held worlds at or below the majority rate, inside a random-query null. The old 96.3758% was exact-name
-recall. Record: `records/typed_pointer_001/pre_design/INPUT_DEFECT_MEASUREMENT.md`. **Owner decision 2026-09-19: build the
+trained worlds reads held worlds at or below the majority rate, inside a random-query null — and that probe covered **four of
+the eight kinds** (`parts` 58.3333 / `context` 60.2941 / `role_set` 83.3333 / `edge_account` 73.8971 against majorities
+52.7778 / 75.0000 / 83.3333 / 80.1471). The old 96.3758% was exact-name recall (seen names 96.8627–100.0000, unseen 50.0000).
+
+**Claim state corrected 2026-09-19.** The four choice kinds (`definition`, `analogy`, `correspondence`, `reach`) were never
+probed. So the general statement "impossible for ANY learner, ALL kinds" is **INFERRED from the hash construction
+(`binding.py:198-202`) plus the q-blind ceiling, NOT MEASURED**; `INPUT_DEFECT_MEASUREMENT.md` line 168 already marks it
+INFERRED, and the earlier wording here and in the hand-off ran MEASURED and INFERRED together. The measured claim is:
+no transfer **for the four per-bit kinds probed**, and any never-seen slot name gets chance whether it sits in a new world or
+a practised one.
+
+**Independently reproduced 2026-09-19.** The cache the analysis reads (`build2.pkl`) was never committed, so the recorded
+numbers could not be re-checked. Rebuilt and re-run end to end: gate digests matched
+(`4481b1d2…fefdd9` projection, `14da2c58…c667` readout), 2,598 slots, 2,442 distinct rows, both analysis stdouts identical
+after stripping wall-clock timings, summary JSON canonically identical. Record:
+`records/typed_pointer_001/pre_design/measurements/input_defect/RERUN_VERIFICATION_20260919.md`.
+
+Record: `records/typed_pointer_001/pre_design/INPUT_DEFECT_MEASUREMENT.md`. **Owner decision 2026-09-19: build the
 pointer machine (option 1) plus the checkpoint check.** Hand-off for the builder: `records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md`.
 
 **MEASURED 2026-09-18 — the practice study: the neurons learn what they practise, and none of it reaches

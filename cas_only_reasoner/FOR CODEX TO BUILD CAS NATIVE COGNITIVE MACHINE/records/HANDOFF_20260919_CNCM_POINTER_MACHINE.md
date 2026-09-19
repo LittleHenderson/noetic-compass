@@ -139,9 +139,21 @@ Encoder rebuild verified byte-exact (projection sha256 `4481b1d2...fdd9`, readou
   Every held accuracy sits inside a random-query null (P from 0.1633 to 0.9833). Leaving out 5 TRAINED worlds fails the same
   way, so any unseen world fails. The published 96.3758% (context) is exact-name recall: seen names 96.8627–100.0000, unseen
   names 50.0000.
-- **Verdict (MEASURED):** transfer to a never-practised world is impossible for this input by construction; the old machine
-  could only memorise names. Record this as a REAL negative about the OLD machine's input (it is in the spec sheet row of this
-  hand-off's commit).
+- **Verdict — claim state corrected 2026-09-19 by the incoming agent, after re-reading `INPUT_DEFECT_MEASUREMENT.md`.**
+  MEASURED: no transfer to a never-practised world **for the four per-bit kinds probed** (`parts`, `context`, `role_set`,
+  `edge_account`), and any never-seen slot name gets chance whether it sits in a new world or a practised one. INFERRED,
+  **not** measured: "impossible for ANY learner, ALL kinds" — that follows from the hash construction
+  (`binding.py:198-202`) plus the q-blind ceiling, and `INPUT_DEFECT_MEASUREMENT.md` line 168 already marks it INFERRED.
+  The four choice kinds (`definition`, `analogy`, `correspondence`, `reach`) were never probed, and three of them are in the
+  new RELATIONAL tier, so the distinction is load-bearing for the pointer gate. Record this as a REAL negative about the OLD
+  machine's input for the four probed kinds (the spec-sheet row of this hand-off's commit is already worded correctly).
+- **Independently reproduced 2026-09-19.** `build2.pkl` was never committed, so none of the above could be re-checked from
+  the repo. It was rebuilt and the whole chain re-run: gate digests matched, 2,598 slots, 2,442 distinct rows, both analysis
+  stdouts identical after stripping wall-clock timings, summary JSON canonically identical. Rebuild takes about 900 s.
+  Record: `pre_design/measurements/input_defect/RERUN_VERIFICATION_20260919.md`.
+- **Checkpoint files: 30 exist on disk, 18 are shipped.** `initial`, `pass_01`, `final`, `prelast` and `retained` exist for
+  each of the 3 seeds; only the first three are in the checkpoint-check ship list (§5.1). `prelast` and `retained` stay
+  unshipped so the check costs what the owner was told (~$0.38–0.63 per job, M2).
 
 Other facts found this session:
 - **Data model.** Course worlds have 3 or 4 nodes (52 with 4, 12 with 3), each node `{ref, label, kind:"idea"}`; 3–4 directed
@@ -366,10 +378,20 @@ network module directly (venv `~/venvs/cas-gpu`, dev only); WSL2 Ubuntu exists (
 
 ## 12. 🔒 Owner action items (the next agent must put these LAST in its report)
 
-1. **Acknowledge the two corrections** in §2 (the checkpoint check costs ~$0.38–$0.63 per job; the input changes too).
-2. **Approve a short AWS smoke job** (well under $1) for the end-to-end worker test S10, or say to skip it.
-3. **Confirm the gate change**: the "learns new worlds" label will require gains on the relational question kinds (parts,
-   edge_account, reach, correspondence, analogy), because copying one input flag could otherwise pass the old gate.
-4. If the smoke timing projects a job above ~11,000 s, a larger per-job reservation needs a new approval (the approved envelope
-   is ~$13 expected, $45 reserved in total).
-5. Vercel MCP server needs authorisation in an interactive `claude` session (`/mcp`) — unrelated to this work.
+**Items 1–3 were ANSWERED by the owner on 2026-09-19, in the session that picked up this hand-off. Do not re-ask them.**
+
+1. **Two corrections — ✅ ACCEPTED, both.** (a) The in-job checkpoint check costs about $0.38–$0.63 per job, not "no extra
+   cost". (b) Pointer answers alone cannot work: the INPUT must change too, so the machine reads one world as a small graph
+   instead of a blend of all 64 worlds. Owner answer verbatim: *"Accept both, carry on."*
+2. **Short AWS smoke job for the end-to-end worker test S10 — ✅ APPROVED.** Well under $1. It doubles as the timing
+   measurement for S7/DG9 and must run before the paid launch.
+3. **Gate change — ✅ CONFIRMED.** `LEARNS_NEW_WORLDS` will require gains on the RELATIONAL kinds (parts, edge_account,
+   reach, correspondence, analogy), because copying one input flag otherwise passes the old gate (FP1: b=10, c=0,
+   p=0.0009765625). Owner answer verbatim: *"Yes — require the relational kinds."* The all-kinds result is reported
+   alongside as a flag, not as the label.
+
+**Still open:**
+
+4. **Budget, conditional.** If the smoke timing projects a job above ~11,000 s, a larger per-job reservation needs a new
+   approval. The approved envelope is ~$13 expected, $45 reserved in total. Nothing has been re-asked yet.
+5. Vercel MCP server needs authorisation in an interactive `claude` session (`/mcp`) — unrelated to this work, untouched.

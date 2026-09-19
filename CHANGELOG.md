@@ -4,6 +4,38 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (later) - Pointer hand-off verified and its claim state corrected; owner settled all three open decisions
+
+$0.00. No AWS call, no torch, no launch.
+
+CORRECTED CLAIM STATE — a correction of wording in 857af081, not a new measurement. The hand-off, the memory note and the
+machine status record said transfer was "impossible for this input by construction" and marked it MEASURED. The measurement
+document itself marks that general statement INFERRED, not measured, and marks the phrase "cannot relate to anything it
+learned" REFUTED as worded. What IS measured: no transfer for the four per-bit kinds probed (parts 58.3333 / context 60.2941 /
+role_set 83.3333 / edge_account 73.8971 against majorities 52.7778 / 75.0000 / 83.3333 / 80.1471), and any never-seen slot name
+gets chance whether it sits in a new world or a practised one. The four choice kinds (definition, analogy, correspondence,
+reach) were never probed, and three of them sit in the relational tier the new gate depends on, so the distinction is
+load-bearing. Corrected in records/MACHINE_STATE_001/STATUS.md section 6 and in the hand-off section 3. The spec-sheet row at
+docs/CAS_HARNESS_SPEC_SHEET.md:1375 was already worded correctly and is unchanged.
+
+REPRODUCED ($0, unmodified committed scripts). build2.pkl was never committed, so the recorded negative could not be
+re-checked from the repo at all. Rebuilt and re-ran the whole chain: gate digests matched (projection
+4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9, readout
+14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667), 2,598 slots, 2,442 distinct rows, both analysis stdouts
+identical after stripping wall-clock timings, summary JSON canonically identical (5,424 canonical characters both runs). The
+only differences were elapsed-second figures. Rebuild takes about 900 s; a .gitignore now keeps the cache local. Record:
+records/typed_pointer_001/pre_design/measurements/input_defect/RERUN_VERIFICATION_20260919.md
+
+OWNER DECISIONS — all three answered 2026-09-19, recorded verbatim in the hand-off section 12, none re-asked: (1) both
+corrections accepted (the checkpoint check costs about $0.38-0.63 per job; the machine's input must change too, so it reads one
+world as a small graph); (2) the short AWS smoke job for the end-to-end worker test S10 is APPROVED, under $1; (3) the "learns
+new worlds" label will require gains on the RELATIONAL kinds, because copying one input flag otherwise passes the old gate
+(b=10, c=0, p=0.0009765625).
+
+ALSO VERIFIED: 30 checkpoint files exist on disk (initial, pass_01, final, prelast, retained per seed); the ship list of 18
+(initial, pass_01, final) is correct and unchanged, so the checkpoint check costs what the owner was told. Local torch
+2.11.0+cu128 runs with CUDA on the RTX 4070 (8,188 MiB), so smoke tests S1-S9 can run locally for $0; only S10 needs AWS.
+
 ## 2026-09-19 UTC - Owner chose the pointer machine; the old input is measured unreadable for new worlds; hand-off written
 
 $0.00. No AWS call, no torch. Owner order (verbatim): "do option 1, pointer answers plus the checkpoint check BUT EXAMINE THIS TO
@@ -15,7 +47,9 @@ input is a SHA-256 code of the slot's name: 0 of 617 held slot names occur in tr
 trained code has median cosine 0.375, the same as random vectors. A linear probe fitted on trained worlds and tested on held
 worlds: parts 58.3333 (majority 52.7778), context 60.2941 (75.0000), role_set 83.3333 (83.3333), edge_account 73.8971
 (80.1471), all inside a random-query null. The published 96.3758% was exact-name recall (unseen names 50.0000). So the old
-machine could only memorise names; transfer was impossible by construction. This is the $0 half of the owner's checkpoint check.
+machine could only memorise names, and no transfer was measured for the four per-bit kinds probed. [Corrected 2026-09-19: this
+entry originally read "transfer was impossible by construction" as MEASURED. That general claim covers all eight kinds but only
+four were probed, so it is INFERRED — see the entry above.] This is the $0 half of the owner's checkpoint check.
 
 DESIGNED, NOT BUILT: a pointer machine that reads one world as a graph (nodes, "contains" edges, declared roles) and answers
 by pointing at that world's own parts, reusing the registered ^6 block as its update step. One adversarial review (pipeline

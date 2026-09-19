@@ -1,0 +1,5 @@
+# Regenerable cache. build2.py rebuilds it in about 900 s (measured 2026-09-19).
+# It was NOT committed in 857af081, which meant the recorded negative result
+# could not be re-checked from the repo. Keep it local; rebuild it instead.
+build2.pkl
+__pycache__/
