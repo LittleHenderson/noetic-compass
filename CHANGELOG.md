@@ -4,6 +4,48 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (later again) - Reviews re-run; the gate's power measured; the pointer contract built and verified
+
+$0.00. No AWS call, no launch. Owner instruction this session: **"REMEMBER OUR MAIN GOAL IS GETTING THOSE NEURONS TO
+LEARN"**, which reframed the priority from measurement to learning.
+
+THE GATE CANNOT DETECT A REAL IMPROVEMENT (pure arithmetic, `pre_design/GATE_FEASIBILITY.md`, `gate_power.py`). The
+three-seed requirement does the damage. At 17 honest relational questions a genuine 40 % improvement clears one seed
+with probability 0.5522 and all three with 0.1683; at 11 questions even 50 % gives 0.0207. Regressions are brutal: the
+smallest passing count is b=7 with none, 10 with one, 12 with two, 14 with three. Every caveat makes the real power
+lower, so the table is an upper bound. Findings FP1-FP3 guard well against a false positive; this is the opposite
+risk, a gate so tight it returns `NO_TRANSFER` whether or not the machine learned — the project's own word for that is
+VACUOUS. Not acted on; the gate is unchanged; three options are recorded for the owner.
+
+LEARNING LEVERS (`pre_design/LEARNING_LEVERS.md`). (1) The machine was stopped while still learning: mean loss fell
+monotonically 1.2879780873 → 0.3981766156 over ten passes and used 5,465.811116 s of a 12,300 s deadline, 44.4 %.
+(2) A registered ceiling caps training at 13 passes: `LEARNER_MAX_UPDATES_CEILING` 2048 with
+`main_updates + 16 <= 2048`, and `pointer_contract.py:66` inherits it; 14 passes is refused. (3) **Held-back RECORD
+accuracy rose 5→23, 7→21, 7→15 of 127 while the held-back QUESTION gate moved +3, 0, −1 of 45** — the neurons were
+learning about unpractised worlds even through the broken input, and the gate's unit could not see it, because a
+question counts only when all of its records are right. Recommendation: raise the ceiling and train to convergence,
+and report held-back accuracy per record as a second reported number that is never a label.
+
+THE LEAKS LENS found the input hands over two relational kinds: the proposed input's own `contains` adjacency solves
+`parts` 5/5 and `edge_account` 5/5 with no learned weights, wider than the known FP2 rule (3/5). R10, a rank-only rule,
+solves 4/9 held `reach`; re-derived independently here and confirmed exactly, which also exposed a **constant `VIA n1`
+answer solving 4/9 on the complementary set** — two policies together solve 8/9. Role_set is solved 6/6 by a public
+clause-prefix map and 6/6 by a position-free token bag. **No cheap rule solves any held `correspondence` or `analogy`
+question**, their paired worlds share no node label, and 54 + 36 trained records back them — so those are the clean,
+hard kinds where a genuine transferable skill would show.
+
+THE CONTRACT IS BUILT AND VERIFIED. `pointer_contract.py` (32,066 bytes, LF, ASCII-only) and
+`tests/test_typed_pointer_study.py` (17,560 bytes). Tests: **11 passed in 76.45s** (run by me), practice baseline
+**24 passed** untouched. An independent verifier (`pre_design/verify_contract.py`) passes **18 of 18**: the 18
+checkpoint MATERIAL rows equal `checkpoint_pins.json`, total 15,259,777 bytes, the `tpntr` bucket is exactly 63
+characters, `MIN_PASSING_B` is 7, the hold-out digests equal the practice study's own, and an unfilled removals
+placeholder reports `population_complete: False` rather than looking finished. Nothing existing was edited.
+
+CORRECTIONS OF MY OWN ERRORS, all found by review: two wrong `model_state_identity` digests in
+`INTERFACE_SPEC_SHARED.md` (the real seeds 20260918/19 values are `35081019…` and `91279389…`, agreed by two sources
+in each receipt); the bucket length for `tpntr` stated as 62 when it is 63; and a verification test of mine that
+asserted the wrong guard intent, corrected against the builder's implementation.
+
 ## 2026-09-19 UTC (later still) - Pointer build inputs prepared and the ^6 start premise measured
 
 $0.00. No AWS call, no training. Dev-only local GPU use for one probe, not claim-bearing.

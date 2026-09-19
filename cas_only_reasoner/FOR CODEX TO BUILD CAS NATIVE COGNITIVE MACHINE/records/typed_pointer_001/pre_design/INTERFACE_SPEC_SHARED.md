@@ -1355,7 +1355,8 @@ Every item is a trap with a `file:line` source. Ordered roughly by how likely it
     `DESIGN_REVIEW_PIPELINE_LENS.md:83-88`). Keep gate readers and analysis scripts under `records/`.
 
 14. **Bucket names are capped at 63 characters** (`matched_contract.py:212`, `worker_contract.py:162`; bucket = job +
-    `-807562639912`). The study token after `cas-meta2-` must be ≤5 characters: `tpntr` → 62, `tpoint` → 64 (fails)
+    `-807562639912`). The study token after `cas-meta2-` must be ≤5 characters: `tpntr` → **63** (exactly at the
+    limit; **corrected 2026-09-19** — this line said 62 and was wrong by one character), `tpoint` → 64 (fails)
     (`DESIGN_REVIEW_PIPELINE_LENS.md:52-55`). Add a length test for all three seeds.
 
 15. **`scope_parameters` freezes everything outside the ^6 allowlist** (`trainer.py:86-88`) and
