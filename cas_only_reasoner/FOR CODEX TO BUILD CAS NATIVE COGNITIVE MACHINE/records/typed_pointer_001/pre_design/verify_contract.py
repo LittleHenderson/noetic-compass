@@ -102,23 +102,38 @@ if isinstance(pop, dict) and not raised:
 else:
     check("population returns while REMOVALS is empty", not raised, detail)
 
-# --- the parameterised schedule: faithful at 10 passes, free at others ---------------------------------
-pb, pstats = pc.pointer_schedule(frozen, pc.practice.PASSES)
-check("pointer_schedule(10) reproduces the practice batches digest",
+# --- the schedule: the AS-IS branch must stay faithful; the STRATIFIED branch is the owner's decision ---------
+pb, pstats = pc.pointer_schedule(frozen, pc.practice.PASSES, stratified=False)
+check("AS-IS pointer_schedule(10) reproduces the practice batches digest",
       pstats["batches_digest"] == "daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857",
       pstats["batches_digest"][:16])
-check("pointer_schedule(10) has 147 updates/pass and 818 presentations/pass",
+check("AS-IS pointer_schedule(10) has 147 updates/pass and 818 presentations/pass",
       (pstats["updates_per_pass"], pstats["presentations_per_pass"]) == (147, 818),
       "%d / %d" % (pstats["updates_per_pass"], pstats["presentations_per_pass"]))
-check("pointer_schedule(10) matches the practice pointer_schedule line for line",
+check("AS-IS pointer_schedule(10) matches the practice schedule line for line",
       pstats == stats, "" if pstats == stats else "differs from practice stats")
 
+sb, sstats = pc.pointer_schedule(frozen, pc.practice.PASSES)
+check("STRATIFIED is the default (owner decision)",
+      pc.STRATIFIED is True and sstats["batches_digest"] != pstats["batches_digest"],
+      "digest=%s" % sstats["batches_digest"][:16])
+check("STRATIFIED keeps 147 updates per pass and reaches 1176 presentations",
+      (sstats["updates_per_pass"], sstats["presentations_per_pass"]) == (147, 1176),
+      "%d / %d" % (sstats["updates_per_pass"], sstats["presentations_per_pass"]))
+kind_of = {row["record_id"]: row["query"]["kind"] for row in frozen["registry"]}
+p1 = [b for b in sb if b["pass"] == 1]
+absent = {k: sum(1 for b in p1 if k not in {kind_of[r] for r in b["record_ids"]})
+          for k in sorted(set(kind_of.values()))}
+check("STRATIFIED: every kind appears in every update of pass 1",
+      all(v == 0 for v in absent.values()), str({k: v for k, v in absent.items() if v}))
+check("STRATIFIED: every batch carries all 8 kinds",
+      all(len(b["record_ids"]) == 8 for b in p1), "batch sizes %s" % sorted({len(b["record_ids"]) for b in p1}))
+
 try:
-    long_batches, long_stats = pc.pointer_schedule(frozen, 20)
-    ok20 = (long_stats["main_updates"] == 2940 and long_stats["passes"] == 20
-            and long_stats["batches_digest"] != pstats["batches_digest"]
-            and len(long_batches) == 2940)
-    detail20 = "main=%d digest=%s" % (long_stats["main_updates"], long_stats["batches_digest"][:12])
+    lb, lstats = pc.pointer_schedule(frozen, 20)
+    ok20 = (lstats["main_updates"] == 2940 and lstats["passes"] == 20
+            and lstats["batches_digest"] != sstats["batches_digest"])
+    detail20 = "main=%d digest=%s" % (lstats["main_updates"], lstats["batches_digest"][:12])
 except Exception as exc:                                     # noqa: BLE001
     ok20, detail20 = False, "%s: %s" % (type(exc).__name__, str(exc)[:100])
 check("pointer_schedule(20) runs and differs from the 10-pass digest", ok20, detail20)

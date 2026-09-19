@@ -1,0 +1,20 @@
+material: 564 packets, held 127 trained 358 excluded 79
+
+label cache carries a digest                                   PASS  ["cache_digest", "declaration_count", "declaration_ids", "excerpt_count", "excerpt_ids", "
+read_packet returns a canonical-serialisable structure         PASS  56543 bytes
+read_packet is deterministic                                   PASS  
+reading declares its schema                                    PASS  cncm.typed-pointer-input/0.1
+reading keys                                                   PASS  ["excerpt", "focus_world", "focus_world_id", "node_flags", "node_rank_feature", "query", "query_id", "record_id", "schema", "worlds"]
+no forbidden field name anywhere in the reading                PASS  []
+no held-world node LABEL text appears in any reading           PASS  []
+        (20 held-world labels exist; 230 distinct labels in the bank)
+rank feature presence matches DESIGN['node_rank_feature']=True PASS  rank string present in reading: True (informational; the switch is internal)
+DESIGN records the rank decision status                        PASS  REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A
+input_digest is defined for all 564 records                    PASS  564 distinct
+digest is reproducible on a re-read                            PASS  
+        all-564 input digest map sha256: b8a4d7e7e83e96bdf99899338eeb07b9fe537a5c770b8e2eacde0a12b432499f
+slot_readings returns one reading per slot of the existing plan PASS  3 readings for 3 slots
+every slot_id appears exactly once and in order                PASS  
+slot_readings refuses a reading that is not a reading          PASS  
+
+VERDICT: ALL PASS  (14 checks, 0 failed)

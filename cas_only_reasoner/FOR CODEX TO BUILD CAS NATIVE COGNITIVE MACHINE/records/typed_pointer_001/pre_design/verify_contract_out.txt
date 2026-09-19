@@ -15,7 +15,17 @@ split counts 127/358/79                                    PASS  127/358/79
 empty REMOVALS -> composition equals verified values       PASS  {"parts": 5, "edge_account": 5, "reach": 9, "correspondence": 5, "analogy": 5}
 empty REMOVALS -> removals_measured is False               PASS  
 empty REMOVALS -> population_complete is False             PASS  
-empty REMOVALS -> known removals recorded but not applied  **FAIL**  total=29
+empty REMOVALS -> known removals recorded but not applied  PASS  total=29
+AS-IS pointer_schedule(10) reproduces the practice batches digest PASS  daf95831dd6f054f
+AS-IS pointer_schedule(10) has 147 updates/pass and 818 presentations/pass PASS  147 / 818
+AS-IS pointer_schedule(10) matches the practice schedule line for line PASS  
+STRATIFIED is the default (owner decision)                 PASS  digest=1c67edd74bf670a1
+STRATIFIED keeps 147 updates per pass and reaches 1176 presentations PASS  147 / 1176
+STRATIFIED: every kind appears in every update of pass 1   PASS  {}
+STRATIFIED: every batch carries all 8 kinds                PASS  batch sizes [8]
+pointer_schedule(20) runs and differs from the 10-pass digest PASS  main=2940 digest=af008c12ac7f
+ceiling permits 24 passes and refuses 25                   PASS  ceiling=3544, 24 passes=3544
+pointer_schedule refuses more than MAX_PASSES_PERMITTED    PASS  
+the practice ceiling would have capped this study at 13 passes PASS  practice ceiling=2048
 
-VERDICT: FAILURES  (18 checks, 1 failed)
-   FAILED: empty REMOVALS -> known removals recorded but not applied
+VERDICT: ALL PASS  (29 checks, 0 failed)
