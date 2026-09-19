@@ -4,6 +4,26 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-18 UTC - PRACTICE STUDY RESULT: NO_TRANSFER_TO_NEW_WORLDS - the neurons memorise what they practise
+
+Three AWS g7.2xlarge jobs, 18,171 s, about $12.72 of compute ($45.00 reserved). Frozen study c4f7c321.
+Label printed by records/typed_practice_001/evaluate_gates.py: NO_TRANSFER_TO_NEW_WORLDS. Integrity I0-I4
+PASS in all three seeds, including I3: the same random start as the matched study.
+
+Per seed 20260917/18/19, questions right before training -> after pass 1 -> after pass 10:
+    practised (of 189)             13/18/17 -> 57/57/56 -> 84/85/86     TRAINED gates PASS, p <= 1.4e-16
+    held-back gate (of 45)          2/3/3   ->  4/4/2   ->  5/3/2       G_LEARN FAIL 3 of 3 seeds
+    held-back shortcut (of 5)       0/2/1   ->  1/1/2   ->  5/5/5       reach -> DIRECT, input-blind
+context, correspondence, definition and edge_account: 0 held-back questions right in every seed at pass 10.
+Development panel ends at 4/3/2 of 59 (seed 20260918 started at 17 untrained). Retention 56->50, 55->50,
+55->53 of 96. Loss per pass 1.2880 -> 0.3982, still falling.
+
+WHAT IT MEANS: in this machine (frozen encoder, frozen readout, one 16,384-weight ^6 block), practice
+produces memorisation of practised worlds, not a skill that reads new worlds. REAL negative for this
+configuration; NOT LICENSED as a statement about the architecture family. Receipts committed and archived
+(D:\tksCAS-archive\cncm_typed_practice_001_20260918, 1,795 files, 0 mismatches). Record:
+records/typed_practice_001/PRACTICE_STUDY_RESULT.md.
+
 ## 2026-09-18 UTC - The practice study is built, reviewed twice and dry-run clean; not yet launched
 
 $0.00. No AWS call, no torch, no GPU. Owner approval (verbatim, AskUserQuestion): "Practice test

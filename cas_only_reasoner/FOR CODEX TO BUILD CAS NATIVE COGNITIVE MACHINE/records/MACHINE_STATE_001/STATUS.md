@@ -538,6 +538,15 @@ hypothesis behind it is refuted by `context` sharing `parts`' arity and failing.
 
 ## 6. The decisions waiting
 
+**MEASURED 2026-09-18 — the practice study: the neurons learn what they practise, and none of it reaches
+worlds they never practised.** Label printed by the frozen gate reader: **`NO_TRANSFER_TO_NEW_WORLDS`**
+(integrity PASS, same random start as the matched runs). Ten passes on 358 records: practised questions
+13 / 18 / 17 → **84 / 85 / 86** of 189 (p ≤ 1.4e-16 per seed); held-back gate questions on five twin-free,
+never-mentioned worlds 2 / 3 / 3 → **5 / 3 / 2** of 45 (G_LEARN FAIL in 3 of 3 seeds). The only held-back gain
+is the input-blind `reach` → `DIRECT` habit. Loss still falling at pass 10. ~$12.72 of compute. Record:
+`records/typed_practice_001/PRACTICE_STUDY_RESULT.md`. **What this settles for this configuration:** more
+practice produces memorisation of practised worlds, not a reading skill. The next lever is architectural.
+
 **RULED 2026-09-18 by the owner — what counts as progress.** Verbatim: **"IT MUST BE LEARNING LEARNING
 AT THE NEURON LEVEL THE ARCHITECTURE SHOULD BE SERVING THIS PURPOSE. EVERYTHING SHOULD BE SERVING THIS
 PURPOSE."** Applied: a gain from a hand-written rule over saved scores (the declared-constraint layer,
