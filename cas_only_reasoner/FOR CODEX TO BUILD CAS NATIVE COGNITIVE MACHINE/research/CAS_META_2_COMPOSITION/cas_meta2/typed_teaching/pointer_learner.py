@@ -1045,6 +1045,7 @@ class GraphForward:
         self.edge_rows = model.edge_head(edge_input)
         node_input = torch.cat((self.hidden, self.query_value.reshape(1, WIDTH).expand(
             self.hidden.shape[0], WIDTH)), dim=1)
+        require(node_input.shape == (self.hidden.shape[0], WIDTH + WIDTH), "POINTER_NODE_HEAD_INPUT")
         self.node_rows = model.node_head(node_input)
 
     def _encode_query(self):
