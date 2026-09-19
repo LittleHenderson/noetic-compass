@@ -112,6 +112,72 @@ The wide output spaces are worth naming: `analogy` `world_id` has **65** symbols
 world scorer is an embedding scorer rather than a classifier, so this is not automatically fatal — but it is the
 place to look first if those kinds show no movement.
 
+## 5.5 🔴 THE READOUT THROWS AWAY THE STRUCTURE THE NEURONS LEARN — the biggest learning risk found so far
+
+From `measurements/learnability_review/lb16_pooling_resolution_out.txt` and `lb17_pool_gradient_out.txt`. These bear
+directly on the main goal, so they are stated in full.
+
+**The good news: the message passing does learn structure at the node level.** Mean cosine between node states,
+`rms_after=output`:
+
+| rounds | mean cosine of EDGE pairs | of NON-edge pairs | **gap** |
+|---|---|---|---|
+| 1 | 0.127477 | 0.088478 | 0.039000 |
+| 2 | 0.298346 | 0.114129 | 0.184217 |
+| 4 | 0.585565 | 0.197146 | **0.388418** |
+| 8 | 0.835563 | 0.495154 | 0.340409 |
+
+Two rounds already separate an edge from a non-edge, and four rounds separate them strongly. **The node states carry
+the graph structure.** With `rms_after=none` the gap keeps growing through eight rounds (0.048761, 0.197758, 0.382743,
+**0.406388**), so where the normalisation is applied changes which round count is best — `output` peaks at 4, `none`
+peaks at 8. That is a real, testable choice the design has not made deliberately.
+
+**The bad news: mean pooling to `g_w` destroys it.** In lb16, with node features drawn randomly per node:
+
+```
+inter-shape distance 0.831003   intra-shape distance 1.213181   ratio 0.68
+```
+
+**Two worlds with *different* shapes are CLOSER to each other than two draws of the *same* shape.** Nearest-centroid
+over 123 samples recovers only **8 to 13**. The pooled world vector is dominated by node features, not by shape.
+
+lb17 confirms it from the other direction:
+
+| node features | relative spread of `g_w` across the 6 shape families |
+|---|---|
+| all identical within a world (no feature noise) | **0.0327 → 0.0798** over 1–8 rounds |
+| only the 3 real flag dimensions | **0.1264 → 0.1555** |
+| random per node | different-shape distance is only **0.8465–0.8927 ×** same-shape distance |
+
+So the pure-shape signal in `g_w` is **3–8 %** of the vector, and with the real flags **13–16 %**. The world vector is
+mostly a summary of *which nodes have which flags*, not of *how the world is wired*.
+
+**Why this matters for the goal.** Every world-choice slot scores `<W [q; g_focus], g_w>` — a comparison of pooled
+vectors. Those slots include `analogy` (`world_id`, 65 symbols) and `correspondence`'s target selection, which are
+exactly the two kinds this review found to be the *clean, hard* tests where a genuine transferable relational skill
+would show. A readout that cannot see shape cannot learn shape, no matter how long it trains and no matter how good
+the input is. **This is the most plausible way the pointer study still fails to learn, after the input defect is
+fixed.**
+
+**What to do about it — a design change, not a tweak.** The node-level signal exists, so keep it and read it out:
+
+1. **Score structural answers at the node level, not after pooling.** `correspondence`'s mapping is already
+   node-pairwise (`mapping_target` per rank) — verify the head reads node states and never `g_w`. `analogy`'s
+   isomorphism test and world-choice comparison are the ones that currently go through `g_w`.
+2. **Replace mean pooling with a permutation-invariant readout that preserves more.** Over 3–4 nodes, plain options
+   that cost almost nothing: concatenate the **rank-sorted** node states (the rank is already a registered input, so
+   sorting by it is well defined); or a sum of outer products; or attention pooling with a learned query. Any of these
+   gives the head access to the wiring instead of a blur of it.
+3. **Choose the round count and normalisation placement deliberately**, from the table above rather than by
+   inheritance. K=4 with `rms_after=output` and K=8 with `rms_after=none` are the two candidates; the current design
+   pins K=8 without having measured this.
+4. **Add a smoke test that asserts it.** A local, $0 check: build the model untrained, and require that the readout's
+   separation of two different shapes exceeds its separation of two draws of the same shape. Today it does not. That
+   test is the guard against this class of failure ever returning unnoticed.
+
+None of this weakens the gate or changes the claim rules. It is aimed squarely at the primary objective: giving the
+neurons a readout through which the structure they learn can actually reach the answer.
+
 ## 6. The single-flag table, and the rule that reopens the rank decision
 
 `measurements/leaks_review/lk2_single_flag_out.txt`. Best no-learning rule per kind, scored by the private checker,
