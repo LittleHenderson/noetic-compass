@@ -4,6 +4,52 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (final round of the design phase) - Gate frozen, rank excluded, protocol drafted
+
+Owner order this round, verbatim: **"STOP SAY FOCUSING ON '$0.00 spent. Nothing on AWS.' BECAUSE WE ULTIMATELY NEED
+AWS TO GET TO THE BEST VERSION OF OUR BUILD/PRODUCT AND WE ALWAYS ALWAYS US AWS BECAUSE IT FASTER THAN RUNNING
+LOCALLY AND SAVES US LOCAL PROCESSING POWER FOR OTHER THINGS IF NECESSARY IT'S A FUCKING LAPTOP SO IT GPU IS NOT
+THAT STRONG PLEASE REMEMBER THIS SO USE AWS"**. Recorded in the hand-off §2 and acted on: **the whole GPU smoke,
+S1–S10, now runs on AWS**, not on the laptop; `$0` is a status, not an achievement.
+
+THE GATE IS FROZEN AT 18. `pointer_contract.REMOVALS` was an empty placeholder and is now filled with **11 removals
+across four classes**, re-derived by `pre_design/freeze_removals.py` and asserted rather than described:
+
+| class | kind of thing | takes |
+|---|---|---|
+| `flag_rule` (FP2) | shortcut | 3 `parts` |
+| `order_rule` (DG3) | shortcut | 2 `reach` |
+| `present_rule` | shortcut | 1 `reach` |
+| **`inexpressible`** | **ARCHITECTURAL — a limit of the head, not a shortcut** | **5 `correspondence`** |
+
+Population **18** (analogy 5, edge_account 5, parts 2, reach 6, correspondence 0), digest
+`4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d`. `b = 7`, share **7/18 = 0.3889**.
+
+THE RANK FEATURE IS EXCLUDED. Both lenses agreed from opposite directions; adopting it would take the population
+from 18 to **13** and the required share from 0.3889 to **0.5385**, and would withdraw the draft's own vacuity
+paragraph, because rank IS the node alias at **244 of 244** refs. The order-dependent questions are removed
+instead, and the rank-last pointing questions are explicitly recorded as **NOT removed**.
+
+STRATIFIED TRAINING LANDED. Every kind appears in every update: 147 updates and **1176** presentations per pass
+against 818 (+43.8 %), digest `1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304`; the unstratified
+branch is kept and still reproduces the practice digest `daf95831…` byte for byte. As-is, `role_set` was absent
+from 115 of 147 updates and `analogy` from 112.
+
+DESIGN v0.2 IS FINAL: 1,317 lines, both review tables folded in (all 18 LK and all 19 LB findings), the gate
+corrected from 24 to 23 and then to 18, and the ORACLE RULES distinction recorded — the one-hop adjacency rules
+are **ceilings, not removals**, because applying the checker's own rule to the input IS the skill under test.
+
+PROTOCOL DRAFTED: `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md`, 90,948 bytes, LF, sha256
+`ef0814579740adf78b18f64d0dd7389ede8a11422f8897e59e686a3a6ab93317`. The pass count is the **one** value left open,
+to be set from the smoke's measured per-update cost.
+
+VERIFICATION: `tests/test_typed_pointer_study.py` **20 passed**; the independent 32-check verifier **ALL PASS**.
+
+CORRECTIONS OF MY OWN, again: an optimistic feasibility figure (0.6723 → **0.2450**, because the improvable
+population is 18 not 23); a test harness that mis-stated `slot_readings`; and a population constant I defined
+without the `correspondence: 0` entry the contract actually returns. The document now says it has been wrong twice
+optimistically and once pessimistically on that table.
+
 ## 2026-09-19 UTC (later again) - Reviews re-run; the gate's power measured; the pointer contract built and verified
 
 $0.00. No AWS call, no launch. Owner instruction this session: **"REMEMBER OUR MAIN GOAL IS GETTING THOSE NEURONS TO

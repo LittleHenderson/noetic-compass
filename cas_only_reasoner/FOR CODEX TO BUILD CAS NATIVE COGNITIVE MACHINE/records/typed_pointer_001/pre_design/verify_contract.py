@@ -73,34 +73,36 @@ check("batches digest matches practice", stats["batches_digest"] ==
 check("split counts 127/358/79", (len(held), len(trained), len(excluded)) == (127, 358, 79),
       "%d/%d/%d" % (len(held), len(trained), len(excluded)))
 
-# --- the population guard -------------------------------------------------------------------------
-empty_removals = all(not v for v in getattr(pc, "REMOVALS", {}).values()) if isinstance(
-    getattr(pc, "REMOVALS", {}), dict) else True
+# --- the FROZEN population -------------------------------------------------------------------------
 try:
     pop = pc.relational_population(frozen)
     raised = False
-    detail = json.dumps({k: pop[k] for k in ("total", "by_kind", "removals_measured", "population_complete")})[:200] if isinstance(pop, dict) else str(pop)[:200]
 except Exception as exc:                                     # noqa: BLE001
-    raised = True
-    detail = "%s: %s" % (type(exc).__name__, str(exc)[:120])
+    pop, raised = None, True
+    detail = "%s: %s" % (type(exc).__name__, str(exc)[:140])
 
-# The contract's guard raises only when the eligible composition DRIFTS from the verified values while the
-# removals placeholder is empty. Returning an unreconciled-but-verified population is correct; what must never
-# happen is that such a population looks finished. So assert the markers, not a refusal.
-if isinstance(pop, dict) and not raised:
-    check("empty REMOVALS -> composition equals verified values",
-          pop["eligible_total"] == 29 and pop["eligible_by_kind"] == pc.VERIFIED_RELATIONAL_BY_KIND
-          and pop["eligible_by_world"] == pc.VERIFIED_RELATIONAL_BY_WORLD,
+check("relational_population computes against the frozen removals", not raised,
+      "" if not raised else detail)
+if pop is not None:
+    check("eligible RELATIONAL is still the verified 29",
+          pop["eligible_total"] == pc.VERIFIED_ELIGIBLE_RELATIONAL == 29
+          and pop["eligible_by_kind"] == pc.VERIFIED_RELATIONAL_BY_KIND, json.dumps(pop["by_kind"]))
+    check("FROZEN population is 18, as analogy 5 / edge_account 5 / parts 2 / reach 6",
+          pop["total"] == pc.VERIFIED_POPULATION == 18
+          and pop["by_kind"] == pc.VERIFIED_POPULATION_BY_KIND,
           json.dumps(pop["by_kind"]))
-    check("empty REMOVALS -> removals_measured is False", pop.get("removals_measured") is False)
-    check("empty REMOVALS -> population_complete is False", pop.get("population_complete") is False)
-    check("empty REMOVALS -> known removals recorded but not applied",
-          pop.get("verified_inputs", {}).get("known_removals") == {"flag_rule": {"parts": 3},
-                                                                  "rank_rule": {"reach": 2}}
-          and pop["total"] == 29,
-          "total=%s" % pop.get("total"))
-else:
-    check("population returns while REMOVALS is empty", not raised, detail)
+    check("population digest equals the pinned constant",
+          pop["digest"] == pc.VERIFIED_POPULATION_DIGEST, pop["digest"][:16])
+    check("eleven removals across four classes, none duplicated",
+          len(pop["removed_questions"]) == 11 and len(set(pop["removed_questions"])) == 11
+          and len(pc.REMOVAL_RULES) == 4,
+          "classes=%s" % (pc.REMOVAL_RULES,))
+    check("the population reports itself COMPLETE once removals are filled",
+          pop["removals_measured"] is True and pop["population_complete"] is True)
+    check("the rank-last questions are NOT removed (rank is excluded)",
+          "rank_rule" not in pc.REMOVAL_RULES and pc.DESIGN["node_rank_feature"] is False
+          and pop["verified_inputs"]["unreconciled_removal_readings"][
+              "rank_last_pointing_not_removed"] == 5)
 
 # --- the schedule: the AS-IS branch must stay faithful; the STRATIFIED branch is the owner's decision ---------
 pb, pstats = pc.pointer_schedule(frozen, pc.practice.PASSES, stratified=False)

@@ -189,10 +189,12 @@ def test_planned_work_formula_is_self_consistent_against_the_real_schedule(mater
     assert contract.DESIGN["primary_label_tier"] == "RELATIONAL"
     assert contract.DESIGN["tiers"]["RELATIONAL"] == list(contract.RELATIONAL)
     assert set(contract.DESIGN["tiers"]) == set(contract.TIERS)
-    # The rank feature is registered as INCLUDED and its reopened status is recorded beside it, so neither
-    # reading is presented as settled (HEAD 6cb0b348 reopened the decision).
-    assert contract.DESIGN["node_rank_feature"] is True
-    assert contract.DESIGN["node_rank_decision_status"] == "REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A"
+    # The rank feature is EXCLUDED, decided 2026-09-19 once both lenses had reported: adopting it would take
+    # the population from 18 to 13 and raise the required share from 7/18 to 7/13, and rank IS the node alias
+    # (244 of 244 refs), so the order-dependent questions are removed instead.
+    assert contract.DESIGN["node_rank_feature"] is False
+    assert contract.DESIGN["node_rank_decision_status"] == (
+        "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD")
     assert contract.DESIGN["owner_approval"].count("2026-09-19") == 1
     for phrase in ("Accept both, carry on.", "Approve the smoke job (Recommended)",
                    "require the relational kinds."):
@@ -347,7 +349,7 @@ def test_make_config_refuses_a_sixty_four_character_bucket():
         contract.make_config(ROOT, source_sha=SOURCE, job=JOB % SEED, bucket=JOB % SEED, model_seed=True)
 
 
-def test_relational_population_returns_the_29_eligible_relational_questions(population):
+def test_relational_population_is_the_frozen_18_after_the_eleven_removals(population):
     assert population["tier"] == "RELATIONAL" and population["tiers"] == list(contract.RELATIONAL)
     assert population["eligible_total"] == len(population["eligible_questions"]) == 29
     assert population["eligible_by_kind"] == ELIGIBLE_BY_KIND
@@ -355,32 +357,41 @@ def test_relational_population_returns_the_29_eligible_relational_questions(popu
     assert sum(population["eligible_by_world"].values()) == 29
     assert population["eligible_by_tier"] == {"DIRECT_READ": 10, "RELATIONAL": 29, "TEXT": 6}
     assert sum(population["eligible_by_tier"].values()) == 45
-    # Nothing is removed yet, and the population says so rather than looking finished.
-    assert population["removals_measured"] is False and population["population_complete"] is False
-    assert contract.REMOVALS == {"flag_rule": {}, "rank_rule": {}}
-    # The later, unreconciled removal readings are recorded and NOT applied: the placeholder accepts only
-    # the two registered rule names, so nothing can leak into the population by accident.
-    assert contract.UNRECONCILED_REMOVAL_READINGS == {"parts_adjacency": 5, "edge_account_adjacency": 5,
-                                                      "reach_rank_only": 4}
-    assert not set(contract.REMOVAL_RULES) & set(contract.UNRECONCILED_REMOVAL_READINGS)
-    assert population["removed_questions"] == []
-    assert population["removed_by_rule"] == {"flag_rule": {}, "rank_rule": {}}
-    assert population["question_ids"] == population["eligible_questions"] and population["total"] == 29
-    assert population["by_kind"] == ELIGIBLE_BY_KIND and population["by_world"] == ELIGIBLE_BY_WORLD
-    assert population["digest"] == population["eligible_digest"] == contract.digest(population["question_ids"])
-    assert population["verified_inputs"] == {"eligible_total": 45, "eligible_relational": 29,
-        "by_kind": ELIGIBLE_BY_KIND, "by_world": ELIGIBLE_BY_WORLD,
-        "known_removals": {"flag_rule": {"parts": 3}, "rank_rule": {"reach": 2}},
-        "unreconciled_removal_readings": {"parts_adjacency": 5, "edge_account_adjacency": 5,
-                                          "reach_rank_only": 4}}
+    # FROZEN 2026-09-19: eleven removals across four classes, and the population says it is finished.
+    assert population["removals_measured"] is True and population["population_complete"] is True
+    assert len(population["removed_questions"]) == 11
+    assert population["total"] == contract.VERIFIED_POPULATION == 18
+    assert population["by_kind"] == contract.VERIFIED_POPULATION_BY_KIND
+    # `by_kind` covers all five RELATIONAL kinds, so `correspondence` is present with a count of zero:
+    # every one of its five questions left the gate as the architectural-inexpressibility class.
+    assert population["by_kind"] == {"parts": 2, "edge_account": 5, "reach": 6,
+                                     "correspondence": 0, "analogy": 5}
+    assert sum(population["by_kind"].values()) == 18
+    assert population["digest"] == contract.VERIFIED_POPULATION_DIGEST
+    assert population["digest"] != population["eligible_digest"]
+    # The four classes, and the one that is NOT a shortcut must be labelled as such.
+    assert set(contract.REMOVAL_RULES) == {"flag_rule", "order_rule", "present_rule", "inexpressible"}
+    assert set(population["removed_by_rule"]) == set(contract.REMOVAL_RULES)
+    assert len(population["removed_by_rule"]["flag_rule"]["parts"]) == 3
+    assert len(population["removed_by_rule"]["order_rule"]["reach"]) == 2
+    assert len(population["removed_by_rule"]["present_rule"]["reach"]) == 1
+    assert len(population["removed_by_rule"]["inexpressible"]["correspondence"]) == 5
+    # The rank-last pointing questions are NOT removed, because the rank feature is excluded.
+    assert contract.DESIGN["node_rank_feature"] is False
+    assert "rank_rule" not in contract.REMOVAL_RULES
+    assert population["verified_inputs"]["unreconciled_removal_readings"][
+        "rank_last_pointing_not_removed"] == 5
     assert all(kind in contract.RELATIONAL for kind in population["eligible_by_kind"])
     assert len(population["shortcut_question_ids"]) == 5
+    # Required share, restated where a reader changing the population will see it.
+    assert contract.MIN_PASSING_B == 7 and 2 ** -contract.MIN_PASSING_B <= 0.01
 
 
-def test_relational_population_guard_fires_while_removals_are_empty(material, population, monkeypatch):
-    # The guard: while the removal placeholder is empty, the eligible RELATIONAL total must be the
-    # verified 29, or the placeholder may not be read as a finished population.
-    assert contract.REMOVALS == {"flag_rule": {}, "rank_rule": {}}
+def test_population_guard_fires_when_the_composition_drifts_and_removals_are_empty(material, population,
+                                                                                  monkeypatch):
+    # The guard exists to stop an UNFILLED placeholder being read as a finished population. Filled, it is
+    # bypassed; emptied again, it fires if the eligible composition drifts from the verified values.
+    monkeypatch.setattr(contract, "REMOVALS", {rule: {} for rule in contract.REMOVAL_RULES})
     one_short = population["eligible_questions"][:-1]
     assert len(one_short) == 28
     monkeypatch.setattr(contract, "_practice_gates", lambda: _FakeGates(one_short))
@@ -388,8 +399,8 @@ def test_relational_population_guard_fires_while_removals_are_empty(material, po
         contract.relational_population(material[0])
 
 
-def test_filling_the_removals_subtracts_exactly_the_measured_lists(material, population, monkeypatch):
-    # The mechanism: a later agent fills in the measured lists and the logic does not move.
+def test_removals_subtract_exactly_the_listed_questions_and_fail_closed(material, population, monkeypatch):
+    # The mechanism: what the lists carry is exactly what leaves, and a malformed or unknown entry fails closed.
     frozen = material[0]
     eligible = population["eligible_questions"]
     kind_of = {row["query"]["query_id"]: row["query"]["kind"] for row in frozen["registry"]}
@@ -397,7 +408,9 @@ def test_filling_the_removals_subtracts_exactly_the_measured_lists(material, pop
     reach = [q for q in eligible if kind_of[q] == "reach"][:2]
     assert len(parts) == 3 and len(reach) == 2
     monkeypatch.setattr(contract, "_practice_gates", lambda: _FakeGates(eligible))
-    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"parts": parts}, "rank_rule": {"reach": reach}})
+    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"parts": parts},
+                                               "order_rule": {"reach": reach},
+                                               "present_rule": {}, "inexpressible": {}})
     filled = contract.relational_population(frozen)
     assert filled["removals_measured"] is True and filled["population_complete"] is True
     assert filled["removed_questions"] == sorted(parts + reach)
@@ -405,10 +418,12 @@ def test_filling_the_removals_subtracts_exactly_the_measured_lists(material, pop
     assert filled["total"] == 24 and filled["by_kind"]["parts"] == 2 and filled["by_kind"]["reach"] == 7
     assert filled["eligible_total"] == 29 and filled["digest"] != filled["eligible_digest"]
     # A malformed placeholder and an unknown question id both fail closed.
-    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"definition": ["q"]}, "rank_rule": {}})
+    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"definition": ["q"]}, "order_rule": {},
+                                               "present_rule": {}, "inexpressible": {}})
     with pytest.raises(ValueError, match="RELATIONAL_REMOVALS_SHAPE"):
         contract.relational_population(frozen)
-    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"parts": ["not-a-held-question"]}, "rank_rule": {}})
+    monkeypatch.setattr(contract, "REMOVALS", {"flag_rule": {"parts": ["not-a-held-question"]},
+                                               "order_rule": {}, "present_rule": {}, "inexpressible": {}})
     with pytest.raises(ValueError, match="RELATIONAL_REMOVALS_UNKNOWN"):
         contract.relational_population(frozen)
 
@@ -676,23 +691,25 @@ def test_p9_reader_cost_cannot_silently_regress(material):
 def test_p9_input_digest_over_all_564_records_is_reproducible(material, monkeypatch):
     # The digest is stable across processes and machines, and BOTH branches of the register design constant
     # are implemented: flipping `pointer_contract.DESIGN["node_rank_feature"]` is the whole change.
+    # Since 2026-09-19 the DEFAULT is the rank-OUT branch, because the rank feature was excluded.
     frozen = material[0]
-    assert contract.DESIGN["node_rank_feature"] is True
-    assert contract.DESIGN["node_rank_decision_status"] == "REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A"
+    assert contract.DESIGN["node_rank_feature"] is False
+    assert contract.DESIGN["node_rank_decision_status"] == (
+        "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD")
     first = _sweep(frozen)
     assert len(first) == 564
-    assert _source.digest(first) == ALL_RECORDS_DIGEST
-    assert _source.digest(_sweep(frozen)) == ALL_RECORDS_DIGEST                  # reproducible
-    with_rank = reader.read_packet(_light_packet(next(iter(frozen["registry"])), frozen))
-    assert with_rank["node_rank_feature"] == 1
-    assert all("rank" in node for node in with_rank["node_flags"])
-    monkeypatch.setitem(contract.DESIGN, "node_rank_feature", False)
-    without_rank = _sweep(frozen)
-    assert _source.digest(without_rank) == ALL_RECORDS_DIGEST_RANK_OUT
-    assert without_rank != first
+    assert _source.digest(first) == ALL_RECORDS_DIGEST_RANK_OUT
+    assert _source.digest(_sweep(frozen)) == ALL_RECORDS_DIGEST_RANK_OUT        # reproducible
+    without_rank = reader.read_packet(_light_packet(next(iter(frozen["registry"])), frozen))
+    assert without_rank["node_rank_feature"] == 0
+    assert all("rank" not in node for node in without_rank["node_flags"])
+    monkeypatch.setitem(contract.DESIGN, "node_rank_feature", True)
+    with_rank = _sweep(frozen)
+    assert _source.digest(with_rank) == ALL_RECORDS_DIGEST
+    assert with_rank != first
     sample = reader.read_packet(_light_packet(next(iter(frozen["registry"])), frozen))
-    assert sample["node_rank_feature"] == 0
-    assert all("rank" not in node for node in sample["node_flags"])
+    assert sample["node_rank_feature"] == 1
+    assert all("rank" in node for node in sample["node_flags"])
     # Same content on both branches apart from the feature: the digests differ, the keys do not.
-    assert set(sample) == set(with_rank)
-    assert set(without_rank) == set(first)
+    assert set(sample) == set(without_rank)
+    assert set(with_rank) == set(first)

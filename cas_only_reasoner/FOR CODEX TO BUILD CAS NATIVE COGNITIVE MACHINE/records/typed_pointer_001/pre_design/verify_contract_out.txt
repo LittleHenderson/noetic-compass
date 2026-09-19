@@ -12,10 +12,13 @@ held digest matches practice                               PASS
 excluded digest matches practice                           PASS  
 batches digest matches practice                            PASS  
 split counts 127/358/79                                    PASS  127/358/79
-empty REMOVALS -> composition equals verified values       PASS  {"parts": 5, "edge_account": 5, "reach": 9, "correspondence": 5, "analogy": 5}
-empty REMOVALS -> removals_measured is False               PASS  
-empty REMOVALS -> population_complete is False             PASS  
-empty REMOVALS -> known removals recorded but not applied  PASS  total=29
+relational_population computes against the frozen removals PASS  
+eligible RELATIONAL is still the verified 29               PASS  {"parts": 2, "edge_account": 5, "reach": 6, "correspondence": 0, "analogy": 5}
+FROZEN population is 18, as analogy 5 / edge_account 5 / parts 2 / reach 6 PASS  {"parts": 2, "edge_account": 5, "reach": 6, "correspondence": 0, "analogy": 5}
+population digest equals the pinned constant               PASS  4b1e3c1f0b8f8be3
+eleven removals across four classes, none duplicated       PASS  classes=('flag_rule', 'order_rule', 'present_rule', 'inexpressible')
+the population reports itself COMPLETE once removals are filled PASS  
+the rank-last questions are NOT removed (rank is excluded) PASS  
 AS-IS pointer_schedule(10) reproduces the practice batches digest PASS  daf95831dd6f054f
 AS-IS pointer_schedule(10) has 147 updates/pass and 818 presentations/pass PASS  147 / 818
 AS-IS pointer_schedule(10) matches the practice schedule line for line PASS  
@@ -28,4 +31,4 @@ ceiling permits 24 passes and refuses 25                   PASS  ceiling=3544, 2
 pointer_schedule refuses more than MAX_PASSES_PERMITTED    PASS  
 the practice ceiling would have capped this study at 13 passes PASS  practice ceiling=2048
 
-VERDICT: ALL PASS  (29 checks, 0 failed)
+VERDICT: ALL PASS  (32 checks, 0 failed)

@@ -469,12 +469,37 @@ def expected_main_delta(stats):
 # REMOVALS is an explicit, typed, CURRENTLY EMPTY placeholder so a later agent fills in the measured
 # lists without touching the logic below. Rule names are fixed: `flag_rule` (FP2) and `rank_rule` (DG3).
 # ---------------------------------------------------------------------------------------------------
-REMOVAL_RULES = ("flag_rule", "rank_rule")
+REMOVAL_RULES = ("flag_rule", "order_rule", "present_rule", "inexpressible")
+# FROZEN 2026-09-19. Eleven removals across FOUR classes, and the classes are different kinds of thing:
+#
+#  * flag_rule, order_rule, present_rule -- SHORTCUT rules. A registered no-learning policy answers these, so a
+#    gain there would not be evidence of learning. Ids printed by `lk6_gate_population_out.txt` lines 62, 65, 68
+#    and copied here through `pre_design/freeze_removals.py` rather than retyped.
+#  * inexpressible -- ARCHITECTURAL. The five `correspondence` questions are removed because the drafted head
+#    CANNOT EXPRESS a bijection (LB12/LB13/LB15: 0 of 20 held correct; in 81 of 88 records no additive per-node
+#    score over these inputs can prefer a correct answer). This is a limit of the head, not a shortcut, and
+#    conflating the two would misdescribe why these questions left the gate. Correspondence is still run, scored
+#    and published; it leaves the LABEL, not the study.
+#
+# With these applied the RELATIONAL gate population is 18 -- analogy 5, edge_account 5, parts 2, reach 6 -- with
+# a digest of 4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d, re-derived and asserted in
+# tests. Minimum passing b is 7, so the required share is 7/18 = 0.3889.
 REMOVALS = {
-    # FP2: held `parts` questions the registered input-blind flag rule already answers -> {"parts": [...]}.
-    "flag_rule": {},
-    # DG3: held `reach` questions the registered node-rank/order rule already answers -> {"reach": [...]}.
-    "rank_rule": {},
+    "flag_rule": {"parts": [
+        "typed-query-4a0342c26f982758689611569bebd798f324a52a3b8ee25cb5f016b394e17509",
+        "typed-query-6d9f6280ddb8dc463bfb557617353b7857fba6cfda057403516a79d8a5ec1249",
+        "typed-query-a14f184d8f6cc4f3b80a87998515fe3c707c2dfb4f92a2358f1233fc43fba1d9"]},
+    "order_rule": {"reach": [
+        "typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94",
+        "typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7"]},
+    "present_rule": {"reach": [
+        "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7"]},
+    "inexpressible": {"correspondence": [
+        "typed-query-06e475e2b15faf1f1171e023219499f3255033f2dd71e05c86388b733c3f6077",
+        "typed-query-6122a0c6cf78338961e9fd54efca446b1b31a74eddcc0e9f9480a1acc62b37c4",
+        "typed-query-9b29b95ce429d36bf88bd5d301f0e146d178dd21b20bada78641e29dae9793e8",
+        "typed-query-a6316d425dd26e46b9898a510e4e90dead89e882c57b444d44014a59c4de29e0",
+        "typed-query-b291ebd18e0a4ea355ee1e08b1f82ba6e934c4e68cd4252691acbd86dc437a86"]},
 }
 # The verified eligible composition (measured 2026-09-19). 45 eligible = 10 DIRECT_READ + 29 RELATIONAL
 # + 6 role_set; the 29 are correspondence 5, edge_account 5, reach 9, analogy 5, parts 5.
@@ -488,20 +513,21 @@ VERIFIED_RELATIONAL_BY_WORLD = {
     "world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952": 5,
     "world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc": 7,
 }
-# The known removals, as the interface spec and design v0.2 record them. NOT applied until REMOVALS
-# carries them, and NOT necessarily complete -- see UNRECONCILED_REMOVAL_READINGS below.
+# The frozen population the removals must produce. Asserted by tests, not merely described.
+# `by_kind` is built over ALL five RELATIONAL kinds, so `correspondence` is present with a count of zero:
+# all five of its questions left the gate as the architectural-inexpressibility class. The headline
+# population is 18 = analogy 5 + edge_account 5 + parts 2 + reach 6 + correspondence 0.
+VERIFIED_POPULATION = 18
+VERIFIED_POPULATION_BY_KIND = {"parts": 2, "edge_account": 5, "reach": 6, "correspondence": 0, "analogy": 5}
+VERIFIED_POPULATION_DIGEST = "4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d"
+# Historical: the removals as INTERFACE_SPEC_POINTER.md:46 first recorded them, kept because the record of what
+# was believed earlier is load-bearing. Superseded by the frozen REMOVALS above.
 VERIFIED_KNOWN_REMOVALS = {"flag_rule": {"parts": 3}, "rank_rule": {"reach": 2}}
-# Measurements that arrived AFTER INTERFACE_SPEC_POINTER.md:46 was written (HEAD 7276f4f2) and that would
-# grow the removals. They are recorded, NOT applied, and NOT reconciled into one list:
-#   * DESIGN_DRAFT_v0.2.md:649-656 -- a zero-learning read of the input's own `contains` adjacency solves
-#     5 of 5 eligible held `parts` and 5 of 5 `edge_account`, so the FP2 rule's 3 of 5 is not the widest
-#     `parts` leak.
-#   * HEAD 6cb0b348 -- a rank-only single-flag rule (R10) solves 4 of the 9 eligible held `reach`, with its
-#     overlap against DG3's 2 of 9 UNMEASURED.
-# If those hold, the RELATIONAL tier itself is narrower than 29, which changes what the owner confirmed by
-# name and is therefore his decision, not this placeholder's. The `_removals()` shape check accepts only
-# the two registered rule names, so nothing here can leak into the population by accident.
-UNRECONCILED_REMOVAL_READINGS = {"parts_adjacency": 5, "edge_account_adjacency": 5, "reach_rank_only": 4}
+# The rank-last pointing rule's 5 questions are NOT removed: the rank feature is EXCLUDED
+# (`DESIGN["node_rank_feature"]` is False), so a rule that needs it is not a registered baseline. Recorded
+# because the run printed those ids and a later agent must not mistake them for removals.
+UNRECONCILED_REMOVAL_READINGS = {"parts_adjacency": 5, "edge_account_adjacency": 5, "reach_rank_only": 4,
+                                 "rank_last_pointing_not_removed": 5}
 # CNCM root, used only to locate the practice study's own gate reader lazily (see _practice_gates).
 CNCM = Path(__file__).resolve().parents[4]
 _GATES_MODULE = None

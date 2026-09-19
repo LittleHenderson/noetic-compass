@@ -66,6 +66,38 @@ Estimated worker clock ≈ 470 s, plus 598.2 s overhead ≈ **1,070 s of instanc
 $1 with margin. If the smoke's own measurement shows the estimate was low by more than about 25 %, the run must be
 killed rather than allowed to exceed the approved amount.
 
+### 3.1 The whole GPU smoke runs HERE — S1 through S9 included, not on the laptop
+
+**Owner order 2026-09-19, verbatim:** *"STOP SAY FOCUSING ON '$0.00 spent. Nothing on AWS.' BECAUSE WE ULTIMATELY NEED
+AWS TO GET TO THE BEST VERSION OF OUR BUILD/PRODUCT AND WE ALWAYS ALWAYS US AWS BECAUSE IT FASTER THAN RUNNING LOCALLY
+AND SAVES US LOCAL PROCESSING POWER FOR OTHER THINGS IF NECESSARY IT'S A FUCKING LAPTOP SO IT GPU IS NOT THAT STRONG
+PLEASE REMEMBER THIS SO USE AWS"*.
+
+The hand-off's earlier plan put S1–S9 on the local RTX 4070 and only S10 on AWS. **That is superseded.** The local
+GPU is a laptop GPU; it is not a smoke-test venue, and its power belongs to other work. **Every one of S1–S10 runs in
+this one AWS job**, which is the cheapest way to obey that because they share the same boot, the same package
+install and the same instance:
+
+| check | what it establishes | added cost |
+|---|---|---|
+| S1 | all 8 kinds forward and backward under deterministic mode, bit-identical twice | small |
+| S2 | `train_sealed_batch` on a batch missing most kinds, and on an interference batch | small |
+| S3 | export → restore → predict identical; replay from prelast equals final | small |
+| S4 | evaluation leaves the learned state unchanged | small |
+| S5 | identical start with the checkpoint check on and off; the three `^6` tensors match the recorded start | small |
+| S6 | phase A restores and rebuilt logits equal `restored.predict` bit-for-bit; a forced failure still writes its artifact | small |
+| S7 | time one pass plus one evaluation → the projection | shares the run |
+| S8 | score bounds `|score| ≤ 1e6` and loss agreement `≤ 2e-5` | small |
+| S9 | **no order-like channel beyond the registered rank** — with rank now excluded, assert the reading carries no rank feature at all, and that a node influences the answer only through its declared flags | small |
+| S10 | the worker's `run()` end to end on the shrunken schedule | the bulk |
+
+None of S1–S9 trains anything, so together they add only a few minutes and leave the total **under the approved
+$1**. They are not claim-bearing and are recorded as plumbing.
+
+**A concrete reason this matters, from this session.** Checking a single flag required a material load that **timed
+out at 120 s on the laptop** — and the same load is what every test file does. The local machine is not just slower;
+it is slow enough to make ordinary verification awkward.
+
 ## 4. What it must measure, and what that buys
 
 1. **Seconds per update and per evaluation, measured on the real instance for the new machine.** From these,

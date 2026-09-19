@@ -1,0 +1,41 @@
+from lk6:  FP2 parts 3, order dependence 2, PRESENT-for-all 1
+eligible RELATIONAL: 29  {'analogy': 5, 'correspondence': 5, 'edge_account': 5, 'parts': 5, 'reach': 9}
+correspondence (the inexpressible class): 5
+  fp2_parts          all present in the eligible relational set: True
+  order_dependence   all present in the eligible relational set: True
+  present_for_all    all present in the eligible relational set: True
+
+REMOVALS = {
+    "flag_rule": {
+        "parts": [
+            "typed-query-4a0342c26f982758689611569bebd798f324a52a3b8ee25cb5f016b394e17509",
+            "typed-query-6d9f6280ddb8dc463bfb557617353b7857fba6cfda057403516a79d8a5ec1249",
+            "typed-query-a14f184d8f6cc4f3b80a87998515fe3c707c2dfb4f92a2358f1233fc43fba1d9"
+        ]
+    },
+    "inexpressible": {
+        "correspondence": [
+            "typed-query-06e475e2b15faf1f1171e023219499f3255033f2dd71e05c86388b733c3f6077",
+            "typed-query-6122a0c6cf78338961e9fd54efca446b1b31a74eddcc0e9f9480a1acc62b37c4",
+            "typed-query-9b29b95ce429d36bf88bd5d301f0e146d178dd21b20bada78641e29dae9793e8",
+            "typed-query-a6316d425dd26e46b9898a510e4e90dead89e882c57b444d44014a59c4de29e0",
+            "typed-query-b291ebd18e0a4ea355ee1e08b1f82ba6e934c4e68cd4252691acbd86dc437a86"
+        ]
+    },
+    "order_rule": {
+        "reach": [
+            "typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94",
+            "typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7"
+        ]
+    },
+    "present_rule": {
+        "reach": [
+            "typed-query-dde56958ee3398739016ce6152278d821a1691cb5875c191e9a42077da4b16f7"
+        ]
+    }
+}
+
+removed total 11 (duplicates 0)
+POPULATION = 18  {'analogy': 5, 'edge_account': 5, 'parts': 2, 'reach': 6}
+matches the frozen 18: True
+population digest = 4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d
