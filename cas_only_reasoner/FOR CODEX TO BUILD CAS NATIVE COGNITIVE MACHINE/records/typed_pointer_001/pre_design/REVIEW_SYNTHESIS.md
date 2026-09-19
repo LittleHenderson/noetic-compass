@@ -70,7 +70,49 @@ Also from `lk1_answer_carriers_out.txt` lines 43-50:
 So the answer text is part of the input. `role_set` stays OUT of the primary label and is reported only — which the
 design already did, but now for a measured reason rather than a judgement call.
 
-## 4. What is still outstanding
+## 4. Do node LABEL words only buy memorisation? (learnability lens, `lb10_labels_out.txt`)
+
+- **20 of 20** held-world node labels have their text somewhere in a trained record — 7,160 textual occurrences across
+  (label, trained record) pairs. So every held world's labels are "seen" in training text, which is a memorisation
+  channel of the same family as the old machine's hashed names.
+- Only **2 of 20** held-world labels are ever the FOCUS of a trained question, so the exposure is not as the subject
+  of a question.
+- Over the 1,470-update schedule (8,180 presentations) the reader would embed held-world node labels **30,420** times,
+  every one of the 20 distinct labels included.
+- **Cost.** `FrameTokenizer.encode_text` measured **0.0219 s** per call. Uncached, the full 10-pass run needs 284,900
+  label encodes = **6,225 s**, which is over half the 12,300 s worker deadline on its own. A one-time cache of the
+  **230** distinct labels costs **5.0 s**.
+- Only **one** checker line mentions a label at all (`checker.py:97`), so almost no answer depends on the words.
+
+**Reading:** the cost argument is answered by caching and does not by itself justify dropping labels. The leak
+argument does — 20/20 held labels appearing in trained text is exactly the channel this project removed from the old
+machine. The outgoing agent's recommendation to drop node label words is therefore supported, but the reviewer's final
+report should confirm that `checker.py:97` is not load-bearing for any kind.
+
+## 5. Is the optimiser adequate? (learnability lens, `lb11_schedule_composition_out.txt`)
+
+Per-head gradient exposure over the 1,470 main updates, with AdamW's second moment decaying at 0.999:
+
+| Head | Updates receiving its gradient | Updates needed for the second moment to describe its own scale |
+|---|---|---|
+| node YES/NO (`parts`, `context` participants) | 1,150 / 1,470 | 1 |
+| edge YES/NO (`edge_account`) | 520 / 1,470 | 3 |
+| role YES/NO (`role_set`) | 320 / 1,470 | 5 |
+| node scorer (`definition` whole, `reach` VIA, `correspondence` mapping) | 1,400 / 1,470 | 1 |
+| world scorer (`definition` refs, `context` setting, `analogy` world) | 550 / 1,470 | 3 |
+| option vectors (`reach` ABSENT/DIRECT, `correspondence` mode, `analogy` NO_MATCH) | 1,360 / 1,470 | 1 |
+| role embedding table | 320 / 1,470 | 5 |
+| world encoder + ^6 block | 1,470 / 1,470 | 1 |
+
+Every head clears its own second-moment requirement by a wide margin, so the per-head gradient rule the design adopts
+(review RK1) is sufficient and the 1,470-update budget is not obviously too small for the heads.
+
+The wide output spaces are worth naming: `analogy` `world_id` has **65** symbols and `definition`
+`kind_ref` / `function_ref` have **64** each, against only 36, 36 and 41 trained records of those kinds. The
+world scorer is an embedding scorer rather than a classifier, so this is not automatically fatal — but it is the
+place to look first if those kinds show no movement.
+
+## 6. What is still outstanding
 
 - The leaks lens had not yet reported its shortcut-policy table (pointer-space policies), its permutation-vacuity
   list, its other pipeline-routes check, or its final removal list and minimum b.
