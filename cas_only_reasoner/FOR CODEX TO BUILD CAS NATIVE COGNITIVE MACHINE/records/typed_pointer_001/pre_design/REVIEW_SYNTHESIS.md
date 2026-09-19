@@ -138,6 +138,27 @@ are precisely the ones that do **not** require following links between a world's
 **R13 (all flags together) scores 13 of 45** — the definition 5 and context 5 that make finding FP1 what it is, plus
 the 3 `parts` from FP2. It confirms exactly why the unchanged gate would print a false positive.
 
+### 6.1 A second no-learning policy, found by re-deriving R10 (this agent, `measurements/leaks_review/VERIFY_R10_FINDINGS.md`)
+
+R10 was re-derived independently and **confirmed at exactly 4 of 9**. Re-deriving it exposed something the lens's
+summary table does not show: **every** admissible held `reach` answer is `VIA n3`, `VIA n1` or `ABSENT` — four want
+`n3`, four want `n1`, one wants `ABSENT`, and nothing else appears.
+
+So **"always answer `VIA n1`", a constant that reads nothing at all, also solves 4 of the 9** — on the complementary
+set to R10.
+
+| policy | reads | solves |
+|---|---|---|
+| R10, rank == highest | the rank flag | 4 / 9 |
+| constant `VIA n1` | **nothing** | 4 / 9 |
+| the two together | — | **8 / 9** |
+
+If a removal list registers both, the honest `reach` population is **1 question**, the relational tier is **11**, and
+the label would rest on `analogy` and `correspondence` alone. This is a floor, not a forecast: the gate is a paired
+test on discordant questions, so part of a prior is absorbed by the design. Deciding it needs the paired arithmetic
+with pass-0's actual answers in hand — which is the required-removals table lens A is building. The population table
+in §7 must be read as a bound in both directions, not as a number.
+
 ## 7. The rank decision, reopened
 
 | | Gate population | Training signal |
