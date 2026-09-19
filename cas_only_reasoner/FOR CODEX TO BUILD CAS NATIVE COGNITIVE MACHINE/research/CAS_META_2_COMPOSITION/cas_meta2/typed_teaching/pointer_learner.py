@@ -226,6 +226,11 @@ MODE_OPTION_COUNT = 2                                       # NO_MATCH, MAPPING
 PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
 RMS_EPSILON = 1e-6
 ROLE_IDS = 6                                                # the six independent role classes
+# The internal, dot-free names each registered `^6` tensor is held under. `register_parameter` refuses a dot,
+# so the container keeps the registered dotted names in its state dict and translates them here.
+BLOCK_NAMES = {name: "_block_" + name.replace(".", "_") for name in PARAMETERS}
+require(set(BLOCK_NAMES) == set(PARAMETERS) and len(set(BLOCK_NAMES.values())) == len(PARAMETERS)
+        and all("." not in name for name in BLOCK_NAMES.values()), "POINTER_BLOCK_NAMES")
 require(WORLD_CANDIDATE_WIDTH == 2 * WIDTH + 4 + DECL_VECTOR_WIDTH
         and WORLD_VECTOR_WIDTH == 2 * WIDTH + 4, "POINTER_WIDTH_ARITHMETIC")
 
@@ -279,19 +284,27 @@ COUNTER_UNITS = {key: ("PACKET_FORWARD" if key in PACKET_FORWARD_KEYS
                  for key in COUNTER_KEYS}
 
 # (counter key, schedule statistic, multiplier, unit). `result = schedule_stat x multiplier`.
+# Derived THROUGH `contract.PLANNED_WORK["relations"]`, which is the one shared source of truth the interface
+# spec asks for (`INTERFACE_SPEC_POINTER.md:49`): for every counter the contract's own table names, the
+# statistic and the multiplier are taken FROM THE CONTRACT, and this module only adds the counters the
+# contract's table does not name. One rule fixes both sides.
+#
 #   * PACKET_FORWARD: one record forward per presentation. `packet_forward_calls` is the forward itself,
 #     `prediction_calls` the public prediction assembled from it, `private_loss_plan_calls` its checked loss
 #     plan (one per record per update; training only, so it is only read on the main training phase).
 #   * ROUNDS_TIMES_PACKETS: CORE_ROUNDS core invocations per forward, each taking an attempt, a call, and one
 #     charged sample pass.
 #   * UPDATE: one per batch.
-# This corrects the contract's provisional relation table (`pointer_contract.py:437-447`), whose
-# `core_forward_*` rows carry multiplier 1 against `presentations` instead of CORE_ROUNDS. The planned total is
-# UNCHANGED either way -- the old machine charged one core call per slot pass and this one charges one per
-# round, so the pointer ledger is rounds x packets = 8 x presentations -- but the ROUNDS x PACKETS split has to
-# be explicit for the study's own work formula and for its `MAX_CORE_CALLS` reconciliation
-# (`pointer_contract.py:105-114`).
-PLANNED_WORK_RELATIONS = (
+#
+# The pointer machine's units are its own -- packet forwards, rounds times packets, and updates, not the old
+# machine's per-slot core passes. A packet forward is one presentation; each forward runs CORE_ROUNDS rounds of
+# message passing, so the core ledger is rounds x packets. On the frozen stratified schedule that is
+# 1176 presentations per pass x 8 = 9408 core calls per pass, i.e. 94080 over ten passes against the
+# registered 600000 `MAX_CORE_CALLS`; the same multiplicative reconciliation `pointer_contract.py:105-114`
+# asks the smoke job to make.
+CONTRACTED = {name: (statistic, multiplier)
+              for name, statistic, multiplier in contract.PLANNED_WORK["relations"]}
+COUNTER_PLAN = (
     ("packet_forward_calls", "presentations", 1, "PACKET_FORWARD"),
     ("prediction_calls", "presentations", 1, "PACKET_FORWARD"),
     ("private_loss_plan_calls", "presentations", 1, "PACKET_FORWARD"),
@@ -304,17 +317,22 @@ PLANNED_WORK_RELATIONS = (
     ("optimizer_step_attempts", "main_updates", 1, "UPDATE"),
     ("optimizer_updates", "main_updates", 1, "UPDATE"),
 )
-EXPECTED_MAIN_COUNTERS = COUNTER_KEYS
+PLANNED_WORK_RELATIONS = tuple(
+    (name, CONTRACTED[name][0], CONTRACTED[name][1], unit) if name in CONTRACTED
+    else (name, statistic, multiplier, unit)
+    for name, statistic, multiplier, unit in COUNTER_PLAN)
+EXPECTED_MAIN_COUNTERS = tuple(name for name, _, _, _ in PLANNED_WORK_RELATIONS)
 require(len(COUNTER_KEYS) == 11 and len(set(COUNTER_KEYS)) == 11, "POINTER_COUNTER_KEYS")
 require(tuple(sorted(name for name, _, _, _ in PLANNED_WORK_RELATIONS)) == tuple(sorted(COUNTER_KEYS))
         and len(PLANNED_WORK_RELATIONS) == len(COUNTER_KEYS)
         and tuple(sorted(COUNTER_UNITS)) == tuple(sorted(COUNTER_KEYS)), "POINTER_COUNTER_RELATIONS")
-require(set(contract.PLANNED_WORK["relations"]) <= {name for name, _, _, _ in PLANNED_WORK_RELATIONS}
-        and all(row[1] in ("presentations", "main_updates") for row in PLANNED_WORK_RELATIONS),
-        "POINTER_COUNTER_RELATION_STATS")
 require(len(COUNTER_KEYS) == len(PACKET_FORWARD_KEYS) + len(ROUND_KEYS) + len(UPDATE_KEYS)
         and set(COUNTER_KEYS) == {*PACKET_FORWARD_KEYS, *ROUND_KEYS, *UPDATE_KEYS},
         "POINTER_COUNTER_ROLLUP")
+require(all(row[1] in ("presentations", "main_updates") and type(row[2]) is int and row[2] >= 1
+            for row in PLANNED_WORK_RELATIONS), "POINTER_COUNTER_RELATION_STATS")
+require(all(CONTRACTED[name][1] == CORE_ROUNDS for name in ROUND_KEYS)
+        and set(CONTRACTED) <= set(EXPECTED_MAIN_COUNTERS), "POINTER_COUNTER_CONTRACT_AGREEMENT")
 
 # The study's own ceilings, read live from the contract rather than re-derived.
 MAX_CORE_CALLS = contract.MAX_CORE_CALLS
@@ -614,11 +632,17 @@ def _build_container(torch, framework, device):
 
         def __init__(self):
             super().__init__()
-            # ---- the registered ^6 block, under its exact registered names, installed FIRST ----
+            # ---- the registered ^6 block, under its exact registered NAMES, installed FIRST ----
+            # `nn.Module.register_parameter` refuses a name containing a dot, so each `^6` tensor is held
+            # under an underscore name and the dot-free names are restored in `state_dict` / `load_state_dict`
+            # below. Nothing downstream ever sees the underscore form: `named_parameters`,
+            # `module.state_dict()`, the optimizer's groups and every checkpoint carry `left.weight`,
+            # `right.weight`, `merge.weight`.
             for name in PARAMETERS:
                 value = start[name].detach().clone()
                 require(tuple(value.shape) == PARAMETER_SHAPES[name], "POINTER_FRAMEWORK_STATE_SHAPE")
-                self.register_parameter(name, torch.nn.Parameter(value, requires_grad=True))
+                self.register_parameter(BLOCK_NAMES[name],
+                                        torch.nn.Parameter(value, requires_grad=True))
             # ---- the shared round: three input norm weights, three mixes, one rate ----
             self.round_state_norm = torch.nn.Parameter(torch.ones(1, device=device, dtype=torch.float32))
             self.round_parent_norm = torch.nn.Parameter(torch.ones(1, device=device, dtype=torch.float32))
@@ -667,9 +691,28 @@ def _build_container(torch, framework, device):
 
         def core_block(self, value):
             """The registered `^6` arithmetic, as `_DecomposeTransform.forward` performs it."""
-            parts = torch.cat((torch.tanh(torch.nn.functional.linear(value, self.left.weight)),
-                               torch.tanh(torch.nn.functional.linear(value, self.right.weight))), dim=-1)
-            return torch.nn.functional.linear(parts, self.merge.weight)
+            left, right, merge = (getattr(self, BLOCK_NAMES[name]).weight for name in PARAMETERS)
+            parts = torch.cat((torch.tanh(torch.nn.functional.linear(value, left)),
+                               torch.tanh(torch.nn.functional.linear(value, right))), dim=-1)
+            return torch.nn.functional.linear(parts, merge)
+
+        def state_dict(self, *args, **kwargs):
+            """The registered `^6` names, never the internal dot-free holders."""
+            value = super().state_dict(*args, **kwargs)
+            for name in PARAMETERS:
+                holder = BLOCK_NAMES[name]
+                if holder in value:
+                    value[name] = value.pop(holder)
+            require(all(name in value for name in PARAMETERS), "POINTER_STATE_BLOCK_NAMES")
+            return value
+
+        def load_state_dict(self, state_dict, strict=True, **kwargs):
+            """Accept the registered `^6` names and translate them onto the internal holders."""
+            body = dict(state_dict)
+            for name in PARAMETERS:
+                require(name in body, "POINTER_STATE_BLOCK_NAMES:" + name)
+                body[BLOCK_NAMES[name]] = body.pop(name)
+            return super().load_state_dict(body, strict=strict, **kwargs)
 
         def initial_block(self):
             """The three `^6` tensors exactly as `_framework` built them: the initialisation check."""
@@ -677,9 +720,11 @@ def _build_container(torch, framework, device):
 
         def preactivations(self, value):
             """The block's two pre-activation tensors for a 2-D input: `[W1 x, W2 tanh(W1 x)]`."""
-            first = torch.cat((torch.nn.functional.linear(value, self.left.weight),
-                               torch.nn.functional.linear(value, self.right.weight)), dim=-1)
-            second = torch.nn.functional.linear(torch.tanh(first), self.merge.weight)
+            left, right = (getattr(self, BLOCK_NAMES[name]).weight for name in ("left.weight", "right.weight"))
+            first = torch.cat((torch.nn.functional.linear(value, left),
+                               torch.nn.functional.linear(value, right)), dim=-1)
+            second = torch.nn.functional.linear(torch.tanh(first),
+                                                getattr(self, BLOCK_NAMES["merge.weight"]).weight)
             return first, second
 
     return _PointerContainer()
@@ -1144,10 +1189,14 @@ class PointerCourseLearner:
         self.tagger = tagger
         # ONE container. `scope_parameters` is never called on it (review RK2).
         self.module = _build_container(torch, framework, self.device)
+        # The scope record is the container's own parameter list under the REGISTERED names, and it records
+        # that the shared freeze was deliberately not applied.
+        registered = _registered_names(self.module)
+        parameters = dict(self.module.named_parameters())
         self.scope = {
-            "allowed": sorted(name for name, parameter in self.module.named_parameters()
+            "allowed": sorted(registered[name] for name, parameter in parameters.items()
                               if parameter.requires_grad),
-            "frozen": sorted(name for name, parameter in self.module.named_parameters()
+            "frozen": sorted(registered[name] for name, parameter in parameters.items()
                              if not parameter.requires_grad),
             "contract_id": "cas.cjt.operation.^6.decompose/0.2", "role": "operation:^6",
             "call": "NOT_CALLED_ON_THE_POINTER_CONTAINER",
@@ -1571,7 +1620,8 @@ class PointerCourseLearner:
         if limit is not None:
             require(type(limit) is int and limit > 0, "POINTER_SATURATION_LIMIT")
             selected = selected[:limit]
-        first_entries, second_entries, round_zero = 0, 0, None
+        first_entries, second_entries, first_hits, second_hits = 0, 0, 0, 0
+        round_zero = [0, 0]
         counts = 0
         was_training = self.module.training
         self.module.eval()
@@ -1584,8 +1634,7 @@ class PointerCourseLearner:
                 hidden = _rms_unit(torch, torch.cat([row[2] for row in blocks], dim=0))
                 counts += hidden.shape[0]
                 for round_index in range(CORE_ROUNDS):
-                    inputs, messages = [], []
-                    limit_at = 0
+                    inputs, messages, limit_at = [], [], 0
                     for block in blocks:
                         state = hidden[limit_at:limit_at + block[1], :]
                         adjacency = block[3]
@@ -1597,11 +1646,12 @@ class PointerCourseLearner:
                     block_input = torch.cat((torch.stack(inputs, dim=1), aggregate),
                                             dim=2).reshape(-1, 3 * WIDTH)
                     first, second = self.module.preactivations(block_input)
-                    first_entries += first.numel()
-                    second_entries += second.numel()
+                    first_hits += int((first.abs() > threshold).sum().item())
+                    second_hits += int((second.abs() > threshold).sum().item())
+                    first_entries += int(first.numel())
+                    second_entries += int(second.numel())
                     if round_index == 0:
-                        hit = int((first.abs() > threshold).sum().item())
-                        round_zero = [hit, int(first.numel())]
+                        round_zero = [int((first.abs() > threshold).sum().item()), int(first.numel())]
                     update = self.module.core_block(block_input)
                     hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP
                                        * torch.tanh(self.module.round_rate) * update)
@@ -1616,27 +1666,29 @@ class PointerCourseLearner:
             "normalisation_placement": "INPUTS_OF_EACH_ROUND_BEFORE_THE_REGISTERED_CORE",
             "initialization": "BUILT_BY_cncm.typed_matched_worker._framework_TORCH_DEFAULT_SCHEME",
             "threshold_abs_z": threshold,
-            "first_layer": {"entries": first_entries,
-                            "saturated_entries": None if first_entries is None else None,
-                            "saturation_fraction": None},
-            "measured": True,
-            "round_zero_first_layer": {"saturated_entries": round_zero[0],
-                                       "entries": round_zero[1],
+            "first_layer": {"entries": first_entries, "saturated_entries": first_hits,
+                            "saturation_fraction": first_hits / first_entries},
+            "second_layer": {"entries": second_entries, "saturated_entries": second_hits,
+                             "saturation_fraction": second_hits / second_entries},
+            "round_zero_first_layer": {"entries": round_zero[1], "saturated_entries": round_zero[0],
                                        "saturation_fraction": round_zero[0] / round_zero[1]},
-            "all_rounds_first_layer_saturation_fraction": None,
-            "second_layer_entries": second_entries,
             "initial_fingerprint": list(_fingerprint(torch, start)),
             "initial_sha256": sha256(_tensor_flat_bytes(torch, start)).hexdigest(),
         }
 
 
-def os_fsync(stream):
-    """`os.fsync` on a binary stream, imported lazily so this module needs no os at import time."""
-    import os
-    return os.fsync(stream.fileno())
+def _registered_names(module):
+    """`{internal parameter name: registered name}`: the `^6` holders map back to their dotted names."""
+    names = {name: name for name, _parameter in module.named_parameters()}
+    for name in PARAMETERS:
+        require(BLOCK_NAMES[name] in names, "POINTER_STATE_BLOCK_NAMES:" + name)
+        names[BLOCK_NAMES[name]] = name
+    require(set(names.values()) == set(module.state_dict()), "POINTER_REGISTERED_NAMES")
+    return names
 
 
-def _packet_of(pending, plan):
-    """The packet a pending result belongs to, recovered from the staged public body."""
-    require(type(pending) is dict and type(plan) is dict, "POINTER_PENDING_PACKET")
-    return pending["packets"][plan["record_id"]]
+def _packet_by_record(packets):
+    """`{record_id: packet}` for a packet mapping or an iterable, used only by helper measurements."""
+    rows = packets.values() if type(packets) is dict else packets
+    return {packet["record"]["record_id"]: packet for packet in rows}
+

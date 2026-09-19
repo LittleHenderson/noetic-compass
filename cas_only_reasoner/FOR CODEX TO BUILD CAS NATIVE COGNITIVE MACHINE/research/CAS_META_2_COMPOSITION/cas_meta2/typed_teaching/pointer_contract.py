@@ -442,21 +442,41 @@ PLANNED_WORK = {
         ("prediction_calls", "presentations", 1),
         ("private_loss_plan_calls", "presentations", 1),
         ("staged_batches", "main_updates", 1),
+        ("backward_attempts", "main_updates", 1),
         ("backward_calls", "main_updates", 1),
+        ("optimizer_step_attempts", "main_updates", 1),
         ("optimizer_updates", "main_updates", 1),
     ),
 }
 
-# OPEN: the pointer machine's own counter key set. `typed_practice_worker.py:361` compares the canonical
-# bytes of the summed per-update deltas and `counter_delta` (`typed_course_worker.py:55-59`,
-# "COUNTER_FIELDS") requires the two snapshots' key sets to match EXACTLY, so one extra or missing key
-# fails MAIN_TRAINING_COUNTERS after the spend. The learner's `counters` dict and this function must be
-# derived from one shared source of truth. Supply the names once lens B fixes the head set; do not guess.
-MAIN_COUNTERS = None
+# CLOSED 2026-09-19. The pointer machine's own counter key set, and the ONE shared source of truth.
+#
+# `typed_practice_worker.py:361` compares the canonical bytes of the summed per-update deltas, and
+# `counter_delta` (`typed_course_worker.py:55-59`, "COUNTER_FIELDS") requires the two snapshots' key sets to
+# match EXACTLY, so one extra or missing key fails MAIN_TRAINING_COUNTERS after the spend. The set below is
+# copied from `pointer_learner.COUNTER_KEYS`, which is where the learner builds its `counters` dict; a test
+# asserts the two are equal, because the contract cannot import the learner without a cycle.
+#
+# The units are the POINTER machine's own: packet forwards, rounds times packets, and updates -- NOT the old
+# machine's per-slot core passes (review DG10). A packet forward is one presentation; each forward runs
+# PLANNED_WORK_ROUNDS rounds of message passing, so the core ledger is rounds x packets. On the frozen
+# stratified schedule that is 1176 presentations per pass x 8 = 9408 core calls per pass, i.e. 94080 over ten
+# passes against the registered 600000 MAX_CORE_CALLS -- the reconciliation the smoke job must confirm.
+#
+# Note `slot_forwards`, the old machine's per-slot counter, is deliberately NOT here: the pointer machine has
+# no per-slot forward.
+# The ORDER is the learner's, deliberately: a test asserts this tuple EQUALS `pointer_learner.COUNTER_KEYS`,
+# and equal tuples are a stronger claim than equal sets. Nothing depends on the order at runtime --
+# `expected_main_delta` returns a dict and `counter_delta` compares key SETS -- but a claim of one shared source
+# of truth should be literally true rather than true-up-to-permutation.
+MAIN_COUNTERS = ("core_forward_attempts", "core_forward_calls", "sample_core_passes",
+                 "packet_forward_calls", "prediction_calls", "staged_batches", "backward_attempts",
+                 "backward_calls", "optimizer_step_attempts", "optimizer_updates",
+                 "private_loss_plan_calls")
 
 
 def expected_main_delta(stats):
-    """The planned work of the main-training phase, from the registered formula and the OPEN counter set."""
+    """The planned work of the main-training phase, from the registered formula and the closed counter set."""
     require(MAIN_COUNTERS is not None, "MAIN_COUNTERS_OPEN")
     require(type(MAIN_COUNTERS) is tuple and len(set(MAIN_COUNTERS)) == len(MAIN_COUNTERS), "MAIN_COUNTERS")
     by_name = {name: stats[key] * multiplier for name, key, multiplier in PLANNED_WORK["relations"]}

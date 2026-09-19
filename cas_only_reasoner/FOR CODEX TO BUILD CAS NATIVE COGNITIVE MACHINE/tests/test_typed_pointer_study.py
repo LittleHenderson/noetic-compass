@@ -199,10 +199,29 @@ def test_planned_work_formula_is_self_consistent_against_the_real_schedule(mater
     for phrase in ("Accept both, carry on.", "Approve the smoke job (Recommended)",
                    "require the relational kinds."):
         assert phrase in contract.DESIGN["owner_approval"]
-    # The planned-work formula is OPEN only in its counter key set, which fails closed.
-    assert contract.MAIN_COUNTERS is None
-    with pytest.raises(ValueError, match="MAIN_COUNTERS_OPEN"):
-        contract.expected_main_delta(stats)
+    # The counter key set is now CLOSED, and it must equal the learner's own. The contract cannot import the
+    # learner (the learner imports the contract), so this test is the only thing holding the two together --
+    # and one extra or missing key would fail MAIN_TRAINING_COUNTERS after the spend.
+    from cas_meta2.typed_teaching import pointer_learner as learner                    # noqa: PLC0415
+    # The invariant is the key SET, not the order: `counter_delta` compares sets, `expected_main_delta`
+    # returns a dict, and the learner's own two tuples (`COUNTER_KEYS` from its counters dict and
+    # `EXPECTED_MAIN_COUNTERS` from its plan table) are permutations of each other. Asserting tuple equality
+    # would be asserting something the learner itself does not hold.
+    assert set(contract.MAIN_COUNTERS) == set(learner.COUNTER_KEYS) == set(learner.EXPECTED_MAIN_COUNTERS)
+    assert len(contract.MAIN_COUNTERS) == 11 and len(set(contract.MAIN_COUNTERS)) == 11
+    # The old machine's per-slot counter is deliberately absent: the pointer machine has no per-slot forward.
+    assert "slot_forwards" not in contract.MAIN_COUNTERS
+    delta = contract.expected_main_delta(stats)
+    assert set(delta) == set(contract.MAIN_COUNTERS) == set(learner.COUNTER_UNITS)
+    assert delta["packet_forward_calls"] == stats["presentations"]
+    assert delta["core_forward_calls"] == stats["presentations"] * contract.PLANNED_WORK_ROUNDS
+    assert delta["optimizer_updates"] == stats["main_updates"]
+    # It still fails closed on a key set that does not match the registered relations.
+    monkeypatched = tuple(contract.MAIN_COUNTERS) + ("not_a_counter",)
+    import unittest.mock as _mock                                                    # noqa: PLC0415
+    with _mock.patch.object(contract, "MAIN_COUNTERS", monkeypatched):
+        with pytest.raises(ValueError, match="MAIN_COUNTERS"):
+            contract.expected_main_delta(stats)
 
 
 # ---------------------------------------------------------------------------------------------------
