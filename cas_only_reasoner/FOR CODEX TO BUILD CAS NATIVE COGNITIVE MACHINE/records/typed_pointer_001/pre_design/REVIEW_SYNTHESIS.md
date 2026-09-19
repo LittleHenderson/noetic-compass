@@ -138,7 +138,43 @@ are precisely the ones that do **not** require following links between a world's
 **R13 (all flags together) scores 13 of 45** — the definition 5 and context 5 that make finding FP1 what it is, plus
 the 3 `parts` from FP2. It confirms exactly why the unchanged gate would print a false positive.
 
-### 6.1 A second no-learning policy, found by re-deriving R10 (this agent, `measurements/leaks_review/VERIFY_R10_FINDINGS.md`)
+### 6.2 The naive pointing policies are weak — but the table does not cover constant answers
+
+`measurements/leaks_review/lk3_pointer_policies_out.txt`. Zero-learning pointing policies, scored on held-eligible
+questions:
+
+| policy | held-eligible solved |
+|---|---|
+| point at the argument node (the query's `whole`) | 5 / 45 (all `definition`) |
+| point at the query's `part` argument | 0 / 45 |
+| point at the focus world plus the declared whole | 5 / 45 (all `definition`) |
+| PRESENT for every non-argument node | 1 / 45 |
+| PRESENT for every node and every edge pair including self-pairs | 1 / 45 |
+
+So the pointer space is **not** trivially exploitable by pointing alone — good news for the design. But note what this
+table does **not** contain: a **constant answer symbol**. It tests *pointing rules*, not *always emit symbol X*. The
+`VIA n1` constant that scores 4 of 9 held `reach` (§6.1) is a choice-slot policy and is absent here. Both classes must
+be registered; registering only the pointing class would leave the bigger hole open.
+
+### 6.3 Node labels carry no information for the two hard kinds — dropping them costs nothing
+
+`measurements/learnability_review/lb14_order_and_labels_out.txt`:
+
+- The paired worlds of a **correspondence** question share **no** node label: `label sets equal` is 0 of 20 held,
+  0 of 54 trained, 0 of 14 excluded. `label-preserving admissible` is **0** on every side.
+- **Analogy**: of 123 correct candidate worlds (held), **123** have zero label overlap with the focus world.
+- Rank-based shortcut rules on `correspondence` solve **0 of 20** held (`ref-rank` 0, `label-rank` 0, `degree-rank` 0).
+
+Two consequences. First, this **confirms the decision to drop node label words**: for the two kinds where genuine
+relational learning would be measured, labels carry no signal at all, so removing them (and closing the 20-of-20
+memorisation channel, §4) costs the machine nothing. Second, **`correspondence` and `analogy` are clean tests** — no
+cheap rule found so far solves any held question of either kind, and their answer sets are narrow (most held
+correspondence questions admit exactly 1 of 24 permutations, `lb12_correspondence_head_out.txt`).
+
+That matters for the main goal: these two kinds, with **54 and 36 trained records** behind them, are where a genuine
+transferable relational skill would show, and where a gain would be hard to fake.
+
+### 6.4 R10 re-derived, and the constant-answer policy it exposed
 
 R10 was re-derived independently and **confirmed at exactly 4 of 9**. Re-deriving it exposed something the lens's
 summary table does not show: **every** admissible held `reach` answer is `VIA n3`, `VIA n1` or `ABSENT` — four want
