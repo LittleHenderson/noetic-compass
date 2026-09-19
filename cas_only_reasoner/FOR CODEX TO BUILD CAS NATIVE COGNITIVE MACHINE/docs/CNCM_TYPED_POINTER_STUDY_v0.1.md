@@ -416,16 +416,16 @@ five `correspondence` removals are registered as their own class. `RELATIONAL_PO
 `INTERFACE_SPEC_POINTER.md:46` is marked `OPEN:` and stays open until that edit lands. **Still unset at HEAD
 `e3ee21c1`: both `REMOVALS["flag_rule"]` and `REMOVALS["rank_rule"]` are the empty placeholder.**
 
-`CONFLICT:` `INTERFACE_SPEC_POINTER.md:46` lists the RELATIONAL per-held-world figures as "verified inputs" —
-`world-98c6352d` 6, `world-28f61f2d` 5, `world-6e1fcbda` 6, `world-22704554` 5, `world-4090ec49` 7, summing to 29 —
-and attributes them to `pipeline_review/r4_reach_lexical.py`. The leaks run's own output gives a different
-per-world composition for the same 29: `{'world-22704554': 5, 'world-28f61f2d': 5, 'world-4090ec49': 7,
-'world-6e1fcbda': 6, 'world-98c6352d': 6}` (`lk6_gate_population_out.txt:14`), which is 5, 5, 7, 6, 6 in the same
-world order. Both sum to 29 and neither can be reconciled with the other from the sources. `DESIGN_DRAFT_v0.2.md`
-§6.2 already records the same discrepancy and marks it `UNCERTAIN`. The removal list of §4.2 is applied
-per-question by `query_id` and does not depend on the per-world split, so the gate population of 18 is unaffected;
-what is undetermined is which per-world breakdown is correct, and no per-world claim should be quoted from
-`INTERFACE_SPEC_POINTER.md:46` until it is settled.
+**RECONCILED 2026-09-19 (R1-15) — the per-world spread is NOT in conflict.** The two sources agree exactly; the apparent disagreement was a **sorted-order misread**. `INTERFACE_SPEC_POINTER.md:46` lists the
+RELATIONAL per-held-world figures as `world-98c6352d` 6, `world-28f61f2d` 5, `world-6e1fcbda` 6, `world-22704554` 5, `world-4090ec49` 7, summing to 29; the leaks run's own output gives
+`{'world-22704554': 5, 'world-28f61f2d': 5, 'world-4090ec49': 7, 'world-6e1fcbda': 6, 'world-98c6352d': 6}` (`lk6_gate_population_out.txt:14`). **Those are the same five counts.** The leaks line is
+`dict(sorted(Counter(...).items()))`, so it prints in world-id order; the spec's own cited source, `pipeline_review/r4_reach_lexical.py:58`, prints `dict(Counter(...))` **unsorted**, so it prints
+in the order the worlds are first encountered in `eligible` — which is why the spec's list reads 98c6352d, 28f61f2d, 6e1fcbda, 22704554, 4090ec49 and not alphabetically. Read the spec's five
+entries as world-to-count pairs rather than by position, and the two sources agree on every world. Re-derived from the frozen material for this amendment, by import
+(`evaluate_gates.eligible_questions` in `records/typed_practice_001`, and `pointer_contract.relational_population`), the eligible RELATIONAL per-held-world mapping is exactly
+`world-98c6352d` 6, `world-28f61f2d` 5, `world-6e1fcbda` 6, `world-22704554` 5, `world-4090ec49` 7, total **29** — identical to `lk6_gate_population_out.txt:14` and to
+`pointer_contract.VERIFIED_RELATIONAL_BY_WORLD`, which pins the same five counts against the full 64-hex world ids. **The spec's per-world figures are therefore confirmed and MAY be quoted; they are not
+undetermined, and no per-world claim is withheld.** `DESIGN_DRAFT_v0.2.md` §6.2's related `UNCERTAIN` is answered as well: they are RELATIONAL-only, and the separate ALL-KIND per-world counts over the same five worlds are 8 / 9 / 10 / 9 / 9, summing to 45. The removal list of §4.2 is applied per-question by `query_id`, so the gate population of 18 was never affected.
 
 ### 4.4 The ORACLE RULES ceiling — reported, NOT removed
 
@@ -1159,10 +1159,10 @@ Collected here so a reader can find them without hunting.
   minutes, still under the approved $1), and "$0 is a status, not an achievement." **The amended rule is newer and
   governs the venue. The approved envelope (~$13 expected, $45 reserved, plus the approved sub-$1 smoke) and the
   requirement to ask before exceeding it are unchanged.**
-- **`CONFLICT:` §4.3** — `INTERFACE_SPEC_POINTER.md:46` and `lk6_gate_population_out.txt:14` give different
-  per-held-world compositions for the same 29 eligible RELATIONAL questions. Both sum to 29 and neither can be
-  reconciled from the sources. The gate population is unaffected because removals are applied per `query_id`; no
-  per-world claim should be quoted from the spec until it is settled.
+- **`RESOLVED:` §4.3 (was a per-world `CONFLICT:`, retired 2026-09-19 by R1-15) — there was never a disagreement.** `INTERFACE_SPEC_POINTER.md:46` and `lk6_gate_population_out.txt:14` print the **same** five
+  per-held-world counts for the same 29 eligible RELATIONAL questions, in different orders: the spec's cited source (`r4_reach_lexical.py:58`) uses an unsorted `Counter`, while the leaks run sorts by world id.
+  Re-derived from the frozen material and confirmed by `pointer_contract.VERIFIED_RELATIONAL_BY_WORLD`, so **the spec's per-world figures may be quoted.** The gate population was never affected, because removals are
+  applied per `query_id`. No `CONFLICT:` on the per-world spread remains anywhere in this document.
 - **`CONFLICT:` §4.3** — the three sources put the post-removal relational population at different values from
   different removal stages: the learnability lens at **25** (29 − 4 flag-solved), the leaks run at **23** (29 − 6),
   and this protocol at **18** (29 − 6 shortcut-rule, − 5 architectural-inexpressibility). All three are exact and
