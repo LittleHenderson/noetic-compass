@@ -370,6 +370,27 @@ What is read. From the public packet ONLY, and only these facts (`INTERFACE_SPEC
 > baseline solves is removed from the gate population before the run, so a rank-solved question can never be counted
 > as learning. See §6.
 
+> **🔴 REOPENED 2026-09-19, hours after the decision above — the rank feature creates a shortcut that eats most of the
+> `reach` tier.** The leaks lens's single-flag table
+> (`measurements/leaks_review/lk2_single_flag_out.txt` line 89-94) measures rule **R10**, *"node rank == the alphabetically
+> last ref"*, reading **only the rank flag and no adjacency**, as solving **4 of the 9** eligible held `reach` questions
+> (and 10 of 26 held reach records). That is the largest single-flag score of any kind after the DIRECT_READ pair. So
+> registering the rank baseline removes up to 4 more `reach` questions from the gate, and the two options are no longer
+> close:
+>
+> | | Gate population | Training signal |
+> |---|---|---|
+> | **rank IN** | `reach` loses up to 4 to R10 **and** 2 to DG3 (the overlap is unmeasured) + `analogy` 5 + `correspondence` 5 → **as low as 13–15** | the order-dependent reach targets stop being contradictory (5/26 held, 11/71 trained) |
+> | **rank OUT** | `reach` loses 2 to DG3 + `analogy` 5 + `correspondence` 5 → **17** | 11 of 71 trained `reach` records keep contradictory targets |
+>
+> Both options clear the floor of `b = 7` on paper, but 17 leaves materially more headroom than 13–15, and the
+> questions rank would remove are exactly the ones that do **not** require following links between a world's parts —
+> which is the owner's own stated criterion for the tier. The counter-argument is training noise on one kind.
+>
+> **The decision is therefore NOT settled, and the reasoning above is retained only as the case FOR rank.** It waits on
+> lens A's authoritative required-removals table, which computes the real overlap and the real population. Do not
+> freeze a population, and do not build `pointer_inputs.py`, on either branch until that lands.
+
 What is NEVER read: `supports`, `cue`, `instruction`, and any answer or target. The registered node `rank` is the
 **only** order-like feature in the input, and it is declared, pinned and baselined. Every other order-like channel is
 excluded — a node's position in the packet, its position in the file, and any part of its ref beyond the index the rank

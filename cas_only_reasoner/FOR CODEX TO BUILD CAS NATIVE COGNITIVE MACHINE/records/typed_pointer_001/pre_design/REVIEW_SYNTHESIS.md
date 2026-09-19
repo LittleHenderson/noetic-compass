@@ -112,7 +112,49 @@ The wide output spaces are worth naming: `analogy` `world_id` has **65** symbols
 world scorer is an embedding scorer rather than a classifier, so this is not automatically fatal — but it is the
 place to look first if those kinds show no movement.
 
-## 6. The node rank feature is the public node alias — and that reopens a decision I had made
+## 6. The single-flag table, and the rule that reopens the rank decision
+
+`measurements/leaks_review/lk2_single_flag_out.txt`. Best no-learning rule per kind, scored by the private checker,
+over held-back **eligible** questions:
+
+| Kind | best zero-learning rule | held-eligible solved |
+|---|---|---|
+| `definition` | R13, all flags | **5 / 5** |
+| `context` | R13, all flags | **5 / 5** |
+| `reach` | **R10, node rank == alphabetically last ref (rank only, no adjacency)** | **4 / 9** |
+| `parts` | R12, the FP2 line | 3 / 5 |
+| `role_set` | best rule scores nothing | 0 / 6 |
+| `analogy` | best rule scores nothing | 0 / 5 |
+| `correspondence` | best rule scores nothing | 0 / 5 |
+| `edge_account` | best rule scores nothing **without adjacency** (R13 scores 0/5) — but the input's own adjacency solves **5 / 5**, see §1 | 0 / 5 by flag rules |
+
+Two things stand out.
+
+**R10 is the surprise.** A rule reading *only* the node rank, with no adjacency at all, answers 4 of the 9 eligible
+held `reach` questions correctly — the largest single-flag score of any kind outside the DIRECT_READ pair. If the rank
+feature is in the input, that baseline must be registered and its 4 questions removed from the gate. Those questions
+are precisely the ones that do **not** require following links between a world's parts.
+
+**R13 (all flags together) scores 13 of 45** — the definition 5 and context 5 that make finding FP1 what it is, plus
+the 3 `parts` from FP2. It confirms exactly why the unchanged gate would print a false positive.
+
+## 7. The rank decision, reopened
+
+| | Gate population | Training signal |
+|---|---|---|
+| rank **IN** | `reach` loses up to 4 to R10 **and** 2 to DG3 (overlap unmeasured) + `analogy` 5 + `correspondence` 5 → **as low as 13–15** | order-dependent `reach` targets stop being contradictory (5/26 held, 11/71 trained) |
+| rank **OUT** | `reach` loses 2 to DG3 + `analogy` 5 + `correspondence` 5 → **17** | 11 of 71 trained `reach` records keep contradictory targets |
+
+**Reopened because the evidence changed after the first decision.** The rank feature was chosen for the training-signal
+reason before R10 was measured; R10 shows it also removes up to 4 of the 9 remaining `reach` questions, and those are
+the questions that most clearly satisfy the owner's criterion of needing the machine to follow links. 17 leaves more
+headroom above the floor of `b = 7` than 13–15 does.
+
+**Not settled here.** It waits on lens A's authoritative required-removals table, which computes the real overlap
+between the R10 set and the DG3 set and the real surviving population. Building `pointer_inputs.py` on either branch
+before that lands would be building on a guess.
+
+## 8. Background: the rank feature is the public node alias
 
 `lk1_answer_carriers_out.txt` Parts G and H:
 
@@ -137,11 +179,12 @@ baseline and removal of the questions that baseline solves. What was **missing**
 the design has chosen to give up. **This must be resolved explicitly in v0.2 §5 and §6, and S9 re-specified, before
 the protocol is frozen** — not left as an unremarked contradiction between two documents.
 
-Note this does **not** change the gate population: the 2 eligible held `reach` questions that the order decides are
-removed whether rank is in or out (`DG3`). The choice affects the training signal (with rank, those targets stop being
-contradictory) and the engineering claims, not the bar.
+Note this section was written **before** R10 was measured, and its closing claim — that the choice does **not** change
+the gate population — is **superseded by §7 and is wrong**. R10 removes up to 4 `reach` questions if rank is in.
+The rank feature's identity as the public alias stands as recorded here; only the conclusion about the population is
+withdrawn.
 
-## 7. Slot-plan symbol alphabets, from the leaks lens (`lk1_answer_carriers_out.txt` Part F)
+## 9. Slot-plan symbol alphabets, from the leaks lens (`lk1_answer_carriers_out.txt` Part F)
 
 The answer spaces a head must cover, with the record counts in parentheses:
 
@@ -162,7 +205,7 @@ correspondence   mode            2           (88)
 
 The four 64/65-symbol slots and the wide `mapping_target` are where the output space, not the input, is hardest.
 
-## 8. What is still outstanding
+## 10. What is still outstanding
 
 - The leaks lens had not yet reported its shortcut-policy table (pointer-space policies), its permutation-vacuity
   list, its other pipeline-routes check, or its final removal list and minimum b.
@@ -170,7 +213,7 @@ The four 64/65-symbol slots and the wide `mapping_target` are where the output s
   recurrence-stability result, the optimiser adequacy analysis, or its predicted false negatives.
 - Both must be folded in before the protocol is frozen.
 
-## 5. Owner decision this creates
+## 11. Owner decision this creates
 
 One consolidated question is owed to the owner, and it should be asked **once**, when both lenses have reported:
 the relational tier the owner confirmed by name included two kinds whose answers the input hands over. Narrowing the
