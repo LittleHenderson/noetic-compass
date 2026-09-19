@@ -226,6 +226,25 @@ learning, and it must be recorded as such.
 > launcher or the owner's explicit acceptance of a $15.00 commitment. **It is raised with the owner; it is not
 > decided here.** Two adversarial reviewers are reading `typed_pointer_launch.py` at this moment, so the launch path
 > is deliberately NOT being edited underneath them.
+
+> **AND A HARDER ONE FOUND THE SAME DAY: the shrunken schedule in §3 CANNOT BE REQUESTED AT ALL, so the smoke is
+> impossible as this plan describes it.** The worker reads `os.environ.get("CNCM_POINTER_REDUCED_SCHEDULE")`
+> (`cncm/typed_pointer_worker.py:142`, `:270`), and **nothing in the tree ever sets it.**
+> `typed_pointer_launch.bootstrap_source()` (`:179-182`) is `matched.bootstrap_source()` with exactly one
+> substitution — `typed_matched_worker` → `typed_pointer_worker` — and adds no environment line. The precedent for
+> how an environment variable actually reaches the instance is `typed_matched_launch.py:171`, which bakes
+> `os.environ['CAS_META2_RUN_TEACHING_CYCLE'] = '1'` into the generated bootstrap. There is no equivalent for the
+> reduced request.
+>
+> **Consequence: every AWS pointer job runs the FULL registered schedule.** With no reduced request the worker
+> returns `(deepcopy(FULL_PLAN), True)` (`cncm/typed_pointer_worker.py:282-283`), so a "smoke" job would train all
+> 1,470 updates and cost roughly **$6**, not $1 — which is why the fix is required rather than optional. The
+> forwarding line is being added to `typed_pointer_launch.py` under a **fail-closed** rule: an explicit module-level
+> opt-in defaulting to `None`, so that with no opt-in the generated source and the package bytes are **byte-for-byte
+> identical to today's** — because the three claim-bearing jobs' `request.json` and `authority.json` pin
+> `archive_sha256` and `manifest_sha256`, and those pins must not move. The request is validated against the
+> worker's own `REDUCED_SCHEDULE_KEYS`, and it must still satisfy `typed_pointer_worker.py:190` (an evaluation at
+> pass `0` **and** at pass `passes`).
 - The owner's approval covers this step; no new approval is needed unless the projection in §4.2 crosses 11,000 s.
 - The smoke's job name uses the same `tpntr` study token, and its artifacts are sealed exactly like a real job's.
 

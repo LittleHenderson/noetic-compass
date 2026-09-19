@@ -4,6 +4,52 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (pre-flight, $0) - R2 adversarial review returns NO-GO: three blockers, four majors, one withdrawn finding
+
+**No spend. No AWS call. No study run.** Review R2 (run-killers and pipeline fit) reported against HEAD
+`00128c20`. Verdict **NO-GO**. Its findings are the reason the reviews exist: two of the three blockers would each
+have burned money before failing, and the third silently destroys an evidence family in **every** job.
+
+| # | severity | finding |
+|---|---|---|
+| B1 | **BLOCKER** | `CNCM_POINTER_REDUCED_SCHEDULE` is read by the worker and **set by nothing**, so the reduced smoke is impossible — it would run the FULL 1,470-update schedule against a ~$1 approval |
+| B2 | **BLOCKER** | the launcher's evidence contract demands all **102** registered names, so a perfect reduced run returns `completed_deliverable: false`, `main()` exits 1, and `execute_study.py:65` stops the study |
+| B3 | **BLOCKER** | `ABLATION_COMPONENTS` misses 2 of the 46 container state-dict keys, so `POINTER_ABLATION_COVERAGE` fails and **all 10 ablation artifacts are dropped from every job** while the envelope still reports `COMPLETE_TYPED_POINTER_ARM` |
+| M1 | MAJOR | the cost projection omits the 598.2 s of non-worker overhead and phase B, and compares against `projected_worker_seconds` rather than instance time — so `within_owner_threshold: True` can be written for a job over the owner's 11,000 s line, and that projection is what decides `PASSES` |
+| M2 | MAJOR | a report-only ablation failure is delivered as `COMPLETE` with no machine-readable trace, so "the ablations ran" and "the ablations never started" are indistinguishable |
+| M3 | MAJOR | `frozen_inputs_hash()` hashes the **working tree** while the package is built from `git show` |
+| M4 | MAJOR | `STRATIFIED_BATCHES_DIGEST` is pinned to the **10-pass** schedule, so setting `PASSES` — the study's one open value and the whole point of the smoke — turns the test suite red and makes `holdout_audit.py` exit 1 with a misleading `SOURCE_SCHEDULE_IS_NOT_THE_BASE_SCHEDULE` |
+
+**Measured by R2, not argued.** B1: rendered bootstrap 2,549 B, `os.environ` occurs **once** (for
+`CAS_META2_RUN_TEACHING_CYCLE`), `CNCM_POINTER_REDUCED_SCHEDULE` **zero** times, and the launcher source does not
+contain the name. B2: a reduced run produces **40** names against a contract requiring **102** — **59** registered
+names it would never write. B3: 44 of 46 keys covered; the `round_mix` prefix tuple carries **six names that match
+nothing**, an abandoned design left behind when three mix scalars became one 3-element `Parameter`. M4: the same
+literal is asserted at `tests/test_typed_pointer_study.py:312-313` and `holdout_audit.py:136`.
+
+**One finding withdrawn by the reviewer itself, and recorded because withdrawing it matters.** R2's first pass
+printed that `updates` escaped the `claim_bearing` guard; on re-measurement the exhaustive sweep returned
+`KEYS WHERE claim_bearing STAYS TRUE WHILE THE PLAN CHANGES: []`, so **all ten reduced keys are covered** and the
+finding is REFUTED. That is the correct behaviour from an adversarial reviewer, and it is the same conclusion an
+independent orchestrator check reached earlier from `typed_pointer_worker.py:295-298`.
+
+**R2 also confirmed nine of its twelve checklist items PASS**, several of which we had only asserted: the phase
+order (phase A at `:1536-1540` before the seed and double build at `:1542-1545`, phase B last at `:1573-1576`);
+counters equal as 11-tuples; the schema handshake identical in both directions with `TYPED_POINTER_FAILED` in
+`failure_statuses`; deterministic mode clean for every op the learner and the `^6` block use, with only a
+deliberately self-overlapping `copy_` control raising; **zero `assert` in all eight spend-path files**; all LF
+**checked by bytes**; and all five owner labels byte-verbatim including the em dash, with
+`owner_decisions_in_contract_text() == [True] * 5`.
+
+**Fixes dispatched in parallel, one owner per file so no two agents collide:** B1 + B2 + M3 to the launch-path
+agent; B3 + M1 + M2 to the worker agent; M4 to the contract/test/audit agent. The learner's one-line fail-closed
+shape guard landed separately as `5fc1f57b`, verified green (**20 passed in 140.58s**) before commit.
+
+**One residual risk R2 could not settle, carried forward honestly:** whether `index_select` backward raises under
+`torch.use_deterministic_algorithms(True)` **on the CUDA device**. It is clean on CPU. If it raises, it does so at
+the first graph forward inside `stage_batch` — after preflight, after phase A and after the double build. Only the
+instance can answer it, and the worker has no instrumentation that would catch it earlier.
+
 ## 2026-09-19 UTC (pre-flight, $0) - Two governance defects and a stale contract flag fixed; smoke cost model corrected; four drivers built
 
 **No spend. No AWS call. No study run.** Found while finishing the build. Every one of these was found by a builder or
