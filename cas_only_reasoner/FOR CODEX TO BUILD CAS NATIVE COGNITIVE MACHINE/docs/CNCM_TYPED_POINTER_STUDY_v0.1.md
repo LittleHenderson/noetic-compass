@@ -358,6 +358,18 @@ the machine's skill, and it is charged to the architecture rather than to the le
 | **required share of the population to improve** | **7/18 = 0.3889** |
 | feasibility, all three seeds | **0.0216** at 30 %, **0.2450** at 40 %, **0.6839** at 50 % |
 | single-seed figures at N = 18 | **0.2783** at 30 %, 0.4509 at 35 %, **0.6257** at 40 %, 0.8811 at 50 % |
+| **frozen population digest** | **`4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d`** |
+
+> **ADDED 2026-09-19, after this document was first drafted.** The population digest was not available when the
+> protocol was written, because it could only be computed once the removal lists were filled in the contract. It is
+> now pinned and **asserted**, not merely described: `pointer_contract.REMOVALS` carries the 11 ids,
+> `pointer_contract.VERIFIED_POPULATION = 18`, `VERIFIED_POPULATION_BY_KIND` and `VERIFIED_POPULATION_DIGEST`, and
+> both `tests/test_typed_pointer_study.py` (20 passed) and the independent 32-check verifier hold them. The list was
+> re-derived by `pre_design/freeze_removals.py`, which reads the ids out of `lk6_gate_population_out.txt` rather than
+> retyping them, and which reproduces this digest.
+>
+> Note that `by_kind` covers **all five** RELATIONAL kinds, so `correspondence` appears with a count of **0** rather
+> than being absent.
 
 Sources: `REVIEW_SYNTHESIS.md` §11.1 and §12.1; `GATE_FEASIBILITY.md` §5; `DESIGN_DRAFT_v0.2.md` §6.6.
 
