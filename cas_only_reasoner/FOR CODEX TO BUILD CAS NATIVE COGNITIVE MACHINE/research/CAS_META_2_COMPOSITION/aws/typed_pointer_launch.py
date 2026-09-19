@@ -644,8 +644,21 @@ def build_pointer_package(output, *, source_sha, git_bytes_fn=None):
     manifest["frozen_budget"] = {**BOUNDS, "main_updates": OPTIMIZER_UPDATES_MAX - 18, "interference_updates": 16,
                                  "validation_replay_updates": 2}
     manifest["typed_design"] = DESIGN
-    manifest["inputs"] = rows
-    manifest["inputs_sha256"] = digest(canonical(rows))
+    # THE MANIFEST'S INPUT INDEX MUST BE THE SAME PROJECTION `contract.make_config` BUILDS. The generated
+    # `_inner_runner.py` compares BOTH `MANIFEST['inputs_sha256'] == CONFIG['inputs_sha256']` AND
+    # `canonical(MANIFEST['inputs']) == canonical(CONFIG['inputs'])` before it will run anything.
+    # `frozen_inputs()` returns the contract's rows PLUS `committed_content_sha256`, and
+    # `pointer_contract.make_config` builds its rows as bare `input_inventory(root)`
+    # (`pointer_contract.py:970`, `:978`). Folding the extra field into either the index or its digest made BOTH
+    # comparisons fail, so a real job booted a g7.2xlarge, installed the package and refused at container line 12
+    # with TYPED_BOOTSTRAP:MANIFEST_INPUT_INDEX_HASH -- before the encoder, before phase A, before any training.
+    # The committed-content digest is load-bearing EVIDENCE, so it is carried in its own field below rather than
+    # dropped. Do not fold it back into `inputs` or `inputs_sha256`.
+    bare_inputs = [{key: value for key, value in row.items() if key != "committed_content_sha256"}
+                   for row in rows]
+    manifest["inputs"] = bare_inputs
+    manifest["inputs_sha256"] = digest(canonical(bare_inputs))
+    manifest["inputs_committed_content_sha256"] = {row["path"]: row["committed_content_sha256"] for row in rows}
     manifest["transport"] = {"implementation": "aws.run_evidence.render_transport",
         "replaced_functions": transport["replaced"], "publisher_wired": transport["publisher_wired"],
         "marker_last": True, "predeclared_contract_sha256": run_evidence.contract_digest(evidence_contract())}
