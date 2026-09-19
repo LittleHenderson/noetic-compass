@@ -58,15 +58,20 @@ Assumes no losses. `N` is the number of honest relational questions; `q` is the 
 ## 5. What this says
 
 **The three-seed requirement is what does the damage.** At `N = 17` a genuine 40 % improvement gives a 55.22 % chance
-in any one seed, and cubing it drops that to **16.83 %**. At `N = 11` — the floor if both `reach` no-learning policies
-are registered — even a **50 %** improvement is worth only **2.07 %**.
+in any one seed, and cubing it drops that to **16.83 %**. At `N = 13` — the floor once the legitimate `reach`
+no-learning rules are applied — even a **50 %** improvement is worth only **12.50 %**.
+
+**Corrected 2026-09-19.** This section previously put the floor at `N = 11` on the strength of a "constant `VIA n1`"
+baseline. That baseline was withdrawn as an error (see `measurements/leaks_review/VERIFY_R10_FINDINGS.md` and
+`REVIEW_SYNTHESIS.md` §6.4): it can only be derived by reading the held-back answers, which the custody rule forbids,
+so it is the answer key and not a mechanism-free baseline. The honest floor is `N = 13`.
 
 **Read against the honest population, the gate is close to unable to pass.** The present best estimates for `N` are:
 
 | scenario | N | P(all three seeds) at a 30 % true improvement | at 40 % |
 |---|---|---|---|
-| both `reach` policies registered | 11 | **0.0000** | **0.0010** |
 | rank kept out of the input | 17 | **0.0114** | 0.1683 |
+| **most likely: rank in, R10 and DG3 applied** | **13–15** | **0.0002 – 0.0023** | **0.0120 – 0.0594** |
 | no removals at all (the tier as first confirmed) | 29 | 0.5355 | 0.9316 |
 
 **Two different failure modes, and the project has only guarded against one.** Findings FP1–FP3 protect against a
