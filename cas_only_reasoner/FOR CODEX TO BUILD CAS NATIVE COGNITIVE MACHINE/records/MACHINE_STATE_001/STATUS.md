@@ -538,6 +538,13 @@ hypothesis behind it is refuted by `context` sharing `parts`' arity and failing.
 
 ## 6. The decisions waiting
 
+**MEASURED 2026-09-19 ($0) — why nothing transferred: the old input makes it impossible.** Every packet holds all 64 worlds in
+one near-identical blend (nearest trained packet to a held packet: cosine median 0.999065); the only slot-specific input is a
+SHA-256 code of the slot's name, new for every held slot (0 of 617 held names occur in training). A linear probe fitted on
+trained worlds reads held worlds at or below the majority rate, inside a random-query null. The old 96.3758% was exact-name
+recall. Record: `records/typed_pointer_001/pre_design/INPUT_DEFECT_MEASUREMENT.md`. **Owner decision 2026-09-19: build the
+pointer machine (option 1) plus the checkpoint check.** Hand-off for the builder: `records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md`.
+
 **MEASURED 2026-09-18 — the practice study: the neurons learn what they practise, and none of it reaches
 worlds they never practised.** Label printed by the frozen gate reader: **`NO_TRANSFER_TO_NEW_WORLDS`**
 (integrity PASS, same random start as the matched runs). Ten passes on 358 records: practised questions

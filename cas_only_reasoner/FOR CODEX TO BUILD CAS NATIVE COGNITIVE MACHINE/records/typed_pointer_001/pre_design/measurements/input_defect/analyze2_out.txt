@@ -1,0 +1,185 @@
+GATE {'ok': True, 'projection': ('4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9', 3829), 'readout': ('14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667', 90)}
+records Counter({'trained': 358, 'held': 127, 'excluded': 79})
+
+====================================================================================================
+(a) WORLDS PER PACKET AND FRAME-ROW COMPOSITION (all 564 packets)
+n_worlds per packet: Counter({64: 564})
+WORLD rows per packet: Counter({64: 564})
+total rows per packet (incl START/END): [(73, 180), (76, 384)]
+tag: rows over course | distinct row byte-keys (ordinal,scope,token_ids) across 564 packets
+  START       564 |      1
+  FORMAT      564 |      1
+  BINDINGS    564 |    564
+  ALIASES     564 |      1
+  POLICY      564 |      1
+  SOURCE      564 |     24
+  WORLD     36096 |     64
+  RECORD      564 |    564
+  QUERY       564 |    316
+  SUPPORT    1152 |    904
+  END         564 |      2
+distinct shared-context blocks (FORMAT+ALIASES+POLICY*+WORLD*) across packets: 1
+SOURCE row: distinct keys 24 focus worlds 24 max distinct SOURCE keys per focus world 1
+focus == source_world_id for all packets: True
+question-specific rows (RECORD+QUERY+SUPPORT) per packet: [(2, 180), (5, 384)]
+question-specific ROW share: n=564 min=0.027397 median=0.065789 max=0.065789
+question-specific TOKEN share: n=564 min=0.011065 median=0.039432 max=0.048997
+  rows in shared_context  per packet: [(67, 564)]
+  rows in focus_source    per packet: [(1, 564)]
+  rows in packet_digests  per packet: [(1, 564)]
+  rows in markers         per packet: [(2, 564)]
+
+====================================================================================================
+(b) COSINE BETWEEN PACKET VECTORS (all 158766 unordered pairs of 564 packets)
+same focus world  : n=6444 min=0.942261 median=0.965208 max=0.999755
+   same question  : n=557 min=0.967154 median=0.998163 max=0.999755
+   diff question  : n=5887 min=0.942261 median=0.963736 max=0.999655
+different focus   : n=152322 min=0.939479 median=0.965658 max=0.999492
+held packet -> nearest TRAINED packet cos   : n=127 min=0.997695 median=0.999065 max=0.999467
+trained packet -> nearest OTHER trained cos : n=358 min=0.990379 median=0.999254 max=0.999755
+norm of course-mean packet vector (1.0 = all identical): 0.983943
+norm of packet residual after removing course mean: n=564 min=0.135587 median=0.179329 max=0.217355
+CENTRED cos same focus     : n=6444 min=-0.582704 median=-0.093756 max=0.992456
+CENTRED cos different focus: n=152322 min=-0.621545 median=-0.088831 max=0.984747
+
+====================================================================================================
+(c) SQUARED-NORM SHARE OF ROW CATEGORIES INSIDE THE PACKET VECTOR
+s = sum of unit row vectors (packet vector = s/|s|). share_add(C) = <s_C, s>/|s|^2 (sums to 1 over C);
+share_own(C) = |s_C|^2/|s|^2 (the category alone).
+  shared_context  add: n=564 min=0.857210 median=0.917762 max=0.955828
+                  own: n=564 min=0.796590 median=0.911303 max=0.992463
+  focus_source    add: n=564 min=-0.001768 median=0.003704 max=0.008922
+                  own: n=564 min=0.008166 median=0.009342 max=0.010174
+  packet_digests  add: n=564 min=0.005490 median=0.014985 max=0.025064
+                  own: n=564 min=0.008166 median=0.009342 max=0.010174
+  question        add: n=564 min=0.000656 median=0.053518 max=0.116107
+                  own: n=564 min=0.013677 median=0.041970 max=0.053570
+  markers         add: n=564 min=0.004332 median=0.013271 max=0.023886
+                  own: n=564 min=0.015311 median=0.017676 max=0.021619
+cos(question-rows sum, packet vector): n=564 min=0.004379 median=0.276008 max=0.533620
+inside enc = unit(p+q), additive share of the slot query q      : n=2598 min=0.500000 median=0.500000 max=0.500000
+inside enc = unit(p+q), additive share of question frame rows    : n=2598 min=-0.018869 median=0.032852 max=0.092127
+
+====================================================================================================
+(d) SLOT QUERY VECTORS: held-world slots vs trained slots (cos = (64 - 2*popcount(xor))/64)
+slots: held 617 trained 1665 excluded 316
+distinct trained query vectors: 722  distinct trained specs: 722
+held slots whose exact spec occurs among trained slots: 0
+held slots whose query vector equals a trained query vector: 0
+held slot scope aliases: ['W0', 'W10', 'W13', 'W17', 'W35', 'W37', 'W47', 'W49', 'W6']
+trained slots with a held-world scope alias: 339
+held slot -> max cos to any TRAINED slot query           : n=617 min=0.312500 median=0.375000 max=0.562500
+trained slot -> max cos to any OTHER trained slot query  : n=1665 min=0.312500 median=1.000000 max=1.000000
+   share of trained slots with an identical query vector in another trained slot: 90.0901%
+trained slot -> max cos to a DIFFERENT trained query vector: n=1665 min=0.281250 median=0.375000 max=0.500000
+control: 500 seeded random +-1/8 vectors -> max cos to trained queries: n=500 min=0.281250 median=0.375000 max=0.531250
+
+(d') FULL ENCODED SLOT INPUT enc = unit(p+q), per-bit-kind slots only
+held slot -> max cos(enc) to any trained slot                     : n=412 min=0.614490 median=0.691833 max=0.781626
+trained slot -> max cos(enc) to any other trained slot             : n=1152 min=0.612071 median=0.998809 max=0.999827
+trained slot -> max cos(enc), other packet AND different spec      : n=1152 min=0.597306 median=0.690344 max=0.792557
+
+====================================================================================================
+(e) PER-BIT LINEAR PROBES, fit on trained-record slots, tested on held-world slots
+----------------------------------------------------------------------------------------------------
+kind parts         trained slots   171 (records 44, PRESENT 60.2339%) | held slots   36 (records 9, PRESENT 47.2222%)
+   held majority-class rate 52.7778% | train-majority constant on held 47.2222% | per-packet ceiling (any q-blind rule) on held 52.7778%
+   ridge-LS enc lam=0.001  train 97.6608%  held 47.2222%
+   ridge-LS enc lam=0.1    train 97.0760%  held 44.4444%
+   ridge-LS enc lam=1      train 94.1520%  held 58.3333%
+   ridge-LS enc lam=10     train 76.6082%  held 44.4444%
+   ridgeLDA enc (published estimator) train 96.4912%  held 44.4444%
+   ridge-LS q   lam=0.001  train 99.4152%  held 55.5556%
+   ridge-LS q   lam=0.1    train 97.0760%  held 47.2222%
+   ridge-LS q   lam=1      train 95.3216%  held 52.7778%
+   ridge-LS q   lam=10     train 86.5497%  held 44.4444%
+   ridgeLDA q   (published estimator) train 97.0760%  held 47.2222%
+   ridge-LS p   lam=0.001  train 66.6667%  held 47.2222%
+   ridge-LS p   lam=0.1    train 61.4035%  held 47.2222%
+   ridge-LS p   lam=1      train 60.2339%  held 47.2222%
+   ridge-LS p   lam=10     train 60.2339%  held 47.2222%
+   ridgeLDA p   (published estimator) train 60.8187%  held 52.7778%
+   1-NN cosine on enc: held 63.8889%
+   5-NN cosine on enc: held 58.3333%
+   lookup memoriser (scope alias, coordinates): held 47.2222%, key coverage 0.0000%
+----------------------------------------------------------------------------------------------------
+kind context       trained slots   156 (records 41, PRESENT 78.8462%) | held slots   68 (records 17, PRESENT 75.0000%)
+   held majority-class rate 75.0000% | train-majority constant on held 75.0000% | per-packet ceiling (any q-blind rule) on held 75.0000%
+   ridge-LS enc lam=0.001  train 100.0000%  held 64.7059%
+   ridge-LS enc lam=0.1    train 98.7179%  held 64.7059%
+   ridge-LS enc lam=1      train 96.7949%  held 60.2941%
+   ridge-LS enc lam=10     train 78.8462%  held 75.0000%
+   ridgeLDA enc (published estimator) train 98.0769%  held 61.7647%
+   ridge-LS q   lam=0.001  train 100.0000%  held 64.7059%
+   ridge-LS q   lam=0.1    train 99.3590%  held 64.7059%
+   ridge-LS q   lam=1      train 97.4359%  held 54.4118%
+   ridge-LS q   lam=10     train 78.8462%  held 75.0000%
+   ridgeLDA q   (published estimator) train 99.3590%  held 64.7059%
+   ridge-LS p   lam=0.001  train 78.8462%  held 75.0000%
+   ridge-LS p   lam=0.1    train 78.8462%  held 75.0000%
+   ridge-LS p   lam=1      train 78.8462%  held 75.0000%
+   ridge-LS p   lam=10     train 78.8462%  held 75.0000%
+   ridgeLDA p   (published estimator) train 69.8718%  held 69.1176%
+   1-NN cosine on enc: held 55.8824%
+   5-NN cosine on enc: held 42.6471%
+   lookup memoriser (scope alias, coordinates): held 75.0000%, key coverage 0.0000%
+----------------------------------------------------------------------------------------------------
+kind role_set      trained slots   180 (records 30, PRESENT 20.0000%) | held slots   36 (records 6, PRESENT 16.6667%)
+   held majority-class rate 83.3333% | train-majority constant on held 83.3333% | per-packet ceiling (any q-blind rule) on held 83.3333%
+   ridge-LS enc lam=0.001  train 83.3333%  held 77.7778%
+   ridge-LS enc lam=0.1    train 82.7778%  held 83.3333%
+   ridge-LS enc lam=1      train 80.5556%  held 83.3333%
+   ridge-LS enc lam=10     train 80.0000%  held 83.3333%
+   ridgeLDA enc (published estimator) train 79.4444%  held 52.7778%
+   ridge-LS q   lam=0.001  train 82.2222%  held 77.7778%
+   ridge-LS q   lam=0.1    train 82.2222%  held 80.5556%
+   ridge-LS q   lam=1      train 81.6667%  held 83.3333%
+   ridge-LS q   lam=10     train 80.0000%  held 83.3333%
+   ridgeLDA q   (published estimator) train 77.7778%  held 52.7778%
+   ridge-LS p   lam=0.001  train 80.0000%  held 83.3333%
+   ridge-LS p   lam=0.1    train 80.0000%  held 83.3333%
+   ridge-LS p   lam=1      train 80.0000%  held 83.3333%
+   ridge-LS p   lam=10     train 80.0000%  held 83.3333%
+   ridgeLDA p   (published estimator) train 73.3333%  held 83.3333%
+   1-NN cosine on enc: held 72.2222%
+   5-NN cosine on enc: held 83.3333%
+   lookup memoriser (scope alias, coordinates): held 83.3333%, key coverage 0.0000%
+----------------------------------------------------------------------------------------------------
+kind edge_account  trained slots   645 (records 46, PRESENT 20.3101%) | held slots  272 (records 17, PRESENT 19.8529%)
+   held majority-class rate 80.1471% | train-majority constant on held 80.1471% | per-packet ceiling (any q-blind rule) on held 80.1471%
+   ridge-LS enc lam=0.001  train 85.2713%  held 68.7500%
+   ridge-LS enc lam=0.1    train 85.2713%  held 69.4853%
+   ridge-LS enc lam=1      train 82.0155%  held 73.8971%
+   ridge-LS enc lam=10     train 79.6899%  held 80.1471%
+   ridgeLDA enc (published estimator) train 79.8450%  held 52.2059%
+   ridge-LS q   lam=0.001  train 84.4961%  held 70.9559%
+   ridge-LS q   lam=0.1    train 83.7209%  held 70.9559%
+   ridge-LS q   lam=1      train 83.1008%  held 74.6324%
+   ridge-LS q   lam=10     train 81.0853%  held 80.1471%
+   ridgeLDA q   (published estimator) train 79.5349%  held 48.1618%
+   ridge-LS p   lam=0.001  train 79.6899%  held 80.1471%
+   ridge-LS p   lam=0.1    train 79.6899%  held 80.1471%
+   ridge-LS p   lam=1      train 79.6899%  held 80.1471%
+   ridge-LS p   lam=10     train 79.6899%  held 80.1471%
+   ridgeLDA p   (published estimator) train 40.4651%  held 30.8824%
+   1-NN cosine on enc: held 65.4412%
+   5-NN cosine on enc: held 68.0147%
+   lookup memoriser (scope alias, coordinates): held 80.1471%, key coverage 0.0000%
+
+====================================================================================================
+CALIBRATION: same estimators, 5-fold IN-WORLD over all 564 records (fold = record index % 5,
+records sorted by record_id; published design used prediction order index % 5)
+  parts         slots   207  const 57.8838%  lda_enc 85.8780%  lda_q 86.7955%  lookup 82.3871%  ridge_enc 88.3211%  ridge_q 88.8339%
+  context       slots   267  const 78.6802%  lda_enc 93.3725%  lda_q 94.8475%  lookup 98.9091%  ridge_enc 94.8268%  ridge_q 95.5815%
+  role_set      slots   216  const 80.5952%  lda_enc 54.6429%  lda_q 53.6905%  lookup 72.3214%  ridge_enc 69.1667%  ridge_q 66.7262%
+  edge_account  slots  1029  const 79.7998%  lda_enc 67.4992%  lda_q 66.9291%  lookup 98.8929%  ridge_enc 80.3362%  ridge_q 80.3311%
+
+====================================================================================================
+CONTROL: leave five TRAINED focus worlds out (10 seeded draws); fit on the other trained-world slots,
+test on the left-out worlds' slots. Tests whether failure is about ANY unseen world, not these five.
+  parts         draws 10  lda_enc_test 44.8917%  n_test 484  ridge_enc_test 52.4241%  ridge_enc_train 100.0000%  test_majority 62.1696%  train_const_on_test 61.5030%
+  context       draws 10  lda_enc_test 73.4777%  n_test 462  ridge_enc_test 66.1184%  ridge_enc_train 100.0000%  test_majority 78.8967%  train_const_on_test 78.8967%
+  role_set      draws 10  lda_enc_test 57.9226%  n_test 462  ridge_enc_test 62.3988%  ridge_enc_train 85.2246%  test_majority 80.7381%  train_const_on_test 80.7381%
+  edge_account  draws 10  lda_enc_test 64.0898%  n_test 1612  ridge_enc_test 72.6910%  ridge_enc_train 87.7097%  test_majority 79.4534%  train_const_on_test 79.4534%
+
+wrote analyze2_summary.json

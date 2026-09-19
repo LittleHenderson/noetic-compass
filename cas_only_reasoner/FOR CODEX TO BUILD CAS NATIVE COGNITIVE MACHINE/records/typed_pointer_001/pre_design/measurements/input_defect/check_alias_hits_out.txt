@@ -1,0 +1,5 @@
+held aliases ['W10', 'W17', 'W35', 'W49', 'W6']
+(scope,coord,symbols,kind,field) (False, False, True, 'context', 'setting_ref') 41
+(scope,coord,symbols,kind,field) (False, False, True, 'definition', 'kind_ref') 36
+(scope,coord,symbols,kind,field) (False, False, True, 'definition', 'function_ref') 36
+(scope,coord,symbols,kind,field) (False, False, True, 'analogy', 'world_id') 36

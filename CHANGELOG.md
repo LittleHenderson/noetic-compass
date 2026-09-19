@@ -4,6 +4,27 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC - Owner chose the pointer machine; the old input is measured unreadable for new worlds; hand-off written
+
+$0.00. No AWS call, no torch. Owner order (verbatim): "do option 1, pointer answers plus the checkpoint check BUT EXAMINE THIS TO
+SEE IF AND HOW IT OR ANYTHING IN HERE CAN HELP: <PDF>".
+
+MEASURED (pure-Python rebuild of the frozen encoder, byte-exact): every packet holds all 64 worlds; a 67-line block is
+byte-identical in all 564 packets; nearest trained packet to a held packet has cosine median 0.999065. The only slot-specific
+input is a SHA-256 code of the slot's name: 0 of 617 held slot names occur in training, and a held code's best match to any
+trained code has median cosine 0.375, the same as random vectors. A linear probe fitted on trained worlds and tested on held
+worlds: parts 58.3333 (majority 52.7778), context 60.2941 (75.0000), role_set 83.3333 (83.3333), edge_account 73.8971
+(80.1471), all inside a random-query null. The published 96.3758% was exact-name recall (unseen names 50.0000). So the old
+machine could only memorise names; transfer was impossible by construction. This is the $0 half of the owner's checkpoint check.
+
+DESIGNED, NOT BUILT: a pointer machine that reads one world as a graph (nodes, "contains" edges, declared roles) and answers
+by pointing at that world's own parts, reusing the registered ^6 block as its update step. One adversarial review (pipeline
+lens) found 10 run-killers and 3 false-positive risks, the worst being that copying one input flag would pass the old gate;
+the fix is a relational-tier gate. PDF assessed: its cited commits are real; its held-out ladder, ablation rule and per-tier
+reporting are adopted; the outside TypeSafe/Jev model is rejected (not neuron learning; its contract forbids training on it).
+
+Hand-off: records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md. Material: records/typed_pointer_001/pre_design/.
+
 ## 2026-09-18 UTC - PRACTICE STUDY RESULT: NO_TRANSFER_TO_NEW_WORLDS - the neurons memorise what they practise
 
 Three AWS g7.2xlarge jobs, 18,171 s, about $12.72 of compute ($45.00 reserved). Frozen study c4f7c321.

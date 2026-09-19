@@ -1,0 +1,15 @@
+load s 95.1 held 127 trained 358 excluded 79 packets 564
+GATE True projection ('4481b1d23e1f30e21e735efe337b8f2404ac53daea51510cf0106b2359fefdd9', 3829) readout ('14da2c58e7c8f271968d99c251fc6eafd510d724982f15b86a3ded604f0ac667', 90)
+0 typed-input-004c1e2f7f83 rows 76 slots so far 4 97.2
+50 typed-input-1313c7a44535 rows 76 slots so far 226 137.5
+100 typed-input-2d4d926e2b10 rows 76 slots so far 449 177.4
+150 typed-input-45aff8e8656c rows 76 slots so far 690 227.6
+200 typed-input-5d079daddd13 rows 76 slots so far 911 267.5
+250 typed-input-70a19eb2b172 rows 76 slots so far 1191 317.3
+300 typed-input-876ac8243915 rows 76 slots so far 1427 364.6
+350 typed-input-9fe6d3369543 rows 73 slots so far 1686 403.2
+400 typed-input-b80606f24d81 rows 73 slots so far 1912 437.8
+450 typed-input-cd99c437aca0 rows 76 slots so far 2124 476.3
+500 typed-input-e478294669e7 rows 76 slots so far 2358 511.0
+550 typed-input-fa0dd293ac76 rows 76 slots so far 2539 546.6
+done s 556.1 slots 2598 distinct rows 2442

@@ -1,0 +1,40 @@
+1. held world aliases (from the 5 frozen ids): ['W10', 'W17', 'W35', 'W49', 'W6']
+   trained slots scoped to a held world: 0
+   trained slot specs containing a held alias token '"Wk/' or '"Wk"': 149
+   held slots scoped to a held world: 537 of 617
+   held slots by kind: {'reach': 26, 'correspondence': 100, 'context': 85, 'parts': 36, 'analogy': 17, 'edge_account': 272, 'role_set': 36, 'definition': 45}
+
+2. distinct query specs per kind among labelled TRAINED slots (a 65-parameter linear fit can shatter <=65)
+   parts         trained slots  171 distinct specs   71 (specs with BOTH labels across records: 0) | held slots  36 distinct specs  20
+   context       trained slots  156 distinct specs   71 (specs with BOTH labels across records: 0) | held slots  68 distinct specs  20
+   role_set      trained slots  180 distinct specs  114 (specs with BOTH labels across records: 28) | held slots  36 distinct specs  30
+   edge_account  trained slots  645 distinct specs  269 (specs with BOTH labels across records: 0) | held slots 272 distinct specs  80
+
+3. NULL: held query vectors replaced by fresh random +-1/8 vectors (one per spec), trained fit fixed, 300 draws (1-NN: first 50 draws)
+   parts         held n=36 majority 52.7778%
+      ridge_enc_1e-3  observed 47.2222% | null median 50.0000%  5th 27.7778%  95th 72.2222%  max 88.8889% | P(null >= observed) = 0.5900
+      ridge_enc_1     observed 58.3333% | null median 50.0000%  5th 27.7778%  95th 72.2222%  max 86.1111% | P(null >= observed) = 0.3500
+      lda_enc         observed 44.4444% | null median 50.0000%  5th 30.5556%  95th 72.2222%  max 88.8889% | P(null >= observed) = 0.6867
+      1nn_enc         observed 63.8889% | null median 51.3889%  5th 33.3333%  95th 69.4444%  max 77.7778% | P(null >= observed) = 0.2200
+   context       held n=68 majority 75.0000%
+      ridge_enc_1e-3  observed 64.7059% | null median 54.4118%  5th 38.2353%  95th 70.5882%  max 80.8824% | P(null >= observed) = 0.2000
+      ridge_enc_1     observed 60.2941% | null median 70.5882%  5th 58.8235%  95th 79.4118%  max 83.8235% | P(null >= observed) = 0.9433
+      lda_enc         observed 61.7647% | null median 59.5588%  5th 42.6471%  95th 76.4706%  max 89.7059% | P(null >= observed) = 0.4333
+      1nn_enc         observed 55.8824% | null median 64.7059%  5th 48.5294%  95th 76.4706%  max 86.7647% | P(null >= observed) = 0.7600
+   role_set      held n=36 majority 83.3333%
+      ridge_enc_1e-3  observed 77.7778% | null median 69.4444%  5th 58.3333%  95th 80.5556%  max 83.3333% | P(null >= observed) = 0.1633
+      ridge_enc_1     observed 83.3333% | null median 83.3333%  5th 80.5556%  95th 83.3333%  max 86.1111% | P(null >= observed) = 0.9333
+      lda_enc         observed 52.7778% | null median 58.3333%  5th 44.4444%  95th 72.2222%  max 83.3333% | P(null >= observed) = 0.7700
+      1nn_enc         observed 72.2222% | null median 72.2222%  5th 61.1111%  95th 80.5556%  max 83.3333% | P(null >= observed) = 0.5200
+   edge_account  held n=272 majority 80.1471%
+      ridge_enc_1e-3  observed 68.7500% | null median 74.8162%  5th 69.8529%  95th 79.7794%  max 83.8235% | P(null >= observed) = 0.9833
+      ridge_enc_1     observed 73.8971% | null median 77.5735%  5th 73.8971%  95th 81.2500%  max 82.7206% | P(null >= observed) = 0.9500
+      lda_enc         observed 52.2059% | null median 59.7426%  5th 52.2059%  95th 69.1176%  max 72.0588% | P(null >= observed) = 0.9500
+      1nn_enc         observed 65.4412% | null median 67.4632%  5th 59.9265%  95th 73.1618%  max 75.3676% | P(null >= observed) = 0.6200
+
+4. IN-WORLD calibration (5 folds, record index % 5 over sorted record ids), test slots split by whether their
+   exact query spec occurred in the training folds. ridge-LS lam=1e-3 on enc and on q.
+   parts         seen n=148 enc 100.0000% q 100.0000% majority 65.5405% | unseen n=59 enc 59.3220% q 61.0169% majority 61.0169%
+   context       seen n=255 enc 96.8627% q 97.6471% majority 78.8235% | unseen n=12 enc 50.0000% q 50.0000% majority 75.0000%
+   role_set      seen n=84 enc 64.2857% q 64.2857% majority 78.5714% | unseen n=132 enc 71.9697% q 68.1818% majority 81.8182%
+   edge_account  seen n=965 enc 80.4145% q 80.4145% majority 79.6891% | unseen n=64 enc 78.1250% q 78.1250% majority 81.2500%
