@@ -1,0 +1,221 @@
+{
+ "boundary": "How the practice study failed on new worlds: a descriptive reading of the sealed answers.",
+ "seeds": {
+  "20260917": {
+   "held_back": {
+    "changed_p00_to_p10": 125,
+    "p00": {
+     "borrowed": 44,
+     "modal": 58,
+     "right": 5,
+     "wrong": 122
+    },
+    "p10": {
+     "borrowed": 33,
+     "modal": 47,
+     "right": 23,
+     "wrong": 104
+    },
+    "records": 127
+   },
+   "held_back_by_kind_p10": {
+    "analogy": {
+     "changed": 15,
+     "records": 17,
+     "right": 4
+    },
+    "context": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "correspondence": {
+     "changed": 20,
+     "records": 20,
+     "right": 0
+    },
+    "definition": {
+     "changed": 15,
+     "records": 15,
+     "right": 0
+    },
+    "edge_account": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "parts": {
+     "changed": 9,
+     "records": 9,
+     "right": 5
+    },
+    "reach": {
+     "changed": 26,
+     "records": 26,
+     "right": 14
+    },
+    "role_set": {
+     "changed": 6,
+     "records": 6,
+     "right": 0
+    }
+   },
+   "practised": {
+    "changed_p00_to_p10": 343,
+    "p00": {
+     "modal": 133,
+     "right": 30
+    },
+    "p10": {
+     "modal": 62,
+     "right": 190
+    },
+    "records": 358
+   }
+  },
+  "20260918": {
+   "held_back": {
+    "changed_p00_to_p10": 118,
+    "p00": {
+     "borrowed": 37,
+     "modal": 64,
+     "right": 7,
+     "wrong": 120
+    },
+    "p10": {
+     "borrowed": 38,
+     "modal": 52,
+     "right": 21,
+     "wrong": 106
+    },
+    "records": 127
+   },
+   "held_back_by_kind_p10": {
+    "analogy": {
+     "changed": 17,
+     "records": 17,
+     "right": 4
+    },
+    "context": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "correspondence": {
+     "changed": 20,
+     "records": 20,
+     "right": 0
+    },
+    "definition": {
+     "changed": 15,
+     "records": 15,
+     "right": 0
+    },
+    "edge_account": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "parts": {
+     "changed": 8,
+     "records": 9,
+     "right": 5
+    },
+    "reach": {
+     "changed": 18,
+     "records": 26,
+     "right": 12
+    },
+    "role_set": {
+     "changed": 6,
+     "records": 6,
+     "right": 0
+    }
+   },
+   "practised": {
+    "changed_p00_to_p10": 338,
+    "p00": {
+     "modal": 128,
+     "right": 25
+    },
+    "p10": {
+     "modal": 60,
+     "right": 192
+    },
+    "records": 358
+   }
+  },
+  "20260919": {
+   "held_back": {
+    "changed_p00_to_p10": 120,
+    "p00": {
+     "borrowed": 31,
+     "modal": 52,
+     "right": 7,
+     "wrong": 120
+    },
+    "p10": {
+     "borrowed": 36,
+     "modal": 50,
+     "right": 15,
+     "wrong": 112
+    },
+    "records": 127
+   },
+   "held_back_by_kind_p10": {
+    "analogy": {
+     "changed": 17,
+     "records": 17,
+     "right": 4
+    },
+    "context": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "correspondence": {
+     "changed": 20,
+     "records": 20,
+     "right": 0
+    },
+    "definition": {
+     "changed": 15,
+     "records": 15,
+     "right": 0
+    },
+    "edge_account": {
+     "changed": 17,
+     "records": 17,
+     "right": 0
+    },
+    "parts": {
+     "changed": 8,
+     "records": 9,
+     "right": 2
+    },
+    "reach": {
+     "changed": 20,
+     "records": 26,
+     "right": 8
+    },
+    "role_set": {
+     "changed": 6,
+     "records": 6,
+     "right": 1
+    }
+   },
+   "practised": {
+    "changed_p00_to_p10": 335,
+    "p00": {
+     "modal": 115,
+     "right": 28
+    },
+    "p10": {
+     "modal": 62,
+     "right": 195
+    },
+    "records": 358
+   }
+  }
+ }
+}

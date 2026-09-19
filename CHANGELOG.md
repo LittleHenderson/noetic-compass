@@ -24,6 +24,11 @@ configuration; NOT LICENSED as a statement about the architecture family. Receip
 (D:\tksCAS-archive\cncm_typed_practice_001_20260918, 1,795 files, 0 mismatches). Record:
 records/typed_practice_001/PRACTICE_STUDY_RESULT.md.
 
+HOW IT FAILS ($0, read from the sealed answers, descriptive only; failure_anatomy.py): training changes
+118-125 of the 127 held-back answers, but into different wrong answers. Wrong answers that equal a
+practised world's right answer: 44/122 -> 33/104, 37/120 -> 38/106, 31/120 -> 36/112 (untrained ->
+pass 10), so no extra copying. What the block learns is specific to practised worlds.
+
 ## 2026-09-18 UTC - The practice study is built, reviewed twice and dry-run clean; not yet launched
 
 $0.00. No AWS call, no torch, no GPU. Owner approval (verbatim, AskUserQuestion): "Practice test

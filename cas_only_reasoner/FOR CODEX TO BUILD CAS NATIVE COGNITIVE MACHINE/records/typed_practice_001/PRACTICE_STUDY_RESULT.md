@@ -71,6 +71,32 @@ observed $2.52/hour; $45.00 reserved (no automatic refund). Worker time 5,466 / 
   the owner's "only memorise" outcome, measured cleanly for the first time: the held-back worlds shared no
   shape, no mention and no answer with training.
 
+## How it fails — a reading of the sealed answers (added after the gate; descriptive, not a gate)
+
+`failure_anatomy.py` → `failure_anatomy_result.json`. No model load, no neural work: it reads the sealed
+answers already in the receipts. Records, per seed 20260917 / 20260918 / 20260919, pass 0 → pass 10:
+
+| | held back (127 records) | practised (358 records) |
+|---|---|---|
+| right | 5 → 23 / 7 → 21 / 7 → 15 | 30 → 190 / 25 → 192 / 28 → 195 |
+| answer changed by training | 125 / 118 / 120 | 343 / 338 / 335 |
+| records giving the most common answer of their kind | 58 → 47 / 64 → 52 / 52 → 50 | 133 → 62 / 128 → 60 / 115 → 62 |
+| wrong answers that are a right answer to a practised record of the same kind | 44 of 122 → 33 of 104 / 37 of 120 → 38 of 106 / 31 of 120 → 36 of 112 | — |
+
+What this shows:
+
+- **Training does reach the new worlds.** Almost every held-back answer changes (118–125 of 127). The
+  machine is not stuck or silent on them.
+- **It does not answer every world the same way.** The share giving the single most common answer stays
+  near 40% on held-back records, and on practised records it halves (the machine learns to tell practised
+  worlds apart).
+- **It is not copying practised answers more after training.** The share of wrong answers that happen to
+  be a practised world's right answer is about the same before training (untrained) and after.
+- **So the change on new worlds is change into different wrong answers.** What the block learned is
+  specific to the practised worlds. It is not a rule it can apply to a world it has not seen.
+
+This is a description of one run's answers, not a new claim; the claim status below is unchanged.
+
 ## Claim status
 
 - **REAL (negative, this configuration):** ten passes of practice raise accuracy on practised questions
