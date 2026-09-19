@@ -4,6 +4,78 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (pre-flight, $0) - R1 returns NO-GO as well: the label's key test cannot fail, and Phase A's ordering evidence is a hardcoded literal
+
+**No spend. No AWS call. No study run.** Review R1 (leaks, shortcuts and custody) reported. Verdict **NO-GO**:
+2 BLOCKER, 5 MAJOR, 5 MINOR, 3 NOTE, 1 CONFLICT-for-the-owner, **7 REFUTED**. Both reviews are now NO-GO, which
+is the pair working as designed — the practice study's second review found what the first redesign created.
+
+### The two blockers
+
+**R1-1 — the build's most important test cannot fail on the regression it names.** The brief called the
+flag-copy-only rule "the single most important behavioural test in the build". R1 ran a **15-mutation battery**
+against `evaluate_gates.py --self-test` and measured that **M2** (`evaluate()` feeding `label_decision` the
+ALL-KINDS result instead of the RELATIONAL population — the exact FP1 regression) and **M3** (keying the label on
+the DIRECT_READ tier) both leave the suite **green, exit 0, `SELFTEST_PASS 23 checks`**. The cause is mechanical:
+`self_test()` **never calls `evaluate()`**. It supplies the very step it appears to be testing. Also uncaught: the
+≥2-kinds rule, the ≥2-worlds rule, the 5-question shortcut subtraction, the reduced-schedule refusal, and the
+ceilings note. And **P12 does not exist**: `pytest --collect-only` collects **20** tests, covering only P1, P2, P3,
+P9, P10, P11 — while protocol §11.2 calls that file "the test map of §11.3", which requires P1–P14. The practice
+study's own file carries the equivalents, so this is unported coverage, not a convention that never existed.
+
+**R1-2 — Phase A's custody ordering is evidence the job asserts but never measures.**
+`cncm/typed_pointer_worker.py:857` is `"phase_a_finished_before_the_model_was_seeded": True` **unconditionally**,
+with the real status beside it at `:858` inside a report-only optional-fields tuple, so no reader branch can reach
+a failure code for it. Phase A is `except Exception → status="FAILED"` and `run()` proceeds; `_seed_and_double_build`
+falls back to the sidecar. So **a job whose checkpoint check FAILED still delivers `COMPLETE_TYPED_POINTER_ARM`
+and can print `LEARNS_NEW_WORLDS` while its own `model_identity.json` asserts the ordering held** — a false claim
+the machine writes about itself. Worse, the restore is what advances all three RNG streams, so the run would have
+a different RNG history from the one the registered design assumes. And
+`identical_start_with_and_without_the_checkpoint_check` is **definitionally the same number** as
+`core_identity_equals_the_practice_start`, so two of the four DG4 booleans are one measurement, not two.
+
+### The finding that matters most to the PRIMARY goal
+
+**R1-23, recorded as a `CONFLICT` for the owner and deliberately NOT acted on.** R1 measured that the registered
+**zero-learning** oracle one-hop rules answer **exactly 7 of the frozen 18** questions (`parts` 2 of 2,
+`edge_account` 5 of 5), spread over **2 kinds and 5 worlds** — and `MIN_PASSING_B` is **7**, the ≥2-kinds rule
+needs 2 and the ≥2-worlds rule needs 2. So every conjunct of `LEARNS_NEW_WORLDS` is satisfiable at `c = 0`
+(`p = 1/128 = 0.0078125`) by a rule that learns nothing. The rank-only rule separately covers **5 of 18**
+(2 kinds, 2 worlds); the union of the two registered baseline sets is **11 of 18**.
+
+**Not acted on, and why that is correct:** protocol §4.4 and `REVIEW_SYNTHESIS.md` §10.1.1 argue the opposite case
+explicitly and the owner confirmed it — applying the checker's own rule to the input *is* the skill under test, so
+the one-hop rule is the ceiling to beat, not a reason to delete questions. The gate is the owner's and is frozen;
+`MIN_PASSING_B` stays 7 and the population stays 18. **What R1-4 does require is that the number be printed**:
+the reader must show `oracle_solvable_in_the_label_population` and `min_passing_b` beside every label, because
+today a reader comparing "solves 5 of eligible 5" against "b must be 7" has no way to see that the two are the
+same questions. Reporting only; no threshold moves.
+
+### Also fixed or dispatched
+`R1-3` the reader crashes with a bare traceback and empty stdout on a malformed study file instead of printing a
+VOID reading. `R1-4` the decisive number is not printed (above). `R1-6` the contract says the rank-solvable
+questions "are removed instead" — **measured: 5 of 5 remain in the 18**. `R1-7` `required_artifacts` is the run's
+own recorded set, safe for the label but not as a completeness claim. `R1-11` and `R1-15` two stale/false
+documents. All dispatched to the agents that own those files, with one owner per file.
+
+### Seven REFUTED, recorded because the negatives are load-bearing
+R1 suspected and then cleared: the evidence publisher **is** create-only end to end (`.partial` + `os.replace`,
+pass logs staged outside `results/`, monotonic progress files, fresh-directory requirement); the reader emits
+**no** answer-bearing flag and **no** rank key (node dict is exactly four keys, all eight kinds); `correspondence`
+**is** reported with all five ids and a per-kind result; **no** non-claim-bearing run can print a label and all
+**ten** reduced keys are covered; the ceilings **do** subtract nothing; **no** baseline is fitted on held answers;
+and **the protocol's own §4.3 per-world `CONFLICT:` is FALSE** — both sources agree (98c6352d 6, 28f61f2d 5,
+6e1fcbda 6, 22704554 5, 4090ec49 7); it arose from reading a world-id-sorted dict as if it were in listed order.
+
+**The frozen population re-derived clean:** total **18**, by kind `{parts 2, edge_account 5, reach 6, analogy 5,
+correspondence 0}`, digest `4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d` — reproduces exactly.
+LK11 also reproduced: **15 of 45** eligible single-record questions, **4 of 18** in the population.
+
+**One process lesson R1 recorded and this log accepts:** it was told to review `00128c20` and HEAD moved three
+times underneath it. Its non-learner findings hold at both revisions because `git diff --name-only 00128c20 HEAD`
+touches only `CHANGELOG.md`, the smoke plan and `pointer_learner.py` — but a review of a moving tree is worth less
+than a review of a tag. The re-review will be run against a **tagged, clean revision**.
+
 ## 2026-09-19 UTC (pre-flight, $0) - R2 adversarial review returns NO-GO: three blockers, four majors, one withdrawn finding
 
 **No spend. No AWS call. No study run.** Review R2 (run-killers and pipeline fit) reported against HEAD
