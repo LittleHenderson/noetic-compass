@@ -768,8 +768,17 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     # escape that evaluates to the real em dash, so the VALUE is byte-for-byte the protocol's while the file stays
     # pure ASCII. Do not "tidy" it back to `--`.
     #
-    # All five labels are now byte-for-byte the protocol's, checked against
-    # `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:52` (1), `:57` (2), `:61` (3), `:64` (4), `:69` (5).
+    # All five labels are now byte-for-byte the protocol's. THE CITATION IS THE PROTOCOL'S SECTION 0.2, ITEMS
+    # 1-5 -- not a line number, because a line number here has already gone stale once: an 18-line correction
+    # block inserted into section 0.2 item 2 pushed decisions 3, 4 and 5 down the file (protocol commit
+    # `69dc269d`). Section 0.2 is the authority; the numbers below are only a convenience for finding the labels.
+    #
+    # DATED HINT ONLY, byte-scanned 2026-09-19 against the protocol at HEAD `d57ea9a6`
+    # (`docs/CNCM_TYPED_POINTER_STUDY_v0.1.md`, 96429 bytes, sha256
+    # 8ac6673325dcd1db6bb34cce567fa2c4c17fa6a56b6ddc01bb1fb70eb73a7079):
+    #   item 1 -> :52, item 2 -> :57, item 3 -> :86, item 4 -> :89-92 (the label wraps), item 5 -> :94.
+    # This hint used to read :52/:57/:61/:64/:69, and the amendment left three of those five wrong. Expect the
+    # same drift after any further protocol edit: re-read section 0.2, and never trust these numbers alone.
     "owner_approval": ("2026-09-19 owner decisions, verbatim, five of five: \"Accept both, carry on.\" (both "
         "corrections -- the in-job checkpoint check costs about $0.38-0.63 per job, not \"no extra cost\", and "
         "pointer answers alone cannot work because the INPUT must change too, one world read as a graph instead "
@@ -807,10 +816,11 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "flag_copy_alone_cannot_pass": True,
     "gate_population": "ELIGIBLE_HELD_RELATIONAL_QUESTIONS_MINUS_REGISTERED_FLAG_AND_RANK_RULE_REMOVALS",
     # CLOSED 2026-09-19. This flag was left `True` from the design phase and contradicted the rest of this
-    # file: `REMOVALS` is filled with the frozen 11 removals across four classes (`pointer_contract.py:507-523`)
-    # and `relational_population` reports `population_complete: True` against `VERIFIED_POPULATION` (18) and
-    # `VERIFIED_POPULATION_DIGEST`. Nothing read it, so it manufactured a false statement about the study rather
-    # than causing a failure. It is now `False`, which is what "the gate is frozen at 18" means.
+    # file: `REMOVALS`, above, is filled with the frozen 11 removals across four classes -- cited BY NAME and
+    # not by line number, so this reference cannot go stale -- and `relational_population` reports
+    # `population_complete: True` against `VERIFIED_POPULATION` (18) and `VERIFIED_POPULATION_DIGEST`. Nothing
+    # read it, so it manufactured a false statement about the study rather than causing a failure. It is now
+    # `False`, which is what "the gate is frozen at 18" means.
     # `pre_design/GATE_FEASIBILITY.md` is the power calculation behind the value 18.
     "gate_population_open": False,
     "checkpoint_check": "THREE_PRACTICE_CHECKPOINTS_PER_SEED_RESTORED_IN_PHASE_A_BEFORE_THE_POINTER_MODEL_IS_SEEDED",
