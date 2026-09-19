@@ -4,6 +4,64 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (pre-flight, $0) - Two governance defects and a stale contract flag fixed; smoke cost model corrected; four drivers built
+
+**No spend. No AWS call. No study run.** Found while finishing the build. Every one of these was found by a builder or
+by an independent seam check, not by the design reviews.
+
+### Governance: the owner's own words were wrong in the contract
+
+`pointer_contract.DESIGN["owner_approval"]` is copied by `prepare_study.py` into **all three** signed per-job
+`owner.json` records, and protocol §0.2 says *"The selected labels are recorded verbatim."* It carried **four** of the
+five decisions and had damaged the third.
+
+1. **The em dash was gone.** `"Yes — require the relational kinds."` was stored as `"Yes -- require the relational
+   kinds."` **Root cause:** `pointer_contract.py` is **pure ASCII** (verified: 0 characters above U+007F), so an
+   ASCII-only build step transliterated the em dash to `--`. Fixed with the ASCII source escape `\u2014`, which
+   evaluates to the real em dash while keeping the file pure ASCII. The value is now byte-for-byte the protocol's.
+2. **The fifth decision was missing entirely.** `"Run it as the transfer test, label honestly (Recommended)"` —
+   protocol §0.2 item 4, `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:64` — was absent from the contract. Added.
+
+All five labels are now present verbatim, checked against `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:52` (1), `:57` (2),
+`:61` (3), `:64` (4), `:69` (5). Verified by import: five of five present, the flattened form absent. `prepare_study.py`
+independently reports the em dash as U+2014 in the owner records it writes.
+
+### A stale flag that claimed the gate was still open
+
+`pointer_contract.py` carried `"gate_population_open": True` from the design phase. It contradicted the rest of its own
+file: `REMOVALS` is filled with the frozen 11 removals across four classes and `relational_population` returns
+`population_complete: True` against `VERIFIED_POPULATION` (18) and `VERIFIED_POPULATION_DIGEST`
+`4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d`. Nothing read it, so it manufactured a false
+statement about the study instead of causing a failure. Now `False`. `verify_contract.py` still reports
+**ALL PASS (32 checks, 0 failed)**.
+
+### The smoke could not have run at all, and cost more than budgeted
+
+Two defects in `pre_design/AWS_SMOKE_S10_PLAN.md`, both before any spend.
+
+1. **A reload-enabled run needs TWO course evaluations, not one.** `cncm/typed_pointer_worker.py:190` —
+   `require(0 in evaluations and passes in evaluations, "POINTER_PLAN_RELOAD_EVALUATIONS")`. The plan budgeted a
+   single course evaluation, so its shrunken schedule with reload and replay would have been **refused outright**.
+2. **Corrected cost: worker clock ≈ 771 s, not 470 s; ≈ $0.96 of instance time, not $0.75.** The first course pass in
+   any job is also the cold one — measured `300.51911266499997` s cold against `173.78626021600007` s warm in the
+   practice receipts (`course_p00` vs `course_p01`) — so the two course rows are 300 s and 174 s, not 174 s once.
+   `598.2` s of non-worker overhead + 771 s ⇒ 1,369 s ≈ **$0.96 at $2.52/hour**, which is 96 % of the approved $1 with
+   no margin, and the S1–S9 checks that ride in the same job cross it.
+
+**This is now an owner decision and no launch happens until it is answered.** The plan's own kill rule — kill rather
+than exceed the approval if the measurement shows the estimate was low by more than ~25 % — would have fired mid-run,
+because the one-evaluation estimate was low by **64 %**. The plan asks for a **$1.50** cap. Nothing has been spent.
+
+### The four drivers are built
+
+`records/typed_pointer_001/`: `prepare_study.py` 9,675 B, `execute_study.py` 4,627 B, `preflight_dry_run.py` 47,491 B,
+`holdout_audit.py` 9,501 B — all LF (0 carriage returns), all compiling. Verified at $0, no AWS and no network call:
+`holdout_audit.py` prints `HOLDOUT_AUDIT_PASS` re-deriving held `668e6ce7…ab1d`, excluded `b82108e1…2621` and source
+schedule `1772c0a5…d275`; `prepare_study.py`'s record shapes pass the **launcher's own** `validate_request`,
+`validate_authority` and `validate_owner` on real job names and a 63-character bucket; and the dry run delivered seed
+`20260917` clean at $0 — status `COMPLETE_TYPED_POINTER_ARM`, 1470 + 16 + 2 = 1488 updates, the 11 `MAIN_COUNTERS`
+keys matching `expected_main_delta`, 99/99 artifacts.
+
 ## 2026-09-19 UTC (pre-flight, $0) - Two defects found and fixed in the AWS smoke plan, and five build seams verified by import
 
 **No spend. No AWS call. No study run.** Work done while the last four build files (`prepare_study.py`,

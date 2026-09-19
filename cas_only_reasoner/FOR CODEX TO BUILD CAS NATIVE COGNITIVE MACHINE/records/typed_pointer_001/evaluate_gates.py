@@ -39,17 +39,26 @@ WHAT THIS PROGRAM DOES NOT DO. It does not decide the claim, it does not round a
 `fractions.Fraction`, recorded as a rational string and as its exact binary float), and it does not touch the
 network, a GPU or a paid service. `$0`.
 
-WHAT IS UNDETERMINED AT HEAD `489cda65`, marked `UNCERTAIN:` at the code that depends on it:
-`UNCERTAIN: the record location and field names of the in-job DG4 identity checks.` The pointer worker is being
-written, so the reader declares its own I3 record contract in `DG4_REPORT_KEYS`, `DG4_ARTIFACT_NAMES`,
-`DG4_IDENTITY_FORM` and `DG4_FIELDS`. A missing record or a renamed field fails CLOSED with a named code, and the
-reader reports the location it read under `seeds[seed]['dg4_source']`, so the worker builder can align to the
-reader instead of the reader guessing.
-`UNCERTAIN: the pointer worker's evaluation phase names.` They are discovered from the job's own artifact manifest
-under the registered `<prefix>_pNN_scoring.json` convention (INTERFACE_SPEC_PIPELINE D.4) rather than hardcoded,
-and the discovery is reported through the per-seed `checkpoints` list.
-`UNCERTAIN: the pointer worker's main-phase batch-log names.` They are likewise discovered from the manifest (every
-`*_batches.jsonl` except `interference_batches.jsonl`), so a renamed prefix is read rather than refused.
+WHAT WAS UNDETERMINED AT HEAD `489cda65`, and what it is now. When this reader was written the pointer worker did
+not exist, and two things were marked `UNCERTAIN:`. Both are now RESOLVED against the shipped worker
+(`cncm/typed_pointer_worker.py`, 101,176 bytes, written after HEAD `489cda65`), and the reader is aligned to it
+rather than to a guess:
+
+* `RESOLVED: the DG4 record's location and field names.` The job writes the full evidence as the artifact
+  `model_identity.json` (`typed_pointer_worker.py:818-841`) and a four-boolean summary under
+  `worker_report.json["model_identity"]` (`:846-851`). I3 reads the artifact first, then the summary, and fails
+  closed with `I3:<seed>:DG4_RECORD_MISSING` when neither is present.
+* `RESOLVED: the evaluation phase names and the batch-log names.` `_evaluation_phases`
+  (`typed_pointer_worker.py:143-147`) builds `course_pNN` / `heldback_pNN` / `development_pNN`, and the pass logs
+  are `pass_NN_batches.jsonl` (`:206`). The reader still discovers both from the job's own manifest instead of
+  hardcoding them, so a renamed prefix is read rather than refused.
+* `NEW, AND NOT IN THE PROTOCOL'S I1:` the job can run a REDUCED schedule through `CNCM_POINTER_REDUCED_SCHEDULE`
+  (`typed_pointer_worker.py:133-134`, `:246-277`) which changes the pass count, the updates and the evaluation
+  points, delivers normally with `SUCCESS_STATUS`, and marks itself `claim_bearing = False` with
+  `schedule_plan_mode = "REDUCED"` (`:1471-1473`). A smoke job must never be able to print a label, so I1 refuses
+  any job that is not `claim_bearing is True and schedule_plan_mode == "REGISTERED"` with
+  `I1:<seed>:REDUCED_SCHEDULE:<mode>`. The job's own required-artifact set (`report["required_artifacts"]`, the
+  rule `deliver` itself uses at `:1410`) is what I1 checks the manifest against.
 """
 from __future__ import annotations
 
@@ -80,17 +89,25 @@ ALL_KINDS_TEST = 'G_LEARN_all_kinds'
 LABELS = ('LEARNS_NEW_WORLDS', 'NO_TRANSFER_TO_NEW_WORLDS', 'VOID')
 
 # ------------------------------------------------------------------------------------------------------------------
-# I3's record contract, declared by this reader because `cncm.typed_pointer_worker` does not exist at HEAD 489cda65.
-# `UNCERTAIN:` the worker builder may name these differently. The reader ACCEPTS the first location present, reports
-# it as `dg4_source`, and fails closed on any missing field, so a mismatch shows up as VOID with an exact code and
-# never as a silent pass.
+# I3's record contract, read off the SHIPPED worker (`cncm/typed_pointer_worker.py:818-841` writes it; the module is
+# 101,176 bytes at the time of this reading, created after HEAD 489cda65). The job writes the full record as the
+# artifact `model_identity.json`, and a four-flag summary under `worker_report.json["model_identity"]`; the artifact
+# is tried FIRST because only it carries the identity values. The reader re-derives every comparison it can from the
+# pinned practice receipt and from the record's own three-seed map, so a self-consistent but wrong record is caught.
 # ------------------------------------------------------------------------------------------------------------------
-DG4_REPORT_KEYS = ('dg4_identity_checks', 'dg4')
-DG4_ARTIFACT_NAMES = ('dg4_identity_checks.json', 'dg4_checks.json')
-DG4_IDENTITY_FORM = 'THREE_TENSOR'
-DG4_FIELDS = ('practice_start_identity', 'first_build_identity', 'second_build_identity',
-              'start_without_check_identity')
-DG4_OPTIONAL_FIELDS = ('whole_module_identity', 'start_with_check_identity')
+DG4_ARTIFACT_NAMES = ('model_identity.json',)
+DG4_REPORT_KEYS = ('model_identity',)
+DG4_IDENTITY_FORM = 'THREE_^6_TENSORS_ONLY'
+# The identity values, each a 64-hex `state_identity`.
+DG4_FIELDS = ('core_identity', 'whole_container_identity', 'second_independent_whole_build_identity',
+              'practice_recorded_model_state_identity')
+# The job's own booleans. Each must be True, and each is ALSO re-derived below where the reader can.
+DG4_FLAGS = ('core_identity_equals_the_practice_start', 'double_build_equal', 'seeds_pairwise_different',
+             'identical_start_with_and_without_the_checkpoint_check',
+             'whole_container_form_is_a_different_number')
+# Report-only fields, echoed so the reader's evidence trail is complete.
+DG4_OPTIONAL_FIELDS = ('phase_a_status', 'phase_a_finished_before_the_model_was_seeded', 'comparison_method',
+                       'local_note', 'seed_core_identities', 'model_seed')
 
 # ------------------------------------------------------------------------------------------------------------------
 # The ORACLE one-hop ceilings. FROZEN, reported BESIDE the label and never applied as removals: REVIEW_SYNTHESIS
@@ -117,8 +134,10 @@ VOID_PATHS = (
     ('I1:WORKER_MODULE_MISSING', 'cncm.typed_pointer_worker could not be imported'),
     ('I1:WORKER_CONSTANTS', 'the worker has no usable SUCCESS_STATUS or EXPECTED_ARTIFACTS'),
     ('I1:WORKER_ARTIFACT_CONTRACT',
-     'EXPECTED_ARTIFACTS is not unique, is 500 names or more, or omits worker_report/measurements'),
+     'EXPECTED_ARTIFACTS is not unique, is 500 names or more, omits worker_report/measurements, or the +3 rule is off'),
     ('I1:<seed>', 'lifecycle, worker status or artifact manifest does not satisfy the worker contract'),
+    ('I1:<seed>:REDUCED_SCHEDULE:<mode>',
+     'the job did not run the REGISTERED plan, so it is not a claim-bearing run and may not print a label'),
     ('I1:<seed>:<Error>', 'reading that job receipt raised OSError/ValueError/KeyError/TypeError'),
     ('I1:<seed>:SCORING:<Error>', 'a scoring file could not be read'),
     ('I1:<seed>:SCORING_PHASES_MISSING', 'the manifest holds no <prefix>_pNN_scoring.json'),
@@ -128,12 +147,17 @@ VOID_PATHS = (
     ('I2:<seed>:MAIN_LOGS:<n>', 'the number of main batch logs is not the frozen pass count'),
     ('I2:<seed>:PASS_LINES:<name>', 'a pass log does not hold exactly the frozen updates per pass'),
     ('I3:<seed>', 'a DG4 identity check failed, or reading the DG4 evidence raised'),
-    ('I3:<seed>:DG4_RECORD_MISSING', 'the job recorded no DG4 identity checks at any accepted location'),
+    ('I3:<seed>:DG4_RECORD_MISSING', 'the job recorded no DG4 identity record at any accepted location'),
     ('I3:<seed>:DG4_IDENTITY_FORM:<form>', 'the record does not use the three-tensor identity form'),
     ('I3:<seed>:DG4_FIELD:<field>', 'a required DG4 field is missing or is not 64 hex characters'),
+    ('I3:<seed>:DG4_FLAG:<flag>', 'a boolean the job recorded as its own DG4 evidence is not true'),
     ('I3:<seed>:DG4_START_TARGET', 'the record names a practice start that is not the pinned one for that seed'),
     ('I3:<seed>:DG4_SIX_IDENTITY', 'the first build of the three ^6 tensors does not equal the practice start'),
-    ('I3:<seed>:DG4_DOUBLE_BUILD', 'the second independent build does not give the same identity'),
+    ('I3:<seed>:DG4_DOUBLE_BUILD', 'the second independent whole-model build does not give the same identity'),
+    ('I3:<seed>:DG4_SEED_IDENTITIES',
+     'the record\'s three-seed identity map is not the three registered seeds, pairwise different, with this seed equal'),
+    ('I3:<seed>:DG4_NOT_DISTINCT_FORM',
+     'the whole-container identity equals the three-tensor identity, so the check compares the job to itself (V3)'),
     ('I3:<seed>:DG4_CHECK_INDEPENDENT_START', 'the start differs with the checkpoint check on and off'),
     ('I3:SEEDS_NOT_PAIRWISE_DIFFERENT', 'two of the three seeds recorded the same ^6 identity'),
     ('I3:START_TARGET:<seed>:<code>', 'the pinned practice start checkpoint could not be read or verified'),
@@ -246,10 +270,12 @@ def worker_contract_failures(worker):
     if type(status) is not str or not status or type(expected) not in (tuple, list) or not expected:
         return ['I1:WORKER_CONSTANTS']
     names = tuple(expected)
+    required_count = getattr(worker, 'EVIDENCE_REQUIRED_COUNT', None)
     if (not all(type(name) is str and name for name in names) or len(set(names)) != len(names)
             or len(names) >= 500
             or not any(name.endswith('worker_report.json') for name in names)
-            or not any(name.endswith('measurements.json') for name in names)):
+            or not any(name.endswith('measurements.json') for name in names)
+            or (required_count is not None and required_count != len(names) + 3)):
         return ['I1:WORKER_ARTIFACT_CONTRACT']
     return []
 
@@ -306,34 +332,36 @@ def matched_start(seed):
 
 
 def dg4_record(artifacts, report):
-    """(record, source) for the job's in-job DG4 identity checks; (None, None) when the job recorded none.
+    """(record, source) for the job's in-job DG4 identity evidence; (None, None) when the job recorded none.
 
-    `UNCERTAIN:` the location. The reader accepts the first of `DG4_REPORT_KEYS` inside `worker_report.json`, then
-    the first of `DG4_ARTIFACT_NAMES` as a standalone artifact, and reports which one it used.
+    The artifact `model_identity.json` is tried FIRST because only it carries the identity values; the summary the
+    worker mirrors into `worker_report.json["model_identity"]` carries four booleans and would fail closed on the
+    missing identities, which is the correct outcome for a job whose DG4 artifact is absent.
     """
-    for key in DG4_REPORT_KEYS:
-        value = report.get(key)
-        if isinstance(value, dict):
-            return value, 'worker_report.json:' + key
     for name in DG4_ARTIFACT_NAMES:
         path = artifacts / name
         if path.is_file():
             value = _read_json(path)
             if isinstance(value, dict):
                 return value, name
+    for key in DG4_REPORT_KEYS:
+        value = report.get(key)
+        if isinstance(value, dict):
+            return value, 'worker_report.json:' + key
     return None, None
 
 
-def dg4_failures(seed, record, target):
-    """The four DG4 checks of protocol section 7.1, as the job recorded them, with (a)'s target re-derived here.
+def dg4_failures(seed, record, target, seeds):
+    """The four DG4 checks of protocol section 7.1, as the job recorded them, with every comparison re-derived.
 
     (a) the three `^6` tensors of the first build equal the practice start for this seed
-    (b) a second independent build gives the same identity
+    (b) a second independent build of the whole model gives the same identity as the first
+    (c) the three seeds' `^6` identities are pairwise different
     (d) the start is identical with the checkpoint check on and off
-    (c) the three seeds' identities pairwise different - re-derived across seeds by the caller, because one job
-        cannot see the other two.
-    The reader re-derives (a)'s target from the PINNED practice receipt, so a job that records a self-consistent
-    but wrong start identity is caught here rather than believed.
+    The reader does not believe the job's booleans: it re-derives each one from the identity values in the same
+    record, re-derives the target from the PINNED practice receipt, and requires the whole-container identity to be
+    a DIFFERENT number from the three-tensor identity, because a check that compares a job to itself proves nothing
+    (V3). `DG4_FLAG:*` is raised when a recorded boolean disagrees with the reader's own derivation or is not true.
     """
     codes = []
     if record.get('identity_form') != DG4_IDENTITY_FORM:
@@ -345,15 +373,28 @@ def dg4_failures(seed, record, target):
             codes.append('I3:%d:DG4_FIELD:%s' % (seed, field))
         else:
             values[field] = value
+    for flag in DG4_FLAGS:
+        if record.get(flag) is not True:
+            codes.append('I3:%d:DG4_FLAG:%s' % (seed, flag))
     if len(values) != len(DG4_FIELDS):
         return codes
-    if values['practice_start_identity'] != target:
+    if values['practice_recorded_model_state_identity'] != target:
         codes.append('I3:%d:DG4_START_TARGET' % seed)
-    if values['first_build_identity'] != target:
+    if values['core_identity'] != target:
         codes.append('I3:%d:DG4_SIX_IDENTITY' % seed)
-    if values['second_build_identity'] != values['first_build_identity']:
+    if values['second_independent_whole_build_identity'] != values['whole_container_identity']:
         codes.append('I3:%d:DG4_DOUBLE_BUILD' % seed)
-    if values['start_without_check_identity'] != values['first_build_identity']:
+    if values['whole_container_identity'] == values['core_identity']:
+        codes.append('I3:%d:DG4_NOT_DISTINCT_FORM' % seed)
+    recorded = record.get('seed_core_identities')
+    expected_seeds = sorted(str(value) for value in seeds)
+    if (type(recorded) is not dict or sorted(recorded) != expected_seeds
+            or not all(_is_digest(value) for value in recorded.values())
+            or len(set(recorded.values())) != len(recorded)
+            or recorded.get(str(seed)) != values['core_identity']):
+        codes.append('I3:%d:DG4_SEED_IDENTITIES' % seed)
+    if (record.get('identical_start_with_and_without_the_checkpoint_check') is not True
+            or values['core_identity'] != values['practice_recorded_model_state_identity']):
         codes.append('I3:%d:DG4_CHECK_INDEPENDENT_START' % seed)
     return codes
 
@@ -483,13 +524,22 @@ def evaluate(study_path):
             lifecycle = _read_json(receipt / 'result.json')
             report = _read_json(art / 'worker_report.json')
             manifest_names = [row['name'] for row in _read_json(art / 'manifest.json')['artifacts']]
+            # The worker's own rule (`typed_pointer_worker.py:1410`): the required set is the one the run RECORDED,
+            # falling back to the registered constant. A reduced run records a shorter set, and is refused below.
+            required = report.get('required_artifacts')
+            required = tuple(required) if isinstance(required, list) else tuple(getattr(worker, 'EXPECTED_ARTIFACTS',
+                                                                                        ()))
             if worker is None:
                 pass  # the named code was already raised once, before any seed was read
             elif not (lifecycle.get('completed_deliverable') is True
                       and lifecycle.get('cleanup', {}).get('complete') is True
                       and report.get('status') == worker.SUCCESS_STATUS
-                      and set(worker.EXPECTED_ARTIFACTS) <= set(manifest_names)):
+                      and set(required) <= set(manifest_names)):
                 failures.append('I1:%d' % seed)
+            # A non-claim-bearing run may never print a label (`typed_pointer_worker.py:1471-1473`): the reduced
+            # schedule is the smoke path, and it is marked as such by the job itself.
+            if not (report.get('claim_bearing') is True and report.get('schedule_plan_mode') == 'REGISTERED'):
+                failures.append('I1:%d:REDUCED_SCHEDULE:%s' % (seed, report.get('schedule_plan_mode')))
         except (OSError, ValueError, KeyError, TypeError) as error:
             failures.append('I1:%d:%s' % (seed, type(error).__name__))
             continue
@@ -513,14 +563,15 @@ def evaluate(study_path):
                 failures.append('I2:%d' % seed)
         except (OSError, ValueError, KeyError, TypeError) as error:
             failures.append('I2:%d:%s' % (seed, type(error).__name__))
+        record, source = None, None
         try:  # I3 -- the in-job DG4 identity checks (the corrected form of protocol section 7.1)
             record, source = dg4_record(art, report)
             if record is None:
                 failures.append('I3:%d:DG4_RECORD_MISSING' % seed)
             else:
-                failures.extend(dg4_failures(seed, record, start_targets.get(seed)))
-                if _is_digest(record.get('first_build_identity')):
-                    six_identities[seed] = record['first_build_identity']
+                failures.extend(dg4_failures(seed, record, start_targets.get(seed), seed_order))
+                if _is_digest(record.get('core_identity')):
+                    six_identities[seed] = record['core_identity']
         except (OSError, ValueError, KeyError, TypeError) as error:
             failures.append('I3:%d:%s' % (seed, type(error).__name__))
         try:  # I4 -- counts, reloads, replays
@@ -537,7 +588,7 @@ def evaluate(study_path):
             failures.append('I4:%d:%s' % (seed, type(error).__name__))
         try:  # the scoring files: the unit of evidence behind every test below
             at, scoring_problems = scoring_rows(art, manifest_names)
-            failures.extend('%s:%d' % (code, seed) for code in scoring_problems)
+            failures.extend('I1:%d:%s' % (seed, code) for code in scoring_problems)
             if not at:
                 failures.append('I1:%d:SCORING_PHASES_MISSING' % seed)
                 continue
@@ -545,7 +596,7 @@ def evaluate(study_path):
             start, final = checkpoints[0], checkpoints[-1]
             full = [n for n in checkpoints if set(at[n]) >= set(trained)]
             first = min([n for n in full if n > start], default=None)
-            needed = sorted({record for records in held_questions.values() for record in records})
+            needed = sorted({record_id for records in held_questions.values() for record_id in records})
             incomplete = [n for n in (start, final) if not set(at[n]) >= set(needed)]
             for n in incomplete:
                 failures.append('I1:%d:SCORING_INCOMPLETE:%d' % (seed, n))
@@ -590,7 +641,9 @@ def evaluate(study_path):
                                        if first is not None and first in trainq and final in trainq
                                        else {'evaluated': False}),
             'gained_questions': gained, 'gained_single_record': sum(1 for row in gained if row['records'] == 1),
-            'dg4_source': None, 'dg4_extra_fields': [],
+            'dg4_source': None, 'dg4_extra_fields': [], 'dg4_phase_a_status': None,
+            'dg4_whole_container_identity': None, 'schedule_plan_mode': report.get('schedule_plan_mode'),
+            'claim_bearing': report.get('claim_bearing'),
             'development': report.get('development_scores'), 'retention': report.get('retention_scores'),
             'pass_summaries': report.get('pass_summaries'),
         }
@@ -600,9 +653,11 @@ def evaluate(study_path):
         for kind in contract.KINDS:
             keys = sorted(q for q in eligible_all if kind_of[q] == kind)
             entry['G_LEARN_kind_' + kind] = seed_test(heldq[start], heldq[final], keys, kind_of, world_of)
-        record, source = dg4_record(art, report)
+        # The evidence echo: which record I3 read, and the report-only fields around it.
         entry['dg4_source'] = source
         entry['dg4_extra_fields'] = sorted(set(record) & set(DG4_OPTIONAL_FIELDS)) if record else []
+        entry['dg4_phase_a_status'] = (record or {}).get('phase_a_status')
+        entry['dg4_whole_container_identity'] = (record or {}).get('whole_container_identity')
         seeds[seed] = entry
 
     if len(six_identities) == len(seed_order) and len(set(six_identities.values())) != len(six_identities):
@@ -813,14 +868,53 @@ def self_test():
           and all(type(meaning) is str and meaning for _, meaning in VOID_PATHS),
           '%d enumerated paths into VOID' % len(VOID_PATHS))
     check('dg4_contract_declared',
-          DG4_IDENTITY_FORM == 'THREE_TENSOR' and len(DG4_FIELDS) == 4 and bool(DG4_REPORT_KEYS)
-          and bool(DG4_ARTIFACT_NAMES),
-          'I3 accepts %r in worker_report.json, then %r as an artifact, and requires %r'
-          % (list(DG4_REPORT_KEYS), list(DG4_ARTIFACT_NAMES), list(DG4_FIELDS)))
+          DG4_IDENTITY_FORM == 'THREE_^6_TENSORS_ONLY' and len(DG4_FIELDS) == 4 and len(DG4_FLAGS) == 5
+          and DG4_ARTIFACT_NAMES == ('model_identity.json',) and DG4_REPORT_KEYS == ('model_identity',),
+          'I3 reads the artifact %r first, then worker_report.json%r, and requires the identity fields %r with the booleans %r'
+          % (list(DG4_ARTIFACT_NAMES), list(DG4_REPORT_KEYS), list(DG4_FIELDS), list(DG4_FLAGS)))
     check('oracle_ceilings_are_not_removals', len(ORACLE_CEILINGS) == 3
           and [numerator for _, _, numerator in ORACLE_CEILINGS] == [5, 5, 1],
           'the one-hop ceilings %r are printed beside the label and subtract nothing'
           % ([numerator for _, _, numerator in ORACLE_CEILINGS],))
+
+    # ---- the I3 record logic, on synthetic DG4 records: the four checks of protocol section 7.1 -------------
+    seeds = tuple(contract.MODEL_SEEDS)
+    target = 'a' * 64
+    other = {str(seed): '%064x' % (index + 1) for index, seed in enumerate(seeds)}
+    other[str(seeds[0])] = target
+    good = {'identity_form': DG4_IDENTITY_FORM, 'core_identity': target,
+            'whole_container_identity': 'b' * 64, 'second_independent_whole_build_identity': 'b' * 64,
+            'practice_recorded_model_state_identity': target, 'seed_core_identities': dict(other),
+            'core_identity_equals_the_practice_start': True, 'double_build_equal': True,
+            'seeds_pairwise_different': True, 'identical_start_with_and_without_the_checkpoint_check': True,
+            'whole_container_form_is_a_different_number': True}
+    check('dg4_good_record_passes', dg4_failures(seeds[0], good, target, seeds) == [],
+          'a well-formed DG4 record raises no I3 code')
+    wrong_identity = dict(good, core_identity='c' * 64)
+    check('dg4_wrong_start_is_caught', dg4_failures(seeds[0], good, 'd' * 64, seeds) != []
+          and any('DG4_SIX_IDENTITY' in code for code in dg4_failures(seeds[0], wrong_identity, target, seeds))
+          and any('DG4_START_TARGET' in code for code in dg4_failures(seeds[0], good, 'd' * 64, seeds)),
+          'a ^6 identity that is not the pinned practice start, and a record naming a different target, both fail')
+    check('dg4_second_build_and_pairwise_and_check_off_are_caught',
+          any('DG4_DOUBLE_BUILD' in code for code in dg4_failures(
+              seeds[0], dict(good, second_independent_whole_build_identity='e' * 64), target, seeds))
+          and any('DG4_FLAG:seeds_pairwise_different' in code for code in dg4_failures(
+              seeds[0], dict(good, seeds_pairwise_different=False), target, seeds))
+          and any('DG4_SEED_IDENTITIES' in code for code in dg4_failures(
+              seeds[0], dict(good, seed_core_identities={str(seeds[0]): target, str(seeds[1]): target,
+                                                         str(seeds[2]): 'f' * 64}), target, seeds))
+          and any('DG4_CHECK_INDEPENDENT_START' in code for code in dg4_failures(
+              seeds[0], dict(good, identical_start_with_and_without_the_checkpoint_check=False), target, seeds)),
+          'the second build, the three-seed difference map and the with/without-check equality each raise their own code')
+    check('dg4_whole_container_form_must_be_a_different_number',
+          any('DG4_NOT_DISTINCT_FORM' in code for code in dg4_failures(
+              seeds[0], dict(good, whole_container_identity=target), target, seeds)),
+          'a container identity equal to the three-tensor identity is the vacuous self-comparison V3 warns about')
+    check('dg4_missing_evidence_fails_closed',
+          dg4_record(Path('__reader_selftest_no_such_dir__'), {}) == (None, None)
+          and dg4_record(Path('__reader_selftest_no_such_dir__'), {'model_identity': 'not a dict'}) == (None, None)
+          and any(code == 'I3:<seed>:DG4_RECORD_MISSING' for code, _ in VOID_PATHS),
+          'no record at any accepted location -> I3:<seed>:DG4_RECORD_MISSING, never a crash and never a pass')
     print(json.dumps({'self_test': checks, 'passed': sum(1 for row in checks if row['pass']),
                       'failed': [row['check'] for row in checks if not row['pass']]}, indent=1, sort_keys=True))
     if all(row['pass'] for row in checks):

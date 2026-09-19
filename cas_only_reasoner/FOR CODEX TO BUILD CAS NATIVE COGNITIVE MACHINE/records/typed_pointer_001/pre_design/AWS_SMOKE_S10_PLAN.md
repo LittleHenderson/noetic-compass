@@ -54,7 +54,8 @@ fits the budget:
 | checkpoint check **phase A** | **one seed, one checkpoint** (`initial`), not three × three | ~174 (one course pass) |
 | seed + double build | real (this is where the ^6 identity check runs) | small |
 | training | **8 updates**, not 1,470 | ~24 at the estimated 3.0 s/update |
-| course evaluation | **one**, warm | ~174 |
+| course evaluation at pass **0** | **required** — and it is the COLD one | ~300 |
+| course evaluation at the **final** pass | **required** — the row this section used to omit | ~174 |
 | held-back evaluation | **one** | ~39 |
 | retention + interference | skipped or minimal | — |
 | reload + replay | real (the code path that fails without the checkpoint fixes) | ~60 |
@@ -62,9 +63,22 @@ fits the budget:
 | ablations | skipped | 0 |
 | source verification + deliver | real | small |
 
-Estimated worker clock ≈ 470 s, plus 598.2 s overhead ≈ **1,070 s of instance time ≈ $0.75**. Under the approved
-$1 with margin. If the smoke's own measurement shows the estimate was low by more than about 25 %, the run must be
-killed rather than allowed to exceed the approved amount.
+**TWO course evaluations are mandatory, not one. Corrected 2026-09-19, before the run.** A reload-enabled plan
+must carry an evaluation at pass `0` **and** at pass `passes` — `cncm/typed_pointer_worker.py:190`,
+`require(0 in evaluations and passes in evaluations, "POINTER_PLAN_RELOAD_EVALUATIONS")`. A plan with reloads and a
+single evaluation is **refused outright**, so the one-evaluation budget could not have run at all. The first course
+pass in any job is also the cold one — measured `300.51911266499997` s cold against `173.78626021600007` s warm in
+the practice receipts (`course_p00` vs `course_p01`) — which is why those two rows differ.
+
+**Corrected estimate: worker clock ≈ 771 s, not the 470 s this section first carried.** 174 (phase A) + 24
+(training) + 300 (cold course pass) + 174 (warm course pass) + 39 (held-back) + 60 (reload and replay). Plus the
+598.2 s of non-worker overhead = **1,369 s of instance time ≈ $0.96 at $2.52/hour**. That is 96 % of the approved
+$1 with no margin, and the eight engineering checks S1–S9 (§3.1), which ride in this same job, would cross it.
+
+**So this is an owner decision, not a builder's, and NO LAUNCH HAPPENS until it is answered.** The rule below says
+a run whose measurement shows the estimate was low by more than about 25 % must be killed rather than allowed to
+exceed the approved amount — and the one-evaluation estimate was low by 64 %, so that rule would have fired
+mid-run and wasted the boot cost too. A **$1.50 cap** covers the corrected figure with real margin.
 
 ### 3.1 The whole GPU smoke runs HERE — S1 through S9 included, not on the laptop
 
@@ -91,8 +105,10 @@ install and the same instance:
 | S9 | **no order-like channel beyond the registered rank** — with rank now excluded, assert the reading carries no rank feature at all, and that a node influences the answer only through its declared flags | small |
 | S10 | the worker's `run()` end to end on the shrunken schedule | the bulk |
 
-None of S1–S9 trains anything, so together they add only a few minutes and leave the total **under the approved
-$1**. They are not claim-bearing and are recorded as plumbing.
+None of S1–S9 trains anything, so together they add only a few minutes. **They are not claim-bearing and are
+recorded as plumbing.** They also do **not** fit under the approved $1 once §3's corrected estimate is used: S10
+alone is ≈ $0.96 of the $1, so anything added crosses it. That is the reason the section-3 amendment above asks the
+owner for a $1.50 cap rather than presenting this as free.
 
 ### 3.2 AWS is not merely preferred here — it is the ONLY venue, by construction
 

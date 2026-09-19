@@ -699,15 +699,31 @@ BOUNDARY = ("Typed pointer reading of ONE focus world as a small directed graph,
 DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "candidate": CANDIDATE,
     "purpose": "DOES_THE_POINTER_MACHINE_LEARN_RELATIONAL_ANSWERS_ON_WORLDS_IT_NEVER_READ",
-    "owner_approval": ("2026-09-19 owner decisions, verbatim: \"Accept both, carry on.\" (both corrections -- the "
-        "in-job checkpoint check costs about $0.38-0.63 per job, not \"no extra cost\", and pointer answers alone "
-        "cannot work because the INPUT must change too, one world read as a graph instead of a blend of all 64), "
-        "\"Approve the smoke job (Recommended)\" (a short AWS smoke job for S10, well under $1, before any paid "
-        "launch), \"Yes -- require the relational kinds.\" (the primary label is keyed on the RELATIONAL tier; "
-        "the all-kinds result is a reported flag, never the label), and on the LB11 schedule question the option "
-        "labelled \"Stratify AND train longer (Recommended)\" (the single pass is stratified -- every one of the "
-        "eight kinds in every update at the same 147 updates per pass -- and the pass count is the study's own "
-        "parameter above the practice study's 10, so `STRATIFIED` is True and `MAX_PASSES_PERMITTED` is 24)."),
+    # CORRECTED 2026-09-19 (pre-flight, $0). This record carried only FOUR of the five owner decisions and had
+    # flattened the em dash in the third to `--`. Neither was cosmetic. Protocol section 0.2 says "The selected
+    # labels are recorded verbatim and are copied into every job's `owner.json`", and `prepare_study.py` copies
+    # THIS string into all three owner records -- so a paraphrase or a missing decision here is propagated
+    # straight into the signed per-job governance records.
+    #
+    # Root cause of the flattened dash, and why the fix looks like this: this module is PURE ASCII (verified, 0
+    # characters above U+007F), so the em dash had been transliterated to `--`. `\u2014` below is an ASCII source
+    # escape that evaluates to the real em dash, so the VALUE is byte-for-byte the protocol's while the file stays
+    # pure ASCII. Do not "tidy" it back to `--`.
+    #
+    # All five labels are now byte-for-byte the protocol's, checked against
+    # `docs/CNCM_TYPED_POINTER_STUDY_v0.1.md:52` (1), `:57` (2), `:61` (3), `:64` (4), `:69` (5).
+    "owner_approval": ("2026-09-19 owner decisions, verbatim, five of five: \"Accept both, carry on.\" (both "
+        "corrections -- the in-job checkpoint check costs about $0.38-0.63 per job, not \"no extra cost\", and "
+        "pointer answers alone cannot work because the INPUT must change too, one world read as a graph instead "
+        "of a blend of all 64), \"Approve the smoke job (Recommended)\" (a short AWS smoke job for S10, well under "
+        "$1, before any paid launch), \"Yes \u2014 require the relational kinds.\" (the primary label is keyed on "
+        "the RELATIONAL tier; the all-kinds result is a reported flag, never the label), \"Run it as the transfer "
+        "test, label honestly (Recommended)\" (the study runs as the transfer test it was built to be, and the "
+        "label is printed honestly, so a tier or a kind whose answer is already in the input is reported as such "
+        "and never carries a learning claim), and on the LB11 schedule question \"Stratify AND train longer "
+        "(Recommended)\" (the single pass is stratified -- every one of the eight kinds in every update at the "
+        "same 147 updates per pass -- and the pass count is the study's own parameter above the practice study's "
+        "10, so `STRATIFIED` is True and `MAX_PASSES_PERMITTED` is 24)."),
     "machine": "POINTER",
     "input_unit": "ONE_FOCUS_WORLD_READ_AS_A_DIRECTED_GRAPH",
     "answer_form": "POINTER_INTO_THE_QUESTION_INPUT",
@@ -732,7 +748,13 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "primary_label_rule": "RELATIONAL_TIER_GAIN_REQUIRED_TWO_KINDS_TWO_WORLDS_ALL_THREE_SEEDS",
     "flag_copy_alone_cannot_pass": True,
     "gate_population": "ELIGIBLE_HELD_RELATIONAL_QUESTIONS_MINUS_REGISTERED_FLAG_AND_RANK_RULE_REMOVALS",
-    "gate_population_open": True,
+    # CLOSED 2026-09-19. This flag was left `True` from the design phase and contradicted the rest of this
+    # file: `REMOVALS` is filled with the frozen 11 removals across four classes (`pointer_contract.py:507-523`)
+    # and `relational_population` reports `population_complete: True` against `VERIFIED_POPULATION` (18) and
+    # `VERIFIED_POPULATION_DIGEST`. Nothing read it, so it manufactured a false statement about the study rather
+    # than causing a failure. It is now `False`, which is what "the gate is frozen at 18" means.
+    # `pre_design/GATE_FEASIBILITY.md` is the power calculation behind the value 18.
+    "gate_population_open": False,
     "checkpoint_check": "THREE_PRACTICE_CHECKPOINTS_PER_SEED_RESTORED_IN_PHASE_A_BEFORE_THE_POINTER_MODEL_IS_SEEDED",
     "initialization": "REGISTERED_RANDOM_PER_MODEL_SEED_AFTER_PHASE_A_RESTORES",
     "condition": CONDITION, "source_seed": SOURCE_SEED, "encoder_seed": ENCODER_SEED,

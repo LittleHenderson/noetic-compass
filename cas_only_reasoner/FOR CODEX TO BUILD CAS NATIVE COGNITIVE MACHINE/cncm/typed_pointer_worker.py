@@ -58,13 +58,16 @@ PLAN item 4). Differences, each deliberate:
 - THE CHECKPOINT CHECK ALWAYS WRITES ITS ARTIFACT WITH A `status` FIELD INSIDE (review RK6). A missing
   artifact fails `EXPECTED_ARTIFACTS` and the lifecycle evidence contract; and a module imported inside
   a `try` that fails poisons `attestor.snapshot()` with `FAILED_IMPORTS` at `final_source_verification`,
-  after the money is spent. So every module the check needs -- `pointer_inputs`, `pointer_learner`,
-  `practice_learner`, `recurrent_cjt.recurrence`, `slots`, `encoder` -- is imported at start-up OUTSIDE
-  any `try`, and each check artifact carries `status` in {`COMPLETE`, `FAILED`} (plus `SKIPPED` for a
-  deliberately shrunken run, which `pre_design/AWS_SMOKE_S10_PLAN.md:110-111` requires to be recorded
-  rather than silently missing). Phase A, phase B and the ablations are REPORT-ONLY: a failure inside
-  them is recorded and the job continues, and `deliver` then drops exactly the names those checks could
-  not produce from the set it requires, so a reported check can never fail an otherwise complete job.
+  after the money is spent. So every module the check needs -- `recurrent_cjt.recurrence`,
+  `pointer_inputs`, `pointer_learner`, `practice_learner`, `slots`, `encoder` -- is imported at MODULE
+  IMPORT TIME, outside any `try` anywhere in this file (their resolved paths travel in
+  `schedule_plan.json` and in the phase-A artifact as evidence; all six are pure at import, so this
+  module still imports without torch). Each check artifact carries `status` in {`COMPLETE`, `FAILED`}
+  (plus `SKIPPED` for a deliberately shrunken run, which `pre_design/AWS_SMOKE_S10_PLAN.md:110-111`
+  requires to be recorded rather than silently missing). Phase A, phase B and the ablations are
+  REPORT-ONLY: a failure inside them is recorded and the job continues, and `deliver` then drops exactly
+  the names those checks could not produce from the set it requires, so a reported check can never fail
+  an otherwise complete job.
 
 - THE PASS COUNT COMES FROM `pointer_contract.PASSES`, read, never restated. `design["schedule"]` is the
   registered ten-pass schedule; a SHRUNKEN run for the smoke job is expressed by an explicit environment
@@ -72,11 +75,11 @@ PLAN item 4). Differences, each deliberate:
   `schedule_plan.json`.
 
 Reuse, by import, of the practice worker's helpers: `_publish_bytes`, `_publish`, `_move_in`,
-`_seal_predictions`, `_append`, `_stage_and_train`, `_train_logged`, `_split_score`. Reuse of the shared
-base: `_ProgressWriter`, `_write_bytes`, `counter_delta`, `_partial_checkpoint`, `_score_seal`, `_state`,
-`_check_state`, `_representatives`. `_evaluate` is NOT reused: it stamps the PRACTICE study's boundary
-string into every scoring artifact it publishes (`typed_practice_worker.py:154`), so this worker
-publishes its own scoring evidence, with the pointer boundary, through the same seal-then-score order.
+`_seal_predictions`, `_train_logged`, `_stage_and_train`, `_split_score`. Reuse of the shared base:
+`_ProgressWriter`, `_partial_checkpoint`, `_score_seal`, `_state`, `_check_state`, `counter_delta`,
+`_representatives`. `_evaluate` is NOT reused: it stamps the PRACTICE study's boundary string into every
+scoring artifact it publishes (`typed_practice_worker.py:154`), so this worker publishes its own scoring
+evidence, with the pointer boundary, through the same seal-then-score order.
 """
 from __future__ import annotations
 
@@ -89,7 +92,13 @@ from pathlib import Path
 import sys
 import time
 
+from cas_meta2.recurrent_cjt import recurrence as recurrence_module
+from cas_meta2.typed_teaching import encoder as encoder_module
 from cas_meta2.typed_teaching import pointer_contract as contract
+from cas_meta2.typed_teaching import pointer_inputs as pointer_reader
+from cas_meta2.typed_teaching import pointer_learner as pointer_module
+from cas_meta2.typed_teaching import practice_learner as practice_learner_module
+from cas_meta2.typed_teaching import slots as slot_module
 from cas_meta2.typed_teaching.learner import PARAMETERS as CORE_PARAMETERS, state_identity as tensor_state_identity
 from . import typed_course_worker as base
 from . import typed_matched_worker as matched
@@ -135,6 +144,19 @@ REDUCED_SCHEDULE_KEYS = frozenset({"passes", "updates", "evaluations", "phase_a"
                                    "ablations", "retention", "interference", "replays"})
 OWNER_PROJECTION_THRESHOLD_SECONDS = 11000
 canonical, require = contract.canonical, contract.require
+# RK6. EVERY module the checkpoint check needs is imported HERE, at module import time -- outside any
+# `try` anywhere in this file -- so a missing module fails the job before the first phase instead of
+# poisoning `attestor.snapshot()` with `FAILED_IMPORTS` at `final_source_verification`, after the spend.
+# All six are pure at import time: this module still imports without torch (test P8 / the numeric-import
+# guard). Their resolved paths travel in `schedule_plan.json` and in the phase-A artifact as evidence.
+CHECKPOINT_CHECK_IMPORTS = {
+    "recurrence": str(Path(recurrence_module.__file__).resolve()),
+    "pointer_inputs": str(Path(pointer_reader.__file__).resolve()),
+    "pointer_learner": str(Path(pointer_module.__file__).resolve()),
+    "practice_learner": str(Path(practice_learner_module.__file__).resolve()),
+    "slots": str(Path(slot_module.__file__).resolve()),
+    "encoder": str(Path(encoder_module.__file__).resolve()),
+    "imported_outside_any_try": True}
 
 
 # ======================================================================================================
@@ -407,7 +429,6 @@ def _input_checks(root, tokenizer, packets, representatives, artifacts, *, start
     equal the ids the SAME reusable lookup produces directly.
     """
     from cas_meta2.typed_teaching import pointer_inputs as reader
-    from cas_meta2.typed_teaching import slots as slot_module
     _deadline(started)
     before = reader._CACHE_STATE["builds"]
     first = reader.label_cache(root)
@@ -489,18 +510,21 @@ def _input_checks(root, tokenizer, packets, representatives, artifacts, *, start
 # 3. PHASE: preflight.
 # ======================================================================================================
 def _preflight(root, attestor, report):
-    """Attestor and package verification, then the platform/enable/GPU guard, then the runtime pin.
+    """The GPU guard FIRST, then the attestor and the package check, then the runtime pin and determinism.
 
-    Nothing numeric is imported before `_cuda()`; the platform guard inside it runs before `import torch`.
+    The order is the practice worker's and is load-bearing twice over. `os.environ` is set before torch is
+    imported; `_cuda()` runs its platform guard before its own `import torch`, so on Windows this raises
+    `ValueError("TEACHING_GPU:LINUX_WORKER_REQUIRED")` with NO numeric import performed and BEFORE the
+    attestor is demanded -- which is exactly what test P8 asserts (`INTERFACE_SPEC_PIPELINE.md:395-399`).
     """
-    require(attestor is not None and callable(getattr(attestor, "snapshot", None)), "SOURCE_ATTESTOR_REQUIRED")
-    loaded_before = attestor.snapshot()
-    from .rpa_learning_worker import verify_worker_packages
-    packages_before = verify_worker_packages(root)
     os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     from cas_meta2.teaching_cycle.gpu_adapter import _cuda
     torch, device = _cuda()
     torch.cuda.reset_peak_memory_stats(device)
+    require(attestor is not None and callable(getattr(attestor, "snapshot", None)), "SOURCE_ATTESTOR_REQUIRED")
+    loaded_before = attestor.snapshot()
+    from .rpa_learning_worker import verify_worker_packages
+    packages_before = verify_worker_packages(root)
     report["runtime"] = {"device": str(device), "torch_version": str(torch.__version__),
                          "cuda_version": torch.version.cuda, "gpu_name": torch.cuda.get_device_name(device)}
     require(report["runtime"]["torch_version"] == "2.11.0+cu128" and report["runtime"]["cuda_version"] == "12.8"
@@ -519,7 +543,7 @@ def _preflight(root, attestor, report):
 def _public_packet_preparation(ctx):
     """The frozen course read as public packets, the schedule, and the protocol artifact."""
     frozen, design = ctx["frozen"], ctx["design"]
-    plan, report = ctx["plan"], ctx["report"]
+    plan = ctx["plan"]
     artifacts = ctx["artifacts"]
     packets = dict(contract.public_packets(frozen))
     held, trained, excluded = contract.split(frozen)
@@ -536,9 +560,13 @@ def _public_packet_preparation(ctx):
     if plan["updates"] is None and plan["passes"] == PASSES:
         require(canonical(stats) == canonical(design["schedule"]), "POINTER_SCHEDULE_IDENTITY")
     else:
-        require(stats["updates_per_pass"] == design["schedule"]["updates_per_pass"]
-                and stats["main_updates"] == plan["updates"]
-                if plan["updates"] is not None else True, "POINTER_REDUCED_SCHEDULE")
+        # A shrunken schedule changes NOTHING registered: the per-pass update count is still the design's,
+        # and the update total is exactly what the plan asked for -- the pass count times that, or the cap.
+        require(stats["updates_per_pass"] == design["schedule"]["updates_per_pass"],
+                "POINTER_REDUCED_SCHEDULE_PER_PASS")
+        require(stats["main_updates"] == (plan["updates"] if plan["updates"] is not None
+                                          else plan["passes"] * stats["updates_per_pass"]),
+                "POINTER_REDUCED_SCHEDULE")
     require(all(key in ctx["trained_set"] for batch in batches for key in batch["record_ids"]),
             "UNTRAINABLE_IN_TRAINING")
     if contract.STRATIFIED:
@@ -615,8 +643,7 @@ def _post_block_vectors(torch, restored, packets, *, started, progress, phase):
     vector itself. Nothing is charged to the restored learner's counters and no target is touched, so the
     extracted vectors are PUBLIC and the restored checkpoint's counters are left exactly as restored.
     """
-    from cas_meta2.recurrent_cjt import recurrence
-    from cas_meta2.typed_teaching import slots as slot_module
+    recurrence = recurrence_module
     counters_before = deepcopy(restored.counters)
     rows = []
     was_training = restored.module.training
@@ -670,7 +697,6 @@ def _post_block_vectors(torch, restored, packets, *, started, progress, phase):
 
 def _verify_vectors_against_predictions(torch, restored, packets, representatives, rows, *, started):
     """Rebuild logits from the extracted vector and compare them with `restored.predict` BIT FOR BIT."""
-    from cas_meta2.typed_teaching import slots as slot_module
     by_record = {row["record_id"]: row for row in rows}
     verified = []
     for key in representatives.values():
@@ -700,13 +726,14 @@ def _checkpoint_check_phase_a(ctx):
               "custody": ("PUBLIC POST-BLOCK VECTORS ONLY: no answer, target or private sidecar is read, and "
                           "`cas_meta2.typed_teaching.checker` is required NOT to be imported yet"),
               "checker_imported_before_phase_a": "cas_meta2.typed_teaching.checker" in sys.modules,
+              "startup_imports": deepcopy(ctx.get("startup_imports", {})),
               "answers_read": False, "report_only": True, "boundary": BOUNDARY}
     try:
         require(not report["checker_imported_before_phase_a"], "POINTER_PHASE_A_CUSTODY")
         torch, device = ctx["torch"], ctx["device"]
         root, artifacts = ctx["root"], ctx["artifacts"]
         seed = ctx["design"]["model_seed"]
-        from cas_meta2.typed_teaching import practice_learner as practice_module
+        practice_module = practice_learner_module
         for name in ctx["plan"]["phase_a"]:
             _deadline(ctx["started"])
             ctx["phase"]("checkpoint_check_phase_a_" + name, checkpoint=name)
@@ -765,8 +792,8 @@ def _seed_and_double_build(ctx):
     torch, device, root = ctx["torch"], ctx["device"], ctx["root"]
     design, artifacts = ctx["design"], ctx["artifacts"]
     seed = design["model_seed"]
-    from cas_meta2.typed_teaching.encoder import build_frozen_typed_encoder
-    from cas_meta2.typed_teaching.pointer_learner import PointerCourseLearner, role_tagger
+    build_frozen_typed_encoder = encoder_module.build_frozen_typed_encoder
+    PointerCourseLearner, role_tagger = pointer_module.PointerCourseLearner, pointer_module.role_tagger
     encoder = build_frozen_typed_encoder(torch, ctx["tokenizer"], seed=design["encoder_seed"], d_model=64,
                                          device=device)
     limits = {"max_updates": ctx["stats"]["main_updates"]
@@ -1006,8 +1033,7 @@ def _retention_and_interference(ctx):
 # ======================================================================================================
 def _restore_pointer(ctx, *, path, pin, encoder):
     """Restore ONE pointer checkpoint into a freshly built framework, and require the exact state back."""
-    from cas_meta2.typed_teaching.pointer_learner import PointerCourseLearner
-    restored = PointerCourseLearner.restore_checkpoint(
+    restored = pointer_module.PointerCourseLearner.restore_checkpoint(
         ctx["torch"], matched._framework(ctx["torch"], ctx["device"], ctx["design"]["model_seed"]), encoder,
         path=path, expected_sha256=pin["sha256"],
         expected_run_identity_digest=ctx["main"].run_identity_digest, device=ctx["device"])
@@ -1019,7 +1045,7 @@ def _reloads_and_replays(ctx):
     """Same-process reconstruction: the plan's reloads and the two prelast replays."""
     artifacts, plan = ctx["artifacts"], ctx["plan"]
     staging, stats, packets = ctx["staging"], ctx["stats"], ctx["packets"]
-    work, report = ctx["work"], ctx["report"]
+    work = ctx["work"]
     reloads, replays = [], []
     for name in plan["reloads"]:
         _deadline(ctx["started"])
@@ -1124,8 +1150,8 @@ def _probe_rows(torch, features, targets, kind_of, worlds, trained_worlds, *, la
 
 def _pointer_node_features(ctx, checkpoints, packets):
     """The pointer machine's own node states at named checkpoints: the focus world, mean-pooled per record."""
-    from cas_meta2.typed_teaching.encoder import build_frozen_typed_encoder
-    from cas_meta2.typed_teaching.pointer_learner import PointerCourseLearner
+    build_frozen_typed_encoder = encoder_module.build_frozen_typed_encoder
+    PointerCourseLearner = pointer_module.PointerCourseLearner
     torch, device, design = ctx["torch"], ctx["device"], ctx["design"]
     features, counts = {}, {}
     for name in checkpoints:
@@ -1174,7 +1200,13 @@ def _checkpoint_check_phase_b(ctx):
         _publish(artifacts / "checkpoint_check_phase_b.json", report)
         return report
     try:
-        require(all(not row["phase"].startswith("checkpoint_check_phase_b") for row in ctx["work"]),
+        # The ordering is proved, not assumed: phase B refuses to derive anything until every pointer
+        # evaluation, reload and replay this plan asked for has already completed (FP3, test P14).
+        done = {row["phase"] for row in ctx["work"]}
+        require(all(name + "_reload" in done for name in plan["reloads"])
+                and all(not plan["replays"] or "replay_%d" % branch in done for branch in (1, 2))
+                and all("course_p%02d" % number in done or "heldback_p%02d" % number in done
+                        for number in plan["evaluations"]),
                 "POINTER_PHASE_B_ORDER")
         from cas_meta2.typed_teaching import checker
         packets = ctx["packets"]
@@ -1201,6 +1233,8 @@ def _checkpoint_check_phase_b(ctx):
                                               for at in range(width)]
             report["probes"][name] = _probe_rows(ctx["torch"], features, targets, kind_of, worlds,
                                                  ctx["trained_set"], label="PRACTICE_POST_BLOCK_VECTOR")
+        if not ctx["phase_a"]["checkpoints"]:
+            report["practice_probes_skipped"] = "PHASE_A_PRODUCED_NO_VECTOR_ARTIFACTS"
         checkpoints = [name for name in PHASE_B_POINTER_CHECKPOINTS if name in ctx["checkpoint_pins"]]
         pointer_features, node_counts = _pointer_node_features(ctx, checkpoints, packets)
         for name, features in pointer_features.items():
@@ -1262,7 +1296,6 @@ def _ablations(ctx):
         _publish(artifacts / "ablations.json", report)
         return report
     try:
-        from cas_meta2.typed_teaching import pointer_learner as pointer_module
         initial = torch.load(artifacts / "initial.pt", map_location="cpu", weights_only=True)
         require(type(initial) is dict and "model_state" in initial, "POINTER_ABLATION_INITIAL")
         initial_state = dict(initial["model_state"])
@@ -1350,7 +1383,7 @@ def _phase_timings(ctx):
                                                       "ablation_"))]
     measured_evaluations = len(evaluation_seconds)
     seconds_per_evaluation = (sum(evaluation_seconds) / measured_evaluations) if measured_evaluations else None
-    phase_a = report.get("phase_a") or {}
+    phase_a = ctx["phase_a"] or {}
     phase_a_seconds = sum(row["elapsed_seconds"] for row in phase_a.get("checkpoints", {}).values())
     phase_a_count = len(phase_a.get("checkpoints", {}))
     registered_updates = PASSES * stats["updates_per_pass"]
@@ -1396,7 +1429,8 @@ def _phase_timings(ctx):
             "projection": projection, "delivery_included": False, "boundary": BOUNDARY}
     _publish(ctx["artifacts"] / "phase_timings.json", body)
     report["phase_timings"] = {"worker_clock_seconds": body["worker_clock_seconds"],
-                               "measured": body["measured"], "projection": projection}
+                               "phases": body["phases"], "measured": body["measured"],
+                               "projection": projection}
 
 
 def deliver(results, artifacts, report, *, failed):
@@ -1452,7 +1486,7 @@ def run(config, root, results, artifacts, attestor=None):
     staging = results.parent / "pointer_staging"
     require(not staging.exists(), "FRESH_STAGING_DIRECTORY")
     staging.mkdir()
-    from cas_meta2.typed_teaching import practice_contract as practice_source
+    from cas_meta2.typed_teaching import practice_contract as practice_source  # noqa: F401 - COURSE_PATH only
     ctx = {"config": config, "root": root, "results": results, "artifacts": artifacts, "staging": staging,
            "started": started, "design": design, "frozen": frozen, "tokenizer": tokenizer,
            "development": development, "plan": plan, "claim_bearing": claim_bearing,
@@ -1479,15 +1513,7 @@ def run(config, root, results, artifacts, attestor=None):
 
         ctx["phase"] = phase
         phase("preflight")
-        # RK6: every module the checkpoint check needs is imported HERE, outside any try, so a missing one
-        # fails the job cheaply instead of poisoning `attestor.snapshot()` after the spend. Importing them
-        # pulls in no numeric module: `pointer_inputs` and `pointer_learner` are pure at import time.
-        from cas_meta2.recurrent_cjt import recurrence                             # noqa: F401
-        from cas_meta2.typed_teaching import pointer_inputs                       # noqa: F401
-        from cas_meta2.typed_teaching import pointer_learner                      # noqa: F401
-        from cas_meta2.typed_teaching import practice_learner                     # noqa: F401
-        from cas_meta2.typed_teaching import slots                                # noqa: F401
-        from cas_meta2.typed_teaching.encoder import build_frozen_typed_encoder    # noqa: F401
+        ctx["startup_imports"] = deepcopy(CHECKPOINT_CHECK_IMPORTS)
         ctx["torch"], ctx["device"], ctx["loaded_before"], ctx["packages_before"] = _preflight(
             root, attestor, report)
         ctx["attestor"] = attestor
@@ -1500,7 +1526,8 @@ def run(config, root, results, artifacts, attestor=None):
                   "required_artifacts": list(required_artifacts),
                   "artifacts_differ_from_the_registered_contract":
                       list(required_artifacts) != list(EXPECTED_ARTIFACTS),
-                  "registered_required_artifacts": list(EXPECTED_ARTIFACTS), "boundary": BOUNDARY})
+                  "registered_required_artifacts": list(EXPECTED_ARTIFACTS),
+                  "checkpoint_check_startup_imports": ctx["startup_imports"], "boundary": BOUNDARY})
 
         with _timed(ctx["timings"], "public_packet_preparation"):
             phase("public_packet_preparation")
