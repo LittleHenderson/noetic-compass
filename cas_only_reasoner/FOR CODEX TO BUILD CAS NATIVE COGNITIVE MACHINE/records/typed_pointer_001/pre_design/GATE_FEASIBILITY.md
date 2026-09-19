@@ -66,13 +66,29 @@ baseline. That baseline was withdrawn as an error (see `measurements/leaks_revie
 `REVIEW_SYNTHESIS.md` §6.4): it can only be derived by reading the held-back answers, which the custody rule forbids,
 so it is the answer key and not a mechanism-free baseline. The honest floor is `N = 13`.
 
-**Read against the honest population, the gate is close to unable to pass.** The present best estimates for `N` are:
+**Read against the honest population, the gate is tight but NOT hopeless.** Both lenses have now reported and the
+population is FROZEN at **23** — see `REVIEW_SYNTHESIS.md` §10.1.
 
-| scenario | N | P(all three seeds) at a 30 % true improvement | at 40 % |
-|---|---|---|---|
-| rank kept out of the input | 17 | **0.0114** | 0.1683 |
-| **most likely: rank in, R10 and DG3 applied** | **13–15** | **0.0002 – 0.0023** | **0.0120 – 0.0594** |
-| no removals at all (the tier as first confirmed) | 29 | 0.5355 | 0.9316 |
+| scenario | N | P(all three seeds) at 30 % true improvement | at 40 % | at 50 % |
+|---|---|---|---|---|
+| **FROZEN: 29 − 6 removals** | **23** | **0.1757** | **0.6723** | **0.9489** |
+| rank adopted instead of removing the order-dependent questions | 18 | 0.0374 | 0.3313 | 0.7697 |
+| rank kept out of the input as the §-7 bound assumed | 17 | 0.0114 | 0.1683 | 0.5798 |
+| a strict population also removing the adjacency-solved questions | 16 | 0.0067 → 0.0114 | 0.2286 → 0.3313 | 0.7389 → 0.7697 |
+| no removals at all (the tier as first confirmed) | 29 | 0.5355 | 0.9316 | 0.9965 |
+
+Single-seed figures at N = 23: 0.1598 at 20 %, 0.3463 at 25 %, **0.5601 at 30 %**, 0.7466 at 35 %, 0.8760 at 40 %.
+
+**Correction 2026-09-19 (second).** Earlier revisions of this document gave floors of N = 11 and then N = 13, and
+concluded the gate was "close to unable to pass". Both floors are superseded: the first rested on the withdrawn
+constant-`VIA n1` baseline, and the second was a pessimistic bound before the leaks lens published its removal
+table. **The frozen figure is 23, and at that size a genuine 30 % improvement passes all three seeds about 18 % of
+the time, and a 40 % improvement about 67 %.** That is a demanding test, not an impossible one, and the earlier
+alarm is withdrawn.
+
+The required share is **7/23 = 0.3043** per seed. The self-consistency is worth noting: at exactly the required
+share the per-seed pass rate is about 0.56, so clearing 7 of 23 is a coin-flip-plus per seed and roughly a 1-in-6
+chance across all three — the test is calibrated near its own threshold, which is what a gate should be.
 
 **Two different failure modes, and the project has only guarded against one.** Findings FP1–FP3 protect against a
 **false positive** — a `LEARNS_NEW_WORLDS` printed when nothing was learned — and they do that job well. This table
