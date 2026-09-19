@@ -455,8 +455,17 @@ CACHE_VOCABULARY = 3829
 # branch of the register design constant. Both are recorded because both branches are implemented and
 # selected live from `pointer_contract.DESIGN["node_rank_feature"]`, whose decision is REOPENED pending
 # lens A (`DESIGN["node_rank_decision_status"]`).
-ALL_RECORDS_DIGEST = "f2652b55f3525d4ab49b57130d638b890f574cb550bbb738001fbe2fe58ba5d4"
-ALL_RECORDS_DIGEST_RANK_OUT = "8ffa39390b5927c341975e22470e898971d70ba50bb7228dbefe8cb918a3f48c"
+ALL_RECORDS_DIGEST = "d6ca34f4449dbdce392461e1313a71c04dd8959d2d0f764aa28b0af26ebd8a72"
+ALL_RECORDS_DIGEST_RANK_OUT = "ef989528913b6a676c9a2c7e495ea5a3f7b5bfc3f52dc072a05becc2a77c20d0"
+# BOTH constants were re-derived on 2026-09-19, for two separate reasons, and the record of the old values is
+# kept because a digest that moved without explanation is indistinguishable from a regression:
+#   * the rank feature was EXCLUDED (pointer_contract.DESIGN["node_rank_feature"] is now False), so the default
+#     branch became the rank-OUT one;
+#   * `is_primary_label` and its rank were REMOVED from the reading, because design v0.2 section 5.1 and the
+#     protocol section 5.3 both require it: LK5 measured `primary_labels == participants` in 64 of 64 worlds,
+#     re-verified here directly against the frozen course.
+# Previous values: rank-OUT was 8ffa39390b5927c341975e22470e898971d70ba50bb7228dbefe8cb918a3f48c and the
+# rank-IN value was f2652b55f3525d4ab49b57130d638b890f574cb550bbb738001fbe2fe58ba5d4.
 # Measured at HEAD 607a3f15 on this machine, system Python 3.14.0 / pytest 9.0.2: worst packet
 # 0.000972 s in one run and 0.001024 s in another, both the 64-world `analogy` kind (64 world graphs, a
 # 56,567-byte canonical reading); the whole 564-record sweep needs 0.427 s / 0.445 s for reading AND

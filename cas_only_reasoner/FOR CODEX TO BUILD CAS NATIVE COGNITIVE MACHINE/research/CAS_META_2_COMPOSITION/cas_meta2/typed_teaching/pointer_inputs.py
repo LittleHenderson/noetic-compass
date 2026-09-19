@@ -21,7 +21,10 @@ WHAT IS READ, per record (INTERFACE_SPEC_POINTER.md section 2, which is the pinn
 * `query` - `kind` as an 8-way learned id, `rule` as a learned id, and the argument node ids where the
   question names them (`whole`, `part`, `target_world_id`).
 * `node_flags` - per node of the focus world: `is_declared_whole`, `is_participant` with rank 1..3,
-  `is_primary_label` with rank 1..3, `is_whole_argument`, `is_part_argument`, and (see below) `rank`.
+  `is_whole_argument`, `is_part_argument`, and (see below) `rank`. `is_primary_label` and its rank are NOT
+  emitted: LK5 measured `primary_labels == participants` in **64 of 64** worlds, re-verified against the frozen
+  course, so it is the same fact as `is_participant` and design v0.2 §5.1 and the protocol §5.3 both require it
+  to be dropped.
 * `excerpt` - `role_set` only: the focal excerpt as a frozen, position-free bag of token ids, sorted.
 
 NODE IDENTITY IS THE REGISTERED RANK, AND NO WORDS. A node is identified everywhere in the reading by its
@@ -205,16 +208,17 @@ def _world_reading(world, *, focus_world_id, target_world_id, arguments, use_ran
     require(type(declarations) is dict, "POINTER_INPUTS_DECLARATIONS")
     whole = world["declared_whole"]
     require(whole in index, "POINTER_INPUTS_DECLARED_WHOLE")
-    # `is_participant` / `is_primary_label` carry the 1-based rank inside the world's declared list, 0 when
-    # the node is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).
+    # `is_participant` carries the 1-based rank inside the world's declared participant list, 0 when the node
+    # is not in it (the same shape the leaks lens measured: lb17_pool_gradient.py:51).
+    #
+    # `is_primary_label` and its rank are NOT emitted. LK5 measured that `primary_labels == participants` in
+    # **64 of 64** worlds, which was re-verified here against the frozen course, so the second flag is provably
+    # the same fact and both design v0.2 §5.1 and the protocol §5.3 require it to be dropped. `is_participant`
+    # is the one kept, because it is the flag `checker.py:178-183` derives `context` from.
     participant_rank = {}
     for position, ref in enumerate(declarations["participants"]):
         require(ref in index, "POINTER_INPUTS_PARTICIPANT")
         participant_rank[index[ref]] = position + 1
-    primary_rank = {}
-    for position, ref in enumerate(declarations["primary_labels"]):
-        require(ref in index, "POINTER_INPUTS_PRIMARY_LABEL")
-        primary_rank[index[ref]] = position + 1
     declaration_ids = {}
     for field in DECLARATION_FIELDS:
         text = declarations[field]
@@ -230,7 +234,6 @@ def _world_reading(world, *, focus_world_id, target_world_id, arguments, use_ran
         body = {
             "is_declared_whole": 1 if rank == index[whole] else 0,
             "is_participant": participant_rank.get(rank, 0),
-            "is_primary_label": primary_rank.get(rank, 0),
             "is_whole_argument": 1 if arguments.get("whole") == rank else 0,
             "is_part_argument": 1 if arguments.get("part") == rank else 0,
         }
