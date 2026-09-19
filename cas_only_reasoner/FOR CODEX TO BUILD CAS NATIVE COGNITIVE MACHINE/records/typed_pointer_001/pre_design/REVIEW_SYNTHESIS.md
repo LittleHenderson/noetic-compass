@@ -160,8 +160,47 @@ consequence that matters more than any gate tweak:
 None of this has been acted on. It is recorded, not applied, and it is the substance of the consolidated question
 now owed to the owner.
 
-## 5. Is the optimiser adequate? (learnability lens, `lb11_schedule_composition_out.txt`)
+## 4.7 LB11 economics: the starving-heads fix costs 44 %, not 360 %
 
+Finding LB11 says the schedule under-covers and instructs "rebalance so every kind appears in every pass (about
+10 x 470 updates), or drop the untrainable heads". `lb11_economics.py` measured the as-is coverage and the two ways
+to obey that instruction. **Measured, $0, and nothing applied.**
+
+**As-is, at 147 updates per pass, each kind is ABSENT from a large share of updates:**
+
+| kind | updates where ABSENT (of 147) | present |
+|---|---|---|
+| `role_set` | **115** | 32 |
+| `analogy` | **112** | 35 |
+| `context` | 107 | 40 |
+| `definition` | 105 | 42 |
+| `edge_account` | 95 | 52 |
+| `correspondence` | 67 | 80 |
+| `parts` | 63 | 84 |
+| `reach` | 40 | 107 |
+
+So a `role_set` head receives a gradient in **32 of 147** updates and an `analogy` head in **35**. The per-kind heads
+are starved for most of the run. This is the mechanism behind the lens's "rarest head 320/1470".
+
+| branch | updates/pass | presentations/pass | every kind every update? | vs as-is |
+|---|---|---|---|---|
+| **A as-is** | 147 | 818 | no | — |
+| **B stratified** | **147** | **1,176** | **yes** | **+43.8 %** |
+| **C widened (the lens's literal reading)** | 470 | 3,760 | yes | +359.7 % |
+
+**B is the sweet spot: it fixes coverage completely for a 43.8 % presentation increase at the SAME update count.**
+C multiplies presentations by 4.6× and its 10 passes need **4,716** updates, which is **above the raised ceiling of
+3,544** — so C is not affordable as literally stated.
+
+Cost context, from the practice receipts rather than modelled: 1,470 updates and 8,180 presentations took
+5,465.811116 s of worker clock, i.e. about **0.6682 s per presentation**. B's extra 358 presentations per pass cost
+roughly **+2,392 s** over ten passes at the old machine's rate — which fits the 12,300 s deadline against the
+practice run's 5,465.811116 s, but the pointer machine's own rate is **unmeasured** and the smoke job measures it.
+
+**Not applied.** Whether to change the registered MIXED_SAME_ITEMS composition is a design decision, and it is part
+of the consolidated question owed to the owner.
+
+## 5. Is the optimiser adequate? (learnability lens, `lb11_schedule_composition_out.txt`)
 Per-head gradient exposure over the 1,470 main updates, with AdamW's second moment decaying at 0.999:
 
 | Head | Updates receiving its gradient | Updates needed for the second moment to describe its own scale |

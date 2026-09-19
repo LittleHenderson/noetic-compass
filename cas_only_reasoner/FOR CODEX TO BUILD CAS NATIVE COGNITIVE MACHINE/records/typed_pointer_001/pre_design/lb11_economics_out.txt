@@ -1,0 +1,33 @@
+A. AS-IS (the practice MIXED order, 147 updates per pass)
+   updates_per_pass 147   presentations_per_pass 818
+   updates in which each kind is ABSENT (of 147):
+      analogy        absent  112  present   35
+      context        absent  107  present   40
+      correspondence absent   67  present   80
+      definition     absent  105  present   42
+      edge_account   absent   95  present   52
+      parts          absent   63  present   84
+      reach          absent   40  present  107
+      role_set       absent  115  present   32
+   every head gets gradient in every update?  False
+
+B. STRATIFIED at the same 147 updates per pass
+   one record per kind per batch where the pool allows; deterministic round-robin over each kind's pool
+   updates 147   presentations_per_pass 1176
+   kinds absent from any update: {}
+   every head gets gradient in every update?  True
+   presentation increase over A: +358 (43.8%)
+
+C. WIDENED, the lens's literal ~470 updates per pass at 8 records each
+   updates_per_pass 470   presentations_per_pass 3760
+   presentation increase over A: +2942 (359.7%)
+   10 passes needs 4716 updates, against the raised ceiling of 3544
+
+COST CONTEXT (measured from the practice receipts, not modelled)
+   practice: 1470 updates, 8180 presentations, 5465.811116456 s of worker clock
+   so roughly 0.6682 s per presentation and 3.7182 s per update
+   a pointer machine's own per-update cost is UNMEASURED; the smoke job measures it
+
+BRIEF CONCLUSION
+   B fixes total kind coverage for a ~44% presentation increase at the SAME update count.
+   C multiplies presentations by 4.6x and needs 4716 updates, above today's ceiling of 3544.
