@@ -54,10 +54,35 @@ selected labels are recorded verbatim and are copied into every job's `owner.jso
    cannot work, because the **INPUT** must change too — one world is read as a small directed graph instead of a
    blend of all 64 worlds.
 2. **The short AWS smoke job for the end-to-end worker test S10 — approved.** Owner selected the option labelled
-   verbatim *"Approve the smoke job (Recommended)"*. Well under $1. Cost model and shrunken schedule:
+   verbatim *"Approve the smoke job (Recommended)"*. Cost model and shrunken schedule:
    `records/typed_pointer_001/pre_design/AWS_SMOKE_S10_PLAN.md`. The measured non-worker overhead is 598.2 s of boot,
-   package install and delivery, costing $0.42 on its own, so the approved $1 leaves the smoke a worker clock of at
-   most about 830 s.
+   package install and delivery, costing $0.42 on its own.
+
+   > **AMENDED 2026-09-19, before the smoke ran.** This item said *"Well under $1"* and *"the approved $1 leaves the
+   > smoke a worker clock of at most about 830 s."* **Both are wrong, and the corrected figures are recorded here
+   > rather than left standing, because this document is the governance record of what the owner approved and what
+   > it buys.** Two independent corrections:
+   >
+   > 1. **The smoke needs TWO course evaluations, not one.** A reload-enabled plan must carry an evaluation at pass
+   >    `0` **and** at pass `passes` — enforced at `cncm/typed_pointer_worker.py:190`
+   >    (`POINTER_PLAN_RELOAD_EVALUATIONS`). The one-evaluation schedule would have been **refused outright**. The
+   >    first course pass is also the cold one (`300.51911266499997` s cold against `173.78626021600007` s warm in
+   >    the practice receipts), so the corrected worker clock is about **771 s**, not 470 s, and the corrected
+   >    instance time is about **1,369 s ≈ $0.96 at $2.52/hour** — 96 % of the approved $1 with no margin. The S1–S9
+   >    checks that ride in the same job cross it. The plan's own kill rule would have fired mid-run, because the
+   >    one-evaluation estimate was low by **64 %**.
+   > 2. **The smoke's reservation cannot be small.** `typed_pointer_launch.py:311,314` hard-requires the caller's
+   >    amount and then reserves the study's own `RESERVATION_USD` (`15.00`); `reservation_plan_for()` pins
+   >    `runtime_seconds_max` to `INSTANCE_SECONDS_MAX` (14400), and `budget.validate_plan` requires
+   >    `reserved_usd >= bound`, making the minimum reservable about **$11.56** — so a $1 reservation is refused with
+   >    `RESERVATION_BELOW_DECLARED_COST_BOUND`. `budget.py` exposes only `reserve_budget`: there is **no release,
+   >    refund or settle function**, and the ledger carries `no_automatic_refund: true`.
+   >
+   > **The owner has since given standing pre-approval for all future jobs**, and the smoke proceeds at the
+   > launcher's `$15.00` reservation with a cash cost of about `$1`. The $15.00 is a **cap commitment, not a
+   > charge** — no money leaves the account — but it is not returned either, so it is recorded as a real commitment
+   > rather than described as "small". Ledger at this amendment: cap `5000.00`, reserved `501.00`, unreserved
+   > `4499.00`.
 3. **The gate change — confirmed.** Owner answer verbatim: *"Yes — require the relational kinds."*
    `LEARNS_NEW_WORLDS` requires gains on the RELATIONAL kinds. The all-kinds result is reported alongside as a flag,
    never as the label.
@@ -716,10 +741,25 @@ Read by `records/typed_pointer_001/evaluate_gates.py`, **not by prose**. Any fai
 | gate | condition |
 |---|---|
 | **I0** | the study has exactly the three seeds: 20260917, 20260918, 20260919 |
-| **I1** | every job `completed_deliverable`, cleanup complete, worker status equals **the new worker's own `SUCCESS_STATUS`**, every name in the new worker's `EXPECTED_ARTIFACTS` present, every scoring file readable |
+| **I1** | every job `completed_deliverable`, cleanup complete, worker status equals **the new worker's own `SUCCESS_STATUS`**, every name in the new worker's `EXPECTED_ARTIFACTS` present, every scoring file readable, **and the job is claim-bearing** (see below) |
 | **I2** | held and excluded ids equal the frozen split (§2.1 digests); every record in every main and interference batch log is a **trained** record; the logged main and interference update counts match the frozen schedule exactly |
 | **I3** | the in-job DG4 evidence of §7.1 — the `^6` sub-block identity against the practice start, the independent second build, the three pairwise-different seeds, and the identical start with and without the checkpoint check — all as the job recorded them |
 | **I4** | per job the frozen main, interference and replay update counts, and reloads and replays exact |
+
+**I1 carries a condition this table did not originally list, added and acknowledged 2026-09-19.**
+`records/typed_pointer_001/evaluate_gates.py` voids a receipt whose job was **not claim-bearing** — the code
+`I1:<seed>:REDUCED_SCHEDULE:<mode>` with the reason *"the job did not run the REGISTERED plan, so it is not a
+claim-bearing run and may not print a label."* The worker can run a shrunken schedule through the environment
+request `CNCM_POINTER_REDUCED_SCHEDULE` (`cncm/typed_pointer_worker.py:142`, `:268-299`), which sets
+`claim_bearing = False` and records `mode: "REDUCED"` in `schedule_plan.json`, **without changing a single
+registered constant** — that is its entire purpose and it is what makes the smoke job possible at all.
+
+**This is a strengthening of the I-list, not a divergence from it, and it is the coordinator's decision.**
+Rationale: a reduced run delivers normally and reports the worker's `SUCCESS_STATUS`, so without this condition a
+smoke job could satisfy every original I1 requirement and print `LEARNS_NEW_WORLDS` — a learning claim from a run
+that was never registered to make one. Refusing it can only ever **withhold** a label, never manufacture one, so it
+cannot create a false claim; and it can never void a legitimate claim-bearing job, because such a job sets no
+reduced request and therefore returns `claim_bearing = True`. The condition is accepted.
 
 **I1 and I3 are new, and the practice reader cannot be reused (RK8).** The practice I1 imports
 `cncm.typed_practice_worker` (`evaluate_gates.py:162-165`) and the practice I3 compares the start weights against
@@ -1042,9 +1082,17 @@ records the owner's order of 2026-09-19 — quoted verbatim in the hand-off as *
 Nothing on AWS.' … PLEASE REMEMBER THIS SO USE AWS"* — and `AWS_SMOKE_S10_PLAN.md` §3.1 (uncommitted in the working tree at the time this protocol was written) states the consequence: the local GPU is a laptop GPU, it is **not** a smoke-test
 venue, and **every one of S1–S10 runs in the single approved AWS job**, which is the cheapest way to obey the order
 because they share one boot, one package install and one instance. None of S1–S9 trains anything, so together they
-add only a few minutes and leave the total **under the approved $1**; they are not claim-bearing and are recorded as
-plumbing. The approved smoke remains a **fourth** AWS job beyond the three claim-bearing ones, and its reservation
-goes through the launcher's own reservation path into the canonical ledger, small and recorded, **never by hand**.
+add only a few minutes; they are not claim-bearing and are recorded as plumbing. The approved smoke remains a
+**fourth** AWS job beyond the three claim-bearing ones, and its reservation goes through the launcher's own
+reservation path into the canonical ledger, **never by hand**.
+
+> **AMENDED 2026-09-19.** This paragraph said S1–S9 *"leave the total under the approved $1"* and that the smoke's
+> reservation is *"small and recorded"*. Neither survives §0.2 item 2's correction: S10 alone is about **$0.96** of
+> the approved $1, so anything added crosses it; and the launcher can only reserve **$15.00**, with no refund
+> function anywhere in `budget.py`. The smoke therefore runs at a **$15.00 cap commitment with an actual cost of
+> about $1**, which is what the owner's standing pre-approval covers. **What does not change:** the smoke is not
+> claim-bearing, its receipts are voided by the gate program (`I1:<seed>:REDUCED_SCHEDULE:<mode>` in
+> `records/typed_pointer_001/evaluate_gates.py`), and no registered constant is modified to make it fit.
 
 `CONFLICT:` — **the venue rule for the smoke changed while this document was being written.** As recorded in
 `records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md` at HEAD `026e6473` (its §2 and §9), the standing rule was
