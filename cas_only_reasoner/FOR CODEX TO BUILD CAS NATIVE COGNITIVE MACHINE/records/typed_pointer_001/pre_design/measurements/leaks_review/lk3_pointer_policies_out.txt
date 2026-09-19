@@ -1,0 +1,155 @@
+  packet cache: reused lk_cache_packets.pkl (564 packets)
+  admissible cache: reused lk_cache_admissible.json (cache built by lk0_material.py (checker.derive_target + evaluate_gates.eligible_questions))
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 4.4 s (frozen/encoder 3.0 s, packets 0.5 s, rest 0.9 s)
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  held questions 50 trained questions 189
+  eligible 45 shortcut-removed 5
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+
+ZERO-LEARNING POINTING POLICIES (the machine's own decoder, no learned weights)
+
+  POLICY: point at the ARGUMENT node (the query's `whole`; the declared whole when the question names none)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 5/5 | held-all 5/5 | trained 18/18 | records held 15/15 trained 36/36 excluded 19/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 2/19 | records held 0/20 trained 5/54 excluded 2/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 0/14 | trained 0/50 | records held 0/26 trained 0/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 5/45 | held-all 5/50 | trained 20/189
+
+  POLICY: point at the query's `part` argument wherever a node must be named
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18 | records held 0/15 trained 0/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/20 trained 0/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 0/14 | trained 0/50 | records held 0/26 trained 0/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 0/45 | held-all 0/50 | trained 0/189
+
+  POLICY: point at the FOCUS world (world-choice slots) and the declared whole (node slots)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 5/5 | held-all 5/5 | trained 18/18 | records held 15/15 trained 36/36 excluded 19/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 2/19 | records held 0/20 trained 5/54 excluded 2/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 0/14 | trained 0/50 | records held 0/26 trained 0/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 5/45 | held-all 5/50 | trained 20/189
+
+  POLICY: PRESENT for every NON-ARGUMENT node (all nodes except the query's `whole` / declared whole)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18 | records held 0/15 trained 0/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/20 trained 0/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 5/19 | records held 0/9 trained 23/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 1/9 | held-all 1/14 | trained 1/50 | records held 1/26 trained 1/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 6/189
+
+  POLICY: PRESENT for every node, every edge pair INCLUDING self-pairs
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18 | records held 0/15 trained 0/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/20 trained 0/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 1/9 | held-all 1/14 | trained 1/50 | records held 1/26 trained 1/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 1/189
+
+  POLICY: PRESENT for every node, edge pairs EXCLUDING self-pairs
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18 | records held 0/15 trained 0/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/20 trained 0/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 1/9 | held-all 1/14 | trained 1/50 | records held 1/26 trained 1/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 1/189
+
+  POLICY: pick the alphabetically FIRST node ref (rank 0)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 1/5 | held-all 1/5 | trained 7/18 | records held 3/15 trained 17/36 excluded 5/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 2/19 | records held 0/20 trained 5/54 excluded 2/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 4/19 | records held 0/9 trained 4/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 0/14 | trained 8/50 | records held 0/26 trained 12/71 excluded 4/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 21/189
+
+  POLICY: pick the node with the LOWEST rank (rank 0 -- identical to the alphabetical rule by construction)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 1/5 | held-all 1/5 | trained 7/18 | records held 3/15 trained 17/36 excluded 5/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 2/19 | records held 0/20 trained 5/54 excluded 2/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 4/19 | records held 0/9 trained 4/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 0/14 | trained 8/50 | records held 0/26 trained 12/71 excluded 4/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 21/189
+
+  POLICY: pick the node with the HIGHEST rank (alphabetically last ref)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 2/18 | records held 0/15 trained 3/36 excluded 4/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 2/19 | records held 0/20 trained 5/54 excluded 2/14
+    parts          held-eligible 1/5 | held-all 1/5 | trained 1/19 | records held 1/9 trained 1/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 4/9 | held-all 4/14 | trained 4/50 | records held 10/26 trained 11/71 excluded 1/10
+    ALL EIGHT KINDS held-eligible 5/45 | held-all 5/50 | trained 9/189
+
+  MAJORITY SYMBOL PER SLOT (estimated on the trained records' correct answers, no neurons):
+    analogy          world_id              -> W18
+    context          participant           -> PRESENT
+    context          setting_ref           -> W22
+    correspondence   mapping_target rank 0 -> N1
+    correspondence   mapping_target rank 1 -> N0
+    correspondence   mapping_target rank 2 -> N2
+    correspondence   mapping_target rank 3 -> N2
+    correspondence   mode                  -> MAPPING
+    definition       function_ref          -> W32
+    definition       kind_ref              -> W32
+    definition       whole                 -> N0
+    edge_account     edge                  -> ABSENT
+    parts            node                  -> PRESENT
+    reach            reach                 -> DIRECT
+    role_set         role                  -> ABSENT
+
+  POLICY: pick the MAJORITY symbol for the slot (a fitted constant, no neuron is trained)
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 1/18 | records held 0/15 trained 4/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 5/15 | records held 0/17 trained 15/36 excluded 1/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 1/19 | records held 0/20 trained 4/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 0/9 | held-all 5/14 | trained 25/50 | records held 5/26 trained 25/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 0/45 | held-all 5/50 | trained 32/189
+
+  POLICY: ALL SYMBOLS TIED at 0.0: the shared decoder's first-declared-symbol tie rule fires
+    role_set       held-eligible 0/6 | held-all 0/6 | trained 0/30 | records held 0/6 trained 0/30 excluded 0/0
+    definition     held-eligible 0/5 | held-all 0/5 | trained 0/18 | records held 0/15 trained 0/36 excluded 0/19
+    context        held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/41 excluded 0/12
+    analogy        held-eligible 0/5 | held-all 0/5 | trained 0/15 | records held 0/17 trained 0/36 excluded 0/17
+    correspondence held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/20 trained 0/54 excluded 0/14
+    parts          held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/9 trained 0/44 excluded 0/0
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+    reach          held-eligible 1/9 | held-all 1/14 | trained 1/50 | records held 1/26 trained 1/71 excluded 0/10
+    ALL EIGHT KINDS held-eligible 1/45 | held-all 1/50 | trained 1/189
+    this is what an untrained pointer machine with equal logits emits (slots.py:293 argmax over the declared order)
+
+NOTE: rank 0 IS 'alphabetically first ref' (checker.py:72-73 sorts node refs, slots.py:55-60 makes the aliases),
+      so the two policies above are the same function and necessarily give identical numbers.
+      policy functions are applied per record, so a question counts only when ALL its records are right.

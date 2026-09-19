@@ -1,0 +1,24 @@
+correspondence records 88
+  held      records 20 ; automorphisms of the source world: [(1, 16), (2, 4)] ; of the records, automorphism-group mappings that ARE admissible: 0
+  trained   records 54 ; automorphisms of the source world: [(1, 29), (2, 11), (6, 14)] ; of the records, automorphism-group mappings that ARE admissible: 5
+  excluded  records 14 ; automorphisms of the source world: [(1, 10), (6, 4)] ; of the records, automorphism-group mappings that ARE admissible: 2
+
+records where NO admissible mapping lies in the source automorphism group
+(the head's tie structure cannot even land on a correct answer there):
+   81 of 88 records; {'excluded': 12, 'trained': 49, 'held': 20}
+
+records where the admissible set is a SINGLE mapping and the source world has no
+non-trivial automorphism (so the head must pick exactly that permutation):
+   55 of 88 ; {'excluded': 10, 'held': 16, 'trained': 29}
+
+Part 2. spectral norm of d(sum h_i^K)/d(h^0) after each SHARED round, one fixed init,
+        node counts taken from the real material (3, 4 bank; 10 development)
+   rms_after=output  nodes  3  18.59 33.89 50.84 69.03 87.67 105.3 121.3 135.1  (round-to-round factor 89.02)
+   rms_after=output  nodes  4  21.93 42.19 59.21 73.61 86.93 100.6 113.6 127  (round-to-round factor 81.7)
+   rms_after=output  nodes 10  22.04 40.34 56.17 71.41 87.65 104.8 122.3 140.2  (round-to-round factor 90.15)
+   rms_after=input   nodes  3  2.202 2.894 3.733 4.631 5.533 6.435 7.34 8.24  (round-to-round factor 7.361)
+   rms_after=input   nodes  4  4.463 5.328 6.566 7.959 9.446 10.93 12.39 13.84  (round-to-round factor 11.18)
+   rms_after=input   nodes 10  4.98 5.836 7.036 8.462 9.996 11.59 13.2 14.83  (round-to-round factor 11.79)
+   rms_after=none    nodes  3  2.217 2.911 3.629 4.377 5.097 5.736 6.302 6.79  (round-to-round factor 6.06)
+   rms_after=none    nodes  4  4.492 5.287 6.289 7.344 8.359 9.257 10.01 10.63  (round-to-round factor 8.575)
+   rms_after=none    nodes 10  4.965 5.815 6.853 7.895 8.863 9.732 10.51 11.19  (round-to-round factor 8.897)

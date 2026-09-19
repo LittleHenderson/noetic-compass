@@ -1,0 +1,38 @@
+correspondence records: 88
+  held      records 20 ; admissible mappings among all permutations: [(1, 16), (2, 4)]
+           identity permutation is valid in 0 of 20 records
+  trained   records 54 ; admissible mappings among all permutations: [(1, 29), (2, 11), (6, 14)]
+           identity permutation is valid in 0 of 54 records
+  excluded  records 14 ; admissible mappings among all permutations: [(1, 10), (6, 4)]
+           identity permutation is valid in 0 of 14 records
+
+how narrow is the correct set? (a permutation chosen at random from all syntactic
+bijections would be correct with probability n_admissible/n_perms)
+   1 valid of 6 permutations : 18 records
+   1 valid of 24 permutations : 37 records
+   2 valid of 24 permutations : 15 records
+   6 valid of 24 permutations : 18 records
+
+held detail:
+   88a1f0f1b548 same_world=False valid 1/24
+   a255dac0c1a5 same_world=False valid 1/24
+   14afe0a667fa same_world=False valid 2/24
+   305452c9a5ca same_world=False valid 1/24
+   123bc9798381 same_world=False valid 1/24
+   76f1f39edf30 same_world=False valid 2/24
+   a60e30012acf same_world=False valid 1/24
+   5b2b0fd90a4c same_world=False valid 1/24
+   cdb8213ca9d6 same_world=False valid 1/24
+   01ac8b42ffd6 same_world=False valid 1/24
+   65e69b5b104d same_world=False valid 1/24
+   a9cf190ebe22 same_world=False valid 1/24
+   e8eb58f307c2 same_world=False valid 1/24
+   ec1ef7cd31ed same_world=False valid 1/24
+   001012dac93f same_world=False valid 1/24
+   13103947908b same_world=False valid 2/24
+   82dfaf6aa442 same_world=False valid 1/24
+   17c70f3a31f8 same_world=False valid 2/24
+   ea8c34528c67 same_world=False valid 1/24
+   0a5a59e131d6 same_world=False valid 1/24
+
+identity mapping admissible? by side: {('excluded', False): 14, ('trained', False): 54, ('held', False): 20}

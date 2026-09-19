@@ -1,0 +1,14 @@
+correspondence records 88
+  held      records 20   ref-rank rule 0  label-rank rule 0  degree-rank rule 0  label-preserving admissible 0  label sets equal 0
+  trained   records 54   ref-rank rule 5  label-rank rule 5  degree-rank rule 7  label-preserving admissible 0  label sets equal 0
+  excluded  records 14   ref-rank rule 2  label-rank rule 2  degree-rank rule 4  label-preserving admissible 0  label sets equal 0
+
+do the paired worlds of a correspondence question share any node label?
+  held      shared-label counts {0: 20}
+  trained   shared-label counts {0: 54}
+  excluded  shared-label counts {0: 14}
+
+analogy: label overlap between the focus world and each candidate, split by whether
+the candidate is a correct answer
+  held      correct candidates 123 overlap histogram {0: 123} ; wrong candidates 948 histogram {0: 942, 1: 6}
+  trained   correct candidates 315 overlap histogram {0: 312, 1: 3} ; wrong candidates 1953 histogram {0: 1918, 1: 35}

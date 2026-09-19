@@ -1,0 +1,21 @@
+  admissible cache: computing 564 records (this is the only slow step)...
+    564 records in 118.0 s
+  admissible cache: written to lk_cache_admissible.json
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 383.2 s
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  held questions 50 records covered 127
+  trained questions 189
+  eligible 45 shortcut-removed 5
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+  eligible by world {'world-22704554': 8, 'world-28f61f2d': 9, 'world-4090ec49': 10, 'world-6e1fcbda': 9, 'world-98c6352d': 9}
+  held-back questions by kind (all) {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 14, 'role_set': 6}
+  shortcut answers per kind {'definition': '{"function_ref": "W32/decl/function", "kind_ref": "W32/decl/kind", "whole": "N0"}', 'role_set': '{"roles": [2], "status": "UNIQUE"}', 'correspondence': '{"pairs": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N0"}, {"source": "N2", "target": "N2"}, {"source": "N3", "target": "N3"}], "status": "MAPPING"}', 'parts': '{"nodes": ["N0", "N2", "N3"]}', 'reach': '{"state": "DIRECT", "via": null}', 'edge_account': '{"edges": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N2"}]}', 'analogy': '{"world_id": "W2"}', 'context': '{"participants": ["N0", "N1", "N3"], "setting_ref": "W59/decl/setting"}'}
+  shortcut source: computed by evaluate_gates.eligible_questions in this run
+  held worlds ['world-22704554', 'world-28f61f2d', 'world-4090ec49', 'world-6e1fcbda', 'world-98c6352d']
+  bank worlds 64 world node counts {3: 12, 4: 52}
+  domain counts {'container': 16, 'grammatical': 16, 'mechanical': 16, 'procedural': 16}
+  worlds where primary_labels == participants: 64 of 64
+  worlds where participants is in sorted order: 14 of 64

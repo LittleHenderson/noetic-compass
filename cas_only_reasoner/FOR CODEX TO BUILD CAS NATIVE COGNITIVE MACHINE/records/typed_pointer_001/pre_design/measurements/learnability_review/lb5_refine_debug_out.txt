@@ -1,0 +1,25 @@
+synthetic shapes, structural colouring (degree only), no text:
+  3-path   rounds 2  final colour classes 3  signature (1, 1, 1)  hist [3, 3, 3]
+  4-star   rounds 2  final colour classes 2  signature (1, 3)  hist [2, 2, 2]
+  4-path   rounds 3  final colour classes 4  signature (1, 1, 1, 1)  hist [3, 4, 4, 4]
+  2+2      rounds 2  final colour classes 2  signature (2, 2)  hist [2, 2, 2]
+  fork     rounds 3  final colour classes 4  signature (1, 1, 1, 1)  hist [3, 4, 4, 4]
+  V        rounds 2  final colour classes 3  signature (1, 1, 2)  hist [3, 3, 3]
+
+with a unique text colour per node (what reading label words does):
+  3-path   final colour classes 3 signature (1, 1, 1)
+  4-star   final colour classes 4 signature (1, 1, 1, 1)
+  4-path   final colour classes 4 signature (1, 1, 1, 1)
+  2+2      final colour classes 4 signature (1, 1, 1, 1)
+  fork     final colour classes 4 signature (1, 1, 1, 1)
+  V        final colour classes 4 signature (1, 1, 1, 1)
+
+real bank worlds: structural colouring, showing the transition each round
+  nodes=4 edges=3  initial classes 4  per-round classes [4, 4, 4]  final signature (1, 1, 1, 1)
+  nodes=4 edges=3  initial classes 2  per-round classes [2, 2, 2]  final signature (1, 3)
+  nodes=3 edges=2  initial classes 3  per-round classes [3, 3, 3]  final signature (1, 1, 1)
+  nodes=4 edges=4  initial classes 3  per-round classes [3, 3, 3]  final signature (1, 1, 2)
+
+real bank worlds by structural-colouring signature: {(1, 1, 1, 1): 28, (1, 3): 12, (1, 1, 1): 12, (1, 1, 2): 12}
+real bank worlds, FULL colouring including flags + label text: {(1, 1, 1, 1): 52, (1, 1, 1): 12}
+real bank worlds, flags but NO label text: {(1, 1, 1, 1): 52, (1, 1, 1): 12}

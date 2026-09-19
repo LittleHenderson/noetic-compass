@@ -1,0 +1,46 @@
+split 127 358 79 packets 564
+frozen keys ['bank', 'batches', 'condition', 'counts', 'course_digest', 'plan', 'prepared_digest', 'presentations', 'readiness', 'registry', 'schema', 'semantic_policy', 'source_profile', 'source_seed', 'teacher_boundary']
+bank keys ['bank', 'schema', 'worlds']
+registry row keys ['cue', 'instruction', 'query', 'record_id', 'role_catalog', 'schema', 'source_digest', 'source_world_id', 'supports']
+world keys ['branch_order', 'contains', 'contains_inventory_complete', 'declarations', 'declared_whole', 'inventory_scope', 'nodes', 'source_status', 'world_id']
+node {'kind': 'idea', 'label': 'Determiner', 'ref': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n0'}
+contains [{'ref': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e2', 'source': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2', 'target': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3'}, {'ref': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/e0', 'source': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n1', 'target': 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3'}]
+declarations {'domain': 'grammatical', 'function': 'carries the relation between List and Item', 'kind': 'a list pattern', 'participants': ['world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2', 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n1', 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3'], 'participants_basis': 'PRIMARY_AUTHORED_LABELS_FIRST_THREE', 'primary_labels': ['world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n2', 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n1', 'world-00d90ef065fa389a45d42961c0d0d95403221772d942d64a61baadc61d92c3a2/n3'], 'setting': 'in an edited sentence'}
+True EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD
+bank world node counts Counter({4: 52, 3: 12})
+bank world edge counts Counter({3: 40, 2: 12, 4: 12})
+packet keys ['record', 'source']
+source keys ['bank', 'focus_world_id', 'worlds']
+n worlds in packet source 64
+n world_ids in bank list 64
+bank world_ids == sorted world ids? True
+record keys ['cue', 'instruction', 'query', 'record_id', 'role_catalog', 'schema', 'source_digest', 'source_world_id', 'supports']
+query {'arguments': {'part': 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n3', 'whole': 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be/n0'}, 'focus_world_id': 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be', 'kind': 'reach', 'query_id': 'typed-query-7a3913508fb53d4e120481850818b32f7a0e40e382f1bb859547c6008ff70695', 'rule': 'bfs_immediate_predecessor_lexical_v1', 'schema': 'cas.typed-teaching-query/0.1', 'source_digest': '77cbfb2ddc9c4869cebe946df2d60bbc0abd73a78d4dbca982ceee6abc3fdef8'}
+supports []
+cue CUBE_FACE_5
+instruction Classify the specified part as DIRECT, ABSENT or VIA. Direct edges take precedence. Apply the exact public rule ID to se
+node data present for all 64 bank worlds? True
+does packet source contain held node labels for non-focus worlds? (should: only data, no leak concept)
+packets whose focus world is held 127
+development packets 59
+dev packet source keys ['bank', 'focus_world_id', 'worlds']
+dev focus world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f
+dev n worlds 65
+dev kind counts Counter({'reach': 53, 'parts': 6})
+dev rules Counter({'first_direct_constituent_lexical_v1': 53, 'direct_contains_v1': 6})
+dev node counts of focus worlds Counter({10: 5, 9: 1})
+dev focus node counts Counter({10: 50, 9: 9})
+dev focus world keys ['branch_order', 'contains', 'contains_inventory_complete', 'declarations', 'declared_whole', 'inventory_scope', 'nodes', 'source_status', 'world_id']
+dev focus node {'kind': 'idea', 'label': 'Dev2Node0', 'ref': 'world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n0'}
+dev declarations {'domain': 'development_structure', 'function': 'supplies a complete declared containment snapshot for a development question', 'kind': 'authored directed containment example', 'participants': ['world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n6', 'world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n0', 'world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n1'], 'participants_basis': 'PRIMARY_AUTHORED_LABELS_FIRST_THREE', 'primary_labels': ['world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n6', 'world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n0', 'world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n1'], 'setting': 'development transfer without answer-bearing supports'}
+dev edges 7
+dev declared_whole world-71b742a82e24ee5ea7e3be28e3da2b809be16303e1347e8b93dcddbe71a7fb3f/n6
+dev inventory_scope EXACT_SUPPLIED_CONTAINS_SNAPSHOT_NOT_WIDER_WORLD
+dev packets with 10-node focus 50
+dev focus sizes {10: 50, 9: 9}
+checker.MAX_ISOMORPHISM_NODES 4
+any dev focus world above the checker bound? True
+dev derive_target ok for 10-node reach parts 1
+dev derive_target ok for parts 1
+dev plan kinds reach slots 1
+max slot symbol count dev 12

@@ -1,0 +1,45 @@
+worlds the reader must encode, total presentations per kind (564 records):
+   role_set 36 of 564 records; distribution {1: 36}
+   definition 4550 of 564 records; distribution {65: 70}
+   context 4550 of 564 records; distribution {65: 70}
+   analogy 4550 of 564 records; distribution {65: 70}
+   correspondence 176 of 564 records; distribution {2: 88}
+   parts 53 of 564 records; distribution {1: 53}
+   edge_account 70 of 564 records; distribution {1: 70}
+   reach 107 of 564 records; distribution {1: 107}
+  all kinds total 14092 of 564
+reader flag construction failures (course packets): none
+course node labels containing a quote character: 0
+bank worlds whose node labels are NOT unique inside the world: 0 of 64
+development packets whose focus labels are not unique: 0 of 59
+zero-learning rule using ONLY the focus world + the query arguments (graph edges allowed):
+    held definition 15/15
+    held context 17/17
+    held analogy 17/17
+    held correspondence 20/20
+    held parts 9/9
+    held edge_account 17/17
+    held reach 26/26
+    trained definition 36/36
+    trained context 41/41
+    trained analogy 36/36
+    trained correspondence 54/54
+    trained parts 44/44
+    trained edge_account 46/46
+    trained reach 71/71
+    excluded definition 19/19
+    excluded context 12/12
+    excluded analogy 17/17
+    excluded correspondence 14/14
+    excluded edge_account 7/7
+    excluded reach 10/10
+flags only, no edges at all (definition, context):
+    ('excluded', 'context') 12/12
+    ('excluded', 'definition') 19/19
+    ('held', 'context') 17/17
+    ('held', 'definition') 15/15
+    ('trained', 'context') 41/41
+    ('trained', 'definition') 36/36
+reach records whose VIA node is decided by the hidden node-ref order: {'held': 5, 'trained': 11, 'excluded': 2}
+
+TOTALS: held 127 trained 358 excluded 79 ; dev packets 59

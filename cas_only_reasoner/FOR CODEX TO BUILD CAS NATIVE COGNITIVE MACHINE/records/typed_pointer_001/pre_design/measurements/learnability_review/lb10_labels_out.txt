@@ -1,0 +1,65 @@
+distinct node labels in the whole 64-world bank: 230 ; nodes: 244
+labels used by more than one world: 13
+held-world node labels: 20 over 5 worlds
+
+held-world node labels whose TEXT occurs in at least one trained record: 20/20
+total (label, trained record) textual occurrences: 7160
+
+held-world node labels that are the FOCUS of a trained question: 2/20
+distinct labels appearing as a trained question's focus (any world): 68
+
+over the 1,470-update schedule (8180 record presentations), how often the pointer reader
+would embed a held-world node label:
+   Bearing        world e8ce8e4952  read 1340 times
+   Bolt           world e9f86b4547  read 1340 times
+   Bracket        world 09375534a9  read 1340 times
+   Brake          world 45a33d14be  read 1340 times
+   Cable          world 09375534a9  read 1340 times
+   Chuck          world e9f86b4547  read 3090 times
+   Crane          world 09375534a9  read 1340 times
+   Disc           world 45a33d14be  read 1340 times
+   Gear           world aeb3dde9fc  read 3210 times
+   Gearbox        world aeb3dde9fc  read 1340 times
+   Hook           world 09375534a9  read 1340 times
+   Lathe          world e9f86b4547  read 1340 times
+   Loom           world e8ce8e4952  read 1340 times
+   Manifold       world aeb3dde9fc  read 1340 times
+   Pad            world 45a33d14be  read 1340 times
+   Pinion         world 45a33d14be  read 1340 times
+   Shaft          world aeb3dde9fc  read 1340 times
+   Shuttle        world e8ce8e4952  read 1340 times
+   Thread         world e8ce8e4952  read 1340 times
+   Tool           world e9f86b4547  read 1340 times
+   TOTAL held-world label reads during training: 30420
+   distinct held-world labels ever read during training: 20/20
+
+over the 564 records (one pass), worlds the reader must encode: 7531
+   records whose slots list every world (kind_ref/function_ref/setting_ref/world_id): 113
+
+FrameTokenizer.encode_text: 0.0219 s per call
+node-label encodes for one pass over all 64 worlds: 244 calls, 5.3 s
+node-label encodes for one pass over the 358 trained records: 28490
+node-label encodes for the full 10-pass run: 284900  -> 6225 s at 0.0219 s/call
+declaration text encodes for one pass over all 64 worlds: 1478
+distinct node labels: 230 -> a one-time cache of 230 encodes (5.0 s)
+distinct declaration strings: 136
+
+checker rules that mention a label or a ref text:
+   token label  appears on checker.py lines [97]
+   token ref    appears on checker.py lines [57, 73, 116, 171, 172, 177, 179, 183]
+
+labels shared by several worlds (so the text alone cannot identify the world):
+   Brush            worlds 2  (held among them: 0)
+   Cap              worlds 2  (held among them: 0)
+   Chuck            worlds 2  (held among them: 1)
+   Gear             worlds 2  (held among them: 1)
+   Label            worlds 2  (held among them: 0)
+   Liner            worlds 2  (held among them: 0)
+   Marker           worlds 2  (held among them: 0)
+   Notes            worlds 2  (held among them: 0)
+   Piston           worlds 2  (held among them: 0)
+   Plate            worlds 3  (held among them: 0)
+   Rotor            worlds 2  (held among them: 0)
+   Seal             worlds 2  (held among them: 0)
+   Spring           worlds 2  (held among them: 0)
+held-world labels that are also labels of a non-held world: 2

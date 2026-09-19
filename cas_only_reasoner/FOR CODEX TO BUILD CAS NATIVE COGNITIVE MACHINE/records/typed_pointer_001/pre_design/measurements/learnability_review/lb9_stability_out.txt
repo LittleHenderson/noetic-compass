@@ -1,0 +1,46 @@
+bank world node-count histogram: {4: 52, 3: 12}
+largest bank world: 4 nodes; bank worlds have at most 4 edges
+development panel focus-world node counts (packets 59): {10: 50, 9: 9}
+
+FORWARD, 8 shared rounds, 50 seeds: mean max|h| after the last round, and mean tanh saturation
+(saturation = fraction of pre-activations with |z| > 2, where tanh' < 0.071)
+  torch_default rms_after=none    3-node max|h|=9.184 sat=0.2466 | 4-star max|h|=9.269 sat=0.2570 | 4-V max|h|=9.207 sat=0.3225 | 10-node max|h|=10.65 sat=0.2883
+  torch_default rms_after=input   3-node max|h|=8.371 sat=0.0715 | 4-star max|h|=8.557 sat=0.0857 | 4-V max|h|=8.478 sat=0.1261 | 10-node max|h|=9.786 sat=0.0989
+  torch_default rms_after=output  3-node max|h|=2.886 sat=0.0765 | 4-star max|h|=3.071 sat=0.0909 | 4-V max|h|=2.885 sat=0.1342 | 10-node max|h|=3.317 sat=0.1054
+  he_normal     rms_after=none    3-node max|h|=23.34 sat=0.7530 | 4-star max|h|=23.87 sat=0.7593 | 4-V max|h|=23.9 sat=0.7933 | 10-node max|h|=26.65 sat=0.7728
+  he_normal     rms_after=input   3-node max|h|=21.99 sat=0.4688 | 4-star max|h|=22.38 sat=0.4756 | 4-V max|h|=22.55 sat=0.5565 | 10-node max|h|=25.25 sat=0.5032
+  he_normal     rms_after=output  3-node max|h|=2.673 sat=0.4802 | 4-star max|h|=2.77 sat=0.4891 | 4-V max|h|=2.658 sat=0.5721 | 10-node max|h|=3.201 sat=0.5136
+  xavier        rms_after=none    3-node max|h|=18.9 sat=0.6313 | 4-star max|h|=19.56 sat=0.6379 | 4-V max|h|=19.36 sat=0.6866 | 10-node max|h|=21.63 sat=0.6561
+  xavier        rms_after=input   3-node max|h|=17.29 sat=0.3089 | 4-star max|h|=18.13 sat=0.3177 | 4-V max|h|=17.99 sat=0.4012 | 10-node max|h|=19.85 sat=0.3446
+  xavier        rms_after=output  3-node max|h|=2.792 sat=0.3207 | 4-star max|h|=2.853 sat=0.3317 | 4-V max|h|=2.68 sat=0.4193 | 10-node max|h|=3.189 sat=0.3566
+  over_large    rms_after=none    3-node max|h|=176.7 sat=0.9767 | 4-star max|h|=179.5 sat=0.9771 | 4-V max|h|=176.6 sat=0.9803 | 10-node max|h|=201.3 sat=0.9787
+  over_large    rms_after=input   3-node max|h|=172.7 sat=0.8982 | 4-star max|h|=178.8 sat=0.8972 | 4-V max|h|=174.8 sat=0.9183 | 10-node max|h|=199.8 sat=0.9047
+  over_large    rms_after=output  3-node max|h|=2.747 sat=0.8992 | 4-star max|h|=2.886 sat=0.9015 | 4-V max|h|=2.719 sat=0.9205 | 10-node max|h|=3.176 sat=0.9075
+
+TRAJECTORY, torch_default init, rms AFTER the update: mean max|h| at rounds 1..8
+  3-node    1.034 1.011 1.058 1.084 1.096 1.112 1.136 1.144
+  4-star    0.9845 0.9961 1.057 1.134 1.197 1.23 1.275 1.299
+  4-V       1.045 1.078 1.115 1.145 1.206 1.237 1.263 1.264
+  10-node   1.21 1.211 1.279 1.28 1.307 1.311 1.302 1.322
+
+TRAJECTORY, torch_default init, NO rms at all: mean max|h| at rounds 1..8 (bounded by 8 x ^6 range)
+  3-node    1.018 1.019 1.116 1.196 1.281 1.338 1.363 1.392
+  4-star    0.9666 0.9985 1.103 1.246 1.362 1.396 1.464 1.534
+  4-V       1.02 1.081 1.181 1.283 1.383 1.448 1.527 1.574
+  10-node   1.188 1.226 1.359 1.42 1.499 1.549 1.561 1.584
+
+PER-ROUND UPDATE SIZE, torch_default init (mean |out| per round); a fixed point needs this to -> 0
+  rms_after=none    0.2723 0.2889 0.3275 0.3606 0.3832 0.4004 0.4105 0.4155
+  rms_after=input   0.2789 0.2887 0.3103 0.3241 0.331 0.3364 0.3398 0.342
+  rms_after=output  0.2789 0.2877 0.3094 0.3246 0.3327 0.3383 0.3413 0.3432
+
+GRADIENT: spectral norm of d(sum of final node states)/d(initial node states) through 8 SHARED rounds
+  torch_default rms_after=none    3-node 7.134 | 4-star 11.71 | 4-V 11.95 | 10-node 12.82
+  torch_default rms_after=input   3-node 8.516 | 4-star 14.15 | 4-V 14.75 | 10-node 15.92
+  torch_default rms_after=output  3-node 141.4 | 4-star 186.8 | 4-V 141.6 | 10-node 160.7
+  he_normal     rms_after=none    3-node 12.75 | 4-star 20.57 | 4-V 19.6 | 10-node 22.08
+  he_normal     rms_after=input   3-node 27.18 | 4-star 44.42 | 4-V 41.19 | 10-node 46.87
+  he_normal     rms_after=output  3-node 284.6 | 4-star 394.2 | 4-V 406.3 | 10-node 387.4
+  over_large    rms_after=none    3-node 96.56 | 4-star 144.6 | 4-V 159.4 | 10-node 143.2
+  over_large    rms_after=input   3-node 275.9 | 4-star 428.7 | 4-V 443.3 | 10-node 464.6
+  over_large    rms_after=output  3-node 2719 | 4-star 4825 | 4-V 3881 | 10-node 2918

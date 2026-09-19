@@ -1,0 +1,27 @@
+worlds in bank: 64
+held worlds present in bank: 5
+distinct shapes: 6
+  shape nodes=3 edges=((0, 1), (1, 2))  count=12  held-in-class=0
+  shape nodes=4 edges=((0, 1), (0, 2), (0, 3))  count=12  held-in-class=0
+  shape nodes=4 edges=((0, 1), (0, 2), (1, 3))  count=8  held-in-class=2
+  shape nodes=4 edges=((0, 1), (0, 2), (1, 3), (2, 3))  count=12  held-in-class=1
+  shape nodes=4 edges=((0, 1), (0, 2), (3, 1))  count=8  held-in-class=1
+  shape nodes=4 edges=((0, 1), (1, 2), (2, 3))  count=12  held-in-class=1
+
+exact degrees per world (histogram of (in,out) pairs, multiset):
+distinct degree multisets: 6
+   ((0, 1), (1, 0), (1, 1)) count 12
+   ((0, 1), (1, 0), (1, 1), (1, 1)) count 12
+   ((0, 2), (1, 1), (1, 1), (2, 0)) count 12
+   ((0, 3), (1, 0), (1, 0), (1, 0)) count 12
+   ((0, 1), (0, 2), (1, 0), (2, 0)) count 8
+   ((0, 2), (1, 0), (1, 0), (1, 1)) count 8
+
+distinct (nodes, edges) pairs: Counter({(4, 3): 40, (3, 2): 12, (4, 4): 12})
+distinct node labels in whole bank: 230
+distinct declarations.domain: Counter({'grammatical': 16, 'procedural': 16, 'container': 16, 'mechanical': 16})
+worlds sharing the same (nodes,edges) but different shape: 1072
+
+held world shapes: [(4, ((0, 1), (0, 2), (3, 1))), (4, ((0, 1), (0, 2), (1, 3))), (4, ((0, 1), (1, 2), (2, 3))), (4, ((0, 1), (0, 2), (1, 3))), (4, ((0, 1), (0, 2), (1, 3), (2, 3)))]
+bank world shapes: Counter({(4, ((0, 1), (0, 2), (0, 3))): 12, (3, ((0, 1), (1, 2))): 12, (4, ((0, 1), (0, 2), (1, 3), (2, 3))): 11, (4, ((0, 1), (1, 2), (2, 3))): 11, (4, ((0, 1), (0, 2), (3, 1))): 7, (4, ((0, 1), (0, 2), (1, 3))): 6})
+a held world shares its exact shape with a bank world? {'world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952': 7, 'world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547': 6, 'world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc': 11, 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be': 6, 'world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9': 11}

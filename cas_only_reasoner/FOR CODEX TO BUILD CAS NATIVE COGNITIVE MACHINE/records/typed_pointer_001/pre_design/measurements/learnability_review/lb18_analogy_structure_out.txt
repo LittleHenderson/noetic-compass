@@ -1,0 +1,22 @@
+held      records 17 answers 123 | correct set == (isomorphic AND different domain) in 17 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 24
+trained   records 36 answers 315 | correct set == (isomorphic AND different domain) in 36 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 69
+excluded  records 17 answers 138 | correct set == (isomorphic AND different domain) in 17 records | correct set == (isomorphic) in 0 | alternative isomorphic candidates the shape test alone cannot reject: 29
+
+held detail (side, rid, correct answers, isomorphic others, isomorphic-but-rejected, non-domain candidates):
+    ('held', '1374d8b8432c', 6, 7, 1, 48)
+    ('held', '69d6b554ce25', 6, 7, 1, 48)
+    ('held', 'adf5318ae5db', 6, 7, 1, 48)
+    ('held', '889a93b1f916', 6, 7, 1, 48)
+    ('held', '53870b56d366', 9, 11, 2, 48)
+    ('held', 'de7d25c7d5e1', 6, 7, 1, 48)
+    ('held', '1b51609b7d4d', 9, 11, 2, 48)
+    ('held', '2e09ef23d9a7', 9, 11, 2, 48)
+    ('held', 'fbbd55675810', 9, 11, 2, 48)
+    ('held', 'd81bdc6ba341', 9, 11, 2, 48)
+    ('held', 'af56d18c5704', 6, 7, 1, 48)
+    ('held', 'c73be6489364', 6, 7, 1, 48)
+    ('held', '9a30ca37b668', 6, 7, 1, 48)
+    ('held', '117dbea75693', 9, 11, 2, 48)
+    ('held', 'c3d238a923dc', 6, 7, 1, 48)
+    ('held', '33510a144755', 6, 7, 1, 48)
+    ('held', '7dddbc3db00c', 9, 11, 2, 48)

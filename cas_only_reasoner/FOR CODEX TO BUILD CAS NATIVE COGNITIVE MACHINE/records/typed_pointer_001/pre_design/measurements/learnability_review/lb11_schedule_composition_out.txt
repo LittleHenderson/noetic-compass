@@ -1,0 +1,87 @@
+main updates 1470, presentations 8180, interference updates 16
+batch size histogram: {1: 20, 2: 40, 3: 170, 4: 390, 5: 70, 6: 250, 7: 80, 8: 450}
+main update budget: 1470 + 16 interference + 2 replay = 1488
+
+main schedule, 1,470 updates:
+  kinds present per update: {1: 20, 2: 450, 3: 560, 4: 170, 5: 180, 6: 90}
+  kind             updates    fraction     presentations
+  role_set         320        320/1470    780
+  definition       420        420/1470    460
+  context          400        400/1470    470
+  analogy          350        350/1470    410
+  correspondence   800        800/1470    1510
+  parts            840        840/1470    1720
+  edge_account     520        520/1470    520
+  reach            1070       1070/1470    2310
+
+per-head exposure over the 1,470 main updates:
+  node YES/NO (parts, context participants)                                      1150/1470 updates
+  edge YES/NO (edge_account pairs)                                                520/1470 updates
+  role YES/NO (role_set)                                                          320/1470 updates
+  node scorer <Wq, h_v> (definition whole, reach VIA, correspondence mapping)    1400/1470 updates
+  world scorer <W[q;g_F], g_w> (definition kind/function, context setting, analogy world)  550/1470 updates
+  option vectors (reach ABSENT/DIRECT, correspondence mode, analogy NO_MATCH)    1360/1470 updates
+  role embedding table                                                            320/1470 updates
+  world encoder + ^6 block (everything)                                          1470/1470 updates
+
+per-head exposure over the 16 interference updates (definition/context only):
+  node YES/NO (parts, context participants)                                        16/16 updates
+  edge YES/NO (edge_account pairs)                                                  0/16 updates
+  role YES/NO (role_set)                                                            0/16 updates
+  node scorer <Wq, h_v> (definition whole, reach VIA, correspondence mapping)      16/16 updates
+  world scorer <W[q;g_F], g_w> (definition kind/function, context setting, analogy world)   16/16 updates
+  option vectors (reach ABSENT/DIRECT, correspondence mode, analogy NO_MATCH)       0/16 updates
+  role embedding table                                                              0/16 updates
+  world encoder + ^6 block (everything)                                            16/16 updates
+
+the same table restricted to what the updated gradient rule (per-head) implies:
+AdamW's second moment is a running average with decay 0.999, so a head that sees
+gradient in a fraction f of updates needs roughly 1/f updates for its second moment
+to describe its own gradient scale rather than be dominated by a stale value.
+  node YES/NO (parts, context participants)                                      f=1150/1470  updates needed for 1e-3 decay-equivalence: 1
+  edge YES/NO (edge_account pairs)                                               f=520/1470  updates needed for 1e-3 decay-equivalence: 3
+  role YES/NO (role_set)                                                         f=320/1470  updates needed for 1e-3 decay-equivalence: 5
+  node scorer <Wq, h_v> (definition whole, reach VIA, correspondence mapping)    f=1400/1470  updates needed for 1e-3 decay-equivalence: 1
+  world scorer <W[q;g_F], g_w> (definition kind/function, context setting, analogy world) f=550/1470  updates needed for 1e-3 decay-equivalence: 3
+  option vectors (reach ABSENT/DIRECT, correspondence mode, analogy NO_MATCH)    f=1360/1470  updates needed for 1e-3 decay-equivalence: 1
+  role embedding table                                                           f=320/1470  updates needed for 1e-3 decay-equivalence: 5
+  world encoder + ^6 block (everything)                                          f=1470/1470  updates needed for 1e-3 decay-equivalence: 1
+
+records of each kind in the trained set (the entire per-kind training population):
+  role_set         30 of 358 trained records
+  definition       36 of 358 trained records
+  context          41 of 358 trained records
+  analogy          36 of 358 trained records
+  correspondence   54 of 358 trained records
+  parts            44 of 358 trained records
+  edge_account     46 of 358 trained records
+  reach            71 of 358 trained records
+held records per kind (the evaluation target population):
+  role_set         6 of 127 held records
+  definition       15 of 127 held records
+  context          17 of 127 held records
+  analogy          17 of 127 held records
+  correspondence   20 of 127 held records
+  parts            9 of 127 held records
+  edge_account     17 of 127 held records
+  reach            26 of 127 held records
+
+output rows and candidate counts per kind (from the slot plan), which bound the
+minimum update count for the head to see each candidate at least once:
+   analogy          world_id       max symbols 65
+   context          participant    max symbols 2
+   context          setting_ref    max symbols 64
+   correspondence   mapping_target max symbols 4
+   correspondence   mode           max symbols 2
+   definition       function_ref   max symbols 64
+   definition       kind_ref       max symbols 64
+   definition       whole          max symbols 4
+   edge_account     edge           max symbols 2
+   parts            node           max symbols 2
+   reach            reach          max symbols 6
+   role_set         role           max symbols 2
+
+questions per held-back world: {'45a33d14be': 26, '09375534a9': 25, 'e8ce8e4952': 25, 'aeb3dde9fc': 26, 'e9f86b4547': 25}
+eligible held questions by kind (the gate population, from the pipeline review):
+  correspondence 5, edge_account 5, reach 9, analogy 5, parts 5 = 29 relational
+  definition 5, context 5 = 10 direct-read

@@ -89,6 +89,77 @@ argument does — 20/20 held labels appearing in trained text is exactly the cha
 machine. The outgoing agent's recommendation to drop node label words is therefore supported, but the reviewer's final
 report should confirm that `checker.py:97` is not load-bearing for any kind.
 
+## 4.5 🔴 THE LEARNABILITY LENS HAS REPORTED — and the relational tier is largely compromised ON THIS CORPUS
+
+`DESIGN_REVIEW_LEARNABILITY_LENS.md` (60,599 bytes, 18 findings LB0–LB18, each with a severity of exactly
+`BLOCKS_RESULT`, `FALSE_NEGATIVE_RISK`, `DESIGN_CHANGE_REQUIRED` or `NOTE`). Its per-kind verdict:
+
+| kind | expressible as drafted? | what is missing |
+|---|---|---|
+| `role_set` | YES | nothing |
+| `definition` | YES, wrong head | score ref heads on declaration text, not `g_w` |
+| `context` | YES, wrong head | same |
+| `parts` | YES | nothing (1 round suffices) |
+| `edge_account` | RISKY | the `a→b` adjacency bit into the edge head's MLP |
+| `reach` rule 2 | YES | the rule embedding (DG2) |
+| `reach` rule 1 | **NO for 5 of 26 held records** | the hidden node-ref order |
+| **`correspondence`** | **NO** | **a joint edge-aware mapping scorer** |
+| `analogy` | text half YES, graph half weak | a non-graph-blind world vector |
+
+**The two findings that matter most, and they hit the two kinds the leaks lens called "clean".**
+
+1. **`correspondence` is NOT EXPRESSIBLE** (LB12, LB13, LB15). The per-node score has no input depending on the
+   target world's edge set, so every permutation in the source world's automorphism group gets an identical score,
+   and the tie rule picks the first syntactic bijection — measured correct in **0 of 20 held** records. In **81 of 88**
+   records no admissible mapping lies in the source's automorphism group at all, so *no additive per-node score over
+   these inputs can be made to prefer a correct answer*. No auxiliary channel rescues it: degree-rank 0/20 held,
+   ref-rank 0/20, label-rank 0/20, and a label-preserving mapping is admissible in **0 of 88**. **Until a joint
+   scorer is built and measured, correspondence must be recorded as a known false negative and removed from the
+   RELATIONAL population.**
+
+2. **`analogy` is solved by a zero-learning rule** (LB18). A *same-shape-and-different-domain* rule solves **17 of 17
+   held analogy records**. The cause is LB3/LB4: only **6 non-isomorphic structures exist** in the 64-world bank
+   (class sizes 12, 12, 12, 12, 8, 8), and every held world has **7, 6, 11, 6, 11** same-shape trained twins. So
+   "isomorphic" is coarse enough to be found by a cheap rule.
+
+**And the machinery that makes this work is exact, not statistical** (LB7): the **sorted (in-degree, out-degree)
+multiset is a complete isomorphism invariant on this corpus** — its partition and the brute-force isomorphism
+partition give the same 6 groups and coincide exactly, with **0 of 2016** non-isomorphic pairs indistinguishable
+under any of the four colourings. So 1-WL is *not* the binding constraint here; the binding constraint is that
+the worlds are 3–4 nodes and their isomorphism class is a degree multiset.
+
+**Three more blockers on the learning side, all `DESIGN_CHANGE_REQUIRED` or `BLOCKS_RESULT`:**
+
+- **LB11 — the schedule under-covers.** The rarest head sees 320 of 1,470 updates; the 64-way text choice gets
+  **550 update events over 113 records**. The instruction is to rebalance so every kind appears in every pass
+  (about 10 × 470 updates), or drop the untrainable heads.
+- **LB9 — the `^6` initialisation is unspecified and changes everything.** Saturation ranges **75.30–98.03 %** with
+  no norm, **48.02–91.83 %** with the output norm, against **7.65–13.42 %** at the torch default. Pin the
+  initialisation and assert the measured saturation at pass 0.
+- **LB17 — the world-level heads must not read the pooled mean.** Condition them on the marked node's state or on
+  degree sums. This agrees with §5.5 and gives the concrete fix: **degree sums**, which LB7 shows are exact here.
+
+## 4.6 What this means for the primary objective — the reframe
+
+**On this corpus, most of the RELATIONAL answers are computable by short exact rules**, because the worlds are tiny
+and their isomorphism class is a degree multiset. That is a property of the course, not of the machine. It has a
+consequence that matters more than any gate tweak:
+
+- The **RELATIONAL tier cannot be the place a learning result is won.** `correspondence` is not expressible by the
+  drafted head; `analogy` falls to a shape rule; `reach` is contaminated by the rank and constant channels. The
+  honest thing is to say so and grade it strictly.
+- The **GRAPH-READING tier is where the neurons can genuinely be shown to learn something that transfers.**
+  `parts` and `edge_account` ask the machine to read a world's own structure and answer about it. Yes, a flag rule
+  or a single adjacency hop produces those answers — but **the machine does not have that rule hard-wired**; it must
+  learn the mapping from node states to pointers, and whether that learned mapping transfers to a never-practised
+  world is a real, falsifiable question with a real positive answer available.
+- So the study can still deliver the owner's objective, **provided the label is not asked to carry more than it can**:
+  report `GRAPH_READING` learning as the learning result, and the RELATIONAL tier as a strict, likely-negative test
+  of something this corpus cannot demonstrate.
+
+None of this has been acted on. It is recorded, not applied, and it is the substance of the consolidated question
+now owed to the owner.
+
 ## 5. Is the optimiser adequate? (learnability lens, `lb11_schedule_composition_out.txt`)
 
 Per-head gradient exposure over the 1,470 main updates, with AdamW's second moment decaying at 0.999:

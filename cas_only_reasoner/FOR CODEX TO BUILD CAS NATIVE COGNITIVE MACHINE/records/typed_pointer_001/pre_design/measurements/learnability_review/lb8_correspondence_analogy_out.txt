@@ -1,0 +1,113 @@
+correspondence records: 88
+  held      records 20  MAPPING 20  NO_MATCH 0  degree-multiset equal 20  mapping fully forced by degree classes 4
+  trained   records 54  MAPPING 54  NO_MATCH 0  degree-multiset equal 54  mapping fully forced by degree classes 17
+  excluded  records 14  MAPPING 14  NO_MATCH 0  degree-multiset equal 14  mapping fully forced by degree classes 8
+
+distribution of admissible-bijection counts (MAPPING records only):
+   {1: 55, 2: 15, 6: 18}
+mapping never forced for any record (some node sits in a non-singleton degree class): 59 of 88
+
+per-record detail (held):
+   88a1f0f1b548 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   a255dac0c1a5 status=MAPPING  bijections=1  deg_equal=True  forced=True  unforced_nodes=0
+   14afe0a667fa status=MAPPING  bijections=2  deg_equal=True  forced=False unforced_nodes=2
+   305452c9a5ca status=MAPPING  bijections=1  deg_equal=True  forced=True  unforced_nodes=0
+   123bc9798381 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   76f1f39edf30 status=MAPPING  bijections=2  deg_equal=True  forced=False unforced_nodes=2
+   a60e30012acf status=MAPPING  bijections=1  deg_equal=True  forced=True  unforced_nodes=0
+   5b2b0fd90a4c status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   cdb8213ca9d6 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   01ac8b42ffd6 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   65e69b5b104d status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   a9cf190ebe22 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   e8eb58f307c2 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   ec1ef7cd31ed status=MAPPING  bijections=1  deg_equal=True  forced=True  unforced_nodes=0
+   001012dac93f status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   13103947908b status=MAPPING  bijections=2  deg_equal=True  forced=False unforced_nodes=2
+   82dfaf6aa442 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   17c70f3a31f8 status=MAPPING  bijections=2  deg_equal=True  forced=False unforced_nodes=2
+   ea8c34528c67 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+   0a5a59e131d6 status=MAPPING  bijections=1  deg_equal=True  forced=False unforced_nodes=2
+
+analogy records: which world is the correct answer, and how many candidates share its shape?
+analogy records 70
+  held      records 17  answers per record {6: 10, 9: 7}  candidates sharing the focus world's exact shape: {7: 10, 11: 7}
+  trained   records 36  answers per record {6: 3, 9: 33}  candidates sharing the focus world's exact shape: {7: 3, 11: 33}
+  excluded  records 17  answers per record {6: 5, 9: 12}  candidates sharing the focus world's exact shape: {7: 5, 11: 12}
+
+ALL analogy answers, with the exact shape-equality route to them:
+   d9b469f8a53e side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   130afae7171a side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   1374d8b8432c side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   bf408746dff2 side=excluded  answers=6 candidates-with-focus-shape=7 domain=grammatical
+   6e1f7fe17538 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   0959645dfa40 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d5d5d9c52d18 side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   5167b3e9b41f side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   61c571e10ee8 side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   69d6b554ce25 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   adf5318ae5db side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   6ad1bee24777 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d2aedcf85ca7 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   65218f67368b side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d7fdc7479c63 side=excluded  answers=6 candidates-with-focus-shape=7 domain=grammatical
+   be4cb9d21e93 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   e39e1034774b side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   ad38c4c1cf36 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   313fe373ed90 side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   8af99a95ecde side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   9f038d83510c side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   0a2bce680d3b side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   889a93b1f916 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   53870b56d366 side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d8353e9deff3 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   39db4dfe86b3 side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   687a55368f94 side=trained   answers=6 candidates-with-focus-shape=7 domain=mechanical
+   467e0a8ff9fa side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   621ca8585905 side=excluded  answers=6 candidates-with-focus-shape=7 domain=grammatical
+   1ebf03a2b541 side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   2bb3dadbabed side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   de7d25c7d5e1 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   066ef673b3ec side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   6f9efbdfaa93 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   50135cf95330 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   bdaf93f319ac side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   6b36d9b1e14a side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   1b51609b7d4d side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   72c4b16d970a side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   720dc04dacd7 side=excluded  answers=6 candidates-with-focus-shape=7 domain=grammatical
+   2e09ef23d9a7 side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   c899246e7166 side=trained   answers=6 candidates-with-focus-shape=7 domain=mechanical
+   fbbd55675810 side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d81bdc6ba341 side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   afb480e3e33a side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   d2676ede4d1a side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   1374068db9a0 side=excluded  answers=9 candidates-with-focus-shape=11 domain=mechanical
+   af56d18c5704 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   59005ac662f0 side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   2ff5e047854c side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   a17cb1f7c8ce side=excluded  answers=6 candidates-with-focus-shape=7 domain=grammatical
+   adfd30bf268c side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   d2265a5668b1 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   c73be6489364 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   9a30ca37b668 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   117dbea75693 side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   dadf34eafc3b side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   c3d238a923dc side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   89907ed5ddc7 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   44fc24f57926 side=excluded  answers=9 candidates-with-focus-shape=11 domain=grammatical
+   33510a144755 side=held      answers=6 candidates-with-focus-shape=7 domain=mechanical
+   2489c4fb8644 side=trained   answers=6 candidates-with-focus-shape=7 domain=mechanical
+   0bc439530bab side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   b642e8fd1ef4 side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   f9acd0b916ac side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   5660bec2f6a0 side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   49f3d9f31ed6 side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+   7dddbc3db00c side=held      answers=9 candidates-with-focus-shape=11 domain=mechanical
+   64ffb19df60a side=trained   answers=9 candidates-with-focus-shape=11 domain=mechanical
+   1408b7273392 side=trained   answers=9 candidates-with-focus-shape=11 domain=grammatical
+
+parts and reach: the answer as a function of the graph
+  parts answer-size histogram: {('held', 1): 1, ('held', 2): 8, ('trained', 1): 8, ('trained', 2): 13, ('trained', 3): 23}
+  reach (side, rule, state) histogram: {('excluded', 'bfs_immediate_predecessor_lexical_v1', 'VIA'): 10, ('held', 'bfs_immediate_predecessor_lexical_v1', 'VIA'): 16, ('held', 'first_direct_constituent_lexical_v1', 'ABSENT'): 1, ('held', 'first_direct_constituent_lexical_v1', 'DIRECT'): 5, ('held', 'first_direct_constituent_lexical_v1', 'VIA'): 4, ('trained', 'bfs_immediate_predecessor_lexical_v1', 'VIA'): 33, ('trained', 'first_direct_constituent_lexical_v1', 'ABSENT'): 1, ('trained', 'first_direct_constituent_lexical_v1', 'DIRECT'): 25, ('trained', 'first_direct_constituent_lexical_v1', 'VIA'): 12}
+  edge_account: total true edges by side: {'trained': 131, 'held': 54, 'excluded': 23}

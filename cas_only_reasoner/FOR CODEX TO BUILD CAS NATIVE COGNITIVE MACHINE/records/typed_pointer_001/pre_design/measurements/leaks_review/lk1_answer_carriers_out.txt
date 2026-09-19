@@ -1,0 +1,121 @@
+  packet cache: built 564 packets in 164.6 s
+  admissible cache: reused lk_cache_admissible.json (cache built by lk0_material.py (checker.derive_target + evaluate_gates.eligible_questions))
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 168.8 s (frozen/encoder 2.8 s, packets 165.1 s, rest 0.9 s)
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  held questions 50 records covered 127
+  trained questions 189
+  eligible 45 shortcut-removed 5
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+  eligible by world {'world-22704554': 8, 'world-28f61f2d': 9, 'world-4090ec49': 10, 'world-6e1fcbda': 9, 'world-98c6352d': 9}
+  held questions by kind (all) {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 14, 'role_set': 6}
+  shortcut per kind (input-blind, the registered removal) {'analogy': '{"world_id": "W2"}', 'context': '{"participants": ["N0", "N1", "N3"], "setting_ref": "W59/decl/setting"}', 'correspondence': '{"pairs": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N0"}, {"source": "N2", "target": "N2"}, {"source": "N3", "target": "N3"}], "status": "MAPPING"}', 'definition': '{"function_ref": "W32/decl/function", "kind_ref": "W32/decl/kind", "whole": "N0"}', 'edge_account': '{"edges": [{"source": "N0", "target": "N1"}, {"source": "N1", "target": "N2"}]}', 'parts': '{"nodes": ["N0", "N2", "N3"]}', 'reach': '{"state": "DIRECT", "via": null}', 'role_set': '{"roles": [2], "status": "UNIQUE"}'}
+
+PART A -- the checker's answer components and the proposed input field that carries each
+  (input fields are exactly DESIGN_DRAFT_v0.1 section 2.1)
+  role_set       answer  : roles[1..6] + status, from the focal_excerpt text ONLY (focal.py:246-272)
+                 input   : the query's focal_excerpt text itself (the entire input for this kind)
+                 candidate space in the input: no candidate set: the answer text IS part of the input
+  definition     answer  : whole = focus.declared_whole; kind_ref and function_ref = the FOCUS world's own ids
+                 input   : per-node flag is_declared_whole; per-world flag is_focus_world; the focus world's kind/function text
+                 candidate space in the input: kind_ref/function_ref slots list all 64 worlds
+  context        answer  : setting_ref = the FOCUS world's id; participants = focus.declarations.participants
+                 input   : per-node flag is_participant; per-world flag is_focus_world; the focus world's setting text
+                 candidate space in the input: setting_ref slot lists all 64 worlds
+  analogy        answer  : every bank world with a different declared domain and an isomorphic graph
+                 input   : per-world domain word; per-world graph (through message passing)
+                 candidate space in the input: world_id slot lists NO_MATCH + all 64 worlds
+  correspondence answer  : NO_MATCH, or every edge-preserving node bijection
+                 input   : per-world flag is_correspondence_target; both graphs through message passing
+                 candidate space in the input: candidate list = NO_MATCH + every syntactic bijection of the two node sets
+  parts          answer  : children of the query's whole argument (one directed hop)
+                 input   : the contains adjacency given to message passing; per-node is_participant
+                 candidate space in the input: one ABSENT/PRESENT slot per node of the focus world
+  edge_account   answer  : the complete contains edge set of the focus world
+                 input   : the contains adjacency given to message passing
+                 candidate space in the input: one ABSENT/PRESENT slot per ordered node pair (including self-pairs)
+  reach          answer  : DIRECT / VIA(via) / ABSENT, BFS over sorted-ref neighbour order
+                 input   : the contains adjacency given to message passing; question flags is_whole / is_part
+                 candidate space in the input: one slot: ABSENT, DIRECT, VIA_<every node>
+
+PART B -- role_set: the excerpt text IS the answer (the TEXT tier is not a world-reading test)
+  clause-prefix -> role map (public, printed by focal.grammar_profile): {'definition': [1], 'context': [2], 'analogy': [3], 'correspondence': [4], 'parts': [5], 'account': [5, 6], 'reference': []}
+  role_set status by side: {'held': {'UNIQUE': 6}, 'trained': {'UNIQUE': 24, 'AMBIGUOUS': 6}}
+  distinct token-bag signatures 36 carrying >1 distinct role answer 0
+  role_set solved by the line-prefix rule (zero learned weights)
+    role_set       held-eligible 6/6 | held-all 6/6 | trained 30/30 | records held 6/6 trained 30/30 excluded 0/0
+  role_set solved by the POSITION-FREE token-bag rule (no order read at all)
+    role_set       held-eligible 6/6 | held-all 6/6 | trained 30/30 | records held 6/6 trained 30/30 excluded 0/0
+
+PART C -- definition and context: two input flags each, no single flag
+  definition flag copy = is_declared_whole + is_focus_world (+ the world's kind/function text)
+    definition     held-eligible 5/5 | held-all 5/5 | trained 18/18 | records held 15/15 trained 36/36 excluded 19/19
+  context flag copy = is_participant + is_focus_world (+ the world's setting text)
+    context        held-eligible 5/5 | held-all 5/5 | trained 19/19 | records held 17/17 trained 41/41 excluded 12/12
+
+PART D -- parts / edge_account / reach: how often the FLAGS or the ADJACENCY already ARE the answer
+  parts = participants - declared_whole (the FP2 rule)
+    parts          held-eligible 3/5 | held-all 3/5 | trained 4/19 | records held 3/9 trained 4/44 excluded 0/0
+  parts = children of the whole argument (ONE adjacency hop; the input GIVES the adjacency)
+    parts          held-eligible 5/5 | held-all 5/5 | trained 19/19 | records held 9/9 trained 44/44 excluded 0/0
+  edge_account = (declared_whole -> participants - whole) (FP2's edge analogue)
+    edge_account   held-eligible 0/5 | held-all 0/5 | trained 0/19 | records held 0/17 trained 0/46 excluded 0/7
+  edge_account = the full adjacency recomputed by the checker's own rule (sanity: the input contains it)
+    edge_account   held-eligible 5/5 | held-all 5/5 | trained 19/19 | records held 17/17 trained 46/46 excluded 7/7
+  reach = DIRECT if whole==declared_whole and part is a participant, else ABSENT (FP2's reach rule)
+    reach          held-eligible 0/9 | held-all 5/14 | trained 19/50 | records held 5/26 trained 19/71 excluded 0/10
+  reach = DIRECT iff part is a child of whole, else ABSENT (one adjacency hop, no learning)
+    reach          held-eligible 1/9 | held-all 6/14 | trained 26/50 | records held 6/26 trained 26/71 excluded 0/10
+
+PART E -- analogy and correspondence: what the candidate lists and the domain word give away
+  bank worlds 64 distinct domains 4 worlds per domain {'container': 16, 'grammatical': 16, 'mechanical': 16, 'procedural': 16}
+  analogy records {'held': 17, 'trained': 36, 'excluded': 17}
+  worlds with a DIFFERENT declared domain (domain-word filter width) {'held': '816/17', 'trained': '1728/36', 'excluded': '816/17'}
+  admissible answer worlds (the answer is ANY ONE of them, checker.py:213-237) {'held': '123/17', 'trained': '315/36', 'excluded': '138/17'}
+  records whose only admissible answer is NO_MATCH {'held': '0/17', 'trained': '0/36', 'excluded': '0/17'}
+  solved by 'name the single different-domain world, else NO_MATCH' {'held': '0/17', 'trained': '0/36', 'excluded': '0/17'}
+  chance of one admissible world from the different-domain pool {'held': '123/816', 'trained': '315/1728', 'excluded': '138/816'}
+  chance of one admissible world from the whole 65-symbol candidate list 576/4550
+  correspondence records {'held': 20, 'trained': 54, 'excluded': 14}
+  NO_MATCH is among the admissible answers {'held': '0/20', 'trained': '0/54', 'excluded': '0/14'} -> the mode slot is a constant across the whole course when this is 0
+  forced candidate space (len(candidates)==1: the decision is NO_MATCH with no input read) {'held': '0/20', 'trained': '0/54', 'excluded': '0/14'}
+  node counts differ {'held': '0/20', 'trained': '0/54', 'excluded': '0/14'} | edge counts differ {'held': '0/20', 'trained': '0/54', 'excluded': '0/14'}
+  admissible mappings / syntactic candidates (chance of a random bijection) {'held': '24/500', 'trained': '135/1116', 'excluded': '34/260'}
+  solved by the node-count rule {'held': '0/20', 'trained': '5/54', 'excluded': '2/14'}
+  solved by the node-count-or-edge-count rule {'held': '0/20', 'trained': '5/54', 'excluded': '2/14'}
+  admissible-answer multiplicity per record (analogy = answer worlds, correspondence = admissible bijections,
+  reach = 1 by construction): the checker counts a prediction right if it equals ANY admissible answer
+    analogy        {'held': {6: 10, 9: 7}, 'trained': {6: 3, 9: 33}, 'excluded': {6: 5, 9: 12}}
+    correspondence {'held': {1: 16, 2: 4}, 'trained': {1: 29, 2: 11, 6: 14}, 'excluded': {1: 10, 6: 4}}
+
+PART F -- slot-plan symbol alphabets (what the answer has to be expressed in)
+  analogy          world_id       symbols {65: 70}
+  context          participant    symbols {2: 267}
+  context          setting_ref    symbols {64: 70}
+  correspondence   mapping_target symbols {3: 54, 4: 280}
+  correspondence   mode           symbols {2: 88}
+  definition       function_ref   symbols {64: 70}
+  definition       kind_ref       symbols {64: 70}
+  definition       whole          symbols {3: 15, 4: 55}
+  edge_account     edge           symbols {2: 1029}
+  parts            node           symbols {2: 207}
+  reach            reach          symbols {6: 79, 5: 28}
+  role_set         role           symbols {2: 216}
+
+PART G -- node-name order and the optional rank feature
+  checker._nodes = sorted(node['ref']) (checker.py:72-73); slots.alias_table N0..N9 = sorted refs (slots.py:55-60)
+  so 'rank among the world's sorted node refs' IS the alphabetical position of the hidden ref.
+  reach records whose answer changes under a node-name relabelling: {'held': '5/26', 'trained': '11/71', 'excluded': '2/10'}
+
+PART H -- the declared participants list is an AUTHORED order, not a graph fact
+  example: participants ['n2', 'n1', 'n3'] -> rank 1,2,3 follows the authored order, and the sorted refs are ['n0', 'n1', 'n2', 'n3']
+  worlds whose participants list is already in sorted ref order: 14 of 64
+  worlds whose primary_labels == participants: 64 of 64
+  participants_basis values {'PRIMARY_AUTHORED_LABELS_FIRST_THREE': 64}
+  node refs whose position in the sorted ref list equals its own stored index ('n<i>' == position i): 244 of 244
+  -> the registered rank feature (DG3) IS the public node alias N<i> (slots.py:55-60), so adding rank adds
+     a per-node index the design says it excludes ('NO node alias index'), and it destroys the
+     permutation-equivariance the draft's section 5 vacuity paragraph relies on.
+  example alias table vs stored index: [('N0', '0'), ('N1', '1'), ('N2', '2'), ('N3', '3')]

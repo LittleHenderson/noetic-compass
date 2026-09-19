@@ -1,0 +1,26 @@
+degree-multiset partition: 6 groups
+isomorphism partition:     6 groups
+every degree group is contained in exactly one isomorphism class? True
+   degrees ((0, 1), (1, 0), (1, 1))  ->  1 isomorphism classes, sizes [12]
+   degrees ((0, 1), (1, 0), (1, 1), (1, 1))  ->  1 isomorphism classes, sizes [12]
+   degrees ((0, 2), (1, 1), (1, 1), (2, 0))  ->  1 isomorphism classes, sizes [12]
+   degrees ((0, 3), (1, 0), (1, 0), (1, 0))  ->  1 isomorphism classes, sizes [12]
+   degrees ((0, 1), (0, 2), (1, 0), (2, 0))  ->  1 isomorphism classes, sizes [8]
+   degrees ((0, 2), (1, 0), (1, 0), (1, 1))  ->  1 isomorphism classes, sizes [8]
+
+so: the two partitions are IDENTICAL
+
+the exact structural fact: for the 64 bank worlds the sorted (in-degree, out-degree) multiset is a COMPLETE isomorphism invariant.
+   size 12 held 0  degrees ((0, 3), (1, 0), (1, 0), (1, 0))  shape edges [(1, 0), (1, 2), (1, 3)]
+   size 12 held 0  degrees ((0, 1), (1, 0), (1, 1))  shape edges [(0, 2), (1, 0)]
+   size 12 held 1  degrees ((0, 2), (1, 1), (1, 1), (2, 0))  shape edges [(0, 1), (0, 3), (1, 2), (3, 2)]
+   size 12 held 1  degrees ((0, 1), (1, 0), (1, 1), (1, 1))  shape edges [(0, 2), (1, 0), (2, 3)]
+   size  8 held 1  degrees ((0, 1), (0, 2), (1, 0), (2, 0))  shape edges [(1, 3), (2, 0), (2, 3)]
+   size  8 held 2  degrees ((0, 2), (1, 0), (1, 0), (1, 1))  shape edges [(0, 1), (0, 2), (2, 3)]
+
+held worlds and their twin counts (worlds sharing their exact shape):
+   b5e8ce8e4952  shape ((0, 1), (0, 2), (3, 1))  twin worlds 7  of which trained/bank 7
+   83e9f86b4547  shape ((0, 1), (0, 2), (1, 3))  twin worlds 7  of which trained/bank 6
+   16aeb3dde9fc  shape ((0, 1), (1, 2), (2, 3))  twin worlds 11  of which trained/bank 11
+   2145a33d14be  shape ((0, 1), (0, 2), (1, 3))  twin worlds 7  of which trained/bank 6
+   bb09375534a9  shape ((0, 1), (0, 2), (1, 3), (2, 3))  twin worlds 11  of which trained/bank 11

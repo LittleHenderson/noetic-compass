@@ -1,0 +1,71 @@
+correspondence: is the FIRST candidate (the tie-break winner for an information-free head) correct?
+   held      0/20 first-candidate correct
+   trained   5/54 first-candidate correct
+   excluded  2/14 first-candidate correct
+
+held-back questions 50 ; eligible 45 ; removed as input-blind shortcut 5
+eligible questions by kind: {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+eligible questions by world: {'world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952': 8, 'world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547': 9, 'world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc': 10, 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be': 9, 'world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9': 9}
+eligible questions by (kind, world):
+   analogy          b5e8ce8e4952  1
+   analogy          83e9f86b4547  1
+   analogy          16aeb3dde9fc  1
+   analogy          2145a33d14be  1
+   analogy          bb09375534a9  1
+   context          b5e8ce8e4952  1
+   context          83e9f86b4547  1
+   context          16aeb3dde9fc  1
+   context          2145a33d14be  1
+   context          bb09375534a9  1
+   correspondence   b5e8ce8e4952  1
+   correspondence   83e9f86b4547  1
+   correspondence   16aeb3dde9fc  1
+   correspondence   2145a33d14be  1
+   correspondence   bb09375534a9  1
+   definition       b5e8ce8e4952  1
+   definition       83e9f86b4547  1
+   definition       16aeb3dde9fc  1
+   definition       2145a33d14be  1
+   definition       bb09375534a9  1
+   edge_account     b5e8ce8e4952  1
+   edge_account     83e9f86b4547  1
+   edge_account     16aeb3dde9fc  1
+   edge_account     2145a33d14be  1
+   edge_account     bb09375534a9  1
+   parts            b5e8ce8e4952  1
+   parts            83e9f86b4547  1
+   parts            16aeb3dde9fc  1
+   parts            2145a33d14be  1
+   parts            bb09375534a9  1
+   reach            b5e8ce8e4952  1
+   reach            83e9f86b4547  1
+   reach            16aeb3dde9fc  3
+   reach            2145a33d14be  2
+   reach            bb09375534a9  2
+   role_set         b5e8ce8e4952  1
+   role_set         83e9f86b4547  2
+   role_set         16aeb3dde9fc  1
+   role_set         2145a33d14be  1
+   role_set         bb09375534a9  1
+DIRECT_READ eligible 10 (worlds 5) ; RELATIONAL eligible 29 (worlds 5)
+relational eligible by kind: {'analogy': 5, 'correspondence': 5, 'edge_account': 5, 'parts': 5, 'reach': 9}
+relational eligible by world: {'world-22704554ac881d9846c94b37c5aabc5790edf38f7810692028f0b5e8ce8e4952': 5, 'world-28f61f2d7941a373f50285be7e57b1a9b8ec85bc0aff9e2d18c683e9f86b4547': 5, 'world-4090ec49174f1d031b16507663d875616c489382d0be1fdf7f4616aeb3dde9fc': 7, 'world-6e1fcbdadc4a1aff1b5deddf2d84b9db1ca75b2ba9bbf98e2b202145a33d14be': 6, 'world-98c6352de9137e679b7d2a460ab99be2791d9c719b0808b2fe3bbb09375534a9': 6}
+shortcut-removed questions by kind: {'reach': 5}
+
+   binomial upper tail P(X>=6 | n=6, 1/2) = 1/64
+   binomial upper tail P(X>=7 | n=7, 1/2) = 1/128
+   binomial upper tail P(X>=8 | n=8, 1/2) = 1/256
+   binomial upper tail P(X>=9 | n=9, 1/2) = 1/512
+   binomial upper tail P(X>=10 | n=10, 1/2) = 1/1024
+
+minimum passing b at alpha = 1/100 with c=0: 7
+
+RELATIONAL population size 29 over 5 worlds; a machine answering only from the
+draft's stated input flags (is whole, is part, focus marker, participants) can solve:
+   flag-only solved relational eligible questions: 4 of 29
+      parts            16b394e17509 bb09375534a9
+      parts            79d8a5ec1249 83e9f86b4547
+      parts            33fc43fba1d9 2145a33d14be
+      reach            2077da4b16f7 b5e8ce8e4952
+
+so the relational gate population a strict reader would use is 25 questions

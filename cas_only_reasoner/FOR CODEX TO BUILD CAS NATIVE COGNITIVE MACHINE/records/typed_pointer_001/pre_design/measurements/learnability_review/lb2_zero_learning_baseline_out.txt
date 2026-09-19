@@ -1,0 +1,38 @@
+honest zero-learning baseline from the draft's reading (no edges, no reachability):
+   held      definition     15/15
+   held      context        17/17
+   held      analogy        0/17
+   held      correspondence 0/20
+   held      parts          3/9
+   held      edge_account   0/17
+   held      reach          1/26
+   trained   definition     36/36
+   trained   context        41/41
+   trained   analogy        0/36
+   trained   correspondence 0/54
+   trained   parts          4/44
+   trained   edge_account   0/46
+   trained   reach          1/71
+   excluded  definition     19/19
+   excluded  context        12/12
+   excluded  analogy        0/17
+   excluded  correspondence 0/14
+   excluded  edge_account   0/7
+   excluded  reach          0/10
+parts detail (correct, wrong) by side: {('trained', False): 40, ('held', False): 6, ('held', True): 3, ('trained', True): 4}
+declared_whole: children == participants-minus-whole  (over all 564 focus-world reads): {'differ': 397, 'match': 167}
+same, over the 64 bank worlds: {'differ': 44, 'match': 20}
+
+per-node field availability across the 64 bank worlds (3-4 nodes) and the 6 dev worlds (9-10 nodes):
+   worlds with 3 nodes: 12
+   worlds with 4 nodes: 52
+   worlds with 9 nodes: 9
+   worlds with 10 nodes: 50
+   a node gets: label token vector, is_declared_whole, is_participant(+rank), is_primary_label(+rank)
+   a node does NOT get: degree, parent count, child count, depth, alias index, ref text, ref order
+   is_whole/is_part marks exist only for the 2 kinds that name them: parts(whole), reach(whole,part)
+total query marks per kind over 564 records: {'context': 0, 'correspondence': 88, 'reach': 214, 'definition': 0, 'role_set': 36, 'parts': 53, 'analogy': 0, 'edge_account': 0}
+
+role_set questions: 36
+distinct excerpts: 36 of 36
+clause prefixes seen across all role_set excerpts: {'Exact node correspondence': 6, 'Direct constituent inventory': 6, 'Declared surroundings': 6, 'Different domains, same containment pattern': 6, 'Complete static containment account': 6, 'Declared whole': 6}

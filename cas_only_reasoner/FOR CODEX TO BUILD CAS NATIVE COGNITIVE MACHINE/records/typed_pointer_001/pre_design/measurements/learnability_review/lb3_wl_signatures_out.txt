@@ -1,0 +1,56 @@
+bank 64 ; held 5 ; bank-minus-held 59
+isomorphism classes: 6 ; sized [(8, 2), (12, 4)]
+
+=== colouring A flags only ===
+   rounds to fixed point: max 1, distribution {1: 64}
+   colour classes per world: min 3 max 4
+   distinct signatures over the 64 bank worlds: 6 ; group-size histogram {8: 2, 12: 4}
+   held-internal            1/10 indistinguishable ; of those NON-isomorphic 0
+   bank-minus-held-internal 278/1711 indistinguishable ; of those NON-isomorphic 0
+   cross held vs bank       41/295 indistinguishable ; of those NON-isomorphic 0
+   largest signature group: 12 worlds ; worlds in signature groups of size > 1: 64
+   over all 2016 bank pairs: same signature and isomorphic 320 ; same signature and NOT 0
+
+=== colouring B flags + label text ===
+   rounds to fixed point: max 1, distribution {1: 64}
+   colour classes per world: min 3 max 4
+   distinct signatures over the 64 bank worlds: 6 ; group-size histogram {8: 2, 12: 4}
+   held-internal            1/10 indistinguishable ; of those NON-isomorphic 0
+   bank-minus-held-internal 278/1711 indistinguishable ; of those NON-isomorphic 0
+   cross held vs bank       41/295 indistinguishable ; of those NON-isomorphic 0
+   largest signature group: 12 worlds ; worlds in signature groups of size > 1: 64
+   over all 2016 bank pairs: same signature and isomorphic 320 ; same signature and NOT 0
+
+=== colouring C flags + ref rank ===
+   rounds to fixed point: max 1, distribution {1: 64}
+   colour classes per world: min 3 max 4
+   distinct signatures over the 64 bank worlds: 6 ; group-size histogram {8: 2, 12: 4}
+   held-internal            1/10 indistinguishable ; of those NON-isomorphic 0
+   bank-minus-held-internal 278/1711 indistinguishable ; of those NON-isomorphic 0
+   cross held vs bank       41/295 indistinguishable ; of those NON-isomorphic 0
+   largest signature group: 12 worlds ; worlds in signature groups of size > 1: 64
+   over all 2016 bank pairs: same signature and isomorphic 320 ; same signature and NOT 0
+
+=== colouring D flags + text + rank ===
+   rounds to fixed point: max 1, distribution {1: 64}
+   colour classes per world: min 3 max 4
+   distinct signatures over the 64 bank worlds: 6 ; group-size histogram {8: 2, 12: 4}
+   held-internal            1/10 indistinguishable ; of those NON-isomorphic 0
+   bank-minus-held-internal 278/1711 indistinguishable ; of those NON-isomorphic 0
+   cross held vs bank       41/295 indistinguishable ; of those NON-isomorphic 0
+   largest signature group: 12 worlds ; worlds in signature groups of size > 1: 64
+   over all 2016 bank pairs: same signature and isomorphic 320 ; same signature and NOT 0
+
+=== the shape identity of the corpus, for the record ===
+   class of 12 worlds ; shape ((0, 1), (0, 2), (0, 3)) ; held in class 0
+   class of 12 worlds ; shape ((0, 1), (1, 2)) ; held in class 0
+   class of 12 worlds ; shape ((0, 1), (0, 2), (1, 3), (2, 3)) ; held in class 1
+   class of 12 worlds ; shape ((0, 1), (1, 2), (2, 3)) ; held in class 1
+   class of  8 worlds ; shape ((0, 1), (0, 2), (3, 1)) ; held in class 1
+   class of  8 worlds ; shape ((0, 1), (0, 2), (1, 3)) ; held in class 2
+held worlds and their twin counts inside the bank:
+   b5e8ce8e4952 : class size 8, bank twins 7
+   83e9f86b4547 : class size 8, bank twins 6
+   16aeb3dde9fc : class size 12, bank twins 11
+   2145a33d14be : class size 8, bank twins 6
+   bb09375534a9 : class size 12, bank twins 11
