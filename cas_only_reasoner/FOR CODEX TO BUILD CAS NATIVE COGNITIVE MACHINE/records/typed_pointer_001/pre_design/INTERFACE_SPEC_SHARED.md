@@ -680,6 +680,24 @@ The three real practice-start values are (probe B): seed 20260917 `82d2037ca8859
 20260919 `d437bbeb1b13a4fd31f1a158d17485821ba52da4a29f1de7b00d8ccd583598f0` (read fresh from each
 `receipt_<seed>/checkpoints/initial_checkpoint.json`).
 
+> **CORRECTED 2026-09-19.** The 20260918 and 20260919 values above are **WRONG** and must not be used. They do not
+> appear in `receipt_<seed>/checkpoints/initial_checkpoint.json`. Read from two independent authoritative sources in
+> each receipt — `checkpoints/worker_report.json` `initial_model_identity` and
+> `checkpoints/initial_checkpoint.json` `metadata.model_state_identity` — which agree with each other exactly:
+>
+> | Seed | `model_state_identity` of `checkpoints/initial.pt` |
+> |---|---|
+> | 20260917 | `82d2037ca88593233f1176913b91f54d419ebacd23f5abc4e12bd71795feb794` |
+> | 20260918 | `35081019e8b56f0c0c14aa8168262c23dab4c662c385ddcf26edc794a179b706` |
+> | 20260919 | `91279389cfc22df46415dd56a26b1285fb3ef1ecd59e3aaccef553564528c12e` |
+>
+> Only the seed-20260917 value was correct above. The seed-20260919 value is independently confirmed a third way:
+> `measurements/framework_probe/FINDINGS.md` recomputed `state_identity` over that checkpoint's own `model_state` and
+> got `91279389...12e` back, matching its recorded metadata. The same table, generated straight from the nine
+> sidecar files, is `pre_design/contract_pins/checkpoint_pins.json` under `model_state_identity` — **use that file,
+> not this paragraph**, and note it lists all nine checkpoints (initial / pass_01 / final per seed), not just the
+> starts.
+
 ### D.2 `_DecomposeTransform` (`research/CAS_CJT_TRANSFORMER_v0_2/cas_cjt/neural.py:115-126`)
 
 ```python
