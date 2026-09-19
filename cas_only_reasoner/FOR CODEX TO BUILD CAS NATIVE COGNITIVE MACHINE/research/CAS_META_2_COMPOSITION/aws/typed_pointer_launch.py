@@ -52,6 +52,118 @@ OUTER_TIMEOUT_SECONDS = 13500                           # setup + worker + publi
 BOOT_WATCHDOG_SECONDS = 14100                           # guest-owned poweroff, never cancelled
 INSTANCE_SECONDS_MAX = contract.INSTANCE_SECONDS_MAX    # launcher wait budget, 14,400 s
 RESERVATION_USD = contract.RESERVATION_USD              # "15.00" -- the practice study's envelope, unchanged
+# ==================================================================================================================
+# THE SHRUNKEN-SCHEDULE OPT-IN. `None` -- "no smoke was asked for" -- UNLESS `set_smoke_request()` is called.
+#
+# WHY THIS EXISTS. The pointer worker reads its shrunken schedule from the environment
+# (`cncm/typed_pointer_worker.py:164`, `:306`: `os.environ.get(REDUCED_SCHEDULE_ENV)`), and until this opt-in
+# existed NOTHING in this tree set that variable for the remote job: `bootstrap_source()` was
+# `matched.bootstrap_source()` with a single `typed_matched_worker` -> `typed_pointer_worker` substitution and
+# added no environment line, while `matched.bootstrap_source()` bakes its own `CAS_META2_RUN_TEACHING_CYCLE`
+# into the generated source (`typed_matched_launch.py:171`). So every AWS pointer job ran the FULL registered
+# plan -- 1,470 updates -- and the smoke job's 8-update schedule could not be requested at all.
+# `pre_design/AWS_SMOKE_S10_PLAN.md` section 6 records that defect and this fix.
+#
+# WHY IT IS AN OPT-IN AND NOT `os.environ.get(...)` HERE. Reading the ambient environment at render time would
+# let an operator's stray variable shrink a CLAIM-BEARING job's schedule -- a claim-bearing run that trains 8
+# updates would then be written to the ledger and to the receipts as though it had trained 1,470. With the
+# opt-in, asking for a shrunken schedule is an explicit act of this module's caller, and with `SMOKE_REQUEST`
+# left at its `None` default the GENERATED SOURCE IS BYTE-FOR-BYTE IDENTICAL TO THIS FILE'S PREVIOUS REVISION
+# -- `render_worker()` inserts nothing, so the package's `archive_sha256` and `manifest_sha256` do not move and
+# the three claim-bearing jobs' existing `request.json`/`authority.json` pins stay valid.
+#
+# `prepare_smoke.py` is the intended caller: it sets this and then freezes the smoke's admission records, so the
+# schedule the smoke will run is recorded in the same commit as the package it will install.
+#
+# The request is the WORKER'S OWN reduced-schedule form -- one of `cncm.typed_pointer_worker.REDUCED_SCHEDULE_KEYS`,
+# already validated here at render time so a typo cannot silently bake a different schedule into an instance the
+# operator is paying for:
+#   {"passes": 1, "updates": 8, "evaluations": [0, 1], "phase_a": ["initial", "pass_01", "final"],
+#    "reloads": true, "replays": true, "phase_b": false, "ablations": false, "retention": false,
+#    "interference": false}
+# Every key above is optional in form and taken from the worker's own key set. `reloads` is the PLURAL key and
+# carries a BOOL (`cncm/typed_pointer_worker.py:165-166`, `:337-341`); the singular `reload` is NOT an accepted key,
+# and a list of checkpoint names under the plural key is refused with `POINTER_PLAN_FLAGS`
+# (`cncm/typed_pointer_worker.py:230-231`). `passes` with `updates` given must be the pass the truncated batches
+# actually end in (`:322-323`, `:333`), and a reload-enabled plan must carry an evaluation at pass 0 AND at pass
+# `passes` (`:234-236`). The emitted line sets ONE variable and nothing else: the worker records
+# `claim_bearing = False` from a reduced request, and the frozen gate reader refuses such a receipt with
+# `I1:<seed>:REDUCED_SCHEDULE:<mode>`, so a smoke job cannot print a learning label even by mistake.
+# ==================================================================================================================
+SMOKE_REQUEST = None
+# The line of the WORKER TEMPLATE that the reduced-schedule assignment is inserted after. Derived from the
+# template's own text, never indexed by line number: `matched.bootstrap_source()` is exactly this line's
+# `CAS_META2_RUN_TEACHING_CYCLE` assignment plus the pointer study's worker-name substitution, and the worker's
+# reload-evaluation rule (`cncm/typed_pointer_worker.py:234-236`) is inside the same generated function, so the two
+# lines sit together. The count must be exactly 1 on BOTH sides of the substitution, so a template change fails the
+# job instead of silently dropping the environment line.
+BOOTSTRAP_ENV_ANCHOR = "os.environ['CAS_META2_RUN_TEACHING_CYCLE'] = '1'"
+# The ten keys the worker's own `reduced_request()` accepts (`cncm/typed_pointer_worker.py:165`,
+# `REDUCED_SCHEDULE_KEYS`). Held here so a typo is refused by the OPERATOR'S OWN call, before a request can be
+# baked into an instance; `_probe()` re-checks this tuple against the worker's set on every package build, so the
+# two can never drift apart silently. The worker re-applies its own key check at run time regardless.
+SMOKE_REQUEST_KEYS = ("passes", "updates", "evaluations", "phase_a", "reloads", "phase_b", "ablations",
+                      "retention", "interference", "replays")
+
+
+def _smoke_request_form(request):
+    """The cheap, local form check: a non-empty dict of keys the worker's own `reduced_request()` accepts.
+
+    Refuses a request that is not a dict, an empty request, a key outside the worker's ten
+    (`SMOKE_REQUEST_KEYS`), or a value the study's own JSON form cannot carry (`pointer_contract.canonical`
+    refuses non-finite numbers), so a request the worker could never parse back is refused here rather than on a
+    paid instance.
+    """
+    require(type(request) is dict, "POINTER_SMOKE_REQUEST_TYPE")
+    require(set(request) <= set(SMOKE_REQUEST_KEYS), "POINTER_SMOKE_REQUEST_KEYS")
+    require(bool(request), "POINTER_SMOKE_REQUEST_EMPTY")
+    try:
+        canonical(request)
+    except (TypeError, ValueError) as error:
+        raise ValueError("POINTER_SMOKE_REQUEST_NOT_JSON:" + type(error).__name__) from error
+    # Canonical (sorted keys, same separators) so the literal embedded in the generated source is the same text
+    # this file validated, whatever order the caller wrote the keys in.
+    return canonical(request).decode("utf-8").rstrip("\n")
+
+
+def smoke_request_literal(request=None):
+    """The literal the generated source carries for an accepted request, or `None` when no smoke was asked for.
+
+    Two checks, both before anything is emitted: the cheap local form check, then the WORKER'S OWN rules run
+    through the worker's own `schedule_plan()`. `reloads` is the plural key and must carry a BOOL -- the worker
+    enforces that at `cncm/typed_pointer_worker.py:211-213` and a list of checkpoint names is refused with
+    `POINTER_PLAN_FLAGS` -- and a reload-enabled plan must carry an evaluation at pass 0 AND at pass `passes`
+    (`cncm/typed_pointer_worker.py:222-224`). A request whose plan came back `claim_bearing` would mean the caller
+    asked for the REGISTERED plan through the smoke path, which is refused outright. Returns the plan alongside the
+    literal so a caller can record exactly what the instance will run.
+    """
+    request = SMOKE_REQUEST if request is None else request
+    require(request is not None, "POINTER_SMOKE_NOT_REQUESTED")
+    literal = _smoke_request_form(request)
+    plan, claim_bearing = _probe().schedule_plan(source=literal)
+    require(not claim_bearing, "POINTER_SMOKE_REQUEST_CLAIM_BEARING")
+    return literal, plan
+
+
+def set_smoke_request(request=None):
+    """The ONLY way `SMOKE_REQUEST` becomes anything but `None`. An explicit act of this module's caller.
+
+    Ambient environment is deliberately NOT read anywhere on this path: an operator's stray variable must not be
+    able to shrink a claim-bearing job's schedule. Called with no argument (or `None`) it clears the opt-in, which
+    is the state that leaves the generated source -- and therefore the package bytes -- byte-for-byte unchanged.
+
+    The request is validated BEFORE it becomes module state, so a refused request leaves the opt-in exactly as it
+    was: a failed call must not be able to half-set the thing the next `bootstrap_source()` reads.
+    """
+    global SMOKE_REQUEST
+    if request is None:
+        SMOKE_REQUEST = None
+        return SMOKE_REQUEST
+    literal, _ = smoke_request_literal(request)      # both checks, before this call touches module state
+    SMOKE_REQUEST = request
+    return literal
+
+
 # THE BUCKET IS EXACTLY 63 CHARACTERS, the maximum `[a-z0-9][a-z0-9-]{1,61}[a-z0-9]` allows (RK4).
 # Counted on a real name, `cas-meta2-tpntr-20260918234544-daeb6497-m-20260917-807562639912`:
 #   "cas-meta2-" 10 + token "tpntr" 5 + "-" 1 + 14-digit stamp + "-" 1 + 8 hex + "-m-" 3 + date 8
@@ -179,7 +291,35 @@ def validate_ledger_path(value):
 def bootstrap_source():
     source = matched.bootstrap_source()
     require(source.count("typed_matched_worker") == 2, "POINTER_BOOTSTRAP_TEMPLATE_CHANGED")
-    return source.replace("typed_matched_worker", "typed_pointer_worker")
+    source = source.replace("typed_matched_worker", "typed_pointer_worker")
+    # THE OPT-IN, AND ONLY THE OPT-IN. With `SMOKE_REQUEST is None` this function returns exactly what it returned
+    # before the opt-in existed, byte for byte, so no package hash moves and the claim-bearing jobs keep the
+    # `archive_sha256`/`manifest_sha256` their admission records pin. With it set, ONE line is inserted
+    # immediately after the teaching-cycle line, carrying the caller's request as a literal.
+    if SMOKE_REQUEST is not None:
+        # The same two checks the setter runs, re-run on the state this function is about to emit: the literal and
+        # the plan come from the WORKER's own `schedule_plan()`, so nothing is baked in that the instance would
+        # then refuse.
+        request, _ = smoke_request_literal()
+        worker = _probe()
+        require(worker.REDUCED_SCHEDULE_ENV == "CNCM_POINTER_REDUCED_SCHEDULE"
+                and set(worker.REDUCED_SCHEDULE_KEYS) == set(SMOKE_REQUEST_KEYS),
+                "POINTER_SMOKE_WORKER_CONTRACT_CHANGED")
+        require(source.count(BOOTSTRAP_ENV_ANCHOR) == 1, "POINTER_BOOTSTRAP_SMOKE_ANCHOR")
+        line, = [hold for hold in source.splitlines() if hold.strip() == BOOTSTRAP_ENV_ANCHOR]
+        indent = line[:line.index(BOOTSTRAP_ENV_ANCHOR)]
+        require(indent in ("", "    "), "POINTER_BOOTSTRAP_SMOKE_INDENT")
+        assignment = indent + "os.environ[%r] = %r" % (worker.REDUCED_SCHEDULE_ENV, request)
+        require(assignment.count("CNCM_POINTER_REDUCED_SCHEDULE") == 1 and "\n" not in assignment,
+                "POINTER_BOOTSTRAP_SMOKE_ASSIGNMENT")
+        source = source.replace(line, line + "\n" + assignment)
+        require(source.count(worker.REDUCED_SCHEDULE_ENV) == 1, "POINTER_BOOTSTRAP_SMOKE_COUNT")
+    else:
+        require(source.count("CNCM_POINTER_REDUCED_SCHEDULE") == 0, "POINTER_BOOTSTRAP_SMOKE_LEAK")
+    # Syntactic check on the generated source, whichever branch produced it: a bootstrap that does not parse would
+    # otherwise be discovered on a paid instance, after the boot and package install.
+    ast.parse(source)
+    return source
 
 
 def render_worker():
