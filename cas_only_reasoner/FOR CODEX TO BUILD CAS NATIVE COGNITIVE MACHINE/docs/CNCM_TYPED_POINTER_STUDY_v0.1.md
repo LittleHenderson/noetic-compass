@@ -1194,10 +1194,11 @@ Collected here so a reader can find them without hunting.
   stated.** At HEAD `026e6473`, `pointer_contract.py` carried `"node_rank_feature": True` with
   `"node_rank_decision_status": "REGISTERED_INCLUDED_REOPENED_AT_6cb0b348_PENDING_LENS_A"`, while
   `REVIEW_SYNTHESIS.md` §10.2 and §12.3 require the flag to be set **False** — a real conflict at that commit. HEAD
-  `e3ee21c1` then landed the flag as `False` with
-  `"node_rank_decision_status": "EXCLUDED_2026_09_19_ORDER_DEPENDENT_QUESTIONS_REMOVED_INSTEAD"`, so the **rank-flag
-  half of that conflict is closed** and the decision of §5.3 is landed in the contract. **This protocol freezes the
-  decision (rank excluded, order-dependent questions removed), which both states agree on.** `UNCERTAIN:` the
+  `e3ee21c1` then landed the flag as `False`. **CORRECTED 2026-09-19 (R1 item 6): the status string quoted here at
+  drafting time said the order-dependent questions were "removed instead", and THAT CLAIM WAS FALSE — measured, the five
+  rank-solvable questions (`parts` 1, `reach` 4, 2 kinds, 2 worlds) are NOT removed and REMAIN INSIDE the population of
+  18. The FEATURE is excluded; the QUESTIONS were never removed. The current status string is
+  `EXCLUDED_2026_09_19_RANK_FEATURE_OFF_RANK_SOLVABLE_QUESTIONS_NOT_REMOVED`.** `UNCERTAIN:` the
   `REMOVALS` placeholder is *not* closed by that commit — `REMOVALS["flag_rule"]` and `REMOVALS["rank_rule"]` are
   still empty, so the contract still refuses to be read as a finished population and §4.3's per-question lists have
   not yet been written into it. Separately, `UNCERTAIN:` the inline comment that landed with `e3ee21c1` records the
