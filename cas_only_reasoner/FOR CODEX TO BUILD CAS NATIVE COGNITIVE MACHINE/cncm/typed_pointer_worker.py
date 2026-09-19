@@ -17,6 +17,16 @@ PLAN item 4). Differences, each deliberate:
   practice checkpoints, extracts and seals the PUBLIC post-block vectors of every slot, and reads NO
   answer: it cannot, because `cas_meta2.typed_teaching.checker` is required NOT to be in `sys.modules`
   at that point (FP3, test P14).
+  **THE ORDERING IS MEASURED IN THE ARTIFACT, NEVER ASSERTED** (review R1-2). `model_identity.json`
+  carries `phase_a_finished_before_the_model_was_seeded` as a derivation over three runtime readings --
+  no pointer model attached before the build, phase A's own return time earlier than the build time from
+  the run's monotonic clock, and phase A's recorded `status` -- so a job whose phase A ran and FAILED
+  records `false` there, beside `phase_a_status`, instead of the unconditional literal it used to carry.
+  REPORT-ONLY IS UNCHANGED: phase A still cannot fail an otherwise complete job, and the reader that
+  wants to fail closed on it does so from `phase_a_status`. The field
+  `identical_start_with_and_without_the_checkpoint_check` is a KNOWN TAUTOLOGY and the artifact says so
+  where it is written; `double_build_equal`, `seed_core_identities` and `seeds_pairwise_different` are
+  the checks in that artifact that can vary.
   **PHASE B RUNS LAST** -- after every pointer evaluation, reload and replay -- because deriving targets
   before training would breach the registered custody rule (`practice_contract.py:11-12`,
   `typed_course_worker.py:149`).
@@ -847,6 +857,12 @@ def _seed_and_double_build(ctx):
                                     limits=limits, device=device, tagger=tagger, python_seed=model_seed,
                                     root=str(root))
 
+    # R1-2. THE ORDERING IS MEASURED HERE, at the instant before the container is built, from two runtime
+    # facts and nothing else: whether any pointer model was already attached to this run, and the run's own
+    # monotonic reading of when phase A returned (`run()` records it). Nothing about this pair is written as
+    # a literal, because a literal cannot vary and therefore is not evidence.
+    model_seeded_at = time.monotonic()
+    model_already_present = ctx.get("main") is not None
     main = build(seed)
     # (b) a SECOND, independent build of the WHOLE model: the container identity must be equal.
     second = build(seed)
@@ -867,13 +883,22 @@ def _seed_and_double_build(ctx):
     # recorded by the practice study's own process, which ran no pointer checkpoint check and had a wholly
     # different RNG history, and `_framework` re-seeds all three streams, so the build is a pure function of
     # the seed -- which is exactly the "identical start with and without the checkpoint check" comparison
-    # (M3 / DG4d). The model that trains is THIS one, built after phase A, so phase A completes first.
+    # (M3 / DG4d). The model that trains is THIS one, built after phase A RETURNED. `run()` only calls this
+    # function after `_checkpoint_check_phase_a` has returned, and the artifact MEASURES that ordering rather
+    # than asserting it (R1-2); when phase A returned with anything other than `COMPLETE`, the reference
+    # identity below comes from the practice sidecar directly and the ordering claim is recorded as false.
     phase_a = ctx["phase_a"]
     if "initial" in phase_a["checkpoints"]:
         recorded = phase_a["checkpoints"]["initial"]["practice_recorded_model_state_identity"]
     else:
         _, _, sidecar = _practice_checkpoint(root, seed, "initial")
         recorded = sidecar["metadata"]["model_state_identity"]
+    # R1-2. The two halves of the ordering, each MEASURED, then the claim they support. `phase_a_status`
+    # below is phase A's own recorded status, read and never restated.
+    phase_a_returned_at = ctx.get("phase_a_returned_at")
+    phase_a_status = phase_a["status"]
+    returned_first = type(phase_a_returned_at) in (int, float) and phase_a_returned_at < model_seeded_at
+    ordering_holds = bool(returned_first and not model_already_present and phase_a_status == "COMPLETE")
     identity = {"schema": "cncm.typed-pointer-model-identity/0.1", "model_seed": seed,
                 "identity_form": "THREE_^6_TENSORS_ONLY",
                 "core_identity": core_identity,
@@ -886,12 +911,45 @@ def _seed_and_double_build(ctx):
                 "seed_core_identities": seed_identities,
                 "seeds_pairwise_different": len(set(seed_identities.values())) == len(seed_identities),
                 "identical_start_with_and_without_the_checkpoint_check": core_identity == recorded,
+                "identical_start_with_and_without_the_checkpoint_check_evidence_status": {
+                    "status": "KNOWN_TAUTOLOGY",
+                    "reason": ("R1-2. This flag is DEFINITIONALLY the same comparison as "
+                               "`core_identity_equals_the_practice_start` above -- the same two values, the "
+                               "same operator -- so it can never vary independently of it and is NOT separate "
+                               "evidence. It is kept, and kept honest, because the gate reader "
+                               "(`records/typed_pointer_001/evaluate_gates.py`, `DG4_FLAGS` and "
+                               "`I3:<seed>:DG4_CHECK_INDEPENDENT_START`) looks for it by name."),
+                    "on_arm": ("this job's container, built after phase A returned, whose `^6` start "
+                               "`core_identity` records"),
+                    "off_arm": ("the practice study's recorded identity, obtained by a process that ran NO "
+                                "checkpoint check and had a wholly different RNG history -- which is why "
+                                "this comparison IS the with-versus-without comparison"),
+                    "why_there_is_no_independent_measurement_in_this_job": (
+                        "a second arm cannot be built. An arm built BEFORE phase A would start from the RNG "
+                        "state phase A overwrites (`learner.py:358-362`), which is the defect the phase "
+                        "order exists to avoid, and the phase order is load-bearing "
+                        "(`pre_design/AWS_SMOKE_S10_PLAN.md:155`, review M3). Perturbing this job's own RNG "
+                        "to build a third arm would change the numerics of the model that trains, on a "
+                        "spend path, for a field that is already covered."),
+                    "checks_in_this_artifact_that_CAN_vary": ["double_build_equal", "seed_core_identities",
+                                                              "seeds_pairwise_different"]},
                 "comparison_method": ("the practice value was recorded by the practice study's own process, "
                                       "with no checkpoint check and a different RNG history; `_framework` "
                                       "re-seeds all three streams, so this build is a pure function of the "
                                       "seed and this equality IS the comparison"),
-                "phase_a_finished_before_the_model_was_seeded": True,
-                "phase_a_status": phase_a["status"],
+                "phase_a_finished_before_the_model_was_seeded": ordering_holds,
+                "phase_a_finished_before_the_model_was_seeded_definition": (
+                    "MEASURED, not asserted (R1-2). True only when all three measured readings agree: no "
+                    "pointer model was attached to this run before this build, phase A had already returned "
+                    "at an earlier reading of the run's own monotonic clock, and phase A's own recorded "
+                    "status is COMPLETE. A phase A that ran and FAILED leaves this false, because the "
+                    "reference identity was then read from the practice sidecar directly and it is not "
+                    "phase A's evidence that the start was compared against."),
+                "phase_a_returned_at_monotonic": phase_a_returned_at,
+                "model_seeded_at_monotonic": model_seeded_at,
+                "phase_a_returned_before_the_model_was_seeded": returned_first,
+                "no_pointer_model_existed_when_this_one_was_built": not model_already_present,
+                "phase_a_status": phase_a_status,
                 "limits": deepcopy(limits), "python_seed": seed,
                 "local_note": ("a LOCAL build reproduces the practice weights to within 7.450580596923828e-09 "
                                "but not byte-exactly, so this equality is an IN-JOB AWS check only"),
@@ -907,7 +965,13 @@ def _seed_and_double_build(ctx):
                                        "core_identity_equals_the_practice_start":
                                            identity["core_identity_equals_the_practice_start"],
                                        "double_build_equal": identity["double_build_equal"],
-                                       "seeds_pairwise_different": identity["seeds_pairwise_different"]}
+                                       "seeds_pairwise_different": identity["seeds_pairwise_different"],
+                                       # R1-2. The measured ordering travels with the summary too, so a reader
+                                       # of `worker_report.json` alone sees it rather than having to open the
+                                       # artifact. Read from `identity`, never restated.
+                                       "phase_a_finished_before_the_model_was_seeded":
+                                           identity["phase_a_finished_before_the_model_was_seeded"],
+                                       "phase_a_status": identity["phase_a_status"]}
 
 
 # ======================================================================================================
@@ -1696,6 +1760,12 @@ def run(config, root, results, artifacts, attestor=None):
             phase("checkpoint_check_phase_a")
             ctx["phase_a"] = _checkpoint_check_phase_a(ctx)
             report["checkpoint_check_phase_a_status"] = ctx["phase_a"]["status"]
+            # R1-2. The run's OWN reading of when phase A returned. `_seed_and_double_build` compares this
+            # against the reading it takes immediately before it builds the container, so the ordering the
+            # model-identity artifact claims is a MEASUREMENT and not a literal. Recorded whether phase A
+            # completed or failed, because "phase A returned before the model was seeded" and "phase A
+            # completed" are two different facts and the artifact reports both separately.
+            ctx["phase_a_returned_at"] = time.monotonic()
             _deadline(started)
 
         with _timed(ctx["timings"], "fresh_initialization"):
