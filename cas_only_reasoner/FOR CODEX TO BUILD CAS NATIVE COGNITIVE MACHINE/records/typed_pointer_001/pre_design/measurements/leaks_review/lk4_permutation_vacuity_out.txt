@@ -1,0 +1,71 @@
+  packet cache: reused lk_cache_packets.pkl (564 packets)
+  admissible cache: reused lk_cache_admissible.json (cache built by lk0_material.py (checker.derive_target + evaluate_gates.eligible_questions))
+  admissible cache: spot check OK (4 records re-derived and compared)
+  material loaded in 4.1 s (frozen/encoder 2.8 s, packets 0.4 s, rest 0.9 s)
+
+MATERIAL
+  records held/trained/excluded 127 358 79
+  eligible 45 shortcut-removed 5
+  eligible by kind {'analogy': 5, 'context': 5, 'correspondence': 5, 'definition': 5, 'edge_account': 5, 'parts': 5, 'reach': 9, 'role_set': 6}
+
+PART A -- the facts that make some permutation claims vacuous
+  (1) world vector g_w = MEAN of the final node states (DESIGN_DRAFT_v0.1 section 2.2). A mean over
+      nodes is invariant under any renaming of the nodes, so every world-choice head (definition
+      kind_ref/function_ref, context setting_ref, analogy world_id) is ORDER-BLIND BY CONSTRUCTION.
+  (2) each node head emits one logit per node, indexed by the node's position in the sorted-ref node
+      tensor, which IS the public alias N0..N9 (slots.py:55-60). So node outputs are equivariant by
+      wiring; an equivariance test tests the plumbing, not the learning.
+  (3) the shared decoder breaks ties by symbol order (slots.py:293: 'argmax over each slot's declared
+      symbol order; first wins exact ties'), so equal logits always emit the first declared symbol.
+
+PART B -- is the private answer name-blind? (renaming the focus world's node refs, then re-deriving)
+  exhaustive renaming for role_set/definition/context/parts/edge_account/reach, one renaming for
+  analogy/correspondence; scored with the private rule functions because the public validator rebuilds
+  node refs positionally (source.py:254 TYPED_SOURCE_WORLD_RECONSTRUCTION), so no free renaming exists
+  in the public model -- which is itself the reason a pointer machine cannot see a name.
+  records whose private answer is NOT invariant under renaming (a name-blind machine cannot know it):
+    held     role_set       0/6
+    held     definition     0/15
+    held     context        0/17
+    held     parts          0/9
+    held     edge_account   0/17
+    held     reach          5/26
+    held     correspondence 0/20
+    held     analogy        0/17
+    trained  role_set       0/30
+    trained  definition     0/36
+    trained  context        0/41
+    trained  parts          0/44
+    trained  edge_account   0/46
+    trained  reach          11/71
+    trained  correspondence 0/54
+    trained  analogy        0/36
+
+PART C -- which held-back questions the renaming dependence removes
+  all held-back questions affected 2 of 50 {'reach': 2}
+  ELIGIBLE held-back questions affected 2 of 45 {'reach': 2}
+  eligible question ids ['typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94', 'typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7']
+  held-back question ids affected (all) ['typed-query-5850f9113bccb701f9bc1cd326758889b77cd0cb3f0a443181b9e1105c3f9e94', 'typed-query-85a38565803471f8fe7867631871a54f1f5ba7d4be1ae01d8516d9b5af68e2c7']
+
+PART D -- VACUOUS: checks and reported numbers that cannot fail, with the reason
+  - node-relabelling invariance of any WORLD-level output (definition kind_ref/function_ref, context setting_ref, analogy world_id) offered as evidence about learning
+      why: g_w is a MEAN over node states, so those logits are identical for every renaming; a pass proves nothing.
+  - node-relabelling equivariance of the node heads offered as evidence (draft S9)
+      why: the readout index is the node's sorted-ref position, so equivariance is the wiring. Keep as an engineering test only, which is what the draft's section 5 already says.
+  - any 'the assembled answer is unchanged when node refs are shuffled' metric
+      why: for every kind where Part B shows the private answer is name-blind, such a metric can only pass.
+  - a relabelling-invariance claim IF the optional rank feature (DG3) is adopted
+      why: rank IS the alphabetical position of the hidden ref, so the machine stops being permutation-equivariant; the vacuity law no longer applies to it and the claim must be withdrawn, not merely reported.
+  - the checkpoint probe accuracy as a transfer measure
+      why: the probe reads node vectors and never a position, so its value is order-invariant by construction.
+  - I3 as written ('initial model identity re-derives from the seed')
+      why: the pure-Python reader cannot run torch, so it collapses into comparing the job with itself (pipeline review DG4/V3); vacuous unless it becomes DG4's in-job check list.
+  - the registered secondary flag RELATIONAL_TRANSFER as a transfer measure, unless the removals of section REQUIRED_REMOVALS are applied first
+      why: with the flag-solvable relational questions still inside it, the flag is satisfied by the same flag-copying that FP1 identified.
+
+PART E -- REQUIRED permutation tests (engineering only; none is learning evidence)
+  - E1 no-alias-channel: rename every node ref in every world and assert the pointer input tensors are byte-identical (the reader must never read node['ref'] except through the registered rank feature).
+  - E2 wiring: permute a world's node rows and assert the node-head logits permute by exactly that permutation while the world vector g_w stays bit-identical.
+  - E3 symbol-row alignment: assert the node tensor row order is the order the reader built and that slot symbol order still maps row i to alias N<i> (slots.py:88, 101, 103, 107).
+  - E4 rank feature (only if DG3 is resolved by adding rank): assert every rank is the sorted-ref position, assert rank is the ONLY order-derived feature, and register that the section 5 vacuity paragraph no longer applies to this machine.
+  - E5 answer-side precondition: the frozen removal test must carry the per-record list from Part B/C above; a question whose answer is not name-blind cannot be in the gate population.

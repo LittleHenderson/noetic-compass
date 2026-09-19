@@ -455,40 +455,73 @@ correspondence   mode            2           (88)
 
 The four 64/65-symbol slots and the wide `mapping_target` are where the output space, not the input, is hardest.
 
-## 10. What is still outstanding
+## 10. BOTH LENSES HAVE NOW REPORTED — the removal table is complete
 
-### 🔴 THE REMOVAL TABLE IS INCOMPLETE — `lk6_gate_population.py` CRASHED PART-WAY
+`DESIGN_REVIEW_LEAKS_LENS.md` (30,790 bytes, findings LK1–LK18) completes the picture. The earlier truncated
+`lk6_gate_population_out.txt` run is superseded by the report's own table.
 
-`measurements/leaks_review/lk6_gate_population_out.txt` is a **truncated** run, not a finished population. It
-completed REMOVAL 1 and REMOVAL 2 and then raised on REMOVAL 3:
+### 10.1 The frozen removal list and the resulting population
 
-```
-REMOVAL 1 -- registered input-blind shortcut       removes  0 eligible: {}
-REMOVAL 2 -- FP2 parts(declared_whole)             removes  3 eligible: {'parts': 3}
-            reach flag rule                        removes  0
-            edge flag rule                         removes  0
-REMOVAL 3 -- DG3 node-order-dependent questions    ValueError: TYPED_SOURCE_WORLD_RECONSTRUCTION
-```
+| | value |
+|---|---|
+| eligible held questions | 45 |
+| RELATIONAL tier before removals | 29 |
+| removals | **6** — FP2 `parts` 3, node-order dependence 2, PRESENT-for-every-node 1 |
+| **RELATIONAL population** | **23** — analogy 5, correspondence 5, edge_account 5, parts 2, reach 6 |
+| spread over the five held worlds | 4 / 4 / 7 / 5 / 3 |
+| kinds and worlds available for the ≥ 2 / ≥ 2 rule | 5 and 5 |
+| minimum passing `b` at c = 0, p ≤ 0.01 | **7** (2⁻⁷ = 1/128 = 0.0078125; 2⁻⁶ = 1/64 = 0.0156250 fails) |
+| required share of the population to improve | **7/23 = 0.3043** |
 
-The crash is in the reviewer's own relabelling harness: it rebuilds a relabelled public source and
-`source.validate_public` rejects the reconstruction (`source.py:254`, `TYPED_SOURCE_WORLD_RECONSTRUCTION`). It is a
-defect in the probe, **not** a property of the study.
+**This corrects design v0.2, which says "29 − 3 − 2 = 24".** It is short by the PRESENT-for-every-node removal;
+the figure is **23, not 24**. Recorded as a required edit.
 
-**So the definitive removal list does not exist yet, and no population may be quoted as final.** What the truncated
-run does establish, and they are consistent with the other tables:
+### 10.2 The rank decision is SETTLED — rank stays OUT
 
-- the registered input-blind shortcut removal takes **0** of the 45 eligible questions;
-- the FP2 flag rule takes **3** (`parts`), the `reach` flag rule **0**, the `edge_account` flag rule **0**;
-- the RELATIONAL tier is 29 (analogy 5, correspondence 5, edge_account 5, parts 5, reach 9) over five held worlds
-  (5, 5, 7, 6, 6).
+Both lenses now agree, and they agree on the same arithmetic from opposite directions:
 
-**Three classes of removal are still not reconciled**, and they were found by different lenses:
-1. the **flag rules** (leak lens `lk2`, learnability LB2 — which says **4**, not 3);
-2. the **one-hop adjacency read**, which the leak lens measured as solving `parts` **5/5** and `edge_account` **5/5**
-   (`lk1_answer_carriers_out.txt` lines 58-66) — this is *not* a flag rule, and it is absent from REMOVAL 2;
-3. the **rank and constant channels** on `reach` (R10 at 4/9, and DG3's 2/9).
+- The leaks lens (LK7) measures the **alphabetically-last-node rule solving 5 of 45 eligible questions by itself**
+  (`parts` 1/5, `reach` 4/9) and states the preference plainly: **prefer the removal option so the vacuity law
+  survives.**
+- The learnability lens (LB1) says rule-1 `reach` depends on the hidden ref order for 5/26 held records and offers
+  the same two options: remove them, or adopt the rank feature.
 
-Until those are reconciled into one list, the honest population is an interval, not a number.
+Adopting rank would take the population from **23 to 18** and raise the required improvement share from
+**7/23 = 0.3043 to 7/18 = 0.3889** — and it would withdraw the draft's own vacuity paragraph, since rank *is* the
+node alias (244/244 refs have sorted position equal to their stored index).
+
+**Decision: the rank feature is EXCLUDED and the order-dependent questions are removed.** The `node_rank_feature`
+flag in the contract must be set False. This supersedes the earlier "REOPENED" state and the case-for-rank recorded
+in §7 — which is kept for the record but is no longer the decision.
+
+### 10.3 The leak lens's other required changes
+
+- **LK1** — `role_set`'s excerpt **is** the answer: a published clause-prefix rule with zero learned weights
+  reproduces 6/6 held-back and 30/30 trained role_set records, and the position-free token-bag reading reproduces it
+  identically. The TEXT tier may never count toward a learning label.
+- **LK2** — `definition` and `context` are pure two-flag copies (5/5 and 5/5 of eligible held; 15/15, 17/17 records).
+- **LK9** — one adjacency hop solves 5/5 `parts`, 5/5 `edge_account`, 1/9 `reach`. The protocol must choose and
+  freeze **PRIMARY (23)** or **STRICT (16 without rank)**.
+- **LK11** — 15 of the 45 eligible questions are decided by a **single record**; print record and admissible counts
+  per gained question.
+- **LK18** — training depths are 1/2/4/8 while every evaluation uses 8. **Fix K = 8 and forbid the learner
+  conditioning on `depth`.**
+- **LK5** — `is primary label` ≡ `is participant` in 64/64 worlds, so one flag is redundant.
+- **LK3 / LK4** — `analogy`'s `NO_MATCH` is never admissible (0/70) and `correspondence`'s `mode` slot is constant
+  (0/88), so those slots carry no positive class anywhere in the material.
+
+### 10.4 The three-lens reconciled position on what can be learned
+
+| tier / kind | can it show learning? |
+|---|---|
+| TEXT (`role_set`) | **no** — the answer is the input (LK1) |
+| DIRECT_READ (`definition`, `context`) | **no** — pure flag copies (LK2, LB2) |
+| `parts`, `edge_account` | **yes, as graph reading** — the machine must learn the mapping and it either transfers or not; a rule also solves them, so they cannot carry a *relational* claim (LK9, LB16) |
+| `reach` | partly — contaminated by the rank and constant channels; the surviving questions are honest (LK7, LB1) |
+| `analogy` | **no** — a same-shape-different-domain rule solves 17/17 held records (LB18) |
+| `correspondence` | **no** — not expressible by the drafted head; 0/20 held (LB12, LB13, LB15) |
+
+This is the substance of what the owner decided on 2026-09-19: **run it as the transfer test and label honestly.**
 
 - The leaks lens had not yet reported its shortcut-policy table (pointer-space policies), its permutation-vacuity
   list, its other pipeline-routes check, or its final removal list and minimum b.
