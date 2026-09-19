@@ -515,10 +515,17 @@ def _node_rank_of_alias(symbol):
 
 
 def _via_rank(symbol):
-    """`VIA_N7` -> 7."""
+    """`VIA_N7` -> 7.
+
+    `symbol[5:]`, NOT `symbol[4:]`. The prefix `VIA_N` is five characters; slicing from index 4 leaves the leading
+    `N`, so `int()` raised `invalid literal for int() with base 10: 'N0'` on the first `VIA_N` symbol a real run
+    ever scored -- after the model built, after phase A completed, and after five other wiring defects had been
+    cleared. `_node_rank` directly above is the correct shape of this function: its prefix `N` is one character and
+    it slices from index 1. The `require` below already pins the pattern, so everything from index 5 is digits.
+    """
     require(type(symbol) is str and re.fullmatch(r"VIA_N[0-9]+", symbol) is not None,
             "POINTER_VIA_ALIAS")
-    return int(symbol[4:])
+    return int(symbol[5:])
 
 
 def _world_alias_table(plan):

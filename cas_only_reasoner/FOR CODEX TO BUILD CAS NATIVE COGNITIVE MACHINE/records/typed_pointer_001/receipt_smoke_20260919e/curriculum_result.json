@@ -1,0 +1,11 @@
+{
+  "arms": {},
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nstor=ATTESTOR)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1780, in run\n    _main_training(ctx)\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1016, in _main_training\n    evaluate_at(0)\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 996, in evaluate_at\n    ctx[\"predictions\"][name], scored = _evaluate(main, packets, name, artifacts, started=ctx[\"started\"],\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 433, in _evaluate\n    rows.append(learner.predict(packet, EVALUATION_DEPTH))\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 1502, in predict\n    result = self._graph(packet)\n             ^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 1476, in _graph\n    rows = forward.head_logits(plan, indicators)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 1230, in head_logits\n    nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith(\"VIA_N\")]\n             ^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 521, in _via_rank\n    return int(symbol[4:])\n           ^^^^^^^^^^^^^^^\nValueError: invalid literal for int() with base 10: 'N0'\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-tpntr-20260919230519-ab8f04e8-m-20260917",
+  "schema": "cncm.typed-pointer-worker-result/0.1",
+  "status": "WORKER_FAILED"
+}
