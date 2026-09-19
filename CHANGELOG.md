@@ -4,6 +4,84 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (FIRST REAL SPEND) - The smoke launched and failed at the container's first check; ~$0.40 cash, $15.00 cap committed
+
+**This is the first money spent on this study.** It bought a real defect found on real infrastructure. It did **not**
+train anything.
+
+### What ran
+
+The smoke job launched for real at `12:59:07` through `typed_pointer_launch.py --execute` with the seven required
+arguments plus the new `--reduced-schedule <literal>`, against the frozen admission
+`records/typed_pointer_001/admission_smoke_001/` and the canonical `meta1` ledger. It cleared validation, took the
+reservation, created a `g7.2xlarge` in `us-west-2` (AMI `ami-0fbbd0facbc9e3cff`, observed rate `2.52`/h,
+`gpu_name_contains` `RTX PRO 4500`) and fetched the package.
+
+### What happened
+
+```
+AWS_CANDIDATE_FAILED   (12:59:07 -> 13:10:30, ~11.4 minutes wall, ~9-10 minutes of instance time)
+
+_inner_runner.py, line 12:
+  require(MANIFEST['inputs_sha256'] == CONFIG['inputs_sha256'], 'MANIFEST_INPUT_INDEX_HASH')
+ValueError: TYPED_BOOTSTRAP:MANIFEST_INPUT_INDEX_HASH
+```
+
+**The failure is at the container's FIRST check — before the encoder is built, before phase A, before any
+training.** The fail-closed bootstrap refused, which is what it is for. `compute_cleanup: COMPLETE`; the instance is
+gone. Nothing was trained.
+
+### What it cost, in two different senses
+
+| | |
+|---|---|
+| **cash spent** | **≈ $0.40** — ~9-10 min of `g7.2xlarge` at `2.52`/h, essentially all of it boot, package install and the refusal |
+| **cap committed** | **$15.00** — the reservation, which has **no refund path** (`budget.py` exposes no release/settle) |
+| canonical ledger after | cap `5000.00`, reserved **`561.00`** (was `546.00`), unreserved **`4439.00`**, revision 88, 90 entries |
+| the reservation row | `cas-meta2-tpntr-20260919193339-111380d9-m-20260917`, `15.00`, `13:01:10` |
+
+Both numbers matter and they are not the same thing: the reservation is a cap commitment, the forty cents is money
+that actually left.
+
+**Note the ledger trap again:** the CNCM-tree snapshot still reads revision 84 / reserved `501.00` / 86 entries and
+shows **zero** pointer reservations, because the launch wrote to the canonical `meta1` ledger. Reading the wrong
+copy would have reported "nothing was spent".
+
+### Diagnosis — most likely mine, and precisely
+
+The smoke admission was frozen at HEAD **`111380d9`**. I then committed the launcher's `--reduced-schedule` fix as
+**`65e37a63`** — and **`typed_pointer_launch.py` is itself a member of `PACKAGING_SOURCES`.** M3's fix made
+`frozen_inputs()` read every inventory row *out of the commit* so that "committed" and "admitted" are the same
+bytes; the config's `inputs_sha256` and the package manifest's now sit on **different sides of my intervening
+commit**.
+
+**The gap this exposes, stated plainly:** the launcher verifies packaged sources against the commit at **build**
+time, and the worker verifies manifest-vs-config at **run** time, but **nothing re-checks that a frozen admission's
+recorded hashes still describe the tree at LAUNCH time.** A freeze is not invalidated when a packaged source
+changes afterwards. That is a real missing guard, and it cost ~$0.40 plus a $15 commitment to find instead of
+being caught for $0.
+
+### What works, proven on real infrastructure
+
+The reduced-schedule path is **proven end to end up to the bootstrap**: `--reduced-schedule` was accepted, the
+smoke-only evidence contract was selected across the process boundary, the reservation was taken, an instance was
+created, the package was fetched, and the container started. The earlier refusal
+(`POINTER_AUTHORITY_BINDING:evidence_contract_sha256`) is genuinely fixed.
+
+### The next three steps, in order
+
+1. **Re-freeze the smoke admission at the current HEAD**, so the package, the config and the manifest all describe
+   the *same* revision. `prepare_smoke.py` writes create-only, so the existing `admission_smoke_001/` must be moved
+   aside first — it is committed, so nothing is lost.
+2. **Add the missing launch-time guard**: `main()` must refuse when any packaged source's working-tree bytes differ
+   from the commit the authority names, so this class of error is caught for **$0**.
+3. **Re-launch.** Then `phase_timings.json` gives the measured seconds per update and per evaluation, which sets
+   `PASSES` — the lever that decides whether these neurons get enough training to converge.
+
+**The neurons have still never been trained.** The refusal happened before the encoder was built, so this run
+moved us no closer to the learning answer. What it bought is a real defect, found on real infrastructure, for about
+the price of the two adversarial reviews.
+
 ## 2026-09-19 UTC (pre-flight, $0) - CORRECTION: R1-1 IS fixed; my acceptance test went stale and I reported a fixed blocker as open
 
 **I was wrong, and this row exists to correct the record.**
