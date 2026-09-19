@@ -204,6 +204,28 @@ learning, and it must be recorded as such.
   approved amount, well under $1) and recorded through the launcher's own reservation path into the canonical
   ledger at the `meta1` worktree path — **never by hand**. The CNCM-tree copy of the ledger is a stale snapshot that
   `validate_ledger_path` refuses.
+
+> **AMENDED 2026-09-19, before the run: the "small reservation" sentence above is NOT SATISFIABLE by the built
+> launcher, and the smoke therefore cannot currently be launched at all.** Recorded here rather than worked around
+> silently, because it is a defect in this plan and in the launch path, not a preference.
+>
+> - `typed_pointer_launch.py:311` requires the caller's amount to equal `shared.RESERVATION_USD` (which is `7.00`),
+>   and `:314` then reserves the study's own `RESERVATION_USD` — `contract.RESERVATION_USD = "15.00"`. There is no
+>   argument, flag or hook that changes either one.
+> - `reservation_plan_for()` hard-sets `plan["runtime_seconds_max"] = INSTANCE_SECONDS_MAX` (`14400`), and
+>   `budget.validate_plan` requires `reserved_usd >= bound`, where `bound` is derived from that runtime, the hourly
+>   maximum (`2.52`) and `ancillary_reserved_usd` (`1.48`). With a 14,400 s plan the **minimum reservable is about
+>   $11.56**, so a $1 reservation is refused outright with `RESERVATION_BELOW_DECLARED_COST_BOUND`.
+> - `budget.py` exposes **only** `reserve_budget`. There is no release, refund or settle function anywhere, and the
+>   ledger carries `no_automatic_refund: true` with `STATUS = "RESERVED_NO_AUTOMATIC_REFUND"`.
+>
+> **Consequence, stated plainly: on the current code the smoke permanently commits $15.00 of the $5,000 cap for a
+> job whose actual cost is about $1.00** — a 15× over-reservation of the amount the owner approved. The reservation
+> is *not* a charge and no money leaves the account, but the cap is not returned either. Two consequences follow:
+> this plan must stop promising a small reservation, and resolving it needs either a small-plan path through the
+> launcher or the owner's explicit acceptance of a $15.00 commitment. **It is raised with the owner; it is not
+> decided here.** Two adversarial reviewers are reading `typed_pointer_launch.py` at this moment, so the launch path
+> is deliberately NOT being edited underneath them.
 - The owner's approval covers this step; no new approval is needed unless the projection in §4.2 crosses 11,000 s.
 - The smoke's job name uses the same `tpntr` study token, and its artifacts are sealed exactly like a real job's.
 

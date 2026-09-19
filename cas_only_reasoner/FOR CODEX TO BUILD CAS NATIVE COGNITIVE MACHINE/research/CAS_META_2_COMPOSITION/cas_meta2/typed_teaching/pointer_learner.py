@@ -204,17 +204,23 @@ QUERY_INPUT_WIDTH = 21                                      # 8 kind + 9 rule + 
 CLAUSE_COUNT = 6                                            # the six independent role classes
 DECLARATION_FIELDS = pointer_inputs.DECLARATION_FIELDS      # ("domain", "function", "kind", "setting")
 DECLARATION_ROWS = len(DECLARATION_FIELDS)
-DECL_MAX_TOKENS = 24                                        # every declaration is one or two words
+DECL_MAX_TOKENS = 256                                       # rows reserved per declaration field
 DECL_VECTOR_WIDTH = 32
 # THE DEGREE FEATURES. A one-hot projection of the in-degree and the out-degree, each spanning
 # {0, 1, 2, 3, 4 or more}: the COMPLETE isomorphism invariant on this corpus ([LB3], [LB7]) inside the head's
 # own input, with NO division by the node count. Every bank world has at most 4 nodes and at most 3 children
 # per node, so the truncation loses nothing here.
 DEGREE_STEPS = 5
+IN_DEGREE_SUM_COLUMN = NODE_FEATURE_COUNT
+OUT_DEGREE_SUM_COLUMN = NODE_FEATURE_COUNT + 1
+# The per-row LENGTH of the node feature matrix: the raw flag columns plus the one-hot degree columns.
+NODE_ROW_WIDTH = NODE_FEATURE_COUNT + 2 * DEGREE_STEPS
 # The `a -> b` adjacency bit's own embed width, so the edge head's MLP can be run as ONE batched matrix
 # product over the `n x n` ordered pairs the `edge_account` slots enumerate.
 DIRECTED_PAIR_WIDTH = 8
-WORLD_VECTOR_WIDTH = 2 * WIDTH + 4                          # mean ++ max ++ 4 degree/flag features
+# mean ++ max ++ 4 degree/flag features ++ the learned attention pool: three full-width vectors and four
+# scalars, so the mean is present AND the wiring the review measured it losing is present beside it.
+WORLD_VECTOR_WIDTH = 3 * WIDTH + 4
 # The per-candidate width of the world-choice scorer: the query key and the query value, each transformed to
 # WIDTH, plus 4 for the is_focus / is_target flags, plus the candidate's declaration embedding -- the shape
 # AND the domain text, which is what an `analogy` answer needs together (17 of 17 held).
@@ -232,7 +238,7 @@ BLOCK_NAMES = {name: "_block_" + name.replace(".", "_") for name in PARAMETERS}
 require(set(BLOCK_NAMES) == set(PARAMETERS) and len(set(BLOCK_NAMES.values())) == len(PARAMETERS)
         and all("." not in name for name in BLOCK_NAMES.values()), "POINTER_BLOCK_NAMES")
 require(WORLD_CANDIDATE_WIDTH == 2 * WIDTH + 4 + DECL_VECTOR_WIDTH
-        and WORLD_VECTOR_WIDTH == 2 * WIDTH + 4, "POINTER_WIDTH_ARITHMETIC")
+        and WORLD_VECTOR_WIDTH == 3 * WIDTH + 4, "POINTER_WIDTH_ARITHMETIC")
 
 # EXACTLY as REVIEW_SYNTHESIS.md sections 5.5 and 5.6 printed them. Never rounded.
 MEASURED_POOLING = {
@@ -347,6 +353,15 @@ require(type(contract.DESIGN["node_rank_feature"]) is bool, "POINTER_RANK_FEATUR
 require(CORE_ROUNDS == 8 and contract.DESIGN["core_rounds"] == CORE_ROUNDS, "POINTER_CORE_ROUNDS")
 NODE_FEATURE_COUNT = (NODE_FEATURE_COUNT_WITH_RANK if contract.DESIGN["node_rank_feature"]
                       else NODE_FEATURE_COUNT)
+# Derived AFTER the rank branch is resolved, so the two widths cannot disagree: `NODE_ROW_WIDTH` is the
+# per-node row of the feature block, and `BLOCK_INPUT_WIDTH` is the three concatenated halves of one round --
+# the normalised state, the normalised parent aggregate and the normalised child aggregate -- which a learned
+# matrix projects to the registered `^6` block's own width. A world is read as a directed graph, and the
+# block is the registered `^6` operation applied per node.
+NODE_ROW_WIDTH = NODE_FEATURE_COUNT + 2 * DEGREE_STEPS
+BLOCK_INPUT_WIDTH = 3 * NODE_ROW_WIDTH
+require(NODE_ROW_WIDTH == (18 if not contract.DESIGN["node_rank_feature"] else 19)
+        and BLOCK_INPUT_WIDTH == 3 * NODE_ROW_WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
 
 # The reading's `kind` id space and the slot `field` space this module scores. Both are pinned here rather than
 # imported, so a course change that reordered kinds or added a slot field fails closed.
@@ -395,6 +410,7 @@ def profile():
     """
     own = Path(__file__).resolve()
     package = own.parent
+    meta = own.parents[1]
     research = own.parents[2]
     paths = [own,
              package / "pointer_contract.py",
@@ -402,10 +418,11 @@ def profile():
              package / "learner.py",
              package / "loss_plan.py",
              package / "slots.py",
-             research / "recurrent_cjt" / "recurrence.py",
-             research / "graph_teaching" / "trainer.py",
-             research / "graph_teaching" / "real_framework.py",
-             research / "teaching_cycle" / "gpu_adapter.py"]
+             meta / "recurrent_cjt" / "recurrence.py",
+             meta / "graph_teaching" / "trainer.py",
+             meta / "graph_teaching" / "real_framework.py",
+             meta / "teaching_cycle" / "gpu_adapter.py"]
+    require(all(path.is_file() for path in paths), "POINTER_PROFILE_FILES")
     body = {
         "schema": "cncm.typed-pointer-learner-profile/0.1",
         "files": [{"path": path.relative_to(research).as_posix(),
@@ -643,13 +660,17 @@ def _build_container(torch, framework, device):
                 require(tuple(value.shape) == PARAMETER_SHAPES[name], "POINTER_FRAMEWORK_STATE_SHAPE")
                 self.register_parameter(BLOCK_NAMES[name],
                                         torch.nn.Parameter(value, requires_grad=True))
-            # ---- the shared round: three input norm weights, three mixes, one rate ----
-            self.round_state_norm = torch.nn.Parameter(torch.ones(1, device=device, dtype=torch.float32))
-            self.round_parent_norm = torch.nn.Parameter(torch.ones(1, device=device, dtype=torch.float32))
-            self.round_child_norm = torch.nn.Parameter(torch.ones(1, device=device, dtype=torch.float32))
-            self.self_mix = torch.nn.Parameter(torch.eye(WIDTH, device=device, dtype=torch.float32) * 0.5)
-            self.parent_mix = torch.nn.Parameter(torch.eye(WIDTH, device=device, dtype=torch.float32) * 0.25)
-            self.child_mix = torch.nn.Parameter(torch.eye(WIDTH, device=device, dtype=torch.float32) * 0.25)
+            # ---- the shared round: the per-half encoder, the three-way blend, and the round rate ----
+            # The node's raw feature row and its two aggregate rows are encoded SEPARATELY by one shared matrix
+            # and then blended, so the registered `^6` block is called on ONE width-WIDTH vector per node per
+            # round, exactly as `_DecomposeTransform` requires.
+            self.node_encode = torch.nn.Linear(NODE_ROW_WIDTH, WIDTH, bias=False).to(device)
+            # A softmax over three logits: how much of the node's OWN signal, of its parents' aggregate and of
+            # its children's aggregate enters the registered `^6` block this round. Shared by all K rounds.
+            self.round_mix = torch.nn.Parameter(
+                torch.tensor([0.5, 0.25, 0.25], device=device, dtype=torch.float32))
+            # `tanh(round_rate)` bounds the per-round step, so the residual stream cannot be driven off its
+            # unit-RMS scale by a single round.
             self.round_rate = torch.nn.Parameter(torch.zeros(1, device=device, dtype=torch.float32))
             # ---- phase one: the query, the readouts, and the one-hot tables ----
             self.query_projection = torch.nn.Linear(QUERY_INPUT_WIDTH, WIDTH, bias=False).to(device)
@@ -657,12 +678,17 @@ def _build_container(torch, framework, device):
             self.attention_key = torch.nn.Linear(WIDTH, 1, bias=False).to(device)
             self.world_projection = torch.nn.Linear(WORLD_VECTOR_WIDTH, WIDTH, bias=False).to(device)
             self.declaration_table = torch.nn.Parameter(
-                torch.empty(DECLARATION_ROWS, DECL_MAX_TOKENS, WIDTH, device=device, dtype=torch.float32))
+                torch.empty(DECLARATION_ROWS * DECL_MAX_TOKENS, WIDTH, device=device,
+                            dtype=torch.float32))
             torch.nn.init.normal_(self.declaration_table, mean=0.0, std=1.0)
-            torch.nn.init.zeros_(self.declaration_table[:, DECL_MAX_TOKENS - 1, :])
+            # The LAST row of every field's block is that field's padding row, held at zero so a short
+            # declaration pads with zeros rather than with a learned token.
+            padding = torch.tensor([field * DECL_MAX_TOKENS + DECL_MAX_TOKENS - 1
+                                    for field in range(DECLARATION_ROWS)], device=device)
+            torch.nn.init.zeros_(self.declaration_table[padding, :])
             self.declaration_projection = torch.nn.Linear(WIDTH, DECL_VECTOR_WIDTH, bias=False).to(device)
             self.directed_pair_embedding = torch.nn.Parameter(
-                torch.zeros(DIRECTED_PAIR_WIDTH, WIDTH, device=device, dtype=torch.float32))
+                torch.zeros(2, DIRECTED_PAIR_WIDTH, device=device, dtype=torch.float32))
             torch.nn.init.normal_(self.directed_pair_embedding, mean=0.0, std=1.0)
             # ---- phase three: the heads. Small, and none of them sees raw adjacency but the edge head. ----
             self.node_head = torch.nn.Sequential(
@@ -691,7 +717,9 @@ def _build_container(torch, framework, device):
 
         def core_block(self, value):
             """The registered `^6` arithmetic, as `_DecomposeTransform.forward` performs it."""
-            left, right, merge = (getattr(self, BLOCK_NAMES[name]).weight for name in PARAMETERS)
+            left = getattr(self, BLOCK_NAMES["left.weight"])
+            right = getattr(self, BLOCK_NAMES["right.weight"])
+            merge = getattr(self, BLOCK_NAMES["merge.weight"])
             parts = torch.cat((torch.tanh(torch.nn.functional.linear(value, left)),
                                torch.tanh(torch.nn.functional.linear(value, right))), dim=-1)
             return torch.nn.functional.linear(parts, merge)
@@ -720,11 +748,12 @@ def _build_container(torch, framework, device):
 
         def preactivations(self, value):
             """The block's two pre-activation tensors for a 2-D input: `[W1 x, W2 tanh(W1 x)]`."""
-            left, right = (getattr(self, BLOCK_NAMES[name]).weight for name in ("left.weight", "right.weight"))
+            left = getattr(self, BLOCK_NAMES["left.weight"])
+            right = getattr(self, BLOCK_NAMES["right.weight"])
+            merge = getattr(self, BLOCK_NAMES["merge.weight"])
             first = torch.cat((torch.nn.functional.linear(value, left),
                                torch.nn.functional.linear(value, right)), dim=-1)
-            second = torch.nn.functional.linear(torch.tanh(first),
-                                                getattr(self, BLOCK_NAMES["merge.weight"]).weight)
+            second = torch.nn.functional.linear(torch.tanh(first), merge)
             return first, second
 
     return _PointerContainer()
@@ -792,15 +821,28 @@ def _graph_blocks(torch, reading, device):
             adjacency[source, target] = 1.0
         rows = []
         for rank, node in enumerate(graph["nodes"]):
-            is_focus = 1.0 if world_id == focus_world_id else 0.0
-            rows.append([float(node["is_declared_whole"]), float(node["is_participant"]),
-                         float(node["is_primary_label"]),
-                         1.0 if (is_focus and whole_argument == rank) else 0.0,
-                         1.0 if (is_focus and part_argument == rank) else 0.0,
-                         is_focus, float(graph["is_target"])])
-        features = torch.tensor(rows, dtype=torch.float32, device=device).reshape(node_count, 7)
+            is_focus = world_id == focus_world_id
+            # EIGHT columns, written as ONE literal so the width is countable at the point of construction and
+            # cannot drift by an appended element. The two query marks exist in the FOCUS world only, and are
+            # applied by LIST POSITION, which is the reading's own node order and this block's row order.
+            values = [
+                float(node.get("is_declared_whole", 0)),
+                float(node.get("is_participant", 0)),
+                float(node["rank"]) if contract.DESIGN["node_rank_feature"]
+                else float(node.get("is_primary_label", 0)),
+                1.0 if (is_focus and whole_argument == rank) else 0.0,
+                1.0 if (is_focus and part_argument == rank) else 0.0,
+                float(graph["is_focus"]),
+                float(graph["is_target"]),
+                1.0,                                   # a constant bias column, never a reading fact
+            ][:NODE_FEATURE_COUNT]
+            if len(values) != NODE_FEATURE_COUNT:
+                raise ValueError("TYPED_MATCHED:POINTER_NODE_FEATURE_WIDTH:%d" % len(values))
+            rows.append(values)
+        features = torch.tensor(rows, dtype=torch.float32, device=device).reshape(node_count,
+                                                                                 NODE_FEATURE_COUNT)
         features = torch.cat((features, _degree_features(torch, adjacency)), dim=1)
-        require(features.shape[1] == NODE_FEATURE_COUNT, "POINTER_NODE_FEATURE_WIDTH")
+        require(features.shape[1] == NODE_ROW_WIDTH, "POINTER_NODE_FEATURE_WIDTH")
         blocks.append([world_id, node_count, _rms_unit(torch, features), adjacency])
     require(focus_world_id in [row[0] for row in blocks], "POINTER_FOCUS_WORLD")
     return blocks
@@ -825,15 +867,39 @@ def _query_vector(torch, reading, device):
     return torch.tensor(values, dtype=torch.float32, device=device).reshape(1, QUERY_INPUT_WIDTH)
 
 
-def _rounds(torch, model, blocks, *, charge=None):
+def _block_input(torch, model, raw):
+    """One round's `^6` input: a length-`WIDTH` vector per node.
+
+    The three per-node halves of a round -- the normalised feature row, the normalised parent aggregate and the
+    normalised child aggregate -- are each ENCODED by one shared learned matrix, then blended by a softmax over
+    three round-shared scalars. So the registered `_DecomposeTransform` is called exactly as it is registered:
+    once per node per round, on ONE `WIDTH`-long vector. The blend is the only place the round can decide how
+    much of the node's own signal, of its parents' aggregate and of its children's aggregate to carry.
+    """
+    require(raw.dim() == 2 and raw.shape[1] == BLOCK_INPUT_WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
+    halves = raw.reshape(raw.shape[0], 3, NODE_ROW_WIDTH)
+    encoded = model.node_encode(halves.reshape(-1, NODE_ROW_WIDTH)).reshape(raw.shape[0], 3, WIDTH)
+    weights = torch.softmax(model.round_mix, dim=0)
+    value = torch.einsum("nhw,h->nw", encoded, weights)
+    require(value.shape == (raw.shape[0], WIDTH), "POINTER_BLOCK_INPUT_WIDTH")
+    return value
+
+
+def _rounds(torch, model, blocks, *, charge=None, observe=None):
     """K = CORE_ROUNDS shared rounds. `charge` is called once per round, for the counters.
 
     The round is `h <- h + cap * tanh(rate) * ^6([norm(h), norm(sum parents), norm(sum children)])`, with the
     three aggregates RMS-normalised AT THE INPUTS before the registered block. `depth` is not a parameter of
     this function and cannot reach the block through any argument.
+
+    `observe(round_index, block_input)` is called once per round with the exact 2-D `^6` input as the block
+    receives it (already projected to the block's width), which is how `pass0_saturation` measures the block's
+    own pre-activations on the real geometry without a second copy of this loop.
     """
     counts = [row[1] for row in blocks]
-    hidden = _rms_unit(torch, torch.cat([row[2] for row in blocks], dim=0))
+    raw = torch.cat([row[2] for row in blocks], dim=0)
+    hidden = _rms_unit(torch, model.node_encode(raw))
+    require(hidden.shape == (sum(counts), WIDTH), "POINTER_ROUND_INITIAL_WIDTH")
     offsets, limit = [], 0
     for count in counts:
         offsets.append((limit, limit + count))
@@ -843,29 +909,42 @@ def _rounds(torch, model, blocks, *, charge=None):
         if charge is not None:
             charge(round_index)
         require(bool(torch.isfinite(hidden).all().item()), "POINTER_STATE_NONFINITE")
-        inputs, messages = [], []
+        inputs, parents, children = [], [], []
         for position, (start, stop) in enumerate(offsets):
             block = hidden[start:stop, :]
+            raw = blocks[position][2]
             adjacency = blocks[position][3]
-            inputs.append(_rms_unit(torch, block))
-            messages.append(_rms_unit(torch, adjacency.matmul(block)))
-            messages.append(_rms_unit(torch, adjacency.transpose(0, 1).matmul(block)))
-        stacked = torch.stack(inputs, dim=1)
-        aggregate = torch.cat(messages, dim=1).reshape(len(counts), 3, WIDTH)[:, 1:, :]
-        block_input = torch.cat((stacked, aggregate), dim=2).reshape(-1, 3 * WIDTH)
-        require(block_input.shape[1] == 3 * WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
-        update = model.core_block(block_input)
+            # The three halves are NODE FEATURE rows, each RMS-normalised, then projected by one shared matrix.
+            inputs.append(_rms_unit(torch, raw))
+            parents.append(_rms_unit(torch, adjacency.matmul(raw)))
+            children.append(_rms_unit(torch, adjacency.transpose(0, 1).matmul(raw)))
+        # Worlds hold DIFFERENT node counts, so the per-node input and the two per-node messages are
+        # concatenated row-by-row in world order rather than stacked square: row i of the result is
+        # [norm(x_i), norm(sum parents_i), norm(sum children_i)] of one node of one world.
+        heights = [row.shape[0] for row in inputs]
+        block_input = torch.cat([torch.cat((inputs[index], parents[index], children[index]), dim=1)
+                                 for index in range(len(inputs))], dim=0)
+        require(block_input.shape == (sum(heights), BLOCK_INPUT_WIDTH), "POINTER_BLOCK_INPUT_WIDTH")
+        # `_block_input` encodes and blends the three halves; the result is ONE width-WIDTH vector per node.
+        hidden_input = _block_input(torch, model, block_input)
+        require(hidden_input.shape == (block_input.shape[0], WIDTH), "POINTER_ROUND_MIX_WIDTH")
+        if observe is not None:
+            observe(round_index, hidden_input)
+        update = model.core_block(hidden_input)
         hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP * torch.tanh(model.round_rate) * update)
     require(bool(torch.isfinite(hidden).all().item()), "POINTER_STATE_NONFINITE")
     return hidden
 
 
 def _pair_rows(torch, blocks, device):
-    """`(index_a, index_b, adjacency_bits)` over every world's `n x n` ordered pairs, in block order.
+    """`(index_a, index_b, bit)` over every world's `n x n` ordered pairs, in block order.
 
     The pairs are enumerated exactly as `answer_space`'s `edge_pairs` does it, `[[a, b] for a in nodes for b in
     nodes]` (`checker.py:190-195` / `slots.py:104-105`), so one batched MLP over this tensor serves every
-    `edge_account` slot in the packet and the plan's slot order IS this tensor's row order.
+    `edge_account` slot in the packet and the plan's slot order IS this tensor's row order. The third return
+    value is the `a -> b` adjacency BIT as a `long` index into the two-row pair embedding -- the empty edge is
+    row 0 and the present edge is row 1, so the head is handed the bit as one extra input dimension and the
+    bit still carries no gradient of its own.
     """
     left, right, bits = [], [], []
     limit = 0
@@ -875,13 +954,14 @@ def _pair_rows(torch, blocks, device):
             for other in range(count):
                 left.append(limit + index)
                 right.append(limit + other)
-                bits.append(1.0 if float(adjacency[index, other]) > 0.5 else 0.0)
+                bits.append(1 if float(adjacency[index, other]) > 0.5 else 0)
         limit += count
-    require(len(left) == sum(block[1] ** 2 for block in blocks), "POINTER_PAIR_ROWS")
+    require(len(left) == sum(block[1] ** 2 for block in blocks)
+            and all(bit in (0, 1) for bit in bits), "POINTER_PAIR_ROWS")
     index_a = torch.tensor(left, dtype=torch.int64, device=device)
     index_b = torch.tensor(right, dtype=torch.int64, device=device)
-    adjacency_bit = torch.tensor(bits, dtype=torch.float32, device=device).reshape(-1, 1)
-    return index_a, index_b, adjacency_bit
+    bit = torch.tensor(bits, dtype=torch.int64, device=device)
+    return index_a, index_b, bit
 
 
 def _declaration_embeddings(torch, model, reading, world_ids, device):
@@ -892,21 +972,44 @@ def _declaration_embeddings(torch, model, reading, world_ids, device):
     a short declaration pads with zeros rather than with a learned token.
     """
     names = list(DECLARATION_FIELDS)
-    token_lists = []
+    # ONE row block of `DECL_MAX_TOKENS` rows PER FIELD, shared by every world in the reading. A declaration
+    # token is mapped to a row by a SORTED POSITION among the tokens that field names, so the table is a
+    # function of the reading alone and two readings of the same packets agree. The LAST row of each block is
+    # the padding row, held at zero.
+    tokens = {field: [] for field in names}
     for world_id in world_ids:
         for field in names:
             ids = reading["worlds"][world_id]["declaration_ids"][field]
-            require(type(ids) is list and ids and len(ids) <= DECL_MAX_TOKENS - 1,
-                    "POINTER_DECLARATION_TOKENS")
-            require(all(type(value) is int and not isinstance(value, bool) for value in ids),
+            require(type(ids) is list and ids, "POINTER_DECLARATION_TOKENS")
+            require(all(type(value) is int and not isinstance(value, bool) and value >= 0 for value in ids),
                     "POINTER_DECLARATION_TOKEN")
-            token_lists.append(list(ids) + [DECL_MAX_TOKENS - 1] * (DECL_MAX_TOKENS - len(ids)))
-    index = torch.tensor(token_lists, dtype=torch.int64, device=device)
-    flat = torch.nn.functional.one_hot(index.reshape(-1), num_classes=DECL_MAX_TOKENS).to(torch.float32)
-    rows = flat.matmul(model.declaration_table.reshape(DECLARATION_ROWS * DECL_MAX_TOKENS, WIDTH))
-    rows = rows.reshape(len(world_ids), DECLARATION_ROWS, WIDTH).sum(dim=1)
-    require(rows.shape == (len(world_ids), WIDTH), "POINTER_DECLARATION_ROWS")
-    return names, model.declaration_projection(rows)
+            tokens[field].extend(ids)
+    columns = {}
+    for field in names:
+        vocabulary = sorted(set(tokens[field]))
+        require(0 < len(vocabulary) <= DECL_MAX_TOKENS - 1, "POINTER_DECLARATION_VOCABULARY:" + field)
+        columns[field] = {token: position for position, token in enumerate(vocabulary)}
+    shortened = []
+    for world_id in world_ids:
+        for field in names:
+            ids = reading["worlds"][world_id]["declaration_ids"][field]
+            seen = sorted({columns[field][token] for token in ids})
+            shortened.append([position for position in seen[:DECL_MAX_TOKENS - 1]]
+                             + [DECL_MAX_TOKENS - 1] * max(0, DECL_MAX_TOKENS - len(seen)))
+    require(len(shortened) == len(world_ids) * DECLARATION_ROWS, "POINTER_DECLARATION_ROWS")
+    require(all(len(row) == DECL_MAX_TOKENS for row in shortened), "POINTER_DECLARATION_ROWS")
+    index = torch.tensor(shortened, dtype=torch.int64, device=device).reshape(
+        len(world_ids), DECLARATION_ROWS, DECL_MAX_TOKENS)
+    # A token id reaches 4000, so the index is a POSITION inside a per-field block, never a vocabulary id:
+    # indexing a table by the raw token id would be an out-of-bounds read.
+    require(int(index.min().item()) >= 0 and int(index.max().item()) < DECL_MAX_TOKENS,
+            "POINTER_DECLARATION_INDEX")
+    fields = torch.arange(DECLARATION_ROWS, dtype=torch.int64, device=device).reshape(1, DECLARATION_ROWS, 1)
+    table = model.declaration_table.reshape(DECLARATION_ROWS, DECL_MAX_TOKENS, WIDTH)
+    rows = table[fields.expand_as(index), index]
+    require(rows.shape == (len(world_ids), DECLARATION_ROWS, DECL_MAX_TOKENS, WIDTH),
+            "POINTER_DECLARATION_ROWS")
+    return names, model.declaration_projection(rows.sum(dim=2))
 
 
 class GraphForward:
@@ -937,8 +1040,7 @@ class GraphForward:
         self.pair_index = (index_a, index_b)
         pairs = self.hidden.index_select(0, index_a)
         others = self.hidden.index_select(0, index_b)
-        edge_input = torch.cat((pairs, others,
-                                adjacency_bit.matmul(model.directed_pair_embedding)), dim=1)
+        edge_input = torch.cat((pairs, others, model.directed_pair_embedding[adjacency_bit]), dim=1)
         require(edge_input.shape[1] == 2 * WIDTH + DIRECTED_PAIR_WIDTH, "POINTER_EDGE_HEAD_INPUT")
         self.edge_rows = model.edge_head(edge_input)
         node_input = torch.cat((self.hidden, self.query_value.reshape(1, WIDTH).expand(
@@ -966,7 +1068,12 @@ class GraphForward:
         return value
 
     def _pooled_worlds(self):
-        """`[mean, max, four degree/flag features, learned attention pool]` per world, projected to WIDTH."""
+        """`[mean, max, four degree/flag features, learned attention pool]` per world, projected to WIDTH.
+
+        The raw width is `2 * WIDTH + 4` plus the attention pool, because the mean, the max AND the pool are
+        each a full-width vector. All of them are kept and then projected together, so the head can use the
+        mean and still reach the wiring through the max, the degree features and the pool.
+        """
         torch, model = self.torch, self.model
         rows = []
         for position, block in enumerate(self.blocks):
@@ -975,13 +1082,14 @@ class GraphForward:
             features = block[2]
             attention = torch.softmax(model.attention_key(state).reshape(-1), dim=0)
             pooled = (attention.reshape(-1, 1) * state).sum(dim=0)
-            degrees = torch.stack([features[:, 7].sum(), features[:, 8].sum(),
-                                   features[:, 7].sum() / block[1], features[:, 8].sum() / block[1]])
+            degrees = torch.stack([features[:, IN_DEGREE_SUM_COLUMN].sum(),
+                                   features[:, OUT_DEGREE_SUM_COLUMN].sum(),
+                                   features[:, IN_DEGREE_SUM_COLUMN].sum() / block[1],
+                                   features[:, OUT_DEGREE_SUM_COLUMN].sum() / block[1]])
             rows.append(torch.cat((state.mean(dim=0), state.max(dim=0).values, degrees, pooled)))
         vector = torch.stack(rows)
         require(vector.shape[1] == WORLD_VECTOR_WIDTH, "POINTER_WORLD_VECTOR_WIDTH")
         return model.world_projection(vector)
-
     # ---- node-level heads: the structural answers ----
     def _node_options(self, position, ranks):
         """`logit = <pointer key, h_v>` for the named node ranks of ONE world, in the given order."""
@@ -1001,8 +1109,10 @@ class GraphForward:
         torch, model = self.torch, self.model
         features = self.blocks[position][2]
         count = self.blocks[position][1]
-        degrees = torch.stack([features[:, 7].sum(), features[:, 8].sum(),
-                               features[:, 7].sum() / count, features[:, 8].sum() / count])
+        degrees = torch.stack([features[:, IN_DEGREE_SUM_COLUMN].sum(),
+                               features[:, OUT_DEGREE_SUM_COLUMN].sum(),
+                               features[:, IN_DEGREE_SUM_COLUMN].sum() / count,
+                               features[:, OUT_DEGREE_SUM_COLUMN].sum() / count])
         value = torch.cat((self.query_value, self.worlds[position], degrees)).reshape(1, 2 * WIDTH + 4)
         return model.reach_option_head(value).reshape(-1)
 
@@ -1210,7 +1320,8 @@ class PointerCourseLearner:
         require(all(parameter.device == self.device and parameter.dtype == torch.float32
                     and parameter.requires_grad for parameter in parameters.values()),
                 "POINTER_PARAMETER_DEVICE")
-        require(all(tuple(parameters[name].shape) == PARAMETER_SHAPES[name] for name in PARAMETERS)
+        require(all(tuple(parameters[BLOCK_NAMES[name]].shape) == PARAMETER_SHAPES[name]
+                    for name in PARAMETERS)
                 and tuple(encoder.readout_rows.shape) == (90, 64)
                 and not encoder.readout_rows.requires_grad, "POINTER_PARAMETER_SHAPE")
         require(type(optimizer_config) is dict
@@ -1625,37 +1736,34 @@ class PointerCourseLearner:
         counts = 0
         was_training = self.module.training
         self.module.eval()
+
+        def observe(round_index, block_input):
+            """The one hook that turns the REAL round into the review's `|z| > 2` statistic."""
+            first, second = self.module.preactivations(block_input)
+            hits_first = int((first.abs() > threshold).sum().item())
+            hits_second = int((second.abs() > threshold).sum().item())
+            row = {"first": hits_first, "first_total": int(first.numel()),
+                   "second": hits_second, "second_total": int(second.numel())}
+            totals["first"] += row["first"]
+            totals["first_total"] += row["first_total"]
+            totals["second"] += row["second"]
+            totals["second_total"] += row["second_total"]
+            if round_index == 0:
+                totals["round_zero"] = [row["first"], row["first_total"]]
+
+        totals = {"first": 0, "first_total": 0, "second": 0, "second_total": 0, "round_zero": [0, 0]}
         with torch.no_grad():
             for packet in selected:
                 self.encoder.verify_frozen()
                 reading = pointer_inputs.read_packet(packet)
                 reading["_device"] = self.device
                 blocks = _graph_blocks(torch, reading, self.device)
-                hidden = _rms_unit(torch, torch.cat([row[2] for row in blocks], dim=0))
-                counts += hidden.shape[0]
-                for round_index in range(CORE_ROUNDS):
-                    inputs, messages, limit_at = [], [], 0
-                    for block in blocks:
-                        state = hidden[limit_at:limit_at + block[1], :]
-                        adjacency = block[3]
-                        inputs.append(_rms_unit(torch, state))
-                        messages.append(_rms_unit(torch, adjacency.matmul(state)))
-                        messages.append(_rms_unit(torch, adjacency.transpose(0, 1).matmul(state)))
-                        limit_at += block[1]
-                    aggregate = torch.cat(messages, dim=1).reshape(len(blocks), 3, WIDTH)[:, 1:, :]
-                    block_input = torch.cat((torch.stack(inputs, dim=1), aggregate),
-                                            dim=2).reshape(-1, 3 * WIDTH)
-                    first, second = self.module.preactivations(block_input)
-                    first_hits += int((first.abs() > threshold).sum().item())
-                    second_hits += int((second.abs() > threshold).sum().item())
-                    first_entries += int(first.numel())
-                    second_entries += int(second.numel())
-                    if round_index == 0:
-                        round_zero = [int((first.abs() > threshold).sum().item()), int(first.numel())]
-                    update = self.module.core_block(block_input)
-                    hidden = _rms_unit(torch, hidden + PER_ROUND_UPDATE_CAP
-                                       * torch.tanh(self.module.round_rate) * update)
+                counts += sum(row[1] for row in blocks)
+                _rounds(torch, self.module, blocks, charge=self._charge_round, observe=observe)
         self.module.train(was_training)
+        first_entries, second_entries = totals["first_total"], totals["second_total"]
+        first_hits, second_hits = totals["first"], totals["second"]
+        round_zero = totals["round_zero"]
         start = self.module.initial_block()
         require(set(start) == set(PARAMETERS), "POINTER_INITIAL_BLOCK")
         return {
