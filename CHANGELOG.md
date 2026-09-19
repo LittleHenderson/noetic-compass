@@ -4,6 +4,59 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC ($0) - ROOT CAUSE of the smoke failure: M3's fix changed the row SHAPE, and `make_config` still computes the old one
+
+**Diagnosed for $0, without re-spending, and it corrects the hypothesis I committed one round earlier.**
+
+I had written that the failure was probably caused by my committing the launcher's `--reduced-schedule` fix *after*
+the freeze. **That was wrong**, and checking it cost nothing instead of another ~$0.40 and a second $15 commitment.
+A frozen admission is internally consistent; the two hashes disagree inside **one** freeze.
+
+### The three hashes, read straight out of the frozen artifacts
+
+```
+AUTHORITY inputs_sha256                : ff5820e6f0a208fc0916878f9155d3747802102275b57ac4fb13baf59da395e4
+MANIFEST  inputs_sha256 (in the package): ff5820e6f0a208fc0916878f9155d3747802102275b57ac4fb13baf59da395e4   <-- MATCH
+AUTHORITY worker_config.inputs_sha256  : 7927529ebdcb6aaee0b916be3e9c97aaeeb6268efeee286bbad791c61845d377   <-- DIFFERENT
+```
+
+`_inner_runner.py:12` compares **MANIFEST against CONFIG**. The authority's own `inputs_sha256` and the package
+manifest agree with each other; it is the **config's** that stands apart.
+
+### The mechanism
+
+- `worker_config(job, *, source_sha)` (`typed_pointer_launch.py:368-371`) delegates: it calls
+  **`contract.make_config(PROJECT, source_sha=..., job=..., model_seed=..., bucket=...)`**.
+- So the config's `inputs_sha256` is computed **inside `pointer_contract`**, from `contract.input_inventory`.
+- M3's fix gave the launcher's own rows a shape change — it **adds a `committed_content_sha256` field to every
+  row** and sources them from `git ls-tree`/`git show` at the commit.
+- `frozen_inputs_hash()` and the package manifest hash **the launcher's rows**; `make_config` hashes
+  **`contract.input_inventory`'s rows**. After M3 those are **different dicts**, so
+  `digest(canonical(rows))` differs **by construction** — not because the tree was dirty, and not because anything
+  changed between the freeze and the launch.
+
+**So `validate_authority` passed** (it compares the authority's hash to `frozen_inputs_hash`, both the new shape)
+while the worker's bootstrap correctly refused (it compares the manifest to the **config**, which is the old
+shape). Two internal checks, each self-consistent, disagreeing with each other. **Nothing tested that the config's
+hash and the launcher's hash are the same number** — and that is the missing guard.
+
+### The fix
+
+Make the two agree on **one** computation. The minimal, safest option: have `frozen_inputs_hash()` compute its
+digest over rows in `contract.input_inventory`'s shape — i.e. strip the added `committed_content_sha256` before
+hashing, or hash the same projection `make_config` uses — so the added field remains available as evidence without
+changing the number that is compared. The alternative (make `make_config` read the commit) is a change to a
+**shared contract module**, which this study's standing rule forbids, so it is not available.
+
+**A guard belongs with it:** assert at FREEZE time that `authority["worker_config"]["inputs_sha256"] ==
+authority["inputs_sha256"] == frozen_inputs_hash(source_sha)`, so a future divergence of this shape is caught for
+**$0** instead of on an instance.
+
+### Cost of the lesson
+
+~$0.40 cash and a $15.00 cap commitment, and **the neurons were never trained** — the container refused at line 12,
+before the encoder, before phase A. The smoke is otherwise proven to the bootstrap on real infrastructure.
+
 ## 2026-09-19 UTC (FIRST REAL SPEND) - The smoke launched and failed at the container's first check; ~$0.40 cash, $15.00 cap committed
 
 **This is the first money spent on this study.** It bought a real defect found on real infrastructure. It did **not**
