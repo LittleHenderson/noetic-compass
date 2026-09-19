@@ -4,6 +4,61 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-19 UTC (pre-flight, $0) - Two defects found and fixed in the AWS smoke plan, and five build seams verified by import
+
+**No spend. No AWS call. No study run.** Work done while the last four build files (`prepare_study.py`,
+`execute_study.py`, `preflight_dry_run.py`, `holdout_audit.py`) and the three reconciling files finished.
+
+**Two real defects, both in `records/typed_pointer_001/pre_design/AWS_SMOKE_S10_PLAN.md`, both corrected before any
+money was spent.** Both would have cost a paid run or produced a WRONG pass count.
+
+1. **The smoke's own PASS rule could not be satisfied by the schedule it prescribes.** §5 read *"every name in
+   `EXPECTED_ARTIFACTS` is present"*, but `EXPECTED_ARTIFACTS` is derived from the **registered** plan
+   (`cncm/typed_pointer_worker.py:237`, `expected_artifact_names(FULL_PLAN)`) while §3 runs a **shrunken** one, which
+   writes the smaller set for the plan it actually ran. As written, the smoke had to be marked FAIL for doing exactly
+   what §3 says. Corrected to the worker's own recorded `required_artifacts` — the set it writes into
+   `schedule_plan.json` and enforces at `cncm/typed_pointer_worker.py:1411-1414`. **Not a relaxation:** on a full run
+   `required_artifacts` *is* `EXPECTED_ARTIFACTS`, and `schedule_plan.json` records both sets plus
+   `artifacts_differ_from_the_registered_contract`, so the reading is checkable. The corrected rule *is* the worker's
+   own check, quoted rather than paraphrased.
+2. **The measurement list omitted `MAX_CORE_CALLS`, which the contract explicitly requires it to re-check.** `§4`
+   listed seconds-per-update, the deadline projection, the end-to-end path and the phase-A ordering — but
+   `pointer_contract.py:107-110` says the smoke *"must re-check `MAX_CORE_CALLS` … the core-call budget may bind
+   before the update budget does. Both are recorded in DESIGN and must be reconciled before the study is frozen."*
+   The pointer machine calls the registered `^6` block once per node per round (~4 nodes × 8 rounds = 32 per world
+   read) against the old machine's 8. Added as §4 item 3: read `core_forward_calls` per pass from the smoke's own
+   counters, divide `MAX_CORE_CALLS = 600000` by the measured per-pass calls, and set
+   **`PASSES = min(deadline-limited, core-call-limited)`**. Setting `PASSES` from the clock alone risked a job that
+   trains happily and then dies on the core-call limit **after the spend**.
+
+**Also corrected: the projection formula was hard-coded to one pass count.** §4.1 read
+`598.2 + 1470 × s_per_update + …`. The stratified schedule runs **147 updates per pass** at **1176 presentations
+per pass** against the practice study's 818 (+358, +43.8 %), and 1470 is `10 × 147` — right only at `PASSES = 10`
+and wrong for every other value. Now written as `PASSES × 147 × s_per_update`, with a note that measured
+per-update cost must be read against the stratified figure (the practice study's ~3.0 s/update was at 5.56
+presentations per update; the stratified pass runs 8, so ~1.438 × is expected).
+
+**Five build seams verified independently by import, not by reading prose.** `$0`, `numpy` only, no torch.
+
+| seam | verified value |
+|---|---|
+| worker artifact contract | `EXPECTED_ARTIFACTS` = **99** names, all unique, `EVIDENCE_REQUIRED_COUNT` = **102** = 99 + 3 ✓ |
+| artifacts scale with `PASSES` | 99 = `2 × 10 + 79`, i.e. `2 × PASSES + 79`; recomputes at freeze, so a changed `PASSES` moves the contract with it rather than breaking it |
+| counter key set | learner `COUNTER_KEYS` and contract `MAIN_COUNTERS` are the **same 11 keys in the same order**; `slot_forwards` absent from both ✓ |
+| rank feature | `DESIGN["node_rank_feature"]` is `False`; `NODE_FEATURE_COUNT` is redefined from it at `pointer_learner.py:352` ✓ |
+| status vocabulary | `SUCCESS_STATUS` / `FAILED_STATUS` / `DELIVERED_STATUS` match the practice study's three-way shape exactly, and the launcher's `failure_statuses` lists `TYPED_POINTER_FAILED` ✓ |
+
+**The smoke cannot be promoted to a label even by mistake** — verified, not assumed. A reduced schedule sets
+`claim_bearing = False` (`cncm/typed_pointer_worker.py:273-277`) and records `mode: "REDUCED"`, and the frozen gate
+program refuses such a receipt outright: `records/typed_pointer_001/evaluate_gates.py:130` carries the void path
+`I1:<seed>:REDUCED_SCHEDULE:<mode>` — *"the job did not run the REGISTERED plan, so it is not a claim-bearing run
+and may not print a label."*
+
+**Budget constants re-read, not recalled:** `MAX_CORE_CALLS = 600000`, `WORKER_DEADLINE_SECONDS = 12300`,
+`MAX_WALL_SECONDS = 12600`, `INSTANCE_SECONDS_MAX = 14400`, `RESERVATION_USD = 15.00`,
+`LEARNER_MAX_UPDATES_CEILING = 3544`, `MAX_PASSES_PERMITTED = 24`, `INTERFERENCE_UPDATES = 16`,
+`PASSES = 10` (**still the one open value, inherited from the practice study and marked NOT FREEZABLE AS-IS**).
+
 ## 2026-09-19 UTC (final round of the design phase) - Gate frozen, rank excluded, protocol drafted
 
 Owner order this round, verbatim: **"STOP SAY FOCUSING ON '$0.00 spent. Nothing on AWS.' BECAUSE WE ULTIMATELY NEED

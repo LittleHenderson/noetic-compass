@@ -121,25 +121,66 @@ it is slow enough to make ordinary verification awkward.
 ## 4. What it must measure, and what that buys
 
 1. **Seconds per update and per evaluation, measured on the real instance for the new machine.** From these,
-   project the full job: `598.2 + 1470 × s_per_update + evaluations + phase A + phase B`.
+   project the full job: `598.2 + PASSES × 147 × s_per_update + evaluations + phase A + phase B`.
 2. **The projection against the deadline.** The worker deadline is `WORKER_DEADLINE_SECONDS = 12300`. The owner's
    threshold is about **11,000 s**: if the projection exceeds it, a larger per-job reservation needs a NEW owner
    approval, because the approved envelope is ~$13 expected and $45 reserved in total.
-3. **That the worker's full path executes end to end** — every phase in order, every expected artifact written, the
+3. **Cores calls, which may bind before the deadline does** — and this one is not optional.
+   `pointer_contract.py:107-110` requires the smoke measurement to *"re-check `MAX_CORE_CALLS`: the pointer machine
+   calls the registered `^6` block once per node per round (~4 nodes × 8 rounds = 32 calls per world read) against
+   the old machine's 8, so the core-call budget may bind before the update budget does. Both are recorded in DESIGN
+   and must be reconciled before the study is frozen."* The smoke must therefore read `core_forward_calls` from its
+   own counter snapshots over **the passes it actually ran**, and divide `MAX_CORE_CALLS` (`600000`, inherited from
+   the practice study) by the measured per-pass core calls to obtain a second, independent pass limit:
+   `PASSES = min(deadline-limited, core-call-limited)`. Setting `PASSES` from the clock alone risks a job that
+   trains happily and then dies on `MAX_CORE_CALLS` **after the spend**.
+4. **That the worker's full path executes end to end** — every phase in order, every expected artifact written, the
    evidence publisher create-only, source verification clean, delivery complete.
-4. **That phase A completes before the model is seeded** (the RNG-overwrite ordering), and that phase B's absence
+5. **That phase A completes before the model is seeded** (the RNG-overwrite ordering), and that phase B's absence
    is recorded as `SKIPPED` with a status field rather than silently missing.
+
+> **Amended 2026-09-19, before the run.** Items 1, 3 and 4 were added or corrected here. The `1470` this section
+> first carried is `10 × 147`: the stratified schedule runs **147 updates per pass** at **1,176 presentations per
+> pass** against the practice study's 818 (+358, +43.8 %) — `pointer_contract.py:43,46,50`, which also records that
+> the *update* count is unchanged at 147. `1470` is right only at `PASSES = 10` and wrong for every other value, so
+> the projection is now written in terms of `PASSES`, the one open value in the frozen protocol
+> (`pointer_contract.PASSES`, currently 10, inherited from the practice study and explicitly *"NOT FREEZABLE
+> AS-IS"*, `pointer_contract.py:90`). Measured per-update cost must also be read against the stratified figure: the
+> practice study's ~3.0 s/update was at 5.56 presentations per update, and the stratified pass runs 8, so the same
+> measurement is expected to be about 1.438 × the old one — that rise is the cost of the owner's "Stratify AND train
+> longer" decision, already paid for in advance by the `LEARNER_MAX_UPDATES_CEILING` raise from the practice
+> ceiling of 2,048 (which would have REFUSED 14 passes) to 3,544 (`pointer_contract.py:102-105,113`).
 
 ## 5. Pass and fail
 
-**PASS** requires all of: the worker reports its success status; every name in `EXPECTED_ARTIFACTS` is present;
+**PASS** requires all of: the worker reports its success status; **every name in the worker's own
+`required_artifacts`** — the set it records in `schedule_plan.json` for the plan it actually ran — is present;
 `final_source_verification` passes with no failed imports; the evidence publisher reports zero conflicts and zero
 non-atomic writes; the measurement file carries per-phase seconds; and the projected full-job time is computed and
 written down.
 
+> **Corrected 2026-09-19, before the run.** This rule first read "every name in `EXPECTED_ARTIFACTS` is present",
+> which the shrunken schedule in §3 makes **impossible to satisfy**. `EXPECTED_ARTIFACTS` is derived from the
+> registered plan — `cncm/typed_pointer_worker.py:237`, `expected_artifact_names(FULL_PLAN)`, which is
+> `2 × PASSES + 79` names (99 at `PASSES = 10`, confirmed by import) — while a reduced run writes the smaller set
+> for the plan it actually ran. As written, the smoke would have had to be marked FAIL for doing exactly what §3
+> prescribes.
+>
+> The correction is **not** a relaxation. The worker enforces
+> `set(required) - {"worker_report.json", "measurements.json"} ⊆ present` on that same recorded set
+> (`cncm/typed_pointer_worker.py:1411-1414`), and on a full run `required_artifacts` **is** `EXPECTED_ARTIFACTS`.
+> `schedule_plan.json` records `required_artifacts`, `registered_required_artifacts` and
+> `artifacts_differ_from_the_registered_contract`, so this reading is checkable rather than assumed.
+
 **FAIL** on any of those, or on exceeding the cost budget. On failure: read the console output (free) before
 re-spending, never guess-and-relaunch. The smoke result is **NOT claim-bearing** — it tests the plumbing, not the
 learning, and it must be recorded as such.
+
+> That last sentence is enforced, not merely promised. The reduced schedule sets `claim_bearing = False`
+> (`cncm/typed_pointer_worker.py:273-277`) and records `mode: "REDUCED"` in `schedule_plan.json`, and the frozen gate
+> program refuses such a receipt outright: `records/typed_pointer_001/evaluate_gates.py:130` carries the void path
+> `I1:<seed>:REDUCED_SCHEDULE:<mode>` — *"the job did not run the REGISTERED plan, so it is not a claim-bearing run
+> and may not print a label"*. A smoke receipt cannot be promoted to a label even by mistake.
 
 ## 6. Governance
 
