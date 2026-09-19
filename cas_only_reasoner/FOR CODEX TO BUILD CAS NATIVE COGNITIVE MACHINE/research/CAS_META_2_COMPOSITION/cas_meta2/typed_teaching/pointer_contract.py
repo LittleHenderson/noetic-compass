@@ -24,6 +24,36 @@ DELIBERATE OPEN ITEMS, each written as a mechanism waiting for a measured decisi
   every eligible held ``parts`` and ``edge_account`` question with no learned weights. Both narrow the
   RELATIONAL tier, so they are lens A / owner decisions, not this file's.
 
+THE SINGLE PASS IS STRATIFIED. Owner decision 2026-09-19: option 2 of the LB11 question, "Stratify AND
+train longer (Recommended)". The owner's words for that option are recorded verbatim in
+``DESIGN["owner_approval"]``. ``STRATIFIED`` below is that decision as a module constant and
+``pointer_schedule`` defaults to it.
+
+WHY, WITH THE MEASUREMENT (records/typed_pointer_001/pre_design/REVIEW_SYNTHESIS.md section 4.7, measured
+by ``lb11_economics.py``; the raw reading is its ``lb11_economics_out.txt``). The practice schedule's MIXED
+course spends each of its 147 updates on a handful of kinds and leaves the rest out, so most per-kind heads
+receive no gradient at all in most updates. As-is, a kind is ABSENT from this many of the 147 updates of a
+pass: role_set 115, analogy 112, context 107, definition 105, edge_account 95, correspondence 67, parts 63,
+reach 40. That is the starvation behind the learnability lens's "rarest head sees a gradient in 320 of
+1470". Stratifying -- one record of every one of the eight kinds in every update -- removes the absence
+entirely:
+
+    branch                          updates/pass   presentations/pass   every kind every update?
+    A as-is (practice MIXED)              147               818          no
+    B stratified (this decision)          147             1176          yes   (+43.8 %)
+    C widened (the lens's literal)        470             3760          yes   (+359.7 %)
+
+B costs +358 presentations per pass, 818 -> 1176, for 43.8 % more presentations AT THE SAME UPDATE COUNT.
+It is affordable; the lens's literal reading is not. C multiplies presentations by 4.6x and its 10 passes
+would need 4716 updates, above the raised ceiling of 3544, so C is refused as stated. The extra
+presentations cost instance time only; the update count, and therefore the learned parameter trajectory's
+length, is unchanged at 147 per pass.
+
+THE PRACTICE SCHEDULE ITSELF IS UNTOUCHED. The stratified pass is this study's own, built here from the same
+MIXED base batch slots; ``practice_contract.practice_schedule`` is still imported unchanged and
+``stratified=False`` reproduces it byte for byte (test ``..._non_stratified_fidelity...``), so the two
+studies stay comparable question for question.
+
 THE GATE IS KEYED ON THE RELATIONAL TIER (review FP1): copying one input flag alone passes the practice
 gate (definition 5 + context 5 held questions, b=10, c=0, p=0.0009765625), so a gain on the DIRECT_READ
 kinds alone must never produce the primary label. The all-kinds result is a reported flag, never the label.
@@ -87,41 +117,72 @@ MAX_WALL_SECONDS = practice.MAX_WALL_SECONDS
 RESERVATION_USD = practice.RESERVATION_USD
 INSTANCE_SECONDS_MAX = practice.INSTANCE_SECONDS_MAX
 
+# ----------------------------------------------------------------------------------------------------------------
+# STRATIFIED. The owner's decision of 2026-09-19, recorded verbatim in `DESIGN["owner_approval"]`: the option
+# labelled "Stratify AND train longer (Recommended)". It is a module constant because `pointer_schedule` defaults to
+# it; `stratified=False` is the only way back to the practice study's own unstratified order.
+#
+# THE MEASUREMENT IT ANSWERS (REVIEW_SYNTHESIS.md section 4.7, measured by pre_design/lb11_economics.py, raw reading
+# in pre_design/lb11_economics_out.txt). The as-is MIXED pass of 147 updates leaves each kind ABSENT from this many
+# updates: role_set 115, analogy 112, context 107, definition 105, edge_account 95, correspondence 67, parts 63,
+# reach 40 -- so a role_set head receives a gradient in 32 of 147 updates and an analogy head in 35. In the
+# stratified pass every kind is present in every update: 0 absences for all eight, still 147 updates, at
+# presentations_per_pass 1176 against 818, i.e. +358 presentations and +43.8 %. The lens's literal reading of the
+# same instruction (+359.7 %, 3760 presentations per pass) would need 4716 updates over ten passes, above this
+# contract's ceiling of 3544, and is refused as stated. Both branches are implemented so the comparison stays
+# re-runnable and the fidelity property below stays testable.
+# ----------------------------------------------------------------------------------------------------------------
+STRATIFIED = True
+
+# The NEW DIGEST of the stratified schedule, measured 2026-09-19 on this frozen course at
+# `pointer_schedule(frozen)` (the default: stratified, `PASSES` passes) and pinned so a later drift is visible
+# rather than discovered after a spend. Two constants, because they answer two different questions:
+#
+#   * STRATIFIED_BATCHES_DIGEST -- the whole default schedule, the number a reader should quote as "the new
+#     digest". It is what
+#     `test_the_stratified_cost_is_the_measured_1176_presentations_and_the_digest_is_pinned` pins.
+#   * STRATIFIED_PASS_DIGEST -- the SINGLE stratified pass, digest of the slot list `_stratified_pass` returns
+#     with its generated ids. This is the one the module can check for itself on every call: it does not depend
+#     on the pass count, so `pointer_schedule` recomputes it and refuses to return a schedule whose composition
+#     has silently moved (`POINTER_STRATIFY_DIGEST`). The practice digest for comparison stays
+#     `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857` at ten passes (`stratified=False`).
+#
+# A different pass count gives a different whole-schedule digest, because the pass number is inside every
+# occurrence and presentation id; that is expected, and the single-pass digest is pass-count independent by
+# construction.
+STRATIFIED_BATCHES_DIGEST = "1c67edd74bf670a1b2b17af63209bc33bc2a92bc3a796e2d66f285d10c7b5304"
+STRATIFIED_PASS_DIGEST = "80ae7121ff75f687e9c6c88593e2ed7d3f6024173d3577243ed05049c8859056"
+
 # Reused UNCHANGED by import: the hold-out must stay byte-identical to the practice study (test P1).
 digest = source.digest
 split = practice.split
 held_worlds = practice.held_worlds
 held_back_questions = practice.held_back_questions
 practice_schedule = practice.practice_schedule    # kept for reference/tests; use pointer_schedule below
+KINDS = practice.KINDS                           # the eight kinds, same tuple, same order, taken BY IMPORT
 
 
-def pointer_schedule(frozen, passes=None):
-    """`passes` repetitions of the MIXED course, keeping only trained records. Returns (batches, stats).
+def _kind_pools(frozen):
+    """`{kind: sorted trained record ids of that kind}` -- the pools the stratified round-robin draws from.
 
-    A faithful clone of `practice_contract.practice_schedule` (`practice_contract.py:130-172`) with ONE difference:
-    the pass count is a parameter, and the update bound is THIS contract's ceiling rather than the practice one.
-
-    Why it cannot simply be imported. The practice function hard-codes `PASSES = 10` and then enforces
-    `main_updates + INTERFERENCE_UPDATES <= practice.LEARNER_MAX_UPDATES_CEILING`, which is 2048. That caps the study
-    at 13 passes and refuses 14. Training length is the cheapest available improvement to the neurons -- the practice
-    run stopped at pass 10 with the loss still falling and 44.4 % of its deadline unused -- so the pointer study must
-    be able to run longer. See `pre_design/LEARNING_LEVERS.md`.
-
-    FIDELITY REQUIREMENT, tested: with `passes == practice.PASSES` this must reproduce the practice study's own
-    `batches_digest` exactly, `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857`, and its
-    `updates_per_pass` 147 and `presentations_per_pass` 818. So the per-pass construction, the occurrence-id digest
-    domain and the presentation-id prefix are deliberately kept identical to the practice study's; only the number of
-    repetitions is a parameter. A different pass count therefore produces a different `batches_digest`, which is
-    expected and must be recorded in the protocol.
-
-    `OPEN:` the value of `PASSES` itself. It is set from the smoke job's MEASURED per-update cost, not guessed.
+    Empty pool is impossible on the frozen course (a test drives the refusal instead), but it is refused rather
+    than silently producing a short batch, because a short batch is exactly the defect this schedule fixes.
     """
-    count = PASSES if passes is None else passes
-    require(type(count) is int and 1 <= count <= MAX_PASSES_PERMITTED,
-            "POINTER_PASSES_BOUND:" + str(count))
-    base, base_stats = matched.schedule(frozen, CONDITION)
-    held, trained, excluded = split(frozen)
-    keep_set = set(trained)
+    trained = set(split(frozen)[1])
+    pools = {kind: sorted(row["record_id"] for row in frozen["registry"]
+                          if row["query"]["kind"] == kind and row["record_id"] in trained)
+             for kind in KINDS}
+    missing = [kind for kind in KINDS if not pools[kind]]
+    require(not missing, "POINTER_STRATIFY_POOL:" + ",".join(missing))
+    return pools
+
+
+def _non_stratified_pass(frozen, base, keep_set):
+    """The practice study's own single pass, clone for clone: `practice_contract.py:135-144` verbatim.
+
+    Byte-identical to the practice construction on purpose (test P1 / the fidelity test): same slot skip rule,
+    same five carried keys, same per-record filtering of every id list.
+    """
     one_pass = []
     for batch in base:
         keep = [at for at, key in enumerate(batch["record_ids"]) if key in keep_set]
@@ -132,6 +193,99 @@ def pointer_schedule(frozen, passes=None):
                          "record_ids": [batch["record_ids"][at] for at in keep],
                          "occurrence_ids": [batch["occurrence_ids"][at] for at in keep],
                          "presentation_ids": [batch["presentation_ids"][at] for at in keep]})
+    return one_pass
+
+
+def _stratified_pass(frozen, base, keep_set):
+    """One pass in which every batch carries ALL EIGHT KINDS: eight records, one per kind.
+
+    Owner decision 2026-09-19. Built from the SAME MIXED base batch slots the practice study uses, so the depth
+    distribution, the phase structure and the round numbering are the base's and unchanged; only the membership
+    and the ids are this study's.
+
+      * slot selection is the same rule as the practice pass -- every base slot holding at least one TRAINED
+        record -- so the update count stays 147 per pass;
+      * inside a slot, exactly one record per kind is taken from that kind's TRAINED pool (sorted), chosen by a
+        deterministic round-robin cursor over that pool that persists across slots within the pass, which is
+        `lb11_economics.py`'s branch B and the measurement REVIEW_SYNTHESIS section 4.7 reports as
+        presentations_per_pass 1176;
+      * `round`, `phase`, `depth` and `source_cursor` come from the base batch (the requirement is explicit);
+      * `occurrence_ids` and `presentation_ids` are generated from (slot index, kind index) alone, so they are
+        reproducible without the base ids and are UNIQUE INSIDE A BATCH -- which is what this contract's own
+        `OCCURRENCE_UNIQUE` check requires, and is all the pass loop's re-digest needs. They are formed in the
+        practice schedule's own style: an occurrence id is the `typed-occurrence-` prefix and a 64-hex digest, and a
+        presentation id is the pass prefix, an 8-hex slot token and the ordinal of the kind inside the batch. The
+        pass loop below still re-digests every occurrence id per pass, so the per-pass mechanism is untouched.
+    """
+    slots = [batch for batch in base if any(key in keep_set for key in batch["record_ids"])]
+    pools = _kind_pools(frozen)
+    cursor = {kind: 0 for kind in KINDS}
+    one_pass = []
+    for index, batch in enumerate(slots):
+        token = source.digest({"domain": "typed-pointer-stratified-v1", "slot": index})[:8]
+        records, occurrences, presentations = [], [], []
+        for at, kind in enumerate(KINDS):
+            pool = pools[kind]
+            records.append(pool[cursor[kind] % len(pool)])
+            cursor[kind] += 1
+            occurrences.append("typed-occurrence-" + source.digest({"domain": "typed-pointer-stratified-v1",
+                                                                    "slot": index, "kind": kind}))
+            presentations.append("pointer-stratified-%s-%02d" % (token, at))
+        one_pass.append({"round": batch["round"], "phase": batch["phase"], "depth": batch["depth"],
+                         "source_cursor": batch["cursor"], "record_ids": records,
+                         "occurrence_ids": occurrences, "presentation_ids": presentations})
+    require(len(one_pass) == len(slots), "POINTER_STRATIFY_SLOTS")
+    return one_pass
+
+
+def pointer_schedule(frozen, passes=None, stratified=None):
+    """`passes` repetitions of the MIXED course, keeping only trained records. Returns (batches, stats).
+
+    A faithful clone of `practice_contract.practice_schedule` (`practice_contract.py:130-172`) with TWO differences:
+    the pass count is a parameter, and the update bound is THIS contract's ceiling rather than the practice one; and
+    the single pass is STRATIFIED unless told otherwise.
+
+    STRATIFIED (the default, owner decision 2026-09-19, module constant `STRATIFIED`). Every one of the eight kinds
+    appears in every update at the SAME 147 updates per pass, which removes the per-kind starvation the as-is MIXED
+    order has (role_set absent from 115 of 147 updates, analogy 112, context 107, definition 105, edge_account 95,
+    correspondence 67, parts 63, reach 40 -- REVIEW_SYNTHESIS.md section 4.7). It costs +43.8 % presentations,
+    818 -> 1176 per pass, and leaves the update count alone. The lens's literal fix (+359.7 %, 4716 updates over ten
+    passes) is above this contract's 3544 ceiling and is refused as stated. See `_stratified_pass`.
+
+    NOT STRATIFIED (`stratified=False`) MUST STAY BYTE-IDENTICAL TO TODAY, tested: the practice path, unchanged.
+    With `passes == practice.PASSES` it reproduces the practice study's own `batches_digest` exactly,
+    `daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857`, and its `updates_per_pass` 147 and
+    `presentations_per_pass` 818. So the per-pass construction, the occurrence-id digest domain and the
+    presentation-id prefix on that branch are deliberately kept identical to the practice study's; only the number of
+    repetitions is a parameter. A different pass count therefore produces a different `batches_digest`, which is
+    expected and must be recorded in the protocol.
+
+    Why the pass count exists at all: the practice function hard-codes `PASSES = 10` and then enforces
+    `main_updates + INTERFERENCE_UPDATES <= practice.LEARNER_MAX_UPDATES_CEILING`, which is 2048. That caps the study
+    at 13 passes and refuses 14. Training length is the cheapest available improvement to the neurons -- the practice
+    run stopped at pass 10 with the loss still falling and 44.4 % of its deadline unused -- so the pointer study must
+    be able to run longer. See `pre_design/LEARNING_LEVERS.md`.
+
+    `OPEN:` the value of `PASSES` itself. It is set from the smoke job's MEASURED per-update cost, not guessed.
+    """
+    count = PASSES if passes is None else passes
+    layered = STRATIFIED if stratified is None else stratified
+    require(type(layered) is bool, "POINTER_STRATIFIED_FLAG:" + type(layered).__name__)
+    require(type(count) is int and 1 <= count <= MAX_PASSES_PERMITTED,
+            "POINTER_PASSES_BOUND:" + str(count))
+    base, base_stats = matched.schedule(frozen, CONDITION)
+    held, trained, excluded = split(frozen)
+    keep_set = set(trained)
+    one_pass = (_stratified_pass(frozen, base, keep_set) if layered
+                else _non_stratified_pass(frozen, base, keep_set))
+    if layered:
+        # Fail closed on composition drift: the stratified pass is a frozen artifact, so it may not silently
+        # change under a re-derivation. This is pass-count independent, so it costs one digest per call.
+        require(source.digest(one_pass) == STRATIFIED_PASS_DIGEST, "POINTER_STRATIFY_DIGEST")
+        kinds_of = {row["record_id"]: row["query"]["kind"] for row in frozen["registry"]}
+        require(all(len(b["record_ids"]) == len(KINDS)
+                    and {kinds_of[key] for key in b["record_ids"]} == set(KINDS) for b in one_pass),
+                "POINTER_STRATIFY_COVERAGE")
     batches = []
     for number in range(1, count + 1):
         for batch in one_pass:
@@ -503,8 +657,11 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
         "in-job checkpoint check costs about $0.38-0.63 per job, not \"no extra cost\", and pointer answers alone "
         "cannot work because the INPUT must change too, one world read as a graph instead of a blend of all 64), "
         "\"Approve the smoke job (Recommended)\" (a short AWS smoke job for S10, well under $1, before any paid "
-        "launch) and \"Yes -- require the relational kinds.\" (the primary label is keyed on the RELATIONAL tier; "
-        "the all-kinds result is a reported flag, never the label)."),
+        "launch), \"Yes -- require the relational kinds.\" (the primary label is keyed on the RELATIONAL tier; "
+        "the all-kinds result is a reported flag, never the label), and on the LB11 schedule question the option "
+        "labelled \"Stratify AND train longer (Recommended)\" (the single pass is stratified -- every one of the "
+        "eight kinds in every update at the same 147 updates per pass -- and the pass count is the study's own "
+        "parameter above the practice study's 10, so `STRATIFIED` is True and `MAX_PASSES_PERMITTED` is 24)."),
     "machine": "POINTER",
     "input_unit": "ONE_FOCUS_WORLD_READ_AS_A_DIRECTED_GRAPH",
     "answer_form": "POINTER_INTO_THE_QUESTION_INPUT",
@@ -527,6 +684,22 @@ DESIGN = {**{key: deepcopy(matched.DESIGN[key]) for key in _INHERITED},
     "initialization": "REGISTERED_RANDOM_PER_MODEL_SEED_AFTER_PHASE_A_RESTORES",
     "condition": CONDITION, "source_seed": SOURCE_SEED, "encoder_seed": ENCODER_SEED,
     "model_seeds": list(MODEL_SEEDS), "passes": PASSES, "holdout_unit": "FOCUS_WORLD",
+    # The single pass a reader must know about before trusting any per-kind statement: STRATIFIED, one record of
+    # each of the eight kinds in EVERY update at the same 147 updates per pass, chosen by the owner's 2026-09-19
+    # decision (see `owner_approval`). `schedule_stratified_absent_updates_as_is` is the as-is branch's own
+    # measurement (REVIEW_SYNTHESIS.md section 4.7), kept beside it so the comparison travels with the field
+    # rather than having to be re-derived; under stratification every one of those eight counts is 0.
+    "schedule_stratified": STRATIFIED,
+    "schedule_stratified_decision": "OWNER_DECISION_STRATIFY_AND_TRAIN_LONGER_RECOMMENDED",
+    "schedule_stratified_updates_per_pass": 147, "schedule_stratified_presentations_per_pass": 1176,
+    "schedule_stratified_kinds_per_batch": len(KINDS),
+    "schedule_stratified_batches_digest": STRATIFIED_BATCHES_DIGEST,
+    "schedule_stratified_pass_digest": STRATIFIED_PASS_DIGEST,
+    "schedule_unstratified_updates_per_pass": 147, "schedule_unstratified_presentations_per_pass": 818,
+    "schedule_unstratified_batches_digest": "daf95831dd6f054f0395e9a868c513650982bd1912247adc698ca067433bc857",
+    "schedule_stratified_absent_updates_as_is": {"role_set": 115, "analogy": 112, "context": 107,
+                                                 "definition": 105, "edge_account": 95, "correspondence": 67,
+                                                 "parts": 63, "reach": 40},
     "holdout_rule": practice.DESIGN["holdout_rule"], "held_worlds": list(practice.HELD_WORLDS),
     "pass_checkpoints": list(PASS_CHECKPOINTS), "full_course_checkpoints": list(FULL_COURSE_CHECKPOINTS),
     "interference_updates": INTERFERENCE_UPDATES, "interference_batch": INTERFERENCE_BATCH,
