@@ -1274,8 +1274,18 @@ def _scalar_scores(torch, rows):
     return scores
 
 
-def _logit_rows(torch, plan, symbols, rows):
-    """`{slot_id: {symbol: float}}` in the plan's declared symbol order."""
+def _logit_rows(torch, plan, rows):
+    """`{slot_id: {symbol: float}}` in the plan's declared symbol order.
+
+    The signature used to carry a fourth, unused `symbols` parameter -- nothing in the body ever read it; the
+    symbol names come from `slot["symbols"]` and the values from `rows[slot["slot_id"]]`. Every caller passes
+    three arguments, so the stale parameter made the FIRST PREDICTION fail outright with
+    `TypeError: _logit_rows() missing 1 required positional argument: 'rows'`, after the model had built, after
+    phase A had completed, and after training had begun -- it cost a fourth AWS run to find. Removed rather than
+    satisfied at the call site: the four other width bugs in this module all came from a declaration drifting
+    away from what the code actually does, and inventing a value for a parameter nobody reads would be the same
+    mistake in a new place.
+    """
     result = {}
     for slot in plan["slots"]:
         values = rows[slot["slot_id"]]
