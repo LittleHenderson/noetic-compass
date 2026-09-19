@@ -134,10 +134,24 @@ Any claim about the pointer machine, about CASformer attention, or about the arc
 
 ### VACUOUS — a control that must not be counted as evidence
 
-Relabelling or shuffling controls over a permutation-symmetric machine are VACUOUS
-(`records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md:109`). Node-relabelling invariance is one of these. It stays a
-required ENGINEERING check that no alias channel exists; it is never evidence of learning
+Relabelling or shuffling controls over a quantity the machine is supposed to be sensitive to are VACUOUS
+(`records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md:109`). Such a control is never evidence of learning
 (`records/typed_pointer_001/pre_design/PDF_ASSESSMENT.md:22`).
+
+> **CORRECTED 2026-09-19 — the machine is deliberately NOT permutation-symmetric, so the earlier reasoning does not
+> hold as written.** Design v0.1 argued that node-relabelling invariance is vacuous *because* the machine is
+> permutation-equivariant over node order. That premise is now false: the input includes the registered node rank
+> (§5.1), which is the node's public index, and the reach tie-break it serves is order-dependent by construction. A
+> machine required to learn an order-dependent rule cannot be invariant under a change of that order.
+>
+> The honest position, which replaces the earlier one:
+> - The machine is **not** invariant under node relabelling, and no result is reported as if it were.
+> - **VACUOUS, never evidence:** any control that relabels or shuffles a quantity the machine is meant to read. Node
+>   relabelling is one of these.
+> - **REQUIRED, engineering only, never evidence:** that a node influences the answer **only** through its registered
+>   features — its raw flags, its rank, and its label tokens if §5.1 keeps them — and never through its position in
+>   the packet, its position in the file, or any part of its ref beyond the index the rank is derived from. This is
+>   test S9, re-specified in §9.
 
 ### Reported only, never gated
 
@@ -179,7 +193,7 @@ resolution has since been sharpened by the two interface specs, the row says so 
 | DG8 | Post-run ablations are unspecified. | Run them on restored copies after the reload and replay checks; reset one component at a time to its `initial.pt` weights; put them in `EXPECTED_ARTIFACTS`; time them; write them via create-only publishing. |
 | DG9 | The machine changed, so 3 new owner-signed per-job records are needed (`validate_owner` checks CANDIDATE and job). The $15 / 4 h per-job envelope is assumed, not measured; the old worker took 5,466 s and the check adds about 9–15 minutes, so the pointer cost is unknown. | Measure one pass plus one evaluation in a smoke (S7). If a job projects above about 11,000 s, go back to the owner before reserving more. |
 | DG10 | Reusing `practice_contract.DESIGN` would carry false fields: `"registered_learner_unchanged": True` (`practice_contract.py:213`) and `initialization` REGISTERED_RANDOM_SAME_AS_MATCHED_STUDY; its schedule stats (`planned_slot_core_passes` 124,510, `presentation_slots` 32,280) are old-machine work counts. `expected_main_delta` (`typed_practice_worker.py:174-180`) and the check at `:361` count old per-slot core passes. | New DESIGN and a new planned-work formula keyed on packet forwards plus rounds × worlds read, tested against real counters (P11). Keep the 18 `_INHERITED` keys that are genuinely machine-independent (`practice_contract.py:196-198`); replace `purpose` and the two false fields; drop `"registered_learner_unchanged"`. |
-| V1 | `base._encoding_checks` (`typed_course_worker.py:228-275`) checks the old encoder's packet and slot vectors and its 90 readout rows. The pointer machine never uses them. | Replace it with checks on the pointer INPUT READER: finite values; cached read equal to uncached read; the label/declaration token cache pinned by digest and built exactly once; no leak of node aliases or node order. Keep the shape — a dict published as `encoding_checks.json`, which is in `EXPECTED_ARTIFACTS` — and keep `_deadline` discipline. |
+| V1 | `base._encoding_checks` (`typed_course_worker.py:228-275`) checks the old encoder's packet and slot vectors and its 90 readout rows. The pointer machine never uses them. | Replace it with checks on the pointer INPUT READER: finite values; cached read equal to uncached read; the label/declaration token cache pinned by digest and built exactly once; and **no order-like channel other than the registered node rank**, which must itself be pinned and declared. Keep the shape — a dict published as `encoding_checks.json`, which is in `EXPECTED_ARTIFACTS` — and keep `_deadline` discipline. |
 | V2 | Pre-block probes at initial / pass_01 / final all read the same frozen encoder, so the pre-block vectors are identical and computing them three times is wasted work. | Compute them ONCE. The $0 half is feasible in pure Python because `binding.py` rows and permutations are SHA-256 based. Only post-block vectors need the GPU. |
 | V3 | An I3 that compares the job's recorded start identity with itself proves nothing. | Covered by the DG4 row: the in-job checks must compare against the practice study's RECORDED value, and the reader consumes the job's recorded evidence rather than re-deriving it. |
 | M1 | Each practice checkpoint exists twice: `checkpoints/` and `collected/results/artifacts/`. Measured byte-identical for all 3 seeds. | Pin one path only: `receipt_<seed>/checkpoints/`. |
@@ -326,17 +340,41 @@ What is read. From the public packet ONLY, and only these facts (`INTERFACE_SPEC
   world the slot lists. Each world is a set of nodes plus directed `contains` edges.
 - **Per node, its own raw flags only**: `is_declared_whole`; `is_participant` with rank 1..3;
   `is_primary_label` with rank 1..3; `is_whole_argument`; `is_part_argument`.
-- **Per node, its rank** among the world's sorted node refs (`INTERFACE_SPEC_POINTER.md:79`). This feature IS included;
-  it resolves DG3 and its rationale is that without it the machine trains on contradictory targets for the
-  order-dependent reach questions, which are answerable only by that order (`INTERFACE_SPEC_POINTER.md:83-85`).
+- **Per node, its rank** among the world's sorted node refs (`INTERFACE_SPEC_POINTER.md:79`). This feature IS included.
 - **Per world**, its domain-text token ids, plus the flags `is_focus` and `is_target`.
 - **The query**: `kind` as an 8-way learned id; `rule` as a learned id (DG2: swapping the reach rule changes 11
   answers); the argument node ids where present.
 - **For `role_set` only**: the focal excerpt as a frozen bag of token ids, position-free.
 
-What is NEVER read: `supports`, `cue`, `instruction`, and any answer or target. Node alias indices are never read as
-an input feature; the registered `rank` is the only order-like feature, and it is world-independent
-(`INTERFACE_SPEC_POINTER.md:61-62`, `:79`).
+> **RESOLVED 2026-09-19 — the rank IS the node's public alias, and this document now says so.** The leaks lens
+> measured that `checker._nodes = sorted(node['ref'])` (`checker.py:72-73`) and `slots.alias_table` N0..N9 are that
+> same sorted list (`slots.py:55-60`), and that **244 of 244** node refs have their position in the sorted list equal
+> to their own stored index — `n<i>` is position `i`, for every node in the bank
+> (`measurements/leaks_review/lk1_answer_carriers_out.txt` Part H). So the rank is **not** new information smuggled
+> past an exclusion: it is the node's own public identifier, and the order the checker's reach tie-break uses cannot
+> be supplied without it, because the order and the index are the same fact.
+>
+> Three reasons make including it the right call:
+> 1. The reach answer space is literally `VIA_<node>`, so any machine that can point at a node already carries node
+>    identity. Withholding rank would not restore symmetry; it would only remove the ordering.
+> 2. The tie-break decides **2 of the 9** eligible held `reach` questions, and without the feature the machine trains
+>    on contradictory targets for **5/26** held and **11/71** trained reach records.
+> 3. The alternative buys nothing: those 2 questions leave the gate population under `DG3` whether rank is in or out.
+>    It only costs the machine the one genuinely transferable skill the order carries — *when two nodes tie, take the
+>    lower rank*.
+>
+> **WITHDRAWN:** the earlier formulation "NO node alias index" contradicted this choice and is withdrawn. What is
+> excluded is every order-like channel **other than** the registered rank.
+>
+> **The rank-only, no-learning baseline is registered** (`INTERFACE_SPEC_POINTER.md:83-85`), and every question that
+> baseline solves is removed from the gate population before the run, so a rank-solved question can never be counted
+> as learning. See §6.
+
+What is NEVER read: `supports`, `cue`, `instruction`, and any answer or target. The registered node `rank` is the
+**only** order-like feature in the input, and it is declared, pinned and baselined. Every other order-like channel is
+excluded — a node's position in the packet, its position in the file, and any part of its ref beyond the index the rank
+is derived from. Test S9 (re-specified in §9) is the engineering check for exactly that, and it is never evidence of
+learning.
 
 The directed `contains` adjacency is given ONLY to message passing. It never reaches a readout head
 (`records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md:190-191`). This is what makes the answer depend on relations among
@@ -580,6 +618,24 @@ rows, ≤ 96 MiB) is not in danger either way, but no agent should quote 254 as 
 
 ### 6.4 What is PENDING on the gate
 
+- **🔴 THE RELATIONAL TIER ITSELF IS IN QUESTION, and this is the largest open item in the document.** The owner
+  confirmed on 2026-09-19 that the label must require gains on the RELATIONAL kinds, describing them as *"the ones
+  that need the machine to follow links between a world's parts"*, and named parts, edge_account, reach,
+  correspondence and analogy (`HANDOFF_20260919_CNCM_POINTER_MACHINE.md` §12). The leaks lens has since **measured**
+  that the proposed input's own directed `contains` adjacency already IS the answer for two of those five, with no
+  learned weights at all (`measurements/leaks_review/lk1_answer_carriers_out.txt` lines 58-66):
+
+  | Kind | zero-learning rule | held-eligible solved |
+  |---|---|---|
+  | `parts` | the whole argument's children, one adjacency hop | **5 / 5** |
+  | `edge_account` | the complete edge set, read off the input | **5 / 5** |
+
+  The FP2 rule the project already knew about solved only 3 of 5 `parts`; the adjacency is the wider leak. Applying
+  the owner's own criterion honestly leaves the three kinds whose answers are **not** in the input — `reach` (best
+  zero-learning rule 1/9), `analogy` (0/17), `correspondence` (0/20) — which is **19** eligible questions, and
+  **about 17** after the DG3 removals. That is a materially tighter bar than the 24 the arithmetic above assumes, and
+  it must not be adopted silently: narrowing the tier changes what the owner confirmed by name. See
+  `REVIEW_SYNTHESIS.md` §1 and §2.
 - **The complete removal list.** Known: FP2 solves 3 of 5 eligible held `parts`; DG3 node-order dependence covers 2 of
   9 eligible held `reach`. `INTERFACE_SPEC_POINTER.md:46` marks `RELATIONAL_POPULATION` as `OPEN:` and says it is
   "WAITING on lens A for the complete removal list". Do not freeze the population before lens A reports.
@@ -654,7 +710,7 @@ Pure, $0, no torch, with the numeric-import guard in place (P8 depends on it).
 | P7 | `EXPECTED_ARTIFACTS` unique, < 500, covers the checkpoint-check files, `required_count == len + 3`. |
 | P8 | The worker refuses Windows BEFORE any numeric import and delivers a FAILED result with the new schema. |
 | P9 | `pointer_inputs` purity, determinism and cache equality for all 230 labels; per-packet read time bounded. |
-| P10 | Inputs exclude supports, cue, instruction and node alias order; include the reach rule. |
+| P10 | Inputs exclude supports, cue, instruction, and every order-like channel **other than** the registered node rank; include the reach rule. |
 | P11 | The planned-work formula matches the real schedule. |
 | P12 | Gate reader: a flag-copy-only outcome gets no label; the exact arithmetic; the new I3. |
 | P13 | The frozen flag-rule and rank-rule baselines and the removal lists. |
@@ -665,8 +721,11 @@ bit-identical twice; S2 `train_sealed_batch` on a batch missing most kinds and o
 restore → predict identical, replay from prelast equals final; S4 evaluation leaves state unchanged; S5 identical
 start with the check on/off and the ^6 sub-block identity equal to the matched start; S6 phase A restores all 3
 checkpoints and rebuilt logits equal `restored.predict` bit-for-bit, and a forced failure still writes the artifact;
-S7 time one pass plus one evaluation → projected job time; S8 score bounds and loss agreement; S9 node-relabelling
-equivariance, engineering only; S10 the worker's `run()` end to end on a shrunken schedule.
+S7 time one pass plus one evaluation → projected job time; S8 score bounds and loss agreement; S9 **no order-like
+channel beyond the registered rank** — a node must influence the answer only through its declared features (raw flags,
+rank, and its label tokens if kept), never through its position in the packet, its position in the file, or any part of
+its ref beyond the index the rank is derived from (engineering only, never evidence; this replaces the earlier
+"node-relabelling equivariance", which cannot hold now that rank is an input — see the VACUOUS note in §1); S10 the worker's `run()` end to end on a shrunken schedule.
 
 Where smoke can run (`records/HANDOFF_20260919_CNCM_POINTER_MACHINE.md:310-313`): `execution_guard()` requires Linux
 and `CAS_META2_RUN_TEACHING_CYCLE=1`, and the worker requires torch `2.11.0+cu128` and an "RTX PRO 4500" GPU. S1, S2,
