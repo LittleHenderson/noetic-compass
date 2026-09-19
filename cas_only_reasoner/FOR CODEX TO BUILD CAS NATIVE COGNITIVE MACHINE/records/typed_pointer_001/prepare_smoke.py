@@ -96,16 +96,26 @@ SMOKE_SCOPE = ('One AWS smoke job (S10) for the pointer study under the owner-ap
                'job is not claim-bearing, and this reservation does not authorise any claim-bearing launch.')
 MAXIMUM_NEW_RESERVATION_USD = '45.00'
 # The contract code every reduced run is voided through, quoted from the frozen gate reader.
+# CITED BY SYMBOL, NOT BY LINE. This used to read `evaluate_gates.py:139`, which had gone stale: the code is
+# emitted by `schedule_plan_failures` and restated in the reader that calls it. Line numbers in a file two other
+# agents are editing rot silently; a function name does not.
 GATE_VOID_PATH = 'I1:<seed>:REDUCED_SCHEDULE:<mode>'
-GATE_VOID_SOURCE = 'records/typed_pointer_001/evaluate_gates.py:139'
+GATE_VOID_SOURCE = ("records/typed_pointer_001/evaluate_gates.py, function schedule_plan_failures(), which emits "
+                    "the code, and the reader that calls it (the same string is listed in VOID_PATHS)")
 # ==================================================================================================================
 # THE SHRUNKEN-SCHEDULE REQUEST, EXACTLY AS THE LAUNCHER BAKES IT INTO THE INSTANCE.
 #
-# It is not read from an admission file and not read from this machine's environment: `prepare()` calls
-# `launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)`, and the launcher emits one line into the generated bootstrap
-# carrying this dict as a literal. The request is validated three times before it can cost anything -- by this
-# script through the worker's own `schedule_plan()` (`validate_reduced_schedule`), by the launcher's
-# `set_smoke_request()`, and by the worker itself at run time against its own `REDUCED_SCHEDULE_KEYS`.
+# IT CROSSES THE PROCESS BOUNDARY AS AN EXPLICIT ARGUMENT, AND THAT IS THE ONLY WAY IT CROSSES. `prepare()` runs in
+# THIS process; the launch runs in another one, and a module-level global cannot reach it. The launcher therefore
+# takes `--reduced-schedule <literal>` and resolves it through `configure_reduced_schedule()` BEFORE any validation;
+# this script uses that SAME function to validate what it is about to freeze, and prints the exact command line.
+# Ambient environment is read nowhere on either side. Before this existed, `job_evidence_contract()` resolved to
+# the REGISTERED contract in the launch process and the real launch was refused at
+# `POINTER_AUTHORITY_BINDING:evidence_contract_sha256` -- free, because it precedes the reservation, but fatal.
+#
+# The request is validated before it can cost anything -- by this script through the worker's own
+# `schedule_plan()` (`validate_reduced_schedule`), by the launcher's own `configure_reduced_schedule()`, and by the
+# worker itself at run time against its own `REDUCED_SCHEDULE_KEYS`.
 #
 # `passes: 1` with `updates: 8` is the only self-consistent 8-update plan. The registered plan is 147 updates per
 # pass, so eight updates are inside the FIRST pass: the worker re-derives the plan's pass number from the batches it
@@ -283,6 +293,23 @@ def smoke_documents(job, identity, *, seed, contract_document):
     return owner, request, authority
 
 
+def launch_arguments(job, literal, directory, receipt_dir):
+    """The exact `--reduced-schedule <literal>` value and argv a launcher must be given, as data.
+
+    `--reduced-schedule` is the ONLY way the request reaches the launch process: the opt-in is a module global in
+    THIS process, and a global cannot cross a process boundary. The literal is the same text this script validated,
+    so what is launched is what was frozen.
+    """
+    return {'reduced_schedule_argument': literal,
+            'required_arguments': {'request': str(directory / 'request.json'),
+                                   'authority': str(directory / 'authority.json'),
+                                   'owner_authorization': str(directory / 'owner.json'),
+                                   'receipt_dir': str(receipt_dir), 'job': job},
+            'note': ('also pass --execute, --request-sha256, --authority-sha256 and --ledger-path; the two digests '
+                     'are the sha256 of request.json and authority.json as written, and the ledger path must be the '
+                     'canonical meta1 one')}
+
+
 def smoke_contract(plan, literal):
     """The SMOKE's evidence contract -- the REDUCED plan's names -- for this job's authority.
 
@@ -342,7 +369,10 @@ def dry_run(seed=None):
     # Both of the smoke's own $0 checks, in the same order `prepare()` runs them: the schedule through the
     # worker's own `schedule_plan()`, then the environment line through the generated bootstrap.
     literal, plan = validate_reduced_schedule()
-    launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)
+    # THE SAME ENTRY POINT THE REAL LAUNCH USES, so this rehearsal and the launch cannot diverge. `--dry-run`
+    # therefore exercises the `--reduced-schedule` path rather than an in-process shortcut the launch cannot take.
+    configured, configured_plan = launch.configure_reduced_schedule(literal)
+    assert configured == literal and configured_plan == plan, 'SMOKE_CONFIGURE_PATH_DIVERGED'
     bootstrap_sha256, assignment = verify_bootstrap_embedding()
     contract_document = smoke_contract(plan, literal)
     owner, request, authority = smoke_documents(job, identity, seed=seed, contract_document=contract_document)
@@ -357,6 +387,8 @@ def dry_run(seed=None):
     assert contract_document['required_count'] < launch.evidence_contract()['required_count'], \
         'SMOKE_CONTRACT_NOT_SMALLER_THAN_THE_REGISTERED_CONTRACT'
     print(json.dumps({'validated_by': ['launch.validate_request',
+                                       'launch.configure_reduced_schedule(literal) -- the SAME entry point '
+                                       'main(--reduced-schedule) uses',
                                        'launch.validate_authority(authority, smoke_contract(plan, literal))',
                                        'launch.validate_owner'],
                       'job': job, 'seed': seed, 'source_sha': source_sha,
@@ -369,6 +401,9 @@ def dry_run(seed=None):
                       'owner_instruction_raw': owner['owner_instruction_raw'],
                       'owner_decisions_in_contract_text': owner['owner_decisions_in_contract_text'],
                       'reduced_schedule': SMOKE_REDUCED_SCHEDULE, 'reduced_schedule_literal': literal,
+                      'reduced_schedule_argument_for_the_launch': literal,
+                      'launch_arguments': launch_arguments(job, literal, HERE / 'admission_smoke_001' / str(seed),
+                                                           HERE / ('receipt_smoke_' + str(seed))),
                       'reduced_schedule_worker_plan': plan,
                       'generated_bootstrap_sha256': bootstrap_sha256,
                       'generated_bootstrap_reduced_schedule_line': assignment,
@@ -398,8 +433,11 @@ def prepare(seed=None):
     package = launch.build_pointer_package(PACKAGE_PARENT / ('package_smoke_' + source_sha[:8]),
                                            source_sha=source_sha)
     literal, plan = validate_reduced_schedule()
-    launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)          # both of the launcher's own checks run inside
-    assert launch.SMOKE_REQUEST is SMOKE_REDUCED_SCHEDULE, 'SMOKE_OPT_IN_NOT_SET'
+    # THE SAME ENTRY POINT `main()` USES, so the in-process and cross-process paths cannot diverge again. This
+    # sets the opt-in for THIS process only; the launch process gets it through `--reduced-schedule <literal>`.
+    configured, configured_plan = launch.configure_reduced_schedule(literal)
+    assert configured == literal and configured_plan == plan, 'SMOKE_CONFIGURE_PATH_DIVERGED'
+    assert launch.SMOKE_REQUEST == SMOKE_REDUCED_SCHEDULE, 'SMOKE_OPT_IN_NOT_SET'
     bootstrap_sha256, assignment = verify_bootstrap_embedding()
     stamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
     job = 'cas-meta2-tpntr-' + stamp + '-' + source_sha[:8] + '-m-' + str(seed)
@@ -449,7 +487,8 @@ def prepare(seed=None):
                  'note': 'accepted and working, but it re-enables phase B, the ablations, retention and the '
                          'held-back set, which this plan section 3 skips; NOT a shorter way to say the request above'},
              'reduced_schedule_claim_bearing': False,
-             'reduced_schedule_opt_in': 'typed_pointer_launch.set_smoke_request(SMOKE_REDUCED_SCHEDULE)',
+             'reduced_schedule_opt_in': ("typed_pointer_launch.configure_reduced_schedule(literal), which is what "
+                                         "typed_pointer_launch.main(--reduced-schedule <literal>) calls"),
              'reduced_schedule_package_opt_in_was_none_when_built': True,
              'generated_bootstrap_sha256': bootstrap_sha256,
              'generated_bootstrap_reduced_schedule_line': assignment,
@@ -460,6 +499,11 @@ def prepare(seed=None):
                  launch.run_evidence.contract_digest(launch.evidence_contract()),
              'registered_evidence_contract_required_count': launch.evidence_contract()['required_count'],
              'evidence_contract_launcher_side': 'typed_pointer_launch.job_evidence_contract()',
+             'reduced_schedule_argument': literal,
+             'launch_arguments': launch_arguments(job, literal, directory, jobs[0]['receipt_dir']),
+             'cross_process_handoff': ('typed_pointer_launch.main(--reduced-schedule <reduced_schedule_argument>), '
+                                       'resolved by configure_reduced_schedule() before any validation; the opt-in '
+                                       'is an in-process global and cannot cross a process boundary by itself'),
              'exit_code_rule': ('launch.main() returns 0 IF AND ONLY IF completed_deliverable is true, which '
                                 'needs byte_verdict COMPLETE_VERIFIED against THIS contract; the registered '
                                 'contract was the reason a perfect reduced run returned 1'),
@@ -472,8 +516,8 @@ def prepare(seed=None):
              'maximum_new_reservation_usd': MAXIMUM_NEW_RESERVATION_USD,
              'jobs_execute_sequentially': True, 'automatic_retries': 0, 'jobs': jobs}
     pin = write(OUTPUT / 'smoke.json', smoke)
-    print(json.dumps({'status': smoke['status'], 'job': job, 'owner': owner, 'smoke': pin}, sort_keys=True),
-          flush=True)
+    print(json.dumps({'status': smoke['status'], 'job': job, 'owner': owner, 'smoke': pin,
+                      'reduced_schedule_argument': literal}, sort_keys=True), flush=True)
 
 
 def arguments(argv):

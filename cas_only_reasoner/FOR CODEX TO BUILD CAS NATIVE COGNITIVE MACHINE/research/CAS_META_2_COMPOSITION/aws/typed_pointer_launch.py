@@ -301,13 +301,29 @@ def _git_object_id(raw):
 
 
 def _committed_rows(source_sha, root=None, *, repository=None):
-    """The input inventory of `source_sha`, with every row's bytes read from the COMMIT."""
+    """The input inventory of `source_sha`, with every row's bytes read from the COMMIT.
+
+    THE ROW SHAPE IS EXACTLY `{"path", "bytes", "sha256"}` -- the three keys `contract.input_inventory` returns.
+    That is not cosmetic and it is not a style choice: the worker's own config carries its own copy of these rows
+    (`make_config` -> `design["inputs"]`), and the bootstrap asserts three things over BOTH copies:
+
+        digest(canonical(CONFIG['inputs'])) == CONFIG['inputs_sha256']          INPUT_INDEX_HASH
+        MANIFEST['inputs_sha256']           == CONFIG['inputs_sha256']          MANIFEST_INPUT_INDEX_HASH
+        canonical(MANIFEST['inputs'])       == canonical(CONFIG['inputs'])      MANIFEST_INPUT_INDEX
+
+    The last two compare the rows THIS FUNCTION returns against the rows the CONFIG carries, so an extra key here
+    -- a `committed_content_sha256` added for the record, say -- makes the two copies differ and the job dies on
+    the instance at `MANIFEST_INPUT_INDEX_HASH`, after the boot and the package install have been paid for. That is
+    exactly what the 2026-09-19 20:0x smoke attempt did. The commit read is the point of this function; the extra
+    field was never needed for it, because the digest below is computed from the same committed bytes it validates.
+    """
     repository = GIT_ROOT if repository is None else repository
     rows = contract.input_inventory(PROJECT if root is None else root)
     names = [row["path"] for row in rows]
     require(len(set(names)) == len(names), "POINTER_INVENTORY_ROWS_NOT_UNIQUE")
-    require(all(type(row["path"]) is str and type(row["bytes"]) is int and type(row["sha256"]) is str
-                for row in rows), "POINTER_INVENTORY_ROW_SHAPE")
+    require(all(set(row) == {"path", "bytes", "sha256"} and type(row["path"]) is str
+                and type(row["bytes"]) is int and type(row["sha256"]) is str for row in rows),
+            "POINTER_INVENTORY_ROW_SHAPE")
     blobs = {}
     for name in names:
         # ONE command does both jobs: it proves the commit CARRIES the row and returns the commit's bytes for it,
@@ -343,8 +359,10 @@ def _committed_rows(source_sha, root=None, *, repository=None):
                 % (path, row["bytes"], size))
         require(len(raw) == size, "POINTER_INVENTORY_BLOB_LENGTH:" + path)
         require(_git_object_id(raw) == object_id, "POINTER_INVENTORY_OBJECT_ID_MISMATCH:" + path)
+        # The row's own declared digest is checked against the COMMIT's bytes, so committed and admitted are the
+        # same bytes by construction -- and the row is returned UNCHANGED, three keys, as `input_inventory` made it.
         require(digest(raw) == row["sha256"], "POINTER_INVENTORY_NOT_COMMITTED:" + path)
-        out.append({**row, "committed_content_sha256": digest(raw)})
+        out.append(dict(row))
     return out
 
 

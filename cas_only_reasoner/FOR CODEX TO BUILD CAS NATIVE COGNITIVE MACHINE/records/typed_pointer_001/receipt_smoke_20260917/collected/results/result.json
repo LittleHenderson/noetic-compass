@@ -1,0 +1,11 @@
+{
+  "arms": {},
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 12, in <module>\n    require(MANIFEST['inputs_sha256'] == CONFIG['inputs_sha256'], 'MANIFEST_INPUT_INDEX_HASH')\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 5, in require\n    if not ok: raise ValueError('TYPED_BOOTSTRAP:' + reason)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: TYPED_BOOTSTRAP:MANIFEST_INPUT_INDEX_HASH\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-tpntr-20260919193339-111380d9-m-20260917",
+  "schema": "cncm.typed-pointer-worker-result/0.1",
+  "status": "WORKER_FAILED"
+}
