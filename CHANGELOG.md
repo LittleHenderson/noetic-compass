@@ -4,6 +4,60 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - Helm 2.0's first AWS run died at the FIRST update: non-finite gradients. The forward pass was fine; the backward blew up.
+
+**Job `cas-meta2-tpntr-20260920184534-df20eb46-m-20260917`, machine `i-0e8c342a5ee7819dc`, died about 27
+minutes in.** One job reserved `15.00`; real compute was roughly 27 minutes. No machine left running,
+cleanup COMPLETE. The study stopped itself (`POINTER_STUDY_STOPPED:INCOMPLETE_JOB`), so seeds 18 and 19
+never launched and their reservations were never taken — **only one of the three `15.00` was spent.**
+
+```
+cncm/.../pointer_learner.py, line 1938, in train_sealed_batch
+    require(all(bool(self.torch.isfinite(parameters[name].grad).all().item())
+ValueError: TYPED_LEARNER_GRADIENTS
+```
+
+### What the evidence rules out, in order
+
+- **The forward pass was fine.** `failed_seal.json` holds the batch's **8 valid predictions**, with
+  `cursor: 0`. The failure is in the BACKWARD, on the **first** update.
+- **It is not the ablation blocker.** That is fixed: this run got past preflight, phase A, the
+  `course_p00` evaluation, and into pass 1. The 90 artifacts that are missing are missing because the run
+  died, not because a check refused.
+- **It is not a bad initialisation.** Every tensor's initial scale was measured and is healthy. The three
+  tensors Helm 2.0 adds or widens are unremarkable: `match_key.weight` max abs `0.12498`,
+  `state_encode.weight` max abs `0.12491`, `reach_option_head.0.weight` max abs `0.06201` — all in line
+  with the tensors that were already there.
+- **It is not the learning rate.** `failed_seal.json` says `cursor: 0`, so this was the first step.
+
+### MY OWN REASONING WAS WRONG, and it matters
+
+My first instinct was that the unwired F4 warm-up schedule caused it, and I said so. **That cannot be
+right.** The failing check is on the raw gradient, and **a gradient does not depend on the learning rate** —
+warm-up changes how far the step goes, not whether the gradient is finite. Warm-up may still be worth
+wiring, but it is not the fix for this, and I have not wired it on that false premise.
+
+**What the mechanism probably is, stated as a hypothesis and not a finding:** Helm 1.0's loop ran the same
+round eight times, so its backward was effectively one round deep. F1 made the loop genuinely iterate, so
+gradients now flow back through **eight** rounds of a recurrent update. That is the only structural change
+to the backward, and it is exactly the kind of change that turns a surviving run into a diverging one. The
+prediction it fits: **Helm 1.0's own seed 17 blew up at pass 8**; Helm 2.0 blew up at update 1.
+
+### What has to happen before another dollar is spent
+
+**A local reproduction, on the RTX 4070, at `$0`.** The tools exist and were checked: the `cas-gpu` venv
+has `torch 2.11.0+cu128` with `cuda True` on `NVIDIA GeForce RTX 4070 Laptop GPU`, and `failed_seal.json`
+preserves the exact batch that failed. The experiment is to replay that batch against the real learner and
+report **which tensor's gradient goes non-finite first** — that names the culprit instead of guessing at it.
+
+**The $0 preflight could never have caught this, and that is the real lesson.** It drives the worker with a
+NON-NEURAL stand-in, so it validates control flow, counts, artifacts and phases — and says so in its own
+boundary line: *"proves nothing about numerics"*. A numeric blow-up is invisible to it. **A run that
+survives the preflight can still die on the first gradient, and this one did.**
+
+**Also required: the worker must be re-frozen under new job names.** `JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY`
+means this job can never be launched again, so a fix needs a fresh study admission.
+
 ## 2026-09-20 UTC (POINTER) - HELM 2.0 IS RUNNING ON AWS. The $0 gate passed, the study is frozen, and three claim-bearing jobs are training.
 
 **`PREFLIGHT_PASS`.** That is the word the rehearsal printed, and it is the gate that had to pass before a

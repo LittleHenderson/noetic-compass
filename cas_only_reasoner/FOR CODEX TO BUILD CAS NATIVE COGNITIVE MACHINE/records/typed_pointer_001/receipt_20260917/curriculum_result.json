@@ -1,0 +1,11 @@
+{
+  "arms": {},
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 36, in <module>\n    report = typed_pointer_worker.run(CONFIG, root=ROOT, results=RESULTS, artifacts=ARTIFACTS, attestor=ATTESTOR)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1803, in run\n    _main_training(ctx)\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1053, in _main_training\n    last_seal, update = _train_logged(main, batch, packets, staging, batches_log, updates_log,\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_practice_worker.py\", line 129, in _train_logged\n    raw, update = _stage_and_train(learner, batch, packets, seal_path, started=started)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_practice_worker.py\", line 118, in _stage_and_train\n    update = learner.train_sealed_batch(seal_path, expected_sha256=pin[\"sha256\"], target_receipts=targets)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 1938, in train_sealed_batch\n    require(all(bool(self.torch.isfinite(parameters[name].grad).all().item())\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py\", line 48, in require\n    raise ValueError(reason)\nValueError: TYPED_LEARNER_GRADIENTS\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-tpntr-20260920184534-df20eb46-m-20260917",
+  "schema": "cncm.typed-pointer-worker-result/0.1",
+  "status": "WORKER_FAILED"
+}
