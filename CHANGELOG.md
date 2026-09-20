@@ -4,6 +4,67 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - The learning brain is NAMED. It is **Helm**, it is versioned, and there is now one file that cannot lose it.
+
+**The brain that learns is `Helm`, current version `0.1`.** The owner chose the name. Everything about
+it that must survive being handed to another agent now lives in ONE file at the CNCM homebase root:
+
+`BRAIN_LINEAGE.md`
+
+It carries the name and version, the versioning scheme, the number of learned numbers, the worlds it
+was taught on, the worlds it was tested on and never shown, every measured score with the before and
+after, the official verdict, the exact evidence folders, a generations table, and six rules for
+whoever comes next. `AGENTS.md` now points at it from a new "The learning brain" section, so an agent
+working in this homebase meets it before it meets the pointer code.
+
+**The scheme, so a milestone is never a surprise:** `0.x` = being tried out, nothing certified.
+`1.0` = the first version that passes the official three-run test. `1.1, 1.2` = same shape, trained
+better. `2.0` = the shape changed, so the number count moved.
+
+**Size, measured, because "will the parameters grow" has a real answer.** Helm 0.1 holds **157,919**
+learned numbers in **46** groups. The largest single group is the word table `declaration_table`,
+1,024 × 64 = **65,536**, which is **41.5%** of the brain. Learning changes these values and never the
+count: it does not grow by getting smarter. It grows only when the working width is widened on
+purpose, which roughly quadruples most groups when the width doubles and would take the count to
+about 630,000 — and that is a version bump, not an edit.
+
+**What the teaching actually was, for the record.** 19 worlds: **11 machines** (four parts, three
+links each) and **8 grammar patterns** (e.g. "a list pattern": List, Item, Determiner, Marker).
+8 question kinds, 564 questions, 358 practised, 127 held back, 79 set aside. Trained 10 passes,
+1470 updates, about 526 s per pass.
+
+**And the five worlds it was never shown, in full**, all machines in a workshop:
+
+| machine | its parts | what contains what |
+|---|---|---|
+| a weaving machine | Bearing, Loom, Shuttle, Thread | Loom→Thread, Shuttle→Thread, Loom→Bearing |
+| a turning machine | Bolt, Chuck, Lathe, Tool | Lathe→Chuck, Lathe→Tool, Tool→Bolt |
+| a transmission assembly | Gear, Gearbox, Manifold, Shaft | Gearbox→Shaft, Shaft→Gear, Gear→Manifold |
+| a stopping assembly | Brake, Disc, Pad, Pinion | Brake→Pad, Brake→Disc, Disc→Pinion |
+| a lifting machine | Bracket, Cable, Crane, Hook | Crane→Hook, Crane→Cable, Cable→Bracket, Hook→Bracket |
+
+**Scope stated honestly, because it would be easy to overstate.** These five are the SAME KIND of thing
+as 11 of the worlds it was taught — machines. So this is transfer to **new individuals with new part
+names and new wiring**, not to a wholly new kind of thing. Real transfer, which a memorising machine
+would fail. Not a claim about novel domains.
+
+**The four clearest examples, in the machine's own words**, all on worlds it had never seen:
+
+| the machine | before | after | correct |
+|---|---|---|---|
+| a turning machine, every link | 7 links incl. `Tool contains Tool`, `Bolt contains Lathe` | `Lathe→Chuck`, `Lathe→Tool`, `Tool→Bolt` | same |
+| a weaving machine, every link | all **12** possible pairs incl. `Thread contains Thread` | `Loom→Bearing`, `Loom→Thread`, `Shuttle→Thread` | same |
+| a weaving machine, what the Loom holds | **nothing** — empty answer | Bearing and Thread | Bearing and Thread |
+| a transmission assembly, what the Gearbox holds | Manifold | Shaft | Shaft |
+
+Before, it was guessing: every pair, a part containing itself, or nothing. After, it read the structure.
+
+**Official verdict, unchanged and prominent: NOT CERTIFIED.** Helm 0.1's learning is measured with the
+graders' own test code on a question set fixed before the result was known — 2/18 → 12/18, gained 10,
+lost 0, bar 7, odds 1 in 1024 — and no grader program has certified it, because that run's certificate
+can never exist. `BRAIN_LINEAGE.md` states this as the most important row in the file and forbids
+writing "passed" about it.
+
 ## 2026-09-20 UTC (POINTER) - I KILLED THE STUDY DRIVER. The full 10-pass run succeeded anyway and its evidence is stranded, because the launcher's own record cannot be recovered.
 
 **What I did wrong, first.** The three claim-bearing jobs were launched as ONE long-lived `execute_study.py`
