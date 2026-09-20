@@ -297,17 +297,19 @@ def verify_bootstrap_embedding(package):
     assert anchor_at < env_at, 'SMOKE_PACKAGE_LINE_BEFORE_THE_ANCHOR'
     # The env assignment's OWN `os.environ[` prefix sits immediately before the variable name, so the gap is
     # measured to the START of the assignment -- otherwise that prefix counts as "another assignment between
-    # them" and a correct package is refused.
-    prefix = 'os.environ['
-    assert source[env_at - len(prefix):env_at] == prefix, 'SMOKE_PACKAGE_ASSIGNMENT_SHAPE'
-    between = source[anchor_at + len(token):env_at - len(prefix)]
+    # them" and a correct package is refused. It is located by a BACKWARD search rather than by subtracting a
+    # width: in the real member the text before the name is `os.environ[\\'` (13 characters), because the wrapper
+    # escapes the quote as well as the newline, so subtracting `len('os.environ[')` lands two characters short.
+    open_at = source.rindex('os.environ[', 0, env_at)
+    assert env_at - open_at <= 16, 'SMOKE_PACKAGE_ASSIGNMENT_SHAPE:%d' % (env_at - open_at)
+    between = source[anchor_at + len(token):open_at]
     assert 'os.environ[' not in between, 'SMOKE_PACKAGE_ASSIGNMENT_BETWEEN_ANCHOR_AND_LINE'
     separators = between.count('\n') + between.count('\\n')
     assert separators == 1, 'SMOKE_PACKAGE_SEPARATOR_COUNT:%d' % separators
     assert len(between) <= 48, 'SMOKE_PACKAGE_LINE_NOT_ADJACENT:%d' % len(between)
     literal = validate_reduced_schedule()[0]
     tail_end = source.index('\n', env_at) if '\n' in source[env_at:] else len(source)
-    line = between + source[env_at - len(prefix):tail_end]
+    line = between + source[open_at:tail_end]
     assert literal in line, 'SMOKE_PACKAGE_LITERAL_NOT_IN_THE_SHIPPED_LINE'
     # The literal has to be the one the WORKER'S OWN PARSER accepts, read from the request this script froze.
     parsed, claim_bearing = worker.schedule_plan(source=literal)
