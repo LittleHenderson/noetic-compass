@@ -1,0 +1,97 @@
+{
+ "automatic_retries": 0,
+ "candidate": "CNCM_TYPED_POINTER_LEARNING_001",
+ "config_schema": "cncm.typed-pointer-worker-config/0.1",
+ "jobs": [
+  {
+   "authority": {
+    "bytes": 65881,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260917\\authority.json",
+    "sha256": "3ece5d53d33c9e4b10e17923247587aab4f8ebb2d3e0f5be21a6c38f62688e8a"
+   },
+   "condition": "MIXED_SAME_ITEMS",
+   "job": "cas-meta2-tpntr-20260920055226-af0970cf-m-20260917",
+   "model_seed": 20260917,
+   "owner": {
+    "bytes": 1042,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260917\\owner.json",
+    "sha256": "64dc79ebab8758f860514e883ec8371427347105e3d39d395d8b79561e6d8a8b"
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917",
+   "request": {
+    "bytes": 354,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260917\\request.json",
+    "sha256": "61d550e8e1d6135f52359c94b18f1b624b07190d561282e9dd47707df19050d8"
+   }
+  },
+  {
+   "authority": {
+    "bytes": 65881,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260918\\authority.json",
+    "sha256": "c3986fff8c62448ca01ab4610dcc6260ad560a253a09dd669e8add6b1f806116"
+   },
+   "condition": "MIXED_SAME_ITEMS",
+   "job": "cas-meta2-tpntr-20260920055226-af0970cf-m-20260918",
+   "model_seed": 20260918,
+   "owner": {
+    "bytes": 1042,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260918\\owner.json",
+    "sha256": "df22f840dc6fa64e524741eedeac415a3589e82adb3d60ac10ee29328a055533"
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918",
+   "request": {
+    "bytes": 354,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260918\\request.json",
+    "sha256": "7adaf6c43c6b0b8c79a8463ecf5520d28eab4662f4e04cc818eabc0341bfbb68"
+   }
+  },
+  {
+   "authority": {
+    "bytes": 65881,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260919\\authority.json",
+    "sha256": "8c674afe8bc341983091869469e4834c02f00c791fbd9d266e0ddd2c13ab4df6"
+   },
+   "condition": "MIXED_SAME_ITEMS",
+   "job": "cas-meta2-tpntr-20260920055226-af0970cf-m-20260919",
+   "model_seed": 20260919,
+   "owner": {
+    "bytes": 1042,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260919\\owner.json",
+    "sha256": "edfe1cb2769c268f63006cbba589203607c3463bae412b7e40c39010f46f47cd"
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919",
+   "request": {
+    "bytes": 354,
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\admission_001\\20260919\\request.json",
+    "sha256": "35b413fe3d3d6f3c132f323995c406c09d0ce667ca9aa1fdfd7f4be3131efc8f"
+   }
+  }
+ ],
+ "jobs_execute_sequentially": true,
+ "maximum_new_reservation_usd": "45.00",
+ "note_about_this_copy": "The Helm 1.0 certified study record, relinked to the receipt directories after they were renamed aside to free the canonical names for Helm 2.0. Paths are the only change; every digest, seed, owner decision and artifact reference is byte-identical to admission_001/study.json as frozen for the certified run.",
+ "numeric_runs_completed": 0,
+ "owner_decisions_in_contract_text": [
+  true,
+  true,
+  true,
+  true,
+  true
+ ],
+ "owner_decisions_verbatim": [
+  "Accept both, carry on.",
+  "Approve the smoke job (Recommended)",
+  "Yes \u2014 require the relational kinds.",
+  "Run it as the transfer test, label honestly (Recommended)",
+  "Stratify AND train longer (Recommended)"
+ ],
+ "package_archive": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\CAS_META_2_COMPOSITION\\records\\typed_pointer_001\\package_af0970cf\\source.zip",
+ "package_archive_sha256": "18064398ce49869da9cd2fcf67592ee00365d6f04d9571e4f63ba3d29a798f71",
+ "package_manifest_sha256": "b585f4fb310d295350157e3fe3ac20db7fb809e2e1e6b4c946450e2df832f940",
+ "protocol_sha256": "81afe89eb2ffa8f0ad02b13407acfe768463ca8287fa6d6c6c1dfc395dc7f08f",
+ "rehearsal": "EXACT_PACKAGE_WINDOWS_REFUSAL_BEFORE_NUMERIC_IMPORT",
+ "reservation_per_job_usd": "15.00",
+ "schema": "cncm.typed-pointer-study-admission/0.1",
+ "source_sha": "af0970cfa6d54a85aeb16e5a99a84d791ace59c0",
+ "status": "FROZEN_BEFORE_FIRST_RUN"
+}
