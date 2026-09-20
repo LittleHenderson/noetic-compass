@@ -4,6 +4,57 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - S1 THROUGH S10 PASS ON AWS. The ninth run is the first pointer run to finish, and the reload that killed the seventh is verified True on real hardware.
+
+**`AWS_CANDIDATE_FINISHED`, `completed_deliverable: true`, `missing_required_objects: []`, 43 of 43 files
+collected.** Job `cas-meta2-tpntr-20260920025700-9b84b35c-m-20260918`, source_sha
+`9b84b35c82bda422f744e76a170892313bc8b61b`, seed `20260918`, receipt
+`records/typed_pointer_001/receipt_smoke_20260918`.
+
+| what the run says | value |
+|---|---|
+| `status` | **`COMPLETE_TYPED_POINTER_ARM`** — the worker's own SUCCESS_STATUS |
+| `failure` | **`None`** |
+| `schedule_plan_mode` | **`REDUCED`** |
+| `reduced_schedule_requested` | **`true`** — the carrier fix works on the instance |
+| plan | passes 1, updates 8, reloads `['initial','final']`, phase_b false, ablations false, retention false, interference false |
+| `checkpoint_reload_verified` | **`True`** |
+| `checkpoint_check_phase_a_status` | `COMPLETE` |
+| `required_artifacts` | 40 (the smoke contract's 43 minus the 3 evidence-contract fields) |
+| `main_training_delta.optimizer_updates` | **8** — the shrunken schedule actually ran |
+| `pass_summaries` | 1 |
+| `elapsed_seconds` / `worker_clock_seconds` | `1577.228962994` |
+| `non_worker_overhead_seconds` | `598.1888835440004` |
+| `degraded_checks` | `['ablations','checkpoint_check_phase_b']` |
+
+**ALL 25 artifacts that the seventh run could not produce now exist** — `initial_reload_predictions.json`
+(25725 bytes), `final_reload_predictions.json` (26575), `replay_1_batch/update/predictions.json`,
+`replay_2_batch/update/predictions.json`, `replay_report.json` (2892), `phase_timings.json` (3234),
+`installed_sources.json` (15003), `loaded_sources.json` (24849), `ablations.json` (922),
+`checkpoint_check_phase_b.json` (893), `checkpoint_check_phase_a.json` (56286). The reload itself:
+
+```
+reloads: 2  ->  phase 'initial' sha d1b2a90ff86e48a1ec936d88f8ef69ce2558c33e28db179757d6b64d00ee70d1
+                phase 'final'   sha bc4d6308247c4528b63d52ecf8da5ad7f834025f5398a2ef1fb37f6a8dfcddc0
+replays: 2  ->  branch 1 and 2, committed_cursor 8, restored_cursor 7
+```
+
+**The two degraded checks are SKIPPED, NOT SILENTLY MISSING** — `ablations.json` carries
+`"status": "SKIPPED"` with `"reason": "ABLATIONS_NOT_SELECTED_BY_THE_RUN_PLAN"` and
+`checkpoint_check_phase_b.json` carries `"reason": "PHASE_B_NOT_SELECTED_BY_THE_RUN_PLAN"`, both `"report_only":
+true`. `report_only_status` reads `{'ablations': 'SKIPPED', 'checkpoint_check_phase_a': 'COMPLETE',
+'checkpoint_check_phase_b': 'SKIPPED'}`. A shrunken run that records what it did not do is the behaviour
+`pre_design/AWS_SMOKE_S10_PLAN.md:110-111` asks for.
+
+**This run is NOT claim-bearing and establishes no learning result** — `claim_bearing: false`,
+`claimed_bearing_run: false`, `learning_on_held_back_established: false`, `schedule_plan_mode: REDUCED`. Its own
+scores are reported only as a pipeline sanity signal: course 17/564 before, 213/564 after; held-back 2/127 →
+45/127; trained 10/358 → 142/358, after **8 optimizer updates**. That is consistent with the full run's fast early
+learning (30 → 356 at its first pass) and is not evidence for anything.
+
+Cost: worker clock `1577.228962994` + overhead `598.1888835440004` = `2175.417846538999` instance seconds
+≈ `0.60428273514972` hours, ≈ `$1.52` at the observed `2.5200000000`/h. Reserved `15.00`.
+
 ## 2026-09-20 UTC (POINTER) - The eighth run died in 90 seconds on a function that has never existed. Fixing the carrier is what executed that branch for the first time.
 
 **Shrinking the smoke schedule was never possible, so the code that shrinks it was never run.** Job
