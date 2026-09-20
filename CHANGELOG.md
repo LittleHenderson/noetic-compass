@@ -4,6 +4,85 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - THE NEURONS LEARNED. The seventh run trained all ten passes and transferred to worlds it never read; it died in the reload, on a type test, and I had mislabelled the run.
+
+**The headline, measured.** The pointer machine's neurons learned a skill that transfers to worlds they were never
+shown. On the frozen gate's own 18-question RELATIONAL population, the seventh run's own scoring files
+(`course_p00_scoring.json` at cursor 0, `course_p10_scoring.json` at cursor 1470) give:
+
+| gate quantity | required | measured |
+|---|---|---|
+| `wrong_to_right` (b) | `MIN_PASSING_B` = 7 | **10** |
+| `right_to_wrong` (c) | 0 | **0** |
+| questions correct, population | — | **2 of 18 → 12 of 18** |
+| improved kinds | 2 | **3** (`edge_account`, `parts`, `reach`) |
+| improved worlds | 2 | **5** |
+| `p_one_sided` | — | **1/1024** = 0.0009765625 |
+
+`label_key_divergence_failures` is `[]`, so the test ran over exactly the frozen population. Side tests:
+`ALL_KINDS` n=45 b=22 c=0 passed; `TIER RELATIONAL` n=29 b=12 c=0; `TIER DIRECT_READ` n=10 b=10 c=0;
+`TRAINED` start→final n=189 b=127 c=1. The gate's own `worker_contract_failures`,
+`schedule_plan_failures` and `min_passing_b_failures` all return `[]` on this receipt.
+
+**CLAIM STATUS, STATED AS I FOUND IT.** The gate's *arithmetic* passes. **The gate program did not print a label
+and I do not claim one.** The run's own record says `status: TYPED_POINTER_FAILED`, `completed_deliverable:
+False`, 25 of its 99 required artifacts absent, and only 1 of the 3 required seeds exists. So the reading is a
+refusal, correctly. This is a MEASURED learning signal, not a gate pass.
+
+**I HAD MISLABELLED THE RUN, AND THE CORRECTION MATTERS.** I had been calling
+`records/typed_pointer_001/receipt_smoke_20260919f` a reduced "smoke" run. It is not. `worker_report.json` and
+`measurements.json` both say `claim_bearing: true`, `claimed_bearing_run: true`, `schedule_plan_mode: REGISTERED`,
+`required_artifacts` = 99, `pass_summaries` = 10 passes, `main_training_delta.optimizer_updates` = 1470. It is the
+FULL registered 10-pass run. The folder name and a stale `reduced_schedule.json` beside it misled me.
+
+**Root cause of the failure, measured rather than argued.** `_fingerprint` guarded with `type(value) is dict`, but
+`nn.Module.state_dict()` returns an `OrderedDict`. The SAVED side is a genuine `dict` (`export_checkpoint` saves
+`dict(self.module.state_dict())`) and fingerprinted as 46 rows; the LIVE side fingerprinted as `()`. `()` never
+equals a 46-row tuple, so the reload refused on a container that matched the checkpoint EXACTLY — on every reload,
+after 1,470 updates had been paid for. Nothing raised on the way in, because the empty tuple is the same answer
+the helper documents for "owns no tensors". The gate is now `isinstance(value, Mapping)`, and the empty answer is
+checked separately at the call site so the two meanings cannot share one expression again.
+
+**Verified for `$0` before any further spend**, by the CPU harness against the failed run's OWN checkpoints:
+
+```
+live container state_dict type: OrderedDict   rows read by _fingerprint: 46 (plain dict copy: 46)
+PHASE E PASSED: export -> restore round trip is exact      (46 params, bitwise equal)
+stale_layout_refused: True   stale_layout_refusal: POINTER_CHECKPOINT_LAYOUT   <- negative control, not vacuous
+initial.pt pass_01.pt prelast.pt final.pt retained.pt  ->  saved=46 live=46 layouts_equal=True differing=0 strict_load=True
+```
+
+The five real checkpoints that killed the seventh run now restore exactly. The refusal sat AFTER the run-identity
+and profile checks, and the failure was `POINTER_CHECKPOINT_LAYOUT` rather than `TYPED_CHECKPOINT_RUN_IDENTITY`,
+so the profile check had already passed on the instance: this type test was the only thing standing between that
+run and a complete artifact set. `SELFTEST_PASS 50 checks`, `sha256
+d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d` — the frozen gate is byte-identical.
+
+**The 25 missing artifacts were exactly the steps after the reload** — 10 ablation files + `ablations.json` +
+`checkpoint_check_phase_b.json`, 3 reload prediction files + 7 `replay_*`, `installed_sources.json` +
+`loaded_sources.json`, and `phase_timings.json` (= 25). One bug, 25 consequences.
+
+**A second defect, and my previous "fix" for it was verified against the wrong artifact.** The shrunken smoke
+schedule crossed the process boundary as one line that `bootstrap_source()` inserts into the generated bootstrap,
+and that bootstrap is a MEMBER of `source.zip`. `prepare_smoke.py` set the opt-in only AFTER building the package
+and then rendered the bootstrap in-process to "prove the smoke's schedule reaches the instance" — which proves
+nothing about the bytes that ship. Consequences, all read out of the seventh run's receipt: the smoke package was
+byte-identical to the claim-bearing one, the instance ran the full registered plan, and the launcher graded it
+against the 43-artifact smoke contract (`collection: INCOMPLETE`, 31 of 43), while the worker reported
+`claim_bearing: true` with 99 required. The opt-in is now set BEFORE the build, and
+`verify_bootstrap_embedding(package)` reads the line out of the built `source.zip` itself. The claim-bearing
+package is built by `prepare_study.py` in a process whose opt-in is `None`, so no pinned package byte moves.
+
+**CORRECTION TO THE GOAL'S PREMISE.** The goal states the last run "stopped at pass 10 with the loss still
+falling" and that training length is a live lever. The loss CONVERGED. Per-pass mean raw loss: 0.9967, 0.7020,
+0.6256, 0.6031, 0.5974, 0.5412, 0.5151, 0.5080, 0.5176, 0.5113 — flat from pass 6, with mean gradient squared
+norm collapsing 68.23 → 0.60. Ten passes is enough; more passes buy little. The reload bug was the lever.
+
+**Money, read live from `_worktrees/meta1/.../campaign_ledger.json` at revision 94**: 7 pointer jobs × `15.00` =
+**`105.00` reserved**, every one `RESERVED_NO_AUTOMATIC_REFUND`; cap `5000.00`, total reserved `651.00`,
+remaining unreserved **`4349.00`**. My earlier "about $7 of cash across seven runs" was the wrong figure to quote
+as the committed position.
+
 ## 2026-09-19 UTC (GPU RUNS) - Five runs, five distinct bugs, each one further along. The pattern is hand-written width arithmetic.
 
 **Each run advanced strictly further than the last and died on a different defect.** That is progress bought at

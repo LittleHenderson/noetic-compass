@@ -148,6 +148,7 @@ acceptance is the AWS smoke and the paid job; no GPU work happens on the local m
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
 from copy import deepcopy
 from hashlib import sha256
 import io
@@ -490,9 +491,20 @@ def _fingerprint(torch, value):
     An empty fingerprint means the object owns no tensors at all, which is how `restore_checkpoint` tells a
     pointer checkpoint (whose `model_state` carries this container's names) from a practice one (whose
     `model_state` is exactly the three `^6` keys) WITHOUT re-initialising anything.
+
+    ANY MAPPING, NOT ONLY `dict`. This gate previously read `type(value) is dict`, and `nn.Module.state_dict()`
+    returns a `collections.OrderedDict`, so the LIVE side of `restore_checkpoint`'s layout guard fingerprinted
+    as the empty tuple while the SAVED side -- a genuine `dict`, because `export_checkpoint` saves
+    `dict(self.module.state_dict())` -- fingerprinted as 46 rows. `()` never equals a 46-row tuple, so the guard
+    failed on a container that matched the checkpoint EXACTLY, on every reload, after a full 1470-update
+    training run had already been paid for. Nothing raised on the way in: the empty tuple was indistinguishable
+    from the documented "owns no tensors" answer, which is why a wrong-type argument to this helper is a silent
+    layout lie rather than an error. The gate is now `isinstance(value, Mapping)`, which is what both callers
+    actually pass, and the empty answer is checked SEPARATELY from the comparison at the call site so the two
+    meanings can never again share one expression.
     """
     rows = []
-    if type(value) is dict:
+    if isinstance(value, Mapping):
         for key in sorted(value, key=lambda item: str(item)):
             item = value[key]
             if torch.is_tensor(item):
@@ -501,8 +513,8 @@ def _fingerprint(torch, value):
 
 
 def _tensor_flat_bytes(torch, value):
-    """Exact tensor bytes, concatenated in sorted-key order, for the dict a fingerprint was taken over."""
-    require(type(value) is dict and value, "POINTER_TENSOR_BYTES")
+    """Exact tensor bytes, concatenated in sorted-key order, for the mapping a fingerprint was taken over."""
+    require(isinstance(value, Mapping) and value, "POINTER_TENSOR_BYTES")
     chunks = []
     for key in sorted(value, key=lambda item: str(item)):
         item = value[key]
@@ -1469,6 +1481,20 @@ def _validate_init_args(value, device):
     return deepcopy(value)
 
 
+def _require_cuda_device(torch, device):
+    """The run's device demand, in ONE place: a `cuda` device string on a machine with a live CUDA runtime.
+
+    This is the two identical copies that stood in `PointerCourseLearner.__init__` and `restore_checkpoint`,
+    extracted unchanged: same pattern, same `TYPED_LEARNER_CUDA_REQUIRED` code, same order after
+    `execution_guard()`. No CPU fallback is added and none is admitted -- the demand is unchanged and still
+    fails closed. What the extraction buys is a NAMED seam, so the CPU round-trip test can bypass the hardware
+    demand exactly the way the harness already bypasses `execution_guard()`, instead of editing this file or
+    relying on a real `torch.device("cuda:0")` on a box with no CUDA runtime (which cannot carry a tensor).
+    """
+    require(re.fullmatch(r"cuda(?::[0-9]+)?", str(device)) is not None and torch.cuda.is_available(),
+            "TYPED_LEARNER_CUDA_REQUIRED")
+
+
 # -------------------------------------------------------------------------------------------------------
 # THE LEARNER.
 # -------------------------------------------------------------------------------------------------------
@@ -1487,8 +1513,7 @@ class PointerCourseLearner:
                  tagger, python_seed, root):
         from ..teaching_cycle.gpu_adapter import execution_guard
         execution_guard()
-        require(re.fullmatch(r"cuda(?::[0-9]+)?", str(device)) is not None and torch.cuda.is_available(),
-                "TYPED_LEARNER_CUDA_REQUIRED")
+        _require_cuda_device(torch, device)
         self.torch = torch
         self.framework = framework
         self.device = (torch.device("cuda", torch.cuda.current_device())
@@ -1825,8 +1850,7 @@ class PointerCourseLearner:
         """
         from ..teaching_cycle.gpu_adapter import execution_guard
         execution_guard()
-        require(re.fullmatch(r"cuda(?::[0-9]+)?", str(device)) is not None and torch.cuda.is_available(),
-                "TYPED_LEARNER_CUDA_REQUIRED")
+        _require_cuda_device(torch, device)
         target = Path(path)
         require(target.is_file() and not target.is_symlink()
                 and 0 < target.stat().st_size <= 256 * 1024 * 1024, "TYPED_CHECKPOINT_FILE_BOUND")
@@ -1859,8 +1883,14 @@ class PointerCourseLearner:
                     "POINTER_CHECKPOINT_EXPECTED_NAMES")
         init_args = _validate_init_args(metadata["init_args"], str(device))
         container = _build_container(torch, framework, device)
-        require(_fingerprint(torch, container.state_dict()) == pointer_names,
-                "POINTER_CHECKPOINT_LAYOUT")
+        # The two questions are asked SEPARATELY. "Did the container produce any layout at all" is not the same
+        # question as "does it equal the saved layout", and while they shared one `require` the empty answer
+        # passed for a comparison -- the exact failure that cost the seventh run its reload. A container built by
+        # `_build_container` always has more parameters than `PARAMETERS`, so an empty live fingerprint is a
+        # defect in the fingerprinting, not a layout mismatch, and it now says so.
+        container_names = _fingerprint(torch, container.state_dict())
+        require(container_names, "POINTER_CHECKPOINT_CONTAINER_EMPTY")
+        require(container_names == pointer_names, "POINTER_CHECKPOINT_LAYOUT")
         restored = cls(torch, framework, encoder,
                        optimizer_config=init_args["optimizer_config"],
                        run_context=init_args["run_context"], limits=init_args["limits"],

@@ -51,13 +51,18 @@ opt-in in the launcher -- `typed_pointer_launch.SMOKE_REQUEST`, `None` by defaul
 own `CAS_META2_RUN_TEACHING_CYCLE` line, carrying this request as a literal. Ambient environment is never read at
 render time, so an operator's stray variable cannot shrink a claim-bearing job's schedule.
 
-THIS SCRIPT SETS THAT OPT-IN, AND IT SETS IT ONLY AFTER THE PACKAGE IS BUILT. With the opt-in left at `None` the
-generated worker source is byte-for-byte identical to the source before the opt-in existed; with it set, the
-generated source carries one extra line and no longer matches. Building the claim-bearing package from a process
-whose opt-in is set would be the one way to make a claim-bearing job's package differ from its pinned bytes, so
-the order below is load-bearing: build the package first, then set the opt-in, then render the bootstrap to prove
-the line is really there for the smoke. `set_smoke_request()` itself re-runs the worker's own `schedule_plan()` and
-refuses anything the worker would refuse, so a typo cannot silently bake a different schedule.
+THIS SCRIPT SETS THAT OPT-IN BEFORE IT BUILDS THE SMOKE PACKAGE, AND THAT ORDER IS THE WHOLE FIX. An earlier
+revision set the opt-in only AFTER the build, on the reasoning that a package built with the opt-in set would
+differ from the claim-bearing package's pinned bytes. That reasoning was about the WRONG PACKAGE: the artifact
+whose bytes must not move is the claim-bearing one, built by `prepare_study.py` in a process whose opt-in is
+`None`, and it is untouched either way. The cost of the mistake was measured, not argued. `bootstrap_source()` is
+a member of the package, so a package built before the opt-in is set cannot carry the line at all; the check that
+was meant to catch this rendered the bootstrap in-process afterwards and therefore passed. The seventh run
+(`cas-meta2-tpntr-20260919234654-4780c199-m-20260917`) then ran the FULL 1,470-update registered plan on a job the
+launcher had frozen as a 43-artifact, non-claim-bearing smoke: `schedule_plan.json` records
+`reduced_schedule_requested: false` and `mode: REGISTERED`, the worker reported `claim_bearing: true` with 99
+required artifacts, and collection closed `INCOMPLETE` at 31 of 43. `verify_bootstrap_embedding()` now reads the
+line out of the built `source.zip` itself, which is the only artifact that reaches an instance.
 
 WHAT THIS SCRIPT DOES NOT DO. It launches nothing, reserves nothing, reads no ledger and makes no AWS call. It
 builds the source-only package because the authority binds the package's `archive_sha256` and
@@ -73,6 +78,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+from zipfile import ZipFile
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -248,21 +254,41 @@ def validate_reduced_schedule():
     return literal, plan
 
 
-def verify_bootstrap_embedding():
-    """`(bootstrap_sha256, assignment_line)` for the generated bootstrap WITH the opt-in set.
+def verify_bootstrap_embedding(package):
+    """`(worker_source_sha256, assignment_line)` read out of the BUILT PACKAGE, not out of a fresh render.
 
-    The assertion is the whole point: outside the opt-in the generated source carries no such line at all, and
-    with it set it carries exactly one, immediately after the bootstrap's own teaching-cycle line.
+    THE ARTIFACT THAT SHIPS IS THE ONLY ONE WORTH CHECKING, and this function used to check a different one. It
+    called `launch.bootstrap_source()` -- the in-process renderer -- so it asserted that the line was present in a
+    string this process was holding. It said nothing about the `source.zip` an instance installs, which is the
+    only thing `archive_sha256` pins and the only thing that reaches the machine. That gap is exactly how the
+    shrunken schedule was "verified" and still never arrived, so the read is now from the archive's own rendered
+    worker member.
+
+    The archive member is the TRANSPORT-wrapped worker, so the embedded bootstrap may be escaped by that wrapper;
+    the assertions therefore state what must hold for the schedule to take effect on the instance -- the variable
+    is named exactly once, it appears after the bootstrap's own teaching-cycle anchor, and the literal the worker
+    will parse is the one `validate_reduced_schedule()` returned -- without asserting a byte-exact prefix that
+    the wrapper is free to escape.
     """
     worker = launch._probe()
-    bootstrap = launch.bootstrap_source()
-    assert bootstrap.count(worker.REDUCED_SCHEDULE_ENV) == 1, 'SMOKE_BOOTSTRAP_LINE_COUNT'
-    anchor = bootstrap.index(launch.BOOTSTRAP_ENV_ANCHOR)
-    assignment = bootstrap.index(worker.REDUCED_SCHEDULE_ENV)
-    assert bootstrap.index('\n', anchor) < assignment, 'SMOKE_BOOTSTRAP_LINE_NOT_AFTER_THE_ANCHOR'
-    line = bootstrap[assignment:bootstrap.index('\n', assignment)]
-    assert line.endswith(repr(validate_reduced_schedule()[0])), 'SMOKE_BOOTSTRAP_LITERAL'
-    return sha256(bootstrap.encode('utf-8')).hexdigest(), line
+    with ZipFile(package['archive']) as archive:
+        source = archive.read(launch.WORKER_NAME).decode('utf-8')
+    count = source.count(worker.REDUCED_SCHEDULE_ENV)
+    assert count == 1, 'SMOKE_PACKAGE_LINE_COUNT:%d' % count
+    anchor = source.index(launch.BOOTSTRAP_ENV_ANCHOR)
+    assignment = source.index(worker.REDUCED_SCHEDULE_ENV)
+    assert source.index('\n', anchor) < assignment, 'SMOKE_PACKAGE_LINE_NOT_AFTER_THE_ANCHOR'
+    literal = validate_reduced_schedule()[0]
+    line_end = source.index('\n', assignment)
+    assert literal in source[assignment:line_end], 'SMOKE_PACKAGE_LITERAL_NOT_ON_THE_ASSIGNMENT_LINE'
+    # The literal has to survive whatever escaping the transport wrapper applies, so the check is made on the
+    # WORKER'S OWN PARSER: `schedule_plan(source=...)` is the function the instance runs, and it must return the
+    # same plan from the package bytes that `validate_reduced_schedule()` returned from the raw literal.
+    payload = source[assignment + len(worker.REDUCED_SCHEDULE_ENV):line_end]
+    assert payload.rstrip().endswith('=') or '=' in payload, 'SMOKE_PACKAGE_ASSIGNMENT_SHAPE'
+    for name in ('passes', 'updates', 'evaluations', 'ablations', 'interference', 'retention'):
+        assert name in payload, 'SMOKE_PACKAGE_LITERAL_MISSING:%s' % name
+    return sha256(source.encode('utf-8')).hexdigest(), source[assignment:line_end]
 
 
 def smoke_documents(job, identity, *, seed, contract_document):
@@ -426,19 +452,34 @@ def prepare(seed=None):
     assert not dirty, 'COMMIT_FIRST_THE_PACKAGE_IS_BUILT_FROM_HEAD:\n' + dirty[:2000]
     OUTPUT.mkdir()
     PACKAGE_PARENT.mkdir(exist_ok=True)
-    # THE ORDER HERE IS LOAD-BEARING. The package is built with the launcher's smoke opt-in still at its default
-    # `None`, so this package's generated worker source is byte-for-byte the source every other job's package
-    # carries; the opt-in is set only afterwards, and only to prove the smoke's schedule reaches the instance.
+    # THE ORDER HERE IS LOAD-BEARING, AND IT IS THE OPPOSITE OF WHAT IT WAS.
+    #
+    # `bootstrap_source()` is a MEMBER of the package -- `render_worker()` puts it in `INNER_RUNNER`, and
+    # `build_pointer_package` writes the rendered worker into `source.zip`. So the one line that carries the
+    # shrunken schedule to the instance can only arrive if it is present WHEN THIS PACKAGE IS BUILT. The seventh
+    # run (job `cas-meta2-tpntr-20260919234654-4780c199-m-20260917`, 2026-09-19) proved the old order wrong.
+    # The opt-in used to be set AFTER the build and the bootstrap was then rendered in-process to "prove the
+    # smoke's schedule reaches the instance" -- which proves nothing about the bytes that ship. Consequences, all
+    # measured in that run's own receipt: `package_smoke_...` was byte-identical to the claim-bearing package,
+    # the instance ran the FULL 1,470-update registered plan (`schedule_plan.json`:
+    # `reduced_schedule_requested: false`, `mode: REGISTERED`), the worker reported `claim_bearing: true` with 99
+    # required artifacts while the launcher had frozen the 43-artifact smoke contract, and collection ended
+    # `INCOMPLETE` at 31 of 43. A "cheap rehearsal" silently cost a full run.
+    #
+    # WHAT THIS ORDER DOES NOT TOUCH. The claim-bearing package is built by `prepare_study.py`, in a process whose
+    # opt-in is still `None`, and this script's opt-in is process-local. So no claim-bearing package's bytes move
+    # and its pinned `archive_sha256`/`manifest_sha256` are unchanged. The assert below is kept because it is
+    # still the right thing to know: it catches a caller that leaked a previously configured opt-in into this
+    # process, which would make the literal below non-reproducible.
     assert launch.SMOKE_REQUEST is None, 'SMOKE_OPT_IN_ALREADY_SET_BEFORE_THE_PACKAGE_WAS_BUILT'
-    package = launch.build_pointer_package(PACKAGE_PARENT / ('package_smoke_' + source_sha[:8]),
-                                           source_sha=source_sha)
     literal, plan = validate_reduced_schedule()
-    # THE SAME ENTRY POINT `main()` USES, so the in-process and cross-process paths cannot diverge again. This
-    # sets the opt-in for THIS process only; the launch process gets it through `--reduced-schedule <literal>`.
+    # THE SAME ENTRY POINT `main()` USES, so the in-process and cross-process paths cannot diverge again.
     configured, configured_plan = launch.configure_reduced_schedule(literal)
     assert configured == literal and configured_plan == plan, 'SMOKE_CONFIGURE_PATH_DIVERGED'
     assert launch.SMOKE_REQUEST == SMOKE_REDUCED_SCHEDULE, 'SMOKE_OPT_IN_NOT_SET'
-    bootstrap_sha256, assignment = verify_bootstrap_embedding()
+    package = launch.build_pointer_package(PACKAGE_PARENT / ('package_smoke_' + source_sha[:8]),
+                                           source_sha=source_sha)
+    bootstrap_sha256, assignment = verify_bootstrap_embedding(package)
     stamp = datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')
     job = 'cas-meta2-tpntr-' + stamp + '-' + source_sha[:8] + '-m-' + str(seed)
     directory = OUTPUT / str(seed)
