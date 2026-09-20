@@ -4,6 +4,68 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - The ablation fix is PROVEN on the real container, LF damage repaired, and a portability hazard found in the ladder digest.
+
+### The ablation fix, proven before it was written
+
+Simulated against the live Helm 2.0 container, not argued:
+
+```
+container tensors      : 48
+covered by exactly one : 48
+   core_block           3 tensors
+   round_mix            4 tensors   (node_encode.weight + state_encode.weight + round_mix + round_rate)
+   heads               33 tensors   (+ match_key.)
+   query_and_readout    8 tensors
+UNCOVERED : none      AMBIGUOUS : none      EMPTY COMP: none
+ABLATION_PHASES: UNCHANGED -> EXPECTED_ARTIFACTS stays 99, the evidence contract does not move
+```
+
+**Two words in two tuples.** `state_encode.` joins `round_mix` beside `node_encode.weight` (it is the
+round's own input projector), and `match_key.` joins `heads` beside `pointer_key.` (it is a scoring
+projection). Because no component is ADDED, `ABLATION_PHASES` is identical, so no registered constant
+moves and nothing needs re-pinning.
+
+**I also predicted a second blocker and the measurement disproved it.** `_reset_component` line 1438
+requires every ablated name to be in `pointer_module._registered_names(...)`, which I expected to hold
+only the three `^6` tensors. It holds **all 48**, so `state_encode.weight` and `match_key.weight` both
+resolve. Checked rather than assumed.
+
+### Two more run-killers ruled out for free
+
+- **No shared module changed.** Across `git diff 6580add4 HEAD`, only `pointer_learner.py` moved among
+  the `typed_teaching` files — `pointer_contract`, `matched_contract`, `practice_contract`,
+  `worker_contract`, `learner`, `slots` and `source` are all untouched.
+- **`BLOCK_INPUT_WIDTH` is learner-local (192) and is NOT in `contract.DESIGN`.** F1 moved no registered
+  constant, so `validate_config` will not reject Helm 2.0 on a config-identity mismatch.
+
+### LF damage: the Helm 2.0 commit converted `CHANGELOG.md` to CRLF
+
+Measured from the git blobs, not the working tree:
+
+| revision | stored as | LF | CRLF |
+|---|---|---|---|
+| `6580add4` | **LF** | 7176 | **0** |
+| `7f3a656f` | **CRLF** | 7239 | 7239 |
+| `HEAD` | **CRLF** | 7422 | 7422 |
+
+That is the whole of the 7,239-insertion / 7,176-deletion "change" on a 7,176-line file — a pure line
+ending rewrite, no content. The worktree-root `.gitattributes` only pins an LFS zip, so nothing enforced
+LF on `CHANGELOG.md`; the subdirectory `.gitattributes` does say `*.md text eol=lf`, which the file
+violated. **Repaired:** `CHANGELOG.md` 7422 CRLF lines → LF (649432 → 642010 bytes) and
+`HELM_2_0_HANDOFF.md` 185 CRLF lines → LF. Both sit outside `contract.input_inventory`, so neither could
+disturb the rehearsal in flight.
+
+### A portability hazard in the ladder, recorded not silently fixed
+
+`ladder_v0_1.json` carries **17,178 CRLF lines** and its digest `4436fb6b481ff606` is computed over those
+bytes. The generator writes in Python text mode on Windows, which translates every newline. **So the
+README's claim that "two builds produce byte-identical files" holds only on one platform**: regenerate on
+Linux and the digest changes. Any result quoting `4436fb6b` must say which platform produced it, and the
+generator should write with `newline="\n"` before that digest is treated as portable. **I did not convert
+those bytes** — changing them would silently invalidate a digest the ladder publishes, which is worse
+than the hazard.
+
 ## 2026-09-20 UTC (POINTER) - TWO INDEPENDENT RULERS AGREE, AND THE BAR IS 0.53 NOT 0.00. The instrument of record is `records/typed_pointer_001/ladder/`.
 
 **Two agents built a difficulty ladder independently, from different constructions, and they agree on the
