@@ -113,6 +113,21 @@ import time
 
 from cas_meta2.recurrent_cjt import recurrence as recurrence_module
 from cas_meta2.typed_teaching import encoder as encoder_module
+# `_slot_counts` LIVES IN `matched_contract`, NOT IN `typed_matched_worker`. The alias `matched` below is bound to
+# the WORKER module and is load-bearing for `_framework` and `_sum_deltas`; it has never carried `_slot_counts`.
+# The reduced branch of `_schedule` called `matched._slot_counts(frozen)` and raised
+# `AttributeError: module 'cncm.typed_matched_worker' has no attribute '_slot_counts'` -- on the FIRST run that ever
+# executed it, job `cas-meta2-tpntr-20260920023737-2010c4b6-m-20260918` (2026-09-20), at
+# `_public_packet_preparation` before any training or evaluation had been written.
+#
+# WHY IT HAD NEVER FIRED. `contract.pointer_schedule` computes `counts` itself from THIS SAME function
+# (`pointer_contract.py:312`, whose own `matched` is `matched_contract`) and returns complete `stats`, so the
+# registered path reads its slot numbers from the contract and never needed the worker's copy. That copy exists
+# only to recompute the three slot totals for the TRUNCATED batch list, and the truncated branch was unreachable
+# until the shrunken schedule actually crossed to an instance -- which the carrier fix in `prepare_smoke.py` did
+# for the first time. Importing the contract module under its own name keeps the worker's recomputation on
+# exactly the function the contract used, so the two cannot drift.
+from cas_meta2.typed_teaching import matched_contract as matched_contract
 from cas_meta2.typed_teaching import pointer_contract as contract
 from cas_meta2.typed_teaching import pointer_inputs as pointer_reader
 from cas_meta2.typed_teaching import pointer_learner as pointer_module
@@ -354,7 +369,7 @@ def _schedule(frozen, plan):
         return batches, stats
     require(plan["updates"] < stats["main_updates"], "POINTER_REDUCED_UPDATES")
     batches = batches[:plan["updates"]]
-    counts = matched._slot_counts(frozen)
+    counts = matched_contract._slot_counts(frozen)
     stats = {**deepcopy(stats),
              "registered_main_updates": stats["main_updates"], "reduced_updates": True,
              "passes": max(batch["pass"] for batch in batches), "main_updates": len(batches),

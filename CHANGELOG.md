@@ -4,6 +4,58 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - The eighth run died in 90 seconds on a function that has never existed. Fixing the carrier is what executed that branch for the first time.
+
+**Shrinking the smoke schedule was never possible, so the code that shrinks it was never run.** Job
+`cas-meta2-tpntr-20260920023737-2010c4b6-m-20260918`, receipt `records/typed_pointer_001/receipt_smoke_20260918`,
+`status: AWS_CANDIDATE_FAILED`, `execution: FAILED`, died before any training or evaluation file existed:
+
+```
+File "/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py", line 357, in _schedule
+    counts = matched._slot_counts(frozen)
+AttributeError: module 'cncm.typed_matched_worker' has no attribute '_slot_counts'
+```
+
+**A one-word module-alias error, and the alias itself is correct everywhere else.** `_slot_counts` lives in
+`cas_meta2/typed_teaching/matched_contract.py:78`. `pointer_contract.py:74` binds `matched_contract as matched`
+and its own call at line 312 works. `cncm/typed_pointer_worker.py:123` binds
+`from . import typed_matched_worker as matched` — a DIFFERENT module — and line 357 assumed it carried
+`_slot_counts`. The alias is load-bearing and must NOT be repointed: `worker.matched._framework` is used at lines
+789, 855, 1137, 1264 and `worker.matched._sum_deltas` at 1061, 1100, 1788. So the call was repointed instead, to
+`matched_contract._slot_counts`, via an explicit import that keeps the worker's recomputation on exactly the
+function the contract already used.
+
+**Why 1,470 updates never touched it.** `contract.pointer_schedule` computes `counts` itself from that same
+function and returns complete `stats`, so the registered path reads its slot totals from the contract and never
+needed the worker's copy. That copy exists only to recompute the three slot totals for the TRUNCATED batch list,
+and the truncated branch is guarded by `plan["updates"] < stats["main_updates"]` — unreachable while the shrunken
+schedule could not reach an instance. The carrier fix is what made it reachable. **This is the cost of a fix that
+was verified against a render instead of against the artifact, and it is the second defect the carrier bug was
+hiding.**
+
+**Verified for `$0` on the frozen material, no torch, no AWS** — and the strong check is a CROSS-CHECK that the
+worker's recomputed totals equal the totals the contract itself produced, so a second drifting copy cannot pass:
+
+| check | result |
+|---|---|
+| `matched_contract._slot_counts` exists | yes |
+| the old target `typed_matched_worker` has `_slot_counts` | **no** — the defect was real |
+| the alias still carries `_framework` and `_sum_deltas` | yes, both |
+| registered plan through the worker's own `_schedule` | 1470 batches, main_updates 1470 |
+| worker's own counts over ALL batches vs `presentation_slots` | **56510 == 56510** |
+| worker's own counts over ALL batches vs `planned_slot_core_passes` | **212080 == 212080** |
+| shrunken plan | 8 batches, main_updates 8, `reduced_updates: True` |
+| shrunken `presentation_slots` vs an independent recount | 304 == 304 |
+| smoke plan artifact names | 40 (matches the admission record) |
+
+`REDUCED BRANCH VERIFICATION: PASSED`. Two of my own assertions in that script were wrong before they were right,
+and both were the same mistake: I asserted `presentation_slots == 32280` and `planned_slot_core_passes == 124510`
+from a comment, and `pointer_contract.py:436-440` says in as many words that those are the PRACTICE study's
+old-machine numbers "that this machine does not have". The real pointer numbers are 56510 and 212080, and the
+check is now a NEGATIVE assertion as well, so the two pairs cannot be confused again.
+
+`tests/test_typed_pointer_study.py`: 22 passed (114.81 s).
+
 ## 2026-09-20 UTC (POINTER) - THE NEURONS LEARNED. The seventh run trained all ten passes and transferred to worlds it never read; it died in the reload, on a type test, and I had mislabelled the run.
 
 **The headline, measured.** The pointer machine's neurons learned a skill that transfers to worlds they were never

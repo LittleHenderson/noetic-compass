@@ -1,0 +1,11 @@
+{
+  "arms": {},
+  "artifacts": [],
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 37, in <module>\n    report = typed_pointer_worker.run(CONFIG, root=ROOT, results=RESULTS, artifacts=ARTIFACTS, attestor=ATTESTOR)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1757, in run\n    _public_packet_preparation(ctx)\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 605, in _public_packet_preparation\n    batches, stats = _schedule(frozen, plan)\n                     ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 357, in _schedule\n    counts = matched._slot_counts(frozen)\n             ^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'cncm.typed_matched_worker' has no attribute '_slot_counts'\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-tpntr-20260920023737-2010c4b6-m-20260918",
+  "schema": "cncm.typed-pointer-worker-result/0.1",
+  "status": "WORKER_FAILED"
+}
