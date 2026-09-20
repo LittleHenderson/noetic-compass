@@ -1,2 +1,0 @@
-{"elapsed_seconds": 31.06, "index": 0, "schema": "cncm.typed-course-progress/0.1", "typed_course_phase": "preflight"}
-{"completed_updates": 0, "elapsed_seconds": 31.29, "index": 1, "schema": "cncm.typed-course-progress/0.1", "typed_course_phase": "failed/preflight"}
