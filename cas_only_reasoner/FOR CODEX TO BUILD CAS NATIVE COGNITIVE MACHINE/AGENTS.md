@@ -57,6 +57,11 @@ Three rules that file will repeat and that are not negotiable:
 - **Never write or edit a certificate, a lifecycle record, or a ledger reservation by hand.** If a
   run's certificate is missing, that run is lost. Say so and run it again.
 
+If you are here to **audit, verify, or independently test** this work rather than extend it, start
+at `AUDIT_PACK.md` instead. It gives the exact commands, the exact frozen numbers, the file hashes,
+the traps that have already fooled people, and eight attempts to break the claim that you are
+expected to actually run and report on.
+
 ## Completion rule
 
 Do not use a passing narrow test, a visible interface, a schema, or a document

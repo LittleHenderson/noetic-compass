@@ -9,6 +9,11 @@ and do not promote a claim that this file marks as not certified. Add a row to t
 at the evidence folder, and leave the old rows alone. Negative results stay. They are the reason
 any of the positive ones can be trusted.
 
+**If your job is to audit, verify, or independently test this work rather than extend it, read
+`AUDIT_PACK.md`** — it carries the exact commands, the frozen numbers, the file hashes, the traps
+that have already fooled people, and eight attempts to break the claim that you are expected to run
+and report on.
+
 ---
 
 ## The brain
