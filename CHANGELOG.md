@@ -4,6 +4,41 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - TWO INDEPENDENT RULERS AGREE, AND THE BAR IS 0.53 NOT 0.00. The instrument of record is `records/typed_pointer_001/ladder/`.
+
+**Two agents built a difficulty ladder independently, from different constructions, and they agree on the
+one thing that matters.** `records/typed_pointer_001/ladder/` (289395 bytes of material, 165 cells,
+baselines, a README, and a proof that its worlds are disjoint from everything the study taught or held)
+is the **instrument of record**. `records/typed_pointer_001/ruler.py` is a simpler independent build and
+now serves as its **cross-check**.
+
+**What they agree on.** A rule with no learned weights that reads one hop of adjacency scores
+**1.000 at hop distance 1 and exactly 0.000 at hop distance 2 and beyond**, at every world size. Two
+different constructions, same cliff. That is the line Helm 1.0 sat on.
+
+**What the instrument of record adds, and it is sharper than my cross-check:**
+
+| rule | hop 1 | hop ≥ 2 |
+|---|---|---|
+| `one_hop_adjacency` | 1.000 | **0.000** |
+| `rank_last_guess` | 0.000 | **0.534** |
+| `constant_answer` | 1.000 | 0.000 |
+| **`best_zero_learning`** | **1.000** | **0.534** |
+| `true_oracle_ceiling` | 1.000 | 1.000 |
+
+**The bar to beat beyond one hop is about 0.534, not 0.000.** My cross-check put its strongest
+mechanism-free rule at 0.375, so the instrument of record is the stricter one and its number is the one
+to use. `the_line_to_beat` is recorded in the artifact as `best_zero_learning`.
+
+**And its README states the consequence the audit was reaching for:** because `parts` and
+`edge_account` are one-hop tasks that a one-hop rule solves perfectly, **no score on those kinds can
+ever be evidence of learning**, however high it goes. That is precisely why Helm 1.0's ten to twelve
+gains — all of them on one-answer questions, none on `analogy` — carried no weight. A model also has to
+be able to answer "nothing" and not be paid for guessing wrongly.
+
+Both files are additive. Neither reads, writes, or imports the frozen 18 or the pass mark, and
+`BRAIN_LINEAGE.md` rule 4 keeps them where they are.
+
 ## 2026-09-20 UTC (POINTER) - HELM 2.0 CANNOT CERTIFY YET: two new tensors are covered by no ablation component. Found by the dry run, proven on the real container.
 
 **The dry run found a hard blocker, and it is not the dry run's fault.** Helm 2.0's ablations FAIL with
