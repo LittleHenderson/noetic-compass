@@ -73,13 +73,49 @@ import evaluate_gates
 COUNTERS = contract.MAIN_COUNTERS
 CORE_ROUNDS = contract.PLANNED_WORK_ROUNDS
 CORE_PARAMETERS = ('left.weight', 'right.weight', 'merge.weight')
+# THE REAL CONTAINER'S OWN 48 NAMES, in sorted order. This list MODELS the pointer container so the
+# rehearsal can run its ablations without torch, and it must be kept in step with
+# `pointer_learner._build_container(...).state_dict()`.
+#
+# IT HAD FALLEN A DESIGN BEHIND. The previous 25-name list still carried six names from an abandoned
+# design -- `round_state_norm`, `round_parent_norm`, `round_child_norm`, `self_mix`, `parent_mix`,
+# `child_mix` -- which `typed_pointer_worker.py:168-173` records as having "matched nothing at all".
+# The ablation coverage check is constructive over the keys it is handed, so those six names were
+# covered by NO component and the rehearsal refused with
+# `POINTER_ABLATION_COVERAGE:child_mix:covered=19:of=25`. That failure said nothing about Helm and
+# everything about this list: **the $0 gate was testing the wrong shape.** It also had to gain Helm
+# 2.0's two new tensors, `state_encode.weight` and `match_key.weight`.
+#
+# Refresh it with:
+#   python -c "import torch,sys; sys.path[:0]=['.','research/CAS_META_2_COMPOSITION']; \
+#     from cas_meta2.graph_teaching.real_framework import build_graph_training_framework as b; \
+#     from cas_meta2.typed_teaching import pointer_learner as p; \
+#     print(sorted(p._build_container(torch,b(torch,torch.device('cpu'),seed=20260917, \
+#     encoder={'d_model':64}),torch.device('cpu')).state_dict()))"
 CONTAINER_NAMES = (
     'left.weight', 'right.weight', 'merge.weight',
-    'round_state_norm', 'round_parent_norm', 'round_child_norm', 'self_mix', 'parent_mix', 'child_mix',
-    'round_rate', 'node_head.', 'edge_head.', 'role_head.', 'role_embedding', 'pointer_key.',
-    'reach_option_head.', 'mode_option_head.', 'world_head.', 'query_projection.', 'query_norm.',
-    'attention_key.', 'world_projection.', 'declaration_table', 'declaration_projection.',
-    'directed_pair_embedding')
+    'attention_key.weight', 'declaration_projection.weight', 'declaration_table',
+    'directed_pair_embedding',
+    'edge_head.0.weight', 'edge_head.2.bias', 'edge_head.2.weight', 'edge_head.3.bias',
+    'edge_head.3.weight',
+    'match_key.weight',
+    'mode_option_head.0.weight', 'mode_option_head.2.bias', 'mode_option_head.2.weight',
+    'mode_option_head.3.bias', 'mode_option_head.3.weight',
+    'node_encode.weight',
+    'node_head.0.weight', 'node_head.2.bias', 'node_head.2.weight', 'node_head.3.bias',
+    'node_head.3.weight',
+    'pointer_key.weight',
+    'query_norm.bias', 'query_norm.weight', 'query_projection.weight',
+    'reach_option_head.0.weight', 'reach_option_head.2.bias', 'reach_option_head.2.weight',
+    'reach_option_head.3.bias', 'reach_option_head.3.weight',
+    'role_embedding',
+    'role_head.0.weight', 'role_head.2.bias', 'role_head.2.weight', 'role_head.3.bias',
+    'role_head.3.weight',
+    'round_mix', 'round_rate',
+    'state_encode.weight',
+    'world_head.0.weight', 'world_head.2.bias', 'world_head.2.weight', 'world_head.3.bias',
+    'world_head.3.weight',
+    'world_projection.weight')
 PRACTICE_CHECKPOINTS = ROOT / 'records/typed_practice_001'
 CLAUSE_COUNT = 6
 I3_STAND_IN_CODES = ('DG4_FLAG:whole_container_form_is_a_different_number', 'DG4_NOT_DISTINCT_FORM')

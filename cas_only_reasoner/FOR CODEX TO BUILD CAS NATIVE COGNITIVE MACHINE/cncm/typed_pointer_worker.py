@@ -174,10 +174,18 @@ CHECKPOINT_CHECK_STATUSES = ("COMPLETE", "FAILED", "SKIPPED")
 ABLATION_COMPONENTS = (
     ("core_block", ("left.weight", "right.weight", "merge.weight")),
     # The shared round: the per-half node encoder belongs with the round mixing, exactly as the row above
-    # groups the three `^6` tensors. All three names EXIST in the live container.
-    ("round_mix", ("node_encode.weight", "round_mix", "round_rate")),
+    # groups the three `^6` tensors. All four names EXIST in the live container.
+    #
+    # `state_encode.weight` JOINED THIS ROW WITH HELM 2.0 (F1). It is the round's own input projector --
+    # it turns the three state vectors into the block's width -- so it belongs to the round, beside
+    # `node_encode.weight`, and not to a head or a readout. Before it was added here the ablation
+    # coverage check refused the whole job with `POINTER_ABLATION_COVERAGE:match_key.weight:covered=46:of=48`,
+    # and because `_effective_required` then drops the ten ablation artifacts from the required set, a
+    # claim-bearing run could never have produced a clean certificate. Measured on the real container, not
+    # inferred: the fix takes coverage to 48 of 48 with no uncovered and no ambiguous key.
+    ("round_mix", ("node_encode.weight", "state_encode.weight", "round_mix", "round_rate")),
     ("heads", ("node_head.", "edge_head.", "role_head.", "role_embedding", "pointer_key.",
-               "reach_option_head.", "mode_option_head.", "world_head.")),
+               "match_key.", "reach_option_head.", "mode_option_head.", "world_head.")),
     ("query_and_readout", ("query_projection.", "query_norm.", "attention_key.", "world_projection.",
                            "declaration_table", "declaration_projection.", "directed_pair_embedding")),
 )
