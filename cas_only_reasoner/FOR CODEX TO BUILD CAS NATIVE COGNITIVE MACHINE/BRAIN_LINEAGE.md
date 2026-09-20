@@ -111,17 +111,65 @@ because a reader will notice them.
   informational. One of them is worth reading anyway: `edge_account`, `parts` and `reach` are where
   the real gains are, and those are exactly the three the primary test names as improved.
 
+### A weakness in this test, found on 2026-09-20 — read this before quoting the result
+
+**The five "never-shown worlds" are new parts and new names arranged in wiring that teaching had already
+shown. All five. This was measured, not suspected.**
+
+Throw away the part names and look only at the wiring — which part points at which — treating any
+renaming of the same pattern as the same pattern. Then:
+
+- Teaching used **19 worlds but only 6 distinct wiring patterns**. Five of the 19 share one pattern,
+  five share another, and the rest repeat three more.
+- The five test worlds use **4 distinct patterns**, and **all 4 of those are among the 6 patterns
+  teaching already contained**.
+- So **5 of the 5 test worlds** are a pattern Helm had already practised, redecorated with new part
+  names.
+- Part names are genuinely new: 68 distinct names in teaching, 20 in the test worlds, and only
+  **two** appear in both — `Chuck` and `Gear`.
+
+**What this does and does not change.**
+
+It does **not** change the certified label. The grader is frozen, the question set was fixed before
+the result was seen, and the worlds really were never read during training. `LEARNS_NEW_WORLDS` was
+printed by that grader and stands.
+
+It **does** narrow what the words mean. The honest description of Helm 1.0 is:
+
+> new parts, new names, **already-seen wiring**.
+
+Not "new worlds" in the sense a reader would assume. Helm did not have to work out a new kind of
+structure. It had to apply a structure it had already seen to parts it had not, and get the direction
+right. That is still real work — the before-behaviour was listing every possible pair and even naming
+a part as containing itself — but the test is easier than the phrase "worlds it had never seen"
+suggests, and anyone quoting this result must say so.
+
+**The fix for Helm 1.1** is a harder test set: held-out wiring patterns that appear **nowhere** in
+teaching, and larger worlds with more parts. Six patterns is a thin basis for a transfer claim, and
+the current test cannot detect whether Helm can generalise to a shape it has never seen.
+
 ### What may be claimed, and what may not
 
 **MAY be claimed:** Helm 1.0, measured by the frozen grader over three independent runs whose
 question set was fixed before any result was seen, learned to read which part contains which in
 **machines it had never been shown**, going from 0–2 of 18 to 11–12 of 18, gaining 10, 12 and 11
 questions while breaking none, across 3 question kinds and all 5 held-out worlds. Retention held.
+**Say it as: new parts, new names, already-seen wiring** — the section above this one measures why the
+last three words are required.
 
 **MAY NOT be claimed:** that it works on anything beyond small structures of parts and containment
 links; that the transfer is to a novel *domain* (the five held-out worlds are the same kind of thing
-as 11 of the taught ones — machines — so this is new individuals, new names, new wiring); that extra
-practice beyond the first pass helps; that the whole CNCM machine exists.
+as 11 of the taught ones — machines); that the transfer is to **novel wiring**, which was the original
+wording here and is **measured false** — all 5 held-out worlds reuse a pattern teaching already
+contained, out of only 6 patterns teaching ever had; that it would handle a shape it has never seen,
+which this test cannot tell you; that extra practice beyond the first pass helps; that the whole CNCM
+machine exists.
+
+**Also not claimed, and worth stating because it is easy to slide past:** this is a result on a
+**fixed, stored** test set, not on new work arriving later. By the standard set out in
+`CAS_RPA_Replay_Policy_Lab_Development_Directive_v1.md` section 12, that makes it a *screening*
+result. "Fresh benefit" — does it help on genuinely new work under matched conditions — has **not**
+been demonstrated for Helm and would need a different experiment.
 
 **Certified is not the same as independently audited.** The grader is frozen and the runs are real,
 but the same session built the machine and read the result. `AUDIT_PACK.md` names the checks and the

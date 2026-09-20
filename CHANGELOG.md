@@ -4,6 +4,46 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - MEASURED WEAKNESS IN HELM'S TEST: all five "never-shown worlds" reuse wiring that teaching already contained.
+
+**A directive document told me to check for near-duplicates in a train/test split. I ran the check, and
+Helm's split is weaker than I had been describing.**
+
+Throw the part names away and compare only the wiring — which part points at which — treating every
+renaming of the same pattern as the same pattern. Measured on the frozen course:
+
+- Teaching used **19 worlds but only 6 distinct wiring patterns**. The counts are 5, 5, 3, 3, 2 and 1.
+- The five test worlds use **4 distinct patterns**, and **all 4 are among those 6**.
+- Therefore **5 of 5 held-out worlds** are a pattern Helm had already practised, wearing new part
+  names.
+- Part names ARE genuinely new: 68 distinct names in teaching, 20 in the test worlds, and only
+  **two** overlap — `Chuck` and `Gear`.
+
+**What this does not change.** The certified label stands. The grader is frozen, the question set was
+fixed before any result was seen, and those five worlds genuinely were never read in training.
+`LEARNS_NEW_WORLDS` was printed by that grader and is not withdrawn.
+
+**What it does change: the meaning of the words.** The honest description of Helm 1.0 is **new parts,
+new names, already-seen wiring** — not "new worlds" as a reader would assume. Helm did not have to work
+out a new kind of structure. It had to apply a structure it had seen before to parts it had not, and
+get the direction right. That is still real work — the before-behaviour was listing every possible
+pair and naming a part as containing itself — but the test is easier than the headline suggests.
+
+**This is exactly the failure mode the directive names** (`Single arithmetic template trivializes the
+test → Add structurally distinct supported tasks`; `Group descendants and near-duplicate worlds into
+one split`). It is the first concrete thing obtained from reading that document, and it is a
+weakening, not a strengthening.
+
+**Fix for Helm 1.1:** held-out wiring patterns that appear **nowhere** in teaching, and worlds with
+more than four parts. Six patterns is a thin basis for a transfer claim, and the present test cannot
+detect whether Helm can handle a shape it has never seen.
+
+**Also recorded from the same document:** Helm's result is on a **fixed, stored** test set, so by that
+document's own section 12 it is a *screening* result. "Fresh benefit" — does it help on genuinely new
+work under matched conditions — has **not** been demonstrated for Helm.
+
+`BRAIN_LINEAGE.md` carries the measurement, a corrected "may not claim" list, and the recommended fix.
+
 ## 2026-09-20 UTC (POINTER) - Helm 1.0 IS CERTIFIED. The frozen grader printed `LEARNS_NEW_WORLDS` on all three seeds.
 
 **The label, printed by the grader program itself as the last step of the study, with no hand on it:**
