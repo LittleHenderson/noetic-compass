@@ -4,6 +4,69 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - HELM 2.0 IS RUNNING ON AWS. The $0 gate passed, the study is frozen, and three claim-bearing jobs are training.
+
+**`PREFLIGHT_PASS`.** That is the word the rehearsal printed, and it is the gate that had to pass before a
+single dollar moved. All three seeds:
+
+| | seed 20260917 | seed 20260918 | seed 20260919 |
+|---|---|---|---|
+| worker status | `COMPLETE_TYPED_POINTER_ARM` | same | same |
+| **`degraded_checks`** | **`[]`** | **`[]`** | **`[]`** |
+| `ablations` / phase A / phase B | COMPLETE / COMPLETE / COMPLETE | same | same |
+| `ablation_status` | **COMPLETE** | **COMPLETE** | **COMPLETE** |
+| save-and-reload verified | **true** | **true** | **true** |
+
+**The ablation fix landed end to end.** Before it, seed 17 read `ablations: FAILED` with
+`POINTER_ABLATION_COVERAGE:child_mix:covered=19:of=25` and the preflight could not pass by construction.
+After it: no degraded checks at all, and 22 passed on the test suite.
+
+### The launch
+
+```
+study    records/typed_pointer_001/admission_001/study.json
+sha256   f141eea6624283e64b16d3c6c4c7d3300eca2b1a745ca594940e8cab0c49465e
+jobs     cas-meta2-tpntr-20260920184534-df20eb46-m-20260917 / 18 / 19
+source   df20eb46   branch research/helm-2.0-iterating-rounds
+machine  i-0e8c342a5ee7819dc  g7.2xlarge, launched 18:51:10 UTC
+```
+
+**Launched detached**, one driver for three single-shot jobs only because it is now detached — the
+mistake that killed the first attempt was a driver tied to my tool call, and this one cannot be.
+
+### The certified Helm 1.0 evidence was preserved, and PROVEN still reproducible
+
+Freeing the canonical `receipt_<seed>` names for Helm 2.0 meant moving three directories that ARE the
+proof behind `LEARNS_NEW_WORLDS`. That could easily have destroyed the certified record. Instead:
+
+- the three receipts became `receipt_helm1_certified_2026091{7,8,9}`, via `git mv` so history follows;
+- `study_helm1_certified.json` is the certified study record relinked to the new paths — **paths are the
+  only change**, every digest, seed, owner decision and artifact reference is byte-identical;
+- `admission_001/` became `admission_helm1_certified/`, keeping the certificate itself
+  (`gate_reading.json`, 202862 bytes, sha256 `475379d2f9d47387a821c79e03a239f9a1f1277a0bbb25b298417557f9b058a9`);
+- **and the grader was re-run on the relinked study file: `LABEL: LEARNS_NEW_WORLDS`**, identical to the
+  committed certificate, with every gate matching exactly — `G_LEARN_population` True,
+  `G_LEARN_all_kinds` True, `G_LEARN_DIRECT_READ` True, `G_LEARN_TEXT` False, `MORE_PRACTICE_population`
+  False, both `TRAINED_*` True, `integrity` True.
+
+**So Helm 1.0's claim is intact and independently re-checkable at its new paths.** Renaming evidence is
+exactly the operation that silently breaks a claim; this one was verified rather than assumed.
+
+### What the run will and will not tell us
+
+The three jobs train Helm 2.0 on the frozen course and the frozen grader reads them. **`analogy` is the
+number to watch: Helm 1.0 scored 0 of 5 on it in every seed**, because cross-world comparison was
+impossible at one hop. The frozen 18's floor stays quoted beside every number: **a rule that learns
+nothing already scores 11 of 18**, Helm 1.0's margin over it was **2, 2, 2 at p = 0.50, 0.50, 0.69**,
+and `parts`/`edge_account` cannot be evidence of anything since a one-hop rule solves them perfectly.
+
+The frozen 18 is a weak instrument — that is why the ruler exists. This run answers "did F1 help on the
+frozen 18". The ladder answers "can it climb at all", and that needs a ladder scorer, which does not
+exist yet.
+
+Money: `15.00` reserved for seed 17, free `4244.00` of `5000.00`. A 12-hour watcher is armed and will
+report the label, each run's records, the money and whether any machine is still billing.
+
 ## 2026-09-20 UTC (POINTER) - The ablation fix is PROVEN on the real container, LF damage repaired, and a portability hazard found in the ladder digest.
 
 ### The ablation fix, proven before it was written
