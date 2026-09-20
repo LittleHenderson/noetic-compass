@@ -4,6 +4,58 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - F3: THE RULER IS BUILT. A one-hop machine scores 1.0000 at one hop and exactly 0.0000 beyond it, at every size.
+
+**`records/typed_pointer_001/ruler.py`** — the instrument that was missing. `$0`, no GPU, ~2 seconds.
+`RULER_SELFTEST_PASS`, 6 checks, exit 0.
+
+### Why the old instrument could not show anything, measured
+
+- **The whole frozen course is 3- and 4-node graphs**: 52 worlds of four nodes, 12 of three, nothing
+  larger anywhere. There is no size axis in the material.
+- **The development panel is no better.** Its own policy says
+  `ALL_64_RETAINED_TRAINING_WORLDS_PLUS_ONE_NONBANK_DEVELOPMENT_FOCUS` — it reuses the same 64 tiny
+  worlds and adds 6 bigger focus worlds, and it asks only `parts` and `reach`, with
+  `comparison: "Parts/reach development structure-and-size transfer only; not all-eight-kind transfer"`.
+- **And an n-node graph can be at most n-1 hops deep.** A four-node world can never be asked a
+  four-hop question. That is why Helm 1.0's ceiling could not be exposed: the worlds were too small
+  to ask a question deep enough to fail.
+
+### What the ruler does
+
+Three axes: **size** (4, 5, 6, 8, 10, 12, 16 nodes), **hops** (1–4, clamped by size because a small
+graph cannot be deep), and a **continuous score** reported BESIDE exact match rather than instead of
+it. Hop distance is computed by breadth-first search, so the x-axis is **measured, not asserted**.
+
+Depth is **guaranteed, not hoped for**: every extra edge creates a shortcut and shortens the longest
+path, so chords are accepted one at a time and only while the depth survives. That bug fired on the
+first run and produced a missing cell, which is how the guarantee got written.
+
+Every table prints the lines that matter: `oracle` (breadth-first, the ceiling), **`one_hop` (a
+faithful model of Helm 1.0)**, and `rank_last` (the gate's own registered rank rule).
+
+### The measured cliff
+
+| size | hops | oracle exact | **one_hop exact** | rank_last exact |
+|---|---|---|---|---|
+| 4 → 16 | **1** | 1.0000 | **1.0000** | 0.0000 – 0.1429 |
+| 4 → 16 | **2** | 1.0000 | **0.0000** | 0.0000 – 0.2222 |
+| 4 → 16 | **3** | 1.0000 | **0.0000** | 0.0000 – 0.3333 |
+| 5 → 16 | **4** | 1.0000 | **0.0000** | 0.0000 – 0.3750 |
+
+28 cells. Answer pool 133. The one-hop rule is **perfect at one hop and exactly zero beyond it, at
+every size** — and the oracle is at 1.0000 in every cell, so the instrument has full headroom to show
+a curve. `rank_last` never exceeds 0.3750.
+
+**This is the line Helm 1.0 sat on and could not cross, now drawn on a chart.** On the frozen 18
+questions Helm 1.0 looked like it had learned something, because those questions are almost all
+one-hop. On this ruler its position would be unambiguous.
+
+**What it does not do:** it does not touch the frozen 18-question set, the grader, or any shared
+module. It is additive, and it sits outside `contract.input_inventory`, so it can be written while a
+run is in flight. It makes **no claim about Helm** — an instrument is not a measurement. Helm 2.0 has
+not been scored on it, and until it is, the ruler proves only that the instrument works.
+
 ## 2026-09-20 UTC (POINTER) - THE ROOT CAUSE, INDEPENDENTLY VERIFIED. The one-hop loop explains every number the audit measured.
 
 **The Helm 2.0 entry below is the agent's own report. This entry is my independent verification of it,
