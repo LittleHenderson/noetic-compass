@@ -73,6 +73,43 @@ against the 43-artifact smoke contract (`collection: INCOMPLETE`, 31 of 43), whi
 `verify_bootstrap_embedding(package)` reads the line out of the built `source.zip` itself. The claim-bearing
 package is built by `prepare_study.py` in a process whose opt-in is `None`, so no pinned package byte moves.
 
+**Both fixes verified for `$0`, and the carrier fix verified IN THE SHIPPED BYTES.** `prepare_smoke.py --verify`
+is not a thing, so the proof is a local script that builds two packages from the same clean HEAD differing only in
+the opt-in. `SMOKE CARRIER PROOF: PASSED`, six of six:
+
+| check | result |
+|---|---|
+| smoke package carries the env line, in the shipped `source.zip` | **exactly once** |
+| claim-bearing package carries the env line | **0 times** |
+| the two packages differ | `1e146f59629df549` vs `813acb9da8519be5` |
+| smoke package is the archived package that shipped the full plan | **no** |
+| `verify_bootstrap_embedding` on the built smoke package | **accepted** |
+| `verify_bootstrap_embedding` on the claim-bearing package | **rejected** (`SMOKE_PACKAGE_ENV_VAR_COUNT:0`) |
+
+The shipped member reads, on adjacent positions:
+
+```
+os.environ['CAS_META2_RUN_TEACHING_CYCLE'] = '1'
+os.environ['CNCM_POINTER_REDUCED_SCHEDULE'] = '{"ablations":false,...,"passes":1,...,"updates":8}'
+from cncm import typed_pointer_worker
+```
+
+**Three of my own checks were wrong before they were right, and each wrongness was measured rather than
+reasoned away.** The bootstrap is embedded as a ONE-LINE string literal, so (1) `launch.BOOTSTRAP_ENV_ANCHOR` is
+not a substring of the member at all — `ValueError: substring not found` on a *correct* package; (2) newlines
+arrive as the two characters `\` + `n`, so walking to the next real newline walked from offset 3144 straight past
+the env var at 3198 to 3695; (3) the text immediately before the variable name is `os.environ[\'`, 13 characters,
+because the quote is escaped too, so subtracting `len('os.environ[')` landed two characters short. The check now
+locates the anchor by its distinctive token, measures the gap to the start of the assignment by a BACKWARD search,
+and asserts exactly one separator, no intervening `os.environ[`, and a gap of at most 48 characters.
+
+**Admission state.** `prepare_study.py` writes `records/typed_pointer_001/admission_001`, which does NOT exist:
+the claim-bearing admission has never been frozen. The six `receipt_smoke_*` directories are the six failed
+launches. The re-freeze is required now because `pointer_learner.py` is under `research/` and therefore IS a
+package member, so the fix moves the pinned `archive_sha256`/`manifest_sha256`. `prepare_smoke.py` is under
+`records/` and is NOT a member (`git_package_bytes` permits only `research/`, `contract.MATERIAL`, and
+`cncm/*.py`), so its edits move no pinned package byte.
+
 **CORRECTION TO THE GOAL'S PREMISE.** The goal states the last run "stopped at pass 10 with the loss still
 falling" and that training length is a live lever. The loss CONVERGED. Per-pass mean raw loss: 0.9967, 0.7020,
 0.6256, 0.6031, 0.5974, 0.5412, 0.5151, 0.5080, 0.5176, 0.5113 — flat from pass 6, with mean gradient squared
