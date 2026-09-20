@@ -4,6 +4,79 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - Helm 1.0 IS CERTIFIED. The frozen grader printed `LEARNS_NEW_WORLDS` on all three seeds.
+
+**The label, printed by the grader program itself as the last step of the study, with no hand on it:**
+
+```
+LABEL : LEARNS_NEW_WORLDS
+integrity: pass, failures []
+```
+
+Certifying reading: `records/typed_pointer_001/admission_001/gate_reading.json`, 202862 bytes, sha256
+`475379d2f9d47387a821c79e03a239f9a1f1277a0bbb25b298417557f9b058a9`. Grader
+`evaluate_gates.py` sha256 `d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d`,
+unchanged. Study `admission_001/study.json` sha256
+`241c110f933c0cb4e3b1f835af66b1833a4417a5f944fd8f6c44aa9c04d23fde`.
+
+### Three seeds, three separate machines, every one of them clean
+
+| | seed 20260917 | seed 20260918 | seed 20260919 |
+|---|---|---|---|
+| launcher | `AWS_CANDIDATE_FINISHED`, deliverable true, cleanup true | same | same |
+| worker | `COMPLETE_TYPED_POINTER_ARM`, `failure: None` | same | same |
+| degraded checks | **`[]`** | **`[]`** | **`[]`** |
+| save-and-reload verified | **true** | **true** | **true** |
+| the frozen 18: before → after | 2/18 → **12/18** | 0/18 → **12/18** | 0/18 → **11/18** |
+| gained / broken | **10 / 0** | **12 / 0** | **11 / 0** |
+| odds this is luck | **1/1024** | **1/4096** | **1/2048** |
+| kinds improved (need 2) | **3** | **3** | **3** |
+| worlds improved (need 2) | **5** | **5** | **5** |
+| never-shown worlds, per answer (127) | 9 → **84** | 2 → **88** | 5 → **81** |
+| taught worlds, per answer (358) | 16 → 258 | 10 → 284 | 13 → 275 |
+| whole course (564) | 30 → **392** | 17 → **422** | 20 → **407** |
+| memory check (96) | 93 → 93 | 93 → 93 | 87 → 87 |
+| run clock | `7791.257429470999` s | `7834.867562267` s | `7792.573039091` s |
+
+The bar was **7** improved with **0** broken on a **18-question** set fixed before any result was seen.
+Every seed cleared it, and every seed broke nothing.
+
+### Every gate, and the three that did not pass
+
+Passed, all three seeds: `integrity` (`failures: []`), **`G_LEARN_population`** (the label's own
+test), `G_LEARN_all_kinds`, `TRAINED_start_to_final`, `TRAINED_first_to_final`, `G_LEARN_DIRECT_READ`.
+
+Did not pass, all three seeds, and **none of them is the label**:
+
+- **`MORE_PRACTICE_population` — failed.** It asks whether practice *beyond the first pass* bought
+  anything on the frozen 18. It did not; most of the gain lands in pass 1. So the honest reading of
+  Helm 1.0 is "it learned from the teaching it was given", **not** "it kept improving the longer it
+  trained". This agrees with the earlier finding that the loss flattened from pass 6.
+- **`G_LEARN_TEXT` — failed.** That is the `role_set` tier, 6 questions: **0 gained, 0 lost**. A null
+  result on a tier the label does not use.
+- **`kind_g_learn` — all eight failed.** Each compares one kind alone, and the small kinds hold only 5
+  or 6 questions. With a bar of 7 improved, a 5-question kind **cannot pass by construction**. These
+  are informational; the real gains are in `edge_account`, `parts` and `reach`, which are exactly the
+  three kinds the primary test names as improved.
+
+### What may and may not be claimed
+
+**MAY:** Helm 1.0 learned to read which part contains which in machines it had never been shown,
+measured by a frozen grader across three independent runs with the question set fixed in advance.
+
+**MAY NOT:** that it generalises beyond small structures of parts and containment links; that the
+transfer crosses into a novel *domain* — the five held-out worlds are the same kind of thing as 11 of
+the taught ones, machines, so this is new individuals with new names and new wiring; that extra
+practice beyond pass 1 helps; that the whole CNCM machine exists.
+
+**Certified is not the same as independently audited.** The grader is frozen and the runs are real,
+but one session built the machine and read the result. `AUDIT_PACK.md` lists what an outside agent
+should run and the eight attempts to break this claim.
+
+`BRAIN_LINEAGE.md` now carries **Helm 1.0** as the current version with the certified row, and keeps
+**Helm 0.1**'s uncertified record beneath it, unedited. Cost: three jobs at `15.00`, free
+`4259.00` of `5000.00`. No machine left running.
+
 ## 2026-09-20 UTC (POINTER) - The learning brain is NAMED. It is **Helm**, it is versioned, and there is now one file that cannot lose it.
 
 **The brain that learns is `Helm`, current version `0.1`.** The owner chose the name. Everything about

@@ -21,7 +21,7 @@ and report on.
 | | |
 |---|---|
 | **Name** | **Helm** |
-| **Current version** | **0.1** |
+| **Current version** | **1.0 — CERTIFIED** |
 | **What it is** | The learning part of the CNCM pointer machine. It reads a small structure of parts and "contains" links, and answers questions about which part holds which. |
 | **Learned numbers** | **157,919**, in **46** groups |
 | **Biggest group** | the word table, `declaration_table`, 1,024 × 64 = **65,536**, which is **41.5%** of the whole brain |
@@ -38,7 +38,98 @@ and report on.
 
 ---
 
-## Helm 0.1 — the record
+## Helm 1.0 — CERTIFIED on 2026-09-20
+
+**The grader printed the label. This is the first version that earned it.**
+
+```
+LABEL : LEARNS_NEW_WORLDS
+integrity: pass, failures []
+```
+
+The label was printed by `records/typed_pointer_001/evaluate_gates.py`, run over
+`records/typed_pointer_001/admission_001/study.json` by `execute_study.py` as the last step of the
+study itself. **No hand was on it.** Certifying reading:
+`records/typed_pointer_001/admission_001/gate_reading.json`, 202862 bytes, sha256
+`475379d2f9d47387a821c79e03a239f9a1f1277a0bbb25b298417557f9b058a9`.
+
+### The three runs
+
+Three seeds, three separate machines, run one after another on AWS. Every one of them finished
+completely: launcher status `AWS_CANDIDATE_FINISHED`, `completed_deliverable: true`,
+`cleanup.complete: true`, worker status `COMPLETE_TYPED_POINTER_ARM`, **no failed checks**, and the
+save-and-reload step verified `true`.
+
+| | seed 20260917 | seed 20260918 | seed 20260919 |
+|---|---|---|---|
+| the frozen 18, before | **2 of 18** | **0 of 18** | **0 of 18** |
+| the frozen 18, after | **12 of 18** | **12 of 18** | **11 of 18** |
+| gained | **10** | **12** | **11** |
+| broken (must be 0) | **0** | **0** | **0** |
+| the bar (7) | cleared | cleared | cleared |
+| odds this is luck | **1/1024** | **1/4096** | **1/2048** |
+| kinds improved (need 2) | **3** | **3** | **3** |
+| worlds improved (need 2) | **5** | **5** | **5** |
+| never-shown worlds, per answer (127) | 9 → **84** | 2 → **88** | 5 → **81** |
+| taught worlds, per answer (358) | 16 → 258 | 10 → 284 | 13 → 275 |
+| the whole course (564) | 30 → **392** | 17 → **422** | 20 → **407** |
+| memory check (96) | 93 → 93 | 93 → 93 | 87 → 87 |
+| the run's own clock | 7791.257429470999 s | 7834.867562267 s | 7792.573039091 s |
+
+**All three seeds passed the primary test.** Nine of nine gate comparisons that the label depends on
+came back `pass`.
+
+### Every gate the grader reported
+
+| gate | result |
+|---|---|
+| `integrity` | **pass** — `failures: []` |
+| **`G_LEARN_population`** — the label's own test | **pass, all 3 seeds** |
+| `G_LEARN_all_kinds` | pass, all 3 seeds |
+| `TRAINED_start_to_final` | pass, all 3 seeds |
+| `TRAINED_first_to_final` | pass, all 3 seeds |
+| `G_LEARN_DIRECT_READ` | pass, all 3 seeds |
+| `MORE_PRACTICE_population` | **fail, all 3 seeds** |
+| `G_LEARN_TEXT` | **fail, all 3 seeds** |
+| `kind_g_learn` (8 kinds) | **fail, all 3 seeds** |
+
+### The three that did not pass, and why they are not failures of the claim
+
+These are REPORTED comparisons, not the label. Say all three plainly whenever this result is quoted,
+because a reader will notice them.
+
+- **`MORE_PRACTICE_population` — failed.** It asks whether the machine got better *after its first
+  pass*, i.e. whether extra practice beyond the first pass bought anything on the frozen 18. It did
+  not: most of the gain lands in pass 1. So the honest reading of Helm 1.0 is **"it learned from the
+  teaching it was given"**, not "it kept improving the longer it trained". This matches the earlier
+  finding that the training loss flattened from pass 6.
+- **`G_LEARN_TEXT` — failed.** That is the `role_set` tier, 6 questions, where **0 were gained and 0
+  lost**. Nothing got worse; nothing got better. It is a null result on a tier the label does not use.
+- **`kind_g_learn` — all eight failed.** These compare each question kind on its own, and the small
+  kinds have only 5 or 6 questions. With a bar of 7 improved, a 5-question kind **cannot pass by
+  construction** — the arithmetic makes it impossible regardless of the machine. These entries are
+  informational. One of them is worth reading anyway: `edge_account`, `parts` and `reach` are where
+  the real gains are, and those are exactly the three the primary test names as improved.
+
+### What may be claimed, and what may not
+
+**MAY be claimed:** Helm 1.0, measured by the frozen grader over three independent runs whose
+question set was fixed before any result was seen, learned to read which part contains which in
+**machines it had never been shown**, going from 0–2 of 18 to 11–12 of 18, gaining 10, 12 and 11
+questions while breaking none, across 3 question kinds and all 5 held-out worlds. Retention held.
+
+**MAY NOT be claimed:** that it works on anything beyond small structures of parts and containment
+links; that the transfer is to a novel *domain* (the five held-out worlds are the same kind of thing
+as 11 of the taught ones — machines — so this is new individuals, new names, new wiring); that extra
+practice beyond the first pass helps; that the whole CNCM machine exists.
+
+**Certified is not the same as independently audited.** The grader is frozen and the runs are real,
+but the same session built the machine and read the result. `AUDIT_PACK.md` names the checks and the
+falsification attempts an outside agent should run.
+
+---
+
+## Helm 0.1 — the record (uncertified, kept as history)
 
 **Measured on 2026-09-20**, job `cas-meta2-tpntr-20260920033528-1af25973-m-20260917`, seed
 `20260917`.
@@ -116,7 +207,9 @@ nothing. After, it read the actual structure of a machine it had never seen.
 
 ### The official verdict
 
-**NOT CERTIFIED.** This is the most important row in this file.
+**NOT CERTIFIED** — this is **Helm 0.1's** verdict, kept as history. Helm 1.0, above, is certified. The
+paragraphs that follow explain why this particular run can never be certified, and that reason is a
+lesson worth keeping.
 
 The run itself succeeded completely — status `COMPLETE_TYPED_POINTER_ARM`, no failed checks, the
 save-and-reload step verified `true`, 99 of 99 required files produced. But the frozen grader
@@ -152,6 +245,7 @@ Add a row. Never edit an old one.
 
 | version | date | numbers | taught on | tested on | the frozen 18 | official verdict | evidence |
 |---|---|---|---|---|---|---|---|
+| **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0 | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` |
 | **Helm 0.1** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18 → **12/18**, gained 10, lost 0 | **NOT CERTIFIED** | `receipt_20260917_orphaned_1af25973/` |
 
 ---
