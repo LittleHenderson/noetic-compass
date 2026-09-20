@@ -268,33 +268,43 @@ def verify_bootstrap_embedding(package):
     shrunken schedule was "verified" and still never arrived, so the read is now from the archive's own rendered
     worker member.
 
-    The archive member is the TRANSPORT-wrapped worker, so the embedded bootstrap arrives ESCAPED: the wrapper
-    renders `os.environ['X'] = '1'` as `os.environ[\\'X\\'] = \\'1\\'`. A search for `launch.BOOTSTRAP_ENV_ANCHOR`
-    verbatim therefore raises `ValueError: substring not found` on a package that is in fact correct -- measured on
-    the real build of `ec77d6c8`, which is why the anchor is located by its DISTINCTIVE TOKEN instead. The token is
-    derived from `BOOTSTRAP_ENV_ANCHOR` rather than restated, so the two cannot drift. The literal itself needs no
-    escaping: it is single-quoted JSON, so it appears verbatim between the wrapper's escaped quotes.
+    The archive member is the TRANSPORT-wrapped worker, and the bootstrap is embedded in it as a ONE-LINE Python
+    string literal. Two consequences, both MEASURED on the real build of `ec77d6c8` and both of which broke a
+    naive version of this function:
+      * quotes arrive escaped, so `launch.BOOTSTRAP_ENV_ANCHOR` is NOT a substring of the member
+        (`ValueError: substring not found` on a package that was in fact correct). The anchor is therefore located
+        by its distinctive token, derived from that constant and re-checked against it so the two cannot drift.
+      * newlines arrive as the TWO characters `\\` + `n`, not as newlines. In the real member the anchor token sits
+        at offset 3144, the env var at 3198, and the first REAL newline after the anchor is at 3695 -- so any
+        check that walks to the next real newline walks straight past the line it is looking for. The gap between
+        the two is 24 characters: `\\'] = \\'1\\'` + the escaped separator + `os.environ[\\'`.
 
-    ADJACENCY IS ASSERTED, not just presence. The fix's whole claim is that the line sits immediately after the
-    bootstrap's own teaching-cycle line, so the NEXT non-empty line after the anchor must be the assignment.
+    ADJACENCY IS ASSERTED, not just presence, and it is asserted against that measured shape: no other
+    `os.environ[` may sit between the anchor and this assignment, the separator between them must be exactly one,
+    and the whole gap must be short. The literal itself needs no unescaping -- it is single-quoted JSON, so it
+    appears verbatim inside the escaped quotes.
     """
     worker = launch._probe()
     with ZipFile(package['archive']) as archive:
         source = archive.read(launch.WORKER_NAME).decode('utf-8')
     token = ANCHOR_TOKEN
     assert token in launch.BOOTSTRAP_ENV_ANCHOR, 'SMOKE_ANCHOR_TOKEN_DRIFTED'
-    for label, needle, expected in (('anchor', token, 1),
-                                    ('env_var', worker.REDUCED_SCHEDULE_ENV, 1)):
+    for label, needle in (('anchor', token), ('env_var', worker.REDUCED_SCHEDULE_ENV)):
         count = source.count(needle)
-        assert count == expected, 'SMOKE_PACKAGE_%s_COUNT:%d' % (label.upper(), count)
+        assert count == 1, 'SMOKE_PACKAGE_%s_COUNT:%d' % (label.upper(), count)
     anchor_at = source.index(token)
     env_at = source.index(worker.REDUCED_SCHEDULE_ENV)
-    assert source.index('\n', anchor_at) < env_at, 'SMOKE_PACKAGE_LINE_BEFORE_THE_ANCHOR'
-    following = [line for line in source[source.index('\n', anchor_at):].split('\n') if line.strip()]
-    assert worker.REDUCED_SCHEDULE_ENV in following[0], 'SMOKE_PACKAGE_LINE_IS_NOT_THE_NEXT_LINE'
+    assert anchor_at < env_at, 'SMOKE_PACKAGE_LINE_BEFORE_THE_ANCHOR'
+    between = source[anchor_at + len(token):env_at]
+    assert 'os.environ[' not in between, 'SMOKE_PACKAGE_ASSIGNMENT_BETWEEN_ANCHOR_AND_LINE'
+    separators = between.count('\n') + between.count('\\n')
+    assert separators == 1, 'SMOKE_PACKAGE_SEPARATOR_COUNT:%d' % separators
+    assert len(between) <= 48, 'SMOKE_PACKAGE_LINE_NOT_ADJACENT:%d' % len(between)
     literal = validate_reduced_schedule()[0]
-    assert literal in following[0], 'SMOKE_PACKAGE_LITERAL_NOT_IN_THE_SHIPPED_LINE'
-    line = following[0]
+    line = between + worker.REDUCED_SCHEDULE_ENV + source[env_at + len(worker.REDUCED_SCHEDULE_ENV):
+                                                         source.index('\n', env_at)
+                                                         if '\n' in source[env_at:] else len(source)]
+    assert literal in line, 'SMOKE_PACKAGE_LITERAL_NOT_IN_THE_SHIPPED_LINE'
     # The literal has to be the one the WORKER'S OWN PARSER accepts, read from the request this script froze.
     parsed, claim_bearing = worker.schedule_plan(source=literal)
     assert not claim_bearing and parsed['passes'] == 1, 'SMOKE_PACKAGE_PLAN_NOT_THE_SMOKE_PLAN'
