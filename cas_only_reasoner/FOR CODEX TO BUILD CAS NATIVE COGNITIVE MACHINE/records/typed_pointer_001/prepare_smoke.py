@@ -168,6 +168,10 @@ GATE_VOID_SOURCE = ("records/typed_pointer_001/evaluate_gates.py, function sched
 # `schedule_plan.json` records `"mode": "REGISTERED" if claim_bearing else "REDUCED"` -- i.e. `"REDUCED"`, which the
 # frozen gate reader voids through `I1:<seed>:REDUCED_SCHEDULE:<mode>`.
 # ==================================================================================================================
+# The distinctive token inside `launch.BOOTSTRAP_ENV_ANCHOR` -- the bootstrap's own teaching-cycle assignment. It
+# is the marker the reduced-schedule line must sit IMMEDIATELY AFTER, and `verify_bootstrap_embedding` asserts it
+# is still a substring of that constant, so the token and the anchor cannot drift apart.
+ANCHOR_TOKEN = "CAS_META2_RUN_TEACHING_CYCLE"
 SMOKE_REDUCED_SCHEDULE = {"passes": 1, "updates": 8, "evaluations": [0, 1],
                           "phase_a": ["initial", "pass_01", "final"], "reloads": True, "replays": True,
                           "phase_b": False, "ablations": False, "retention": False, "interference": False}
@@ -264,31 +268,37 @@ def verify_bootstrap_embedding(package):
     shrunken schedule was "verified" and still never arrived, so the read is now from the archive's own rendered
     worker member.
 
-    The archive member is the TRANSPORT-wrapped worker, so the embedded bootstrap may be escaped by that wrapper;
-    the assertions therefore state what must hold for the schedule to take effect on the instance -- the variable
-    is named exactly once, it appears after the bootstrap's own teaching-cycle anchor, and the literal the worker
-    will parse is the one `validate_reduced_schedule()` returned -- without asserting a byte-exact prefix that
-    the wrapper is free to escape.
+    The archive member is the TRANSPORT-wrapped worker, so the embedded bootstrap arrives ESCAPED: the wrapper
+    renders `os.environ['X'] = '1'` as `os.environ[\\'X\\'] = \\'1\\'`. A search for `launch.BOOTSTRAP_ENV_ANCHOR`
+    verbatim therefore raises `ValueError: substring not found` on a package that is in fact correct -- measured on
+    the real build of `ec77d6c8`, which is why the anchor is located by its DISTINCTIVE TOKEN instead. The token is
+    derived from `BOOTSTRAP_ENV_ANCHOR` rather than restated, so the two cannot drift. The literal itself needs no
+    escaping: it is single-quoted JSON, so it appears verbatim between the wrapper's escaped quotes.
+
+    ADJACENCY IS ASSERTED, not just presence. The fix's whole claim is that the line sits immediately after the
+    bootstrap's own teaching-cycle line, so the NEXT non-empty line after the anchor must be the assignment.
     """
     worker = launch._probe()
     with ZipFile(package['archive']) as archive:
         source = archive.read(launch.WORKER_NAME).decode('utf-8')
-    count = source.count(worker.REDUCED_SCHEDULE_ENV)
-    assert count == 1, 'SMOKE_PACKAGE_LINE_COUNT:%d' % count
-    anchor = source.index(launch.BOOTSTRAP_ENV_ANCHOR)
-    assignment = source.index(worker.REDUCED_SCHEDULE_ENV)
-    assert source.index('\n', anchor) < assignment, 'SMOKE_PACKAGE_LINE_NOT_AFTER_THE_ANCHOR'
+    token = ANCHOR_TOKEN
+    assert token in launch.BOOTSTRAP_ENV_ANCHOR, 'SMOKE_ANCHOR_TOKEN_DRIFTED'
+    for label, needle, expected in (('anchor', token, 1),
+                                    ('env_var', worker.REDUCED_SCHEDULE_ENV, 1)):
+        count = source.count(needle)
+        assert count == expected, 'SMOKE_PACKAGE_%s_COUNT:%d' % (label.upper(), count)
+    anchor_at = source.index(token)
+    env_at = source.index(worker.REDUCED_SCHEDULE_ENV)
+    assert source.index('\n', anchor_at) < env_at, 'SMOKE_PACKAGE_LINE_BEFORE_THE_ANCHOR'
+    following = [line for line in source[source.index('\n', anchor_at):].split('\n') if line.strip()]
+    assert worker.REDUCED_SCHEDULE_ENV in following[0], 'SMOKE_PACKAGE_LINE_IS_NOT_THE_NEXT_LINE'
     literal = validate_reduced_schedule()[0]
-    line_end = source.index('\n', assignment)
-    assert literal in source[assignment:line_end], 'SMOKE_PACKAGE_LITERAL_NOT_ON_THE_ASSIGNMENT_LINE'
-    # The literal has to survive whatever escaping the transport wrapper applies, so the check is made on the
-    # WORKER'S OWN PARSER: `schedule_plan(source=...)` is the function the instance runs, and it must return the
-    # same plan from the package bytes that `validate_reduced_schedule()` returned from the raw literal.
-    payload = source[assignment + len(worker.REDUCED_SCHEDULE_ENV):line_end]
-    assert payload.rstrip().endswith('=') or '=' in payload, 'SMOKE_PACKAGE_ASSIGNMENT_SHAPE'
-    for name in ('passes', 'updates', 'evaluations', 'ablations', 'interference', 'retention'):
-        assert name in payload, 'SMOKE_PACKAGE_LITERAL_MISSING:%s' % name
-    return sha256(source.encode('utf-8')).hexdigest(), source[assignment:line_end]
+    assert literal in following[0], 'SMOKE_PACKAGE_LITERAL_NOT_IN_THE_SHIPPED_LINE'
+    line = following[0]
+    # The literal has to be the one the WORKER'S OWN PARSER accepts, read from the request this script froze.
+    parsed, claim_bearing = worker.schedule_plan(source=literal)
+    assert not claim_bearing and parsed['passes'] == 1, 'SMOKE_PACKAGE_PLAN_NOT_THE_SMOKE_PLAN'
+    return sha256(source.encode('utf-8')).hexdigest(), line
 
 
 def smoke_documents(job, identity, *, seed, contract_document):
