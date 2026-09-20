@@ -38,7 +38,42 @@ and report on.
 
 ---
 
-## Helm 1.0 — CERTIFIED on 2026-09-20
+## Helm 1.0 — CERTIFIED on 2026-09-20, **INTERPRETATION DOWNGRADED on 2026-09-20**
+
+> ## READ THIS BEFORE QUOTING ANY NUMBER BELOW
+>
+> **A rule that learns nothing scores 11 of 18 on the same questions.** The grader's own certificate
+> says so, in its `oracle_ceilings` block:
+>
+> ```
+> oracle_or_rank_solvable_in_the_label_population: 11     (of the 18 the label is keyed on)
+> oracle_solvable_in_the_label_population: 7              (one-hop read: edge_account 5 + parts 2)
+> applied_as_removals: false
+> floor_note: "a zero-learning rule already answers these questions of the label's own population;
+>              they are REPORTED and NOT subtracted, so the label must be read beside them"
+> ```
+>
+> **Helm scored 12, 12, 11. Correct answers it produced that the no-learning rule does NOT produce:
+> 2, 2, 2.** Run the gate's OWN bar (improved ≥ 7, broken 0) against that rule rather than against
+> the untrained machine, and **all three seeds fail**: p = 0.50, 0.50, 0.69.
+>
+> **And `analogy` — the only one of the four kinds no trivial rule can touch — scores 0 of 5 before
+> training and 0 of 5 after, in all three seeds.** All 33 gains sit on the 13 questions that have
+> exactly one acceptable answer; **zero** gains on the 5 questions with more than one.
+>
+> **So the honest headline is `+2 over a program that reads the links off the page`, at even odds —
+> not `0–2 → 11–12 of 18` at 1-in-1024.** Both are true. The second is measured against a starting
+> point that cannot read the page; the first is measured against a starting point that can. The
+> second is not wrong. It is just not the number that answers "did it learn to read structure".
+>
+> **What this does not do:** it does not withdraw the label. `LEARNS_NEW_WORLDS` is what the frozen
+> grader prints, and it stands as a mechanical fact. **What it withdraws is my interpretation of it.**
+> Helm 1.0 learned to apply a one-hop structural rule to structures it had never seen. It did **not**
+> demonstrate the broader structural comparison the study was built to test. The certified label
+> cannot tell those two apart, and I did not put the floor in this file when I first wrote it.
+>
+> Found by an independent audit on 2026-09-20:
+> `records/typed_pointer_001/AUDIT_REPORT_20260920_INDEPENDENT.md`.
 
 **The grader printed the label. This is the first version that earned it.**
 
@@ -154,8 +189,10 @@ the current test cannot detect whether Helm can generalise to a shape it has nev
 question set was fixed before any result was seen, learned to read which part contains which in
 **machines it had never been shown**, going from 0–2 of 18 to 11–12 of 18, gaining 10, 12 and 11
 questions while breaking none, across 3 question kinds and all 5 held-out worlds. Retention held.
-**Say it as: new parts, new names, already-seen wiring** — the section above this one measures why the
-last three words are required.
+**Say it as: new parts, mostly new names, already-seen wiring** — the section above this one
+measures why the last three words are required, and two of the 20 part names in the test worlds
+(`Chuck` and `Gear`) had in fact been taught. **And say the floor beside it: a rule that learns
+nothing scores 11 of 18 on the same questions.**
 
 **MAY NOT be claimed:** that it works on anything beyond small structures of parts and containment
 links; that the transfer is to a novel *domain* (the five held-out worlds are the same kind of thing
@@ -293,7 +330,7 @@ Add a row. Never edit an old one.
 
 | version | date | numbers | taught on | tested on | the frozen 18 | official verdict | evidence |
 |---|---|---|---|---|---|---|---|
-| **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0 | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` |
+| **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines, all reusing taught wiring | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0. **A no-learning rule scores 11/18 on the same set; Helm's margin over it is 2, 2, 2 at p = 0.50, 0.50, 0.69. `analogy` 0/5 in every seed.** | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds. Interpretation DOWNGRADED 2026-09-20 by independent audit.** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` + `AUDIT_REPORT_20260920_INDEPENDENT.md` |
 | **Helm 0.1** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18 → **12/18**, gained 10, lost 0 | **NOT CERTIFIED** | `receipt_20260917_orphaned_1af25973/` |
 
 ---
@@ -305,10 +342,23 @@ Add a row. Never edit an old one.
    printed.
 2. **Never call an uncertified run a pass**, however good its numbers look. Say "measured, not
    certified" and give both numbers.
-3. **Never write or edit a certificate, a lifecycle record, or a reservation by hand.** If a run's
-   certificate is missing, the run is lost. Say so and run it again.
-4. **Never change the 18-question set or the pass mark** to make a result land. They were fixed
+3. **Never write or edit a certificate, a lifecycle record, a reservation, or — added
+   2026-09-20 — `course_p00_scoring.json` or `course_p10_scoring.json`.** Those last two are the
+   files that actually decide the label, and **as of Helm 1.0 the grader does not check them
+   against the sha256 the run itself recorded in `artifact_manifest.json`.** An independent audit
+   proved this by hand-editing seed 19's file: `LEARNS_NEW_WORLDS` still came out, with
+   `integrity: pass, failures: []`. The real files were verified intact afterwards (297 of 297
+   matched), so nothing is forged — but the guarantee is weaker than this file used to imply.
+   **Verify with `records/typed_pointer_001/verify_evidence_hashes.py`, and fix the grader in the
+   next version rather than editing the frozen one.**
+4. **Read the certificate's `oracle_ceilings` and `contract` blocks, not just its headline.** They
+   say what a rule that learns nothing already solves. Helm 1.0's file said `11 of 18` and this
+   file did not repeat it, which is the mistake this rule exists to stop.
+5. **Never change the 18-question set or the pass mark** to make a result land. They were fixed
    before the result was known; that is the only reason they mean anything.
-5. **Do not delete a failed run's folder.** Run 7's failure and the two killed attempts are what
+6. **Do not delete a failed run's folder.** Run 7's failure and the two killed attempts are what
    prove the fixes were real.
-6. **Update this file in the same commit as the result**, and point the new row at the folder.
+7. **Update this file in the same commit as the result**, and point the new row at the folder.
+8. **A certified label is not an interpretation.** The grader tells you what it printed. It does not
+   tell you what was learned. Compare against a rule that learns nothing before saying a machine
+   learned anything.

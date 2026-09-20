@@ -138,8 +138,11 @@ python -m pytest tests/test_typed_pointer_study.py -q
 ### Check 4 — the end-to-end dry run, no GPU
 
 ```
-python records/typed_pointer_001/preflight_dry_run.py <empty scratch dir>
+python records/typed_pointer_001/preflight_dry_run.py <scratch dir that does NOT exist yet>
 ```
+
+The scratch directory must **not** exist: the script creates it, and an existing path makes it stop
+with `FileExistsError`. (Corrected 2026-09-20 after an independent audit hit exactly that.)
 
 - **Proves:** the whole pipeline runs with a deliberately dumb stand-in brain, so a pass cannot come
   from the real brain being clever and a failure cannot come from the plumbing.

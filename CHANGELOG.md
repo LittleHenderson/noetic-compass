@@ -4,6 +4,81 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - INDEPENDENT AUDIT DOWNGRADES HELM 1.0's INTERPRETATION. A rule that learns nothing scores 11 of 18 on the label's own questions.
+
+**The label stands. My interpretation of it does not.** An independent audit
+(`records/typed_pointer_001/AUDIT_REPORT_20260920_INDEPENDENT.md`, 22221 bytes, sha256
+`9d8826c5c09689f9a65323f5b31f070641beb52c0911814c4174d43322ba60fb`) reproduced every number I
+published, then found two things I had left out and one thing I had got wrong.
+
+### 1. The zero-learning floor — the certificate said it and I did not
+
+The grader's own certifying file carries an `oracle_ceilings` block. I built `BRAIN_LINEAGE.md` from
+the headline numbers and **never read that block.** It says:
+
+```
+oracle_or_rank_solvable_in_the_label_population: 11     (of the 18 the label is keyed on)
+oracle_solvable_in_the_label_population: 7              (one-hop read: edge_account 5 + parts 2)
+applied_as_removals: false
+floor_note: "a zero-learning rule already answers these questions of the label's own population;
+             they are REPORTED and NOT subtracted, so the label must be read beside them"
+```
+
+**Helm scored 12, 12, 11. A hard-coded rule that learns nothing scores 11.** Correct answers Helm
+produced that the no-learning rule does not: **2, 2, 2**. Run the gate's OWN bar (improved ≥ 7,
+broken 0) against that rule instead of against the untrained machine, and **all three seeds fail**:
+p = 0.50, 0.50, 0.69.
+
+**And it scores 0 of 5 on `analogy` — the only one of the four kinds in the 18 that no trivial rule
+can touch — before and after, in all three seeds.** Independently verified here: **all 33 gains sit
+on the 13 questions with exactly one acceptable answer; zero gains on the 5 with more than one.**
+
+So the honest headline is **+2 over a program that reads the links off the page, at even odds** — not
+`0–2 → 11–12 of 18` at 1-in-1024. Both are true; the second is measured against a starting point that
+cannot read the page. Helm 1.0 learned to apply a one-hop structural rule to structures it had never
+seen. It did **not** demonstrate the broader structural comparison the study was built to test, and
+the certified label cannot tell those two apart.
+
+### 2. The certificate is not bound to the evidence — a forgery path, and a new check for it
+
+The label is a function of two editable JSON files per seed. **The grader never checks them against
+the sha256 the run itself recorded in `artifact_manifest.json`** — its only byte-level digest
+comparison is the practice start-checkpoint pin at `evaluate_gates.py:646`. The auditor proved it by
+hand-editing seed `20260919`'s `course_p10_scoring.json` so every real-correct answer read wrong and
+every real-wrong read right: the grader still printed `LEARNS_NEW_WORLDS` with
+`integrity: pass, failures: []`.
+
+**The real files are not forged.** Verified here independently: **297 of 297 evidence files across
+the three receipts match their own recorded hashes, 0 mismatched, 0 missing.** But the guarantee was
+weaker than this project claimed.
+
+**Added `records/typed_pointer_001/verify_evidence_hashes.py`** — the missing check, deliberately
+*beside* the frozen grader rather than inside it, because editing `evaluate_gates.py` would move its
+sha256 and the certificate `475379d2...` could no longer be reproduced. It runs `EVIDENCE_HASH_CHECK:
+PASS` on the real evidence and **catches a tampered copy** (proved on a scratch copy of seed 18 with
+every `correct` flag flipped: exit 1, both hashes printed). `BRAIN_LINEAGE.md` rule 3 now names the
+two scoring files, and rule 4 requires reading the `oracle_ceilings` block.
+
+### 3. Two wording corrections I had got wrong
+
+- **"new wiring" is false.** All 5 held-out worlds reuse a link pattern teaching already contained.
+  Already corrected earlier today.
+- **"names it had never seen" is not quite right either.** Two of the 20 part names in the test worlds
+  — `Chuck` and `Gear` — were taught. Corrected in `BRAIN_LINEAGE.md`.
+- Also fixed: `AUDIT_PACK.md` check 4 said "empty scratch dir"; the script needs a path that does not
+  exist, or it stops with `FileExistsError`.
+
+### What the audit confirmed
+
+Every hash matched; self-test `SELFTEST_PASS 50 checks`; hold-out `HOLDOUT_AUDIT_PASS`; `22 passed`;
+**the reading re-ran byte-for-byte identical** to the committed certificate (202862 bytes,
+`475379d2...`); every published number recomputed exactly from raw `correct` flags; 157,919 numbers in
+46 groups, `declaration_table` 41.50%; zero leakage, 358/358 trained ids updated; seed identities
+reproducible across all three machines. **The commonest-answer guessing attack scores 0 of 45 — that
+attack is dead.**
+
+`BRAIN_LINEAGE.md` now leads the Helm 1.0 block with the floor, not with the headline.
+
 ## 2026-09-20 UTC (POINTER) - MEASURED WEAKNESS IN HELM'S TEST: all five "never-shown worlds" reuse wiring that teaching already contained.
 
 **A directive document told me to check for near-duplicates in a train/test split. I ran the check, and
