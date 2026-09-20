@@ -1,0 +1,8 @@
+{
+  "failure": {
+    "message": "INNER_RUNNER_EXIT_1\nTraceback (most recent call last):\n  File \"/opt/cas-graph6curr/package/_inner_runner.py\", line 36, in <module>\n    report = typed_pointer_worker.run(CONFIG, root=ROOT, results=RESULTS, artifacts=ARTIFACTS, attestor=ATTESTOR)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1787, in run\n    _reloads_and_replays(ctx)\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1154, in _reloads_and_replays\n    restored = _restore_pointer(ctx, path=artifacts / (name + \".pt\"), pin=pin, encoder=ctx[\"encoder\"])\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/cncm/typed_pointer_worker.py\", line 1136, in _restore_pointer\n    restored = pointer_module.PointerCourseLearner.restore_checkpoint(\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py\", line 1723, in restore_checkpoint\n    require(_fingerprint(torch, container.state_dict()) == pointer_names,\n  File \"/opt/cas-graph6curr/package/research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/source.py\", line 48, in require\n    raise ValueError(reason)\nValueError: POINTER_CHECKPOINT_LAYOUT\n",
+    "type": "InnerRunnerFailure"
+  },
+  "job": "cas-meta2-tpntr-20260919234654-4780c199-m-20260917",
+  "schema": "cncm.typed-pointer-failure/0.1"
+}
