@@ -468,3 +468,12 @@ Add a row. Never edit an old one.
 8. **A certified label is not an interpretation.** The grader tells you what it printed. It does not
    tell you what was learned. Compare against a rule that learns nothing before saying a machine
    learned anything.
+9. **Never edit source while a run is in flight.** `typed_pointer_worker.py:1516`,
+   `_final_source_verification`, re-reads the **live working tree** at the **very end** of a run and
+   refuses if it no longer matches the frozen rows. An edit made mid-run does not fail fast — it fails
+   at the finish line, after all the compute is spent, and the run is discarded. Do not touch anything
+   under `cncm/`, `research/`, or the four `records/typed_*_001` pin sets. Root-level files
+   (`AGENTS.md`, this file, `AUDIT_PACK.md`, `CHANGELOG.md`) and `records/typed_pointer_001/` are not
+   in the inventory and are safe. **This has already cost the project two runs** — a study driver
+   killed between jobs by an interrupted tool call, and a dry run killed by a concurrent edit to
+   `pointer_learner.py`.

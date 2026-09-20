@@ -37,6 +37,49 @@ evidence, Evidence Packet launch work, or unrelated deployment tasks into this
 CNCM build. CAS Harness and the CAS Native Cognitive Machine are separate
 projects.
 
+## NEVER EDIT SOURCE WHILE A RUN IS IN FLIGHT
+
+**This has already destroyed two runs.** Do not be the third.
+
+`cncm/typed_pointer_worker.py:1516`, `_final_source_verification`, runs at the **very end** of a run and
+requires the **live working tree** to still match the frozen input rows:
+
+```python
+require(canonical(contract.input_inventory(ctx["root"])) == canonical(ctx["config"]["inputs"]),
+        "SOURCES_CHANGED")
+```
+
+So a single edit made at any point during a run does not fail fast. It fails **at the finish line, after
+all the compute is spent**, and the whole run is discarded.
+
+**The files you must not touch while a run is in flight** are the 258 rows of
+`contract.input_inventory(root)`:
+
+- anything under `cncm/`
+- anything under `research/`
+- the four pin sets under `records/typed_course_001`, `records/typed_interface_001`,
+  `records/typed_matched_001`, `records/typed_practice_001`
+
+**Safe to edit at any time:** root-level documents such as `AGENTS.md`, `BRAIN_LINEAGE.md`,
+`AUDIT_PACK.md`, the worktree `CHANGELOG.md`, and anything under `records/typed_pointer_001/`. None of
+these are in the inventory, which is why they can be written while training runs.
+
+**Before starting any run, check whether one is already in flight:**
+
+```powershell
+Get-CimInstance Win32_Process -Filter "Name like '%python%'" |
+  Where-Object { $_.CommandLine -like '*preflight*' -or $_.CommandLine -like '*execute_study*' } |
+  Select-Object ProcessId, CommandLine
+```
+
+**The two losses, so this is not abstract:** a study driver killed between its first and second job by
+an interrupted tool call, taking a fully successful 1,470-update run's certificate with it; and a dry
+run killed about nine minutes in by a concurrent edit to `pointer_learner.py`.
+
+**The fix belongs in the code, not in discipline.** A check that discards a finished run should compare
+the sources the worker actually **loaded** (`loaded_sources.json`, already produced) against the frozen
+rows, rather than re-reading a live tree that the run did not consume.
+
 ## The learning brain — read this before touching the pointer work
 
 The part of this machine that learns is named **Helm** and it is versioned. Before you run
