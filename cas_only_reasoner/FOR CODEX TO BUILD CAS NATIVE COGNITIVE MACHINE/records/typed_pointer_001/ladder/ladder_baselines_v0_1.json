@@ -1,0 +1,1498 @@
+{
+ "cells": [
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 18,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 303,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 30,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 48,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 75,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 12,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 120,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 18,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 159,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 20,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 26,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 37,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 9,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 52,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 15,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 198,
+   "value": 0
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 180,
+   "value": 1
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 0.068493,
+   "graded": 0.534247,
+   "kind": "reach",
+   "questions": 146,
+   "value": 2
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 0.044643,
+   "graded": 0.522321,
+   "kind": "reach",
+   "questions": 112,
+   "value": 3
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 0.066667,
+   "graded": 0.533333,
+   "kind": "reach",
+   "questions": 75,
+   "value": 4
+  },
+  {
+   "axis": "hop",
+   "baseline": "best_zero_learning",
+   "exact": 0.075,
+   "graded": 0.5375,
+   "kind": "reach",
+   "questions": 40,
+   "value": 5
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.507353,
+   "graded": 0.507353,
+   "kind": "reach",
+   "questions": 136,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.5,
+   "graded": 0.5,
+   "kind": "reach",
+   "questions": 144,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.404494,
+   "graded": 0.404494,
+   "kind": "reach",
+   "questions": 178,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.916667,
+   "graded": 0.916667,
+   "kind": "reach",
+   "questions": 36,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.409091,
+   "graded": 0.409091,
+   "kind": "reach",
+   "questions": 176,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "best_zero_learning",
+   "exact": 0.740741,
+   "graded": 0.740741,
+   "kind": "reach",
+   "questions": 81,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 18,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.475248,
+   "graded": 0.475248,
+   "kind": "parts",
+   "questions": 303,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.333333,
+   "graded": 0.333333,
+   "kind": "parts",
+   "questions": 30,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.458333,
+   "graded": 0.458333,
+   "kind": "parts",
+   "questions": 48,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.506667,
+   "graded": 0.506667,
+   "kind": "parts",
+   "questions": 75,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.25,
+   "graded": 0.25,
+   "kind": "parts",
+   "questions": 12,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.566667,
+   "graded": 0.566667,
+   "kind": "parts",
+   "questions": 120,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.166667,
+   "graded": 0.166667,
+   "kind": "parts",
+   "questions": 18,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 159,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 20,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 26,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 37,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 9,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 52,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "parts_non_empty",
+   "questions": 15,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 198,
+   "value": 0
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.5,
+   "kind": "reach",
+   "questions": 180,
+   "value": 1
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 146,
+   "value": 2
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 112,
+   "value": 3
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 75,
+   "value": 4
+  },
+  {
+   "axis": "hop",
+   "baseline": "constant_answer",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 40,
+   "value": 5
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.264706,
+   "graded": 0.386029,
+   "kind": "reach",
+   "questions": 136,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.25,
+   "graded": 0.375,
+   "kind": "reach",
+   "questions": 144,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.202247,
+   "graded": 0.303371,
+   "kind": "reach",
+   "questions": 178,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.5,
+   "graded": 0.708333,
+   "kind": "reach",
+   "questions": 36,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.204545,
+   "graded": 0.306818,
+   "kind": "reach",
+   "questions": 176,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "constant_answer",
+   "exact": 0.444444,
+   "graded": 0.592593,
+   "kind": "reach",
+   "questions": 81,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 18,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 303,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 30,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 48,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 75,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 12,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 120,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 18,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 159,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 20,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 26,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 37,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 9,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 52,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 15,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 198,
+   "value": 0
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 180,
+   "value": 1
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 146,
+   "value": 2
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 112,
+   "value": 3
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 75,
+   "value": 4
+  },
+  {
+   "axis": "hop",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 40,
+   "value": 5
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.507353,
+   "graded": 0.507353,
+   "kind": "reach",
+   "questions": 136,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.5,
+   "graded": 0.5,
+   "kind": "reach",
+   "questions": 144,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.404494,
+   "graded": 0.404494,
+   "kind": "reach",
+   "questions": 178,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.916667,
+   "graded": 0.916667,
+   "kind": "reach",
+   "questions": 36,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.409091,
+   "graded": 0.409091,
+   "kind": "reach",
+   "questions": 176,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "one_hop_adjacency",
+   "exact": 0.740741,
+   "graded": 0.740741,
+   "kind": "reach",
+   "questions": 81,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 18,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.019802,
+   "graded": 0.050055,
+   "kind": "parts",
+   "questions": 303,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.033333,
+   "graded": 0.072222,
+   "kind": "parts",
+   "questions": 30,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.038194,
+   "kind": "parts",
+   "questions": 48,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.013333,
+   "graded": 0.031111,
+   "kind": "parts",
+   "questions": 75,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.166667,
+   "graded": 0.25,
+   "kind": "parts",
+   "questions": 12,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.008333,
+   "graded": 0.0125,
+   "kind": "parts",
+   "questions": 120,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.055556,
+   "graded": 0.240741,
+   "kind": "parts",
+   "questions": 18,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.037736,
+   "graded": 0.095388,
+   "kind": "parts_non_empty",
+   "questions": 159,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.05,
+   "graded": 0.108333,
+   "kind": "parts_non_empty",
+   "questions": 20,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.070513,
+   "kind": "parts_non_empty",
+   "questions": 26,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.027027,
+   "graded": 0.063063,
+   "kind": "parts_non_empty",
+   "questions": 37,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.222222,
+   "graded": 0.333333,
+   "kind": "parts_non_empty",
+   "questions": 9,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.019231,
+   "graded": 0.028846,
+   "kind": "parts_non_empty",
+   "questions": 52,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.066667,
+   "graded": 0.288889,
+   "kind": "parts_non_empty",
+   "questions": 15,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 198,
+   "value": 0
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.0,
+   "kind": "reach",
+   "questions": 180,
+   "value": 1
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.068493,
+   "graded": 0.534247,
+   "kind": "reach",
+   "questions": 146,
+   "value": 2
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.044643,
+   "graded": 0.522321,
+   "kind": "reach",
+   "questions": 112,
+   "value": 3
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.066667,
+   "graded": 0.533333,
+   "kind": "reach",
+   "questions": 75,
+   "value": 4
+  },
+  {
+   "axis": "hop",
+   "baseline": "rank_last_guess",
+   "exact": 0.075,
+   "graded": 0.5375,
+   "kind": "reach",
+   "questions": 40,
+   "value": 5
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.051471,
+   "graded": 0.272059,
+   "kind": "reach",
+   "questions": 136,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.083333,
+   "graded": 0.291667,
+   "kind": "reach",
+   "questions": 144,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.0,
+   "graded": 0.297753,
+   "kind": "reach",
+   "questions": 178,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.027778,
+   "graded": 0.055556,
+   "kind": "reach",
+   "questions": 36,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.005682,
+   "graded": 0.298295,
+   "kind": "reach",
+   "questions": 176,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "rank_last_guess",
+   "exact": 0.024691,
+   "graded": 0.141975,
+   "kind": "reach",
+   "questions": 81,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 18,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "edge_account",
+   "questions": 3,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 303,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 30,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 48,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 75,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 12,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 120,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts",
+   "questions": 18,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 159,
+   "value": 1
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 20,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 26,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 37,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 9,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 52,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "parts_non_empty",
+   "questions": 15,
+   "value": 6
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 198,
+   "value": 0
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 180,
+   "value": 1
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 146,
+   "value": 2
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 112,
+   "value": 3
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 75,
+   "value": 4
+  },
+  {
+   "axis": "hop",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 40,
+   "value": 5
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 136,
+   "value": 10
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 144,
+   "value": 16
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 178,
+   "value": 25
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 36,
+   "value": 4
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 176,
+   "value": 40
+  },
+  {
+   "axis": "size",
+   "baseline": "true_oracle_ceiling",
+   "exact": 1.0,
+   "graded": 1.0,
+   "kind": "reach",
+   "questions": 81,
+   "value": 6
+  }
+ ],
+ "ladder_digest": "4436fb6b481ff606db27a8399c35a94b04f71502a0319722e336f299da59f696",
+ "note": "The zero-learning curves. A model's score on this ladder is uninterpretable until it is drawn against `best_zero_learning`, the envelope of every rule here that learns nothing. `one_hop_adjacency` is the single most important of them: it is what Helm 1.0's architecture could compute and no more, and it falls from 1.000 at one hop to 0.000 at two.",
+ "schema": "cncm.helm-difficulty-ladder-baselines/0.1",
+ "the_line_to_beat": "best_zero_learning",
+ "zero_learning_rules": [
+  "one_hop_adjacency",
+  "rank_last_guess",
+  "constant_answer"
+ ]
+}

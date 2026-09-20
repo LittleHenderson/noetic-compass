@@ -4,6 +4,53 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - HELM 2.0 CANNOT CERTIFY YET: two new tensors are covered by no ablation component. Found by the dry run, proven on the real container.
+
+**The dry run found a hard blocker, and it is not the dry run's fault.** Helm 2.0's ablations FAIL with
+`POINTER_ABLATION_COVERAGE:match_key.weight:covered=46:of=48`. I proved this is a real defect and not a
+rehearsal artifact by calling the worker's own `_ablation_components` on the real container on CPU:
+
+```
+REAL HELM 2.0 CONTAINER: 48 tensors
+  COVERAGE: REFUSED -> POINTER_ABLATION_COVERAGE:match_key.weight:covered=46:of=48
+     UNCOVERED: match_key.weight
+     UNCOVERED: state_encode.weight
+```
+
+**So a real claim-bearing run of Helm 2.0 would fail its ablations.** `_effective_required` then drops
+the ten ablation artifacts from the required set, `registered_required_failures` fires
+`REQUIRED_ARTIFACTS:<n>!=99`, and **Helm 2.0 could never produce a clean certified receipt.** It must be
+fixed before any spend.
+
+**The cause is exactly the two tensors F1 and F2b added.** `ABLATION_COMPONENTS` in
+`cncm/typed_pointer_worker.py:174-183` decides which component each container key belongs to, and it
+was written for the Helm 1.0 shape:
+
+- **`state_encode.weight`** (new in F1, the round input projector) belongs with **`round_mix`**, beside
+  `node_encode.weight` — it is part of the shared round.
+- **`match_key.weight`** (new in F2b, the bilinear matching key) belongs with **`heads`**, beside
+  `pointer_key.` — it is a scoring projection.
+
+The coverage check itself is CORRECT and did its job: it exists precisely so a new tensor cannot slip
+through unablated and leave partial evidence. It caught the omission.
+
+### A second, separate staleness in the rehearsal harness
+
+`records/typed_pointer_001/preflight_dry_run.py:76-82` hard-codes a 25-name stand-in container, and that
+list is stale. It still carries **six names from the abandoned design** — `round_state_norm`,
+`round_parent_norm`, `round_child_norm`, `self_mix`, `parent_mix`, `child_mix` — which the worker's own
+comment at `typed_pointer_worker.py:168-173` records as having "matched nothing at all". Those six are
+why the dry run reports `covered=19:of=25` rather than a Helm 2.0 number, and why its `ablations` reads
+FAILED. **The stand-in needs updating to the real container's key set**, or the rehearsal will keep
+reporting an ablation failure that says nothing about the brain.
+
+### What the dry run otherwise proved
+
+Seed 17 reached `TYPED_POINTER_DELIVERED` with `failure: null`, **`checkpoint_reload_verified: true`**,
+`checkpoint_check_phase_a: COMPLETE`, `checkpoint_check_phase_b: COMPLETE`, 10 passes, 1470 updates, and
+**`installed_sources.json` present** — the very artifact whose absence killed the last dry run. So the
+1.0 → 2.0 shape change does **not** break the pipeline, and the source attestation is satisfied.
+
 ## 2026-09-20 UTC (POINTER) - F3: THE RULER IS BUILT. A one-hop machine scores 1.0000 at one hop and exactly 0.0000 beyond it, at every size.
 
 **`records/typed_pointer_001/ruler.py`** — the instrument that was missing. `$0`, no GPU, ~2 seconds.
