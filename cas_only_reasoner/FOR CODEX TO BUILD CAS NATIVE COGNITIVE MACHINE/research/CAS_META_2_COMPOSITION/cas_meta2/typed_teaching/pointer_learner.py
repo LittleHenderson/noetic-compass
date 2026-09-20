@@ -211,8 +211,21 @@ DECL_VECTOR_WIDTH = 32
 # own input, with NO division by the node count. Every bank world has at most 4 nodes and at most 3 children
 # per node, so the truncation loses nothing here.
 DEGREE_STEPS = 5
+# WHERE THE TWO DEGREE COLUMNS ARE, AND WHY THEY ARE DERIVED. `_degree_features` appends `2 * DEGREE_STEPS`
+# columns to every node feature row, in this order: the IN-degree one-hot's `DEGREE_STEPS` columns FIRST, then
+# the OUT-degree one-hot's. These two constants name the FIRST column of each block, so the two blocks are
+# `DEGREE_STEPS` apart and the second ends at the row's own width. Summed over a world's rows, that column is
+# the world's count of nodes sitting at the block's first degree value -- scaled by the per-row RMS
+# `_rms_unit` applies to the row, which is what `_pooled_worlds` and `_reach_options` then read.
+#
+# `OUT_DEGREE_SUM_COLUMN` previously read `NODE_FEATURE_COUNT + 1` = 9, which is the IN-degree block's SECOND
+# column. Every world-level and reach-level degree feature therefore carried a second IN-degree statistic, no
+# out-degree reading reached any head at all, and NOTHING RAISED, because index 9 exists inside an 18-wide row.
+# That is the same family as the four width defects above -- a declaration drifting from the thing it
+# describes -- and it is silent in exactly the way a wrong width is not, which is why the two constants are now
+# DERIVED from the block they name AND validated against the world's own adjacency in `_graph_blocks`.
 IN_DEGREE_SUM_COLUMN = NODE_FEATURE_COUNT
-OUT_DEGREE_SUM_COLUMN = NODE_FEATURE_COUNT + 1
+OUT_DEGREE_SUM_COLUMN = NODE_FEATURE_COUNT + DEGREE_STEPS
 # The per-row LENGTH of the node feature matrix: the raw flag columns plus the one-hot degree columns.
 NODE_ROW_WIDTH = NODE_FEATURE_COUNT + 2 * DEGREE_STEPS
 # The `a -> b` adjacency bit's own embed width, so the edge head's MLP can be run as ONE batched matrix
@@ -373,6 +386,13 @@ NODE_ROW_WIDTH = NODE_FEATURE_COUNT + 2 * DEGREE_STEPS
 BLOCK_INPUT_WIDTH = 3 * NODE_ROW_WIDTH
 require(NODE_ROW_WIDTH == (18 if not contract.DESIGN["node_rank_feature"] else 19)
         and BLOCK_INPUT_WIDTH == 3 * NODE_ROW_WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
+# The two degree blocks tile the degree half of the row EXACTLY: the in-degree block occupies
+# `[IN_DEGREE_SUM_COLUMN, OUT_DEGREE_SUM_COLUMN)`, the out-degree block occupies the rest, and each is
+# `DEGREE_STEPS` wide. This is arithmetic, so it cannot see a wrong number -- the check that can, and that
+# reads the graph itself, is in `_graph_blocks`.
+require(IN_DEGREE_SUM_COLUMN == NODE_FEATURE_COUNT
+        and OUT_DEGREE_SUM_COLUMN == IN_DEGREE_SUM_COLUMN + DEGREE_STEPS
+        and OUT_DEGREE_SUM_COLUMN + DEGREE_STEPS == NODE_ROW_WIDTH, "POINTER_DEGREE_COLUMNS")
 
 # The reading's `kind` id space and the slot `field` space this module scores. Both are pinned here rather than
 # imported, so a course change that reordered kinds or added a slot field fails closed.
@@ -815,19 +835,37 @@ def _rms_unit(torch, value):
     return value / _row_rms(torch, value)
 
 
+def _block_width(model):
+    """The registered `^6` block's INPUT width, read from the block's own weight, never from `WIDTH`.
+
+    `WIDTH` is a module constant restating the second dimension of the registered `left.weight`; the
+    registered tensors are the authority (`learner.PARAMETER_SHAPES`, `_DecomposeTransform.forward`), so every
+    check that a tensor is the width the block consumes reads THIS and not the constant. The two are equal
+    today and the point is that a check cannot detect the constant being wrong.
+    """
+    return int(getattr(model, BLOCK_NAMES["left.weight"]).shape[1])
+
+
 def _degree_features(torch, adjacency):
-    """`[in-degree, out-degree]` one-hot, truncated at `DEGREE_STEPS - 1`, so the degrees stay EXACT.
+    """`(one_hot, in_degree, out_degree)`: `[in-degree, out-degree]` one-hot, truncated at `DEGREE_STEPS - 1`.
 
     Not divided by the node count: the sorted (in-degree, out-degree) multiset is a complete isomorphism
     invariant on this corpus, and a mean would put the invariant back behind a division. Every bank world has at
-    most 4 nodes and at most 3 children per node, so the truncation loses nothing here.
+    most 4 nodes and at most 3 children per node, so the truncation loses nothing here. The in-degree block
+    comes FIRST, which is the order `IN_DEGREE_SUM_COLUMN` / `OUT_DEGREE_SUM_COLUMN` name.
+
+    The two degree tensors are RETURNED as well as one-hot encoded, because `_graph_blocks` checks the two
+    column offsets against them: a wrong offset is silent (it addresses a column that exists), so the check has
+    to be against the degrees themselves -- and this function is the only place they are computed.
     """
     require(adjacency.dim() == 2 and adjacency.shape[0] == adjacency.shape[1], "POINTER_ADJACENCY_SHAPE")
     in_degree = torch.clamp(adjacency.sum(dim=0).to(torch.int64), max=DEGREE_STEPS - 1)
     out_degree = torch.clamp(adjacency.sum(dim=1).to(torch.int64), max=DEGREE_STEPS - 1)
-    return torch.cat((torch.nn.functional.one_hot(in_degree, num_classes=DEGREE_STEPS).to(adjacency.dtype),
-                      torch.nn.functional.one_hot(out_degree, num_classes=DEGREE_STEPS).to(adjacency.dtype)),
-                     dim=1)
+    one_hot = torch.cat(
+        (torch.nn.functional.one_hot(in_degree, num_classes=DEGREE_STEPS).to(adjacency.dtype),
+         torch.nn.functional.one_hot(out_degree, num_classes=DEGREE_STEPS).to(adjacency.dtype)), dim=1)
+    require(tuple(one_hot.shape) == (adjacency.shape[0], 2 * DEGREE_STEPS), "POINTER_DEGREE_FEATURES")
+    return one_hot, in_degree, out_degree
 
 
 def _graph_blocks(torch, reading, device):
@@ -874,8 +912,23 @@ def _graph_blocks(torch, reading, device):
             rows.append(values)
         features = torch.tensor(rows, dtype=torch.float32, device=device).reshape(node_count,
                                                                                  NODE_FEATURE_COUNT)
-        features = torch.cat((features, _degree_features(torch, adjacency)), dim=1)
+        degree_one_hot, in_degree, out_degree = _degree_features(torch, adjacency)
+        features = torch.cat((features, degree_one_hot), dim=1)
         require(features.shape[1] == NODE_ROW_WIDTH, "POINTER_NODE_FEATURE_WIDTH")
+        # THE GUARD THAT ENDS THIS FAMILY FOR THE TWO DEGREE COLUMNS. Both constants are INDEXES into this row,
+        # and a wrong index is SILENT: it addresses a column that exists and belongs to the other degree block,
+        # so no width check can see it and the world head simply never receives an out-degree reading. So the
+        # check is against the GRAPH and not against a restatement of the constants: each named block must be
+        # the one-hot of the degree it is named for, computed one line above from this same `adjacency`.
+        in_block = features[:, IN_DEGREE_SUM_COLUMN:IN_DEGREE_SUM_COLUMN + DEGREE_STEPS]
+        out_block = features[:, OUT_DEGREE_SUM_COLUMN:OUT_DEGREE_SUM_COLUMN + DEGREE_STEPS]
+        require(tuple(in_block.shape) == (node_count, DEGREE_STEPS)
+                and tuple(out_block.shape) == (node_count, DEGREE_STEPS)
+                and bool((in_block.sum(dim=1) == 1).all().item())
+                and bool((out_block.sum(dim=1) == 1).all().item())
+                and bool((in_block.argmax(dim=1) == in_degree).all().item())
+                and bool((out_block.argmax(dim=1) == out_degree).all().item()),
+                "POINTER_DEGREE_COLUMNS:" + world_id)
         blocks.append([world_id, node_count, _rms_unit(torch, features), adjacency])
     require(focus_world_id in [row[0] for row in blocks], "POINTER_FOCUS_WORLD")
     return blocks
@@ -908,13 +961,20 @@ def _block_input(torch, model, raw):
     three round-shared scalars. So the registered `_DecomposeTransform` is called exactly as it is registered:
     once per node per round, on ONE `WIDTH`-long vector. The blend is the only place the round can decide how
     much of the node's own signal, of its parents' aggregate and of its children's aggregate to carry.
+
+    The row width is `node_encode`'s OWN `in_features` and the split is `-1` where it can be, so the three
+    restatements of `NODE_ROW_WIDTH` this function used to carry are gone: `model.node_encode(halves.reshape(-1,
+    NODE_ROW_WIDTH))` would have failed on a row encoder built for a different width, but it would have failed
+    with a reshape size, not with the layer that owns the width.
     """
-    require(raw.dim() == 2 and raw.shape[1] == BLOCK_INPUT_WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
-    halves = raw.reshape(raw.shape[0], 3, NODE_ROW_WIDTH)
-    encoded = model.node_encode(halves.reshape(-1, NODE_ROW_WIDTH)).reshape(raw.shape[0], 3, WIDTH)
+    require(raw.dim() == 2, "POINTER_BLOCK_INPUT_WIDTH")
+    row_width = int(model.node_encode.in_features)
+    require(row_width == NODE_ROW_WIDTH and raw.shape[1] == 3 * row_width, "POINTER_BLOCK_INPUT_WIDTH")
+    halves = raw.reshape(raw.shape[0], 3, -1)
+    encoded = model.node_encode(halves.reshape(-1, row_width)).reshape(raw.shape[0], 3, -1)
     weights = torch.softmax(model.round_mix, dim=0)
     value = torch.einsum("nhw,h->nw", encoded, weights)
-    require(value.shape == (raw.shape[0], WIDTH), "POINTER_BLOCK_INPUT_WIDTH")
+    require(value.shape == (raw.shape[0], _block_width(model)), "POINTER_BLOCK_INPUT_WIDTH")
     return value
 
 
@@ -931,8 +991,16 @@ def _rounds(torch, model, blocks, *, charge=None, observe=None):
     """
     counts = [row[1] for row in blocks]
     raw = torch.cat([row[2] for row in blocks], dim=0)
+    block_width = _block_width(model)
+    # The row encoder's OWN `in_features` is the check, and it has to be HERE: this is the first call that
+    # consumes a raw feature row, so a row encoder built for a different row width would otherwise fail inside
+    # torch's matmul -- `mat1 and mat2 shapes cannot be multiplied (244x18 and 19x64)` -- with a message that
+    # names no layer, which is exactly how the node-head defect stayed hidden for a whole paid run.
+    require(int(model.node_encode.in_features) == int(raw.shape[1]),
+            "POINTER_NODE_ENCODE_WIDTH:%d!=%d" % (int(model.node_encode.in_features),
+                                                  int(raw.shape[1])))
     hidden = _rms_unit(torch, model.node_encode(raw))
-    require(hidden.shape == (sum(counts), WIDTH), "POINTER_ROUND_INITIAL_WIDTH")
+    require(hidden.shape == (sum(counts), block_width), "POINTER_ROUND_INITIAL_WIDTH")
     offsets, limit = [], 0
     for count in counts:
         offsets.append((limit, limit + count))
@@ -960,7 +1028,7 @@ def _rounds(torch, model, blocks, *, charge=None, observe=None):
         require(block_input.shape == (sum(heights), BLOCK_INPUT_WIDTH), "POINTER_BLOCK_INPUT_WIDTH")
         # `_block_input` encodes and blends the three halves; the result is ONE width-WIDTH vector per node.
         hidden_input = _block_input(torch, model, block_input)
-        require(hidden_input.shape == (block_input.shape[0], WIDTH), "POINTER_ROUND_MIX_WIDTH")
+        require(hidden_input.shape == (block_input.shape[0], block_width), "POINTER_ROUND_MIX_WIDTH")
         if observe is not None:
             observe(round_index, hidden_input)
         update = model.core_block(hidden_input)
@@ -1038,9 +1106,13 @@ def _declaration_embeddings(torch, model, reading, world_ids, device):
     require(int(index.min().item()) >= 0 and int(index.max().item()) < DECL_MAX_TOKENS,
             "POINTER_DECLARATION_INDEX")
     fields = torch.arange(DECLARATION_ROWS, dtype=torch.int64, device=device).reshape(1, DECLARATION_ROWS, 1)
-    table = model.declaration_table.reshape(DECLARATION_ROWS, DECL_MAX_TOKENS, WIDTH)
+    table = model.declaration_table.reshape(DECLARATION_ROWS, DECL_MAX_TOKENS, -1)
+    # The table's row width is the width of the layer that consumes it, read from that layer.
+    require(int(table.shape[-1]) == int(model.declaration_projection.in_features),
+            "POINTER_DECLARATION_TABLE_WIDTH:%d!=%d" % (int(table.shape[-1]),
+                                                        int(model.declaration_projection.in_features)))
     rows = table[fields.expand_as(index), index]
-    require(rows.shape == (len(world_ids), DECLARATION_ROWS, DECL_MAX_TOKENS, WIDTH),
+    require(rows.shape == (len(world_ids), DECLARATION_ROWS, DECL_MAX_TOKENS, table.shape[-1]),
             "POINTER_DECLARATION_ROWS")
     return names, model.declaration_projection(rows.sum(dim=2))
 
@@ -1064,9 +1136,21 @@ class GraphForward:
         self.focus_offset = sum(row[1] for row in self.blocks[:self.focus_position])
         self.hidden = _rounds(torch, model, self.blocks, charge=charge)
         self.query = _query_vector(torch, reading, device)
+        # Every head below is checked against the width THE LAYER OWNS, once, at the point the tensor is built.
+        require(int(model.query_projection.in_features) == int(self.query.shape[1]),
+                "POINTER_QUERY_HEAD_WIDTH:%d!=%d" % (int(model.query_projection.in_features),
+                                                     int(self.query.shape[1])))
         self.query_value = self._encode_query()
+        require(int(model.pointer_key.in_features) == int(self.query_value.shape[-1]),
+                "POINTER_POINTER_KEY_WIDTH:%d!=%d" % (int(model.pointer_key.in_features),
+                                                      int(self.query_value.shape[-1])))
         self.pointer_query = model.pointer_key(self.query_value)
         self.worlds = self._pooled_worlds()
+        # The world vector is consumed by `matmul` against the query value and the pointer key, and by the
+        # reach / mode / role / world-score concatenations, so its width has to BE the block width.
+        require(int(model.world_projection.out_features) == _block_width(model)
+                == int(self.query_value.shape[-1]),
+                "POINTER_WORLD_VECTOR_WIDTH")
         self.declaration_names, self.declaration_embed = _declaration_embeddings(
             torch, model, reading, self.world_ids, device)
         index_a, index_b, adjacency_bit = _pair_rows(torch, self.blocks, device)
@@ -1074,17 +1158,23 @@ class GraphForward:
         pairs = self.hidden.index_select(0, index_a)
         others = self.hidden.index_select(0, index_b)
         edge_input = torch.cat((pairs, others, model.directed_pair_embedding[adjacency_bit]), dim=1)
-        require(edge_input.shape[1] == 2 * WIDTH + DIRECTED_PAIR_WIDTH, "POINTER_EDGE_HEAD_INPUT")
+        # The scalar was `int(value.shape[1]) == 2 * WIDTH + DIRECTED_PAIR_WIDTH`: it restated the head's own
+        # construction, so it held while the head was right and could not have detected it being wrong. The
+        # head's `in_features` is the number the forward pass actually has to satisfy.
+        require(int(model.edge_head[0].in_features) == int(edge_input.shape[1]),
+                "POINTER_EDGE_HEAD_WIDTH:%d!=%d" % (int(model.edge_head[0].in_features),
+                                                    int(edge_input.shape[1])))
         self.edge_rows = model.edge_head(edge_input)
-        node_input = torch.cat((self.hidden, self.query_value.reshape(1, WIDTH).expand(
-            self.hidden.shape[0], WIDTH)), dim=1)
+        node_input = torch.cat((self.hidden, self.query_value.reshape(1, -1).expand(
+            self.hidden.shape[0], self.query_value.shape[-1])), dim=1)
         # THE GUARD THAT WOULD HAVE CAUGHT IT -- and the reason the first version did not. This line used to
         # assert only that `node_input` was `WIDTH + WIDTH` wide. That invariant HELD while the head was built for
         # `NODE_FEATURE_COUNT + WIDTH` and could not accept it, so the guard passed and the failure simply moved
         # one line down onto `model.node_head(node_input)` -- where it stayed hidden until the first real training
         # step on AWS (`mat1 and mat2 shapes cannot be multiplied (244x128 and 72x64)`). A guard that restates the
         # shape it was handed is not a check on the wiring. Comparing against the MODULE'S OWN `in_features` is.
-        require(node_input.shape == (self.hidden.shape[0], 2 * WIDTH), "POINTER_NODE_HEAD_INPUT")
+        require(int(self.hidden.shape[1]) == int(self.query_value.shape[-1]),
+                "POINTER_NODE_HEAD_INPUT")
         require(int(model.node_head[0].in_features) == int(node_input.shape[1]),
                 "POINTER_NODE_HEAD_WIDTH:%d!=%d" % (int(model.node_head[0].in_features),
                                                     int(node_input.shape[1])))
@@ -1099,7 +1189,7 @@ class GraphForward:
         """
         torch, model = self.torch, self.model
         base = model.query_norm(model.query_projection(self.query)).reshape(-1)
-        require(base.shape == (WIDTH,), "POINTER_QUERY_STATE")
+        require(base.shape == (_block_width(model),), "POINTER_QUERY_STATE")
         value = base
         for argument in (self.reading["query"]["whole"], self.reading["query"]["part"]):
             if argument is None:
@@ -1116,6 +1206,11 @@ class GraphForward:
         The raw width is `2 * WIDTH + 4` plus the attention pool, because the mean, the max AND the pool are
         each a full-width vector. All of them are kept and then projected together, so the head can use the
         mean and still reach the wiring through the max, the degree features and the pool.
+
+        The four degree terms are the world's rows summed at the FIRST column of each degree block
+        (`IN_DEGREE_SUM_COLUMN`, `OUT_DEGREE_SUM_COLUMN`) -- the in-degree and the out-degree count of nodes at
+        that block's first value -- plus the same two divided by the node count. They are read from the columns
+        `_graph_blocks` validates against the world's own adjacency.
         """
         torch, model = self.torch, self.model
         rows = []
@@ -1123,6 +1218,9 @@ class GraphForward:
             start = sum(row[1] for row in self.blocks[:position])
             state = self.hidden[start:start + block[1], :]
             features = block[2]
+            require(int(model.attention_key.in_features) == int(state.shape[1]),
+                    "POINTER_ATTENTION_KEY_WIDTH:%d!=%d" % (int(model.attention_key.in_features),
+                                                            int(state.shape[1])))
             attention = torch.softmax(model.attention_key(state).reshape(-1), dim=0)
             pooled = (attention.reshape(-1, 1) * state).sum(dim=0)
             degrees = torch.stack([features[:, IN_DEGREE_SUM_COLUMN].sum(),
@@ -1132,6 +1230,11 @@ class GraphForward:
             rows.append(torch.cat((state.mean(dim=0), state.max(dim=0).values, degrees, pooled)))
         vector = torch.stack(rows)
         require(vector.shape[1] == WORLD_VECTOR_WIDTH, "POINTER_WORLD_VECTOR_WIDTH")
+        # The projection's OWN input width is the authority: `WORLD_VECTOR_WIDTH` is the same number written
+        # twice, so it cannot detect itself being wrong.
+        require(int(model.world_projection.in_features) == int(vector.shape[1]),
+                "POINTER_WORLD_VECTOR_WIDTH:%d!=%d" % (int(model.world_projection.in_features),
+                                                       int(vector.shape[1])))
         return model.world_projection(vector)
     # ---- node-level heads: the structural answers ----
     def _node_options(self, position, ranks):
@@ -1156,7 +1259,13 @@ class GraphForward:
                                features[:, OUT_DEGREE_SUM_COLUMN].sum(),
                                features[:, IN_DEGREE_SUM_COLUMN].sum() / count,
                                features[:, OUT_DEGREE_SUM_COLUMN].sum() / count])
-        value = torch.cat((self.query_value, self.worlds[position], degrees)).reshape(1, 2 * WIDTH + 4)
+        value = torch.cat((self.query_value, self.worlds[position], degrees)).reshape(1, -1)
+        # DERIVED, NEVER RESTATED. This reshape used to say `2 * WIDTH + 4`, i.e. the same number the head was
+        # built from -- a check that cannot detect that number being wrong, which is the whole lesson of the
+        # width defects in this module. `-1` plus the head's own `in_features` has no second number to drift.
+        require(int(model.reach_option_head[0].in_features) == int(value.shape[1]),
+                "POINTER_REACH_OPTION_HEAD_WIDTH:%d!=%d"
+                % (int(model.reach_option_head[0].in_features), int(value.shape[1])))
         return model.reach_option_head(value).reshape(-1)
 
     def _mode_options(self, position):
@@ -1193,6 +1302,11 @@ class GraphForward:
         candidate = torch.cat((key.reshape(-1, 1), value.reshape(-1, 1), flags,
                                self.declaration_embed[:, column, :]), dim=1)
         require(candidate.shape[1] == WORLD_CANDIDATE_WIDTH, "POINTER_WORLD_CANDIDATE_WIDTH")
+        # And the head's own input width, which is the check that can fail: `WORLD_CANDIDATE_WIDTH` is the same
+        # number the head was built from, so agreeing with it is not evidence. This was defect 2 of the six.
+        require(int(self.model.world_head[0].in_features) == int(candidate.shape[1]),
+                "POINTER_WORLD_HEAD_WIDTH:%d!=%d" % (int(self.model.world_head[0].in_features),
+                                                     int(candidate.shape[1])))
         flat = self.model.world_head(candidate).reshape(-1)
         rows = []
         for symbol in symbols:
@@ -1224,9 +1338,14 @@ class GraphForward:
                         and not isinstance(coordinates[0], bool) and 0 < coordinates[0] <= ROLE_IDS,
                         "POINTER_SLOT_COORDINATES")
                 value = torch.cat((indicator, self.query_value, self.worlds[self.focus_position],
-                                   self.model.role_embedding[coordinates[0] - 1])).reshape(
-                    1, 3 * WIDTH + CLAUSE_COUNT)
-                logits = self.model.role_head(value).reshape(2)
+                                   self.model.role_embedding[coordinates[0] - 1])).reshape(1, -1)
+                # DERIVED, NEVER RESTATED. The reshape used to say `3 * WIDTH + CLAUSE_COUNT`, which is the
+                # number `role_head` was itself built from: two restatements of one hand-written width agree with
+                # each other and disagree with the tensor, which is exactly how defect 4 reached a paid run.
+                require(int(self.model.role_head[0].in_features) == int(value.shape[1]),
+                        "POINTER_ROLE_HEAD_WIDTH:%d!=%d" % (int(self.model.role_head[0].in_features),
+                                                            int(value.shape[1])))
+                logits = self.model.role_head(value).reshape(-1)
             elif field == "whole":
                 logits = self._node_options(self.focus_position,
                                             [_node_rank_of_alias(symbol) for symbol in symbols])
@@ -1262,13 +1381,33 @@ class GraphForward:
         return self.world_position[target]
 
     def _edge_pair_index(self, plan, coordinates):
-        """Position of one `[a, b]` pair inside the plan's own `edge` slot order."""
+        """The `edge_rows` ROW of one `[a, b]` pair. `edge_rows` is global; the plan's pair list is not.
+
+        `_pair_rows` builds `edge_rows` over EVERY world's `n x n` ordered pairs in block order, so the row a
+        pair actually occupies is `offset(focus) + a * n_focus + b`. This method used to return the pair's
+        position inside the plan's own `edge` slot list, which is `a * n_focus + b` alone -- an index into a
+        DIFFERENT tensor's numbering. It is correct today only because every `edge_account` reading happens to
+        carry exactly the focus world, so `offset(focus)` is 0 and the focus world is block 0 (measured over all
+        564 registry packets). Nothing raised and nothing could: the wrong index addresses a row that exists.
+
+        The row is therefore recovered from `pair_index` -- the tensor's OWN enumeration, the very tensors the
+        head consumed -- and not from a second restatement of the plan's order. `focus_offset + rank` is the
+        same node-row convention `head_logits` uses for the `node` and `participant` heads.
+        """
         pairs = [[slot["coordinates"][0], slot["coordinates"][1]] for slot in plan["slots"]
                  if slot["field"] == "edge"]
         require(pairs == sorted(pairs), "POINTER_EDGE_PAIR_ORDER")
         target = list(coordinates)
         require(target in pairs, "POINTER_EDGE_PAIR")
-        return pairs.index(target)
+        ranks = [_node_rank_of_ref(ref) for ref in target]
+        require(all(0 <= rank < self.blocks[self.focus_position][1] for rank in ranks),
+                "POINTER_EDGE_PAIR")
+        index_a, index_b = self.pair_index
+        wanted = (self.focus_offset + ranks[0], self.focus_offset + ranks[1])
+        matches = [position for position in range(len(index_a))
+                   if int(index_a[position]) == wanted[0] and int(index_b[position]) == wanted[1]]
+        require(len(matches) == 1, "POINTER_EDGE_PAIR_ROW:%s" % (wanted,))
+        return matches[0]
 
 
 def _world_alias_table_for(reading, symbol):
