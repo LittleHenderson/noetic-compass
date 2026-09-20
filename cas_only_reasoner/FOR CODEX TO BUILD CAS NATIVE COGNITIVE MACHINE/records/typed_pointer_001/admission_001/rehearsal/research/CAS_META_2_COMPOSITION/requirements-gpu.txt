@@ -1,6 +1,0 @@
-# AWS Linux Python 3.11/3.12 only; never install or run locally.
-# Direct pins; full resolved environment is retained in remote receipts.
-# torch==2.11.0 is installed separately from the cu128 index.
-numpy==2.2.6
-jsonschema==4.26.0
-pytest==9.0.2
