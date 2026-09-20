@@ -35,7 +35,12 @@ from cas_meta2.typed_teaching import pointer_learner as pl  # noqa: E402
 LEARNER_SOURCE = ROOT / "research/CAS_META_2_COMPOSITION/cas_meta2/typed_teaching/pointer_learner.py"
 # A real trained Helm 1.0 brain, used so the checks run on real weights rather than on a fresh
 # random build. Any of the three seeds does; the finding is not seed-dependent.
-TRAINED = ROOT / "records/typed_pointer_001/receipt_20260917/collected/results/artifacts/final.pt"
+TRAINED = ROOT / "records/typed_pointer_001/receipt_helm1_certified_20260917/collected/results/artifacts/final.pt"
+# The receipt directory was renamed from `receipt_20260917` to `receipt_helm1_certified_20260917` on
+# 2026-09-20, to free the canonical `receipt_<seed>` names for the Helm 2.0 study. The certified Helm 1.0
+# evidence moved with it and the grader still prints `LEARNS_NEW_WORLDS` from the relinked study file
+# (`records/typed_pointer_001/study_helm1_certified.json`). This path had to follow, and a hard-coded path
+# that silently stops resolving is exactly the kind of thing that reads as "the check passes" when it does not.
 
 
 def _container():

@@ -880,13 +880,67 @@ def _row_rms(torch, value):
     regime for `tanh` (review section 5.6's saturation table).
     """
     require(value.dim() == 2, "POINTER_ROW_RMS")
-    return torch.clamp(torch.sqrt(torch.mean(value * value, dim=1, keepdim=True)), min=RMS_EPSILON)
+    # HELM 2.0 (F1 FOLLOW-UP). CLAMP THE MEAN SQUARE, THEN TAKE THE SQRT -- NEVER THE OTHER WAY ROUND.
+    #
+    # This line killed Helm 2.0's first AWS run, and anomaly detection named it exactly:
+    #
+    #     Error detected in SqrtBackward0
+    #       pointer_learner.py:1113  children.append(_rms_unit(torch, adjacency.transpose(0,1).matmul(state)))
+    #       pointer_learner.py:883   torch.clamp(torch.sqrt(torch.mean(value*value, dim=1, keepdim=True)), min=...)
+    #     Function 'SqrtBackward0' returned nan values in its 0th output.
+    #
+    # `sqrt(x)`'s derivative is `1 / (2 * sqrt(x))`. A row of zeros gives `sqrt(0) = 0`, so the old form asks
+    # for `1 / 0`; the outer `clamp` then ZEROES that gradient, and the division computes `0 / 0` -- which is
+    # NaN, not zero. The clamp could not save it because the NaN is produced by `sqrt`'s own backward, before
+    # the clamp's zeroing is applied.
+    #
+    # WHY F1 MADE IT REACHABLE. `adjacency.matmul(state)` sums a node's PARENTS' states and the transpose sums
+    # its CHILDREN's, so a node with no parents or no children gives a row of exact zeros. Helm 1.0 took those
+    # aggregates from the FROZEN FEATURE ROWS, which are never all-zero because they carry degree one-hots, so
+    # `sqrt(0)` never happened. F1 correctly changed the aggregates to the learned STATE, and a genuinely empty
+    # sum became reachable. Measured, not reasoned: the non-finite gradients were on 7 of 48 tensors -- the
+    # three registered `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight`,
+    # every one of them inside the round -- while every head and readout stayed finite.
+    #
+    # THE FORWARD IS BITWISE UNCHANGED. For any `x >= 0`, `max(sqrt(x), eps)` and `sqrt(max(x, eps*eps))` are
+    # the same number, so every row computes exactly what it computed before. Only the BACKWARD changes, and
+    # only for a row that was previously producing NaN: `sqrt` now receives `eps*eps`, so its derivative is
+    # `grad / (2 * eps)` with `grad = 0` from the clamp -- which is 0, a finite and correct answer.
+    return torch.sqrt(torch.clamp(torch.mean(value * value, dim=1, keepdim=True),
+                                min=RMS_EPSILON * RMS_EPSILON))
 
 
 def _rms_unit(torch, value):
-    """Per-node RMS normalisation: the placement review section 5.6 pins."""
+    """Per-node RMS normalisation: the placement review section 5.6 pins.
+
+    HELM 2.0 (F1 FOLLOW-UP). AN EMPTY SUM MUST CARRY A ZERO GRADIENT, NOT AN ENORMOUS ONE.
+
+    `_row_rms` clamps its divisor at `RMS_EPSILON`, so a row of zeros gives `0 / RMS_EPSILON = 0`. The VALUE
+    is right and the GRADIENT is not: with the old `value / rms` the derivative of a clamped row is
+    `1 / RMS_EPSILON`, because the clamp's derivative is not the derivative of the true RMS. That is a huge
+    number for a row whose honest gradient contribution is zero.
+
+    WHICH ROWS ARE ZERO, AND WHY F1 MADE IT MATTER. `adjacency.matmul(state)` is the SUM OF A NODE'S PARENTS'
+    STATES, and it is exactly zero for a node with no parents; the transpose is zero for a node with no
+    children. Helm 1.0 took those aggregates from the FROZEN FEATURE ROWS, which are never all-zero because
+    they carry degree one-hots, so the clamp never fired and this was unreachable. F1 correctly changed the
+    aggregates to the learned STATE -- and a node's empty parent set now produces a genuine zero row. Through
+    eight recurrent rounds the `1 / RMS_EPSILON` gradients multiply up until they overflow.
+
+    MEASURED, NOT REASONED. Helm 2.0's first AWS run died at `TYPED_LEARNER_GRADIENTS` on its FIRST update
+    (`cursor: 0`) after a forward pass that produced eight valid predictions. Reproduced locally on the RTX
+    4070 with the real learner, and the non-finite gradients were on 7 of 48 tensors: the three registered
+    `^6` tensors, `round_mix`, `round_rate`, `node_encode.weight` and `state_encode.weight` -- every one of
+    them in the round or feeding it. Every head and readout stayed finite, `match_key` included.
+
+    THE FIX IS BITWISE IDENTICAL WHERE THE OLD CODE WORKED. `mask` is a constant (a comparison carries no
+    gradient), so for every row with a real RMS this is still exactly `value / rms`. It changes behaviour only
+    for a row at or below the clamp, where the old answer was a gradient that diverged.
+    """
     require(value.dim() == 2, "POINTER_RMS_UNIT")
-    return value / _row_rms(torch, value)
+    rms = _row_rms(torch, value)
+    mask = (rms > RMS_EPSILON).to(value.dtype)
+    return value * mask / torch.clamp(rms, min=RMS_EPSILON)
 
 
 def _block_width(model):
