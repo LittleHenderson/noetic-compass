@@ -139,7 +139,14 @@ what carries them.
    `BRAIN_LINEAGE.md`'s own versioning a shape change is a **2.0** and gets its own row. **I did not
    touch `BRAIN_LINEAGE.md`.** Helm 1.0 stays exactly as certified.
 
-5. **Sinkhorn is in the log domain** (`scores - logsumexp(rows)`, then `- logsumexp(columns)`,
+5. **Never edit `pointer_learner.py` while a preflight is running.** The worker re-reads its
+   source files and checks them against a source attestation, so an edit landing mid-run kills it
+   with `ValueError: TYPED_MATCHED:SOURCES_CHANGED` after however long it had already spent. I did
+   exactly this to the audit's own check-4 run and threw away about nine minutes of it. The
+   attestation is taken from what is ON DISK when the run starts, which is why the Helm 2.0
+   preflight -- started after the edits -- passes it without any pin needing to change.
+
+6. **Sinkhorn is in the log domain** (`scores - logsumexp(rows)`, then `- logsumexp(columns)`,
    `SINKHORN_STEPS = 3`). The output is still logits, so the loss and `slots._check_scores` consume
    it unchanged. `_mapping_logits` caches per plan on purpose — normalising one row in isolation
    would put back exactly the independence it replaces.
@@ -153,10 +160,10 @@ what carries them.
 | `rounds_iterate_check.py`, 6 checks | ✅ **PASS**, 174,303 params, 48 groups |
 | `pytest tests/test_typed_pointer_study.py` after F1 alone | ✅ **22 passed** |
 | `pytest` after F1 + F2a + F2b + F4 | ✅ **22 passed in 147.46s** |
-| `preflight_dry_run.py` end-to-end on Helm 2.0 | 🔧 **running when this was written — re-run it** |
+| `preflight_dry_run.py` end-to-end on Helm 2.0 | 🔧 **running, clean, reached pass 6 of 10 / 770 of 1470 updates with no error — confirm it finished `PREFLIGHT_PASS`** |
 | any GPU run | ⬜ **none. No money spent, nothing claimed.** |
 
-**Re-run the last two before you build anything on top of this.** The preflight wants a directory
+**Confirm the preflight finished before you build anything on top of this.** The preflight wants a directory
 that does **not exist** — it stops with `FileExistsError` if you create it first.
 
 ```bash

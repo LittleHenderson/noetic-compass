@@ -84,7 +84,7 @@ python -m pytest tests/test_typed_pointer_study.py -q
 ```
 `22 passed in 168.64s`. Exit `0`.
 
-### Check 4 — end-to-end dry run 🔧 **STILL RUNNING AT TIME OF WRITING**
+### Check 4 — end-to-end dry run ⬜ **COULD NOT RUN — I invalidated it myself**
 
 ```
 python records/typed_pointer_001/preflight_dry_run.py <fresh dir>
@@ -93,9 +93,18 @@ Note for the next auditor: the directory must **not exist**. If you create it fi
 stops with `FileExistsError`. `AUDIT_PACK.md` check 4 says "empty scratch dir", which reads as
 "make one first". It should say "a path that does not exist yet".
 
-The run is progressing normally through the real phase order — preflight, packet preparation,
-input checks, `course_p00` predictions, main training at 1470 updates. No errors. It is slow on
-a processor because it does the full schedule. Result to follow.
+**Reported honestly: this is my fault, not a finding about the artifact.** The run progressed
+normally through the real phase order — preflight, packet preparation, input checks,
+`course_p00` predictions, main training — and then died with
+`ValueError: TYPED_MATCHED:SOURCES_CHANGED`. The cause is that I began editing
+`pointer_learner.py` for the Helm 2.0 work while this run was still in flight. The worker
+re-reads its source files and checks them against a source attestation, so the edit killed it.
+
+**This is not a fail of check 4 and must not be reported as one.** It is COULD NOT RUN. A later
+agent can re-run it from the pre-change commit on `codex/cncm-vision-next`, where the learner is
+untouched. A separate preflight started AFTER the edits, on the Helm 2.0 code, passed the same
+source attestation and ran cleanly to pass 6 of 10 — which is what identifies the concurrent edit
+as the cause rather than anything in the pipeline.
 
 ### Check 5 — the reading. ✅ **REPRODUCED, BYTE FOR BYTE**
 
