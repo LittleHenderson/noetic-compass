@@ -252,6 +252,22 @@ SLOT_DECLARATION_FIELD = {"kind_ref": "kind", "function_ref": "function", "setti
 REACH_OPTION_COUNT = 2                                      # ABSENT, DIRECT
 MODE_OPTION_COUNT = 2                                       # NO_MATCH, MAPPING
 PER_ROUND_UPDATE_CAP = 0.01                                 # a collapse guard, not an authority choice
+# HELM 2.0 (F4). THE MEASUREMENT THAT MOTIVATES THIS, from the three certified Helm 1.0 runs:
+# seed 20260918 fell monotonically to loss 0.1598 with mean grad^2 0.261 -- converged. Seed 20260917
+# went grad^2 0.622 -> 19.159 -> 28.822 across passes 7-9 and its loss ROSE from 0.226 to 0.299. That
+# is the seed whose `role_set` finished at 0.13 while seed 20260918 reached 1.00 on the same course.
+# The learning rate was a constant 0.003 with no warm-up, no decay and no clipping, so a single bad
+# batch could move the weights arbitrarily far. Both guards below are RECORDED in every update row,
+# never silent: an audit can count how often the clip bound, and what the rate was at every step.
+GRADIENT_CLIP_NORM = 1.0
+# HELM 2.0 (F2b). Sinkhorn iterations on the correspondence score matrix. Three is the usual small
+# number: enough to push the matrix toward one-to-one, few enough that the gradient stays well behaved.
+SINKHORN_STEPS = 3
+# Fraction of the planned updates spent warming the rate up from zero before the cosine decay starts.
+LR_WARMUP_FRACTION = 0.05
+# The floor the cosine decays to, as a fraction of the configured rate. Never zero: a dead rate at the
+# end of training is indistinguishable from a converged model in the loss curve.
+LR_FINAL_FRACTION = 0.10
 RMS_EPSILON = 1e-6
 ROLE_IDS = 6                                                # the six independent role classes
 # The internal, dot-free names each registered `^6` tensor is held under. `register_parameter` refuses a dot,
@@ -384,9 +400,15 @@ NODE_FEATURE_COUNT = (NODE_FEATURE_COUNT_WITH_RANK if contract.DESIGN["node_rank
 # matrix projects to the registered `^6` block's own width. A world is read as a directed graph, and the
 # block is the registered `^6` operation applied per node.
 NODE_ROW_WIDTH = NODE_FEATURE_COUNT + 2 * DEGREE_STEPS
-BLOCK_INPUT_WIDTH = 3 * NODE_ROW_WIDTH
+# HELM 2.0 (F1). The three halves of a round are now the STATE and its two STATE aggregates, so the round
+# input is three WIDTH-wide vectors, not three NODE_ROW_WIDTH-wide feature rows. `NODE_ROW_WIDTH` still
+# names the raw feature row, which `node_encode` reads ONCE to give the state its starting value.
+# Before this change the aggregates were taken from the frozen feature rows, so every round received a
+# bitwise identical input and the receptive field was exactly ONE hop however many rounds ran. See
+# `records/typed_pointer_001/HELM_ARCHITECTURE_FINDING_AND_PLAN.md`.
+BLOCK_INPUT_WIDTH = 3 * WIDTH
 require(NODE_ROW_WIDTH == (18 if not contract.DESIGN["node_rank_feature"] else 19)
-        and BLOCK_INPUT_WIDTH == 3 * NODE_ROW_WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
+        and BLOCK_INPUT_WIDTH == 3 * WIDTH, "POINTER_BLOCK_INPUT_WIDTH")
 # The two degree blocks tile the degree half of the row EXACTLY: the in-degree block occupies
 # `[IN_DEGREE_SUM_COLUMN, OUT_DEGREE_SUM_COLUMN)`, the out-degree block occupies the rest, and each is
 # `DEGREE_STEPS` wide. This is arithmetic, so it cannot see a wrong number -- the check that can, and that
@@ -715,6 +737,21 @@ def _build_container(torch, framework, device):
             # and then blended, so the registered `^6` block is called on ONE width-WIDTH vector per node per
             # round, exactly as `_DecomposeTransform` requires.
             self.node_encode = torch.nn.Linear(NODE_ROW_WIDTH, WIDTH, bias=False).to(device)
+            # HELM 2.0 (F1). The ROUND's own encoder. `node_encode` reads the raw feature row ONCE, to give
+            # the state its starting value; `state_encode` reads the STATE and its two aggregates, once per
+            # half per node per round, which is what makes the loop a loop. A separate matrix rather than a
+            # widened `node_encode` because the two jobs have different input widths and because every
+            # existing tensor then keeps its registered shape: this change ADDS one tensor and moves none.
+            self.state_encode = torch.nn.Linear(WIDTH, WIDTH, bias=False).to(device)
+            # HELM 2.0 (F2b). THE CORRESPONDENCE BILINEAR. In Helm 1.0 every `mapping_target` slot was scored
+            # by `_node_options`, i.e. `target_state . pointer_query` -- a vector that depends on the QUERY and
+            # not on the SOURCE node. So every source node received the IDENTICAL ranking over targets, and the
+            # only mapping the model could express was "every source points at the same target", which is never
+            # a bijection. That is why `correspondence` sat at 0.09 on its OWN TRAINING DATA, and why the five
+            # correspondence questions left the gate population under the class `inexpressible`. This matrix
+            # makes the score a function of the PAIR, and `_mapping_logits` then normalises rows and columns
+            # together so that one-to-one is a property of the output rather than a hope.
+            self.match_key = torch.nn.Linear(WIDTH, WIDTH, bias=False).to(device)
             # A softmax over three logits: how much of the node's OWN signal, of its parents' aggregate and of
             # its children's aggregate enters the registered `^6` block this round. Shared by all K rounds.
             self.round_mix = torch.nn.Parameter(
@@ -762,8 +799,13 @@ def _build_container(torch, framework, device):
                 torch.empty(ROLE_IDS, WIDTH, device=device, dtype=torch.float32))
             torch.nn.init.normal_(self.role_embedding, mean=0.0, std=1.0)
             self.pointer_key = torch.nn.Linear(WIDTH, WIDTH, bias=False).to(device)
+            # HELM 2.0 (F2a). `4 * WIDTH + 4`, not `2 * WIDTH + 4`: this head decides ABSENT vs DIRECT for a
+            # NAMED PAIR of nodes, and in Helm 1.0 it was handed only the query vector, the whole-world vector
+            # and four degree scalars -- it never saw either node of the pair it was judging. The per-node
+            # pointer options did see them; these two mode options did not. `reach` carries 6 of the 18 gate
+            # questions, so that was information starvation on a third of the label's own population.
             self.reach_option_head = torch.nn.Sequential(
-                torch.nn.Linear(2 * WIDTH + 4, WIDTH, bias=False), torch.nn.GELU(),
+                torch.nn.Linear(4 * WIDTH + 4, WIDTH, bias=False), torch.nn.GELU(),
                 torch.nn.LayerNorm(WIDTH), torch.nn.Linear(WIDTH, REACH_OPTION_COUNT, bias=True)).to(device)
             # `3 * WIDTH`, and the whole point is that BOTH this head and the reshape in `_mode_options` used to
             # say `2 * WIDTH + 2 * WIDTH` -- they agreed with each other and disagreed with the tensor, which is
@@ -968,7 +1010,7 @@ def _query_vector(torch, reading, device):
 def _block_input(torch, model, raw):
     """One round's `^6` input: a length-`WIDTH` vector per node.
 
-    The three per-node halves of a round -- the normalised feature row, the normalised parent aggregate and the
+    The three per-node halves of a round -- the normalised STATE, the normalised parent aggregate and the
     normalised child aggregate -- are each ENCODED by one shared learned matrix, then blended by a softmax over
     three round-shared scalars. So the registered `_DecomposeTransform` is called exactly as it is registered:
     once per node per round, on ONE `WIDTH`-long vector. The blend is the only place the round can decide how
@@ -980,10 +1022,12 @@ def _block_input(torch, model, raw):
     with a reshape size, not with the layer that owns the width.
     """
     require(raw.dim() == 2, "POINTER_BLOCK_INPUT_WIDTH")
-    row_width = int(model.node_encode.in_features)
-    require(row_width == NODE_ROW_WIDTH and raw.shape[1] == 3 * row_width, "POINTER_BLOCK_INPUT_WIDTH")
+    # HELM 2.0 (F1): the halves are STATE vectors now, so the round's encoder is `state_encode` and the
+    # authority for the half width is ITS OWN `in_features`, exactly as `node_encode`'s was before.
+    row_width = int(model.state_encode.in_features)
+    require(row_width == WIDTH and raw.shape[1] == 3 * row_width, "POINTER_BLOCK_INPUT_WIDTH")
     halves = raw.reshape(raw.shape[0], 3, -1)
-    encoded = model.node_encode(halves.reshape(-1, row_width)).reshape(raw.shape[0], 3, -1)
+    encoded = model.state_encode(halves.reshape(-1, row_width)).reshape(raw.shape[0], 3, -1)
     weights = torch.softmax(model.round_mix, dim=0)
     value = torch.einsum("nhw,h->nw", encoded, weights)
     require(value.shape == (raw.shape[0], _block_width(model)), "POINTER_BLOCK_INPUT_WIDTH")
@@ -1024,13 +1068,22 @@ def _rounds(torch, model, blocks, *, charge=None, observe=None):
         require(bool(torch.isfinite(hidden).all().item()), "POINTER_STATE_NONFINITE")
         inputs, parents, children = [], [], []
         for position, (start, stop) in enumerate(offsets):
-            block = hidden[start:stop, :]
-            raw = blocks[position][2]
+            # HELM 2.0 (F1). THE DEFECT THIS REPLACES: these three aggregates were taken from `raw`, the
+            # FROZEN node feature rows, while the state `hidden` was read into a local named `block` that
+            # was never used. The round input was therefore a constant, bitwise identical on all
+            # CORE_ROUNDS rounds, and no information more than ONE hop away could ever reach a node --
+            # at round 8 or at round 800. The docstring above always described the intended recurrence
+            # (`norm(h)`); the code did not perform it. Measured proof, and the two $0 checks that must
+            # pass before any spend, are in `records/typed_pointer_001/HELM_ARCHITECTURE_FINDING_AND_PLAN.md`
+            # and re-run by `records/typed_pointer_001/rounds_iterate_check.py`.
+            state = hidden[start:stop, :]
             adjacency = blocks[position][3]
-            # The three halves are NODE FEATURE rows, each RMS-normalised, then projected by one shared matrix.
-            inputs.append(_rms_unit(torch, raw))
-            parents.append(_rms_unit(torch, adjacency.matmul(raw)))
-            children.append(_rms_unit(torch, adjacency.transpose(0, 1).matmul(raw)))
+            # The three halves are STATE rows, each RMS-normalised, then projected by one shared matrix.
+            # `adjacency.matmul(state)` sums each node's PARENTS' states; the transpose sums its CHILDREN's.
+            # Because the state carries what the previous round learned, hop k reaches distance k.
+            inputs.append(_rms_unit(torch, state))
+            parents.append(_rms_unit(torch, adjacency.matmul(state)))
+            children.append(_rms_unit(torch, adjacency.transpose(0, 1).matmul(state)))
         # Worlds hold DIFFERENT node counts, so the per-node input and the two per-node messages are
         # concatenated row-by-row in world order rather than stacked square: row i of the result is
         # [norm(x_i), norm(sum parents_i), norm(sum children_i)] of one node of one world.
@@ -1140,6 +1193,7 @@ class GraphForward:
 
     def __init__(self, torch, model, reading, device, *, charge=None):
         self.torch, self.model, self.reading, self.device = torch, model, reading, device
+        self._mapping_cache = None            # HELM 2.0 (F2b): filled once per plan by `_mapping_logits`
         self.blocks = _graph_blocks(torch, reading, device)
         self.world_ids = [row[0] for row in self.blocks]
         self.world_position = {world_id: index for index, world_id in enumerate(self.world_ids)}
@@ -1262,6 +1316,79 @@ class GraphForward:
             0, torch.tensor([start + rank for rank in ranks], dtype=torch.int64, device=self.device))
         return states.matmul(self.pointer_query)
 
+    def _mapping_logits(self, plan):
+        """HELM 2.0 (F2b): the whole source x target score matrix for `correspondence`, Sinkhorn-normalised.
+
+        Built ONCE per plan and cached, because Sinkhorn is a property of the MATRIX: normalising a single
+        row in isolation would reintroduce exactly the independence this replaces. Rows are the plan's
+        `mapping_target` source nodes in plan order, columns are every target node those slots name.
+
+        `S[i][j] = <W h_source_i, h_target_j>` is the pair score. The loop then alternately subtracts the
+        row log-sum-exp and the column log-sum-exp, which is Sinkhorn in the log domain: it drives the
+        matrix toward one that is near-doubly-stochastic, so a source that is confidently taken by one
+        target stops being available to the others. The result is still LOGITS, one row per source, which
+        is what the loss and `slots._check_scores` already consume -- nothing downstream changes shape.
+
+        This makes a bijection REPRESENTABLE. It does not make it correct: that is a question for a run.
+        """
+        if self._mapping_cache is not None:
+            return self._mapping_cache
+        torch = self.torch
+        sources, targets = [], []
+        for slot in plan["slots"]:
+            if slot["field"] != "mapping_target":
+                continue
+            require(len(slot["coordinates"]) == 1, "POINTER_SLOT_COORDINATES")
+            sources.append(_node_rank_of_ref(slot["coordinates"][0]))
+            for symbol in slot["symbols"]:
+                rank = _node_rank_of_alias(symbol)
+                if rank not in targets:
+                    targets.append(rank)
+        if not sources:
+            self._mapping_cache = {}
+            return self._mapping_cache
+        require(len(set(sources)) == len(sources), "POINTER_MAPPING_SOURCE_REPEAT")
+        targets = sorted(targets)
+        target_offset = sum(row[1] for row in self.blocks[:self._target_position()])
+        source_states = self.hidden.index_select(
+            0, torch.tensor([self.focus_offset + rank for rank in sources],
+                            dtype=torch.int64, device=self.device))
+        target_states = self.hidden.index_select(
+            0, torch.tensor([target_offset + rank for rank in targets],
+                            dtype=torch.int64, device=self.device))
+        scores = self.model.match_key(source_states).matmul(target_states.transpose(0, 1))
+        require(scores.shape == (len(sources), len(targets)), "POINTER_MAPPING_SCORE_SHAPE")
+        for _ in range(SINKHORN_STEPS):
+            scores = scores - torch.logsumexp(scores, dim=1, keepdim=True)
+            scores = scores - torch.logsumexp(scores, dim=0, keepdim=True)
+        require(bool(torch.isfinite(scores).all().item()), "POINTER_MAPPING_NONFINITE")
+        column = {rank: index for index, rank in enumerate(targets)}
+        self._mapping_cache = {"rows": {rank: scores[index] for index, rank in enumerate(sources)},
+                               "column": column}
+        return self._mapping_cache
+
+    def _pair_states(self, position):
+        """HELM 2.0 (F2a): `cat(state[whole], state[part])` for the query's named pair, zeros where unnamed.
+
+        The two node ranks are the FOCUS world's own list positions, exactly as `_graph_blocks` applies the
+        two query marks, so the state is taken from the focus world's slice of `hidden` and NOT from
+        `position` -- `position` names the world whose options are being scored, which for `reach` is the
+        focus world but is not the same thing. A rank of `None` means the question named no such node, and
+        that slot is a zero vector rather than an absent one, so the head's input width never varies.
+        """
+        torch = self.torch
+        count = self.blocks[self.focus_position][1]
+        parts = []
+        for rank in (self.reading["query"]["whole"], self.reading["query"]["part"]):
+            if rank is None:
+                parts.append(self.hidden.new_zeros(self.hidden.shape[1]))
+                continue
+            require(type(rank) is int and 0 <= rank < count, "POINTER_PAIR_STATE_RANK")
+            parts.append(self.hidden[self.focus_offset + rank, :])
+        value = torch.cat(parts)
+        require(int(value.shape[0]) == 2 * self.hidden.shape[1], "POINTER_PAIR_STATE_WIDTH")
+        return value
+
     def _reach_options(self, position):
         """The always-available `reach` options: `ABSENT`, `DIRECT`, then one pointer per candidate node."""
         torch, model = self.torch, self.model
@@ -1271,7 +1398,11 @@ class GraphForward:
                                features[:, OUT_DEGREE_SUM_COLUMN].sum(),
                                features[:, IN_DEGREE_SUM_COLUMN].sum() / count,
                                features[:, OUT_DEGREE_SUM_COLUMN].sum() / count])
-        value = torch.cat((self.query_value, self.worlds[position], degrees)).reshape(1, -1)
+        # HELM 2.0 (F2a): the PAIR the question is about, read from the same `hidden` the pointer options use.
+        # A question with no named node contributes a zero vector in that slot, so the width is fixed and the
+        # "not named" case is representable rather than absent.
+        value = torch.cat((self.query_value, self.worlds[position],
+                           self._pair_states(position), degrees)).reshape(1, -1)
         # DERIVED, NEVER RESTATED. This reshape used to say `2 * WIDTH + 4`, i.e. the same number the head was
         # built from -- a check that cannot detect that number being wrong, which is the whole lesson of the
         # width defects in this module. `-1` plus the head's own `in_features` has no second number to drift.
@@ -1362,8 +1493,14 @@ class GraphForward:
                 logits = self._node_options(self.focus_position,
                                             [_node_rank_of_alias(symbol) for symbol in symbols])
             elif field == "mapping_target":
-                logits = self._node_options(self._target_position(),
-                                            [_node_rank_of_alias(symbol) for symbol in symbols])
+                # HELM 2.0 (F2b): this slot's ROW of the Sinkhorn-normalised pair matrix, indexed in the
+                # slot's own symbol order. Helm 1.0 called `_node_options` here, which scored every
+                # target against `pointer_query` and therefore gave EVERY source the same ranking.
+                require(len(coordinates) == 1, "POINTER_SLOT_COORDINATES")
+                mapping = self._mapping_logits(plan)
+                row = mapping["rows"][_node_rank_of_ref(coordinates[0])]
+                logits = torch.stack([row[mapping["column"][_node_rank_of_alias(symbol)]]
+                                      for symbol in symbols])
             elif field == "reach":
                 nodes = [_via_rank(symbol) for symbol in symbols if symbol.startswith("VIA_N")]
                 require(symbols[:REACH_OPTION_COUNT] == ["ABSENT", "DIRECT"]
@@ -1575,6 +1712,18 @@ class PointerCourseLearner:
                 and type(run_context["source_seed"]) is int
                 and run_context["source_seed"] in SOURCE_SEEDS, "TYPED_LEARNER_RUN_CONTEXT")
         self.optimizer_config, self.limits = deepcopy(optimizer_config), deepcopy(limits)
+        # HELM 2.0 (F4). The schedule needs to know how many updates the run plans, and the learner is
+        # not told that today. `limits["planned_main_updates"]` is the seam: when a caller supplies it
+        # the rate warms up and then decays; when it is ABSENT the rate is the configured constant, which
+        # is bitwise what Helm 1.0 did. So this change cannot alter an existing run's arithmetic unless
+        # that run opts in, and `learning_rate_schedule` records which of the two was in force.
+        planned = limits.get("planned_main_updates") if type(limits) is dict else None
+        require(planned is None or (type(planned) is int and planned > 0),
+                "TYPED_LEARNER_PLANNED_MAIN_UPDATES")
+        self.planned_main_updates = planned
+        self.learning_rate_schedule = ("CONSTANT_AS_HELM_1_0" if planned is None
+                                       else "WARMUP_%g_THEN_COSINE_TO_%g_OVER_%d"
+                                       % (LR_WARMUP_FRACTION, LR_FINAL_FRACTION, planned))
         self.optimizer = torch.optim.AdamW(list(self.module.parameters()),
                                            lr=optimizer_config["learning_rate"],
                                            weight_decay=optimizer_config["weight_decay"],
@@ -1605,6 +1754,32 @@ class PointerCourseLearner:
         self._started, self._elapsed_before = time.monotonic(), 0.0
 
     # ---- bookkeeping ----
+    def _learning_rate(self):
+        """This step's learning rate. HELM 2.0 (F4).
+
+        With no `planned_main_updates` this returns the configured constant, so a caller that does not
+        opt in gets Helm 1.0's arithmetic exactly. With one, the rate warms LINEARLY from zero over the
+        first `LR_WARMUP_FRACTION` of the plan and then follows a cosine down to `LR_FINAL_FRACTION` of
+        the configured rate. The floor is deliberately not zero: a rate that reaches zero makes a
+        converged model and a stalled one look identical in the loss curve, which is precisely the
+        reading Helm 1.0's flat pass 4-10 stretch already made hard.
+
+        `self.cursor` is the count of updates COMMITTED so far, so the first step asks with cursor 0 and
+        the last with cursor `planned - 1`. A run that overruns its plan holds the floor rather than
+        walking off the end of the cosine.
+        """
+        base = float(self.optimizer_config["learning_rate"])
+        planned = self.planned_main_updates
+        if planned is None:
+            return base
+        step, warmup = int(self.cursor), max(1, int(planned * LR_WARMUP_FRACTION))
+        if step < warmup:
+            return base * (step + 1) / warmup
+        span = max(1, planned - warmup)
+        progress = min(1.0, (step - warmup) / span)
+        cosine = 0.5 * (1.0 + math.cos(math.pi * progress))
+        return base * (LR_FINAL_FRACTION + (1.0 - LR_FINAL_FRACTION) * cosine)
+
     def _elapsed(self):
         return self._elapsed_before + time.monotonic() - self._started
 
@@ -1767,6 +1942,16 @@ class PointerCourseLearner:
                                    for name in trained)
             require(math.isfinite(gradient_squared), "TYPED_LEARNER_GRADIENT_NORM_NONFINITE")
             self._budget()
+            # HELM 2.0 (F4). Clip, then set this step's rate. Both are MEASURED into the row below.
+            # `clip_grad_norm_` returns the norm it SAW, before any scaling, so `gradient_norm_before_clip`
+            # is the real reading and `gradient_was_clipped` is derived from it rather than asserted.
+            clip_norm = float(self.torch.nn.utils.clip_grad_norm_(
+                [parameter for parameter in parameters.values() if parameter.grad is not None],
+                GRADIENT_CLIP_NORM))
+            require(math.isfinite(clip_norm), "TYPED_LEARNER_GRADIENT_NORM_NONFINITE")
+            step_learning_rate = self._learning_rate()
+            for group in self.optimizer.param_groups:
+                group["lr"] = step_learning_rate
             self.counters["optimizer_step_attempts"] += 1
             self.optimizer.step()
             self.counters["optimizer_updates"] += 1
@@ -1783,6 +1968,12 @@ class PointerCourseLearner:
                       "normalized_batch_loss": sum(row["normalized_task_loss"] for row in reports)
                       / len(reports),
                       "training_uses": "raw_batch_loss", "gradient_squared_norm": gradient_squared,
+                      # HELM 2.0 (F4), recorded so the guards are auditable rather than trusted.
+                      "gradient_norm_before_clip": clip_norm,
+                      "gradient_clip_norm": GRADIENT_CLIP_NORM,
+                      "gradient_was_clipped": bool(clip_norm > GRADIENT_CLIP_NORM),
+                      "learning_rate_this_step": step_learning_rate,
+                      "learning_rate_schedule": self.learning_rate_schedule,
                       "loss_plan_digests": loss_ids, "counters": deepcopy(self.counters),
                       "gradient_parameter_names": trained,
                       "gradient_parameter_count": len(trained),

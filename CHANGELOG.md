@@ -4,6 +4,69 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - HELM 2.0 F1/F2/F4 BUILT. Helm 1.0's eight reasoning rounds were ONE round repeated eight times.
+
+**Branch `research/helm-2.0-iterating-rounds`. Code only. $0. No GPU, no run, no claim promoted,
+`BRAIN_LINEAGE.md` untouched.**
+
+### The defect
+
+`pointer_learner.py:_rounds` took its three per-round aggregates from `raw`, the FROZEN node
+feature rows, and read the state `hidden` only into a local named `block` that was never used.
+So `update` was constant and the recurrence was `h <- rms(h + c*u)` with the SAME `u` eight
+times. **The receptive field was exactly ONE hop, at round 8 or at round 800.** The function's
+own docstring described the intended recurrence (`norm(h)`); the code did not perform it.
+
+Proven three ways, with the real trained `final.pt`: an AST walk reporting exactly one
+assigned-and-never-read name (`block`); all 8 round inputs **bitwise identical**, max|diff|
+`0.000e+00`; and a node's final vector **identical** (`0.000e+00`) when the graph changed two
+hops away with its one-hop neighbourhood held fixed.
+
+This explains every Helm 1.0 reading: `context`/`definition`/`parts`/`edge_account` at 1.00
+train AND 1.00 held (saturated one-hop tasks, no headroom); `reach` 0.94 (DIRECT is one hop,
+VIA needs two); `analogy` 0.42 train / **0.00 held**; the ten-node panel at `7/59, 9/59, 6/59`.
+And it explains the audit's floor result: **the one-hop adjacency rule IS the architecture's
+ceiling**, so Helm 1.0 converged onto the trivial baseline because that is what it could compute.
+
+### Built
+
+- **F1** the loop reads its own state; new `state_encode` `Linear(64,64)`; `BLOCK_INPUT_WIDTH`
+  54 -> 192. Receptive field 1 hop -> `CORE_ROUNDS` = 8.
+- **F2a** the `reach` ABSENT/DIRECT head is shown the query's node pair. It previously decided
+  "is this part inside that whole" **without being shown either node**; `reach` carries 6 of the
+  18 gate questions. Head input `2*WIDTH+4` -> `4*WIDTH+4`.
+- **F2b** `correspondence` gets a bilinear pair score (`match_key`) plus 3 log-domain Sinkhorn
+  steps. Helm 1.0 scored every `mapping_target` slot against `pointer_query`, which depends on
+  the QUERY and not the SOURCE, so **every source node got the identical ranking over targets**
+  and a bijection was UNREPRESENTABLE. That is why it sat at 0.09 on its own training data.
+- **F4** gradient clipping at global norm 1.0, plus an opt-in warm-up/cosine schedule. Both are
+  RECORDED in every update row (`gradient_norm_before_clip`, `gradient_was_clipped`,
+  `learning_rate_this_step`, `learning_rate_schedule`). Motivation: seed 20260917 went grad^2
+  0.622 -> 19.159 -> 28.822 across passes 7-9 with the loss RISING, on a constant 0.003 rate with
+  no clipping; that is the seed whose `role_set` finished at 0.13 while seed 20260918 reached 1.00.
+  **The schedule defaults OFF** -- it activates only when a caller puts `planned_main_updates` in
+  `limits`, so an existing run's arithmetic is bitwise unchanged unless it opts in.
+
+Brain: **157,919 numbers in 46 groups -> 174,303 in 48. +16,384, +10.4%.**
+
+### Gate
+
+`records/typed_pointer_001/rounds_iterate_check.py` -- 6 checks, `$0`, ~10 s, no CUDA. Prints
+`ROUNDS_ITERATE_PASS`. Round-to-round difference now GROWS monotonically (0.034 -> 0.230), which
+is information spreading one hop per round; the two-hop test moved off `0.000e+00`.
+**Nothing should be launched if this does not pass.**
+
+### NOT done -- next agent picks up at `records/typed_pointer_001/HELM_2_0_HANDOFF.md`
+
+Wire `planned_main_updates` through the worker (the schedule is dormant without it); held-back
+loss per pass; multi-head attention (`attention_key` is 64 numbers today); and **F3, the big one**
+-- a difficulty ladder and a continuous score, built BESIDE the frozen 18 and never replacing it,
+because 18 yes/no questions cannot show a curve. F5 scaling comes after F3, `CORE_ROUNDS` first
+because the round is shared and costs zero new parameters.
+
+**No result is claimed. The machine is now CAPABLE of things Helm 1.0 could not represent.
+Whether it does them is a question for a run and for the frozen grader, which is untouched.**
+
 ## 2026-09-20 UTC (POINTER) - INDEPENDENT AUDIT DOWNGRADES HELM 1.0's INTERPRETATION. A rule that learns nothing scores 11 of 18 on the label's own questions.
 
 **The label stands. My interpretation of it does not.** An independent audit
