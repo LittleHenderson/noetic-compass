@@ -4,6 +4,55 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - THE ROOT CAUSE, INDEPENDENTLY VERIFIED. The one-hop loop explains every number the audit measured.
+
+**The Helm 2.0 entry below is the agent's own report. This entry is my independent verification of it,
+plus the consequence for Helm 1.0's record, which that agent correctly left untouched.**
+
+**I confirmed the defect by reading the certified source at `6580add4`.** `_rounds` reads the state into
+a local named `block` and never uses it; all three per-round aggregates come from `raw`, the frozen
+input rows. The round input is therefore a **constant** and the state drifts the same way eight times.
+**The docstring says `norm(h)`. The code says `norm(raw)`.** Reach: one hop, always.
+
+**I ran the repair's own gate myself, on CPU, at `$0`:**
+
+```
+records/typed_pointer_001/rounds_iterate_check.py  ->  ROUNDS_ITERATE_PASS, exit 0
+tests/test_typed_pointer_study.py -q               ->  22 passed, exit 0
+```
+
+Six checks, all real and none vacuous: no assigned-and-never-read name in `_rounds`; round input is
+three state vectors (`192 == 3 * 64`); **the round input differs across rounds and grows steadily**
+(`0.014739282429218292, 0.02969013899564743, 0.04484092444181442, 0.06017898768186569,
+0.07569090276956558, 0.0913623794913292, 0.10717859119176865`); **a change two hops away reaches node
+0** (`0.0018496513366699219`, where 1.0 gave exactly `0.000e+00`), with the one-hop neighbourhood
+asserted bitwise identical **and** the graph asserted really changed; reach head 260 wide; different
+sources prefer different targets with Sinkhorn columns summing to 1 (`1.1920928955078125e-07`).
+**174,303 numbers in 48 groups**, matching the claim exactly. The three tensors a 1.0 checkpoint cannot
+fill are printed by name, not hidden.
+
+**The consequence for Helm 1.0 — this changes the diagnosis, and it is the important part.** The
+certified label stands. What it measured was **the ceiling of a broken loop**:
+
+| the audit found | why |
+|---|---|
+| a no-learning rule scores **11 of 18**; Helm 12/12/11 | one-hop adjacency **is the ceiling**. A trivial rule was the only thing Helm could compute. |
+| `analogy` **0/5** before and after, all seeds | needs cross-world comparison; impossible at one hop. |
+| `context`, `definition`, `parts`, `edge_account` **1.00 train and held** | all one-hop, saturated, no headroom. |
+| `reach` 0.94 train / 0.88–0.96 held | DIRECT is one hop; **VIA needs two**. |
+| `correspondence` **0.09 on its own training data** | every source was scored against the same query vector, so every source got the identical ranking. A one-to-one mapping was **unrepresentable**, not merely unlearned. |
+| ten-node panel 7/59, 9/59, 6/59 | bigger graphs put more of the question out of reach. |
+
+**So Helm 1.0's numbers must not be used to argue anything about Helm's capacity. They measure a
+defect.** That is now written into `BRAIN_LINEAGE.md`, which also carries a **Helm 2.0** row marked
+**NOT TRAINED, NOT CERTIFIED, NO CLAIM** — because building a shape is not a result, and this project
+has already been caught once treating a headline as a finding.
+
+**Still gating everything: F3, a ruler.** Eighteen yes/no questions cannot show a learning curve, and
+six of them are out of reach for a one-hop machine. Until there is a difficulty ladder by world size and
+hop distance plus a continuous score beside exact-match — built **beside** the frozen 18, **never
+replacing it** — no scaling run can show anything.
+
 ## 2026-09-20 UTC (POINTER) - HELM 2.0 F1/F2/F4 BUILT. Helm 1.0's eight reasoning rounds were ONE round repeated eight times.
 
 **Branch `research/helm-2.0-iterating-rounds`. Code only. $0. No GPU, no run, no claim promoted,

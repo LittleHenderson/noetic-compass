@@ -21,7 +21,8 @@ and report on.
 | | |
 |---|---|
 | **Name** | **Helm** |
-| **Current version** | **1.0 — CERTIFIED** |
+| **Current shape** | **2.0 — built and verified on CPU at `$0`. NOT trained. NOT certified. No claim.** |
+| **Last certified** | **1.0** — and the reason its result was so thin is now known: its loop was broken. Read the mechanism section below before quoting 1.0. |
 | **What it is** | The learning part of the CNCM pointer machine. It reads a small structure of parts and "contains" links, and answers questions about which part holds which. |
 | **Learned numbers** | **157,919**, in **46** groups |
 | **Biggest group** | the word table, `declaration_table`, 1,024 × 64 = **65,536**, which is **41.5%** of the whole brain |
@@ -35,6 +36,110 @@ and report on.
 | **1.0** | the first version that passes the official three-run test. |
 | **1.1, 1.2** | same shape, trained better. |
 | **2.0** | the shape changed, so the number count moved. |
+
+---
+
+## WHY HELM 1.0's RESULT WAS SO THIN — the mechanism, found 2026-09-20
+
+**Helm 1.0's eight reasoning rounds were one round, repeated eight times.** The loop read the state
+into a local named `block` and then never used it. All three per-round aggregates were computed from
+`raw` — the frozen input rows — so the round input was a **constant**, and the machine's reach was
+**exactly one hop, at 8 rounds or at 800.**
+
+The function's own docstring said `norm(h)`. The code said `norm(raw)`.
+
+```python
+for round_index in range(CORE_ROUNDS):
+    for position, (start, stop) in enumerate(offsets):
+        block = hidden[start:stop, :]        # assigned, NEVER READ
+        raw   = blocks[position][2]          # the frozen rows
+        inputs.append(  _rms_unit(torch, raw))
+        parents.append( _rms_unit(torch, adjacency.matmul(raw)))
+        children.append(_rms_unit(torch, adjacency.transpose(0,1).matmul(raw)))
+```
+
+**This explains everything the independent audit measured.**
+
+| what the audit found | why, mechanically |
+|---|---|
+| a rule that learns nothing scores **11 of 18**, and Helm scored 12/12/11 | the one-hop adjacency rule **is the architecture's ceiling**. Helm did not "only learn a trivial rule" — a trivial rule is the **only thing it could compute**. |
+| `analogy` **0 of 5** before and after, all seeds | analogy needs a containment pattern compared **across** worlds. Impossible at one hop. |
+| `context`, `definition`, `parts`, `edge_account` at **1.00 on both training and held** | all four are one-hop questions. Saturated, with zero headroom to show learning. |
+| `reach` 0.94 train / 0.88–0.96 held | DIRECT is one hop and learnable; **VIA needs two** and was out of reach. |
+| `correspondence` **0.09 on its own training data** | every head ended `Linear(64→2)` and every source was scored against the same query vector, so **every source got the identical ranking** — a one-to-one mapping was not merely unlearned but **unrepresentable**. |
+| the ten-node panel at 7/59, 9/59, 6/59 | bigger graphs put more of the question outside one hop. |
+
+**So the correct description of Helm 1.0 is not "it learned a shallow rule".** It is: **the label is
+real, and what it measured was the ceiling of a broken loop.** The study asked a one-hop machine a
+question needing more than one hop, and the one-hop machine answered exactly as far as it could.
+
+**Do not use Helm 1.0's numbers to argue anything about Helm's capacity.** They measure a defect.
+
+---
+
+## Helm 2.0 — built 2026-09-20, NOT trained, NOT certified
+
+**No claim is made here. There is no result.** This section exists so the next agent knows what shape
+exists and what has and has not been shown.
+
+**Branch:** `research/helm-2.0-iterating-rounds`, commit `7f3a656f`, based on `6580add4`.
+**Cost: `$0`.** No GPU, no run, no reservation, no ledger entry, no claim promoted.
+
+The shape changed, so the version moved to 2.0 by the scheme above.
+
+| | Helm 1.0 | Helm 2.0 |
+|---|---|---|
+| learned numbers | 157,919 | **174,303** (+16,384, +10.4%) |
+| tensor groups | 46 | **48** |
+| reach | **1 hop, always** | **up to 8 hops** |
+| round input | 3 frozen feature rows (54 wide) | **3 state vectors (192 wide)** |
+
+**What changed, in plain terms:**
+
+- **F1 — the loop now reads its own state.** New `state_encode` `Linear(64,64)`; `BLOCK_INPUT_WIDTH`
+  54 → 192. This is the repair for the mechanism above.
+- **F2a — the reach head is shown the pair it judges.** It used to decide "is this part inside that
+  whole" without being shown either node. Input 132 → 260. `reach` carries 6 of the 18 gate questions.
+- **F2b — correspondence can express a one-to-one mapping.** A bilinear pair score plus log-domain
+  Sinkhorn steps, so different sources can prefer different targets.
+- **F4 — gradient clipping at norm 1.0**, plus an opt-in warm-up/cosine schedule that is **off by
+  default**, so the arithmetic is bitwise unchanged unless a caller asks for it. Both are recorded in
+  every update row, so the guards are auditable rather than trusted.
+
+**Verified on CPU at `$0`, by me, not by the agent that wrote it:**
+
+```
+python records/typed_pointer_001/rounds_iterate_check.py    ->  ROUNDS_ITERATE_PASS, exit 0
+python -m pytest tests/test_typed_pointer_study.py -q       ->  22 passed, exit 0
+```
+
+Six checks, all real: no assigned-and-never-read name in `_rounds`; the round input is three state
+vectors (`192 == 3 * 64`); **the round input differs across rounds and the difference grows steadily**
+(`0.014739282429218292`, `0.02969013899564743`, `0.04484092444181442`, `0.06017898768186569`,
+`0.07569090276956558`, `0.0913623794913292`, `0.10717859119176865`); **a change two hops away now
+reaches the node** (`0.0018496513366699219` where 1.0 gave exactly `0.000e+00`), with the node's
+one-hop neighbourhood asserted bitwise identical **and** the graph asserted really changed, so it
+cannot pass vacuously; the reach head is 260 wide; and different sources now prefer different targets
+with Sinkhorn columns summing to 1 (`1.1920928955078125e-07`).
+
+**This says the machine is now CAPABLE of more than one hop. It does not say it is better.** What it
+does with that capability is a question for a run and a grader, and neither has happened.
+
+**Known trap, reported rather than hidden.** A Helm 1.0 checkpoint does **not** load strictly into
+Helm 2.0: three tensors are absent (`match_key.weight`, `reach_option_head.0.weight`,
+`state_encode.weight`) and one changed shape (`reach_option_head.0.weight`). The check prints all four
+by name. Any continuation from a 1.0 checkpoint must drop and report them, **never silently coerce**.
+The practice-checkpoint phase-A restore path has **not** been exercised and may need the same treatment.
+
+### Still open, and this is the one that gates everything
+
+**F3 — build a ruler a curve can be drawn on.** Eighteen yes/no questions cannot show a learning curve,
+and six of the eighteen are questions a one-hop machine cannot reach. Until there is a difficulty
+ladder by world size and hop distance, plus a continuous score beside exact-match, **no scaling run can
+show anything.** Build it **beside** the frozen 18, **never replacing it**.
+
+Then F5 — scale. `CORE_ROUNDS` 8 → 12 → 16 first, which costs **zero new parameters** because the
+round is shared.
 
 ---
 
@@ -330,7 +435,8 @@ Add a row. Never edit an old one.
 
 | version | date | numbers | taught on | tested on | the frozen 18 | official verdict | evidence |
 |---|---|---|---|---|---|---|---|
-| **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines, all reusing taught wiring | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0. **A no-learning rule scores 11/18 on the same set; Helm's margin over it is 2, 2, 2 at p = 0.50, 0.50, 0.69. `analogy` 0/5 in every seed.** | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds. Interpretation DOWNGRADED 2026-09-20 by independent audit.** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` + `AUDIT_REPORT_20260920_INDEPENDENT.md` |
+| **Helm 2.0** | 2026-09-20 | **174,303** | not trained | not tested | **no result** | **NOT TRAINED, NOT CERTIFIED, NO CLAIM.** Built and CPU-verified at `$0`; the loop now iterates and reaches 8 hops. | branch `research/helm-2.0-iterating-rounds`, commit `7f3a656f`; `rounds_iterate_check.py` |
+| **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines, all reusing taught wiring | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0. **A no-learning rule scores 11/18 on the same set; Helm's margin over it is 2, 2, 2 at p = 0.50, 0.50, 0.69. `analogy` 0/5 in every seed.** | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds. Interpretation DOWNGRADED 2026-09-20. Cause now known: the loop was broken; one hop was the ceiling.** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` + `AUDIT_REPORT_20260920_INDEPENDENT.md` |
 | **Helm 0.1** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18 → **12/18**, gained 10, lost 0 | **NOT CERTIFIED** | `receipt_20260917_orphaned_1af25973/` |
 
 ---
