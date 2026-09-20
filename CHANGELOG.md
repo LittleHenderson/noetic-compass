@@ -4,6 +4,70 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-20 UTC (POINTER) - I KILLED THE STUDY DRIVER. The full 10-pass run succeeded anyway and its evidence is stranded, because the launcher's own record cannot be recovered.
+
+**What I did wrong, first.** The three claim-bearing jobs were launched as ONE long-lived `execute_study.py`
+process. A tool call of mine was interrupted, that interruption killed the driver, and the study stopped between
+its first and second job. This was my error of process design, not a defect in the study: nothing in the code
+failed. The fix is already applied — the replacement run is started **detached**, so it cannot be killed this way.
+
+**The seed-17 job itself ran to completion and SUCCEEDED, better than any run before it.** Its worker uploaded its
+own records to S3 before the instance was stopped. Read out of `results/artifacts/worker_report.json` and
+`measurements.json` for job `cas-meta2-tpntr-20260920033528-1af25973-m-20260917`:
+
+| field | value |
+|---|---|
+| `status` | **`COMPLETE_TYPED_POINTER_ARM`** |
+| `claim_bearing` / `claimed_bearing_run` | `true` / `true` |
+| `schedule_plan_mode` | `REGISTERED` |
+| **`degraded_checks`** | **`[]` — EMPTY** |
+| `ablations` / `checkpoint_check_phase_a` / `checkpoint_check_phase_b` | **`COMPLETE` / `COMPLETE` / `COMPLETE`** |
+| `checkpoint_reload_verified` | **`true`** |
+| `failure` | `null` |
+| `required_artifacts` / `optimizer_updates` / `pass_summaries` | 99 / 1470 / 10 |
+| `elapsed_seconds` | `7779.904791968999` |
+| course | `course_p00` 30/564 → `course_p10` **392/564** |
+| held-back records | 9/127 → 78/127 at pass 1 |
+| retention | 93/96 before and 93/96 after (held world 19/20, trained world 74/76) |
+| development | 0/59 at cursor 0 → 7/59 at cursor 1470 |
+
+**Every single thing the seventh run failed to do, this run did.** The seventh run died at the reload with
+`POINTER_CHECKPOINT_LAYOUT` and left `degraded_checks: ['ablations','checkpoint_check_phase_b']` with
+`checkpoint_reload_verified: null`. This one has an empty degraded list, all three report-only checks `COMPLETE`,
+and `checkpoint_reload_verified: true`. Pass-level numbers: mean loss 1.0566, 0.6598, 0.5978, 0.5912, 0.5835,
+0.5555, 0.5405, 0.5760, 0.6523, 0.5749 at ~526 s per pass (`525.7354`–`526.8565`).
+
+**CLAIM STATUS: NONE, AND THAT IS NOT A JUDGEMENT CALL.** The run succeeded, but the frozen gate cannot read it,
+because `receipt_20260917/result.json` does not exist and cannot legitimately exist. That file is not the
+worker's — it is the **launcher lifecycle's own record** (`schema: cas-graph-training-candidate-launch/1`, carrying
+`completed_deliverable`, `cleanup`, `stages`, `reservation`, `ledger_before`/`ledger_after`), and the gate reads
+`completed_deliverable` and `cleanup.complete` out of it. The launcher died before writing it. Two hard reasons it
+cannot be recovered:
+
+1. **`graph_training_curriculum_launch.py:1622-1624` refuses a job already in the ledger** —
+   `JOB_ALREADY_RESERVED_NO_AUTOMATIC_RETRY`. Job `...-m-20260917` is permanently single-shot; it can never be
+   launched again, and its `15.00` reservation will not return (`no_automatic_refund: true`).
+2. **There is no collection-only entry point.** `provider.collect()` exists, but the lifecycle record is written
+   inside `lifecycle.execute()` after a fresh `provider.reserve()` that the check above refuses. Writing
+   `result.json` by hand would be manufacturing the exact lifecycle record the gate trusts, so I did not.
+
+The evidence is therefore kept as `records/typed_pointer_001/receipt_20260917_orphaned_1af25973/` (the launcher's
+own `evidence_contract.json`, `intent.json`, `preflight.json`, `reservation.json`, `launch.json` and its
+`provider_*.json` records), and the S3 objects for bucket
+`cas-meta2-tpntr-20260920033528-1af25973-m-20260917-807562639912` are the only copy of the worker's records. The
+instance `i-03f50a5d5c7e6da44` was terminated by me after the worker finished, so billing stopped; the other
+workstream's `i-0c3028734c8885542` (`cas-bridge-control-20260822`) was not touched.
+
+**The lesson, stated plainly: one driver process for three single-shot jobs is a single point of failure, and the
+cost of that failure is not the broken job — it is a fully successful run whose evidence no gate will ever accept.**
+The recovery is a fresh study admission, which produces three NEW job names the ledger will accept, launched
+detached.
+
+**Cost of my mistake, exact.** The lost seed-17 job reserved `15.00` and its real compute was
+`worker_clock_seconds 7779.904791968999` + `non_worker_overhead_seconds 598.1888835440004` =
+`8378.093675513` instance seconds ≈ `2.3272482431981` hours ≈ **`$5.86`** at the observed `2.5200000000`/h,
+spent on evidence nothing can read. The fresh study reserves `45.00` more (`15.00` per job) as its jobs launch.
+
 ## 2026-09-20 UTC (POINTER) - S1 THROUGH S10 PASS ON AWS. The ninth run is the first pointer run to finish, and the reload that killed the seventh is verified True on real hardware.
 
 **`AWS_CANDIDATE_FINISHED`, `completed_deliverable: true`, `missing_required_objects: []`, 43 of 43 files
