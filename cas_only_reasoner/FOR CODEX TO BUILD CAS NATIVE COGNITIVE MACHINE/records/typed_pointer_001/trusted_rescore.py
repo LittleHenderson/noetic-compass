@@ -59,8 +59,8 @@ def _lf_sha(path):
     return hashlib.sha256(pathlib.Path(path).read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
-def _raw_sha(path):
-    return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
+# Every file hash here is LF-normalised: the receipts, anchors and readings are text files that git stores
+# with LF while a Windows working copy may hold CRLF; a raw-byte pin would fire on a fresh checkout.
 
 
 def _canon(value):
@@ -115,10 +115,10 @@ def write_anchor(study_path, anchor_path, receipt_override, material=None):
         rdir = pathlib.Path(receipt_override.get(seed, job["receipt_dir"]))
         art = rdir / "collected/results/artifacts"
         seeds[seed] = {"receipt_dir_at_anchor_time": str(rdir),
-                       "raw_predictions_sha256": {ph: _raw_sha(art / ("%s_predictions.json" % ph)) for ph in PHASES}}
+                       "predictions_sha256_lf": {ph: _lf_sha(art / ("%s_predictions.json" % ph)) for ph in PHASES}}
     anchor = {
         "schema": "cncm.trusted-rescore-anchor/0.1", "written": "2026-09-21",
-        "study_path": str(study_path), "study_sha256": _raw_sha(study_path),
+        "study_path": str(study_path), "study_sha256_lf": _lf_sha(study_path),
         "grader": {"path": "records/typed_pointer_001/evaluate_gates.py", "sha256_lf": _lf_sha(GRADER)},
         "checker": checker_identity(checker),
         "course_digest": frozen["course_digest"],
@@ -131,8 +131,9 @@ def write_anchor(study_path, anchor_path, receipt_override, material=None):
         "seeds": seeds,
         "custody": "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab",
     }
-    pathlib.Path(anchor_path).write_text(json.dumps(anchor, indent=1, sort_keys=True), encoding="utf-8")
-    print("anchor written: %s  sha256 %s" % (anchor_path, _raw_sha(anchor_path)[:16]))
+    with open(anchor_path, "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(anchor, indent=1, sort_keys=True))
+    print("anchor written: %s  sha256_lf %s" % (anchor_path, _lf_sha(anchor_path)[:16]))
     return 0
 
 
@@ -164,13 +165,13 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
         question_correct = {}
         for ph in PHASES:
             ppath, spath = art / ("%s_predictions.json" % ph), art / ("%s_scoring.json" % ph)
-            entry = {"predictions_sha256": None, "rescored": 0, "scoring_rows_compared": 0, "disagreements": 0}
+            entry = {"predictions_sha256_lf": None, "rescored": 0, "scoring_rows_compared": 0, "disagreements": 0}
             if not ppath.is_file():
                 reasons.append("MISSING_OR_EXTRA_PREDICTIONS:%s:%s:file absent" % (seed, ph))
                 seed_report["phases"][ph] = entry
                 continue
-            entry["predictions_sha256"] = _raw_sha(ppath)
-            if entry["predictions_sha256"] != anchor["seeds"].get(seed, {}).get("raw_predictions_sha256", {}).get(ph):
+            entry["predictions_sha256_lf"] = _lf_sha(ppath)
+            if entry["predictions_sha256_lf"] != anchor["seeds"].get(seed, {}).get("predictions_sha256_lf", {}).get(ph):
                 reasons.append("PREDICTIONS_IDENTITY:%s:%s:raw predictions differ from the anchor (altered, or the wrong phase/split file)" % (seed, ph))
             try:
                 preds = json.loads(ppath.read_text(encoding="utf-8"))["predictions"]
@@ -247,12 +248,13 @@ def rescore(study_path, anchor_path, receipt_override, out_path, material=None, 
             reasons.append("FROZEN_GRADER_DISAGREES:label or per-seed counts differ between the fresh rescore and gate_reading.json")
             label = "VOID_REJECTED"
     reading = {"schema": SCHEMA, "verdict": "REJECT" if reasons else "RESCORE_OK", "label_rederived": label, "reject_reasons": reasons,
-               "anchor": {"path": str(anchor_path), "sha256": _raw_sha(anchor_path)}, "grader_sha256_lf": _lf_sha(GRADER),
+               "anchor": {"path": str(anchor_path), "sha256_lf": _lf_sha(anchor_path)}, "grader_sha256_lf": _lf_sha(GRADER),
                "checker": ident, "course_digest": frozen["course_digest"], "population_digest": population["digest"],
                "per_seed": per_seed, "comparison_with_frozen_grader": comparison, "custody": anchor.get("custody"),
                "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was rechecked with the private checker"}
     if out_path:
-        pathlib.Path(out_path).write_text(json.dumps(reading, indent=1, sort_keys=True), encoding="utf-8")
+        with open(out_path, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(reading, indent=1, sort_keys=True))
     print(json.dumps({k: reading[k] for k in ("verdict", "label_rederived", "reject_reasons")}, indent=1))
     for seed, s in per_seed.items():
         print("  seed %s: frozen18 %s -> %s, gained %d broken %d, rescored %s, disagreements %s" % (

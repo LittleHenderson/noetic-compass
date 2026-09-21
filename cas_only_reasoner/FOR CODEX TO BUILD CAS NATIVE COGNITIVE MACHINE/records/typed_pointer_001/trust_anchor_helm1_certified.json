@@ -88,21 +88,21 @@
  "schema": "cncm.trusted-rescore-anchor/0.1",
  "seeds": {
   "20260917": {
-   "raw_predictions_sha256": {
+   "predictions_sha256_lf": {
     "course_p00": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
     "course_p10": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1"
    },
    "receipt_dir_at_anchor_time": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917"
   },
   "20260918": {
-   "raw_predictions_sha256": {
+   "predictions_sha256_lf": {
     "course_p00": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
     "course_p10": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224"
    },
    "receipt_dir_at_anchor_time": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918"
   },
   "20260919": {
-   "raw_predictions_sha256": {
+   "predictions_sha256_lf": {
     "course_p00": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
     "course_p10": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513"
    },
@@ -110,6 +110,6 @@
   }
  },
  "study_path": "records\\typed_pointer_001\\study_helm1_certified.json",
- "study_sha256": "bc62fe05046fdfee3135a69e3b9d364a5ad26e8aba6bed98c1205faec8c24379",
+ "study_sha256_lf": "bc62fe05046fdfee3135a69e3b9d364a5ad26e8aba6bed98c1205faec8c24379",
  "written": "2026-09-21"
 }

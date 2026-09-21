@@ -1,7 +1,7 @@
 {
  "anchor": {
   "path": "records\\typed_pointer_001\\trust_anchor_helm1_certified.json",
-  "sha256": "72b68c33c0cb6d93c5b30b9d2205486aa54b59245733f35151dc38ce92d4b6fc"
+  "sha256_lf": "9929dd81d9526899814208d1c3901f8b9a21237c30e03adfea058d757ec30ee6"
  },
  "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was rechecked with the private checker",
  "checker": {
@@ -72,13 +72,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+     "predictions_sha256_lf": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+     "predictions_sha256_lf": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
      "rescored": 564,
      "scoring_rows_compared": 564
     }
@@ -100,13 +100,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+     "predictions_sha256_lf": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+     "predictions_sha256_lf": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
      "rescored": 564,
      "scoring_rows_compared": 564
     }
@@ -128,13 +128,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+     "predictions_sha256_lf": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
+     "predictions_sha256_lf": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
      "rescored": 564,
      "scoring_rows_compared": 564
     }

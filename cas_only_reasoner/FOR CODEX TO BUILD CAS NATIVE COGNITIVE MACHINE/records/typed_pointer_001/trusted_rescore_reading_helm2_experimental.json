@@ -1,7 +1,7 @@
 {
  "anchor": {
   "path": "records\\typed_pointer_001\\trust_anchor_helm2_experimental_20208c92.json",
-  "sha256": "8e1252a083a5ec76350a45fde235b189e3e262e628a8091a5307a437c3f3664b"
+  "sha256_lf": "03c4437a3fdbd21d498f1c2249ec7a24a65cf7a38bcc35427bfd0780716f822d"
  },
  "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was rechecked with the private checker",
  "checker": {
@@ -14,6 +14,7 @@
  },
  "comparison_with_frozen_grader": {
   "frozen_label": "NO_TRANSFER_TO_NEW_WORLDS",
+  "frozen_reading_path": "records\\typed_pointer_001\\admission_001\\gate_reading.json",
   "frozen_reading_present": true,
   "labels_agree": true,
   "per_seed": {
@@ -71,13 +72,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
+     "predictions_sha256_lf": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
+     "predictions_sha256_lf": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
      "rescored": 564,
      "scoring_rows_compared": 564
     }
@@ -99,13 +100,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
+     "predictions_sha256_lf": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
+     "predictions_sha256_lf": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
      "rescored": 564,
      "scoring_rows_compared": 564
     }
@@ -127,13 +128,13 @@
    "phases": {
     "course_p00": {
      "disagreements": 0,
-     "predictions_sha256": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
+     "predictions_sha256_lf": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
      "rescored": 564,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
-     "predictions_sha256": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
+     "predictions_sha256_lf": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
      "rescored": 564,
      "scoring_rows_compared": 564
     }
