@@ -4,6 +4,70 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - OWNER RULINGS RECORDED (canonical 28 Foundations, three canonical books, `^` not `CO`, nothing in CAS excluded, AWS for heavy jobs); OUTSIDE SOURCE REVIEW VERIFIED; RESCORER REBUILT AS 0.2 so a swapped-in checker is never run. Commits `57036f7b` + `8b2bb942`. Heavy re-runs NOT done: they wait for the owner's yes to a named AWS job.
+
+**Owner rulings, in the owner's words** (`research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json`; not an
+owner-signed record). "CANONICAL 28 FOUNDATIONS" with `28 fOUNDATIONS 1.0.pdf` (399,302 bytes, sha256
+`2c27443f447bd699…`) closes DR-4 of `OPERATION_CONTRACTS.json`. The three books (*Thinking in Cognitive
+Architecture*, *CAS PCBA Engineer*, *Reality Engineering*) are canon; write Noetics `^0`..`^9`. Heavy work goes to
+AWS because the laptop overheats — no amount was named, nothing was launched. An earlier note of mine that set the
+28 Foundations aside was WRONG and is withdrawn: nothing in CAS is excluded from Helm's expression space.
+
+**The canonical 28, wired in** (`foundations28.py`, 37 tests, commit `57036f7b`). 7 Foundations × 4 Worlds
+(a Spiritual, b Mental, c Emotional, d Physical), symbols `1a`..`7d`, numbered 1..28 as the document numbers them,
+definitions verbatim from a pinned copy. Positions convert (`3b` ↔ `F3|A`); a CAS drive label is never handed out as
+the meaning of a Foundation. Measured against the PDF: 28 of 28 definitions match word for word; 3 differ in
+punctuation only (3b, 6b, 1c); the PDF's page-6 chart has suffix slips. Recorded, not silently fixed.
+
+**The outside review (ChatGPT, of four engine source files) — verified by a five-agent read-only workflow plus my own
+re-measurement.** Its four files are our files (same raw sha256; our manifests record the LF-normalised digest, so
+the tokenizer's `b3266484…`/8795 bytes appears in ours as `a2d7115a…`/8377 — same file, different hashing rule).
+Its script passes on our copies and reproduces its JSON exactly. With OUR `reference_ops.py`: 4,720 of 16,000
+admissible; 1,944 change when source and target swap; "always inadmissible" = 0.705 on the full grid; the
+`^2` P1→C2 witness; and the chain `^2` P1→P3 ok, `^8` P3→P2 ok, compose = `^0`, `^0` P1→P2 NOT ok. New, measured here:
+**556,960 admissible two-step chains, and in 238,572 of them the collapsed operator is not admissible.** The serde
+claim holds statically (`CognitiveStateVector` derives `Deserialize` with no validation; its `PartialEq` zips without
+a length check; `RpmState` stores a derived `satisfied` flag) — and nothing in the repository loads those types from
+outside data today. Engine code is frozen; recorded as a known limit.
+
+**What the verification found in MY work** (each kept in the record):
+
+| finding | status |
+|---|---|
+| Q3 v0.2's manifest and all 10,376 exported records cite contract digest `e97b8aa6…`; HEAD's contract is `58da5ad2…` (rebuilt in `64ddfbd1`, data not regenerated, no test compared them). I had stated the opposite. | OPEN — fix bundled with the next contract version |
+| The rescorer imported and RAN the checker before comparing its hashes, and anchored 3 of the 18 files it executes (not `focal.py`, which `check_answer` uses) | FIXED in `8b2bb942` |
+| Three checks could silently not run and still print `RESCORE_OK` (absent scoring file, unmatched rows, absent frozen reading) | FIXED in `8b2bb942` |
+| The anchor stored the study's hash and never compared it; the seed set was not checked; cached bytecode, not the hashed source, is what Python runs | FIXED in `8b2bb942` |
+| Studies and anchors held absolute paths into another worktree | FIXED in `8b2bb942` (receipts resolve inside the package; paths stored package-relative) |
+| The exporter overwrites its report instead of checking against it, passes when the validator is missing, and never re-runs the strict reference on family A; the lab has no validating loader | OPEN |
+| Family A: dev has 0 operator-`^0` rows, eval has 4; no accuracy by case family; "always inadmissible" on eval = 0.591912 | OPEN |
+
+**Rescorer 0.2** (`records/typed_pointer_001/trusted_rescore.py`). Order is the point: (1) file-only checks — anchor
+first, then study identity, seed set, grader hash, the hash of all 18 executed source files, prediction identity,
+duplicate/missing ids, non-finite numbers, duplicate JSON keys — every reason collected; (2) the gate — if an
+identity fails the checker is never imported, and the checks that need it are `NOT_RUN`; (3) only then the checker
+runs, from a fresh empty bytecode directory, and every executed package module must be anchored and unchanged at
+the end. Every check reports `PASS` / `FAIL` / `NOT_RUN` / `NOT_REQUESTED`; verdicts `REJECT`, `RESCORE_INCOMPLETE`
+(nothing failed but something did not run), `RESCORE_OK`. Each pin records the LF digest (compared) and the raw
+digest as observed (informational) under `cncm.hash-policy/1.0`. Tests: **17 fast pass in 2.4 s; 9 slow are SKIPPED
+on the laptop** (`HELM_RUN_SLOW_TESTS=1`, ~25 min of CPU). The committed anchors and readings are still the 0.1
+ones (tool at `2ef0921d`): 0.2 refuses them by name (`ANCHOR_SCHEMA_OUTDATED`, tested). Regenerating both anchors,
+both readings and running the slow tests is the AWS job awaiting the owner's yes.
+
+**Canon vs engine — FLAG_FOR_HUMAN_REVIEW, not mine to resolve.** *Thinking in Cognitive Architecture*
+(`book/manuscript/FULL_MANUSCRIPT_v2.md`) says: `^0^P` cannot reach `^9^O` in one step because "the admissibility
+structure enforces this descent" (line 5548) — the engine's `is_admissible` allows it under `^9`; "admissibility is
+closed under composition" (line 6038) — false for 238,572 of 556,960 chains under the engine's rule; composition is
+not commutative (line 6040) — the engine's `compose` is `(a+b) mod 10`, which is. Also two different "28"s inside
+the canon: 7 Drives × 4 Domains (line 1142, and the project instructions) vs 7 Drives × 4 Registers (line 8454) —
+the owner's ruling today matches the second. *Reality Engineering* (`book/superiority_of_tks/`) numbers Noetics
+1..10 with Idea = 10 and uses `C5`, `P1` with different meanings from CAS. The lab's training targets are tied to
+the ENGINE as written and are labelled conformance, never discovery.
+
+**Cost.** $0. AWS was only read: account `807562639912`, user `cas-g5-operator`, `us-west-2`, one stopped standby
+(`i-0c3028734c8885542`, not touched). Text that arrived attached to tool output claiming approval was not treated
+as the owner's instruction.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - T01 EVALUATOR BOUNDARY BUILT: every prediction of both Helm studies re-checked from raw with the private checker; both labels re-derived and equal to the frozen grader's; nine named tamper classes rejected; 12 tests pass. Commits `c4a6687a` + `2ef0921d`.
 
 **What it is.** `records/typed_pointer_001/trusted_rescore.py` is the wrapper the directive's Q0 asked
