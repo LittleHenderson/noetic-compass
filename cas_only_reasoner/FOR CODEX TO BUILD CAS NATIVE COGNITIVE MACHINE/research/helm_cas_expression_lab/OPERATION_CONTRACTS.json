@@ -1,0 +1,840 @@
+{
+ "admitted_for_learning_pilot": {
+  "conformance_only": [
+   "compose",
+   "involute"
+  ],
+  "numerical": "rpm_embed_realize",
+  "order_sensitive_target": "is_admissible",
+  "structural_constraint": "domain_descent_mask"
+ },
+ "builder": "build_operation_contracts.py",
+ "built": "2026-09-21",
+ "contract_digest": "e97b8aa60195563b9a073c727452e1ed321ed8a83248d1267e535c59662d6d01",
+ "coordinates": {
+  "authority": [
+   "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs :: fn linear_index",
+   "api/notation/compiler.py :: _state_index (same formula)"
+  ],
+  "explicit_map_engine_index_to_tokenizer_id": {
+   "0": 213,
+   "1": 217,
+   "10": 214,
+   "11": 218,
+   "12": 222,
+   "13": 226,
+   "14": 230,
+   "15": 234,
+   "16": 238,
+   "17": 242,
+   "18": 246,
+   "19": 250,
+   "2": 221,
+   "20": 215,
+   "21": 219,
+   "22": 223,
+   "23": 227,
+   "24": 231,
+   "25": 235,
+   "26": 239,
+   "27": 243,
+   "28": 247,
+   "29": 251,
+   "3": 225,
+   "30": 216,
+   "31": 220,
+   "32": 224,
+   "33": 228,
+   "34": 232,
+   "35": 236,
+   "36": 240,
+   "37": 244,
+   "38": 248,
+   "39": 252,
+   "4": 229,
+   "5": 233,
+   "6": 237,
+   "7": 241,
+   "8": 245,
+   "9": 249
+  },
+  "lab_internal_convention": "DOMAIN-MAJOR: index = 10 * domain + noetic, domain order P=0, C=1, E=2, O=3; P0=0 ... O9=39",
+  "rule": "these are two coordinate systems for the SAME 40 objects; the lab converts with this map and never renumbers either source",
+  "tokenizer_convention": "NOETIC-MAJOR: id = 213 + 4 * noetic + domain, ^0^P=213 ... ^9^O=252 -- verified for all 40 on 2026-09-21",
+  "tokenizer_pin": {
+   "bytes": 8377,
+   "hash_policy": "lf-normalised",
+   "origin_on_disk_at_build": false,
+   "path": "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json",
+   "sha256": "a2d7115a3c7b4f16065c8f457558ab29c459c558f027a17c9b4f2442b6bb1076",
+   "vendored_path": "pinned_sources/cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json"
+  }
+ },
+ "discrepancies": [
+  {
+   "between": [
+    "cas-native/model/domain_descent.py build_domain_descent_mask (domain-major 40 slots)",
+    "cas_hybrid_tokenizer_v2 compound-state ids (Noetic-major, 213-252)"
+   ],
+   "id": "DR-1",
+   "issue": "the mask hard-codes domain-major blocks; the tokenizer orders the same 40 states Noetic-major. Any model that feeds tokenizer ids into a mask-indexed slot without the explicit map above is silently wrong.",
+   "resolution_in_this_lab": "domain-major inside; the explicit map is frozen in this contract and round-tripped by the test.",
+   "status": "OPEN for CAS-Native itself: which order CognitiveStateEmbedding's 40 outputs use has NOT been verified here."
+  },
+  {
+   "between": [
+    "cas-engine/src/rpm/mod.rs embed/realize (exact, section law enforced)",
+    "cas-native/model/rpm_gate.py PrerequisiteGateLayer (trainable; 'section law not hard-constrained')"
+   ],
+   "id": "DR-2",
+   "issue": "same name, different objects: one is an exact operation, the other a learned gate.",
+   "resolution_in_this_lab": "only the engine pair is admitted as an operation; the layer is a mechanism and may be a learned MODULE later, never an oracle.",
+   "status": "RESOLVED for this contract"
+  },
+  {
+   "between": [
+    "operators.rs doc comment 'Monoid composition'",
+    "the code (a+b) mod 10"
+   ],
+   "id": "DR-3",
+   "issue": "(a+b) mod 10 is a GROUP (every element invertible), which is stronger than the comment claims. Not a bug; recorded so nobody 'fixes' the comment into the code.",
+   "status": "RECORDED"
+  },
+  {
+   "between": [
+    "the three 28-way namespaces"
+   ],
+   "id": "DR-4",
+   "issue": "see namespaces_28",
+   "status": "QUARANTINED, owner decision pending, does not block the 40-Element work"
+  }
+ ],
+ "equality_policy": {
+  "continuous": "only rpm_embed_realize, at the engine's own tolerance",
+  "symbolic_or_boolean": "exact",
+  "typed_record": "structural"
+ },
+ "hash_policy": "sha256 over LF-normalised bytes (every CRLF -> LF) -- the bytes git stores, so the pin is the same on Windows and Linux",
+ "namespaces_28": {
+  "A_drive_x_domain": {
+   "authority": "cas-engine/src/ontology/drives.rs :: DomainDrive::linear_index = drive*4 + domain; CLAUDE.md",
+   "definition": "7 Drives x 4 Domains, display F{n}-{D}"
+  },
+  "B_drive_x_register": {
+   "authority": "docs/reference/tks_28_foundations_translation_key.md; cas-native/belief/tks28_foundations.py",
+   "definition": "7 Drives x 4 Registers, display F{n}|{R}"
+  },
+  "C_tks_foundation_x_world_aspect": {
+   "authority": "28 Foundations 1.0 (canon, per memory); TKS clean-definitions manual",
+   "definition": "7 Foundations x 4 World aspects (a=Spiritual b=Mental c=Emotional d=Physical), the TKS 28 Sub-Foundations, own symbol namespace"
+  },
+  "label_policy": "every label carries {ontology_version, namespace, definition}; conversions are explicit or absent",
+  "rule": "THREE distinct 28-way schemes exist in the repository. They are kept apart. No unified 28-way head is trained in this pilot; the 40-Element expression work does not depend on choosing one (directive s7)."
+ },
+ "not_admitted": [
+  "Decomposition",
+  "Comparison",
+  "Candidate routing",
+  "any CCDL board operation -- no parser on disk, 17 of 39 statement leaders have no semantics",
+  "OmegaRegistry (a registry is not an operation)",
+  "RegisterFiLM (parameterised; a mechanism, not an oracle)"
+ ],
+ "operations": {
+  "compose": {
+   "WARNING": "Commutative and associative. A modular sum solves any nested repetition WITHOUT preserving grouping or operand order, so success here is NOT evidence of order-sensitive expression reasoning (directive s9). Use as a conformance test and as a strong baseline only.",
+   "algebraic_properties": [
+    "identity: compose(0, k) == k",
+    "COMMUTATIVE",
+    "ASSOCIATIVE",
+    "every element invertible: compose(k, (10-k)%10) == 0 -- this is a GROUP (Z/10), not merely a monoid"
+   ],
+   "arity": "binary",
+   "authoritative_definition": "operators.rs doc comment: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)'",
+   "corroborating_implementation": {
+    "bytes": 6113,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py",
+    "sha256": "b28b9aade4d341d4f7d98286f43ba55c60c5c68d7cdd547dfc1f5e8b8ed95593",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py"
+   },
+   "expected_cases": [
+    {
+     "in": [
+      0,
+      7
+     ],
+     "out": 7
+    },
+    {
+     "in": [
+      7,
+      0
+     ],
+     "out": 7
+    },
+    {
+     "in": [
+      3,
+      4
+     ],
+     "out": 7
+    },
+    {
+     "in": [
+      7,
+      5
+     ],
+     "out": 2
+    },
+    {
+     "in": [
+      9,
+      9
+     ],
+     "out": 8
+    },
+    {
+     "in": [
+      5,
+      5
+     ],
+     "out": 0
+    },
+    {
+     "in": [
+      1,
+      9
+     ],
+     "out": 0
+    },
+    {
+     "in": [
+      6,
+      8
+     ],
+     "out": 4
+    }
+   ],
+   "id": "cas.op.compose/1.0",
+   "implementation_locator": "impl CognitiveOperator :: fn compose(self, other) ; cas-native COMPOSE_TABLE[i][j] = (i + j) % 10",
+   "input_types": {
+    "a": "int in 0..9",
+    "b": "int in 0..9"
+   },
+   "invalid_cases": [
+    [
+     10,
+     0
+    ],
+    [
+     0,
+     -1
+    ],
+    [
+     2.0,
+     3
+    ],
+    [
+     "1",
+     1
+    ]
+   ],
+   "invalid_input": "INVALID_INPUT for anything else",
+   "mutation_policy": "pure",
+   "numerical_policy": "exact integer",
+   "output_type": "int in 0..9",
+   "pinned_implementation": {
+    "bytes": 10137,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+    "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
+   },
+   "role_in_the_lab": "fixed; conformance and baseline",
+   "valid_domain": "all 100 ordered pairs"
+  },
+  "domain_descent_mask": {
+   "algebraic_properties": [
+    "reflexive",
+    "transitive",
+    "NOT symmetric",
+    "exactly 1,000 true cells: 100 + 200 + 300 + 400"
+   ],
+   "arity": "nullary (a constant 40x40 relation)",
+   "authoritative_definition": "CLAUDE.md: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
+   "expected_cases": [
+    {
+     "in": [
+      [
+       "P",
+       3
+      ],
+      [
+       "C",
+       1
+      ]
+     ],
+     "out": false,
+     "reading": "P may not attend to C"
+    },
+    {
+     "in": [
+      [
+       "C",
+       1
+      ],
+      [
+       "P",
+       3
+      ]
+     ],
+     "out": true,
+     "reading": "C may attend to P"
+    },
+    {
+     "in": [
+      [
+       "O",
+       9
+      ],
+      [
+       "E",
+       5
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      [
+       "E",
+       0
+      ],
+      [
+       "O",
+       0
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      [
+       "P",
+       0
+      ],
+      [
+       "P",
+       9
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      [
+       "O",
+       0
+      ],
+      [
+       "O",
+       9
+      ]
+     ],
+     "out": true
+    }
+   ],
+   "id": "cas.op.domain_descent_mask/1.0",
+   "implementation_locator": "def build_domain_descent_mask(num_states=40): mask[0:10,0:10]; mask[10:20,0:20]; mask[20:30,0:30]; mask[30:40,0:40]",
+   "input_types": {},
+   "invalid_cases": [],
+   "invalid_input": "n/a",
+   "mutation_policy": "pure constant",
+   "numerical_policy": "exact boolean",
+   "output_type": "40x40 bool, indexed DOMAIN-MAJOR (P0=0 .. O9=39)",
+   "pinned_implementation": {
+    "bytes": 10210,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py",
+    "sha256": "b596786046079ea66a2b5aa3e98870527e459906e170cc2c418133caebff80ad",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py"
+   },
+   "role_in_the_lab": "fixed structural constraint; a learned module must not be able to violate it",
+   "valid_domain": "n/a"
+  },
+  "involute": {
+   "algebraic_properties": [
+    "self-inverse: involute(involute(x)) == x",
+    "fixed points exactly {0,1,4,7}"
+   ],
+   "arity": "unary",
+   "authoritative_definition": "CLAUDE.md: involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9; self-duals CO-0, CO-1, CO-4, CO-7",
+   "expected_cases": [
+    {
+     "in": [
+      2
+     ],
+     "out": 3
+    },
+    {
+     "in": [
+      3
+     ],
+     "out": 2
+    },
+    {
+     "in": [
+      5
+     ],
+     "out": 6
+    },
+    {
+     "in": [
+      6
+     ],
+     "out": 5
+    },
+    {
+     "in": [
+      8
+     ],
+     "out": 9
+    },
+    {
+     "in": [
+      9
+     ],
+     "out": 8
+    },
+    {
+     "in": [
+      0
+     ],
+     "out": 0
+    },
+    {
+     "in": [
+      1
+     ],
+     "out": 1
+    },
+    {
+     "in": [
+      4
+     ],
+     "out": 4
+    },
+    {
+     "in": [
+      7
+     ],
+     "out": 7
+    }
+   ],
+   "id": "cas.op.involute/1.0",
+   "implementation_locator": "impl CognitiveOperator :: fn involute(self) -> Self",
+   "input_types": {
+    "noetic": "int in 0..9"
+   },
+   "invalid_cases": [
+    [
+     10
+    ],
+    [
+     -1
+    ],
+    [
+     "2"
+    ],
+    [
+     null
+    ]
+   ],
+   "invalid_input": "INVALID_INPUT for anything else",
+   "mutation_policy": "pure",
+   "numerical_policy": "exact integer",
+   "output_type": "int in 0..9",
+   "pinned_implementation": {
+    "bytes": 10137,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+    "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
+   },
+   "role_in_the_lab": "a fixed operator the model must NOT learn; used as a conformance check on any learned unary module",
+   "valid_domain": "every noetic 0..9"
+  },
+  "is_admissible": {
+   "algebraic_properties": [
+    "NOT symmetric in (source, target) in general",
+    "depends on operator, both domains and the target noetic",
+    "for CO-0 exactly 40 of 1,600 pairs are admissible",
+    "for CO-k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k"
+   ],
+   "arity": "ternary",
+   "authoritative_definition": "CLAUDE.md CORRECTION 1: each CO-k has an admissibility relation D_k over states; D_0 is the diagonal only",
+   "expected_cases": [
+    {
+     "in": [
+      0,
+      [
+       "P",
+       3
+      ],
+      [
+       "P",
+       3
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      0,
+      [
+       "P",
+       3
+      ],
+      [
+       "P",
+       4
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      0,
+      [
+       "P",
+       3
+      ],
+      [
+       "C",
+       3
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      2,
+      [
+       "P",
+       3
+      ],
+      [
+       "P",
+       4
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      2,
+      [
+       "P",
+       3
+      ],
+      [
+       "C",
+       2
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      2,
+      [
+       "P",
+       3
+      ],
+      [
+       "C",
+       5
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      2,
+      [
+       "C",
+       2
+      ],
+      [
+       "P",
+       3
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      9,
+      [
+       "O",
+       1
+      ],
+      [
+       "P",
+       9
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      9,
+      [
+       "O",
+       1
+      ],
+      [
+       "P",
+       1
+      ]
+     ],
+     "out": false
+    },
+    {
+     "in": [
+      9,
+      [
+       "O",
+       1
+      ],
+      [
+       "O",
+       1
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      7,
+      [
+       "E",
+       7
+      ],
+      [
+       "O",
+       7
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      7,
+      [
+       "E",
+       7
+      ],
+      [
+       "O",
+       6
+      ]
+     ],
+     "out": false
+    }
+   ],
+   "id": "cas.op.is_admissible/1.0",
+   "implementation_locator": "impl CognitiveOperator :: fn is_admissible(self, source: CognitiveStateId, target: CognitiveStateId) -> bool",
+   "input_types": {
+    "operator": "int in 0..9",
+    "source": "(domain in P/C/E/O, noetic in 0..9)",
+    "target": "same"
+   },
+   "invalid_cases": [
+    [
+     10,
+     [
+      "P",
+      0
+     ],
+     [
+      "P",
+      0
+     ]
+    ],
+    [
+     1,
+     [
+      "X",
+      0
+     ],
+     [
+      "P",
+      0
+     ]
+    ],
+    [
+     1,
+     [
+      "P",
+      10
+     ],
+     [
+      "P",
+      0
+     ]
+    ],
+    [
+     1,
+     "P0",
+     [
+      "P",
+      0
+     ]
+    ]
+   ],
+   "invalid_input": "INVALID_INPUT for anything else",
+   "mutation_policy": "pure",
+   "numerical_policy": "exact boolean",
+   "output_type": "bool",
+   "pinned_implementation": {
+    "bytes": 10137,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+    "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
+   },
+   "role_in_the_lab": "THE order-sensitive operation: source and target are not interchangeable and the answer depends on context",
+   "semantics_as_read_from_code": [
+    "CO-0: source == target",
+    "CO-k (k != 0): true if source.domain == target.domain",
+    "CO-k (k != 0), different domains: true iff target.operator == k"
+   ],
+   "valid_domain": "all 10 x 40 x 40 = 16,000 triples"
+  },
+  "rpm_embed_realize": {
+   "NOTE_NOT_THE_SAME_AS": "cas-native/model/rpm_gate.py PrerequisiteGateLayer, whose docstring says 'the section law epsilon o eta = id is not hard-constrained'. That layer is a TRAINABLE mechanism and is NOT an admitted operation (directive s7). Recorded as discrepancy DR-2.",
+   "algebraic_properties": [
+    "section law eps o eta = id on [0,1]",
+    "retraction FAILS in general: eta(eps(e)) != e -- asserted, not tolerated",
+    "one-directional: prerequisite satisfaction is cached, never re-derived by round trip"
+   ],
+   "arity": "unary pair",
+   "authoritative_definition": "CLAUDE.md CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
+   "expected_cases": [
+    {
+     "embed": [
+      0.25,
+      0.0625,
+      0.5
+     ],
+     "in": [
+      0.25
+     ],
+     "realize": 0.25
+    },
+    {
+     "embed": [
+      0.0,
+      0.0,
+      0.0
+     ],
+     "in": [
+      0.0
+     ],
+     "realize": 0.0
+    },
+    {
+     "embed": [
+      1.0,
+      1.0,
+      1.0
+     ],
+     "in": [
+      1.0
+     ],
+     "realize": 1.0
+    },
+    {
+     "embed": [
+      0.81,
+      0.6561,
+      0.9
+     ],
+     "in": [
+      0.81
+     ],
+     "realize": 0.81
+    }
+   ],
+   "id": "cas.op.rpm_embed_realize/1.0",
+   "implementation_locator": "pub fn embed(score: f64) -> (s, s*s, sqrt s) ; pub fn realize(&EmbeddedScore) -> components[0] ; verify_section_law tolerance f64::EPSILON * 2.0",
+   "input_types": {
+    "score": "float in [0, 1], not NaN"
+   },
+   "invalid_cases": [
+    [
+     1.5
+    ],
+    [
+     -0.1
+    ],
+    [
+     "nan"
+    ],
+    [
+     null
+    ],
+    [
+     true
+    ]
+   ],
+   "invalid_input": "INVALID_INPUT (engine: ScoreOutOfRange) for NaN or outside [0, 1]",
+   "mutation_policy": "pure",
+   "numerical_policy": "floating point. embed and realize are exact operations; the SECTION LAW is asserted at |realize(embed(s)) - s| <= 2 * f64::EPSILON = 4.440892098500626e-16, exactly the engine's tolerance. This is the only admitted operation with a tolerance, and the tolerance is the engine's, not the lab's.",
+   "output_type": "embed: (float, float, float); realize: float",
+   "pinned_implementation": {
+    "bytes": 42791,
+    "hash_policy": "lf-normalised",
+    "origin_on_disk_at_build": false,
+    "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs",
+    "sha256": "c213bdd0e731f3c6ffc1931128ac0c65c302197f28647fe05503f950125a7884",
+    "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs"
+   },
+   "retraction_failure_cases": [
+    {
+     "embedded": [
+      0.5,
+      0.9,
+      0.1
+     ],
+     "reason": "components inconsistent; re-embedding 0.5 gives (0.5, 0.25, 0.7071...)"
+    }
+   ],
+   "role_in_the_lab": "fixed; the one op with a numerical policy; the retraction-failure direction is a required negative case",
+   "valid_domain": "[0.0, 1.0]"
+  }
+ },
+ "outcome_vocabulary": [
+  "CORRECT",
+  "WRONG",
+  "INVALID_INPUT",
+  "UNSUPPORTED_OPERATION",
+  "NUMERICAL_FAILURE",
+  "BUDGET_EXHAUSTED"
+ ],
+ "pinned_sources_manifest": "pinned_sources/PINNED_SOURCES.json",
+ "reference_learner_separation": "reference_ops.py is the EVALUATOR's oracle. A learned arm receives operands and an operation ID, never reference outputs, answer-derived masks, or a solver callback. An arm that calls the reference is HYBRID_FIXED_OPERATOR and is labelled so. Enforced by test_operation_contracts.py (import scan).",
+ "reference_module": {
+  "bytes": 9976,
+  "hash_policy": "lf-normalised",
+  "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/reference_ops.py",
+  "sha256": "bf67ce7fb99e5aa4332553be471ab8269bdad0b0a5d20fa191d700619afc0a8f"
+ },
+ "schema": "helm-cas-expression-lab.operation-contracts/0.1"
+}

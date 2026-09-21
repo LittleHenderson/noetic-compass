@@ -1,0 +1,56 @@
+{
+ "files": [
+  {
+   "bytes": 10137,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+   "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+   "vendored_as": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
+  },
+  {
+   "bytes": 10210,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs",
+   "sha256": "fcebc98d53d6e8927ad8624bfcec6dd52c39de06f167e0ebeaa75e9d975cde2d",
+   "vendored_as": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs"
+  },
+  {
+   "bytes": 42791,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs",
+   "sha256": "c213bdd0e731f3c6ffc1931128ac0c65c302197f28647fe05503f950125a7884",
+   "vendored_as": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs"
+  },
+  {
+   "bytes": 10210,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py",
+   "sha256": "b596786046079ea66a2b5aa3e98870527e459906e170cc2c418133caebff80ad",
+   "vendored_as": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py"
+  },
+  {
+   "bytes": 6113,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py",
+   "sha256": "b28b9aade4d341d4f7d98286f43ba55c60c5c68d7cdd547dfc1f5e8b8ed95593",
+   "vendored_as": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py"
+  },
+  {
+   "bytes": 8377,
+   "copy_matches_origin": true,
+   "hash_policy": "lf-normalised",
+   "origin": "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json",
+   "sha256": "a2d7115a3c7b4f16065c8f457558ab29c459c558f027a17c9b4f2442b6bb1076",
+   "vendored_as": "pinned_sources/cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json"
+  }
+ ],
+ "hash_policy": "sha256 over LF-normalised bytes",
+ "schema": "helm-cas-expression-lab.pinned-sources/0.1",
+ "vendored": "2026-09-21",
+ "why": "the authoritative engine and CAS-Native sources are NOT tracked in this repository's worktree; a contract that hashes an untracked file cannot be checked out. These are byte-identical copies, hashed at copy time; the origin path is recorded so the copy can be re-verified against the live source. Directive s1: 'only necessary library adapters should be extracted'."
+}
