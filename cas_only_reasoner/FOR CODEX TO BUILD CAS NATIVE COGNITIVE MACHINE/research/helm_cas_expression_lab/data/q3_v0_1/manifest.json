@@ -1,0 +1,250 @@
+{
+ "built": "2026-09-21",
+ "compiler": {
+  "hash_policy": "lf-normalised",
+  "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+  "resolved_from": "main_checkout",
+  "sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+ },
+ "counts": {
+  "A_dev": 272,
+  "A_eval": 272,
+  "A_train": 2176,
+  "C_dev": 256,
+  "C_eval": 256,
+  "C_train": 2048,
+  "R_dev": 256,
+  "R_eval": 256,
+  "R_train": 2048
+ },
+ "exposure_report": {
+  "A": "operator ids and domains are all seen in training; held-out CELLS are unseen combinations of them; individual (source, target) noetic pairs may recur across cells -- disclosed",
+  "C": "the operation and all ten digits are seen; held-out DEPTHS are unseen; the baseline solves every depth",
+  "R": "surface form: none shared across splits (deduplicated); AST shape: none shared across splits by construction; atomic literals: SHARED (every family reuses the same 40 states, drives, registers) -- disclosed, not forbidden"
+ },
+ "files": {
+  "sealed_A_dev.jsonl": {
+   "records": 272,
+   "sha256": "8af2aa04026d4e7688c80fb1e7699ae4d954b0ec24042a1ffa808a32eb24412d"
+  },
+  "sealed_A_eval.jsonl": {
+   "records": 272,
+   "sha256": "ec0a609a3ad60f7532b388b175318d17655f089ca0a51888032a8e03940fdd3f"
+  },
+  "sealed_A_train.jsonl": {
+   "records": 2176,
+   "sha256": "6b7483378967c510fd0b35206eca892cdbb04fd3cda2e1f391b017f88e45e21c"
+  },
+  "sealed_C_dev.jsonl": {
+   "records": 256,
+   "sha256": "2c0135535b33ca609d0bb3c18366a9bbfd01c5204bfefa07f27d9dda5fd8c82d"
+  },
+  "sealed_C_eval.jsonl": {
+   "records": 256,
+   "sha256": "aa66cb20981e591cc0b884e7c9ed1fc909f10efb0a41611ace473a8604229458"
+  },
+  "sealed_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "38202a2f5849aa58e450983770aea399e12edce81dcc9d58dfd2702fd7575487"
+  },
+  "sealed_R_dev.jsonl": {
+   "records": 256,
+   "sha256": "0b6d89bccb70ce06550b1004186cdd72b695e176b34a643197e19bd356bdab02"
+  },
+  "sealed_R_eval.jsonl": {
+   "records": 256,
+   "sha256": "1ddea5d25b5d79186ac91cf7a057aebbda3de2c232e3564b05eaa5510be3755b"
+  },
+  "sealed_R_train.jsonl": {
+   "records": 2048,
+   "sha256": "f33eda6dc59a72cfb72c1952c120dbf6528d9ca8458de5bcd48a90379a2e108e"
+  },
+  "visible_A_dev.jsonl": {
+   "records": 272,
+   "sha256": "67e1021373f8595ef996b05866bbeb9b604af9005bd6a4b0adbc6c2c6ac225cf"
+  },
+  "visible_A_eval.jsonl": {
+   "records": 272,
+   "sha256": "5e74d84a801b36b67fd02ba57968f3ca03267c0329cf49e1ddc0f0e01380b04e"
+  },
+  "visible_A_train.jsonl": {
+   "records": 2176,
+   "sha256": "d3f34ae778851c60972a3c6a1a02d3a113b9d8c1acd8f886718a4f57a466ea1a"
+  },
+  "visible_C_dev.jsonl": {
+   "records": 256,
+   "sha256": "a068a443e369cc096a8c06baed05a46fc994f828321abbbdd8912ec1489497ba"
+  },
+  "visible_C_eval.jsonl": {
+   "records": 256,
+   "sha256": "a193d73dbe12b93b5b42ce0304aa0561bb4d783cf9575b46e3b1f1eac062861a"
+  },
+  "visible_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "b13b9ba4cdf7e127dd0decdd3252d2819534bcedb90ec29a211e338c2b32e530"
+  },
+  "visible_R_dev.jsonl": {
+   "records": 256,
+   "sha256": "a9f36c6bee31e1767547f5e19e15698f7791c486d40235feadb23f13f240bf56"
+  },
+  "visible_R_eval.jsonl": {
+   "records": 256,
+   "sha256": "a3e5d990ecadd6eab3cff35348fac4d0a22aeb79bd63b1c23b2186181162a393"
+  },
+  "visible_R_train.jsonl": {
+   "records": 2048,
+   "sha256": "ca5ea9e26be545fb5ebb47936906f688d6e03015f903419439783bd78d481a5f"
+  }
+ },
+ "generator": "q3_behaviour_records.py",
+ "operation_contracts_digest": "e97b8aa60195563b9a073c727452e1ed321ed8a83248d1267e535c59662d6d01",
+ "record_id_policy": "sha256(seed, family:split, index)[:24] -- position only; no content, no answer, no source hash",
+ "reference_learner_separation": "sealed_* files are the evaluator's; a learner may open visible_* only. Enforced by test_q3_behaviour_records.py.",
+ "schema": "helm-cas-expression-lab.q3-behaviour-records/0.1",
+ "sdg_pool": {
+  "hash_policy": "lf-normalised",
+  "path": "cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl",
+  "sha256": "92a6c23c8eebc2604c86b07e6a6415b1c775ea2ba1a7b43288232f5c77549a7b"
+ },
+ "sdg_usage": "expression strings only; SDG prompt/response text is never read (the label sits inside it)",
+ "seed": 20260921,
+ "sizes": {
+  "dev": 256,
+  "eval": 256,
+  "train": 2048
+ },
+ "split_policy": {
+  "A": "whole (operator, source_domain, target_domain) cells: 24 eval, 16 dev, 120 train",
+  "C": "by chain depth: train/dev 1-3, eval 4-6",
+  "R": "whole AST-shape groups; eval and dev take the rarest shapes first"
+ },
+ "stats": {
+  "A": {
+   "cells": 160,
+   "cells_held_dev": 16,
+   "cells_held_eval": 24,
+   "held_cells_dev": [
+    "1:P>C",
+    "1:P>O",
+    "2:O>C",
+    "2:O>E",
+    "2:O>P",
+    "2:P>O",
+    "3:E>O",
+    "3:P>E",
+    "4:P>O",
+    "5:E>C",
+    "6:E>P",
+    "6:O>C",
+    "6:P>C",
+    "7:C>C",
+    "7:E>E",
+    "9:C>O"
+   ],
+   "held_cells_eval": [
+    "0:P>P",
+    "1:E>E",
+    "1:O>P",
+    "2:C>O",
+    "2:E>E",
+    "2:E>O",
+    "2:E>P",
+    "3:P>C",
+    "4:C>E",
+    "4:E>C",
+    "4:P>P",
+    "5:E>O",
+    "5:O>C",
+    "5:O>P",
+    "6:O>E",
+    "7:E>O",
+    "7:P>C",
+    "8:E>O",
+    "8:P>O",
+    "9:C>P",
+    "9:E>E",
+    "9:O>C",
+    "9:P>E",
+    "9:P>P"
+   ]
+  },
+  "C": {
+   "depths": {
+    "dev": [
+     1,
+     2,
+     3
+    ],
+    "eval": [
+     4,
+     5,
+     6
+    ],
+    "train": [
+     1,
+     2,
+     3
+    ]
+   }
+  },
+  "R": {
+   "pool_expressions": 8520,
+   "shape_groups": 1381,
+   "valid_unique": 8249
+  }
+ },
+ "visibility": {
+  "A": {
+   "mode": "neural_operation_execution",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "operation_id",
+    "observation"
+   ],
+   "withheld": [
+    "outcome",
+    "target",
+    "cell",
+    "oracle",
+    "trace"
+   ]
+  },
+  "C": {
+   "mode": "neural_operation_execution",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "operation_id",
+    "observation"
+   ],
+   "withheld": [
+    "outcome",
+    "target",
+    "depth",
+    "oracle",
+    "trace"
+   ]
+  },
+  "R": {
+   "mode": "reconstruction",
+   "teacher_forcing_note": "a target may be used to compute training LOSS; it is never a model INPUT at evaluated prediction; teacher-forced passes are not free-running reconstruction and must be reported apart",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "observation"
+   ],
+   "withheld": [
+    "target_canonical_ast",
+    "target_ast",
+    "ast_size",
+    "shape_key",
+    "validity",
+    "oracle"
+   ]
+  }
+ }
+}

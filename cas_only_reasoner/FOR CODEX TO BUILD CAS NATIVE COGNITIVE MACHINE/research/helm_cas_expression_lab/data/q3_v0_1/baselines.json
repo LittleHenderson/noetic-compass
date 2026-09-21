@@ -1,0 +1,69 @@
+{
+ "A": {
+  "always_valid_never_refuse": {
+   "exact": 0.235294,
+   "n": 272,
+   "refusals_missed": 16
+  },
+  "constant_majority": {
+   "exact": 0.705882,
+   "n": 272,
+   "refusals_missed": 16
+  },
+  "exact_row_memory_from_train": {
+   "exact": 0.0,
+   "n": 272,
+   "refusals_missed": 16
+  },
+  "exact_symbolic_reference": {
+   "exact": 1.0,
+   "n": 272,
+   "note": "the contract oracle; the ceiling, not a competitor"
+  },
+  "same_domain_only": {
+   "exact": 0.863971,
+   "n": 272,
+   "refusals_missed": 16
+  },
+  "same_domain_or_target_noetic_equals_operator_ignoring_CO0": {
+   "exact": 0.911765,
+   "n": 272,
+   "refusals_missed": 16
+  },
+  "target_noetic_equals_operator": {
+   "exact": 0.775735,
+   "n": 272,
+   "refusals_missed": 16
+  }
+ },
+ "C": {
+  "constant_majority": {
+   "exact": 0.117188
+  },
+  "modular_sum_ignoring_grouping": {
+   "exact": 1.0,
+   "n": 256,
+   "note": "1.0 by construction; C is conformance-only"
+  }
+ },
+ "R": {
+  "compiler_reference": {
+   "exact": 1.0,
+   "note": "the oracle; R measures fidelity, not reasoning"
+  },
+  "copy_input_string_as_ast": {
+   "exact": 0.0,
+   "note": "a string is not an AST; exact match impossible"
+  },
+  "eval_ast_size_distribution": {
+   "3": 8,
+   "5": 14,
+   "8": 75,
+   "9": 28,
+   "10": 130,
+   "11": 1
+  }
+ },
+ "schema": "helm-cas-expression-lab.q3-baselines/0.1",
+ "scored_on": "eval"
+}
