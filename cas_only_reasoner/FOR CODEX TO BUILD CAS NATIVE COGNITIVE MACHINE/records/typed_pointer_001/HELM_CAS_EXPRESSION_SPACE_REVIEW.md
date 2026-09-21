@@ -256,3 +256,88 @@ Not "weights matching components." That has nothing to score.
    checkpoint and needs its own row in `BRAIN_LINEAGE.md`.
 5. **Whether to extend the SDG with a PCBA generator** — that is the piece of the proposal that
    turns "boards" from a hope into a dataset.
+
+---
+
+## Addendum — a second opinion from ChatGPT, compared (2026-09-20)
+
+The owner obtained an independent review from ChatGPT, written against repository snapshot
+`cc392f5e` (**2026-08-27** — three weeks before Helm existed, so it never saw the pointer
+learner, the loop defect, the audit, or Helm 2.0; it also guessed "Helm" might be a public
+family of hyperbolic language models, which it is not). Its three factual claims were verified
+here, on disk:
+
+| ChatGPT claim | verified? | where |
+|---|---|---|
+| `CognitiveStateEmbedding` projects to a positive normalised 40-vector, with a register-aware version | ✅ | `noetic-compass-scaffold/noetic-compass/cas-native/model/embedding.py:50`; `register_film.py:96,382` (`RegisterLatent`, `RegisterFiLM`); `_LatentFiLMView.apply_register` |
+| `StructuredPredictionHead` predicts Noetic, Domain, Drive, Register, expression family, transition kind, with a supervised loss | ✅ | `cas-native/model/structured_prediction.py:99,127,130,240` (`structured_prediction_loss`) |
+| `cas-synthetic/` generates v7.4–v7.7 records incl. invalid examples | ✅ | confirmed by the SDG explorer above |
+
+**And one fact neither review had:** the engine already holds **executable** CAS operations —
+`compose`, `involute`, `is_admissible(source, target)` (`cas-engine/src/ontology/operators.rs:79-110`),
+`domain_descent.py`, `rpm_gate.py` / `PrerequisiteGate`, `RegisterFiLM`, `OmegaRegistry`
+(`cas-native/model/`). These are the `T_k` that ChatGPT's consistency equation needs.
+
+**None of it touches Helm.** A grep of `cas_meta2/` and `cncm/` for `CognitiveStateEmbedding`,
+`StructuredPredictionHead` or `structured_prediction` returns nothing. ChatGPT's proposal is
+addressed to **CAS-Native**, the larger transformer; this review is addressed to **Helm**, the
+174,303-parameter graph reader. The ideas transfer; the code does not, yet.
+
+### Where ChatGPT is stronger than this review
+
+1. **The transition-consistency test, `D(M_k(E(s))) = T_k(s)`.** This is the scorer that my
+   "NOT LICENSED — nothing to score" verdict on "weights matching components" was missing. A
+   learned module reflects a component if decoding its output matches the declared CAS
+   operation applied symbolically. **Verdict revised:** NOT LICENSED *as stated*; **licensable**
+   when defined as transition-consistency against an executable `T_k` — and `T_k` exists today
+   for `compose`, `involute`, `is_admissible`, domain descent and the RPM gate. It does **not**
+   exist for the roles ChatGPT names ("Decomposition", "Comparison", "Candidate routing"), nor
+   for two-thirds of CCDL (17 of 39 statement leaders have no semantics). Build modules for the
+   operations that have semantics; do not name modules after ones that don't.
+2. **The intervention test.** Correct a wrongly-bound operand *inside* the CAS representation and
+   watch the downstream answer improve without being given the answer. That is a causal test of
+   whether the structure is used rather than displayed. This review lacked it.
+3. **The three-arm control** — conventional model / CAS-heads-only / CAS-modules — at matched
+   capacity and data, holding out whole expression *structures*, not rows. Right design.
+4. **Explicit bindings beside the vector.** "Subtract the cost from the budget" vs "the budget
+   from the cost": a profile of Element scores loses argument order; a typed expression keeps
+   it. The vector carries learned meaning; the expression keeps exact relations. Agreed, and
+   sharper than my "decodable to notation".
+5. **Behaviour-paired SDG records** — initial state, operation, prerequisites, intermediate
+   states, result, invalid alternatives and *why* they fail. That is the right extension of a
+   generator that already runs CAS → English, and it teaches what a computation *does*.
+6. "Probability a label is correct" ≠ "activation or relevance." Worth pinning.
+
+### Where ChatGPT is blind, because its snapshot predates the evidence
+
+1. **`Z_E ∈ R^{40×k}` — 40 named slots keyed by a stable id.** Sound as an *output* bottleneck
+   with interventions. As an *input* feature to Helm's `analogy` it is the type-equality
+   shortcut: pick the candidate with the same slot as the focus. Helm's 1024×64 table memorised
+   under exactly that regime (0.42 train / 0.00 held-out). ChatGPT could not know.
+2. **"Board as a composition of operations."** No CCDL parser exists on disk; the CSB listing has
+   four loose edges; 17 of 39 leaders have syntax only. The executable subset today is the
+   *algebra* — start there, not at boards.
+3. **Shuffled-label controls can be vacuous.** The recorded law from CJT-OHM: a label shuffle
+   over a permutation-symmetric scorer returns 0.0 over every permutation and proves nothing.
+   The control must first be shown *able* to move the score.
+4. **The SDG's only English→CAS lane is a foreign model.** ChatGPT's "for arbitrary text, keep
+   the CAS translation a candidate interpretation" is right, but it under-states it: today that
+   candidate comes from Claude Haiku, and the ratified rule bars it from training input.
+5. **A third "28".** ChatGPT names Drive × Register and the TKS 7 × 4 World-aspect
+   Sub-Foundations; the Rust engine and `CLAUDE.md` say Drive × **Domain**. Three namespaces,
+   not two. Its rule — every label carries ontology version and namespace, conversions explicit
+   — is the right rule and is now more necessary than it knew.
+
+### The combined plan, in order
+
+1. Items 1–3 of this review (registry, round-trip decoder, fix-never-learn the algebra).
+2. ChatGPT's consistency test on the operations that have `T_k`: `compose`, `involute`,
+   `is_admissible`, domain descent, RPM gate. One module each. `D(M_k(E(s))) = T_k(s)`, exact
+   after decode-and-compile, on held-out compositions.
+3. The intervention test and the three-arm control, with a shuffle control proven non-vacuous.
+4. Behaviour-paired SDG records.
+5. Only then boards — after a frozen CCDL parser and a relation-typed door (Helm 3.0).
+
+**Claim states for this addendum:** the three verified claims and the executable-operation
+list are **real** (quoted paths); the revised "licensable" verdict is **my opinion**; nothing
+here was run.
