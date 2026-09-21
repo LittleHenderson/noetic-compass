@@ -1,4 +1,4 @@
-"""Q3 v0.2 tests -- every reviewer finding on v0.1 becomes an assertion here, so it cannot come back quietly.
+"""Q3 v0.3 tests -- every reviewer finding on v0.1, and every finding of the 2026-09-21 verification, is an assertion here.
 
   1. DETERMINISM   a fresh build into a temp dir is byte-identical to the committed data, file by file.
   2. SEALED        no withheld field in any visible file; A's visible side carries no bool; R/G carry no target.
@@ -14,6 +14,9 @@
                    refuse out-of-range" rule present; reference scores MEASURED (finding B1); C modular-sum 1.0.
   7. SEPARATION    no learner* file opens a sealed_* file.
   8. PINS          the compiler hash in the manifest matches the compiler on disk.
+  9. BINDING       the manifest cites exactly the contract digest OPERATION_CONTRACTS.json holds (v0.2 did not, unnoticed).
+ 10. CASE FAMILIES every case family (^0 same-domain, ^0 cross-domain, non-identity same, non-identity cross) is present in
+                   dev and eval, ^0 diagonal positives included; baselines are scored by case family on dev and eval.
 
 Run:  python -m pytest research/helm_cas_expression_lab/test_q3_behaviour_records.py -q
 """
@@ -32,7 +35,7 @@ sys.path.insert(0, str(HERE))
 import reference_ops as ref  # noqa: E402
 import q3_behaviour_records as q3  # noqa: E402
 
-DATA = HERE / "data" / "q3_v0_2"
+DATA = HERE / "data" / "q3_v0_3"
 MANIFEST = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
 SEED = MANIFEST["seed"]
 
@@ -71,7 +74,7 @@ def test_visible_files_carry_only_declared_fields(fam, split):
         text = json.dumps(v)
         if fam == "A":
             assert '"target": true' not in text and '"target": false' not in text and "outcome" not in text and "INVALID" not in text
-            assert "order_flip" not in text and "swapped" not in text and "refusal_kind" not in text
+            assert "order_flip" not in text and "swapped" not in text and "refusal_kind" not in text and "case_family" not in text
         if fam in ("R", "G"):
             assert "target" not in text and '"ast"' not in text and "shape" not in text and "depth" not in text
         if fam == "C":
@@ -171,8 +174,9 @@ def test_reconstruction_targets_recompute_from_the_compiler_on_a_sample(fam):
 
 # --- 6 ----------------------------------------------------------------------------------------
 def test_baselines_include_the_attacks_and_measure_the_references():
-    b = json.loads((DATA / "baselines.json").read_text(encoding="utf-8"))
-    assert b["scored_on"] == "eval" and set(b) >= {"A", "C", "R", "G"}
+    full = json.loads((DATA / "baselines.json").read_text(encoding="utf-8"))
+    assert full["scored_on"]["A"] == ["dev", "eval"] and set(full) >= {"A", "C", "R", "G"} and set(full["A"]) == {"dev", "eval"}
+    b = dict(full, A=full["A"]["eval"])
     names = list(b["A"])
     assert any(n.startswith("R3 =") for n in names) and any(n.startswith("R7 =") for n in names)
     assert "exact_row_memory_from_train_INCLUDING_refusals" in b["A"] and "answer_False_refuse_out_of_range" in b["A"]
@@ -190,3 +194,42 @@ def test_baselines_include_the_attacks_and_measure_the_references():
 def test_no_learner_file_opens_sealed_data():
     offenders = [p.name for p in HERE.rglob("learner*.py") if re.search(r"sealed_", p.read_text(encoding="utf-8"))]
     assert not offenders, "SEALED_DATA_OPENED_BY_LEARNER:%s" % offenders
+
+
+# --- 9 ----------------------------------------------------------------------------------------
+def test_the_manifest_cites_exactly_the_current_contract():
+    contract = json.loads((HERE / "OPERATION_CONTRACTS.json").read_text(encoding="utf-8"))
+    assert MANIFEST["operation_contracts_digest"] == contract["contract_digest"], "DATA_BOUND_TO_A_CONTRACT_HEAD_NO_LONGER_HOLDS"
+    assert MANIFEST["schema"].endswith("/0.3")
+
+
+# --- 10 ---------------------------------------------------------------------------------------
+def test_every_case_family_is_present_in_dev_and_eval_with_diagonal_positives():
+    for s in ("dev", "eval"):
+        valid = [(v, sd) for v, sd in _pairs("A", s) if sd["outcome"] != "INVALID_INPUT"]
+        counts = {f: sum(1 for _, sd in valid if sd["case_family"] == f) for f in q3.CASE_FAMILIES}
+        assert all(n >= 16 for n in counts.values()), (s, counts)
+        assert counts == MANIFEST["stats"]["A"]["valid_rows_by_case_family"][s]
+        diagonal = [sd for v, sd in valid if v["observation"]["operator"] == 0 and v["observation"]["source"] == v["observation"]["target"]]
+        assert len(diagonal) >= 4 and all(sd["target"] is True for sd in diagonal)      # ^0 is admissible ONLY on the diagonal
+        assert sum(1 for _, sd in valid if sd["order_flip"]) * 2 == len(valid) == 256
+        for v, sd in valid:                                                               # the label is recomputed, not trusted
+            o = v["observation"]
+            assert sd["case_family"] == q3.case_family(o["operator"], o["source"], o["target"])
+
+
+def test_baselines_are_scored_by_case_family_on_dev_and_eval():
+    full = json.loads((DATA / "baselines.json").read_text(encoding="utf-8"))["A"]
+    for split in ("dev", "eval"):
+        for name, row in full[split].items():
+            fams = row["by_case_family"]
+            assert set(fams) == set(q3.CASE_FAMILIES) | {"refusal"} and all(f["n"] > 0 for f in fams.values()), (split, name)
+            assert sum(f["n"] for f in fams.values()) == row["n"] == 272
+        always = full[split]["always_inadmissible (the constant majority answer)"]
+        assert always["by_case_family"]["nonidentity_same_domain"]["exact"] == 0.0     # same-domain non-identity moves are ALWAYS admissible
+        assert always["by_case_family"]["op0_cross_domain"]["exact"] == 1.0            # ^0 across domains is NEVER admissible
+        assert always["by_case_family"]["refusal"]["exact"] == 0.0
+        reference = full[split]["exact_symbolic_reference (measured, not typed)"]
+        assert all(f["exact"] == 1.0 for f in reference["by_case_family"].values())
+        lookup = [row for name, row in full[split].items() if name.startswith("R7 =")][0]
+        assert lookup["exact"] == 1.0, "a lookup from train already matches the code everywhere: family A is conformance, not discovery"

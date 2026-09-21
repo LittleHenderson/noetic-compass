@@ -1,0 +1,769 @@
+{
+ "A": {
+  "dev": {
+   "ORDER_BLIND: same_domain or tn==k or sn==k (+^0, +refusal)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.685567,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.775735,
+    "n": 272,
+    "order_flip_exact": 0.523438,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.738281
+   },
+   "R1 = registered + ^0 diagonal": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.941176,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "R3 = registered + ^0 + range-check refusal (reviewer's hand rule)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "R7 = 4-feature majority lookup from train + range-check refusal": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "WRONG_DIRECTION: same_domain or sn==k (+^0, +refusal)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.340206,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.529412,
+    "n": 272,
+    "order_flip_exact": 0.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.5
+   },
+   "always_inadmissible (the constant majority answer)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.639175,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.727273,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.573529,
+    "n": 272,
+    "order_flip_exact": 0.476562,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.632812
+   },
+   "answer_False_refuse_out_of_range": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.639175,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.727273,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.632353,
+    "n": 272,
+    "order_flip_exact": 0.476562,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.632812
+   },
+   "exact_row_memory_from_train_INCLUDING_refusals": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.0,
+    "n": 272,
+    "order_flip_exact": 0.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.132812
+   },
+   "exact_symbolic_reference (measured, not typed)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "same_domain_only": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.639175,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.272727,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.625,
+    "n": 272,
+    "order_flip_exact": 0.476562,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.6875
+   },
+   "target_noetic_equals_operator": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.166667,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 0.9375,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.727273,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.841912,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.878906
+   },
+   "v0_1_registered_rule (same_domain or target_noetic==op)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 194
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 24
+     },
+     "op0_cross_domain": {
+      "exact": 0.9375,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.272727,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.878676,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.929688
+   }
+  },
+  "eval": {
+   "ORDER_BLIND: same_domain or tn==k or sn==k (+^0, +refusal)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.70297,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.779412,
+    "n": 272,
+    "order_flip_exact": 0.53125,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.734375
+   },
+   "R1 = registered + ^0 diagonal": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.941176,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "R3 = registered + ^0 + range-check refusal (reviewer's hand rule)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "R7 = 4-feature majority lookup from train + range-check refusal": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "WRONG_DIRECTION: same_domain or sn==k (+^0, +refusal)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.366337,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.529412,
+    "n": 272,
+    "order_flip_exact": 0.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.5
+   },
+   "always_inadmissible (the constant majority answer)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.658416,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.727273,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.606618,
+    "n": 272,
+    "order_flip_exact": 0.46875,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.675781
+   },
+   "answer_False_refuse_out_of_range": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.658416,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.727273,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 0.665441,
+    "n": 272,
+    "order_flip_exact": 0.46875,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.675781
+   },
+   "exact_row_memory_from_train_INCLUDING_refusals": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.0,
+    "n": 272,
+    "order_flip_exact": 0.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.117188
+   },
+   "exact_symbolic_reference (measured, not typed)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 1.0,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 1.0,
+      "n": 16
+     }
+    },
+    "exact": 1.0,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 1.0
+   },
+   "same_domain_only": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 0.658416,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.272727,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.628676,
+    "n": 272,
+    "order_flip_exact": 0.46875,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.699219
+   },
+   "target_noetic_equals_operator": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 0.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 0.875,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.681818,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.849265,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.910156
+   },
+   "v0_1_registered_rule (same_domain or target_noetic==op)": {
+    "by_case_family": {
+     "nonidentity_cross_domain": {
+      "exact": 1.0,
+      "n": 202
+     },
+     "nonidentity_same_domain": {
+      "exact": 1.0,
+      "n": 16
+     },
+     "op0_cross_domain": {
+      "exact": 0.875,
+      "n": 16
+     },
+     "op0_same_domain": {
+      "exact": 0.272727,
+      "n": 22
+     },
+     "refusal": {
+      "exact": 0.0,
+      "n": 16
+     }
+    },
+    "exact": 0.875,
+    "n": 272,
+    "order_flip_exact": 1.0,
+    "order_flip_n": 128,
+    "swapped_twin_exact": 0.929688
+   }
+  }
+ },
+ "C": {
+  "constant_majority": {
+   "exact": 0.125
+  },
+  "modular_sum_ignoring_grouping": {
+   "exact": 1.0,
+   "n": 256,
+   "note": "conformance-only by construction"
+  }
+ },
+ "G": {
+  "compiler_reference (measured, not typed)": {
+   "exact": 1.0,
+   "n": 256,
+   "note": "the oracle; this family measures fidelity"
+  },
+  "copy_input_string_as_ast": {
+   "exact": 0.0,
+   "note": "a string is not an AST"
+  },
+  "eval_ast_size_distribution": {
+   "9": 30,
+   "11": 59,
+   "13": 55,
+   "15": 54,
+   "17": 32,
+   "19": 14,
+   "21": 7,
+   "23": 4,
+   "25": 1
+  }
+ },
+ "R": {
+  "compiler_reference (measured, not typed)": {
+   "exact": 1.0,
+   "n": 251,
+   "note": "the oracle; this family measures fidelity"
+  },
+  "copy_input_string_as_ast": {
+   "exact": 0.0,
+   "note": "a string is not an AST"
+  },
+  "eval_ast_size_distribution": {
+   "2": 10,
+   "3": 30,
+   "4": 25,
+   "5": 20,
+   "6": 21,
+   "7": 23,
+   "8": 36,
+   "9": 33,
+   "10": 38,
+   "11": 15
+  }
+ },
+ "schema": "helm-cas-expression-lab.q3-baselines/0.3",
+ "scored_on": {
+  "A": [
+   "dev",
+   "eval"
+  ],
+  "C": "eval",
+  "G": "eval",
+  "R": "eval"
+ }
+}

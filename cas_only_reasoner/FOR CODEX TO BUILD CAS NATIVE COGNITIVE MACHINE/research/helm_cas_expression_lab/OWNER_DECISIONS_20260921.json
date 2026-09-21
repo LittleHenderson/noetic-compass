@@ -3,7 +3,8 @@
   "custody": "Recorded by Fable from the owner's chat messages of 2026-09-21. This is NOT an owner-signed record. Each entry quotes the owner's words exactly; 'what_fable_does' is Fable's reading and can be corrected by the owner.",
   "applies_to": {
     "branch": "research/helm-3.0-cas-lab",
-    "operation_contracts_digest": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad"
+    "recorded_against_contract": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad (0.1)",
+    "folded_into_contract": "81c4dd3b38aae50191187946a2dde1bbf24c3be8bcd135138a32ec563cfbd133 (0.2)"
   },
   "decisions": [
     {

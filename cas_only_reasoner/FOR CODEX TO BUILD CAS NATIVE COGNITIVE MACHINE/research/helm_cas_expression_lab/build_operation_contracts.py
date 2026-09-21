@@ -14,12 +14,21 @@ Two disciplines this builder enforces rather than describes:
     used to write its own answer key, a bug in the reference would certify itself. The cases below were
     written from the Rust source by reading it, and the test checks the reference against them.
 
-Also frozen here: the lab's coordinate convention (domain-major inside; the tokenizer's Noetic-major
-ids mapped explicitly), the THREE 28-way namespaces kept apart, and a discrepancy ledger for every
-place two sources disagree. Nothing in this file renumbers the engine or migrates historical data.
+VERSION 0.2 (2026-09-21), what changed from 0.1 and why:
+  * Notation: the ten Noetics are written ^0 .. ^9 (owner ruling OD-2). The engine's own spelling (CO-0,
+    `CO2`) appears only where the engine's text is quoted, with the ^ form beside it.
+  * The canonical 28 is settled (owner ruling OD-3: 28 Foundations 1.0). DR-4 is RESOLVED.
+  * A measured witness that two admissible steps do NOT make an admissible collapsed step
+    (`is_admissible.witnesses.no_composition_law`): 238,572 of 556,960 chains. No generator may assume it.
+  * Three places where the canonical book and the engine code disagree are recorded (DR-5..DR-7) with the
+    owner's decision OD-6: the first experiment stays on the engine code's rules.
+  * `states.rs`, the authority for the 40-state index, is now pinned like the other sources.
+  * The digest is PORTABLE: everything that depends on the machine that ran the build (raw-byte digests,
+    whether an origin file is checked out, the validator's version, Windows path separators) moved to a
+    non-digested `environment` block. The same sources give the same `contract_digest` on any machine.
 
 Usage:  python research/helm_cas_expression_lab/build_operation_contracts.py
-Cost:   $0. Pure Python. Writes ONE file beside itself.
+Cost:   $0. Pure Python. Writes OPERATION_CONTRACTS.json and contracts_package_schema/*.json beside itself.
 """
 import hashlib
 import json
@@ -33,10 +42,16 @@ VENDORED = HERE / "pinned_sources"                # byte copies taken 2026-09-21
 ENGINE_REL = "noetic-compass-scaffold/noetic-compass/cas-engine/src"
 NATIVE_REL = "noetic-compass-scaffold/noetic-compass/cas-native"
 TOKENIZER_REL = "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json"
-CONTRACT_VERSION = "helm-cas-expression-lab.operation-contracts/0.1"
+CONTRACT_VERSION = "helm-cas-expression-lab.operation-contracts/0.2"
+BOOK = "book/manuscript/FULL_MANUSCRIPT_v2.md"
 
-
-HASH_POLICY = "sha256 over LF-normalised bytes (every CRLF -> LF) -- the bytes git stores, so the pin is the same on Windows and Linux"
+HASH_POLICY = {
+    "policy_id": "cncm.hash-policy/1.0", "algorithm": "sha256",
+    "compared": "the digest of the LF-normalised bytes (every CRLF -> LF, nothing else touched) -- the bytes git stores, so a pin is the same on Windows and Linux",
+    "informational": "environment.raw_observed_pins: the digest of the exact bytes on the building machine; never compared, not part of contract_digest",
+    "meaning_of_a_match": "the same text under the declared newline rule -- not a claim that the raw bytes are identical",
+}
+ENVIRONMENT = {"note": "NOT part of contract_digest: facts about the machine that ran the build", "raw_observed_pins": {}, "origin_on_disk_at_build": {}}
 
 
 def canonical_bytes(path):
@@ -45,10 +60,12 @@ def canonical_bytes(path):
     return path.read_bytes().replace(b"\r\n", b"\n")
 
 
-def _hash(path):
+def _hash(path, label):
     if not path.is_file():
         raise SystemExit("CONTRACT_REFUSED:PIN_SOURCE_MISSING:%s" % path)
-    data = canonical_bytes(path)
+    raw = path.read_bytes()
+    data = raw.replace(b"\r\n", b"\n")
+    ENVIRONMENT["raw_observed_pins"][label] = {"bytes_raw_observed": len(raw), "sha256_raw_observed": hashlib.sha256(raw).hexdigest()}
     return {"bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "hash_policy": "lf-normalised"}
 
 
@@ -62,20 +79,40 @@ def pin(rel):
       * the vendored copy MUST exist and MUST match the manifest's hash (the manifest is the record of
         what the origin was when copied);
       * if the origin IS on disk, it MUST match too -- drift detection when someone checks it out;
-      * if the origin is not on disk, that is recorded as `origin_on_disk: false`, not silently skipped.
+      * whether the origin was on disk is a fact about THIS machine: it goes to `environment`, not the digest.
     """
     manifest = json.loads((VENDORED / "PINNED_SOURCES.json").read_text(encoding="utf-8"))
     recorded = {row["origin"]: row for row in manifest["files"]}
     if rel not in recorded:
         raise SystemExit("CONTRACT_REFUSED:NOT_IN_PINNED_SOURCES_MANIFEST:%s" % rel)
-    copy = _hash(VENDORED / rel)
+    copy = _hash(VENDORED / rel, "pinned_sources/" + rel)
     if copy["sha256"] != recorded[rel]["sha256"] or not recorded[rel]["copy_matches_origin"]:
         raise SystemExit("CONTRACT_REFUSED:VENDORED_COPY_DIVERGED_FROM_MANIFEST:%s" % rel)
     origin_path = REPO / rel
     origin_on_disk = origin_path.is_file()
-    if origin_on_disk and _hash(origin_path)["sha256"] != copy["sha256"]:
+    if origin_on_disk and hashlib.sha256(canonical_bytes(origin_path)).hexdigest() != copy["sha256"]:
         raise SystemExit("CONTRACT_REFUSED:ORIGIN_DIVERGED_FROM_VENDORED_COPY:%s" % rel)
-    return {"path": rel, "vendored_path": "pinned_sources/" + rel, "origin_on_disk_at_build": origin_on_disk, **copy}
+    ENVIRONMENT["origin_on_disk_at_build"][rel] = origin_on_disk
+    return {"path": rel, "vendored_path": "pinned_sources/" + rel, **copy}
+
+
+def measure_no_composition_law(ref):
+    """Count two-step chains s -a-> t -b-> u with both steps admissible, and how many of them are NOT
+    admissible as ONE step under the collapsed operator compose(a, b). Exhaustive over the finite grid."""
+    states = [(d, n) for d in ref.DOMAINS for n in range(10)]
+    reach = {(k, s): [t for t in states if ref.is_admissible(k, s, t)] for k in range(10) for s in states}
+    reach_set = {key: set(value) for key, value in reach.items()}
+    chains = broken = 0
+    for a in range(10):
+        for b in range(10):
+            ab = ref.compose(a, b)
+            for s in states:
+                allowed = reach_set[(ab, s)]
+                for t in reach[(a, s)]:
+                    outs = reach[(b, t)]
+                    chains += len(outs)
+                    broken += sum(1 for u in outs if u not in allowed)
+    return chains, broken
 
 
 def build():
@@ -83,7 +120,7 @@ def build():
 
     ops["involute"] = {
         "id": "cas.op.involute/1.0", "arity": "unary",
-        "authoritative_definition": "CLAUDE.md: involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9; self-duals CO-0, CO-1, CO-4, CO-7",
+        "authoritative_definition": "project instructions, 'Structural invariants': involution pairs ^2<->^3, ^5<->^6, ^8<->^9; self-duals ^0, ^1, ^4, ^7 (the engine spells these CO-2 .. CO-9)",
         "pinned_implementation": pin(ENGINE_REL + "/ontology/operators.rs"),
         "implementation_locator": "impl CognitiveOperator :: fn involute(self) -> Self",
         "input_types": {"noetic": "int in 0..9"}, "output_type": "int in 0..9",
@@ -99,7 +136,8 @@ def build():
 
     ops["compose"] = {
         "id": "cas.op.compose/1.0", "arity": "binary",
-        "authoritative_definition": "operators.rs doc comment: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)'",
+        "authoritative_definition": ("operators.rs doc comment, quoted: 'Monoid composition. CO-0 is the identity element. composition maps "
+                                     "(CO-a, CO-b) -> CO-((a+b) mod 10)' -- CO-k is the engine's spelling of ^k"),
         "pinned_implementation": pin(ENGINE_REL + "/ontology/operators.rs"),
         "corroborating_implementation": pin(NATIVE_REL + "/model/composition.py"),
         "implementation_locator": "impl CognitiveOperator :: fn compose(self, other) ; cas-native COMPOSE_TABLE[i][j] = (i + j) % 10",
@@ -111,6 +149,10 @@ def build():
         "WARNING": ("Commutative and associative. A modular sum solves any nested repetition WITHOUT preserving grouping or "
                     "operand order, so success here is NOT evidence of order-sensitive expression reasoning (directive s9). "
                     "Use as a conformance test and as a strong baseline only."),
+        "NOT_A_STATEMENT_ABOUT_ADMISSIBILITY": ("compose is arithmetic on operator indices only. It implies NOTHING about whether the collapsed "
+                                                "operator is admissible between the first source and the last target: see "
+                                                "is_admissible.witnesses.no_composition_law. It is also NOT the book's composition of operator "
+                                                "sequences, which the book says is not commutative (DR-7)."),
         "expected_cases": [{"in": [0, 7], "out": 7}, {"in": [7, 0], "out": 7}, {"in": [3, 4], "out": 7}, {"in": [7, 5], "out": 2},
                            {"in": [9, 9], "out": 8}, {"in": [5, 5], "out": 0}, {"in": [1, 9], "out": 0}, {"in": [6, 8], "out": 4}],
         "invalid_cases": [[10, 0], [0, -1], [2.0, 3], ["1", 1]],
@@ -119,16 +161,17 @@ def build():
 
     ops["is_admissible"] = {
         "id": "cas.op.is_admissible/1.0", "arity": "ternary",
-        "authoritative_definition": "CLAUDE.md CORRECTION 1: each CO-k has an admissibility relation D_k over states; D_0 is the diagonal only",
+        "authoritative_definition": "project instructions, CORRECTION 1: each operator ^k has an admissibility relation D_k over states; D_0 is the diagonal only",
         "pinned_implementation": pin(ENGINE_REL + "/ontology/operators.rs"),
         "implementation_locator": "impl CognitiveOperator :: fn is_admissible(self, source: CognitiveStateId, target: CognitiveStateId) -> bool",
-        "semantics_as_read_from_code": ["CO-0: source == target", "CO-k (k != 0): true if source.domain == target.domain",
-                                        "CO-k (k != 0), different domains: true iff target.operator == k"],
+        "semantics_as_read_from_code": ["^0: source == target", "^k (k != 0): true if source.domain == target.domain",
+                                        "^k (k != 0), different domains: true iff target.operator == k"],
         "input_types": {"operator": "int in 0..9", "source": "(domain in P/C/E/O, noetic in 0..9)", "target": "same"},
         "output_type": "bool", "valid_domain": "all 10 x 40 x 40 = 16,000 triples",
         "invalid_input": "INVALID_INPUT for anything else", "mutation_policy": "pure", "numerical_policy": "exact boolean",
         "algebraic_properties": ["NOT symmetric in (source, target) in general", "depends on operator, both domains and the target noetic",
-                                 "for CO-0 exactly 40 of 1,600 pairs are admissible", "for CO-k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k"],
+                                 "for ^0 exactly 40 of 1,600 pairs are admissible", "for ^k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k",
+                                 "does NOT enforce domain descent: ^9 from ^0^P to ^9^O is admissible in one step (DR-5)"],
         "expected_cases": [
             {"in": [0, ["P", 3], ["P", 3]], "out": True}, {"in": [0, ["P", 3], ["P", 4]], "out": False},
             {"in": [0, ["P", 3], ["C", 3]], "out": False},
@@ -136,14 +179,17 @@ def build():
             {"in": [2, ["P", 3], ["C", 5]], "out": False}, {"in": [2, ["C", 2], ["P", 3]], "out": False},
             {"in": [9, ["O", 1], ["P", 9]], "out": True}, {"in": [9, ["O", 1], ["P", 1]], "out": False},
             {"in": [9, ["O", 1], ["O", 1]], "out": True}, {"in": [7, ["E", 7], ["O", 7]], "out": True},
-            {"in": [7, ["E", 7], ["O", 6]], "out": False}],
+            {"in": [7, ["E", 7], ["O", 6]], "out": False},
+            {"in": [9, ["P", 0], ["O", 9]], "out": True, "reading": "the book says this single step is impossible; the engine allows it (DR-5)"},
+            {"in": [2, ["P", 1], ["P", 3]], "out": True}, {"in": [8, ["P", 3], ["P", 2]], "out": True},
+            {"in": [0, ["P", 1], ["P", 2]], "out": False, "reading": "^2 then ^8 are each admissible, compose(2,8) = 0, and ^0 from P1 to P2 is not"}],
         "invalid_cases": [[10, ["P", 0], ["P", 0]], [1, ["X", 0], ["P", 0]], [1, ["P", 10], ["P", 0]], [1, "P0", ["P", 0]]],
         "role_in_the_lab": "THE order-sensitive operation: source and target are not interchangeable and the answer depends on context",
     }
 
     ops["domain_descent_mask"] = {
         "id": "cas.op.domain_descent_mask/1.0", "arity": "nullary (a constant 40x40 relation)",
-        "authoritative_definition": "CLAUDE.md: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
+        "authoritative_definition": "project instructions: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
         "pinned_implementation": pin(NATIVE_REL + "/model/domain_descent.py"),
         "implementation_locator": "def build_domain_descent_mask(num_states=40): mask[0:10,0:10]; mask[10:20,0:20]; mask[20:30,0:30]; mask[30:40,0:40]",
         "input_types": {}, "output_type": "40x40 bool, indexed DOMAIN-MAJOR (P0=0 .. O9=39)",
@@ -160,7 +206,7 @@ def build():
 
     ops["rpm_embed_realize"] = {
         "id": "cas.op.rpm_embed_realize/1.0", "arity": "unary pair",
-        "authoritative_definition": "CLAUDE.md CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
+        "authoritative_definition": "project instructions, CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
         "pinned_implementation": pin(ENGINE_REL + "/rpm/mod.rs"),
         "implementation_locator": "pub fn embed(score: f64) -> (s, s*s, sqrt s) ; pub fn realize(&EmbeddedScore) -> components[0] ; verify_section_law tolerance f64::EPSILON * 2.0",
         "input_types": {"score": "float in [0, 1], not NaN"}, "output_type": "embed: (float, float, float); realize: float",
@@ -171,6 +217,11 @@ def build():
                              "This is the only admitted operation with a tolerance, and the tolerance is the engine's, not the lab's."),
         "algebraic_properties": ["section law eps o eta = id on [0,1]", "retraction FAILS in general: eta(eps(e)) != e -- asserted, not tolerated",
                                  "one-directional: prerequisite satisfaction is cached, never re-derived by round trip"],
+        "WHAT_THE_SECTION_LAW_DOES_NOT_SHOW": ("realize returns the first coordinate of (s, s*s, sqrt s), so the section law holds by construction. "
+                                               "It is a regression test for exact recovery. It is not evidence that a learned encoder found a meaningful representation."),
+        "KNOWN_LIMIT_OF_THE_FROZEN_ENGINE": ("rpm/mod.rs RpmState and ontology/states.rs CognitiveStateVector derive serde Deserialize without re-running their "
+                                             "constructors' checks, and CognitiveStateVector's PartialEq zips without a length check. Nothing in the repository loads "
+                                             "those types from outside data today. A `satisfied` flag or a state vector is trustworthy only when built through the constructor."),
         "expected_cases": [{"in": [0.25], "embed": [0.25, 0.0625, 0.5], "realize": 0.25},
                            {"in": [0.0], "embed": [0.0, 0.0, 0.0], "realize": 0.0},
                            {"in": [1.0], "embed": [1.0, 1.0, 1.0], "realize": 1.0},
@@ -186,17 +237,26 @@ def build():
     coordinates = {
         "lab_internal_convention": "DOMAIN-MAJOR: index = 10 * domain + noetic, domain order P=0, C=1, E=2, O=3; P0=0 ... O9=39",
         "authority": [(ENGINE_REL + "/ontology/states.rs") + " :: fn linear_index", "api/notation/compiler.py :: _state_index (same formula)"],
-        "tokenizer_convention": "NOETIC-MAJOR: id = 213 + 4 * noetic + domain, ^0^P=213 ... ^9^O=252 -- verified for all 40 on 2026-09-21",
+        "engine_index_pin": pin(ENGINE_REL + "/ontology/states.rs"),
+        "tokenizer_convention": "NOETIC-MAJOR: id = 213 + 4 * noetic + domain, ^0^P=213 ... ^9^O=252 -- verified for all 40 on 2026-09-21, and again by an outside reviewer's script",
         "tokenizer_pin": pin(TOKENIZER_REL),
         "explicit_map_engine_index_to_tokenizer_id": {str(10 * d + n): 213 + 4 * n + d for d in range(4) for n in range(10)},
-        "rule": "these are two coordinate systems for the SAME 40 objects; the lab converts with this map and never renumbers either source",
+        "what_the_canon_books_do": ("Thinking in Cognitive Architecture lists the 40 Noetic-first in Appendix A and Domain-first in Appendix J; CAS PCBA Engineer "
+                                    "lists Domain-first. All agree on the Domain order P, C, E, O and that ^0 is Idea. Listing order is presentation, not meaning."),
+        "rule": "these are two orderings of the SAME 40 Elements; the lab converts with this map and never renumbers either source, and never passes a raw index between them",
     }
 
     namespaces_28 = {
-        "rule": "THREE distinct 28-way schemes exist in the repository. They are kept apart. No unified 28-way head is trained in this pilot; the 40-Element expression work does not depend on choosing one (directive s7).",
-        "A_drive_x_domain": {"definition": "7 Drives x 4 Domains, display F{n}-{D}", "authority": "cas-engine/src/ontology/drives.rs :: DomainDrive::linear_index = drive*4 + domain; CLAUDE.md"},
-        "B_drive_x_register": {"definition": "7 Drives x 4 Registers, display F{n}|{R}", "authority": "docs/reference/tks_28_foundations_translation_key.md; cas-native/belief/tks28_foundations.py"},
-        "C_tks_foundation_x_world_aspect": {"definition": "7 Foundations x 4 World aspects (a=Spiritual b=Mental c=Emotional d=Physical), the TKS 28 Sub-Foundations, own symbol namespace", "authority": "28 Foundations 1.0 (canon, per memory); TKS clean-definitions manual"},
+        "rule": ("OWNER RULING 2026-09-21 (OD-3): the canonical 28 is '28 Foundations 1.0' -- scheme C below. When the lab needs a 28-way Foundation "
+                 "coordinate it uses foundations28.py (symbols 1a..7d, numbered 1..28 as the document numbers them, definitions verbatim). The other "
+                 "two grids stay named and separate; conversions are explicit or absent."),
+        "canonical": "C_tks_foundation_x_world_aspect", "lab_module": "research/helm_cas_expression_lab/foundations28.py",
+        "A_drive_x_domain": {"definition": "7 Drives x 4 Domains, display F{n}-{D}", "authority": "cas-engine/src/ontology/drives.rs :: DomainDrive::linear_index = drive*4 + domain; project instructions; the book, line 1142 ('28 Domain-Specific Drives')",
+                             "relation_to_canon": "a DIFFERENT grid: Domains (P, C, E, O) are not Worlds or Registers"},
+        "B_drive_x_register": {"definition": "7 Drives x 4 Registers, display F{n}|{R}", "authority": "docs/reference/tks_28_foundations_translation_key.md; cas-native/belief/tks28_foundations.py; the book, line 8454 ('7 Drives x 4 Registers = 28 SubFoundations')",
+                               "relation_to_canon": "the POSITION-BY-POSITION mirror of C ('3b' <-> 'F3|A'); positions only -- a CAS drive label is never the meaning of a Foundation"},
+        "C_tks_foundation_x_world_aspect": {"definition": "7 Foundations x 4 Worlds (a=Spiritual b=Mental c=Emotional d=Physical), own symbol namespace 1a..7d",
+                                            "authority": "28 Foundations 1.0 (owner-supplied PDF, sha256 2c27443f447bd69901372edb1316be56a92490afc6f88055ce0c84ce7a871017)"},
         "label_policy": "every label carries {ontology_version, namespace, definition}; conversions are explicit or absent",
     }
 
@@ -214,12 +274,35 @@ def build():
         {"id": "DR-3", "between": ["operators.rs doc comment 'Monoid composition'", "the code (a+b) mod 10"],
          "issue": "(a+b) mod 10 is a GROUP (every element invertible), which is stronger than the comment claims. Not a bug; recorded so nobody 'fixes' the comment into the code.",
          "status": "RECORDED"},
-        {"id": "DR-4", "between": ["the three 28-way namespaces"], "issue": "see namespaces_28", "status": "QUARANTINED, owner decision pending, does not block the 40-Element work"},
+        {"id": "DR-4", "between": ["the three 28-way namespaces"], "issue": "see namespaces_28",
+         "status": "RESOLVED by owner ruling OD-3, 2026-09-21: the canonical 28 is 28 Foundations 1.0"},
+        {"id": "DR-5", "between": [BOOK + " line 5548: one cannot go from ^0^P directly to ^9^O in a single step; 'the admissibility structure enforces this descent'",
+                                    "operators.rs is_admissible: ^9 from ^0^P to ^9^O is admissible (the target's Noetic equals the operator)"],
+         "issue": "the engine enforces descent only in domain_descent_mask, not in is_admissible.",
+         "status": "FLAG_FOR_HUMAN_REVIEW; owner decision OD-6: the first experiment stays on the engine code's rules; a book-faithful rule is a separate task"},
+        {"id": "DR-6", "between": [BOOK + " line 6038: 'admissibility is closed under composition'",
+                                    "measured on the engine rule: see is_admissible.witnesses.no_composition_law"],
+         "issue": "under the engine's compose and is_admissible the closure fails for a large share of two-step chains.",
+         "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"},
+        {"id": "DR-7", "between": [BOOK + " line 6040: composition is NOT commutative (explicit counterexample with ^8 and ^3)",
+                                    "operators.rs compose: (a + b) mod 10, commutative on all 100 pairs"],
+         "issue": "the book composes operator SEQUENCES; the engine adds operator indices. They are different operations with the same name.",
+         "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"},
+        {"id": "DR-8", "between": [BOOK + " line 1142: '28 Domain-Specific Drives' (7 Drives x 4 Domains)", BOOK + " line 8454: '7 Drives x 4 Registers = 28 SubFoundations'"],
+         "issue": "the canon book uses '28' for two different grids.", "status": "RECORDED; the owner's ruling OD-3 matches the second; see namespaces_28"},
     ]
+
+    sys.path.insert(0, str(HERE))
+    import reference_ops as _ref
 
     contract = {
         "schema": CONTRACT_VERSION, "built": "2026-09-21", "hash_policy": HASH_POLICY, "builder": pathlib.Path(__file__).name, "pinned_sources_manifest": "pinned_sources/PINNED_SOURCES.json",
-        "reference_module": {"path": (HERE / "reference_ops.py").relative_to(REPO).as_posix(), **_hash(HERE / "reference_ops.py")},
+        "canon": {"owner_ruling": "OD-2, 2026-09-21: three books are canonical for CAS; Noetics are written ^0 .. ^9",
+                  "books": {"Thinking in Cognitive Architecture": BOOK, "CAS PCBA Engineer": "book/CAS_PCBA_Engineer/*.md", "Reality Engineering": "book/superiority_of_tks/MANUSCRIPT.md (built from SOURCE_ORIGINAL.md)"},
+                  "canonical_28": "28 Foundations 1.0 -- foundations28.py", "owner_decisions_record": "OWNER_DECISIONS_20260921.json"},
+        "scope": ("Nothing in CAS is excluded from Helm's expression space (owner ruling OD-4): the 40 Elements, the 28 Foundations, Registers, operators, recipes "
+                  "and every expression built from them. THIS file freezes only the first five OPERATIONS a learned module may be trained against."),
+        "reference_module": {"path": (HERE / "reference_ops.py").relative_to(REPO).as_posix(), **_hash(HERE / "reference_ops.py", "reference_ops.py")},
         "reference_learner_separation": ("reference_ops.py is the EVALUATOR's oracle. A learned arm receives operands and an operation ID, never "
                                          "reference outputs, answer-derived masks, or a solver callback. An arm that calls the reference is "
                                          "HYBRID_FIXED_OPERATOR and is labelled so. Enforced by test_operation_contracts.py (import scan)."),
@@ -227,23 +310,31 @@ def build():
         "equality_policy": {"symbolic_or_boolean": "exact", "typed_record": "structural", "continuous": "only rpm_embed_realize, at the engine's own tolerance"},
         "operations": ops, "coordinates": coordinates, "namespaces_28": namespaces_28, "discrepancies": discrepancies,
         "admitted_for_learning_pilot": {"order_sensitive_target": "is_admissible", "conformance_only": ["compose", "involute"],
-                                        "structural_constraint": "domain_descent_mask", "numerical": "rpm_embed_realize"},
+                                        "structural_constraint": "domain_descent_mask", "numerical": "rpm_embed_realize",
+                                        "targets_are": "the ENGINE CODE's rules as pinned (owner decision OD-6); results on them are labelled 'matches the code', never discovery"},
         "not_admitted": ["Decomposition", "Comparison", "Candidate routing", "any CCDL board operation -- no parser on disk, 17 of 39 statement leaders have no semantics",
-                         "OmegaRegistry (a registry is not an operation)", "RegisterFiLM (parameterised; a mechanism, not an oracle)"],
+                         "OmegaRegistry (a registry is not an operation)", "RegisterFiLM (parameterised; a mechanism, not an oracle)",
+                         "any rule of the form 'two admissible steps imply an admissible collapsed step' -- measured false, see no_composition_law"],
     }
-    # ---- WITNESSES (owner response draft s5): asymmetry and context-sensitivity are MEASURED, not inferred from a name.
-    sys.path.insert(0, str(HERE))
-    import reference_ops as _ref
+    # ---- WITNESSES: asymmetry, context-sensitivity and the missing composition law are MEASURED, not inferred from a name.
     states = [(d, n) for d in _ref.DOMAINS for n in range(10)]
     asym = [(k, s, t) for k in range(10) for s in states for t in states
             if _ref.is_admissible(k, s, t) != _ref.is_admissible(k, t, s)]
     ctx = [(s, t) for s in states for t in states if len({_ref.is_admissible(k, s, t) for k in range(10)}) > 1]
+    admissible_total = sum(1 for k in range(10) for s in states for t in states if _ref.is_admissible(k, s, t))
+    chains, broken = measure_no_composition_law(_ref)
     ops["is_admissible"]["witnesses"] = {
-        "asymmetric_triples": len(asym), "of_triples": 16000,
+        "admissible_triples": admissible_total, "asymmetric_triples": len(asym), "of_triples": 16000,
+        "always_inadmissible_accuracy_on_the_full_uniform_grid": (16000 - admissible_total) / 16000,
         "example_asymmetric": {"triple": list(asym[0][:1]) + [list(asym[0][1]), list(asym[0][2])],
                                "f(k,s,t)": _ref.is_admissible(*asym[0]), "f(k,t,s)": _ref.is_admissible(asym[0][0], asym[0][2], asym[0][1])},
         "context_sensitive_pairs": len(ctx), "of_pairs": 1600,
         "note": "a (source, target) pair is context-sensitive when the answer depends on WHICH operator is applied",
+        "no_composition_law": {
+            "admissible_two_step_chains": chains, "collapsed_operator_not_admissible": broken,
+            "example": {"first": [2, ["P", 1], ["P", 3]], "second": [8, ["P", 3], ["P", 2]], "compose": _ref.compose(2, 8),
+                        "collapsed": [0, ["P", 1], ["P", 2]], "collapsed_admissible": _ref.is_admissible(0, ("P", 1), ("P", 2))},
+            "reading": "two admissible steps do NOT make the collapsed operator admissible. Not a defect of the code, which promises no such law; a generator or a learner that assumes it is wrong."},
     }
     mask = _ref.domain_descent_mask()
     ops["domain_descent_mask"]["witnesses"] = {"asymmetric_cells": sum(1 for i in range(40) for j in range(40) if mask[i][j] != mask[j][i]), "of_cells": 1600}
@@ -277,47 +368,36 @@ def build():
                            "rule": op["numerical_policy"]},
             "allowed_for_neural_target": name in ("is_admissible", "compose", "involute"),
         }
-        (export_dir / (name + ".json")).write_text(json.dumps(exp, indent=1, sort_keys=True), encoding="utf-8")
+        with open(export_dir / (name + ".json"), "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(exp, indent=1, sort_keys=True))
         exports[name] = "contracts_package_schema/" + name + ".json"
-    validation = {"schema": str(schema_path.relative_to(PACKAGE)) if schema_path.exists() else None, "validator": None, "results": {}}
+    validation = {"schema": schema_path.relative_to(PACKAGE).as_posix() if schema_path.exists() else None, "validator": None, "results": {}}
     if schema_path.exists():
         schema = json.loads(schema_path.read_text(encoding="utf-8"))
         try:
             import jsonschema
-            for name in ops:
-                doc = json.loads((export_dir / (name + ".json")).read_text(encoding="utf-8"))
-                try:
-                    jsonschema.validate(doc, schema); validation["results"][name] = "VALID"
-                except jsonschema.ValidationError as error:
-                    validation["results"][name] = "INVALID: " + error.message[:160]
-            validation["validator"] = "jsonschema " + __import__("importlib.metadata").metadata.version("jsonschema")
         except ImportError:
-            def required_ok(doc, sch):
-                for key in sch.get("required", []):
-                    if key not in doc:
-                        return "MISSING:" + key
-                    sub = (sch.get("properties") or {}).get(key, {})
-                    if isinstance(doc[key], dict) and sub.get("required"):
-                        r = required_ok(doc[key], sub)
-                        if r != "VALID":
-                            return key + "." + r
-                    if isinstance(doc[key], list) and isinstance(sub.get("items"), dict) and sub["items"].get("required"):
-                        for row in doc[key]:
-                            r = required_ok(row, sub["items"])
-                            if r != "VALID":
-                                return key + "[]." + r
-                return "VALID"
-            for name in ops:
-                validation["results"][name] = required_ok(json.loads((export_dir / (name + ".json")).read_text(encoding="utf-8")), schema)
-            validation["validator"] = "required-keys check (jsonschema not installed)"
+            raise SystemExit("CONTRACT_REFUSED:VALIDATOR_MISSING: install jsonschema -- the package-schema export is not written unvalidated")
+        for name in ops:
+            doc = json.loads((export_dir / (name + ".json")).read_text(encoding="utf-8"))
+            try:
+                jsonschema.validate(doc, schema)
+                validation["results"][name] = "VALID"
+            except jsonschema.ValidationError as error:
+                validation["results"][name] = "INVALID: " + error.message[:160]
+        validation["validator"] = "jsonschema"
+        ENVIRONMENT["validator_version"] = "jsonschema " + __import__("importlib.metadata").metadata.version("jsonschema")
     contract["package_schema_export"] = {"files": exports, "validation": validation}
 
+    # the digest covers everything EXCEPT `environment`, so the same sources give the same digest on any machine
     body = json.dumps(contract, indent=1, sort_keys=True)
     contract["contract_digest"] = hashlib.sha256(body.encode("utf-8")).hexdigest()
-    out = HERE / "OPERATION_CONTRACTS.json"
-    out.write_text(json.dumps(contract, indent=1, sort_keys=True), encoding="utf-8")
+    contract["environment"] = ENVIRONMENT
+    with open(HERE / "OPERATION_CONTRACTS.json", "w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(contract, indent=1, sort_keys=True))
     print("OPERATION_CONTRACTS.json written: %d operations, %d discrepancies, contract_digest %s"
           % (len(ops), len(discrepancies), contract["contract_digest"][:16]))
+    print("  no_composition_law: %d admissible two-step chains, %d with a non-admissible collapsed operator" % (chains, broken))
     for name, op in ops.items():
         print("  %-22s %s  pinned %s @ %s" % (name, op["id"], op["pinned_implementation"]["path"], op["pinned_implementation"]["sha256"][:12]))
     return 0

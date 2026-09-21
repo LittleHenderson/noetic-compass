@@ -16,7 +16,7 @@ Pure Python. No torch. No randomness. Every function is total on its declared do
 """
 import math
 
-NOETICS = tuple(range(10))                 # CO-0 .. CO-9, the engine's CognitiveOperator index
+NOETICS = tuple(range(10))                 # ^0 .. ^9 (the engine spells them CO-0 .. CO-9: its CognitiveOperator index)
 DOMAINS = ("P", "C", "E", "O")             # the engine's Domain order: Principled=0, Cognitive=1, Evaluative=2, Operational=3
 NUM_STATES = 40
 # Involution partners, verbatim from cas-engine/src/ontology/operators.rs `involute`.
@@ -88,7 +88,7 @@ def involute(noetic):
 
 
 # ---------------------------------------------------------------------------------------------
-# OP-2  compose : Noetic x Noetic -> Noetic.  `(a + b) mod 10`, CO-0 identity.
+# OP-2  compose : Noetic x Noetic -> Noetic.  `(a + b) mod 10`, ^0 identity.
 # COMMUTATIVE AND ASSOCIATIVE: a modular sum solves any nesting without preserving grouping, so this
 # operation is a CONFORMANCE test and a strong baseline, never evidence of order-sensitive reasoning
 # (directive section 9). The contract carries that flag.
@@ -109,8 +109,8 @@ def is_admissible(operator, source, target):
     """`CognitiveOperator::is_admissible`, operators.rs:110-125, CORRECTION 1.
 
     `source` and `target` are `(domain, noetic)` pairs.
-      CO-0            : admissible only on the diagonal, source == target.
-      any other CO-k  : admissible if source.domain == target.domain (intra-domain),
+      ^0              : admissible only on the diagonal, source == target.
+      any other ^k    : admissible if source.domain == target.domain (intra-domain),
                         else admissible iff target.noetic == k (the operator mediates the crossing).
     """
     if not _is_noetic(operator):

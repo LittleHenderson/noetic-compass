@@ -47,7 +47,7 @@ def _sha(path):
 def test_every_pinned_source_still_matches():
     pins = [op["pinned_implementation"] for op in OPS.values()]
     pins += [op["corroborating_implementation"] for op in OPS.values() if "corroborating_implementation" in op]
-    pins += [CONTRACT["coordinates"]["tokenizer_pin"]]
+    pins += [CONTRACT["coordinates"]["tokenizer_pin"], CONTRACT["coordinates"]["engine_index_pin"]]
     manifest = json.loads((HERE / "pinned_sources" / "PINNED_SOURCES.json").read_text(encoding="utf-8"))
     recorded = {row["origin"]: row["sha256"] for row in manifest["files"]}
     for p in pins:
@@ -62,9 +62,16 @@ def test_every_pinned_source_still_matches():
     assert _sha(ref_pin["path"]) == ref_pin["sha256"], "REFERENCE_MODULE_EDITED_AFTER_CONTRACT"
 
 
-def test_contract_digest_is_of_its_own_body():
-    body = {k: v for k, v in CONTRACT.items() if k != "contract_digest"}
-    assert hashlib.sha256(json.dumps(body, indent=1, sort_keys=True).encode("utf-8")).hexdigest() == CONTRACT["contract_digest"]
+def test_contract_digest_is_of_its_own_body_and_is_portable():
+    # `environment` holds facts about the machine that ran the build; it is deliberately outside the digest
+    body = {k: v for k, v in CONTRACT.items() if k not in ("contract_digest", "environment")}
+    text = json.dumps(body, indent=1, sort_keys=True)
+    assert hashlib.sha256(text.encode("utf-8")).hexdigest() == CONTRACT["contract_digest"]
+    assert chr(92) not in text, "a Windows path separator inside the digested body makes the digest machine-dependent"
+    assert "origin_on_disk" not in text and "raw_observed" not in text.replace("environment.raw_observed_pins", "")
+    assert CONTRACT["schema"].endswith("/0.2") and CONTRACT["hash_policy"]["policy_id"] == "cncm.hash-policy/1.0"
+    raw = CONTRACT["environment"]["raw_observed_pins"]
+    assert all(set(v) == {"bytes_raw_observed", "sha256_raw_observed"} for v in raw.values()) and len(raw) >= 6
 
 
 # --- 2. hand-pinned cases ----------------------------------------------------------------------
@@ -145,7 +152,7 @@ def test_is_admissible_all_16000_triples_agree_with_a_second_reading_of_the_sour
                 assert got is _admissible_second_opinion(op, s, t), (op, s, t)
                 n_true += got
         counts[op] = n_true
-    # CO-0: the diagonal only. CO-k: 4 domains x 100 intra pairs + cross-domain pairs with target noetic k:
+    # ^0: the diagonal only. ^k: 4 domains x 100 intra pairs + cross-domain pairs with target noetic k:
     # 40 sources x 3 other domains x 1 target each = 120. Total 400 + 120 = 520.
     assert counts[0] == 40 and all(counts[k] == 520 for k in range(1, 10)), counts
 
@@ -174,6 +181,44 @@ def test_rpm_section_law_on_a_grid_and_retraction_fails():
     assert ref.rpm_retraction_law_fails_for((0.5, 0.9, 0.1))
     assert not ref.rpm_retraction_law_fails_for(ref.rpm_embed(0.36))   # a genuine image of eta round-trips
     assert math.isnan(float("nan"))
+
+
+def test_two_admissible_steps_do_not_make_an_admissible_collapsed_step():
+    """Recounted here with the SECOND reading of the source, not with reference_ops; numbers hand-pinned from three"""
+    # independent measurements on 2026-09-21 (a brute-force count, the builder, and an outside reviewer's example).
+    states = [(d, n) for d in ref.DOMAINS for n in range(10)]
+    reach = {(k, s): [t for t in states if _admissible_second_opinion(k, s, t)] for k in range(10) for s in states}
+    chains = broken = 0
+    for a in range(10):
+        for b in range(10):
+            for s in states:
+                allowed = set(reach[((a + b) % 10, s)])
+                for t in reach[(a, s)]:
+                    chains += len(reach[(b, t)])
+                    broken += sum(1 for u in reach[(b, t)] if u not in allowed)
+    assert (chains, broken) == (556960, 238572)
+    w = OPS["is_admissible"]["witnesses"]
+    law = w["no_composition_law"]
+    assert (law["admissible_two_step_chains"], law["collapsed_operator_not_admissible"]) == (556960, 238572)
+    assert law["example"]["compose"] == 0 and law["example"]["collapsed_admissible"] is False
+    assert ref.is_admissible(2, ("P", 1), ("P", 3)) and ref.is_admissible(8, ("P", 3), ("P", 2)) and not ref.is_admissible(0, ("P", 1), ("P", 2))
+    assert (w["admissible_triples"], w["asymmetric_triples"], w["always_inadmissible_accuracy_on_the_full_uniform_grid"]) == (4720, 1944, 0.705)
+
+
+def test_the_engine_allows_the_single_step_the_book_forbids():
+    assert ref.is_admissible(9, ("P", 0), ("O", 9)) is True           # DR-5: ^9 from ^0^P to ^9^O
+    assert ref.may_attend(("P", 0), ("O", 9)) is False                # descent lives in the mask, not in is_admissible
+
+
+def test_owner_rulings_and_canon_conflicts_are_recorded():
+    status = {d["id"]: d["status"] for d in CONTRACT["discrepancies"]}
+    assert status["DR-4"].startswith("RESOLVED by owner ruling OD-3")
+    assert all(status[k].startswith("FLAG_FOR_HUMAN_REVIEW") and "OD-6" in status[k] for k in ("DR-5", "DR-6", "DR-7"))
+    n28 = CONTRACT["namespaces_28"]
+    assert n28["canonical"] == "C_tks_foundation_x_world_aspect" and (HERE.parents[1] / n28["lab_module"]).is_file()
+    assert "Nothing in CAS is excluded" in CONTRACT["scope"]
+    assert all(line.startswith("^") for line in OPS["is_admissible"]["semantics_as_read_from_code"])   # owner: ^ not CO
+    assert "matches the code" in CONTRACT["admitted_for_learning_pilot"]["targets_are"]
 
 
 # --- coordinates ---------------------------------------------------------------------------------

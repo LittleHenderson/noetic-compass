@@ -6,16 +6,34 @@
   ],
   "numerical": "rpm_embed_realize",
   "order_sensitive_target": "is_admissible",
-  "structural_constraint": "domain_descent_mask"
+  "structural_constraint": "domain_descent_mask",
+  "targets_are": "the ENGINE CODE's rules as pinned (owner decision OD-6); results on them are labelled 'matches the code', never discovery"
  },
  "builder": "build_operation_contracts.py",
  "built": "2026-09-21",
- "contract_digest": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad",
+ "canon": {
+  "books": {
+   "CAS PCBA Engineer": "book/CAS_PCBA_Engineer/*.md",
+   "Reality Engineering": "book/superiority_of_tks/MANUSCRIPT.md (built from SOURCE_ORIGINAL.md)",
+   "Thinking in Cognitive Architecture": "book/manuscript/FULL_MANUSCRIPT_v2.md"
+  },
+  "canonical_28": "28 Foundations 1.0 -- foundations28.py",
+  "owner_decisions_record": "OWNER_DECISIONS_20260921.json",
+  "owner_ruling": "OD-2, 2026-09-21: three books are canonical for CAS; Noetics are written ^0 .. ^9"
+ },
+ "contract_digest": "81c4dd3b38aae50191187946a2dde1bbf24c3be8bcd135138a32ec563cfbd133",
  "coordinates": {
   "authority": [
    "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs :: fn linear_index",
    "api/notation/compiler.py :: _state_index (same formula)"
   ],
+  "engine_index_pin": {
+   "bytes": 10210,
+   "hash_policy": "lf-normalised",
+   "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs",
+   "sha256": "fcebc98d53d6e8927ad8624bfcec6dd52c39de06f167e0ebeaa75e9d975cde2d",
+   "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs"
+  },
   "explicit_map_engine_index_to_tokenizer_id": {
    "0": 213,
    "1": 217,
@@ -59,16 +77,16 @@
    "9": 249
   },
   "lab_internal_convention": "DOMAIN-MAJOR: index = 10 * domain + noetic, domain order P=0, C=1, E=2, O=3; P0=0 ... O9=39",
-  "rule": "these are two coordinate systems for the SAME 40 objects; the lab converts with this map and never renumbers either source",
-  "tokenizer_convention": "NOETIC-MAJOR: id = 213 + 4 * noetic + domain, ^0^P=213 ... ^9^O=252 -- verified for all 40 on 2026-09-21",
+  "rule": "these are two orderings of the SAME 40 Elements; the lab converts with this map and never renumbers either source, and never passes a raw index between them",
+  "tokenizer_convention": "NOETIC-MAJOR: id = 213 + 4 * noetic + domain, ^0^P=213 ... ^9^O=252 -- verified for all 40 on 2026-09-21, and again by an outside reviewer's script",
   "tokenizer_pin": {
    "bytes": 8377,
    "hash_policy": "lf-normalised",
-   "origin_on_disk_at_build": false,
    "path": "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json",
    "sha256": "a2d7115a3c7b4f16065c8f457558ab29c459c558f027a17c9b4f2442b6bb1076",
    "vendored_path": "pinned_sources/cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json"
-  }
+  },
+  "what_the_canon_books_do": "Thinking in Cognitive Architecture lists the 40 Noetic-first in Appendix A and Domain-first in Appendix J; CAS PCBA Engineer lists Domain-first. All agree on the Domain order P, C, E, O and that ^0 is Idea. Listing order is presentation, not meaning."
  },
  "discrepancies": [
   {
@@ -106,30 +124,118 @@
    ],
    "id": "DR-4",
    "issue": "see namespaces_28",
-   "status": "QUARANTINED, owner decision pending, does not block the 40-Element work"
+   "status": "RESOLVED by owner ruling OD-3, 2026-09-21: the canonical 28 is 28 Foundations 1.0"
+  },
+  {
+   "between": [
+    "book/manuscript/FULL_MANUSCRIPT_v2.md line 5548: one cannot go from ^0^P directly to ^9^O in a single step; 'the admissibility structure enforces this descent'",
+    "operators.rs is_admissible: ^9 from ^0^P to ^9^O is admissible (the target's Noetic equals the operator)"
+   ],
+   "id": "DR-5",
+   "issue": "the engine enforces descent only in domain_descent_mask, not in is_admissible.",
+   "status": "FLAG_FOR_HUMAN_REVIEW; owner decision OD-6: the first experiment stays on the engine code's rules; a book-faithful rule is a separate task"
+  },
+  {
+   "between": [
+    "book/manuscript/FULL_MANUSCRIPT_v2.md line 6038: 'admissibility is closed under composition'",
+    "measured on the engine rule: see is_admissible.witnesses.no_composition_law"
+   ],
+   "id": "DR-6",
+   "issue": "under the engine's compose and is_admissible the closure fails for a large share of two-step chains.",
+   "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"
+  },
+  {
+   "between": [
+    "book/manuscript/FULL_MANUSCRIPT_v2.md line 6040: composition is NOT commutative (explicit counterexample with ^8 and ^3)",
+    "operators.rs compose: (a + b) mod 10, commutative on all 100 pairs"
+   ],
+   "id": "DR-7",
+   "issue": "the book composes operator SEQUENCES; the engine adds operator indices. They are different operations with the same name.",
+   "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"
+  },
+  {
+   "between": [
+    "book/manuscript/FULL_MANUSCRIPT_v2.md line 1142: '28 Domain-Specific Drives' (7 Drives x 4 Domains)",
+    "book/manuscript/FULL_MANUSCRIPT_v2.md line 8454: '7 Drives x 4 Registers = 28 SubFoundations'"
+   ],
+   "id": "DR-8",
+   "issue": "the canon book uses '28' for two different grids.",
+   "status": "RECORDED; the owner's ruling OD-3 matches the second; see namespaces_28"
   }
  ],
+ "environment": {
+  "note": "NOT part of contract_digest: facts about the machine that ran the build",
+  "origin_on_disk_at_build": {
+   "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json": false,
+   "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs": false,
+   "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs": false,
+   "noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs": false,
+   "noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py": false,
+   "noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py": false
+  },
+  "raw_observed_pins": {
+   "pinned_sources/cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json": {
+    "bytes_raw_observed": 8795,
+    "sha256_raw_observed": "b3266484a132878f1bd984f0dd38c2a27efda8a93b59aa51a27b994f25431a9d"
+   },
+   "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs": {
+    "bytes_raw_observed": 10137,
+    "sha256_raw_observed": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc"
+   },
+   "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs": {
+    "bytes_raw_observed": 10210,
+    "sha256_raw_observed": "fcebc98d53d6e8927ad8624bfcec6dd52c39de06f167e0ebeaa75e9d975cde2d"
+   },
+   "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs": {
+    "bytes_raw_observed": 42791,
+    "sha256_raw_observed": "c213bdd0e731f3c6ffc1931128ac0c65c302197f28647fe05503f950125a7884"
+   },
+   "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py": {
+    "bytes_raw_observed": 6113,
+    "sha256_raw_observed": "b28b9aade4d341d4f7d98286f43ba55c60c5c68d7cdd547dfc1f5e8b8ed95593"
+   },
+   "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py": {
+    "bytes_raw_observed": 10368,
+    "sha256_raw_observed": "581371bba57e2fd0a57f02e26f039c6ae01ffe1663b63145ca5c6df049a2ad51"
+   },
+   "reference_ops.py": {
+    "bytes_raw_observed": 9999,
+    "sha256_raw_observed": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12"
+   }
+  },
+  "validator_version": "jsonschema 4.26.0"
+ },
  "equality_policy": {
   "continuous": "only rpm_embed_realize, at the engine's own tolerance",
   "symbolic_or_boolean": "exact",
   "typed_record": "structural"
  },
- "hash_policy": "sha256 over LF-normalised bytes (every CRLF -> LF) -- the bytes git stores, so the pin is the same on Windows and Linux",
+ "hash_policy": {
+  "algorithm": "sha256",
+  "compared": "the digest of the LF-normalised bytes (every CRLF -> LF, nothing else touched) -- the bytes git stores, so a pin is the same on Windows and Linux",
+  "informational": "environment.raw_observed_pins: the digest of the exact bytes on the building machine; never compared, not part of contract_digest",
+  "meaning_of_a_match": "the same text under the declared newline rule -- not a claim that the raw bytes are identical",
+  "policy_id": "cncm.hash-policy/1.0"
+ },
  "namespaces_28": {
   "A_drive_x_domain": {
-   "authority": "cas-engine/src/ontology/drives.rs :: DomainDrive::linear_index = drive*4 + domain; CLAUDE.md",
-   "definition": "7 Drives x 4 Domains, display F{n}-{D}"
+   "authority": "cas-engine/src/ontology/drives.rs :: DomainDrive::linear_index = drive*4 + domain; project instructions; the book, line 1142 ('28 Domain-Specific Drives')",
+   "definition": "7 Drives x 4 Domains, display F{n}-{D}",
+   "relation_to_canon": "a DIFFERENT grid: Domains (P, C, E, O) are not Worlds or Registers"
   },
   "B_drive_x_register": {
-   "authority": "docs/reference/tks_28_foundations_translation_key.md; cas-native/belief/tks28_foundations.py",
-   "definition": "7 Drives x 4 Registers, display F{n}|{R}"
+   "authority": "docs/reference/tks_28_foundations_translation_key.md; cas-native/belief/tks28_foundations.py; the book, line 8454 ('7 Drives x 4 Registers = 28 SubFoundations')",
+   "definition": "7 Drives x 4 Registers, display F{n}|{R}",
+   "relation_to_canon": "the POSITION-BY-POSITION mirror of C ('3b' <-> 'F3|A'); positions only -- a CAS drive label is never the meaning of a Foundation"
   },
   "C_tks_foundation_x_world_aspect": {
-   "authority": "28 Foundations 1.0 (canon, per memory); TKS clean-definitions manual",
-   "definition": "7 Foundations x 4 World aspects (a=Spiritual b=Mental c=Emotional d=Physical), the TKS 28 Sub-Foundations, own symbol namespace"
+   "authority": "28 Foundations 1.0 (owner-supplied PDF, sha256 2c27443f447bd69901372edb1316be56a92490afc6f88055ce0c84ce7a871017)",
+   "definition": "7 Foundations x 4 Worlds (a=Spiritual b=Mental c=Emotional d=Physical), own symbol namespace 1a..7d"
   },
+  "canonical": "C_tks_foundation_x_world_aspect",
+  "lab_module": "research/helm_cas_expression_lab/foundations28.py",
   "label_policy": "every label carries {ontology_version, namespace, definition}; conversions are explicit or absent",
-  "rule": "THREE distinct 28-way schemes exist in the repository. They are kept apart. No unified 28-way head is trained in this pilot; the 40-Element expression work does not depend on choosing one (directive s7)."
+  "rule": "OWNER RULING 2026-09-21 (OD-3): the canonical 28 is '28 Foundations 1.0' -- scheme C below. When the lab needs a 28-way Foundation coordinate it uses foundations28.py (symbols 1a..7d, numbered 1..28 as the document numbers them, definitions verbatim). The other two grids stay named and separate; conversions are explicit or absent."
  },
  "not_admitted": [
   "Decomposition",
@@ -137,10 +243,12 @@
   "Candidate routing",
   "any CCDL board operation -- no parser on disk, 17 of 39 statement leaders have no semantics",
   "OmegaRegistry (a registry is not an operation)",
-  "RegisterFiLM (parameterised; a mechanism, not an oracle)"
+  "RegisterFiLM (parameterised; a mechanism, not an oracle)",
+  "any rule of the form 'two admissible steps imply an admissible collapsed step' -- measured false, see no_composition_law"
  ],
  "operations": {
   "compose": {
+   "NOT_A_STATEMENT_ABOUT_ADMISSIBILITY": "compose is arithmetic on operator indices only. It implies NOTHING about whether the collapsed operator is admissible between the first source and the last target: see is_admissible.witnesses.no_composition_law. It is also NOT the book's composition of operator sequences, which the book says is not commutative (DR-7).",
    "WARNING": "Commutative and associative. A modular sum solves any nested repetition WITHOUT preserving grouping or operand order, so success here is NOT evidence of order-sensitive expression reasoning (directive s9). Use as a conformance test and as a strong baseline only.",
    "algebraic_properties": [
     "identity: compose(0, k) == k",
@@ -149,11 +257,10 @@
     "every element invertible: compose(k, (10-k)%10) == 0 -- this is a GROUP (Z/10), not merely a monoid"
    ],
    "arity": "binary",
-   "authoritative_definition": "operators.rs doc comment: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)'",
+   "authoritative_definition": "operators.rs doc comment, quoted: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)' -- CO-k is the engine's spelling of ^k",
    "corroborating_implementation": {
     "bytes": 6113,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py",
     "sha256": "b28b9aade4d341d4f7d98286f43ba55c60c5c68d7cdd547dfc1f5e8b8ed95593",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/composition.py"
@@ -247,7 +354,6 @@
    "pinned_implementation": {
     "bytes": 10137,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
     "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
@@ -268,7 +374,7 @@
     "exactly 1,000 true cells: 100 + 200 + 300 + 400"
    ],
    "arity": "nullary (a constant 40x40 relation)",
-   "authoritative_definition": "CLAUDE.md: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
+   "authoritative_definition": "project instructions: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
    "expected_cases": [
     {
      "in": [
@@ -362,7 +468,6 @@
    "pinned_implementation": {
     "bytes": 10210,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py",
     "sha256": "b596786046079ea66a2b5aa3e98870527e459906e170cc2c418133caebff80ad",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py"
@@ -380,7 +485,7 @@
     "fixed points exactly {0,1,4,7}"
    ],
    "arity": "unary",
-   "authoritative_definition": "CLAUDE.md: involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9; self-duals CO-0, CO-1, CO-4, CO-7",
+   "authoritative_definition": "project instructions, 'Structural invariants': involution pairs ^2<->^3, ^5<->^6, ^8<->^9; self-duals ^0, ^1, ^4, ^7 (the engine spells these CO-2 .. CO-9)",
    "expected_cases": [
     {
      "in": [
@@ -469,7 +574,6 @@
    "pinned_implementation": {
     "bytes": 10137,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
     "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
@@ -481,11 +585,12 @@
    "algebraic_properties": [
     "NOT symmetric in (source, target) in general",
     "depends on operator, both domains and the target noetic",
-    "for CO-0 exactly 40 of 1,600 pairs are admissible",
-    "for CO-k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k"
+    "for ^0 exactly 40 of 1,600 pairs are admissible",
+    "for ^k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k",
+    "does NOT enforce domain descent: ^9 from ^0^P to ^9^O is admissible in one step (DR-5)"
    ],
    "arity": "ternary",
-   "authoritative_definition": "CLAUDE.md CORRECTION 1: each CO-k has an admissibility relation D_k over states; D_0 is the diagonal only",
+   "authoritative_definition": "project instructions, CORRECTION 1: each operator ^k has an admissibility relation D_k over states; D_0 is the diagonal only",
    "expected_cases": [
     {
      "in": [
@@ -654,6 +759,64 @@
       ]
      ],
      "out": false
+    },
+    {
+     "in": [
+      9,
+      [
+       "P",
+       0
+      ],
+      [
+       "O",
+       9
+      ]
+     ],
+     "out": true,
+     "reading": "the book says this single step is impossible; the engine allows it (DR-5)"
+    },
+    {
+     "in": [
+      2,
+      [
+       "P",
+       1
+      ],
+      [
+       "P",
+       3
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      8,
+      [
+       "P",
+       3
+      ],
+      [
+       "P",
+       2
+      ]
+     ],
+     "out": true
+    },
+    {
+     "in": [
+      0,
+      [
+       "P",
+       1
+      ],
+      [
+       "P",
+       2
+      ]
+     ],
+     "out": false,
+     "reading": "^2 then ^8 are each admissible, compose(2,8) = 0, and ^0 from P1 to P2 is not"
     }
    ],
    "id": "cas.op.is_admissible/1.0",
@@ -713,19 +876,20 @@
    "pinned_implementation": {
     "bytes": 10137,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
     "sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
    },
    "role_in_the_lab": "THE order-sensitive operation: source and target are not interchangeable and the answer depends on context",
    "semantics_as_read_from_code": [
-    "CO-0: source == target",
-    "CO-k (k != 0): true if source.domain == target.domain",
-    "CO-k (k != 0), different domains: true iff target.operator == k"
+    "^0: source == target",
+    "^k (k != 0): true if source.domain == target.domain",
+    "^k (k != 0), different domains: true iff target.operator == k"
    ],
    "valid_domain": "all 10 x 40 x 40 = 16,000 triples",
    "witnesses": {
+    "admissible_triples": 4720,
+    "always_inadmissible_accuracy_on_the_full_uniform_grid": 0.705,
     "asymmetric_triples": 1944,
     "context_sensitive_pairs": 1440,
     "example_asymmetric": {
@@ -743,20 +907,64 @@
       ]
      ]
     },
+    "no_composition_law": {
+     "admissible_two_step_chains": 556960,
+     "collapsed_operator_not_admissible": 238572,
+     "example": {
+      "collapsed": [
+       0,
+       [
+        "P",
+        1
+       ],
+       [
+        "P",
+        2
+       ]
+      ],
+      "collapsed_admissible": false,
+      "compose": 0,
+      "first": [
+       2,
+       [
+        "P",
+        1
+       ],
+       [
+        "P",
+        3
+       ]
+      ],
+      "second": [
+       8,
+       [
+        "P",
+        3
+       ],
+       [
+        "P",
+        2
+       ]
+      ]
+     },
+     "reading": "two admissible steps do NOT make the collapsed operator admissible. Not a defect of the code, which promises no such law; a generator or a learner that assumes it is wrong."
+    },
     "note": "a (source, target) pair is context-sensitive when the answer depends on WHICH operator is applied",
     "of_pairs": 1600,
     "of_triples": 16000
    }
   },
   "rpm_embed_realize": {
+   "KNOWN_LIMIT_OF_THE_FROZEN_ENGINE": "rpm/mod.rs RpmState and ontology/states.rs CognitiveStateVector derive serde Deserialize without re-running their constructors' checks, and CognitiveStateVector's PartialEq zips without a length check. Nothing in the repository loads those types from outside data today. A `satisfied` flag or a state vector is trustworthy only when built through the constructor.",
    "NOTE_NOT_THE_SAME_AS": "cas-native/model/rpm_gate.py PrerequisiteGateLayer, whose docstring says 'the section law epsilon o eta = id is not hard-constrained'. That layer is a TRAINABLE mechanism and is NOT an admitted operation (directive s7). Recorded as discrepancy DR-2.",
+   "WHAT_THE_SECTION_LAW_DOES_NOT_SHOW": "realize returns the first coordinate of (s, s*s, sqrt s), so the section law holds by construction. It is a regression test for exact recovery. It is not evidence that a learned encoder found a meaningful representation.",
    "algebraic_properties": [
     "section law eps o eta = id on [0,1]",
     "retraction FAILS in general: eta(eps(e)) != e -- asserted, not tolerated",
     "one-directional: prerequisite satisfaction is cached, never re-derived by round trip"
    ],
    "arity": "unary pair",
-   "authoritative_definition": "CLAUDE.md CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
+   "authoritative_definition": "project instructions, CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
    "expected_cases": [
     {
      "embed": [
@@ -832,7 +1040,6 @@
    "pinned_implementation": {
     "bytes": 42791,
     "hash_policy": "lf-normalised",
-    "origin_on_disk_at_build": false,
     "path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs",
     "sha256": "c213bdd0e731f3c6ffc1931128ac0c65c302197f28647fe05503f950125a7884",
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs"
@@ -875,17 +1082,18 @@
     "is_admissible": "VALID",
     "rpm_embed_realize": "VALID"
    },
-   "schema": "_handoffs\\FABLE_HELM_CAS_v1\\schemas\\operation_contract.schema.json",
-   "validator": "jsonschema 4.26.0"
+   "schema": "_handoffs/FABLE_HELM_CAS_v1/schemas/operation_contract.schema.json",
+   "validator": "jsonschema"
   }
  },
  "pinned_sources_manifest": "pinned_sources/PINNED_SOURCES.json",
  "reference_learner_separation": "reference_ops.py is the EVALUATOR's oracle. A learned arm receives operands and an operation ID, never reference outputs, answer-derived masks, or a solver callback. An arm that calls the reference is HYBRID_FIXED_OPERATOR and is labelled so. Enforced by test_operation_contracts.py (import scan).",
  "reference_module": {
-  "bytes": 9976,
+  "bytes": 9999,
   "hash_policy": "lf-normalised",
   "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/reference_ops.py",
-  "sha256": "bf67ce7fb99e5aa4332553be471ab8269bdad0b0a5d20fa191d700619afc0a8f"
+  "sha256": "00a1e3f05273b4ba8c43a6b63de77e46e8560a7fe2e6d1d4ca56da3ec36d1e12"
  },
- "schema": "helm-cas-expression-lab.operation-contracts/0.1"
+ "schema": "helm-cas-expression-lab.operation-contracts/0.2",
+ "scope": "Nothing in CAS is excluded from Helm's expression space (owner ruling OD-4): the 40 Elements, the 28 Foundations, Registers, operators, recipes and every expression built from them. THIS file freezes only the first five OPERATIONS a learned module may be trained against."
 }

@@ -1,0 +1,256 @@
+{"family": "G", "mode": "reconstruction", "observation": "((^0^E_{F5} + ^4^C) + ((^1^C_{F4} × ^9^C|A) × ^2^C))", "record_id": "c12aa3c699ee2af86b148e5e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^E|T × ^1^E_{F6}) + ((^7^P|T × ^3^P_{F1}|f) × ^2^P))", "record_id": "45963e68fc68b4a8010bec0f"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P + ^9^C|A) + ((^9^C + ^4^E_{F7}) + ((^0^E + ^4^C|A) + ^3^P_{F6}|A)))", "record_id": "9299295fe7ced2045a7d5dfd"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^7^E_{F3} + ^2^O) + (^9^C_{F5}|E + ^0^C|E)) + (^4^P_{F4} × ^5^P_{F7}))", "record_id": "74ba152a17e463836d08ce17"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^C_{F3}|A + ^3^C|E) + ((((^6^E + ^8^O|E) + ^6^C_{F1}) + ^6^O) + ((^8^E_{F1}|E + ^6^C_{F6}) + ((^4^P_{F3} × ^0^E|T) + (^8^C_{F7}|A × ^8^E|A)))))", "record_id": "06e1e0be1aea2be218fa06a5"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^O|T + ^0^O_{F6}|E) + (^9^E_{F5}|T + (^9^O|A + (^4^P|A + ^5^C))))", "record_id": "a3213fd8a9fa3aca90da8cb2"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^9^O_{F6} + ^2^C|E) + ^0^P_{F5}|A) + ^8^P)", "record_id": "6d018571a7fe4785cc1d48c6"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^E_{F7}|A + (((^4^E_{F2}|T + ^2^O) + (^8^O_{F4}|E + (^7^P|E × ^5^O))) + (^0^E|A + ^4^P_{F3}|A)))", "record_id": "833a111b31d5f095f42a4b27"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^E + ((^2^O_{F4}|f + ((^2^P_{F1} × ^2^C|A) + (^1^C + ^4^C_{F3}))) + (^1^O_{F4} + (^6^C_{F4}|E + ^4^O|E))))", "record_id": "dd710c42273c18180e7391c8"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^E_{F7}|T × ^5^E_{F3}|E) + (^4^E_{F4} + ^7^E))", "record_id": "57bf1205085e4653d0a15060"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^P_{F2} + ^5^O|E) + ((^9^C_{F7}|T + ^1^P_{F5}|f) + (^6^O|f + ^6^C_{F1}|E)))", "record_id": "f827325400d4999efb2194e9"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^E_{F5}|T + ((^0^P_{F1}|A × ^6^C|E) + ((^8^P|f × ^6^O|T) + ((^9^O_{F5}|f + ^7^E_{F3}) + ^8^P_{F4}))))", "record_id": "81d6fabc986ce0041442e4ea"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F6} + (^8^P + ^7^O_{F4}|A)) + (((^2^P × ^9^O|A) + ^1^O_{F3}|E) + (^2^P_{F4}|A + ((^5^C_{F7} + ^6^E|f) + ^2^E))))", "record_id": "8366dc7f5771cad393906306"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P_{F4} + ^1^P|E) + ((^2^O|f + ^2^O|A) + (^5^P + ^6^P_{F5}|f)))", "record_id": "e4f7ee21f944d8bd4f7888ff"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^E_{F6}|f + (^0^C_{F7}|T + ((^2^C|A + (^8^E_{F4}|f × ^7^O_{F5}|f)) + ^0^O_{F5})))", "record_id": "1bdf64cd54b5af68f80c17ed"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^O_{F2}|A + ^8^O_{F3}|A) + (^6^P_{F7}|E + (^8^C_{F3}|A × (^0^P_{F7} × ^6^E_{F7}))))", "record_id": "c1821ebabd72e99c40dc56c2"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^C_{F2}|E + ((^4^O|A × ^2^O_{F5}) + (^1^C|T × ^7^E_{F6}))) + (^4^E|T + ^8^O_{F4}|A))", "record_id": "a7781dc32d4d90fc422441b9"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^O_{F7}|f + (^7^P_{F2}|A + ^0^O_{F1}|A)) + (^3^E_{F1} + ^7^O|T))", "record_id": "64d7fec6cb9d3b88fd764820"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^P_{F6} × ^1^P|T) + (^4^O_{F6} + (^7^O_{F4} × ^4^O)))", "record_id": "2b9106cc9758cd4dc1492daa"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^P|T × (^5^P × ^5^E_{F5}|E)) × ^3^E_{F1})", "record_id": "fd0775807ad6c3292fc8f960"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^O|T × ^8^O|A) + (^4^C_{F4}|A + (^0^O + ^3^O|E)))", "record_id": "f890a8bd476239693edbcfc8"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^C|f + ((^3^P|T + ^7^O|E) + ^5^P_{F7}|f))", "record_id": "a121fe654018a4832bdb9dbb"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^C_{F1}|f + (^9^O|f + ^1^C_{F5}|E)) + (^3^O|f + (^6^E|T × ^0^E)))", "record_id": "59e7bf0af1105cf4836becef"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^2^P + ^5^O_{F6}) + ((^8^C_{F6}|T + ^2^E_{F1}|A) + (^4^O + (^9^O|f + ^9^O|f)))) + (^8^E + ^9^C|T))", "record_id": "d2eae0f714fa690ed2ad1e41"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^C + (((^4^P + ^1^C|f) + ((^1^P + ^7^C_{F3}|f) + (^9^E|f × ^6^O|A))) + (^1^E|E + ^0^C_{F1}|f)))", "record_id": "46ed8722584f7563453c3215"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^2^E + ^7^O_{F1}) + (^5^P_{F3} + ^3^P|E)) + ((^6^O|T × ^4^O|T) × ((^0^E_{F2} × ^6^O) × (^5^O_{F6}|A × (^3^E_{F1}|E × ^5^O)))))", "record_id": "c877a3d35a3de4889da1956b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^P + ((^1^P × (^4^P|E × ^7^P_{F2}|A)) × ^0^P|A)) + (^2^P_{F7} × ^5^E_{F2}))", "record_id": "6e54296888fd0a837419b634"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^C × ^0^E) + (^5^P|T × ^0^C_{F4}|T))", "record_id": "8a57fc05491bbcb53a18f76f"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^O_{F1}|E × ^0^O_{F6}) + ((^8^O + ^1^E_{F7}|E) + ^7^E|A))", "record_id": "877e297e4cc89d4dfdaa9b4d"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F7}|A × ^5^O) + (^1^P + (^3^C_{F2}|E × ^5^O|T)))", "record_id": "c82cbc3b58d72b6c4dccf243"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^O_{F3}|A + ^4^E|E) + ((^3^P + ^4^E_{F3}) + ((^6^O_{F4}|A + (^3^O + ^2^O|A)) + (^0^C_{F5}|T + ^2^C|E))))", "record_id": "b5a7f8c1cc5e7a6c71e6376f"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^4^P + ^2^P) + ((^9^P_{F6}|T × ^7^C) + ((^2^O_{F2}|A + ^3^E) + ^8^O))) + ^1^O_{F6})", "record_id": "5122bb3560e22cd2737a87f2"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^E_{F4} + ((^3^E_{F4}|T + ^5^E|A) + ^6^P|E))", "record_id": "d609f909fad86259dab4dc88"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^E|f × ^3^O_{F1}|f) + (^4^O × ((^3^E_{F4} × (^8^C_{F5}|E × ^0^E_{F7})) × ^4^O_{F7})))", "record_id": "495fb962cc27696620d4007f"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^O_{F4}|f + ((^3^O|f + ^0^O_{F2}) + (^4^C_{F4}|T + ^5^C_{F2}|f)))", "record_id": "e590de51be603124d1bb511a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^P_{F1}|E + ((^1^P + ^3^E_{F4}|T) + ^7^O_{F6}))", "record_id": "0201056587b6a1db76cf822c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^E|T + (^5^P_{F1} + ^1^C|f)) + (^0^C_{F4} + ^5^O))", "record_id": "cbcc7718fb81fa2508f6ec85"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^E_{F3}|f + ^9^O_{F6}|E) + ((^9^P|T + ^0^E_{F4}) + (^4^P|E + ^5^P)))", "record_id": "4f35454230c6b72d97d045cb"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^E + (^3^E_{F1}|A + ^5^P_{F4}|f)) + ^4^P)", "record_id": "0b0f08b6187fafb8afe62cfe"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^C + (^4^P_{F4} + ^6^C|E)) + ^8^O|T)", "record_id": "c29a52a610533fdd9ebbcb0a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^P + ((^7^C_{F5}|A + (^5^P_{F3}|E × (^8^C × ^3^E_{F6}))) + ^4^O_{F4}))", "record_id": "9df41306b56ad8822dd17765"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P_{F7} + (^3^E|A × ^2^E|f)) + ^7^E_{F3})", "record_id": "53538634b621db37cc446493"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^E + ((^2^C_{F4}|E + ^1^P_{F5}) + (^4^P_{F4}|T × ^8^C)))", "record_id": "a3c0f68ce9ad4c298802d179"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^2^O + ^6^C_{F5}|f) + (^5^C_{F7} + ^1^E)) + ((^0^P_{F5} × ^2^P|f) × ^0^C|A))", "record_id": "cd461085fc1d91ef37ce41fe"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P_{F2}|T + ((^5^C_{F6} × ^0^E|T) × (^1^E × ^2^E|T)))", "record_id": "f12af196b62a75243893b92f"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P_{F2}|T + ((((^5^O + ^3^C|E) + ^1^C_{F6}) + (^5^E_{F5}|T × (^7^O × ^7^O_{F1}|E))) + ^2^O_{F5}))", "record_id": "953884e2a36bf31e9c565d16"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^C_{F2}|E + (^4^C_{F4}|E + (^3^P + ^1^O))) + ^4^E_{F6})", "record_id": "322e9812eb88b8b7d56ed45e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^O_{F6} × ^9^O_{F6}) + (^1^O_{F5} × (^2^E_{F5} × ^9^O)))", "record_id": "a8100b1e4bb4856364eee527"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^O × ^2^O_{F3}) + (^5^C + ((^7^P|A × ^7^P_{F4}) × ^9^P|f)))", "record_id": "6d9d7bd9a6311186fc9e6143"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^1^E_{F4}|A × ^5^O) × ((^0^P|f × ^6^O_{F7}) × (^5^C_{F7}|T × (^0^O|f × ^9^O)))) + ^4^P_{F4})", "record_id": "9d0765e89d5730594c3d6f23"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^P_{F7} + ^2^P) + (^4^E_{F5}|A × (^6^O × ^7^O_{F2}|T)))", "record_id": "db65ddef4bc29a4315a9aca8"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^E_{F2}|A + ((^4^P_{F1} + ^7^O_{F6}) + ((^6^P_{F7}|E × ^0^C_{F4}|A) + ((^3^E|T + ^1^E) + (^8^P_{F7} × ^0^E|f)))))", "record_id": "ba33d57e7b0c88960b767c8c"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^0^E_{F6} + ^8^C_{F2}|T) + (^2^E|f + ^8^E|A)) + ((^5^P|A + ^6^C_{F2}|A) + (^0^E_{F2} + (^0^C_{F1}|f + ^2^P_{F5}|f))))", "record_id": "7f56697079e66b964f6a488b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^E_{F1} + (^8^O_{F6} + (^3^E_{F2} + ^3^C_{F4}|A))) + (^9^C_{F1}|A + (((^4^E|f + ^8^P|E) + (^8^E|A + ^8^P|A)) + (^5^E + ^0^O|A))))", "record_id": "72a5faef1ee14c3495570535"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^P_{F5} + ^7^E_{F7}|A) + ((^8^P × ^0^E_{F2}|f) + (^5^P + ^9^C)))", "record_id": "16d4b005165f47146345c108"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^P_{F5} + ((^6^O_{F7} + (^1^P_{F2} × ^2^C_{F1}|A)) + (^4^C|A × ^4^C_{F1})))", "record_id": "cf381b00a0da01d4395422b8"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^C|A + (^3^E|A × (^0^E_{F7} × ^3^O))) + ^2^O)", "record_id": "c07e366157e80dcdc7dd327e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^C × (^4^E|E × ^7^E|A)) + ((^4^C + ^5^O_{F5}|T) + ((^4^P × ^6^E|E) × ^6^O|f)))", "record_id": "f88a7d0ddb36f0bd763d6cf6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^C_{F6}|f + (^7^C|A × (^6^E_{F3} × ^2^E|A))) + (^3^P_{F7} + ^3^E|E))", "record_id": "972cfb11993ab71d91430e89"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^C|T × ^4^E_{F7}) + (^9^O + ^9^E|A))", "record_id": "d8ce339acb9f885b1c1fd318"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^O|A + ^9^C_{F2}|f) + ((^0^E_{F7}|E × ^2^O_{F1}|T) + (^2^O_{F1} + ^9^E)))", "record_id": "98400fcc84d53198f0bf70c0"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^E|E × (^4^C × (^8^C_{F5}|A × (^1^C_{F3} × ^9^O_{F7}))))", "record_id": "8f18979290d297dbecf4e2b8"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^C_{F7}|T + ((^2^C_{F6}|E + ^0^P_{F1}) + ^0^E_{F3}|A)) + ^6^O_{F1})", "record_id": "bc11998dc0ea14d17682a58d"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^C_{F5} × (^7^P_{F7}|f × ^5^E|f)) + (^1^P_{F5}|T × ^7^E|E))", "record_id": "a8632f7350b012e19c1acd29"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^P + (((^9^P_{F1} + ^2^O) + (^3^C|A + (^4^C × ^2^E_{F7}|A))) + (^1^C_{F1} × ^2^E|E)))", "record_id": "e29287f1abb2843079913e1c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P × ^3^P_{F6}|A) + (^3^P + (^2^O|T + (^6^C_{F5}|f + ^9^E|f))))", "record_id": "61cb86ab5e9035b7ebb8002e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^C_{F5}|f + ^8^O_{F4}|A) + ((^0^O + (^5^P|T × ^3^O_{F3})) + ^4^C_{F6}|f))", "record_id": "9bfed6ef52bc4538c9c091ce"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^P × (^8^P_{F3} × ^0^C)) × ^8^O_{F1})", "record_id": "19d21b49c585665afc7c995b"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^P|T + (^5^P + (^3^P|f + ^8^P|T)))", "record_id": "c7d21981c3ecd5cfb33f25dd"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^P × ^6^E|T) + (^9^P_{F5}|A + (^3^O|E + ^3^P|A)))", "record_id": "eea19edc792aef1b25a16bb4"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^7^E|T × ^2^E_{F3}) + ^9^C_{F5}) + ^4^E_{F5})", "record_id": "ae72431d87f19efb1dc39e9f"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^P|T × ^0^P) + ((^5^C_{F7} + (^4^C|T + ^8^E)) + ^3^O_{F5}|E))", "record_id": "5199b424bcda895285c4a8c1"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^O + (^2^C_{F1}|A × ^9^C_{F6})) + (^7^C|f + ((^3^P|T × ^9^P|T) × ^7^C_{F4})))", "record_id": "a575cefa990f851df8417831"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^0^P + ^7^P|E) + ^0^E) + ((^6^C|T + ^1^P|A) + ((^3^E + (^9^P + ^5^O|T)) + ^2^C_{F6})))", "record_id": "f8b1acceee736f961f089ec2"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^2^E_{F6}|E × ^6^O) + ((^7^O_{F2} + ^4^P) + ^9^O|E)) + (^5^E_{F5} + (^3^E_{F4}|E + (^9^O_{F4} + (^4^P_{F5}|f × ^6^P|A)))))", "record_id": "1e0f175a4a2ed0ab10239293"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^P|A + (^9^O_{F3} + ^5^C_{F2}|f)) + ((^8^C × ^0^E_{F5}) + (^6^O_{F3}|E + (^9^O|A + ^6^O))))", "record_id": "689171819b2716ac30eb2829"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^C|f + (^7^C_{F6} + ^8^P_{F4}|E)) + ^8^C)", "record_id": "f2dc3ed0a3ccc9669f8f00af"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^P + (^2^O|T + (^4^C|E × ^7^O_{F5})))", "record_id": "97d601fb11090036ffbda817"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^1^C_{F2} × ^6^E_{F3}) + (^7^O + (^2^E_{F5}|E + ^1^E|f))) + (^9^P_{F3}|A + ((^1^O + ^8^O) + ^8^O|T)))", "record_id": "d605bdc5f3ccfc5c5ed14cfb"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P × ^0^P_{F1}|T) + ((^3^P_{F5} + (^2^C_{F1}|f + ^5^P|E)) + (^2^E + ^4^E)))", "record_id": "d7237fb25172805bca1612cb"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^P_{F2} + ((^6^O_{F5}|T + ^2^E_{F3}) + (^0^P × ^5^E)))", "record_id": "acbe3081d6bad0c7fb81f389"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^O_{F7} + ^4^O_{F3}|A) + (^1^E + ((^4^O_{F3} + ^5^O) + (^5^P|T + (^7^E|f × ^3^O|E)))))", "record_id": "274619f39d7ef5cdf86362b3"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^E_{F5}|A + (^1^P|E + (^3^C_{F1}|f × ^3^O_{F1}))) + ((^8^E_{F1} + (^6^O + ^5^P_{F5})) + (^4^P_{F7} + ((^0^C_{F2}|f + ^5^E_{F7}) + (^5^P|T × ^2^P_{F2}|T)))))", "record_id": "1ec97f63f72d9b30267aaf82"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P_{F6} + (^1^C|A × ^7^O|T)) + ((^6^E|f + (^4^C × ^9^E|f)) + (^2^O + ^0^P)))", "record_id": "0d650c1bfeb92837c76057e3"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^6^P_{F6}|T × ^9^C_{F1}) + ^6^C|E) + (^6^O_{F7}|T + ^1^P))", "record_id": "9c6aa6c55460d4404b8778a5"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^O_{F5}|E + ((^2^E × ^0^O|T) + ((^3^C_{F6} + (^3^E × ^0^E_{F4})) + (^0^C|A + ^5^E_{F4}))))", "record_id": "288066a73bc355aad3682b2d"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^1^P|A + ^9^C_{F1}) + (^9^C_{F3} + ((^2^P × ^7^P) × ^1^C))) + ^9^P_{F6})", "record_id": "f6e3a40e6ec967fef043179b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P_{F1}|f × ^3^P_{F4}) + ((^6^C_{F3} + ^9^E|A) + ((^2^P|E × ^5^P|T) × ^3^P_{F4}|T)))", "record_id": "a6d0b688c84774dde8e3958a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^P × ^1^O) + ((^2^E × ^7^E_{F3}) + (^6^O + ^2^O_{F4})))", "record_id": "0ec255a2680abe4929906af1"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^P_{F4} × ^5^C_{F3}) + (^2^O_{F2} + ((^6^C_{F1}|T × ^4^C_{F1}|f) + ((^4^C_{F6}|E + ^7^O_{F6}) + ^2^P_{F6}|A))))", "record_id": "4827f7321cfbb647153ca9f9"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P_{F7}|E + (^6^C_{F7}|E + ^0^P)) + (^9^O_{F1} + ^4^E_{F3}))", "record_id": "c0bb4d8e80bfbcf7440dbbc8"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^C|T + (^3^O + (^3^O_{F2}|E + (^7^P × ^2^P_{F5}|T))))", "record_id": "6f13491cb839099464268427"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^E_{F2}|T + ((^7^C|T + ^8^P) + (^6^C_{F5} + ((^7^E|E + ^4^P|E) + (^6^O|E + ^6^P)))))", "record_id": "2ba9a1d616de5b30954786a4"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^P|A + ((^1^P_{F6}|f + (^8^E_{F2} × ^2^O_{F6}|E)) + ((^7^E_{F1}|A + ^1^C_{F4}|f) + ((^1^O_{F7}|A + ^8^C) + (^6^P|T × ^4^O)))))", "record_id": "ed19e95a78d2601831fca126"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^E|f + ((^7^E|E × ^7^E_{F7}|T) + (^4^E|E × (^2^E × ^5^E_{F4}))))", "record_id": "93e51720be36349ce2b341e8"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P_{F6} + (^5^E × (^9^C × (^9^C_{F7} × ^8^E|f))))", "record_id": "2b8c0849be956271154c3519"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^P_{F4}|E + (^8^O + (^2^O|f + ^0^C_{F1}|T))) + ^2^C|T)", "record_id": "fb13a6ace69f4b464dd03cb9"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P_{F2} × ^9^C_{F2}) + (^1^E|E + (^5^C × (^0^P|f × ^2^E))))", "record_id": "fb7d56804532901904063bad"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P × (^2^P|f × ^8^E_{F3})) + ((^4^C × ^5^O_{F2}) + ((^0^E|T + ^0^O_{F4}) + ^8^P_{F4})))", "record_id": "21a7f03aa26e0def2d411b17"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^C|E + ^9^P) + ((^5^P_{F2}|E × ^9^P_{F5}|T) × ^1^P_{F1}|f))", "record_id": "79b3e1770853e23658d8dbe8"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^C_{F3} + ((^1^O|T × ^6^O_{F6}) + (^7^C|T + (^6^P + ^2^C))))", "record_id": "1ba5ddc2926a0917ebfbd04e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^O|A + ^6^C|T) + ((^7^P + ^0^O_{F6}) + ^1^C_{F5}|E))", "record_id": "d62fe68b976f1c06435b0ce2"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^C|E + (((^0^P + ^0^P|T) + ^4^O) + ((^3^O + (^5^C_{F6}|T + ^9^P)) + ((^4^E × ^8^E_{F6}|T) + ^7^E|T))))", "record_id": "893e0494d7b28dd0ba157661"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^C_{F4} × ^4^O) + (^8^C_{F1}|T + ^2^E_{F4}))", "record_id": "a3e0eb1fdc622b1a2bcb5205"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^O_{F1} + (^5^E + (^4^E_{F7} + ^0^C_{F3}|E)))", "record_id": "04b930bf51000402e0b7a4cf"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^C_{F7} + (^6^P + (^1^O|T + ((^0^O|T + ^1^E_{F2}) + ^5^O_{F4}))))", "record_id": "a3534c8c035dcd6365b35df4"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^O_{F2}|E + ((^5^C_{F6}|E + ^1^C) + ^7^O|E))", "record_id": "69eb8767994f8c3998bf73b6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^C_{F2} + ^7^O_{F5}) + (^4^P_{F1} + (^8^P|E + ^4^O)))", "record_id": "39f6f051ba0ee6ed0e55af6a"}
+{"family": "G", "mode": "reconstruction", "observation": "((((^5^C|T + (^9^C + ^8^P)) + ^2^P|T) + ^4^C) + (^6^C|f + (^2^E_{F1}|f + ^1^C|E)))", "record_id": "74a5016baaf3852193fb1985"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^C_{F3}|E + ^5^O_{F3}|f) + (^4^E|f + (^1^E + ^2^E_{F6})))", "record_id": "9820e0a9ebf9c862972d7fb0"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F2}|T + ^8^C|f) + (^3^P + ^2^E|E))", "record_id": "c80ca8514ce7c3f7daca555a"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^5^E_{F6} + ^9^O_{F5}|A) + (^3^P|A × ^3^C)) + (^8^E + ^2^O|A))", "record_id": "dd0497061746d509080a9ea4"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^9^O_{F3}|E × ^2^O) + (^8^C + ^4^O|T)) + ((^6^E|E + ^1^E) + ((^3^O_{F5}|f + ^1^C_{F3}) + ^0^O)))", "record_id": "645e5bb97d1e613d15a1113c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^P + ((^4^E_{F5}|T + ^7^E_{F2}|T) + (^5^E_{F5}|A × ^0^E_{F2}|T))) + ^7^O_{F3})", "record_id": "17b46036df9caa175491af7a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P + ((^0^E_{F2}|E × ^2^O) + ^4^O|T))", "record_id": "5d9ba731292e224a03ba2f09"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^P_{F7} + ^7^O_{F2}|T) + ((^4^P|E × ^4^C|T) + ^7^E))", "record_id": "42956ec2c1eff020dd08219a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^C + (^8^E_{F3}|T × (^0^E_{F4} × ^0^E_{F2})))", "record_id": "c5c3182f4c85b55980a972b3"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^P_{F7}|T + (^8^C|T × ^1^C)) + (^2^E_{F3}|E + ^0^C|T))", "record_id": "b7d17fadced2310d6ace0005"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^E_{F5} + (((^6^P|E + ^2^C_{F5}) + (^4^C|E × ^7^E_{F6})) + (^2^C_{F3} + ^3^C_{F4})))", "record_id": "45979e4859243f38dece07cf"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^E|A × (^2^O × ^5^O|E)) × ^7^O)", "record_id": "d1c67c93f8eaa7f93e61baee"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^C_{F6}|T + ^1^C_{F7}) + (^4^E|E + (^1^O + ^4^O_{F1})))", "record_id": "212c19f98887dd96c6299e17"}
+{"family": "G", "mode": "reconstruction", "observation": "(((((^9^P|E × ^7^O) + (^6^P_{F5}|T × ^5^C|E)) + (^1^E|A + ^9^C_{F3}|E)) + (^2^C_{F7} × ^9^O)) + (^0^P + ^9^O_{F5}))", "record_id": "fb2b32724285143eb7b2a958"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^C|A + ^0^O_{F4}|E) + (^0^O|E + (((^3^E_{F7}|A + ^2^C_{F4}|f) + (^8^P + ^1^C)) + ^0^E_{F2})))", "record_id": "a9d8fccd2f603000b51a901a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^C_{F7}|f + ((^9^E + ^3^O_{F7}) + (^8^E_{F5} + (^1^E × ^5^E|A)))) + (^2^E|f + (^3^P_{F4}|A × ^2^C)))", "record_id": "6aa86f5db2af1dba8ce6c7a6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P_{F5} + (^4^P + ^8^C|E)) + (^2^P|E + ((^4^O_{F4}|E + ^3^E|T) + ^9^E|A)))", "record_id": "09f71f13b40f36e3a68be977"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^C|E + ^7^P_{F3}|E) + (^0^O|A + (^0^C × (^9^P_{F1}|T × ^3^E_{F3}|E))))", "record_id": "5f225f5d5d7a541861a0ef47"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^E|A + (^1^C_{F2} + (^2^P_{F4}|T + ^1^O|A))) + ^7^O|f)", "record_id": "2fc38298fdc25e7d79d354cd"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^C|T + ((^0^C|f × ^1^E_{F7}|E) + (^0^P + (^1^O_{F5} + (^7^O + ^8^C)))))", "record_id": "5b0eb5d2fa72dcb76469c00c"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^P_{F2} + (^3^C + (^0^C + (^5^O_{F7} + ^3^E_{F3}))))", "record_id": "83956ebac91918d5c1f4192e"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^O + (((^9^P_{F6} × ^2^P) + ^2^E_{F3}) + ^8^E_{F6}|f))", "record_id": "f1dd50b06a186f54ea88faab"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^E_{F5}|A × ((^7^C × ^0^C|E) × ^4^E|T))", "record_id": "7dbd2d42f0c84a414c4b79e9"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^E_{F3}|A + ((^5^O_{F6}|T + ^0^C_{F2}|E) + (^5^C + (^6^E_{F3} + ^9^O|E))))", "record_id": "2a8ef924ff8424dbe6bba5c1"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^P_{F4} + ((^2^E_{F5}|A + ^7^O_{F6}) + ((^4^P × ^5^C) × ^5^E)))", "record_id": "a34a3c86ed4f2d891aa21642"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^E_{F4}|f + ((^9^E_{F2}|E × ^7^E_{F4}|T) + ((^7^E_{F2} × ^5^E) × ^1^O|T)))", "record_id": "718a1352842d5a50462ce4e8"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F5}|T + ^5^C|A) + (^6^E|A + ^7^E_{F5}|E))", "record_id": "1eb9df463b79398e1ba02bcc"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P_{F7}|f × (^4^O_{F5}|E × ^6^O)) + (^6^P_{F1}|T × ^7^P|A))", "record_id": "d1b46d43d0f841e5e94a2182"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^O × ^4^O_{F3}) + (^6^P_{F2} + ^6^P_{F6}|A))", "record_id": "029456e2af3b0bed51de9183"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P_{F3} + ((^0^E_{F1} + ^0^E_{F2}|A) + ((^7^P + ^8^P_{F3}|E) + ^0^P_{F7})))", "record_id": "95347326d271fcf5f5be8c85"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^5^O|T + ^9^E_{F1}) + (^3^E|T + ^3^O)) + (((^6^C_{F2}|E + ^9^E_{F5}) + (^3^E_{F1} + ^7^C_{F1})) + (^2^C × ((^2^P_{F1}|f × ^0^C_{F2}|A) × ^8^C))))", "record_id": "18ca888264a5fab0ede8c2bc"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^C_{F6}|f + ^9^P) + (^9^C|T + (^1^P + ^8^P_{F1})))", "record_id": "e67ce6c9d92aa3277124d9a5"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^E|A + ((^4^C|T × ^0^C|A) × (^8^E × ^4^O_{F5})))", "record_id": "ffc1b59468f8d3c46020e4ef"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^O + (((^4^C_{F6} + ^3^E_{F6}) + ^0^P_{F7}) + (^9^P|E × ^6^O|E))) + ^8^E|T)", "record_id": "a1289783f18b620090919f16"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^P|T × (^5^C|E × (^1^C|T × ^7^E_{F7}|E)))", "record_id": "8813475e8a14c75498902d3c"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^3^P_{F7} + (^1^E_{F6}|A + (^2^C_{F3}|E × ^7^O|A))) + ^4^O_{F1}) + ^9^O_{F3}|A)", "record_id": "5fcb3b4ba7a765389cc429d0"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^E + (^8^P_{F6} + ((^8^C_{F6} + ^9^P_{F2}) + ((^6^O + ^9^E_{F4}) + ^9^E|T))))", "record_id": "b60a0450e94c148037103963"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^P_{F4} × ^9^O_{F6}|T) + ^1^C)", "record_id": "5a627e5434b2ddbe9a8fcc7f"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^C_{F4}|f + (((^9^P + ^7^O) + ^2^E_{F4}|T) + (^0^C|f + ^4^E_{F5})))", "record_id": "fe64268596dd32075b472262"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^C|T + ^2^E_{F1}) + (^8^P_{F2}|f + ^4^P_{F6}))", "record_id": "d1ba8f014d16e1c8584d6b57"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^O + ((^9^P_{F2} + ^3^E_{F7}|f) + ^5^O))", "record_id": "87f49107bce5fea9aab62a50"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P_{F4} × ^0^O_{F5}) + (^9^E_{F2} + ^9^E_{F5}))", "record_id": "41251363963f52d3cd633e0c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^P|f × ^7^C_{F7}|f) + (^4^E_{F3} + ((^6^P + ^8^C_{F6}|A) + (^2^P|E + ^1^C))))", "record_id": "aa63112726d577466995335e"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^E|f + (((^4^C_{F2}|f + ^2^P_{F1}) + (^8^C × ^7^C)) + (^7^O_{F5} × ^5^O_{F1})))", "record_id": "f196f5985cb9eec269d859f6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^E_{F6} + ^9^C|E) + (^7^E_{F5} + (^2^E_{F4}|T × (^0^C_{F4}|E × ^6^O_{F2}|A))))", "record_id": "a6706f5d015d19e6eda278c5"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^6^O_{F6}|f + ^3^E|A) + ((^6^P_{F7} × (^4^C|f × ^8^O)) + ^5^P)) + ^5^O|E)", "record_id": "be0bb844eeb934b69004abef"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^4^P_{F1} × ^8^E) + ((^2^C|T + ^5^P) + ^0^O_{F7}|f)) + ^4^P_{F7})", "record_id": "3a7d749b58f62cff523f619e"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^O_{F1} × (^4^C_{F2} × (^9^C|E × ^7^O_{F6})))", "record_id": "42bf5afa64dacaa1435e3c1c"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^O_{F2} + ((^9^E_{F2} + ^0^P_{F5}|A) + (^6^O + ((^7^O|A × ^4^O_{F1}|E) + ^8^C_{F6}))))", "record_id": "94d48ebf675ae73d4387a41a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^E_{F1} + (^0^E|f + (^0^E_{F7} + ^9^E_{F1}|f)))", "record_id": "396dc0cc4c685349a9e79af2"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^E_{F1} × (^3^C|E × (^4^O|f × ^2^O_{F1}|f)))", "record_id": "d95ae66f777b19daffb8eba9"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P + ^3^E_{F3}|A) + (^8^E|f + (^0^P_{F3}|A + (^4^C_{F3} + (^5^P|A × ^9^C|f)))))", "record_id": "7ccb343231d3a8045ada1fb1"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^P_{F6}|E × (^9^P_{F6} × (^5^P_{F6}|E × ^9^O|E)))", "record_id": "03c9cb20bdfc0b3d81b47d83"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^P_{F4} + ((^4^P + ^2^P_{F1}|T) + (^1^C_{F7}|A × ^3^C_{F1}|f)))", "record_id": "bc265f2375821c1c3625f750"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^C_{F2}|T + ((^0^O_{F3} × (^1^E_{F4}|E × ^7^O)) + ((^6^C + ^9^E) + (^0^P|A × (^4^P_{F1}|f × ^9^P|A)))))", "record_id": "d5733805405cda6987389c4d"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^C + ((^6^P_{F7} × ^4^P) × (^1^C × ^6^O|f)))", "record_id": "c295fa503072074daa15c4bd"}
+{"family": "G", "mode": "reconstruction", "observation": "(^3^C_{F7} × ((^0^C_{F2} × (^1^O|E × ^0^O_{F4}|E)) × ^8^O))", "record_id": "22ec3a4461418f7b9b3ee0a0"}
+{"family": "G", "mode": "reconstruction", "observation": "(^1^P + (^7^O_{F2}|A + (^6^C × ^3^O_{F5}|T)))", "record_id": "b092b5f4ba2bac8ad23936a4"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^C + ^1^E_{F6}) + (^4^O_{F6} + ^7^P_{F7}))", "record_id": "00ca96c76bb8dc6232d750cf"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^8^C_{F1} × ^1^C) + ^6^O_{F3}|A) + (^2^C_{F6}|A + ^3^E_{F7}))", "record_id": "82db178dabc570ae67fac08e"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^P_{F7}|E + (^6^E|E × (^4^E|T × ^7^O|T)))", "record_id": "c45afde235fda19d4a4df6a2"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^C|f + ((^2^O_{F6} + (^2^C × ^9^O_{F3}|A)) + (^4^C_{F7}|T × (^5^P × ^1^C|T))))", "record_id": "67aad78669ac64da23975aee"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P_{F1} × ^9^P) + (^7^E × ^0^E_{F5}|A))", "record_id": "b0ee381e64d55ba7b6454f32"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^C + (^7^P_{F7}|T + ((^3^C_{F2} × ^7^E_{F7}|f) + ((^9^O_{F3} × ^1^O) + ^7^P_{F1}|E))))", "record_id": "2c4c25c54ec0143125e7d945"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^C_{F4} × ^2^C_{F1}) + ((^5^C_{F5}|A × ^4^C_{F3}|T) + ((^8^E_{F4} × ^6^O|A) + (^6^P_{F3} × (^9^E_{F1}|A × ^9^O_{F7})))))", "record_id": "a29f308cc33bea8960b9fbd6"}
+{"family": "G", "mode": "reconstruction", "observation": "((((^3^E × (^5^C_{F2}|A × ^5^E_{F2})) + ^3^E_{F3}|T) + ^7^C_{F1}) + ^8^C_{F6})", "record_id": "4a8f51aeb564b11e92686dc5"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^C + (^2^P|T × ^8^C|f)) + (((^6^C × ^4^E_{F1}) + ^7^C_{F1}) + (^3^O_{F4} + (^3^P_{F7}|E + (^2^O_{F5}|T + ^1^P|T)))))", "record_id": "724ebca45cf027310165408b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^P_{F6} × ^7^P_{F1}) + ((^5^O_{F3}|T × ^3^O_{F3}|f) + (^6^P + (^1^P|A + ^7^E_{F7}))))", "record_id": "200b1059fc532f3cf4c40bab"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^O|A × ^8^O_{F3}|T) + ((^3^P_{F3}|T × ^2^C) + (^8^C_{F5} + ^1^C_{F5})))", "record_id": "98cb8f37dcd786c0a8b8f917"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^E|f + (^7^O_{F2} × (^1^C × ^1^O_{F2}|A)))", "record_id": "249d7e00f649b7f55d959143"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^P_{F5}|f + ((^0^C_{F3}|T × ^4^E_{F5}|A) + (^3^E_{F5}|f × ^7^O)))", "record_id": "4a39d89abf977673fab8bec6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^O_{F6} + ^5^E) + ((^7^P_{F2}|A × ^8^P|T) + ^6^C))", "record_id": "ff9dfb0ce2389075e16a6050"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^P + ^7^P) + ((^0^P + (^9^C_{F4}|E × ^7^O_{F3})) + (^9^O|A + (^2^O_{F4}|E + ^3^O_{F3}|f))))", "record_id": "ddf5c460d015245a9b2e4ce7"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^E_{F6} × (^6^C|f × (^0^P × ^4^E))) × ^9^E_{F5})", "record_id": "70e80958acd2d6c4781d126b"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^1^E + ^0^C|A) + ^1^E_{F4}) + ^4^O_{F2}|E)", "record_id": "22a3966adbb1a34c794f7f36"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^C|f × ^2^E_{F7}) + ((^3^P|A + ^2^O_{F3}) + (^4^E + ^7^P_{F3})))", "record_id": "851b12657a16ea43ee775931"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^P × ^6^E|f) + (^4^C_{F6}|A × ^4^E|f))", "record_id": "3e82103561b492a37f3a2903"}
+{"family": "G", "mode": "reconstruction", "observation": "(((((^8^P_{F5} + ^3^E_{F5}|E) + ^8^O_{F7}) + ^3^P_{F5}) + (^2^E + ^1^E_{F5})) + ((^2^P_{F2} × ^1^O_{F1}|T) + (^9^P_{F6} + ^0^C)))", "record_id": "f3c2876468db374177d9f999"}
+{"family": "G", "mode": "reconstruction", "observation": "((((^1^C_{F6}|T + ^0^E|f) + ^0^P|A) + (^2^C|f + ((^7^E_{F4}|E × ^1^O) + (^1^P + ^1^E)))) + (^4^P|T × ^9^O_{F7}))", "record_id": "074a86b990a75639c7547ed6"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^E + ^2^E) + (^2^O + ((^6^C_{F7}|A + ^3^O_{F1}) + (^1^C_{F6} + (^3^P|A × ^0^P_{F6}|f)))))", "record_id": "6a065c0dc04f850239592de2"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^O|E + ^4^E_{F2}|A) + ((^0^P_{F4}|E + ^5^C) + ^3^P|A))", "record_id": "7a0f92041a7c1fece0f70ec9"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^P_{F6}|E + (^2^P|A × (^0^P_{F1} × ^4^C|T)))", "record_id": "63aebdbcc1d94a16b17188cd"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^P + (^5^E_{F1}|A + (^2^P|A × (^4^P × ^4^P_{F3}|A))))", "record_id": "1eb8101f452ac5c8cf4a93fb"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^E + ((^3^O_{F5} × ^3^O|E) + (^2^O_{F2}|A + (^4^O|T + ^9^C))))", "record_id": "ca2f1b5d1ba4d495a4747be5"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^C|T + ^1^O) + ((^8^C|T + ^1^P_{F3}|T) + (^8^P + (^8^O|T + (^8^E_{F5}|T + ^3^P_{F5}|T)))))", "record_id": "d17af0778a28ed6d42c0f0e4"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^P × ((^3^O|A × ^1^O_{F7}|f) × (^2^O_{F4} × ^7^O|T)))", "record_id": "485a4ee32ac6b0222e01d52d"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^C + ((^1^C_{F3} + ^3^P_{F6}|f) + ^4^P|f))", "record_id": "ccec7ae4a04eb059076b314a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^P_{F5}|E × ^5^P) + (^2^P_{F3}|A × (^0^C_{F1}|E × ^8^C|E)))", "record_id": "2ddea30cf825d4eac92d2934"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^O + (^8^O + ((^1^P + ^5^O|E) + (^4^C|T × ^2^E|A))))", "record_id": "a9d16b81814bcb6031b3f5f7"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^O_{F3}|E + ^5^O_{F1}) + (^7^P|A + (^4^P_{F2}|f × ^7^P_{F5})))", "record_id": "f7788feaff00d3787be5d49a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^E + ^7^C_{F5}|E) + ((^5^P + ^3^E_{F4}|E) + ((^8^P|f × ^4^O) + (^0^C + ^9^E))))", "record_id": "a0927ce895745b476a3af1e5"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^P|A + (^0^C + (^3^E_{F1}|E × ^9^E|f))) + ^5^C_{F1}|T)", "record_id": "258fb12b23de4e063a97528b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^C_{F5}|f × ^9^O) + ((^6^P_{F3}|f + ^1^P_{F7}|E) + (^6^P_{F7}|T × ^0^C_{F6}|A)))", "record_id": "354080c9d33271bcc301e886"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^4^E + (^9^C_{F7}|A × ^7^E_{F4})) + (((^8^P_{F4}|T × ^3^C_{F3}) + (^8^O + ^0^P_{F7})) + (^0^O_{F5}|E + ^8^C|f))) + ^2^C_{F3})", "record_id": "b92582961cea5aff335c65fb"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^9^E_{F5} + ^3^C_{F6}) + (^1^C|f + (^3^E|E × ^2^E_{F3}))) + (^5^O + ^1^O|A))", "record_id": "de571422e474edfec399c372"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^O_{F5}|f + (^3^P + ^4^C|A)) + (^2^C_{F6}|A × ^9^C|T))", "record_id": "b2497f2540f6a02c66b8497b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^E_{F6} + ^8^C_{F1}|T) + (^6^O|f + ^8^C_{F5}))", "record_id": "be47fa3d034e07b12cbc1b68"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^E|E + (^8^P|f × ^2^O|T)) + ^6^E)", "record_id": "029107620e3f111ce85af5be"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F7}|f × ^3^E|E) + ((^5^P_{F7} + ^3^E_{F3}) + ^8^C_{F5}))", "record_id": "b1edb7cd5cf02183e844eeb0"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^C + ((^3^P_{F2}|A + ^0^E_{F4}|T) + ^6^C_{F7}|A))", "record_id": "9e850a6973b240903c0ed351"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^O × ^6^O|E) + (^3^E + ^6^P|T))", "record_id": "747b3a6166fd9d699028542a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^E + ^5^P|T) + ((^3^E × ^7^E_{F7}) + (^1^C_{F3}|f + ^1^E|T)))", "record_id": "2a6a3b4bd7460c130123ce28"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^0^E_{F3}|T × ^4^O) + ^2^E) + ((^6^E_{F4}|A + ^1^P|A) + ((^3^C_{F3} + ^7^P) + ^7^O_{F4})))", "record_id": "204bd0d615fbe3fa1e59dc5e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^O_{F7} + (^0^O|A + ^7^P_{F3}|E)) + (^9^O_{F6}|A + (^7^C_{F1} × ^8^C_{F6})))", "record_id": "4ede0700fbd3867fa91dcc6c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^E_{F6} + (^1^C_{F3}|T + (^9^C_{F1}|A + ^8^P_{F4}))) + ^6^C|A)", "record_id": "0699dcf5b80eaa7d012fab00"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^C + (^0^E + ^8^C)) + (((^0^C|f + ^9^O|E) + (^4^E + ^8^P_{F5}|E)) + (^5^C + ^5^C)))", "record_id": "5e6e0c60c9cd4aa6aef3bd04"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^8^C|A + ^6^E_{F2}) + ((^7^P|T + ^1^E|T) + (^1^P × ^8^C|T))) + (^4^O|f + ^4^P_{F5}))", "record_id": "886a2424a9459d0a32126db5"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^4^P_{F5}|T × ^4^O) + ((^6^P + ^6^P_{F2}) + ((^8^P_{F2} × ^9^P) + (^8^E_{F3} × ^1^E|f)))) + (^1^C + ^5^P_{F1}|T))", "record_id": "e25ddb36d52efafd8e1951eb"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^P|f + (((^3^E|f + (^7^P|f × ^7^O_{F3})) + (^0^O|E + (^8^O + ^9^P|T))) + ^5^O))", "record_id": "ee0f65d60019e63e42cd284c"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^P + (^0^P_{F7}|E × (^4^C|A × ^9^O_{F4})))", "record_id": "b56ef8217a545549a75d170b"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^3^C_{F7} × ^3^C_{F3}|f) + ^6^O) + (((^4^E_{F1} × (^3^P|f × ^5^E_{F6})) × (^9^P|T × ^3^E_{F5}|A)) × (^0^E_{F1} × ^5^E_{F5})))", "record_id": "1617b650ec3240ed8027462a"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^O + ^1^E_{F6}|A) + (^4^C + ^0^O_{F7}))", "record_id": "69334c90bed4b91edce12886"}
+{"family": "G", "mode": "reconstruction", "observation": "((^1^P_{F7} × ^8^P|T) × ((^8^C_{F1} × ^5^E_{F5}) × (^3^P|T × ^8^O_{F2}|T)))", "record_id": "691c3410fbf03b802e9accc8"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^O + ^6^C|E) + (^5^E_{F6}|A + (^1^E_{F1} × ^2^O_{F3}|f)))", "record_id": "50c6547f133728d2ad0654f2"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^E|f + (((^3^E_{F7} + ^7^C_{F3}) + (^1^E_{F2}|T × ^1^E)) + ^1^O))", "record_id": "73e7ffa1487ecada7c101230"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^E|f + ((^6^P_{F1}|A + ^2^P|f) + ^3^P))", "record_id": "70f842c7c998ebe01e19db35"}
+{"family": "G", "mode": "reconstruction", "observation": "(^8^P|E + (^0^C × (^0^O|E × (^2^C_{F3} × ^8^O_{F1}|E))))", "record_id": "9052e617d5845942060ff248"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^P_{F6} × ^9^P|E) + ((^0^E_{F3} × ^0^O_{F3}|f) × (^2^C_{F3} × ((^8^C|T × ^2^E_{F4}|E) × ^6^O_{F4}|E))))", "record_id": "0d77a676cbd603d7fe7c3e22"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^C_{F5} + ^8^P_{F2}) + (^2^P + (^7^E|f + ^1^O)))", "record_id": "b67589b890865031a832c7e4"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^O + (^4^C|A + (^4^P_{F4}|f + ^2^C_{F1})))", "record_id": "38d03050160fe382e0070747"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^0^E × ^0^O_{F3}|f) + (^5^E_{F6} + ^4^O|T)) + ^1^O_{F2}|T)", "record_id": "bc36e19eb71ba4e19d928057"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^E × ^3^E_{F4}|A) + ((^9^C_{F7}|f + ^2^O) + (^9^C_{F7} + ^8^P_{F5}|E)))", "record_id": "377fbed3f3c62107d5a44e8c"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^C_{F2}|T × ^9^O_{F6}|f) + ((^6^C + (^3^C_{F6} × ^5^E)) + ^8^P|E))", "record_id": "4553da587bbd638b5bfb1174"}
+{"family": "G", "mode": "reconstruction", "observation": "((^4^O|f + ^9^E|E) + ((^5^C × ^2^E_{F3}|A) + ((^7^E|E + ^9^E_{F6}) + ((^5^P_{F5} + ^0^E|T) + (^2^C|T + ^1^O)))))", "record_id": "5a544d1b5f5c6c0d4557e330"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^C_{F5}|f × (^5^C × ^5^E|A)) + (((^2^P + ^3^C|f) + (^8^P_{F2} + ^5^E|T)) + ^5^C_{F4}))", "record_id": "b7080f656f9cefc455e242a4"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^4^C × ^7^C_{F1}|E) + (^3^E × ^6^E_{F4}|T)) + (^9^P_{F4}|A + (^0^O_{F7}|f × (^9^C|f × ^8^O))))", "record_id": "44aa9b6814e81b19428dbcfa"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^1^C × ^4^E_{F2}) × ^2^O_{F2}|A) + (^5^C_{F2}|E + ^4^P))", "record_id": "a1adbfd16027f1aac14612ae"}
+{"family": "G", "mode": "reconstruction", "observation": "(^4^O|f + ((^1^O_{F4} + (^6^P_{F4}|A + ^4^P_{F2}|E)) + (^2^E|T + (^7^C_{F6}|E + ^1^P_{F2}))))", "record_id": "738fc8b0171774f36235c03e"}
+{"family": "G", "mode": "reconstruction", "observation": "((^2^C_{F5} + (^5^O_{F6}|A + ((^1^C|T + ^4^P) + ^2^E_{F2}))) + ^5^E)", "record_id": "be26cf3dd35b03ffa87194ae"}
+{"family": "G", "mode": "reconstruction", "observation": "(^0^O|T + ((^1^E + (^0^C_{F7} + (^2^C + ^8^E|T))) + ^5^O|T))", "record_id": "4b1b0d11fd1963b1b5794725"}
+{"family": "G", "mode": "reconstruction", "observation": "(^1^O_{F2}|f + (^2^E_{F6} + ((^9^C_{F5} + ^9^C_{F2}|A) + (^1^P × ^9^O_{F5}|T))))", "record_id": "727b8f67349c5d61502197c5"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^7^O_{F7} + ^9^C_{F1}|f) + (^4^E_{F1} + ^0^E_{F5})) + ^3^O)", "record_id": "13eabbfa595b46b65dae3d14"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^E|E + ((^5^P_{F3} × ^4^E|E) × ^2^O))", "record_id": "19163dfc1b420709f962904b"}
+{"family": "G", "mode": "reconstruction", "observation": "((^8^C|A × ^9^O|E) + (^7^O_{F2}|A + ^1^O))", "record_id": "f0275430a783bd9be06cc2cf"}
+{"family": "G", "mode": "reconstruction", "observation": "((^3^C|A + ((^6^P × ^6^E|f) + ^3^E_{F2})) + ^5^E|A)", "record_id": "4732fda9c34425e306fb2460"}
+{"family": "G", "mode": "reconstruction", "observation": "(^5^E_{F5} + (^4^P + (^3^E + (^5^O_{F7} + (^8^O|E × ^1^O)))))", "record_id": "e3a16f442992e236f28af171"}
+{"family": "G", "mode": "reconstruction", "observation": "((^0^P × ^0^E_{F5}|T) + ((^9^O + ^9^P) + (^0^P_{F5}|E × ^6^O_{F7})))", "record_id": "9acf1ca013612cae0c9cf673"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^O_{F7} + (^8^E_{F1} × (^8^C_{F6}|T × ^8^O_{F6}))) + ^1^C_{F7})", "record_id": "f6422cbad3d62c4217ab3ee5"}
+{"family": "G", "mode": "reconstruction", "observation": "(^6^C_{F7}|A + ((^6^P_{F5}|f × ^3^P|A) + (^8^P + (^7^O_{F5}|T + ^0^C))))", "record_id": "ac234d156d764cd2de7d6bfe"}
+{"family": "G", "mode": "reconstruction", "observation": "((^6^O_{F5}|T + (^1^E × ^2^O_{F1}|E)) + (^6^E + ^1^P))", "record_id": "834978d2d570d030a2a49a0a"}
+{"family": "G", "mode": "reconstruction", "observation": "(^7^C|E + ((^4^C|T + ^2^E) + (^2^C_{F1} + ^4^E)))", "record_id": "a4f39b5d7372cb74108919d1"}
+{"family": "G", "mode": "reconstruction", "observation": "(^9^O|T + ((^9^P × ^6^P) × ^9^C))", "record_id": "cbc5b473910d10e0b6f73151"}
+{"family": "G", "mode": "reconstruction", "observation": "(^2^C + ((^5^C_{F6}|T × ^4^E_{F7}) + (^8^O|E + (^3^P_{F5}|T × ^6^E_{F5}|E))))", "record_id": "0b70f741286bb3588eeb8ca6"}
+{"family": "G", "mode": "reconstruction", "observation": "(^1^C_{F4} + ((^3^O|f + ^3^O_{F6}|f) + (^7^O|f + ^9^E_{F7}|T)))", "record_id": "338ad9fb83b778c4b2c43dc7"}
+{"family": "G", "mode": "reconstruction", "observation": "(((^5^E|T × ^9^O) × (^0^O|A × ^8^O)) + (^8^C|E × ^6^O|T))", "record_id": "95f9392dca9cd2f52970c721"}
+{"family": "G", "mode": "reconstruction", "observation": "((^7^C_{F4}|A + (^6^C_{F6}|E × ^6^E_{F5})) + (^4^P|E × (^0^C_{F2}|T × ^5^C|T)))", "record_id": "3709872fa434eafe22fcea07"}
+{"family": "G", "mode": "reconstruction", "observation": "((^5^C|T × ^1^E) + (^2^P × ^9^P|T))", "record_id": "ccf4c1385d8da85f493ff3ea"}
+{"family": "G", "mode": "reconstruction", "observation": "((^9^O_{F5} × ^8^O_{F4}|T) + ((^6^P × ^0^P) × ^7^O))", "record_id": "6aca55bb5701179b8e638254"}

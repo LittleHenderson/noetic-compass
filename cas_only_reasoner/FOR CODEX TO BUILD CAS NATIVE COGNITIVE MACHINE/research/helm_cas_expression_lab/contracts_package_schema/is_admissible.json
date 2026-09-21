@@ -22,7 +22,7 @@
  "parameter_policy": "NONE",
  "reference": {
   "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
-  "semantic_source": "CLAUDE.md CORRECTION 1: each CO-k has an admissibility relation D_k over states; D_0 is the diagonal only",
+  "semantic_source": "project instructions, CORRECTION 1: each operator ^k has an admissibility relation D_k over states; D_0 is the diagonal only",
   "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
   "source_sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
   "symbol": "impl CognitiveOperator :: fn is_admissible(self, source: CognitiveStateId, target: CognitiveStateId) -> bool"

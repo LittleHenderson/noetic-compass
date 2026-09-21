@@ -20,7 +20,7 @@
  "parameter_policy": "NONE",
  "reference": {
   "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
-  "semantic_source": "CLAUDE.md: involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9; self-duals CO-0, CO-1, CO-4, CO-7",
+  "semantic_source": "project instructions, 'Structural invariants': involution pairs ^2<->^3, ^5<->^6, ^8<->^9; self-duals ^0, ^1, ^4, ^7 (the engine spells these CO-2 .. CO-9)",
   "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
   "source_sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
   "symbol": "impl CognitiveOperator :: fn involute(self) -> Self"

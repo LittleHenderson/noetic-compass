@@ -21,7 +21,7 @@
  "parameter_policy": "NONE",
  "reference": {
   "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
-  "semantic_source": "operators.rs doc comment: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)'",
+  "semantic_source": "operators.rs doc comment, quoted: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)' -- CO-k is the engine's spelling of ^k",
   "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
   "source_sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
   "symbol": "impl CognitiveOperator :: fn compose(self, other) ; cas-native COMPOSE_TABLE[i][j] = (i + j) % 10"
