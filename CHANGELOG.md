@@ -4,6 +4,47 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - Q3 BUILT: behaviour-paired records v0.1 with sealed targets, structure-family splits and baselines registered BEFORE training. 27 tests pass. Commit `c189bedb`. Adversarial review launched before any module trains on it.
+
+**What it is.** `research/helm_cas_expression_lab/q3_behaviour_records.py` → `data/q3_v0_1/` (5.1 MB,
+committed). Three task families around the Q2 contracts, built in 4 seconds, byte-deterministic:
+
+| family | observation → sealed target | split policy | size train/dev/eval |
+|---|---|---|---|
+| **R** reconstruction | expression string → canonical AST from the compiler | whole **AST shapes** held out (8,249 valid SDG expressions in 1,381 shape groups) | 2048 / 256 / 256 |
+| **A** admissibility — *the order-sensitive family* | (operator, source state, target state) → bool; plus `INVALID_INPUT` refusals | whole **(operator, source-domain, target-domain) cells** held out: 24 eval, 16 dev, 120 train | 2176 / 272 / 272 |
+| **C** compose chains | bracketed chain → result mod 10 | **longer chains** held out (train/dev depth 1–3, eval 4–6) | 2048 / 256 / 256 |
+
+**The SDG is used for its expressions only.** A level2 record's prompt reads "Describe a situation in
+which the emergent register Omega_clarity arises" — the label sits inside the prompt and inside the
+expression — so no SDG prompt/response text is read. Compiler-checked `cas_expression` strings are
+re-compiled and re-validated here; 8,520 unique, 8,249 valid.
+
+**Visibility is a file boundary.** `visible_*.jsonl` carries only the fields the manifest declares
+visible; `sealed_*.jsonl` carries targets, oracle traces and validity. `record_id` is
+`sha256(seed, family:split, index)[:24]` — position only, so it cannot carry an answer. The compiler
+is resolved from the main checkout (the worktree is sparse) and its LF-normalised hash is recorded in
+the manifest; the tests fail if it drifts.
+
+**Baselines on A eval, registered now, before anything learns:** constant majority `0.705882`;
+same-domain-only `0.863971`; target-noetic-equals-operator `0.775735`; **same-domain OR
+target-noetic-equals-operator, ignoring CO-0 → `0.911765`, the bar**; exact row memory from train
+`0.0` (the cell holdout holds — no eval row was seen); always-valid-never-refuse `0.235294`;
+reference `1.0`. The 8.8% above the bar is the CO-0 diagonal and the refusals — that is the learnable
+residual, disclosed up front. On C the modular-sum rule scores `1.0` by construction: C is
+conformance-only. On R the ceiling is the compiler: R measures fidelity, not reasoning.
+
+**Tests (27):** a fresh build is byte-identical to the committed data; no withheld field appears in any
+visible file and A's visible side carries no boolean; ids recompute from position; R shapes, A cells and
+C depths are disjoint across splits exactly as declared; every sealed target recomputes from
+`reference_ops` (A, C) or the compiler (R, sampled); baselines present; no `learner*` file opens a
+`sealed_*` file.
+
+**Review before use.** Three adversarial attackers are running against the committed files: read a
+sealed target from the visible side; beat `0.911765` with a cheaper hand rule; prove the held-out
+structure is really unseen (including sub-tree exposure for R and digit-multiset exposure for C).
+Their findings will be recorded here before Q4 trains anything.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - Q2 CLOSED: five CAS operations frozen in `OPERATION_CONTRACTS.json`, pinned to engine code by measured hash, 15 tests pass. Branch `research/helm-3.0-cas-lab`, commit `d880cf47`.
 
 **Where.** `research/helm_cas_expression_lab/` on the new lab branch, in its own worktree
