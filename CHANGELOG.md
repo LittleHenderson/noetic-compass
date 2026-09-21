@@ -4,6 +4,77 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - T01 EVALUATOR BOUNDARY BUILT: every prediction of both Helm studies re-checked from raw with the private checker; both labels re-derived and equal to the frozen grader's; nine named tamper classes rejected; 12 tests pass. Commits `c4a6687a` + `2ef0921d`.
+
+**What it is.** `records/typed_pointer_001/trusted_rescore.py` is the wrapper the directive's Q0 asked
+for: a way to re-derive a study's label WITHOUT reading the study's own scoring files. `--write-anchor`
+pins, into `trust_anchor_*.json`: the frozen grader (`evaluate_gates.py`, sha256 of the LF bytes
+`d3e0ea979835fa54…`), the private checker (profile digest `2c95354e62994fb8…` plus the LF sha256 of
+`checker.py`, `answers.py`, `source.py`), the course digest, the 18-question relational population
+(digest `4b1e3c1f0b8f8be3…`, ids, kinds, worlds), the pass rule (b ≥ 7, c = 0, kinds ≥ 2, worlds ≥ 2,
+every seed), and the LF sha256 of every seed's raw prediction files. A rescore then checks each identity
+against the anchor, re-runs `checker.check_answer` on every prediction, re-derives the label from those
+FRESH results only, compares every row's `check_digest` with the stored scoring row, and compares the
+label and the per-seed gained/broken counts with the frozen grader's `gate_reading.json`. Any failure is
+a typed reason and the label becomes `VOID_REJECTED`. Custody is stated in the anchor and in every
+reading: `EVALUATION_NOT_INDEPENDENT` — the same session built the model, the lab and this tool.
+
+**The two readings** (`trusted_rescore_reading_helm1_certified.json`,
+`trusted_rescore_reading_helm2_experimental.json`). 3 seeds × 2 phases × 564 = **3,384 predictions
+re-checked per study; 0 disagreements** with the stored scoring rows; every identity matched.
+
+| study | verdict | label re-derived | frozen 18 correct, before → after (seeds 20260917 / 18 / 19) | gained / broken per seed | = frozen grader | wall |
+|---|---|---|---|---|---|---|
+| Helm 1.0 certified (`study_helm1_certified.json`) | `RESCORE_OK` | `LEARNS_NEW_WORLDS` | 2→12 / 0→12 / 0→11 | 10/0 · 12/0 · 11/0 | yes, all three seeds and the label | 894 s |
+| Helm 2.0-experimental (`admission_001/study.json`) | `RESCORE_OK` | `NO_TRANSFER_TO_NEW_WORLDS` | 2→12 / 0→12 / 4→10 | 11/1 · 12/0 · 7/1 | yes, all three seeds and the label | 899 s |
+
+So the certified 1.0 label and the 2.0 failure both survive a re-derivation that never read a
+`correct` flag from the receipts. Seed 20260918 is the best seed of both studies (12 gained, 0 broken);
+2.0's failure is seeds 20260917 and 20260919 each breaking one question they had before.
+
+**The tamper suite** (`test_trusted_rescore.py`, 12 tests, 12 pass, 1,942 s = 32 min — the frozen course is
+loaded once per module, and each tampered run still re-checks all 1,128 predictions of the seed). On a
+copy of the certified seed 20260918 receipt, ONE named edit per test:
+
+| edit | typed reason that fired |
+|---|---|
+| none (clean copy, through the command line) | `RESCORE_OK`, exit 0, gained 12 broken 0 |
+| 20 `correct` flags flipped in `course_p10_scoring.json` | `SCORING_FILE_DISAGREES_WITH_RESCORE` |
+| the same, plus an `artifact_manifest.json` rewritten to match the tampered bytes | `SCORING_FILE_DISAGREES_WITH_RESCORE` — the manifest is not trusted, the checker is re-run |
+| grader hash in the anchor replaced (evaluator substitution) | `EVALUATOR_IDENTITY` |
+| phase-0 predictions copied over the phase-10 file (wrong split/phase) | `PREDICTIONS_IDENTITY` |
+| one prediction duplicated | `DUPLICATE_IDS` |
+| one prediction removed | `MISSING_OR_EXTRA_PREDICTIONS` |
+| one answer replaced by a string | `MALFORMED_PREDICTION` (the checker raises `AnswerContractError`) |
+| one score replaced by NaN | `NONFINITE_NUMBER` |
+
+The last three tests check the two committed readings and anchors: labels and per-seed counts agree
+with the frozen grader; the anchors pin the grader hash and population digest above.
+
+**Three defects found by running it, fixed before any reading was kept.** (1) The frozen-grader
+comparison read keys `b`/`c` that `gate_reading.json` does not have — it stores `wrong_to_right` /
+`right_to_wrong` — so the first rescore would have printed a false `REJECT`; that run was stopped and
+never recorded. (2) The certified 1.0 study's frozen reading is not beside the study file
+(`admission_helm1_certified/gate_reading.json`), so the first kept 1.0 reading compared against nothing;
+`--frozen-reading` added and the study re-run. (3) After commit `c4a6687a`: the anchors pinned RAW bytes
+and were written with Windows line endings, so a fresh checkout (LF) would have failed every pin; every
+file hash is now LF-normalised and every output is written LF (`2ef0921d`), anchors and readings
+regenerated, suite re-run — same numbers.
+
+**What this licenses and what it does not.** A third party with the repository can re-run
+`trusted_rescore.py` against the committed anchors and get these readings; the receipts' `correct`
+flags are no longer load-bearing for either label. It does NOT make the evaluation independent: the
+anchor is written by the same session that built everything, so a dishonest session could anchor a
+dishonest checker. The missing piece is still a separate custodian, as the authorization file says.
+
+**Also in `c4a6687a`.** `research/helm_cas_expression_lab/q3_export_behavior_pairs.py` joins Q3 v0.2
+into the delivered package's `behavior_pair.schema.json`: **10,376 records in 12 files, 0 invalid**
+under `jsonschema`. The 12 MB of derived `.jsonl` stay out of git (`sealed_view/.gitignore`);
+`EXPORT_REPORT.json` pins each file's record count and sha256 so a regenerated copy can be checked.
+
+**Cost.** $0. Deterministic Python on the local CPU only (checker re-runs; no neural work). Wall
+times above were measured with two or three of these jobs running at once.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - Q3 v0.1 WAS BROKEN BY ALL THREE REVIEWERS. Q3 v0.2 answers every finding by name and turns each into a test. 36 tests pass. Commit `ee5496fa`.
 
 **The review, exact.** Three independent attackers, read-only, ~390k tokens, against the committed
