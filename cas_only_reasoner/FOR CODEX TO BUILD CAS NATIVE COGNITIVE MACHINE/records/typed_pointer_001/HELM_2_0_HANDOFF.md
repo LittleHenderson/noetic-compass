@@ -93,7 +93,15 @@ actually read is the right curve.
 Replace with 4 heads of width 16 (4×64 = 256 numbers). Cheap; lets the world vector attend to more
 than one thing at a time.
 
-### 4. F3 — THE BIG ONE. Build a ruler a curve can be drawn on.  🔧 $0 but real work
+### 4. F3 — BUILT. `records/typed_pointer_001/ladder/` — read `LADDER_README.md`  ✅
+18 worlds at 4/6/10/16/25/40 nodes, 1,072 questions, difficulty axis = hop distance, continuous
+score beside exact match, zero-learning envelope shipped inside the artifact, disjoint labels
+proven, byte-deterministic (digest `4436fb6b481ff606`). **373 evidence questions at distance >= 2.**
+The bar there is `best_zero_learning` ~0.53, NOT zero. `parts`/`edge_account` are a size CONTROL,
+never evidence. No model has run on it. What remains of F3 is only WIRING: a runner that feeds
+`ladder_v0_1.json` through the worker and scores with `build_ladder.py:score`.
+
+#### (original F3 brief, kept for the record)
 **This is the largest remaining item and it gates every scaling run.** Eighteen yes/no questions
 about four-node worlds cannot show a continuous curve — eleven of the nineteen possible scores are
 already reachable by a rule that learns nothing. Needed:
@@ -160,7 +168,8 @@ what carries them.
 | `rounds_iterate_check.py`, 6 checks | ✅ **PASS**, 174,303 params, 48 groups |
 | `pytest tests/test_typed_pointer_study.py` after F1 alone | ✅ **22 passed** |
 | `pytest` after F1 + F2a + F2b + F4 | ✅ **22 passed in 147.46s** |
-| `preflight_dry_run.py` end-to-end on Helm 2.0 | 🔧 **running, clean, reached pass 6 of 10 / 770 of 1470 updates with no error — confirm it finished `PREFLIGHT_PASS`** |
+| `preflight_dry_run.py` end-to-end on Helm 2.0 | 🟨 **seed 1 COMPLETE** (`COMPLETE_TYPED_POINTER_ARM`, no failed checks, 551 files, 1804.61 s); **seed 2 killed by the tool harness** at pass 8, update 1100 of 1470, exit 127, no Python error. Re-run from a real terminal, not through an agent's Bash tool — a 45+ minute CPU job gets cut. |
+| F4 recording exercised end to end | ⬜ **NO.** The dry run's stand-in brain bypasses `PointerCourseLearner`'s step, so its update rows carry none of the F4 fields (`learning_rate_schedule` is absent). F4 is unit-checked only. The first real run is what exercises it. |
 | any GPU run | ⬜ **none. No money spent, nothing claimed.** |
 
 **Confirm the preflight finished before you build anything on top of this.** The preflight wants a directory
