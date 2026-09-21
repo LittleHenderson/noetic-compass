@@ -1,4 +1,4 @@
-"""Q3 v0.3 tests -- every reviewer finding on v0.1, and every finding of the 2026-09-21 verification, is an assertion here.
+"""Q3 v0.4 tests -- every reviewer finding on v0.1, and every finding of the 2026-09-21 verification, is an assertion here.
 
   1. DETERMINISM   a fresh build into a temp dir is byte-identical to the committed data, file by file.
   2. SEALED        no withheld field in any visible file; A's visible side carries no bool; R/G carry no target.
@@ -35,7 +35,7 @@ sys.path.insert(0, str(HERE))
 import reference_ops as ref  # noqa: E402
 import q3_behaviour_records as q3  # noqa: E402
 
-DATA = HERE / "data" / "q3_v0_3"
+DATA = HERE / "data" / "q3_v0_4"
 MANIFEST = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
 SEED = MANIFEST["seed"]
 
@@ -103,9 +103,17 @@ def test_strict_shapes_disjoint_across_splits_recomputed_from_sealed_ast(fam):
     assert not (shapes["train"] & shapes["eval"]) and not (shapes["train"] & shapes["dev"]) and not (shapes["dev"] & shapes["eval"])
 
 
-def test_G_eval_is_deeper_than_train():
-    assert min(r["depth"] for r in _rows("sealed_G_eval.jsonl")) >= 4 or True   # eval PREFERS depth>=4; the hard assertion is on the max
-    assert max(r["depth"] for r in _rows("sealed_G_eval.jsonl")) >= max(r["depth"] for r in _rows("sealed_G_train.jsonl"))
+def test_G_is_split_by_bare_tree_shape_and_eval_is_deeper_than_every_train_row():
+    """v0.3 claimed 'eval depths are longer than anything in train' while train held 485 rows at eval's depths, and 170 of"""
+    # 256 eval trees had a bare shape already in train. Both are now asserted, recomputed from the sealed AST.
+    rows = {s: _rows("sealed_G_%s.jsonl" % s) for s in q3.SPLITS}
+    shapes = {s: {json.dumps(q3.tree_shape(r["target_ast"])) for r in rows[s]} for s in q3.SPLITS}
+    assert not (shapes["train"] & shapes["dev"]) and not (shapes["train"] & shapes["eval"]) and not (shapes["dev"] & shapes["eval"])
+    assert min(r["depth"] for r in rows["eval"]) > max(r["depth"] for r in rows["train"])
+    assert {r["depth"] for r in rows["train"]} == {1, 2, 3} and {r["depth"] for r in rows["dev"]} == {3} and {r["depth"] for r in rows["eval"]} == {4, 5}
+    assert all(r["depth"] == q3.tree_depth(q3.tree_shape(r["target_ast"])) for s in q3.SPLITS for r in rows[s])
+    assert MANIFEST["stats"]["G"]["bare_tree_shapes_shared_across_splits"] == 0
+    assert "deeper than every train row" in MANIFEST["family_labels"]["G"]
 
 
 def test_A_cells_disjoint_order_flip_balanced_and_refusals_unshared():
@@ -169,7 +177,9 @@ def test_reconstruction_targets_recompute_from_the_compiler_on_a_sample(fam):
     for s in q3.SPLITS:
         for v, sd in _pairs(fam, s)[:40]:
             art = compile_expression(v["observation"]).to_dict()
-            assert art["valid"] and q3.canonical(art["ast"]) == sd["target_canonical_ast"] == q3.canonical(sd["target_ast"])
+            assert art["valid"] and q3.canonical(q3.to_lab_spelling(art["ast"])) == sd["target_canonical_ast"] == q3.canonical(sd["target_ast"])
+            assert q3.to_compiler_spelling(sd["target_ast"]) == art["ast"]          # the spelling map is exactly invertible
+            assert "CO-" not in sd["target_canonical_ast"]                          # owner ruling: ^0 .. ^9
 
 
 # --- 6 ----------------------------------------------------------------------------------------
@@ -200,7 +210,7 @@ def test_no_learner_file_opens_sealed_data():
 def test_the_manifest_cites_exactly_the_current_contract():
     contract = json.loads((HERE / "OPERATION_CONTRACTS.json").read_text(encoding="utf-8"))
     assert MANIFEST["operation_contracts_digest"] == contract["contract_digest"], "DATA_BOUND_TO_A_CONTRACT_HEAD_NO_LONGER_HOLDS"
-    assert MANIFEST["schema"].endswith("/0.3")
+    assert MANIFEST["schema"].endswith("/0.4")
 
 
 # --- 10 ---------------------------------------------------------------------------------------
@@ -224,7 +234,7 @@ def test_baselines_are_scored_by_case_family_on_dev_and_eval():
         for name, row in full[split].items():
             fams = row["by_case_family"]
             assert set(fams) == set(q3.CASE_FAMILIES) | {"refusal"} and all(f["n"] > 0 for f in fams.values()), (split, name)
-            assert sum(f["n"] for f in fams.values()) == row["n"] == 272
+            assert sum(f["n"] for f in fams.values()) == row["n"] == 296
         always = full[split]["always_inadmissible (the constant majority answer)"]
         assert always["by_case_family"]["nonidentity_same_domain"]["exact"] == 0.0     # same-domain non-identity moves are ALWAYS admissible
         assert always["by_case_family"]["op0_cross_domain"]["exact"] == 1.0            # ^0 across domains is NEVER admissible
@@ -233,3 +243,51 @@ def test_baselines_are_scored_by_case_family_on_dev_and_eval():
         assert all(f["exact"] == 1.0 for f in reference["by_case_family"].values())
         lookup = [row for name, row in full[split].items() if name.startswith("R7 =")][0]
         assert lookup["exact"] == 1.0, "a lookup from train already matches the code everywhere: family A is conformance, not discovery"
+
+
+# --- 11: the v0.3 review ------------------------------------------------------------------------
+def test_train_teaches_the_identity_diagonal_and_the_sizes_are_asserted_not_hoped():
+    stats = MANIFEST["stats"]["A"]
+    assert stats["op0_diagonal_positive_rows"]["train"] >= 16          # v0.3 had 4 in 2,048; a seed sweep gave as few as 0
+    train = [(v, sd) for v, sd in _pairs("A", "train") if sd["outcome"] != "INVALID_INPUT"]
+    diagonal = [sd for v, sd in train if v["observation"]["operator"] == 0 and v["observation"]["source"] == v["observation"]["target"]]
+    assert len(diagonal) == stats["op0_diagonal_positive_rows"]["train"] and all(sd["target"] is True for sd in diagonal)
+    source = (HERE / "q3_behaviour_records.py").read_text(encoding="utf-8")
+    assert "A_TRAIN_HAS_TOO_FEW_OP0_DIAGONAL_POSITIVES" in source and "SIZE_OR_FLIP_SHARE_NOT_MET" in source
+    assert "G_TREE_SHAPE_SHARED_ACROSS_SPLITS" in source and "G_EVAL_NOT_DEEPER_THAN_TRAIN" in source
+
+
+def test_refusals_have_a_quota_per_kind_and_unseen_classes_have_an_n():
+    by_kind = MANIFEST["stats"]["A"]["refusal_rows_by_kind"]
+    assert all(n == 8 for n in by_kind["dev"].values()) and all(n == 8 for n in by_kind["eval"].values()) and len(by_kind["eval"]) == 5
+    assert set(by_kind["eval"]) - set(by_kind["train"]) == {"float_equal_to_int", "string"}     # 16 rows of classes train never shows
+    for s in q3.SPLITS:
+        counts = {}
+        for _, sd in _pairs("A", s):
+            if sd["outcome"] == "INVALID_INPUT":
+                counts[sd["refusal_kind"]] = counts.get(sd["refusal_kind"], 0) + 1
+        assert counts == by_kind[s]
+
+
+def test_the_rebalancing_is_said_in_plain_words_and_measured():
+    assert "DELIBERATELY rebalanced" in MANIFEST["rebalancing_note"] and "not comparable" in MANIFEST["rebalancing_note"]
+    rates = MANIFEST["stats"]["A"]["admissible_rate_by_case_family"]
+    for s in q3.SPLITS:
+        valid = [(v, sd) for v, sd in _pairs("A", s) if sd["outcome"] != "INVALID_INPUT"]
+        for fam in q3.CASE_FAMILIES:
+            rows = [sd for _, sd in valid if sd["case_family"] == fam]
+            assert rates[s][fam] == round(sum(1 for sd in rows if sd["target"]) / len(rows), 6)
+        assert rates[s]["nonidentity_same_domain"] == 1.0 and rates[s]["op0_cross_domain"] == 0.0
+    assert rates["train"]["nonidentity_cross_domain"] < rates["eval"]["nonidentity_cross_domain"]      # the shift is real and disclosed
+    twins = MANIFEST["stats"]["A"]["swapped_twin_of_a_heldout_row_is_a_train_row"]
+    assert twins["eval"] > 0 and "partly in-distribution" in MANIFEST["exposure_report"]["A"]
+
+
+def test_the_new_registered_baselines():
+    full = json.loads((DATA / "baselines.json").read_text(encoding="utf-8"))["A"]
+    for split in ("dev", "eval"):
+        prior = [row for name, row in full[split].items() if name.startswith("train_case_family_prior")][0]
+        learner_side = [row for name, row in full[split].items() if name.startswith("R7 lookup + LEARNER-SIDE refusal")][0]
+        assert 0.5 < prior["exact"] < 0.9                         # what a learner gets from train priors alone
+        assert learner_side["exact"] == 1.0 and learner_side["by_case_family"]["refusal"]["exact"] == 1.0     # no oracle involved
+    assert "baselines.json" in MANIFEST["files"]                  # hashed since v0.4

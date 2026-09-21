@@ -1,0 +1,11 @@
+{
+ "data_versions": {
+  "helm-cas-expression-lab.q3-behaviour-records/0.4": {
+   "data_dir": "data/q3_v0_4",
+   "export_report_sha256": "e4259515d66b493ee3ff4264afd04a172f3999294c3fada384dbece4a80dd357",
+   "manifest_sha256": "5ac78006a566e62d1aab888018e3f9b4e4f98c2833cf46cc2c2489d08d52c838"
+  }
+ },
+ "schema": "helm-cas-expression-lab.q3-data-pins/0.1",
+ "why": "kept OUTSIDE the data folders: a forged copy of the data carries its own manifest, never this pin"
+}

@@ -1,4 +1,21 @@
-"""Q3 v0.3 -- behaviour-paired records with SEALED targets, STRICT structure splits, and baselines that include the attacks.
+"""Q3 v0.4 -- behaviour-paired records with SEALED targets, STRICT structure splits, and baselines that include the attacks.
+
+v0.4 (2026-09-21) answers the three-attacker review of v0.3, which broke two claims and found the rest sound:
+  G   'eval depths are longer than anything in train' was FALSE: train held 485 rows at eval's depths, and 170 of 256 eval
+      trees had a bare tree shape already in train -- only a per-leaf suffix pattern was held out (the v0.1 'fingerprint'
+      defect again). -> G is now split by BARE TREE SHAPE and by DEPTH: train is depths 1-3, dev is depth-3 trees whose bare
+      shape is held out whole, eval is depths 4-5. The builder asserts that no bare shape is shared and that eval is deeper
+      than every train row.
+  A   'all four rule features are richly present in train' was FALSE for the ^0 diagonal: 4 positive rows in 2,048, and a
+      sweep of 120 seeds gave as few as 0. -> every ^0-diagonal row of the train cells is included (a floor of 16 is
+      asserted), and the builder now ASSERTS the dev/eval sizes and the exact 50% order-flip share instead of hoping.
+      Refusals are drawn by QUOTA per kind (8 per kind in dev and eval) so 'unseen refusal class' accuracy has an n.
+      New registered baselines: the train case-family prior, and a learner-side refusal rule that uses NO oracle.
+      The manifest now says in plain words that dev and eval are deliberately REBALANCED and gives the admissible rate by
+      case family per split, and how many swapped twins of eval rows sit in train.
+  ^   R and G targets are the compiler's AST with ONE documented, invertible spelling change: the compiler writes a Noetic
+      as 'CO-k'; the lab target writes '^k' (owner ruling OD-2). `to_lab_spelling` / `to_compiler_spelling` are tested.
+
 
 v0.3 (2026-09-21) changes three things and nothing else; v0.2 stays on disk as the artifact that was reviewed:
   * BOUND TO THE CURRENT CONTRACT. v0.2's manifest and its 10,376 exported records cite contract digest e97b8aa6..., a
@@ -87,7 +104,7 @@ def _main_checkout():
 
 
 MAIN_CHECKOUT = _main_checkout()
-SCHEMA = "helm-cas-expression-lab.q3-behaviour-records/0.3"
+SCHEMA = "helm-cas-expression-lab.q3-behaviour-records/0.4"
 SEED = 20260921
 FAMILIES = ("R", "G", "A", "C")
 SPLITS = ("train", "dev", "eval")
@@ -170,6 +187,38 @@ def strict_shape(ast):
     return "<leaf>"
 
 
+def tree_shape(ast):
+    """The BARE shape of a nested binary expression: 'L' for anything that is not a binary node, else ['B', left, right]."""
+    if isinstance(ast, dict) and isinstance(ast.get("left"), dict) and isinstance(ast.get("right"), dict):
+        return ["B", tree_shape(ast["left"]), tree_shape(ast["right"])]
+    return "L"
+
+
+def tree_depth(shape):
+    return 0 if shape == "L" else 1 + max(tree_depth(shape[1]), tree_depth(shape[2]))
+
+
+def to_lab_spelling(ast):
+    """The compiler spells a Noetic 'CO-k'. The lab target spells it '^k' (owner ruling OD-2). Nothing else changes."""
+    if isinstance(ast, dict):
+        return {k: to_lab_spelling(v) for k, v in ast.items()}
+    if isinstance(ast, list):
+        return [to_lab_spelling(v) for v in ast]
+    if isinstance(ast, str) and len(ast) == 4 and ast.startswith("CO-") and ast[3].isdigit():
+        return "^" + ast[3]
+    return ast
+
+
+def to_compiler_spelling(ast):
+    if isinstance(ast, dict):
+        return {k: to_compiler_spelling(v) for k, v in ast.items()}
+    if isinstance(ast, list):
+        return [to_compiler_spelling(v) for v in ast]
+    if isinstance(ast, str) and len(ast) == 2 and ast[0] == "^" and ast[1].isdigit():
+        return "CO-" + ast[1]
+    return ast
+
+
 def _ast_size(ast):
     if isinstance(ast, dict):
         return 1 + sum(_ast_size(v) for v in ast.values() if isinstance(v, (dict, list)))
@@ -236,8 +285,11 @@ def emit_R(rows, split, seed, family="R"):
     for i, row in enumerate(rows):
         rid = _record_id(seed, "%s:%s" % (family, split), i)
         visible.append({"record_id": rid, "family": family, "mode": "reconstruction", "observation": row["expression"]})
-        sealed.append({"record_id": rid, "family": family, "target_canonical_ast": canonical(row["ast"]), "target_ast": row["ast"],
+        lab = to_lab_spelling(row["ast"])
+        assert to_compiler_spelling(lab) == row["ast"], "the spelling map must be invertible"
+        sealed.append({"record_id": rid, "family": family, "target_canonical_ast": canonical(lab), "target_ast": lab,
                        "ast_size": _ast_size(row["ast"]), "shape_key": row["shape_key"], "depth": row.get("depth"),
+                       "tree_shape_key": row.get("tree_shape_key"),
                        "validity": "VALID", "oracle": "api.notation.compiler.compile_expression"})
     return visible, sealed
 
@@ -283,27 +335,49 @@ def build_family_G(rng, compile_expression):
                 continue
             candidates.append({"expression": expr, "ast": art["ast"], "depth": depth})
             made += 1
-    groups = collections.defaultdict(list)
+    # v0.4: split by BARE tree shape and by DEPTH. train = depths 1-3; dev = depth-3 trees whose bare shape is held out WHOLE;
+    # eval = depths 4-5 (deeper than every train row, so every eval shape is new by construction -- asserted below).
     for row in candidates:
-        groups[_sha_json(strict_shape(row["ast"]))[:16]].append(row)
-    # eval takes whole topologies of depth >= 4 first (unseen and longer), then rarest; dev takes rarest of the rest.
-    deep = {k for k, m in groups.items() if min(r["depth"] for r in m) >= 4}
-    split_of, quota = {}, dict(SIZES)
-    for k in sorted(deep, key=lambda k: (len(groups[k]), k)):
-        if len(groups[k]) <= quota["eval"]:
-            split_of[k] = "eval"
-            quota["eval"] -= len(groups[k])
-    rest = {k: m for k, m in groups.items() if k not in split_of}
-    split_of.update(_assign_groups_rarest_first(rng, rest, {"eval": quota["eval"], "dev": quota["dev"], "train": SIZES["train"]}))
+        shape = tree_shape(row["ast"])
+        row["tree_shape_key"], row["shape_key"] = _sha_json(shape)[:16], _sha_json(strict_shape(row["ast"]))[:16]
+        assert tree_depth(shape) == row["depth"], "the generator's depth must be the tree's depth"
+    depth3 = collections.defaultdict(list)
+    for row in candidates:
+        if row["depth"] == 3:
+            depth3[row["tree_shape_key"]].append(row)
+    shape_order = sorted(depth3)
+    rng.shuffle(shape_order)
+    dev_shapes, dev_rows = set(), 0
+    for key in shape_order:                                   # whole shapes go to dev until it is full
+        if dev_rows >= SIZES["dev"]:
+            break
+        dev_shapes.add(key)
+        dev_rows += len(depth3[key])
     out = {s: [] for s in SPLITS}
-    for k, members in groups.items():
-        for row in members:
-            out[split_of[k]].append({**row, "shape_key": k})
+    for row in candidates:
+        if row["depth"] >= 4:
+            out["eval"].append(row)
+        elif row["tree_shape_key"] in dev_shapes:
+            out["dev"].append(row)
+        else:
+            out["train"].append(row)
     for s in SPLITS:
         rng.shuffle(out[s])
+    half = SIZES["eval"] // 2                               # eval: depth 4 and depth 5 in equal parts
+    out["eval"] = [r for r in out["eval"] if r["depth"] == 4][:half] + [r for r in out["eval"] if r["depth"] == 5][:SIZES["eval"] - half]
+    rng.shuffle(out["eval"])
+    for s in ("train", "dev"):
         out[s] = out[s][:SIZES[s]]
+    shapes = {s: {r["tree_shape_key"] for r in out[s]} for s in SPLITS}
+    if shapes["train"] & shapes["dev"] or shapes["train"] & shapes["eval"] or shapes["dev"] & shapes["eval"]:
+        raise SystemExit("Q3_REFUSED:G_TREE_SHAPE_SHARED_ACROSS_SPLITS")
+    if not min(r["depth"] for r in out["eval"]) > max(r["depth"] for r in out["train"]):
+        raise SystemExit("Q3_REFUSED:G_EVAL_NOT_DEEPER_THAN_TRAIN")
+    groups = {r["shape_key"] for r in candidates}
     stats = {"generated_valid": len(candidates), "rejected_by_compiler": dict(rejected), "strict_shape_groups": len(groups),
              "strict_shapes_per_split": {s: len({r["shape_key"] for r in out[s]}) for s in SPLITS},
+             "bare_tree_shapes_per_split": {s: len(shapes[s]) for s in SPLITS}, "bare_tree_shapes_shared_across_splits": 0,
+             "bare_tree_shapes_of_depth_3_in_pool": len(depth3), "bare_tree_shapes_held_out_for_dev": len(dev_shapes),
              "depths_per_split": {s: dict(sorted(collections.Counter(r["depth"] for r in out[s]).items())) for s in SPLITS}}
     return out, stats
 
@@ -318,10 +392,10 @@ REFUSAL_POOLS = {   # split-disjoint VALUES and TYPE CLASSES (finding A3). Every
 }
 
 
-def _refusal_case(rng, split):
+def _refusal_case(rng, split, kind=None):
     pool, base = REFUSAL_POOLS[split], {"operator": rng.randrange(10), "source": [rng.choice(ref.DOMAINS), rng.randrange(10)],
                                        "target": [rng.choice(ref.DOMAINS), rng.randrange(10)]}
-    kind = rng.choice(("bad_operator", "bad_domain", "bad_noetic") + pool["types"])
+    kind = kind or rng.choice(("bad_operator", "bad_domain", "bad_noetic") + pool["types"])
     if kind == "bad_operator":
         base["operator"] = rng.choice(pool["bad_ints"])
     elif kind == "bad_domain":
@@ -389,7 +463,12 @@ def build_family_A(rng):
         if s == "train":
             rows = (pools[s]["flip"] + pools[s]["flat"])
             rng.shuffle(rows)
-            out[s] = rows[:SIZES[s]]
+            # v0.4: ^0 is admissible ONLY on the diagonal. Every such row of the train cells is included, so the rule can be learned.
+            diagonal = [r for r in rows if r["case_family"] == "op0_same_domain" and r["source"] == r["target"]]
+            if len(diagonal) < 16:
+                raise SystemExit("Q3_REFUSED:A_TRAIN_HAS_TOO_FEW_OP0_DIAGONAL_POSITIVES:%d" % len(diagonal))
+            out[s] = diagonal + [r for r in rows if r not in diagonal][:SIZES[s] - len(diagonal)]
+            rng.shuffle(out[s])
         else:                                   # finding A2: at least half of valid rows are order-flip rows
             half = SIZES[s] // 2
             flat, chosen = pools[s]["flat"], []
@@ -399,12 +478,17 @@ def build_family_A(rng):
                 chosen += [r for r in flat if r["case_family"] == fam and r not in chosen][:16]
             chosen += [r for r in flat if r not in chosen][:SIZES[s] - half - len(chosen)]
             out[s] = pools[s]["flip"][:half] + chosen
+            if len(pools[s]["flip"][:half]) != half or len(out[s]) != SIZES[s]:
+                raise SystemExit("Q3_REFUSED:A_%s_SIZE_OR_FLIP_SHARE_NOT_MET:%d flip, %d rows" % (s.upper(), len(pools[s]["flip"][:half]), len(out[s])))
             rng.shuffle(out[s])
     refusal_strings = {}
     for s in SPLITS:
-        n_bad, made, seen = max(1, SIZES[s] // 16), 0, set()
+        kinds = ("bad_operator", "bad_domain", "bad_noetic") + REFUSAL_POOLS[s]["types"]
+        per_kind = 25 if s == "train" else 8                 # v0.4: a QUOTA per kind, so every refusal class has an n
+        plan = [k for k in kinds for _ in range(per_kind)]
+        n_bad, made, seen = len(plan), 0, set()
         while made < n_bad:
-            obs, kind = _refusal_case(rng, s)
+            obs, kind = _refusal_case(rng, s, plan[made])
             key = json.dumps(obs, sort_keys=True)
             if key in seen or not _refuses(obs):
                 continue
@@ -412,6 +496,10 @@ def build_family_A(rng):
             out[s].insert(rng.randrange(len(out[s]) + 1), {**obs, "refusal_kind": kind})
             made += 1
         refusal_strings[s] = seen
+    train_index = collections.defaultdict(list)
+    for r in out["train"]:
+        if "order_flip" in r:
+            train_index[(r["operator"], tuple(r["source"]), tuple(r["target"]))].append(r)
     stats = {"cells": len(cells), "cells_held_eval": 24, "cells_held_dev": 16,
              "held_cells_eval": sorted("%d:%s>%s" % c for c in held["eval"]), "held_cells_dev": sorted("%d:%s>%s" % c for c in held["dev"]),
              "order_flip_valid_rows": {s: sum(1 for r in out[s] if r.get("order_flip")) for s in SPLITS},
@@ -420,6 +508,11 @@ def build_family_A(rng):
              "valid_rows_by_case_family": {s: {f: sum(1 for r in out[s] if r.get("case_family") == f) for f in CASE_FAMILIES} for s in SPLITS},
              "op0_diagonal_positive_rows": {s: sum(1 for r in out[s] if r.get("case_family") == "op0_same_domain" and r["source"] == r["target"]) for s in SPLITS},
              "admissible_rows": {s: sum(1 for r in out[s] if "order_flip" in r and ref.is_admissible(r["operator"], tuple(r["source"]), tuple(r["target"]))) for s in SPLITS},
+             "admissible_rate_by_case_family": {s: {f: round(sum(1 for r in out[s] if r.get("case_family") == f and ref.is_admissible(r["operator"], tuple(r["source"]), tuple(r["target"])))
+                                                          / max(1, sum(1 for r in out[s] if r.get("case_family") == f)), 6) for f in CASE_FAMILIES} for s in SPLITS},
+             "refusal_rows_by_kind": {s: dict(sorted(collections.Counter(r["refusal_kind"] for r in out[s] if "refusal_kind" in r).items())) for s in SPLITS},
+             "swapped_twin_of_a_heldout_row_is_a_train_row": {s: sum(1 for r in out[s] if "order_flip" in r and any(
+                 t["operator"] == r["operator"] and t["source"] == r["target"] and t["target"] == r["source"] for t in train_index.get((r["operator"], tuple(r["target"]), tuple(r["source"])), []))) for s in ("dev", "eval")},
              "refusal_observations_shared_across_splits": len(refusal_strings["train"] & refusal_strings["dev"])
              + len(refusal_strings["train"] & refusal_strings["eval"]) + len(refusal_strings["dev"] & refusal_strings["eval"])}
     return out, stats
@@ -512,6 +605,25 @@ def baselines_A(vis_train, seal_train, vis_eval, seal_eval):
     for o, t in train_valid:
         table[feats(o)][t] += 1
     lookup = {k: c.most_common(1)[0][0] for k, c in table.items()}
+    family_prior = collections.defaultdict(collections.Counter)      # what a learner knows from train: the usual answer per case family
+    for o, t in train_valid:
+        family_prior[case_family(o["operator"], o["source"], o["target"])][t] += 1
+    prior = {f: c.most_common(1)[0][0] for f, c in family_prior.items()}
+    vocabulary = {"operator": set(), "domain": set(), "noetic": set()}   # every token seen in a VALID train row; no oracle involved
+    for o, _ in train_valid:
+        vocabulary["operator"].add(repr(o["operator"]))
+        for end in ("source", "target"):
+            vocabulary["domain"].add(repr(o[end][0]))
+            vocabulary["noetic"].add(repr(o[end][1]))
+
+    def learner_side_refuse(o):
+        """Refuse when the key set is wrong or any field token never appeared in a valid train row. repr() keeps 2, 2.0, True and '2' apart."""
+        try:
+            if set(o) != {"operator", "source", "target"} or repr(o["operator"]) not in vocabulary["operator"]:
+                return True
+            return any(len(o[end]) != 2 or repr(o[end][0]) not in vocabulary["domain"] or repr(o[end][1]) not in vocabulary["noetic"] for end in ("source", "target"))
+        except Exception:
+            return True
 
     REFUSE = "INVALID_INPUT"
     rules = {
@@ -524,6 +636,8 @@ def baselines_A(vis_train, seal_train, vis_eval, seal_eval):
         "R7 = 4-feature majority lookup from train + range-check refusal": lambda o: REFUSE if not _valid_fields(o) else lookup.get(feats(o), majority),
         "exact_row_memory_from_train_INCLUDING_refusals": lambda o: (memo_all[json.dumps(o, sort_keys=True)] if json.dumps(o, sort_keys=True) in memo_all_has else None),
         "answer_False_refuse_out_of_range": lambda o: REFUSE if not _valid_fields(o) else False,
+        "train_case_family_prior (the usual train answer for this kind of question) + range-check refusal": lambda o: REFUSE if not _valid_fields(o) else prior[case_family(o["operator"], o["source"], o["target"])],
+        "R7 lookup + LEARNER-SIDE refusal (train vocabulary only, NO oracle)": lambda o: REFUSE if learner_side_refuse(o) else lookup.get(feats(o), majority),
         "ORDER_BLIND: same_domain or tn==k or sn==k (+^0, +refusal)": lambda o: REFUSE if not _valid_fields(o) else ((o["source"] == o["target"]) if o["operator"] == 0 else (o["source"][0] == o["target"][0] or o["target"][1] == o["operator"] or o["source"][1] == o["operator"])),
         "WRONG_DIRECTION: same_domain or sn==k (+^0, +refusal)": lambda o: REFUSE if not _valid_fields(o) else ((o["source"] == o["target"]) if o["operator"] == 0 else (o["source"][0] == o["target"][0] or o["source"][1] == o["operator"])),
         "exact_symbolic_reference (measured, not typed)": lambda o: REFUSE if not _valid_fields(o) else ref.is_admissible(o["operator"], tuple(o["source"]), tuple(o["target"])),
@@ -571,7 +685,7 @@ def baselines_C(vis_eval, seal_eval):
 
 def baselines_reconstruction(compile_expression, vis_eval, seal_eval):
     ev = {r["record_id"]: r for r in seal_eval}
-    hit = sum(1 for v in vis_eval if canonical(compile_expression(v["observation"]).to_dict()["ast"]) == ev[v["record_id"]]["target_canonical_ast"])
+    hit = sum(1 for v in vis_eval if canonical(to_lab_spelling(compile_expression(v["observation"]).to_dict()["ast"])) == ev[v["record_id"]]["target_canonical_ast"])
     return {"compiler_reference (measured, not typed)": {"exact": round(hit / max(1, len(vis_eval)), 6), "n": len(vis_eval), "note": "the oracle; this family measures fidelity"},
             "copy_input_string_as_ast": {"exact": 0.0, "note": "a string is not an AST"},
             "eval_ast_size_distribution": dict(sorted(collections.Counter(ev[v["record_id"]]["ast_size"] for v in vis_eval).items()))}
@@ -580,7 +694,7 @@ def baselines_reconstruction(compile_expression, vis_eval, seal_eval):
 # ---------------------------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", default=str(HERE / "data" / "q3_v0_3"))
+    parser.add_argument("--out", default=str(HERE / "data" / "q3_v0_4"))
     parser.add_argument("--seed", type=int, default=SEED)
     args = parser.parse_args()
     out = pathlib.Path(args.out)
@@ -608,40 +722,43 @@ def main():
                 files[path.name] = {"records": len(rows), "sha256": _sha_bytes(body)}
             counts["%s_%s" % (fam, split)] = len(vis)
 
-    baselines = {"schema": "helm-cas-expression-lab.q3-baselines/0.3", "scored_on": {"A": ["dev", "eval"], "C": "eval", "R": "eval", "G": "eval"},
+    baselines = {"schema": "helm-cas-expression-lab.q3-baselines/0.4", "scored_on": {"A": ["dev", "eval"], "C": "eval", "R": "eval", "G": "eval"},
                  "A": {split: baselines_A(*packets["A"]["train"], *packets["A"][split]) for split in ("dev", "eval")},
                  "C": baselines_C(*packets["C"]["eval"]),
                  "R": baselines_reconstruction(compile_expression, *packets["R"]["eval"]),
                  "G": baselines_reconstruction(compile_expression, *packets["G"]["eval"])}
-    with open(out / "baselines.json", "w", encoding="utf-8", newline="\n") as handle:
-        handle.write(json.dumps(baselines, indent=1, sort_keys=True))
+    baselines_body = json.dumps(baselines, indent=1, sort_keys=True).encode("utf-8")
+    (out / "baselines.json").write_bytes(baselines_body)
+    files["baselines.json"] = {"records": None, "sha256": _sha_bytes(baselines_body)}      # v0.4: the baselines are hashed too
 
     manifest = {
-        "schema": SCHEMA, "seed": args.seed, "built": "2026-09-21", "generator": pathlib.Path(__file__).name, "supersedes": "data/q3_v0_2 (kept on disk: the reviewed artifact, bound to contract e97b8aa6..., with no operator-^0 rows in dev); v0.2 superseded data/q3_v0_1 (kept; found leaking)",
+        "schema": SCHEMA, "seed": args.seed, "built": "2026-09-21", "generator": pathlib.Path(__file__).name, "supersedes": "data/q3_v0_3 (kept on disk: attacked on 2026-09-21 -- G's 'deeper than train' claim and A's 'richly present' claim were false); v0.3 superseded v0.2 (bound to a contract HEAD no longer holds); v0.2 superseded v0.1 (found leaking)",
+        "rebalancing_note": "Family A's dev and eval are DELIBERATELY rebalanced (half order-flip rows, stratified case families). Their answer rates differ from train BY CONSTRUCTION -- see stats.A.admissible_rate_by_case_family. A model's calibration on eval is therefore not comparable with its calibration on train, and a gap between train and eval accuracy is partly this sampling decision.",
+        "target_spelling": "R and G targets are the compiler's AST with one documented, invertible change: the compiler writes a Noetic as 'CO-k', the lab target writes '^k' (owner ruling OD-2). q3_behaviour_records.to_compiler_spelling restores the compiler's form exactly.",
         "contract_binding": "operation_contracts_digest MUST equal contract_digest in OPERATION_CONTRACTS.json; a test and the exporter refuse anything else",
         "operation_contracts_digest": contract["contract_digest"], "compiler": compiler_pin, "sdg_pool": pool_pin,
         "sdg_usage": "expression strings only; SDG prompt/response text is never read (the label sits inside it)",
         "sizes_are_ceilings": SIZES, "counts": counts, "files": files, "stats": {"R": statsR, "G": statsG, "A": statsA, "C": statsC},
         "family_labels": {
             "R": "FIDELITY. Expression -> canonical AST for SDG expressions. Ceiling = the compiler (measured). The SDG pool is structurally narrow; strict-shape holdout therefore yields a SMALL eval and dev, reported in stats. Reviewer measurement on v0.1: one regular expression reproduced 204/256 eval targets; 52/256 needed a grammar.",
-            "G": "STRUCTURAL GENERALISATION. Grammar-generated nested binary trees, compiled, held out by whole strict TOPOLOGY and by depth (eval prefers depth >= 4). This is the structural test R cannot be.",
+            "G": "STRUCTURAL GENERALISATION. Grammar-generated nested binary trees, compiled. Split by BARE tree shape and by depth: train is depths 1-3; dev is depth-3 trees whose bare shape is held out whole (new shape, same depth); eval is depths 4-5 (deeper than every train row, so every eval shape is new). Both facts are asserted by the builder and re-checked by the loader.",
             "A": "CONFORMANCE AND TRANSFER, NOT DISCOVERY. The answer depends only on four field equalities (op==0, same_domain, target_noetic==op, source==target). A three-line hand rule (R3) and a 4-feature lookup filled from train (R7) are registered; a learned module is measured on fidelity to them and on transfer to unseen cells, and MUST report the order-flip and swapped-twin metrics, accuracy BY CASE FAMILY (^0 same-domain, ^0 cross-domain, non-identity same-domain, non-identity cross-domain, refusal) and refusal accuracy on unseen refusal classes. Because the lookup R7 already scores 1.0, this family can only show that a model MATCHES THE CODE; it can never show learning beyond lookup. The targets are the engine code's rules (owner decision OD-6), not the book's. Accuracy alone is not a claim.",
             "C": "CONFORMANCE-ONLY. The modular-sum rule scores 1.0 by construction.",
         },
         "visibility": {
-            "R": {"mode": "reconstruction", "visible": ["record_id", "family", "mode", "observation"], "withheld": ["target_canonical_ast", "target_ast", "ast_size", "shape_key", "depth", "validity", "oracle"]},
-            "G": {"mode": "reconstruction", "visible": ["record_id", "family", "mode", "observation"], "withheld": ["target_canonical_ast", "target_ast", "ast_size", "shape_key", "depth", "validity", "oracle"]},
+            "R": {"mode": "reconstruction", "visible": ["record_id", "family", "mode", "observation"], "withheld": ["target_canonical_ast", "target_ast", "ast_size", "shape_key", "tree_shape_key", "depth", "validity", "oracle"]},
+            "G": {"mode": "reconstruction", "visible": ["record_id", "family", "mode", "observation"], "withheld": ["target_canonical_ast", "target_ast", "ast_size", "shape_key", "tree_shape_key", "depth", "validity", "oracle"]},
             "A": {"mode": "neural_operation_execution", "visible": ["record_id", "family", "mode", "operation_id", "observation"], "withheld": ["outcome", "target", "cell", "order_flip", "case_family", "swapped_target", "refusal_kind", "oracle", "trace"]},
             "C": {"mode": "neural_operation_execution", "visible": ["record_id", "family", "mode", "operation_id", "observation"], "withheld": ["outcome", "target", "depth", "oracle", "trace"]},
             "teacher_forcing_note": "a target may be used to compute training LOSS; it is never a model INPUT at evaluated prediction; teacher-forced passes are not free-running reconstruction and are reported apart",
         },
-        "split_policy": {"R": "whole STRICT shapes (every scalar leaf abstracted); eval then dev take the rarest first", "G": "whole strict topologies; eval takes depth>=4 topologies first, then rarest; dev the rarest of the rest",
+        "split_policy": {"R": "whole STRICT shapes (every scalar leaf abstracted); eval then dev take the rarest first", "G": "train = depths 1-3; dev = whole bare tree shapes of depth 3, held out; eval = depths 4 and 5 in equal parts; no bare shape shared (asserted)",
                          "A": "whole (operator, source_domain, target_domain) cells: 24 eval, 16 dev, 120 train; each of eval and dev is guaranteed one cell of every case family; eval/dev valid rows are 50% order-flip, and the other half is stratified across the case families with ^0 diagonal positives guaranteed; refusals drawn from split-disjoint value pools and type classes",
                          "C": "one seen-set across all splits, train first; depths train 1-3, dev 2-3, eval 4-6"},
         "exposure_report": {
             "R": "strict shapes: none shared across splits by construction (asserted). Atomic literals, names and coefficients recur across splits -- disclosed. Eval and dev are small because the SDG pool has few strict shapes; see stats.R.",
-            "G": "strict topologies: none shared across splits by construction (asserted); all leaf literals recur -- disclosed; eval depths >= 4 are longer than anything in train.",
-            "A": "the rule's four features are all richly present in train; holding out cells holds out COMBINATIONS, not rule components; R7 (a 4-feature lookup from train) reaches its registered score on unseen cells with no hand truth table. Refusal observations are asserted disjoint across splits, and eval refusal TYPE CLASSES (float-equal-to-int, string) are unseen in train -- disclosed.",
+            "G": "bare tree shapes: none shared across splits (asserted by the builder, re-checked by the loader); every eval row is deeper than every train row (asserted); leaf literals and the +/x operators recur across splits -- disclosed.",
+            "A": "the rule's four features are present in train in the measured amounts in stats.A (the rarest, ^0-diagonal positives, has a floor of 16 -- every such row of the train cells); holding out cells holds out COMBINATIONS, not rule components; some swapped twins of held-out rows ARE train rows (stats.A.swapped_twin_of_a_heldout_row_is_a_train_row), so the swapped-twin score is partly in-distribution; R7 (a 4-feature lookup from train) reaches its registered score on unseen cells with no hand truth table. Refusal observations are asserted disjoint across splits, and eval refusal TYPE CLASSES (float-equal-to-int, string) are unseen in train -- disclosed.",
             "C": "measured: dev/eval strings verbatim in train = stats.C.verbatim_in_train (must be 0); dev/eval chains that contain a verbatim train chain as a sub-expression = stats.C.contain_a_verbatim_train_chain_as_subexpression -- disclosed, expected high, because every long chain extends a short one. The digit-multiset check used in v0.1 was vacuous and is gone.",
         },
         "record_id_policy": "sha256 of the raw UTF-8 string '<seed>:<family>:<split>:<index>', first 24 hex. Position only.",
@@ -651,10 +768,10 @@ def main():
     with open(out / "manifest.json", "w", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(manifest, indent=1, sort_keys=True))
 
-    print("Q3 v0.3 written to %s" % out)
+    print("Q3 v0.4 written to %s" % out)
     print("  counts:", counts)
     print("  R: %d valid SDG expressions, %d strict shapes; per split %s; root mix eval %s" % (statsR["valid_unique"], statsR["strict_shape_groups"], statsR["strict_shapes_per_split"], statsR["root_node_mix"]["eval"]))
-    print("  G: %d generated valid, rejected %s; strict shapes %d; per split %s; depths %s" % (statsG["generated_valid"], statsG["rejected_by_compiler"], statsG["strict_shape_groups"], statsG["strict_shapes_per_split"], statsG["depths_per_split"]))
+    print("  G: %d generated valid, rejected %s; bare tree shapes per split %s (shared: 0, asserted); depths %s" % (statsG["generated_valid"], statsG["rejected_by_compiler"], statsG["bare_tree_shapes_per_split"], statsG["depths_per_split"]))
     print("  A: order-flip valid rows %s of valid %s; refusals %s; refusal observations shared across splits: %d" % (statsA["order_flip_valid_rows"], statsA["valid_rows"], statsA["refusal_rows"], statsA["refusal_observations_shared_across_splits"]))
     print("  C: verbatim in train %s; contain a train sub-chain %s" % (statsC["verbatim_in_train"], statsC["contain_a_verbatim_train_chain_as_subexpression"]))
     print("  A rows by case family: %s ; ^0 diagonal positives %s ; admissible rows %s" % (statsA["valid_rows_by_case_family"], statsA["op0_diagonal_positive_rows"], statsA["admissible_rows"]))

@@ -27,6 +27,15 @@ VERSION 0.2 (2026-09-21), what changed from 0.1 and why:
     whether an origin file is checked out, the validator's version, Windows path separators) moved to a
     non-digested `environment` block. The same sources give the same `contract_digest` on any machine.
 
+VERSION 0.3 (2026-09-21, same day): a reviewer showed that 0.2 compared the WRONG book passages with the engine.
+  * The book has TWO combining operations. `x` (Monoid Composition, lines 1727/1729/2782/5572) is ^((a+b) mod 10): the
+    engine's compose MATCHES it on the Noetic index and lacks only its domain rule. The non-commutative one is the Nesting
+    Operator (Definition 26.1), which the engine does not have at all. 0.2's DR-7 called that a disagreement; it is not.
+  * The book's closure claim is about composable morphisms giving SOME morphism. Tested fairly it fails for 9,720 of
+    556,960 chains (1.75%), not 238,572 (42.8%); the larger number is a fact about the engine's index-sum collapse.
+  * DR-5: nothing pinned enforces 'no single step across intermediate domains' -- the mask enforces direction only.
+  * The book itself is now pinned by hash and every quoted phrase is tested against its cited line.
+
 Usage:  python research/helm_cas_expression_lab/build_operation_contracts.py
 Cost:   $0. Pure Python. Writes OPERATION_CONTRACTS.json and contracts_package_schema/*.json beside itself.
 """
@@ -42,7 +51,7 @@ VENDORED = HERE / "pinned_sources"                # byte copies taken 2026-09-21
 ENGINE_REL = "noetic-compass-scaffold/noetic-compass/cas-engine/src"
 NATIVE_REL = "noetic-compass-scaffold/noetic-compass/cas-native"
 TOKENIZER_REL = "cas-synthetic/data/native_nl/cas_hybrid_tokenizer_v2_2026_05_07.json"
-CONTRACT_VERSION = "helm-cas-expression-lab.operation-contracts/0.2"
+CONTRACT_VERSION = "helm-cas-expression-lab.operation-contracts/0.3"
 BOOK = "book/manuscript/FULL_MANUSCRIPT_v2.md"
 
 HASH_POLICY = {
@@ -115,12 +124,64 @@ def measure_no_composition_law(ref):
     return chains, broken
 
 
+def measure_fair_closure(ref):
+    """The book's closure claim read fairly: composable admissible arrows s->t, t->u give SOME admissible arrow s->u."""
+    states = [(d, n) for d in ref.DOMAINS for n in range(10)]
+    reach = {(k, s): [t for t in states if ref.is_admissible(k, s, t)] for k in range(10) for s in states}
+    arrow = {(s, t) for s in states for t in states if any(ref.is_admissible(k, s, t) for k in range(10))}
+    chains_without_any_arrow = sum(1 for a in range(10) for b in range(10) for s in states for t in reach[(a, s)] for u in reach[(b, t)] if (s, u) not in arrow)
+    paths = [(s, t, u) for (s, t) in sorted(arrow) for u in states if (t, u) in arrow]
+    failing = sorted({(s, u) for s, t, u in paths if (s, u) not in arrow})
+    return {"state_pairs_with_some_admissible_operator": len(arrow), "of_state_pairs": 1600,
+            "operator_labelled_chains_with_no_admissible_operator_end_to_end": chains_without_any_arrow,
+            "state_pair_paths": len(paths), "state_pair_paths_with_no_arrow_end_to_end": sum(1 for s, t, u in paths if (s, u) not in arrow),
+            "failing_end_to_end_pairs": len(failing),
+            "every_failure_ends_at_a_cross_domain_state_with_noetic_0": all(u[1] == 0 and s[0] != u[0] for s, u in failing),
+            "example": [list(failing[0][0]), list(failing[0][1])]}
+
+
+def measure_cross_domain_moves(ref):
+    states = [(d, n) for d in ref.DOMAINS for n in range(10)]
+    order = {d: i for i, d in enumerate(ref.DOMAINS)}
+    cross = [(s, t) for k in range(10) for s in states for t in states if s[0] != t[0] and ref.is_admissible(k, s, t)]
+    mask = ref.domain_descent_mask()
+    return {"cross_domain_admissible_triples": len(cross),
+            "one_step_descents": sum(1 for s, t in cross if order[t[0]] - order[s[0]] == 1),
+            "descents_that_skip_a_domain": sum(1 for s, t in cross if order[t[0]] - order[s[0]] > 1),
+            "upward_moves": sum(1 for s, t in cross if order[t[0]] < order[s[0]]),
+            "mask_true_cells": sum(map(sum, mask)), "mask_true_cells_that_skip_a_domain": sum(1 for i in range(40) for j in range(40) if mask[i][j] and i // 10 - j // 10 > 1)}
+
+
+BOOK_QUOTES = {   # line number -> a phrase that must be found on that line of the pinned book
+    1142: "28 Domain-Specific Drives", 1729: "^a × ^b = ^((a+b) mod 10)", 2782: "^(min(Domain-x, Domain-y))",
+    5548: "the admissibility structure enforces this descent", 5572: "Multiplication is only defined where the target domain satisfies the descent constraint",
+    5721: "admissibility is preserved under iterated composition", 6021: "The Nesting Operator",
+    6038: "admissibility is closed under composition", 6040: "commutativity is not", 8454: "7 Drives × 4 Registers = 28 SubFoundations",
+}
+
+
+def pin_book():
+    """The canon book lives in the main checkout (the lab worktree is sparse). Pin it by LF hash and check every quoted phrase."""
+    for root in [REPO] + list(REPO.parents):
+        path = root / BOOK
+        if path.is_file():
+            data = canonical_bytes(path)
+            lines = data.decode("utf-8").split(chr(10))
+            for number, phrase in BOOK_QUOTES.items():
+                if phrase not in lines[number - 1]:
+                    raise SystemExit("CONTRACT_REFUSED:BOOK_QUOTE_NOT_ON_ITS_LINE:%d:%s" % (number, phrase))
+            ENVIRONMENT["book_found_at_build"] = True
+            return {"path": BOOK, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest(), "hash_policy": "lf-normalised",
+                    "quoted_lines": {str(n): p for n, p in sorted(BOOK_QUOTES.items())}}
+    raise SystemExit("CONTRACT_REFUSED:CANON_BOOK_NOT_FOUND:%s -- build from a checkout that holds the book" % BOOK)
+
+
 def build():
     ops = {}
 
     ops["involute"] = {
         "id": "cas.op.involute/1.0", "arity": "unary",
-        "authoritative_definition": "project instructions, 'Structural invariants': involution pairs ^2<->^3, ^5<->^6, ^8<->^9; self-duals ^0, ^1, ^4, ^7 (the engine spells these CO-2 .. CO-9)",
+        "authoritative_definition": "project instructions, 'Structural invariants': involution pairs ^2<->^3, ^5<->^6, ^8<->^9; self-duals ^0, ^1, ^4, ^7 (the engine spells the ten CO-0 .. CO-9)",
         "pinned_implementation": pin(ENGINE_REL + "/ontology/operators.rs"),
         "implementation_locator": "impl CognitiveOperator :: fn involute(self) -> Self",
         "input_types": {"noetic": "int in 0..9"}, "output_type": "int in 0..9",
@@ -136,8 +197,9 @@ def build():
 
     ops["compose"] = {
         "id": "cas.op.compose/1.0", "arity": "binary",
-        "authoritative_definition": ("operators.rs doc comment, quoted: 'Monoid composition. CO-0 is the identity element. composition maps "
-                                     "(CO-a, CO-b) -> CO-((a+b) mod 10)' -- CO-k is the engine's spelling of ^k"),
+        "authoritative_definition": ("operators.rs doc comment, quoted: 'Monoid composition. CO-0 is the identity element. ... composition maps "
+                                     "(CO-a, CO-b) -> CO-((a+b) mod 10)' -- CO-k is the engine's spelling of ^k. The canon book defines the SAME rule as its "
+                                     "Monoid Composition `x`: '^a x ^b = ^((a+b) mod 10)' (lines 1727, 1729, 5572), with a domain rule the engine lacks (DR-7)"),
         "pinned_implementation": pin(ENGINE_REL + "/ontology/operators.rs"),
         "corroborating_implementation": pin(NATIVE_REL + "/model/composition.py"),
         "implementation_locator": "impl CognitiveOperator :: fn compose(self, other) ; cas-native COMPOSE_TABLE[i][j] = (i + j) % 10",
@@ -151,8 +213,8 @@ def build():
                     "Use as a conformance test and as a strong baseline only."),
         "NOT_A_STATEMENT_ABOUT_ADMISSIBILITY": ("compose is arithmetic on operator indices only. It implies NOTHING about whether the collapsed "
                                                 "operator is admissible between the first source and the last target: see "
-                                                "is_admissible.witnesses.no_composition_law. It is also NOT the book's composition of operator "
-                                                "sequences, which the book says is not commutative (DR-7)."),
+                                                "is_admissible.witnesses.no_composition_law. It is the book's `x`, NOT the book's Nesting Operator "
+                                                "(Definition 26.1), which is not commutative and which the engine does not implement (DR-7)."),
         "expected_cases": [{"in": [0, 7], "out": 7}, {"in": [7, 0], "out": 7}, {"in": [3, 4], "out": 7}, {"in": [7, 5], "out": 2},
                            {"in": [9, 9], "out": 8}, {"in": [5, 5], "out": 0}, {"in": [1, 9], "out": 0}, {"in": [6, 8], "out": 4}],
         "invalid_cases": [[10, 0], [0, -1], [2.0, 3], ["1", 1]],
@@ -171,7 +233,7 @@ def build():
         "invalid_input": "INVALID_INPUT for anything else", "mutation_policy": "pure", "numerical_policy": "exact boolean",
         "algebraic_properties": ["NOT symmetric in (source, target) in general", "depends on operator, both domains and the target noetic",
                                  "for ^0 exactly 40 of 1,600 pairs are admissible", "for ^k (k != 0): 400 intra-domain pairs + cross-domain pairs whose target noetic == k",
-                                 "does NOT enforce domain descent: ^9 from ^0^P to ^9^O is admissible in one step (DR-5)"],
+                                 "has NO domain-order term: ^9 from ^0^P to ^9^O is admissible in one step, and cross-domain moves go upward as readily as downward (DR-5, witnesses.cross_domain_moves)"],
         "expected_cases": [
             {"in": [0, ["P", 3], ["P", 3]], "out": True}, {"in": [0, ["P", 3], ["P", 4]], "out": False},
             {"in": [0, ["P", 3], ["C", 3]], "out": False},
@@ -225,7 +287,7 @@ def build():
         "expected_cases": [{"in": [0.25], "embed": [0.25, 0.0625, 0.5], "realize": 0.25},
                            {"in": [0.0], "embed": [0.0, 0.0, 0.0], "realize": 0.0},
                            {"in": [1.0], "embed": [1.0, 1.0, 1.0], "realize": 1.0},
-                           {"in": [0.81], "embed": [0.81, 0.6561, 0.9], "realize": 0.81}],
+                           {"in": [0.5625], "embed": [0.5625, 0.31640625, 0.75], "realize": 0.5625}],   # every value exact in binary; embed outputs are compared with ==
         "retraction_failure_cases": [{"embedded": [0.5, 0.9, 0.1], "reason": "components inconsistent; re-embedding 0.5 gives (0.5, 0.25, 0.7071...)"}],
         "invalid_cases": [[1.5], [-0.1], ["nan"], [None], [True]],
         "NOTE_NOT_THE_SAME_AS": ("cas-native/model/rpm_gate.py PrerequisiteGateLayer, whose docstring says 'the section law epsilon o eta = id "
@@ -276,18 +338,24 @@ def build():
          "status": "RECORDED"},
         {"id": "DR-4", "between": ["the three 28-way namespaces"], "issue": "see namespaces_28",
          "status": "RESOLVED by owner ruling OD-3, 2026-09-21: the canonical 28 is 28 Foundations 1.0"},
-        {"id": "DR-5", "between": [BOOK + " line 5548: one cannot go from ^0^P directly to ^9^O in a single step; 'the admissibility structure enforces this descent'",
+        {"id": "DR-5", "between": [BOOK + " lines 5548-5550: one cannot go from ^0^P directly to ^9^O in a single step without passing through the intermediate domains; 'the admissibility structure enforces this descent'",
                                     "operators.rs is_admissible: ^9 from ^0^P to ^9^O is admissible (the target's Noetic equals the operator)"],
-         "issue": "the engine enforces descent only in domain_descent_mask, not in is_admissible.",
+         "issue": ("is_admissible has no domain-order term: see witnesses.cross_domain_moves (one-step descents, descents that skip a domain, and upward moves). "
+                   "domain_descent_mask is CAS-Native code, not the engine, and enforces DIRECTION only -- O may attend P in one hop. "
+                   "The book's 'no single step across intermediate domains' is enforced by NO pinned source."),
          "status": "FLAG_FOR_HUMAN_REVIEW; owner decision OD-6: the first experiment stays on the engine code's rules; a book-faithful rule is a separate task"},
-        {"id": "DR-6", "between": [BOOK + " line 6038: 'admissibility is closed under composition'",
-                                    "measured on the engine rule: see is_admissible.witnesses.no_composition_law"],
-         "issue": "under the engine's compose and is_admissible the closure fails for a large share of two-step chains.",
+        {"id": "DR-6", "between": [BOOK + " lines 6038 and 5721: composable admissible morphisms compose to a morphism of Noetica ('admissibility is closed under composition')",
+                                    "measured on the engine rule, read FAIRLY as 'some operator is admissible from the first source to the last target': witnesses.fair_closure"],
+         "issue": ("the fair reading fails for a SMALL share of chains, every one ending at a cross-domain state whose Noetic is ^0 (only ^0 could reach it, and ^0 admits the diagonal only). "
+                   "The much larger count in witnesses.no_composition_law is about collapsing with the index-sum operator -- a fact about the engine's two functions, NOT a claim the book makes. "
+                   "Contract 0.2 presented that larger count as the book-vs-engine conflict; that was an overstatement and is withdrawn."),
          "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"},
-        {"id": "DR-7", "between": [BOOK + " line 6040: composition is NOT commutative (explicit counterexample with ^8 and ^3)",
-                                    "operators.rs compose: (a + b) mod 10, commutative on all 100 pairs"],
-         "issue": "the book composes operator SEQUENCES; the engine adds operator indices. They are different operations with the same name.",
-         "status": "FLAG_FOR_HUMAN_REVIEW; OD-6 as above"},
+        {"id": "DR-7", "between": [BOOK + " defines TWO operations: `x` Monoid Composition (lines 1727, 1729, 2782, 5572) and the Nesting Operator of the Fractal Monoid (Definition 26.1, lines 6019-6040)",
+                                    "operators.rs compose: (a + b) mod 10 on operator indices only"],
+         "issue": ("compose AGREES with the book's `x` on the Noetic index. Two real gaps: (1) the book's `x` also fixes the result's domain (min(Domain-x, Domain-y)) and requires same-domain or "
+                   "valid descent -- the engine's compose takes no domains; (2) the Nesting Operator, which the book proves non-commutative (line 6040), has NO engine counterpart. "
+                   "Contract 0.2 set line 6040 against compose as if they were the same operation; that was wrong and is withdrawn."),
+         "status": "agreement RECORDED for `x` on the index; FLAG_FOR_HUMAN_REVIEW for the two gaps; OD-6 as above"},
         {"id": "DR-8", "between": [BOOK + " line 1142: '28 Domain-Specific Drives' (7 Drives x 4 Domains)", BOOK + " line 8454: '7 Drives x 4 Registers = 28 SubFoundations'"],
          "issue": "the canon book uses '28' for two different grids.", "status": "RECORDED; the owner's ruling OD-3 matches the second; see namespaces_28"},
     ]
@@ -299,7 +367,8 @@ def build():
         "schema": CONTRACT_VERSION, "built": "2026-09-21", "hash_policy": HASH_POLICY, "builder": pathlib.Path(__file__).name, "pinned_sources_manifest": "pinned_sources/PINNED_SOURCES.json",
         "canon": {"owner_ruling": "OD-2, 2026-09-21: three books are canonical for CAS; Noetics are written ^0 .. ^9",
                   "books": {"Thinking in Cognitive Architecture": BOOK, "CAS PCBA Engineer": "book/CAS_PCBA_Engineer/*.md", "Reality Engineering": "book/superiority_of_tks/MANUSCRIPT.md (built from SOURCE_ORIGINAL.md)"},
-                  "canonical_28": "28 Foundations 1.0 -- foundations28.py", "owner_decisions_record": "OWNER_DECISIONS_20260921.json"},
+                  "canonical_28": "28 Foundations 1.0 -- foundations28.py", "owner_decisions_record": "OWNER_DECISIONS_20260921.json",
+                  "book_pin": pin_book()},
         "scope": ("Nothing in CAS is excluded from Helm's expression space (owner ruling OD-4): the 40 Elements, the 28 Foundations, Registers, operators, recipes "
                   "and every expression built from them. THIS file freezes only the first five OPERATIONS a learned module may be trained against."),
         "reference_module": {"path": (HERE / "reference_ops.py").relative_to(REPO).as_posix(), **_hash(HERE / "reference_ops.py", "reference_ops.py")},
@@ -325,6 +394,8 @@ def build():
     chains, broken = measure_no_composition_law(_ref)
     ops["is_admissible"]["witnesses"] = {
         "admissible_triples": admissible_total, "asymmetric_triples": len(asym), "of_triples": 16000,
+        "asymmetric_triples_reading": "ordered triples where f(k,s,t) != f(k,t,s); each unordered pair is counted in both directions, so %d pairs" % (len(asym) // 2),
+        "fair_closure": measure_fair_closure(_ref), "cross_domain_moves": measure_cross_domain_moves(_ref),
         "always_inadmissible_accuracy_on_the_full_uniform_grid": (16000 - admissible_total) / 16000,
         "example_asymmetric": {"triple": list(asym[0][:1]) + [list(asym[0][1]), list(asym[0][2])],
                                "f(k,s,t)": _ref.is_admissible(*asym[0]), "f(k,t,s)": _ref.is_admissible(asym[0][0], asym[0][2], asym[0][1])},
@@ -334,7 +405,8 @@ def build():
             "admissible_two_step_chains": chains, "collapsed_operator_not_admissible": broken,
             "example": {"first": [2, ["P", 1], ["P", 3]], "second": [8, ["P", 3], ["P", 2]], "compose": _ref.compose(2, 8),
                         "collapsed": [0, ["P", 1], ["P", 2]], "collapsed_admissible": _ref.is_admissible(0, ("P", 1), ("P", 2))},
-            "reading": "two admissible steps do NOT make the collapsed operator admissible. Not a defect of the code, which promises no such law; a generator or a learner that assumes it is wrong."},
+            "reading": ("two admissible steps do NOT make the INDEX-SUM-collapsed operator admissible. A fact about the engine's compose and is_admissible together; the code promises no such law "
+                        "and the book does not claim it (the book's claim, read fairly, is witnesses.fair_closure). A generator or a learner that assumes it is wrong.")},
     }
     mask = _ref.domain_descent_mask()
     ops["domain_descent_mask"]["witnesses"] = {"asymmetric_cells": sum(1 for i in range(40) for j in range(40) if mask[i][j] != mask[j][i]), "of_cells": 1600}

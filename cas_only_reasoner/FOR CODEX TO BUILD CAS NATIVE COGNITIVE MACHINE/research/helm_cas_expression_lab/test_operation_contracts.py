@@ -67,9 +67,10 @@ def test_contract_digest_is_of_its_own_body_and_is_portable():
     body = {k: v for k, v in CONTRACT.items() if k not in ("contract_digest", "environment")}
     text = json.dumps(body, indent=1, sort_keys=True)
     assert hashlib.sha256(text.encode("utf-8")).hexdigest() == CONTRACT["contract_digest"]
-    assert chr(92) not in text, "a Windows path separator inside the digested body makes the digest machine-dependent"
+    # a literal backslash in a VALUE appears in JSON text as two backslashes; a single one is only a unicode escape such as the book's multiplication sign
+    assert chr(92) * 2 not in text, "a Windows path separator inside the digested body makes the digest machine-dependent"
     assert "origin_on_disk" not in text and "raw_observed" not in text.replace("environment.raw_observed_pins", "")
-    assert CONTRACT["schema"].endswith("/0.2") and CONTRACT["hash_policy"]["policy_id"] == "cncm.hash-policy/1.0"
+    assert CONTRACT["schema"].endswith("/0.3") and CONTRACT["hash_policy"]["policy_id"] == "cncm.hash-policy/1.0"
     raw = CONTRACT["environment"]["raw_observed_pins"]
     assert all(set(v) == {"bytes_raw_observed", "sha256_raw_observed"} for v in raw.values()) and len(raw) >= 6
 
@@ -110,7 +111,8 @@ def test_domain_descent_cases():
 def test_rpm_cases():
     for case in OPS["rpm_embed_realize"]["expected_cases"]:
         e = ref.rpm_embed(*case["in"])
-        assert all(abs(a - b) <= ref.RMS_LAW_TOLERANCE for a, b in zip(e, case["embed"])), case
+        assert list(e) == case["embed"], case                     # exact: every expected value is exact in binary
+        assert not ref.rpm_retraction_law_fails_for(tuple(case["embed"])), case
         assert ref.rpm_realize(e) == case["realize"]
     for bad in OPS["rpm_embed_realize"]["invalid_cases"]:
         value = float("nan") if bad == ["nan"] else bad[0]
@@ -205,6 +207,31 @@ def test_two_admissible_steps_do_not_make_an_admissible_collapsed_step():
     assert (w["admissible_triples"], w["asymmetric_triples"], w["always_inadmissible_accuracy_on_the_full_uniform_grid"]) == (4720, 1944, 0.705)
 
 
+def test_the_book_is_treated_fairly():
+    """Numbers recounted here with the second reading of the source; hand-pinned from two independent measurements."""
+    states = [(d, n) for d in ref.DOMAINS for n in range(10)]
+    arrow = {(s, t) for s in states for t in states if any(_admissible_second_opinion(k, s, t) for k in range(10))}
+    paths = [(s, t, u) for (s, t) in arrow for u in states if (t, u) in arrow]
+    failing = {(s, u) for s, t, u in paths if (s, u) not in arrow}
+    assert (len(arrow), len(paths), sum(1 for s, t, u in paths if (s, u) not in arrow), len(failing)) == (1480, 54760, 1080, 120)
+    assert all(u[1] == 0 and s[0] != u[0] for s, u in failing)
+    fair = OPS["is_admissible"]["witnesses"]["fair_closure"]
+    assert fair["operator_labelled_chains_with_no_admissible_operator_end_to_end"] == 9720 and fair["state_pair_paths_with_no_arrow_end_to_end"] == 1080
+    moves = OPS["is_admissible"]["witnesses"]["cross_domain_moves"]
+    assert (moves["cross_domain_admissible_triples"], moves["one_step_descents"], moves["descents_that_skip_a_domain"], moves["upward_moves"]) == (1080, 270, 270, 540)
+    assert (moves["mask_true_cells"], moves["mask_true_cells_that_skip_a_domain"]) == (1000, 300)
+    book = CONTRACT["canon"]["book_pin"]
+    assert len(book["sha256"]) == 64 and set(book["quoted_lines"]) >= {"1729", "5548", "6021", "6038", "6040"}
+    for parent in HERE.parents:                                   # the book lives in the main checkout; re-check it when it is reachable
+        path = parent / book["path"]
+        if path.is_file():
+            data = _lf(path)
+            assert hashlib.sha256(data).hexdigest() == book["sha256"], "THE_CANON_BOOK_CHANGED_SINCE_THE_CONTRACT_WAS_BUILT"
+            lines = data.decode("utf-8").split(chr(10))
+            assert all(phrase in lines[int(n) - 1] for n, phrase in book["quoted_lines"].items())
+            break
+
+
 def test_the_engine_allows_the_single_step_the_book_forbids():
     assert ref.is_admissible(9, ("P", 0), ("O", 9)) is True           # DR-5: ^9 from ^0^P to ^9^O
     assert ref.may_attend(("P", 0), ("O", 9)) is False                # descent lives in the mask, not in is_admissible
@@ -213,7 +240,8 @@ def test_the_engine_allows_the_single_step_the_book_forbids():
 def test_owner_rulings_and_canon_conflicts_are_recorded():
     status = {d["id"]: d["status"] for d in CONTRACT["discrepancies"]}
     assert status["DR-4"].startswith("RESOLVED by owner ruling OD-3")
-    assert all(status[k].startswith("FLAG_FOR_HUMAN_REVIEW") and "OD-6" in status[k] for k in ("DR-5", "DR-6", "DR-7"))
+    assert all("FLAG_FOR_HUMAN_REVIEW" in status[k] and "OD-6" in status[k] for k in ("DR-5", "DR-6", "DR-7"))
+    assert status["DR-7"].startswith("agreement RECORDED")           # the engine's compose IS the book's x on the index
     n28 = CONTRACT["namespaces_28"]
     assert n28["canonical"] == "C_tks_foundation_x_world_aspect" and (HERE.parents[1] / n28["lab_module"]).is_file()
     assert "Nothing in CAS is excluded" in CONTRACT["scope"]
