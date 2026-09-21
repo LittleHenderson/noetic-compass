@@ -4,6 +4,77 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - THE OWNER-APPROVED AWS JOB RAN: both Helm labels re-derived on a cloud machine by rescorer 0.2, 26 of 26 tests passed there, 0.2629 USD of a 2.00 USD ceiling. SAME DAY: I told the owner something unfair about the canon book, a reviewer caught it, and it is corrected. Rulebook 0.3, practice data v0.4, loader 0.2. Commits `6ad65271`, `8fab9575`, `0f6a7327`, `0d331585`, `64bf94a0`.
+
+**Owner decisions, in the owner's words** (`research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json`; not an owner-signed
+record): "yes run the AWS job AND I AGREE WITH THE NAMING SCHEMA". The progression *experimental → release candidate →
+release* is now the official rule (`BRAIN_LINEAGE.md`: an acceptance note ADDED under the proposal; the proposal text kept as
+written). The owner also confirmed in chat that several messages which had reached me mid-task attached to tool output were the
+owner's; they are recorded as such (OD-4 nothing in CAS excluded; OD-6 the first experiment stays on the engine code's rules,
+book-faithful rules are a separate task; OD-7 budget context 4,199.00 of 5,000.00 USD). Two one-click task suggestions were
+queued for the owner: book-faithful rules the engine lacks; a tested reader for the CAS PCBA board language.
+
+**The AWS job** (`records/typed_pointer_001/aws_rescore_job/`). ONE `c7i.2xlarge`, `us-west-2a`, `i-0c11af58a0a5d143a`, price
+checked at 0.357 USD/hour, launched 16:16:47Z from commit `8fab9575` (bundle 65 files, 7.22 MB, sha256 `958c0ecb…`, built from
+an audit-hook trace of what the course load really opens). No credentials on the machine: one download link, two upload links.
+Four layers of shut-off (the operating system's scheduled power-off; an 85-minute timer; an exit handler on ANY exit;
+terminate-on-shutdown) plus a client kill switch at 95 minutes. Three read-only reviewers attacked the scripts BEFORE launch
+(no blocker; eight fixes applied: broken-pipe could have disabled both in-machine switches; no double-launch guard; the watcher
+died on a network error; stale committed readings would have come back as fresh if a job failed; unsafe archive unpacking on
+Windows). Result: the machine shut itself down; watcher confirmed `terminated` at 16:58:42Z, 41.9 minutes, **cost upper bound
+0.2629 USD**; no volume left behind; the owner's stopped standby was never touched.
+
+| study | verdict | label re-derived | gained / broken (seeds 17, 18, 19) | checks | wall |
+|---|---|---|---|---|---|
+| Helm 1.0 certified | `RESCORE_OK` | `LEARNS_NEW_WORLDS` | 10/0 · 12/0 · 11/0 | 17 of 17 `PASS` | 820 s |
+| Helm 2.0-experimental | `RESCORE_OK` | `NO_TRANSFER_TO_NEW_WORLDS` | 11/1 · 12/0 · 7/1 | 17 of 17 `PASS` | 830 s |
+
+3,384 predictions re-checked per study, 0 disagreements, checker run from a fresh empty bytecode directory, every executed
+module anchored and unchanged; identical to the 0.1 readings. Tests on the machine: **26 passed in 2473.99 s**, the 9 slow ones
+included. **Verified here, not taken on trust:** both cloud-written anchors pass all 9 file-only checks against the LOCAL files
+(grader, all 18 executed sources, both studies, 12 prediction files); each reading cites the anchor and the tool now on disk.
+Anchor hashes pinned in the test (`b1798323f6f7f9c9…`, `f71fa001209eb0bb…`). Custody unchanged: `EVALUATION_NOT_INDEPENDENT`.
+
+**A CORRECTION TO WHAT I TOLD THE OWNER (kept in the record).** Rulebook 0.2 and my report said the canon book and the engine
+disagree in three places. A reviewer showed two of the three were unfair, and I confirmed it by reading the lines and recounting:
+
+| what I said | what is true |
+|---|---|
+| the book says order matters when combining (line 6040); the code adds indices, so order never matters | NOT a disagreement. The book has TWO operations. `×` (lines 1727, 1729, 2782, 5572) is `^((a+b) mod 10)`: the engine's `compose` **matches it** on the Noetic index and lacks only its domain rule. The non-commutative one is the Nesting Operator (Definition 26.1), which the engine does not have. |
+| "two allowed steps make an allowed step" fails in 238,572 of 556,960 cases (43%) | Overstated about 25×. The book's claim is that composable admissible moves give SOME admissible move. Read fairly it fails for **9,720 of 556,960** chains (1.75%; 1,080 of 54,760 state-pair paths; every failure ends at a cross-domain `^0` state). 238,572 is about the engine's index-sum collapse — a fact about two engine functions, not about the book. |
+| single-step `^0^P → ^9^O`: the book forbids, the code allows | STANDS, and sharper: `is_admissible` has no domain-order term (1,080 cross-domain admissible triples = 270 one-step descents + 270 that skip a domain + 540 upward), and `domain_descent_mask` enforces direction only (300 of 1,000 true cells skip a domain). No pinned source enforces the book's rule. |
+
+The owner was told the same day; the decision (OD-6) is unchanged in direction; the queued task was replaced with a corrected
+one. **Rulebook 0.3** (`contract_digest 891d9e9dab670a64…`) states all three fairly with both counts as measured witnesses,
+pins the book itself (`859350d5bcf39160…`) and checks every quoted phrase against its cited line, replaces one inexact expected
+case, and keeps 0.2's changes (`^` notation; canonical 28 settled, DR-4 RESOLVED; `states.rs` pinned; a digest that is the same
+on any machine).
+
+**Practice data: v0.3 was attacked the hour it was committed; v0.4 answers it.** Three attackers, all succeeded somewhere.
+
+| finding on v0.3 | measured | v0.4 |
+|---|---|---|
+| G: "eval is deeper than anything in train" | FALSE: train held 485 rows at eval's depths; 170 of 256 eval trees had a bare shape already in train | split by BARE tree shape and depth: train depths 1–3 (16 shapes), dev = 9 whole depth-3 shapes, eval depths 4–5 (163 shapes); both asserted by the builder |
+| A: "all four rule features richly present in train" | FALSE for the `^0` diagonal: 4 rows of 2,048; a 120-seed sweep gave as few as 0 | every `^0`-diagonal row of the train cells (20; floor of 16 asserted); dev/eval sizes and the exact 50% order-flip share asserted |
+| unseen refusal classes had n = 5 | string class n = 1 | quota of 8 per kind in dev and eval (16 rows of classes train never shows) |
+| dev/eval differ from train by construction, unsaid | a train-prior learner drops 0.9380 → 0.7070 | said in plain words in the manifest, with the admissible rate by case family per split; new baselines: train case-family prior (eval 0.746622) and R7 with a learner-side refusal rule that uses no oracle (1.0) |
+| R/G targets taught the model to write `CO-k` | 17,232 occurrences in one file | lab spelling `^k`, exactly invertible to the compiler's form (tested) |
+| v0.2 and its 10,376 exported records cite a contract HEAD no longer holds | `e97b8aa6…` vs the contract | data is bound to the current contract; a test and the exporter refuse anything else |
+
+**Loader 0.2** (`q3_load.py`). Loader 0.1 was one hour old when an attacker got 60+ forgeries past it: answers put into the
+learner's file through an edited manifest, all 256 family-C answers shifted by one, garbage R/G trees, wrong cells, id swaps, all
+of eval copied into train — and the exporter then printed PASS. Now: who may see what is fixed IN CODE; every target the lab can
+recompute is recomputed (A and C from the reference; R/G structure-checked, and the loader SAYS it did not recompile them);
+record ids re-derived from position; `load_dataset` checks the data set as a whole; the manifest and the export report are pinned
+OUTSIDE the data folder (`Q3_DATA_PINS.json`); no bare exception escapes. The exporter checks by default and never repairs.
+v0.4: 10,421 records, 0 invalid under the package schema. **Tests: 118 lab + 19 rescorer fast (9 slow run on AWS) — all pass.**
+
+**Known limits, stated.** The load also READS nine other `.py` files and three data files that the anchors do not pin one by one
+(the course digest covers them indirectly). Family A can only ever show "matches the code" — a lookup from train already scores
+1.0. R/G targets are not recompiled by the loader. v0.4 and loader 0.2 have not themselves been attacked yet.
+
+**Cost.** 0.2629 USD (upper bound) for the AWS job; everything else $0.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - OWNER RULINGS RECORDED (canonical 28 Foundations, three canonical books, `^` not `CO`, nothing in CAS excluded, AWS for heavy jobs); OUTSIDE SOURCE REVIEW VERIFIED; RESCORER REBUILT AS 0.2 so a swapped-in checker is never run. Commits `57036f7b` + `8b2bb942`. Heavy re-runs NOT done: they wait for the owner's yes to a named AWS job.
 
 **Owner rulings, in the owner's words** (`research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json`; not an
