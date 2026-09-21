@@ -1,0 +1,397 @@
+{
+ "built": "2026-09-21",
+ "compiler": {
+  "hash_policy": "lf-normalised",
+  "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+  "resolved_from": "main_checkout",
+  "sha256": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+ },
+ "counts": {
+  "A_dev": 272,
+  "A_eval": 272,
+  "A_train": 2176,
+  "C_dev": 256,
+  "C_eval": 256,
+  "C_train": 2048,
+  "G_dev": 256,
+  "G_eval": 256,
+  "G_train": 2048,
+  "R_dev": 237,
+  "R_eval": 251,
+  "R_train": 2048
+ },
+ "exposure_report": {
+  "A": "the rule's four features are all richly present in train; holding out cells holds out COMBINATIONS, not rule components; R7 (a 4-feature lookup from train) reaches its registered score on unseen cells with no hand truth table. Refusal observations are asserted disjoint across splits, and eval refusal TYPE CLASSES (float-equal-to-int, string) are unseen in train -- disclosed.",
+  "C": "measured: dev/eval strings verbatim in train = stats.C.verbatim_in_train (must be 0); dev/eval chains that contain a verbatim train chain as a sub-expression = stats.C.contain_a_verbatim_train_chain_as_subexpression -- disclosed, expected high, because every long chain extends a short one. The digit-multiset check used in v0.1 was vacuous and is gone.",
+  "G": "strict topologies: none shared across splits by construction (asserted); all leaf literals recur -- disclosed; eval depths >= 4 are longer than anything in train.",
+  "R": "strict shapes: none shared across splits by construction (asserted). Atomic literals, names and coefficients recur across splits -- disclosed. Eval and dev are small because the SDG pool has few strict shapes; see stats.R."
+ },
+ "family_labels": {
+  "A": "CONFORMANCE AND TRANSFER, NOT DISCOVERY. The answer depends only on four field equalities (op==0, same_domain, target_noetic==op, source==target). A three-line hand rule (R3) and a 4-feature lookup filled from train (R7) are registered; a learned module is measured on fidelity to them and on transfer to unseen cells, and MUST report the order-flip and swapped-twin metrics and refusal accuracy on unseen refusal classes. Accuracy alone is not a claim.",
+  "C": "CONFORMANCE-ONLY. The modular-sum rule scores 1.0 by construction.",
+  "G": "STRUCTURAL GENERALISATION. Grammar-generated nested binary trees, compiled, held out by whole strict TOPOLOGY and by depth (eval prefers depth >= 4). This is the structural test R cannot be.",
+  "R": "FIDELITY. Expression -> canonical AST for SDG expressions. Ceiling = the compiler (measured). The SDG pool is structurally narrow; strict-shape holdout therefore yields a SMALL eval and dev, reported in stats. Reviewer measurement on v0.1: one regular expression reproduced 204/256 eval targets; 52/256 needed a grammar."
+ },
+ "files": {
+  "sealed_A_dev.jsonl": {
+   "records": 272,
+   "sha256": "16dc321f437b27b8a1bc85115ccd7e2949800da68c4ad8c90d5cfeaba07d8183"
+  },
+  "sealed_A_eval.jsonl": {
+   "records": 272,
+   "sha256": "f4c37e46b72d277a27f1d74639862af3fda1d4d83f1cd448bb1579b7a0d8c8cb"
+  },
+  "sealed_A_train.jsonl": {
+   "records": 2176,
+   "sha256": "d0d43c66d5cd575463f7ada08c828c475f0ff1cccfb40b802abd01a39402dde5"
+  },
+  "sealed_C_dev.jsonl": {
+   "records": 256,
+   "sha256": "ddcb4b1e3f5ba0e0dd4bfa1da3867760342c4509cc14489d64ae957fcd3367df"
+  },
+  "sealed_C_eval.jsonl": {
+   "records": 256,
+   "sha256": "5db2189da98f4acab872e8392d2266979733e8cb056a092a8bfaded5fd6774fb"
+  },
+  "sealed_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "a1df769293eaa3a232dd0d1023d37568e8387199b812716f9850746d5400ed3b"
+  },
+  "sealed_G_dev.jsonl": {
+   "records": 256,
+   "sha256": "619830b9e44710ff42de7b292d67de16bc472608c11ea393ba123929d81da677"
+  },
+  "sealed_G_eval.jsonl": {
+   "records": 256,
+   "sha256": "ae92feb4466d6f93639bc2cd612dc72dd7a41289048605c5c8be21ee72f338e7"
+  },
+  "sealed_G_train.jsonl": {
+   "records": 2048,
+   "sha256": "91692c9e60aad74b72ea64697179f0a96a43d1c353ef89526df621478447395c"
+  },
+  "sealed_R_dev.jsonl": {
+   "records": 237,
+   "sha256": "b6031a6fede6683437a276e2eeef01151d88678b953a86be6801058b9fb97ab6"
+  },
+  "sealed_R_eval.jsonl": {
+   "records": 251,
+   "sha256": "4bd45d66ca6b61b9e2b85857ccdaf11a236dbb276be26e734fff2515e8cdc017"
+  },
+  "sealed_R_train.jsonl": {
+   "records": 2048,
+   "sha256": "f7cbcabcfb80ee73f5beaca4a73f2a269e2ce98dcbe7648178ecb58f428e3b3c"
+  },
+  "visible_A_dev.jsonl": {
+   "records": 272,
+   "sha256": "c2adadedb8ab074cfc99e10107ae310508edb9ad146ed06d5aa5d94a3651ecbe"
+  },
+  "visible_A_eval.jsonl": {
+   "records": 272,
+   "sha256": "8f2a021e00f1d1515422248d9b02ba0f6008e94148d18efb272b8c6fb8e37cc4"
+  },
+  "visible_A_train.jsonl": {
+   "records": 2176,
+   "sha256": "aff4ed94d8ab5fcf982ee5cef6af882c09c02be54cca0a4d74fa4cf33059c2a4"
+  },
+  "visible_C_dev.jsonl": {
+   "records": 256,
+   "sha256": "5a71da93755342f3f1c4e3c73c7ac0f3d4217e0c38e517adf8a00de7417b448d"
+  },
+  "visible_C_eval.jsonl": {
+   "records": 256,
+   "sha256": "15d0ebf9d3c8ae48c358697660ff6ef5b175ccfe29502cc637c8e386f458d7c8"
+  },
+  "visible_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "cb983f0d8cd1c6e9e8e3dfbf2ca63a3de52e3ae8045e1200d59f120c47bb34d6"
+  },
+  "visible_G_dev.jsonl": {
+   "records": 256,
+   "sha256": "60a17a614d99b1037d09dfbf8169d15f6876f5c4c0ea81a256ab3692aff17ccb"
+  },
+  "visible_G_eval.jsonl": {
+   "records": 256,
+   "sha256": "a162611a0c21e119a35f6cc812c42dad2af022dcc8da3ffcaf75dfee227b08c1"
+  },
+  "visible_G_train.jsonl": {
+   "records": 2048,
+   "sha256": "0908875379c963ca2e87537c8eeb1ff067bcddb0f17baa18bd0d8e8ea44c1496"
+  },
+  "visible_R_dev.jsonl": {
+   "records": 237,
+   "sha256": "ca6b93f4658ac14ba5626dcdbfa48afccc7f2df0ad284935b7edaea70dae1722"
+  },
+  "visible_R_eval.jsonl": {
+   "records": 251,
+   "sha256": "b4522cce570392ff8dc52d60f58f0945ade17c5acfd9d48fd4074e70133bcfc1"
+  },
+  "visible_R_train.jsonl": {
+   "records": 2048,
+   "sha256": "abe83e164eb37c9846f9f5510b60b30117ea79085e09ddec147a7ce3ab8f2ab5"
+  }
+ },
+ "generator": "q3_behaviour_records.py",
+ "operation_contracts_digest": "e97b8aa60195563b9a073c727452e1ed321ed8a83248d1267e535c59662d6d01",
+ "record_id_policy": "sha256 of the raw UTF-8 string '<seed>:<family>:<split>:<index>', first 24 hex. Position only.",
+ "review_of_v0_1": "three independent attackers, 2026-09-21: leak (refusals recycled), baseline (hand rule 1.0, lookup 1.0, order-flip rows 11.7%), split (R shape was a fingerprint; C dev not deduplicated). All three succeeded; v0.2 answers each by name in the module docstring.",
+ "schema": "helm-cas-expression-lab.q3-behaviour-records/0.2",
+ "sdg_pool": {
+  "hash_policy": "lf-normalised",
+  "path": "cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl",
+  "sha256": "92a6c23c8eebc2604c86b07e6a6415b1c775ea2ba1a7b43288232f5c77549a7b"
+ },
+ "sdg_usage": "expression strings only; SDG prompt/response text is never read (the label sits inside it)",
+ "seal_policy": "a file boundary against a LEARNER, not a secret: the sealed side regenerates from this public code and seed (shown by the v0.1 reviewers).",
+ "seed": 20260921,
+ "sizes_are_ceilings": {
+  "dev": 256,
+  "eval": 256,
+  "train": 2048
+ },
+ "split_policy": {
+  "A": "whole (operator, source_domain, target_domain) cells: 24 eval, 16 dev, 120 train; eval/dev valid rows are >= 50% order-flip; refusals drawn from split-disjoint value pools and type classes",
+  "C": "one seen-set across all splits, train first; depths train 1-3, dev 2-3, eval 4-6",
+  "G": "whole strict topologies; eval takes depth>=4 topologies first, then rarest; dev the rarest of the rest",
+  "R": "whole STRICT shapes (every scalar leaf abstracted); eval then dev take the rarest first"
+ },
+ "stats": {
+  "A": {
+   "cells": 160,
+   "cells_held_dev": 16,
+   "cells_held_eval": 24,
+   "held_cells_dev": [
+    "1:P>C",
+    "1:P>O",
+    "2:O>C",
+    "2:O>E",
+    "2:O>P",
+    "2:P>O",
+    "3:E>O",
+    "3:P>E",
+    "4:P>O",
+    "5:E>C",
+    "6:E>P",
+    "6:O>C",
+    "6:P>C",
+    "7:C>C",
+    "7:E>E",
+    "9:C>O"
+   ],
+   "held_cells_eval": [
+    "0:P>P",
+    "1:E>E",
+    "1:O>P",
+    "2:C>O",
+    "2:E>E",
+    "2:E>O",
+    "2:E>P",
+    "3:P>C",
+    "4:C>E",
+    "4:E>C",
+    "4:P>P",
+    "5:E>O",
+    "5:O>C",
+    "5:O>P",
+    "6:O>E",
+    "7:E>O",
+    "7:P>C",
+    "8:E>O",
+    "8:P>O",
+    "9:C>P",
+    "9:E>E",
+    "9:O>C",
+    "9:P>E",
+    "9:P>P"
+   ],
+   "order_flip_valid_rows": {
+    "dev": 128,
+    "eval": 128,
+    "train": 235
+   },
+   "refusal_observations_shared_across_splits": 0,
+   "refusal_rows": {
+    "dev": 16,
+    "eval": 16,
+    "train": 128
+   },
+   "valid_rows": {
+    "dev": 256,
+    "eval": 256,
+    "train": 2048
+   }
+  },
+  "C": {
+   "contain_a_verbatim_train_chain_as_subexpression": {
+    "dev": 256,
+    "eval": 256
+   },
+   "depths": {
+    "dev": [
+     2,
+     3
+    ],
+    "eval": [
+     4,
+     5,
+     6
+    ],
+    "train": [
+     1,
+     2,
+     3
+    ]
+   },
+   "verbatim_in_train": {
+    "dev": 0,
+    "eval": 0
+   }
+  },
+  "G": {
+   "depths_per_split": {
+    "dev": {
+     "2": 18,
+     "3": 106,
+     "4": 72,
+     "5": 60
+    },
+    "eval": {
+     "4": 154,
+     "5": 102
+    },
+    "train": {
+     "1": 552,
+     "2": 544,
+     "3": 467,
+     "4": 282,
+     "5": 203
+    }
+   },
+   "generated_valid": 3900,
+   "rejected_by_compiler": {
+    "1": 193,
+    "2": 981,
+    "3": 3035,
+    "4": 7752,
+    "5": 19688
+   },
+   "strict_shape_groups": 2238,
+   "strict_shapes_per_split": {
+    "dev": 256,
+    "eval": 256,
+    "train": 1111
+   }
+  },
+  "R": {
+   "pool_expressions": 8520,
+   "root_node_mix": {
+    "dev": {
+     "BinaryExpr": 56,
+     "MetaAssertion": 47,
+     "RecipeLiteral": 58,
+     "TypedMetaSetLiteral": 76
+    },
+    "eval": {
+     "BinaryExpr": 92,
+     "CallExpr": 71,
+     "EmergentResult": 10,
+     "MetaAssertion": 22,
+     "TypedMetaSetLiteral": 56
+    },
+    "train": {
+     "BinaryExpr": 797,
+     "CallExpr": 45,
+     "DriveLiteral": 9,
+     "EmergentResult": 581,
+     "RecipeLiteral": 260,
+     "StateLiteral": 297,
+     "TupleLiteral": 40,
+     "TypedMetaSetLiteral": 19
+    }
+   },
+   "strict_shape_groups": 83,
+   "strict_shapes_per_split": {
+    "dev": 13,
+    "eval": 42,
+    "train": 28
+   },
+   "valid_unique": 8249
+  }
+ },
+ "supersedes": "data/q3_v0_1 (kept on disk; reviewed and found leaking on 2026-09-21)",
+ "visibility": {
+  "A": {
+   "mode": "neural_operation_execution",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "operation_id",
+    "observation"
+   ],
+   "withheld": [
+    "outcome",
+    "target",
+    "cell",
+    "order_flip",
+    "swapped_target",
+    "refusal_kind",
+    "oracle",
+    "trace"
+   ]
+  },
+  "C": {
+   "mode": "neural_operation_execution",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "operation_id",
+    "observation"
+   ],
+   "withheld": [
+    "outcome",
+    "target",
+    "depth",
+    "oracle",
+    "trace"
+   ]
+  },
+  "G": {
+   "mode": "reconstruction",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "observation"
+   ],
+   "withheld": [
+    "target_canonical_ast",
+    "target_ast",
+    "ast_size",
+    "shape_key",
+    "depth",
+    "validity",
+    "oracle"
+   ]
+  },
+  "R": {
+   "mode": "reconstruction",
+   "visible": [
+    "record_id",
+    "family",
+    "mode",
+    "observation"
+   ],
+   "withheld": [
+    "target_canonical_ast",
+    "target_ast",
+    "ast_size",
+    "shape_key",
+    "depth",
+    "validity",
+    "oracle"
+   ]
+  },
+  "teacher_forcing_note": "a target may be used to compute training LOSS; it is never a model INPUT at evaluated prediction; teacher-forced passes are not free-running reconstruction and are reported apart"
+ }
+}
