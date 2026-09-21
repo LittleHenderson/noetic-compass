@@ -4,6 +4,58 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - Q2 CLOSED: five CAS operations frozen in `OPERATION_CONTRACTS.json`, pinned to engine code by measured hash, 15 tests pass. Branch `research/helm-3.0-cas-lab`, commit `d880cf47`.
+
+**Where.** `research/helm_cas_expression_lab/` on the new lab branch, in its own worktree
+(`_worktrees/helm3-lab`), per the implementation directive's §4 isolation rule. Q0 and the first
+return are on `research/helm-2.0-iterating-rounds` (`c58d4f42`, pushed). `$0`. No model, no GPU,
+no claim.
+
+**What is admitted, and why each one.** `involute` (fixed self-inverse table; conformance check for
+any learned unary module). `compose` (`(a+b) mod 10`; **commutative and associative — in fact a
+group** — so per directive §9 it is a conformance test and a strong baseline, never evidence of
+order-sensitive reasoning). **`is_admissible`** (asymmetric, context-sensitive: CO-0 on the diagonal
+only; CO-k intra-domain always; cross-domain iff the target noetic is k — **this is the
+order-sensitive target**). `domain_descent_mask` (fixed 40×40, domain-major, 1,000 true cells).
+`rpm_embed_realize` (`(s, s², √s)` → `s`; section law at the engine's own `2·f64::EPSILON`; the
+retraction failure `η∘ε ≠ e` is a required negative case, Correction 2). Not admitted: the roles
+"Decomposition / Comparison / Candidate routing" (no executable semantics), any CCDL board
+operation (no parser on disk; **17 of 39** statement leaders have no semantics — 43.6%, not the
+"two-thirds" my earlier addendum wrote), `OmegaRegistry` (a registry is not an operation),
+`RegisterFiLM` (parameterised; a mechanism, not an oracle).
+
+**How it is checked.** `reference_ops.py` is the evaluator's oracle — pure Python, mirrors the Rust
+line for line, strict integer domains (Python would otherwise let `2.0` and `True` through
+`range(10)`), `INVALID_INPUT` outside its domain. Expected cases are **hand-pinned from
+`operators.rs`, not generated from the reference**, so a reference bug cannot certify itself.
+`test_operation_contracts.py`: pins hold; hand cases; the algebra exhaustively — all 10
+involutions, all 100 compositions, all 1,000 associativity triples, **all 16,000 admissibility
+triples against a second independent reading of the source** (counts 40 for CO-0, 520 for each
+CO-k), all 1,600 mask cells, the section law on a 1,001-point grid, the retraction failure; the
+40-state coordinate map round-trips against the frozen tokenizer; no `learner*` file imports the
+reference (directive D04). **15 passed.**
+
+**Two traps closed on the way.** (1) The engine and CAS-Native trees are tracked but
+**sparse-excluded** in both worktrees (`core.sparseCheckout = true`; 1,307 + 392 skip-worktree
+files), so a contract pinning the live path pointed at files that are not on disk. The checkable
+artifact is now a vendored byte copy under `pinned_sources/`, with `PINNED_SOURCES.json` recording
+origin path and hash measured against the main checkout; the origin is drift-checked whenever it is
+present. (2) **Hashes are over LF-normalised bytes.** On-disk bytes are CRLF here and LF in git; a
+raw-byte pin holds on exactly one machine. The CRLF trap from memory, closed at the hash — and the
+pins were re-verified against the committed bytes after the commit, 15/15.
+
+**Coordinates and namespaces frozen.** Domain-major inside (`states.rs linear_index`,
+`P0=0 … O9=39`); the tokenizer's Noetic-major ids `213 + 4·noetic + domain` verified for all 40;
+the explicit map lives in the contract. The three 28-way namespaces (Drive×Domain, Drive×Register,
+TKS Foundation×World-aspect) are quarantined; no 28-way head in this pilot. Four discrepancy records:
+DR-1 the descent mask assumes domain-major slots while the tokenizer is Noetic-major — **open for
+CAS-Native**, whose 40-output head order is unverified; DR-2 engine `embed/realize` (exact) vs
+`PrerequisiteGateLayer` (trainable, "not hard-constrained"); DR-3 the "monoid" comment vs group
+code; DR-4 the three 28s.
+
+**Next.** Q3: behaviour-paired records via an isolated adapter over `cas-synthetic`, with visibility
+manifests and splits by canonical structure — before any module is trained.
+
 ## 2026-09-21 UTC (POINTER) - HELM 2.0-EXPERIMENTAL RAN: the grader printed `NO_TRANSFER_TO_NEW_WORLDS`. Correspondence went 0 -> 20/20 on never-shown worlds; retention fell on two seeds. Not an upgrade on the certified gate.
 
 **Recorded by the audit/F1-F4 session on 2026-09-21.** The three runs were launched and collected
