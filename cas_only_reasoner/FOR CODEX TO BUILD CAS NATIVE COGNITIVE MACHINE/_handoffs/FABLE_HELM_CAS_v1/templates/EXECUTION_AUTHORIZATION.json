@@ -1,0 +1,44 @@
+{
+  "schema": "fable.execution-authorization/1.0",
+  "status": "DISCOVERY_REQUIRED",
+  "owner_request": "Implement and execute the development plan through Fable; no new monetary amount specified.",
+  "instruction_evidence": [],
+  "checkout": {
+    "path": null,
+    "branch": null,
+    "head": null,
+    "authorized_remote_branch": null
+  },
+  "reversible_code_and_deterministic_tests": {
+    "status": "WITHIN_OWNER_REQUEST_SUBJECT_TO_CURRENT_REPO_RULES"
+  },
+  "local_neural_training": {
+    "status": "VERIFY_CURRENT_OWNER_POLICY",
+    "device": null,
+    "max_updates_total": null,
+    "max_wall_seconds": null,
+    "max_concurrent_jobs": null
+  },
+  "cloud_or_paid_api": {
+    "status": "NOT_NEWLY_AUTHORIZED",
+    "new_spend_usd": 0,
+    "authorization_reference": null
+  },
+  "protected_final_evaluation": {
+    "status": "VERIFY_CUSTODIAN_AND_RESOURCE_PERMISSION"
+  },
+  "production_activation": {
+    "status": "NOT_AUTHORIZED_BY_THIS_HANDOFF"
+  },
+  "destructive_cleanup_force_push": {
+    "status": "NOT_AUTHORIZED"
+  },
+  "policy_conflicts": [],
+  "unblocked_work_to_continue": [
+    "source audit",
+    "schemas and adapters",
+    "deterministic reference tests",
+    "data generation within approved limits",
+    "run preparation"
+  ]
+}

@@ -38,6 +38,13 @@ and report on.
 | **2.0** | the shape changed, so the number count moved. |
 
 **Proposed extension, 2026-09-21 — owner to ratify before any label below is used as official.**
+*The owner-side response of 2026-09-21 keeps this scheme and attaches conditions (rc requires the
+unchanged three-seed label AND closed evaluator-integrity/custody gates AND criteria frozen before
+the confirmatory run; averaging or best-seed selection may not hide a mandatory-family failure;
+disclosure of a regression waives nothing). Recorded verbatim, with the corrected Q0 status
+`Q0_DISCOVERY_COMPLETE / Q0_EVALUATOR_BOUNDARY_OPEN`, in
+`records/typed_pointer_001/LINEAGE_RATIFICATION_CLARIFICATIONS_20260921.md`. Still marked proposed
+until the owner's own word.*
 The owner asked for a progression *experimental → release candidate → release* and for it to be
 reconciled with the rules above. Reconciled, it reads:
 

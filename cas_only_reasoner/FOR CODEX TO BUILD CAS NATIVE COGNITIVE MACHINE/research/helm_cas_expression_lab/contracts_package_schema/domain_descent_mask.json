@@ -1,0 +1,30 @@
+{
+ "allowed_for_neural_target": false,
+ "comparison": {
+  "mode": "EXACT_TYPED",
+  "rule": "exact boolean"
+ },
+ "error_cases": [
+  {
+   "condition": "input outside valid_domain (wrong type, range, key set)",
+   "typed_result": "INVALID_INPUT"
+  }
+ ],
+ "input_schema": {},
+ "operation_id": "cas.op.domain_descent_mask/1.0",
+ "output_schema": {
+  "mask": "40x40 bool, domain-major"
+ },
+ "parameter_policy": "NONE",
+ "reference": {
+  "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
+  "semantic_source": "CLAUDE.md: domain descent P -> C -> E -> O; cas-native build_domain_descent_mask: rows of domain d attend to columns of domains <= d",
+  "source_path": "noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py",
+  "source_sha256": "b596786046079ea66a2b5aa3e98870527e459906e170cc2c418133caebff80ad",
+  "symbol": "def build_domain_descent_mask(num_states=40): mask[0:10,0:10]; mask[10:20,0:20]; mask[20:30,0:30]; mask[30:40,0:40]"
+ },
+ "schema_version": "fable.operation-contract/1.0",
+ "semantics_version": "cas-v7.7 / engine as pinned",
+ "stateful": false,
+ "valid_domain": "n/a"
+}

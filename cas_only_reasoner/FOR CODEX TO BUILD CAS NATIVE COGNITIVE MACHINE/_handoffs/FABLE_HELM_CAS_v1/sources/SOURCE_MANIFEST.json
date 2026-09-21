@@ -1,0 +1,46 @@
+{
+  "schema": "fable.source-manifest/1.0",
+  "prepared": "2026-09-21",
+  "sources": [
+    {
+      "id": "S1",
+      "original_attachment_name": "HELM_CAS_EXPRESSION_SPACE_REVIEW(1).md",
+      "package_path": "sources/HELM_CAS_EXPRESSION_SPACE_REVIEW.md",
+      "bytes": 23186,
+      "sha256": "6fa527f61857249f55dc93aae7edf0e364445f8c867945c6937bd5bc42c83469",
+      "note": "Claude latest review including addendum; findings reported, local checkout not inspected here."
+    },
+    {
+      "id": "S2",
+      "original_attachment_name": "HELM_2_0_HANDOFF.md",
+      "package_path": "sources/HELM_2_0_HANDOFF.md",
+      "bytes": 11378,
+      "sha256": "a70312e78ea46cc0eaa31c607be9e24616eb4e6b0cfd568af3ac999a9ba4756e",
+      "note": "Claude handoff; verify current local successors and unresolved worker paths."
+    },
+    {
+      "id": "S3",
+      "original_attachment_name": "HELM_ARCHITECTURE_FINDING_AND_PLAN.md",
+      "package_path": "sources/HELM_ARCHITECTURE_FINDING_AND_PLAN.md",
+      "bytes": 19378,
+      "sha256": "176b66b6e146a414a46e379559d62d5ae514b3310f9f988bb3d7d8bb869fb8e7",
+      "note": "Claude diagnosis and proposed repairs; several strong causal claims are not adopted."
+    },
+    {
+      "id": "S4",
+      "original_attachment_name": "RESULT~1(6).JSO",
+      "package_path": "sources/TYPED_POINTER_WORKER_RESULT.json",
+      "bytes": 15013,
+      "sha256": "e404589def0e57516fcf793bc5120aa79c7d6b0f01b27787831bb2ec94c75b88",
+      "note": "Supplied result bytes preserved, extension renamed; not its listed underlying evidence artifacts."
+    },
+    {
+      "id": "S5",
+      "package_path": "sources/CLAUDE_OWNER_UPDATE_EXCERPT.md",
+      "bytes": 1297,
+      "sha256": "5d8e658d227cae3cf34c73a23b1fcfdc56c3054841587e2ca80f258c5f9703bc",
+      "note": "Labeled selected excerpt and summary of user-pasted text; not a Git verification."
+    }
+  ],
+  "verification_scope": "Byte identities of supplied local source copies only. No referenced repository code or checkpoint was audited."
+}

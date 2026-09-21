@@ -1,0 +1,67 @@
+{
+  "schema": "fable.execution-authorization/1.0",
+  "status": "PREPARED_PENDING_OWNER_WORD",
+  "working_copy_of": "_handoffs/FABLE_HELM_CAS_v1/templates/EXECUTION_AUTHORIZATION.json (delivered template preserved unchanged; sha256 of the delivery zip c7f958edec11911c79ae5c467115fbbc8201a436452fd4c548d9f20f60eb9067)",
+  "filled_on": "2026-09-21",
+  "owner_request": "Implement and execute the development plan through Fable; no new monetary amount specified.",
+  "instruction_evidence": [
+    {"what": "the implementation directive", "where": "C:/Users/wakil/Downloads/FABLE_HELM_CAS_Implementation_Directive_v1.md (also _handoffs/FABLE_HELM_CAS_v1/DIRECTIVE.md)", "says": "section 3: execute neural smoke tests only on resources actually authorized; '$0' is not a permission; if local neural permission is unresolved, prepare the runnable experiment and ask one narrow resource question while continuing all unblocked work"},
+    {"what": "the owner-side response draft to the first return", "where": "C:/Users/wakil/Downloads/FABLE_Q0_Followup_Draft_20260921.md", "says": "section 1 RECOMMENDS authorising the RTX 4070 smoke with the caps below; its own header says it is a draft for owner adoption and NOT an independent grant of resource permission"},
+    {"what": "standing owner rule, GPU-first / cloud-first (2026-08-30)", "where": "CLAUDE.md and memory", "says": "no neural workload on local CPU (fail closed GPU_REQUIRED); local RTX 4070 = smoke/dev only; AWS GPU for every claim-bearing run"},
+    {"what": "standing owner rule, research governance (2026-08-30)", "where": "CLAUDE.md and memory", "says": "owner approval must be executable (a signed record), not prose-interpretable; Claude is not the research governor"},
+    {"what": "the owner's message of 2026-09-21", "where": "chat", "says": "treat the CAS-integrated architecture as prospective Helm 3.0; keep lab work and Helm 2.0 improvements separately versioned; preserve Helm 2.0 and its best seed; experimental -> rc -> release"}
+  ],
+  "checkout": {
+    "path": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm3-lab",
+    "branch": "research/helm-3.0-cas-lab",
+    "head": "30b555f1 at the time this file was written; the commit that adds this file supersedes it -- read `git rev-parse HEAD`",
+    "authorized_remote_branch": "origin/research/helm-3.0-cas-lab (push after commit is a standing instruction; no force-push, no deletion, no merge to production)",
+    "isolation": "own worktree, one source-owning session; the Helm 2.0 engineer session owns _worktrees/vision-next and research/helm-2.0-iterating-rounds"
+  },
+  "reversible_code_and_deterministic_tests": {
+    "status": "WITHIN_OWNER_REQUEST_SUBJECT_TO_CURRENT_REPO_RULES",
+    "done_under_it": ["Q2 OPERATION_CONTRACTS.json (15 tests)", "Q3 v0.1 + adversarial review + v0.2 (36 tests)", "package extraction and verify_package.py PASS", "package-schema exports of all five contracts VALID"]
+  },
+  "local_neural_training": {
+    "status": "PENDING_OWNER_WORD",
+    "what_is_being_asked": "may the Expression Lab ENGINEERING SMOKE run on the local RTX 4070 as dev/smoke under the standing rule? Not claim-bearing. Not a protected study.",
+    "recommended_caps_from_the_owner_side_draft_section_1": {
+      "device": "cuda:0 -- NVIDIA GeForce RTX 4070, 8 GB, venv ~/venvs/cas-gpu; dev/smoke only",
+      "seeds": 1,
+      "width": 64,
+      "max_records_in_pinned_smoke_dataset": 2048,
+      "max_updates_total": 128,
+      "max_updates_total_includes": "resumed and repeated optimizer work; validation and replay work recorded separately",
+      "max_concurrent_jobs": 1,
+      "max_wall_seconds": 1800,
+      "device_ownership": "coordinate with the other session before launch; one GPU training job at a time",
+      "not_included": ["AWS", "paid API calls", "extra seeds", "width sweeps", "automatic budget extension", "production activation", "CPU neural training"]
+    },
+    "device": "cuda:0 (RTX 4070)",
+    "max_updates_total": 128,
+    "max_wall_seconds": 1800,
+    "max_concurrent_jobs": 1,
+    "what_happens_if_no": "the prepared run is preserved as ENGINEERING_READY / EXECUTION_BLOCKED_RESOURCE; contracts, data, tests and encoder code continue",
+    "what_happens_if_cuda_unavailable_or_device_busy": "preserve the prepared run; do not silently change resources; record the blocker",
+    "usage_recording": "actual elapsed time and device usage are recorded; local computation is never called resource-free"
+  },
+  "cloud_or_paid_api": {
+    "status": "NOT_NEWLY_AUTHORIZED",
+    "new_spend_usd": 0,
+    "authorization_reference": null
+  },
+  "protected_final_evaluation": {
+    "status": "EVALUATION_NOT_INDEPENDENT",
+    "why": "no separate evaluation custodian exists in this environment; this session designed the model, the data and the evaluator. A separate agent with the same access to disclosed final targets does not restore custody. Protected claims wait for genuinely separate custody and appropriate resources."
+  },
+  "production_activation": {"status": "NOT_AUTHORIZED_BY_THIS_HANDOFF"},
+  "destructive_cleanup_force_push": {"status": "NOT_AUTHORIZED"},
+  "policy_conflicts": [],
+  "unblocked_work_to_continue": [
+    "T01 evaluator boundary wrapper and tamper tests (EVALUATION_NOT_INDEPENDENT)",
+    "behaviour-pair schema export of Q3 v0.2 against schemas/behavior_pair.schema.json",
+    "Q4 R0 order-blind control (deterministic, no training)",
+    "Q4 R1/R2 encoder and module CODE (built, not trained, until the word above)",
+    "changelog and memory records"
+  ]
+}

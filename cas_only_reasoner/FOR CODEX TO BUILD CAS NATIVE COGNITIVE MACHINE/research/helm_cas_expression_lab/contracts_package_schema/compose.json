@@ -1,0 +1,33 @@
+{
+ "allowed_for_neural_target": true,
+ "comparison": {
+  "mode": "EXACT_TYPED",
+  "rule": "exact integer"
+ },
+ "error_cases": [
+  {
+   "condition": "input outside valid_domain (wrong type, range, key set)",
+   "typed_result": "INVALID_INPUT"
+  }
+ ],
+ "input_schema": {
+  "a": "int 0..9",
+  "b": "int 0..9"
+ },
+ "operation_id": "cas.op.compose/1.0",
+ "output_schema": {
+  "noetic": "int 0..9"
+ },
+ "parameter_policy": "NONE",
+ "reference": {
+  "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
+  "semantic_source": "operators.rs doc comment: 'Monoid composition. CO-0 is the identity element. composition maps (CO-a, CO-b) -> CO-((a+b) mod 10)'",
+  "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+  "source_sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+  "symbol": "impl CognitiveOperator :: fn compose(self, other) ; cas-native COMPOSE_TABLE[i][j] = (i + j) % 10"
+ },
+ "schema_version": "fable.operation-contract/1.0",
+ "semantics_version": "cas-v7.7 / engine as pinned",
+ "stateful": false,
+ "valid_domain": "all 100 ordered pairs"
+}

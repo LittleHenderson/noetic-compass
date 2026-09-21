@@ -1,0 +1,32 @@
+{
+ "allowed_for_neural_target": true,
+ "comparison": {
+  "mode": "EXACT_TYPED",
+  "rule": "exact integer"
+ },
+ "error_cases": [
+  {
+   "condition": "input outside valid_domain (wrong type, range, key set)",
+   "typed_result": "INVALID_INPUT"
+  }
+ ],
+ "input_schema": {
+  "noetic": "int 0..9"
+ },
+ "operation_id": "cas.op.involute/1.0",
+ "output_schema": {
+  "noetic": "int 0..9"
+ },
+ "parameter_policy": "NONE",
+ "reference": {
+  "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
+  "semantic_source": "CLAUDE.md: involution pairs CO-2<->CO-3, CO-5<->CO-6, CO-8<->CO-9; self-duals CO-0, CO-1, CO-4, CO-7",
+  "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs",
+  "source_sha256": "86479f13f98dda2bb47b2cae80da9276903a81b1f60e2ead47cfd44f496645bc",
+  "symbol": "impl CognitiveOperator :: fn involute(self) -> Self"
+ },
+ "schema_version": "fable.operation-contract/1.0",
+ "semantics_version": "cas-v7.7 / engine as pinned",
+ "stateful": false,
+ "valid_domain": "every noetic 0..9"
+}

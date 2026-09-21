@@ -1,0 +1,618 @@
+{
+  "schema": "fable.work-plan/1.0",
+  "all_items_initial_status": "PLANNED",
+  "core_release_task": "T27",
+  "extension_tasks": [
+    "T23",
+    "T24",
+    "T25"
+  ],
+  "confirmatory_task": "T19",
+  "gating_note": "Confirmatory or PCBA tasks blocked by actual permissions/semantics do not block a labeled core engineering release. No benefit claim without its required confirmatory gates. T20 is an experimental branch, not production promotion.",
+  "tasks": [
+    {
+      "id": "T00",
+      "phase": "Q0",
+      "owner": "F0",
+      "reviewer": "F5",
+      "title": "Discover checkout, permissions, worktrees and reported commits",
+      "depends_on": [],
+      "outputs": [
+        "SOURCE_AUDIT.md",
+        "local source manifest",
+        "execution authorization"
+      ],
+      "acceptance_vectors": [
+        "V01",
+        "V02",
+        "V49",
+        "V50"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T01",
+      "phase": "Q0",
+      "owner": "F5",
+      "reviewer": "F6",
+      "title": "Anchor evaluator and independently rescore raw predictions",
+      "depends_on": [
+        "T00"
+      ],
+      "outputs": [
+        "trusted evaluation identity",
+        "tamper-rejection suite"
+      ],
+      "acceptance_vectors": [
+        "V03",
+        "V04",
+        "V05",
+        "V06",
+        "V07"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T02",
+      "phase": "Q0",
+      "owner": "F0",
+      "reviewer": "F5",
+      "title": "Reconcile lineage and historical score attribution",
+      "depends_on": [
+        "T00",
+        "T01"
+      ],
+      "outputs": [
+        "versioned lineage/audit supplement",
+        "result attribution ledger"
+      ],
+      "acceptance_vectors": [
+        "V02",
+        "V06",
+        "V51"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T03",
+      "phase": "Q1",
+      "owner": "F1",
+      "reviewer": "F6",
+      "title": "Verify existing recurrence and pair-aware changes",
+      "depends_on": [
+        "T00"
+      ],
+      "outputs": [
+        "actual rounds tests",
+        "reported-versus-reproduced findings"
+      ],
+      "acceptance_vectors": [
+        "V08",
+        "V09"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T04",
+      "phase": "Q1",
+      "owner": "F1",
+      "reviewer": "F6",
+      "title": "Wire real schedule, gradient logs and development loss",
+      "depends_on": [
+        "T03"
+      ],
+      "outputs": [
+        "worker update path",
+        "real-step logs"
+      ],
+      "acceptance_vectors": [
+        "V10",
+        "V11"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T05",
+      "phase": "Q1",
+      "owner": "F1",
+      "reviewer": "F5",
+      "title": "Implement task-correct discrete correspondence contract",
+      "depends_on": [
+        "T03"
+      ],
+      "outputs": [
+        "matching contract",
+        "joint decoder/validator"
+      ],
+      "acceptance_vectors": [
+        "V12"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T06",
+      "phase": "Q1",
+      "owner": "F5",
+      "reviewer": "F6",
+      "title": "Wire difficulty ladder and same-item baselines",
+      "depends_on": [
+        "T01",
+        "T03"
+      ],
+      "outputs": [
+        "ladder runner",
+        "per-stratum baseline records"
+      ],
+      "acceptance_vectors": [
+        "V13",
+        "V38"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T07",
+      "phase": "Q1",
+      "owner": "F1",
+      "reviewer": "F6",
+      "title": "Complete checkpoint and durable-run recovery",
+      "depends_on": [
+        "T04",
+        "T05"
+      ],
+      "outputs": [
+        "strict checkpoint format",
+        "owned job runner"
+      ],
+      "acceptance_vectors": [
+        "V14",
+        "V42",
+        "V43",
+        "V44"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T08",
+      "phase": "Q1",
+      "owner": "F0",
+      "reviewer": "F5",
+      "title": "Execute identified baseline under approved resources",
+      "depends_on": [
+        "T02",
+        "T04",
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "outputs": [
+        "Helm baseline result",
+        "resource/identity receipts"
+      ],
+      "acceptance_vectors": [
+        "V10",
+        "V13",
+        "V49",
+        "V51"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T09",
+      "phase": "Q2",
+      "owner": "F2",
+      "reviewer": "F5",
+      "title": "Inventory and freeze executable operation subset",
+      "depends_on": [
+        "T00"
+      ],
+      "outputs": [
+        "operation contracts",
+        "semantics discrepancy ledger"
+      ],
+      "acceptance_vectors": [
+        "V17",
+        "V18"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T10",
+      "phase": "Q2",
+      "owner": "F2",
+      "reviewer": "F6",
+      "title": "Pin 40-coordinate adapters and namespace separation",
+      "depends_on": [
+        "T09"
+      ],
+      "outputs": [
+        "index conversion tests",
+        "ontology version map"
+      ],
+      "acceptance_vectors": [
+        "V15",
+        "V16"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T11",
+      "phase": "Q2",
+      "owner": "F5",
+      "reviewer": "F6",
+      "title": "Build independent reference and simple algebra baselines",
+      "depends_on": [
+        "T09",
+        "T10",
+        "T01"
+      ],
+      "outputs": [
+        "oracle adapter",
+        "modulo and exact baselines"
+      ],
+      "acceptance_vectors": [
+        "V17",
+        "V19"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T12",
+      "phase": "Q3",
+      "owner": "F3",
+      "reviewer": "F2",
+      "title": "Implement behavior-paired SDG subset",
+      "depends_on": [
+        "T10",
+        "T11"
+      ],
+      "outputs": [
+        "generator",
+        "behavior schema examples"
+      ],
+      "acceptance_vectors": [
+        "V20",
+        "V24"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T13",
+      "phase": "Q3",
+      "owner": "F3",
+      "reviewer": "F5",
+      "title": "Seal structure-first data splits and visible packet boundary",
+      "depends_on": [
+        "T12"
+      ],
+      "outputs": [
+        "split manifests",
+        "visible packet schema",
+        "leakage report"
+      ],
+      "acceptance_vectors": [
+        "V21",
+        "V22",
+        "V23",
+        "V37"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T14",
+      "phase": "Q4",
+      "owner": "F4",
+      "reviewer": "F2",
+      "title": "Build bounded encoders and free-running decoder",
+      "depends_on": [
+        "T10",
+        "T12"
+      ],
+      "outputs": [
+        "bag baseline",
+        "order-aware encoder",
+        "canonical decoder"
+      ],
+      "acceptance_vectors": [
+        "V25",
+        "V26",
+        "V27"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T15",
+      "phase": "Q4",
+      "owner": "F4",
+      "reviewer": "F5",
+      "title": "Implement isolated typed learned operation modules",
+      "depends_on": [
+        "T11",
+        "T14"
+      ],
+      "outputs": [
+        "learned module interface",
+        "operation-specific decoders"
+      ],
+      "acceptance_vectors": [
+        "V28",
+        "V29",
+        "V30"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T16",
+      "phase": "Q5",
+      "owner": "F5",
+      "reviewer": "F6",
+      "title": "Freeze three-arm experiment and benefit endpoint",
+      "depends_on": [
+        "T08",
+        "T13",
+        "T15"
+      ],
+      "outputs": [
+        "frozen experiment manifest",
+        "budget/sample rationale"
+      ],
+      "acceptance_vectors": [
+        "V35",
+        "V37",
+        "V38",
+        "V49"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T17",
+      "phase": "Q4-Q5",
+      "owner": "F4",
+      "reviewer": "F5",
+      "title": "Run bounded authorized representation/operation training",
+      "depends_on": [
+        "T13",
+        "T15"
+      ],
+      "outputs": [
+        "smoke checkpoints",
+        "free-running pilot scores"
+      ],
+      "acceptance_vectors": [
+        "V26",
+        "V28",
+        "V29",
+        "V30",
+        "V49",
+        "V51"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T18",
+      "phase": "Q5",
+      "owner": "F4",
+      "reviewer": "F5",
+      "title": "Run causal interventions and bypass controls",
+      "depends_on": [
+        "T17"
+      ],
+      "outputs": [
+        "intervention records",
+        "natural/artificial cohort report"
+      ],
+      "acceptance_vectors": [
+        "V31",
+        "V32",
+        "V33",
+        "V34",
+        "V36"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T19",
+      "phase": "Q5",
+      "owner": "F5",
+      "reviewer": "F6",
+      "title": "Evaluate frozen confirmatory comparisons when authorized",
+      "depends_on": [
+        "T16",
+        "T18"
+      ],
+      "outputs": [
+        "sealed evaluation receipt",
+        "paired benefit report"
+      ],
+      "acceptance_vectors": [
+        "V35",
+        "V37",
+        "V38",
+        "V51"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T20",
+      "phase": "Q6",
+      "owner": "F1",
+      "reviewer": "F4",
+      "title": "Integrate candidate into experimental Helm lineage",
+      "depends_on": [
+        "T08",
+        "T18"
+      ],
+      "outputs": [
+        "experimental typed adapter",
+        "legacy compatibility",
+        "new model identity"
+      ],
+      "acceptance_vectors": [
+        "V14",
+        "V39",
+        "V40"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T21",
+      "phase": "Q6",
+      "owner": "F1",
+      "reviewer": "F6",
+      "title": "Export trace to versioned read-only RPA view",
+      "depends_on": [
+        "T20"
+      ],
+      "outputs": [
+        "new adapter schema",
+        "input/module/intervention inspector"
+      ],
+      "acceptance_vectors": [
+        "V41"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T22",
+      "phase": "Q6",
+      "owner": "F6",
+      "reviewer": "F5",
+      "title": "Reproduce integrated behavior, reload and rollback",
+      "depends_on": [
+        "T20",
+        "T21"
+      ],
+      "outputs": [
+        "independent integration test report",
+        "rollback receipt"
+      ],
+      "acceptance_vectors": [
+        "V39",
+        "V40",
+        "V41",
+        "V42",
+        "V43",
+        "V44",
+        "V52"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T23",
+      "phase": "Q7",
+      "owner": "F2",
+      "reviewer": "F5",
+      "title": "Freeze executable CCDL subset and parser",
+      "depends_on": [
+        "T09",
+        "T18"
+      ],
+      "outputs": [
+        "CCDL contract",
+        "ambiguity ledger",
+        "parser"
+      ],
+      "acceptance_vectors": [
+        "V45",
+        "V46"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T24",
+      "phase": "Q7",
+      "owner": "F3",
+      "reviewer": "F5",
+      "title": "Generate PCBA structural tasks and new held-out families",
+      "depends_on": [
+        "T23"
+      ],
+      "outputs": [
+        "PCBA SDG plugin",
+        "new split manifests"
+      ],
+      "acceptance_vectors": [
+        "V20",
+        "V22",
+        "V47",
+        "V48"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T25",
+      "phase": "Q7",
+      "owner": "F4",
+      "reviewer": "F5",
+      "title": "Execute PCBA extension only after prior gates",
+      "depends_on": [
+        "T20",
+        "T24"
+      ],
+      "outputs": [
+        "board module/interface tests",
+        "separate board evaluation"
+      ],
+      "acceptance_vectors": [
+        "V39",
+        "V45",
+        "V46",
+        "V47",
+        "V48"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T26",
+      "phase": "Release",
+      "owner": "F6",
+      "reviewer": "F5",
+      "title": "Audit core release evidence and all incomplete fields",
+      "depends_on": [
+        "T02",
+        "T18",
+        "T22"
+      ],
+      "outputs": [
+        "release audit",
+        "claim-boundary checklist"
+      ],
+      "acceptance_vectors": [
+        "V01",
+        "V02",
+        "V03",
+        "V04",
+        "V05",
+        "V21",
+        "V29",
+        "V37",
+        "V49",
+        "V50",
+        "V51",
+        "V52"
+      ],
+      "status": "PLANNED"
+    },
+    {
+      "id": "T27",
+      "phase": "Release",
+      "owner": "F0",
+      "reviewer": "F6",
+      "title": "Deliver core runnable package and next decision",
+      "depends_on": [
+        "T26"
+      ],
+      "outputs": [
+        "runbook",
+        "code commits",
+        "evidence bundle",
+        "release report"
+      ],
+      "acceptance_vectors": [
+        "V50",
+        "V51",
+        "V52"
+      ],
+      "status": "PLANNED"
+    }
+  ]
+}

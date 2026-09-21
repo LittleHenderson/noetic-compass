@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fable:behavior-pair:1.0",
+  "title": "Proposed offline behavior pair; never serialize whole record to learner",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "operation_id",
+    "contract_sha256",
+    "structure_family",
+    "split",
+    "model_input",
+    "target",
+    "provenance"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "fable.behavior-pair/1.0"
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "operation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contract_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "structure_family": {
+      "type": "string",
+      "minLength": 1
+    },
+    "split": {
+      "enum": [
+        "TRAIN",
+        "DEVELOPMENT",
+        "ENGINEERING_EVAL",
+        "PROTECTED_FINAL"
+      ]
+    },
+    "model_input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "task_mode",
+        "representation",
+        "bindings",
+        "context"
+      ],
+      "properties": {
+        "task_mode": {
+          "enum": [
+            "RECONSTRUCTION",
+            "OPERATION",
+            "NATIVE_INTERPRETATION",
+            "BOARD_STRUCTURAL"
+          ]
+        },
+        "representation": {
+          "type": [
+            "object",
+            "array",
+            "string"
+          ]
+        },
+        "bindings": {
+          "type": "object"
+        },
+        "context": {
+          "type": "object"
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "typed_result",
+        "intermediate_reference"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "VALID",
+            "INVALID_INPUT",
+            "UNMET_PREREQUISITE",
+            "UNSUPPORTED"
+          ]
+        },
+        "typed_result": {},
+        "intermediate_reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "canonical_ast": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "negative_cases": {
+          "type": "array"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator_version",
+        "seed",
+        "semantic_source",
+        "oracle_receipt_sha256"
+      ],
+      "properties": {
+        "generator_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "semantic_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "oracle_receipt_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "paraphrase_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

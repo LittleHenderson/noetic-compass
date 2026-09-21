@@ -10,7 +10,7 @@
  },
  "builder": "build_operation_contracts.py",
  "built": "2026-09-21",
- "contract_digest": "e97b8aa60195563b9a073c727452e1ed321ed8a83248d1267e535c59662d6d01",
+ "contract_digest": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad",
  "coordinates": {
   "authority": [
    "noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/states.rs :: fn linear_index",
@@ -253,7 +253,12 @@
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-engine/src/ontology/operators.rs"
    },
    "role_in_the_lab": "fixed; conformance and baseline",
-   "valid_domain": "all 100 ordered pairs"
+   "valid_domain": "all 100 ordered pairs",
+   "witnesses": {
+    "asymmetric_pairs": 0,
+    "note": "zero: compose is commutative, which is why it is conformance-only",
+    "of_pairs": 100
+   }
   },
   "domain_descent_mask": {
    "algebraic_properties": [
@@ -363,7 +368,11 @@
     "vendored_path": "pinned_sources/noetic-compass-scaffold/noetic-compass/cas-native/model/domain_descent.py"
    },
    "role_in_the_lab": "fixed structural constraint; a learned module must not be able to violate it",
-   "valid_domain": "n/a"
+   "valid_domain": "n/a",
+   "witnesses": {
+    "asymmetric_cells": 1200,
+    "of_cells": 1600
+   }
   },
   "involute": {
    "algebraic_properties": [
@@ -715,7 +724,29 @@
     "CO-k (k != 0): true if source.domain == target.domain",
     "CO-k (k != 0), different domains: true iff target.operator == k"
    ],
-   "valid_domain": "all 10 x 40 x 40 = 16,000 triples"
+   "valid_domain": "all 10 x 40 x 40 = 16,000 triples",
+   "witnesses": {
+    "asymmetric_triples": 1944,
+    "context_sensitive_pairs": 1440,
+    "example_asymmetric": {
+     "f(k,s,t)": true,
+     "f(k,t,s)": false,
+     "triple": [
+      1,
+      [
+       "P",
+       0
+      ],
+      [
+       "C",
+       1
+      ]
+     ]
+    },
+    "note": "a (source, target) pair is context-sensitive when the answer depends on WHICH operator is applied",
+    "of_pairs": 1600,
+    "of_triples": 16000
+   }
   },
   "rpm_embed_realize": {
    "NOTE_NOT_THE_SAME_AS": "cas-native/model/rpm_gate.py PrerequisiteGateLayer, whose docstring says 'the section law epsilon o eta = id is not hard-constrained'. That layer is a TRAINABLE mechanism and is NOT an admitted operation (directive s7). Recorded as discrepancy DR-2.",
@@ -828,6 +859,26 @@
   "NUMERICAL_FAILURE",
   "BUDGET_EXHAUSTED"
  ],
+ "package_schema_export": {
+  "files": {
+   "compose": "contracts_package_schema/compose.json",
+   "domain_descent_mask": "contracts_package_schema/domain_descent_mask.json",
+   "involute": "contracts_package_schema/involute.json",
+   "is_admissible": "contracts_package_schema/is_admissible.json",
+   "rpm_embed_realize": "contracts_package_schema/rpm_embed_realize.json"
+  },
+  "validation": {
+   "results": {
+    "compose": "VALID",
+    "domain_descent_mask": "VALID",
+    "involute": "VALID",
+    "is_admissible": "VALID",
+    "rpm_embed_realize": "VALID"
+   },
+   "schema": "_handoffs\\FABLE_HELM_CAS_v1\\schemas\\operation_contract.schema.json",
+   "validator": "jsonschema 4.26.0"
+  }
+ },
  "pinned_sources_manifest": "pinned_sources/PINNED_SOURCES.json",
  "reference_learner_separation": "reference_ops.py is the EVALUATOR's oracle. A learned arm receives operands and an operation ID, never reference outputs, answer-derived masks, or a solver callback. An arm that calls the reference is HYBRID_FIXED_OPERATOR and is labelled so. Enforced by test_operation_contracts.py (import scan).",
  "reference_module": {

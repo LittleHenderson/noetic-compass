@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:fable:operation-contract:1.0",
+  "title": "Proposed versioned operation contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "operation_id",
+    "semantics_version",
+    "reference",
+    "input_schema",
+    "output_schema",
+    "valid_domain",
+    "error_cases",
+    "stateful",
+    "parameter_policy",
+    "comparison",
+    "allowed_for_neural_target"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "fable.operation-contract/1.0"
+    },
+    "operation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "semantics_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_path",
+        "source_sha256",
+        "symbol",
+        "semantic_source",
+        "independent_test_reference"
+      ],
+      "properties": {
+        "source_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1
+        },
+        "semantic_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "independent_test_reference": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "input_schema": {
+      "type": "object"
+    },
+    "output_schema": {
+      "type": "object"
+    },
+    "valid_domain": {
+      "type": "string",
+      "minLength": 1
+    },
+    "error_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "condition",
+          "typed_result"
+        ],
+        "properties": {
+          "condition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "typed_result": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "stateful": {
+      "type": "boolean"
+    },
+    "parameter_policy": {
+      "enum": [
+        "NONE",
+        "FIXED_VERSIONED_PARAMETERS",
+        "FROZEN_MEASURED_TRANSFORM",
+        "UNRESOLVED_EXCLUDE"
+      ]
+    },
+    "comparison": {
+      "type": "object",
+      "required": [
+        "mode",
+        "rule"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "EXACT_TYPED",
+            "EXACT_CANONICAL_AST",
+            "DECLARED_NUMERIC_TOLERANCE"
+          ]
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "allowed_for_neural_target": {
+      "type": "boolean"
+    },
+    "exclusion_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

@@ -1,0 +1,475 @@
+{
+  "schema": "fable.acceptance-vectors/1.0",
+  "status": "PLANNED_NOT_EXECUTED",
+  "vectors": [
+    {
+      "id": "V01",
+      "group": "Q0",
+      "name": "Canonical checkout and import origin",
+      "method": "Resolve Git top-level, full SHA, dirty state, worktrees, and __file__ for target imports.",
+      "expected": "Source manifest identifies one selected worktree; stale duplicate imports rejected.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V02",
+      "group": "Q0",
+      "name": "Preserve original artifacts",
+      "method": "Hash original frozen gate/rehearsal and user edits before and after implementation.",
+      "expected": "No protected byte changes; new audit supplements separate.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V03",
+      "group": "Q0",
+      "name": "Changed score artifact",
+      "method": "Alter one score in an isolated result copy.",
+      "expected": "Verifier refuses; independent recomputation does not accept the altered aggregate.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V04",
+      "group": "Q0",
+      "name": "Changed score plus run manifest",
+      "method": "Alter score and its run-owned expected digest together.",
+      "expected": "Trusted external anchor or independent raw-prediction scorer detects disagreement.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V05",
+      "group": "Q0",
+      "name": "Changed evaluator plus run digest",
+      "method": "Replace scorer with always-pass and edit its run-owned hash.",
+      "expected": "External evaluator identity rejects it before scoring.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V06",
+      "group": "Q0",
+      "name": "Prediction/split identity",
+      "method": "Inject duplicate, missing, extra and foreign-split prediction IDs.",
+      "expected": "Explicit rejection; no denominator silently shrinks.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V07",
+      "group": "Q0",
+      "name": "Unsafe paths and nonfinite values",
+      "method": "Inject traversal paths, unsupported formats, NaN/infinity in result fields.",
+      "expected": "Reject without arbitrary load/execute; no favorable default.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V08",
+      "group": "Q1",
+      "name": "State-dependent rounds",
+      "method": "Run AST/dataflow checks and hook real round inputs across a multi-hop fixture.",
+      "expected": "Updated hidden state influences messages; unused-block defect absent.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V09",
+      "group": "Q1",
+      "name": "Two-hop sensitivity and null",
+      "method": "Change a task-relevant edge two hops away; add a truly irrelevant control edit.",
+      "expected": "Propagation changes where expected and null invariant explained; no reasoning score inferred from magnitude alone.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V10",
+      "group": "Q1",
+      "name": "Real optimizer path",
+      "method": "Execute permitted real-learner steps, not stand-in; inspect update records.",
+      "expected": "Weights actually update, planned schedule/clip fields present, counters agree.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V11",
+      "group": "Q1",
+      "name": "Schedule step accounting",
+      "method": "Compare uninterrupted and resumed schedule including replay-only checks.",
+      "expected": "Main-step index and learning rate identical; replay does not advance main schedule silently.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V12",
+      "group": "Q1",
+      "name": "Hard assignment contract",
+      "method": "Test duplicate row maxima on doubly stochastic counterexample, ties, masks, rectangular cases if supported.",
+      "expected": "Task-legal complete/partial assignment or typed refusal; no duplicate target under bijection contract.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V13",
+      "group": "Q1",
+      "name": "Ladder same-item baselines",
+      "method": "Run exact scorer and simple baselines on identical ladder records.",
+      "expected": "Per-kind/size/hop counts reconcile; old gate untouched; no new-name-only topology claim.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V14",
+      "group": "Q1",
+      "name": "Strict checkpoint identity",
+      "method": "Try 1.0 checkpoint in incompatible 2.0 model without migration.",
+      "expected": "Refuse; migration separately lists dropped/new tensors and new identity.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V15",
+      "group": "Q2",
+      "name": "Forty-index permutation",
+      "method": "Enumerate all 40 meanings through domain-major/noetic-major/tokenizer mappings.",
+      "expected": "Bijection, exact semantic round-trip, unknown IDs rejected.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V16",
+      "group": "Q2",
+      "name": "Separate 28 namespaces",
+      "method": "Use same numeric index from three namespace labels.",
+      "expected": "No implicit equality or cast; unsupported mapping yields explicit error.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V17",
+      "group": "Q2",
+      "name": "Reference contract differential",
+      "method": "Compare independent declared semantics and pinned engine on finite supported inputs/errors.",
+      "expected": "Agreement or quarantined semantic discrepancy; no target redefinition to hide it.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V18",
+      "group": "Q2",
+      "name": "Parameterized reference classification",
+      "method": "Inspect FiLM/RPM/descent signatures, parameters and side effects.",
+      "expected": "Only frozen specified behavior admitted; trainable/ambiguous behavior labeled and excluded until contracted.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V19",
+      "group": "Q2",
+      "name": "Modulo simplification baseline",
+      "method": "Enumerate compose pairs/triples and evaluate modulo-sum baseline.",
+      "expected": "Commutative/associative semantics recognized for quoted rule; no order claim from this family alone.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V20",
+      "group": "Q3",
+      "name": "Behavior record schema",
+      "method": "Validate good, invalid-input, missing-prerequisite and unsupported-operation examples.",
+      "expected": "Typed status/result and exact source bindings; no silently invented expected answer.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V21",
+      "group": "Q3",
+      "name": "Input/target separation",
+      "method": "Inspect serialized inference packet, feature construction and file permissions.",
+      "expected": "No targets, verifier answer trace, answer-bearing labels/IDs, or hidden oracle calls accessible.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V22",
+      "group": "Q3",
+      "name": "Structure-first disjointness",
+      "method": "Generate split fingerprints before paraphrase and arbitrary rename.",
+      "expected": "No declared protected topology/template family crosses splits; overlaps explicitly measured.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V23",
+      "group": "Q3",
+      "name": "Answer shortcut suite",
+      "method": "Run substring, type-equality, cardinality, one-hop, bag and exact-code baselines where relevant.",
+      "expected": "Useful easy tasks retained as controls; invalid shortcut-supported reasoning claims excluded.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V24",
+      "group": "Q3",
+      "name": "Paraphrase meaning and ambiguity",
+      "method": "Check deterministic variants plus role-swapped near matches against bindings.",
+      "expected": "Same-meaning variants agree; changed bindings differ; ambiguous cases not forced to a false unique label.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V25",
+      "group": "Q4",
+      "name": "Order-preserving representation",
+      "method": "Encode two supported role/order-sensitive expressions with same bag of tokens.",
+      "expected": "Candidate retains distinguishable structure; bag collision documented as control.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V26",
+      "group": "Q4",
+      "name": "Free-running canonical reconstruction",
+      "method": "Encode held-out expression, remove original sequence/AST access where strict bottleneck claimed, decode without teacher targets.",
+      "expected": "Canonical expression score reported by length/depth; invalid outputs count as errors.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V27",
+      "group": "Q4",
+      "name": "No hidden bottleneck side channel",
+      "method": "Disable raw input pointers, parse-tree skip, target cache and metadata during strict reconstruction test.",
+      "expected": "No undeclared source recovery; permitted structured memory explicitly reported as non-strict.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V28",
+      "group": "Q4",
+      "name": "Typed operation consistency",
+      "method": "Execute isolated learned candidate and compare D_k(M_k(E_k(x))) with held-back T_k(x).",
+      "expected": "Exact typed-result agreement scored; oracle never executes inside candidate.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V29",
+      "group": "Q4",
+      "name": "Learned versus fixed-path tracing",
+      "method": "Patch reference inference aliases to raise and trace accesses in learned arm.",
+      "expected": "Learned prediction proceeds without reference; hybrid baseline labeled independently.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V30",
+      "group": "Q4",
+      "name": "Unsupported and invalid behavior",
+      "method": "Exercise out-of-subset operator, wrong arity, missing prerequisite and numeric bound.",
+      "expected": "Typed refusal/error contract; invalid conditions do not become confident success.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V31",
+      "group": "Q5",
+      "name": "Binding correction intervention",
+      "method": "Freeze model, inject one intermediate binding error, correct only that binding, continue same downstream modules.",
+      "expected": "Predefined expected restoration measured without final-answer patch; all eligible cases counted.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V32",
+      "group": "Q5",
+      "name": "Natural versus artificial error cohorts",
+      "method": "Separate spontaneous model misbindings from injected errors.",
+      "expected": "Distinct denominators and results; synthetic repair not advertised as universal self-correction.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V33",
+      "group": "Q5",
+      "name": "Sham and irrelevant changes",
+      "method": "Apply no-op and semantically irrelevant intervention chosen by reference semantics.",
+      "expected": "Decoded outcome invariant under preregistered tolerance/cohort rule.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V34",
+      "group": "Q5",
+      "name": "Non-vacuous corruption",
+      "method": "Construct wrong-role/operator patch known to alter the reference outcome.",
+      "expected": "Positive control can change outcome; globally consistent renaming not treated as corruption.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V35",
+      "group": "Q5",
+      "name": "Three-arm fairness",
+      "method": "Audit information, useful parameter count, compute, training data and tuning accesses in A/B/C.",
+      "expected": "Differences declared; no extra gold concepts or inactive dummy parameters to manufacture parity.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V36",
+      "group": "Q5",
+      "name": "CAS path causal participation",
+      "method": "Ablate/replace CAS intermediate path and compare with heads-only control.",
+      "expected": "Evidence distinguishes used computation from post-hoc labeling or bypass.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V37",
+      "group": "Q5",
+      "name": "Final evaluation custody",
+      "method": "Attempt learner access to final labels or example-level final feedback during development.",
+      "expected": "Denied or EVALUATION_NOT_INDEPENDENT; exposed set relabeled as development.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V38",
+      "group": "Q5",
+      "name": "Metric denominators and uncertainty",
+      "method": "Independently recompute strata and paired cluster-aware comparisons from raw records.",
+      "expected": "Counts reconcile; seeds/world families not falsely treated as independent rows; no automatic benefit pass.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V39",
+      "group": "Q6",
+      "name": "Experimental Helm integration",
+      "method": "Run new typed packet through experimental adapter and instrument recurrent consumption.",
+      "expected": "Types/bindings influence computation, not just inspector; legacy baseline still works.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V40",
+      "group": "Q6",
+      "name": "Prediction/verification distinction",
+      "method": "Supply wrong learned candidate whose verifier can diagnose it.",
+      "expected": "Original answer remains wrong in learner score; verified or hybrid correction separately recorded.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V41",
+      "group": "Q6",
+      "name": "RPA export and focus isolation",
+      "method": "Export versioned trace and inspect input/module/intervention/evidence identities.",
+      "expected": "No reinterpretation as runtime0.2; navigation cannot alter actual model or state.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V42",
+      "group": "Q6",
+      "name": "Fresh-process reload and resume",
+      "method": "Persist full model/optimizer/RNG/cursor; reload isolated process and replay next legal step.",
+      "expected": "Declared byte/numeric and exact-semantic policy satisfied; all saved-state parts accounted.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V43",
+      "group": "Q6",
+      "name": "Crash cut accounting",
+      "method": "Interrupt between update/checkpoint/receipt boundaries in disposable run.",
+      "expected": "No double update or skipped charge; source/cursor/optimizer recover or typed refusal.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V44",
+      "group": "Q6",
+      "name": "Source mutation during run",
+      "method": "Alter a source dependency of an isolated frozen-run copy.",
+      "expected": "Run refuses or invalidates claim; no mutable source race accepted.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V45",
+      "group": "Q7",
+      "name": "CCDL declared edges only",
+      "method": "Parse supported fixtures containing explicit versus missing/prose-only connections.",
+      "expected": "Declared edges preserved; ambiguity refused/excluded with reason; no silent inference.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V46",
+      "group": "Q7",
+      "name": "Typed ports and feedback",
+      "method": "Exercise cause/bias/effect roles, multi-input incidence and feedback graph.",
+      "expected": "Role/direction preserved; signal cycles not confused with containment cycles.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V47",
+      "group": "Q7",
+      "name": "Board benchmark categories",
+      "method": "Compare direct lookup controls with multi-step and construction tasks.",
+      "expected": "Direct facts may be easy; reasoning claim requires corresponding harder evidence.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V48",
+      "group": "Q7",
+      "name": "Fresh board family holdout",
+      "method": "Evaluate newly generated sealed structural families, not read book examples.",
+      "expected": "Known boards treated as regressions; test families unavailable to developers/learner.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V49",
+      "group": "Release",
+      "name": "Resources and worker lifecycle",
+      "method": "Inspect exact permission record and job commands; simulate exceeded budget/tool timeout.",
+      "expected": "No new spend/forbidden training; only owned process controlled; resume path recorded.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V50",
+      "group": "Release",
+      "name": "Commit, push and rollback",
+      "method": "Check actual owner branch rule, source secret scan, commit ancestry and rollback.",
+      "expected": "Authorized branch preserved/pushed as required; no force push/production merge; unresolved remote issue explicit.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V51",
+      "group": "Release",
+      "name": "No skipped-to-pass promotion",
+      "method": "Build report with required test missing/skipped and a high raw score.",
+      "expected": "Affected gate INCOMPLETE, not PASS; historical evidence not reassigned.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    },
+    {
+      "id": "V52",
+      "group": "Release",
+      "name": "Independent end-to-end demonstration",
+      "method": "Reviewer runs documented task, learned operation, internal correction, reload and unsupported case.",
+      "expected": "Reproducible bounded demo with separate engineering/representation/operation/benefit statuses.",
+      "mandatory_for_applicable_gate": true,
+      "status": "PLANNED"
+    }
+  ],
+  "scope_note": "These vectors specify future implementation tests. Package and mathematical checks do not execute Helm or satisfy these vectors."
+}

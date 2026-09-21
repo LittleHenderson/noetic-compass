@@ -231,6 +231,87 @@ def build():
         "not_admitted": ["Decomposition", "Comparison", "Candidate routing", "any CCDL board operation -- no parser on disk, 17 of 39 statement leaders have no semantics",
                          "OmegaRegistry (a registry is not an operation)", "RegisterFiLM (parameterised; a mechanism, not an oracle)"],
     }
+    # ---- WITNESSES (owner response draft s5): asymmetry and context-sensitivity are MEASURED, not inferred from a name.
+    sys.path.insert(0, str(HERE))
+    import reference_ops as _ref
+    states = [(d, n) for d in _ref.DOMAINS for n in range(10)]
+    asym = [(k, s, t) for k in range(10) for s in states for t in states
+            if _ref.is_admissible(k, s, t) != _ref.is_admissible(k, t, s)]
+    ctx = [(s, t) for s in states for t in states if len({_ref.is_admissible(k, s, t) for k in range(10)}) > 1]
+    ops["is_admissible"]["witnesses"] = {
+        "asymmetric_triples": len(asym), "of_triples": 16000,
+        "example_asymmetric": {"triple": list(asym[0][:1]) + [list(asym[0][1]), list(asym[0][2])],
+                               "f(k,s,t)": _ref.is_admissible(*asym[0]), "f(k,t,s)": _ref.is_admissible(asym[0][0], asym[0][2], asym[0][1])},
+        "context_sensitive_pairs": len(ctx), "of_pairs": 1600,
+        "note": "a (source, target) pair is context-sensitive when the answer depends on WHICH operator is applied",
+    }
+    mask = _ref.domain_descent_mask()
+    ops["domain_descent_mask"]["witnesses"] = {"asymmetric_cells": sum(1 for i in range(40) for j in range(40) if mask[i][j] != mask[j][i]), "of_cells": 1600}
+    ops["compose"]["witnesses"] = {"asymmetric_pairs": sum(1 for a in range(10) for b in range(10) if _ref.compose(a, b) != _ref.compose(b, a)), "of_pairs": 100,
+                                   "note": "zero: compose is commutative, which is why it is conformance-only"}
+
+    # ---- PACKAGE-SCHEMA EXPORT: one file per operation conforming to the delivered
+    # `_handoffs/FABLE_HELM_CAS_v1/schemas/operation_contract.schema.json`, so the package's own tests can read it.
+    schema_path = PACKAGE / "_handoffs/FABLE_HELM_CAS_v1/schemas/operation_contract.schema.json"
+    export_dir = HERE / "contracts_package_schema"
+    export_dir.mkdir(exist_ok=True)
+    io_types = {
+        "involute": ({"noetic": "int 0..9"}, {"noetic": "int 0..9"}),
+        "compose": ({"a": "int 0..9", "b": "int 0..9"}, {"noetic": "int 0..9"}),
+        "is_admissible": ({"operator": "int 0..9", "source": "[domain P|C|E|O, noetic 0..9]", "target": "[domain, noetic]"}, {"admissible": "bool"}),
+        "domain_descent_mask": ({}, {"mask": "40x40 bool, domain-major"}),
+        "rpm_embed_realize": ({"score": "float in [0,1]"}, {"embed": "[float, float, float]", "realize": "float"}),
+    }
+    exports = {}
+    for name, op in ops.items():
+        exp = {
+            "schema_version": "fable.operation-contract/1.0", "operation_id": op["id"], "semantics_version": "cas-v7.7 / engine as pinned",
+            "reference": {"source_path": op["pinned_implementation"]["path"], "source_sha256": op["pinned_implementation"]["sha256"],
+                          "symbol": op["implementation_locator"], "semantic_source": op["authoritative_definition"],
+                          "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py"},
+            "input_schema": io_types[name][0], "output_schema": io_types[name][1], "valid_domain": op["valid_domain"],
+            "error_cases": [{"condition": "input outside valid_domain (wrong type, range, key set)", "typed_result": "INVALID_INPUT"}]
+                           + ([{"condition": "eta(eps(e)) != e for a non-image e", "typed_result": "RETRACTION_FAILURE_EXPECTED"}] if name == "rpm_embed_realize" else []),
+            "stateful": False, "parameter_policy": "NONE",   # schema enum: NONE | FIXED_VERSIONED_PARAMETERS | FROZEN_MEASURED_TRANSFORM | UNRESOLVED_EXCLUDE
+            "comparison": {"mode": "DECLARED_NUMERIC_TOLERANCE" if name == "rpm_embed_realize" else "EXACT_TYPED",
+                           "rule": op["numerical_policy"]},
+            "allowed_for_neural_target": name in ("is_admissible", "compose", "involute"),
+        }
+        (export_dir / (name + ".json")).write_text(json.dumps(exp, indent=1, sort_keys=True), encoding="utf-8")
+        exports[name] = "contracts_package_schema/" + name + ".json"
+    validation = {"schema": str(schema_path.relative_to(PACKAGE)) if schema_path.exists() else None, "validator": None, "results": {}}
+    if schema_path.exists():
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        try:
+            import jsonschema
+            for name in ops:
+                doc = json.loads((export_dir / (name + ".json")).read_text(encoding="utf-8"))
+                try:
+                    jsonschema.validate(doc, schema); validation["results"][name] = "VALID"
+                except jsonschema.ValidationError as error:
+                    validation["results"][name] = "INVALID: " + error.message[:160]
+            validation["validator"] = "jsonschema " + __import__("importlib.metadata").metadata.version("jsonschema")
+        except ImportError:
+            def required_ok(doc, sch):
+                for key in sch.get("required", []):
+                    if key not in doc:
+                        return "MISSING:" + key
+                    sub = (sch.get("properties") or {}).get(key, {})
+                    if isinstance(doc[key], dict) and sub.get("required"):
+                        r = required_ok(doc[key], sub)
+                        if r != "VALID":
+                            return key + "." + r
+                    if isinstance(doc[key], list) and isinstance(sub.get("items"), dict) and sub["items"].get("required"):
+                        for row in doc[key]:
+                            r = required_ok(row, sub["items"])
+                            if r != "VALID":
+                                return key + "[]." + r
+                return "VALID"
+            for name in ops:
+                validation["results"][name] = required_ok(json.loads((export_dir / (name + ".json")).read_text(encoding="utf-8")), schema)
+            validation["validator"] = "required-keys check (jsonschema not installed)"
+    contract["package_schema_export"] = {"files": exports, "validation": validation}
+
     body = json.dumps(contract, indent=1, sort_keys=True)
     contract["contract_digest"] = hashlib.sha256(body.encode("utf-8")).hexdigest()
     out = HERE / "OPERATION_CONTRACTS.json"

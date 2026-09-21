@@ -1,0 +1,72 @@
+{
+  "schema": "fable.experiment-plan/1.0",
+  "status": "DRAFT_DEFAULTS_NOT_RUN",
+  "frozen": false,
+  "experiment_id": null,
+  "source_manifest_sha256": null,
+  "oracle_identity": null,
+  "task_families": [],
+  "model_visible_fields": [],
+  "forbidden_prediction_sources": [
+    "gold targets",
+    "oracle output traces",
+    "answer-bearing metadata",
+    "reference execution alias"
+  ],
+  "arms": [
+    "A_conventional",
+    "B_cas_heads_only",
+    "C_cas_internal_computation"
+  ],
+  "baselines": [
+    "exact_symbolic",
+    "type_equality",
+    "bag_rows_nearest_neighbor",
+    "applicable_simple_graph_or_modulo"
+  ],
+  "engineering_smoke": {
+    "permission_required": true,
+    "seeds": 1,
+    "max_optimizer_updates_per_model": 128,
+    "max_training_records": 2048,
+    "max_development_records": 256,
+    "max_engineering_evaluation_records": 256,
+    "initial_width": 64,
+    "bounded_alternative_width": 128,
+    "claim_bearing": false
+  },
+  "confirmatory": {
+    "permission_required": true,
+    "minimum_seeds": 3,
+    "minimum_semantically_distinct_task_families": 2,
+    "seeds": [],
+    "primary_endpoint": null,
+    "smallest_worthwhile_effect": null,
+    "uncertainty_method": null,
+    "sample_size_rationale": null,
+    "tuning_budget": null,
+    "protected_dataset_identity": null
+  },
+  "proposed_pilot_thresholds": {
+    "free_running_canonical_exact_per_supported_stratum": 0.95,
+    "typed_operation_exact_per_supported_stratum": 0.95,
+    "eligible_injected_binding_restoration": 0.9,
+    "sham_irrelevant_decoded_invariance": 0.98,
+    "note": "Proposed engineering thresholds. Review/freeze before runs; not theorem, guarantee, or existing owner-ratified gate."
+  },
+  "benefit_rule": "Freeze endpoint/effect and paired analysis before final evaluation; never infer comparative benefit from engineering passes alone.",
+  "cohorts": {
+    "injected_errors": null,
+    "natural_errors": null,
+    "irrelevant_edits": null,
+    "role_sensitive_cases": null
+  },
+  "data_splits": {
+    "construction_unit": "canonical structure/topology before paraphrase",
+    "known_book_fixtures": "development/regression only",
+    "final_exposure_log": []
+  },
+  "resource_authorization_reference": null,
+  "custodian": null,
+  "reviewer": null
+}

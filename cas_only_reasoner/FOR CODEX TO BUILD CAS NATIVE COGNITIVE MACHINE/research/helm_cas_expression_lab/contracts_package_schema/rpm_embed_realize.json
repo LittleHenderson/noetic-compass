@@ -1,0 +1,37 @@
+{
+ "allowed_for_neural_target": false,
+ "comparison": {
+  "mode": "DECLARED_NUMERIC_TOLERANCE",
+  "rule": "floating point. embed and realize are exact operations; the SECTION LAW is asserted at |realize(embed(s)) - s| <= 2 * f64::EPSILON = 4.440892098500626e-16, exactly the engine's tolerance. This is the only admitted operation with a tolerance, and the tolerance is the engine's, not the lab's."
+ },
+ "error_cases": [
+  {
+   "condition": "input outside valid_domain (wrong type, range, key set)",
+   "typed_result": "INVALID_INPUT"
+  },
+  {
+   "condition": "eta(eps(e)) != e for a non-image e",
+   "typed_result": "RETRACTION_FAILURE_EXPECTED"
+  }
+ ],
+ "input_schema": {
+  "score": "float in [0,1]"
+ },
+ "operation_id": "cas.op.rpm_embed_realize/1.0",
+ "output_schema": {
+  "embed": "[float, float, float]",
+  "realize": "float"
+ },
+ "parameter_policy": "NONE",
+ "reference": {
+  "independent_test_reference": "research/helm_cas_expression_lab/test_operation_contracts.py",
+  "semantic_source": "CLAUDE.md CORRECTION 2: RPM is a section-retraction, NOT an adjunction: eps o eta = id, but eta o eps != id",
+  "source_path": "noetic-compass-scaffold/noetic-compass/cas-engine/src/rpm/mod.rs",
+  "source_sha256": "c213bdd0e731f3c6ffc1931128ac0c65c302197f28647fe05503f950125a7884",
+  "symbol": "pub fn embed(score: f64) -> (s, s*s, sqrt s) ; pub fn realize(&EmbeddedScore) -> components[0] ; verify_section_law tolerance f64::EPSILON * 2.0"
+ },
+ "schema_version": "fable.operation-contract/1.0",
+ "semantics_version": "cas-v7.7 / engine as pinned",
+ "stateful": false,
+ "valid_domain": "[0.0, 1.0]"
+}
