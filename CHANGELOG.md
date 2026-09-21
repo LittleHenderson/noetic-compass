@@ -4,6 +4,36 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - THE CAS COMPILER ALREADY NESTS THOUGHTS AND COMPUTES SET-THEORY META-LOGIC. Examined by running it; 15 facts pinned; my earlier claim that the code has no nesting is corrected. Commit `a32d05c8`.
+
+**Why.** The owner asked whether the code lets a thought sit inside another thought, pointed at the CAS compiler (`dist/cas-offline`) and the
+CAS CLI, and added that set-theory symbols serve as meta-logic. I had told the owner the book's Nesting Operator does not exist in the code,
+after checking only the engine's small `compose` function. **Too broad, and corrected** (OD-6, second correction; OD-8).
+
+**How.** My own runs, then five read-only examiners (about 450 expressions), then a critic who re-ran twelve key experiments: 12 of 12
+confirmed. Symbolic code only; no neural model was run. Findings: `research/helm_cas_expression_lab/COMPILER_NESTING_AND_SETS_FINDINGS_20260921.md`;
+facts pinned to the exact compiler text (LF sha256 `8169188ad73df8fc…`, the same text in the scaffold, in `dist/cas-offline`, and in the Q3
+manifest) by `test_compiler_nesting_facts.py`, 15 tests.
+
+| level | verdict | measured |
+|---|---|---|
+| WRITE the nesting | **YES** | `^8^C ∘ ^3^C` gives sequence `[8, 3]`, the other order `[3, 8]`; the parse tree keeps which thought is inside which; 150 levels deep works; a set inside a set works three levels deep and is NOT flattened (`S2 ∈ S3` true, `S1 ∈ S3` false, `|S3|` = 1); the diagram builder already draws a box inside a box for sets |
+| Set-theory meta-logic | **REAL** | `∈ ∉ ⊂ ⊆ ⊃ ⊇ ∪ ∩ ∖ ∅` and cardinality bars, `Product`, `Pullback`, `CoverOf`, `PartitionOf` are all COMPUTED; `|States| = 40` true, `= 41` false; **all 20 examples in the book's Appendix J.5 evaluate as the book says**; the compiler's 28 SubFoundations are 7 Drives × 4 Registers, the positional mirror of the owner's canonical 28 (checked against `foundations28.py`) |
+| APPLY the book's governing meaning | **NOT YET** | the one computed number is a digit sum, the same in either order on all 100 pairs; the value flattens grouping; `^8 ∘ ^9` gives `^7`, not `^0` (only division cancels); different domains cannot be nested, so two of the book's own examples do not compile; Registers and Drives are dropped from the value |
+| TEACH Helm | **NOT TODAY** | no generated training example contains the ring sign or a set inside a set; 2 of 99 compiler tests touch the ring; no tool turns a tree back into CAS text |
+
+**Limits of the sets.** Elements are name labels: an inner set is known by its name, not by what is in it; an expression put into a set
+keeps only a label of its answer; no *not / and / or / for all / there exists*, no set equality; single letters are reserved.
+**FLAG_FOR_HUMAN_REVIEW:** the compiler's built-in `Worlds` holds the four Domains while the translation key maps Worlds to the four
+Registers. **Canon slip:** the offline help text calls `F2` Vitality (F2 is Wisdom) and nicknames Noetic names. Also found: relation and
+ring-result membership always false; a hole in the ring's same-domain rule; a raw Python crash near depth 200; half the CLI's commands start a
+neural model on the local CPU by default (not run).
+
+**What it means for Helm.** Reuse the parse tree as the target for a read-the-nesting skill; use the set meta-logic as a ready-made grader
+(questions a program can mark, agreeing with the book on all 20 of its examples); the missing piece is the governing MEANING, which goes with
+the book-faithful rules. Two one-click tasks were queued for the owner (give the compiler's nesting the book's meaning; fix the compiler
+defects and the help-text canon slips); the earlier book-faithful-rules suggestion was replaced because its premise was wrong. Cost $0.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - THE OWNER-APPROVED AWS JOB RAN: both Helm labels re-derived on a cloud machine by rescorer 0.2, 26 of 26 tests passed there, 0.2629 USD of a 2.00 USD ceiling. SAME DAY: I told the owner something unfair about the canon book, a reviewer caught it, and it is corrected. Rulebook 0.3, practice data v0.4, loader 0.2. Commits `6ad65271`, `8fab9575`, `0f6a7327`, `0d331585`, `64bf94a0`.
 
 **Owner decisions, in the owner's words** (`research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json`; not an owner-signed
