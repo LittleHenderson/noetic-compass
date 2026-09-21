@@ -21,7 +21,7 @@ and report on.
 | | |
 |---|---|
 | **Name** | **Helm** |
-| **Current shape** | **2.0 — built and verified on CPU at `$0`. NOT trained. NOT certified. No claim.** |
+| **Current shape** | **2.0-experimental — RAN on AWS 2026-09-20, three seeds, source `20208c92`. The grader printed `NO_TRANSFER_TO_NEW_WORLDS`. NOT certified. No claim of upgrade.** See the "Helm 2.0-experimental — ran" section. |
 | **Last certified** | **1.0** — and the reason its result was so thin is now known: its loop was broken. Read the mechanism section below before quoting 1.0. |
 | **What it is** | The learning part of the CNCM pointer machine. It reads a small structure of parts and "contains" links, and answers questions about which part holds which. |
 | **Learned numbers** | **157,919**, in **46** groups |
@@ -36,6 +36,24 @@ and report on.
 | **1.0** | the first version that passes the official three-run test. |
 | **1.1, 1.2** | same shape, trained better. |
 | **2.0** | the shape changed, so the number count moved. |
+
+**Proposed extension, 2026-09-21 — owner to ratify before any label below is used as official.**
+The owner asked for a progression *experimental → release candidate → release* and for it to be
+reconciled with the rules above. Reconciled, it reads:
+
+| label | what earns it | what it may claim |
+|---|---|---|
+| **X.0-experimental** | the shape changed and its `$0` structural gate passed. It may have been run. Whatever the grader printed is recorded verbatim, pass or fail. | **Nothing.** An experimental identity says only "this shape exists and was measured." |
+| **X.0-rc** | the frozen grader printed `LEARNS_NEW_WORLDS` on all three seeds, **and** the comparative acceptance tests are recorded with four separate statuses (`engineering`, `representation`, `operation`, `benefit`): held-out cases, meaningful internal interventions, matched comparison arms, and a regression check across **every** task family, not only the gate. | "Passed its own tests." Not yet audited. |
+| **X.0** (release) | rc, **plus** an independent audit reproduced it, **plus** release notes that name every family it weakened as plainly as every family it improved. | The version number without qualifier. |
+
+Under this scheme, today: **Helm 1.0** is a release (certified, then independently audited on
+2026-09-20 with its interpretation downgraded and its result intact). **Helm 2.0 is
+2.0-experimental** — its gate reading is `NO_TRANSFER_TO_NEW_WORLDS`, so it cannot be an rc, however
+large its other gains. **Helm 3.0-experimental** is reserved for the CAS-integrated shape and does
+not exist yet; nothing of it is built. Old checkpoints are never overwritten; any reuse of one
+version's weights in another requires a migration record listing every tensor as carried,
+reshaped, absent or fresh — the discipline `rounds_iterate_check.py:_container` already follows.
 
 ---
 
@@ -74,6 +92,106 @@ real, and what it measured was the ceiling of a broken loop.** The study asked a
 question needing more than one hop, and the one-hop machine answered exactly as far as it could.
 
 **Do not use Helm 1.0's numbers to argue anything about Helm's capacity.** They measure a defect.
+
+---
+
+## Helm 2.0-experimental — RAN 2026-09-20. The grader printed `NO_TRANSFER_TO_NEW_WORLDS`. NOT certified.
+
+**Recorded 2026-09-21 by the session that did the independent audit and built F1/F2/F3/F4.** The
+three runs below were launched and collected by a *different* session working on this same branch
+on 2026-09-20 (commits `df20eb46` … `3da10d84`); their receipts reached the tree after that
+session's last commit and were swept into this session's `c8d5c430` and `27fd5698` by `git add -A`.
+This section is the record those receipts were owed. The certified Helm 1.0 evidence was **not**
+touched: it lives byte-identical under `receipt_helm1_certified_2026091{7,8,9}/` and
+`admission_helm1_certified/` (renamed by `df20eb46`, zero content changes; `verify_evidence_hashes.py`
+→ 297 files, `EVIDENCE_HASH_CHECK:PASS`; `gate_reading.json` sha256 still `475379d2f9d47387…`).
+
+**The runs.** Jobs `cas-meta2-tpntr-20260920210258-20208c92-m-{20260917,20260918,20260919}`, source
+frozen at `20208c92` — which is F1/F2/F4 **plus** that session's repair of a first-update NaN in
+`_rms_unit` (`9e9ba62a`: clamp the mean square before the sqrt; forward bitwise unchanged) and an
+ablation-coverage fix. All three: `COMPLETE_TYPED_POINTER_ARM`, no failed checks, full 10-pass
+`REGISTERED` schedule, 1,470 updates, 174,303 numbers in 48 groups. Evidence hash check on all three:
+297 files, `PASS`. Reading: `admission_001/gate_reading.json`, sha256 `52877c1670132c70…`.
+
+```
+LABEL : NO_TRANSFER_TO_NEW_WORLDS
+integrity: pass, failures []
+G_LEARN_population: FAIL  (per seed: 20260917 False, 20260918 True, 20260919 False)
+```
+
+Two seeds each **broke one** frozen question (gained 11 / lost 1, gained 7 / lost 1), and the gate
+requires zero broken on every seed. Both broken questions are `reach`, and both are in
+`RANK_LAST_SOLVED_QUESTION_IDS` — the "point at the alphabetically last node" floor. Helm 2.0
+stopped exploiting that shortcut and paid for it on the gate.
+
+### Every number, beside Helm 1.0 (certified) on the same questions
+
+| | seed 20260917 | seed 20260918 | seed 20260919 |
+|---|---|---|---|
+| the frozen 18, before → after | 2 → **12** | 0 → **12** | 4 → **10** |
+| gained / broken | 11 / **1** | 12 / 0 | 7 / **1** |
+| above the zero-learning floor (11) | 2 | 2 | 2 |
+| *Helm 1.0 frozen 18 / above floor* | *12 / 2* | *12 / 2* | *11 / 2* |
+| never-shown worlds, per answer (127) | **103** (1.0: 84) | **105** (1.0: 88) | **99** (1.0: 81) |
+| the whole course (564) | **495** (1.0: 392) | **495** (1.0: 422) | **490** (1.0: 407) |
+| memory check (96) | **78** (1.0: 93) | 93 (1.0: 93) | **82** (1.0: 87) |
+
+**By kind, on the 127 never-shown-world answers, 1.0 → 2.0:**
+
+| kind | 20260917 | 20260918 | 20260919 |
+|---|---|---|---|
+| `correspondence` (20) | 0 → **20** | 0 → **20** | 0 → **20** |
+| `analogy` (17) | 0 → 0 | 0 → 0 | 0 → 0 |
+| `reach` (26) | 25 → **23** | 25 → 25 | 23 → **20** |
+| `parts` (9) | 9 → **7** | 9 → 9 | 6 → 6 |
+| `role_set` (6) | 1 → 4 | 5 → **2** | 3 → 4 |
+| `context` / `definition` / `edge_account` | 17/17, 15/15, 17/17 — unchanged | same | same |
+
+**The gain that the certified instrument cannot see.** `correspondence` went from **0 of 20 to 20 of
+20 on never-shown worlds, on all three seeds.** That is F2b, the matching head. The audit had classed
+that kind *inexpressible* and all five of its questions were removed from the frozen 18 — so the gate
+is structurally blind to it. Mechanism-free baselines registered against the same 20 questions,
+exact match against the checker's admissible answers: **unique in/out-degree + declared-whole
+signature match 4 / 20; positional match 0 / 20; always `NO_MATCH` 0 / 20.** Helm 2.0 beat the
+cheapest rule by sixteen. **Open:** a full isomorphism matcher with lexical tie-breaks has not been
+registered; 4/20 is the cheapest baseline, not the strongest.
+
+**What did not move and what got worse.** `analogy` is 0 of 17 on every seed, exactly as
+predicted — it needs relational features, not a bigger loop. `reach` fell on two seeds, `parts` on
+one, and **retention fell on two seeds** (93 → 78, 87 → 82). Training loss went far lower than 1.0
+(0.4629 → 0.0745 on seed 20260918, against 1.0's 0.1598). F4's clipping was live — 187 of 1,470
+updates clipped, largest pre-clip norm 24.566 — and F4's schedule was **dormant**
+(`CONSTANT_AS_HELM_1_0`; `planned_main_updates` still not wired).
+
+### Four statuses, as the implementation directive requires
+
+| status | reading |
+|---|---|
+| `engineering_status` | **PASS** — three clean runs, hashes intact, source frozen, gate check passes. |
+| `representation_status` | **PARTIAL** — one previously inexpressible kind is now expressed and transfers; one (analogy) is untouched. |
+| `operation_status` | **NOT APPLICABLE** — no CAS operation modules exist in this lineage; that is 3.0. |
+| `benefit_status` | **MIXED, NOT AN UPGRADE ON THE CERTIFIED INSTRUMENT.** Large gains on per-answer measures and on correspondence; the frozen gate failed; retention and reach regressed on two seeds. |
+
+### The best seed, and what is preserved
+
+**Best Helm 2.0-experimental seed: 20260918** — 12/18, 105/127, 495/564, 93/96 — the only seed
+that held retention. Archived at `D:\tksCAS-archive\helm_2_0_experimental_20208c92\receipt_20260918`
+with `final.pt` sha256 `a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658`, all
+hashes confirmed against the repository copy. **Best certified seed remains Helm 1.0's 20260918**
+(12/18, 88/127, 422/564, 93/96), archived at
+`D:\tksCAS-archive\helm_1_0_certified\receipt_helm1_certified_20260918` with `final.pt` sha256
+`a63b2428f77b0151…`, confirmed against the `c95dc6ac` bytes. Neither will be overwritten. Any 3.0
+reuse of either needs a migration record.
+
+**MAY be claimed:** Helm 2.0-experimental, on the same frozen questions and the same never-shown
+worlds as the certified 1.0 runs, answered `correspondence` perfectly where 1.0 answered none and a
+structural rule answers four; it answered 19, 17 and 18 more of the 127 never-shown-world questions;
+and it answered 103, 73 and 83 more of the whole course.
+
+**MAY NOT be claimed:** that Helm 2.0 is an upgrade over 1.0 — the frozen grader refused it, it is
+level with 1.0 above the zero-learning floor, and it lost retention on two seeds; that the loop
+repair alone explains any of this — the run also carries the NaN repair and the matching head, and no
+ablation separates them; that anything here is certified.
 
 ---
 
@@ -435,6 +553,7 @@ Add a row. Never edit an old one.
 
 | version | date | numbers | taught on | tested on | the frozen 18 | official verdict | evidence |
 |---|---|---|---|---|---|---|---|
+| **Helm 2.0-experimental** | 2026-09-20 (ran), recorded 2026-09-21 | **174,303** | 19 worlds (same course as 1.0), source `20208c92` | the same 5 never-shown machines | 2/18→**12/18**, 0/18→**12/18**, 4/18→**10/18**; gained 11, 12, 7; **broke 1, 0, 1** | **`NO_TRANSFER_TO_NEW_WORLDS` — NOT CERTIFIED. Not an upgrade on the gate.** Correspondence 0→20/20 on never-shown worlds (structural baseline 4/20); held-back 127: 103, 105, 99; whole course 495, 495, 490; retention **78**, 93, **82**. Best seed 20260918. | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` (`52877c16…`); `verify_evidence_hashes.py` PASS |
 | **Helm 2.0** | 2026-09-20 | **174,303** | not trained | not tested | **no result** | **NOT TRAINED, NOT CERTIFIED, NO CLAIM.** Built and CPU-verified at `$0`; the loop now iterates and reaches 8 hops. | branch `research/helm-2.0-iterating-rounds`, commit `7f3a656f`; `rounds_iterate_check.py` |
 | **Helm 1.0** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines, all reusing taught wiring | 2/18→**12/18**, 0/18→**12/18**, 0/18→**11/18**; gained 10, 12, 11; lost 0. **A no-learning rule scores 11/18 on the same set; Helm's margin over it is 2, 2, 2 at p = 0.50, 0.50, 0.69. `analogy` 0/5 in every seed.** | **`LEARNS_NEW_WORLDS` — CERTIFIED, all 3 seeds. Interpretation DOWNGRADED 2026-09-20. Cause now known: the loop was broken; one hop was the ceiling.** | `receipt_2026091{7,8,9}/` + `admission_001/gate_reading.json` + `AUDIT_REPORT_20260920_INDEPENDENT.md` |
 | **Helm 0.1** | 2026-09-20 | 157,919 | 19 worlds (11 machines, 8 grammar patterns) | 5 never-shown machines | 2/18 → **12/18**, gained 10, lost 0 | **NOT CERTIFIED** | `receipt_20260917_orphaned_1af25973/` |

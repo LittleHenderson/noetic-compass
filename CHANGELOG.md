@@ -4,6 +4,55 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (POINTER) - HELM 2.0-EXPERIMENTAL RAN: the grader printed `NO_TRANSFER_TO_NEW_WORLDS`. Correspondence went 0 -> 20/20 on never-shown worlds; retention fell on two seeds. Not an upgrade on the certified gate.
+
+**Recorded by the audit/F1-F4 session on 2026-09-21.** The three runs were launched and collected
+by the other session on this branch on 2026-09-20 (`df20eb46` … `3da10d84`, source frozen at
+`20208c92` = F1/F2/F4 + the `_rms_unit` NaN repair `9e9ba62a` + the ablation-coverage fix). Their
+receipts reached the working tree after that session's last commit and were swept into this
+session's `c8d5c430` and `27fd5698` by `git add -A` — under the OLD certified directory names,
+because `df20eb46` had moved the certified Helm 1.0 evidence to `receipt_helm1_certified_*` and
+`admission_helm1_certified/`. **The certified evidence is intact**: every file matches the `c95dc6ac`
+bytes, `verify_evidence_hashes.py` → 297 files `PASS`, `gate_reading.json` still `475379d2f9d47387…`.
+This entry and the matching `BRAIN_LINEAGE.md` section are the record those receipts were owed.
+
+**Result, exact.** Jobs `cas-meta2-tpntr-20260920210258-20208c92-m-*`, all `COMPLETE_TYPED_POINTER_ARM`,
+no failed checks, full 10-pass schedule, hashes `PASS` 297/297 each. Label
+`NO_TRANSFER_TO_NEW_WORLDS`, integrity pass, `G_LEARN_population` per seed False/True/False: seeds
+20260917 and 20260919 each **broke one** frozen question (both `reach`, both `rank_last`-floor
+questions). Frozen 18: 12, 12, 10 (1.0: 12, 12, 11); above the zero-learning floor 2, 2, 2 (1.0:
+2, 2, 2). Never-shown 127: **103, 105, 99** (1.0: 84, 88, 81). Whole course **495, 495, 490** (1.0:
+392, 422, 407). Retention **78**, 93, **82** (1.0: 93, 93, 87).
+
+**By kind on the 127.** `correspondence` **0 → 20/20 on every seed** — F2b, the matching head; the
+kind the audit classed inexpressible and the frozen 18 removed, so the gate cannot see it.
+Mechanism-free baselines registered on those 20: unique-signature structural match **4/20**,
+positional 0/20, always-NO_MATCH 0/20; a full isomorphism-with-lexical-tiebreak baseline is OPEN.
+`analogy` 0/17 on every seed, unchanged. `reach` 25→23, 25→25, 23→20. `parts` 9→7, 9→9, 6→6.
+`role_set` 1→4, 5→2, 3→4. F4 clipping live (187/1470 clipped, max pre-clip norm 24.566); F4
+schedule DORMANT (`CONSTANT_AS_HELM_1_0`). Training loss 0.4629 → 0.0745 (seed 20260918).
+
+**Four statuses:** engineering PASS; representation PARTIAL; operation N/A; benefit **MIXED — not an
+upgrade on the certified instrument**, large gains on per-answer measures, regressions in retention
+and reach on two seeds.
+
+**Best seed 20260918** (12/18, 105/127, 495/564, 93/96, the only seed that held retention), archived
+`D:\tksCAS-archive\helm_2_0_experimental_20208c92\receipt_20260918`, `final.pt`
+`a6e72caac1fccbd994433a46684846f5a3de48683dcc6b5def5946b85ef20658`. Certified 1.0 best seed 20260918
+archived `D:\tksCAS-archive\helm_1_0_certified\receipt_helm1_certified_20260918`, `final.pt`
+`a63b2428f77b0151…`, confirmed against `c95dc6ac`. An earlier archive copy made at 09:xx from the
+new `receipt_20260918` (which is Helm 2.0, not 1.0) was removed and replaced.
+
+**Lineage reconciliation (owner to ratify):** `BRAIN_LINEAGE.md` gains a proposed
+experimental → rc → release extension mapped onto its own rules. Under it Helm 1.0 is a release,
+**Helm 2.0 is 2.0-experimental and cannot be an rc** (the gate failed), and Helm 3.0-experimental is
+reserved for the CAS-integrated shape, which does not exist yet.
+
+**Two process findings.** Two agent sessions worked the same worktree and branch on 2026-09-20; the
+directive's §4 isolation rule is now followed — this session moves to `research/helm-3.0-cas-lab`
+in its own worktree and leaves this branch to the Helm 2.0 engineer. And `git add -A` must not be
+used on a shared tree; commits are now made by explicit path.
+
 ## 2026-09-20 UTC (POINTER) - Helm 2.0's first AWS run died at the FIRST update: non-finite gradients. The forward pass was fine; the backward blew up.
 
 **Job `cas-meta2-tpntr-20260920184534-df20eb46-m-20260917`, machine `i-0e8c342a5ee7819dc`, died about 27
