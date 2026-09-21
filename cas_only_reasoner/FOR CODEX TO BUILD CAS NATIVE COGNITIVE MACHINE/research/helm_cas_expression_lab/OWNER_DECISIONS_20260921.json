@@ -74,7 +74,8 @@
       "owner_words": "YES I AGREE WITH THE FOLLOWING: ... keeping the small first experiment on the code's rules, which is built and honestly labelled ... then open a separate task to write book-faithful versions of those three rules, since the books are canon",
       "what_fable_does": "The first small experiment stays on the engine code's rules, labelled 'matches the code', never 'discovery'. A separate task writes book-faithful versions of the rules the engine lacks.",
       "status": "OWNER_DECISION",
-      "correction_by_fable_2026-09-21": "What Fable first told the owner about the book and the code was partly WRONG and was corrected the same day after a review: (1) single-step descent -- stands: the book forbids ^0^P -> ^9^O in one step, the code allows it, and no pinned code enforces 'no skipping a domain'; (2) closure under composition -- overstated about 25 times: read fairly the code fails for 9,720 of 556,960 chains (1.75%), not 238,572; (3) 'order matters' -- NOT a disagreement: the book has two combining operations; the code's compose matches the book's x on the Noetic index (lacking only its domain rule), and the book's Nesting Operator, where order matters, does not exist in the code. The owner's decision is unchanged in direction; the queued task was replaced with a corrected one."
+      "correction_by_fable_2026-09-21": "What Fable first told the owner about the book and the code was partly WRONG and was corrected the same day after a review: (1) single-step descent -- stands: the book forbids ^0^P -> ^9^O in one step, the code allows it, and no pinned code enforces 'no skipping a domain'; (2) closure under composition -- overstated about 25 times: read fairly the code fails for 9,720 of 556,960 chains (1.75%), not 238,572; (3) 'order matters' -- NOT a disagreement: the book has two combining operations; the code's compose matches the book's x on the Noetic index (lacking only its domain rule), and the book's Nesting Operator, where order matters, does not exist in the code. The owner's decision is unchanged in direction; the queued task was replaced with a corrected one.",
+      "second_correction_by_fable_2026-09-21": "Fable also told the owner that the book's Nesting Operator 'does not exist in the code'. TOO BROAD: that was checked only against the engine's small compose function. The CAS compiler (api/notation/compiler.py, the same text as dist/cas-offline) HAS the ring operator: it keeps the written order, keeps the grouping in its parse tree, and nests at least 150 levels deep. What it lacks is the book's MEANING of nesting (order changing the outcome, grouping surviving in the value, cancellation of opposites, a domain-crossing container, Registers and Drives kept). The owner pointed Fable at the compiler; see COMPILER_NESTING_AND_SETS_FINDINGS_20260921.md and test_compiler_nesting_facts.py (15 pinned facts)."
     },
     {
       "id": "OD-7",
@@ -82,6 +83,13 @@
       "owner_words": "Money and state: $4199.00 left of $5000.00. All three runs reserved $15.00 each.",
       "what_fable_does": "Recorded as the project's budget state as pasted from the previous agent. Every launch still states its machine, time limit and dollar ceiling first and destroys itself on a timer.",
       "status": "CONTEXT"
+    },
+    {
+      "id": "OD-8",
+      "topic": "nesting and set-theory meta-logic in the existing CAS compiler",
+      "owner_words": "the meta-logic of the code allows for thought to be nested inside another thought right? ... CAS Compiler was created months ago so you might want to take a look and thoroughly examine it ... it use set theory symbols as meta-logic as well",
+      "what_fable_does": "Examined the compiler, the offline bundle and the CLI by running them (symbolic code only). Answer: YES at the 'write' level (ring operator, brackets, a set inside a set three levels deep, box-inside-box diagrams) and YES for set-theory meta-logic (computed true/false; all 20 book examples in Appendix J.5 agree); NOT YET at the 'apply the book's governing meaning' level; NOT TODAY at the 'teach Helm' level. Work on nesting starts from the compiler's existing features, never from the assumption that nesting is absent.",
+      "status": "EXAMINED__FINDINGS_RECORDED"
     }
   ],
   "mid_task_messages_confirmed_by_the_owner": {
