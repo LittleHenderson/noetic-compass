@@ -1,0 +1,150 @@
+{
+ "anchor": {
+  "path": "records\\typed_pointer_001\\trust_anchor_helm1_certified.json",
+  "sha256": "72b68c33c0cb6d93c5b30b9d2205486aa54b59245733f35151dc38ce92d4b6fc"
+ },
+ "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was rechecked with the private checker",
+ "checker": {
+  "profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
+  "sources": {
+   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
+   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
+   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+  }
+ },
+ "comparison_with_frozen_grader": {
+  "frozen_label": "LEARNS_NEW_WORLDS",
+  "frozen_reading_path": "records\\typed_pointer_001\\admission_helm1_certified\\gate_reading.json",
+  "frozen_reading_present": true,
+  "labels_agree": true,
+  "per_seed": {
+   "20260917": {
+    "agree": true,
+    "frozen_gained_broken": [
+     10,
+     0
+    ],
+    "rescored_gained_broken": [
+     10,
+     0
+    ]
+   },
+   "20260918": {
+    "agree": true,
+    "frozen_gained_broken": [
+     12,
+     0
+    ],
+    "rescored_gained_broken": [
+     12,
+     0
+    ]
+   },
+   "20260919": {
+    "agree": true,
+    "frozen_gained_broken": [
+     11,
+     0
+    ],
+    "rescored_gained_broken": [
+     11,
+     0
+    ]
+   }
+  }
+ },
+ "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
+ "custody": "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab",
+ "grader_sha256_lf": "d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d",
+ "label_rederived": "LEARNS_NEW_WORLDS",
+ "per_seed": {
+  "20260917": {
+   "broken": 0,
+   "frozen_18_after": 12,
+   "frozen_18_before": 2,
+   "gained": 10,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260917",
+   "worlds_improved": 5
+  },
+  "20260918": {
+   "broken": 0,
+   "frozen_18_after": 12,
+   "frozen_18_before": 0,
+   "gained": 12,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260918",
+   "worlds_improved": 5
+  },
+  "20260919": {
+   "broken": 0,
+   "frozen_18_after": 11,
+   "frozen_18_before": 0,
+   "gained": 11,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
+     "rescored": 564,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_helm1_certified_20260919",
+   "worlds_improved": 5
+  }
+ },
+ "population_digest": "4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d",
+ "reject_reasons": [],
+ "schema": "cncm.trusted-rescore-reading/0.1",
+ "verdict": "RESCORE_OK"
+}
