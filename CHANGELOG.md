@@ -4,6 +4,44 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - Q3 v0.1 WAS BROKEN BY ALL THREE REVIEWERS. Q3 v0.2 answers every finding by name and turns each into a test. 36 tests pass. Commit `ee5496fa`.
+
+**The review, exact.** Three independent attackers, read-only, ~390k tokens, against the committed
+v0.1 files. All three reported `attack_succeeded: true`. What they measured:
+
+| finding | measured on v0.1 | what it means |
+|---|---|---|
+| **A1** a three-line hand rule — registered rule + "CO-0 needs source==target" + a range check | **1.000000** on A eval and dev | A is fully solvable without learning |
+| **A1** a 4-feature majority lookup filled from *train* (op==0, same_domain, tn==op, src==tgt) | **1.000000** on the held-out cells | the answer depends only on field equalities; holding out cells holds out **no rule component** |
+| **A2** eval rows whose answer changes when source and target are swapped | **30 of 256 = 0.117188** | the accuracy number was dominated by rows where order does not matter; an order-blind rule scored 0.926 |
+| **A3** eval refusal rows verbatim in train | **16 of 16** (six templates recycled into every split) | refusal accuracy was memory; the row-memory baseline reported 0.0 only because it *skipped* refusal rows |
+| **A3** "answer False, refuse out-of-range" — unregistered | **0.764706**, above the registered majority 0.705882 | the true mechanism-free floor was never written down |
+| **R1** `shape()` kept coefficients and Ω names as leaves | every eval "shape group" a **singleton**; with leaves abstracted **251/256** eval structures already in train; eval **80% RecipeLiteral vs 8%** in train | the R split was a fingerprint, not a structure holdout |
+| **R** one regular expression vs the compiler | **204/256** eval targets reproduced | R is a fidelity task; its ceiling is symbolic |
+| **C1** dev chains verbatim in train | **102/256** (depth-1 has only 100 strings; dedup was per split) | dev was not held out |
+| **B1** two "1.0" ceilings | typed as literals, never measured | fixed |
+| **I1** `record_id` hashed the JSON-quoted string | doc said otherwise | fixed |
+| position / order / `record_id` as covert features | at or below chance on every blind rule | **held** — the file boundary is real, but it is a discipline against a learner, not a secret: the sealed side regenerates from public code + seed |
+
+**v0.2, in order of the findings.** A is relabelled **conformance-and-transfer, never discovery**; R3 and
+R7 are registered baselines at 1.0 and every rule is now also scored on the **order-flip rows** and on
+the **swapped twin** of every row — where the wrong-direction rule collapses to **0.0** and the
+order-blind rule to **0.523**, which is what those metrics are for; eval and dev valid rows are
+**128 of 256 order-flip** by construction. Refusals are drawn from **split-disjoint value pools and type
+classes** (eval's float-equal-to-int and string classes are unseen in train), shared across splits = 0,
+asserted. R uses `strict_shape()` — every scalar leaf abstracted — and is honestly small: **83 strict
+shapes** in the whole SDG pool (28 train / 13 dev / 42 eval), 237 dev and 251 eval records; relabelled
+**fidelity**. A **new family G** generates nested binary trees from the grammar itself and compiles each:
+3,900 valid, **2,238 strict topologies**, held out by whole topology and depth (eval is depths 4–5 only);
+the compiler rejected 7,752 depth-4 and 19,688 depth-5 candidates to get there — the acceptance rate is
+in the manifest. C uses one seen-set across splits (verbatim in train: dev 0, eval 0), discloses that
+256/256 dev and eval chains contain a verbatim train chain as a sub-expression, and drops the vacuous
+digit-multiset check. Every reference score is measured. v0.1 stays on disk as the reviewed artifact.
+
+**What A can now be used to show.** Fidelity to R3 (1.0 is the floor, not the result), transfer to
+unseen cells against R7, **order-flip exact** and **swapped-twin exact** as their own numbers, and
+refusal accuracy on unseen refusal classes. Accuracy alone is not a claim.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - Q3 BUILT: behaviour-paired records v0.1 with sealed targets, structure-family splits and baselines registered BEFORE training. 27 tests pass. Commit `c189bedb`. Adversarial review launched before any module trains on it.
 
 **What it is.** `research/helm_cas_expression_lab/q3_behaviour_records.py` → `data/q3_v0_1/` (5.1 MB,
