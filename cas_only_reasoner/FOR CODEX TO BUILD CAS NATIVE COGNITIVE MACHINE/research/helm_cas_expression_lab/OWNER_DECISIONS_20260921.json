@@ -55,9 +55,9 @@
     {
       "id": "OD-4",
       "topic": "how much of CAS is in scope for Helm's expression space",
-      "owner_words": "(earlier the same week) It would just be the 40 Elements but the infinite expressions and notations THAT CAS CONSISTS OF -- followed on 2026-09-21 by the ruling OD-3, which puts the 28 Foundations in scope",
+      "owner_words": "NOT just the 40 Elements ... MEANING DO NOT EXCLUDE ANY OF THE OTHER OF THE CAS SYSTEM",
       "what_fable_does": "Nothing in CAS is excluded: the 40 Elements, the 28 Foundations, Registers, operators, recipes, and the unlimited expressions and notations built from them. An earlier note by Fable that treated the 28 as set aside was wrong and is withdrawn.",
-      "status": "FABLE_READING__OWNER_MAY_CORRECT"
+      "status": "OWNER_RULING"
     },
     {
       "id": "OD-5",
@@ -66,16 +66,31 @@
       "what_fable_does": "The progression experimental -> release candidate -> release, with the three conditions put to the owner (no stage may be skipped; release notes name what got worse as plainly as what got better; Helm 2.0 and its best seed 20260918 stay preserved as the fallback) and the fuller conditions in LINEAGE_RATIFICATION_CLARIFICATIONS_20260921.md, is the official rule. Helm 1.0 = release; Helm 2.0 = 2.0-experimental (its gate printed NO_TRANSFER_TO_NEW_WORLDS); Helm 3.0-experimental is reserved and not built.",
       "status": "ACCEPTED_BY_OWNER_IN_CHAT",
       "recorded_in": "BRAIN_LINEAGE.md (acceptance note added under the proposal)"
-    }
-  ],
-  "not_treated_as_owner_instructions": [
-    {
-      "text": "YOU HAVE MY APPROVAL",
-      "why": "arrived attached to the output of a tool call, not as a chat message; names no amount and no action. Not used as approval for anything."
     },
     {
-      "text": "three lines about 'NOT just the 40 Elements'",
-      "why": "arrived attached to the output of tool calls, not as chat messages. Not used as instructions. Their substance agrees with OD-3 and OD-4, which rest on the owner's chat messages."
+      "id": "OD-6",
+      "topic": "book versus engine code: which rules Helm learns first",
+      "owner_words": "YES I AGREE WITH THE FOLLOWING: ... keeping the small first experiment on the code's rules, which is built and honestly labelled ... then open a separate task to write book-faithful versions of those three rules, since the books are canon",
+      "what_fable_does": "The first small experiment stays on the engine code's rules, labelled 'matches the code', never 'discovery'. A separate task writes book-faithful versions of the three rules where Thinking in Cognitive Architecture and the engine differ (single-step descent, admissibility under composition, order-sensitive composition).",
+      "status": "OWNER_DECISION"
+    },
+    {
+      "id": "OD-7",
+      "topic": "budget context",
+      "owner_words": "Money and state: $4199.00 left of $5000.00. All three runs reserved $15.00 each.",
+      "what_fable_does": "Recorded as the project's budget state as pasted from the previous agent. Every launch still states its machine, time limit and dollar ceiling first and destroys itself on a timer.",
+      "status": "CONTEXT"
     }
-  ]
+  ],
+  "mid_task_messages_confirmed_by_the_owner": {
+    "owner_words": "I often copy and paste to you either your own words or words from a different agent or from a file ... do not disregarding anything coming from me whether I copy and paste it or I type it",
+    "what_happened": "Several owner messages reached Fable mid-task attached to tool output. Fable held them back at the time. The owner confirmed in chat that they were the owner's; they are recorded below as the owner's.",
+    "messages": [
+      "YOU HAVE MY APPROVAL",
+      "NOT just the 40 Elements ... DO NOT EXCLUDE ANY OF THE OTHER OF THE CAS SYSTEM",
+      "YOUR APPROVED FOR THE FOLLOWING Money and state: $4199.00 left of $5000.00. All three runs reserved $15.00 each.",
+      "I APPROVE ....CHECK THE AWS ACCOUNT",
+      "YES I AGREE WITH THE FOLLOWING: Book versus code ... keeping the small first experiment on the code's rules ... a separate task to write book-faithful versions of those three rules"
+    ]
+  }
 }

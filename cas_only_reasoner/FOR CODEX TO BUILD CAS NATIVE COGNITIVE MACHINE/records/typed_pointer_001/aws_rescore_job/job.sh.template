@@ -1,0 +1,93 @@
+#!/bin/bash
+# Helm T01 re-check job. Runs as root through cloud-init user-data on a throwaway machine.
+# There are NO credentials on this machine: it can fetch ONE object and write TWO objects through
+# time-limited links. It always ends by shutting itself down, and the machine is set to be destroyed on shutdown.
+set -uo pipefail
+trap '' PIPE          # if the log pipe ever dies, an echo must not kill this script before it reaches its shutdown line
+# Kill switch 0 of 3+1: the operating system's own scheduled power-off. It does not depend on this script staying alive.
+shutdown -h +__MAX_MINUTES__ "helm job hard limit" || true
+LOG=/var/log/helm_job.log
+exec > >(tee -a "$LOG") 2>&1
+echo "JOB START $(date -u +%FT%TZ)"
+
+# Kill switch 1 of 3: after __MAX_SECONDS__ seconds, tell the main script to stop (its exit handler uploads whatever exists and
+# shuts down); two minutes later shut down regardless.
+( sleep __MAX_SECONDS__; kill -TERM $$ 2>/dev/null; sleep 120; shutdown -h now; echo "IN-INSTANCE TIMER FIRED $(date -u +%FT%TZ)" ) &
+
+WORK=/root/helm_job
+mkdir -p "$WORK/out"
+cd "$WORK"
+STATUS=setup
+
+upload() {   # $1 = file, $2 = time-limited upload link
+  curl -sS --retry 3 --max-time 300 -X PUT --upload-file "$1" "$2" -o /dev/null -w "upload $(basename "$1") -> http %{http_code}\n" || true
+}
+
+finish() {   # Kill switch 2 of 3: ANY exit -- success, error, signal -- uploads what exists and shuts down.
+  echo "JOB FINISH $(date -u +%FT%TZ) status=$STATUS"
+  echo "$STATUS" > "$WORK/out/STATUS"
+  cp "$LOG" "$WORK/out/job.log" 2>/dev/null || true
+  tar -czf "$WORK/results.tar.gz" -C "$WORK" out || true
+  upload "$WORK/results.tar.gz" "__RESULTS_URL__"
+  shutdown -h now
+}
+trap finish EXIT
+
+# progress: the log is uploaded every 4 minutes so the client can read it without logging in
+( while true; do sleep 240; upload "$LOG" "__PROGRESS_URL__"; done ) &
+
+curl -fsS --retry 3 --max-time 600 -o bundle.tar.gz "__BUNDLE_URL__" || { STATUS=bundle_download_failed; exit 1; }
+echo "__BUNDLE_SHA256__  bundle.tar.gz" | sha256sum -c - || { STATUS=bundle_hash_mismatch; exit 1; }
+mkdir pkg pkg_tests
+tar -xzf bundle.tar.gz -C pkg
+tar -xzf bundle.tar.gz -C pkg_tests       # the tests get their own copy: the re-check jobs REWRITE anchors and readings
+
+export HOME=/root
+curl -LsSf --retry 3 https://astral.sh/uv/install.sh | sh || { STATUS=uv_install_failed; exit 1; }
+export PATH="/root/.local/bin:$PATH"
+uv python install __PYTHON_VERSION__ || { STATUS=python_install_failed; exit 1; }
+uv venv --python __PYTHON_VERSION__ "$WORK/venv" || { STATUS=venv_failed; exit 1; }
+uv pip install --python "$WORK/venv/bin/python" pytest || { STATUS=pytest_install_failed; exit 1; }
+PY="$WORK/venv/bin/python"
+{ "$PY" --version; uname -a; nproc; echo "bundle_sha256=__BUNDLE_SHA256__"; echo "source_commit=__SOURCE_COMMIT__";
+  uv --version; echo "python_binary_sha256=$(sha256sum "$(readlink -f "$PY")" | cut -d' ' -f1)"; uv pip freeze --python "$PY"; } > "$WORK/out/env.txt" 2>&1
+cat "$WORK/out/env.txt"
+
+R=records/typed_pointer_001
+STATUS=running
+# The bundle carries the OLD anchors and readings because the tests read them. Remove them from the JOB copy, so a job that
+# fails cannot pass off stale files as fresh ones.
+rm -f "$WORK/pkg/$R"/trust_anchor_*.json "$WORK/pkg/$R"/trusted_rescore_reading_*.json
+
+( cd "$WORK/pkg" && START=$(date +%s) \
+  && "$PY" $R/trusted_rescore.py --study $R/study_helm1_certified.json --anchor $R/trust_anchor_helm1_certified.json --write-anchor \
+  && "$PY" $R/trusted_rescore.py --study $R/study_helm1_certified.json --anchor $R/trust_anchor_helm1_certified.json \
+       --frozen-reading $R/admission_helm1_certified/gate_reading.json --out $R/trusted_rescore_reading_helm1_certified.json; \
+  CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) > "$WORK/out/helm1.log" 2>&1 &
+P1=$!
+
+( cd "$WORK/pkg" && START=$(date +%s) \
+  && "$PY" $R/trusted_rescore.py --study $R/admission_001/study.json --anchor $R/trust_anchor_helm2_experimental_20208c92.json --write-anchor \
+  && "$PY" $R/trusted_rescore.py --study $R/admission_001/study.json --anchor $R/trust_anchor_helm2_experimental_20208c92.json \
+       --out $R/trusted_rescore_reading_helm2_experimental.json; \
+  CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) > "$WORK/out/helm2.log" 2>&1 &
+P2=$!
+
+( cd "$WORK/pkg_tests" && START=$(date +%s) \
+  && HELM_RUN_SLOW_TESTS=1 "$PY" -m pytest $R/test_trusted_rescore.py -q -p no:cacheprovider --durations=0 -rs --junitxml="$WORK/out/slow_tests.xml"; \
+  CODE=$?; echo "exit=$CODE wall=$(( $(date +%s) - START ))s"; exit $CODE ) > "$WORK/out/slow_tests.log" 2>&1 &
+P3=$!
+
+# wait for the three jobs only -- never for the timer or the progress loop -- and keep each job's own exit code
+wait "$P1"; H1=$?
+wait "$P2"; H2=$?
+wait "$P3"; TESTS=$?
+
+for f in trust_anchor_helm1_certified.json trust_anchor_helm2_experimental_20208c92.json \
+         trusted_rescore_reading_helm1_certified.json trusted_rescore_reading_helm2_experimental.json; do
+  cp "$WORK/pkg/$R/$f" "$WORK/out/$f" 2>/dev/null || echo "MISSING OUTPUT $f"
+done
+tail -n 12 "$WORK/out/helm1.log" "$WORK/out/helm2.log" "$WORK/out/slow_tests.log"
+if [ "$H1" -eq 0 ] && [ "$H2" -eq 0 ] && [ "$TESTS" -eq 0 ]; then STATUS=done; else STATUS="finished_with_failures helm1=$H1 helm2=$H2 slow_tests=$TESTS"; fi
+echo "job exit codes: helm1=$H1 helm2=$H2 slow_tests=$TESTS"
+exit 0
