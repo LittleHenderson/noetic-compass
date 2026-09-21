@@ -1,0 +1,42 @@
+{
+  "schema": "helm-cas-expression-lab.owner-decisions/0.1",
+  "custody": "Recorded by Fable from the owner's chat messages of 2026-09-21. This is NOT an owner-signed record. Each entry quotes the owner's words exactly; 'what_fable_does' is Fable's reading and can be corrected by the owner.",
+  "applies_to": {"branch": "research/helm-3.0-cas-lab", "operation_contracts_digest": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad"},
+  "decisions": [
+    {
+      "id": "OD-1",
+      "topic": "where heavy computing runs",
+      "owner_words": "IF YOU COULD USE AWS BECAUSE IT'S FASTER AND MORE POWER AND SPACE THAN MY LAPTOP LAPTOP OVER HEATS AND STALLS OUT",
+      "what_fable_does": "Heavy work (neural training, and long checking jobs such as the 32-minute tamper suite) goes to AWS instead of the laptop. The owner named no amount, so nothing is launched on these words alone: before any launch Fable states the exact machine, the time limit and the dollar ceiling in chat and waits for a yes.",
+      "status": "DIRECTION_RECORDED__NO_LAUNCH_MADE__NO_AMOUNT_NAMED",
+      "aws_facts_checked_read_only": {"account": "807562639912", "user": "cas-g5-operator", "region": "us-west-2", "instances_not_terminated": ["i-0c3028734c8885542 (g6e.xlarge, stopped, owner's standby, 300 GiB disk, not touched)"]}
+    },
+    {
+      "id": "OD-2",
+      "topic": "canonical books and notation",
+      "owner_words": "THE BOOKS \"THINKING IN COGNITIVE ARCHITECTURE\" AND \"CAS PCBA ENGINEER\" BOTH OF WHICH AS WELL AS \"REALITY ENGINEERING\" ALL ARE CANONICAL AND CAN BE FOUND ON LOCAL DEVICE (I'D RATHER USE ^ THAN \"CO\" IN REGARD TO CAS NOTATIONS)",
+      "what_fable_does": "The three books are treated as canon for how CAS is written and ordered. New lab documents and reports write the ten Noetics as ^0 .. ^9. Where the frozen engine code spells a name 'CO2', that spelling is quoted only as a code identifier, next to ^2.",
+      "status": "RECORDED"
+    },
+    {
+      "id": "OD-3",
+      "topic": "which 28",
+      "owner_words": "CANONICAL 28 FOUNDATIONS",
+      "attachment": {"file": "28 fOUNDATIONS 1.0.pdf", "bytes": 399302, "pages": 7, "sha256_raw": "2c27443f447bd69901372edb1316be56a92490afc6f88055ce0c84ce7a871017"},
+      "what_fable_does": "Closes discrepancy DR-4 of OPERATION_CONTRACTS.json (three 28-way namespaces, owner decision pending). The lab's one 28-way Foundation coordinate is 28 Foundations 1.0: 7 Foundations x 4 Worlds (a Spiritual, b Mental, c Emotional, d Physical), symbols 1a..7d, numbered 1..28 as the document numbers them, definitions verbatim. CAS labels F1..F7 with Registers T, A, f, E are the same POSITIONS and are never used as the meaning of a Foundation. Built and tested in foundations28.py (37 tests). The frozen contracts file is NOT edited for this; the decision is recorded here and folds into the contracts at their next version.",
+      "status": "RECORDED__DR-4_RESOLVED",
+      "checked": "All 28 definitions in the repository's capture match the PDF word for word; three differ in punctuation only and the PDF's page-6 chart has suffix slips -- listed in foundations28.KNOWN_DISCREPANCIES, not silently fixed."
+    },
+    {
+      "id": "OD-4",
+      "topic": "how much of CAS is in scope for Helm's expression space",
+      "owner_words": "(earlier the same week) It would just be the 40 Elements but the infinite expressions and notations THAT CAS CONSISTS OF -- followed on 2026-09-21 by the ruling OD-3, which puts the 28 Foundations in scope",
+      "what_fable_does": "Nothing in CAS is excluded: the 40 Elements, the 28 Foundations, Registers, operators, recipes, and the unlimited expressions and notations built from them. An earlier note by Fable that treated the 28 as set aside was wrong and is withdrawn.",
+      "status": "FABLE_READING__OWNER_MAY_CORRECT"
+    }
+  ],
+  "not_treated_as_owner_instructions": [
+    {"text": "YOU HAVE MY APPROVAL", "why": "arrived attached to the output of a tool call, not as a chat message; names no amount and no action. Not used as approval for anything."},
+    {"text": "three lines about 'NOT just the 40 Elements'", "why": "arrived attached to the output of tool calls, not as chat messages. Not used as instructions. Their substance agrees with OD-3 and OD-4, which rest on the owner's chat messages."}
+  ]
+}
