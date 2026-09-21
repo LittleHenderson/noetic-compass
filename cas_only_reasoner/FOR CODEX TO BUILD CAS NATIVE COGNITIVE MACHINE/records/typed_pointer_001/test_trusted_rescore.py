@@ -256,6 +256,36 @@ def test_committed_readings_agree_with_the_frozen_grader(name, expected_label, c
     assert all(s["phases"][ph]["rescored"] == 564 and s["phases"][ph]["disagreements"] == 0 for s in r["per_seed"].values() for ph in T.PHASES)
 
 
+# The anchors were written on the cloud machine (2026-09-21, commit 8fab9575, Python 3.14.7) and checked here file by file.
+# Whoever rewrites a receipt cannot rewrite an anchor without failing this test.
+ANCHOR_SHA256_LF = {
+    "trust_anchor_helm1_certified.json": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef",
+    "trust_anchor_helm2_experimental_20208c92.json": "f71fa001209eb0bb8a7ab980cae24c1dab394ca3f12ce333a84e985a76a1f834",
+}
+
+
+def test_the_committed_anchors_are_the_pinned_ones_and_every_file_they_pin_is_the_file_on_disk():
+    studies = {"trust_anchor_helm1_certified.json": "study_helm1_certified.json", "trust_anchor_helm2_experimental_20208c92.json": "admission_001/study.json"}
+    for name, digest in ANCHOR_SHA256_LF.items():
+        assert T.file_pin(HERE / name)["sha256_lf"] == digest, "ANCHOR_CHANGED:%s" % name
+        anchor = json.loads((HERE / name).read_text(encoding="utf-8"))
+        assert anchor["schema"] == T.ANCHOR_SCHEMA and anchor["custody"].startswith("EVALUATION_NOT_INDEPENDENT") and len(anchor["checker"]["code_closure"]) == 18
+        out = pathlib.Path(tempfile.mkdtemp()) / "safe.json"
+        T.rescore(HERE / studies[name], HERE / name, {}, out, safe_only=True)        # file checks only: seconds, no checker import
+        reading = json.loads(out.read_text(encoding="utf-8"))
+        assert reading["reject_reasons"] == [] and all(reading["checks"][c]["status"] == "PASS" for c in T.SAFE_CHECKS)
+
+
+def test_the_committed_readings_were_made_by_this_tool_against_these_anchors():
+    for name, anchor in (("helm1_certified", "trust_anchor_helm1_certified.json"), ("helm2_experimental", "trust_anchor_helm2_experimental_20208c92.json")):
+        r = json.loads((HERE / ("trusted_rescore_reading_%s.json" % name)).read_text(encoding="utf-8"))
+        assert r["schema"] == T.SCHEMA and r["anchor"]["pin"]["sha256_lf"] == ANCHOR_SHA256_LF[anchor]
+        assert r["tool"]["pin"]["sha256_lf"] == T.file_pin(RESCORE)["sha256_lf"], "the tool changed after the readings were made: re-run the job"
+        assert all(c["status"] == "PASS" for c in r["checks"].values()) and r["imported_checker_code"] is True
+        assert r["bytecode_policy"] == "FRESH_EMPTY_PYCACHE_PREFIX_AND_NO_BYTECODE_WRITTEN" and r["material_supplied_by_caller"] is False
+        assert all(s["receipt_resolved_from"] == "package-relative" for s in r["per_seed"].values())
+
+
 # =================================== SLOW ===================================
 @pytest.fixture(scope="module")
 def material():

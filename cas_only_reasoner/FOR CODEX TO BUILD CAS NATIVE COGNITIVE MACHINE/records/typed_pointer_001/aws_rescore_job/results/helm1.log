@@ -1,0 +1,11 @@
+anchor written: records/typed_pointer_001/trust_anchor_helm1_certified.json  sha256_lf b1798323f6f7f9c9
+{
+ "verdict": "RESCORE_OK",
+ "label_rederived": "LEARNS_NEW_WORLDS",
+ "reject_reasons": []
+}
+  checks: ANCHOR_READABLE=PASS, STUDY_IDENTITY=PASS, SEED_SET=PASS, EVALUATOR_IDENTITY=PASS, CHECKER_CODE_IDENTITY=PASS, PREDICTIONS_IDENTITY=PASS, ID_SET=PASS, FINITE_NUMBERS=PASS, WELL_FORMED_JSON=PASS, CHECKER_PROFILE=PASS, COURSE_IDENTITY=PASS, POPULATION_IDENTITY=PASS, CODE_CLOSURE_COMPLETE=PASS, CODE_UNCHANGED_DURING_RUN=PASS, RESCORE=PASS, SCORING_FILE_AGREEMENT=PASS, FROZEN_GRADER_AGREEMENT=PASS
+  seed 20260917: frozen18 2 -> 12, gained 10 broken 0, rescored [564, 564], disagreements [0, 0]
+  seed 20260918: frozen18 0 -> 12, gained 12 broken 0, rescored [564, 564], disagreements [0, 0]
+  seed 20260919: frozen18 0 -> 11, gained 11 broken 0, rescored [564, 564], disagreements [0, 0]
+exit=0 wall=820s

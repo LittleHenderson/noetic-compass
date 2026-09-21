@@ -1,0 +1,52 @@
+JOB START 2026-09-21T16:17:04Z
+bundle.tar.gz: OK
+downloading uv 0.12.17 x86_64-unknown-linux-gnu
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.14.7-linux-x86_64-gnu (download) (34.3MiB)
+ Downloaded cpython-3.14.7-linux-x86_64-gnu (download)
+Installed Python 3.14.7 in 703ms
+ + cpython-3.14.7-linux-x86_64-gnu (python3.14)
+Using CPython 3.14.7
+Creating virtual environment at: venv
+Activate with: source venv/bin/activate
+Using Python 3.14.7 environment at: venv
+Resolved 5 packages in 124ms
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Prepared 5 packages in 57ms
+Installed 5 packages in 4ms
+ + iniconfig==2.3.0
+ + packaging==26.3
+ + pluggy==1.6.0
+ + pygments==2.21.0
+ + pytest==9.1.1
+Python 3.14.7
+Linux ip-172-31-36-58 7.0.0-1012-aws #12~24.04.1-Ubuntu SMP PREEMPT Wed Aug 12 14:00:57 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+8
+bundle_sha256=958c0ecbdbf95b209340077102399e5c69baab9fc25e3d75516718ca7b883eef
+source_commit=8fab957581a9616df1942c944dbd3ce14b1c4032
+uv 0.12.17 (x86_64-unknown-linux-gnu)
+python_binary_sha256=241bf774a81580bb760adf960b48df7e6b23b1de026c9c912d4ca6be1a08241e
+Using Python 3.14.7 environment at: venv
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pygments==2.21.0
+pytest==9.1.1
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200

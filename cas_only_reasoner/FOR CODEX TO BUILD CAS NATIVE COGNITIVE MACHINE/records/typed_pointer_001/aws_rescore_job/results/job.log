@@ -1,0 +1,94 @@
+JOB START 2026-09-21T16:17:04Z
+bundle.tar.gz: OK
+downloading uv 0.12.17 x86_64-unknown-linux-gnu
+installing to /root/.local/bin
+  uv
+  uvx
+everything's installed!
+
+To add $HOME/.local/bin to your PATH, either restart your shell or run:
+
+    source $HOME/.local/bin/env (sh, bash, zsh)
+    source $HOME/.local/bin/env.fish (fish)
+Downloading cpython-3.14.7-linux-x86_64-gnu (download) (34.3MiB)
+ Downloaded cpython-3.14.7-linux-x86_64-gnu (download)
+Installed Python 3.14.7 in 703ms
+ + cpython-3.14.7-linux-x86_64-gnu (python3.14)
+Using CPython 3.14.7
+Creating virtual environment at: venv
+Activate with: source venv/bin/activate
+Using Python 3.14.7 environment at: venv
+Resolved 5 packages in 124ms
+Downloading pygments (1.2MiB)
+ Downloaded pygments
+Prepared 5 packages in 57ms
+Installed 5 packages in 4ms
+ + iniconfig==2.3.0
+ + packaging==26.3
+ + pluggy==1.6.0
+ + pygments==2.21.0
+ + pytest==9.1.1
+Python 3.14.7
+Linux ip-172-31-36-58 7.0.0-1012-aws #12~24.04.1-Ubuntu SMP PREEMPT Wed Aug 12 14:00:57 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+8
+bundle_sha256=958c0ecbdbf95b209340077102399e5c69baab9fc25e3d75516718ca7b883eef
+source_commit=8fab957581a9616df1942c944dbd3ce14b1c4032
+uv 0.12.17 (x86_64-unknown-linux-gnu)
+python_binary_sha256=241bf774a81580bb760adf960b48df7e6b23b1de026c9c912d4ca6be1a08241e
+Using Python 3.14.7 environment at: venv
+iniconfig==2.3.0
+packaging==26.3
+pluggy==1.6.0
+pygments==2.21.0
+pytest==9.1.1
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+upload helm_job.log -> http 200
+==> /root/helm_job/out/helm1.log <==
+anchor written: records/typed_pointer_001/trust_anchor_helm1_certified.json  sha256_lf b1798323f6f7f9c9
+{
+ "verdict": "RESCORE_OK",
+ "label_rederived": "LEARNS_NEW_WORLDS",
+ "reject_reasons": []
+}
+  checks: ANCHOR_READABLE=PASS, STUDY_IDENTITY=PASS, SEED_SET=PASS, EVALUATOR_IDENTITY=PASS, CHECKER_CODE_IDENTITY=PASS, PREDICTIONS_IDENTITY=PASS, ID_SET=PASS, FINITE_NUMBERS=PASS, WELL_FORMED_JSON=PASS, CHECKER_PROFILE=PASS, COURSE_IDENTITY=PASS, POPULATION_IDENTITY=PASS, CODE_CLOSURE_COMPLETE=PASS, CODE_UNCHANGED_DURING_RUN=PASS, RESCORE=PASS, SCORING_FILE_AGREEMENT=PASS, FROZEN_GRADER_AGREEMENT=PASS
+  seed 20260917: frozen18 2 -> 12, gained 10 broken 0, rescored [564, 564], disagreements [0, 0]
+  seed 20260918: frozen18 0 -> 12, gained 12 broken 0, rescored [564, 564], disagreements [0, 0]
+  seed 20260919: frozen18 0 -> 11, gained 11 broken 0, rescored [564, 564], disagreements [0, 0]
+exit=0 wall=820s
+
+==> /root/helm_job/out/helm2.log <==
+anchor written: records/typed_pointer_001/trust_anchor_helm2_experimental_20208c92.json  sha256_lf f71fa001209eb0bb
+{
+ "verdict": "RESCORE_OK",
+ "label_rederived": "NO_TRANSFER_TO_NEW_WORLDS",
+ "reject_reasons": []
+}
+  checks: ANCHOR_READABLE=PASS, STUDY_IDENTITY=PASS, SEED_SET=PASS, EVALUATOR_IDENTITY=PASS, CHECKER_CODE_IDENTITY=PASS, PREDICTIONS_IDENTITY=PASS, ID_SET=PASS, FINITE_NUMBERS=PASS, WELL_FORMED_JSON=PASS, CHECKER_PROFILE=PASS, COURSE_IDENTITY=PASS, POPULATION_IDENTITY=PASS, CODE_CLOSURE_COMPLETE=PASS, CODE_UNCHANGED_DURING_RUN=PASS, RESCORE=PASS, SCORING_FILE_AGREEMENT=PASS, FROZEN_GRADER_AGREEMENT=PASS
+  seed 20260917: frozen18 2 -> 12, gained 11 broken 1, rescored [564, 564], disagreements [0, 0]
+  seed 20260918: frozen18 0 -> 12, gained 12 broken 0, rescored [564, 564], disagreements [0, 0]
+  seed 20260919: frozen18 4 -> 10, gained 7 broken 1, rescored [564, 564], disagreements [0, 0]
+exit=0 wall=830s
+
+==> /root/helm_job/out/slow_tests.log <==
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_a_malformed_answer_is_rejected_and_the_rescore_is_incomplete
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_wrong_phase_file_is_rejected
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-POPULATION_IDENTITY]
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_agreement_and_disagreement_with_a_frozen_grader_reading
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_a_closure_file_the_anchor_does_not_list_is_rejected
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_evaluator_substitution_is_rejected_and_the_checker_is_not_run
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_through_the_command_line_does_not_import_the_checker
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_is_rejected_before_any_import
+
+(38 durations < 0.005s hidden.  Use -vv to show these durations.)
+26 passed in 2473.99s (0:41:13)
+exit=0 wall=2474s
+job exit codes: helm1=0 helm2=0 slow_tests=0
+JOB FINISH 2026-09-21T16:58:21Z status=done

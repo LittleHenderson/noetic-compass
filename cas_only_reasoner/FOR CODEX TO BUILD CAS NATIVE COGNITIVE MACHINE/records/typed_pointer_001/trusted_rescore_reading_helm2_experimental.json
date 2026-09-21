@@ -1,20 +1,88 @@
 {
  "anchor": {
-  "path": "records\\typed_pointer_001\\trust_anchor_helm2_experimental_20208c92.json",
-  "sha256_lf": "03c4437a3fdbd21d498f1c2249ec7a24a65cf7a38bcc35427bfd0780716f822d"
+  "path": "records/typed_pointer_001/trust_anchor_helm2_experimental_20208c92.json",
+  "pin": {
+   "bytes_lf": 62348,
+   "bytes_raw_observed": 62348,
+   "sha256_lf": "f71fa001209eb0bb8a7ab980cae24c1dab394ca3f12ce333a84e985a76a1f834",
+   "sha256_raw_observed": "f71fa001209eb0bb8a7ab980cae24c1dab394ca3f12ce333a84e985a76a1f834"
+  }
  },
- "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was rechecked with the private checker",
- "checker": {
-  "profile_digest": "2c95354e62994fb8a0c0ab56254d1527f5f4d2c79ea5ecbed5679de730bd8a81",
-  "sources": {
-   "answers.py": "4d4cf21b65914c5b6878b58a52ab3cfe2f8864b319a3bb5ad1b95c6780686e5c",
-   "checker.py": "57ac0a9f78c46999fac444fc974d3c1b718435b583cbc48701be74c56efa971e",
-   "source.py": "13c265e576dd027362611ca0956ac9f1e6285945cb7e626cef9270c2d08a9337"
+ "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was re-checked with the private checker",
+ "bytecode_policy": "FRESH_EMPTY_PYCACHE_PREFIX_AND_NO_BYTECODE_WRITTEN",
+ "checks": {
+  "ANCHOR_READABLE": {
+   "detail": "records/typed_pointer_001/trust_anchor_helm2_experimental_20208c92.json",
+   "status": "PASS"
+  },
+  "CHECKER_CODE_IDENTITY": {
+   "detail": "18 source files",
+   "status": "PASS"
+  },
+  "CHECKER_PROFILE": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "CODE_CLOSURE_COMPLETE": {
+   "detail": "17 executed package modules, all anchored",
+   "status": "PASS"
+  },
+  "CODE_UNCHANGED_DURING_RUN": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "COURSE_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "EVALUATOR_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FINITE_NUMBERS": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FROZEN_GRADER_AGREEMENT": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "ID_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "POPULATION_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "PREDICTIONS_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "RESCORE": {
+   "detail": "3384 predictions re-checked",
+   "status": "PASS"
+  },
+  "SCORING_FILE_AGREEMENT": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "SEED_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "STUDY_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "WELL_FORMED_JSON": {
+   "detail": "",
+   "status": "PASS"
   }
  },
  "comparison_with_frozen_grader": {
   "frozen_label": "NO_TRANSFER_TO_NEW_WORLDS",
-  "frozen_reading_path": "records\\typed_pointer_001\\admission_001\\gate_reading.json",
+  "frozen_reading_path": "records/typed_pointer_001/admission_001/gate_reading.json",
   "frozen_reading_present": true,
   "labels_agree": true,
   "per_seed": {
@@ -51,12 +119,14 @@
      1
     ]
    }
-  }
+  },
+  "requested": true
  },
- "course_digest": "272c26e1391c65607d40ff7ae67522402f6a2af553478d32ea6daa0e8e706dbb",
  "custody": "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab",
- "grader_sha256_lf": "d3e0ea979835fa548ae4fe4081280839b5b629296f24735a70e90e8880cdc90d",
+ "hash_policy": "cncm.hash-policy/1.0",
+ "imported_checker_code": true,
  "label_rederived": "NO_TRANSFER_TO_NEW_WORLDS",
+ "material_supplied_by_caller": false,
  "per_seed": {
   "20260917": {
    "broken": 1,
@@ -74,16 +144,19 @@
      "disagreements": 0,
      "predictions_sha256_lf": "e60ae95441e2a4398b328d702e1eb76a707f5ba5162c2a039a1a3b502992f3e8",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
      "predictions_sha256_lf": "d0de70eb158928df69592cd18bf396d7db7e215c275a2c43fd20a07a14659ee3",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     }
    },
-   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260917",
+   "receipt_dir": "records/typed_pointer_001/receipt_20260917",
+   "receipt_resolved_from": "package-relative",
    "worlds_improved": 5
   },
   "20260918": {
@@ -102,16 +175,19 @@
      "disagreements": 0,
      "predictions_sha256_lf": "78448292f8af808a4a91bde27b36e5020594e25621a6a2629147c9b3bfe509d1",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
      "predictions_sha256_lf": "93a90d34c78473dcece3aacf79460d03fea572dc9f2bf24d51afef2b2f86507a",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     }
    },
-   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260918",
+   "receipt_dir": "records/typed_pointer_001/receipt_20260918",
+   "receipt_resolved_from": "package-relative",
    "worlds_improved": 5
   },
   "20260919": {
@@ -130,21 +206,32 @@
      "disagreements": 0,
      "predictions_sha256_lf": "326cce31e85ff35a49b9a7ff4664f78410809b50ac6304f1961af3ce47429aca",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     },
     "course_p10": {
      "disagreements": 0,
      "predictions_sha256_lf": "b0ab2a3d2ca4b544fefa254952fa84959a3b72c0972ecb35010be158ba8c61cd",
      "rescored": 564,
+     "scoring_file_present": true,
      "scoring_rows_compared": 564
     }
    },
-   "receipt_dir": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\vision-next\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\typed_pointer_001\\receipt_20260919",
+   "receipt_dir": "records/typed_pointer_001/receipt_20260919",
+   "receipt_resolved_from": "package-relative",
    "worlds_improved": 5
   }
  },
- "population_digest": "4b1e3c1f0b8f8be339e281410dc830fac1834432e8d816d67dce58906e90036d",
  "reject_reasons": [],
- "schema": "cncm.trusted-rescore-reading/0.1",
+ "schema": "cncm.trusted-rescore-reading/0.2",
+ "tool": {
+  "path": "records/typed_pointer_001/trusted_rescore.py",
+  "pin": {
+   "bytes_lf": 31710,
+   "bytes_raw_observed": 31710,
+   "sha256_lf": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a",
+   "sha256_raw_observed": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a"
+  }
+ },
  "verdict": "RESCORE_OK"
 }

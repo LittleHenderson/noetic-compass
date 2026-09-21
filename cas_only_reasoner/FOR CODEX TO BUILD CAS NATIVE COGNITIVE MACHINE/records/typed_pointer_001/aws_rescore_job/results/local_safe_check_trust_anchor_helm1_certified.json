@@ -1,0 +1,104 @@
+{
+ "anchor": {
+  "path": "records/typed_pointer_001/trust_anchor_helm1_certified.json",
+  "pin": {
+   "bytes_lf": 62398,
+   "bytes_raw_observed": 62398,
+   "sha256_lf": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef",
+   "sha256_raw_observed": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef"
+  }
+ },
+ "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was re-checked with the private checker",
+ "bytecode_policy": null,
+ "checks": {
+  "ANCHOR_READABLE": {
+   "detail": "records/typed_pointer_001/trust_anchor_helm1_certified.json",
+   "status": "PASS"
+  },
+  "CHECKER_CODE_IDENTITY": {
+   "detail": "18 source files",
+   "status": "PASS"
+  },
+  "CHECKER_PROFILE": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "CODE_CLOSURE_COMPLETE": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "CODE_UNCHANGED_DURING_RUN": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "COURSE_IDENTITY": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "EVALUATOR_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FINITE_NUMBERS": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FROZEN_GRADER_AGREEMENT": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "ID_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "POPULATION_IDENTITY": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "PREDICTIONS_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "RESCORE": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "SCORING_FILE_AGREEMENT": {
+   "detail": "--safe-only: file checks only, the checker was not imported",
+   "status": "NOT_RUN"
+  },
+  "SEED_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "STUDY_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "WELL_FORMED_JSON": {
+   "detail": "",
+   "status": "PASS"
+  }
+ },
+ "comparison_with_frozen_grader": {
+  "requested": true
+ },
+ "custody": "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab",
+ "hash_policy": "cncm.hash-policy/1.0",
+ "imported_checker_code": false,
+ "label_rederived": "NOT_DERIVED",
+ "material_supplied_by_caller": false,
+ "per_seed": {},
+ "reject_reasons": [],
+ "schema": "cncm.trusted-rescore-reading/0.2",
+ "tool": {
+  "path": "records/typed_pointer_001/trusted_rescore.py",
+  "pin": {
+   "bytes_lf": 31710,
+   "bytes_raw_observed": 31710,
+   "sha256_lf": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a",
+   "sha256_raw_observed": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a"
+  }
+ },
+ "verdict": "RESCORE_INCOMPLETE"
+}

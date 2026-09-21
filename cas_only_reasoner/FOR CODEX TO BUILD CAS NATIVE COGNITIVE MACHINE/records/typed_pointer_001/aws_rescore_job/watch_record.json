@@ -1,0 +1,14 @@
+{
+ "schema": "cncm.aws-rescore-watch/0.2",
+ "instance_id": "i-0c11af58a0a5d143a",
+ "outcome": "RESULTS_RECEIVED",
+ "job_status": "done",
+ "final_state": "terminated",
+ "files_downloaded": 11,
+ "launched_utc": "2026-09-21T16:16:47Z",
+ "watch_ended_utc": "2026-09-21T16:58:42Z",
+ "minutes_from_launch_to_watch_end": 41.9,
+ "cost_upper_bound_usd": 0.2629,
+ "cost_note": "upper bound: billed time ends at shutdown, before the watch ended; includes the auto-assigned public address (0.005/hour) and 0.01 for 20 GB of disk",
+ "dollar_ceiling": 2.0
+}

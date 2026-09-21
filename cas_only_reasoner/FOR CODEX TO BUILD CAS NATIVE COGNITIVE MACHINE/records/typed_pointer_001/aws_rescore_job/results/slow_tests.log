@@ -1,0 +1,46 @@
+..........................                                               [100%]
+============================== slowest durations ===============================
+548.91s call     records/typed_pointer_001/test_trusted_rescore.py::test_agreement_and_disagreement_with_a_frozen_grader_reading
+371.68s call     records/typed_pointer_001/test_trusted_rescore.py::test_altered_scores_are_rejected_with_or_without_a_rewritten_manifest
+320.62s call     records/typed_pointer_001/test_trusted_rescore.py::test_clean_copy_through_the_command_line_reproduces_the_certified_numbers
+182.88s call     records/typed_pointer_001/test_trusted_rescore.py::test_code_that_ran_but_is_not_anchored_is_rejected
+182.81s call     records/typed_pointer_001/test_trusted_rescore.py::test_a_malformed_answer_is_rejected_and_the_rescore_is_incomplete
+182.78s call     records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-COURSE_IDENTITY]
+182.72s call     records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-CHECKER_IDENTITY]
+182.65s call     records/typed_pointer_001/test_trusted_rescore.py::test_an_absent_scoring_file_is_not_run_which_is_not_ok
+182.38s call     records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-POPULATION_IDENTITY]
+134.95s setup    records/typed_pointer_001/test_trusted_rescore.py::test_clean_copy_through_the_command_line_reproduces_the_certified_numbers
+0.22s call     records/typed_pointer_001/test_trusted_rescore.py::test_duplicate_missing_and_absent_predictions_are_rejected
+0.16s call     records/typed_pointer_001/test_trusted_rescore.py::test_nonfinite_numbers_and_duplicate_json_keys_are_rejected
+0.11s call     records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_through_the_command_line_does_not_import_the_checker
+0.09s call     records/typed_pointer_001/test_trusted_rescore.py::test_every_safely_checkable_reason_is_collected_not_just_the_first
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_study_identity_and_seed_set
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_wrong_phase_file_is_rejected
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_a_closure_file_the_anchor_does_not_list_is_rejected
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_clean_files_pass_every_file_check_and_safe_only_is_never_ok
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_evaluator_substitution_is_rejected_and_the_checker_is_not_run
+0.06s call     records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_is_rejected_before_any_import
+0.03s call     records/typed_pointer_001/test_trusted_rescore.py::test_receipts_resolve_inside_this_package_and_paths_are_portable
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_clean_files_pass_every_file_check_and_safe_only_is_never_ok
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_code_that_ran_but_is_not_anchored_is_rejected
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-COURSE_IDENTITY]
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_nonfinite_numbers_and_duplicate_json_keys_are_rejected
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_every_safely_checkable_reason_is_collected_not_just_the_first
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_altered_scores_are_rejected_with_or_without_a_rewritten_manifest
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_study_identity_and_seed_set
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_an_outdated_or_unreadable_anchor_is_a_typed_rejection_with_a_written_reading
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_an_absent_scoring_file_is_not_run_which_is_not_ok
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_duplicate_missing_and_absent_predictions_are_rejected
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-CHECKER_IDENTITY]
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_a_malformed_answer_is_rejected_and_the_rescore_is_incomplete
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_wrong_phase_file_is_rejected
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_profile_course_and_population_identity[<lambda>-POPULATION_IDENTITY]
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_agreement_and_disagreement_with_a_frozen_grader_reading
+0.03s setup    records/typed_pointer_001/test_trusted_rescore.py::test_a_closure_file_the_anchor_does_not_list_is_rejected
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_evaluator_substitution_is_rejected_and_the_checker_is_not_run
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_through_the_command_line_does_not_import_the_checker
+0.02s setup    records/typed_pointer_001/test_trusted_rescore.py::test_checker_code_substitution_is_rejected_before_any_import
+
+(38 durations < 0.005s hidden.  Use -vv to show these durations.)
+26 passed in 2473.99s (0:41:13)
+exit=0 wall=2474s

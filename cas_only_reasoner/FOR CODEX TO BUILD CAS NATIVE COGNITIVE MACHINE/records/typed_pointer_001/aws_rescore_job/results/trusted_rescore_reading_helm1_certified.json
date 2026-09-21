@@ -1,0 +1,237 @@
+{
+ "anchor": {
+  "path": "records/typed_pointer_001/trust_anchor_helm1_certified.json",
+  "pin": {
+   "bytes_lf": 62398,
+   "bytes_raw_observed": 62398,
+   "sha256_lf": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef",
+   "sha256_raw_observed": "b1798323f6f7f9c9656b1c30eef724e94104715e180eb6724ad11c6c3b2b49ef"
+  }
+ },
+ "boundary": "the scoring files' correct flags were NOT read for the label; every prediction was re-checked with the private checker",
+ "bytecode_policy": "FRESH_EMPTY_PYCACHE_PREFIX_AND_NO_BYTECODE_WRITTEN",
+ "checks": {
+  "ANCHOR_READABLE": {
+   "detail": "records/typed_pointer_001/trust_anchor_helm1_certified.json",
+   "status": "PASS"
+  },
+  "CHECKER_CODE_IDENTITY": {
+   "detail": "18 source files",
+   "status": "PASS"
+  },
+  "CHECKER_PROFILE": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "CODE_CLOSURE_COMPLETE": {
+   "detail": "17 executed package modules, all anchored",
+   "status": "PASS"
+  },
+  "CODE_UNCHANGED_DURING_RUN": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "COURSE_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "EVALUATOR_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FINITE_NUMBERS": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "FROZEN_GRADER_AGREEMENT": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "ID_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "POPULATION_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "PREDICTIONS_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "RESCORE": {
+   "detail": "3384 predictions re-checked",
+   "status": "PASS"
+  },
+  "SCORING_FILE_AGREEMENT": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "SEED_SET": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "STUDY_IDENTITY": {
+   "detail": "",
+   "status": "PASS"
+  },
+  "WELL_FORMED_JSON": {
+   "detail": "",
+   "status": "PASS"
+  }
+ },
+ "comparison_with_frozen_grader": {
+  "frozen_label": "LEARNS_NEW_WORLDS",
+  "frozen_reading_path": "records/typed_pointer_001/admission_helm1_certified/gate_reading.json",
+  "frozen_reading_present": true,
+  "labels_agree": true,
+  "per_seed": {
+   "20260917": {
+    "agree": true,
+    "frozen_gained_broken": [
+     10,
+     0
+    ],
+    "rescored_gained_broken": [
+     10,
+     0
+    ]
+   },
+   "20260918": {
+    "agree": true,
+    "frozen_gained_broken": [
+     12,
+     0
+    ],
+    "rescored_gained_broken": [
+     12,
+     0
+    ]
+   },
+   "20260919": {
+    "agree": true,
+    "frozen_gained_broken": [
+     11,
+     0
+    ],
+    "rescored_gained_broken": [
+     11,
+     0
+    ]
+   }
+  },
+  "requested": true
+ },
+ "custody": "EVALUATION_NOT_INDEPENDENT -- written by the session that also built the model and the lab",
+ "hash_policy": "cncm.hash-policy/1.0",
+ "imported_checker_code": true,
+ "label_rederived": "LEARNS_NEW_WORLDS",
+ "material_supplied_by_caller": false,
+ "per_seed": {
+  "20260917": {
+   "broken": 0,
+   "frozen_18_after": 12,
+   "frozen_18_before": 2,
+   "gained": 10,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "0d2b83f408bc82fb8b4b8613289598ae88539859b8c1ac8d981c48cf9ca80d8c",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "80024e4e600e14c8bf8e30924ba454b3bf37cf1bd70386e6041af9fb1bd772b1",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "records/typed_pointer_001/receipt_helm1_certified_20260917",
+   "receipt_resolved_from": "package-relative",
+   "worlds_improved": 5
+  },
+  "20260918": {
+   "broken": 0,
+   "frozen_18_after": 12,
+   "frozen_18_before": 0,
+   "gained": 12,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "2cc0ab23e1ada9f7bf820068b51c2bb21f8844a98800c55808b6c38513144b74",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "fa27c44a4a5edc1d59f5478ddb2909adfa0b914588f7353942d72c9d77b31224",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "records/typed_pointer_001/receipt_helm1_certified_20260918",
+   "receipt_resolved_from": "package-relative",
+   "worlds_improved": 5
+  },
+  "20260919": {
+   "broken": 0,
+   "frozen_18_after": 11,
+   "frozen_18_before": 0,
+   "gained": 11,
+   "kinds_improved": [
+    "edge_account",
+    "parts",
+    "reach"
+   ],
+   "passed": true,
+   "phases": {
+    "course_p00": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "a56b1f5ce4fc833bb278e243fa1f6663734579741024207834bfe69f7b205e4e",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    },
+    "course_p10": {
+     "disagreements": 0,
+     "predictions_sha256_lf": "38a5aa55e4ac7e559c35075c1c5c7ce0c0b48d60466479989ad8894e4c2f0513",
+     "rescored": 564,
+     "scoring_file_present": true,
+     "scoring_rows_compared": 564
+    }
+   },
+   "receipt_dir": "records/typed_pointer_001/receipt_helm1_certified_20260919",
+   "receipt_resolved_from": "package-relative",
+   "worlds_improved": 5
+  }
+ },
+ "reject_reasons": [],
+ "schema": "cncm.trusted-rescore-reading/0.2",
+ "tool": {
+  "path": "records/typed_pointer_001/trusted_rescore.py",
+  "pin": {
+   "bytes_lf": 31710,
+   "bytes_raw_observed": 31710,
+   "sha256_lf": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a",
+   "sha256_raw_observed": "8e9a751a15358043b8d1bbc7428fd0e475325174e58fe9e00ec5297cbdd5953a"
+  }
+ },
+ "verdict": "RESCORE_OK"
+}
