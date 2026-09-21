@@ -45,6 +45,10 @@ disclosure of a regression waives nothing). Recorded verbatim, with the correcte
 `Q0_DISCOVERY_COMPLETE / Q0_EVALUATOR_BOUNDARY_OPEN`, in
 `records/typed_pointer_001/LINEAGE_RATIFICATION_CLARIFICATIONS_20260921.md`. Still marked proposed
 until the owner's own word.*
+**ACCEPTED BY THE OWNER, 2026-09-21.** The owner's words in chat: "I AGREE WITH THE NAMING SCHEMA". The progression
+*experimental -> release candidate -> release* below, with the conditions recorded in
+`records/typed_pointer_001/LINEAGE_RATIFICATION_CLARIFICATIONS_20260921.md`, is from this date the official rule for naming
+Helm versions. (Recorded by Fable from the chat; not an owner-signed record. The paragraph above is kept as it was written.)
 The owner asked for a progression *experimental → release candidate → release* and for it to be
 reconciled with the rules above. Reconciled, it reads:
 
