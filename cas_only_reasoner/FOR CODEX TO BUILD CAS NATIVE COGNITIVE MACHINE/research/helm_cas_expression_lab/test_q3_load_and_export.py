@@ -20,7 +20,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import q3_load  # noqa: E402
 
-DATA = HERE / "data" / "q3_v0_4"
+DATA = HERE / "data" / "q3_v0_5"
 EXPORTER = HERE / "q3_export_behavior_pairs.py"
 
 

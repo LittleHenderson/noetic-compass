@@ -1,0 +1,251 @@
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^6, ^8, ^9}, NoeticCluster{^2, ^4, ^6, ^8})", "record_id": "24bdaa0fca5e155a889f6a03"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^E, ^1^O, ^6^P} ∩ StateCluster{^6^P}", "record_id": "7ab4ea887e3b7eb2e5f405e7"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^P, ^1^E} ∖ StateCluster{^1^E}", "record_id": "923027d811a3e6add58b3324"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^E, ^2^E, ^3^O, ^0^C} ∪ StateCluster{^2^P, ^3^O, ^9^P}", "record_id": "7238e363083a93e59feb08fa"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^C} ⊆ States", "record_id": "b456a9dade762a050e97a2c2"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^P, ^3^E, ^7^O, ^4^E} ∪ StateCluster{^6^O, ^8^C, ^3^O}", "record_id": "1098d0a28ac590203fea9459"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^4^E_{F6}|E, ^8^E_{F3}|T}", "record_id": "e5fe6883a89d034771751583"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^3, ^4, ^6}, NoeticCluster{^1, ^2})", "record_id": "8163c669e59a3d84d6b583b1"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^P_{F7}|f, ^6^C|A, ^6^P_{F7}|A, ^5^E|f}", "record_id": "fc5472c397d62aafd5472012"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^2^E_{F2}|A, ^5^O_{F4}|T}", "record_id": "7b32ea4a18fc6758f588de62"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^2}, NoeticCluster{^0, ^2, ^3, ^8})", "record_id": "52a6d97cbed1a70776548ffa"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^P} ⊆ States", "record_id": "c49fdbb73773bb68da556439"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^5, ^9}, NoeticCluster{^2, ^9})", "record_id": "e8bd9ade9ebef241165c7e29"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^4, ^7, ^8}, NoeticCluster{^0, ^5, ^7, ^8})", "record_id": "9bc46d7aadbf713309614a5a"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^P|T × ^4^P|f × ^4^P|E × ^4^P|A) = ^4^P|Ω_attunement", "record_id": "13f6e48b7b36e8adf09c55b4"}
+{"family": "R", "mode": "reconstruction", "observation": "^3 ∈ Noetics", "record_id": "11593aa7e2018208c774a26f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^C_{F2}|T, ^3^C|T}", "record_id": "df042e56c413260de929c8ac"}
+{"family": "R", "mode": "reconstruction", "observation": "^0 ∈ Noetics", "record_id": "6361e31b24660940151d4e86"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^2}, NoeticCluster{^0, ^3})", "record_id": "170444367ba5f7a21993061e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^C} ∩ StateCluster{^1^C, ^1^O}", "record_id": "f15179a11fc898d492ef075a"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^E|A × ^4^E|f × ^4^E|T × ^4^E|E) = ^4^E|Ω_attunement", "record_id": "5f37035410f12ed52539c762"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^E} ⊆ States", "record_id": "1f5196731522b51ad9ffbedd"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^6}, NoeticCluster{^0, ^2, ^6})", "record_id": "cda52a85a24eb61b032dcad3"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^3, ^4, ^6}, NoeticCluster{^4, ^6, ^7})", "record_id": "d01cc3ce2bc188fdcb07f2a2"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^O, ^4^O, ^6^C} ∩ StateCluster{^4^O}", "record_id": "a9fd52775e5be03b6bf97972"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^7}, NoeticCluster{^7, ^9})", "record_id": "430c119fa31986ced828b4a2"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^C|f}", "record_id": "c6be727e7e057da048ca525a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^O} ⊆ States", "record_id": "280dfa3fc0e3070e54f65ae3"}
+{"family": "R", "mode": "reconstruction", "observation": "^9 ∈ Noetics", "record_id": "ed930c83259b7b7825aeea80"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^E, ^0^C} ∪ StateCluster{^3^P, ^4^C, ^6^C, ^0^O}", "record_id": "f806f7a24defc279cefdd165"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^4, ^6, ^7, ^9}, NoeticCluster{^4, ^6, ^8, ^9})", "record_id": "131478fc134f1359ac7f7061"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^P} ∪ StateCluster{^2^P, ^9^E, ^7^P, ^2^O}", "record_id": "e2f3ae19955df87f21063678"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^C, ^6^O, ^1^P} ∩ StateCluster{^6^O, ^5^P, ^7^E, ^4^E}", "record_id": "efba9d1bd2280dd843ac16c4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^C} ∩ StateCluster{^7^C, ^6^C}", "record_id": "4041e6906e95d4c5eb45e61f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^O} ⊆ States", "record_id": "f6cd3327800e034b8872439b"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^C} ⊆ States", "record_id": "30e91c3104642eebef8054c2"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^5, ^6, ^9}, NoeticCluster{^1, ^5, ^8, ^9})", "record_id": "4b3b936aa8048e558de01850"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^O, ^4^P, ^1^P} ∪ StateCluster{^5^O, ^2^O, ^0^O, ^8^P}", "record_id": "bfb555bd8ce5029094a19251"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^4^P_{F3}|f, ^4^C_{F3}|A}", "record_id": "a71c201cfb22a17c40f5f4a7"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^3, ^4, ^7}, NoeticCluster{^2, ^3, ^4, ^7})", "record_id": "4a64d5425aa010dfbbb7b72e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^O} ∪ StateCluster{^6^P}", "record_id": "fa1bb06289a13890f3732628"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^E|E, ^5^C|f, ^3^C_{F7}|E}", "record_id": "64c0f046faffa6be9dbe220b"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^5^P_{F6}|A, ^8^O_{F5}|E}", "record_id": "4a6b073a77539d706eb048ae"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^E, ^6^P} ∪ StateCluster{^5^P, ^6^E, ^9^C, ^2^C}", "record_id": "607272015ed900f07cf4626a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^E_{F5}|A, ^3^P|f, ^0^C|A}", "record_id": "40da0bea4d0fc1c8319ba793"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^E} ⊆ States", "record_id": "7b2404c7f7c6ceecbd44578c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^O, ^9^E, ^9^O} ∖ StateCluster{^2^O}", "record_id": "538c04031f47329f75af4b43"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P} ∩ StateCluster{^0^P, ^5^P}", "record_id": "b271aca7c9cc74d1a0fc7bec"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^O, ^3^P} ∪ StateCluster{^6^E, ^7^C, ^0^O, ^6^C}", "record_id": "57e6e4b972e4148215a1d3ed"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^4}, NoeticCluster{^0, ^4, ^8, ^9})", "record_id": "6fbddd74b2cda4e541b2c6f2"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^P} ∪ StateCluster{^6^P}", "record_id": "bc4d6d7d5420d66167b94c8d"}
+{"family": "R", "mode": "reconstruction", "observation": "^4 ∈ Noetics", "record_id": "aada825fdf3eff357434d3f6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^E, ^6^E} ∖ StateCluster{^6^E}", "record_id": "adb682bc73377b62374e519b"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^5^P|T, ^7^P_{F2}|T, ^9^P|f, ^4^E|T}", "record_id": "a99126a8095a2069bb29f45d"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^3, ^8}, NoeticCluster{^0, ^7})", "record_id": "612caeaba25f7c4bc5e52587"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^5, ^7}, NoeticCluster{^1, ^2, ^4, ^8})", "record_id": "0815926cda2abf977fc425ce"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^P_{F1}|f, ^0^P_{F1}|A, ^1^P_{F3}|T, ^5^O_{F5}|E}", "record_id": "80d9cb141fd02fae99673287"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^O, ^4^E, ^2^P, ^6^O} ∪ StateCluster{^3^P, ^8^E, ^0^O, ^1^P}", "record_id": "1c10298d202a14445d616859"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^8}, NoeticCluster{^1, ^7, ^8})", "record_id": "93acf3c00c501e41cc9a9c49"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^3, ^4}, NoeticCluster{^0, ^3, ^5})", "record_id": "8b44931cc59054e0a6534b7a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^P|f, ^2^E_{F7}|T}", "record_id": "8eb4453a55f735ad017ca05f"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^6, ^8, ^9}, NoeticCluster{^4, ^8, ^9})", "record_id": "5645a0f62634ea27ae33355f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^P, ^5^P, ^2^E, ^5^O} ∪ StateCluster{^5^O, ^5^E, ^3^E}", "record_id": "2346327c49140b5f4177d73e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^C|A, ^9^P_{F7}|f}", "record_id": "39688f372c434fd9e82b229f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^O, ^8^O, ^4^O, ^5^C} ∪ StateCluster{^0^E, ^1^E, ^2^O}", "record_id": "e4aadd26755049a0cc1c3c63"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^6^C_{F3}|E, ^2^P_{F6}|T, ^6^P_{F3}|E, ^9^O_{F6}|T}", "record_id": "711adc44e1fbfce50c5ddcaf"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^C, ^7^P} ∪ StateCluster{^4^C, ^1^E, ^2^E, ^6^C}", "record_id": "43f78f0baa3d550946c01a1c"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^O|f × ^4^O|T × ^4^O|A × ^4^O|E) = ^4^O|Ω_attunement", "record_id": "4382c9720af93c63ff5d0d0e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^E, ^9^O, ^0^E} ∪ StateCluster{^7^E, ^5^P, ^2^C, ^4^C}", "record_id": "32fc4d425629e30b4535b0ef"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^5^P_{F7}|T}", "record_id": "d01f2575551a75d8fed8e743"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^O_{F1}|E, ^5^P|T}", "record_id": "0acfdbe08604705591010229"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^E, ^9^C} ∪ StateCluster{^0^E, ^5^E, ^6^O, ^8^O}", "record_id": "05c895eb9171fa7bbe210b6d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^O, ^3^C} ∪ StateCluster{^9^P}", "record_id": "36586c156cc1bd6e51bede16"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^4, ^5}, NoeticCluster{^4, ^6, ^7, ^9})", "record_id": "ac83b1fe75598a45c7fda2d3"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^O, ^7^C, ^4^C} ∖ StateCluster{^4^C}", "record_id": "73f2ad7c9bc37e3b01e7acca"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^2^E_{F4}|E, ^2^C_{F7}|T, ^3^O_{F3}|f, ^0^O_{F3}|T}", "record_id": "98b5763b565b2090b223c44d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^6^C_{F3}|T, ^5^P|A}", "record_id": "38d7633389ce197a0a97609d"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^2}, NoeticCluster{^2, ^3, ^7})", "record_id": "bceaac74410573a86a7db002"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^6, ^8, ^9}, NoeticCluster{^4, ^7, ^8})", "record_id": "307e7050e97d2c1dc232bd01"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^E_{F5}|f, ^6^E|E}", "record_id": "4db85561a778546761d24cc9"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^E, ^5^C, ^0^E} ∖ StateCluster{^7^E}", "record_id": "832b616e974da52f54ed2bf6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^E, ^8^P} ∪ StateCluster{^1^C, ^9^C, ^4^E}", "record_id": "b20d6d72eb9d30e59203a61f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^C, ^5^E, ^9^C} ∩ StateCluster{^5^E, ^8^C, ^1^P, ^8^E}", "record_id": "8c807ff31c058a84e5990b05"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^C, ^0^C} ∩ StateCluster{^3^C}", "record_id": "cceee4bd952bfe51fcb8f3d0"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^P} ∩ StateCluster{^7^P}", "record_id": "4341f897c730b80512a81346"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^O|A, ^9^P_{F4}|f, ^3^E_{F5}|T}", "record_id": "886a2e77a9183218af4e0368"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^5, ^6, ^7}, NoeticCluster{^0, ^3, ^6, ^8})", "record_id": "d9d49fad92c07cd28a886799"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^C|T × ^4^C|A × ^4^C|f × ^4^C|E) = ^4^C|Ω_attunement", "record_id": "d8ff00d633709c1ad79edc64"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^E_{F1}|E, ^6^C_{F1}|A, ^6^E_{F6}|T, ^7^O_{F5}|f}", "record_id": "40974e4662da2a46d802d16e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^C, ^6^P, ^5^E} ∩ StateCluster{^6^P, ^5^C, ^2^P}", "record_id": "8147b30cedf4f8ec8d35871d"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^2, ^7}, NoeticCluster{^3, ^7})", "record_id": "4ff50f44187dbe2d038a294b"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^E, ^4^C} ∪ StateCluster{^7^E, ^0^O, ^5^C}", "record_id": "a583405841220610356a619d"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4|f × ^4|E × ^4|A × ^4|T) = ^4|Ω_attunement", "record_id": "0f9d8da23a656daccf989641"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^C, ^7^C, ^6^C} ∪ StateCluster{^4^C}", "record_id": "457fd5300d299b73d165619e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^O|E, ^7^E_{F4}|A, ^0^O|E}", "record_id": "4d762d7dcaacd14cd4ec1a0e"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^2, ^7}, NoeticCluster{^1, ^2})", "record_id": "bcb1ff5596c99eb2af0287ea"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^C_{F3}|T, ^9^C|T, ^0^O_{F4}|A, ^7^P|f}", "record_id": "f1009c1b942bf45e5cf70602"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^E|A, ^8^C_{F7}|A}", "record_id": "209d107d3dd592727e9eebf8"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^C, ^1^C, ^3^P} ∩ StateCluster{^3^P, ^7^P, ^0^O}", "record_id": "d0e5edc9f4280576ddc5e514"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^4}, NoeticCluster{^2, ^3, ^7, ^9})", "record_id": "27e7df164d6d9f4990bd7938"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^O} ∪ StateCluster{^3^O, ^9^O, ^4^C, ^8^O}", "record_id": "0c54cc28ac03db4b0ede8ced"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^P_{F1}|f, ^7^P_{F6}|E}", "record_id": "85a4d9e2eb115154e7390485"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^E, ^8^C, ^1^P} ∪ StateCluster{^6^P}", "record_id": "b7c6dd60d8778a653a8134ab"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^E, ^4^P, ^8^O} ∪ StateCluster{^2^E, ^3^P, ^6^C, ^6^E}", "record_id": "9a232518f7cae91a29f13e5c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^P, ^6^O, ^0^P} ∩ StateCluster{^6^O}", "record_id": "633043f2ead2c64ec9d6b673"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^8^C_{F7}|E}", "record_id": "05cfcdac10f62e2f2d7dc6e0"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^5}, NoeticCluster{^1, ^3, ^5, ^7})", "record_id": "abe35af36c879a74220bf3bd"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^5^P_{F7}|T, ^5^P_{F4}|T, ^7^C_{F6}|f}", "record_id": "475ea68ee0e467eb2ee32d60"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^O, ^1^C, ^4^O, ^4^E} ∪ StateCluster{^7^O, ^9^E, ^9^P}", "record_id": "fd1f6b1ea32e9539e4a0d85e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^O} ∪ StateCluster{^8^E, ^3^O, ^4^C, ^1^O}", "record_id": "bfba4600c4f5900a09cfee6c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^E|A}", "record_id": "499d37246b2d7c6909f7208c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^P|E, ^4^P|A, ^4^P|E, ^6^P|T}", "record_id": "3fa84c5b0f2940c93c9dae2a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P, ^9^P} ∩ StateCluster{^9^P, ^5^C, ^3^E, ^0^C}", "record_id": "d31ed67b3b0cdc90a47c8b30"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^6, ^9}, NoeticCluster{^1, ^5, ^6, ^9})", "record_id": "5ccf16d13f40aefd18ecc0d4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^4^E_{F3}|A, ^0^E|A}", "record_id": "22292c77343aaa260a514a5c"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^6}, NoeticCluster{^0, ^3, ^5, ^9})", "record_id": "d5a9206d9044e70ce92eef95"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^4, ^5}, NoeticCluster{^0, ^3})", "record_id": "abefe63dbb3df711d1b4e02f"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^8, ^9}, NoeticCluster{^7, ^9})", "record_id": "c28995601698836f8a5ee9da"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^7}, NoeticCluster{^1, ^5})", "record_id": "63aec41a5f2c52cc6a401dc7"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^2}, NoeticCluster{^2, ^7})", "record_id": "35c51335f26be2bedd63fb4f"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^O|T × ^4^O|A × ^4^O|E × ^4^O|f) = ^4^O|Ω_attunement", "record_id": "5b410e5118f51593dd90df0a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^E} ∩ StateCluster{^2^E}", "record_id": "0a72ef63594af876d66eee0e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^P} ∩ StateCluster{^1^P, ^8^E, ^8^O, ^3^O}", "record_id": "7c7cafc3c8aea4b766c709f9"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^P, ^5^O, ^2^P} ∪ StateCluster{^6^P, ^0^C, ^2^E, ^5^C}", "record_id": "705c4335828780e4225ab6e8"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^2, ^5, ^9}, NoeticCluster{^0, ^4, ^5, ^7})", "record_id": "1d1651885e2a7d2a78e807d9"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^6^O|E, ^1^O|A, ^0^P|T}", "record_id": "b43d6166baebbf3d97a0e8c3"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^P, ^8^O, ^3^C} ∪ StateCluster{^5^O, ^2^P, ^3^P}", "record_id": "64aa2570c2cb12c32614f5f5"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^O, ^7^E, ^1^P} ∩ StateCluster{^7^E, ^4^P, ^9^O, ^7^O}", "record_id": "c956822647b604eb97dc369c"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^3, ^8, ^9}, NoeticCluster{^3, ^4, ^9})", "record_id": "c5ebf5d6696889bcebef4e14"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^7, ^8}, NoeticCluster{^0, ^1, ^6, ^7})", "record_id": "f37a1b08f130494413a3f603"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^3, ^5, ^9}, NoeticCluster{^2, ^3, ^4})", "record_id": "de345a9540abe5e6f799c5ad"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^4, ^5, ^9}, NoeticCluster{^0, ^4, ^5, ^9})", "record_id": "d2b5cfd4d4b0421235ed42a1"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^4, ^5, ^7}, NoeticCluster{^3, ^4, ^5, ^7})", "record_id": "d7ae35b53c1a45440a1cbe72"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^0^O|f}", "record_id": "2b88a7fc9dc144b95ef11114"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^3, ^4, ^8}, NoeticCluster{^4, ^5, ^6})", "record_id": "55c1cdf1fdbcba25f3de5689"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^E} ∩ StateCluster{^2^E, ^5^P, ^3^C, ^5^O}", "record_id": "f404d4c797657c35e116ffbd"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^O} ⊆ States", "record_id": "b84c91305639f610bc9397c6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^P, ^5^P} ∪ StateCluster{^1^P, ^6^E, ^9^P, ^9^E}", "record_id": "54ba56761f26d97821d020f2"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^O_{F5}|A, ^5^C_{F6}|T}", "record_id": "9719f006b2a750f11c05d438"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^8^O|T, ^2^C|E, ^9^C_{F1}|f}", "record_id": "d136a1f7680e7cb29fb8b5ce"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^3, ^4}, NoeticCluster{^1, ^2, ^9})", "record_id": "796c01a1b20af4dc07a1ff7c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^E, ^2^E} ∖ StateCluster{^8^E}", "record_id": "e1c0b10ac035ae8d8daccb2c"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^C|E × ^4^C|A × ^4^C|f × ^4^C|T) = ^4^C|Ω_attunement", "record_id": "f6b6e278041141ed22718718"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^E, ^1^P, ^0^C} ∪ StateCluster{^6^P, ^0^C, ^2^P}", "record_id": "37f151479c3de0d781d50f81"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^E_{F1}|f, ^3^E_{F3}|f, ^0^P_{F2}|f}", "record_id": "629a88dfbe7f41d627fb86ce"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^E} ⊆ States", "record_id": "b48c201f5c9c33172d5ad5b6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^P, ^4^E} ∖ StateCluster{^3^P}", "record_id": "020bb922a31c055034462819"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^8^C|T, ^4^P|f}", "record_id": "f9690473c436156d25c0aae6"}
+{"family": "R", "mode": "reconstruction", "observation": "^8 ∈ Noetics", "record_id": "fb7564144e39e2b6f68598c9"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^3}, NoeticCluster{^0, ^3})", "record_id": "1d82bf2ee163fa3fa24ab759"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^C, ^2^C, ^0^C} ∖ StateCluster{^0^C}", "record_id": "12c2cfd3697faf60ac1780f0"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^E_{F6}|A}", "record_id": "8f56514d6daad06bfce08052"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^O} ∩ StateCluster{^9^O, ^6^P, ^9^C, ^5^C}", "record_id": "86977621ee9c90dcc971357f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^O, ^1^E, ^6^P, ^2^O} ∪ StateCluster{^0^C, ^9^P, ^3^P}", "record_id": "395554c5a65b179d54a0613d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^2^O_{F1}|f, ^1^E|E}", "record_id": "51b16908d663aa1e11ad5075"}
+{"family": "R", "mode": "reconstruction", "observation": "^7 ∈ Noetics", "record_id": "0312231576a56be7563304c7"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^C|E, ^1^C|A, ^5^P_{F1}|A}", "record_id": "f9d7ee76ea53d7bdaceeab30"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^4}, NoeticCluster{^4, ^6})", "record_id": "e2d85a286794fccf0475739e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P, ^4^C, ^9^E, ^4^O} ∪ StateCluster{^2^C, ^4^C, ^1^C, ^5^C}", "record_id": "a9b2c56069d6bde0c09d4913"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^7, ^8}, NoeticCluster{^0, ^1, ^8})", "record_id": "6b9bae3796b2d5926b8d72bf"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^E|A × ^4^E|f × ^4^E|E × ^4^E|T) = ^4^E|Ω_attunement", "record_id": "ce1c4beed51cc16a4d28f1bb"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^P, ^1^P, ^1^E} ∪ StateCluster{^6^O, ^8^E, ^1^C, ^3^P}", "record_id": "d022b3ca092fed19ef31550a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^P, ^3^P} ∪ StateCluster{^6^C, ^3^O, ^7^C}", "record_id": "b1874281fed2c50efdd42a86"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^C_{F7}|A}", "record_id": "692376692e25e03d3e01f411"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^2^C|T, ^6^P_{F5}|f}", "record_id": "596f6c683ff3d2325126aa38"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^3, ^7, ^8}, NoeticCluster{^0, ^7})", "record_id": "e5a3c9f70732b694ece88456"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^2, ^5}, NoeticCluster{^1, ^5, ^7})", "record_id": "b3ef24f04caefd6a792e97c4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^6^O_{F1}|A, ^5^P_{F2}|f, ^4^P_{F3}|A, ^1^C_{F2}|A}", "record_id": "1f832e08adc42975b38ec11f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^O, ^3^E, ^5^E} ∖ StateCluster{^5^E}", "record_id": "0ce98f95be006ac750c50806"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^5^O|T, ^8^C_{F1}|f, ^8^C|A, ^0^P_{F1}|E}", "record_id": "e119ae394c4c597963b00e70"}
+{"family": "R", "mode": "reconstruction", "observation": "^6 ∈ Noetics", "record_id": "ccf7ce78c3b43cad025dd9e1"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^P_{F4}|E, ^4^P|E}", "record_id": "898b6edc92c17f34619c0fbe"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^5, ^7}, NoeticCluster{^4, ^5, ^8})", "record_id": "da1b40b4d7a180b84a44f3fd"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^O, ^4^C} ∖ StateCluster{^4^C}", "record_id": "a22e62658742f1c6e6acf07d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^O|E}", "record_id": "9313875ce8ec0a3084341f99"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^6}, NoeticCluster{^3, ^7})", "record_id": "01522433067012a4097ac385"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^4, ^5}, NoeticCluster{^1, ^2, ^5, ^7})", "record_id": "6b15a92ed3427b2ce33ba2fe"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^C} ∩ StateCluster{^8^C, ^1^O}", "record_id": "3147458331f958ceb7b73c22"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^3, ^5}, NoeticCluster{^5, ^7, ^8})", "record_id": "012248d0c2433f908439ee35"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^O} ∪ StateCluster{^7^E, ^9^C}", "record_id": "82aab60c8505516b7185fc03"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^4^P_{F7}|E, ^1^C_{F2}|T, ^1^O_{F3}|A, ^2^O_{F5}|T}", "record_id": "ab26df3c4d99f25a51b518e4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^E} ∪ StateCluster{^8^P, ^3^P}", "record_id": "50acdb04cc4a43a8dc57d43f"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^P_{F7}|A, ^1^C_{F7}|T}", "record_id": "aec3c42c73e606153983be0c"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^9}, NoeticCluster{^1, ^7})", "record_id": "31fe899263068ece78f9c601"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P, ^8^C, ^5^C} ∖ StateCluster{^5^C}", "record_id": "60f4c4b3113c4bef84fac631"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^C_{F5}|A}", "record_id": "6cccbc3fc44bdf6c598ea946"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^4, ^6, ^9}, NoeticCluster{^5, ^7, ^9})", "record_id": "4c525f83682c0d31656e36aa"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^O, ^7^E, ^7^O, ^3^C} ∪ StateCluster{^1^E, ^6^E, ^5^O}", "record_id": "6584956abbf047b6e576542e"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^3}, NoeticCluster{^1, ^3, ^6, ^7})", "record_id": "7b6537f93e3e36a204132e7e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^C, ^5^C} ∪ StateCluster{^7^P, ^5^E, ^5^O}", "record_id": "b45ccfcefe09ded3709bf7ad"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^6, ^9}, NoeticCluster{^0, ^5, ^6, ^9})", "record_id": "b017646f99dc1521a71b8ded"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^4, ^5, ^8}, NoeticCluster{^4, ^5, ^6, ^9})", "record_id": "66a00f69f7b53dca6eccc8dd"}
+{"family": "R", "mode": "reconstruction", "observation": "^5 ∈ Noetics", "record_id": "c537c6c6470c3f02906f8726"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^P, ^0^O} ∪ StateCluster{^2^E, ^6^E, ^8^O, ^0^C}", "record_id": "e7944c557485b3952c2dbc8d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^O, ^3^C} ∖ StateCluster{^3^C}", "record_id": "25164aba906b718e667600a9"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^1, ^5, ^7}, NoeticCluster{^1, ^3, ^7, ^8})", "record_id": "c34071849e0b55a75bccb96e"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^E_{F6}|E, ^0^E_{F3}|f, ^8^O|A}", "record_id": "fab59733882e5044eb2d9643"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^O, ^5^E, ^5^C} ∪ StateCluster{^2^E}", "record_id": "6a2b155762e35d613930b87c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^C} ⊆ States", "record_id": "ed306da14539033bbc3f95ad"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^5, ^6, ^8}, NoeticCluster{^7, ^8, ^9})", "record_id": "b8ac865fabb7c64b3fab48b6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^6^E, ^9^E, ^6^C, ^3^P} ∩ StateCluster{^9^E, ^6^E, ^4^P, ^9^P}", "record_id": "05e2572061b15749e070679c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^P} ∩ StateCluster{^1^P, ^9^C}", "record_id": "2ccff4258345b827b819ab1d"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^E, ^7^C} ∖ StateCluster{^7^C}", "record_id": "bb590dc2138d1c2f9cee3d18"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P, ^6^E} ∪ StateCluster{^1^P, ^2^O, ^4^P}", "record_id": "e2ab07c2a82dadf30f55df43"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^6^P_{F6}|A, ^6^C_{F1}|f, ^8^P|T}", "record_id": "7982712d79e1e4458b9a4fe6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^P, ^3^E} ∩ StateCluster{^3^E, ^6^O, ^9^P}", "record_id": "c67a952f84c1bc2ede6f9a53"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^6, ^8}, NoeticCluster{^2, ^6, ^7, ^8})", "record_id": "0b772e2bb8a707597b9d61ca"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^9}, NoeticCluster{^3, ^5, ^9})", "record_id": "2a28306e70200f4aee1ffeea"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^O} ∪ StateCluster{^5^C}", "record_id": "64b3a7c49b704d25ebff0e84"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^E|T × ^4^E|A × ^4^E|E × ^4^E|f) = ^4^E|Ω_attunement", "record_id": "a492e0d36703c7846412ab6c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^C|A, ^1^E_{F7}|E, ^4^P|A, ^3^P_{F4}|f}", "record_id": "dca27174af3d86f7dd49e20a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^E} ⊆ States", "record_id": "9c34c4c36951d655060bd9f4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^8^E, ^0^P, ^5^P, ^9^P} ∪ StateCluster{^3^E, ^3^O, ^8^C, ^8^P}", "record_id": "163c9c9fc58629b6684ded6c"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^6, ^9}, NoeticCluster{^1, ^6, ^7, ^8})", "record_id": "012a7950ae74dbd2a64b99c5"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^P} ∩ StateCluster{^0^P, ^8^C}", "record_id": "f7caf852428387d2e426d5a7"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^2, ^3, ^7}, NoeticCluster{^3, ^5, ^7, ^9})", "record_id": "e7e210ae04283ba95877de01"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^E_{F2}|A, ^7^C|A, ^4^P_{F6}|A, ^2^C_{F4}|A}", "record_id": "66bae1cb380bd1ec5feaf7b3"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^7, ^8}, NoeticCluster{^2, ^8})", "record_id": "0e1562de35ffbf1b6d2e935c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^O} ⊆ States", "record_id": "5c1b3029460f8bb7163a0eec"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^C, ^0^O} ∩ StateCluster{^0^O}", "record_id": "a72130098055d9c76c7ca9bc"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^P, ^2^P, ^7^O, ^5^C} ∩ StateCluster{^1^P, ^8^P, ^1^E}", "record_id": "0ed8891e3ae580776441ddf4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^7^C_{F7}|E, ^6^E_{F3}|f}", "record_id": "fc2a4b49d9efb019aa9940e7"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^E, ^8^E} ∪ StateCluster{^8^P, ^4^O, ^1^P, ^9^P}", "record_id": "b46bc3c378cecf16db45d892"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^9}, NoeticCluster{^0, ^6})", "record_id": "d070fe2bcc7efc2b6bfe9108"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^4^C, ^1^O} ∖ StateCluster{^1^O}", "record_id": "d782b7c8eabb5cecb290f21c"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^2, ^3, ^6, ^9}, NoeticCluster{^0, ^1, ^9})", "record_id": "b7bdd2d27069a7c5b09401ac"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^3^P_{F6}|A, ^3^E_{F1}|E, ^2^P_{F6}|T}", "record_id": "987f553a7d795aa858d29c4c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^C, ^2^E} ∪ StateCluster{^0^C, ^0^E, ^8^E}", "record_id": "e41a99df89ca4535ab0ddb95"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^7^E, ^2^E, ^1^C} ∪ StateCluster{^5^E, ^9^P, ^6^P}", "record_id": "e8a4a35fed55d0dc0eb66720"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^9^P|f, ^6^C_{F1}|f, ^7^P_{F6}|E}", "record_id": "4dd22ee689ba1cd3a8ceefc4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^3^P} ∩ StateCluster{^3^P}", "record_id": "bea6c132540dd6d97912673a"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^4}, NoeticCluster{^0, ^1, ^4, ^8})", "record_id": "b6a4c59fa344f6dc5e570c74"}
+{"family": "R", "mode": "reconstruction", "observation": "^2 ∈ Noetics", "record_id": "add7724f4b73e98a849b2a97"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^E, ^4^O, ^4^P, ^5^E} ∪ StateCluster{^2^E, ^7^O, ^5^C}", "record_id": "7a5a7ccb137cbb09d9eaae54"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^5, ^6, ^7}, NoeticCluster{^0, ^5, ^7})", "record_id": "31db5b086772355606e2b16a"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^P, ^7^P} ∖ StateCluster{^7^P}", "record_id": "aea8ed897055a1b67126756d"}
+{"family": "R", "mode": "reconstruction", "observation": "^1 ∈ Noetics", "record_id": "375dc96c36ccee00cca53783"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^5^O, ^1^O, ^1^C} ∪ StateCluster{^7^C, ^3^C, ^1^O}", "record_id": "fb50aaf1c106e4bc332466e4"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^4, ^9}, NoeticCluster{^4, ^5, ^6, ^9})", "record_id": "5010b27edfb87205ce4e2ca6"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^C} ∩ StateCluster{^2^C}", "record_id": "90e2ae36732fc8dc6a4eade1"}
+{"family": "R", "mode": "reconstruction", "observation": "StateVariantCluster{^1^C_{F2}|E}", "record_id": "3a71d142c9aabd34619e5ccb"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^1, ^5, ^7, ^9}, NoeticCluster{^0, ^1, ^6, ^9})", "record_id": "0f309612a2db185eb94ce88c"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^0^O, ^0^C, ^6^C, ^3^P} ∪ StateCluster{^5^O, ^8^C, ^1^C, ^5^E}", "record_id": "73fa661aeaca9bf1c8ef149f"}
+{"family": "R", "mode": "reconstruction", "observation": "(^4^C|A × ^4^C|f × ^4^C|E × ^4^C|T) = ^4^C|Ω_attunement", "record_id": "ce7366f694c7d5ff142afe20"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^6}, NoeticCluster{^0, ^1, ^4})", "record_id": "3bc6ea1b95778a3d01d0a3ed"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^9^E} ∪ StateCluster{^8^C, ^9^O}", "record_id": "c8153313750970b859892ac4"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^1^P, ^4^E} ∩ StateCluster{^1^P, ^6^O, ^0^O}", "record_id": "35c92044bdef14b13b4edb56"}
+{"family": "R", "mode": "reconstruction", "observation": "StateCluster{^2^E, ^7^P, ^1^P} ∩ StateCluster{^1^P}", "record_id": "0d407161c959fdc710221952"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^3, ^6, ^7}, NoeticCluster{^3, ^5})", "record_id": "6670275bfe5923c6f413bcd3"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^0, ^4, ^6}, NoeticCluster{^4, ^8})", "record_id": "99885c67b2c36a014f6a33f7"}
+{"family": "R", "mode": "reconstruction", "observation": "Pullback(NoeticCluster{^4, ^9}, NoeticCluster{^3, ^4, ^7, ^9})", "record_id": "ded52aec558c03a997f38dc4"}

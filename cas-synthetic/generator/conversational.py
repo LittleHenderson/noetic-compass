@@ -39,6 +39,21 @@ _DOMAIN_NAMES = {
     "E": "evaluative",
     "O": "operational",
 }
+# The ten canonical Noetic NAMES (docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md, Clarification 1). These are the only
+# names allowed in a name slot such as "^6 (Male)". The plain-word glosses in _NOETIC_NAMES below are DESCRIPTIONS
+# for story sentences only; before 2026-09-21 they were also written into the name slot ("^6 (analysis)").
+_NOETIC_CANONICAL_NAMES = {
+    0: "Idea",
+    1: "Mind",
+    2: "Positive",
+    3: "Negative",
+    4: "Vibration",
+    5: "Female",
+    6: "Male",
+    7: "Rhythm",
+    8: "Above/Cause",
+    9: "Below/Effect",
+}
 _NOETIC_NAMES = {
     0: "open possibility",
     1: "direct attention",
@@ -865,7 +880,7 @@ def _cas_reading(expression: str) -> str:
     domain = _top_domain(expression)
     pieces: list[str] = []
     if noetic is not None:
-        pieces.append(f"{_NOETIC_NAMES.get(noetic, f'Noetic ^{noetic}')} as the main noetic signal")
+        pieces.append(f"^{noetic} {_NOETIC_CANONICAL_NAMES.get(noetic, '')} as the main noetic signal".replace("  ", " "))
     if domain is not None:
         pieces.append(f"{_DOMAIN_STORY_NAMES.get(domain, domain)} as the main domain")
     registers = _registers(expression)
@@ -921,7 +936,7 @@ def _conversation_need(source_bucket: str, expression: str, rng: random.Random) 
 def _focus_summary(expression: str) -> str:
     noetic_counts = extract_noetic_counts(expression)
     domain_counts = extract_domain_counts(expression)
-    noetic_part = _axis_focus(noetic_counts, _NOETIC_NAMES, "Noetic")
+    noetic_part = _axis_focus(noetic_counts, _NOETIC_CANONICAL_NAMES, "Noetic")
     domain_part = _axis_focus(domain_counts, _DOMAIN_NAMES, "domain")
     return f"{noetic_part}; {domain_part}; {_feature_summary(expression)}"
 

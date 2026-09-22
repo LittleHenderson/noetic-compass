@@ -4,6 +4,62 @@ Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - THE CAS COMPILER NOW CARRIES THE BOOK'S MEANING OF NESTING; eight measured defects fixed; `Worlds` clarified without changing it; twelve help-text canon slips fixed; the answer to "is PCBA in the compiler" is no, with my earlier "no parser on disk" corrected. Owner order of 2026-09-21. Symbolic only, $0.
+
+**Compiler** (`noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 `8169188ad73df8fc…` -> `f1a44678438a65c3…` (two review rounds; the first reviewed text was `00834e0258ea6b46…`); the same text
+rebuilt into `dist/cas-offline/` and `dist/cas-offline.zip` with `offline-cas/build_offline_package.py`). **Additive.** Every old field of a ring
+result is unchanged. A differential run of the OLD text against the NEW over 7,813 distinct expressions (the 99 compiler tests' strings, the
+`.cas` example files, the offline tool's 30 examples, all 5,096 Q3 v0.4 practice records): 0 newly invalid, 0 newly valid, and the only changed
+answers are 12 `Product(...)` results whose elements are now labelled `Tuple<a,b>` (the fix that lets a tuple be found in a Product set).
+
+- **Nesting, the book's meaning** (Chapter 26 Definition 26.1, Theorem 26.2, the Classification Theorem; Chapter 10). Every ring result gains a
+  `nesting` block: each term with its own Noetic name, Domain, Drive, Register and role (first written = `innermost`, last written = `governing`);
+  the identity law; the Dual Cancellation canonical form under BOTH readings the book supports, with a single `form` only when they agree; the
+  Theorem 26.2 criterion under THREE readings (exact partner to the right; either order; any landing-side Noetic) with `orbit_class` given only
+  when all three agree and `orbit_class_by_reading` beside it (`^2∘^3∘^2∘^3` stabilizing, `^8∘^8∘^8` amplifying; the book's own oscillatory
+  example `^8∘^6∘^8∘^6` is NOT_DECIDED because line 6093 contradicts 6151/3015/3061); Chapter 10's five worked analyses are reproduced on 1 of 5
+  and the block says so. Where the book is in two minds the block names the question by id (N1-N13) instead of choosing. The seven cross-Domain nestings the book writes (refused before) now
+  compile with a warning.
+- **Defects fixed, each with a regression test** (`tests/test_notation_compiler_nesting_and_defects.py`, 50 tests): relation in a relation set
+  always false; ring result in a set stored as a Python repr and never found (now keyed by every term's Domain, Drive and Register); tuple never found in a Product; names starting with P/C/E/O
+  split by the lexer (`Cluster{}`, `EmptySet`, `Charlie`); `|Product(...)|` and `|A ∪ B|` unparseable; chained `⊆` gave a wrong type error;
+  raw Python RecursionError near 180 bracket levels; reserved names (`C`, `A`, `Noetics`, `Worlds`) silently mis-bound as `let` names or parameters
+  (function names stay free: `fn f(...)` always worked); parse tree thrown away on a typecheck failure. **Withdrawn after review:** a set-as-element
+  keyed by CONTENTS (it made typed = untyped sets, literals = built-ins, changed CoverOf sizes, flipped `"CO-2" ∈ Noetics`); set identity is now an
+  owner decision and the name-keyed limit is pinned as such. The 99 pre-existing compiler tests pass unchanged (99 passed).
+- **`Worlds`.** Unchanged in meaning: the compiler keyword still evaluates to `Domains` (P, C, E, O) as the book's Appendix J.3 says. New: a
+  compile warning and a code comment say it is an alias of Domains and NOT the TKS World axis of the 28 Foundations, which corresponds to
+  `Registers`; `docs/reference/tks_28_foundations_translation_key.md` retitles its table "TKS World position -> CAS Register" and carries the
+  canonical letters a Spiritual, b Mental, c Emotional, d Physical. Nothing merged. The conflicting passages (book 8443/8452 vs Clarification 8
+  343-348; book 1142 vs 8454 and CLAUDE.md 273 on "the 28") are listed for the owner in
+  `research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md`. **FLAG_FOR_HUMAN_REVIEW** stays.
+- **Help text.** Thirteen example sentences (a 13th, naming `^3` only as "boundary signals", found by review) and two glossary entries ("7 × 4 Domains = 28" for the compiler's Drive|Register set) in `offline-cas/cas_terminal.py`, `dist/cas-offline/cas_terminal.py` and the dashboard's
+  `CompilerPage.tsx`: F2 called "Vitality" x5 (F2 is Wisdom), F6 called "Purpose" x1 (F6 is Structure), Noetic nicknames removed
+  (Female/Differentiation x4, Negative/Boundary x2, Male/Structure x1, Positive/affirming x1). Guard test
+  `tests/test_offline_help_text_canon.py` (454 checks: names, forbidden nicknames, Noetic-in-expression, dictionary) fails on the old text (28 failures). Training labels: `cas-synthetic/generator/conversational.py` now
+  writes the canonical name in the mapping slot (`^6 (Male)`, was `^6 (analysis)`); story sentences keep their plain-word glosses. The 34
+  failures in `cas-synthetic/tests` are the same 34 with and without this edit (pre-existing; not mine to fix here).
+- **PCBA — IN the project, PARTLY IMPLEMENTED (owner ruling 2026-09-21: "close the gap, not remove PCBA from CAS").** Not in the CAS notation
+  compiler itself (0 mentions; every book component line refused). **Correction:** I said earlier that no PCBA/CCDL parser exists on disk. Wrong.
+  `cas-forex/cas_forex/pcba_syntax.py` + `pcba_compiler.py` (+ `cjt_*`, board rules in `crc_linter.py`) read ONE component in the book's shape,
+  know 23 kinds (20 of the book's 39 names; 18 book names unknown), and send each state and arrow to the real compiler through a bridge; switched
+  off for production by their own code; ENGINEERED-NOT-VALIDATED, NOT LICENSED. Next task: reuse that reader where it matches the book, build the
+  whole-board reading and checking, keep four SEPARATE results (read a component / check a board / run its behaviour / teach Helm).
+- **Lab.** `test_compiler_nesting_facts.py` re-pinned to the new text (16 tests; four "defect" facts flipped to FIXED). Q3 data rebuilt as
+  **v0.5** bound to the new compiler text: all 24 record files byte-identical to v0.4 (targets are parse trees, which did not change); only
+  `baselines.json` differs (its schema string). Pinned in `Q3_DATA_PINS.json` (manifest `a09768d20fb3b86c…`, export report `97c44c49ce67c605…`);
+  v0.4 kept on disk. Pool lookup now walks up from the worktree. Lab suite: 134 passed.
+- **Adversarial review before commit:** four lenses (book faithfulness, regression, set semantics, canon/Worlds); 46 of 60 agents finished (the
+  14 regression-lens skeptics hit the session limit; I reproduced those findings myself). 6 major book-faithfulness findings -> three-reading
+  criterion, ids N10-N13, ^7 no longer vetoes, text fixes; 4 major set-semantics findings -> content-keying withdrawn, ring key from term labels;
+  2 major regression findings -> deep chain no longer crashes in `to_dict()`, fn names free; canon lens -> 13th sentence, glossary, guard test,
+  translation-key path and wording, PCBA counts corrected.
+
+**Owner decisions still open** (listed in full in the open-questions document): W-A/W-B/W-C on `Worlds` and "the 28"; N1-N9 on nesting; the
+PCBA route (extend the cas-forex front end, or add a component production to the compiler); set display; the never-compiling demo file
+`docs/CAS_FULL_DEMO_APP.cas`; Reality Engineering's TKS-side Foundation names; the older name sets still in `api/notation/parser.py`,
+`api/pipeline/llm_scorer.py`, `cas-native/data/*english_generator.py` and the existing level-3 data rows.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - THE CAS COMPILER ALREADY NESTS THOUGHTS AND COMPUTES SET-THEORY META-LOGIC. Examined by running it; 15 facts pinned; my earlier claim that the code has no nesting is corrected. Commit `a32d05c8`.
 
 **Why.** The owner asked whether the code lets a thought sit inside another thought, pointed at the CAS compiler (`dist/cas-offline`) and the

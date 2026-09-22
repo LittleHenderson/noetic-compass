@@ -829,20 +829,320 @@ class RelationValue:
         }
 
 
+# ---------------------------------------------------------------------------
+# The Nesting Operator: the canon book's meaning, ADDED beside the legacy fields
+# ---------------------------------------------------------------------------
+# Source: "Thinking in Cognitive Architecture", Chapter 26 (The Fractal
+# Calculus) -- Definition 26.1, Theorem 26.2 (Dual Cancellation Criterion), the
+# Classification Theorem -- and Chapter 10 (canonical form by cancellation).
+#
+# What the book states mechanically is computed here. Where the book is in two
+# minds, BOTH readings are reported and the open question is named by id;
+# nothing is settled silently. The legacy fields of a fractal value
+# (`sequence`, `composed_operator`, `orbit_length`, `domain`) are unchanged.
+
+NESTING_SCHEMA = "cas.nesting/0.2"
+NESTING_SURFACING_MEMBER = {2: 3, 5: 6, 8: 9}      # surfacing-side member -> its landing-side partner
+NESTING_PARTNER = {2: 3, 3: 2, 5: 6, 6: 5, 8: 9, 9: 8}
+NESTING_LANDING_SIDE = frozenset({3, 6, 9})          # Theorem 26.2 text and the chapter's Key Insight
+NESTING_RHYTHM = 7                                   # listed surfacing-side, but the book names no partner for it
+NESTING_OPEN_QUESTIONS = {
+    "N1": "Which side is the container. Definition 26.1 (line 6021) and three worked examples (2890, 1845, 6309) put the LEFT thought inside the RIGHT one; three other worked examples (3199, 3203, 4624/4670) read the LEFT thought as the host, and the TKS book's `X.Y` puts the container on the left. This block follows Definition 26.1. Time order is a separate question: line 6044 writes an applied sequence as f_n ∘ ... ∘ f_1 with f_1 applied FIRST, so the right-hand thought may be the EARLIER one; 'later partner' below means 'written to the right'.",
+    "N2": "Is nesting with ^0 really a no-op. Definition 26.1 says yes; line 1847 says an ^0^P container changes what is admissible. ^0 terms are dropped from the canonical form here and listed in `identity_terms`.",
+    "N3": "Does the order inside a cancelling pair matter. The glossary cancels each pair (7146); lines 3683-3687 say ^5 nested in ^6 gives ^0 while ^6 nested in ^5 is a rupture; Chapter 10 Analysis 3 reduces a ^6-then-^5 word to ^0^E. Both readings are computed, for the canonical form AND for the criterion.",
+    "N4": "Which Noetics are surfacing-side and which landing-side. Line 6052 has ^6 landing; line 6073 has ^6 surfacing and ^0 landing; ^7 is surfacing-side in both lists yet has no partner; ^1 and ^4 are in no list. This block uses the 6052 list for ^2/^3, ^5/^6, ^8/^9, treats ^1 and ^4 as neutral, and treats ^7 as a THIRD category: it never resolves and never cancels; a word of ^7 alone is not classed (line 3161 calls a ^7 word 'Amplifying', Template 23 at 6787 calls one 'the healthiest sustained-work signature'); ^7 does not veto a class earned by the other thoughts.",
+    "N5": "Where a healthy orbit ends: at ^0 (6075, 6079, 6089) or on ^9 or ^3 (6048), or on ^9 with no cancellation at all (Chapter 10, 2902-2906).",
+    "N6": "An alternating involution pair (^2^3^2^3, ^5^6^5^6 ...) is called stabilizing in Chapter 26 (6089, Template 27) and oscillatory in Chapter 10 (2916-2920, Analysis 3). Attached whenever such a pattern is present, whatever class is reported.",
+    "N7": "Cancellation needs 'equal intensity' and the chapter names a Closure Ratio; the notation has no intensity and the book gives no formula. Equal intensity is ASSUMED here.",
+    "N8": "The book nests across Domains, Drives and Registers but never states the Domain, Drive or Register of the nested whole. Each term keeps its own; the legacy `domain` field is picked by position. A Drive stated on one side only never cancels here ('driven by the same fuel', 6057, never covers an unstated fuel); Register is ignored in the cancelling condition (6013), though Chapter 10 lines 2948 and 3015 describe register-crossing as what makes a cancellation take.",
+    "N9": "Short words. Most amplifying and oscillatory examples in the book repeat (`^8 ∘ ^8 ∘ ^8`, `^8 ∘ ^6 ∘ ^8 ∘ ^6`), so those two classes are reported only for repeating patterns; but two-term words are read both ways: `^8 ∘ ^3` is 'highly productive' (6027), `^8 ∘ ^6` is a loop to be fixed (6142), `^2^P ∘ ^6^P` is 'stable' (6124). A non-repeating unresolved word is left unclassed with this id.",
+    "N10": "Adjacent or eventual. Chapter 10 cancels pairs 'applied sequentially' (2995) and says of ^8^C followed two steps later by ^9^C that no cancellation appears (2980); Theorem 26.2 says a partner 'must eventually exist' (6052). `canonical_form` cancels ADJACENT pairs only; `dual_cancellation_criterion` accepts ANY partner written to the right. Attached whenever the two disagree.",
+    "N11": "Exact partner or any landing-side thought. Line 6052 asks for 'a corresponding landing-side operator (CO_{3,6,9})' and lines 6151, 3015, 3061 and 2902-2904 let ^6 or ^9 resolve an ^8; line 6093 says ^8 'should be matched with ^9, not ^6'. The criterion is computed under both readings (`by_exact_partner`, `by_any_landing`).",
+    "N12": "Does a landing-side thought with no surfacing partner break the criterion. Lines 6052 and 6089 are one-directional (only surfacing thoughts need partners); lines 6073 and 6079 are symmetric ('both members eventually appear'; pure landing 'grinds inward to nothing'); Chapter 10 Analyses 1 and 4 call such words Stabilizing. A word with an unpartnered landing thought is left unclassed with this id.",
+    "N13": "Chapter 10's five worked analyses (2930-2982) classify by the Domain walk and the ending Noetic, with judgment beyond these rules; this block reproduces the stated class for 1 of the 5 (Analysis 2). Their `→` sequences may not even be the same object as a `∘` word. Attached to every word of two or more thoughts.",
+}
+NESTING_CROSS_DOMAIN_WARNING = (
+    "this nesting crosses Domains: the canon book nests across Domains but does not state the Domain of the "
+    "nested whole, so the legacy `domain` field is picked by position; read each term's own Domain in `nesting.terms`"
+)
+WORLDS_ALIAS_WARNING = (
+    "`Worlds` is a compiler alias of `Domains` (P, C, E, O), as the book's Appendix J.3 documents. It is not the "
+    "TKS World axis of the 28 Foundations: per Clarification 8 that axis corresponds to `Registers` (T, A, f, E) by "
+    "position, and the project has not yet ruled on 'the 28' (owner question W-C). "
+    "Write `Domains` or `Registers` explicitly in new work."
+)
+
+
+def _nested_term_label(term: dict[str, Any]) -> str:
+    label = f"^{term['noetic']}"
+    if term.get("domain"):
+        label += f"^{term['domain']}"
+    if term.get("drive"):
+        label += "_{" + str(term["drive"]) + "}"
+    register = term.get("register")
+    if isinstance(register, list):
+        label += "|<" + ",".join(register) + ">"
+    elif register:
+        label += f"|{register}"
+    return label
+
+
+def _nested_term_from_digit(noetic: int) -> dict[str, Any]:
+    term: dict[str, Any] = {
+        "noetic": int(noetic),
+        "name": OPERATOR_NAMES[int(noetic)] if 0 <= int(noetic) < len(OPERATOR_NAMES) else "?",
+        "domain": None,
+        "drive": None,
+        "register": None,
+    }
+    term["label"] = _nested_term_label(term)
+    return term
+
+
+def _nested_term_from_state(value: "StateValue") -> dict[str, Any]:
+    term = _nested_term_from_digit(value.dominant_operator())
+    if value.domain_explicit:
+        term["domain"] = value.dominant_domain()
+    if value.explicit_drive and value.drive_weights:
+        term["drive"] = f"F{max(value.drive_weights, key=value.drive_weights.get)}"
+    if isinstance(value.register, tuple):
+        term["register"] = list(value.register)
+    elif value.register is not None:
+        term["register"] = value.register
+    if value.drive_register is not None:
+        term["drive_register"] = list(value.drive_register) if isinstance(value.drive_register, tuple) else value.drive_register
+    if value.emergent_register is not None:
+        term["emergent_register"] = value.emergent_register
+    term["label"] = _nested_term_label(term)
+    return term
+
+
+def _nesting_same_setting(a: dict[str, Any], b: dict[str, Any]) -> bool:
+    """The book's condition for cancelling: 'in the same domain and driven by the same fuel'."""
+    return a.get("domain") == b.get("domain") and a.get("drive") == b.get("drive")
+
+
+def _nesting_criterion(terms: list[dict[str, Any]], positions: list[int], *, either_order: bool, any_landing: bool) -> dict[str, Any]:
+    """Theorem 26.2 under one reading: which surfacing-side thoughts find a partner written to their right.
+
+    either_order: a landing thought written to the LEFT of the surfacing one also counts (N3).
+    any_landing:  any landing-side Noetic in the same Domain with the same Drive resolves, not only the exact partner (N11).
+    """
+    live = [p for p in positions if terms[p]["noetic"] != 0]
+    resolved: list[list[int]] = []
+    used: set[int] = set()
+    unresolved: list[int] = []
+    for position in live:
+        term = terms[position]
+        if term["noetic"] not in NESTING_SURFACING_MEMBER:
+            continue
+        wanted = NESTING_LANDING_SIDE if any_landing else {NESTING_SURFACING_MEMBER[term["noetic"]]}
+        candidates = [q for q in live if q > position and q not in used and terms[q]["noetic"] in wanted and _nesting_same_setting(term, terms[q])]
+        if not candidates and either_order:
+            candidates = [q for q in live if q < position and q not in used and terms[q]["noetic"] in wanted and _nesting_same_setting(term, terms[q])]
+        if candidates:
+            partner = candidates[0]
+            used.add(partner)
+            resolved.append(sorted([position, partner]))
+        else:
+            unresolved.append(position)
+    unpartnered_landing = [p for p in live if terms[p]["noetic"] in NESTING_LANDING_SIDE and p not in used]
+    rhythm = [p for p in live if terms[p]["noetic"] == NESTING_RHYTHM]
+    surfacing_present = any(terms[p]["noetic"] in NESTING_SURFACING_MEMBER for p in live)
+    met: bool | None = False if unresolved else (True if surfacing_present else None)
+    return {"resolved": resolved, "unresolved_surfacing": unresolved, "unpartnered_landing": unpartnered_landing, "rhythm_terms": rhythm, "met": met}
+
+
+def _nesting_reduce(terms: list[dict[str, Any]], positions: list[int], *, either_order: bool) -> tuple[list[int], list[list[int]]]:
+    survivors: list[int] = []
+    cancelled: list[list[int]] = []
+    for position in positions:
+        term = terms[position]
+        if survivors:
+            top = terms[survivors[-1]]
+            is_pair = NESTING_PARTNER.get(top["noetic"]) == term["noetic"]
+            order_ok = either_order or top["noetic"] in NESTING_SURFACING_MEMBER
+            if is_pair and order_ok and _nesting_same_setting(top, term):
+                cancelled.append([survivors.pop(), position])
+                continue
+        survivors.append(position)
+    return survivors, cancelled
+
+
+def _analyse_nesting(terms: list[dict[str, Any]]) -> dict[str, Any]:
+    count = len(terms)
+    listed: list[dict[str, Any]] = []
+    for position, term in enumerate(terms):
+        entry = {"position": position, **term}
+        if count == 1:
+            entry["role"] = "only term"
+        elif position == 0:
+            entry["role"] = "innermost"
+        elif position == count - 1:
+            entry["role"] = "governing"
+        else:
+            entry["role"] = "inside every term to its right; governs every term to its left"
+        listed.append(entry)
+
+    identity = [p for p, t in enumerate(terms) if t["noetic"] == 0]
+    live = [p for p, t in enumerate(terms) if t["noetic"] != 0]
+    domains = {t.get("domain") for t in terms}
+    single_domain = next(iter(domains)) if len(domains) == 1 else None
+
+    def _form(survivors: list[int]) -> list[str]:
+        if survivors:
+            return [terms[p]["label"] for p in survivors]
+        return ["^0" + (f"^{single_domain}" if single_domain else "")]
+
+    ordered, ordered_cancelled = _nesting_reduce(terms, live, either_order=False)
+    free, free_cancelled = _nesting_reduce(terms, live, either_order=True)
+    agreed = ordered == free
+
+    # Theorem 26.2 under the three readings the book supports (N3, N11); the first is the base reading.
+    base = _nesting_criterion(terms, live, either_order=False, any_landing=False)
+    by_either_order = _nesting_criterion(terms, live, either_order=True, any_landing=False)
+    by_any_landing = _nesting_criterion(terms, live, either_order=False, any_landing=True)
+    readings_agree = base["met"] == by_either_order["met"] == by_any_landing["met"] and base["unpartnered_landing"] == by_any_landing["unpartnered_landing"]
+    resolved, unresolved = base["resolved"], base["unresolved_surfacing"]
+    unpartnered_landing, rhythm, met = base["unpartnered_landing"], base["rhythm_terms"], base["met"]
+    non_adjacent = [pair for pair in resolved if any(terms[q]["noetic"] != 0 for q in range(pair[0] + 1, pair[1]))]   # a live thought sits between the two
+    cancelled_positions = {p for pair in ordered_cancelled for p in pair}
+    adjacency_disagrees = any(p not in cancelled_positions for pair in resolved for p in pair)
+
+    present = {terms[p]["noetic"] for p in live}
+    has_surfacing = bool(present & set(NESTING_SURFACING_MEMBER))
+    has_landing = bool(present & NESTING_LANDING_SIDE)
+    alternating_pair = (
+        len(live) >= 4 and len(present) == 2 and all(NESTING_PARTNER.get(terms[live[i]]["noetic"]) == terms[live[i + 1]]["noetic"] for i in range(len(live) - 1))
+    )
+    pure_rhythm = bool(rhythm) and not has_surfacing and not has_landing
+
+    def classify(reading: dict[str, Any]) -> tuple[str, str]:
+        """The Classification Theorem (6085-6095) applied to one reading of the criterion."""
+        r_unresolved, r_resolved, r_unpartnered = reading["unresolved_surfacing"], reading["resolved"], reading["unpartnered_landing"]
+        # Most amplifying and oscillatory examples in the book REPEAT (`^8 ∘ ^8 ∘ ^8 ...`,
+        # `^8 ∘ ^6 ∘ ^8 ∘ ^6`); two-term words are read both ways (N9). So those two classes are
+        # reported only when the unresolved pattern repeats. ^7 never resolves and never vetoes (N4).
+        repeats = len(r_unresolved) >= 2
+        wrong_partners_only = bool(r_unresolved) and all(NESTING_SURFACING_MEMBER[terms[p]["noetic"]] not in present for p in r_unresolved)
+        if reading["met"] is True and not r_unpartnered:
+            return "stabilizing", "every surfacing-side thought is resolved by a landing-side partner written to its right, in the same Domain with the same Drive"
+        if reading["met"] is True and r_unpartnered:
+            return "NOT_DECIDED_BY_THE_BOOK", "every surfacing-side thought is resolved, but a landing-side thought has no surfacing partner (N12)"
+        if has_surfacing and not has_landing and repeats:
+            return "amplifying", "surfacing-side thoughts repeat with no landing-side thought at all"
+        if wrong_partners_only and has_landing and not r_resolved and repeats:
+            return "oscillatory", "surfacing-side and landing-side thoughts both repeat, but never the right partner"
+        if r_unresolved and not repeats and not r_resolved:
+            return "NOT_DECIDED_BY_THE_BOOK", "one unresolved surfacing-side thought, not a repeating pattern (N9)"
+        if pure_rhythm:
+            return "NOT_DECIDED_BY_THE_BOOK", "^7 Rhythm alone: line 3161 calls such a word Amplifying, Template 23 calls it the healthiest sustained-work signature (N4)"
+        if not has_surfacing:
+            return "NOT_DECIDED_BY_THE_BOOK", "no surfacing-side thought; the theorem's three classes do not cover this case (N12)"
+        return "NOT_DECIDED_BY_THE_BOOK", "some surfacing-side thoughts are resolved and others are not"
+
+    by_reading = {
+        "exact_partner_written_to_the_right": classify(base),
+        "either_order": classify(by_either_order),
+        "any_landing_side": classify(by_any_landing),
+    }
+    classes = {c for c, _ in by_reading.values()}
+    if len(classes) == 1:
+        orbit, reason = by_reading["exact_partner_written_to_the_right"]
+    else:
+        orbit, reason = "NOT_DECIDED_BY_THE_BOOK", "the book's readings of the Dual Cancellation criterion give different classes for this word: " + "; ".join("%s -> %s" % (k, v[0]) for k, v in by_reading.items()) + " (see N3, N11)"
+
+    questions = ["N1"] if count > 1 else []
+    if identity:
+        questions.append("N2")
+    if not agreed or base["met"] != by_either_order["met"]:
+        questions.append("N3")
+    if present & {6, 7} or (present and present <= {1, 4}):
+        questions.append("N4")
+    if orbit == "stabilizing":
+        questions.append("N5")
+    if alternating_pair:
+        questions.append("N6")
+    if ordered_cancelled or free_cancelled or resolved:
+        questions.append("N7")
+    mixed = len(domains) > 1 or len({t.get("drive") for t in terms}) > 1 or len({str(t.get("register")) for t in terms}) > 1
+    if mixed:
+        questions.append("N8")
+    if unresolved and len(unresolved) < 2:
+        questions.append("N9")
+    if non_adjacent or adjacency_disagrees:
+        questions.append("N10")
+    if base["met"] != by_any_landing["met"] or base["unpartnered_landing"] != by_any_landing["unpartnered_landing"]:
+        questions.append("N11")
+    if unpartnered_landing or (not has_surfacing and has_landing):
+        questions.append("N12")
+    if count > 1:
+        questions.append("N13")
+
+    return {
+        "schema": NESTING_SCHEMA,
+        "source": "Thinking in Cognitive Architecture, Chapter 26 (Definition 26.1, Theorem 26.2, Classification Theorem) and Chapter 10",
+        "reading": "in `f ∘ g` the thought f sits inside the governing environment of g: the FIRST written thought is innermost, the LAST written thought governs",
+        "terms": listed,
+        "innermost": terms[0]["label"] if terms else None,
+        "governing": terms[-1]["label"] if terms else None,
+        "crosses_domains": len(domains) > 1,
+        "identity_terms": identity,
+        "canonical_form": {
+            "rule": "identity law, then adjacent involution pairs in the same Domain with the same Drive cancel to ^0",
+            "surfacing_member_first": {"cancelled": ordered_cancelled, "form": _form(ordered)},
+            "either_order": {"cancelled": free_cancelled, "form": _form(free)},
+            "agreed": agreed,
+            "form": _form(ordered) if agreed else None,
+        },
+        "dual_cancellation_criterion": {
+            "rule": "every surfacing-side thought needs its exact landing-side partner written to its RIGHT (anywhere, not only adjacent), in the same Domain with the same Drive; the other readings the book supports are computed beside it",
+            "resolved": resolved,
+            "unresolved_surfacing": unresolved,
+            "unpartnered_landing": unpartnered_landing,
+            "rhythm_terms": rhythm,
+            "met": met,
+            "non_adjacent_pairs": non_adjacent,
+            "by_either_order": by_either_order,
+            "by_any_landing": by_any_landing,
+            "readings_agree": readings_agree,
+        },
+        "chapter_10_analyses": "NOT_REPRODUCED: the five worked analyses of Chapter 10 (lines 2930-2982) are matched on 1 of 5 by these rules (N13)",
+        "orbit_class": orbit,
+        "orbit_class_reason": reason,
+        "orbit_class_by_reading": {k: v[0] for k, v in by_reading.items()},
+        "assumed": ["equal intensity (the notation has no intensity field)"],
+        "open_questions": questions,
+    }
+
+
+def _nesting_terms_of(value: Any) -> list[dict[str, Any]]:
+    if isinstance(value, StateValue):
+        return [_nested_term_from_state(value)]
+    if isinstance(value, FractalValue):
+        if value.terms is not None:
+            return [dict(term) for term in value.terms]
+        return [_nested_term_from_digit(noetic) for noetic in value.sequence]
+    return []
+
+
 @dataclass
 class FractalValue:
     sequence: list[int]
     composed_operator: int
     orbit_length: int
     domain: str | None = None
+    terms: list[dict[str, Any]] | None = None
 
     def to_dict(self) -> dict[str, Any]:
+        terms = self.terms if self.terms is not None else [_nested_term_from_digit(noetic) for noetic in self.sequence]
         return {
             "kind": "fractal",
             "sequence": self.sequence,
             "composed_operator": f"CO-{self.composed_operator}",
             "orbit_length": self.orbit_length,
             "domain": self.domain,
+            "nesting": _analyse_nesting(terms),
         }
 
 
@@ -1212,11 +1512,16 @@ def _build_builtin_meta_sets() -> dict[str, frozenset[str]]:
 
 BUILTIN_META_SETS = _build_builtin_meta_sets()
 META_SET_ALIASES = {
+    # `Worlds` is a legacy TKS-era alias of `Domains` (book Appendix J.3). It is NOT the
+    # TKS World axis of the 28 Foundations; that axis corresponds to `Registers` by position
+    # (Clarification 8 and docs/reference/tks_28_foundations_translation_key.md). The alias
+    # is kept so old programs still run; using it raises WORLDS_ALIAS_WARNING.
     "Worlds": "Domains",
     "DriveRegisterPositions": "SubFoundations",
     "SubFoundationPositions": "SubFoundations",
 }
 BUILTIN_META_SET_NAMES = set(BUILTIN_META_SETS) | set(META_SET_ALIASES)
+RESERVED_BINDING_NAMES = frozenset(BUILTIN_META_SET_NAMES) | frozenset({"T", "A", "f", "E"})
 
 
 @dataclass
@@ -1267,7 +1572,7 @@ class CompilationArtifact:
         (e.g. a pure RPM drive query). See the :class:`RegisterActivation`
         docstring and the module header comment for semantics.
         """
-        if self.ast is None:
+        if self.ast is None or not self.valid:
             return []
         return extract_register_activations(self.ast)
 
@@ -1333,7 +1638,7 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     # bar before a collection name tokenize as PIPE without stealing legacy
     # register suffixes such as `|A` after state/drive primitives.
     (
-        r"\|(?=(?:[A-Za-z_][A-Za-z0-9_]*(?:\{|\|)|\{|" + re.escape(UNICODE_EMPTY_SET) + r"\|))",
+        r"\|(?=(?:[A-Za-z_][A-Za-z0-9_]*(?:\{|\|)|[A-Za-z_][A-Za-z0-9_]+|\{|" + re.escape(UNICODE_EMPTY_SET) + r"\|))",
         TokenKind.PIPE,
     ),
     # CAS v7.5: `|R` register suffix. Matched permissively as `|<letter>` so
@@ -1359,8 +1664,8 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
     # Uppercase constructors/builtins that begin with P/C/E/O must be claimed
     # before the single-letter DOMAIN rule, otherwise `Pullback(...)` would
     # tokenize as DOMAIN `P` + IDENT `ullback`.
-    (r"(?:Pullback|Product|Coordinate|CASCoordinate|CoverOf|PartitionOf)\b", TokenKind.IDENT),
-    (r"[PCEO]", TokenKind.DOMAIN),
+    (r"(?:Pullback|Product|Coordinate|CASCoordinate|CASTuple|CoverOf|PartitionOf|Cluster|EmptySet)\b", TokenKind.IDENT),
+    (r"[PCEO](?![A-Za-z0-9])", TokenKind.DOMAIN),
     # CAS v7.7 (Clarification 10 §2): single uppercase letters lex as
     # IDENT. This enables the register-set form `|⟨T,A,f⟩` where each
     # element tokenizes individually, and enables diagnostic-quality
@@ -1619,6 +1924,7 @@ class Parser:
     def __init__(self, tokens: list[LexToken]):
         self.tokens = tokens
         self.index = 0
+        self.meta_set_aliases_used: list[str] = []      # e.g. `Worlds`; read by _compile_source for WORLDS_ALIAS_WARNING
 
     def current(self) -> LexToken:
         return self.tokens[self.index]
@@ -1652,6 +1958,29 @@ class Parser:
             return statements[0]
         return Program(statements=statements)
 
+    def _expect_binding_name(self, what: str) -> str:
+        token = self.current()
+        word_like = {TokenKind.DOMAIN, TokenKind.STATE_VECTOR, TokenKind.STATE_REF, TokenKind.DRIVE, TokenKind.RPM, TokenKind.PHI,
+                     TokenKind.YIELD_T, TokenKind.YIELD_A, TokenKind.THETA, TokenKind.OMEGA, TokenKind.LAMBDA_TOK, TokenKind.KAPPA_TOK,
+                     TokenKind.IOTA_TOK, TokenKind.ETA_TOK, TokenKind.UNION, TokenKind.INTERSECTION, TokenKind.SET_DIFF,
+                     TokenKind.LET, TokenKind.FN, TokenKind.USE, TokenKind.EXPORT}
+        if token.kind != TokenKind.IDENT and token.kind not in word_like:
+            raise CompilerError(CompilerStage.PARSING, f"expected IDENT, got {token.kind.value}", position=token.position)
+        if token.kind != TokenKind.IDENT or token.value in RESERVED_BINDING_NAMES:
+            raise CompilerError(
+                CompilerStage.PARSING,
+                (
+                    f"{token.value!r} is reserved in CAS notation and cannot be used as a {what} name. "
+                    "Reserved: domain letters P C E O; register letters T A f E; S (state vector); "
+                    "state refs like P1 and drive tokens like F1 or F_1; keywords let fn use export "
+                    "RPM Phi Y_T Y_A union intersect intersection setminus difference diff; names that "
+                    "start with Theta Omega Lambda kappa iota eta; built-in sets "
+                    + ", ".join(sorted(BUILTIN_META_SET_NAMES))
+                ),
+                position=token.position,
+            )
+        return self.advance().value
+
     def parse_statement(self) -> Any:
         token = self.current()
         if token.kind == TokenKind.EXPORT:
@@ -1666,7 +1995,7 @@ class Parser:
             return ExportStatement(statement=exported)
         if token.kind == TokenKind.LET:
             self.advance()
-            name = self.expect(TokenKind.IDENT).value
+            name = self._expect_binding_name("let")
             annotation = None
             if self.current().kind == TokenKind.COLON:
                 self.advance()
@@ -1675,12 +2004,12 @@ class Parser:
             return LetStatement(name=name, expr=self.parse_expression(), annotation=annotation)
         if token.kind == TokenKind.FN:
             self.advance()
-            name = self.expect(TokenKind.IDENT).value
+            name = self.expect(TokenKind.IDENT).value          # fn names are looked up by call and were never mis-bound: not reserved
             self.expect(TokenKind.LPAREN)
             params: list[str] = []
             param_types: list[TypeInfo] = []
             if self.current().kind != TokenKind.RPAREN:
-                params.append(self.expect(TokenKind.IDENT).value)
+                params.append(self._expect_binding_name("parameter"))
                 if self.current().kind == TokenKind.COLON:
                     self.advance()
                     param_types.append(self.parse_type())
@@ -1688,7 +2017,7 @@ class Parser:
                     param_types.append(TypeInfo(kind=TypeKind.ANY))
                 while self.current().kind == TokenKind.COMMA:
                     self.advance()
-                    params.append(self.expect(TokenKind.IDENT).value)
+                    params.append(self._expect_binding_name("parameter"))
                     if self.current().kind == TokenKind.COLON:
                         self.advance()
                         param_types.append(self.parse_type())
@@ -1856,6 +2185,12 @@ class Parser:
             TokenKind.SUPERSET_EQ,
         }:
             token = self.advance()
+            if isinstance(expr, MetaAssertion):
+                raise CompilerError(
+                    CompilerStage.PARSING,
+                    "chained set comparisons are not supported; write each comparison as its own statement",
+                    position=token.position,
+                )
             rhs = self.parse_set_expression()
             expr = MetaAssertion(op=token.kind.value, left=expr, right=rhs)
         if self.current().kind == TokenKind.EQUALS and isinstance(expr, CardinalityExpr):
@@ -1967,6 +2302,8 @@ class Parser:
                 self.expect(TokenKind.RPAREN)
                 return CallExpr(callee=name, args=args)
             if _is_builtin_meta_set_name(name):
+                if name in META_SET_ALIASES:
+                    self.meta_set_aliases_used.append(name)
                 return MetaSetLiteral(name=_canonical_meta_set_name(name))
             if name in VALID_REGISTERS:
                 return MetaSymbol(name=name, symbol_kind="register")
@@ -3335,16 +3672,25 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
                 if (
                     left.kind != TypeKind.ANY
                     and right.kind != TypeKind.ANY
+                    and left.domains
+                    and right.domains
                     and left.domains != right.domains
                 ):
-                    raise CompilerError(CompilerStage.TYPECHECK, "CIRC requires both states to share a domain")
+                    # The canon book nests across Domains (seven written examples, among them
+                    # `^7^C|A ∘ ^7^O|E` and Template 23 `CO-7^P ∘ CO-7^C ∘ CO-7^E ∘ CO-7^O`).
+                    # The old refusal contradicted the book and was enforced on this one path
+                    # only (a fractal operand, an any-typed parameter or fractal(...) slipped past it).
+                    if NESTING_CROSS_DOMAIN_WARNING not in warnings:
+                        warnings.append(NESTING_CROSS_DOMAIN_WARNING)
                 return TypeInfo(kind=TypeKind.FRACTAL, domains=left.domains or right.domains, singular=True)
+            if left.domains and right.domains and left.domains != right.domains and NESTING_CROSS_DOMAIN_WARNING not in warnings:
+                warnings.append(NESTING_CROSS_DOMAIN_WARNING)          # the same warning on the fractal paths (review finding)
             if left.kind == TypeKind.FRACTAL and right.kind in {TypeKind.STATE, TypeKind.ANY}:
                 return TypeInfo(kind=TypeKind.FRACTAL, domains=right.domains, singular=True)
             if left.kind in {TypeKind.STATE, TypeKind.ANY} and right.kind == TypeKind.FRACTAL:
                 return TypeInfo(kind=TypeKind.FRACTAL, domains=left.domains, singular=True)
             if left.kind == TypeKind.FRACTAL and right.kind == TypeKind.FRACTAL:
-                return TypeInfo(kind=TypeKind.FRACTAL, singular=True)
+                return TypeInfo(kind=TypeKind.FRACTAL, domains=left.domains or right.domains, singular=True)
             raise CompilerError(
                 CompilerStage.TYPECHECK,
                 "CIRC is only defined for state and fractal expressions",
@@ -3777,6 +4123,10 @@ def _meta_member_keys(value: Any) -> frozenset[str]:
         return frozenset({value.name})
     if isinstance(value, TupleValue):
         return frozenset({_tuple_key(value)})
+    if isinstance(value, RelationValue):
+        return frozenset({_relation_key(value)})
+    if isinstance(value, FractalValue):
+        return frozenset({_fractal_key(value)})
     if isinstance(value, str):
         return frozenset({value})
     return frozenset()
@@ -3809,6 +4159,8 @@ def _meta_value_label(value: Any) -> str:
         return _relation_key(value)
     if isinstance(value, TupleValue):
         return _tuple_key(value)
+    if isinstance(value, FractalValue):
+        return _fractal_key(value)
     return str(value)
 
 
@@ -3845,6 +4197,15 @@ def _relation_key(value: RelationValue) -> str:
         f"{arrows.get(value.relation, '->')}"
         f"{_meta_value_label(value.target)}"
     )
+
+
+def _fractal_key(value: FractalValue) -> str:
+    """Set-element key of a ring result: every term with its own Domain, Drive and Register, in written order.
+
+    `^8^C_{F2}|A ∘ ^3^C|f` -> 'Phi<^8^C_{F2}|A:^3^C|f>'; the bare literal `Phi<8:3>` -> 'Phi<^8:^3>'. Two nestings that
+    differ in any term's Domain, Drive, Register or order are different elements (review finding, 2026-09-21).
+    """
+    return "Phi<" + ":".join(term["label"] for term in _nesting_terms_of(value)) + ">"
 
 
 def _tuple_key(value: TupleValue) -> str:
@@ -3983,7 +4344,7 @@ def _set_operation_value(op: str, left: MetaSetValue, right: MetaSetValue) -> Me
 
 
 def _product_value(left: MetaSetValue, right: MetaSetValue) -> MetaSetValue:
-    elements = frozenset(f"<{a},{b}>" for a in sorted(left.elements) for b in sorted(right.elements))
+    elements = frozenset(f"Tuple<{a},{b}>" for a in sorted(left.elements) for b in sorted(right.elements))
     return MetaSetValue(
         name=f"Product({left.name}, {right.name})",
         elements=elements,
@@ -4472,6 +4833,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                 raise CompilerError(CompilerStage.EXECUTION, "fractal expects at least two arguments")
             sequence: list[int] = []
             domain: str | None = None
+            nested_terms: list[dict[str, Any]] = []
             for arg in args:
                 if isinstance(arg, StateValue):
                     sequence.append(arg.dominant_operator())
@@ -4481,10 +4843,19 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                     domain = domain or arg.domain
                 else:
                     raise CompilerError(CompilerStage.EXECUTION, "fractal expects state or fractal arguments")
+                nested_terms.extend(_nesting_terms_of(arg))
             composed = 0
             for op in sequence:
                 composed = _compose_operators(composed, op)
-            stack.append(FractalValue(sequence=sequence, composed_operator=composed, orbit_length=len(sequence), domain=domain))
+            stack.append(
+                FractalValue(
+                    sequence=sequence,
+                    composed_operator=composed,
+                    orbit_length=len(sequence),
+                    domain=domain,
+                    terms=nested_terms,
+                )
+            )
             return
         if name in {"Pullback", "Product", "Union", "Intersection", "Difference"}:
             if len(args) != 2:
@@ -4676,6 +5047,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                     sequence=sequence,
                     composed_operator=composed,
                     orbit_length=len(sequence),
+                    terms=_nesting_terms_of(left) + _nesting_terms_of(right),
                     domain=left.dominant_domain(),
                 )
             )
@@ -4690,6 +5062,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                     sequence=sequence,
                     composed_operator=composed,
                     orbit_length=len(sequence),
+                    terms=_nesting_terms_of(left) + _nesting_terms_of(right),
                     domain=right.dominant_domain(),
                 )
             )
@@ -4704,6 +5077,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                     sequence=sequence,
                     composed_operator=composed,
                     orbit_length=len(sequence),
+                    terms=_nesting_terms_of(left) + _nesting_terms_of(right),
                     domain=left.dominant_domain(),
                 )
             )
@@ -4718,6 +5092,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
                     sequence=sequence,
                     composed_operator=composed,
                     orbit_length=len(sequence),
+                    terms=_nesting_terms_of(left) + _nesting_terms_of(right),
                     domain=left.domain or right.domain,
                 )
             )
@@ -5761,11 +6136,14 @@ def _walk(
 
 
 def _compile_source(source: str, *, module_dir: str | None = None) -> CompilationArtifact:
+    ast: Any | None = None
     try:
         tokens = lex(source)
         parser = Parser(tokens)
         ast = parser.parse()
         warnings: list[str] = []
+        if "Worlds" in parser.meta_set_aliases_used:
+            warnings.append(WORLDS_ALIAS_WARNING)
         type_info = _infer(
             ast,
             warnings,
@@ -5784,7 +6162,14 @@ def _compile_source(source: str, *, module_dir: str | None = None) -> Compilatio
             valid=True,
             engine="rust+python" if cas_engine is not None else "python",
         )
-    except CompilerError as exc:
+    except (CompilerError, RecursionError) as exc:
+        if isinstance(exc, RecursionError):
+            exc = CompilerError(
+                CompilerStage.PARSING if ast is None else CompilerStage.TYPECHECK,
+                "expression is too deeply nested or too long for this compiler "
+                "(Python recursion limit reached); split it into let-bindings",
+            )
+            ast = None          # a tree that deep cannot be serialised either (review finding)
         partial_tokens: list[LexToken] = []
         try:
             partial_tokens = lex(source)[:-1]
@@ -5793,7 +6178,7 @@ def _compile_source(source: str, *, module_dir: str | None = None) -> Compilatio
         return CompilationArtifact(
             source=source,
             tokens=partial_tokens,
-            ast=None,
+            ast=ast,
             type_info=None,
             bytecode=[],
             result=None,

@@ -35,7 +35,7 @@ sys.path.insert(0, str(HERE))
 import reference_ops as ref  # noqa: E402
 import q3_behaviour_records as q3  # noqa: E402
 
-DATA = HERE / "data" / "q3_v0_4"
+DATA = HERE / "data" / "q3_v0_5"
 MANIFEST = json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
 SEED = MANIFEST["seed"]
 
@@ -210,7 +210,7 @@ def test_no_learner_file_opens_sealed_data():
 def test_the_manifest_cites_exactly_the_current_contract():
     contract = json.loads((HERE / "OPERATION_CONTRACTS.json").read_text(encoding="utf-8"))
     assert MANIFEST["operation_contracts_digest"] == contract["contract_digest"], "DATA_BOUND_TO_A_CONTRACT_HEAD_NO_LONGER_HOLDS"
-    assert MANIFEST["schema"].endswith("/0.4")
+    assert MANIFEST["schema"].endswith("/0.5")
 
 
 # --- 10 ---------------------------------------------------------------------------------------

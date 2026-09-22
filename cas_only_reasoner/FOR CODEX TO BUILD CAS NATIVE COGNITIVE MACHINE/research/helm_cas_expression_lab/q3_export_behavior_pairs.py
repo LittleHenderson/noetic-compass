@@ -119,7 +119,7 @@ def build(data_dir):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data", default=str(HERE / "data" / "q3_v0_4"))
+    parser.add_argument("--data", default=str(HERE / "data" / "q3_v0_5"))
     parser.add_argument("--write", action="store_true", help="write the files, the report and the report's pin (default: check, write nothing)")
     args = parser.parse_args()
     data_dir = pathlib.Path(args.data)
