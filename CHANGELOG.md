@@ -1,5 +1,62 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - AUDIT OF THE SECOND AGENT'S RPA / CAS-OHM WORK: 119 REPRODUCES,
+26 OVERSTATED, 11 UNVERIFIABLE, 0 FALSE. Read-only; nothing of theirs was modified or pushed.
+
+Subject: worktree `_worktrees/codex-rpa-recorded-run`, branch `codex/helm-rpa-recorded-run-20260922`, HEAD
+`eb998556`. The same standard just applied to my own work. Five independent auditors; every verdict below was
+re-derived by running the command, not taken on an auditor's word. Full record:
+`records/audit_package_20260922/06_AUDIT_OF_THE_CODEX_AGENT.md`.
+
+**Nothing they claim is false.** Every headline count reproduces: 75 (56+12+7), 347, and 107 (48+44+15), zero
+skipped. The "422 distinct" and "529 distinct" claims survive the hard test - pairwise node-id overlap is
+exactly 0 and the union is exactly 529, so there is no double counting. All 13 cryptographic digests reproduce,
+including one recomputed from a git blob for a file not even checked out. The generated HTML is 1,849,451 bytes
+at sha256 `34ce37a2...`, byte-identical on re-render. The plan digest `af813837...` reproduces over canonical
+JSON. **Nothing ran**: the output directory `q4_smoke_output` does not exist.
+
+**Their CAS-Ohm is correct and better than my design in one respect.** All three book modes compute: `I = V/R`
+gives 3 at R=4 and 2 at R=6 from drive 12; `V = I x R` gives 12; `R = V/I` gives 4. It uses EXACT RATIONAL
+arithmetic, not floating point - output carries `exact_value: {numerator, denominator}` and
+`decimal_is_rounded: false`. Refusals are named and correct: `OHM_ZERO_CONSTRAINT`, `OHM_ZERO_ATTENTION`,
+`OHM_NUMBER` (non-finite) and `OHM_SCALE_MISMATCH`.
+
+**Two of my own failure classes do NOT recur in their work.** `recorded_view_tests.xml` retains a genuine
+11-pass/1-fail run of the NEW test against the OLD renderer with the real error text - the before-receipt my own
+"39/39 -> 48/48" claim lacked. And `eb998556` deletes zero files and removes zero test functions.
+
+**OVERSTATED (7 classes).** (1) The 529 are **193 distinct test FUNCTIONS**; 336 rows (63.5%) are parametrized
+repeats - one function supplies 31 of the 92 rows in one file. Same inflation class an auditor found in my 458.
+(2) Only **83 of the 529 are new work**; 446 pre-date the commit. (3) 529 is **19.7% of 2,691 collectible
+tests**, and **20 modules cannot be collected at all** (5 need `jsonschema`, 15 need modules the sparse checkout
+omits). (4) The "independent CLI rendering" calls **the same `render_rpa_view` function object** - it shows
+determinism, not independent implementation. (5) "local and remote atlas commit `5b3d713c`" is on **no remote**.
+(6) Two CHANGELOG counts exceed their own records ("637" over a 622-passed/6-failed/9-errors record; "354"
+omits a fifth XML with `failures=1 errors=37`). (7) An auditor showed `verify_authorization` **accepts an
+agent-generated key** - but they disclose that exact limit twice, in the docstring and in STATUS.md, and the real
+protection is the out-of-band `--trusted-key-sha256` fingerprint. Imprecise wording, not a hidden hole.
+
+**UNVERIFIABLE (4).** The "Continuation attachment SHA-256 `76d7821a...`" matches **no file anywhere** under any
+normalisation (the named document hashes to `cd86eaf8...`). "Three initial backend tests failed" has **no
+receipt**, while the other failure in the same list does. "Retained acceptance records for the native, compound,
+scoped and cube adapters" name no path or digest. "289 PCBA tests passed" matches no retained XML.
+
+**PROJECT-LEVEL FINDING: there are now TWO CAS-Ohm implementations with zero cross-references.**
+`api/cas_ohm/quantifiers.py` (2026-08-18; residual diagnostics, float) and their new 281-line
+`api/notation/cas_ohm.py` (three modes, exact rational). Both compute `I = V/R` with different numeric models
+and different refusal behaviour. **This is tooling, not diligence**: their sparse checkout contains only
+`api/notation`, so the older module was never on their disk and no file search could have surfaced it. Their
+CAS-Ohm commits are 22:40-22:42; my hardening of the older module is 22:59 - seventeen minutes apart on the same
+problem, neither aware of the other. **Concrete consequence: their branch's copy of `quantifiers.py` still has
+the defect I fixed** - `if rf <= 0.0` with four `_is_finite` references against my nine; `i_pred(nan, 2)`
+returns `nan` and `i_pred(8, inf)` returns `inf` there. Their claim that non-finite numbers are refused is true
+of their new helper and false of the older module on the same branch.
+
+**Assessment.** Their work is sound and honestly bounded; every hard safety claim holds. The faults are all one
+kind - numbers stated so as to invite over-reading, and four claims bound to artifacts nobody can inspect. That
+is the same fault an independent checker found in my own headline count hours earlier. It appears to be the
+characteristic failure of this kind of work, in both of us.
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - The fourth checker found the worst one: MY MERGE DELETED THREE OF MY OWN CANON
 GUARD TESTS WHILE THEY WERE PASSING. Restored. Two of my five merge-comparison points were FALSE. 458 -> 639.
 
