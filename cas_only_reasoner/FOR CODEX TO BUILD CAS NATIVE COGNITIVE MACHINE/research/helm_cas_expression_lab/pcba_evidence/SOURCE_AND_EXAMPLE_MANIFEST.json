@@ -1,0 +1,65 @@
+{
+  "scope": "reviewed read-only source snapshots; original user files unchanged",
+  "sources": [
+    {
+      "path": "pinned_sources/pcba_book/Appendix_C_CCDL_Language_Reference.md",
+      "sha256_lf": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md"
+    },
+    {
+      "path": "pinned_sources/pcba_book/Chapter_04_Your_First_Cognitive_Circuit.md",
+      "sha256_lf": "13ef9030ebf9189dbedc31c40332accbaaa1552a1681bb56ac9d354dc368329e",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Chapter_04_Your_First_Cognitive_Circuit.md"
+    },
+    {
+      "path": "pinned_sources/pcba_book/Chapter_17_CCB_Design_Process.md",
+      "sha256_lf": "ab58f6ef9dcc7a49c262bc9bc41835ec450b344a26340b91ce2feef52cfa5d07",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Chapter_17_CCB_Design_Process.md"
+    }
+  ],
+  "examples": [
+    {
+      "example": "pcba_board_layout_book.ccdl",
+      "exit_code": 2,
+      "parse": "PASS",
+      "structural": "UNVERIFIED",
+      "diagnostic_codes": [
+        "U-PCBA-FEEDBACK-POLICY",
+        "U-PCBA-INLINE-TOPOLOGY"
+      ]
+    },
+    {
+      "example": "pcba_first_circuit_book.ccdl",
+      "exit_code": 2,
+      "parse": "PASS",
+      "structural": "FAIL",
+      "diagnostic_codes": [
+        "E-CJT-002",
+        "W-PCBA-UNCONNECTED-IO"
+      ]
+    },
+    {
+      "example": "pcba_named_feedback.ccdl",
+      "exit_code": 0,
+      "parse": "PASS",
+      "structural": "PASS",
+      "diagnostic_codes": [
+        "W-PCBA-UNCONNECTED-IO"
+      ]
+    },
+    {
+      "example": "pcba_safety_filter_book.ccdl",
+      "exit_code": 2,
+      "parse": "PASS",
+      "structural": "UNVERIFIED",
+      "diagnostic_codes": [
+        "U-PCBA-CJT-ADMISSIBILITY",
+        "U-PCBA-COUPLED-LOOPS",
+        "U-PCBA-FEEDBACK-POLICY",
+        "U-PCBA-LOOP-GAIN",
+        "U-PCBA-TERMINAL",
+        "W-PCBA-UNCONNECTED-IO"
+      ]
+    }
+  ]
+}

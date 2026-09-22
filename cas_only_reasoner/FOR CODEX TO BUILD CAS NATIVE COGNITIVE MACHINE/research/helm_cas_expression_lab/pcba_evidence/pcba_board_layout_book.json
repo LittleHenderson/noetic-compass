@@ -1,0 +1,433 @@
+{
+  "schema": "cas.pcba.check/0.1",
+  "parse_status": "PASS",
+  "structural_status": "UNVERIFIED",
+  "valid": false,
+  "diagnostics": [
+    {
+      "code": "U-PCBA-FEEDBACK-POLICY",
+      "severity": "unverified",
+      "message": "Explicit upward feedback preserved; the book does not define a complete low-gain acceptance policy",
+      "line": 13,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-INLINE-TOPOLOGY",
+      "severity": "unverified",
+      "message": "Repeated inline state/domain does not establish shared net identity; use named nodes for complete loop checking",
+      "line": 8,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-INLINE-TOPOLOGY",
+      "severity": "unverified",
+      "message": "Repeated inline state/domain does not establish shared net identity; use named nodes for complete loop checking",
+      "line": 9,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-INLINE-TOPOLOGY",
+      "severity": "unverified",
+      "message": "Repeated inline state/domain does not establish shared net identity; use named nodes for complete loop checking",
+      "line": 10,
+      "column": 5
+    }
+  ],
+  "document": {
+    "schema": "cas.pcba.document/0.1",
+    "kind": "board",
+    "name": "csb_v0",
+    "statements": [
+      {
+        "kind": "layer",
+        "location": {
+          "line": 2,
+          "column": 5
+        },
+        "name": "P",
+        "domain": "P",
+        "statements": [
+          {
+            "kind": "node",
+            "name": "bias_charter",
+            "state": "^5^P_{F7}|T",
+            "location": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          {
+            "kind": "node",
+            "name": "policy_aversion",
+            "state": "^3^P_{F7}|f",
+            "location": {
+              "line": 2,
+              "column": 44
+            }
+          }
+        ]
+      },
+      {
+        "kind": "layer",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "name": "C",
+        "domain": "C",
+        "statements": [
+          {
+            "kind": "node",
+            "name": "understand",
+            "state": "^1^C_{F2}|A",
+            "location": {
+              "line": 3,
+              "column": 16
+            }
+          }
+        ]
+      },
+      {
+        "kind": "layer",
+        "location": {
+          "line": 4,
+          "column": 5
+        },
+        "name": "E",
+        "domain": "E",
+        "statements": [
+          {
+            "kind": "node",
+            "name": "weigh",
+            "state": "^6^E_{F6}|A",
+            "location": {
+              "line": 4,
+              "column": 16
+            }
+          }
+        ]
+      },
+      {
+        "kind": "layer",
+        "location": {
+          "line": 5,
+          "column": 5
+        },
+        "name": "O",
+        "domain": "O",
+        "statements": [
+          {
+            "kind": "node",
+            "name": "respond",
+            "state": "^9^O_{F5}|E",
+            "location": {
+              "line": 5,
+              "column": 16
+            }
+          }
+        ]
+      },
+      {
+        "kind": "via",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "name": "v1",
+        "source": "^5^P",
+        "target": "^1^C",
+        "parameters": {}
+      },
+      {
+        "kind": "via",
+        "location": {
+          "line": 9,
+          "column": 5
+        },
+        "name": "v2",
+        "source": "^3^P",
+        "target": "^6^E",
+        "parameters": {}
+      },
+      {
+        "kind": "via",
+        "location": {
+          "line": 10,
+          "column": 5
+        },
+        "name": "v3",
+        "source": "^6^E",
+        "target": "^9^O",
+        "parameters": {}
+      },
+      {
+        "kind": "via",
+        "location": {
+          "line": 13,
+          "column": 5
+        },
+        "name": "v4",
+        "source": "^9^O",
+        "target": "^5^P",
+        "parameters": {
+          "\u03b2": "0.2"
+        }
+      }
+    ],
+    "source_sha256": "b020919fda9a715ab9807bfae6bd0bbe7fbad4ee0f46f5188ffcae217d38f04e"
+  },
+  "netlist": {
+    "symbols": {
+      "P": {
+        "kind": "layer",
+        "location": {
+          "line": 2,
+          "column": 5
+        },
+        "domain": "P"
+      },
+      "bias_charter": {
+        "kind": "node",
+        "location": {
+          "line": 2,
+          "column": 16
+        },
+        "state": {
+          "operator": 5,
+          "domain": "P",
+          "drive": 7,
+          "register": "T",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "P"
+      },
+      "policy_aversion": {
+        "kind": "node",
+        "location": {
+          "line": 2,
+          "column": 44
+        },
+        "state": {
+          "operator": 3,
+          "domain": "P",
+          "drive": 7,
+          "register": "f",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "P"
+      },
+      "C": {
+        "kind": "layer",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "domain": "C"
+      },
+      "understand": {
+        "kind": "node",
+        "location": {
+          "line": 3,
+          "column": 16
+        },
+        "state": {
+          "operator": 1,
+          "domain": "C",
+          "drive": 2,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "C"
+      },
+      "E": {
+        "kind": "layer",
+        "location": {
+          "line": 4,
+          "column": 5
+        },
+        "domain": "E"
+      },
+      "weigh": {
+        "kind": "node",
+        "location": {
+          "line": 4,
+          "column": 16
+        },
+        "state": {
+          "operator": 6,
+          "domain": "E",
+          "drive": 6,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "E"
+      },
+      "O": {
+        "kind": "layer",
+        "location": {
+          "line": 5,
+          "column": 5
+        },
+        "domain": "O"
+      },
+      "respond": {
+        "kind": "node",
+        "location": {
+          "line": 5,
+          "column": 16
+        },
+        "state": {
+          "operator": 9,
+          "domain": "O",
+          "drive": 5,
+          "register": "E",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "O"
+      },
+      "v1": {
+        "kind": "via",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "domain": null
+      },
+      "v2": {
+        "kind": "via",
+        "location": {
+          "line": 9,
+          "column": 5
+        },
+        "domain": null
+      },
+      "v3": {
+        "kind": "via",
+        "location": {
+          "line": 10,
+          "column": 5
+        },
+        "domain": null
+      },
+      "v4": {
+        "kind": "via",
+        "location": {
+          "line": 13,
+          "column": 5
+        },
+        "domain": null
+      }
+    },
+    "components": {},
+    "edges": [
+      {
+        "id": 0,
+        "source": "inline:8:5:source",
+        "target": "inline:8:5:target",
+        "gain_literal": null,
+        "kind": "via",
+        "location": {
+          "line": 8,
+          "column": 5
+        }
+      },
+      {
+        "id": 1,
+        "source": "inline:9:5:source",
+        "target": "inline:9:5:target",
+        "gain_literal": null,
+        "kind": "via",
+        "location": {
+          "line": 9,
+          "column": 5
+        }
+      },
+      {
+        "id": 2,
+        "source": "inline:10:5:source",
+        "target": "inline:10:5:target",
+        "gain_literal": null,
+        "kind": "via",
+        "location": {
+          "line": 10,
+          "column": 5
+        }
+      },
+      {
+        "id": 3,
+        "source": "inline:13:5:source",
+        "target": "inline:13:5:target",
+        "gain_literal": "0.2",
+        "kind": "via",
+        "location": {
+          "line": 13,
+          "column": 5
+        }
+      }
+    ],
+    "loops": []
+  },
+  "execution_status": "NOT_IMPLEMENTED",
+  "helm_status": "NOT_TRAINED",
+  "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+  "full_book_validation_status": "UNVERIFIED",
+  "engine_admissibility_status": "NOT_RUN_OPERATOR_UNSPECIFIED",
+  "sources": {
+    "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "implementation_sha256_lf": {
+      "pcba_check.py": "c15791522413a7ec446e4697407de0996a7c067e3cdd012637987dff6d075139",
+      "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+      "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+    },
+    "component_frontends": [
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+        "bytes": 7741,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+        "bytes": 4943,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+        "bytes": 5998,
+        "use": "enum_class_only"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+        "bytes": 5771,
+        "use": "enum_class_only"
+      }
+    ],
+    "book_authority": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+      "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "sections": [
+        "Passive Components",
+        "One-Way and Threshold Components",
+        "CJT Parameter Block Grammar"
+      ]
+    }
+  },
+  "input": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\examples\\pcba_board_layout_book.ccdl",
+    "bytes": 624,
+    "sha256": "b020919fda9a715ab9807bfae6bd0bbe7fbad4ee0f46f5188ffcae217d38f04e"
+  }
+}

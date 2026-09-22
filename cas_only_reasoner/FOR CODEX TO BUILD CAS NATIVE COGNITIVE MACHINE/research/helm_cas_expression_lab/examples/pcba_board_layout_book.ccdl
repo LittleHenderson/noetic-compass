@@ -1,0 +1,14 @@
+board csb_v0 {
+    layer P: [ bias_charter: ^5^P_{F7}|T,  policy_aversion: ^3^P_{F7}|f ];
+    layer C: [ understand:   ^1^C_{F2}|A ];
+    layer E: [ weigh:        ^6^E_{F6}|A ];
+    layer O: [ respond:      ^9^O_{F5}|E ];
+
+    // vias carry signals across Domain layers (Domain Descent: P -> C -> E -> O)
+    via v1: ^5^P -> ^1^C;       // charter biases intake
+    via v2: ^3^P -> ^6^E;       // the guard's verdict gates evaluation
+    via v3: ^6^E -> ^9^O;       // a passed evaluation descends to output
+
+    // feedback via runs the other way (O -> P): outcomes update the charter
+    via v4: ^9^O -> ^5^P  [β=0.2];
+}

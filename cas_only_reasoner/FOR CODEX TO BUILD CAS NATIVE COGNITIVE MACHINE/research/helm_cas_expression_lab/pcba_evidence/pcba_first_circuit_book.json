@@ -1,0 +1,384 @@
+{
+  "schema": "cas.pcba.check/0.1",
+  "parse_status": "PASS",
+  "structural_status": "FAIL",
+  "valid": false,
+  "diagnostics": [
+    {
+      "code": "E-CJT-002",
+      "severity": "error",
+      "message": "Bias Domain is below cause Domain (Appendix C; Chapter 4's printed example conflicts with this rule)",
+      "line": 14,
+      "column": 5
+    },
+    {
+      "code": "W-PCBA-UNCONNECTED-IO",
+      "severity": "warning",
+      "message": "Declared input prompt is unconnected; no wiring was inferred",
+      "line": 2,
+      "column": 5
+    },
+    {
+      "code": "W-PCBA-UNCONNECTED-IO",
+      "severity": "warning",
+      "message": "Declared output response is unconnected; no wiring was inferred",
+      "line": 3,
+      "column": 5
+    }
+  ],
+  "document": {
+    "schema": "cas.pcba.document/0.1",
+    "kind": "circuit",
+    "name": "first_circuit",
+    "statements": [
+      {
+        "kind": "input",
+        "location": {
+          "line": 2,
+          "column": 5
+        },
+        "names": [
+          "prompt"
+        ]
+      },
+      {
+        "kind": "output",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "names": [
+          "response"
+        ]
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 6,
+          "column": 5
+        },
+        "name": "question",
+        "state": "^8^C_{F2}|A"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 7,
+          "column": 5
+        },
+        "name": "experience",
+        "state": "^5^E_{F4}|f"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "name": "answer",
+        "state": "^9^C_{F6}|A"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 11,
+          "column": 5
+        },
+        "prefix": "resistor",
+        "name": "r1",
+        "expression": "Resistor< question, R=30 >"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 14,
+          "column": 5
+        },
+        "prefix": "cjt",
+        "name": "c1",
+        "expression": "CJT< question | experience => answer > [\u03b2=2.4]"
+      },
+      {
+        "kind": "probe",
+        "location": {
+          "line": 17,
+          "column": 5
+        },
+        "name": "tp1",
+        "target": "answer"
+      }
+    ],
+    "source_sha256": "a7d19bb380878a0d485721d980aee23601d75c0c7f6eba6161a02b61f19f20e9"
+  },
+  "netlist": {
+    "symbols": {
+      "prompt": {
+        "kind": "input",
+        "location": {
+          "line": 2,
+          "column": 5
+        },
+        "domain": null
+      },
+      "response": {
+        "kind": "output",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "domain": null
+      },
+      "question": {
+        "kind": "node",
+        "location": {
+          "line": 6,
+          "column": 5
+        },
+        "state": {
+          "operator": 8,
+          "domain": "C",
+          "drive": 2,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "C"
+      },
+      "experience": {
+        "kind": "node",
+        "location": {
+          "line": 7,
+          "column": 5
+        },
+        "state": {
+          "operator": 5,
+          "domain": "E",
+          "drive": 4,
+          "register": "f",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "E"
+      },
+      "answer": {
+        "kind": "node",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "state": {
+          "operator": 9,
+          "domain": "C",
+          "drive": 6,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "C"
+      },
+      "r1": {
+        "kind": "component",
+        "location": {
+          "line": 11,
+          "column": 5
+        },
+        "domain": null
+      },
+      "c1": {
+        "kind": "component",
+        "location": {
+          "line": 14,
+          "column": 5
+        },
+        "domain": null
+      },
+      "tp1": {
+        "kind": "probe",
+        "location": {
+          "line": 17,
+          "column": 5
+        },
+        "domain": null
+      }
+    },
+    "components": {
+      "r1": {
+        "type": "Resistor",
+        "kind": "resistor",
+        "parameters": {
+          "R": 30
+        },
+        "parameter_literals": {
+          "R": "30"
+        },
+        "terminals": {
+          "state": "question"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "state": {
+            "id": "name:question",
+            "reference": "question",
+            "domain": "C",
+            "state": {
+              "operator": 8,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "c1": {
+        "type": "CJT",
+        "kind": "cjt",
+        "parameters": {
+          "beta": 2.4,
+          "sat": 0.95,
+          "cutoff": 0.1,
+          "region": "active"
+        },
+        "parameter_literals": {
+          "beta": "2.4",
+          "sat": "0.95",
+          "cutoff": "0.1",
+          "region": "active"
+        },
+        "terminals": {
+          "cause": "question",
+          "bias": "experience",
+          "effect": "answer"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "cause": {
+            "id": "name:question",
+            "reference": "question",
+            "domain": "C",
+            "state": {
+              "operator": 8,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "bias": {
+            "id": "name:experience",
+            "reference": "experience",
+            "domain": "E",
+            "state": {
+              "operator": 5,
+              "domain": "E",
+              "drive": 4,
+              "register": "f",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "effect": {
+            "id": "name:answer",
+            "reference": "answer",
+            "domain": "C",
+            "state": {
+              "operator": 9,
+              "domain": "C",
+              "drive": 6,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      }
+    },
+    "edges": [
+      {
+        "id": 0,
+        "source": "name:question",
+        "target": "name:answer",
+        "gain_literal": "2.4",
+        "kind": "cjt_cause",
+        "location": {
+          "line": 14,
+          "column": 5
+        }
+      },
+      {
+        "id": 1,
+        "source": "name:experience",
+        "target": "name:answer",
+        "gain_literal": null,
+        "kind": "cjt_bias",
+        "location": {
+          "line": 14,
+          "column": 5
+        }
+      }
+    ],
+    "loops": []
+  },
+  "execution_status": "NOT_IMPLEMENTED",
+  "helm_status": "NOT_TRAINED",
+  "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+  "full_book_validation_status": "UNVERIFIED",
+  "engine_admissibility_status": "NOT_RUN_OPERATOR_UNSPECIFIED",
+  "sources": {
+    "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "implementation_sha256_lf": {
+      "pcba_check.py": "c15791522413a7ec446e4697407de0996a7c067e3cdd012637987dff6d075139",
+      "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+      "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+    },
+    "component_frontends": [
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+        "bytes": 7741,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+        "bytes": 4943,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+        "bytes": 5998,
+        "use": "enum_class_only"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+        "bytes": 5771,
+        "use": "enum_class_only"
+      }
+    ],
+    "book_authority": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+      "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "sections": [
+        "Passive Components",
+        "One-Way and Threshold Components",
+        "CJT Parameter Block Grammar"
+      ]
+    }
+  },
+  "input": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\examples\\pcba_first_circuit_book.ccdl",
+    "bytes": 693,
+    "sha256": "a7d19bb380878a0d485721d980aee23601d75c0c7f6eba6161a02b61f19f20e9"
+  }
+}

@@ -2,6 +2,11 @@
 
 ## 2026-09-21 Codex continuation: engineering only
 
+PCBA follow-up adds a deterministic whole-document reader and bounded static
+checker. Its tests and CLI examples are recorded in
+`research/helm_cas_expression_lab/pcba_evidence/VERIFICATION.md`.
+No Helm model was loaded, trained, evaluated, or promoted by this work.
+
 Compiler recovery/corrections, Q3 loader hardening and versioned data rebuilds,
 and Q4 representation/decoder preparation are recorded in
 `CODEX_CONTINUATION_20260921.md` and `records/continuation_20260921/`.

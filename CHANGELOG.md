@@ -1,31 +1,33 @@
 # tksCAS — Changelog
 
-## 2026-09-21 — Isolated PCBA component adapter
+## 2026-09-21 — PCBA circuit and board reader with bounded static checks
 
-Added a CNCM research adapter around the existing PCBA/CJT syntax frontends.
-It reads four exact, hash-checked files from the original cas-forex source;
-executes only the two enum definitions from schemas; and removes the two schema
-imports from the parser ASTs before loading them in private namespaces. It
-does not import the cas-forex package, its compiler bridge, or live services.
-The original parser files and all trading/production code remain unchanged.
+Added a whole-document CCDL reader and CLI report with separate parsing,
+structural, execution and Helm results. Two-pass name resolution preserves
+forward references and state metadata. Strict parameter/type/domain checks,
+exact decimal loop products, parallel-edge enumeration and bounded graph
+search reject malformed or unsafe declared paths without partial-success claims.
 
-The supported subset (CJT, Resistor, Capacitor, Inductor, Diode, Transformer)
-requires complete terminal references, rejects duplicate parameters, preserves
-large integer parameters, and checks Appendix C ranges. CJT defaults are
-beta=1, sat=0.95, cutoff=0.1, region=active; optional gm/rπ remain absent unless
-provided and allow zero. Other known book components are preserved with an
-explicit unsupported diagnostic and complete=false. Board name resolution,
-whole-board legality, runtime behavior and empirical claims are outside this
-adapter. The original permissive substring compiler wrappers are not reused.
+Reused the existing PCBA/CJT parsers through an isolated strict adapter and
+four portable byte-pinned source snapshots. Only parser code and two schema
+enum definitions are loaded; no trading package, network, model, or permissive
+substring bridge is used. Supported parts are CJT, Resistor, Capacitor,
+Inductor, Diode and Transformer. Known unsupported parts stay unverified.
 
-Validation: 84 deterministic adapter checks passed under Python 3.12.10 with
-Pydantic 2.13.3. A fresh-process guard confirmed that parser use neither imports
-cas-forex/trading/model modules nor opens network connections or child processes,
-and leaves an existing unrelated cas_forex module untouched. Exact dependencies
-are exposed by source_files(); a changed or missing file fails closed. The
-default dependency paths are local read-only references, so relocation requires
-an explicit recorded adapter update. Python 3.14 lacks Pydantic in this local
-environment; it was not used to claim successful adapter execution.
+Bias feedback uses gm, not beta. Unknown transfer, passive influence, coupled
+loops, inline identity, untyped connected I/O and unspecified upward-feedback
+policy cannot pass. Printed book fixtures retain their actual conflict/open
+results. Full-book admissibility and circuit execution remain unimplemented;
+no Helm training, core compiler/engine change, or production activation occurred.
+
+Validation: 289 PCBA tests passed (including 93 adapter checks); independent
+boundary review exercised 2,764 cases without crashes, labeled unexpected
+passes, or inconsistent reports. Full lab coverage reached 637 distinct tests
+across the installed Python environments: Python 3.12 passed 622 and lacked
+dependencies for 15 older cases; all 66 tests in those two files then passed
+under Python 3.14. The PCBA runtime is Python 3.12 with Pydantic 2.
+Commands, limits, source hashes, initial invocation failures and JSON examples
+are in the lab's PCBA_STATUS_20260921.md and tracked pcba_evidence directory.
 
 ## 2026-09-21 — Recover CAS compiler work and prepare Q4 interfaces
 

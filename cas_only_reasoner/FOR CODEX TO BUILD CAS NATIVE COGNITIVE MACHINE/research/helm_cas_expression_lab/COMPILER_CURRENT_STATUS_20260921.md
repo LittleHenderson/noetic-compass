@@ -54,7 +54,7 @@ composition. The frozen engine and operation contracts are unchanged.
 | W-B | Noetic×Domain or Noetic×Register crosswalk for the 40 Elements |
 | W-C | One positional crosswalk or different mappings at different levels |
 | Set identity | Binding names, content identity, and typed/text separation |
-| PCBA route | Extend the existing component reader or add component syntax to the main compiler |
+| PCBA semantics | Reader route implemented separately; operator admission, full transfer and temporal semantics remain open |
 
 Exact current N-question wording is in `NESTING_OPEN_QUESTIONS` in the compiler.
 N11's exact-partner result is the base `dual_cancellation_criterion` object;
@@ -63,9 +63,11 @@ the alternate result is `by_any_landing`. The repeated ^8/^6 example is
 
 Binding-name set identity still means equal-content sets can differ and a text
 label can match a named set. Tests disclose this limitation; it is not fixed.
-The separate PCBA/CJT frontend reads components; full board semantics, execution,
-validation and learned integration remain separate milestones. No production
-activation or PCBA safety claim is made.
+The separate PCBA/CJT frontend now feeds a whole-document circuit/board reader
+and a bounded structural checker. See `PCBA_STATUS_20260921.md` for tested scope,
+book conflicts, source identities and open rules. Full board semantics,
+execution, full-book validation and learned integration remain separate
+milestones. No production activation or PCBA safety claim is made.
 
 Use `../../CODEX_CONTINUATION_20260921.md` and the continuation verification
 record for the tested commit, compiler hashes, data pins and exact commands.

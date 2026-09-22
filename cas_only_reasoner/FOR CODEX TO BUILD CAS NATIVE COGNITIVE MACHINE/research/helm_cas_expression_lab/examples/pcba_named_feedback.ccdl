@@ -1,0 +1,11 @@
+// Static schematic fixture. This does not execute a circuit or train Helm.
+circuit named_feedback {
+    input: prompt;
+    output: response;
+    node cause: ^8^C_{F2}|A;
+    node bias: ^5^P_{F4}|f;
+    node effect: ^9^C_{F6}|A;
+    cjt stage1: CJT< cause | bias => effect > [beta=0.5];
+    feedback effect -> cause [beta=0.2];
+    probe result: effect;
+}

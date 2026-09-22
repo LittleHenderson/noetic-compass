@@ -1,5 +1,18 @@
 # Codex continuation — 2026-09-21
 
+## Follow-up: PCBA whole-document reader
+
+The owner's instruction to work on the PCBA issue is implemented as a bounded
+research circuit/board reader and structural checker. The route uses the
+existing PCBA/CJT syntax frontends through an isolated strict adapter. It does
+not extend the core CAS expression compiler or run a model.
+
+Current scope, commands, source identities, examples and open semantics:
+`research/helm_cas_expression_lab/PCBA_STATUS_20260921.md`.
+Verification and JSON reports are tracked in the sibling `pcba_evidence/`
+directory. The historical PCBA-route question below is superseded by this work;
+execution, full-book validation and learned Helm integration remain open.
+
 ## Follow-up: compiler recovery and Q4 code
 
 The initial T13-only account below is historical. The continuation now also
@@ -14,7 +27,8 @@ Current compiler report:
 The recovered report is retained with a superseded-status banner. Its claim
 that nested sets use content identity is false for current code; name identity
 and text-forgery limitations remain disclosed. N1–N13, W-A/W-B/W-C, set identity
-and the PCBA route remain owner/specification decisions.
+remain owner/specification decisions. The PCBA reader route is implemented in
+the follow-up above; unresolved PCBA semantics are listed in its status file.
 
 Q3 v0.5 was recovered byte-for-byte. New v0.6 and v0.7 builds preserve older
 versions and pin their own compiler bytes. v0.6 is an intermediate build; its

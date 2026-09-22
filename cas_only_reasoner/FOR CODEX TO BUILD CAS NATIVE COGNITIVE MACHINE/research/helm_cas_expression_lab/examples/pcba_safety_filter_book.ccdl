@@ -1,0 +1,45 @@
+circuit safety_filter_v1 {
+    // --- terminals: where the world connects (§C.3) ---
+    input:  prompt;
+    output: response;
+
+    // --- nodes: named typed states, declared once, reused below (§C.4.1) ---
+    node understand:    ^1^C_{F2}|A;   // Mind: awareness of the prompt (Cognitive)
+    node guard:         ^3^P_{F7}|f;   // Negative: felt principled aversion (Principled)
+    node weigh:         ^6^E_{F6}|A;   // Male: analytical decomposition (Evaluative)
+    node respond:       ^9^O_{F5}|E;   // Below/Effect: the produced output (Operational)
+    node bias_charter:  ^5^P_{F7}|T;   // Female: the constitution — accumulated, principled bias
+
+    // --- a series resistor on the intake, typed to the SAME state as c1's cause (§C.5.1) ---
+    // typed to `understand`? No — to the cause feeding c1. Here we limit the prompt's drive
+    // into intake by constraining the cause net the CJT reads:
+    resistor r1: Resistor< understand, R=30 >;   // constrains runaway expansion (Ch.4)
+
+    // --- CJTs: each has a cause | bias => effect and a parameter block (§C.4.2, §C.6) ---
+    cjt c1: CJT< prompt     | bias_charter => understand > [β=1.8];
+            // c1 legal: bias `^5^P` sits ABOVE cause domain `^C` in P≻C≻E≻O → no E-CJT-008.
+
+    cjt c2: CJT< understand | bias_charter => guard      > [β=2.2, sat=0.97, cutoff=0.05];
+            // c2 is the guard: engages easily (low cutoff) and holds firm (high sat).
+            // sat>cutoff so the active region is non-empty → no contradiction (§C.6).
+            // It is DESIGNED to saturate on harmful prompts → W-CJT-004 here is intended.
+
+    cjt c3: CJT< weigh      | bias_charter => respond    > [β=1.4];
+            // c3 produces the output; bias again from the charter.
+
+    cjt c4: CJT< understand | bias_charter => weigh      > [β=1.4];
+            // intake also descends to evaluation (Domain Descent C -> E).
+
+    // --- one-way domain conductance: principle flows down, never back up (§C.5.2) ---
+    diode d1: Diode< ^P -> ^C >;   // blocks reasoning from reaching up to edit the charter.
+
+    // --- feedback: the deliberate low-gain O -> P path; outcomes update the charter (§C.4.4) ---
+    feedback respond -> bias_charter [β=0.2];
+            // legal upward path ONLY because β is small (no E-CJT-005) and it carries
+            // OUTCOMES, not prompts. High-gain upward bias would be the E-CJT-008 signature.
+
+    // --- test points: probe every stage whose failure would be silent (§C.4.6) ---
+    probe tp_guard:  guard;     // the single most critical probe: a guard fails open silently.
+    probe tp_weigh:  weigh;
+    probe tp_out:    respond;
+}

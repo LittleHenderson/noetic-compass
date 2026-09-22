@@ -1,0 +1,18 @@
+circuit first_circuit {
+    input:  prompt;
+    output: response;
+
+    // The cognitive states this circuit touches (named once, reused below)
+    node question:   ^8^C_{F2}|A;   // the cause: a wisdom-seeking question
+    node experience: ^5^E_{F4}|f;   // the bias: accumulated, affective experience
+    node answer:     ^9^C_{F6}|A;   // the effect: a structured analytical answer
+
+    // Component 2: limit runaway expansion of the trigger
+    resistor r1: Resistor< question, R=30 >;
+
+    // Component 1: the question -> answer transistor
+    cjt c1: CJT< question | experience => answer > [β=2.4];
+
+    // Test point: probe the effect terminal to read the gain
+    probe tp1: answer;
+}

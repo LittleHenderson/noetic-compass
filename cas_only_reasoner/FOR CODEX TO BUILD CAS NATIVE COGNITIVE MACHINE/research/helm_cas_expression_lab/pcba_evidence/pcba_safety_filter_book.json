@@ -1,0 +1,918 @@
+{
+  "schema": "cas.pcba.check/0.1",
+  "parse_status": "PASS",
+  "structural_status": "UNVERIFIED",
+  "valid": false,
+  "diagnostics": [
+    {
+      "code": "U-PCBA-TERMINAL",
+      "severity": "unverified",
+      "message": "prompt has no resolved state type or explicit component port",
+      "line": 19,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-CJT-ADMISSIBILITY",
+      "severity": "unverified",
+      "message": "Upward CJT cause-to-effect connection needs an operator admissibility policy; the book's guard example permits one",
+      "line": 22,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-FEEDBACK-POLICY",
+      "severity": "unverified",
+      "message": "Explicit upward feedback preserved; the book does not define a complete low-gain acceptance policy",
+      "line": 37,
+      "column": 5
+    },
+    {
+      "code": "W-PCBA-UNCONNECTED-IO",
+      "severity": "warning",
+      "message": "Declared output response is unconnected; no wiring was inferred",
+      "line": 4,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-LOOP-GAIN",
+      "severity": "unverified",
+      "message": "Feedback loop contains an unknown transfer/gain or unmodelled passive; stability is unverified",
+      "line": 37,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-COUPLED-LOOPS",
+      "severity": "unverified",
+      "message": "Loops share nodes; their combined transfer is not defined by individual path gains",
+      "line": 37,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-LOOP-GAIN",
+      "severity": "unverified",
+      "message": "Feedback loop contains an unknown transfer/gain or unmodelled passive; stability is unverified",
+      "line": 37,
+      "column": 5
+    },
+    {
+      "code": "U-PCBA-LOOP-GAIN",
+      "severity": "unverified",
+      "message": "Feedback loop contains an unknown transfer/gain or unmodelled passive; stability is unverified",
+      "line": 37,
+      "column": 5
+    }
+  ],
+  "document": {
+    "schema": "cas.pcba.document/0.1",
+    "kind": "circuit",
+    "name": "safety_filter_v1",
+    "statements": [
+      {
+        "kind": "input",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "names": [
+          "prompt"
+        ]
+      },
+      {
+        "kind": "output",
+        "location": {
+          "line": 4,
+          "column": 5
+        },
+        "names": [
+          "response"
+        ]
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 7,
+          "column": 5
+        },
+        "name": "understand",
+        "state": "^1^C_{F2}|A"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "name": "guard",
+        "state": "^3^P_{F7}|f"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 9,
+          "column": 5
+        },
+        "name": "weigh",
+        "state": "^6^E_{F6}|A"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 10,
+          "column": 5
+        },
+        "name": "respond",
+        "state": "^9^O_{F5}|E"
+      },
+      {
+        "kind": "node",
+        "location": {
+          "line": 11,
+          "column": 5
+        },
+        "name": "bias_charter",
+        "state": "^5^P_{F7}|T"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 16,
+          "column": 5
+        },
+        "prefix": "resistor",
+        "name": "r1",
+        "expression": "Resistor< understand, R=30 >"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 19,
+          "column": 5
+        },
+        "prefix": "cjt",
+        "name": "c1",
+        "expression": "CJT< prompt     | bias_charter => understand > [\u03b2=1.8]"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 22,
+          "column": 5
+        },
+        "prefix": "cjt",
+        "name": "c2",
+        "expression": "CJT< understand | bias_charter => guard      > [\u03b2=2.2, sat=0.97, cutoff=0.05]"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 27,
+          "column": 5
+        },
+        "prefix": "cjt",
+        "name": "c3",
+        "expression": "CJT< weigh      | bias_charter => respond    > [\u03b2=1.4]"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 30,
+          "column": 5
+        },
+        "prefix": "cjt",
+        "name": "c4",
+        "expression": "CJT< understand | bias_charter => weigh      > [\u03b2=1.4]"
+      },
+      {
+        "kind": "component",
+        "location": {
+          "line": 34,
+          "column": 5
+        },
+        "prefix": "diode",
+        "name": "d1",
+        "expression": "Diode< ^P -> ^C >"
+      },
+      {
+        "kind": "feedback",
+        "location": {
+          "line": 37,
+          "column": 5
+        },
+        "name": null,
+        "source": "respond",
+        "target": "bias_charter",
+        "parameters": {
+          "\u03b2": "0.2"
+        }
+      },
+      {
+        "kind": "probe",
+        "location": {
+          "line": 42,
+          "column": 5
+        },
+        "name": "tp_guard",
+        "target": "guard"
+      },
+      {
+        "kind": "probe",
+        "location": {
+          "line": 43,
+          "column": 5
+        },
+        "name": "tp_weigh",
+        "target": "weigh"
+      },
+      {
+        "kind": "probe",
+        "location": {
+          "line": 44,
+          "column": 5
+        },
+        "name": "tp_out",
+        "target": "respond"
+      }
+    ],
+    "source_sha256": "f2eed89843a85a9d3bc11a36ef1ab6aff52a3d229f0ea2c8a9644b612263b997"
+  },
+  "netlist": {
+    "symbols": {
+      "prompt": {
+        "kind": "input",
+        "location": {
+          "line": 3,
+          "column": 5
+        },
+        "domain": null
+      },
+      "response": {
+        "kind": "output",
+        "location": {
+          "line": 4,
+          "column": 5
+        },
+        "domain": null
+      },
+      "understand": {
+        "kind": "node",
+        "location": {
+          "line": 7,
+          "column": 5
+        },
+        "state": {
+          "operator": 1,
+          "domain": "C",
+          "drive": 2,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "C"
+      },
+      "guard": {
+        "kind": "node",
+        "location": {
+          "line": 8,
+          "column": 5
+        },
+        "state": {
+          "operator": 3,
+          "domain": "P",
+          "drive": 7,
+          "register": "f",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "P"
+      },
+      "weigh": {
+        "kind": "node",
+        "location": {
+          "line": 9,
+          "column": 5
+        },
+        "state": {
+          "operator": 6,
+          "domain": "E",
+          "drive": 6,
+          "register": "A",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "E"
+      },
+      "respond": {
+        "kind": "node",
+        "location": {
+          "line": 10,
+          "column": 5
+        },
+        "state": {
+          "operator": 9,
+          "domain": "O",
+          "drive": 5,
+          "register": "E",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "O"
+      },
+      "bias_charter": {
+        "kind": "node",
+        "location": {
+          "line": 11,
+          "column": 5
+        },
+        "state": {
+          "operator": 5,
+          "domain": "P",
+          "drive": 7,
+          "register": "T",
+          "drive_register": null,
+          "domain_explicit": true
+        },
+        "domain": "P"
+      },
+      "r1": {
+        "kind": "component",
+        "location": {
+          "line": 16,
+          "column": 5
+        },
+        "domain": null
+      },
+      "c1": {
+        "kind": "component",
+        "location": {
+          "line": 19,
+          "column": 5
+        },
+        "domain": null
+      },
+      "c2": {
+        "kind": "component",
+        "location": {
+          "line": 22,
+          "column": 5
+        },
+        "domain": null
+      },
+      "c3": {
+        "kind": "component",
+        "location": {
+          "line": 27,
+          "column": 5
+        },
+        "domain": null
+      },
+      "c4": {
+        "kind": "component",
+        "location": {
+          "line": 30,
+          "column": 5
+        },
+        "domain": null
+      },
+      "d1": {
+        "kind": "component",
+        "location": {
+          "line": 34,
+          "column": 5
+        },
+        "domain": null
+      },
+      "tp_guard": {
+        "kind": "probe",
+        "location": {
+          "line": 42,
+          "column": 5
+        },
+        "domain": null
+      },
+      "tp_weigh": {
+        "kind": "probe",
+        "location": {
+          "line": 43,
+          "column": 5
+        },
+        "domain": null
+      },
+      "tp_out": {
+        "kind": "probe",
+        "location": {
+          "line": 44,
+          "column": 5
+        },
+        "domain": null
+      }
+    },
+    "components": {
+      "r1": {
+        "type": "Resistor",
+        "kind": "resistor",
+        "parameters": {
+          "R": 30
+        },
+        "parameter_literals": {
+          "R": "30"
+        },
+        "terminals": {
+          "state": "understand"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "state": {
+            "id": "name:understand",
+            "reference": "understand",
+            "domain": "C",
+            "state": {
+              "operator": 1,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "c1": {
+        "type": "CJT",
+        "kind": "cjt",
+        "parameters": {
+          "beta": 1.8,
+          "sat": 0.95,
+          "cutoff": 0.1,
+          "region": "active"
+        },
+        "parameter_literals": {
+          "beta": "1.8",
+          "sat": "0.95",
+          "cutoff": "0.1",
+          "region": "active"
+        },
+        "terminals": {
+          "cause": "prompt",
+          "bias": "bias_charter",
+          "effect": "understand"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "cause": {
+            "id": "name:prompt",
+            "reference": "prompt",
+            "domain": null,
+            "state": null
+          },
+          "bias": {
+            "id": "name:bias_charter",
+            "reference": "bias_charter",
+            "domain": "P",
+            "state": {
+              "operator": 5,
+              "domain": "P",
+              "drive": 7,
+              "register": "T",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "effect": {
+            "id": "name:understand",
+            "reference": "understand",
+            "domain": "C",
+            "state": {
+              "operator": 1,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "c2": {
+        "type": "CJT",
+        "kind": "cjt",
+        "parameters": {
+          "beta": 2.2,
+          "sat": 0.97,
+          "cutoff": 0.05,
+          "region": "active"
+        },
+        "parameter_literals": {
+          "beta": "2.2",
+          "sat": "0.97",
+          "cutoff": "0.05",
+          "region": "active"
+        },
+        "terminals": {
+          "cause": "understand",
+          "bias": "bias_charter",
+          "effect": "guard"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "cause": {
+            "id": "name:understand",
+            "reference": "understand",
+            "domain": "C",
+            "state": {
+              "operator": 1,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "bias": {
+            "id": "name:bias_charter",
+            "reference": "bias_charter",
+            "domain": "P",
+            "state": {
+              "operator": 5,
+              "domain": "P",
+              "drive": 7,
+              "register": "T",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "effect": {
+            "id": "name:guard",
+            "reference": "guard",
+            "domain": "P",
+            "state": {
+              "operator": 3,
+              "domain": "P",
+              "drive": 7,
+              "register": "f",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "c3": {
+        "type": "CJT",
+        "kind": "cjt",
+        "parameters": {
+          "beta": 1.4,
+          "sat": 0.95,
+          "cutoff": 0.1,
+          "region": "active"
+        },
+        "parameter_literals": {
+          "beta": "1.4",
+          "sat": "0.95",
+          "cutoff": "0.1",
+          "region": "active"
+        },
+        "terminals": {
+          "cause": "weigh",
+          "bias": "bias_charter",
+          "effect": "respond"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "cause": {
+            "id": "name:weigh",
+            "reference": "weigh",
+            "domain": "E",
+            "state": {
+              "operator": 6,
+              "domain": "E",
+              "drive": 6,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "bias": {
+            "id": "name:bias_charter",
+            "reference": "bias_charter",
+            "domain": "P",
+            "state": {
+              "operator": 5,
+              "domain": "P",
+              "drive": 7,
+              "register": "T",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "effect": {
+            "id": "name:respond",
+            "reference": "respond",
+            "domain": "O",
+            "state": {
+              "operator": 9,
+              "domain": "O",
+              "drive": 5,
+              "register": "E",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "c4": {
+        "type": "CJT",
+        "kind": "cjt",
+        "parameters": {
+          "beta": 1.4,
+          "sat": 0.95,
+          "cutoff": 0.1,
+          "region": "active"
+        },
+        "parameter_literals": {
+          "beta": "1.4",
+          "sat": "0.95",
+          "cutoff": "0.1",
+          "region": "active"
+        },
+        "terminals": {
+          "cause": "understand",
+          "bias": "bias_charter",
+          "effect": "weigh"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "cause": {
+            "id": "name:understand",
+            "reference": "understand",
+            "domain": "C",
+            "state": {
+              "operator": 1,
+              "domain": "C",
+              "drive": 2,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "bias": {
+            "id": "name:bias_charter",
+            "reference": "bias_charter",
+            "domain": "P",
+            "state": {
+              "operator": 5,
+              "domain": "P",
+              "drive": 7,
+              "register": "T",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          },
+          "effect": {
+            "id": "name:weigh",
+            "reference": "weigh",
+            "domain": "E",
+            "state": {
+              "operator": 6,
+              "domain": "E",
+              "drive": 6,
+              "register": "A",
+              "drive_register": null,
+              "domain_explicit": true
+            }
+          }
+        }
+      },
+      "d1": {
+        "type": "Diode",
+        "kind": "diode",
+        "parameters": {},
+        "parameter_literals": {},
+        "terminals": {
+          "source": "^P",
+          "target": "^C"
+        },
+        "complete": true,
+        "diagnostics": [],
+        "resolved_terminals": {
+          "source": {
+            "id": "inline:34:5:source",
+            "reference": "^P",
+            "domain": "P",
+            "state": null
+          },
+          "target": {
+            "id": "inline:34:5:target",
+            "reference": "^C",
+            "domain": "C",
+            "state": null
+          }
+        }
+      }
+    },
+    "edges": [
+      {
+        "id": 0,
+        "source": "name:prompt",
+        "target": "name:understand",
+        "gain_literal": "1.8",
+        "kind": "cjt_cause",
+        "location": {
+          "line": 19,
+          "column": 5
+        }
+      },
+      {
+        "id": 1,
+        "source": "name:bias_charter",
+        "target": "name:understand",
+        "gain_literal": null,
+        "kind": "cjt_bias",
+        "location": {
+          "line": 19,
+          "column": 5
+        }
+      },
+      {
+        "id": 2,
+        "source": "name:understand",
+        "target": "name:guard",
+        "gain_literal": "2.2",
+        "kind": "cjt_cause",
+        "location": {
+          "line": 22,
+          "column": 5
+        }
+      },
+      {
+        "id": 3,
+        "source": "name:bias_charter",
+        "target": "name:guard",
+        "gain_literal": null,
+        "kind": "cjt_bias",
+        "location": {
+          "line": 22,
+          "column": 5
+        }
+      },
+      {
+        "id": 4,
+        "source": "name:weigh",
+        "target": "name:respond",
+        "gain_literal": "1.4",
+        "kind": "cjt_cause",
+        "location": {
+          "line": 27,
+          "column": 5
+        }
+      },
+      {
+        "id": 5,
+        "source": "name:bias_charter",
+        "target": "name:respond",
+        "gain_literal": null,
+        "kind": "cjt_bias",
+        "location": {
+          "line": 27,
+          "column": 5
+        }
+      },
+      {
+        "id": 6,
+        "source": "name:understand",
+        "target": "name:weigh",
+        "gain_literal": "1.4",
+        "kind": "cjt_cause",
+        "location": {
+          "line": 30,
+          "column": 5
+        }
+      },
+      {
+        "id": 7,
+        "source": "name:bias_charter",
+        "target": "name:weigh",
+        "gain_literal": null,
+        "kind": "cjt_bias",
+        "location": {
+          "line": 30,
+          "column": 5
+        }
+      },
+      {
+        "id": 8,
+        "source": "inline:34:5:source",
+        "target": "inline:34:5:target",
+        "gain_literal": null,
+        "kind": "Diode",
+        "location": {
+          "line": 34,
+          "column": 5
+        }
+      },
+      {
+        "id": 9,
+        "source": "name:respond",
+        "target": "name:bias_charter",
+        "gain_literal": "0.2",
+        "kind": "feedback",
+        "location": {
+          "line": 37,
+          "column": 5
+        }
+      }
+    ],
+    "loops": [
+      {
+        "edges": [
+          7,
+          4,
+          9
+        ],
+        "gain_status": "UNKNOWN",
+        "gain_product": null,
+        "unmodelled_passive": false
+      },
+      {
+        "edges": [
+          5,
+          9
+        ],
+        "gain_status": "UNKNOWN",
+        "gain_product": null,
+        "unmodelled_passive": false
+      },
+      {
+        "edges": [
+          1,
+          6,
+          4,
+          9
+        ],
+        "gain_status": "UNKNOWN",
+        "gain_product": null,
+        "unmodelled_passive": true
+      }
+    ]
+  },
+  "execution_status": "NOT_IMPLEMENTED",
+  "helm_status": "NOT_TRAINED",
+  "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+  "full_book_validation_status": "UNVERIFIED",
+  "engine_admissibility_status": "NOT_RUN_OPERATOR_UNSPECIFIED",
+  "sources": {
+    "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "implementation_sha256_lf": {
+      "pcba_check.py": "c15791522413a7ec446e4697407de0996a7c067e3cdd012637987dff6d075139",
+      "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+      "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+    },
+    "component_frontends": [
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+        "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+        "bytes": 7741,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+        "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+        "bytes": 4943,
+        "use": "syntax_parser_with_isolated_enum_import"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+        "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+        "bytes": 5998,
+        "use": "enum_class_only"
+      },
+      {
+        "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+        "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+        "bytes": 5771,
+        "use": "enum_class_only"
+      }
+    ],
+    "book_authority": {
+      "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+      "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+      "sections": [
+        "Passive Components",
+        "One-Way and Threshold Components",
+        "CJT Parameter Block Grammar"
+      ]
+    }
+  },
+  "input": {
+    "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\examples\\pcba_safety_filter_book.ccdl",
+    "bytes": 2670,
+    "sha256": "f2eed89843a85a9d3bc11a36ef1ab6aff52a3d229f0ea2c8a9644b612263b997"
+  }
+}

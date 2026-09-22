@@ -11,7 +11,7 @@ from dataclasses import dataclass
 import hashlib
 import re
 
-MAX_SOURCE_BYTES = 1_048_576
+MAX_SOURCE_BYTES = 65_536
 MAX_STATEMENTS = 512
 MAX_DEPTH = 32
 MAX_TOKENS = 65_536
@@ -435,7 +435,7 @@ Duplicate parameter keys are errors rather than last-value-wins mutation.
     try:
         body = source.encode("utf-8", errors="strict") if type(source) is str else source
         if len(body) > MAX_SOURCE_BYTES:
-            raise PcbaParseError("E-PCBA-LIMIT", "UTF-8 source exceeds 1 MiB")
+            raise PcbaParseError("E-PCBA-LIMIT", "UTF-8 source exceeds 64 KiB")
         text = body.decode("utf-8", errors="strict")
     except UnicodeError as error:
         raise PcbaParseError("E-PCBA-ENCODING", "Invalid UTF-8 source") from error
