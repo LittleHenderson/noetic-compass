@@ -362,7 +362,7 @@ def test_decimal_display_does_not_inherit_host_exponent_or_precision_limits(scal
 def _derived_fields(scale):
     return {
         "quantity": "attention", "value": Fraction(3), "scale": scale,
-        "origin": "calculated", "reference": "independent reconstruction",
+        "origin": "calculated", "reference": ohm.VERSION + ":attention_flow",
         "representation": "exact_rational", "operation": "attention_flow",
         "inputs": (quantity(scale, "drive", 12), quantity(scale, "constraint", 4)),
     }
@@ -402,6 +402,81 @@ def test_direct_calculated_construction_refuses_zero_denominator(scale):
 def test_direct_input_declaration_cannot_hide_a_calculation(scale):
     fields = _derived_fields(scale)
     fields["origin"] = "design"
+    with pytest.raises(ohm.CasOhmError) as caught:
+        ohm.OhmQuantity(**fields)
+    assert caught.value.code == "OHM_PROVENANCE"
+
+
+def _input_fields(scale):
+    return {
+        "quantity": "drive", "value": Fraction(1), "scale": scale,
+        "origin": "design", "reference": "independent declared input",
+        "representation": "exact_decimal_text", "literal": "1",
+    }
+
+
+@pytest.mark.parametrize("origin", ["design", "supplied_observation"])
+def test_direct_declared_input_must_match_its_literal(scale, origin):
+    fields = _input_fields(scale)
+    fields.update(value=Fraction(2), origin=origin)
+    with pytest.raises(ohm.CasOhmError) as caught:
+        ohm.OhmQuantity(**fields)
+    assert caught.value.code == "OHM_PROVENANCE"
+
+
+@pytest.mark.parametrize("field,value", [
+    ("representation", None), ("representation", []), ("representation", {}),
+    ("representation", 1), ("representation", "instrumented"),
+    ("literal", None), ("literal", 1), ("literal", 1.0),
+    ("literal", True), ("literal", []), ("literal", {}),
+    ("notes", ("MEASURED",)),
+])
+def test_direct_input_metadata_cannot_bypass_factory_validation(scale, field, value):
+    fields = _input_fields(scale)
+    fields[field] = value
+    with pytest.raises(ohm.CasOhmError) as caught:
+        ohm.OhmQuantity(**fields)
+    assert caught.value.code == "OHM_PROVENANCE"
+
+
+@pytest.mark.parametrize("representation,literal", [
+    ("integer", "01"), ("integer", "+1"), ("integer", "1.0"),
+    ("binary_float_via_shortest_decimal", "1.00"),
+    ("binary_float_via_shortest_decimal", "1e0"),
+    ("binary_float_via_shortest_decimal", " 1.0"),
+])
+def test_direct_machine_input_literals_must_be_canonical(scale, representation, literal):
+    fields = _input_fields(scale)
+    fields.update(representation=representation, literal=literal)
+    with pytest.raises(ohm.CasOhmError) as caught:
+        ohm.OhmQuantity(**fields)
+    assert caught.value.code == "OHM_PROVENANCE"
+
+
+@pytest.mark.parametrize("representation,literal", [
+    ("integer", "1"), ("exact_decimal_text", "1.000"),
+    ("binary_float_via_shortest_decimal", "1.0"),
+])
+def test_valid_direct_input_reconstruction_remains_serializable(scale, representation, literal):
+    fields = _input_fields(scale)
+    fields.update(representation=representation, literal=literal)
+    result = ohm.OhmQuantity(**fields).to_dict()
+    assert exact(result) == 1
+    assert result["input_literal"] == literal
+    json.dumps(result, allow_nan=False)
+
+
+def test_valid_direct_calculated_reconstruction_remains_serializable(scale):
+    result = ohm.OhmQuantity(**_derived_fields(scale))
+    assert_calculation(result, "attention", Fraction(3), "attention_flow")
+
+
+@pytest.mark.parametrize("field,value", [
+    ("notes", ("MEASURED",)), ("reference", "sensor observation"),
+])
+def test_direct_result_cannot_change_its_calculation_reference_or_notes(scale, field, value):
+    fields = _derived_fields(scale)
+    fields[field] = value
     with pytest.raises(ohm.CasOhmError) as caught:
         ohm.OhmQuantity(**fields)
     assert caught.value.code == "OHM_PROVENANCE"
