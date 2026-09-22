@@ -1,0 +1,31 @@
+{
+  "schema": "cas.audit-attachment-recovery/0.1",
+  "found_original_copies": [
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\CODEX_RPA_RECORDED_RUN_CONTINUATION_20260922.md",
+      "bytes": 18307,
+      "sha256_raw": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5",
+      "sha256_lf": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5",
+      "matches_expected": true
+    },
+    {
+      "path": "C:\\Users\\wakil\\Downloads\\CODEX_RPA_RECORDED_RUN_CONTINUATION_20260922 (1).md",
+      "bytes": 18307,
+      "sha256_raw": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5",
+      "sha256_lf": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5",
+      "matches_expected": true
+    }
+  ],
+  "retained_copy": "inputs/RECOVERED_ORIGINAL_CONTINUATION.md",
+  "expected_sha256": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5",
+  "copy_status": "RECOVERED_EXISTING_BYTES_NOT_REGENERATED",
+  "bounded_candidates_hashed": 153,
+  "later_copy_prefix_reported_by_peer": "cd86eaf8",
+  "later_copy_matches": [],
+  "comparison_status": "LATER_COPY_UNAVAILABLE_FOR_CONTENT_COMPARISON",
+  "custody_boundary": "Recovery from current Downloads verifies the attachment bytes. It does not prove these bytes were present in either historical audited worktree.",
+  "user_recovery_notice": {
+    "path": "C:\\Users\\wakil\\.codex\\attachments\\595bede0-57a9-401a-835d-46f28b2fbc54\\Pasted text.txt",
+    "sha256_raw": "c9a9a3f92bafc9fe480cbad02bc8cc838c3c8de49366a628c54b6df7bf38c262"
+  }
+}

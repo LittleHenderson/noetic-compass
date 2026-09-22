@@ -1,0 +1,3 @@
+*.json -text
+*.txt binary
+inputs/*.md -text

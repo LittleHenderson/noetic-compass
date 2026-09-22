@@ -1,0 +1,83 @@
+{
+  "schema": "cas.audit-reconciliation-package/0.1",
+  "subject_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "peer_audit_commit": "65ad300835c06f9feff154170cb8b103d5d13ffa",
+  "scope": "Integrity manifest of additive evidence reconciliation, not product or model acceptance.",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 44,
+      "sha256_raw": "f1e3b6bc7e782754bfc418468a35dc487502958c4af335927dc9f1fa9b53e09f"
+    },
+    {
+      "path": "acceptance_record_index.json",
+      "bytes": 279003,
+      "sha256_raw": "b0ce817443271e8c8c06ed656471e3a54c113da61e7367e86d253ea43e344748"
+    },
+    {
+      "path": "AMENDMENT.md",
+      "bytes": 12903,
+      "sha256_raw": "3e20f47ec7f54b22de618ff0b1c8d0e7b3c64ef07434243df4b113ece91bbb7f"
+    },
+    {
+      "path": "atlas_case_reconciliation.json",
+      "bytes": 611611,
+      "sha256_raw": "37e10723d7b9e2ec8f87c4505d89aad586c69627a6018c14f32b709c93e9ab08"
+    },
+    {
+      "path": "attachment_recovery.json",
+      "bytes": 1557,
+      "sha256_raw": "d047ebf86de4be4fc6f7593f226f54d9af975b15a2acd5e9dee6760c2371a8ec"
+    },
+    {
+      "path": "inputs/PEER_AUDIT_65ad3008.md",
+      "bytes": 8501,
+      "sha256_raw": "330c6b220b8420edd319f56c79de552f8d2a134cdf5fb5b43ca21da67de822b6"
+    },
+    {
+      "path": "inputs/RECOVERED_ORIGINAL_CONTINUATION.md",
+      "bytes": 18307,
+      "sha256_raw": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5"
+    },
+    {
+      "path": "lab_history_reconciliation.json",
+      "bytes": 564177,
+      "sha256_raw": "0a77bcd849c9b8d68edb63ecfb13bdac2d95857c5331dbf1c6ec854d98c04559"
+    },
+    {
+      "path": "publication_observation_NEW.json",
+      "bytes": 675,
+      "sha256_raw": "547b79c5c1f48a5ffbdb73335cd432ec16a7fe3ba9098425b5d6fcf383ee4ea1"
+    },
+    {
+      "path": "receipt_and_source_index.json",
+      "bytes": 211501,
+      "sha256_raw": "97e2def8df4153cfd5e1dc48bd41ef0808c5dc67c555cb24571205066e79b74a"
+    },
+    {
+      "path": "reconcile.py",
+      "bytes": 24291,
+      "sha256_raw": "b17b6db9d0548779fd94c5acf6e7149499ec698c6fea77c36cac8740cf0b4763"
+    },
+    {
+      "path": "seal_package.py",
+      "bytes": 1004,
+      "sha256_raw": "0a67ef26e4411ce45774f108eb2f4d4fba4ceaf2d19548689a83e22ab7b3ee2a"
+    },
+    {
+      "path": "selected_case_inventory.json",
+      "bytes": 314748,
+      "sha256_raw": "58e0afdc45317379afc7c7d680030d4edfd038f96024f03d541c3f81ccfbfd74"
+    },
+    {
+      "path": "selected_q4_collection_NEW.json",
+      "bytes": 2664,
+      "sha256_raw": "fad8872904417720d28a401f4533aaaad8e257263c62766008f52b14b1e28d07"
+    },
+    {
+      "path": "selected_q4_collection_NEW.txt",
+      "bytes": 14784,
+      "sha256_raw": "b69a8ccb8e0ba56ad5537ecad7f41f999200861392adeeb7601294c3cc10f20e"
+    }
+  ]
+}

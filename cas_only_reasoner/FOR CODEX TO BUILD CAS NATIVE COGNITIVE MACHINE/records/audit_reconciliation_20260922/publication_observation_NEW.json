@@ -1,0 +1,16 @@
+{
+  "observed_utc": "2026-09-22T21:47:53.091755+00:00",
+  "kind": "CURRENT_REMOTE_READ_NOT_HISTORICAL_PUBLICATION_PROOF",
+  "remote": "origin",
+  "command": [
+    "git",
+    "ls-remote",
+    "origin",
+    "refs/heads/codex/helm-rpa-recorded-run-20260922"
+  ],
+  "response": "eb9985566bd11a89f485d627186ef0efa7177f02\trefs/heads/codex/helm-rpa-recorded-run-20260922",
+  "ancestor": "5b3d713c5e7f2b2fc2959aaf776d0d80ca09d256",
+  "descendant": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "is_ancestor_exit_code": 0,
+  "conclusion": "The atlas commit is reachable through this presently published branch. Remote state today does not establish historical publication timing."
+}

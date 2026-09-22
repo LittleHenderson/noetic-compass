@@ -1,0 +1,57 @@
+{
+  "kind": "NEW_COLLECTION_ONLY_NOT_EXECUTION",
+  "command": [
+    "C:\\Python314\\python.exe",
+    "-B",
+    "-m",
+    "pytest",
+    "--collect-only",
+    "--noconftest",
+    "-o",
+    "addopts=",
+    "-p",
+    "no:cacheprovider",
+    "-q",
+    "test_learner_q4.py",
+    "test_q4_followup.py",
+    "test_q4_preparation.py"
+  ],
+  "cwd": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-evidence-reconcile\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab",
+  "returncode": 0,
+  "started_utc": "2026-09-22T21:50:30.827192+00:00",
+  "completed_utc": "2026-09-22T21:50:33.358549+00:00",
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PYTEST_DISABLE_PLUGIN_AUTOLOAD": "1",
+    "PYTHONIOENCODING": "utf-8"
+  },
+  "source_ref": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "source_files": [
+    {
+      "repository_relative_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/test_learner_q4.py",
+      "source_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob_sha1": "a943f2eefa79d0700b7d8f644dcde62f813d6f21",
+      "raw_bytes": 11302,
+      "sha256_raw": "dd45b9e8e7fdb5cd24357a8c815ad183449087425caec62a66a44f9e6f8ae74b",
+      "sha256_lf": "dd45b9e8e7fdb5cd24357a8c815ad183449087425caec62a66a44f9e6f8ae74b"
+    },
+    {
+      "repository_relative_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/test_q4_followup.py",
+      "source_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob_sha1": "fa14123fec8b5354e90c37062fe5831defd8ecc9",
+      "raw_bytes": 14242,
+      "sha256_raw": "f0ca858e015dfd336ecfca81ad0aaf2183b8210588ba4ae38a7ff6a20865d8c4",
+      "sha256_lf": "f0ca858e015dfd336ecfca81ad0aaf2183b8210588ba4ae38a7ff6a20865d8c4"
+    },
+    {
+      "repository_relative_path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/test_q4_preparation.py",
+      "source_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob_sha1": "068812d93c89c0d09e676d39ea3d43a45919e1c6",
+      "raw_bytes": 6045,
+      "sha256_raw": "cb827c10237a27c6f71af58f490713d36add5db1d24d66e834ba228f223daa42",
+      "sha256_lf": "cb827c10237a27c6f71af58f490713d36add5db1d24d66e834ba228f223daa42"
+    }
+  ],
+  "raw_output_sha256": "b69a8ccb8e0ba56ad5537ecad7f41f999200861392adeeb7601294c3cc10f20e",
+  "note": "This lists current frozen-source cases; it is not the historical 107-case test receipt and asserts no pass."
+}
