@@ -69,13 +69,16 @@ The neutral monograph field name ``resistance_delta`` is exposed alongside
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from decimal import Decimal, getcontext
+from decimal import Decimal, InvalidOperation
 from enum import Enum
+from fractions import Fraction
 from typing import Optional, Sequence, Union
 
-getcontext().prec = 50  # generous precision for pre-rounding band comparisons
-
 Number = Union[int, float, Decimal]
+
+# Version the input/result validation and exact comparison policy separately
+# from the unchanged non-identifying residual method. See NUMERIC_POLICY.md.
+NUMERIC_POLICY_VERSION = "cas-ohm-diagnostic-numeric/0.2.0"
 
 # Method identity stamped on every residual (ch10:rule:nonident).
 RESIDUAL_METHOD_IDENTITY = "CAS-OHM-V1-NONIDENTIFYING-RESIDUAL"
@@ -191,8 +194,33 @@ class Score:
         hi = 10.0 if self.unit == "Q10" else (100.0 if self.unit == "Q100" else None)
         if hi is None:
             raise KindError(f"Score unit must be Q10 or Q100, got {self.unit!r}")
-        if not (0.0 <= float(self.value) <= hi):
+        if not (0.0 <= _finite_float("Score.value", self.value) <= hi):
             raise ValueError(f"{self.unit} score out of range [0,{hi}]: {self.value}")
+
+
+def _is_finite(x: float) -> bool:
+    import math
+    return math.isfinite(x)
+
+
+def _finite_float(name: str, value: Number) -> float:
+    """Keep the float API, but refuse conversion and arithmetic overflow."""
+    try:
+        result = float(value)
+    except (TypeError, ValueError, OverflowError) as exc:
+        raise ValueError(f"{name}: a finite float-representable number is required") from exc
+    if not _is_finite(result):
+        raise ValueError(f"{name}: a finite float-representable number is required")
+    if result == 0.0 and isinstance(value, (int, float, Decimal)) and value != 0:
+        raise ValueError(f"{name}: nonzero input underflows the finite float representation")
+    return result
+
+
+def _tolerance(name: str, value: Number) -> float:
+    result = _finite_float(name, value)
+    if result < 0:
+        raise ValueError(f"{name}: tolerance must be nonnegative")
+    return result
 
 
 def _as_resistance(name: str, r: Number) -> float:
@@ -204,7 +232,15 @@ def _as_resistance(name: str, r: Number) -> float:
             f"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a "
             f"type error, not a smaller numeric error (ch06:47-52)."
         )
-    rf = float(r)
+    rf = _finite_float(name, r)
+    if not _is_finite(rf):
+        raise ValueError(
+            f"{name}: effective resistance must be a finite number; got {rf!r}. "
+            f"An undefined quantity is refused with a reason, never carried into "
+            f"arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular "
+            f"would pass a strictly-positive test, because NaN compares False "
+            f"against every operator."
+        )
     if rf <= 0.0:
         raise ValueError(
             f"{name}: effective resistance must be strictly positive "
@@ -238,7 +274,19 @@ def r_total(r_cap: Number, r_policy: Number,
                 f"r_total: component {name} is a {val.unit} Score; a score cannot "
                 f"be summed into a resistance total (ch07 quantity-kind rule)."
             )
-        total += float(val)
+        component = _finite_float(f"r_total.{name}", val)
+        if not _is_finite(component):
+            raise ValueError(
+                f"r_total: component {name} must be a finite number; got "
+                f"{component!r} (ch10:def:censoring)."
+            )
+        total += component
+    if not _is_finite(total):
+        raise ValueError(
+            f"r_total: the sum of the four constraint terms overflowed to "
+            f"{total!r}; a non-finite total is refused rather than carried "
+            f"into a prediction (ch10:def:censoring)."
+        )
     if total <= 0.0:
         raise ValueError(f"r_total must be strictly positive, got {total}")
     return total
@@ -262,15 +310,17 @@ def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
     if isinstance(p_cap, Score):
         if p_cap.unit != "Q10":
             raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
-        p = float(p_cap.value)
+        p = _finite_float("r_cap.p_cap", p_cap.value)
     else:
-        p = float(p_cap)
+        p = _finite_float("r_cap.p_cap", p_cap)
+    r_min = _as_resistance("r_cap.r_min", r_min)
+    r_max = _as_resistance("r_cap.r_max", r_max)
     if not (0.0 < r_min <= r_max):
         raise ValueError(
             f"r_cap bounds require 0 < r_min <= r_max, got r_min={r_min}, r_max={r_max}")
     if not (0.0 <= p <= 10.0):
         raise ValueError(f"p_cap must be a Q10 score in [0,10], got {p}")
-    r = r_max - (p / 10.0) * (r_max - r_min)
+    r = _finite_float("r_cap result", r_max - (p / 10.0) * (r_max - r_min))
     # numerical clamp into the declared bounds
     return max(r_min, min(r_max, r))
 
@@ -283,7 +333,13 @@ def i_pred(v: Number, r_total_value: Number) -> float:
     be strictly positive.  A Score in the denominator is refused as a type error.
     """
     r = _as_resistance("i_pred", r_total_value)
-    return float(v) / r
+    vf = _finite_float("i_pred.drive", v)
+    if not _is_finite(vf):
+        raise ValueError(
+            f"i_pred: drive must be a finite number; got {vf!r}. An undefined "
+            f"quantity is refused with a reason, never emitted (ch10:def:censoring)."
+        )
+    return _finite_float("i_pred result", vf / r)
 
 
 # Alias with the monograph's own symbol names for the response model.
@@ -352,8 +408,10 @@ def delta_current(i_obs: Number, i_pred_value: Number,
             f"default; a missing precondition is a typed rejection, not a degraded "
             f"diagnostic."
         )
-    tol = abs(float(tolerance))
-    delta = float(i_obs) - float(i_pred_value)
+    tol = _tolerance("delta_current.tolerance", tolerance)
+    observed = _finite_float("delta_current.i_obs", i_obs)
+    predicted = _finite_float("delta_current.i_pred", i_pred_value)
+    delta = _finite_float("delta_current result", observed - predicted)
     if delta < -tol:
         sign = SignReading.UNDERSHOOT
     elif delta > tol:
@@ -449,8 +507,9 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
     no first-class interval arithmetic, so it supports censoring two ways:
 
       * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
-        the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
-        exactly as ch10:def:censoring specifies, independent of the point value.
+        the ratio is CENSORED when lo <= 0 (interval includes/touches zero).
+        Malformed, non-finite or reversed intervals and points outside their
+        interval are also unusable observations and are censored.
       * POINT mode (simplified fallback, used when no interval is given) — the
         ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
         interval rule).  This is correct in spirit but cannot honor a tight
@@ -475,22 +534,42 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
     R_hidden = 8/2 - 2 = 2.
     """
     r_known = _as_resistance("r_hidden(r_known)", r_known)
+    vf = _finite_float("r_hidden.drive", v)
+    if not _is_finite(vf):
+        raise ValueError(
+            f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+            f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+            f"The drive is the value the caller applied, so a non-finite drive is a "
+            f"caller error rather than an observation too uncertain to support a "
+            f"conclusion, and it raises rather than censoring."
+        )
+
+    eps = _tolerance("r_hidden.zero_compat_eps", zero_compat_eps)
+    try:
+        i = _finite_float("r_hidden.i_obs", i_obs)
+    except ValueError:
+        return CensoredResult(
+            marker="OBSERVATION_UNREPRESENTABLE",
+            reason="i_obs is undefined or not a finite representable number; ratio censored.",
+        )
 
     # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
     if i_obs_interval is not None:
         try:
-            lo = float(i_obs_interval[0])
-            hi = float(i_obs_interval[1])
-        except (TypeError, ValueError, IndexError):
+            if len(i_obs_interval) != 2:
+                raise ValueError("an observation interval needs exactly two bounds")
+            lo = _finite_float("i_obs_interval.lower", i_obs_interval[0])
+            hi = _finite_float("i_obs_interval.upper", i_obs_interval[1])
+        except (TypeError, ValueError, IndexError, KeyError):
             return CensoredResult(
-                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
-                reason="i_obs_interval is malformed / non-numeric; ratio v/i_obs "
+                marker="OBSERVED_INTERVAL_INVALID",
+                reason="i_obs_interval is malformed / non-finite; ratio v/i_obs "
                        "unrepresentable, resistance estimate censored.",
             )
-        if not (_is_finite(lo) and _is_finite(hi)):
+        if lo > hi:
             return CensoredResult(
-                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
-                reason=f"i_obs_interval=({lo},{hi}) is non-finite; ratio censored.",
+                marker="OBSERVED_INTERVAL_INVALID",
+                reason="i_obs_interval has reversed bounds; ratio censored.",
             )
         if lo <= 0.0:
             return CensoredResult(
@@ -503,17 +582,13 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
                     f"remains computable; only the ratio quantity is refused."
                 ),
             )
-
-    try:
-        i = float(i_obs)
-    except (TypeError, ValueError):
-        return CensoredResult(
-            marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
-            reason="i_obs is undefined / not a finite number; ratio v/i_obs "
-                   "unrepresentable, resistance estimate censored.",
-        )
+        if not lo <= i <= hi:
+            return CensoredResult(
+                marker="OBSERVED_POINT_OUTSIDE_INTERVAL",
+                reason="i_obs is outside its declared interval; ratio censored.",
+            )
     # POINT mode fallback (only when no admissible interval was supplied).
-    if i_obs_interval is None and (not _is_finite(i) or abs(i) <= abs(float(zero_compat_eps))):
+    if i_obs_interval is None and abs(i) <= eps:
         return CensoredResult(
             marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
             reason=(
@@ -524,22 +599,20 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
                 f"elsewhere; only the ratio quantity is refused."
             ),
         )
-    if not _is_finite(i):
+    # The interval checks above prevent an interval from admitting a zero
+    # denominator. Check the arithmetic result too: finite operands can overflow.
+    r_apparent = vf / i
+    magnitude = r_apparent - r_known
+    if not (_is_finite(r_apparent) and _is_finite(magnitude)):
         return CensoredResult(
-            marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
-            reason=f"i_obs={i} is non-finite; ratio v/i_obs censored.",
+            marker="RESISTANCE_RESULT_UNREPRESENTABLE",
+            reason="apparent resistance or signed resistance delta is not finite; estimate censored.",
         )
-    r_apparent = float(v) / i
     return RHidden(
-        magnitude=r_apparent - r_known,
+        magnitude=magnitude,
         r_apparent=r_apparent,
         r_known=r_known,
     )
-
-
-def _is_finite(x: float) -> bool:
-    import math
-    return math.isfinite(x)
 
 
 # ---------------------------------------------------------------------------
@@ -547,9 +620,9 @@ def _is_finite(x: float) -> bool:
 # ---------------------------------------------------------------------------
 
 # Exact cut points as rationals (ch08:def:bands): 5/2, 5, 15/2.
-_CUT_1 = Decimal(5) / Decimal(2)    # 2.5
+_CUT_1 = Decimal("2.5")
 _CUT_2 = Decimal(5)                 # 5
-_CUT_3 = Decimal(15) / Decimal(2)   # 7.5
+_CUT_3 = Decimal("7.5")
 
 
 @dataclass(frozen=True)
@@ -560,13 +633,29 @@ class MaturityQ4:
     i_q_exact: str            # decimal string of the pre-rounding value
     trend: Optional[Trend] = None
     minimum_effect: float = DEFAULT_TREND_TOL
+    minimum_effect_exact: Optional[str] = None
 
 
 def _to_decimal(x: Number) -> Decimal:
-    if isinstance(x, Decimal):
-        return x
-    # str() route preserves the human-entered pre-rounding value exactly.
-    return Decimal(str(x))
+    try:
+        # Preserve the existing shortest-decimal route for float inputs. It
+        # does not turn an observed binary float into a more accurate reading.
+        result = x if isinstance(x, Decimal) else Decimal(str(x))
+    except (InvalidOperation, TypeError, ValueError) as exc:
+        raise ValueError("a finite decimal-compatible number is required") from exc
+    if not result.is_finite():
+        raise ValueError("a finite decimal-compatible number is required")
+    return result
+
+
+def _exact_tolerance(name: str, value: Number) -> tuple[Fraction, float, str]:
+    exact = _to_decimal(value)
+    if exact < 0:
+        raise ValueError(f"{name}: tolerance must be nonnegative")
+    # The public result field remains a float. Refuse an unrepresentable
+    # threshold instead of reporting zero/infinity for the declared threshold.
+    display = _finite_float(name, exact)
+    return Fraction(exact), display, format(exact, "f")
 
 
 def _band_of(exact: Decimal) -> Band:
@@ -612,12 +701,16 @@ def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
     absent.  This point trend is a display mnemonic only.
     """
     exact = _to_decimal(i_q)
+    if exact < 0:
+        raise ValueError("i_q must be nonnegative")
     band = _band_of(exact)
+    me, me_display, me_exact = _exact_tolerance("maturity_q4.minimum_effect", minimum_effect)
     trend: Optional[Trend] = None
     if prev_i_q is not None:
         prev = _to_decimal(prev_i_q)
-        diff = exact - prev
-        me = _to_decimal(abs(float(minimum_effect)))
+        if prev < 0:
+            raise ValueError("prev_i_q must be nonnegative")
+        diff = Fraction(exact) - Fraction(prev)
         if diff > me:
             trend = Trend.RISING
         elif -diff > me:
@@ -626,9 +719,12 @@ def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
             trend = Trend.STABLE
     return MaturityQ4(
         band=band,
-        i_q_exact=format(exact.normalize(), "f"),
+        # normalize() rounds under the ambient Decimal context; fixed-point
+        # formatting alone retains every digit that selected the band.
+        i_q_exact=format(exact, "f"),
         trend=trend,
-        minimum_effect=abs(float(minimum_effect)),
+        minimum_effect=me_display,
+        minimum_effect_exact=me_exact,
     )
 
 
@@ -657,6 +753,7 @@ class TrendTag:
     axis: str
     minimum_effect: float
     uncertainty_rule: str
+    minimum_effect_exact: Optional[str] = None
 
 
 def admissible_trend(earlier_point: Number, later_point: Number, *,
@@ -683,7 +780,7 @@ def admissible_trend(earlier_point: Number, later_point: Number, *,
     every value here is fabricated for exposition (RING 4 / NOT LICENSED / HELD).
     """
     missing = []
-    if axis is None:
+    if not isinstance(axis, str) or not axis.strip():
         missing.append("axis")
     if earlier_interval is None or later_interval is None:
         missing.append("interval")
@@ -697,19 +794,28 @@ def admissible_trend(earlier_point: Number, later_point: Number, *,
             + " (ch08:rule:trend requires axis + interval + minimum-effect + "
               "uncertainty rule; a missing component is inadmissible, not degraded)."
         )
-    e_lo, e_hi = float(earlier_interval[0]), float(earlier_interval[1])
-    l_lo, l_hi = float(later_interval[0]), float(later_interval[1])
-    me = abs(float(minimum_effect))
-    ep = float(earlier_point)
-    lp = float(later_point)
+    if uncertainty_rule != "interval-non-overlap":
+        raise InadmissibleTrendError("unsupported uncertainty rule; only interval-non-overlap is implemented")
+    try:
+        if len(earlier_interval) != 2 or len(later_interval) != 2:
+            raise ValueError("each interval must contain exactly two bounds")
+        e_lo, e_hi = (_to_decimal(v) for v in earlier_interval)
+        l_lo, l_hi = (_to_decimal(v) for v in later_interval)
+        if e_lo > e_hi or l_lo > l_hi:
+            raise ValueError("interval bounds must be ordered")
+        me, me_display, me_exact = _exact_tolerance("admissible_trend.minimum_effect", minimum_effect)
+        ep = Fraction(_to_decimal(earlier_point))
+        lp = Fraction(_to_decimal(later_point))
+    except (TypeError, ValueError, IndexError, KeyError) as exc:
+        raise InadmissibleTrendError(f"inadmissible numeric trend evidence: {exc}") from exc
     if l_lo > e_hi and (lp - ep) > me:
         verdict = TrendVerdict.RISING
     elif l_hi < e_lo and (ep - lp) > me:
         verdict = TrendVerdict.FALLING
     else:
         verdict = TrendVerdict.NO_TREND
-    return TrendTag(verdict=verdict, axis=axis, minimum_effect=me,
-                    uncertainty_rule=uncertainty_rule)
+    return TrendTag(verdict=verdict, axis=axis, minimum_effect=me_display,
+                    uncertainty_rule=uncertainty_rule, minimum_effect_exact=me_exact)
 
 
 # ---------------------------------------------------------------------------
@@ -867,4 +973,5 @@ __all__ = [
     # constants
     "RESIDUAL_METHOD_IDENTITY", "R_HIDDEN_PROBE_SHORTLIST",
     "R_HIDDEN_NAME_OVERRIDE_NOTE", "WITHDRAWN_CAUSAL_IDENTITY_NOTE",
+    "NUMERIC_POLICY_VERSION",
 ]

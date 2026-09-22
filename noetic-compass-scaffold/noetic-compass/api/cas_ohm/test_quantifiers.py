@@ -507,6 +507,99 @@ def test_cjtq_record_trace_and_asom():
 
 
 # ----------------------------------------------------------------------------
+# Non-finite inputs are refused, never emitted (ch10:def:censoring).
+#
+# Added 2026-09-21 after a measured hole: NaN slid through the strictly-positive
+# guard (NaN compares False against every operator) and infinity passed it
+# outright. Before the fix: i_pred(nan, 4.0) -> nan; i_pred(8.0, nan) -> nan;
+# i_pred(8.0, inf) -> 0.0; i_pred(inf, 4.0) -> inf; r_total(1e308, 1e308, 1, 1)
+# -> inf. The quiet one was i_pred(8.0, inf) -> 0.0, a clean-looking zero flow
+# out of nonsense input, which reads downstream as a starved path.
+# ----------------------------------------------------------------------------
+
+_INF = float("inf")
+_NAN = float("nan")
+
+
+def _refuses(fn, *args, **kwargs):
+    try:
+        result = fn(*args, **kwargs)
+    except ValueError as exc:
+        assert "finite" in str(exc), f"refused, but not for finiteness: {exc}"
+        return True
+    raise AssertionError(f"{fn.__name__} returned {result!r} instead of refusing")
+
+
+def test_i_pred_refuses_nan_resistance():
+    assert _refuses(i_pred, 8.0, _NAN)
+
+
+def test_i_pred_refuses_infinite_resistance():
+    assert _refuses(i_pred, 8.0, _INF)
+
+
+def test_i_pred_refuses_nan_drive():
+    assert _refuses(i_pred, _NAN, 4.0)
+
+
+def test_i_pred_refuses_infinite_drive():
+    assert _refuses(i_pred, _INF, 4.0)
+
+
+def test_i_pred_still_refuses_zero_and_negative_resistance():
+    for bad in (0.0, -2.0):
+        try:
+            i_pred(8.0, bad)
+        except ValueError:
+            continue
+        raise AssertionError(f"i_pred accepted resistance {bad}")
+
+
+def test_i_pred_unchanged_on_good_input():
+    assert i_pred(8.0, 4.0) == 2.0
+    assert y_hat(8.0, 4.0) == 2.0
+
+
+def test_r_total_refuses_non_finite_component():
+    assert _refuses(r_total, _NAN, 1.0, 1.0, 1.0)
+    assert _refuses(r_total, _INF, 1.0, 1.0, 1.0)
+
+
+def test_r_total_refuses_an_overflowing_sum():
+    assert _refuses(r_total, 1e308, 1e308, 1.0, 1.0)
+
+
+def test_r_total_unchanged_on_good_input():
+    assert r_total(1.0, 2.0, 3.0, 4.0) == 10.0
+
+
+# --- r_hidden's drive term, missed by the first pass and found by an independent re-check.
+# Before this fix, at the commit that claimed to close the non-finite hole:
+#     r_hidden(v=nan, i_obs=2.0, r_known=2.0) -> RHidden magnitude=nan
+#     r_hidden(v=inf, i_obs=2.0, r_known=2.0) -> RHidden magnitude=inf
+
+def test_r_hidden_refuses_non_finite_drive():
+    for bad in (_NAN, _INF):
+        try:
+            result = r_hidden(v=bad, i_obs=2.0, r_known=2.0)
+        except ValueError as exc:
+            assert "finite" in str(exc)
+            continue
+        raise AssertionError(f"r_hidden accepted drive {bad!r} and returned {result!r}")
+
+
+def test_r_hidden_unchanged_on_the_worked_example():
+    result = r_hidden(v=8.0, i_obs=2.0, r_known=2.0)
+    assert result.magnitude == 2.0 and result.r_apparent == 4.0
+
+
+def test_r_hidden_still_censors_a_zero_compatible_observation():
+    result = r_hidden(v=8.0, i_obs=0.0, r_known=2.0)
+    assert getattr(result, "censored", False) is True
+    assert "censor" in result.reason.lower() or "unrepresentable" in result.reason.lower()
+
+
+# ----------------------------------------------------------------------------
 # Runner (works without pytest).
 # ----------------------------------------------------------------------------
 

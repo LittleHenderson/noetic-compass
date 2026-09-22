@@ -1,0 +1,3190 @@
+......................................................F..F...F..F....... [ 35%]
+.F.........FFFFFF..F.....F...FFFFFFFFFFFFFFFFFFFFF...FFFFF.FFFFFFFFFFFFF [ 70%]
+FFF...F......F...FFF.F.FF...FFFFFFFFFFF.F.FFFFFFFFFFFFFFFFF              [100%]
+================================== FAILURES ===================================
+_ test_prediction_refuses_invalid_numbers[drive-integer_conversion_overflow] __
+
+bad = 100000000000000000...0000000000000000000, argument = 'drive'
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("argument", ["drive", "resistance"])
+    def test_prediction_refuses_invalid_numbers(bad, argument):
+        with pytest.raises(ValueError):
+>           q.i_pred(bad, 2) if argument == "drive" else q.i_pred(8, bad)
+            ^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 100000000000000000...0000000000000000000, r_total_value = 2
+
+    def i_pred(v: Number, r_total_value: Number) -> float:
+        """Predicted response  i_pred = v / r_total  — the candidate's repair of the
+        legacy form I=V/R_total (ch06:47-52).  Mapped into candidate types this is
+        y_hat = a / r_eff with r_eff the calibrated bridge quantity (and NOTHING
+        else).  v is the ALPHA dose; r_total_value is ALPHA_PER_ACTIVATION and must
+        be strictly positive.  A Score in the denominator is refused as a type error.
+        """
+        r = _as_resistance("i_pred", r_total_value)
+>       vf = float(v)
+             ^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:311: OverflowError
+___________ test_prediction_refuses_invalid_numbers[drive-missing] ____________
+
+bad = None, argument = 'drive'
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("argument", ["drive", "resistance"])
+    def test_prediction_refuses_invalid_numbers(bad, argument):
+        with pytest.raises(ValueError):
+>           q.i_pred(bad, 2) if argument == "drive" else q.i_pred(8, bad)
+            ^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = None, r_total_value = 2
+
+    def i_pred(v: Number, r_total_value: Number) -> float:
+        """Predicted response  i_pred = v / r_total  — the candidate's repair of the
+        legacy form I=V/R_total (ch06:47-52).  Mapped into candidate types this is
+        y_hat = a / r_eff with r_eff the calibrated bridge quantity (and NOTHING
+        else).  v is the ALPHA dose; r_total_value is ALPHA_PER_ACTIVATION and must
+        be strictly positive.  A Score in the denominator is refused as a type error.
+        """
+        r = _as_resistance("i_pred", r_total_value)
+>       vf = float(v)
+             ^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:311: TypeError
+_ test_prediction_refuses_invalid_numbers[resistance-integer_conversion_overflow] _
+
+bad = 100000000000000000...0000000000000000000, argument = 'resistance'
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("argument", ["drive", "resistance"])
+    def test_prediction_refuses_invalid_numbers(bad, argument):
+        with pytest.raises(ValueError):
+>           q.i_pred(bad, 2) if argument == "drive" else q.i_pred(8, bad)
+                                                         ^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+quantifiers.py:310: in i_pred
+    r = _as_resistance("i_pred", r_total_value)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'i_pred', r = 100000000000000000...0000000000000000000
+
+    def _as_resistance(name: str, r: Number) -> float:
+        """Coerce a resistance argument, rejecting Score wrappers and non-positive
+        values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
+        if isinstance(r, Score):
+            raise KindError(
+                f"{name}: a {r.unit} Score cannot occupy the resistance position "
+                f"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a "
+                f"type error, not a smaller numeric error (ch06:47-52)."
+            )
+>       rf = float(r)
+             ^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:212: OverflowError
+_________ test_prediction_refuses_invalid_numbers[resistance-missing] _________
+
+bad = None, argument = 'resistance'
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("argument", ["drive", "resistance"])
+    def test_prediction_refuses_invalid_numbers(bad, argument):
+        with pytest.raises(ValueError):
+>           q.i_pred(bad, 2) if argument == "drive" else q.i_pred(8, bad)
+                                                         ^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+quantifiers.py:310: in i_pred
+    r = _as_resistance("i_pred", r_total_value)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'i_pred', r = None
+
+    def _as_resistance(name: str, r: Number) -> float:
+        """Coerce a resistance argument, rejecting Score wrappers and non-positive
+        values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
+        if isinstance(r, Score):
+            raise KindError(
+                f"{name}: a {r.unit} Score cannot occupy the resistance position "
+                f"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a "
+                f"type error, not a smaller numeric error (ch06:47-52)."
+            )
+>       rf = float(r)
+             ^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:212: TypeError
+_ test_other_float_boundaries_refuse_invalid_numbers[positive_infinity-bound] _
+
+operation = 'bound', bad = inf
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:46: Failed
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-total] _
+
+operation = 'total', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:39: in <lambda>
+    "total": lambda: q.r_total(1, bad, 1, 1),
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+r_cap = 1, r_policy = 100000000000000000...0000000000000000000, r_context = 1
+r_resource = 1
+
+    def r_total(r_cap: Number, r_policy: Number,
+                r_context: Number, r_resource: Number) -> float:
+        """R_total = R_cap + R_policy + R_context + R_resource.
+    
+        EXTRA-CHAPTER: this additive decomposition is NOT present in ch05/ch06.
+        There R_total occurs ONLY inside the REJECTED legacy form I_pred=V/R_total
+        (ch06:48).  Implemented here per the owner's named contract.  Each component
+        is a resistance term (ALPHA_PER_ACTIVATION); Score wrappers are rejected and
+        the sum must be strictly positive.
+        """
+        parts = {
+            "r_cap": r_cap, "r_policy": r_policy,
+            "r_context": r_context, "r_resource": r_resource,
+        }
+        total = 0.0
+        for name, val in parts.items():
+            if isinstance(val, Score):
+                raise KindError(
+                    f"r_total: component {name} is a {val.unit} Score; a score cannot "
+                    f"be summed into a resistance total (ch07 quantity-kind rule)."
+                )
+>           component = float(val)
+                        ^^^^^^^^^^
+E           OverflowError: int too large to convert to float
+
+quantifiers.py:254: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-capability] _
+
+operation = 'capability', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:40: in <lambda>
+    "capability": lambda: q.r_cap(bad, 1, 5),
+                          ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = 100000000000000000...0000000000000000000, r_min = 1, r_max = 5
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+>           p = float(p_cap)
+                ^^^^^^^^^^^^
+E           OverflowError: int too large to convert to float
+
+quantifiers.py:292: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-bound] _
+
+operation = 'bound', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:41: in <lambda>
+    "bound": lambda: q.r_cap(5, 1, bad),
+                     ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = 5, r_min = 1, r_max = 100000000000000000...0000000000000000000
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+            p = float(p_cap)
+        if not (0.0 < r_min <= r_max):
+            raise ValueError(
+                f"r_cap bounds require 0 < r_min <= r_max, got r_min={r_min}, r_max={r_max}")
+        if not (0.0 <= p <= 10.0):
+            raise ValueError(f"p_cap must be a Q10 score in [0,10], got {p}")
+>       r = r_max - (p / 10.0) * (r_max - r_min)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:298: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-score] _
+
+operation = 'score', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:42: in <lambda>
+    "score": lambda: q.Score(bad),
+                     ^^^^^^^^^^^^
+<string>:5: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Score(value=1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000...0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, unit='Q10')
+
+    def __post_init__(self) -> None:
+        hi = 10.0 if self.unit == "Q10" else (100.0 if self.unit == "Q100" else None)
+        if hi is None:
+            raise KindError(f"Score unit must be Q10 or Q100, got {self.unit!r}")
+>       if not (0.0 <= float(self.value) <= hi):
+                       ^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:194: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-known_resistance] _
+
+operation = 'known_resistance', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:43: in <lambda>
+    "known_resistance": lambda: q.r_hidden(8, 2, bad),
+                                ^^^^^^^^^^^^^^^^^^^^^
+quantifiers.py:508: in r_hidden
+    r_known = _as_resistance("r_hidden(r_known)", r_known)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'r_hidden(r_known)', r = 100000000000000000...0000000000000000000
+
+    def _as_resistance(name: str, r: Number) -> float:
+        """Coerce a resistance argument, rejecting Score wrappers and non-positive
+        values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
+        if isinstance(r, Score):
+            raise KindError(
+                f"{name}: a {r.unit} Score cannot occupy the resistance position "
+                f"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a "
+                f"type error, not a smaller numeric error (ch06:47-52)."
+            )
+>       rf = float(r)
+             ^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:212: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-hidden_drive] _
+
+operation = 'hidden_drive', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:44: in <lambda>
+    "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+                            ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 100000000000000000...0000000000000000000, i_obs = 2, r_known = 2.0
+zero_compat_eps = 1e-09, i_obs_interval = None
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+>       vf = float(v)
+             ^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:509: OverflowError
+_ test_other_float_boundaries_refuse_invalid_numbers[decimal_conversion_overflow-bound] _
+
+operation = 'bound', bad = Decimal('1E+400')
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:41: in <lambda>
+    "bound": lambda: q.r_cap(5, 1, bad),
+                     ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = 5, r_min = 1, r_max = Decimal('1E+400')
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+            p = float(p_cap)
+        if not (0.0 < r_min <= r_max):
+            raise ValueError(
+                f"r_cap bounds require 0 < r_min <= r_max, got r_min={r_min}, r_max={r_max}")
+        if not (0.0 <= p <= 10.0):
+            raise ValueError(f"p_cap must be a Q10 score in [0,10], got {p}")
+>       r = r_max - (p / 10.0) * (r_max - r_min)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: unsupported operand type(s) for *: 'float' and 'decimal.Decimal'
+
+quantifiers.py:298: TypeError
+___ test_other_float_boundaries_refuse_invalid_numbers[signaling_nan-bound] ___
+
+operation = 'bound', bad = Decimal('sNaN')
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:41: in <lambda>
+    "bound": lambda: q.r_cap(5, 1, bad),
+                     ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = 5, r_min = 1, r_max = Decimal('sNaN')
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+            p = float(p_cap)
+>       if not (0.0 < r_min <= r_max):
+                ^^^^^^^^^^^^^^^^^^^^
+E       decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:293: InvalidOperation
+______ test_other_float_boundaries_refuse_invalid_numbers[missing-total] ______
+
+operation = 'total', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:39: in <lambda>
+    "total": lambda: q.r_total(1, bad, 1, 1),
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+r_cap = 1, r_policy = None, r_context = 1, r_resource = 1
+
+    def r_total(r_cap: Number, r_policy: Number,
+                r_context: Number, r_resource: Number) -> float:
+        """R_total = R_cap + R_policy + R_context + R_resource.
+    
+        EXTRA-CHAPTER: this additive decomposition is NOT present in ch05/ch06.
+        There R_total occurs ONLY inside the REJECTED legacy form I_pred=V/R_total
+        (ch06:48).  Implemented here per the owner's named contract.  Each component
+        is a resistance term (ALPHA_PER_ACTIVATION); Score wrappers are rejected and
+        the sum must be strictly positive.
+        """
+        parts = {
+            "r_cap": r_cap, "r_policy": r_policy,
+            "r_context": r_context, "r_resource": r_resource,
+        }
+        total = 0.0
+        for name, val in parts.items():
+            if isinstance(val, Score):
+                raise KindError(
+                    f"r_total: component {name} is a {val.unit} Score; a score cannot "
+                    f"be summed into a resistance total (ch07 quantity-kind rule)."
+                )
+>           component = float(val)
+                        ^^^^^^^^^^
+E           TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:254: TypeError
+___ test_other_float_boundaries_refuse_invalid_numbers[missing-capability] ____
+
+operation = 'capability', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:40: in <lambda>
+    "capability": lambda: q.r_cap(bad, 1, 5),
+                          ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = None, r_min = 1, r_max = 5
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+>           p = float(p_cap)
+                ^^^^^^^^^^^^
+E           TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:292: TypeError
+______ test_other_float_boundaries_refuse_invalid_numbers[missing-bound] ______
+
+operation = 'bound', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:41: in <lambda>
+    "bound": lambda: q.r_cap(5, 1, bad),
+                     ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+p_cap = 5, r_min = 1, r_max = None
+
+    def r_cap(p_cap: Number, r_min: float, r_max: float) -> float:
+        """Capability -> resistance inversion:  R_cap(P_cap).
+    
+        EXTRA-CHAPTER: the P_cap symbol, the R_cap(.) inversion, and the R_min/R_max
+        bounds are NOT in ch05/06/07/08/10.  Implemented per the owner's named
+        contract as a MONOTONE-DECREASING linear inversion of a capability score:
+    
+            R_cap = R_max - (P_cap / 10) * (R_max - R_min)
+    
+        so a null capability (P_cap=0) yields the maximal resistance R_max and a
+        maxed capability (P_cap=10, Q10 top) yields the minimal resistance R_min.
+        More capability -> less resistance.  P_cap is a Q10 CAPABILITY_SCORE; a
+        Score wrapper is accepted here (this is the one place a score is the input),
+        but the OUTPUT is a resistance and is clamped to [R_min, R_max].
+        """
+        if isinstance(p_cap, Score):
+            if p_cap.unit != "Q10":
+                raise KindError("r_cap expects a Q10 CAPABILITY_SCORE")
+            p = float(p_cap.value)
+        else:
+            p = float(p_cap)
+>       if not (0.0 < r_min <= r_max):
+                ^^^^^^^^^^^^^^^^^^^^
+E       TypeError: '<=' not supported between instances of 'int' and 'NoneType'
+
+quantifiers.py:293: TypeError
+______ test_other_float_boundaries_refuse_invalid_numbers[missing-score] ______
+
+operation = 'score', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:42: in <lambda>
+    "score": lambda: q.Score(bad),
+                     ^^^^^^^^^^^^
+<string>:5: in __init__
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = Score(value=None, unit='Q10')
+
+    def __post_init__(self) -> None:
+        hi = 10.0 if self.unit == "Q10" else (100.0 if self.unit == "Q100" else None)
+        if hi is None:
+            raise KindError(f"Score unit must be Q10 or Q100, got {self.unit!r}")
+>       if not (0.0 <= float(self.value) <= hi):
+                       ^^^^^^^^^^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:194: TypeError
+_ test_other_float_boundaries_refuse_invalid_numbers[missing-known_resistance] _
+
+operation = 'known_resistance', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:43: in <lambda>
+    "known_resistance": lambda: q.r_hidden(8, 2, bad),
+                                ^^^^^^^^^^^^^^^^^^^^^
+quantifiers.py:508: in r_hidden
+    r_known = _as_resistance("r_hidden(r_known)", r_known)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'r_hidden(r_known)', r = None
+
+    def _as_resistance(name: str, r: Number) -> float:
+        """Coerce a resistance argument, rejecting Score wrappers and non-positive
+        values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
+        if isinstance(r, Score):
+            raise KindError(
+                f"{name}: a {r.unit} Score cannot occupy the resistance position "
+                f"(ALPHA_PER_ACTIVATION); a constraint SCORE in the denominator is a "
+                f"type error, not a smaller numeric error (ch06:47-52)."
+            )
+>       rf = float(r)
+             ^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:212: TypeError
+__ test_other_float_boundaries_refuse_invalid_numbers[missing-hidden_drive] ___
+
+operation = 'hidden_drive', bad = None
+
+    @pytest.mark.parametrize("operation", ["total", "capability", "bound", "score", "known_resistance", "hidden_drive"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_other_float_boundaries_refuse_invalid_numbers(operation, bad):
+        operations = {
+            "total": lambda: q.r_total(1, bad, 1, 1),
+            "capability": lambda: q.r_cap(bad, 1, 5),
+            "bound": lambda: q.r_cap(5, 1, bad),
+            "score": lambda: q.Score(bad),
+            "known_resistance": lambda: q.r_hidden(8, 2, bad),
+            "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:44: in <lambda>
+    "hidden_drive": lambda: q.r_hidden(bad, 2, 2),
+                            ^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = None, i_obs = 2, r_known = 2.0, zero_compat_eps = 1e-09
+i_obs_interval = None
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+>       vf = float(v)
+             ^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:509: TypeError
+_____ test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-observed] _____
+
+field = 'observed', bad = nan
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+____ test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-predicted] _____
+
+field = 'predicted', bad = nan
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+____ test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-tolerance] _____
+
+field = 'tolerance', bad = nan
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-observed] _
+
+field = 'observed', bad = inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-predicted] _
+
+field = 'predicted', bad = inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-tolerance] _
+
+field = 'tolerance', bad = inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-observed] _
+
+field = 'observed', bad = -inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-predicted] _
+
+field = 'predicted', bad = -inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-tolerance] _
+
+field = 'tolerance', bad = -inf
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-observed] _
+
+field = 'observed', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = 100000000000000000...0000000000000000000, i_pred_value = 0
+tolerance = 0.1, region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+        tol = abs(float(tolerance))
+>       delta = float(i_obs) - float(i_pred_value)
+                ^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:387: OverflowError
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-predicted] _
+
+field = 'predicted', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = 100, i_pred_value = 100000000000000000...0000000000000000000
+tolerance = 0.1, region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+        tol = abs(float(tolerance))
+>       delta = float(i_obs) - float(i_pred_value)
+                               ^^^^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:387: OverflowError
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-tolerance] _
+
+field = 'tolerance', bad = 100000000000000000...0000000000000000000
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = 100, i_pred_value = 0
+tolerance = 100000000000000000...0000000000000000000
+region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+>       tol = abs(float(tolerance))
+                  ^^^^^^^^^^^^^^^^
+E       OverflowError: int too large to convert to float
+
+quantifiers.py:386: OverflowError
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-observed] _
+
+field = 'observed', bad = Decimal('1E+400')
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-predicted] _
+
+field = 'predicted', bad = Decimal('1E+400')
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+_ test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-tolerance] _
+
+field = 'tolerance', bad = Decimal('1E+400')
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:55: Failed
+___ test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-observed] ___
+
+field = 'observed', bad = None
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = None, i_pred_value = 0, tolerance = 0.1
+region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+        tol = abs(float(tolerance))
+>       delta = float(i_obs) - float(i_pred_value)
+                ^^^^^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:387: TypeError
+__ test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-predicted] ___
+
+field = 'predicted', bad = None
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = 100, i_pred_value = None, tolerance = 0.1
+region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+        tol = abs(float(tolerance))
+>       delta = float(i_obs) - float(i_pred_value)
+                               ^^^^^^^^^^^^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:387: TypeError
+__ test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-tolerance] ___
+
+field = 'tolerance', bad = None
+
+    @pytest.mark.parametrize("field", ["observed", "predicted", "tolerance"])
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    def test_residual_cannot_emit_a_sign_from_invalid_numbers(field, bad):
+        kwargs = {"i_obs": 100, "i_pred_value": 0, "tolerance": 0.1}
+        kwargs[{"observed": "i_obs", "predicted": "i_pred_value", "tolerance": "tolerance"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.delta_current(**kwargs)
+
+test_numeric_boundaries.py:56: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_obs = 100, i_pred_value = 0, tolerance = None
+region = <Region.ACTIVE: 'ACTIVE'>
+
+    def delta_current(i_obs: Number, i_pred_value: Number,
+                      tolerance: float = DEFAULT_ALIGN_TOL,
+                      region: Region = Region.ACTIVE) -> DeltaCurrent:
+        """delta_I = I_obs - I_pred — the residual, with a directional sign reading.
+    
+        Sign readings (NEUTRAL DIRECTION ONLY — no mechanism vocabulary):
+            WITHIN_TOLERANCE  |delta_I| <= tolerance    (residual is zero-compatible)
+            UNDERSHOOT        delta_I < -tolerance       (observed below prediction)
+            OVERSHOOT         delta_I >  tolerance        (observed above prediction)
+    
+        NON-IDENTIFICATION DISCIPLINE (ch10:rule:nonident, ch10:sec:goodfor):
+        the returned sign is ordinal evidence for ALLOCATING further measurement —
+        it ranks follow-up PROBES only.  It does NOT, and the record explicitly
+        refuses to, identify a generating mechanism.  The labels name a DIRECTION of
+        discrepancy (below vs above prediction), never a cause — mechanism words
+        ("opposition", "amplification", "bypass") are barred from the emitted label
+        by ch10:rule:nonident.  The dataclass field ``identifies_mechanism`` is fixed
+        False for exactly this reason.
+    
+        ACTIVE-REGION-ONLY precondition (ch06:63-68, ch10 active-region gate): a
+        residual is only computable when the dose-response region is ACTIVE.  A
+        non-ACTIVE region raises EligibilityError — saturated / flat / unassessed
+        residuals are UNCOMPUTABLE, not merely inadvisable.
+        """
+        if region is not Region.ACTIVE:
+            raise EligibilityError(
+                f"delta_current refuses to run in region {region.value}: a residual is "
+                f"admissible ONLY in the ACTIVE region (ch06:63-68). Silence is the "
+                f"default; a missing precondition is a typed rejection, not a degraded "
+                f"diagnostic."
+            )
+>       tol = abs(float(tolerance))
+                  ^^^^^^^^^^^^^^^^
+E       TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:386: TypeError
+___________ test_finite_operation_overflow_is_rejected[prediction] ____________
+
+operation = 'prediction'
+
+    @pytest.mark.parametrize("operation", ["prediction", "residual", "total"])
+    def test_finite_operation_overflow_is_rejected(operation):
+        operations = {
+            "prediction": lambda: q.i_pred(1e308, 1e-308),
+            "residual": lambda: q.delta_current(1e308, -1e308),
+            "total": lambda: q.r_total(1e308, 1e308, 1, 1),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:66: Failed
+____________ test_finite_operation_overflow_is_rejected[residual] _____________
+
+operation = 'residual'
+
+    @pytest.mark.parametrize("operation", ["prediction", "residual", "total"])
+    def test_finite_operation_overflow_is_rejected(operation):
+        operations = {
+            "prediction": lambda: q.i_pred(1e308, 1e-308),
+            "residual": lambda: q.delta_current(1e308, -1e308),
+            "total": lambda: q.r_total(1e308, 1e308, 1, 1),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:66: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[nan-residual] __
+
+operation = 'residual', bad = nan
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+__ test_thresholds_must_be_finite_nonnegative_and_representable[nan-hidden] ___
+
+operation = 'hidden', bad = nan
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+        with pytest.raises(ValueError):
+>           operations[operation]()
+
+test_numeric_boundaries.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+test_numeric_boundaries.py:76: in <lambda>
+    "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 8, i_obs = 0, r_known = 2.0, zero_compat_eps = nan, i_obs_interval = None
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+        vf = float(v)
+        if not _is_finite(vf):
+            raise ValueError(
+                f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+                f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+                f"The drive is the value the caller applied, so a non-finite drive is a "
+                f"caller error rather than an observation too uncertain to support a "
+                f"conclusion, and it raises rather than censoring."
+            )
+    
+        # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
+        if i_obs_interval is not None:
+            try:
+                lo = float(i_obs_interval[0])
+                hi = float(i_obs_interval[1])
+            except (TypeError, ValueError, IndexError):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason="i_obs_interval is malformed / non-numeric; ratio v/i_obs "
+                           "unrepresentable, resistance estimate censored.",
+                )
+            if not (_is_finite(lo) and _is_finite(hi)):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=f"i_obs_interval=({lo},{hi}) is non-finite; ratio censored.",
+                )
+            if lo <= 0.0:
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=(
+                        f"observation interval [{lo}, {hi}] includes or touches zero "
+                        f"(lower bound <= 0); the ratio v/i_obs has no finite moments "
+                        f"and no usable interval, so apparent resistance and resistance "
+                        f"delta are CENSORED (ch10:def:censoring). The residual itself "
+                        f"remains computable; only the ratio quantity is refused."
+                    ),
+                )
+    
+        try:
+            i = float(i_obs)
+        except (TypeError, ValueError):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason="i_obs is undefined / not a finite number; ratio v/i_obs "
+                       "unrepresentable, resistance estimate censored.",
+            )
+        # POINT mode fallback (only when no admissible interval was supplied).
+        if i_obs_interval is None and (not _is_finite(i) or abs(i) <= abs(float(zero_compat_eps))):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason=(
+                    f"i_obs={i} is zero-compatible (|i_obs| <= {zero_compat_eps}); the "
+                    f"ratio v/i_obs has no finite moments and no usable interval, so the "
+                    f"apparent resistance and any resistance delta are CENSORED "
+                    f"(ch10:def:censoring). The residual itself remains computable "
+                    f"elsewhere; only the ratio quantity is refused."
+                ),
+            )
+        if not _is_finite(i):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason=f"i_obs={i} is non-finite; ratio v/i_obs censored.",
+            )
+>       r_apparent = float(v) / i
+                     ^^^^^^^^^^^^
+E       ZeroDivisionError: division by zero
+
+quantifiers.py:572: ZeroDivisionError
+_ test_thresholds_must_be_finite_nonnegative_and_representable[nan-maturity] __
+
+operation = 'maturity', bad = nan
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+___ test_thresholds_must_be_finite_nonnegative_and_representable[nan-trend] ___
+
+operation = 'trend', bad = nan
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[infinite-residual] _
+
+operation = 'residual', bad = inf
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[infinite-hidden] _
+
+operation = 'hidden', bad = inf
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[infinite-maturity] _
+
+operation = 'maturity', bad = inf
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[infinite-trend] _
+
+operation = 'trend', bad = inf
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[negative-residual] _
+
+operation = 'residual', bad = -0.1
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[negative-hidden] _
+
+operation = 'hidden', bad = -0.1
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[negative-maturity] _
+
+operation = 'maturity', bad = -0.1
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[negative-trend] _
+
+operation = 'trend', bad = -0.1
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[underflow-residual] _
+
+operation = 'residual', bad = Decimal('1E-400')
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[underflow-hidden] _
+
+operation = 'hidden', bad = Decimal('1E-400')
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[underflow-maturity] _
+
+operation = 'maturity', bad = Decimal('1E-400')
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_thresholds_must_be_finite_nonnegative_and_representable[underflow-trend] _
+
+operation = 'trend', bad = Decimal('1E-400')
+
+    @pytest.mark.parametrize("operation", ["residual", "hidden", "maturity", "trend"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -0.1, Decimal("1e-400")],
+                             ids=["nan", "infinite", "negative", "underflow"])
+    def test_thresholds_must_be_finite_nonnegative_and_representable(operation, bad):
+        operations = {
+            "residual": lambda: q.delta_current(100, 0, tolerance=bad),
+            "hidden": lambda: q.r_hidden(8, 0, 2, zero_compat_eps=bad),
+            "maturity": lambda: q.maturity_q4(2, minimum_effect=bad),
+            "trend": lambda: q.admissible_trend(2, 4, axis="fixture", earlier_interval=(1, 2),
+                                              later_interval=(3, 4), minimum_effect=bad),
+        }
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:81: Failed
+_ test_unusable_observations_are_censored[point-integer_conversion_overflow] __
+
+bad = 100000000000000000...0000000000000000000, interval = None
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("interval", [None, (1, 3)], ids=["point", "interval"])
+    def test_unusable_observations_are_censored(bad, interval):
+>       result = q.r_hidden(8, bad, 2, i_obs_interval=interval)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 8, i_obs = 100000000000000000...0000000000000000000, r_known = 2.0
+zero_compat_eps = 1e-09, i_obs_interval = None
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+        vf = float(v)
+        if not _is_finite(vf):
+            raise ValueError(
+                f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+                f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+                f"The drive is the value the caller applied, so a non-finite drive is a "
+                f"caller error rather than an observation too uncertain to support a "
+                f"conclusion, and it raises rather than censoring."
+            )
+    
+        # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
+        if i_obs_interval is not None:
+            try:
+                lo = float(i_obs_interval[0])
+                hi = float(i_obs_interval[1])
+            except (TypeError, ValueError, IndexError):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason="i_obs_interval is malformed / non-numeric; ratio v/i_obs "
+                           "unrepresentable, resistance estimate censored.",
+                )
+            if not (_is_finite(lo) and _is_finite(hi)):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=f"i_obs_interval=({lo},{hi}) is non-finite; ratio censored.",
+                )
+            if lo <= 0.0:
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=(
+                        f"observation interval [{lo}, {hi}] includes or touches zero "
+                        f"(lower bound <= 0); the ratio v/i_obs has no finite moments "
+                        f"and no usable interval, so apparent resistance and resistance "
+                        f"delta are CENSORED (ch10:def:censoring). The residual itself "
+                        f"remains computable; only the ratio quantity is refused."
+                    ),
+                )
+    
+        try:
+>           i = float(i_obs)
+                ^^^^^^^^^^^^
+E           OverflowError: int too large to convert to float
+
+quantifiers.py:548: OverflowError
+_ test_unusable_observations_are_censored[interval-integer_conversion_overflow] _
+
+bad = 100000000000000000...0000000000000000000, interval = (1, 3)
+
+    @pytest.mark.parametrize("bad", BAD, ids=BAD_IDS)
+    @pytest.mark.parametrize("interval", [None, (1, 3)], ids=["point", "interval"])
+    def test_unusable_observations_are_censored(bad, interval):
+>       result = q.r_hidden(8, bad, 2, i_obs_interval=interval)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:88: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 8, i_obs = 100000000000000000...0000000000000000000, r_known = 2.0
+zero_compat_eps = 1e-09, i_obs_interval = (1, 3)
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+        vf = float(v)
+        if not _is_finite(vf):
+            raise ValueError(
+                f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+                f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+                f"The drive is the value the caller applied, so a non-finite drive is a "
+                f"caller error rather than an observation too uncertain to support a "
+                f"conclusion, and it raises rather than censoring."
+            )
+    
+        # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
+        if i_obs_interval is not None:
+            try:
+                lo = float(i_obs_interval[0])
+                hi = float(i_obs_interval[1])
+            except (TypeError, ValueError, IndexError):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason="i_obs_interval is malformed / non-numeric; ratio v/i_obs "
+                           "unrepresentable, resistance estimate censored.",
+                )
+            if not (_is_finite(lo) and _is_finite(hi)):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=f"i_obs_interval=({lo},{hi}) is non-finite; ratio censored.",
+                )
+            if lo <= 0.0:
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=(
+                        f"observation interval [{lo}, {hi}] includes or touches zero "
+                        f"(lower bound <= 0); the ratio v/i_obs has no finite moments "
+                        f"and no usable interval, so apparent resistance and resistance "
+                        f"delta are CENSORED (ch10:def:censoring). The residual itself "
+                        f"remains computable; only the ratio quantity is refused."
+                    ),
+                )
+    
+        try:
+>           i = float(i_obs)
+                ^^^^^^^^^^^^
+E           OverflowError: int too large to convert to float
+
+quantifiers.py:548: OverflowError
+______ test_invalid_observation_interval_never_admits_ratio[0-interval0] ______
+
+point = 0, interval = (1, 2)
+
+    @pytest.mark.parametrize("point,interval", [
+        (0, (1, 2)), (2, (3, 1)), (4, (1, 2)), (2, (1,)), (2, (1, 2, 3)),
+        (2, (Decimal("1e400"), Decimal("2e400"))), (2, {"lo": 1, "hi": 3}),
+    ])
+    def test_invalid_observation_interval_never_admits_ratio(point, interval):
+>       result = q.r_hidden(8, point, 2, i_obs_interval=interval)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 8, i_obs = 0, r_known = 2.0, zero_compat_eps = 1e-09
+i_obs_interval = (1, 2)
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+        vf = float(v)
+        if not _is_finite(vf):
+            raise ValueError(
+                f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+                f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+                f"The drive is the value the caller applied, so a non-finite drive is a "
+                f"caller error rather than an observation too uncertain to support a "
+                f"conclusion, and it raises rather than censoring."
+            )
+    
+        # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
+        if i_obs_interval is not None:
+            try:
+                lo = float(i_obs_interval[0])
+                hi = float(i_obs_interval[1])
+            except (TypeError, ValueError, IndexError):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason="i_obs_interval is malformed / non-numeric; ratio v/i_obs "
+                           "unrepresentable, resistance estimate censored.",
+                )
+            if not (_is_finite(lo) and _is_finite(hi)):
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=f"i_obs_interval=({lo},{hi}) is non-finite; ratio censored.",
+                )
+            if lo <= 0.0:
+                return CensoredResult(
+                    marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                    reason=(
+                        f"observation interval [{lo}, {hi}] includes or touches zero "
+                        f"(lower bound <= 0); the ratio v/i_obs has no finite moments "
+                        f"and no usable interval, so apparent resistance and resistance "
+                        f"delta are CENSORED (ch10:def:censoring). The residual itself "
+                        f"remains computable; only the ratio quantity is refused."
+                    ),
+                )
+    
+        try:
+            i = float(i_obs)
+        except (TypeError, ValueError):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason="i_obs is undefined / not a finite number; ratio v/i_obs "
+                       "unrepresentable, resistance estimate censored.",
+            )
+        # POINT mode fallback (only when no admissible interval was supplied).
+        if i_obs_interval is None and (not _is_finite(i) or abs(i) <= abs(float(zero_compat_eps))):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason=(
+                    f"i_obs={i} is zero-compatible (|i_obs| <= {zero_compat_eps}); the "
+                    f"ratio v/i_obs has no finite moments and no usable interval, so the "
+                    f"apparent resistance and any resistance delta are CENSORED "
+                    f"(ch10:def:censoring). The residual itself remains computable "
+                    f"elsewhere; only the ratio quantity is refused."
+                ),
+            )
+        if not _is_finite(i):
+            return CensoredResult(
+                marker="OBSERVED_INTERVAL_INCLUDES_ZERO",
+                reason=f"i_obs={i} is non-finite; ratio v/i_obs censored.",
+            )
+>       r_apparent = float(v) / i
+                     ^^^^^^^^^^^^
+E       ZeroDivisionError: division by zero
+
+quantifiers.py:572: ZeroDivisionError
+______ test_invalid_observation_interval_never_admits_ratio[2-interval1] ______
+
+point = 2, interval = (3, 1)
+
+    @pytest.mark.parametrize("point,interval", [
+        (0, (1, 2)), (2, (3, 1)), (4, (1, 2)), (2, (1,)), (2, (1, 2, 3)),
+        (2, (Decimal("1e400"), Decimal("2e400"))), (2, {"lo": 1, "hi": 3}),
+    ])
+    def test_invalid_observation_interval_never_admits_ratio(point, interval):
+        result = q.r_hidden(8, point, 2, i_obs_interval=interval)
+>       assert isinstance(result, q.CensoredResult)
+E       assert False
+E        +  where False = isinstance(RHidden(magnitude=2.0, r_apparent=4.0, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>... - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."), <class 'numeric_boundary_subject.CensoredResult'>)
+E        +    where <class 'numeric_boundary_subject.CensoredResult'> = q.CensoredResult
+
+test_numeric_boundaries.py:100: AssertionError
+______ test_invalid_observation_interval_never_admits_ratio[4-interval2] ______
+
+point = 4, interval = (1, 2)
+
+    @pytest.mark.parametrize("point,interval", [
+        (0, (1, 2)), (2, (3, 1)), (4, (1, 2)), (2, (1,)), (2, (1, 2, 3)),
+        (2, (Decimal("1e400"), Decimal("2e400"))), (2, {"lo": 1, "hi": 3}),
+    ])
+    def test_invalid_observation_interval_never_admits_ratio(point, interval):
+        result = q.r_hidden(8, point, 2, i_obs_interval=interval)
+>       assert isinstance(result, q.CensoredResult)
+E       assert False
+E        +  where False = isinstance(RHidden(magnitude=0.0, r_apparent=2.0, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>... - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."), <class 'numeric_boundary_subject.CensoredResult'>)
+E        +    where <class 'numeric_boundary_subject.CensoredResult'> = q.CensoredResult
+
+test_numeric_boundaries.py:100: AssertionError
+______ test_invalid_observation_interval_never_admits_ratio[2-interval4] ______
+
+point = 2, interval = (1, 2, 3)
+
+    @pytest.mark.parametrize("point,interval", [
+        (0, (1, 2)), (2, (3, 1)), (4, (1, 2)), (2, (1,)), (2, (1, 2, 3)),
+        (2, (Decimal("1e400"), Decimal("2e400"))), (2, {"lo": 1, "hi": 3}),
+    ])
+    def test_invalid_observation_interval_never_admits_ratio(point, interval):
+        result = q.r_hidden(8, point, 2, i_obs_interval=interval)
+>       assert isinstance(result, q.CensoredResult)
+E       assert False
+E        +  where False = isinstance(RHidden(magnitude=2.0, r_apparent=4.0, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>... - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."), <class 'numeric_boundary_subject.CensoredResult'>)
+E        +    where <class 'numeric_boundary_subject.CensoredResult'> = q.CensoredResult
+
+test_numeric_boundaries.py:100: AssertionError
+______ test_invalid_observation_interval_never_admits_ratio[2-interval6] ______
+
+point = 2, interval = {'hi': 3, 'lo': 1}
+
+    @pytest.mark.parametrize("point,interval", [
+        (0, (1, 2)), (2, (3, 1)), (4, (1, 2)), (2, (1,)), (2, (1, 2, 3)),
+        (2, (Decimal("1e400"), Decimal("2e400"))), (2, {"lo": 1, "hi": 3}),
+    ])
+    def test_invalid_observation_interval_never_admits_ratio(point, interval):
+>       result = q.r_hidden(8, point, 2, i_obs_interval=interval)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_numeric_boundaries.py:99: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+v = 8, i_obs = 2, r_known = 2.0, zero_compat_eps = 1e-09
+i_obs_interval = {'hi': 3, 'lo': 1}
+
+    def r_hidden(v: Number, i_obs: Number, r_known: Number,
+                 zero_compat_eps: float = DEFAULT_ZERO_COMPAT_EPS,
+                 i_obs_interval: Optional[Sequence[Number]] = None
+                 ) -> Union[RHidden, CensoredResult]:
+        """R_hidden = V / I_obs - R_known — the 'hidden resistance' quantity, kept
+        quarantined.  (Caller-facing name is an owner override of ch10; the emitted
+        substance is monograph-faithful — see R_HIDDEN_NAME_OVERRIDE_NOTE.)
+    
+        CENSORING (ch10:def:censoring, ch10:ex:censored).  The MONOGRAPH rule censors
+        on the OBSERVATION UNCERTAINTY INTERVAL: refuse the ratio quantities iff the
+        interval's lower bound <= 0 (it includes or touches zero).  This module has
+        no first-class interval arithmetic, so it supports censoring two ways:
+    
+          * INTERVAL mode (monograph-faithful) — pass ``i_obs_interval=(lo, hi)`` and
+            the ratio is CENSORED iff lo <= 0 (interval includes/touches zero),
+            exactly as ch10:def:censoring specifies, independent of the point value.
+          * POINT mode (simplified fallback, used when no interval is given) — the
+            ratio is censored iff |I_obs| <= eps (a point-and-epsilon proxy for the
+            interval rule).  This is correct in spirit but cannot honor a tight
+            interval that excludes zero at a tiny point value, nor an interval that
+            touches zero at a point far from zero.  The gap is disclosed here.
+    
+        When censored, r_hidden returns a typed CensoredResult carrying the marker
+        OBSERVED_INTERVAL_INCLUDES_ZERO and an explicit reason string.  Rationale: a
+        ratio V/I_obs with a zero-compatible denominator has no finite moments and no
+        usable interval (0.1 -> 40, 0.01 -> 400 from data the instrument cannot
+        distinguish from silence).  Absence-by-censoring is never an empty slot.
+    
+        On an admissible I_obs it returns an RHidden carrying:
+          * magnitude = V/I_obs - R_known (also exposed as ``resistance_delta``),
+          * r_apparent = V/I_obs tagged role APPARENT_SAME_SAMPLE (the role the
+            prediction gate refuses as input),
+          * the probe shortlist {capability, policy, context, resource,
+            miswired-branch} — things to PROBE, not causes identified,
+          * the withdrawn-causal-identity note and identifies_mechanism = False.
+    
+        Worked check (fabricated, ch10 spirit): V=8, R_known=2, I_obs=2 ->
+        R_hidden = 8/2 - 2 = 2.
+        """
+        r_known = _as_resistance("r_hidden(r_known)", r_known)
+        vf = float(v)
+        if not _is_finite(vf):
+            raise ValueError(
+                f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+                f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+                f"The drive is the value the caller applied, so a non-finite drive is a "
+                f"caller error rather than an observation too uncertain to support a "
+                f"conclusion, and it raises rather than censoring."
+            )
+    
+        # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
+        if i_obs_interval is not None:
+            try:
+>               lo = float(i_obs_interval[0])
+                           ^^^^^^^^^^^^^^^^^
+E               KeyError: 0
+
+quantifiers.py:522: KeyError
+________________ test_hidden_finite_input_overflow_is_censored ________________
+
+    def test_hidden_finite_input_overflow_is_censored():
+        result = q.r_hidden(1e308, 0.1, 2)
+>       assert isinstance(result, q.CensoredResult)
+E       assert False
+E        +  where False = isinstance(RHidden(magnitude=inf, r_apparent=inf, r_known=2.0, role=<ResistanceRole.APPARENT_SAME_SAMPLE: 'APPARENT_SAME_SAMPLE'>... - r_eff (role APPARENT_SAME_SAMPLE, uncensored-only); use the 'resistance_delta' field for the monograph vocabulary."), <class 'numeric_boundary_subject.CensoredResult'>)
+E        +    where <class 'numeric_boundary_subject.CensoredResult'> = q.CensoredResult
+
+test_numeric_boundaries.py:106: AssertionError
+_________ test_maturity_requires_valid_declared_numbers[nan-current] __________
+
+field = 'current', bad = nan
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+quantifiers.py:650: in maturity_q4
+    band = _band_of(exact)
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+exact = Decimal('NaN')
+
+    def _band_of(exact: Decimal) -> Band:
+        """Guarded cascade in exact arithmetic, first STRICT-inequality wins; cut
+        points assigned UPWARD (equality fails '<' and falls to the upper band).
+        Top band [7.5, inf) has NO upper test — overloaded values band Q4."""
+>       if exact < _CUT_1:      # [0, 2.5)
+           ^^^^^^^^^^^^^^
+E       decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:611: InvalidOperation
+_________ test_maturity_requires_valid_declared_numbers[nan-previous] _________
+
+field = 'previous', bad = nan
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_q = 2, prev_i_q = nan, minimum_effect = 0
+
+    def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
+                    minimum_effect: float = DEFAULT_TREND_TOL) -> MaturityQ4:
+        """I_Q maturity band Q1..Q4 on the HALF-OPEN cut points 2.5 / 5 / 7.5, read
+        off the PRE-ROUNDING decimal value (ch08:def:bands), plus a trend tag.
+    
+        Bands (left-closed, cut points assigned upward):
+            [0, 2.5)  -> Q1     [2.5, 5)  -> Q2
+            [5, 7.5)  -> Q3     [7.5, inf) -> Q4
+    
+        Classification reads the exact (pre-rounding) value, never a rounded
+        display: 7.499 is Q3, 7.5 is Q4; every value in [2.495, 2.5) is Q1 even
+        though a 2-decimal display renders 2.50.  Banding divides by nothing from
+        the observation side, so a zero i_q bands Q1 without censoring.
+    
+        Trend tag (from prev_i_q, computed on exact values):
+            RISING   i_q - prev > minimum_effect
+            WANING   prev - i_q > minimum_effect
+            STABLE   |i_q - prev| <= minimum_effect
+        prev_i_q=None -> trend is None (no comparison declared).
+    
+        IMPORTANT — this convenience trend is NOT the ADMISSIBLE ch08 trend.  It
+        enforces ONLY the minimum-effect component and (with the default
+        minimum_effect=0.0) treats any nonzero delta as a trend.  ch08:rule:trend
+        requires an ADMISSIBLE tag to declare all four of axis + interval +
+        minimum-effect + uncertainty rule and to use interval NON-OVERLAP; a tag
+        missing any component is INADMISSIBLE, not degraded.  For that discipline use
+        ``admissible_trend(...)`` below, which fails closed when any component is
+        absent.  This point trend is a display mnemonic only.
+        """
+        exact = _to_decimal(i_q)
+        band = _band_of(exact)
+        trend: Optional[Trend] = None
+        if prev_i_q is not None:
+            prev = _to_decimal(prev_i_q)
+            diff = exact - prev
+            me = _to_decimal(abs(float(minimum_effect)))
+>           if diff > me:
+               ^^^^^^^^^
+E           decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:656: InvalidOperation
+______ test_maturity_requires_valid_declared_numbers[nan-minimum_effect] ______
+
+field = 'minimum_effect', bad = nan
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_q = 2, prev_i_q = 1, minimum_effect = nan
+
+    def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
+                    minimum_effect: float = DEFAULT_TREND_TOL) -> MaturityQ4:
+        """I_Q maturity band Q1..Q4 on the HALF-OPEN cut points 2.5 / 5 / 7.5, read
+        off the PRE-ROUNDING decimal value (ch08:def:bands), plus a trend tag.
+    
+        Bands (left-closed, cut points assigned upward):
+            [0, 2.5)  -> Q1     [2.5, 5)  -> Q2
+            [5, 7.5)  -> Q3     [7.5, inf) -> Q4
+    
+        Classification reads the exact (pre-rounding) value, never a rounded
+        display: 7.499 is Q3, 7.5 is Q4; every value in [2.495, 2.5) is Q1 even
+        though a 2-decimal display renders 2.50.  Banding divides by nothing from
+        the observation side, so a zero i_q bands Q1 without censoring.
+    
+        Trend tag (from prev_i_q, computed on exact values):
+            RISING   i_q - prev > minimum_effect
+            WANING   prev - i_q > minimum_effect
+            STABLE   |i_q - prev| <= minimum_effect
+        prev_i_q=None -> trend is None (no comparison declared).
+    
+        IMPORTANT — this convenience trend is NOT the ADMISSIBLE ch08 trend.  It
+        enforces ONLY the minimum-effect component and (with the default
+        minimum_effect=0.0) treats any nonzero delta as a trend.  ch08:rule:trend
+        requires an ADMISSIBLE tag to declare all four of axis + interval +
+        minimum-effect + uncertainty rule and to use interval NON-OVERLAP; a tag
+        missing any component is INADMISSIBLE, not degraded.  For that discipline use
+        ``admissible_trend(...)`` below, which fails closed when any component is
+        absent.  This point trend is a display mnemonic only.
+        """
+        exact = _to_decimal(i_q)
+        band = _band_of(exact)
+        trend: Optional[Trend] = None
+        if prev_i_q is not None:
+            prev = _to_decimal(prev_i_q)
+            diff = exact - prev
+            me = _to_decimal(abs(float(minimum_effect)))
+>           if diff > me:
+               ^^^^^^^^^
+E           decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:656: InvalidOperation
+_______ test_maturity_requires_valid_declared_numbers[infinite-current] _______
+
+field = 'current', bad = inf
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+______ test_maturity_requires_valid_declared_numbers[infinite-previous] _______
+
+field = 'previous', bad = inf
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+___ test_maturity_requires_valid_declared_numbers[infinite-minimum_effect] ____
+
+field = 'minimum_effect', bad = inf
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+_______ test_maturity_requires_valid_declared_numbers[negative-current] _______
+
+field = 'current', bad = -1
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+______ test_maturity_requires_valid_declared_numbers[negative-previous] _______
+
+field = 'previous', bad = -1
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+___ test_maturity_requires_valid_declared_numbers[negative-minimum_effect] ____
+
+field = 'minimum_effect', bad = -1
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:140: Failed
+____ test_maturity_requires_valid_declared_numbers[signaling_nan-current] _____
+
+field = 'current', bad = Decimal('sNaN')
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+quantifiers.py:650: in maturity_q4
+    band = _band_of(exact)
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+exact = Decimal('sNaN')
+
+    def _band_of(exact: Decimal) -> Band:
+        """Guarded cascade in exact arithmetic, first STRICT-inequality wins; cut
+        points assigned UPWARD (equality fails '<' and falls to the upper band).
+        Top band [7.5, inf) has NO upper test — overloaded values band Q4."""
+>       if exact < _CUT_1:      # [0, 2.5)
+           ^^^^^^^^^^^^^^
+E       decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:611: InvalidOperation
+____ test_maturity_requires_valid_declared_numbers[signaling_nan-previous] ____
+
+field = 'previous', bad = Decimal('sNaN')
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_q = 2, prev_i_q = Decimal('sNaN'), minimum_effect = 0
+
+    def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
+                    minimum_effect: float = DEFAULT_TREND_TOL) -> MaturityQ4:
+        """I_Q maturity band Q1..Q4 on the HALF-OPEN cut points 2.5 / 5 / 7.5, read
+        off the PRE-ROUNDING decimal value (ch08:def:bands), plus a trend tag.
+    
+        Bands (left-closed, cut points assigned upward):
+            [0, 2.5)  -> Q1     [2.5, 5)  -> Q2
+            [5, 7.5)  -> Q3     [7.5, inf) -> Q4
+    
+        Classification reads the exact (pre-rounding) value, never a rounded
+        display: 7.499 is Q3, 7.5 is Q4; every value in [2.495, 2.5) is Q1 even
+        though a 2-decimal display renders 2.50.  Banding divides by nothing from
+        the observation side, so a zero i_q bands Q1 without censoring.
+    
+        Trend tag (from prev_i_q, computed on exact values):
+            RISING   i_q - prev > minimum_effect
+            WANING   prev - i_q > minimum_effect
+            STABLE   |i_q - prev| <= minimum_effect
+        prev_i_q=None -> trend is None (no comparison declared).
+    
+        IMPORTANT — this convenience trend is NOT the ADMISSIBLE ch08 trend.  It
+        enforces ONLY the minimum-effect component and (with the default
+        minimum_effect=0.0) treats any nonzero delta as a trend.  ch08:rule:trend
+        requires an ADMISSIBLE tag to declare all four of axis + interval +
+        minimum-effect + uncertainty rule and to use interval NON-OVERLAP; a tag
+        missing any component is INADMISSIBLE, not degraded.  For that discipline use
+        ``admissible_trend(...)`` below, which fails closed when any component is
+        absent.  This point trend is a display mnemonic only.
+        """
+        exact = _to_decimal(i_q)
+        band = _band_of(exact)
+        trend: Optional[Trend] = None
+        if prev_i_q is not None:
+            prev = _to_decimal(prev_i_q)
+>           diff = exact - prev
+                   ^^^^^^^^^^^^
+E           decimal.InvalidOperation: [<class 'decimal.InvalidOperation'>]
+
+quantifiers.py:654: InvalidOperation
+_______ test_maturity_requires_valid_declared_numbers[missing-current] ________
+
+field = 'current', bad = None
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+quantifiers.py:649: in maturity_q4
+    exact = _to_decimal(i_q)
+            ^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+x = None
+
+    def _to_decimal(x: Number) -> Decimal:
+        if isinstance(x, Decimal):
+            return x
+        # str() route preserves the human-entered pre-rounding value exactly.
+>       return Decimal(str(x))
+               ^^^^^^^^^^^^^^^
+E       decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]
+
+quantifiers.py:604: InvalidOperation
+____ test_maturity_requires_valid_declared_numbers[missing-minimum_effect] ____
+
+field = 'minimum_effect', bad = None
+
+    @pytest.mark.parametrize("field", ["current", "previous", "minimum_effect"])
+    @pytest.mark.parametrize("bad", [float("nan"), float("inf"), -1, Decimal("sNaN"), None],
+                             ids=["nan", "infinite", "negative", "signaling_nan", "missing"])
+    def test_maturity_requires_valid_declared_numbers(field, bad):
+        if field == "previous" and bad is None:
+            assert q.maturity_q4(2, prev_i_q=None).trend is None
+            return  # the documented absence of a previous reading remains allowed
+        kwargs = {"i_q": 2, "prev_i_q": 1, "minimum_effect": 0}
+        kwargs[{"current": "i_q", "previous": "prev_i_q", "minimum_effect": "minimum_effect"}[field]] = bad
+        with pytest.raises(ValueError):
+>           q.maturity_q4(**kwargs)
+
+test_numeric_boundaries.py:141: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+i_q = 2, prev_i_q = 1, minimum_effect = None
+
+    def maturity_q4(i_q: Number, prev_i_q: Optional[Number] = None,
+                    minimum_effect: float = DEFAULT_TREND_TOL) -> MaturityQ4:
+        """I_Q maturity band Q1..Q4 on the HALF-OPEN cut points 2.5 / 5 / 7.5, read
+        off the PRE-ROUNDING decimal value (ch08:def:bands), plus a trend tag.
+    
+        Bands (left-closed, cut points assigned upward):
+            [0, 2.5)  -> Q1     [2.5, 5)  -> Q2
+            [5, 7.5)  -> Q3     [7.5, inf) -> Q4
+    
+        Classification reads the exact (pre-rounding) value, never a rounded
+        display: 7.499 is Q3, 7.5 is Q4; every value in [2.495, 2.5) is Q1 even
+        though a 2-decimal display renders 2.50.  Banding divides by nothing from
+        the observation side, so a zero i_q bands Q1 without censoring.
+    
+        Trend tag (from prev_i_q, computed on exact values):
+            RISING   i_q - prev > minimum_effect
+            WANING   prev - i_q > minimum_effect
+            STABLE   |i_q - prev| <= minimum_effect
+        prev_i_q=None -> trend is None (no comparison declared).
+    
+        IMPORTANT — this convenience trend is NOT the ADMISSIBLE ch08 trend.  It
+        enforces ONLY the minimum-effect component and (with the default
+        minimum_effect=0.0) treats any nonzero delta as a trend.  ch08:rule:trend
+        requires an ADMISSIBLE tag to declare all four of axis + interval +
+        minimum-effect + uncertainty rule and to use interval NON-OVERLAP; a tag
+        missing any component is INADMISSIBLE, not degraded.  For that discipline use
+        ``admissible_trend(...)`` below, which fails closed when any component is
+        absent.  This point trend is a display mnemonic only.
+        """
+        exact = _to_decimal(i_q)
+        band = _band_of(exact)
+        trend: Optional[Trend] = None
+        if prev_i_q is not None:
+            prev = _to_decimal(prev_i_q)
+            diff = exact - prev
+>           me = _to_decimal(abs(float(minimum_effect)))
+                                 ^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: float() argument must be a string or a real number, not 'NoneType'
+
+quantifiers.py:655: TypeError
+_ test_maturity_saved_value_replays_its_original_band_with_low_decimal_precision _
+
+    def test_maturity_saved_value_replays_its_original_band_with_low_decimal_precision():
+        value = Decimal("2.49999999999999999999999999999999999999999999999999999")
+        with localcontext() as context:
+            context.prec = 2
+            result = q.maturity_q4(value)
+            assert result.band is q.Band.Q1
+>           assert Decimal(result.i_q_exact) == value
+E           AssertionError: assert Decimal('2.5') == Decimal('2.49999999999999999999999999999999999999999999999999999')
+E            +  where Decimal('2.5') = Decimal('2.5')
+E            +    where '2.5' = MaturityQ4(band=<Band.Q1: 'Q1'>, i_q_exact='2.5', trend=None, minimum_effect=0.0).i_q_exact
+
+test_numeric_boundaries.py:150: AssertionError
+_____ test_exact_trend_does_not_collapse_distinct_decimal_inputs_to_float _____
+
+    def test_exact_trend_does_not_collapse_distinct_decimal_inputs_to_float():
+        D = Decimal
+        with localcontext() as context:
+            context.prec = 2
+            result = q.admissible_trend(
+                D("1.00000000000000000001"), D("1.00000000000000000004"), axis="fixture",
+                earlier_interval=(D("1.00000000000000000000"), D("1.00000000000000000002")),
+                later_interval=(D("1.00000000000000000003"), D("1.00000000000000000005")),
+                minimum_effect=D("0.000000000000000000001"))
+>       assert result.verdict is q.TrendVerdict.RISING
+E       AssertionError: assert <TrendVerdict.NO_TREND: 'NO_TREND'> is <TrendVerdict.RISING: 'RISING'>
+E        +  where <TrendVerdict.NO_TREND: 'NO_TREND'> = TrendTag(verdict=<TrendVerdict.NO_TREND: 'NO_TREND'>, axis='fixture', minimum_effect=1e-21, uncertainty_rule='interval-non-overlap').verdict
+E        +  and   <TrendVerdict.RISING: 'RISING'> = <enum 'TrendVerdict'>.RISING
+E        +    where <enum 'TrendVerdict'> = q.TrendVerdict
+
+test_numeric_boundaries.py:163: AssertionError
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides0] _
+
+overrides = {'earlier_interval': (3, 1)}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides1] _
+
+overrides = {'later_interval': (5, 3)}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides2] _
+
+overrides = {'earlier_interval': (1,)}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+        with pytest.raises(q.InadmissibleTrendError):
+>           q.admissible_trend(**kwargs)
+
+test_numeric_boundaries.py:177: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+earlier_point = 2, later_point = 4
+
+    def admissible_trend(earlier_point: Number, later_point: Number, *,
+                         axis: Optional[str] = None,
+                         earlier_interval: Optional[Sequence[Number]] = None,
+                         later_interval: Optional[Sequence[Number]] = None,
+                         minimum_effect: Optional[Number] = None,
+                         uncertainty_rule: str = "interval-non-overlap") -> TrendTag:
+        """ADMISSIBLE trend tag per ch08:rule:trend — all-or-nothing.
+    
+        A trend tag is admissible ONLY if it declares all four:
+          (i)   axis        — the typed quantity / test point / profile identity,
+          (ii)  interval    — ordered replay frames, one uncertainty interval each,
+          (iii) minimum_effect — a threshold fixed BEFORE comparison,
+          (iv)  uncertainty_rule — how uncertainties enter (here: interval NON-OVERLAP).
+        Omit ANY one and this raises InadmissibleTrendError (never a degraded tag).
+    
+        Verdict (computed on EXACT point values + intervals, never a rounded display):
+            RISING   iff lower(later) > upper(earlier)  AND  (later - earlier) > minimum_effect
+            FALLING  iff upper(later) < lower(earlier)  AND  (earlier - later) > minimum_effect
+            NO_TREND otherwise (overlapping intervals OR sub-threshold difference).
+    
+        NOTE: no trend tag over live-model data is asserted anywhere in the monograph;
+        every value here is fabricated for exposition (RING 4 / NOT LICENSED / HELD).
+        """
+        missing = []
+        if axis is None:
+            missing.append("axis")
+        if earlier_interval is None or later_interval is None:
+            missing.append("interval")
+        if minimum_effect is None:
+            missing.append("minimum-effect")
+        if not uncertainty_rule:
+            missing.append("uncertainty-rule")
+        if missing:
+            raise InadmissibleTrendError(
+                "inadmissible trend tag: missing " + ", ".join(missing)
+                + " (ch08:rule:trend requires axis + interval + minimum-effect + "
+                  "uncertainty rule; a missing component is inadmissible, not degraded)."
+            )
+>       e_lo, e_hi = float(earlier_interval[0]), float(earlier_interval[1])
+                                                       ^^^^^^^^^^^^^^^^^^^
+E       IndexError: tuple index out of range
+
+quantifiers.py:735: IndexError
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides3] _
+
+overrides = {'later_interval': (3, 4, 5)}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides4] _
+
+overrides = {'earlier_interval': (nan, 2)}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides5] _
+
+overrides = {'earlier_point': nan}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides6] _
+
+overrides = {'axis': ''}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_ test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides7] _
+
+overrides = {'uncertainty_rule': 'invented-rule'}
+
+    @pytest.mark.parametrize("overrides", [
+        {"earlier_interval": (3, 1)}, {"later_interval": (5, 3)},
+        {"earlier_interval": (1,)}, {"later_interval": (3, 4, 5)},
+        {"earlier_interval": (float("nan"), 2)}, {"earlier_point": float("nan")},
+        {"axis": ""}, {"uncertainty_rule": "invented-rule"},
+    ])
+    def test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict(overrides):
+        kwargs = dict(earlier_point=2, later_point=4, axis="fixture", earlier_interval=(1, 2),
+                      later_interval=(3, 4), minimum_effect=0.1)
+        kwargs.update(overrides)
+>       with pytest.raises(q.InadmissibleTrendError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'numeric_boundary_subject.InadmissibleTrendError'>
+
+test_numeric_boundaries.py:176: Failed
+_____________ test_import_does_not_change_caller_decimal_context ______________
+
+    def test_import_does_not_change_caller_decimal_context():
+        with localcontext() as context:
+            context.prec = 3
+            fresh_spec = importlib.util.spec_from_file_location("ohm_context_fixture", SOURCE)
+            fresh = importlib.util.module_from_spec(fresh_spec)
+            sys.modules[fresh_spec.name] = fresh
+            fresh_spec.loader.exec_module(fresh)
+>           assert context.prec == 3
+E           assert 50 == 3
+E            +  where 50 = Context(prec=50, rounding=ROUND_HALF_EVEN, Emin=-999999, Emax=999999, capitals=1, clamp=0, flags=[InvalidOperation, Inexact, Rounded], traps=[InvalidOperation, DivisionByZero, Overflow]).prec
+
+test_numeric_boundaries.py:187: AssertionError
+__ test_decimal_conversion_underflow_is_not_silently_reported_as_zero_drive ___
+
+    def test_decimal_conversion_underflow_is_not_silently_reported_as_zero_drive():
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:193: Failed
+__ test_exact_threshold_is_retained_alongside_legacy_float_display[maturity] __
+
+operation = 'maturity'
+
+    @pytest.mark.parametrize("operation", ["maturity", "trend"])
+    def test_exact_threshold_is_retained_alongside_legacy_float_display(operation):
+        threshold = Decimal("0.1000000000000000000001")
+        if operation == "maturity":
+            result = q.maturity_q4(Decimal("2.1"), prev_i_q=2, minimum_effect=threshold)
+            assert result.trend is q.Trend.STABLE
+        else:
+            result = q.admissible_trend(2, Decimal("2.1"), axis="fixture",
+                earlier_interval=(Decimal("1.99"), Decimal("2.01")),
+                later_interval=(Decimal("2.09"), Decimal("2.11")), minimum_effect=threshold)
+            assert result.verdict is q.TrendVerdict.NO_TREND
+        assert result.minimum_effect == 0.1  # legacy approximate display remains
+>       assert Decimal(result.minimum_effect_exact) == threshold
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'MaturityQ4' object has no attribute 'minimum_effect_exact'. Did you mean: 'minimum_effect'?
+
+test_numeric_boundaries.py:209: AttributeError
+___ test_exact_threshold_is_retained_alongside_legacy_float_display[trend] ____
+
+operation = 'trend'
+
+    @pytest.mark.parametrize("operation", ["maturity", "trend"])
+    def test_exact_threshold_is_retained_alongside_legacy_float_display(operation):
+        threshold = Decimal("0.1000000000000000000001")
+        if operation == "maturity":
+            result = q.maturity_q4(Decimal("2.1"), prev_i_q=2, minimum_effect=threshold)
+            assert result.trend is q.Trend.STABLE
+        else:
+            result = q.admissible_trend(2, Decimal("2.1"), axis="fixture",
+                earlier_interval=(Decimal("1.99"), Decimal("2.01")),
+                later_interval=(Decimal("2.09"), Decimal("2.11")), minimum_effect=threshold)
+>           assert result.verdict is q.TrendVerdict.NO_TREND
+E           AssertionError: assert <TrendVerdict.RISING: 'RISING'> is <TrendVerdict.NO_TREND: 'NO_TREND'>
+E            +  where <TrendVerdict.RISING: 'RISING'> = TrendTag(verdict=<TrendVerdict.RISING: 'RISING'>, axis='fixture', minimum_effect=0.1, uncertainty_rule='interval-non-overlap').verdict
+E            +  and   <TrendVerdict.NO_TREND: 'NO_TREND'> = <enum 'TrendVerdict'>.NO_TREND
+E            +    where <enum 'TrendVerdict'> = q.TrendVerdict
+
+test_numeric_boundaries.py:207: AssertionError
+_ test_unrepresentable_threshold_is_rejected_before_rational_allocation[overflow] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002404C996FD0>
+bad = Decimal('1E+400')
+
+    @pytest.mark.parametrize("bad", [Decimal("1e400"), Decimal("1e-400")], ids=["overflow", "underflow"])
+    def test_unrepresentable_threshold_is_rejected_before_rational_allocation(monkeypatch, bad):
+        def fraction_must_not_run(value):
+            raise AssertionError("rational allocation preceded finite float validation")
+        monkeypatch.setattr(q, "Fraction", fraction_must_not_run, raising=False)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:217: Failed
+_ test_unrepresentable_threshold_is_rejected_before_rational_allocation[underflow] _
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002404C997230>
+bad = Decimal('1E-400')
+
+    @pytest.mark.parametrize("bad", [Decimal("1e400"), Decimal("1e-400")], ids=["overflow", "underflow"])
+    def test_unrepresentable_threshold_is_rejected_before_rational_allocation(monkeypatch, bad):
+        def fraction_must_not_run(value):
+            raise AssertionError("rational allocation preceded finite float validation")
+        monkeypatch.setattr(q, "Fraction", fraction_must_not_run, raising=False)
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'ValueError'>
+
+test_numeric_boundaries.py:217: Failed
+=========================== short test summary info ===========================
+FAILED \\.\nul::test_prediction_refuses_invalid_numbers[drive-integer_conversion_overflow]
+FAILED \\.\nul::test_prediction_refuses_invalid_numbers[drive-missing] - Type...
+FAILED \\.\nul::test_prediction_refuses_invalid_numbers[resistance-integer_conversion_overflow]
+FAILED \\.\nul::test_prediction_refuses_invalid_numbers[resistance-missing]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[positive_infinity-bound]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-total]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-capability]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-bound]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-score]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-known_resistance]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[integer_conversion_overflow-hidden_drive]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[decimal_conversion_overflow-bound]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[signaling_nan-bound]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-total]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-capability]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-bound]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-score]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-known_resistance]
+FAILED \\.\nul::test_other_float_boundaries_refuse_invalid_numbers[missing-hidden_drive]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[nan-tolerance]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[positive_infinity-tolerance]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[negative_infinity-tolerance]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[integer_conversion_overflow-tolerance]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[decimal_conversion_overflow-tolerance]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-observed]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-predicted]
+FAILED \\.\nul::test_residual_cannot_emit_a_sign_from_invalid_numbers[missing-tolerance]
+FAILED \\.\nul::test_finite_operation_overflow_is_rejected[prediction] - Fail...
+FAILED \\.\nul::test_finite_operation_overflow_is_rejected[residual] - Failed...
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[nan-residual]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[nan-hidden]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[nan-maturity]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[nan-trend]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[infinite-residual]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[infinite-hidden]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[infinite-maturity]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[infinite-trend]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[negative-residual]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[negative-hidden]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[negative-maturity]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[negative-trend]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[underflow-residual]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[underflow-hidden]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[underflow-maturity]
+FAILED \\.\nul::test_thresholds_must_be_finite_nonnegative_and_representable[underflow-trend]
+FAILED \\.\nul::test_unusable_observations_are_censored[point-integer_conversion_overflow]
+FAILED \\.\nul::test_unusable_observations_are_censored[interval-integer_conversion_overflow]
+FAILED \\.\nul::test_invalid_observation_interval_never_admits_ratio[0-interval0]
+FAILED \\.\nul::test_invalid_observation_interval_never_admits_ratio[2-interval1]
+FAILED \\.\nul::test_invalid_observation_interval_never_admits_ratio[4-interval2]
+FAILED \\.\nul::test_invalid_observation_interval_never_admits_ratio[2-interval4]
+FAILED \\.\nul::test_invalid_observation_interval_never_admits_ratio[2-interval6]
+FAILED \\.\nul::test_hidden_finite_input_overflow_is_censored - assert False
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[nan-current] - ...
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[nan-previous]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[nan-minimum_effect]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[infinite-current]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[infinite-previous]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[infinite-minimum_effect]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[negative-current]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[negative-previous]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[negative-minimum_effect]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[signaling_nan-current]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[signaling_nan-previous]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[missing-current]
+FAILED \\.\nul::test_maturity_requires_valid_declared_numbers[missing-minimum_effect]
+FAILED \\.\nul::test_maturity_saved_value_replays_its_original_band_with_low_decimal_precision
+FAILED \\.\nul::test_exact_trend_does_not_collapse_distinct_decimal_inputs_to_float
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides0]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides1]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides2]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides3]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides4]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides5]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides6]
+FAILED \\.\nul::test_trend_rejects_invalid_evidence_instead_of_emitting_a_verdict[overrides7]
+FAILED \\.\nul::test_import_does_not_change_caller_decimal_context - assert 5...
+FAILED \\.\nul::test_decimal_conversion_underflow_is_not_silently_reported_as_zero_drive
+FAILED \\.\nul::test_exact_threshold_is_retained_alongside_legacy_float_display[maturity]
+FAILED \\.\nul::test_exact_threshold_is_retained_alongside_legacy_float_display[trend]
+FAILED \\.\nul::test_unrepresentable_threshold_is_rejected_before_rational_allocation[overflow]
+FAILED \\.\nul::test_unrepresentable_threshold_is_rejected_before_rational_allocation[underflow]
+92 failed, 111 passed in 2.81s

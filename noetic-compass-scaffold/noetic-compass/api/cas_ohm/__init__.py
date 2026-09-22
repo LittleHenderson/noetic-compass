@@ -50,6 +50,7 @@ from .quantifiers import (
     R_HIDDEN_PROBE_SHORTLIST,
     R_HIDDEN_NAME_OVERRIDE_NOTE,
     WITHDRAWN_CAUSAL_IDENTITY_NOTE,
+    NUMERIC_POLICY_VERSION,
 )
 
 __all__ = [
@@ -62,4 +63,5 @@ __all__ = [
     "Score", "ResistanceRole", "SignReading", "Band", "Trend", "KindError",
     "RESIDUAL_METHOD_IDENTITY", "R_HIDDEN_PROBE_SHORTLIST",
     "R_HIDDEN_NAME_OVERRIDE_NOTE", "WITHDRAWN_CAUSAL_IDENTITY_NOTE",
+    "NUMERIC_POLICY_VERSION",
 ]

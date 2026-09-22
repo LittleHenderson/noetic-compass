@@ -1,0 +1,31 @@
+{
+  "schema": "cas.ohm.public-entrypoint-probe/0.1",
+  "status": "PASS",
+  "execution_kind": "NEW_SYMBOLIC_PROBE_WITH_FABRICATED_INPUTS",
+  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+  "source_ref": "WORKING_TREE_BOUND_BY_SHA256",
+  "source_path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+  "source_sha256": "418e77a091cd9c68ada54016c15f762b836bb3c998a8080f5e2678a8291537f9",
+  "entrypoint": "api.cas_ohm",
+  "numeric_policy_version": "cas-ohm-diagnostic-numeric/0.2.0",
+  "public_signatures_unchanged_against": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "signatures": {
+    "i_pred": "(v: 'Number', r_total_value: 'Number') -> 'float'",
+    "y_hat": "(a: 'Number', r_eff: 'Number') -> 'float'",
+    "r_total": "(r_cap: 'Number', r_policy: 'Number', r_context: 'Number', r_resource: 'Number') -> 'float'",
+    "r_cap": "(p_cap: 'Number', r_min: 'float', r_max: 'float') -> 'float'",
+    "delta_current": "(i_obs: 'Number', i_pred_value: 'Number', tolerance: 'float' = 0.05, region: 'Region' = <Region.ACTIVE: 'ACTIVE'>) -> 'DeltaCurrent'",
+    "r_hidden": "(v: 'Number', i_obs: 'Number', r_known: 'Number', zero_compat_eps: 'float' = 1e-09, i_obs_interval: 'Optional[Sequence[Number]]' = None) -> 'Union[RHidden, CensoredResult]'",
+    "maturity_q4": "(i_q: 'Number', prev_i_q: 'Optional[Number]' = None, minimum_effect: 'float' = 0.0) -> 'MaturityQ4'",
+    "admissible_trend": "(earlier_point: 'Number', later_point: 'Number', *, axis: 'Optional[str]' = None, earlier_interval: 'Optional[Sequence[Number]]' = None, later_interval: 'Optional[Sequence[Number]]' = None, minimum_effect: 'Optional[Number]' = None, uncertainty_rule: 'str' = 'interval-non-overlap') -> 'TrendTag'",
+    "asom": "(region: 'Region', outcome: 'Outcome') -> 'Optional[AsomLabel]'",
+    "check_eligibility": "(region: 'Region', calibrated: 'bool', right_model: 'bool', stale: 'bool', outcome: 'Outcome' = <Outcome.INTENDED: 'INTENDED'>) -> 'Eligibility'",
+    "require_eligible": "(region: 'Region', calibrated: 'bool', right_model: 'bool', stale: 'bool', outcome: 'Outcome' = <Outcome.INTENDED: 'INTENDED'>) -> 'None'"
+  },
+  "signed_residual": -2.0,
+  "zero_observation_ratio": "CENSORED",
+  "invalid_tolerance_refusal": "delta_current.tolerance: a finite float-representable number is required",
+  "uncalibrated_profile": "NOT_ADMITTED",
+  "all_prior_public_exports_retained": true,
+  "limits": "A direct package probe does not prove any deployed application imports this module."
+}

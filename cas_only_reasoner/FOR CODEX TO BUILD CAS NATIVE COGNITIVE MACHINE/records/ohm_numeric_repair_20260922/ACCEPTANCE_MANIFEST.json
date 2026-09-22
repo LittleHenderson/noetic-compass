@@ -1,0 +1,98 @@
+{
+  "schema": "cas.ohm.numeric-repair-manifest/0.1",
+  "status": "BOUNDED_SYMBOLIC_TEST_ACCEPTANCE_ONLY",
+  "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+  "peer_hardening_commit": "a4b2e0d7c6726968903b99c714b7b5a6b15d401f",
+  "artifacts": [
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/.gitattributes",
+      "bytes": 39,
+      "sha256": "0b789f162d8b8bdee829f3fa50b158c2ec61d7fe55c899cefdb496f5716d2464"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/before_eb998556.txt",
+      "bytes": 197134,
+      "sha256": "79bec5b9684f9ef7220166749f71ebbb8e19ef3e46696415ba67fb9754b91e93"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/before_eb998556.xml",
+      "bytes": 214924,
+      "sha256": "2fd038b06bf6e9538949c255311e0ec6c987b699230e2cdf79eaa7f6caabe256"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/peer_a4b2e0d7.txt",
+      "bytes": 171567,
+      "sha256": "1a2989a62b5be4634a8e72966ee0496be4e576eea65989b076881087e43aafce"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/peer_a4b2e0d7.xml",
+      "bytes": 190147,
+      "sha256": "7490cfd9c994adb5a5820eeb320622f6a695507356c0a2cadf792dfc9a34f83d"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/probe_public_entrypoints.py",
+      "bytes": 2728,
+      "sha256": "4befbce0f8adcdbdd55216dc304d31b3b4c84c9c75829d082a3b0990620e1f79"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/PUBLIC_ENTRYPOINT.json",
+      "bytes": 2498,
+      "sha256": "c64c6c5a541b89fc8260dbf897c42f2a3169d95dac5922005a1fb078c31cebd5"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/README.md",
+      "bytes": 5930,
+      "sha256": "1b659c0bd3232be46d289d70da09c2f34794532dd7b637462c0d0d301a4668f0"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/RECEIPTS.json",
+      "bytes": 270585,
+      "sha256": "612c0e497299a24e51e0b340b5a728687f4c4c53f21ac1b1cd770c78ec434b30"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/repaired.txt",
+      "bytes": 264,
+      "sha256": "59eac72ddd1e07ecaed4b263066d393e72c292b2c142699f0952ddca62544e36"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/repaired.xml",
+      "bytes": 22509,
+      "sha256": "b40437af9fd9847ccc57ba2571ef60f48310941033335b5e83b4e03d9c49340c"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/run_repair_receipts.py",
+      "bytes": 7343,
+      "sha256": "439f5beb7ada716d56b221bb991f331e20934c2914b78f2dbc254d948db44d43"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/verify_acceptance.py",
+      "bytes": 1732,
+      "sha256": "bde9bfb8c49eceb33e52e35ac5b6d73e74ef61f0e79b0c967750bfb71750b2fe"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py",
+      "bytes": 1999,
+      "sha256": "8fb5e758033517a0e66a39654297b207f3c4d3f6b505264290ca8618a55c1777"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py",
+      "bytes": 44828,
+      "sha256": "418e77a091cd9c68ada54016c15f762b836bb3c998a8080f5e2678a8291537f9"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py",
+      "bytes": 24013,
+      "sha256": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_numeric_boundaries.py",
+      "bytes": 9766,
+      "sha256": "22aa87bc8b8da9329efee553c0da5a8ad5ffa257df5f244e46ea88e5aa6a911f"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/cas_ohm/NUMERIC_POLICY.md",
+      "bytes": 4060,
+      "sha256": "786d63f15a7f800ddc8d1d02e1c42dd2471e17056839525fc22b5ade420e14b6"
+    }
+  ]
+}
