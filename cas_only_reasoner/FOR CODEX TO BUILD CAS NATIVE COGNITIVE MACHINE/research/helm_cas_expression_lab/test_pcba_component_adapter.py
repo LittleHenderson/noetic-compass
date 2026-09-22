@@ -104,6 +104,50 @@ def test_exact_large_integer_preserved_despite_old_frontend_float_rounding():
     assert parse_component("Resistor< signal, R=9007199254740993 >")["parameters"]["R"] == 9007199254740993
 
 
+def test_exact_cjt_default_and_alias_literals():
+    result = parse_component("CJT< question | charter => answer > [β=1.0000000000000000001]")
+    assert result["parameters"]["beta"] == 1.0  # Display-only rounded value.
+    assert result["parameter_literals"] == {"beta": "1.0000000000000000001", "sat": "0.95", "cutoff": "0.1", "region": "active"}
+
+
+def test_underflow_gain_literal_is_preserved_exactly():
+    raw = "." + "0" * 400 + "1"
+    result = parse_component(f"CJT< question | charter => answer > [beta={raw}]")
+    assert result["parameters"]["beta"] == 0.0
+    assert result["parameter_literals"]["beta"] == raw
+
+
+def test_distinct_exact_cutoff_and_saturation_do_not_collapse_at_float_precision():
+    lower = ".90000000000000000001"
+    upper = ".90000000000000000002"
+    result = parse_component(f"CJT< question | charter => answer > [cutoff={lower},sat={upper}]")
+    assert result["parameters"]["cutoff"] == result["parameters"]["sat"]
+    assert result["parameter_literals"]["cutoff"] == lower
+    assert result["parameter_literals"]["sat"] == upper
+    with pytest.raises(ComponentError, match="cutoff"):
+        parse_component(f"CJT< question | charter => answer > [cutoff={upper},sat={lower}]")
+
+
+@pytest.mark.parametrize("key", ["beta", "gm", "rπ"])
+def test_tiny_negative_cjt_parameters_cannot_round_to_allowed_zero(key):
+    raw = "-." + "0" * 400 + "1"
+    with pytest.raises(ComponentError, match="nonnegative"):
+        parse_component(f"CJT< question | charter => answer > [{key}={raw}]")
+
+
+def test_exact_passive_range_rejects_value_rounded_into_bounds():
+    with pytest.raises(ComponentError, match="leakage"):
+        parse_component("Capacitor< memory, C=1, leakage=1.00000000000000000001 >")
+
+
+def test_exact_positive_transformer_ratio_does_not_become_illegal_zero():
+    raw = "." + "0" * 400 + "1"
+    result = parse_component(f"Transformer< ^P -> ^C, ratio={raw} >")
+    assert result["parameters"]["ratio"] == 0.0
+    assert result["parameter_literals"]["ratio"] == raw
+    assert result["complete"]
+
+
 @pytest.mark.parametrize("expression", [
     "CJT< a | b => c > [beta=" + "9" * 1025 + "]",
     "Resistor< signal, R=" + "9" * 400 + " >",
@@ -111,7 +155,14 @@ def test_exact_large_integer_preserved_despite_old_frontend_float_rounding():
 def test_oversized_and_nonfinite_numbers_fail_cleanly(expression):
     with pytest.raises(ComponentError) as caught:
         parse_component(expression)
-    assert caught.value.code == "E-COMP-PARAM"
+    assert caught.value.code == ("E-COMP-LIMIT" if len(expression) > 1024 else "E-COMP-PARAM")
+
+
+def test_exact_decimal_limit_precedes_fraction_conversion():
+    raw = "." + "0" * 511 + "1"
+    with pytest.raises(ComponentError) as caught:
+        parse_component(f"CJT< a | b => c > [beta={raw}]")
+    assert caught.value.code == "E-COMP-LIMIT"
 
 
 @pytest.mark.parametrize("expression", [
@@ -145,6 +196,9 @@ def test_source_receipts_match_exact_bytes():
     assert len(receipts) == 4
     for receipt in receipts:
         assert Path(receipt["path"]).is_absolute()
+        assert Path(receipt["path"]).is_relative_to(Path(adapter.__file__).resolve().parent / "pinned_sources")
+        assert receipt["original_path"] != receipt["path"]
+        assert Path(receipt["original_path"]).is_relative_to(adapter.ORIGINAL_SOURCE_ROOT)
         assert hashlib.sha256(Path(receipt["path"]).read_bytes()).hexdigest() == receipt["sha256"]
     assert {r["use"] for r in receipts} == {"enum_class_only", "syntax_parser_with_isolated_enum_import"}
 

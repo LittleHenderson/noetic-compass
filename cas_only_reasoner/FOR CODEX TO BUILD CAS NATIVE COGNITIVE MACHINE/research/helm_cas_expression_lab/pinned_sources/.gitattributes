@@ -1,0 +1,2 @@
+# Preserve the exact raw bytes recorded in source dependency receipts.
+cas-forex/cas_forex/** -text whitespace=cr-at-eol

@@ -17,9 +17,11 @@ import sys
 import threading
 import types
 from enum import Enum
+from fractions import Fraction
 
 
-SOURCE_ROOT = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\cas-forex\cas_forex")
+SOURCE_ROOT = Path(__file__).resolve().parent / "pinned_sources" / "cas-forex" / "cas_forex"
+ORIGINAL_SOURCE_ROOT = Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\cas-forex\cas_forex")
 SOURCE_HASHES = {
     "pcba_syntax.py": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
     "cjt_syntax.py": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
@@ -27,7 +29,8 @@ SOURCE_HASHES = {
     "schemas/cjt.py": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
 }
 AUTHORITY_SOURCE = {
-    "path": r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\Appendix_C_CCDL_Language_Reference.md",
+    "path": str(Path(__file__).resolve().parent / "pinned_sources" / "pcba_book" / "Appendix_C_CCDL_Language_Reference.md"),
+    "original_path": r"C:\Users\wakil\OneDrive\Desktop\tksCAS\book\CAS_PCBA_Engineer\Appendix_C_CCDL_Language_Reference.md",
     "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
     "sections": ["Passive Components", "One-Way and Threshold Components", "CJT Parameter Block Grammar"],
 }
@@ -35,6 +38,7 @@ MAX_SOURCE_BYTES = 131072
 MAX_EXPRESSION_CHARS = 16384
 MAX_NESTING = 32
 MAX_ARGUMENTS = 64
+MAX_NUMBER_CHARS = 512
 _LOCK = threading.RLock()
 _FRONTENDS = None
 _IDENT = r"[A-Za-z][A-Za-z0-9_]*"
@@ -76,7 +80,7 @@ def source_files() -> list[dict]:
     """Return verified read-only dependencies; no discovery or environment fallback."""
     sources = _verified_sources()
     return [
-        {"path": str((SOURCE_ROOT / name).resolve()), "sha256": SOURCE_HASHES[name],
+        {"path": str((SOURCE_ROOT / name).resolve()), "original_path": str(ORIGINAL_SOURCE_ROOT / name), "sha256": SOURCE_HASHES[name],
          "bytes": len(data), "use": "enum_class_only" if name.startswith("schemas/") else "syntax_parser_with_isolated_enum_import"}
         for name, data in sources.items()
     ]
@@ -221,7 +225,9 @@ def _unique(items: list[tuple[str, str]]) -> dict[str, str]:
 
 
 def _number(key: str, raw: str):
-    if len(raw) > 1024 or not _NUMBER.fullmatch(raw):
+    if len(raw) > MAX_NUMBER_CHARS:
+        raise ComponentError("E-COMP-LIMIT", f"Parameter {key} exceeds the 512-character decimal limit")
+    if not _NUMBER.fullmatch(raw):
         raise ComponentError("E-COMP-PARAM", f"Parameter {key} requires a finite decimal number")
     number = float(raw)
     if not math.isfinite(number):
@@ -243,13 +249,15 @@ def _cjt(frontend, prefix: str, body: str, suffix: str) -> dict:
     allowed = {"beta", "sat", "cutoff", "region", "gm", "rπ"}
     if set(raw) - allowed:
         raise ComponentError("E-COMP-PARAM", f"Unknown CJT parameter: {sorted(set(raw) - allowed)[0]}")
+    literals = {"beta": "1.0", "sat": "0.95", "cutoff": "0.1", "region": "active", **raw}
     parameters = {"beta": 1.0, "sat": 0.95, "cutoff": 0.1, "region": "active"}
     parameters.update({key: value if key == "region" else _number(key, value) for key, value in raw.items()})
     if parameters["region"] not in {"active", "cutoff", "saturation", "breakdown"}:
         raise ComponentError("E-COMP-PARAM", "Invalid intended CJT region")
-    if any(parameters[key] < 0 for key in ("beta", "gm", "rπ") if key in parameters):
+    exact = {key: Fraction(value) for key, value in literals.items() if key != "region"}
+    if any(exact[key] < 0 for key in ("beta", "gm", "rπ") if key in exact):
         raise ComponentError("E-COMP-PARAM", "beta, gm and rπ must be nonnegative")
-    if not 0 < parameters["sat"] <= 1 or not 0 <= parameters["cutoff"] < 1 or parameters["cutoff"] >= parameters["sat"]:
+    if not 0 <= exact["cutoff"] < exact["sat"] <= 1:
         raise ComponentError("E-COMP-PARAM", "CJT requires 0 <= cutoff < sat <= 1")
     # gm/rπ are checked and preserved here; the older frontend has no fields
     # for them. Use original decimal strings, never its lossy :g serializer.
@@ -259,7 +267,8 @@ def _cjt(frontend, prefix: str, body: str, suffix: str) -> dict:
     except ValueError as exc:
         raise ComponentError("E-COMP-SYNTAX", str(exc)) from exc
     terminals = {role: _reference(getattr(node, role)) for role in ("cause", "bias", "effect")}
-    return {"type": "CJT", "kind": "cjt", "parameters": parameters, "terminals": terminals, "complete": True, "diagnostics": []}
+    return {"type": "CJT", "kind": "cjt", "parameters": parameters, "parameter_literals": literals,
+            "terminals": terminals, "complete": True, "diagnostics": []}
 
 
 def parse_component(expression: str) -> dict:
@@ -287,7 +296,7 @@ def parse_component(expression: str) -> dict:
     if kind not in _SUPPORTED:
         # Preserve syntax we cannot check. Do not manufacture terminal roles or
         # claim the permissive older component parser validated a whole board.
-        return {"type": type_name, "kind": kind, "parameters": raw, "terminals": {}, "raw_arguments": args,
+        return {"type": type_name, "kind": kind, "parameters": raw, "parameter_literals": dict(raw), "terminals": {}, "raw_arguments": args,
                 "complete": False, "diagnostics": [{"code": "UNSUPPORTED_COMPONENT", "severity": "warning", "message": f"{type_name} is preserved; component semantics are not checked."}]}
     if len(args) != 1:
         raise ComponentError("E-COMP-TERMINAL", f"{type_name} requires exactly one state or directed pair")
@@ -300,9 +309,10 @@ def parse_component(expression: str) -> dict:
     if required and required not in raw:
         raise ComponentError("E-COMP-PARAM", f"Missing {type_name} parameter: {required}")
     parameters = {key: _number(key, value) for key, value in raw.items()}
-    if any(value < 0 for value in parameters.values()) or (kind == "transformer" and parameters["ratio"] <= 0):
+    exact = {key: Fraction(value) for key, value in raw.items()}
+    if any(value < 0 for value in exact.values()) or (kind == "transformer" and exact["ratio"] <= 0):
         raise ComponentError("E-COMP-PARAM", f"Invalid {type_name} parameter range")
-    if "leakage" in parameters and parameters["leakage"] > 1:
+    if "leakage" in exact and exact["leakage"] > 1:
         raise ComponentError("E-COMP-PARAM", "Capacitor leakage must be in [0,1]")
     if kind in {"diode", "transformer"}:
         pair = args[0].split("->")
@@ -315,10 +325,17 @@ def parse_component(expression: str) -> dict:
     # Unicode brackets for that parser only; preserve the actual terminal text
     # above. Ignore its float-mediated numeric values (large integers lose bits).
     old_terminal = args[0].replace("⟨", "<").replace("⟩", ">")
-    old_args = [old_terminal] + [f"{key}={value}" for key, value in raw.items()]
+    legacy_raw = dict(raw)
+    if kind == "transformer" and parameters["ratio"] == 0:
+        # The exact positive ratio already passed above. The old frontend only
+        # checks float>0 and cannot represent a subnormal-underflow decimal;
+        # supply a positive representative solely for its redundant range guard.
+        # All public values and downstream checks retain the original literal.
+        legacy_raw["ratio"] = "1"
+    old_args = [old_terminal] + [f"{key}={value}" for key, value in legacy_raw.items()]
     try:
         node = pcba.parse_pcba_component_expression(f"{type_name}< {', '.join(old_args)} >")
     except ValueError as exc:
         raise ComponentError("E-COMP-SYNTAX", str(exc)) from exc
-    return {"type": type_name, "kind": node.kind.value, "parameters": parameters,
+    return {"type": type_name, "kind": node.kind.value, "parameters": parameters, "parameter_literals": dict(raw),
             "terminals": terminals, "complete": True, "diagnostics": []}
