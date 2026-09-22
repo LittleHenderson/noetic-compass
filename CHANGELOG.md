@@ -1,5 +1,29 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - RESTORED THE FOUR MORE TESTS MY MERGE DELETED. 639 -> 643. Found by the
+peer audit, not by me. Then checked, this time, that nothing else was lost.
+
+The peer audit (`codex/helm-peer-audit-20260922` @ `0922f339`, `records/peer_audit_20260922/merge/REPORT.md`)
+found that merge `078d00ed` deleted **seven** passing tests, not three. I had restored three on 2026-09-22
+(`626cc84b`) and told the auditor to "check whether anything else went the same way" - a check I should have
+run myself before handing the package over. The four still missing were all in
+`tests/test_notation_compiler_nesting_and_defects.py`: the 1,000-term flat-chain serialisation guard; `fn
+Noetics` allowed while reserved let/parameter names are refused (plus the exact numeric-binding error); no
+false cross-Domain warning through a same-Domain function call; no alias warning when `Worlds` is an
+emergent-result label.
+
+**Receipts** (`records/audit_package_20260922/receipts_restore_four_tests_20260922/`): before `639 passed` at
+`65ad3008`; the four ORIGINAL bodies, unmodified from `d50abbbc`, against today's compiler: `4 passed`; after
+`643 passed`. Case-ID comparison: 0 lost, 0 non-passing, exactly the four added. The behaviours were never
+broken; the protection was. The restore is a byte-for-byte copy, verified function by function.
+
+**Completeness, checked not assumed.** Every function, method and class defined at `d50abbbc` in the 12 `.py`
+files my side of the merge changed still exists: **0 missing**. 93 my-side test bodies compared: 0 missing,
+four differ, each explained - one is the other line's newer Q3 data version (`/0.5` -> `/0.7`); the other
+three are the help-text guards I restored on 2026-09-22, which differ **only by docstrings I added**. Their
+assertions and all ten module-level constants are identical to the originals. "Restored" should have said
+"restored, with added docstrings".
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - AUDIT OF THE SECOND AGENT'S RPA / CAS-OHM WORK: 119 REPRODUCES,
 26 OVERSTATED, 11 UNVERIFIABLE, 0 FALSE. Read-only; nothing of theirs was modified or pushed.
 

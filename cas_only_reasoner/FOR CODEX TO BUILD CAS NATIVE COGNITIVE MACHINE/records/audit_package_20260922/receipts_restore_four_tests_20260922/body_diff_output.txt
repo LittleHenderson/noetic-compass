@@ -1,0 +1,31 @@
+==================== test_no_bare_nickname_word_stands_in_for_a_noetic
+  7f32129d == d50abbbc
+  d50abbbc != WT
+    --- d50abbbc
+    +++ WT
+    @@ -1,0 +2,2 @@
+    +    """A retired Scheme-A/B/C name must not appear even WITHOUT a slash. `test_a_noetic_keeps_its_one_canonical_name`
+    +    only catches the `Female/Differentiation` shape; this catches a bare `Boundary` standing in for ^3."""
+==================== test_every_noetic_named_in_the_sentence_is_in_the_expression
+  7f32129d == d50abbbc
+  d50abbbc != WT
+    --- d50abbbc
+    +++ WT
+    @@ -1,0 +2 @@
+    +    """A sentence may not name a Noetic its own expression does not contain."""
+==================== test_dictionary_entries_carry_the_canonical_notation
+  7f32129d == d50abbbc
+  d50abbbc != WT
+    --- d50abbbc
+    +++ WT
+    @@ -1,0 +2,2 @@
+    +    """The glossary tables, not just the example sentences: every Noetic on its own number, every Drive on its own
+    +    number, no nickname word in a definition, and no '4 Domains = 28' for a set of Drive|Register positions."""
+==================== test_the_manifest_cites_exactly_the_current_contract
+  d50abbbc != 04547c55
+    --- d50abbbc
+    +++ 04547c55
+    @@ -4 +4 @@
+    -    assert MANIFEST["schema"].endswith("/0.5")
+    +    assert MANIFEST["schema"].endswith("/0.7")
+  04547c55 == WT

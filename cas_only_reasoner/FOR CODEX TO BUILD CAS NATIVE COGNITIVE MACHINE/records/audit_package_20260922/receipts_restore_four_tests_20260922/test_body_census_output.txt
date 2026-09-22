@@ -1,0 +1,6 @@
+test_compiler_nesting_facts.py | my-side test fns: 16 | missing: [] | body differs: []
+test_q3_behaviour_records.py | my-side test fns: 19 | missing: [] | body differs: ['test_the_manifest_cites_exactly_the_current_contract']
+test_q3_load_and_export.py | my-side test fns: 17 | missing: [] | body differs: []
+test_notation_compiler_nesting_and_defects.py | my-side test fns: 32 | missing: [] | body differs: []
+test_offline_help_text_canon.py | my-side test fns: 9 | missing: [] | body differs: ['test_dictionary_entries_carry_the_canonical_notation', 'test_every_noetic_named_in_the_sentence_is_in_the_expression', 'test_no_bare_nickname_word_stands_in_for_a_noetic']
+total my-side test functions compared: 93
