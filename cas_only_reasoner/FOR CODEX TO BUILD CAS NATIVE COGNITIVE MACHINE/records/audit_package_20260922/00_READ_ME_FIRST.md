@@ -66,7 +66,7 @@ built — including their disagreements with me).
 
 I am the author. These are the places where an author's account is least reliable, so start here.
 
-1. **Test counts.** I quote 458, 348, 48/48, 99. Counts are easy to state and easy to get wrong. Re-run them.
+1. **Test counts.** I quote 639 (was 458 before three deleted guards were restored), 348, 51/51, 99. Counts are easy to state and easy to get wrong. Re-run them.
    Note that two of the suites need `TEMP` and `TMP` pointed **outside** the repository or they refuse to run.
 2. **"Nothing else changed."** I claim my CAS-Ohm fix changed only the non-finite cases. That is a claim about
    everything I did *not* test. Try to find a behaviour I altered without noticing.

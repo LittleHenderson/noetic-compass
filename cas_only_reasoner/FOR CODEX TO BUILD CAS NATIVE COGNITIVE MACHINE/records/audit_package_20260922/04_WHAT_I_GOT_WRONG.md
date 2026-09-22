@@ -196,6 +196,79 @@ The book now contradicts its own headings. I did **not** fix it: the owner appro
 are two more of the same class found afterwards, in their book. Judge whether reporting rather than editing was right.
 
 ---
+## 12. The worst one: my merge deleted three of my own canon guard tests, while they were passing
+
+**What I did:** resolving the merge, I took *theirs* wholesale for every conflicted test file. I never checked whether
+my version had coverage theirs lacked.
+
+**What it cost:** `tests/test_offline_help_text_canon.py` went from **9 test functions and 454 collected cases to 6 and
+273**. Three guards were dropped:
+
+- `test_no_bare_nickname_word_stands_in_for_a_noetic`
+- `test_every_noetic_named_in_the_sentence_is_in_the_expression`
+- `test_dictionary_entries_carry_the_canonical_notation`
+
+**They were not dropped because they failed.** The checker ran my 9-function version against the *merged* help text and
+got `454 passed`. **181 checks were lost while green.**
+
+The first one is the serious loss. It blocks the retired Scheme-A/B/C nickname words the project instructions name as
+load-bearing — `Boundary`, `Differentiation`, `Concretization`, `Abstraction`, `Reflection`, `Unification`,
+`Transformation`, `Expansion`, `Contraction`, `Integration`, `Attraction`, `Aversion` — in the **bare** form, without a
+slash. The surviving test only catches the `Female/Differentiation` shape. The help text is clean today; the protection
+against tomorrow's drift was gone.
+
+**This is what the rule *never delete a negative result* exists to prevent, and I did it to myself while claiming the
+merge "kept every unique file from both lines".** It did keep every *file*. It did not keep every *test*.
+
+**Restored 2026-09-22.** Nine functions, 454 cases; the five-file suite is 639, up from 458.
+
+**For you as auditor:** I took "theirs" wholesale for **every** conflicted test file. Check whether anything else went
+the same way.
+
+---
+
+## 13. Two of the five points that decided the merge were FALSE
+
+**(d) "Both shipped demo files compile under theirs and not mine."** The compiler was never the variable. The other
+agent **edited the `.cas` files** — `circ` became the ring character, and a binding named `difference` (a reserved word)
+became `contrast_state`. All four combinations, measured:
+
+| demo files from | my compiler | their compiler |
+|---|---|---|
+| the old files | both FAIL | both FAIL |
+| their fixed files | both compile | both compile |
+
+**I credited a win to a mechanism that did not cause it.** Their own demo test passes against my compiler.
+
+**(c) "A regression I introduced, which the other agent caught."** False — and wrong in the *self-critical* direction,
+which is its own kind of inaccuracy. Measured against the tree before my commit:
+
+| `let <name> = ^2^C` | before me | mine | theirs |
+|---|---|---|---|
+| `P1_count`, `F2_total` | REFUSED | REFUSED | ok |
+| `A`, `T`, `Noetics`, `Worlds` | ok | REFUSED | REFUSED |
+| `Charlie` | REFUSED | ok | ok |
+
+`P1_count` was already refused before I touched it. I changed the error *message*, not the answer. Their fix is new work,
+not a repair of my damage. What my commit actually did was refuse `A`/`T`/`Noetics`/`Worlds` (the intended fix — theirs
+kept them refused) and *accept* `Charlie`. **I claimed a fault I did not commit, which made their work look more like a
+rescue than it was.** Being wrong in the humble direction is still being wrong.
+
+Three of the five points stand and reproduce exactly. The merge decision is unaffected. Two fifths of my stated reasoning
+for it was not true.
+
+---
+
+## 14. "I verified their work before merging" — UNVERIFIABLE, and I accept it
+
+The test numbers reproduce, so the work was done. But **the only record of the pre-merge verification is text written
+inside the merge commit itself.** Nothing in the repository, timestamped before the merge, separates *checked, then
+merged* from *merged, then wrote that I checked*.
+
+A verification claim needs an artifact dated before the action it licenses. Mine did not have one. The lesson is
+structural, not about honesty: **write the evidence down before you act on it, not in the commit that acts.**
+
+---
 ## What I believe is still uncertain, as of handover
 
 Stated so you can test these rather than discover them:

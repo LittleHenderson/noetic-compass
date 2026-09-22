@@ -1,5 +1,60 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - The fourth checker found the worst one: MY MERGE DELETED THREE OF MY OWN CANON
+GUARD TESTS WHILE THEY WERE PASSING. Restored. Two of my five merge-comparison points were FALSE. 458 -> 639.
+
+**The deletion.** My merge resolution took "theirs" wholesale for every test file without checking whether my version
+had coverage theirs lacked. `tests/test_offline_help_text_canon.py` went from **9 test functions and 454 collected
+cases to 6 and 273**. The three dropped guards were `test_no_bare_nickname_word_stands_in_for_a_noetic`,
+`test_every_noetic_named_in_the_sentence_is_in_the_expression` and `test_dictionary_entries_carry_the_canonical_notation`.
+
+**They were not dropped because they failed.** The checker ran my 9-function version against the MERGED help text and
+got `454 passed`. **181 checks were lost while green.** The first of the three blocks exactly the retired
+Scheme-A/B/C nickname words the project instructions name as load-bearing anti-drift terms - `Boundary`,
+`Differentiation`, `Concretization`, `Abstraction`, `Reflection`, `Unification`, `Transformation`, `Expansion`,
+`Contraction`, `Integration`, `Attraction`, `Aversion` - in the bare form, without a slash, which the surviving test
+does not catch. The help text is clean today; the protection against tomorrow's drift had been removed. This is what
+the rule *never delete a negative result* exists to prevent, and I did it to myself. **Restored: 9 functions, 454
+cases; the five-file compiler suite is now 639 passed, up from 458.**
+
+**Two of my five merge-comparison points were FALSE.**
+
+**(d) "Both shipped demo files compile under theirs and not mine."** The compiler was never the variable. The second
+agent EDITED the two `.cas` files (`circ` became the ring character; the binding name `difference` became
+`contrast_state`). Measured, all four combinations:
+
+| demo files from | my compiler | their compiler |
+|---|---|---|
+| `7f32129d` (old files) | both FAIL | both FAIL |
+| `04547c55` (their fixed files) | both compile | both compile |
+
+**I credited a win to a mechanism that did not cause it.** Their own `test_full_demo_program.py` passes against my
+compiler.
+
+**(c) "A regression I introduced, which the other agent caught."** Also false, and wrong in the self-critical
+direction. Measured against the tree BEFORE my compiler commit:
+
+| `let <name> = ^2^C` | before me | mine | theirs |
+|---|---|---|---|
+| `P1_count`, `F2_total` | REFUSED | REFUSED | ok |
+| `A`, `T`, `Noetics`, `Worlds` | ok | REFUSED | REFUSED |
+| `Charlie` | REFUSED | ok | ok |
+
+`P1_count` was **already refused before I touched it** - by lexer patterns that predate my commit. I changed the error
+message, not the answer. Their change is a NEW lexer fix, not a repair of my damage. What my commit actually did was
+newly refuse `A`, `T`, `Noetics`, `Worlds` (the intended fix - those are genuinely reserved, and theirs kept them
+refused) and newly ACCEPT `Charlie`. **I claimed a regression I did not cause**, which made the other agent's work
+look more like a rescue than it was.
+
+**One claim is UNVERIFIABLE and I accept the verdict.** I said I verified the second agent's work *before* merging.
+The test numbers reproduce, so the work was done - but the only record of it is text written inside the merge commit
+itself. Nothing in the repository, dated before the merge, distinguishes "checked, then merged" from "merged, then
+wrote that I checked". A verification claim needs an artifact with a timestamp that precedes the action it licenses.
+
+Three of the five comparison points stand and reproduce exactly: the Drive Register kept in a set element, the
+cross-Domain warning firing through a function and through `fractal(...)`, and the stricter N9. The merge decision
+itself is unaffected. The reasoning I gave for it was 40 percent wrong.
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - PRE-HANDOVER RE-CHECK: four agents re-ran my claims. One was FALSE, three were
 OVERSTATED, and a defect of the same class was still live. All corrected here. 48/48 -> 51/51.
 
