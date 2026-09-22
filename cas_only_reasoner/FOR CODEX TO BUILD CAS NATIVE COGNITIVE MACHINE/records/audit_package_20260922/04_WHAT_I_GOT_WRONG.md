@@ -351,6 +351,49 @@ remote. Today `git ls-remote` shows it there. This cannot prove when it was publ
 could not have seen it either way. Further corrections to that audit are in `06_AUDIT_OF_THE_CODEX_AGENT.md`.
 
 ---
+## 21. My OD-A book edit created a contradiction in the canon, and I pinned it
+
+Found by the independent book verifier, confirmed by me with `git diff dbb388ee d50abbbc`. My commit `0fc6bb30`
+changed `Appendix_B_Component_Datasheets.md` line 59 from *"effect flips to its involution pair (`^2`→`^3`) — the
+controlled state inverts"* to *"engineered failure behavior; an involution flip occurs only when that explicit rule
+is declared"*, and line 79 to match. **Twenty-six other passages still say the flip is automatic** (Appendix A:40,
+A:121, Appendix C:549, Chapter 3:101, Chapter 9:203, Chapter 4:176 and more), and **CCDL has no syntax for declaring
+such a rule**. Before my edit the book agreed with itself. After it, Chapter 4's own first circuit reads two
+different ways in breakdown (`^8^C_{F6}|A` or `^9^C_{F6}|A`). I then made `d50abbbc` the canon pin.
+
+The owner approved the OD-A *direction* — separate Boolean logic from Noetic involution. The unreconciled wording is
+mine. **Not fixed here: which rule the book means is the owner's decision.** The options, with every passage listed,
+are in `verification_of_ohm_repair_20260922/book/OWNER_DECISION_BOOK_ISSUES.md`.
+
+---
+
+## 22. My CAS-Ohm hardening skipped the master-record update the project rules require
+
+The project rules say `docs/CAS_HARNESS_SPEC_SHEET.md` must be updated **in the same commit as the result**. My
+commits `86ba3d75` and `a4b2e0d7` changed the module's tests from 39 to 48 to 51 and never touched entry [22], which
+still said `PASSED 39/39`. It also still said exact decimal arithmetic means "a display rounding can never move a
+value across a band edge" — false for the saved value. Found by the verification's critic. Caught up now: entry [22]
+carries a dated update and the sentence is annotated, not deleted; a Change Log row records the lapse.
+
+---
+
+## 23. My audit of the other agent contained two FALSE statements and three overstatements
+
+Codex answered my audit; an independent agent checked the answer; I re-checked the central facts myself. Details in
+`06_AUDIT_OF_THE_CODEX_AGENT.md`, section "Corrections after Codex's amendment". In short:
+
+- **FALSE:** I told the owner the attachment digest `76d7821a…` "matches no file anywhere". Two copies were in
+  `Downloads`, created eight hours before my audit. I had searched only the branches.
+- **FALSE as a mismatch:** "'354' omits a fifth XML" — the record discloses that run openly.
+- **Misidentification:** I compared the attachment with Codex's running log (`cd86eaf8…`), an unrelated document.
+- **OVERSTATED:** the 637 (derived on the same record's line 24) and the 289 (all 289 cases sit in `lab312_tests.xml`).
+- **Wrong in method:** "`5b3d713c` is on no remote" — item 20.
+
+I closed that audit by saying the other agent's faults "are all of one kind — numbers stated in a way that invites
+over-reading". Some of the over-reading was mine. An absence claim ("no file anywhere", "no remote", "no receipt")
+is only as wide as the search behind it, and I stated all three wider than I had searched.
+
+---
 ## What I believe is still uncertain, as of handover
 
 Stated so you can test these rather than discover them:

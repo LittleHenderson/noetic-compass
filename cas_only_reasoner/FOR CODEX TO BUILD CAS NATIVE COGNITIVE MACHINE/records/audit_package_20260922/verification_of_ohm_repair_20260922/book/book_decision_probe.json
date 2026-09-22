@@ -1,0 +1,1364 @@
+{
+  "repo": "C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/helm3-lab",
+  "commit": "65ad3008",
+  "commit_full": "65ad300835c06f9feff154170cb8b103d5d13ffa",
+  "issue1": {
+    "conditional": [
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 59,
+        "commit": "65ad3008",
+        "text": "| **Breakdown** | overload past safe limits | engineered failure behavior; an involution flip occurs only when that explicit rule is declared |",
+        "sha256": "6595a433839ae06bf4f33ec88269aa7d30cb4df603d8d24bda87c6d72494cb1b"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 79,
+        "commit": "65ad3008",
+        "text": "| Breakdown rule invoked | declared overload rule changes the output, possibly by a licensed involution | (design: clamp before breakdown) |",
+        "sha256": "09e1dd4a6e4ca8439b9409c7cd473b87c732b616cbdaa92930740f00132614d3"
+      }
+    ],
+    "automatic": [
+      {
+        "file": "Appendix_A_Notation_Quick_Reference.md",
+        "line": 40,
+        "commit": "65ad3008",
+        "text": "Under CJT **breakdown**, output flips to its involution pair; self-duals have nowhere to flip (stable anchors).",
+        "sha256": "95e23649b9185bfd141cb1fb92d1307cdb102acf72ee708716bd2e020feaff5a"
+      },
+      {
+        "file": "Appendix_A_Notation_Quick_Reference.md",
+        "line": 121,
+        "commit": "65ad3008",
+        "text": "Regions: **Cutoff** (no effect) · **Active** (Δeffect ≈ β·Δcause) · **Saturation** (maxed) · **Breakdown** (flips to involution pair). Named form: `let cjt_x = CJT< … => … > [β=…];`",
+        "sha256": "c2094a7fed093c8dd776c030663107bc004c8725adc474c6f57fa6ae4baec3c9"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 549,
+        "commit": "65ad3008",
+        "text": "- **Breakdown** — gross overload; the effect flips to the involution pair (`^2`→`^3`, `^8`→`^9`), a bug unless deliberately designed with protection.",
+        "sha256": "267eb744d5506e66170b0c5b4b92bc6768919d2c46a5eec1df2fb55fb1f10c84"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 765,
+        "commit": "65ad3008",
+        "text": "For complementary / differential structures (an OpAmp, a push-pull pair, involution-paired stages), the compiler checks that the two halves are balanced — that an involution pair is not driven so far apart that the stage tips into breakdown, and that a differential amplifier's two inputs are compatible. This is the structural form of the project-wide constraint that involution pairs cannot diverge by more than the safe margin. An imbalance severe enough to invert a state is a breakdown condition; a `^2`→`^3` flip under overload is the signature.",
+        "sha256": "a23419bba4798b0517d5057f261ced7ee3de50f6498d2ca6438ab86205976c14"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 1041,
+        "commit": "65ad3008",
+        "text": "5. **Push-pull balance** — no involution pair is driven apart far enough to flip; no breakdown.",
+        "sha256": "0e59c13bf31e248e0e9b37fd8aab7b0f82096937a2b96e83e3855a46f8276d52"
+      },
+      {
+        "file": "Appendix_D_CCB_Reference_Designs.md",
+        "line": 545,
+        "commit": "65ad3008",
+        "text": "| **Breakdown on write** | Stored state flips to its involution pair (impression voltage exceeds rating) | Probe reads the opposite Noetic: a stored `^2` reads back as `^3`. |",
+        "sha256": "091e8b662695ddb6eea84946a06d435d3904dedf9755583023b81b2b214511d3"
+      },
+      {
+        "file": "Appendix_D_CCB_Reference_Designs.md",
+        "line": 764,
+        "commit": "65ad3008",
+        "text": "| **Overtemperature** | One Drive pinned high too long | Temp climbs through Warning→Critical→Emergency; involution flips appear |",
+        "sha256": "32848a7d5fabd4c69b80e03162ccc0b58b6e3bc26053d18f838da6a050149f53"
+      },
+      {
+        "file": "Appendix_E_Exercise_Answers.md",
+        "line": 74,
+        "commit": "65ad3008",
+        "text": "**(a)** **Saturation** — the effect was already at its ceiling; more cause produces no further change. **(b)** **Cutoff** — bias (relevant experience) is essentially zero, so β ≈ 0 and the effect is near zero. **(c)** **Breakdown** — overload has flipped the output to the involution partner (`^2`→`^3`). **(d)** **Active** — proportional response, Δeffect ≈ β·Δcause.",
+        "sha256": "6c0cd0029c0aac5db840670a565ab10f53356aefa00c05859e867b45b4e6f318"
+      },
+      {
+        "file": "Appendix_F_Lab_Setup_Guide.md",
+        "line": 172,
+        "commit": "65ad3008",
+        "text": "- **Is the effect the right type?** You should read a `^9^C_{F6}|A` state. If you instead read an involution flip (a `^9`→`^8`, or a `^2`→`^3`), the transistor has gone into breakdown and you have found a bug.",
+        "sha256": "6aebb79223d2275b724bc251994a0cab87e0806b6730ebdfd68469b68fb0604e"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 47,
+        "commit": "65ad3008",
+        "text": "**Breakdown** — The overload region of a transistor or *CJT*. In a CJT, breakdown is",
+        "sha256": "9f7640309509d4d82668ed641dfb64aa4435a4e3e67596b2a54712b0d3f2ed77"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 48,
+        "commit": "65ad3008",
+        "text": "when the output **flips to its involution pair** — a *Positive* (`^2`) state inverts",
+        "sha256": "ac52b126f65aaf54f7199ff0ccca87f6faab0f29bc99e78c21ba21b29b8f8507"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 49,
+        "commit": "65ad3008",
+        "text": "to *Negative* (`^3`) under stress. *Self-dual* Noetics have nowhere to flip, which",
+        "sha256": "2fed383de3c0409899c3dcd40cc5355b46d47ad7c2565f5d0ab4046801ebfd4c"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 50,
+        "commit": "65ad3008",
+        "text": "makes them structurally stable anchors.",
+        "sha256": "2eb992b0e278f928649da5d4965e7f91933a886fd7e30187342742a5f77571b3"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 238,
+        "commit": "65ad3008",
+        "text": "Under *breakdown*, a CJT's output flips to its involution partner. *Dial* settings of an",
+        "sha256": "e243cd99a566850ad7c4bfd5f141f3b0fba5a93ed65d51e808835007ac5ede7a"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 324,
+        "commit": "65ad3008",
+        "text": "attracted toward. Involution partner of *Negative* (`^3`); under *breakdown* a Positive",
+        "sha256": "f11cf89662dda2ee0da9795c79f958d6ae20d98d3881731f934b0fa75f55c524"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 325,
+        "commit": "65ad3008",
+        "text": "state can invert to Negative.",
+        "sha256": "6eca9709b94b40bbe5fd57dc534665f7c0f022d0c52898e6d7ce21911abe5155"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 397,
+        "commit": "65ad3008",
+        "text": "*Rhythm* (`^7`); the Drive *F4 Connection*. Self-duals have nowhere to flip under",
+        "sha256": "bcf782ce5a5cd42f3f33567ec842b6cef0b27757e4944e081163c47de69060f8"
+      },
+      {
+        "file": "Appendix_G_Glossary.md",
+        "line": 398,
+        "commit": "65ad3008",
+        "text": "*breakdown*, which makes them stable anchors.",
+        "sha256": "f328809a366950e9dd6c254cabb5b9ae7c9d97dc2c32619983c326969968d977"
+      },
+      {
+        "file": "Chapter_02_CAS_Notation_in_One_Chapter.md",
+        "line": 56,
+        "commit": "65ad3008",
+        "text": "The remaining four are **self-duals** — their own inverse, with no opposite partner: `^0` Idea, `^1` Mind, `^4` Vibration, and `^7` Rhythm. This matters later: when a CJT goes into *breakdown* (overload), its output flips to its involution pair — a `^2` Positive state can invert to `^3` Negative under stress. Self-duals have nowhere to flip, which makes them structurally stable anchors. Hold onto the pairs; they reappear in Chapter 4 when we wire the first transistor.",
+        "sha256": "08cbe30cd3e88919c2a5d0d3f6f058743786812c7bc88ef54a51c2ea8c5be872"
+      },
+      {
+        "file": "Chapter_02_CAS_Notation_in_One_Chapter.md",
+        "line": 220,
+        "commit": "65ad3008",
+        "text": "- **Involution pairs** (`^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`) and **self-duals** (`^0`,`^1`,`^4`,`^7`) determine what a component flips to under breakdown.",
+        "sha256": "d46bae471ba49bb756bd78ef2f97ea94fd83daadb357927410c8c155257606b8"
+      },
+      {
+        "file": "Chapter_03_The_Transistor_That_Changed_Everything.md",
+        "line": 101,
+        "commit": "65ad3008",
+        "text": "- **Breakdown.** This is the dangerous one, and the cognitive version is the most important idea in the chapter. Electronically: overload forces the junction to conduct destructively. Cognitively: under overload the effect **flips to the involution Noetic pair.** Recall the involution pairs from Chapter 1: `^2`↔`^3`, `^5`↔`^6`, `^8`↔`^9`. A transition that was producing **`^2` Positive** — attraction, affinity — is driven so hard that it inverts into **`^3` Negative** — visceral aversion, repulsion. The classic human case: pushed past the limit, fascination flips to disgust, enthusiasm flips to revulsion. The circuit did not gracefully max out. It snapped into its opposite. A cognitive circuit in breakdown is not producing too much of the right thing; it is producing the *wrong thing.*",
+        "sha256": "6b64456594816cfe7aac2033d0d8171f364d6ec61fe5a1a334a0d9c6854d9ee3"
+      },
+      {
+        "file": "Chapter_03_The_Transistor_That_Changed_Everything.md",
+        "line": 103,
+        "commit": "65ad3008",
+        "text": "> **Bench Notes:** Cutoff and saturation are *boundaries* of the active region — the effect goes to zero or to its ceiling, but it stays the *right kind* of effect. Breakdown is categorically different: the effect changes *Noetic.* `^2` Positive becomes `^3` Negative. When you debug a misbehaving cognitive circuit, your first question is \"which region?\" — and if the answer is breakdown, you are not looking at a tuning problem, you are looking at an inversion, and the fix is structural, not a nudge to a Dial.",
+        "sha256": "c9fc8db9fe7197a3510337bea67432482439137b8e8ff00a6035289cd9d6787b"
+      },
+      {
+        "file": "Chapter_03_The_Transistor_That_Changed_Everything.md",
+        "line": 188,
+        "commit": "65ad3008",
+        "text": "| **Breakdown** | over-voltage, destructive conduction | effect flips to involution pair under overload | output Noetic ≠ designed Noetic; `^2`→`^3` inversion at the emitter |",
+        "sha256": "fc98fda2a35f43095c15882509c3b8e8f7e41718abae5c19d83ff1aed15542f0"
+      },
+      {
+        "file": "Chapter_03_The_Transistor_That_Changed_Everything.md",
+        "line": 199,
+        "commit": "65ad3008",
+        "text": "- The four cognitive regions: **cutoff** (no engagement), **active** (proportional response), **saturation** (effect plateaued), and **breakdown** — where the effect **flips to its involution pair** (`^2`→`^3`).",
+        "sha256": "ec0c4acba1fa7d2a580a3cd52c43a9c4af6e0501fa6efdfd2fd64d7ea194874f"
+      },
+      {
+        "file": "Chapter_04_Your_First_Cognitive_Circuit.md",
+        "line": 161,
+        "commit": "65ad3008",
+        "text": "- **Is the effect the right type?** You should see a `^9^C_{F6}|A` state — a structured, analytical Below/Effect in the cognitive domain. If you instead see, say, an `^3` involution flip, the transistor has gone into breakdown and you've found a bug.",
+        "sha256": "32834a4dd555c76d27cf1b59e3a8256b711ebda29ed144439dfb281758b8a19c"
+      },
+      {
+        "file": "Chapter_04_Your_First_Cognitive_Circuit.md",
+        "line": 176,
+        "commit": "65ad3008",
+        "text": "| **Breakdown** | Effect flips to an involution pair (`^9`→`^8`, or worse) | Gross overload past breakdown threshold | Out of scope for this circuit; covered with protection diodes later. |",
+        "sha256": "4309542d7a9059523a9d9c136cb16bcbda6e78e01aeb586bead801eaa7ea79ee"
+      },
+      {
+        "file": "Chapter_05_Resistors.md",
+        "line": 171,
+        "commit": "65ad3008",
+        "text": "The cognitive analog protects a sensitive **Cognitive Junction Transistor (CJT)** — the central component of this book, introduced in Chapter 4, that models a cause→bias→effect transition. A CJT driven too hard goes into *breakdown*: its output flips to its involution pair, a `^2` Positive collapsing into `^3` Negative under overload. A current-limiting resistor placed before the CJT's Cause terminal caps how much Drive pressure can ever reach it, keeping it in its safe active region no matter how intense the input.",
+        "sha256": "e3997e5bf1492adaff10ef3fe5a6798b018680402e14ee17ebf0e84925060131"
+      },
+      {
+        "file": "Chapter_05_Resistors.md",
+        "line": 177,
+        "commit": "65ad3008",
+        "text": "This is the exact component you will build into the Cognitive Safety Board's **Agency rail** in Chapters 18 and 22. The CSB's most safety-critical transistors sit on the path where Agency Drive becomes action, and an unlimited Agency surge is precisely what drives those transistors into breakdown — the failure mode where a board built to refuse instead flips into eager compliance. The current-limiter is the small, cheap, dull component that prevents the catastrophic one. Foreshadowed here; built there.",
+        "sha256": "ad6aeecce75fe886a0e3d863127a2332496b5144664e582d1a2d7168445f61d6"
+      },
+      {
+        "file": "Chapter_06_Capacitors.md",
+        "line": 195,
+        "commit": "65ad3008",
+        "text": "| **Dielectric breakdown** | Stored state flips to its involution pair under overload | Voltage (impression) far exceeds the cell's rating — a traumatic over-charge | The probe reads the *opposite* Noetic: a stored `^2` reads back as `^3`. |",
+        "sha256": "aa8e09f419df5602af770c274076fe16eceb0e5e6b0dcaf236924060a73a4f8e"
+      },
+      {
+        "file": "Chapter_09_CJT_Deep_Dive.md",
+        "line": 5,
+        "commit": "65ad3008",
+        "text": "Chapter 3 introduced the Cognitive Junction Transistor as an idea: a thought has the same three-terminal structure as a transistor — a cause enters, is processed against a bias, and produces an amplified effect, with four operating regions including a breakdown that flips the output into its involution pair. Chapter 4 wired one into a working circuit. That was the romance. This chapter is the datasheet.",
+        "sha256": "f4c91c9da15136fdf9de2a08c8fccd94a429b37a56f135ac94fbe2d42e3daadf"
+      },
+      {
+        "file": "Chapter_09_CJT_Deep_Dive.md",
+        "line": 203,
+        "commit": "65ad3008",
+        "text": "| **Breakdown** | over-voltage, destructive conduction | output flips to involution pair under overload | output Noetic ≠ designed Noetic; `^2`→`^3` at the emitter |",
+        "sha256": "b804da3c8b295e0b84c8c6d688c2f7a6b70dd25d7f8e17e0457975b28ffbf7b3"
+      },
+      {
+        "file": "Chapter_09_CJT_Deep_Dive.md",
+        "line": 215,
+        "commit": "65ad3008",
+        "text": "- **Thermal runaway** is positive feedback through the early-effect path (`^6^E → ^8^C`): gain rises with activation until the CJT crosses into breakdown and the output flips to its involution pair. Tame it with negative feedback and current-limiting.",
+        "sha256": "ce60d6f7c1aefaf124e41e7529e70203d620d4eb27f1b26ed900f72e574c9e39"
+      },
+      {
+        "file": "Chapter_11_Amplifiers.md",
+        "line": 21,
+        "commit": "65ad3008",
+        "text": "A transistor is not an amplifier until you *bias* it. Recall the operating regions from Chapters 3 and 9: **cutoff** (no output at all), **active** (the linear region where output tracks input proportionally), **saturation** (output maxed out, more input does nothing), and **breakdown** (overload, where things flip and break). An amplifier only works in the **active** region. That is the only region where Δoutput ≈ β·Δinput — where the signal comes out the same shape it went in, just larger.",
+        "sha256": "683f814909a39e0a979c1baf37f8f0a371e5fa424940999853ef9c20e1c379e0"
+      },
+      {
+        "file": "Chapter_14_Power_Management.md",
+        "line": 216,
+        "commit": "65ad3008",
+        "text": "- **Inversion** — the ingredient is present and produces its **shadow form** (the involution pair, `^2`→`^3` under breakdown). A *corrupted* prerequisite.",
+        "sha256": "dd13f4003e906dbbeaaf85512b88d16ed489481b705f3ec82d80b91d5e9ca971"
+      },
+      {
+        "file": "Chapter_14_Power_Management.md",
+        "line": 285,
+        "commit": "65ad3008",
+        "text": "| **Overtemperature** | One Drive pinned high too long | CJTs trend toward saturation/breakdown; involution flips appear |",
+        "sha256": "7ea778ac184b61c79f1ec4b0e944a304cbd8d8d1f731381b2e27beb3290b002e"
+      },
+      {
+        "file": "Chapter_21_CMB_Cognitive_Memory_Board.md",
+        "line": 296,
+        "commit": "65ad3008",
+        "text": "| **Breakdown on write** | Stored state flips to its involution pair | Impression voltage far exceeds a cell's rating (a traumatic over-charge) | Probe reads the opposite Noetic: a stored `^2` reads back as `^3`. |",
+        "sha256": "de5bedde90a69f60c09d0d1ab210a8cce851b733bbf54b147bfbcefd4037bb57"
+      },
+      {
+        "file": "Chapter_22_CPMB_Power_Management_Board.md",
+        "line": 19,
+        "commit": "65ad3008",
+        "text": "3. **Thermal protection.** The board must detect sustained high Drive — the cognitive equivalent of a regulator running too hot for too long — and throttle, rest, or shut down before a CJT is driven into breakdown (where, recall from Chapter 4, an overloaded state flips to its involution pair: `^2` Positive inverts to `^3` Negative).",
+        "sha256": "d58eeabf789aba2f8c7092655d6dfd7ff8e7518348fff7eb642b7eedc0fac72d"
+      },
+      {
+        "file": "Chapter_22_CPMB_Power_Management_Board.md",
+        "line": 361,
+        "commit": "65ad3008",
+        "text": "| **Overtemperature** | One Drive pinned high too long | Temp climbs through Warning→Critical→Emergency; involution flips appear |",
+        "sha256": "32848a7d5fabd4c69b80e03162ccc0b58b6e3bc26053d18f838da6a050149f53"
+      },
+      {
+        "file": "STYLE_GUIDE.md",
+        "line": 125,
+        "commit": "65ad3008",
+        "text": "**Saturation** (effect maxed, more cause does nothing) · **Breakdown** (effect flips to involution pair —",
+        "sha256": "e1dc351b735eb11cb3fe7ca32c3e6fe1fbc9c4e01bd99f3b64a0787125496807"
+      },
+      {
+        "file": "STYLE_GUIDE.md",
+        "line": 126,
+        "commit": "65ad3008",
+        "text": "`^2`→`^3` under overload). Named form: `let cjt_x = CJT< … => … > [β=…];`",
+        "sha256": "3668dd590d37de2493d79e8223674b32e5429ebb0c2a7fe24245c22ac63231c3"
+      }
+    ],
+    "adjacent_configuration_involution": [
+      {
+        "file": "Chapter_09_CJT_Deep_Dive.md",
+        "line": 157,
+        "commit": "65ad3008",
+        "text": "Cognitively, common-emitter is the workhorse CJT doing real amplification with **phase inversion** — the output Noetic is the *involution partner* of the input. A cause that is an `^8` Above/Cause yields a `^9` Below/Effect (the `^8`↔`^9` involution); a stimulus the system is drawn toward (`^2` Positive) can be amplified into its dual on inversion. This is the standard `CJT< ^8… => ^9… >` we have built all along: high gain, output is the involution of the input. Most stages in most circuits are common-emitter.",
+        "sha256": "a1cfa5b061ba34a29c8d83c66e328adbab5c19f4e0ed795983a6ab350b668ac8"
+      },
+      {
+        "file": "Chapter_09_CJT_Deep_Dive.md",
+        "line": 178,
+        "commit": "65ad3008",
+        "text": "| **Common-emitter** | Emitter | high | inverted | workhorse amplifier; output = involution of input |",
+        "sha256": "54dafcedb5f093e7869687877e5407249752f969c8250f94a2a9b4126390e9e7"
+      },
+      {
+        "file": "Appendix_E_Exercise_Answers.md",
+        "line": 279,
+        "commit": "65ad3008",
+        "text": "- **(b)** Amplify a faint question into a substantial answer, accepting the output is the involution partner → **common-emitter** (high gain *and* inverting — the configuration that flips to the involution pair).",
+        "sha256": "30797afd3556a5eb5284c0bf0e7542dc497361d2144f702c31400bbb155a9245"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 46,
+        "commit": "65ad3008",
+        "text": "| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |",
+        "sha256": "0c590106e290c7e77f2b3e19d29311bce8fa354bfc6a5d59d5dfaf460a9639de"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 307,
+        "commit": "65ad3008",
+        "text": "| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |",
+        "sha256": "0c590106e290c7e77f2b3e19d29311bce8fa354bfc6a5d59d5dfaf460a9639de"
+      }
+    ],
+    "syntax": [
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 185,
+        "commit": "65ad3008",
+        "text": "Parameter keys inside parameter blocks (`β`, `sat`, `cutoff`, `region`, `gm`, `rπ`, `R`, `C`, `L`, `leakage`, `ratio`, `breakdown`, `frequency`, `threshold`, `action`, `target_state`, `tolerance`, `open_loop_gain`, `inputs`, `outputs`, `select`, `non_inverting`, `inverting`, `output`, `v`, `dial`, `dropout`, `enforce`, `beta_scale`, `duration`, `pump`, `gain`, `tau`, `V`, `dt`, `metric`, `top_k`, `capture_range`, `lock_range`) are reserved in parameter position only.",
+        "sha256": "b709381d3716e4ca7de34c328081ef8e9929b7bb5a7c3e2912eaeb3b49ff0803"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 531,
+        "commit": "65ad3008",
+        "text": "| `region` | declared intended operating region | enum | `cutoff` \\| `active` \\| `saturation` \\| `breakdown` | `active` |",
+        "sha256": "5b17fa4a6518d94d48169ea6f6dcf95320169c08742abc334971fc7b9ca7a118"
+      }
+    ],
+    "matrix": [
+      {
+        "effect_noetic": "^0",
+        "explicit_rule": false,
+        "automatic_out": "^0",
+        "conditional_out": "^0",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^0",
+        "explicit_rule": true,
+        "automatic_out": "^0",
+        "conditional_out": "^0",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^1",
+        "explicit_rule": false,
+        "automatic_out": "^1",
+        "conditional_out": "^1",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^1",
+        "explicit_rule": true,
+        "automatic_out": "^1",
+        "conditional_out": "^1",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^2",
+        "explicit_rule": false,
+        "automatic_out": "^3",
+        "conditional_out": "^2",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^2",
+        "explicit_rule": true,
+        "automatic_out": "^3",
+        "conditional_out": "^3",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^3",
+        "explicit_rule": false,
+        "automatic_out": "^2",
+        "conditional_out": "^3",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^3",
+        "explicit_rule": true,
+        "automatic_out": "^2",
+        "conditional_out": "^2",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^4",
+        "explicit_rule": false,
+        "automatic_out": "^4",
+        "conditional_out": "^4",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^4",
+        "explicit_rule": true,
+        "automatic_out": "^4",
+        "conditional_out": "^4",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^5",
+        "explicit_rule": false,
+        "automatic_out": "^6",
+        "conditional_out": "^5",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^5",
+        "explicit_rule": true,
+        "automatic_out": "^6",
+        "conditional_out": "^6",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^6",
+        "explicit_rule": false,
+        "automatic_out": "^5",
+        "conditional_out": "^6",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^6",
+        "explicit_rule": true,
+        "automatic_out": "^5",
+        "conditional_out": "^5",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^7",
+        "explicit_rule": false,
+        "automatic_out": "^7",
+        "conditional_out": "^7",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^7",
+        "explicit_rule": true,
+        "automatic_out": "^7",
+        "conditional_out": "^7",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^8",
+        "explicit_rule": false,
+        "automatic_out": "^9",
+        "conditional_out": "^8",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^8",
+        "explicit_rule": true,
+        "automatic_out": "^9",
+        "conditional_out": "^9",
+        "differ": false
+      },
+      {
+        "effect_noetic": "^9",
+        "explicit_rule": false,
+        "automatic_out": "^8",
+        "conditional_out": "^9",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^9",
+        "explicit_rule": true,
+        "automatic_out": "^8",
+        "conditional_out": "^8",
+        "differ": false
+      }
+    ],
+    "differing_cells": [
+      {
+        "effect_noetic": "^2",
+        "explicit_rule": false,
+        "automatic_out": "^3",
+        "conditional_out": "^2",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^3",
+        "explicit_rule": false,
+        "automatic_out": "^2",
+        "conditional_out": "^3",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^5",
+        "explicit_rule": false,
+        "automatic_out": "^6",
+        "conditional_out": "^5",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^6",
+        "explicit_rule": false,
+        "automatic_out": "^5",
+        "conditional_out": "^6",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^8",
+        "explicit_rule": false,
+        "automatic_out": "^9",
+        "conditional_out": "^8",
+        "differ": true
+      },
+      {
+        "effect_noetic": "^9",
+        "explicit_rule": false,
+        "automatic_out": "^8",
+        "conditional_out": "^9",
+        "differ": true
+      }
+    ]
+  },
+  "issue2": {
+    "quotes": [
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 379,
+        "commit": "65ad3008",
+        "text": "arg_list  ::= arg , { \",\" , arg }",
+        "sha256": "42521ce83340872a83cc111e63ca007a28348dc4971a4efa2ee0d688ebcadd35"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 444,
+        "commit": "65ad3008",
+        "text": "gate ::= ( \"AND\" | \"OR\" | \"NOT\" | \"NAND\" | \"NOR\" | \"XOR\" | \"XNOR\" ) , \"<\" , arg_list , \">\"",
+        "sha256": "71364fb4d6f8a946c9ad74e5118d57f160942b0149c6f7aa415f91f5aab6e854"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 447,
+        "commit": "65ad3008",
+        "text": "Gates act on engineered Boolean firing flags obtained by thresholding continuous CAS activations. `NOT` takes one input; the rest take two or more. AND detects a both-active condition. XOR is true for exactly one active input. XNOR is true when its inputs agree, including the both-inactive case.",
+        "sha256": "7569fe1d1b90595c22b03e0dca68a13e326b00c8a1d15126dd2e1684d641ea09"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 452,
+        "commit": "65ad3008",
+        "text": "XOR< route_a_flag, route_b_flag >        // exactly one route",
+        "sha256": "481b5663096614a5bb230a04369618778be81e2f8f3c37715546e280422c33e8"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 453,
+        "commit": "65ad3008",
+        "text": "XNOR< candidate_flag, baseline_flag >    // equal truth values",
+        "sha256": "a7ab5621c55345d3f9ebe9dee993b4804a30b9ee30323339445fab12098b862d"
+      },
+      {
+        "file": "Appendix_C_CCDL_Language_Reference.md",
+        "line": 890,
+        "commit": "65ad3008",
+        "text": "arg_list       ::= arg { \",\" arg }",
+        "sha256": "eda4f109aaf42ec0c5cb712ea66172351230b8a8b6b7da7e93c8046df986ecde"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 87,
+        "commit": "65ad3008",
+        "text": "A **logic gate** takes one or more binary inputs (true/false) and produces one binary output by a fixed rule. They are the atoms of digital decision-making. In CAS, a gate combines the *firing states* of several cognitive conditions into a single go/no-go signal — useful anywhere a circuit must decide whether a set of prerequisites is satisfied before allowing a state to propagate.",
+        "sha256": "022baac0eb38f9c83a6bdf446473207329a4041d81dac41ab6a7053f6fddb06b"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 96,
+        "commit": "65ad3008",
+        "text": "| **XOR** | true if inputs *differ* | exclusivity detector — exactly one fires |",
+        "sha256": "6ff95a7561194799bbe5e0e800692296fc55589d5ff6a706bd681b59b9f55a4b"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 97,
+        "commit": "65ad3008",
+        "text": "| **XNOR** | true if inputs agree | equivalence detector — both-active and both-inactive count |",
+        "sha256": "500c936330abbcf2fdbc90c2dfbc9463f84c6b88b9b93a628b03eb86b9d3406b"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 99,
+        "commit": "65ad3008",
+        "text": "The two safety rules to memorize are **AND detects both-active conflict; XOR detects exactly-one exclusivity**. NOT is a Boolean complement. It maps to a Noetic involution only for `^2↔^3`, `^5↔^6`, or `^8↔^9`; the self-duals remain themselves. If attraction and aversion firing flags are both active, an AND gate raises the conflict flag. XOR is false in that case.",
+        "sha256": "faf9e837a4bd0aa1916f63c6ade028b908c13f1188978eeb1b87bd1d7156b352"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 115,
+        "commit": "65ad3008",
+        "text": "| `XOR< s₁, s₂ >` | 2 firing flags | fires iff exactly one fires |",
+        "sha256": "18c5c713e06fb0cc90b50f9bece22d83535a7de9ae464adeba51b6b5075050b7"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 116,
+        "commit": "65ad3008",
+        "text": "| `XNOR< s₁, s₂ >` | 2 firing flags | fires iff the inputs agree, including both-inactive |",
+        "sha256": "e8256dbab78575983e1c4d1ea8bd9d7ab9845d8fe5c6e8cc6d6a49b7aa080d37"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 118,
+        "commit": "65ad3008",
+        "text": "> **Bench Note — AND is your both-active ambiguity alarm.** A well-posed prompt may pull a system toward attraction or aversion. If both explicit firing flags are active, `AND< attract, averse >` raises the conflict signal. XOR is false in that case because its standard rule is exactly-one. Route the AND flag to the deliberation stage; do not suppress it.",
+        "sha256": "5c2fbda3a311adc64f372eed6ca376924c8ff66c9d9c6a722fb1400a3cacd7c2"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 324,
+        "commit": "65ad3008",
+        "text": "- **Logic gates** combine explicit firing flags: AND (all, including both-active conflict), OR (any), NOT (Boolean complement), NOR (none), XOR (exactly one), and XNOR (equal, including both-inactive).",
+        "sha256": "975ef6f34d4fbb7e719f3efee5128fd5279c104b4fc50eed49212435c8e4b6e1"
+      },
+      {
+        "file": "Chapter_10_Special_Purpose_Components.md",
+        "line": 356,
+        "commit": "65ad3008",
+        "text": "A junior engineer labels a component that \"audits an interpretation, decomposes it, and tests it for flaws\" as an `XOR< ^3^E, ^3^E >` both-active conflict detector built on `^3` Negative. Two things are wrong. Identify (a) the Noetic error — what Noetic actually describes \"audit / decompose / test for flaws,\" and why it is *not* `^3` — and (b) the gate error — why XOR cannot detect two simultaneously active inputs. (Answer in Appendix E.)",
+        "sha256": "5ba8e515e410457549831004416e04d80ef245282a37f94711761c04006c90c6"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 367,
+        "commit": "65ad3008",
+        "text": "**Symbol / role.** A logic gate takes binary inputs and produces a binary output by a fixed rule. In CAS a gate combines the *firing states* of several cognitive conditions into a single go/no-go signal.",
+        "sha256": "138aee8fa0b72e6c02a828716c2ae806a1d3fc6659aa62ced888f7ffd55979e6"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 389,
+        "commit": "65ad3008",
+        "text": "| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | exclusivity detector — one route, never both |",
+        "sha256": "9ac3ac415352c656ac8a03e860d9ac631d1c003b652e31d4e56d84cf99671516"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 390,
+        "commit": "65ad3008",
+        "text": "| `XNOR< s₁, s₂ >` | 2 | fires iff inputs agree | equivalence detector; both-active **and** both-inactive count |",
+        "sha256": "0b1af9416c36e10bc405c65203834e16cd68df6682c85bfc7a009dfa9f8dbae3"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 392,
+        "commit": "65ad3008",
+        "text": "**Cognitive function.** Prerequisite combination. **NOT** is a Boolean complement; it maps to a Noetic involution only for a licensed involution pair. **AND**, not XOR, is the both-active conflict detector. **XOR** reports exactly one active input. **XNOR** reports equality and therefore needs an activity qualifier when both-inactive must be excluded.",
+        "sha256": "9bd4a67d3745f5a5d53e1a7f309f3721ee4ef3162b309d9dac6ce4192b5dea65"
+      },
+      {
+        "file": "Appendix_B_Component_Datasheets.md",
+        "line": 401,
+        "commit": "65ad3008",
+        "text": "| XOR used for both-active detection | both-active produces false because XOR requires exactly one |",
+        "sha256": "97bfcdbe468afe8869a665a71b78d78acdc0e607f7e7452274df524ab498afb9"
+      },
+      {
+        "file": "Appendix_A_Notation_Quick_Reference.md",
+        "line": 137,
+        "commit": "65ad3008",
+        "text": "| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … > XNOR< … >` | Boolean logic on engineered firing flags, not on states. |",
+        "sha256": "8ef8694698593930008b0a76e144b9ce971a9fd2028fe4ce9fb3b0e75d0d08cd"
+      },
+      {
+        "file": "Appendix_E_Exercise_Answers.md",
+        "line": 337,
+        "commit": "65ad3008",
+        "text": "**10.4 — Spot the drift.** **(a) Noetic error:** \"audit / decompose / test for flaws\" is **`^6` Male** (compositional decomposition-and-test), not `^3` Negative — `^3` is repulsion, not analytical critique. The correct literal is `^6^E_{F6}|A`. **(b) Gate error:** XOR fires only when its inputs differ, so `XOR< ^3^E, ^3^E >` is always false. More generally, XOR cannot detect two simultaneously active inputs. Threshold attraction and aversion explicitly, then use **AND** for the both-active conflict flag.",
+        "sha256": "0a56a4610c7bb7afffa16fee02d42e9381934b5e0fb3c43f823c93bbfb52d872"
+      },
+      {
+        "file": "STYLE_GUIDE.md",
+        "line": 145,
+        "commit": "65ad3008",
+        "text": "AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … >",
+        "sha256": "8f4c89ab74d789b1bbeb96885447ff76222abdbefafa3c528853a6d729d200f4"
+      }
+    ],
+    "table3": [
+      {
+        "inputs": "000",
+        "k_active": 0,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 0,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 1
+      },
+      {
+        "inputs": "001",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "010",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "011",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "100",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "101",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "110",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "111",
+        "k_active": 3,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 0,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 1
+      }
+    ],
+    "table4": [
+      {
+        "inputs": "0000",
+        "k_active": 0,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 0,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 1
+      },
+      {
+        "inputs": "0001",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0010",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0011",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0100",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0101",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0110",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "0111",
+        "k_active": 3,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1000",
+        "k_active": 1,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 1,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 0,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1001",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1010",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1011",
+        "k_active": 3,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1100",
+        "k_active": 2,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1101",
+        "k_active": 3,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1110",
+        "k_active": 3,
+        "XOR:odd_parity": 1,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 1,
+        "XNOR:even_parity (NOT odd_parity)": 0,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 0
+      },
+      {
+        "inputs": "1111",
+        "k_active": 4,
+        "XOR:odd_parity": 0,
+        "XOR:exactly_one": 0,
+        "XOR:not_all_equal ('inputs differ', Ch10:96, AppE:337)": 0,
+        "XNOR:even_parity (NOT odd_parity)": 1,
+        "XNOR:NOT exactly_one": 1,
+        "XNOR:all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": 1
+      }
+    ],
+    "diff_rows": {
+      "3": {
+        "XOR odd_parity vs exactly_one": [
+          "111"
+        ],
+        "XNOR even_parity (NOT odd_parity) vs NOT exactly_one": [
+          "111"
+        ],
+        "XOR odd_parity vs not_all_equal ('inputs differ', Ch10:96, AppE:337)": [
+          "011",
+          "101",
+          "110",
+          "111"
+        ],
+        "XNOR even_parity (NOT odd_parity) vs all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": [
+          "011",
+          "101",
+          "110",
+          "111"
+        ],
+        "XOR exactly_one vs not_all_equal ('inputs differ', Ch10:96, AppE:337)": [
+          "011",
+          "101",
+          "110"
+        ],
+        "XNOR NOT exactly_one vs all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": [
+          "011",
+          "101",
+          "110"
+        ]
+      },
+      "4": {
+        "XOR odd_parity vs exactly_one": [
+          "0111",
+          "1011",
+          "1101",
+          "1110"
+        ],
+        "XNOR even_parity (NOT odd_parity) vs NOT exactly_one": [
+          "0111",
+          "1011",
+          "1101",
+          "1110"
+        ],
+        "XOR odd_parity vs not_all_equal ('inputs differ', Ch10:96, AppE:337)": [
+          "0011",
+          "0101",
+          "0110",
+          "1001",
+          "1010",
+          "1100"
+        ],
+        "XNOR even_parity (NOT odd_parity) vs all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": [
+          "0011",
+          "0101",
+          "0110",
+          "1001",
+          "1010",
+          "1100"
+        ],
+        "XOR exactly_one vs not_all_equal ('inputs differ', Ch10:96, AppE:337)": [
+          "0011",
+          "0101",
+          "0110",
+          "0111",
+          "1001",
+          "1010",
+          "1011",
+          "1100",
+          "1101",
+          "1110"
+        ],
+        "XNOR NOT exactly_one vs all_equal ('inputs agree', AppB:390, AppC:447, Ch10:97/116)": [
+          "0011",
+          "0101",
+          "0110",
+          "0111",
+          "1001",
+          "1010",
+          "1011",
+          "1100",
+          "1101",
+          "1110"
+        ]
+      }
+    },
+    "book_pair_not_complement": {
+      "3": [
+        "011",
+        "101",
+        "110"
+      ],
+      "4": [
+        "0011",
+        "0101",
+        "0110",
+        "0111",
+        "1001",
+        "1010",
+        "1011",
+        "1100",
+        "1101",
+        "1110"
+      ]
+    },
+    "two_input_book_pair_complement": true,
+    "two_input_all_agree": true
+  },
+  "issue3": {
+    "quotes": [
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 17,
+        "commit": "65ad3008",
+        "text": "The control-theory skeleton of every closed loop is one equation. Call the forward path's raw gain `A` (the \"open-loop gain\" — how much the amplifier multiplies its input before any feedback). Call `β` the **feedback factor** — the fraction of the output that gets routed back to the input. Then the actual, real-world gain you observe — the **closed-loop gain** — is:",
+        "sha256": "0a36efc3cb00f949394dd15242e233eedbf7aac9a0cbe95ff87c6d9b89b4b083"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 25,
+        "commit": "65ad3008",
+        "text": "This little fraction is the engine of the entire chapter, so read it slowly. The quantity `Aβ` is the **loop gain**: how much a signal is multiplied as it travels all the way around the loop once. When the feedback opposes the input (negative feedback), `1 + Aβ` is a number bigger than one, so the closed-loop gain is *smaller* than the raw gain. You gave up gain. Here's what you bought: if `A` is enormous — and in a real op-amp it's 100,000 or more — then `Aβ` dominates the denominator, the `1` becomes negligible, and the equation collapses to `A_closed ≈ A/(Aβ) = 1/β`. The forward gain `A` *cancels out entirely*. Your gain is now set by `β` alone — by the feedback network, by a couple of resistors — and is utterly indifferent to whether `A` is 100,000 or 80,000 or drifting with temperature. That is Black's miracle in one line: **make the loop gain large and the system's behavior stops depending on the messy, drifting forward path and starts depending only on the clean, stable feedback path.**",
+        "sha256": "a359a049cb32162a2d0cc51c331d7283fecf15df38d4064b9212be548cd03567"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 31,
+        "commit": "65ad3008",
+        "text": "**Stability.** Drift in the forward path gets divided by `1 + Aβ`. A 10% wobble in `A` becomes a fraction of a percent wobble in `A_closed`. The loop swallows the forward path's sins.",
+        "sha256": "279e4e3ce6f6441562d7265c382ceee97a648f68a466f3e487d7bb786baec5d4"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 47,
+        "commit": "65ad3008",
+        "text": "Notice what isn't in that equation: the op-amp's own gain `A`. It cancelled, exactly as the `1/β` argument promised (here `β = Rg/(Rf+Rg)`, so `1/β = 1 + Rf/Rg`). Pick `Rf = 20kΩ` and `Rg = 10kΩ` and you have a gain of exactly 3, set in metal, immune to whatever the silicon is doing. We will build precisely that circuit, in CAS, in a moment.",
+        "sha256": "8ba64b00deb92c59f51714ac492c6e43563a7214416173c781b014f31c843f17"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 180,
+        "commit": "65ad3008",
+        "text": "## Worked Build 1: A Negative-Feedback Amplifier, Closed-Loop Gain = 3",
+        "sha256": "05af45c122b4d4c0caedc153b001a4043a4367efaed4f5e931263a26884a97e5"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 182,
+        "commit": "65ad3008",
+        "text": "We'll build the cognitive twin of the non-inverting op-amp with gain 3. The forward path is a high-gain expansion CJT (our \"op-amp\"). The feedback path samples an evaluation node and feeds it back to oppose the expansion, set so the closed-loop gain lands at exactly 3.",
+        "sha256": "8a49724b8d436f514182834c57a9acc5c80ea70e0cfff5feaee7bf032d1078b2"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 184,
+        "commit": "65ad3008",
+        "text": "Recall the op-amp formula: `A_closed = 1 + Rf/Rg`. For a gain of 3 we need `Rf/Rg = 2`. In CAS feedback terms, the feedback factor is `β = Rg/(Rf+Rg) = 1/3`, and with large forward gain the closed-loop gain is `1/β = 3`. So we set the forward CJT's open-loop gain high and the feedback path's `β = 0.333`.",
+        "sha256": "8981105d8ce7a3e0e4bf7ab9b8a260c3cf4f5223becd0ba0468edebb8e303066"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 198,
+        "commit": "65ad3008",
+        "text": "    cjt c_fwd: CJT< prompt   | bias_principles => expand   > [β=12.0];",
+        "sha256": "1197423244ed9d1f0ba4f3f46d2027b5b095d771133e57006c5cc6b8a46108c6"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 199,
+        "commit": "65ad3008",
+        "text": "    cjt c_eval: CJT< expand  | bias_principles => evaluate > [β=1.5];",
+        "sha256": "8bef95757d8b06106d90bc0feffe01df35e127b16948781deff9f23d36516ecd"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 200,
+        "commit": "65ad3008",
+        "text": "    cjt c_out:  CJT< evaluate| bias_principles => respond  > [β=1.0];",
+        "sha256": "daa8e2f5c2cec53166e4cdf1faca1f512989a398a17e939f36d3b2754c262339"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 203,
+        "commit": "65ad3008",
+        "text": "    // β = 1/3 → closed-loop gain = 1 + Rf/Rg = 3",
+        "sha256": "9cceb2812ad2472e820ea82e7ad154cd53898edf018d733a324736c93e3c37ac"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 204,
+        "commit": "65ad3008",
+        "text": "    feedback evaluate -> expand [β=0.333];",
+        "sha256": "bd95c50f29d3079e4e1283bad570277e4dc062a5d778d18274e60ac82b99a5c8"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 206,
+        "commit": "65ad3008",
+        "text": "    probe tp_fwd:  expand;     // watch the raw, hot expansion",
+        "sha256": "470f24bd9c608bb10dc28b9da731e54ccc1441d261c27b31b23d82b7e703da6e"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 207,
+        "commit": "65ad3008",
+        "text": "    probe tp_out:  evaluate;   // watch the tempered, fed-back result",
+        "sha256": "11e93cb5b8dfa0e4e41d10f1e9cfc1db99ba1f48bddac9ecb128cfe08262589b"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 211,
+        "commit": "65ad3008",
+        "text": "Walk it line by line. The forward CJT `c_fwd` has `β=12.0` — an aggressive, unstable-on-its-own expansion, our stand-in for the op-amp's runaway open-loop gain. Left alone it would blow every prompt out of proportion. The `feedback evaluate -> expand [β=0.333]` line is Black's inverted wire: it samples the evaluation node and routes one-third of it back to *oppose* the expansion's bias. By the closed-loop formula, the observed gain settles to `1/β = 3`, regardless of whether the forward `β` is 12 or 10 or drifting — the loop divides out the forward path's volatility. The two probes let you see the contrast: `tp_fwd` shows the hot raw expansion, `tp_out` shows the disciplined result after feedback. Gain of exactly 3, set by the feedback factor, immune to the forward path. This is the current-limited, self-stabilizing topology that the CSB's reasoning rail uses in Chapter 18.",
+        "sha256": "891360f650fd792d0117f88a6970c9f65fa45c511057d3801b61940209fa294b"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 213,
+        "commit": "65ad3008",
+        "text": "> **Bench Note — keep the loop gain large.** The gain only locks to `1/β` when the forward `β` is much larger than `1/β`. Here forward `β=12` against a target of 3 — a loop gain of 4×, enough to make the forward path's drift negligible. If you set the forward `β` only slightly above 3, the `1` in `1 + Aβ` stops being negligible and your gain wanders with the forward path. Hot forward path, gentle feedback: that's the recipe for a stable, drift-immune amplifier.",
+        "sha256": "2f2428a963b322054bf3374fc078ed23c5122be3b60675c0b9234f73ee845a54"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 278,
+        "commit": "65ad3008",
+        "text": "| Closed-loop gain | `A_closed` | `A / (1 + Aβ)` ≈ `1/β` | Set by `β` alone |",
+        "sha256": "16117b551e0c62a491bc698384a428f5763d670554f4273c8be330a875d9f740"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 291,
+        "commit": "65ad3008",
+        "text": "| **Loop gain too low** | Gain wanders with forward path | Forward `β` not ≫ target `1/β` | Raise forward gain so `Aβ ≫ 1` |",
+        "sha256": "084c3c5a830b56bd3df3d12c063369497a9321fac22a964e4365c442a1a0a3f2"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 311,
+        "commit": "65ad3008",
+        "text": "- **Open-loop acts blind; closed-loop watches its own output and corrects.** The governing equation is `A_closed = A / (1 + Aβ)`. Make loop gain `Aβ` large and behavior depends on the clean feedback path (`1/β`), not the drifting forward path.",
+        "sha256": "99d4ad3400f60ed1aa68ec322664dd68459d2b1b468e2311e42ab84fcb9e0e18"
+      },
+      {
+        "file": "Chapter_16_Feedback_Systems.md",
+        "line": 330,
+        "commit": "65ad3008",
+        "text": "c) Roughly how large should the forward CJT's `β` be for the loop to lock cleanly to gain 5? Explain in one sentence why \"a little above 5\" is not enough.",
+        "sha256": "6c601b35c56bdf5a0af903c0ea861e9546529d3c8c3156672a89652561234a4d"
+      },
+      {
+        "file": "Appendix_E_Exercise_Answers.md",
+        "line": 519,
+        "commit": "65ad3008",
+        "text": "**(a)** For gain 5: `Rf/Rg = 4` (e.g. Rf=40, Rg=10). **(b)** Feedback factor `β = 1/A_closed = 1/5 = 0.2`. **(c)** The forward CJT's open-loop β should be **much larger than 5** (a high gain, e.g. ≥ 50–100). \"A little above 5\" is not enough because closed-loop gain only equals `1/β` cleanly when **loop gain (A·β) ≫ 1**; with forward gain barely above 5 the feedback can't dominate, so the actual gain sags below 5 and varies with conditions.",
+        "sha256": "b92bf5a88f31707da8b0eec1eeb0cfe4b0f708a8afba2acbfef6bc954774a1f5"
+      }
+    ],
+    "numbers": {
+      "beta_0.333": "333/1000",
+      "beta_1/3": "1/3",
+      "A=12,beta=0.333": {
+        "fraction": "3000/1249",
+        "float_repr": "2.401921537229784"
+      },
+      "loop_gain A=12,beta=0.333": {
+        "fraction": "999/250",
+        "float_repr": "3.996"
+      },
+      "A=10,beta=0.333": {
+        "fraction": "1000/433",
+        "float_repr": "2.3094688221709005"
+      },
+      "loop_gain A=10,beta=0.333": {
+        "fraction": "333/100",
+        "float_repr": "3.33"
+      },
+      "A=18,beta=0.333": {
+        "fraction": "9000/3497",
+        "float_repr": "2.5736345438947668"
+      },
+      "loop_gain A=18,beta=0.333": {
+        "fraction": "2997/500",
+        "float_repr": "5.994"
+      },
+      "A=15,beta=0.333": {
+        "fraction": "3000/1199",
+        "float_repr": "2.5020850708924103"
+      },
+      "loop_gain A=15,beta=0.333": {
+        "fraction": "999/200",
+        "float_repr": "4.995"
+      },
+      "limit 1/beta, beta=0.333": {
+        "fraction": "1000/333",
+        "float_repr": "3.003003003003003"
+      },
+      "exactly 3? A=12,beta=0.333": false,
+      "exactly 3? A=10,beta=0.333": false,
+      "exactly 3? A=18,beta=0.333": false,
+      "exactly 3? limit,beta=0.333": false,
+      "A=12,beta=1/3": {
+        "fraction": "12/5",
+        "float_repr": "2.4"
+      },
+      "loop_gain A=12,beta=1/3": {
+        "fraction": "4/1",
+        "float_repr": "4.0"
+      },
+      "A=10,beta=1/3": {
+        "fraction": "30/13",
+        "float_repr": "2.3076923076923075"
+      },
+      "loop_gain A=10,beta=1/3": {
+        "fraction": "10/3",
+        "float_repr": "3.3333333333333335"
+      },
+      "A=18,beta=1/3": {
+        "fraction": "18/7",
+        "float_repr": "2.5714285714285716"
+      },
+      "loop_gain A=18,beta=1/3": {
+        "fraction": "6/1",
+        "float_repr": "6.0"
+      },
+      "A=15,beta=1/3": {
+        "fraction": "5/2",
+        "float_repr": "2.5"
+      },
+      "loop_gain A=15,beta=1/3": {
+        "fraction": "5/1",
+        "float_repr": "5.0"
+      },
+      "limit 1/beta, beta=1/3": {
+        "fraction": "3/1",
+        "float_repr": "3.0"
+      },
+      "exactly 3? A=12,beta=1/3": false,
+      "exactly 3? A=10,beta=1/3": false,
+      "exactly 3? A=18,beta=1/3": false,
+      "exactly 3? limit,beta=1/3": true,
+      "A such that A/(1+A*0.333)==3": {
+        "fraction": "3000/1",
+        "float_repr": "3000.0"
+      },
+      "check A*=3000 gives exactly 3 (beta=0.333)": true,
+      "beta=1/3: 1-3b": "0",
+      "beta=1/3 closed-form": "3A/(3+A)",
+      "beta=1/3, A=297 (1% below 3)": {
+        "fraction": "297/100",
+        "float_repr": "2.97"
+      },
+      "beta=1/3, A=297 equals 297/100": true,
+      "beta=1/3: gain(12)-gain(10)": {
+        "fraction": "6/65",
+        "float_repr": "0.09230769230769231"
+      },
+      "beta=1/3: (gain(12)-gain(10))/gain(12)": {
+        "fraction": "1/26",
+        "float_repr": "0.038461538461538464"
+      },
+      "beta=1/3: 1 - gain(12)/3": {
+        "fraction": "1/5",
+        "float_repr": "0.2"
+      },
+      "beta=1/3: forward drop (12-10)/12": {
+        "fraction": "1/6",
+        "float_repr": "0.16666666666666666"
+      },
+      "beta=0.333: gain(12)-gain(10)": {
+        "fraction": "50000/540817",
+        "float_repr": "0.09245271505888314"
+      },
+      "beta=0.333 full chain: gain(18)-gain(15)": {
+        "fraction": "300000/4192903",
+        "float_repr": "0.0715494730023566"
+      },
+      "beta=0.333 full chain: (gain(18)-gain(15))/gain(18)": {
+        "fraction": "100/3597",
+        "float_repr": "0.027800945232137893"
+      },
+      "beta=0.333 full chain: 1 - gain(18)/3": {
+        "fraction": "497/3497",
+        "float_repr": "0.14212181870174434"
+      },
+      "beta=0.333 A=12: 1 - gain(12)/3": {
+        "fraction": "249/1249",
+        "float_repr": "0.19935948759007205"
+      },
+      "NONSTANDARD 1.5*A12/(1+12*0.333)": {
+        "fraction": "4500/1249",
+        "float_repr": "3.602882305844676"
+      },
+      "NONSTANDARD 1.5*A12/(1+12/3)": {
+        "fraction": "18/5",
+        "float_repr": "3.6"
+      },
+      "peer_audit_floats": {
+        "A12": 2.401921537229784,
+        "A10": 2.3094688221709005,
+        "A18": 2.5736345438947668,
+        "limit": 3.003003003003003
+      },
+      "peer_audit_floats_match": {
+        "A12": true,
+        "A10": true,
+        "A18": true,
+        "limit": true,
+        "A12_exact_third": true
+      }
+    }
+  }
+}

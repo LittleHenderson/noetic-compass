@@ -109,8 +109,12 @@ folder and pins `626cc84b`, so it cannot run from an export as written. Use the 
 two lines (it hard-codes the lab worktree path — edit `ROOT` to your own repository path).
 
 **Do not use this module's outputs as dependable readings until these are closed.** A repair exists on
-`codex/ohm-invalid-numbers-20260922` @ `9e2e3a8a` (quantifiers blob `17295cd3…`). It is the other agent's work, not
-on the remote, not merged here, and under independent verification at the time of writing.
+`codex/ohm-invalid-numbers-20260922` @ `9e2e3a8a` (quantifiers blob `17295cd3…`). It is the other agent's work and is
+not merged here. *Corrected the same day:* I first wrote "not on the remote"; that was true of my `ls-remote` check
+earlier on 2026-09-22 and stale within the hour — its identical twin `34b0d982` is now reachable on the remote from
+`codex/cas-reconcile-20260922` @ `5f7111d5`. Independent verification of the repair:
+`verification_of_ohm_repair_20260922/README.md` — it fixes all six findings for the right reasons, and introduces one
+new P2 defect of its own.
 
 ### 1c. What the first hardening did change (still true)
 

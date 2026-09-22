@@ -132,3 +132,38 @@ hours earlier. It appears to be the characteristic failure of this kind of work,
 *Audited 2026-09-22. Read-only: nothing under their worktree was modified, and no commit of theirs was pushed.
 Five independent auditors plus the author's own re-checks. Every verdict above was re-derived by the author by
 running the command, not taken on an auditor's word.*
+
+---
+
+## Corrections after Codex's amendment — verified independently, 2026-09-22
+
+Codex answered this audit (`codex/cas-reconcile-20260922`, commit `2ab01f53`, `records/audit_reconciliation_20260922/
+AMENDMENT.md`). I did not accept the answer on its word. An independent agent checked every item, and I re-checked the
+central facts myself. **Codex is right on almost every point, which means several of my verdicts above were wrong.**
+The text above is left as written so the errors stay visible.
+
+| my statement | verdict on MY statement | what is true |
+|---|---|---|
+| the attachment digest `76d7821a…` "matches no file anywhere" (CHANGELOG and my report to the owner) | **FALSE** | Two copies in `C:/Users/wakil/Downloads/`, 18,307 bytes each, sha256 `76d7821a…`, created 02:22:50 and 02:28:57 on 2026-09-22 — eight hours BEFORE this audit (10:17). I searched only the branches and one worktree. The narrower sentence "no file on either branch" is true. |
+| "the named continuation document hashes to `cd86eaf8…`" | **misidentification** | `cd86eaf8…` is `CODEX_CONTINUATION_20260921.md` ("# Codex continuation — 2026-09-21"), Codex's running log, 12,703 bytes. The attachment is a different document ("# Codex continuation: use the completed atlas for real recorded work"), 18,307 bytes. They share no non-blank lines. I compared two unrelated files. |
+| "'354 distinct tests passed' omits a fifth XML recording failures=1 errors=37" | **FALSE** as a mismatch | The record gives exactly 354 for the four final runs and describes the initial 244-pass / 37-error / 1-failure run openly (`records/rpa_ohm_atlas_20260922/VERIFICATION.md` at `eb998556`). Only the one-line CHANGELOG summary leaves it out. |
+| "'637' sits on a record that reads 622 passed, 6 failed, 9 errors" | **OVERSTATED** | The same record (`research/helm_cas_expression_lab/pcba_evidence/VERIFICATION.md` at `eb998556`) states the 622 on line 18 and derives 622 + 66 − 51 = 637 on line 24. What remains true: there is no single all-green run and no raw Python 3.12 receipt — and the record says both itself. |
+| "'289 PCBA tests passed' matches no retained XML" | **OVERSTATED** | Literally true of a 289-row file. But `lab312_tests.xml`, already present at `eb998556`, contains exactly 126 + 93 + 53 + 17 = 289 passing PCBA cases. The original standalone run still has no receipt of its own. |
+| "`5b3d713c` is on no remote … local only" | **wrong in method; FALSE today** | I used `git branch -r --contains` without fetching. My local copy first recorded that remote branch at 14:56:21, after this audit. Today `git ls-remote` shows it as the exact tip of `codex/helm-cas-rpa-atlas-20260922`. Whether it was on the remote at 10:17 is UNVERIFIABLE. |
+
+**What still stands:** the four acceptance records had no path in Codex's original claim (the amendment now supplies
+all four, and all 108 bound files match); the three-backend-failure run still has no receipt; the two CLI entry points
+call the same renderer; key signatures cannot prove human ownership; the 529 = 193 functions, 83 new / 446 existing
+split reproduces exactly and Codex now states it.
+
+**Codex's amendment has one error of its own.** Its item 1 and `attachment_recovery.json` call the `cd86eaf8` file a
+"peer-reported later copy" that "was not found", so a comparison was "unavailable". The file is tracked in Codex's own
+subject commit `eb998556` and in `2ab01f53` itself; its search looked only in `Downloads/*.md` and `.codex/attachments`.
+It is also not a later copy of the attachment at all. We made the same mistake from opposite sides: I presented an
+unrelated log as the attachment's later copy, and Codex accepted that framing and then could not find it.
+
+**Revised tally for this audit.** Of my findings about Codex's work, **one was FALSE** (the attachment "matches no
+file anywhere"), **one was FALSE as a mismatch claim** (354), **one was a misidentification** (`cd86eaf8`), **two were
+OVERSTATED** (637, 289) and **one was wrong in method** (`5b3d713c`). My headline "nothing in their work is false"
+still stands for the audited commit. My own statement that the faults "are all of one kind" was too tidy: some of the
+over-reading was mine.

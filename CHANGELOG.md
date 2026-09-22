@@ -1,5 +1,42 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - INDEPENDENT VERIFICATION OF THE CAS-OHM NUMERIC REPAIR: it fixes all six peer
+findings for the right reasons and touches nothing else - and it introduces ONE NEW P2 DEFECT. Plus: my OD-A book
+edit created a canon contradiction; my audit of the other agent had two FALSE statements; the spec sheet caught up.
+
+The owner's plan: one agent repairs the older diagnostic module, a separate agent verifies. Codex repaired
+(`codex/ohm-invalid-numbers-20260922` @ `9e2e3a8a`; identical twin `34b0d982` reachable on the remote from
+`codex/cas-reconcile-20260922` @ `5f7111d5`). I verified, read-only, with seven independent agents and a critic.
+Record: `records/audit_package_20260922/verification_of_ohm_repair_20260922/`.
+
+**Verified:** all 8 peer probes pass, each by a named refusal or censor marker; 43 of the peer's 50 probes behave as
+asked (the other 7 are side observations the repair leaves open by its own statement); every README number
+reproduces (70 functions / 203 cases; base 86/117, `a4b2e0d7` 111/92, repaired 203/0, case by case); the 39 original
+and 12 carried test bodies are byte-identical; 19 files changed, all in scope; compiler, atlas and Rust engine
+byte-identical with identical test results (314 / 98 + 1 environment failure / 64); board-to-compiler still exact
+`3/1`, `NO_MEASUREMENT_PERFORMED`; no clamping, rounding or swallowed errors; signed residuals and tiny positive values
+preserved; save/replay 0 mismatches over 99 values x 9 tampered Decimal contexts (1,477 before).
+
+**Not clean:** (P2, new) exact `Fraction`s are built from level/point inputs with no size check - a 25-character
+Decimal (`1E-999999999999999999`) makes `maturity_q4` / `admissible_trend` try to build a ~4.152410e+17-byte integer
+and never finish; same call returned at once on `a4b2e0d7`. (P2, new) the 152 new cases never assert WHICH refusal
+or marker fires - they still pass with an accidental error substituted. (P3, new) six behaviour changes missing from
+`NUMERIC_POLICY.md`; reproduce steps fail on a default CRLF checkout. Inherited P2 gaps stay open (`r_total` float
+positivity, eligibility admits `None`, negative point observation). Not merged here; integration is the owner's call.
+
+**Against me:** (1) my OD-A commit `0fc6bb30` changed Appendix B:59/79 to a conditional breakdown flip while 26 other
+passages still say automatic and CCDL has no syntax to declare the rule - the book agreed with itself before my
+edit. (2) The spec sheet's Cap. [22] still said `PASSED 39/39`: my hardening commits skipped the same-commit update
+the rules require. Caught up now; one false sentence annotated, not deleted. (3) My audit of the other agent: the
+attachment "matches no file anywhere" was FALSE (two copies in Downloads, created 02:22:50 and 02:28:57, eight hours
+before my audit); "354 omits a fifth XML" FALSE as a mismatch; `cd86eaf8` was an unrelated document; 637 and 289
+OVERSTATED. Corrections appended to `06_AUDIT_OF_THE_CODEX_AGENT.md`; `04_WHAT_I_GOT_WRONG.md` items 21-23.
+
+**Book, for the owner - not edited:** `verification_of_ohm_repair_20260922/book/OWNER_DECISION_BOOK_ISSUES.md` lists
+every passage and the exact numbers for three decisions: breakdown rule; XOR/XNOR input count (with 3+ inputs the
+book's own XOR and XNOR stop being opposites); Chapter 16:211's "exactly 3, observed" (formula gives 3000/1249 at
+A=12, 9000/3497 for the listing as written; no measurement record exists anywhere).
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - COLD RUN OF THE REPRODUCTION GUIDE: every count reproduced; ten instruction
 problems found and fixed.
 
