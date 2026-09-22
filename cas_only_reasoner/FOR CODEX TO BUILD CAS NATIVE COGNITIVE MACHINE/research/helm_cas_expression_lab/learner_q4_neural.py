@@ -44,11 +44,11 @@ be bound to config + the input/output codec versions by the future run harness.
         def __init__(self):
             super().__init__()
             self.config = config
-            self.input_embedding = nn.Embedding(257, config.width, padding_idx=0, device=selected)
-            self.encoder = nn.GRU(config.width, config.width, batch_first=True, device=selected)
-            self.output_embedding = nn.Embedding(len(TOKENS) + 1, config.width, device=selected)
-            self.decoder = nn.GRU(config.width, config.width, batch_first=True, device=selected)
-            self.output_head = nn.Linear(config.width, len(TOKENS), device=selected)
+            self.input_embedding = nn.Embedding(257, config.width, padding_idx=0, device=selected, dtype=torch.float32)
+            self.encoder = nn.GRU(config.width, config.width, batch_first=True, device=selected, dtype=torch.float32)
+            self.output_embedding = nn.Embedding(len(TOKENS) + 1, config.width, device=selected, dtype=torch.float32)
+            self.decoder = nn.GRU(config.width, config.width, batch_first=True, device=selected, dtype=torch.float32)
+            self.output_head = nn.Linear(config.width, len(TOKENS), device=selected, dtype=torch.float32)
 
         def _device(self):
             actual = self.input_embedding.weight.device

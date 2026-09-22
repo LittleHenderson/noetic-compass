@@ -8,7 +8,9 @@ version, operation result, or benefit claim follows from these checks.
 
 - `learner_q4_representation.from_visible_record(row)` accepts a Q3 R/G visible
   record and produces ordered UTF-8 byte IDs. The caller must first use
-  `q3_load.load_visible` to read the pinned visible data. IDs, family, mode,
+  `q3_load.check_pins` and `q3_load.check_contract_binding`, then
+  `q3_load.load_visible`, to read the pinned visible data. `load_visible` alone
+  verifies file contents against their manifest, not the external pin. IDs, family, mode,
   provenance, and targets are absent from the encoding. The adapter rejects
   extra fields and operation-family packets. Input length is 1–2,048 bytes.
 - `R0NearestNeighbor(training_examples)` sums fixed one-hot byte rows and
@@ -72,10 +74,14 @@ runtime custody controls and Q5 interventions remain necessary.
 | V25 order-preserving representation | Ordered input and AST codec distinguish a same-bag pair; R0 collides | Run the actual learned encoder and report its distinction |
 | V26 free-running reconstruction | Free-running loop tested with scripted fixtures; training AST codec compatibility checked | Authorized neural run; held-out length/depth scores; syntax, exact AST, bindings, refusal, and execution scores separately; invalid outputs count as errors |
 | V27 no hidden bottleneck side channel | Decoder API has only numeric vector/history; no source, AST, target cache or solver import in prediction modules | Instrument the real neural path, isolate evaluator files, test checkpoint reload and interventions; audit any added bypass |
-| R2 structured memory | Not implemented | Explicit node/role memory and learned vectors; label as structured computation, not strict vector compression |
-| Q4 exit / T15 | Not implemented here | Typed learned operations, invalid-case behavior, supervised loss/training harness, executable end-to-end experiment |
+| R2 structured memory | Bounded node/role/vector interface and isolated vector-intervention hook added; no learned computation executed | Learned structured-memory encoder and downstream causal tests; label as structured computation, not strict vector compression |
+| Checkpoint/reload | Source/data/externally pinned weight-byte verification plus strict CUDA restore code; tamper tests use non-model bytes and fake objects | Real CUDA save and fresh-process reload measurements |
+| Q4 exit / T15 | One supervised R1 train/dev smoke runner prepared, never launched; see companion runbook | Authorized neural run; typed learned operations, invalid-case behavior, full end-to-end experiment |
 
 No private held-out target was inspected for this implementation. No learning
 score was computed. Resource authorization is supplied by the owner/session,
 not inferred from constructing these interfaces. Parent integration owns the
 shared changelog, lineage note, task ledger, and any later run approval.
+
+The follow-up runner is described in `Q4_ONE_JOB_RUNBOOK_20260921.md`. Its dry
+run verifies metadata and pins only. It has no built-in grant of permission.
