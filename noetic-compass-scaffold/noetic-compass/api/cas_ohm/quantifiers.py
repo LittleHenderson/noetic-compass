@@ -506,6 +506,15 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
     R_hidden = 8/2 - 2 = 2.
     """
     r_known = _as_resistance("r_hidden(r_known)", r_known)
+    vf = float(v)
+    if not _is_finite(vf):
+        raise ValueError(
+            f"r_hidden: drive must be a finite number; got {vf!r}. An undefined "
+            f"quantity is refused with a reason, never emitted (ch10:def:censoring). "
+            f"The drive is the value the caller applied, so a non-finite drive is a "
+            f"caller error rather than an observation too uncertain to support a "
+            f"conclusion, and it raises rather than censoring."
+        )
 
     # INTERVAL mode — monograph-faithful censoring on lower_bound <= 0.
     if i_obs_interval is not None:

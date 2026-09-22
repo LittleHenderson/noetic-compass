@@ -573,6 +573,32 @@ def test_r_total_unchanged_on_good_input():
     assert r_total(1.0, 2.0, 3.0, 4.0) == 10.0
 
 
+# --- r_hidden's drive term, missed by the first pass and found by an independent re-check.
+# Before this fix, at the commit that claimed to close the non-finite hole:
+#     r_hidden(v=nan, i_obs=2.0, r_known=2.0) -> RHidden magnitude=nan
+#     r_hidden(v=inf, i_obs=2.0, r_known=2.0) -> RHidden magnitude=inf
+
+def test_r_hidden_refuses_non_finite_drive():
+    for bad in (_NAN, _INF):
+        try:
+            result = r_hidden(v=bad, i_obs=2.0, r_known=2.0)
+        except ValueError as exc:
+            assert "finite" in str(exc)
+            continue
+        raise AssertionError(f"r_hidden accepted drive {bad!r} and returned {result!r}")
+
+
+def test_r_hidden_unchanged_on_the_worked_example():
+    result = r_hidden(v=8.0, i_obs=2.0, r_known=2.0)
+    assert result.magnitude == 2.0 and result.r_apparent == 4.0
+
+
+def test_r_hidden_still_censors_a_zero_compatible_observation():
+    result = r_hidden(v=8.0, i_obs=0.0, r_known=2.0)
+    assert getattr(result, "censored", False) is True
+    assert "censor" in result.reason.lower() or "unrepresentable" in result.reason.lower()
+
+
 # ----------------------------------------------------------------------------
 # Runner (works without pytest).
 # ----------------------------------------------------------------------------

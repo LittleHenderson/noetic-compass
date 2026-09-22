@@ -1,5 +1,90 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - PRE-HANDOVER RE-CHECK: four agents re-ran my claims. One was FALSE, three were
+OVERSTATED, and a defect of the same class was still live. All corrected here. 48/48 -> 51/51.
+
+**Why this ran.** The owner asked for an audit package to hand to a third-party agent. Before handing over a set of
+claims, four agents independently re-ran them with instructions to find anything false, overstated or unverifiable. This
+is what they found. Every correction below is the checkers' work, verified by me before acceptance.
+
+### A live defect of the same class, one function over
+
+Commit `86ba3d75` hardened `i_pred` and `r_total` against non-finite input and cited the monograph rule that an undefined
+quantity is refused with a reason and never emitted. **`r_hidden` was left out.** Measured at that commit:
+`r_hidden(v=nan, i_obs=2.0, r_known=2.0)` -> `RHidden magnitude=nan`, and with `v=inf` -> `magnitude=inf`. `r_known`
+already passed through `_as_resistance` and `i_obs` was already checked; only the drive term was unguarded. **The fix was
+narrower than the principle it invoked.** Now closed: a non-finite drive raises, matching `i_pred` - the drive is the
+value the caller applied, so it is a caller error, not an observation too uncertain to support a conclusion. Three tests
+added. **51/51 pass.** The worked example is unchanged (`magnitude 2.0`, `r_apparent 4.0`) and a zero-compatible
+observation is still censored rather than raised.
+
+### One claim of mine was FALSE
+
+The `86ba3d75` commit message and changelog said *"no test covered a non-finite input"*. **False.** The pre-fix test file
+already had `test_r_hidden_censors_non_finite`, which passed `float("nan")` and `float("inf")` as `i_obs` at lines 156
+and 158. The accurate sentence is: no test covered a non-finite input **to `i_pred` or `r_total`**. This makes the cause
+story sharper, not weaker - the author of the module had already thought about non-finite input and handled it by
+censoring in `r_hidden`, but never carried that guard to the other two functions.
+
+### Three claims of mine were OVERSTATED
+
+**1. The dangerous value. I had it backwards.** I called `i_pred(8.0, inf) -> 0.0` "the dangerous one" because a zero
+flow "reads downstream as a starved path", and the changelog went further and called it *"an ASOM classification produced
+from garbage"*. **There is no such code path.** `asom()` takes two enums and never reads a flow number; `asom(0.0,
+Outcome.INTENDED)` returns `None`, and `Region` is always a caller judgement - no function in the module derives one from
+a number. So the changelog wording was FALSE and the commit-message wording OVERSTATED.
+
+What a bad flow value actually does, measured through `delta_current`, the module's only numeric consumer of a flow:
+
+| `i_pred` value fed in | residual | sign |
+|---|---|---|
+| a CORRECT prediction, 2.0 | 0.0 | `WITHIN_TOLERANCE` |
+| 0.0 - the one I called dangerous | 2.0 | `OVERSHOOT` |
+| **nan** | **nan** | **`WITHIN_TOLERANCE`** |
+| inf | -inf | `UNDERSHOOT` |
+
+**NaN is the dangerous one**, because it produces the same sign reading as a perfectly correct prediction. The `0.0` case
+I singled out is the *visible* one. I picked the wrong value and stated the wrong mechanism.
+
+**2. "NaN compares False against every operator"** - not quite. `nan != 0.0` returns `True`. The accurate statement is
+that NaN compares False against every ordering and equality operator and True against `!=`. The conclusion is unaffected:
+`nan <= 0.0` is False, so NaN slid through the strictly-positive guard.
+
+**3. "All 39 book .md files are LF in index and worktree"** - true in the `helm3-lab` worktree (40 rows, all `i/lf w/lf`,
+`core.autocrlf=false`) and **false in the main repository**, where `core.autocrlf=true` gives 24 CRLF files, 15 LF and one
+mixed in the working tree. The claim never said which repository. Harmless to the canon pin - the committed blobs are
+identical either way, and a checker confirmed the eight changed files are identical **raw**, before any normalising - but
+an auditor checking the main repository would mark it false.
+
+### Framing the counts honestly
+
+**"458 compiler tests pass"** is literally what pytest prints and it reproduces, but it is not 458 independent compiler
+behaviours: 99 pre-date this work and 359 do not, and 270 of the 458 come from **three parametrized functions** swept over
+90 help-text example rows in a single file (`test_offline_help_text_canon.py` has six test functions and collects 273).
+Stated here before someone else states it.
+
+**"39/39 -> 48/48" proves nothing on its own**, because that commit wrote its own nine tests. The evidence that makes it
+mean something is the falsification run: HEAD's test file against the pre-fix implementation gives **`PASSED 42/48`** with
+six tests failing by name, each naming the bad value the old code returned (`inf`, `0.0`, `nan`, `nan`, `inf`, `nan`).
+That check is now part of the audit package.
+
+### A book finding, reported not acted on
+
+The OD-A edits deliberately stopped calling the op-amp a CJT - both headings became "Op-Amp - High-Gain Differential
+Stage with Feedback" and the datasheet body was rewritten. **Two sentences were missed and survive in the canon pin
+`d50abbbc`:** `Chapter_10_Special_Purpose_Components.md:322` ("**Op-Amp** is an ultra-high-gain CJT tamed by feedback")
+and `Appendix_B_Component_Datasheets.md:65` ("The op-amp is a CJT with so much raw gain it must be tamed by feedback.").
+The book now contradicts its own headings. **Not edited:** the owner approved a specific set of fixes, and these are two
+more of the same class found afterwards, in their book, so they need their own yes.
+
+### Also corrected in the audit package
+
+The commit list named eight commits; at least seven more carry the same date, including `c3855275`, which is the very
+baseline the diffs are taken against. The pointer to the second agent's worktree is stale - that worktree has moved on to
+`5b3d713c` on branch `codex/helm-cas-rpa-atlas-20260922`, so the audit package now cites commit `04547c55` instead of a
+directory path. And the lab suite's stated runtime was low: 200.42s in one run, 292.05s in another, so the package says
+3-5 minutes.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - CAS-Ohm: a real hole closed in the one function the owner named first. 39/39 -> 48/48.
 
 **Owner directive:** add CAS-Ohm to the CAS compiler as real calculation, and *"first locate existing CAS-Ohm implementations...
