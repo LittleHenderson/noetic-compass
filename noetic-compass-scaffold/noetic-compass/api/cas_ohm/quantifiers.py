@@ -195,6 +195,11 @@ class Score:
             raise ValueError(f"{self.unit} score out of range [0,{hi}]: {self.value}")
 
 
+def _is_finite(x: float) -> bool:
+    import math
+    return math.isfinite(x)
+
+
 def _as_resistance(name: str, r: Number) -> float:
     """Coerce a resistance argument, rejecting Score wrappers and non-positive
     values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
@@ -205,6 +210,14 @@ def _as_resistance(name: str, r: Number) -> float:
             f"type error, not a smaller numeric error (ch06:47-52)."
         )
     rf = float(r)
+    if not _is_finite(rf):
+        raise ValueError(
+            f"{name}: effective resistance must be a finite number; got {rf!r}. "
+            f"An undefined quantity is refused with a reason, never carried into "
+            f"arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular "
+            f"would pass a strictly-positive test, because NaN compares False "
+            f"against every operator."
+        )
     if rf <= 0.0:
         raise ValueError(
             f"{name}: effective resistance must be strictly positive "
@@ -238,7 +251,19 @@ def r_total(r_cap: Number, r_policy: Number,
                 f"r_total: component {name} is a {val.unit} Score; a score cannot "
                 f"be summed into a resistance total (ch07 quantity-kind rule)."
             )
-        total += float(val)
+        component = float(val)
+        if not _is_finite(component):
+            raise ValueError(
+                f"r_total: component {name} must be a finite number; got "
+                f"{component!r} (ch10:def:censoring)."
+            )
+        total += component
+    if not _is_finite(total):
+        raise ValueError(
+            f"r_total: the sum of the four constraint terms overflowed to "
+            f"{total!r}; a non-finite total is refused rather than carried "
+            f"into a prediction (ch10:def:censoring)."
+        )
     if total <= 0.0:
         raise ValueError(f"r_total must be strictly positive, got {total}")
     return total
@@ -283,7 +308,13 @@ def i_pred(v: Number, r_total_value: Number) -> float:
     be strictly positive.  A Score in the denominator is refused as a type error.
     """
     r = _as_resistance("i_pred", r_total_value)
-    return float(v) / r
+    vf = float(v)
+    if not _is_finite(vf):
+        raise ValueError(
+            f"i_pred: drive must be a finite number; got {vf!r}. An undefined "
+            f"quantity is refused with a reason, never emitted (ch10:def:censoring)."
+        )
+    return vf / r
 
 
 # Alias with the monograph's own symbol names for the response model.
@@ -535,11 +566,6 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
         r_apparent=r_apparent,
         r_known=r_known,
     )
-
-
-def _is_finite(x: float) -> bool:
-    import math
-    return math.isfinite(x)
 
 
 # ---------------------------------------------------------------------------

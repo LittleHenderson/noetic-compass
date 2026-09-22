@@ -1,5 +1,50 @@
 # tksCAS — Changelog
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - CAS-Ohm: a real hole closed in the one function the owner named first. 39/39 -> 48/48.
+
+**Owner directive:** add CAS-Ohm to the CAS compiler as real calculation, and *"first locate existing CAS-Ohm implementations...
+FIND, CHECK, AND CONNECT WHAT EXISTS, rather than assume CAS-Ohm needs to be written from nothing."* The FIND step found the
+module the owner had built on 2026-08-18 (commit `3ea9dbe6`) precisely so a later agent would not rewrite it:
+`noetic-compass-scaffold/noetic-compass/api/cas_ohm/`, 1,470 lines, pure standard library, `PASSED 39/39` when re-run today.
+
+**The CHECK step found a defect in `i_pred`, the first of the owner's three operations.** The monograph rule
+(`ch10:def:censoring`) is that an undefined quantity is refused with a written reason and NEVER emitted as NaN or infinity.
+Measured before the fix:
+
+| call | returned |
+|---|---|
+| `i_pred(nan, 4.0)` | `nan` |
+| `i_pred(8.0, nan)` | `nan` |
+| `i_pred(8.0, inf)` | **`0.0`** |
+| `i_pred(inf, 4.0)` | `inf` |
+| `r_total(1e308, 1e308, 1.0, 1.0)` | `inf` |
+
+The quiet one is `i_pred(8.0, inf) -> 0.0`: a clean-looking zero flow out of nonsense input, which reads downstream as a
+STARVED path - an ASOM classification produced from garbage. Cause: the guard was `if rf <= 0.0`, and NaN compares False
+against every operator, so NaN slid straight through a strictly-positive test; infinity is legitimately positive and was never
+questioned. The module already had `_is_finite`; `_as_resistance` never called it. All 39 tests passed because none covered a
+non-finite input.
+
+**Fixed.** `_as_resistance` refuses a non-finite resistance BEFORE the sign test (so NaN is named, not mis-reported as
+non-positive); `i_pred` refuses a non-finite drive; `r_total` refuses a non-finite component and an overflowing sum.
+`_is_finite` hoisted above its first use. Refusals RAISE, matching how the module already refuses zero and negative
+resistance - a caller error is not an observation, so it is not censored. Nine tests added, one per measured case plus the
+unchanged good paths: **48/48 pass**. Verified unchanged: `i_pred(8.0, 4.0) = 2.0`, `r_total(1,2,3,4) = 10.0`, the book's
+worked example `r_hidden(V=8, I_obs=2, R_known=2)` still gives magnitude `2.0` and `r_apparent 4.0`, and zero/negative
+resistance is still refused.
+
+**State of the owner's three operations:** `I = V/R` exists (`i_pred`, now hardened). `R = V/I` exists but only as a private
+step inside `r_hidden`, surfaced as `RHidden.r_apparent` and hard-tagged `APPARENT_SAME_SAMPLE` - a role the monograph bars
+from re-entering a prediction, so surfacing it as an operation must carry that tag. `V = I x R` is **MISSING** and is the one
+piece to write. None of the three is reachable from the compiler yet; that connection is the build.
+
+Canon read first-hand: `book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md` names the three modes
+(Measure `I=V/R`, Design `V=IxR`, Diagnose `R=V/I`), fixes every scale (R 0-100; saturation 0-1; Dial integer 3-9; rails
+3.3-12 V), fixes `I_Q = min(10, 10 x I_raw / I_FS)`, decomposes `R_total = R_cap + R_policy + R_context + R_resource` (a bare
+total "tells you nothing"), and forbids chaining measured gains ("Never let a bare beta off the bench"). Note for the build:
+the book calls `I = V/R` the *Measure* mode while its own text calls it "the design-time prediction", so compiler operations
+will be named for what they COMPUTE, never for the mode.
+
 ## 2026-09-21 UTC (HELM 3.0 LAB) - CORRECTION to the OD-A brief: the `gate` clash was already reachable in the COMMITTED book.
 
 **What I got wrong.** The OD-A brief and the commit message for the book canon fix both said the uncommitted edits only made
