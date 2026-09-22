@@ -28,6 +28,22 @@ HEAD is `86ba3d75431c56147f229f24794805a3d8504f76`.
 
 Plus `a4b2e0d7` (2026-09-22): r_hidden hardened the same way, after the pre-handover re-check found the defect was still live one function over. HEAD is now `a4b2e0d7`.
 
+**Update after the peer audit (2026-09-22).** An independent peer audit (`codex/helm-peer-audit-20260922` @
+`0922f339`, `records/peer_audit_20260922/REPORT.md`) found that this package's list of my mistakes was incomplete.
+Everything it found about my work was re-measured by me and accepted. Since then:
+
+| commit | what it does |
+|---|---|
+| `9fe1eb36` | restores the **four more** passing tests my merge deleted (compiler suite 639 → 643) |
+| `67c539a8` | rewrites `03_REPRODUCE.md` so every number names both the implementation and the test revision |
+| `c3471ef9` | adds items 15–20 to `04_WHAT_I_GOT_WRONG.md`; annotates claims in place; adds MERGE-6 and OHM-11 |
+
+**The older CAS-Ohm module on this branch is not dependable yet** (claim OHM-11): an invalid tolerance reports
+`WITHIN_TOLERANCE`, finite inputs overflow to `inf`, and a saved value can reopen in a different band. Any earlier
+wording in this package that calls it "hardened" is qualified by that. Three book issues found by the peer audit
+await the owner and are not edited. Receipts: `receipts_restore_four_tests_20260922/`,
+`receipts_reproduction_pins_20260922/`.
+
 **The full dated list matters.** Seven further commits carry the date 2026-09-21 on this same line, including
 `c3855275` (15:30) — which is the baseline every diff in `03_REPRODUCE.md` is taken against — and `a32d05c8` (15:28),
 plus the six from the second agent that the merge brought in (`0c4eb7da`, `8feed0cf`, `8c409a28`, `a5956609`,
@@ -66,7 +82,7 @@ built — including their disagreements with me).
 
 I am the author. These are the places where an author's account is least reliable, so start here.
 
-1. **Test counts.** I quote 639 (was 458 before three deleted guards were restored), 348, 51/51, 99. Counts are easy to state and easy to get wrong. Re-run them.
+1. **Test counts.** I quote 643 at `9fe1eb36` (639 at `626cc84b`, 458 at the merge `078d00ed`), 348, 51/51, 99. Each count belongs to a named pair of implementation and test revisions — see `03_REPRODUCE.md`. Counts are easy to state and easy to get wrong. Re-run them.
    Note that two of the suites need `TEMP` and `TMP` pointed **outside** the repository or they refuse to run.
 2. **"Nothing else changed."** I claim my CAS-Ohm fix changed only the non-finite cases. That is a claim about
    everything I did *not* test. Try to find a behaviour I altered without noticing.
@@ -89,11 +105,16 @@ Stated plainly so you can hold me to it:
 
 - **No model was run.** No training, no inference, no GPU, no CPU inference, no cloud job, no money spent.
   Everything here is symbolic code, text and tests. If you find evidence otherwise, report it.
-- **CAS-Ohm is not connected to the compiler yet.** The module exists and is hardened; the connection is
+- **CAS-Ohm is not connected to the compiler yet — on this branch.** The module exists and is hardened; the connection is
   designed but not built. Any claim that the compiler can compute CAS-Ohm today would be false.
+  *Corrected 2026-09-22 (peer audit):* this is true only of `research/helm-3.0-cas-lab`. On
+  `codex/helm-rpa-recorded-run-20260922` @ `eb998556` the compiler already computes CAS-Ohm through a different
+  helper (`api/notation/cas_ohm.py`). And "hardened" is too strong: see claim OHM-11.
 - **Nothing here is validated against a live model.** The book itself says these are "design scores,
   calibration values, or observed ratings," never "a voltmeter reading from a brain or a language model."
-- **The PCBA board reader is not built.** Two specifications exist; no code.
+- **The PCBA board reader is not built — on this branch.** Two specifications exist; no code.
+  *Corrected 2026-09-22 (peer audit):* other branches already hold a bounded PCBA reader (for example
+  `codex/helm-pcba-reader-20260921` and `eb998556`). "Absent here" never means "absent from the project".
 - **I am not the research governor.** Owner decisions are recorded in `OWNER_DECISIONS_20260921.json`. Where a
   decision is unmade, the work is supposed to report it as open rather than choose. Check whether it does.
 
