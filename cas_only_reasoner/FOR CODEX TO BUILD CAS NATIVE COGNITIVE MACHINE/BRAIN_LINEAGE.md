@@ -1,5 +1,15 @@
 # The learning brain — lineage record
 
+## 2026-09-21 Codex continuation: engineering only
+
+Compiler recovery/corrections, Q3 loader hardening and versioned data rebuilds,
+and Q4 representation/decoder preparation are recorded in
+`CODEX_CONTINUATION_20260921.md` and `records/continuation_20260921/`.
+These deterministic results do not add learned parameters, training worlds,
+held-out neural scores, a checkpoint, a scientific acceptance label or a new
+Helm release. Helm 1.0 remains the last release; Helm 2.0 remains experimental;
+Helm 3.0 remains prospective. Book decisions and evaluator custody remain open.
+
 **This file is the single place that names the brain that learns, says what it has actually
 achieved, and says where the proof is. Every agent that touches this work reads this file first
 and updates it in the same commit as any new result.**

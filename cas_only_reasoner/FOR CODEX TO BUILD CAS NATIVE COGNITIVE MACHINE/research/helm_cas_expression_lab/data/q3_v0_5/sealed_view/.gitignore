@@ -1,0 +1,3 @@
+# Derived files: regenerate with q3_export_behavior_pairs.py --write (deterministic). EXPORT_REPORT.json pins each
+# file's count and sha256; Q3_DATA_PINS.json (outside this folder) pins the report. The default mode checks, never writes.
+*.jsonl

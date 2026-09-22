@@ -1,0 +1,59 @@
+{
+  "schema": "helm.codex-source-recovery/1",
+  "source_root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm3-lab",
+  "source_head": "c38552754388573be36a07f6863299d9db1a5f63",
+  "files": [
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\Q3_DATA_PINS.json",
+      "sha256_raw": "CCF18983F614454497376F23987C8C595CA5737FCEE348EA51237A2935AD9C5B"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\q3_behaviour_records.py",
+      "sha256_raw": "6C426803426D8BE3EE732C5A06B5975B954C6C71153CA2428A257B398228711C"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\q3_export_behavior_pairs.py",
+      "sha256_raw": "7A245463A20439492FFF003423A15E63BB27F869FB8D7AFEFD44DB6E01DF9E37"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\test_compiler_nesting_facts.py",
+      "sha256_raw": "3AC41C00F0B0A9FC3AB0B0F98299BE0BE69DD4EDB4AC29DCCDDADE833901C375"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\test_q3_behaviour_records.py",
+      "sha256_raw": "1B56D924D13CEB215B5023CE644A57C9D58480E56114D282CE6254274A4E6C48"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\test_q3_load_and_export.py",
+      "sha256_raw": "50D129BAC7010D508A2FEE1D19EB3BDB2B254370C6D20029FF32140CEFD567F1"
+    },
+    {
+      "path": "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+      "sha256_raw": "1E20BDB7B6AE6EE0CB9A0A17A7002E47392AC8FBA43A38DF45BCCA62F9299AE4"
+    },
+    {
+      "path": "docs\\reference\\tks_28_foundations_translation_key.md",
+      "sha256_raw": "3F68300884BFF6EB8A4846E015A634E8859D85DC920F6235E755F5303952AB81"
+    },
+    {
+      "path": "noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+      "sha256_raw": "7FB6CF2159092251856A90D8E2FFA5086FD21635F84E94675541479FD5FABAAA"
+    },
+    {
+      "path": "noetic-compass-scaffold\\noetic-compass\\dashboard\\src\\pages\\CompilerPage.tsx",
+      "sha256_raw": "CB3F961F4A74388399053FE057CF01568E45513D0B5D9FDE2ED92B90BE1DB04D"
+    },
+    {
+      "path": "offline-cas\\cas_terminal.py",
+      "sha256_raw": "C678D8F9298452D60FAA87A9C2472D87A0C342A91FF0AF371587363BCD8FD98D"
+    },
+    {
+      "path": "noetic-compass-scaffold\\noetic-compass\\tests\\test_notation_compiler_nesting_and_defects.py",
+      "sha256_raw": "E4D89DCE87AF99B9703FFE7BEC58C21B3B944E638E7378FC2BAAF88519B30AC4"
+    },
+    {
+      "path": "noetic-compass-scaffold\\noetic-compass\\tests\\test_offline_help_text_canon.py",
+      "sha256_raw": "155F6FDCABC6BF70CED15EC952DA459D9A57DDB975E0DD1B3826E89BD6676D98"
+    }
+  ]
+}

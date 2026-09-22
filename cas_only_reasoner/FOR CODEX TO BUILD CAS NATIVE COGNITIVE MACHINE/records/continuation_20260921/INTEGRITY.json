@@ -1,0 +1,50 @@
+{
+  "schema": "helm.codex-continuation-integrity/1",
+  "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+  "compiler_source_bundle_zip_bytes_equal": true,
+  "terminal_source_bundle_zip_bytes_equal": true,
+  "zip_sha256_raw": "7d4bf12da9189c2d182a17014d2162c4676d65d37c60fca23b246f536747a890",
+  "original_source_changed_concurrently": [
+    "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\Q3_DATA_PINS.json",
+    "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\q3_behaviour_records.py",
+    "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\test_compiler_nesting_facts.py",
+    "cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md",
+    "docs\\reference\\tks_28_foundations_translation_key.md",
+    "noetic-compass-scaffold\\noetic-compass\\api\\notation\\compiler.py",
+    "noetic-compass-scaffold\\noetic-compass\\dashboard\\src\\pages\\CompilerPage.tsx",
+    "offline-cas\\cas_terminal.py",
+    "noetic-compass-scaffold\\noetic-compass\\tests\\test_notation_compiler_nesting_and_defects.py",
+    "noetic-compass-scaffold\\noetic-compass\\tests\\test_offline_help_text_canon.py"
+  ],
+  "recovery_record_is_a_historical_snapshot": true,
+  "q3_v0_5_to_v0_7_row_files_identical": 24,
+  "data_versions": {
+    "4": {
+      "manifest_sha256_lf": "5ac78006a566e62d1aab888018e3f9b4e4f98c2833cf46cc2c2489d08d52c838",
+      "compiler_sha256_lf": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+      "records": 10421
+    },
+    "5": {
+      "manifest_sha256_lf": "304dc5c99c51441d432db7ef35be30b0fea97d64b9165f4ca43fa84c8b8c7616",
+      "compiler_sha256_lf": "5c732d95f5862e5e3e5bf0a2296be092f0e9c980127a5690aec4d41567fdf775",
+      "records": 10421
+    },
+    "6": {
+      "manifest_sha256_lf": "9bf440e9a5a1abdd139bfddc82cce0dad52606f86bf7099f2f51baf5a28acb7c",
+      "compiler_sha256_lf": "9d64c949ebe70c39a6ef1d303d4aa5e939f08e387398bec286ac0762a8b1b380",
+      "records": 10421
+    },
+    "7": {
+      "manifest_sha256_lf": "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9",
+      "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+      "records": 10421
+    }
+  },
+  "no_neural_or_provider_execution": true,
+  "q3_v0_5_row_and_baseline_files_match_current_original": true,
+  "original_current_head": "7f32129dc767f4098d5346d9416dec17935fa556",
+  "original_current_v0_5_manifest_sha256_lf": "a09768d20fb3b86c0493fe1546478068328e6d3c923d17318399eb76cd5a89f9",
+  "v0_5_manifest_in_this_branch_is_the_recovered_snapshot": true,
+  "launcher_crlf_without_double_carriage_return": true,
+  "package_python_initializer_lf": true
+}

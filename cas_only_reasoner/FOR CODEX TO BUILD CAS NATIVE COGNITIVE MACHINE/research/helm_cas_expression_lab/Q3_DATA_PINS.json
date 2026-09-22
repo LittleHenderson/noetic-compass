@@ -4,6 +4,21 @@
    "data_dir": "data/q3_v0_4",
    "export_report_sha256": "e4259515d66b493ee3ff4264afd04a172f3999294c3fada384dbece4a80dd357",
    "manifest_sha256": "5ac78006a566e62d1aab888018e3f9b4e4f98c2833cf46cc2c2489d08d52c838"
+  },
+  "helm-cas-expression-lab.q3-behaviour-records/0.5": {
+   "data_dir": "data/q3_v0_5",
+   "export_report_sha256": "a0891896e3b386bc8dc78f8684739840d081f0c6d27473fa95a0e410a761be8b",
+   "manifest_sha256": "304dc5c99c51441d432db7ef35be30b0fea97d64b9165f4ca43fa84c8b8c7616"
+  },
+  "helm-cas-expression-lab.q3-behaviour-records/0.6": {
+   "data_dir": "data/q3_v0_6",
+   "export_report_sha256": "98e6dd4cea7809896e95b0808f9d2d52b834406ab904d7c352d7fb03a5b345dd",
+   "manifest_sha256": "9bf440e9a5a1abdd139bfddc82cce0dad52606f86bf7099f2f51baf5a28acb7c"
+  },
+  "helm-cas-expression-lab.q3-behaviour-records/0.7": {
+   "data_dir": "data/q3_v0_7",
+   "export_report_sha256": "cb69d3784b5623f7b4a2afb0913710fa7b9accc0e7665593ed7dbb3e2a4849c0",
+   "manifest_sha256": "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9"
   }
  },
  "schema": "helm-cas-expression-lab.q3-data-pins/0.1",

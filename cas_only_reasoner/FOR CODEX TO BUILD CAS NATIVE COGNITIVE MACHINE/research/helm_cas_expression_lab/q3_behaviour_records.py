@@ -1,4 +1,17 @@
-"""Q3 v0.4 -- behaviour-paired records with SEALED targets, STRICT structure splits, and baselines that include the attacks.
+"""Q3 v0.7 -- behaviour-paired records with SEALED targets, STRICT structure splits, and baselines that include the attacks.
+
+v0.7 follows final review of identifier boundaries and fully-labelled repeated nesting words.
+  The intermediate v0.6 build and its exact compiler snapshot remain preserved.
+
+v0.6 preserves v0.4/v0.5 and binds a fresh build to the recovered and corrected compiler.
+  The source, offline directory and ZIP now carry identical compiler bytes. Mechanical
+  register-identity, warning, diagnostic and short-pattern fixes do not select book readings.
+
+v0.5 (2026-09-21) is v0.4 rebuilt on the CHANGED compiler text (LF sha256 5c732d95f5862e5e...; v0.4 was bound to 8169188ad73df8fc...).
+  The compiler gained the book's meaning for the Nesting Operator (an additive `nesting` block) and eight defect fixes; the
+  R and G targets are parse trees, which the change does not touch (checked: every v0.4 observation gives the same tree under
+  both texts), but the manifest binds the data to one compiler text, so a new version is the honest form. Nothing else changed.
+  The pool is now found by walking up from the worktree (the scaffold being checked out here no longer hides the pool).
 
 v0.4 (2026-09-21) answers the three-attacker review of v0.3, which broke two claims and found the rest sound:
   G   'eval depths are longer than anything in train' was FALSE: train held 485 rows at eval's depths, and 170 of 256 eval
@@ -104,7 +117,7 @@ def _main_checkout():
 
 
 MAIN_CHECKOUT = _main_checkout()
-SCHEMA = "helm-cas-expression-lab.q3-behaviour-records/0.4"
+SCHEMA = "helm-cas-expression-lab.q3-behaviour-records/0.7"
 SEED = 20260921
 FAMILIES = ("R", "G", "A", "C")
 SPLITS = ("train", "dev", "eval")
@@ -147,7 +160,7 @@ def _load_compiler():
 
 
 def _find_pool():
-    for root in (REPO, MAIN_CHECKOUT):
+    for root in [REPO, MAIN_CHECKOUT, *REPO.parents]:
         cand = root / SDG_POOL
         if cand.is_file():
             return cand, {"path": SDG_POOL, "sha256": _sha_bytes(cand.read_bytes().replace(b"\r\n", b"\n")), "hash_policy": "lf-normalised"}
@@ -694,10 +707,12 @@ def baselines_reconstruction(compile_expression, vis_eval, seal_eval):
 # ---------------------------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", default=str(HERE / "data" / "q3_v0_4"))
+    parser.add_argument("--out", default=str(HERE / "data" / "q3_v0_7"))
     parser.add_argument("--seed", type=int, default=SEED)
     args = parser.parse_args()
     out = pathlib.Path(args.out)
+    if out.exists() and any(out.iterdir()):
+        raise SystemExit("Q3_REFUSED:OUTPUT_NOT_EMPTY:use a fresh data version directory")
     out.mkdir(parents=True, exist_ok=True)
     compile_expression, compiler_pin = _load_compiler()
     pool_path, pool_pin = _find_pool()
@@ -722,7 +737,7 @@ def main():
                 files[path.name] = {"records": len(rows), "sha256": _sha_bytes(body)}
             counts["%s_%s" % (fam, split)] = len(vis)
 
-    baselines = {"schema": "helm-cas-expression-lab.q3-baselines/0.4", "scored_on": {"A": ["dev", "eval"], "C": "eval", "R": "eval", "G": "eval"},
+    baselines = {"schema": "helm-cas-expression-lab.q3-baselines/0.5", "scored_on": {"A": ["dev", "eval"], "C": "eval", "R": "eval", "G": "eval"},
                  "A": {split: baselines_A(*packets["A"]["train"], *packets["A"][split]) for split in ("dev", "eval")},
                  "C": baselines_C(*packets["C"]["eval"]),
                  "R": baselines_reconstruction(compile_expression, *packets["R"]["eval"]),
@@ -732,7 +747,7 @@ def main():
     files["baselines.json"] = {"records": None, "sha256": _sha_bytes(baselines_body)}      # v0.4: the baselines are hashed too
 
     manifest = {
-        "schema": SCHEMA, "seed": args.seed, "built": "2026-09-21", "generator": pathlib.Path(__file__).name, "supersedes": "data/q3_v0_3 (kept on disk: attacked on 2026-09-21 -- G's 'deeper than train' claim and A's 'richly present' claim were false); v0.3 superseded v0.2 (bound to a contract HEAD no longer holds); v0.2 superseded v0.1 (found leaking)",
+        "schema": SCHEMA, "seed": args.seed, "built": "2026-09-21", "generator": pathlib.Path(__file__).name, "supersedes": "data/q3_v0_4 (kept on disk, unchanged: bound to compiler text 8169188ad73df8fc..., which was replaced on 2026-09-21 by 5c732d95f5862e5e... -- book meaning for the Nesting Operator, eight defect fixes; R and G targets are parse trees and are unchanged); v0.4 superseded v0.3 (kept on disk: attacked on 2026-09-21 -- G's 'deeper than train' claim and A's 'richly present' claim were false); v0.3 superseded v0.2 (bound to a contract HEAD no longer holds); v0.2 superseded v0.1 (found leaking)",
         "rebalancing_note": "Family A's dev and eval are DELIBERATELY rebalanced (half order-flip rows, stratified case families). Their answer rates differ from train BY CONSTRUCTION -- see stats.A.admissible_rate_by_case_family. A model's calibration on eval is therefore not comparable with its calibration on train, and a gap between train and eval accuracy is partly this sampling decision.",
         "target_spelling": "R and G targets are the compiler's AST with one documented, invertible change: the compiler writes a Noetic as 'CO-k', the lab target writes '^k' (owner ruling OD-2). q3_behaviour_records.to_compiler_spelling restores the compiler's form exactly.",
         "contract_binding": "operation_contracts_digest MUST equal contract_digest in OPERATION_CONTRACTS.json; a test and the exporter refuse anything else",
@@ -768,7 +783,7 @@ def main():
     with open(out / "manifest.json", "w", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(manifest, indent=1, sort_keys=True))
 
-    print("Q3 v0.4 written to %s" % out)
+    print("Q3 v0.7 written to %s" % out)
     print("  counts:", counts)
     print("  R: %d valid SDG expressions, %d strict shapes; per split %s; root mix eval %s" % (statsR["valid_unique"], statsR["strict_shape_groups"], statsR["strict_shapes_per_split"], statsR["root_node_mix"]["eval"]))
     print("  G: %d generated valid, rejected %s; bare tree shapes per split %s (shared: 0, asserted); depths %s" % (statsG["generated_valid"], statsG["rejected_by_compiler"], statsG["bare_tree_shapes_per_split"], statsG["depths_per_split"]))

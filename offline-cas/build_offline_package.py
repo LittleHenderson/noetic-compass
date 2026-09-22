@@ -68,10 +68,11 @@ def _populate(target: Path) -> None:
         "from .compiler import CAS_GRAMMAR_BNF, compile_expression, compile_file\n"
         "__all__ = ['CAS_GRAMMAR_BNF', 'compile_expression', 'compile_file']\n",
         encoding="utf-8",
+        newline="\n",
     )
     shutil.copy2(COMPILER, notation_dir / "compiler.py")
 
-    (target / "cas.bat").write_text("@echo off\r\npython \"%~dp0cas.py\" %*\r\n", encoding="utf-8")
+    (target / "cas.bat").write_bytes(b'@echo off\r\npython "%~dp0cas.py" %*\r\n')
 
 
 def build() -> None:

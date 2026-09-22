@@ -20,7 +20,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import q3_load  # noqa: E402
 
-DATA = HERE / "data" / "q3_v0_4"
+DATA = HERE / "data" / "q3_v0_7"
 EXPORTER = HERE / "q3_export_behavior_pairs.py"
 
 
@@ -281,6 +281,16 @@ def test_check_mode_reports_drift_and_never_repairs(copy):
     (copy / "sealed_view" / "behavior_pairs_C_eval.jsonl").write_text('{"forged": true}\n', encoding="utf-8")
     run = _export("--data", str(copy))
     assert run.returncode == 1 and "EXPORT_DRIFT behavior_pairs_C_eval.jsonl" in run.stdout
+
+
+@pytest.mark.parametrize("body", [b"\xff", b"[]", b'{"files": null}'])
+def test_bad_export_report_is_refused_without_traceback_or_repair(copy, body):
+    report = copy / "sealed_view" / "EXPORT_REPORT.json"
+    report.write_bytes(body)
+    run = _export("--data", str(copy))
+    assert run.returncode == 1 and "EXPORT_DRIFT" in run.stdout
+    assert "Traceback" not in run.stderr
+    assert report.read_bytes() == body
 
 
 def test_the_exporter_refuses_forged_and_superseded_data(copy):

@@ -1,8 +1,10 @@
 """MEASURED FACTS about how the CAS compiler handles a thought inside a thought, pinned so nobody has to re-derive them.
 
-Subject: `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 8169188ad73df8fc... -- the SAME text that
-ships in `dist/cas-offline/` and that Q3's manifest already pins. Measured 2026-09-21 by my own probes and by five independent
-examiners plus a critic who re-ran twelve of their experiments (all twelve confirmed). Symbolic only; no model is involved.
+Subject: `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 61ed5a45970459e4... -- the SAME text that
+ships in `dist/cas-offline/`. First measured 2026-09-21 on text 8169188ad73df8fc... by my own probes and by five independent
+examiners plus a critic who re-ran twelve of their experiments (all twelve confirmed). RE-MEASURED the same day after the
+compiler was changed (book meaning for the Nesting Operator; defects fixed): the facts marked FIXED below flipped and
+are pinned in their new form; the name-keyed set limit is kept on purpose (owner decision pending). Symbolic only; no model is involved.
 
 Three levels are kept apart in every test name:
     WRITES   the compiler stores which expression is inside which (in the parse tree, the `ast`)
@@ -22,7 +24,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import q3_behaviour_records as q3  # noqa: E402
 
-COMPILER_SHA256_LF = "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c"
+COMPILER_SHA256_LF = "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
 RING = "∘"          # the ring operator, the book's Nesting Operator sign
 IN, NOT_IN, SUBSET = "∈", "∉", "⊆"
 compile_expression, PIN = q3._load_compiler()
@@ -90,17 +92,29 @@ def test_APPLIES_NOT_a_noetic_nested_with_its_opposite_does_not_return_to_idea()
     assert divided["kind"] == "state" and divided["dominant_state"] == "C0"      # only DIVISION cancels
 
 
-def test_APPLIES_NOT_drives_and_registers_on_nested_thoughts_are_dropped_from_the_value():
+def test_FIXED_drives_and_registers_on_nested_thoughts_are_kept_in_the_nesting_block():
     _, plain = run(ring("^8^C", "^3^C"))
     _, marked = run(ring("^8^C_{F2}|A", "^3^C|f"))
-    assert plain == marked and set(marked) == {"kind", "sequence", "composed_operator", "orbit_length", "domain"}
+    legacy = {"kind", "sequence", "composed_operator", "orbit_length", "domain"}
+    assert {k: plain[k] for k in legacy} == {k: marked[k] for k in legacy}      # the legacy fields still drop them ...
+    assert [(t["drive"], t["register"]) for t in marked["nesting"]["terms"]] == [("F2", "A"), (None, "f")]   # ... the nesting block keeps them
+    assert marked["nesting"]["innermost"] == "^8^C_{F2}|A" and marked["nesting"]["governing"] == "^3^C|f"
 
 
-def test_APPLIES_NOT_a_thought_cannot_be_nested_in_a_thought_of_another_domain():
-    art, _ = run(ring("^8^P", "^3^C"))
-    assert not art["valid"] and "share a domain" in art["error"]      # the book's flagship picture -- a working thought inside a principled one -- is refused
+def test_FIXED_a_thought_can_be_nested_in_a_thought_of_another_domain_with_a_warning():
+    art, value = run(ring("^8^P", "^3^C"))
+    assert art["valid"] and value["nesting"]["crosses_domains"] is True and any("crosses Domains" in w for w in art["warnings"])
     art, _ = run("(^2^C + ^5^C) %s ^3^C" % RING)
-    assert not art["valid"]                                           # a sum cannot be nested either: only single states and fractals
+    assert not art["valid"]                                           # a sum still cannot be nested: only single states and fractals
+
+
+def test_APPLIES_the_books_meaning_is_now_computed_beside_the_legacy_digit_sum():
+    _, nested = run(ring("^8^C", "^9^C"))
+    assert nested["composed_operator"] == "CO-7"                                          # legacy digit sum, unchanged
+    assert nested["nesting"]["canonical_form"]["form"] == ["^0^C"]                        # Dual Cancellation, computed
+    assert nested["nesting"]["orbit_class"] == "stabilizing"
+    _, other = run(ring("^9^C", "^8^C"))
+    assert other["nesting"]["canonical_form"]["agreed"] is False and "N3" in other["nesting"]["open_questions"]   # the book is in two minds: reported, not decided
 
 
 # ---------------------------------------------------------------- sets as meta-logic: EXECUTED, and they match the book
@@ -133,25 +147,27 @@ def test_WRITES_a_set_can_sit_inside_a_set_three_levels_deep_without_being_flatt
 
 
 def test_LIMIT_the_outer_set_remembers_the_inner_set_by_NAME_not_by_what_is_in_it():
+    # STILL TRUE on purpose: a content-keyed version was built and withdrawn after review; set identity is the owner's call.
     program = "let S1 = NoeticSet{^2, ^7}; let S2 = {S1, NoeticSet{^3}}; "
     assert run(program + "S1 %s S2" % IN)[1]["holds"] is True
     assert run(program + "NoeticSet{^2, ^7} %s S2" % IN)[1]["holds"] is False     # same contents, spelled out: not recognised
     assert run(program + "NoeticSet{^3} %s S2" % IN)[1]["holds"] is True          # recognised only because it was spelled this way when S2 was built
     _, s2 = run(program + "S2")
-    assert s2["elements"] == ["NoeticSet{CO-3}", "S1"] or sorted(s2["elements"]) == ["NoeticSet{CO-3}", "S1"]
+    assert sorted(s2["elements"]) == ["NoeticSet{CO-3}", "S1"]
 
 
 def test_LIMIT_an_expression_put_into_a_set_is_worked_out_first_and_only_a_label_is_kept():
     _, s = run("{^2^C + ^5^C, ^3^C}")
-    assert sorted(s["elements"]) == ["C2", "C3"]                       # the sum is gone; only the label of its answer remains
+    assert sorted(s["elements"]) == ["C2", "C3"]                       # the sum is gone; only the label of its answer remains (still true)
     program = "let S4 = {%s}; " % ring("^8^C", "^3^C")
-    assert run(program + "(%s) %s S4" % (ring("^8^C", "^3^C"), IN))[1]["holds"] is False     # a ring result in a set cannot be found again
-    assert run("let R1 = ^5^P -> ^5^C; let S5 = {R1}; R1 %s S5" % IN)[1]["holds"] is False    # nor can a relation
+    assert run(program + "(%s) %s S4" % (ring("^8^C", "^3^C"), IN))[1]["holds"] is True      # FIXED: a ring result in a set is found again, order and all
+    assert run(program + "(%s) %s S4" % (ring("^3^C", "^8^C"), IN))[1]["holds"] is False
+    assert run("let R1 = ^5^P -> ^5^C; let Q5 = {R1}; R1 %s Q5" % IN)[1]["holds"] is True    # FIXED: so is a relation
 
 
 def test_LIMIT_single_letters_are_reserved():
     art, _ = run("let S1 = NoeticSet{^2}; let C = {S1}; |C|")
-    assert not art["valid"]                                            # P, C, E, O (domains) and T, A, f, E (registers) are not free names
+    assert not art["valid"] and "is reserved in CAS notation" in art["error"]     # P, C, E, O (domains) and T, A, f, E (registers) are not free names; the message now says so
 
 
 # ---------------------------------------------------------------- the picture: boxes inside boxes already exist for sets

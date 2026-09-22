@@ -119,7 +119,7 @@ def build(data_dir):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data", default=str(HERE / "data" / "q3_v0_4"))
+    parser.add_argument("--data", default=str(HERE / "data" / "q3_v0_7"))
     parser.add_argument("--write", action="store_true", help="write the files, the report and the report's pin (default: check, write nothing)")
     args = parser.parse_args()
     data_dir = pathlib.Path(args.data)
@@ -139,6 +139,7 @@ def main():
     pin = pins["data_versions"][manifest["schema"]]
     if args.write:
         out.mkdir(exist_ok=True)
+        (out / ".gitignore").write_text("behavior_pairs_*.jsonl\n", encoding="utf-8", newline="\n")
         for name, body in bodies.items():
             (out / name).write_bytes(body)
         report = {"schema": "helm-cas-expression-lab.q3-behavior-pair-export/0.3", "source": "data/" + data_dir.name,
@@ -162,9 +163,11 @@ def main():
         print("EXPORT_DRIFT: EXPORT_REPORT.json is not the pinned report")
         drift += 1
     try:
-        committed = q3_load.strict_loads(report_bytes.decode("utf-8"), "EXPORT_REPORT.json")
-        assert isinstance(committed, dict) and isinstance(committed.get("files"), dict)
-    except (q3_load.Q3LoadError, AssertionError) as error:
+        committed = q3_load.strict_loads(report_bytes, "EXPORT_REPORT.json")
+        if not isinstance(committed, dict) or not isinstance(committed.get("files"), dict):
+            print("EXPORT_DRIFT: the committed report must be an object with a files object")
+            return 1
+    except q3_load.Q3LoadError as error:
         print("EXPORT_DRIFT: the committed report is unreadable (%s)" % error)
         return 1
     for field, value in (("contract_sha256", contract_digest), ("source_manifest_sha256", q3_load.manifest_sha(data_dir)), ("source_manifest_schema", manifest["schema"])):

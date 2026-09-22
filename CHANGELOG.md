@@ -1,5 +1,39 @@
 # tksCAS — Changelog
 
+## 2026-09-21 — Recover CAS compiler work and prepare Q4 interfaces
+
+Recovered the unfinished compiler/help/data changes from `helm3-lab` without
+editing that checkout. Corrected register-sensitive nesting set keys, runtime
+cross-Domain warnings, identifier/reserved-name diagnostics, and false repeated
+pattern classification. Preserved unresolved book readings and the selected
+28 Foundations 1.0 source. Repaired the imported-module demo and canonical help
+descriptions; rebuilt the matching offline folder/ZIP and normalized generated
+launcher/initializer line endings. Synthetic conversation wording now uses a
+new generator version and content-bound IDs; no old dataset was regenerated.
+
+Preserved the originally recovered Q3 v0.5, built and pinned v0.6/v0.7, and
+verified all 24 visible/target row files are unchanged from recovered v0.5.
+v0.7 exports 10,421 records with zero schema failures. Export report decoding
+now rejects malformed UTF-8 and bad shapes without tracebacks or repairs.
+
+Q4 adds ordered inputs, an order-blind R0 control, a bounded AST decoder,
+CUDA-only R1 code, R2 structural-memory interfaces, checkpoint checks and a
+bounded single-job supervisor. Tests use scripted/fake objects; no neural
+initialization, inference, training, real signing, cloud launch or promotion
+occurred. The saved preparation is `PREPARED_NOT_AUTHORIZATION`.
+
+Validation: 458 compiler/demo/help checks; 304 lab checks including the initial
+48 Q4 checks; 92 final Q4 checks (48 overlap); 27 synthetic checks. Final added
+learner modules also pass both existing evaluator-boundary scans. Dashboard
+TSX syntax passes TypeScript 6.0.2. No full dashboard build or real CUDA execution
+is claimed. Evidence and initial failed test invocations are recorded under
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/continuation_20260921/`.
+
+The original checkout independently advanced to `7f32129d` during this work,
+including repinning its v0.5 in place. Historical and current hashes are kept
+separate. No formal merge, production change, frozen contract/engine change,
+or unverified PCBA owner ruling was applied.
+
 ## 2026-09-21 — Q3 loader 0.4: remaining malformed-input errors
 
 The loader now reports Q3LoadError for malformed schema/count/pin/contract

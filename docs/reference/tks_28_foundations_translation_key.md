@@ -40,16 +40,22 @@ TKS Foundation labels and CAS Drive names are position-matched:
 
 CAS Drive names are authoritative. Where TKS labels use different nomenclature, the mapping is by position in the 7-Foundation sequence, not by label. TKS-specific labels are preserved in the entry only when they illuminate the structural content; they are never carried into the CAS v7.5 expression.
 
-### Register-to-World correspondence
+### TKS World position → CAS Register (28 Foundations context)
 
-| CAS Register | TKS World Position | Secular character |
+> **Two things are called "Worlds" in this project. Do not merge them.** (Recorded 2026-09-21; owner clarification pending.)
+> 1. **This table:** the TKS World axis of the canonical "28 Foundations 1.0" (a = Spiritual, b = Mental, c = Emotional, d = Physical) corresponds to the CAS **Register** axis, by position.
+> 2. **The compiler keyword `Worlds`:** in `api/notation/compiler.py` (and the Rust `language.rs`) `Worlds` is a legacy alias of `Domains` (P, C, E, O), as the book's Appendix J.3 documents. It is a different thing. The compiler now says so in a warning whenever the keyword is used.
+>
+> The frozen meaning of each is unchanged. In new code and data write `Domains` or `Registers` explicitly. Source of the canonical letters and names: `research/helm_cas_expression_lab/foundations28.py` (symbols `1a`..`7d`; positional mirror `3b` ↔ `F3|A`).
+
+| CAS Register | TKS World position (canonical "28 Foundations 1.0") | Secular character |
 | :--- | :--- | :--- |
-| `\|T` Transcendent | 1st World (highest / most abstract) | High-abstraction, purpose-orienting, integrative-across-particulars. |
-| `\|A` Analytical | 2nd World | Explicit, sequential, logical, reason-based. |
-| `\|f` Affective | 3rd World | Value-laden, feeling-toned. |
-| `\|E` Embodied | 4th World (lowest / most concrete) | Sensorimotor, concrete, direct engagement with material/physical substrate. |
+| `\|T` Transcendent | 1st World — `a` Spiritual (highest / most abstract) | High-abstraction, purpose-orienting, integrative-across-particulars. |
+| `\|A` Analytical | 2nd World — `b` Mental | Explicit, sequential, logical, reason-based. |
+| `\|f` Affective | 3rd World — `c` Emotional | Value-laden, feeling-toned. |
+| `\|E` Embodied | 4th World — `d` Physical (lowest / most concrete) | Sensorimotor, concrete, direct engagement with material/physical substrate. |
 
-This World-order convention (high-abstraction at 1st, embodied at 4th) matches the Domain descent ordering in CAS (P ≻ C ≻ E ≻ O). The Register axis is orthogonal to the Domain axis; they do not collapse, but they share a high-to-low abstraction gradient that eases reading when both are specified.
+This World-order convention (high-abstraction at 1st, embodied at 4th) runs in the same high-to-low direction as the Domain descent ordering in CAS (P ≻ C ≻ E ≻ O). That shared direction is a reading aid only: the Register axis is orthogonal to the Domain axis, and a TKS World is **not** a CAS Domain in this table.
 
 ---
 

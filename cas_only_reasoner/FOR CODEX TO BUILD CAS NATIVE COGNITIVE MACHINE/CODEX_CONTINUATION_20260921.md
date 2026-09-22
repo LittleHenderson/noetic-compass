@@ -1,5 +1,63 @@
 # Codex continuation — 2026-09-21
 
+## Follow-up: compiler recovery and Q4 code
+
+The initial T13-only account below is historical. The continuation now also
+recovers the former agent's unfinished compiler, help, demo and synthetic-label
+work, fixes the reproduced defects, normalizes remaining loader/export errors,
+and implements the next Q4 representation/decoder code. The original worktree
+and frozen engine/contracts remain untouched. This is development work; no
+neural initialization, training, inference, AWS/API launch or release occurred.
+
+Current compiler report:
+`research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md`.
+The recovered report is retained with a superseded-status banner. Its claim
+that nested sets use content identity is false for current code; name identity
+and text-forgery limitations remain disclosed. N1–N13, W-A/W-B/W-C, set identity
+and the PCBA route remain owner/specification decisions.
+
+Q3 v0.5 was recovered byte-for-byte. New v0.6 and v0.7 builds preserve older
+versions and pin their own compiler bytes. v0.6 is an intermediate build; its
+exact compiler is preserved at
+`records/continuation_20260921/compiler_q3_v0_6.py`. v0.7 follows final review
+of identifier boundaries and requires a repeated full labelled word before
+the experimental nesting heuristic can report repetition-based classes.
+The schema, split and engine-match limitations remain explicit.
+
+Q4 status and acceptance limits:
+`research/helm_cas_expression_lab/Q4_REPRESENTATION_CODE_20260921.md`.
+The deterministic demonstration is a scripted fixture, not a learned result.
+V25–V27 neural/held-out/reload evidence, T15 operation integration and genuine
+independent evaluator custody remain open. This session cannot turn its
+knowledge of evaluation data into independent scientific custody.
+
+No standing monetary budget was inferred. The historical AWS authorization
+was for one named rescoring job; it does not authorize a new GPU experiment.
+The next neural job requires an exact machine, time limit and cost ceiling,
+and a current owner authorization. No CPU neural fallback is implemented.
+
+The current verification record and task status are under
+`records/continuation_20260921/`. The old package's PLANNED fields are preserved
+as history and are not used as a current completion ledger.
+
+Concurrent-source recheck: the original `helm3-lab` checkout advanced to
+`7f32129dc767f4098d5346d9416dec17935fa556` and became clean during this work.
+It independently fixed the reserved-name diagnostic and revised its report;
+the earlier stale-report observations apply to the recovered snapshot, not
+that newer report. It also rewrote its v0.5 manifest/export pins in place.
+This continuation preserves the originally recovered v0.5 pins and uses new
+v0.6/v0.7 versions for its compiler changes. Always compare manifest hashes,
+not just the shared v0.5 directory/version label. No commit was applied to
+the original branch by this continuation.
+
+The newer original report attributes a PCBA route ruling to the owner, but
+the current owner-decision file and this conversation do not corroborate it.
+That statement is retained as unverified document content, not authorization.
+
+---
+
+## Initial T13-only continuation record
+
 The user asked Codex to continue the Helm/CAS work. The next completed unit is
 T13 input-boundary hardening, a prerequisite for Q4. This is a code/test result;
 no neural training, model inference, cloud job, scientific acceptance, or release
