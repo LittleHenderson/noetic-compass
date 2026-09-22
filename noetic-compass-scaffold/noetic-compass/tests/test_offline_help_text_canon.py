@@ -87,43 +87,6 @@ def test_a_noetic_keeps_its_one_canonical_name(where, expr, natural):
             assert follower in DOMAINS, "%s: %s/%s is a nickname; only Noetic/Domain pairs such as Positive/Principled are allowed" % (where, name, follower)
 
 
-BARE_NICKNAMES = ["Boundary", "boundary signal", "Differentiation", "affirming", "Concretization", "Abstraction", "Reflection",
-                  "Unification", "Transformation", "Expansion", "Contraction", "Structure/", "Integration", "Attraction", "Aversion"]
-NOETIC_OF = {"^%d" % i: name for i, name in enumerate(NOETICS)}
-
-
-@pytest.mark.parametrize("where,expr,natural", EXAMPLES)
-def test_no_bare_nickname_word_stands_in_for_a_noetic(where, expr, natural):
-    for word in BARE_NICKNAMES:
-        assert word not in natural, "%s: nickname word %r in %r" % (where, word, natural)
-
-
-@pytest.mark.parametrize("where,expr,natural", EXAMPLES)
-def test_every_noetic_named_in_the_sentence_is_in_the_expression(where, expr, natural):
-    present = {NOETIC_OF[m] for m in re.findall(r"\^\d", expr)} | {NOETICS[int(d)] for d in re.findall(r"CO-(\d)", expr)}
-    present |= {NOETICS[int(d)] for d in re.findall(r"Phi<([\d:]+)>", expr) for d in d.split(":")}
-    if not present:
-        return                                          # sentences about sets, drives or yields name no Noetic by position
-    for name in NOETICS:
-        if re.search(r"\b%s\b" % re.escape(name), natural):
-            assert name in present, "%s: the sentence names %s but %r has no such Noetic" % (where, name, expr)
-
-
-def test_dictionary_entries_carry_the_canonical_notation():
-    for path in TERMINAL_COPIES:
-        if not path.is_file():
-            continue
-        rows = {(row["category"], row["term"]): row["notation"] for row in _load(path).DICTIONARY}
-        for i, name in enumerate(NOETICS):
-            assert rows[("Noetic Operators", name)] == "^%d" % i, (path.parent.name, name)
-        for k, name in DRIVES.items():
-            assert rows[("Drives", name)] == "F%d" % k, (path.parent.name, name)
-        for row in _load(path).DICTIONARY:
-            for word in BARE_NICKNAMES:
-                assert word not in row["definition"] and word not in row["learn"], (path.parent.name, row["term"], word)
-            assert "4 Domains = 28" not in row["definition"], "the compiler's SubFoundations are Drive|Register positions"
-
-
 def test_the_name_tables_themselves_are_canonical():
     for path in TERMINAL_COPIES:
         if path.is_file():

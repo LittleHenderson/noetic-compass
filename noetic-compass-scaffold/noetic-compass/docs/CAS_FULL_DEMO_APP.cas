@@ -8,9 +8,9 @@ let concretization: state[C] = CO-3^C_{F2};
 let integration: state[C] = CO-4^C_{F4};
 
 let composed: state[C] = abstraction * integration;
-let difference: state[C] = integration / abstraction;
+let contrast_state: state[C] = integration / abstraction;
 
-let motif: fractal = abstraction circ concretization circ integration;
+let motif: fractal = abstraction ∘ concretization ∘ integration;
 let phi_seq: fractal = Phi<2:4:6:8>;
 
 let readiness: rpm = RPM(CO-6^O_{F5});

@@ -9,4 +9,4 @@ export let judgment: state[E] = CO-5^E_{F4};
 export fn link(source: state[C], target: state[E]): relation = source -> target;
 
 # Reusable typed function: build a fractal motif from two cognitive states.
-export fn chain(a: state[C], b: state[C]): fractal = a circ b;
+export fn chain(a: state[C], b: state[C]): fractal = a ∘ b;

@@ -1,6 +1,6 @@
 """MEASURED FACTS about how the CAS compiler handles a thought inside a thought, pinned so nobody has to re-derive them.
 
-Subject: `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 f1a44678438a65c3... -- the SAME text that
+Subject: `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 61ed5a45970459e4... -- the SAME text that
 ships in `dist/cas-offline/`. First measured 2026-09-21 on text 8169188ad73df8fc... by my own probes and by five independent
 examiners plus a critic who re-ran twelve of their experiments (all twelve confirmed). RE-MEASURED the same day after the
 compiler was changed (book meaning for the Nesting Operator; defects fixed): the facts marked FIXED below flipped and
@@ -24,7 +24,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import q3_behaviour_records as q3  # noqa: E402
 
-COMPILER_SHA256_LF = "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4"
+COMPILER_SHA256_LF = "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
 RING = "∘"          # the ring operator, the book's Nesting Operator sign
 IN, NOT_IN, SUBSET = "∈", "∉", "⊆"
 compile_expression, PIN = q3._load_compiler()

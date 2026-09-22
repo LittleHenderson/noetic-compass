@@ -1,2 +1,2 @@
-@echo off
-python "%~dp0cas.py" %*
+@echo off
+python "%~dp0cas.py" %*

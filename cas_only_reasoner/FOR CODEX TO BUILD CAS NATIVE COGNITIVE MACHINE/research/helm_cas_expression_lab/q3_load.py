@@ -1,4 +1,12 @@
-"""The lab's ONE door for reading Q3 records (loader 0.2). Nothing downstream calls json.loads on a data file directly.
+"""The lab's ONE door for reading Q3 records (loader 0.4). Nothing downstream calls json.loads on a data file directly.
+
+0.4 normalizes malformed pin/contract metadata, UTF-8, oversized JSON integers,
+and covered malformed-row failures to Q3LoadError. It does not catch process-level
+resource exhaustion or hide unexpected implementation errors.
+
+0.3 rejects overflowing JSON numbers, malformed visibility declarations, and
+learner-visible mode/operation headers that differ from the fixed family contract.
+The frozen data, reference operations, and operation contracts are unchanged.
 
 Why this exists. Until 2026-09-21 every consumer parsed the .jsonl files raw, and the strict checks were re-applied
 to loaded records only by the pytest file. Loader 0.1 closed that for family A. An attacker then showed (60+ forged
@@ -19,7 +27,8 @@ copies) that everything else in 0.1 was a SHAPE check. 0.2 answers each finding 
     eval, counts equal to the manifest, no undeclared .jsonl file in the folder, baselines.json hashed.
   * THE MANIFEST IS PINNED OUTSIDE THE DATA FOLDER (`Q3_DATA_PINS.json`, beside this file). A forged copy of the data
     carries its own forged manifest; it cannot carry the pin. `check_pins` refuses it (MANIFEST_NOT_THE_PINNED_ONE).
-  * No exception other than Q3LoadError escapes for a malformed manifest, a missing file or undecodable bytes.
+  * Covered manifest/record/pin/contract/file failures raise Q3LoadError, including
+    undecodable bytes, unsupported JSON values and malformed nested metadata.
 
 Two doors, deliberately separate:
   load_visible(data_dir, family, split)   the LEARNER's door: the visible file only.
@@ -27,6 +36,7 @@ Two doors, deliberately separate:
 """
 import hashlib
 import json
+import math
 import pathlib
 import re
 import sys
@@ -38,10 +48,15 @@ import reference_ops as ref  # noqa: E402
 FAMILIES, SPLITS = ("R", "G", "A", "C"), ("train", "dev", "eval")
 CASE_FAMILIES = ("op0_same_domain", "op0_cross_domain", "nonidentity_same_domain", "nonidentity_cross_domain")
 PINS = HERE / "Q3_DATA_PINS.json"
+# Bounds structural JSON traversal before the recursive AST helpers are reached.
+MAX_JSON_DEPTH = 128
 
 # Fixed in code on purpose. The manifest must agree with these; it cannot change them.
 VISIBLE_KEYS = {"R": {"record_id", "family", "mode", "observation"}, "G": {"record_id", "family", "mode", "observation"},
                 "A": {"record_id", "family", "mode", "operation_id", "observation"}, "C": {"record_id", "family", "mode", "operation_id", "observation"}}
+VISIBLE_MODES = {"R": "reconstruction", "G": "reconstruction",
+                 "A": "neural_operation_execution", "C": "neural_operation_execution"}
+OPERATION_IDS = {"A": "cas.op.is_admissible/1.0", "C": "cas.op.compose/1.0"}
 _RECON = {"record_id", "family", "target_canonical_ast", "target_ast", "ast_size", "shape_key", "tree_shape_key", "depth", "validity", "oracle"}
 SEALED_KEYS = {"R": _RECON, "G": _RECON,
                "A_valid": {"record_id", "family", "outcome", "target", "cell", "order_flip", "case_family", "swapped_target", "oracle", "trace"},
@@ -69,9 +84,15 @@ def _lf(path):
 
 
 def strict_loads(text, where="<text>"):
-    """json.loads that refuses what json.loads silently accepts: NaN / Infinity and duplicate object keys."""
+    """Reject nonfinite numbers (including exponent overflow) and duplicate keys."""
     def constant(name):
         raise Q3LoadError("NONFINITE_NUMBER: %s in %s" % (name, where))
+
+    def finite_float(number):
+        value = float(number)
+        if not math.isfinite(value):
+            constant(number)
+        return value
 
     def pairs(items):
         keys = [k for k, _ in items]
@@ -79,9 +100,33 @@ def strict_loads(text, where="<text>"):
             raise Q3LoadError("DUPLICATE_JSON_KEYS: %s in %s" % (sorted({k for k in keys if keys.count(k) > 1}), where))
         return dict(items)
     try:
-        return json.loads(text, parse_constant=constant, object_pairs_hook=pairs)
+        if isinstance(text, (bytes, bytearray)):
+            text = text.decode("utf-8")
+        result = json.loads(text, parse_constant=constant, parse_float=finite_float, object_pairs_hook=pairs)
+        # JSON permits escaped lone surrogates, but later UTF-8 hashing cannot encode
+        # them. Check keys as well as values before any downstream code sees them.
+        pending = [(result, 0)]
+        while pending:
+            value, depth = pending.pop()
+            if depth > MAX_JSON_DEPTH:
+                raise Q3LoadError("MALFORMED_JSON: nesting exceeds %d in %s" % (MAX_JSON_DEPTH, where))
+            if isinstance(value, str) and re.search(r"[\ud800-\udfff]", value):
+                raise Q3LoadError("INVALID_UNICODE: unpaired surrogate in %s" % where)
+            if isinstance(value, dict):
+                pending.extend((key, depth + 1) for key in value.keys())
+                pending.extend((child, depth + 1) for child in value.values())
+            elif isinstance(value, list):
+                pending.extend((child, depth + 1) for child in value)
+        return result
+    except Q3LoadError:
+        raise
+    except UnicodeDecodeError:
+        raise Q3LoadError("NOT_UTF8: %s" % where) from None
     except json.JSONDecodeError as error:
-        raise Q3LoadError("MALFORMED_JSON: %s in %s" % (error.msg, where))
+        raise Q3LoadError("MALFORMED_JSON: %s in %s" % (error.msg, where)) from None
+    except (ValueError, TypeError, RecursionError) as error:
+        # Python's configured integer-digit and nesting limits are not JSONDecodeError.
+        raise Q3LoadError("MALFORMED_JSON: %s in %s" % (type(error).__name__, where)) from None
 
 
 def manifest_of(data_dir):
@@ -89,14 +134,31 @@ def manifest_of(data_dir):
     try:
         manifest = strict_loads(body.decode("utf-8"), "manifest.json")
         files, seed, visibility = manifest["files"], manifest["seed"], manifest["visibility"]
-        assert isinstance(files, dict) and isinstance(seed, int) and not isinstance(seed, bool) and isinstance(visibility, dict)
-        assert all(isinstance(v, dict) and isinstance(v.get("sha256"), str) for v in files.values())
+        if not (isinstance(files, dict) and type(seed) is int and isinstance(visibility, dict)):
+            raise Q3LoadError("MANIFEST_MALFORMED: files, seed or visibility has the wrong type")
+        if not all(isinstance(v, dict) and isinstance(v.get("sha256"), str) for v in files.values()):
+            raise Q3LoadError("MANIFEST_MALFORMED: file entries require a sha256 string")
+        if not isinstance(manifest.get("schema"), str) or not manifest["schema"]:
+            raise Q3LoadError("MANIFEST_MALFORMED: schema must be a nonempty string")
+        if "counts" in manifest and (not isinstance(manifest["counts"], dict) or
+                any(type(n) is not int or n < 0 for n in manifest["counts"].values())):
+            raise Q3LoadError("MANIFEST_MALFORMED: counts must map split names to nonnegative integers")
+        if any(name.endswith(".jsonl") and "records" in entry and
+               (type(entry["records"]) is not int or entry["records"] < 0)
+               for name, entry in files.items()):
+            raise Q3LoadError("MANIFEST_MALFORMED: file record counts must be nonnegative integers")
     except Q3LoadError:
         raise
     except Exception as error:
         raise Q3LoadError("MANIFEST_MALFORMED: %s" % type(error).__name__)
     for family in FAMILIES:                                   # the manifest may DESCRIBE the policy; it may not change it
         declared = visibility.get(family, {})
+        if not isinstance(declared, dict):
+            raise Q3LoadError("MANIFEST_MALFORMED: visibility for family %s must be an object" % family)
+        for key in ("visible", "withheld"):
+            names = declared.get(key, [])
+            if not isinstance(names, list) or not all(isinstance(name, str) for name in names):
+                raise Q3LoadError("MANIFEST_MALFORMED: %s.%s must be a list of field names" % (family, key))
         withheld = (SEALED_KEYS["A_valid"] | SEALED_KEYS["A_refusal"]) if family == "A" else SEALED_KEYS[family]
         if set(declared.get("visible", [])) != VISIBLE_KEYS[family] or set(declared.get("withheld", [])) != withheld - {"record_id", "family"}:
             raise Q3LoadError("VISIBILITY_POLICY_EDITED: the manifest's field lists for family %s are not the ones fixed in q3_load.py" % family)
@@ -110,17 +172,23 @@ def manifest_sha(data_dir):
 def check_pins(data_dir):
     """The manifest must be the one pinned OUTSIDE the data folder, for this data version."""
     manifest = manifest_of(data_dir)
-    pins = strict_loads(_lf(PINS).decode("utf-8"), PINS.name)
-    pin = pins.get("data_versions", {}).get(manifest.get("schema"))
-    if not pin:
+    pins = strict_loads(_lf(PINS), PINS.name)
+    if not isinstance(pins, dict) or not isinstance(pins.get("data_versions"), dict):
+        raise Q3LoadError("PINS_MALFORMED: data_versions must be an object")
+    if manifest["schema"] not in pins["data_versions"]:
         raise Q3LoadError("NO_PIN_FOR_THIS_DATA_VERSION: %s" % manifest.get("schema"))
+    pin = pins["data_versions"][manifest["schema"]]
+    if not isinstance(pin, dict) or not isinstance(pin.get("manifest_sha256"), str):
+        raise Q3LoadError("PINS_MALFORMED: a version pin requires a manifest_sha256 string")
     if manifest_sha(data_dir) != pin["manifest_sha256"]:
         raise Q3LoadError("MANIFEST_NOT_THE_PINNED_ONE: %s" % manifest.get("schema"))
     return pin
 
 
 def check_contract_binding(data_dir, contract_path=None):
-    contract = strict_loads(_lf(contract_path or HERE / "OPERATION_CONTRACTS.json").decode("utf-8"), "OPERATION_CONTRACTS.json")
+    contract = strict_loads(_lf(contract_path or HERE / "OPERATION_CONTRACTS.json"), "OPERATION_CONTRACTS.json")
+    if not isinstance(contract, dict) or not isinstance(contract.get("contract_digest"), str) or not contract["contract_digest"]:
+        raise Q3LoadError("CONTRACT_MALFORMED: contract_digest must be a nonempty string")
     cited = manifest_of(data_dir).get("operation_contracts_digest")
     if cited != contract["contract_digest"]:
         raise Q3LoadError("CONTRACT_DIGEST_MISMATCH: the data cites %s, OPERATION_CONTRACTS.json is %s -- rebuild the data"
@@ -165,6 +233,8 @@ def _rows(data_dir, name, manifest, family, split):
 
 def load_visible(data_dir, family, split):
     """The learner's door. Every row carries EXACTLY the visible key set fixed in this file."""
+    if family not in FAMILIES or split not in SPLITS:
+        raise Q3LoadError("UNKNOWN_FAMILY_OR_SPLIT: %r %r" % (family, split))
     manifest = manifest_of(data_dir)
     rows = _rows(data_dir, "visible_%s_%s.jsonl" % (family, split), manifest, family, split)
     for row in rows:
@@ -172,6 +242,10 @@ def load_visible(data_dir, family, split):
             raise Q3LoadError("ROW_KEYS_WRONG: visible %s has %s" % (row["record_id"], sorted(set(row) ^ VISIBLE_KEYS[family])))
         if row["family"] != family:
             raise Q3LoadError("WRONG_FAMILY: %s" % row["record_id"])
+        if row["mode"] != VISIBLE_MODES[family]:
+            raise Q3LoadError("WRONG_MODE: %s requires %s" % (row["record_id"], VISIBLE_MODES[family]))
+        if family in OPERATION_IDS and row["operation_id"] != OPERATION_IDS[family]:
+            raise Q3LoadError("WRONG_OPERATION_ID: %s requires %s" % (row["record_id"], OPERATION_IDS[family]))
     return rows
 
 
@@ -200,7 +274,8 @@ def _check_A(visible, sealed):
             raise Q3LoadError("ROW_KEYS_WRONG: sealed refusal %s" % rid)
         if not refuses(o):
             raise Q3LoadError("SEALED_SAYS_INVALID_BUT_REFERENCE_ACCEPTS: %s" % rid)
-        if sealed["target"] is not None or sealed["cell"] is not None or sealed["order_flip"] is not None or sealed["refusal_kind"] not in REFUSAL_KINDS:
+        if (sealed["target"] is not None or sealed["cell"] is not None or sealed["order_flip"] is not None or
+                not isinstance(sealed["refusal_kind"], str) or sealed["refusal_kind"] not in REFUSAL_KINDS):
             raise Q3LoadError("REFUSAL_ROW_CARRIES_AN_ANSWER_OR_AN_UNKNOWN_KIND: %s" % rid)
         return
     if sealed.get("outcome") != "CORRECT_IF_MATCH" or set(sealed) != SEALED_KEYS["A_valid"]:
@@ -222,6 +297,8 @@ _TOKEN = re.compile(r"\s*(compose\(|\)|,|\d)")
 
 def evaluate_chain(text):
     """Parse a family-C chain -- only `compose(x, y)` and single digits -- and return (value, nesting depth)."""
+    if not isinstance(text, str):
+        raise Q3LoadError("C_CHAIN_UNPARSEABLE: expected a string")
     tokens, position = [], 0
     while position < len(text):
         match = _TOKEN.match(text, position)
@@ -244,7 +321,10 @@ def evaluate_chain(text):
                 raise Q3LoadError("C_CHAIN_UNPARSEABLE: %r" % text[:60])
             return ref.compose(a, b), 1 + da + db, i + 1
         raise Q3LoadError("C_CHAIN_UNPARSEABLE: %r" % text[:60])
-    value, depth, end = parse(0)
+    try:
+        value, depth, end = parse(0)
+    except RecursionError:
+        raise Q3LoadError("C_CHAIN_UNPARSEABLE: nesting exceeds the parser limit") from None
     if end != len(tokens):
         raise Q3LoadError("C_CHAIN_UNPARSEABLE: %r" % text[:60])
     return value, depth
@@ -297,7 +377,10 @@ def load_split(data_dir, family, split):
     for v, s in zip(visible, sealed):
         if s.get("family") != family:
             raise Q3LoadError("WRONG_FAMILY: %s" % v["record_id"])
-        check(v, s)
+        try:
+            check(v, s)
+        except RecursionError:
+            raise Q3LoadError("ROW_TOO_DEEP: %s" % v["record_id"]) from None
         pairs.append((v, s))
     return pairs
 
@@ -315,7 +398,7 @@ def load_dataset(data_dir, pinned=True):
         raise Q3LoadError("UNDECLARED_FILE_ON_DISK: %s" % sorted(on_disk - declared))
     if "baselines.json" not in declared or hashlib.sha256(_lf(data_dir / "baselines.json")).hexdigest() != manifest["files"]["baselines.json"]["sha256"]:
         raise Q3LoadError("BASELINES_NOT_THE_HASHED_ONES")
-    strict_loads(_lf(data_dir / "baselines.json").decode("utf-8"), "baselines.json")
+    strict_loads(_lf(data_dir / "baselines.json"), "baselines.json")
     data = {f: {s: load_split(data_dir, f, s) for s in SPLITS} for f in FAMILIES}
     for f in FAMILIES:
         keys = {s: {json.dumps(v["observation"], sort_keys=True) for v, _ in data[f][s]} for s in SPLITS}

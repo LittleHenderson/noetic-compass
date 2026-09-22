@@ -44,7 +44,7 @@ CAS Drive names are authoritative. Where TKS labels use different nomenclature, 
 
 > **Two things are called "Worlds" in this project. Do not merge them.** (Recorded 2026-09-21; owner clarification pending.)
 > 1. **This table:** the TKS World axis of the canonical "28 Foundations 1.0" (a = Spiritual, b = Mental, c = Emotional, d = Physical) corresponds to the CAS **Register** axis, by position.
-> 2. **The compiler keyword `Worlds`:** in `api/notation/compiler.py` (and the Rust `language.rs`) `Worlds` is a legacy alias of `Domains` (P, C, E, O), as the book's Appendix J.3 documents. It is a different thing. The Python compiler now says so in a warning on every successful compile that uses the keyword; the Rust engine keeps the same alias silently.
+> 2. **The compiler keyword `Worlds`:** in `api/notation/compiler.py` (and the Rust `language.rs`) `Worlds` is a legacy alias of `Domains` (P, C, E, O), as the book's Appendix J.3 documents. It is a different thing. The compiler now says so in a warning whenever the keyword is used.
 >
 > The frozen meaning of each is unchanged. In new code and data write `Domains` or `Registers` explicitly. Source of the canonical letters and names: `cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/foundations28.py` (symbols `1a`..`7d`; positional mirror `3b` ↔ `F3|A`).
 

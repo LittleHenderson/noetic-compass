@@ -56,7 +56,7 @@
  "schema": "helm-cas-expression-lab.q3-behavior-pair-export/0.3",
  "source": "data/q3_v0_5",
  "source_manifest_schema": "helm-cas-expression-lab.q3-behaviour-records/0.5",
- "source_manifest_sha256": "a09768d20fb3b86c0493fe1546478068328e6d3c923d17318399eb76cd5a89f9",
+ "source_manifest_sha256": "304dc5c99c51441d432db7ef35be30b0fea97d64b9165f4ca43fa84c8b8c7616",
  "validator": "jsonschema Draft 2020-12",
  "verification": {
   "A": "RECOMPUTED_FROM_THE_REFERENCE",

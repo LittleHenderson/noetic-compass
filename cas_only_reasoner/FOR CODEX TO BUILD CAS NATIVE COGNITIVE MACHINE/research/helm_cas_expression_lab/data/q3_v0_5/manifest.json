@@ -4,7 +4,7 @@
   "hash_policy": "lf-normalised",
   "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
   "resolved_from": "worktree",
-  "sha256": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4"
+  "sha256": "5c732d95f5862e5e3e5bf0a2296be092f0e9c980127a5690aec4d41567fdf775"
  },
  "contract_binding": "operation_contracts_digest MUST equal contract_digest in OPERATION_CONTRACTS.json; a test and the exporter refuse anything else",
  "counts": {
@@ -403,7 +403,7 @@
    "valid_unique": 8249
   }
  },
- "supersedes": "data/q3_v0_4 (kept on disk, unchanged: bound to compiler text 8169188ad73df8fc..., which was replaced on 2026-09-21 by f1a44678438a65c3... -- book meaning for the Nesting Operator, eight defect fixes; R and G targets are parse trees and are unchanged); v0.4 superseded v0.3 (kept on disk: attacked on 2026-09-21 -- G's 'deeper than train' claim and A's 'richly present' claim were false); v0.3 superseded v0.2 (bound to a contract HEAD no longer holds); v0.2 superseded v0.1 (found leaking)",
+ "supersedes": "data/q3_v0_4 (kept on disk, unchanged: bound to compiler text 8169188ad73df8fc..., which was replaced on 2026-09-21 by 5c732d95f5862e5e... -- book meaning for the Nesting Operator, eight defect fixes; R and G targets are parse trees and are unchanged); v0.4 superseded v0.3 (kept on disk: attacked on 2026-09-21 -- G's 'deeper than train' claim and A's 'richly present' claim were false); v0.3 superseded v0.2 (bound to a contract HEAD no longer holds); v0.2 superseded v0.1 (found leaking)",
  "target_spelling": "R and G targets are the compiler's AST with one documented, invertible change: the compiler writes a Noetic as 'CO-k', the lab target writes '^k' (owner ruling OD-2). q3_behaviour_records.to_compiler_spelling restores the compiler's form exactly.",
  "visibility": {
   "A": {

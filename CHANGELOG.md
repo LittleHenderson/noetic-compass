@@ -1,5 +1,121 @@
 # tksCAS — Changelog
 
+## 2026-09-21 UTC (HELM 3.0 LAB) - TWO AGENT LINES RECONCILED INTO ONE, and the PCBA book canon is pinned (owner decisions OD-A, OD-9, OD-10).
+
+**Why.** A second agent (branch `codex/helm-cas-data-boundary-20260921`) recovered this line's then-uncommitted compiler work and
+continued it independently, while I committed mine separately as `7f32129d`. Two lines existed for the same work. The owner said
+*"another agent did this work already check it out"*, then approved reconciling them.
+
+**Their work was verified, not assumed.** Every test command in their `records/continuation_20260921/VERIFICATION.md` was re-run here
+and every count reproduced: **458, 304, 92, 27, 2 passed**; Q3 v0.5 versus v0.7 all 24 row files identical; scaffold source, offline
+folder and ZIP carry the same compiler. No neural model ran: `learner_q4_neural.py` imports torch only inside `build_model` and fails
+closed with `GPU_REQUIRED` on any non-`cuda:N` device.
+
+**Their compiler replaces mine** (`f1a44678438a65c3…` -> `61ed5a45970459e4…`). Measured side by side, theirs is better on every point
+where the two differ:
+
+| point | mine | theirs |
+|---|---|---|
+| a ring result's set label | dropped the Drive Register (`^8^C_{F2}`) | keeps it (`^8^C_{F2\|A}`) |
+| cross-Domain warning through a function or `fractal(...)` | silent | warns |
+| `let P1_count = …`, `let F2_total = …` | **wrongly refused (a regression I introduced)** | accepted |
+| N9 repetition | two unresolved thoughts was enough | needs a repeated full labelled word |
+| the two shipped demo `.cas` files | still broken | both compile |
+
+**They flagged my report, and they were right.** Their record refused to treat my prose as authorization for the owner's PCBA ruling,
+because no artifact carried it. The ruling is real and is now recorded in the owner's words as **OD-9** in `OWNER_DECISIONS_20260921.json`
+(with OD-10 for the check-it-out instruction). **This corrects the previous entry below**, whose title says the answer to "is PCBA in the
+compiler" is no: PCBA is **IN the project and PARTLY IMPLEMENTED**, never rejected, and the task is to close the gap between what the book
+describes and what the software implements. Four separate results, four claim words, none inheriting another's pass: read a component,
+check a board, run its behaviour, teach Helm. That entry's "twelve help-text canon slips" is also now thirteen.
+
+**OD-A ruled: the PCBA book canon is pinned.** Six PCBA chapters carried uncommitted edits that changed the rules a board checker would
+enforce. Read against each other, they are one coherent defect fix: the committed book described Boolean logic gates in Noetic vocabulary.
+`XOR` was called a both-active detector, which is plainly wrong (`XOR` fires when inputs *differ*; **`AND`** is the both-active detector),
+and `NOT` was called the involution operator made discrete. The owner approved committing them. Two further one-line defects were found by
+reading the edited text against itself and fixed first: `Appendix_B:374` still showed the old `NOT` meaning and contradicted its own table
+at `:386`; `Appendix_A:137` omitted `XNOR` and still said gates act on "states". The book CHANGELOG now records the rule changes, which the
+70 uncommitted CHANGELOG lines never mentioned. Brief: `research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md`.
+**Canon pin: commit `d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454`** (identical content is `eb3c9b1e` in the main checkout, which could not be
+pushed without publishing two of another agent's unfinished commits).
+
+Also corrected here: the review critic claimed the book edits created a `gate` naming clash. They did not. `gate` is both a component
+prefix and a statement leader in the **committed** grammar already (`Appendix_C` §C.2 and §C.12); the edit only makes it reachable in a
+listing, and one token of lookahead past the colon resolves it.
+
+**Merge resolution.** All code, tests and data take the codex line; my three documents and the book canon commit are kept; the translation
+key takes their wording with my corrected file path (theirs did not resolve from the repo root). Verified after merging: 458 compiler tests
+pass, every unique file from both lines is present, the book's `XNOR` fix survives, and all 39 book files are LF in index and worktree.
+
+## 2026-09-21 — Recover CAS compiler work and prepare Q4 interfaces
+
+Recovered the unfinished compiler/help/data changes from `helm3-lab` without
+editing that checkout. Corrected register-sensitive nesting set keys, runtime
+cross-Domain warnings, identifier/reserved-name diagnostics, and false repeated
+pattern classification. Preserved unresolved book readings and the selected
+28 Foundations 1.0 source. Repaired the imported-module demo and canonical help
+descriptions; rebuilt the matching offline folder/ZIP and normalized generated
+launcher/initializer line endings. Synthetic conversation wording now uses a
+new generator version and content-bound IDs; no old dataset was regenerated.
+
+Preserved the originally recovered Q3 v0.5, built and pinned v0.6/v0.7, and
+verified all 24 visible/target row files are unchanged from recovered v0.5.
+v0.7 exports 10,421 records with zero schema failures. Export report decoding
+now rejects malformed UTF-8 and bad shapes without tracebacks or repairs.
+
+Q4 adds ordered inputs, an order-blind R0 control, a bounded AST decoder,
+CUDA-only R1 code, R2 structural-memory interfaces, checkpoint checks and a
+bounded single-job supervisor. Tests use scripted/fake objects; no neural
+initialization, inference, training, real signing, cloud launch or promotion
+occurred. The saved preparation is `PREPARED_NOT_AUTHORIZATION`.
+
+Validation: 458 compiler/demo/help checks; 304 lab checks including the initial
+48 Q4 checks; 92 final Q4 checks (48 overlap); 27 synthetic checks. Final added
+learner modules also pass both existing evaluator-boundary scans. Dashboard
+TSX syntax passes TypeScript 6.0.2. No full dashboard build or real CUDA execution
+is claimed. Evidence and initial failed test invocations are recorded under
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/continuation_20260921/`.
+
+The original checkout independently advanced to `7f32129d` during this work,
+including repinning its v0.5 in place. Historical and current hashes are kept
+separate. No formal merge, production change, frozen contract/engine change,
+or unverified PCBA owner ruling was applied.
+
+## 2026-09-21 — Q3 loader 0.4: remaining malformed-input errors
+
+The loader now reports Q3LoadError for malformed schema/count/pin/contract
+metadata, undecodable pin/contract/baseline bytes, oversized JSON integers,
+unpaired Unicode surrogates, malformed refusal kinds, and deep chain/AST input.
+JSON nesting is limited to 128 levels before recursive AST helpers are reached.
+Existing file/hash/reference error codes and all pinned data remain unchanged.
+The initial record-count guard incorrectly rejected the baseline file's valid
+`records: null`; it now checks JSONL row files only.
+
+The 56 new regression cases pass; against base `0c4eb7da42389eb7cd94f089e73e150066346afa`
+the same cases yield 48 failures and 8 passes. The existing 82 loader/export
+checks passed with the new loader, and the original worktree's pinned Q3 v0.5
+still loads all 10,421 rows. These are deterministic data checks. No model,
+GPU, cloud, compiler, target, operation contract, or dataset generation ran.
+Unexpected implementation errors and process resource exhaustion are not
+silently converted into data errors. Reconstruction remains structure-checked,
+not independently recompiled by the loader.
+
+## 2026-09-21 — Codex Helm continuation: Q3 loader 0.3
+
+Fixed exponent-overflow JSON values, malformed visibility declarations, and
+unchecked learner-visible mode/operation headers. The last gap allowed answer
+payloads in fields intended to identify the task. Existing loader/export tests:
+19 passed before the change. New regression cases: 52 failed before the fix;
+the combined suite now passes 82 tests. All 10,421 newer local Q3 v0.5 records
+also load with their existing pins. No data, model weights, reference operations,
+or frozen contracts changed.
+
+Work is isolated on `codex/helm-cas-data-boundary-20260921` from recovered local
+HEAD `c38552754388573be36a07f6863299d9db1a5f63`. Prior compiler/data edits remain
+untouched in `helm3-lab`; compiler/package pin reconciliation remains open.
+No neural or cloud execution occurred. See the CNCM
+`CODEX_CONTINUATION_20260921.md` for the exact boundary and next work.
+
 Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.

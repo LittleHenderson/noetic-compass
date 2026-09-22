@@ -1,5 +1,17 @@
 # The compiler now carries the book's meaning of nesting — and the questions only the owner can settle
 
+> **UPDATED AFTER THE MERGE, 2026-09-21.** The compiler this report describes (`f1a44678438a65c3…`) has been **superseded** by the one from `codex/helm-cas-data-boundary-20260921` (`61ed5a45970459e4…`), which is now on this branch. A second agent continued the same unfinished work independently and produced a better result. I re-ran every test command in its record (458 / 304 / 92 / 27 / 2 passed) and compared the two compilers behaviour by behaviour. **Everything below still holds except these five points, where the merged compiler is better:**
+>
+> 1. A ring result used as a set element now keeps each term's **Drive Register** and emergent name (`Phi<^8^C_{F2|A}:^3^C>`). Mine dropped the `|A`.
+> 2. The cross-Domain warning now fires through **functions, built-ins and imported modules**, not only where both Domains are known at type-check.
+> 3. **N9** now needs a repeated *full labelled word* before it will report a repetition-based class. Two unresolved thoughts, or one repeated digit, is no longer treated as evidence of repetition.
+> 4. Ordinary names such as `P1_count` and `F2_total` are **accepted**. My reserved-name fix was too greedy and wrongly refused them — a regression I introduced, which the other agent caught.
+> 5. Both shipped demo files (`CAS_FULL_DEMO_APP.cas`, `CAS_FULL_DEMO_LIB.cas`) now **compile**; the owner question about them is closed.
+>
+> **OD-A is ruled.** The owner approved committing the book edits. The canon pin is commit `d50abbbcbeb6ff0e8cca3d30a8fc3df62fe03454` on this branch (identical content is `eb3c9b1e` in the main checkout). See `OD_A_BOOK_CANON_BRIEF_20260921.md`. The owner's PCBA ruling is recorded as **OD-9** in `OWNER_DECISIONS_20260921.json`; the other agent was right that my prose alone was not authorization.
+>
+> The companion record for the merged compiler is `COMPILER_CURRENT_STATUS_20260921.md`.
+
 **Owner order, 2026-09-21:** *"Give the compiler's nesting the book's meaning. Fix defects found in the compiler and its help text. Fix Worlds means two different things in the project. Also is CAS PCBA components included in the compiler? and fix a naming slip in the offline tool's help text."*
 
 Everything below was done with the symbolic compiler only. No neural model was run. Cost $0.

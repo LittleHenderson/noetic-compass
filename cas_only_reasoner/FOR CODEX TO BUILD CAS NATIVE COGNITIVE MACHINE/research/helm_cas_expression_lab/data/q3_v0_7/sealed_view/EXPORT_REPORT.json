@@ -1,0 +1,67 @@
+{
+ "boundary": "sealed_view/ is the evaluator's joined view; a learner may open visible_* only",
+ "contract_sha256": "891d9e9dab670a642696190687dc9badcff44669d70aa7f7590076d0ffcfee26",
+ "files": {
+  "behavior_pairs_A_dev.jsonl": {
+   "records": 296,
+   "sha256": "ae9dd82f721773b1f5ef589b830a909758ab0d73803888a71ab6d94b2790cc52"
+  },
+  "behavior_pairs_A_eval.jsonl": {
+   "records": 296,
+   "sha256": "854b170c25290e2ef9f29cdc9d2cfca8ed3c82034ea04767251bb8bbf9747216"
+  },
+  "behavior_pairs_A_train.jsonl": {
+   "records": 2173,
+   "sha256": "e6d378b3b3056876a6db163b26f7dc1c77b3ef220f4e1b2046a5a60cf24e5083"
+  },
+  "behavior_pairs_C_dev.jsonl": {
+   "records": 256,
+   "sha256": "bf7f56af0dfa0a0133a5e6a435bc866d51c250e5cf20ae8acd764dd0f4d8f9f0"
+  },
+  "behavior_pairs_C_eval.jsonl": {
+   "records": 256,
+   "sha256": "43ceb6656d8169c3f1097360de1d564ae01447d9e2b47d2f3904502434290906"
+  },
+  "behavior_pairs_C_train.jsonl": {
+   "records": 2048,
+   "sha256": "1af505f9467729dd36ce840480609ec90171060539aec7dc2d5109a71dfca670"
+  },
+  "behavior_pairs_G_dev.jsonl": {
+   "records": 256,
+   "sha256": "f4edb479e37aa1880f48773df04643164aaaf7d9dc065c6c51e360309552d3ed"
+  },
+  "behavior_pairs_G_eval.jsonl": {
+   "records": 256,
+   "sha256": "45ca54a556ff2b1607703dac0a6d283b743fb6a6ad5ca2262940182e38a3e885"
+  },
+  "behavior_pairs_G_train.jsonl": {
+   "records": 2048,
+   "sha256": "9647ad777c05cc6e596f0f252a0e5b56d9b8305ba550008d25096146b8b4f9c1"
+  },
+  "behavior_pairs_R_dev.jsonl": {
+   "records": 237,
+   "sha256": "d3f560e5a88ac60d9057fdad5fff780c9251da1d1c43b30177ca887a8d4aec97"
+  },
+  "behavior_pairs_R_eval.jsonl": {
+   "records": 251,
+   "sha256": "d78604019d73d8364e76ba4ae434cac1555f8f943094e1485dd77540d14de741"
+  },
+  "behavior_pairs_R_train.jsonl": {
+   "records": 2048,
+   "sha256": "2f0b54a7e42b651cee1f2ef06ee9d34d8d3b5b8c41d81a4e00cf2034ed313125"
+  }
+ },
+ "how_to_verify": "python q3_export_behavior_pairs.py   (no flag: rebuilds in memory and compares with this report; writes nothing)",
+ "package_schema": "_handoffs/FABLE_HELM_CAS_v1/schemas/behavior_pair.schema.json",
+ "schema": "helm-cas-expression-lab.q3-behavior-pair-export/0.3",
+ "source": "data/q3_v0_7",
+ "source_manifest_schema": "helm-cas-expression-lab.q3-behaviour-records/0.7",
+ "source_manifest_sha256": "1cf98a2b48ade4acf12c51c0cc74d3dd2504f7eb0e7d24662fe8b6f7d29f8bf9",
+ "validator": "jsonschema Draft 2020-12",
+ "verification": {
+  "A": "RECOMPUTED_FROM_THE_REFERENCE",
+  "C": "RECOMPUTED_FROM_THE_REFERENCE",
+  "G": "STRUCTURE_CHECKED__TARGET_NOT_RECOMPILED (the compiler is outside this worktree; the test suite recompiles a sample)",
+  "R": "STRUCTURE_CHECKED__TARGET_NOT_RECOMPILED (the compiler is outside this worktree; the test suite recompiles a sample)"
+ }
+}

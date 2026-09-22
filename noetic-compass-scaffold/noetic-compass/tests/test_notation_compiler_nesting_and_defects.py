@@ -267,31 +267,6 @@ def test_defect_7_reserved_names_are_refused_with_a_clear_message(text):
     assert not artifact["valid"] and "is reserved in CAS notation" in artifact["error"]
 
 
-def test_review_a_deep_flat_chain_fails_cleanly_and_still_serialises():
-    import json
-    artifact = compile_expression(" + ".join(["^2^C"] * 1000))
-    assert artifact.valid is False and "too deeply nested" in artifact.error and artifact.ast is None
-    assert json.dumps(artifact.to_dict())                              # to_dict() used to crash on the kept tree
-
-
-def test_review_fn_names_are_not_reserved_but_let_names_and_parameters_are():
-    assert run("fn f(x: state): state = x; f(^2^C)")[1]["dominant_state"] == "C2"
-    assert run("fn Noetics(x: state): state = x; Noetics(^2^C)")[1]["dominant_state"] == "C2"
-    assert "is reserved" in run("let f = ^2^C; f")[0]["error"]
-    assert "is reserved" in run("fn h(f: state): state = f; h(^2^C)")[0]["error"]
-    assert run("let 1 = ^2^C")[0]["error"] == "parsing@4: expected IDENT, got NUMBER"
-
-
-def test_review_no_cross_domain_warning_when_a_side_has_no_known_domain_at_typecheck():
-    artifact, result = run("fn id(s: state): state = s; id(^8^C) %s ^3^C" % RING)
-    assert artifact["valid"] and artifact["warnings"] == [] and result["nesting"]["crosses_domains"] is False
-
-
-def test_review_the_worlds_warning_comes_from_the_alias_not_from_the_word():
-    artifact, _ = run("(^3^P|A × ^3^P|f) = Worlds")            # an emergent-result label spelled Worlds is not the alias
-    assert artifact["valid"] and artifact["warnings"] == []
-
-
 def test_defect_8_the_parse_tree_survives_a_typecheck_failure():
     artifact = compile_expression("^9^O -> ^2^P")
     assert artifact.valid is False and artifact.ast is not None
