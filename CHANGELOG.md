@@ -1,5 +1,32 @@
 # tksCAS — Changelog
 
+## 2026-09-21 — Isolated PCBA component adapter
+
+Added a CNCM research adapter around the existing PCBA/CJT syntax frontends.
+It reads four exact, hash-checked files from the original cas-forex source;
+executes only the two enum definitions from schemas; and removes the two schema
+imports from the parser ASTs before loading them in private namespaces. It
+does not import the cas-forex package, its compiler bridge, or live services.
+The original parser files and all trading/production code remain unchanged.
+
+The supported subset (CJT, Resistor, Capacitor, Inductor, Diode, Transformer)
+requires complete terminal references, rejects duplicate parameters, preserves
+large integer parameters, and checks Appendix C ranges. CJT defaults are
+beta=1, sat=0.95, cutoff=0.1, region=active; optional gm/rπ remain absent unless
+provided and allow zero. Other known book components are preserved with an
+explicit unsupported diagnostic and complete=false. Board name resolution,
+whole-board legality, runtime behavior and empirical claims are outside this
+adapter. The original permissive substring compiler wrappers are not reused.
+
+Validation: 84 deterministic adapter checks passed under Python 3.12.10 with
+Pydantic 2.13.3. A fresh-process guard confirmed that parser use neither imports
+cas-forex/trading/model modules nor opens network connections or child processes,
+and leaves an existing unrelated cas_forex module untouched. Exact dependencies
+are exposed by source_files(); a changed or missing file fails closed. The
+default dependency paths are local read-only references, so relocation requires
+an explicit recorded adapter update. Python 3.14 lacks Pydantic in this local
+environment; it was not used to claim successful adapter execution.
+
 ## 2026-09-21 — Recover CAS compiler work and prepare Q4 interfaces
 
 Recovered the unfinished compiler/help/data changes from `helm3-lab` without
