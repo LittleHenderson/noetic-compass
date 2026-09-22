@@ -52,7 +52,15 @@
    "why_this_one_is_risky": "Counts are easy to misstate. Also check that the 9 added tests actually test the 5 defect cases and are not padding.",
    "notes": "",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "FALSE as written",
+     "correction": "42/48 requires the test file from 86ba3d75. 'HEAD's test file' (a4b2e0d7 tests) against 078d00ed code gives 44/51 with seven named failures. The count belongs to the (implementation, tests) pair; see the matrix in 03_REPRODUCE.md section 1a and receipts_reproduction_pins_20260922/ohm_matrix.json."
+    }
+   ]
   },
   {
    "id": "OHM-5",
@@ -85,7 +93,15 @@
    "why_this_one_is_risky": "If this is false, I have overclaimed the state of the work in the opposite direction from usual.",
    "notes": "",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "TRUE ONLY WITH BRANCH SCOPE",
+     "correction": "True on research/helm-3.0-cas-lab. On codex/helm-rpa-recorded-run-20260922 @ eb998556 the compiler already has CAS-Ohm operations through a DIFFERENT helper, api/notation/cas_ohm.py; the peer audit ran its board-to-compiler example there and got exact result 3/1, NO_MEASUREMENT_PERFORMED. This older api/cas_ohm module is not connected to the compiler on either branch."
+    }
+   ]
   },
   {
    "id": "OHM-8",
@@ -184,7 +200,15 @@
    "why_this_one_is_risky": "Counts are the easiest thing to state and the easiest to fake. Re-run rather than read.",
    "notes": "",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "STALE (true only at 078d00ed)",
+     "correction": "458 is the count at the merge 078d00ed. 639 at 626cc84b, 643 at 9fe1eb36. Receipts: receipts_reproduction_pins_20260922/compiler_suite_<rev>.txt."
+    }
+   ]
   },
   {
    "id": "TEST-2",
@@ -283,7 +307,15 @@
    "why_this_one_is_risky": "Check whether the recorded ruling matches the owner's actual words, or whether I paraphrased in my own favour.",
    "notes": "",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "WRONG POINTER; the refusal exists",
+     "correction": "The refusal is at CODEX_CONTINUATION_20260921.md lines 53-55 (at 04547c55 and 9fe1eb36), not VERIFICATION.md."
+    }
+   ]
   },
   {
    "id": "GOV-4",
@@ -316,7 +348,15 @@
    "why_this_one_is_risky": "This is the clearest evidence that my first fix was narrower than the principle it cited. An independent checker found it, not me. LOOK FOR A THIRD FUNCTION OF THE SAME CLASS THAT BOTH OF US MISSED.",
    "notes": "Found 2026-09-22 during the pre-handover re-check.",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "INCOMPLETE",
+     "correction": "r_hidden refuses a non-finite drive, but finite inputs still overflow (r_hidden(1e308, 0.1, 2.0) gives magnitude inf) and the interval path raises ZeroDivisionError. See OHM-11."
+    }
+   ]
   },
   {
    "id": "OHM-10",
@@ -360,7 +400,15 @@
    "why_this_one_is_risky": "This is the most serious self-inflicted fault in the package and an independent checker found it, not me. The first dropped guard blocks the exact retired nickname words the project instructions name as load-bearing. CHECK WHETHER MY MERGE DROPPED ANYTHING ELSE THE SAME WAY - I took 'theirs' wholesale for every conflicted test file.",
    "notes": "Found 2026-09-22 during the pre-handover re-check. Violates the project's own rule 'never delete a negative result'.",
    "auditor_verdict": "",
-   "auditor_observed": ""
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "INCOMPLETE",
+     "correction": "The merge deleted SEVEN passing tests, not three. The other four were in tests/test_notation_compiler_nesting_and_defects.py; restored in 9fe1eb36. See MERGE-6."
+    }
+   ]
   },
   {
    "id": "TEST-5",
@@ -371,6 +419,36 @@
    "why_this_one_is_risky": "A number that moved during the audit. Check both and confirm the reason for the change is the restore, not something else.",
    "notes": "Added 2026-09-22.",
    "auditor_verdict": "",
+   "auditor_observed": "",
+   "corrections": [
+    {
+     "date": "2026-09-22",
+     "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339, re-measured by the author",
+     "verdict_on_original": "REPRODUCES at 626cc84b; superseded",
+     "correction": "639 at 626cc84b reproduces. After the four further tests were restored, 643 at 9fe1eb36."
+    }
+   ]
+  },
+  {
+   "id": "MERGE-6",
+   "area": "merge",
+   "claim": "My merge 078d00ed also deleted four more passing tests from tests/test_notation_compiler_nesting_and_defects.py. Restored byte-for-byte from d50abbbc in 9fe1eb36. No other function, method or class from my side of the merge is missing now.",
+   "how_to_check": "Count 'def test_' in that file at d50abbbc, 078d00ed, 9fe1eb36 (32, 28, 32). Run the compiler suite at 626cc84b and 9fe1eb36. Run receipts_restore_four_tests_20260922/function_census.py and test_body_census.py from the worktree root.",
+   "what_i_say_you_will_observe": "639 then 643; case-ID diff 0 lost, exactly four added. Census: 12 files compared, 0 functions missing; 93 test bodies, 0 missing, 4 differing bodies each explained in body_diff_output.txt.",
+   "why_this_one_is_risky": "My census compares names and bodies from my side only. A test the OTHER side had and the merge dropped would not show up here. The peer audit's union check says zero paths lost; check it.",
+   "notes": "Found by the peer audit, not by me. Added 2026-09-22.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-11",
+   "area": "cas_ohm",
+   "claim": "The older CAS-Ohm module on this branch (quantifiers.py blob f842a9f2 at a4b2e0d7, 626cc84b and 9fe1eb36) still has open numeric defects and is not dependable: invalid tolerance reports WITHIN_TOLERANCE; finite inputs overflow to inf; the interval path raises ZeroDivisionError; reversed trend intervals are accepted; a Decimal just below 2.5 is saved as '2.5' and replays into the next band.",
+   "how_to_check": "Run the peer audit's records/peer_audit_20260922/ohm/contract_boundary_probes.py (commit 0922f339), changing only PIN to 9fe1eb36562b4d44dda788f93fca71316b8e8db2.",
+   "what_i_say_you_will_observe": "8 tests: 7 failures and 1 error (the ZeroDivisionError).",
+   "why_this_one_is_risky": "It is a claim that something is still broken. The repair on codex/ohm-invalid-numbers-20260922 @ 9e2e3a8a is not merged here; do not assume it is.",
+   "notes": "Qualifies every earlier description of this module as hardened. Added 2026-09-22.",
+   "auditor_verdict": "",
    "auditor_observed": ""
   }
  ],
@@ -378,5 +456,10 @@
   "what_happened": "Four agents independently re-ran these claims before handover, instructed to find anything false, overstated or unverifiable.",
   "result": "Four agents. TWO claims FALSE in the merge comparison (the demo files were the variable, not the compiler; and the P1_count 'regression' was not mine), one claim FALSE in cas_ohm (OHM-10), three OVERSTATED, one UNVERIFIABLE (the 'I verified before merging' claim, accepted), one live defect found and fixed (OHM-9), and ONE SELF-INFLICTED REGRESSION FOUND AND REVERSED (MERGE-5: my merge deleted three passing canon guards). All corrections are in this file, in 04_WHAT_I_GOT_WRONG.md and in CHANGELOG.md.",
   "what_this_means_for_you": "These claims have already survived one adversarial pass. Do not treat that as reassurance - treat it as a floor. The checkers found what they found in under an hour, and every error they found was mine."
+ },
+ "peer_audit_round": {
+  "source": "peer audit codex/helm-peer-audit-20260922 @ 0922f339",
+  "peer_totals": "33 claims: 26 REPRODUCES, 1 FALSE as written for the current reproduction command, 1 OVERSTATED, 5 UNVERIFIABLE at full stated strength",
+  "author_response": "All peer findings about the author's work were re-measured by the author on 2026-09-22 and accepted. Corrections are recorded per claim under 'corrections', in 04_WHAT_I_GOT_WRONG.md items 15-20, and in 03_REPRODUCE.md. The original claim text is kept unchanged."
  }
 }

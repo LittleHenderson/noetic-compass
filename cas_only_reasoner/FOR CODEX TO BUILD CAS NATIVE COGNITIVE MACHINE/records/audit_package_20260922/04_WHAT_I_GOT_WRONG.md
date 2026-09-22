@@ -269,6 +269,88 @@ A verification claim needs an artifact dated before the action it licenses. Mine
 structural, not about honesty: **write the evidence down before you act on it, not in the commit that acts.**
 
 ---
+## 15. My merge deleted SEVEN passing tests, not three — and I did not look for the other four
+
+Found by the peer audit (`codex/helm-peer-audit-20260922` @ `0922f339`), not by me. Item 12 above told you,
+the auditor, to "check whether anything else went the same way". **That was a check I could run in two minutes
+and should have run before handing this package over.** Four more functions were missing from
+`tests/test_notation_compiler_nesting_and_defects.py`: the 1,000-term flat-chain serialisation guard; `fn Noetics`
+allowed while reserved let/parameter names are refused; no false cross-Domain warning through a same-Domain function
+call; no alias warning when `Worlds` is an emergent-result label.
+
+All four original bodies pass unmodified against today's compiler. The behaviour was never broken; the protection
+was. **Restored in `9fe1eb36`: 639 -> 643.** This time I ran the census myself: every function, method and class
+my side of the merge defined still exists (0 missing); 93 test bodies compared. Receipts:
+`receipts_restore_four_tests_20260922/`.
+
+**A smaller inaccuracy found by that census:** the three guards I "restored" in `626cc84b` differ from the originals
+**only by docstrings I added**. Their assertions and all ten module-level constants are identical. "Restored"
+should have said "restored, with added docstrings".
+
+---
+
+## 16. My CAS-Ohm hardening closed the cases its own tests asked about, and left others open
+
+The peer audit found, and I reproduced on this branch today (`9fe1eb36`, module blob `f842a9f2…`):
+
+| call | observed | what is wrong |
+|---|---|---|
+| `delta_current(100, 0, tolerance=float("nan"))` | `WITHIN_TOLERANCE` | invalid input reported as "all is fine" |
+| `i_pred(1e308, 1e-308)` | `inf` | two FINITE inputs, an unusable result emitted as a number |
+| `r_hidden(8, 0, 2, i_obs_interval=(1, 2))` | `ZeroDivisionError` | the interval path skips the zero guard |
+| reversed trend intervals | verdict `RISING` | accepted instead of refused |
+| `maturity_q4` just below 2.5 | Q1, saved as `'2.5'` | the saved value reopens as **Q2** |
+
+**The first is the worst: it turns an invalid number into reassurance.** My hardening checked what goes IN to
+`i_pred`, `r_total` and `r_hidden`. It never checked what comes OUT of a calculation, never checked tolerances,
+never checked intervals, and never checked that a saved value replays to the same decision.
+
+**And I told the owner, in my audit of the other agent, that "whoever merges next should take my hardened
+version".** That was too strong. My version is better than the one before it and still not dependable. The
+"still uncertain" section below predicted more gaps; the prediction was right and I should have acted on it.
+
+---
+
+## 17. Claim OHM-4 was FALSE as written — I did not pin the test revision
+
+I wrote: "running HEAD's test file against the PRE-FIX implementation gives 42/48". Measured today:
+
+| code at `078d00ed` with tests from | observed |
+|---|---|
+| `86ba3d75` | `42/48` — what I meant |
+| `a4b2e0d7` (what "HEAD" meant when you read it) | `44/51` |
+
+A count belongs to a pair: the code AND the tests. "HEAD" moves. `03_REPRODUCE.md` now pins both for every number.
+
+---
+
+## 18. My reproduction guide contradicted my own corrections
+
+After I withdrew two merge-comparison points and restored three guards, `03_REPRODUCE.md` still said `458 passed`,
+`PASSED 48/48`, and still showed the withdrawn demo-file comparison as evidence. I corrected the claims file and the
+changelog and did not re-read the guide that tells you how to check them. Rewritten in `67c539a8`, with a table of
+every superseded statement.
+
+Also in that guide: pytest "9.1.1". This machine has 9.0.2 and I cannot reproduce the earlier number. Withdrawn.
+
+---
+
+## 19. Claim GOV-3 pointed at the wrong document
+
+I said the other agent's refusal to treat my prose as an owner ruling was in their `VERIFICATION.md`. It is in
+**`CODEX_CONTINUATION_20260921.md`, lines 53–55**. The refusal exists; my citation was wrong.
+
+---
+
+## 20. My audit of the other agent: one claim was wrong in method
+
+I wrote that commit `5b3d713c` "is on **no remote**" because `git branch -r --contains` returned nothing. I had
+not fetched. My local copy first recorded that remote branch at **14:56 on 2026-09-22**, during a fetch I ran
+after that audit was committed (10:17). A check against a local view that was never updated is not a check of the
+remote. Today `git ls-remote` shows it there. This cannot prove when it was published; it does prove my method
+could not have seen it either way. Further corrections to that audit are in `06_AUDIT_OF_THE_CODEX_AGENT.md`.
+
+---
 ## What I believe is still uncertain, as of handover
 
 Stated so you can test these rather than discover them:
@@ -279,5 +361,6 @@ Stated so you can test these rather than discover them:
   The book itself warns about exactly this hazard for `β`: two dimensionless quantities that a unit check
   cannot tell apart.
 - ~~The claim that `i_pred(8.0, inf) → 0.0` was "dangerous".~~ **RESOLVED — it was wrong.** See item 7 above.
-- **Whether my CAS-Ohm fix changed anything I did not test.** I checked the cases I knew about. One gap has since been
+- ~~Whether my CAS-Ohm fix left anything open.~~ **RESOLVED — it did; see item 16.** Original text kept:
+  **Whether my CAS-Ohm fix changed anything I did not test.** I checked the cases I knew about. One gap has since been
   found and closed (item 8); assume there are more.

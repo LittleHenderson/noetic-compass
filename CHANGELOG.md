@@ -1,5 +1,23 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - SELF-REPORT UPDATED FROM THE PEER AUDIT: six more of my errors recorded
+(04_WHAT_I_GOT_WRONG.md items 15-20); claims file annotated in place, nothing deleted.
+
+Items: (15) the merge deleted SEVEN tests, not three, and I did not look for the other four; (16) my CAS-Ohm
+hardening checked inputs, never results, tolerances, intervals or save/replay - and my advice to "take my hardened
+version" was too strong; (17) OHM-4 was FALSE as written (test revision not pinned); (18) the reproduction guide
+contradicted my own corrections; (19) GOV-3 cited the wrong document; (20) my "on no remote" claim about
+`5b3d713c` came from a local view I had never fetched.
+
+`01_CLAIMS_TO_CHECK.json`: corrections recorded per claim (OHM-4, OHM-7 branch scope, OHM-9, TEST-1, TEST-5,
+GOV-3, MERGE-5) with the original text kept; new claims MERGE-6 and OHM-11 (35 claims). The peer audit's
+`contract_boundary_probes.py`, changed only in its repository path and PIN, run against `9fe1eb36`: **8 tests,
+7 failures, 1 error** (receipt in `receipts_reproduction_pins_20260922/`).
+
+Also repaired: one stray BACKSPACE byte in this file (the 2026-09-20 `inversion_gate._DOMAIN_RE` entry, commit
+`be973ea8`), where a shell had turned the two characters backslash-b into a control character. Only that byte was
+changed. The same trap hit again while repairing it; the fix builds the backslash with chr(92).
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - REPRODUCTION GUIDE REWRITTEN WITH PINNED IMPLEMENTATION AND TEST REVISIONS.
 One of my reproduction claims was FALSE as written; the CAS-Ohm module on this branch still has open defects.
 
@@ -8100,7 +8118,7 @@ criteria were true by construction. `docs/working/gate5_weld/cas_weld_loop_v2.py
   only that the chain reports failure when the diagnosis is wrong, never falls back to ground
   truth, never manufactures a correction, and beats a non-zero chance rate a random
   intervention can and does hit. **Nothing here bears on efficacy; no model is loaded.**
-- Separate finding, committed on its own: `inversion_gate._DOMAIN_RE` used `` after
+- Separate finding, committed on its own: `inversion_gate._DOMAIN_RE` used `\b` after
   `[PCEO]`, which `_` defeats, so **axis W could never fire on any drive-tagged expression
   in the repo**. Fixed; 7 regression tests (4 fail against the old regex); belief suite
   135 → 142 passing.
