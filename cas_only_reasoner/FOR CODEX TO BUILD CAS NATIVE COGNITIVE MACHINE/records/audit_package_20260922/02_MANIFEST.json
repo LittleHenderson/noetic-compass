@@ -1,0 +1,369 @@
+{
+ "built": "2026-09-22",
+ "canon_pin_all_identical": true,
+ "canon_pin_cross_repository_check": {
+  "Appendix_A_Notation_Quick_Reference.md": {
+   "identical": true,
+   "lab_d50abbbc": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+   "main_eb3c9b1e": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6"
+  },
+  "Appendix_B_Component_Datasheets.md": {
+   "identical": true,
+   "lab_d50abbbc": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+   "main_eb3c9b1e": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920"
+  },
+  "Appendix_C_CCDL_Language_Reference.md": {
+   "identical": true,
+   "lab_d50abbbc": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+   "main_eb3c9b1e": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f"
+  },
+  "Appendix_E_Exercise_Answers.md": {
+   "identical": true,
+   "lab_d50abbbc": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+   "main_eb3c9b1e": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681"
+  },
+  "CHANGELOG.md": {
+   "identical": true,
+   "lab_d50abbbc": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+   "main_eb3c9b1e": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101"
+  },
+  "Chapter_10_Special_Purpose_Components.md": {
+   "identical": true,
+   "lab_d50abbbc": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+   "main_eb3c9b1e": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812"
+  },
+  "Chapter_15_Mixed_Signal_Design.md": {
+   "identical": true,
+   "lab_d50abbbc": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+   "main_eb3c9b1e": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5"
+  },
+  "Chapter_18_CSB_Cognitive_Safety_Board.md": {
+   "identical": true,
+   "lab_d50abbbc": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+   "main_eb3c9b1e": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e"
+  }
+ },
+ "digest_convention": "sha256 over the file's bytes with every CRLF pair replaced by a single LF; recorded as sha256_lf",
+ "files": {
+  "CHANGELOG.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+    "canon_pin_d50abbbc": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+    "fork_point_c3855275": "976a42abe40b799e4dd97798c762f4120d70450b899327a46d8e9bbd58fb00e2",
+    "head_86ba3d75": "403d93e1e4169da60ddce4656ab9ee0e4be3681230054dc4d3abeb2e82f5472d",
+    "merge_078d00ed": "702ec77843687bb6936aa8b98b0f89c46f7ceb415914cf7692d48c14bd4c8eab",
+    "my_compiler_work_7f32129d": "d470df95461b95817050f0577daf4d4ed996935198ff12f0fb659e8e4d96c266",
+    "their_line_04547c55": "25bb371bbe9730b6c6ec5c224868d355268c5f93cfc282a2c6117aa18bc39d6c"
+   },
+   "on_disk_now": {
+    "bytes": 721048,
+    "has_crlf": false,
+    "sha256_lf": "269d49569375665892f44df8e6b0ae2e58006ead4c8fc0db0860acd5e073a27e"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+    "canon_pin_d50abbbc": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+    "fork_point_c3855275": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+    "head_86ba3d75": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+    "merge_078d00ed": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6",
+    "my_compiler_work_7f32129d": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2",
+    "their_line_04547c55": "e529af40f73e1976bdc1c95d041b0c082b25088ac7729d791f866bb86555dcb2"
+   },
+   "on_disk_now": {
+    "bytes": 8254,
+    "has_crlf": false,
+    "sha256_lf": "b9f2fd8c9ce5b3253acabeaeced9351526452315429d74419dcd00cebfd60ef6"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+    "canon_pin_d50abbbc": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+    "fork_point_c3855275": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+    "head_86ba3d75": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+    "merge_078d00ed": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920",
+    "my_compiler_work_7f32129d": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3",
+    "their_line_04547c55": "ad2d3df3549a747613ec35e322a9200cec2b30f5e4ad5b76d87927fcd00585c3"
+   },
+   "on_disk_now": {
+    "bytes": 36779,
+    "has_crlf": false,
+    "sha256_lf": "18e668134e95da710a8b026f72272c4fb86bc6a593d8d3a466ec87dea54c6920"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+    "canon_pin_d50abbbc": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+    "fork_point_c3855275": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+    "head_86ba3d75": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+    "merge_078d00ed": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f",
+    "my_compiler_work_7f32129d": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c",
+    "their_line_04547c55": "154861bb7542aed54eff1f03ad50a2d47b23be2c2fdd20c2de30b6552d8b3d6c"
+   },
+   "on_disk_now": {
+    "bytes": 81004,
+    "has_crlf": false,
+    "sha256_lf": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+    "canon_pin_d50abbbc": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+    "fork_point_c3855275": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+    "head_86ba3d75": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+    "merge_078d00ed": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681",
+    "my_compiler_work_7f32129d": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce",
+    "their_line_04547c55": "0c336fadec8717283cffbb5977400aa8e5045c17cb92073f31a80680c7cadcce"
+   },
+   "on_disk_now": {
+    "bytes": 88175,
+    "has_crlf": false,
+    "sha256_lf": "5498899699f13cc59b30a74a282050c0f4777844230706f003dab5fb24340681"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "canon_pin_d50abbbc": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "fork_point_c3855275": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "head_86ba3d75": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "merge_078d00ed": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "my_compiler_work_7f32129d": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf",
+    "their_line_04547c55": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf"
+   },
+   "on_disk_now": {
+    "bytes": 21165,
+    "has_crlf": false,
+    "sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf"
+   }
+  },
+  "book/CAS_PCBA_Engineer/CHANGELOG.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+    "canon_pin_d50abbbc": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+    "fork_point_c3855275": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+    "head_86ba3d75": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+    "merge_078d00ed": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101",
+    "my_compiler_work_7f32129d": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f",
+    "their_line_04547c55": "2d75ac987eab5cf90e2dd2cf2a10cd8137224025f2693c6d99c95af371bf362f"
+   },
+   "on_disk_now": {
+    "bytes": 29298,
+    "has_crlf": false,
+    "sha256_lf": "a3d53db917f3cf2a311125b7485673efb0d301ac60c9805fbabd0c8040e20101"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+    "canon_pin_d50abbbc": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+    "fork_point_c3855275": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+    "head_86ba3d75": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+    "merge_078d00ed": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812",
+    "my_compiler_work_7f32129d": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54",
+    "their_line_04547c55": "4c3ee6c73e0048af1db53cca7299673f0862280b83f43fe764f66c551b3bad54"
+   },
+   "on_disk_now": {
+    "bytes": 34037,
+    "has_crlf": false,
+    "sha256_lf": "1505a17b6e163f13dad3c4155195e26932ec98a3a4a002140d6f04bafb636812"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+    "canon_pin_d50abbbc": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+    "fork_point_c3855275": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+    "head_86ba3d75": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+    "merge_078d00ed": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5",
+    "my_compiler_work_7f32129d": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63",
+    "their_line_04547c55": "4154a3d6d93358b9ddedfe89947b1240038469327ea869bafbd38d52696e4b63"
+   },
+   "on_disk_now": {
+    "bytes": 29377,
+    "has_crlf": false,
+    "sha256_lf": "af2352a52a636946991de56fdc68650a5f3e80073b9f73fccb77d72c6e3d73a5"
+   }
+  },
+  "book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+    "canon_pin_d50abbbc": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+    "fork_point_c3855275": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+    "head_86ba3d75": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+    "merge_078d00ed": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e",
+    "my_compiler_work_7f32129d": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7",
+    "their_line_04547c55": "a44ea69550b8b656623851109e176c6c5132d32902157c7d58b8b323161c00a7"
+   },
+   "on_disk_now": {
+    "bytes": 53417,
+    "has_crlf": false,
+    "sha256_lf": "a81a82033dff860c3422feb2feeab96da37c5706a43bbda9ac7a1725fe0e781e"
+   }
+  },
+  "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+    "canon_pin_d50abbbc": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+    "head_86ba3d75": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+    "merge_078d00ed": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175",
+    "my_compiler_work_7f32129d": "bdeee7335d769621190917a66f07e6bca9f0d8d8285a7c6a9ea252950a961d20",
+    "their_line_04547c55": "43abe69fc3cb914275d3d0f554f8a1083fba7c1d39ab9f2415a6d43efedaeae8"
+   },
+   "on_disk_now": {
+    "bytes": 23027,
+    "has_crlf": false,
+    "sha256_lf": "0af5db219b2e53e32b7966026e5f429e293a07019b5a72d0472aef5cff3bc175"
+   }
+  },
+  "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/COMPILER_CURRENT_STATUS_20260921.md": {
+   "by_ref": {
+    "head_86ba3d75": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+    "merge_078d00ed": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e",
+    "their_line_04547c55": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e"
+   },
+   "on_disk_now": {
+    "bytes": 4213,
+    "has_crlf": false,
+    "sha256_lf": "43f4c02168efc07f8fa6b562ce86463a4f8089bea558de939c18abe7aeaecb9e"
+   }
+  },
+  "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OD_A_BOOK_CANON_BRIEF_20260921.md": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+    "canon_pin_d50abbbc": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e",
+    "head_86ba3d75": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb",
+    "merge_078d00ed": "7c88baa91d476f60894ed376cf349bcd665bed98ace339709b80c2406fb0a85e"
+   },
+   "on_disk_now": {
+    "bytes": 7220,
+    "has_crlf": false,
+    "sha256_lf": "12b45bb9274f3d9dcbe587c0cd68ce2598fb119bca03fafb79b5343b80d31bbb"
+   }
+  },
+  "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/research/helm_cas_expression_lab/OWNER_DECISIONS_20260921.json": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+    "canon_pin_d50abbbc": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+    "fork_point_c3855275": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+    "head_86ba3d75": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+    "merge_078d00ed": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a",
+    "my_compiler_work_7f32129d": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a",
+    "their_line_04547c55": "e8147ec064a7719bfa88b5b70d369d076403b014194c58c0e1e7606cc020cb1a"
+   },
+   "on_disk_now": {
+    "bytes": 12809,
+    "has_crlf": false,
+    "sha256_lf": "e0b8feafb3b7f5495777b65621df102bde8dff7787ecb7e53ed5d8ae2f231b4a"
+   }
+  },
+  "dist/cas-offline/api/notation/compiler.py": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "canon_pin_d50abbbc": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "fork_point_c3855275": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+    "head_86ba3d75": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "merge_078d00ed": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "my_compiler_work_7f32129d": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "their_line_04547c55": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+   },
+   "on_disk_now": {
+    "bytes": 270085,
+    "has_crlf": false,
+    "sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+   }
+  },
+  "noetic-compass-scaffold/noetic-compass/api/cas_ohm/__init__.py": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "canon_pin_d50abbbc": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "fork_point_c3855275": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "head_86ba3d75": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "merge_078d00ed": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "my_compiler_work_7f32129d": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0",
+    "their_line_04547c55": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0"
+   },
+   "on_disk_now": {
+    "bytes": 1941,
+    "has_crlf": false,
+    "sha256_lf": "b21ff39fe0fbc8954dfa0b218b6d0c6d528ab456a10194173533bb78eaac1bf0"
+   }
+  },
+  "noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+    "canon_pin_d50abbbc": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+    "fork_point_c3855275": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+    "head_86ba3d75": "65b9c171323bff99bc37288a73465d28c47acac33995924a0dc906fdfb9757a4",
+    "merge_078d00ed": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+    "my_compiler_work_7f32129d": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+    "their_line_04547c55": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4"
+   },
+   "on_disk_now": {
+    "bytes": 40676,
+    "has_crlf": false,
+    "sha256_lf": "039fdb9b124b83a5a9ef312c6d6c3a8c806fd6b5b85e3b7960e83d6f45666284"
+   }
+  },
+  "noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+    "canon_pin_d50abbbc": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+    "fork_point_c3855275": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+    "head_86ba3d75": "b8c4df7d9a88dc53b9a58e4c3148fae2aecc9f71408a5b37de7615bfc5d00836",
+    "merge_078d00ed": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+    "my_compiler_work_7f32129d": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11",
+    "their_line_04547c55": "1bfb396f6c4e48a8b3378add721f700f420195c6e001f106fd9432fe648d6b11"
+   },
+   "on_disk_now": {
+    "bytes": 24013,
+    "has_crlf": false,
+    "sha256_lf": "34b574a76b752fc120ca42d0fe04eded954fcf15a0c270d90feaa2f2bd9441eb"
+   }
+  },
+  "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": {
+   "by_ref": {
+    "book_pre_edit_dbb388ee": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "canon_pin_d50abbbc": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "fork_point_c3855275": "8169188ad73df8fc3ca709731b3fb4ea07b2513d38d69cf66d22d64cfe88ff4c",
+    "head_86ba3d75": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "merge_078d00ed": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "my_compiler_work_7f32129d": "f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4",
+    "their_line_04547c55": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+   },
+   "on_disk_now": {
+    "bytes": 270085,
+    "has_crlf": false,
+    "sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+   }
+  }
+ },
+ "refs": {
+  "book_pre_edit_dbb388ee": "dbb388ee",
+  "canon_pin_d50abbbc": "d50abbbc",
+  "fork_point_c3855275": "c3855275",
+  "head_86ba3d75": "86ba3d75",
+  "merge_078d00ed": "078d00ed",
+  "my_compiler_work_7f32129d": "7f32129d",
+  "their_line_04547c55": "04547c55"
+ },
+ "repositories": {
+  "lab": {
+   "branch": "research/helm-3.0-cas-lab",
+   "head": "86ba3d75431c56147f229f24794805a3d8504f76",
+   "note": "worktrees share _worktrees/vision-next/.git",
+   "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\helm3-lab"
+  },
+  "main": {
+   "carries": "eb3c9b1e, identical book content to d50abbbc",
+   "note": "a SEPARATE repository, on another agent's branch codex/casformer-v0.2-release",
+   "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS"
+  }
+ },
+ "schema": "cas.audit-package/1.0",
+ "why_lf": "the two repositories on this machine store some files with different line endings, so a raw-byte digest reports a pure line-ending difference as a content edit. This bit the author once during the work being audited and the correction is commit d50abbbc."
+}

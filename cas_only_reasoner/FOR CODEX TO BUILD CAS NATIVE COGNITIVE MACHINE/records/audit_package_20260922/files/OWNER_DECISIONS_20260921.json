@@ -1,0 +1,125 @@
+{
+ "schema": "helm-cas-expression-lab.owner-decisions/0.1",
+ "custody": "Recorded by Fable from the owner's chat messages of 2026-09-21. This is NOT an owner-signed record. Each entry quotes the owner's words exactly; 'what_fable_does' is Fable's reading and can be corrected by the owner.",
+ "applies_to": {
+  "branch": "research/helm-3.0-cas-lab",
+  "recorded_against_contract": "58da5ad22963b43dcda5568d1cda26414dd6b9ec4a46aa4e033cf3f1da6ea2ad (0.1)",
+  "folded_into_contract": "891d9e9dab670a642696190687dc9badcff44669d70aa7f7590076d0ffcfee26 (0.3)"
+ },
+ "decisions": [
+  {
+   "id": "OD-1",
+   "topic": "where heavy computing runs",
+   "owner_words": "IF YOU COULD USE AWS BECAUSE IT'S FASTER AND MORE POWER AND SPACE THAN MY LAPTOP LAPTOP OVER HEATS AND STALLS OUT",
+   "what_fable_does": "Heavy work (neural training, and long checking jobs such as the 32-minute tamper suite) goes to AWS instead of the laptop. The owner named no amount, so nothing is launched on these words alone: before any launch Fable states the exact machine, the time limit and the dollar ceiling in chat and waits for a yes.",
+   "status": "APPROVED_BY_OWNER_IN_CHAT__ONE_NAMED_JOB",
+   "aws_facts_checked_read_only": {
+    "account": "807562639912",
+    "user": "cas-g5-operator",
+    "region": "us-west-2",
+    "instances_not_terminated": [
+     "i-0c3028734c8885542 (g6e.xlarge, stopped, owner's standby, 300 GiB disk, not touched)"
+    ]
+   },
+   "owner_approval_words": "yes run the AWS job",
+   "approved_job": {
+    "what": "regenerate both trust anchors and both rescoring readings with trusted_rescore 0.2, and run its 9 slow tests",
+    "machine": "one c7i.2xlarge, us-west-2, on-demand",
+    "price_checked": "0.357 USD per hour (AWS pricing API, 2026-09-21)",
+    "time_limit_minutes": 90,
+    "dollar_ceiling": 2.0,
+    "how_the_ceiling_is_enforced": "the machine shuts itself down after 85 minutes at the latest and is set to terminate on shutdown; a second kill switch on the client terminates it at 95 minutes; 1.5 hours at 0.357 is 0.54 USD plus cents of disk",
+    "scope": "this job only; the small GPU practice run is a separate, later request"
+   }
+  },
+  {
+   "id": "OD-2",
+   "topic": "canonical books and notation",
+   "owner_words": "THE BOOKS \"THINKING IN COGNITIVE ARCHITECTURE\" AND \"CAS PCBA ENGINEER\" BOTH OF WHICH AS WELL AS \"REALITY ENGINEERING\" ALL ARE CANONICAL AND CAN BE FOUND ON LOCAL DEVICE (I'D RATHER USE ^ THAN \"CO\" IN REGARD TO CAS NOTATIONS)",
+   "what_fable_does": "The three books are treated as canon for how CAS is written and ordered. New lab documents and reports write the ten Noetics as ^0 .. ^9. Where the frozen engine code spells a name 'CO2', that spelling is quoted only as a code identifier, next to ^2.",
+   "status": "RECORDED"
+  },
+  {
+   "id": "OD-3",
+   "topic": "which 28",
+   "owner_words": "CANONICAL 28 FOUNDATIONS",
+   "attachment": {
+    "file": "28 fOUNDATIONS 1.0.pdf",
+    "bytes": 399302,
+    "pages": 7,
+    "sha256_raw": "2c27443f447bd69901372edb1316be56a92490afc6f88055ce0c84ce7a871017"
+   },
+   "what_fable_does": "Closes discrepancy DR-4 of OPERATION_CONTRACTS.json (three 28-way namespaces, owner decision pending). The lab's one 28-way Foundation coordinate is 28 Foundations 1.0: 7 Foundations x 4 Worlds (a Spiritual, b Mental, c Emotional, d Physical), symbols 1a..7d, numbered 1..28 as the document numbers them, definitions verbatim. CAS labels F1..F7 with Registers T, A, f, E are the same POSITIONS and are never used as the meaning of a Foundation. Built and tested in foundations28.py (37 tests). The frozen contracts file is NOT edited for this; the decision is recorded here and folds into the contracts at their next version.",
+   "status": "RECORDED__DR-4_RESOLVED",
+   "checked": "All 28 definitions in the repository's capture match the PDF word for word; three differ in punctuation only and the PDF's page-6 chart has suffix slips -- listed in foundations28.KNOWN_DISCREPANCIES, not silently fixed."
+  },
+  {
+   "id": "OD-4",
+   "topic": "how much of CAS is in scope for Helm's expression space",
+   "owner_words": "NOT just the 40 Elements ... MEANING DO NOT EXCLUDE ANY OF THE OTHER OF THE CAS SYSTEM",
+   "what_fable_does": "Nothing in CAS is excluded: the 40 Elements, the 28 Foundations, Registers, operators, recipes, and the unlimited expressions and notations built from them. An earlier note by Fable that treated the 28 as set aside was wrong and is withdrawn.",
+   "status": "OWNER_RULING"
+  },
+  {
+   "id": "OD-5",
+   "topic": "how Helm versions are named",
+   "owner_words": "I AGREE WITH THE NAMING SCHEMA",
+   "what_fable_does": "The progression experimental -> release candidate -> release, with the three conditions put to the owner (no stage may be skipped; release notes name what got worse as plainly as what got better; Helm 2.0 and its best seed 20260918 stay preserved as the fallback) and the fuller conditions in LINEAGE_RATIFICATION_CLARIFICATIONS_20260921.md, is the official rule. Helm 1.0 = release; Helm 2.0 = 2.0-experimental (its gate printed NO_TRANSFER_TO_NEW_WORLDS); Helm 3.0-experimental is reserved and not built.",
+   "status": "ACCEPTED_BY_OWNER_IN_CHAT",
+   "recorded_in": "BRAIN_LINEAGE.md (acceptance note added under the proposal)"
+  },
+  {
+   "id": "OD-6",
+   "topic": "book versus engine code: which rules Helm learns first",
+   "owner_words": "YES I AGREE WITH THE FOLLOWING: ... keeping the small first experiment on the code's rules, which is built and honestly labelled ... then open a separate task to write book-faithful versions of those three rules, since the books are canon",
+   "what_fable_does": "The first small experiment stays on the engine code's rules, labelled 'matches the code', never 'discovery'. A separate task writes book-faithful versions of the rules the engine lacks.",
+   "status": "OWNER_DECISION",
+   "correction_by_fable_2026-09-21": "What Fable first told the owner about the book and the code was partly WRONG and was corrected the same day after a review: (1) single-step descent -- stands: the book forbids ^0^P -> ^9^O in one step, the code allows it, and no pinned code enforces 'no skipping a domain'; (2) closure under composition -- overstated about 25 times: read fairly the code fails for 9,720 of 556,960 chains (1.75%), not 238,572; (3) 'order matters' -- NOT a disagreement: the book has two combining operations; the code's compose matches the book's x on the Noetic index (lacking only its domain rule), and the book's Nesting Operator, where order matters, does not exist in the code. The owner's decision is unchanged in direction; the queued task was replaced with a corrected one.",
+   "second_correction_by_fable_2026-09-21": "Fable also told the owner that the book's Nesting Operator 'does not exist in the code'. TOO BROAD: that was checked only against the engine's small compose function. The CAS compiler (api/notation/compiler.py, the same text as dist/cas-offline) HAS the ring operator: it keeps the written order, keeps the grouping in its parse tree, and nests at least 150 levels deep. What it lacks is the book's MEANING of nesting (order changing the outcome, grouping surviving in the value, cancellation of opposites, a domain-crossing container, Registers and Drives kept). The owner pointed Fable at the compiler; see COMPILER_NESTING_AND_SETS_FINDINGS_20260921.md and test_compiler_nesting_facts.py (15 pinned facts)."
+  },
+  {
+   "id": "OD-7",
+   "topic": "budget context",
+   "owner_words": "Money and state: $4199.00 left of $5000.00. All three runs reserved $15.00 each.",
+   "what_fable_does": "Recorded as the project's budget state as pasted from the previous agent. Every launch still states its machine, time limit and dollar ceiling first and destroys itself on a timer.",
+   "status": "CONTEXT"
+  },
+  {
+   "id": "OD-8",
+   "topic": "nesting and set-theory meta-logic in the existing CAS compiler",
+   "owner_words": "the meta-logic of the code allows for thought to be nested inside another thought right? ... CAS Compiler was created months ago so you might want to take a look and thoroughly examine it ... it use set theory symbols as meta-logic as well",
+   "what_fable_does": "Examined the compiler, the offline bundle and the CLI by running them (symbolic code only). Answer: YES at the 'write' level (ring operator, brackets, a set inside a set three levels deep, box-inside-box diagrams) and YES for set-theory meta-logic (computed true/false; all 20 book examples in Appendix J.5 agree); NOT YET at the 'apply the book's governing meaning' level; NOT TODAY at the 'teach Helm' level. Work on nesting starts from the compiler's existing features, never from the assumption that nesting is absent.",
+   "status": "EXAMINED__FINDINGS_RECORDED"
+  },
+  {
+   "id": "OD-9",
+   "topic": "PCBA stays in CAS; it is partly implemented, not rejected",
+   "owner_words": "PCBA remains included in the project. Describe it as partly implemented, not rejected. Reuse the existing component reader where it matches the book. Build the missing whole-board reading and checking features. Keep reading a component, checking a board, running its behavior, and teaching Helm as separate results. Bottom line: the book describes more than the current software implements. The task is to close that gap, not remove PCBA from CAS.",
+   "what_fable_does": "Records PCBA's status as PARTLY IMPLEMENTED (never 'rejected' or 'not in CAS'). Reuses the cas-forex component reader (pcba_syntax.py, cjt_syntax.py, compiler_bridge.py, crc_linter.py) where it matches the book. Builds the whole-board reader and checker that the book describes and no code implements. Keeps four separate results with four separate claim words: (1) read a component, (2) check a board, (3) run its behaviour, (4) teach Helm. No result inherits another's pass.",
+   "status": "RULED_BY_OWNER_IN_CHAT",
+   "given": "2026-09-21, in the chat message that also said 'I hit my usage limit while you were working, but it has reset now.'",
+   "why_this_record_exists": "The codex continuation (branch codex/helm-cas-data-boundary-20260921, records/continuation_20260921/VERIFICATION.md) read this ruling in the report prose and correctly refused to treat prose as authorization: 'The newer original report attributes a PCBA route ruling to the owner, but the current owner-decision file and this conversation do not corroborate it.' The ruling IS real and was given in the owner's own words above; it was missing from this file. That gap is what this entry closes. The governance rule stands: owner approval must be recorded, not inferred from an agent's prose.",
+   "still_open": "The ROUTE is not ruled: whether the whole-board reader lives beside pcba_syntax.py in cas-forex or becomes a new CCDL module the CAS compiler can call. Owner decisions OD-A..OD-O in COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md section 5 remain open, starting with OD-A: the book's PCBA chapters carry uncommitted edits, so there are two canon texts."
+  },
+  {
+   "id": "OD-10",
+   "topic": "check the other agent's work instead of repeating it",
+   "owner_words": "another agent did this work already check it out",
+   "pointer": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_worktrees/codex-helm-data/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/continuation_20260921/VERIFICATION.md",
+   "what_fable_does": "Re-ran every test command in that record in that worktree and compared the two compilers side by side. Every count reproduced: 458, 304, 92, 27, 2. Their compiler (LF sha256 61ed5a45970459e4...) is better than mine (f1a44678438a65c3...) on every point where they differ, including one regression I had introduced. Does not duplicate their work; does not push to their branch.",
+   "status": "DONE",
+   "given": "2026-09-21"
+  }
+ ],
+ "mid_task_messages_confirmed_by_the_owner": {
+  "owner_words": "I often copy and paste to you either your own words or words from a different agent or from a file ... do not disregarding anything coming from me whether I copy and paste it or I type it",
+  "what_happened": "Several owner messages reached Fable mid-task attached to tool output. Fable held them back at the time. The owner confirmed in chat that they were the owner's; they are recorded below as the owner's.",
+  "messages": [
+   "YOU HAVE MY APPROVAL",
+   "NOT just the 40 Elements ... DO NOT EXCLUDE ANY OF THE OTHER OF THE CAS SYSTEM",
+   "YOUR APPROVED FOR THE FOLLOWING Money and state: $4199.00 left of $5000.00. All three runs reserved $15.00 each.",
+   "I APPROVE ....CHECK THE AWS ACCOUNT",
+   "YES I AGREE WITH THE FOLLOWING: Book versus code ... keeping the small first experiment on the code's rules ... a separate task to write book-faithful versions of those three rules"
+  ]
+ }
+}

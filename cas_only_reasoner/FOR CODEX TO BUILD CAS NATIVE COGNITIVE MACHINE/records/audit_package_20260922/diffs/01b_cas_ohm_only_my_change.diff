@@ -1,0 +1,157 @@
+diff --git a/noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py b/noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py
+index 2c98a773..11b6dbd9 100644
+--- a/noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py
++++ b/noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py
+@@ -195,6 +195,11 @@ class Score:
+             raise ValueError(f"{self.unit} score out of range [0,{hi}]: {self.value}")
+ 
+ 
++def _is_finite(x: float) -> bool:
++    import math
++    return math.isfinite(x)
++
++
+ def _as_resistance(name: str, r: Number) -> float:
+     """Coerce a resistance argument, rejecting Score wrappers and non-positive
+     values (EFFECTIVE_RESISTANCE is strictly positive — ch06:54-60)."""
+@@ -205,6 +210,14 @@ def _as_resistance(name: str, r: Number) -> float:
+             f"type error, not a smaller numeric error (ch06:47-52)."
+         )
+     rf = float(r)
++    if not _is_finite(rf):
++        raise ValueError(
++            f"{name}: effective resistance must be a finite number; got {rf!r}. "
++            f"An undefined quantity is refused with a reason, never carried into "
++            f"arithmetic as NaN or infinity (ch10:def:censoring). NaN in particular "
++            f"would pass a strictly-positive test, because NaN compares False "
++            f"against every operator."
++        )
+     if rf <= 0.0:
+         raise ValueError(
+             f"{name}: effective resistance must be strictly positive "
+@@ -238,7 +251,19 @@ def r_total(r_cap: Number, r_policy: Number,
+                 f"r_total: component {name} is a {val.unit} Score; a score cannot "
+                 f"be summed into a resistance total (ch07 quantity-kind rule)."
+             )
+-        total += float(val)
++        component = float(val)
++        if not _is_finite(component):
++            raise ValueError(
++                f"r_total: component {name} must be a finite number; got "
++                f"{component!r} (ch10:def:censoring)."
++            )
++        total += component
++    if not _is_finite(total):
++        raise ValueError(
++            f"r_total: the sum of the four constraint terms overflowed to "
++            f"{total!r}; a non-finite total is refused rather than carried "
++            f"into a prediction (ch10:def:censoring)."
++        )
+     if total <= 0.0:
+         raise ValueError(f"r_total must be strictly positive, got {total}")
+     return total
+@@ -283,7 +308,13 @@ def i_pred(v: Number, r_total_value: Number) -> float:
+     be strictly positive.  A Score in the denominator is refused as a type error.
+     """
+     r = _as_resistance("i_pred", r_total_value)
+-    return float(v) / r
++    vf = float(v)
++    if not _is_finite(vf):
++        raise ValueError(
++            f"i_pred: drive must be a finite number; got {vf!r}. An undefined "
++            f"quantity is refused with a reason, never emitted (ch10:def:censoring)."
++        )
++    return vf / r
+ 
+ 
+ # Alias with the monograph's own symbol names for the response model.
+@@ -537,11 +568,6 @@ def r_hidden(v: Number, i_obs: Number, r_known: Number,
+     )
+ 
+ 
+-def _is_finite(x: float) -> bool:
+-    import math
+-    return math.isfinite(x)
+-
+-
+ # ---------------------------------------------------------------------------
+ # HEADLINE QUANTIFIER 3 — maturity_q4 (half-open banding + trend).
+ # ---------------------------------------------------------------------------
+diff --git a/noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py b/noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py
+index 8e0c26b1..c516ac1c 100644
+--- a/noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py
++++ b/noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py
+@@ -506,6 +506,73 @@ def test_cjtq_record_trace_and_asom():
+     assert rec2.asom_label is None
+ 
+ 
++# ----------------------------------------------------------------------------
++# Non-finite inputs are refused, never emitted (ch10:def:censoring).
++#
++# Added 2026-09-21 after a measured hole: NaN slid through the strictly-positive
++# guard (NaN compares False against every operator) and infinity passed it
++# outright. Before the fix: i_pred(nan, 4.0) -> nan; i_pred(8.0, nan) -> nan;
++# i_pred(8.0, inf) -> 0.0; i_pred(inf, 4.0) -> inf; r_total(1e308, 1e308, 1, 1)
++# -> inf. The quiet one was i_pred(8.0, inf) -> 0.0, a clean-looking zero flow
++# out of nonsense input, which reads downstream as a starved path.
++# ----------------------------------------------------------------------------
++
++_INF = float("inf")
++_NAN = float("nan")
++
++
++def _refuses(fn, *args, **kwargs):
++    try:
++        result = fn(*args, **kwargs)
++    except ValueError as exc:
++        assert "finite" in str(exc), f"refused, but not for finiteness: {exc}"
++        return True
++    raise AssertionError(f"{fn.__name__} returned {result!r} instead of refusing")
++
++
++def test_i_pred_refuses_nan_resistance():
++    assert _refuses(i_pred, 8.0, _NAN)
++
++
++def test_i_pred_refuses_infinite_resistance():
++    assert _refuses(i_pred, 8.0, _INF)
++
++
++def test_i_pred_refuses_nan_drive():
++    assert _refuses(i_pred, _NAN, 4.0)
++
++
++def test_i_pred_refuses_infinite_drive():
++    assert _refuses(i_pred, _INF, 4.0)
++
++
++def test_i_pred_still_refuses_zero_and_negative_resistance():
++    for bad in (0.0, -2.0):
++        try:
++            i_pred(8.0, bad)
++        except ValueError:
++            continue
++        raise AssertionError(f"i_pred accepted resistance {bad}")
++
++
++def test_i_pred_unchanged_on_good_input():
++    assert i_pred(8.0, 4.0) == 2.0
++    assert y_hat(8.0, 4.0) == 2.0
++
++
++def test_r_total_refuses_non_finite_component():
++    assert _refuses(r_total, _NAN, 1.0, 1.0, 1.0)
++    assert _refuses(r_total, _INF, 1.0, 1.0, 1.0)
++
++
++def test_r_total_refuses_an_overflowing_sum():
++    assert _refuses(r_total, 1e308, 1e308, 1.0, 1.0)
++
++
++def test_r_total_unchanged_on_good_input():
++    assert r_total(1.0, 2.0, 3.0, 4.0) == 10.0
++
++
+ # ----------------------------------------------------------------------------
+ # Runner (works without pytest).
+ # ----------------------------------------------------------------------------

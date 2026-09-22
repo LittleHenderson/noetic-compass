@@ -1,0 +1,360 @@
+{
+ "schema": "cas.audit-claims/1.0",
+ "built": "2026-09-22",
+ "subject": "work done 2026-09-21 on branch research/helm-3.0-cas-lab, HEAD 86ba3d75431c56147f229f24794805a3d8504f76",
+ "author": "Claude (Anthropic), agent in the owner's repository",
+ "instruction_to_auditor": "For each claim record auditor_verdict as one of REPRODUCES / FALSE / OVERSTATED / UNVERIFIABLE and auditor_observed as the literal output you saw. Do not paraphrase numbers. If a command errors, that is not a check that passed.",
+ "the_three_questions": [
+  "Is 04_WHAT_I_GOT_WRONG.md complete, or did the author miss a mistake?",
+  "Is any claim stated with more confidence than its evidence supports?",
+  "Is there anywhere a calculated value could be mistaken for a measured one?"
+ ],
+ "claims": [
+  {
+   "id": "OHM-1",
+   "area": "cas_ohm",
+   "claim": "Before commit 86ba3d75, i_pred returned nan for i_pred(nan, 4.0) and for i_pred(8.0, nan), 0.0 for i_pred(8.0, inf), and inf for i_pred(inf, 4.0); r_total(1e308, 1e308, 1.0, 1.0) returned inf.",
+   "how_to_check": "Extract the pre-change module: git show 078d00ed:noetic-compass-scaffold/noetic-compass/api/cas_ohm/quantifiers.py (and __init__.py beside it) into a scratch folder, then call each function.",
+   "what_i_say_you_will_observe": "nan, nan, 0.0, inf, inf — exactly those five values.",
+   "why_this_one_is_risky": "This is the defect claim. If it does not reproduce, the fix had no justification.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-2",
+   "area": "cas_ohm",
+   "claim": "After commit 86ba3d75 all five of those calls are refused with a ValueError whose message contains the word 'finite'.",
+   "how_to_check": "Same five calls against the current module at <worktree>/noetic-compass-scaffold/noetic-compass/api/cas_ohm/.",
+   "what_i_say_you_will_observe": "Five ValueError refusals, each message containing 'finite'.",
+   "why_this_one_is_risky": "An over-broad fix could refuse valid input too. Check OHM-3 alongside this one.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-3",
+   "area": "cas_ohm",
+   "claim": "The fix changed nothing else: i_pred(8.0, 4.0) == 2.0, y_hat(8.0, 4.0) == 2.0, r_total(1,2,3,4) == 10.0, r_hidden(v=8.0, i_obs=2.0, r_known=2.0) gives magnitude 2.0 and r_apparent 4.0, and resistance 0.0 or -2.0 is still refused.",
+   "how_to_check": "Run all of those against both the before and after modules and compare.",
+   "what_i_say_you_will_observe": "Identical results before and after.",
+   "why_this_one_is_risky": "This is a claim about everything I did NOT test. Try to find a behaviour I altered without noticing — that is the highest-value finding in this area.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-4",
+   "area": "cas_ohm",
+   "claim": "The module passed 39/39 before my change and passes 48/48 after it. AND, because that commit wrote its own tests, the count alone proves nothing: running HEAD's test file against the PRE-FIX implementation gives PASSED 42/48 with six tests failing by name.",
+   "how_to_check": "python api/cas_ohm/test_quantifiers.py on the current tree, and on a scratch copy of the 078d00ed version. Then the falsification run: copy HEAD's test_quantifiers.py over a scratch copy of 078d00ed's quantifiers.py and __init__.py, and run it.",
+   "what_i_say_you_will_observe": "PASSED 48/48, PASSED 39/39, and for the falsification run PASSED 42/48 with six named failures.",
+   "why_this_one_is_risky": "Counts are easy to misstate. Also check that the 9 added tests actually test the 5 defect cases and are not padding.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-5",
+   "area": "cas_ohm",
+   "claim": "The cause was that the guard read 'if rf <= 0.0', which NaN passes because NaN compares False against every ordering and equality operator (it returns True against !=), and which infinity passes because infinity is legitimately positive; and the module already contained a _is_finite helper that _as_resistance never called.",
+   "how_to_check": "Read the pre-change _as_resistance (around line 198) and the pre-change _is_finite (around line 540).",
+   "what_i_say_you_will_observe": "The guard is exactly 'if rf <= 0.0'; _is_finite exists and is not referenced by _as_resistance.",
+   "why_this_one_is_risky": "This is my explanation of the cause, not just the symptom. An explanation can be plausible and wrong.",
+   "notes": "Corrected 2026-09-22: 'every operator' was overstated; nan != 0.0 is True. The conclusion is unaffected.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-6",
+   "area": "cas_ohm",
+   "claim": "WITHDRAWN BY THE AUTHOR BEFORE HANDOVER. I called i_pred(8.0, inf) -> 0.0 the dangerous one because a zero flow reads downstream as a starved path, and the changelog went further and called it an ASOM classification produced from garbage. BOTH ARE WRONG. There is no code path from a flow number to an ASOM label: asom() takes two enums, asom(0.0, INTENDED) returns None, and Region is always a caller judgement. Measured through delta_current, the module's only numeric consumer of a flow value: 0.0 -> OVERSHOOT (visible), nan -> WITHIN_TOLERANCE (the SAME sign reading as a perfectly correct prediction), inf -> UNDERSHOOT. NaN is the dangerous value, not 0.0. I picked the wrong value and stated the wrong mechanism.",
+   "how_to_check": "Trace what actually consumes a flow value in this module (Region, Outcome, asom, check_eligibility) and decide whether a 0.0 from i_pred could in fact reach a classification.",
+   "what_i_say_you_will_observe": "asom(0.0, Outcome.INTENDED) -> None. delta_current(i_obs=2.0, i_pred_value=nan) -> value=nan, sign=WITHIN_TOLERANCE.",
+   "why_this_one_is_risky": "Already found and corrected by an independent checker before handover. Verify the correction, not the original.",
+   "notes": "Corrected 2026-09-22. The original overstatement is recorded in 04_WHAT_I_GOT_WRONG.md.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-7",
+   "area": "cas_ohm",
+   "claim": "The CAS-Ohm module is NOT connected to the CAS compiler. None of the three operations is reachable from a compiled expression today.",
+   "how_to_check": "grep the whole worktree for 'cas_ohm' and check whether api/notation/compiler.py imports or calls it.",
+   "what_i_say_you_will_observe": "No import of cas_ohm from the compiler; no CAS syntax reaches it.",
+   "why_this_one_is_risky": "If this is false, I have overclaimed the state of the work in the opposite direction from usual.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-8",
+   "area": "cas_ohm",
+   "claim": "Of the owner's three operations, I = V/R exists as i_pred; R = V/I exists only as a private step inside r_hidden (surfaced as RHidden.r_apparent, tagged APPARENT_SAME_SAMPLE); V = I x R does not exist anywhere in the module.",
+   "how_to_check": "Read the module's __all__ and search the source for any function computing V from I and R.",
+   "what_i_say_you_will_observe": "No such function exists. r_apparent is computed inside r_hidden and carries the APPARENT_SAME_SAMPLE role.",
+   "why_this_one_is_risky": "A missing-feature claim is easy to get wrong by not looking hard enough. I got a similar claim wrong twice before (see 04, item 6).",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-1",
+   "area": "book canon",
+   "claim": "Commit d50abbbc is the canon pin, and its eight changed book files are byte-identical (over LF-normalised bytes) to commit eb3c9b1e in the SEPARATE main repository.",
+   "how_to_check": "Compare sha256 over LF-normalised bytes for each of the eight files across the two repositories. 02_MANIFEST.json records both sets under canon_pin_cross_repository_check.",
+   "what_i_say_you_will_observe": "All eight identical; the manifest reports canon_pin_all_identical: true.",
+   "why_this_one_is_risky": "Two repositories are easy to confuse. Confirm you are reading the right git dir for each.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-2",
+   "area": "book canon",
+   "claim": "The true content change is 202 insertions and 95 deletions across 8 files. The 1765/1658 figure in commit 0fc6bb30 is a line-ending mistake, fixed by d50abbbc. SCOPE CORRECTION: 'all book .md files are LF' is true in the helm3-lab worktree and FALSE in the main repository, where core.autocrlf=true leaves 24 CRLF files in the working tree. The committed blobs are identical either way.",
+   "how_to_check": "git diff dbb388ee d50abbbc -- book/CAS_PCBA_Engineer/ ; and git show --stat 0fc6bb30",
+   "what_i_say_you_will_observe": "202 insertions / 95 deletions for the first; the larger figure for the second.",
+   "why_this_one_is_risky": "I am reporting my own mistake here. Check that the fix is complete: git ls-files --eol should show all 39 book .md files as i/lf w/lf.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-3",
+   "area": "book canon",
+   "claim": "The committed book called XOR a both-active detector, which is wrong because XOR fires when its inputs differ; AND is the both-active detector. I called this 'plainly wrong'.",
+   "how_to_check": "Read Chapter_10 lines 96 and 104 of git show dbb388ee, and the corresponding lines after.",
+   "what_i_say_you_will_observe": "The pre-edit text reads 'dissonance detector - both ^2 and ^3 firing -> conflict flag'.",
+   "why_this_one_is_risky": "This is the central justification for committing the owner's edits. If my reading of XOR is wrong, the recommendation collapses.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-4",
+   "area": "book canon",
+   "claim": "MY SELF-CORRECTION: the gate prefix/leader clash was ALREADY reachable in the committed book at Chapter_10:278 and in Chapter_14; my original published claim that the edits made it reachable was FALSE.",
+   "how_to_check": "git show dbb388ee:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md | grep -n '^[[:space:]]*gate [a-z_]*:' and the same for Chapter_14_Power_Management.md",
+   "what_i_say_you_will_observe": "Chapter_10 line 278 reads 'gate dissonance: XOR< attract, averse >;' and Chapter_14 carries two gate statements.",
+   "why_this_one_is_risky": "CHECK THE CORRECTION AS HARD AS THE ORIGINAL ERROR. A wrong correction is worse than the original mistake.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-5",
+   "area": "book canon",
+   "claim": "In the committed book, Chapter_10:278 uses the 'gate' prefix while its own answer key at Appendix_E:327 uses the 'xor' prefix for the same declaration — so the edits fix an internal inconsistency.",
+   "how_to_check": "Compare git show dbb388ee for both lines.",
+   "what_i_say_you_will_observe": "Chapter_10:278 'gate dissonance: XOR< ... >' and Appendix_E:327 'xor dissonance: XOR< ... >'.",
+   "why_this_one_is_risky": "This is the strengthened argument I substituted after my error. It should be held to the same standard as the claim it replaced.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-6",
+   "area": "book canon",
+   "claim": "Two further one-line defects existed in the owner's edited text and I fixed them before committing: Appendix_B:374 still showed the old NOT meaning and contradicted its own table at :386; Appendix_A:137 omitted XNOR and said gates act on 'states'.",
+   "how_to_check": "Read those lines in the owner's pre-fix working copy and in the canon pin.",
+   "what_i_say_you_will_observe": "Both were present before and are fixed after.",
+   "why_this_one_is_risky": "These are the only content changes I authored in the owner's book. Check that I changed nothing else.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-7",
+   "area": "book canon",
+   "claim": "The book contains 58 circuit/board listing blocks across 42 distinct names (an earlier investigator reported 60).",
+   "how_to_check": "Count with the regex in 03_REPRODUCE.md section 4.",
+   "what_i_say_you_will_observe": "58 blocks, 42 names.",
+   "why_this_one_is_risky": "Three different figures circulated. Get your own number.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "TEST-1",
+   "area": "tests",
+   "claim": "458 compiler tests pass on the merged tree.",
+   "how_to_check": "The command in 03_REPRODUCE.md section 2, from <worktree>/noetic-compass-scaffold/noetic-compass.",
+   "what_i_say_you_will_observe": "'458 passed'.",
+   "why_this_one_is_risky": "Counts are the easiest thing to state and the easiest to fake. Re-run rather than read.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "TEST-2",
+   "area": "tests",
+   "claim": "348 lab tests pass on the merged tree.",
+   "how_to_check": "The command in 03_REPRODUCE.md section 3. TEMP and TMP must point OUTSIDE the repository or the Q4 key fixtures refuse.",
+   "what_i_say_you_will_observe": "'348 passed in ~200s'.",
+   "why_this_one_is_risky": "If you get setup errors, check TEMP before concluding failure — that trap cost the author a confused run.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "TEST-3",
+   "area": "tests",
+   "claim": "The 99 pre-existing compiler tests were not modified by this work.",
+   "how_to_check": "git diff c3855275 HEAD -- noetic-compass-scaffold/noetic-compass/tests/test_notation_compiler.py",
+   "what_i_say_you_will_observe": "An empty diff.",
+   "why_this_one_is_risky": "A common way to make tests pass is to change them. Verify the pre-existing file is untouched.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "MERGE-1",
+   "area": "merge",
+   "claim": "The second agent's compiler (LF sha256 61ed5a45970459e4...) is better than mine (f1a44678438a65c3...) on five specific points, which is why the merge took theirs.",
+   "how_to_check": "Load both texts side by side and run the seven expressions in 03_REPRODUCE.md section 5.",
+   "what_i_say_you_will_observe": "The table in that section.",
+   "why_this_one_is_risky": "I HAD AN INTEREST IN THIS COMPARISON. It decided whose work survived, and I am the one who reported that mine lost. Re-run every row.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "MERGE-2",
+   "area": "merge",
+   "claim": "One of those five points is a regression I introduced: my compiler wrongly refused ordinary names such as P1_count and F2_total.",
+   "how_to_check": "'let P1_count = ^2^C; P1_count' against both compilers.",
+   "what_i_say_you_will_observe": "Mine refuses; theirs accepts.",
+   "why_this_one_is_risky": "Self-reported fault. Check it is stated accurately and not minimised.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "MERGE-3",
+   "area": "merge",
+   "claim": "The merge kept every unique file from both lines.",
+   "how_to_check": "Check the merged HEAD contains OWNER_DECISIONS_20260921.json, OD_A_BOOK_CANON_BRIEF_20260921.md, COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md and the book canon commit (mine), and COMPILER_CURRENT_STATUS_20260921.md, learner_q4_neural.py, q4_smoke_job.py, records/continuation_20260921/VERIFICATION.md, data/q3_v0_7/manifest.json (theirs).",
+   "what_i_say_you_will_observe": "All present.",
+   "why_this_one_is_risky": "A merge that silently drops the other party's work is a serious failure. Look for anything lost.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "MERGE-4",
+   "area": "merge",
+   "claim": "I verified the second agent's claims by re-running their commands before merging, and every count reproduced: 458, 304, 92, 27, 2 passed; Q3 v0.5 vs v0.7 all 24 row files identical.",
+   "how_to_check": "Their record is at <codex-worktree>/cas_only_reasoner/FOR CODEX .../records/continuation_20260921/VERIFICATION.md. Re-run its commands in their worktree.",
+   "what_i_say_you_will_observe": "Those counts.",
+   "why_this_one_is_risky": "I claim I checked rather than trusted. Test whether the claim of having checked is itself true.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "GOV-1",
+   "area": "governance",
+   "claim": "No model was run in any of this work: no training, no inference, no GPU, no CPU inference, no cloud job, no money spent.",
+   "how_to_check": "Read learner_q4_neural.py (torch imported only inside build_model; GPU_REQUIRED on any non-cuda device). Search the session's artifacts for any run receipt, cost record or cloud launch.",
+   "what_i_say_you_will_observe": "No evidence of a model run.",
+   "why_this_one_is_risky": "This is the claim with the most riding on it. If you find any evidence of a run, that outranks everything else in this audit.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "GOV-2",
+   "area": "governance",
+   "claim": "I did not push another agent's unpushed commits. The main repository's branch codex/casformer-v0.2-release carries my commit eb3c9b1e but was deliberately left unpushed because it also carries two of their unfinished commits.",
+   "how_to_check": "In the main repository: git rev-list --count HEAD --not --remotes, and check whether the branch has an upstream.",
+   "what_i_say_you_will_observe": "Three unpushed commits, no upstream set.",
+   "why_this_one_is_risky": "Publishing someone else's unfinished work would be a real harm. Verify I did not.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "GOV-3",
+   "area": "governance",
+   "claim": "An owner ruling that existed only in my prose was recorded as an artifact (OD-9) after a second agent correctly refused to treat my report as authorization.",
+   "how_to_check": "Read OWNER_DECISIONS_20260921.json entries OD-9 and OD-10, and the second agent's VERIFICATION.md paragraph refusing the prose.",
+   "what_i_say_you_will_observe": "Both present; the OD-9 entry explains why it exists.",
+   "why_this_one_is_risky": "Check whether the recorded ruling matches the owner's actual words, or whether I paraphrased in my own favour.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "GOV-4",
+   "area": "governance",
+   "claim": "Where an owner decision is unmade, the work reports it as open rather than choosing. Open items include the PCBA route, set identity, N1-N13, and W-A/W-B/W-C.",
+   "how_to_check": "Read COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md section 5 and the NESTING_OPEN_QUESTIONS table in the compiler.",
+   "what_i_say_you_will_observe": "Thirteen nesting questions N1-N13 named by id, and a section 5 list of owner decisions.",
+   "why_this_one_is_risky": "Look for anywhere the code silently picks a reading instead of reporting the question. The author claims it never does.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "GOV-5",
+   "area": "governance",
+   "claim": "A change I had built (set-element identity by contents) was WITHDRAWN after review showed it changed more than claimed.",
+   "how_to_check": "Read the withdrawal note in COMPILER_BOOK_MEANING_AND_OPEN_QUESTIONS_20260921.md section 1b item 3, and check that the current compiler still keys a set element by its binding name.",
+   "what_i_say_you_will_observe": "The withdrawal is documented and the old behaviour is pinned as a known limitation.",
+   "why_this_one_is_risky": "Check the withdrawal is real in the code, not only in the prose.",
+   "notes": "",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-9",
+   "area": "cas_ohm",
+   "claim": "A defect of the same class survived my first fix: r_hidden never checked its drive argument. At commit 86ba3d75, r_hidden(v=nan, i_obs=2.0, r_known=2.0) returned RHidden magnitude=nan, and v=inf returned magnitude=inf. It is fixed now and the suite is 51/51.",
+   "how_to_check": "Run those two calls against the module at 86ba3d75 and at HEAD, and run python api/cas_ohm/test_quantifiers.py at both.",
+   "what_i_say_you_will_observe": "nan and inf magnitudes at 86ba3d75; a ValueError containing 'finite' at HEAD; PASSED 48/48 then PASSED 51/51.",
+   "why_this_one_is_risky": "This is the clearest evidence that my first fix was narrower than the principle it cited. An independent checker found it, not me. LOOK FOR A THIRD FUNCTION OF THE SAME CLASS THAT BOTH OF US MISSED.",
+   "notes": "Found 2026-09-22 during the pre-handover re-check.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "OHM-10",
+   "area": "cas_ohm",
+   "claim": "My statement 'no test covered a non-finite input' was FALSE. The pre-fix test file already had test_r_hidden_censors_non_finite, passing nan and inf as i_obs at lines 156 and 158. The accurate claim is: no test covered a non-finite input TO i_pred OR r_total.",
+   "how_to_check": "git show 078d00ed:noetic-compass-scaffold/noetic-compass/api/cas_ohm/test_quantifiers.py and read lines 150-165.",
+   "what_i_say_you_will_observe": "A test named test_r_hidden_censors_non_finite calling r_hidden with float('nan') and float('inf').",
+   "why_this_one_is_risky": "A false statement in a commit message. Check whether my correction is itself accurate.",
+   "notes": "Corrected 2026-09-22.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "TEST-4",
+   "area": "tests",
+   "claim": "The 458 figure is not 458 independent compiler behaviours: 99 pre-date this work, 359 do not, and 270 of the 458 come from three parametrized functions swept over 90 help-text rows in a single file.",
+   "how_to_check": "pytest --collect-only on each of the five files, and count 'def test_' in test_offline_help_text_canon.py.",
+   "what_i_say_you_will_observe": "test_offline_help_text_canon.py declares six test functions and collects 273.",
+   "why_this_one_is_risky": "I am disclosing a weakness in my own headline number. Check I have not understated it further.",
+   "notes": "Added 2026-09-22 after a checker pointed out the number invites over-reading.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  },
+  {
+   "id": "BOOK-8",
+   "area": "book canon",
+   "claim": "The OD-A edits left two instances of the defect they were made to remove: the op-amp is still called a CJT at Chapter_10:322 and Appendix_B:65, contradicting the headings those same edits changed. REPORTED TO THE OWNER, NOT FIXED.",
+   "how_to_check": "grep -n CJT on those two files at the canon pin d50abbbc, and read the two section headings.",
+   "what_i_say_you_will_observe": "Chapter_10:322 'Op-Amp is an ultra-high-gain CJT tamed by feedback' and Appendix_B:65 'The op-amp is a CJT with so much raw gain it must be tamed by feedback.', while both headings read 'Op-Amp - High-Gain Differential Stage with Feedback'.",
+   "why_this_one_is_risky": "The canon pin I committed carries a known internal contradiction. I chose to report rather than edit the owner's book again without a fresh yes. Judge whether that was the right call.",
+   "notes": "Found 2026-09-22 by a checker reading the canon pin itself.",
+   "auditor_verdict": "",
+   "auditor_observed": ""
+  }
+ ],
+ "pre_handover_recheck": {
+  "what_happened": "Four agents independently re-ran these claims before handover, instructed to find anything false, overstated or unverifiable.",
+  "result": "One claim FALSE (see OHM-10), three OVERSTATED (OHM-5, OHM-6, and the scope of BOOK-2), one UNVERIFIABLE (BOOK-6, because the pre-fix state was never committed anywhere), and one live defect found and fixed (OHM-9). All corrections are in this file and in CHANGELOG.md.",
+  "what_this_means_for_you": "These claims have already survived one adversarial pass. Do not treat that as reassurance - treat it as a floor. The checkers found what they found in under an hour, and every error they found was mine."
+ }
+}

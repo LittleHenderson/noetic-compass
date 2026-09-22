@@ -1,0 +1,656 @@
+diff --git a/book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md b/book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md
+index ccf10546..44c57162 100644
+--- a/book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md
++++ b/book/CAS_PCBA_Engineer/Appendix_A_Notation_Quick_Reference.md
+@@ -134,7 +134,7 @@ Regions: **Cutoff** (no effect) · **Active** (Δeffect ≈ β·Δcause) · **Sa
+ | Transformer | `Transformer< ^P -> ^C, ratio=0.5 >` | Domain impedance match. |
+ | OpAmp | `OpAmp< non_inverting=^8^C_{F2}\|A, inverting=^6^E_{F6}\|A, output=^9^C_{F2}\|A, open_loop_gain=10000 >` | Differential amplification. |
+ | Oscillator | `Oscillator< Phi< ^8^C\|A, ^3^O\|E, ^9^E\|f, ^0^P\|T >, frequency=0.0000116 >` | Cyclic state traversal. |
+-| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … >` | Boolean logic on states. |
++| Gates | `AND< … > OR< … > NOT< … > NAND< … > NOR< … > XOR< … > XNOR< … >` | Boolean logic on engineered firing flags, not on states. |
+ | MUX / DEMUX | `MUX< inputs=[…], select=Drive::active >` | Drive-selected routing. |
+ | Regulator | `Regulator< target_state=^0^E_{F3}\|f, tolerance=0.1 >` | Holds a target state. |
+ | Fuse | `Fuse< ^8^O_{F5}\|E, threshold=0.9, action=permanent_block >` | Trips and blocks on overload. |
+diff --git a/book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md b/book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md
+index 1b0a98ce..9bb4f430 100644
+--- a/book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md
++++ b/book/CAS_PCBA_Engineer/Appendix_B_Component_Datasheets.md
+@@ -17,7 +17,7 @@ Canonical Noetic names are used throughout: `^0` Idea, `^1` Mind, `^2` Positive,
+ 
+ ## CJT — Cognitive Junction Transistor
+ 
+-**Symbol / role.** The book's central component. A transistor is a three-terminal device where a small current at one terminal controls a large current between the other two. The **CJT** models a cognitive state transition the same way: a small change at the **Bias** terminal controls a large change in the **Cause → Effect** transition. It is the active, amplifying element of every cognitive circuit — everything else conditions, stores, routes, or protects the signal the CJT produces.
++**Symbol / role.** The book's central component. A transistor is a three-terminal device where one terminal controls conduction through a separate path. The **CJT** keeps that controlled-transition pattern: a Bias role shapes a Cause-to-Effect transition. These are CAS functional roles, not claims that Cause is literally a collector, Bias a base, or Effect an emitter.
+ 
+ **CCDL syntax.**
+ 
+@@ -30,11 +30,13 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
+ 
+ **Terminals.**
+ 
+-| Terminal | Transistor analog | CAS analog |
++| Functional port | Hardware drawing cue | CAS role |
+ |---|---|---|
+-| **C — Cause** | Collector (input) | the Idea entering the Mind — typically an `^8` Above/Cause state |
+-| **B — Bias** | Base (control) | accumulated substrate: `^5` Female, constitution, Dial settings, Drive config |
+-| **E — Effect** | Emitter (output) | the Idea produced — typically a `^9` Below/Effect state |
++| **Cause** | one transition-path port | the triggering Idea — typically `^8` Above/Cause |
++| **Bias** | control-port cue | accumulated `^5` composition plus stated configuration |
++| **Effect** | the other transition-path port | the Idea brought to Mind — typically `^9` Below/Effect |
++
++The plate labels the three cognitive ports explicitly. Their names do not assign fixed BJT terminal identities.
+ 
+ **Parameters.**
+ 
+@@ -54,7 +56,7 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
+ | **Cutoff** | bias below `cutoff` threshold | no effect; the transition does not fire |
+ | **Active** | bias above cutoff, below saturation | linear amplification: `Δeffect ≈ β·Δcause` |
+ | **Saturation** | effect at `sat` plateau | effect maxed; more cause produces no further change |
+-| **Breakdown** | overload past safe limits | effect flips to its involution pair (`^2`→`^3`) — the controlled state inverts |
++| **Breakdown** | overload past safe limits | engineered failure behavior; an involution flip occurs only when that explicit rule is declared |
+ 
+ **Gain, formally.** Small-signal `β = ‖∂E/∂C‖_FR` at constant bias; large-signal `β = d_FR(E_after, E_before) / d_FR(C_after, C_before)`, where `d_FR(p,q) = 2·arccos(Σ√(pₖqₖ))` is the Fisher-Rao geodesic distance on the open simplex Δ39°. (Stated in Chapter 3 and restated in Chapter 9; cited, not re-derived, here.) **Before you write a measured β on a test report, read the gain-definition section of Appendix I** — a second, different definition of `β` is in circulation in instrumentation tooling, and the two are not known to be the same quantity.
+ 
+@@ -74,7 +76,7 @@ let cjt_x = CJT< ^8^C_{F2}|A | ^5^P_{F7}|T => ^9^C_{F2}|A > [β=2.0];
+ | Short circuit | cause routed straight to effect, bypassing bias | W-CJT-006 CjtShortCircuit |
+ | Cascade too deep | long β-chain compounds gain into instability | W-CJT-007 CjtCascadeDepth |
+ | Cross-domain bias | bias and transition in incompatible domains | E-CJT-008 CjtCrossDomainBias |
+-| Breakdown flip | overload inverts the state to its involution pair | (design: clamp before breakdown) |
++| Breakdown rule invoked | declared overload rule changes the output, possibly by a licensed involution | (design: clamp before breakdown) |
+ 
+ > **Bench Note — pick the region on purpose.** A safety CJT *should* saturate at its specified threshold — that is the certification claim, an engineering fact about where the effect plateaus, not a claim about values. A reasoning CJT should sit in the active region with modest β. Cutoff is for stages you want silent until bias crosses a deliberate floor.
+ 
+@@ -113,36 +115,36 @@ Resistor< ^8^C_{F2}|A, R=50 >   // limits activation flow; higher R = more const
+ 
+ ---
+ 
+-## Capacitor — Experience Storage
++## Capacitor — Persistence of Accumulated Composition
+ 
+-**Symbol / role.** A capacitor stores electrical charge and releases it later, smoothing out fast changes in voltage. In CAS it stores **accumulated experience** — the `^5` Female substrate — and bleeds it back into the circuit over time.
++**Symbol / role.** A capacitor stores electrical charge and releases it later, smoothing fast voltage changes. In CAS it models the persistence of `^5` Female composition: the Mind **is composed of** accumulated Ideas. The Mind is not a container, and the Ideas are not cargo placed inside it.
+ 
+ **CCDL syntax.**
+ 
+ ```cas
+-Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >   // stores experience; leakage = forgetting
++Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >   // preserves accumulated composition; leakage = decay
+ ```
+ 
+ **Parameters.**
+ 
+ | Parameter | Range | Meaning |
+ |---|---|---|
+-| state literal | — | the experiential state being stored |
+-| `C` | >0 | capacity; how much experience can be held |
+-| `leakage` | 0–1 | rate of decay per unit time — forgetting |
+-| `esr` | ≥0 | equivalent series resistance; how slowly stored experience can be drawn out |
++| state literal | — | the `^5` composition whose persistence is modeled |
++| `C` | >0 | persistence capacity for that accumulated composition |
++| `leakage` | 0–1 | decay rate per unit time |
++| `esr` | ≥0 | equivalent series resistance; how slowly the retained effect can bias a path |
+ 
+-**Cognitive function.** Memory with dynamics. A capacitor smooths a noisy input by averaging recent activation, and it holds a baseline that carries forward when the input goes quiet. `leakage` is forgetting: `leakage=0` is permanent memory, higher values fade. This is the building block of the Cognitive Memory Board.
++**Cognitive function.** Persistence with dynamics. A capacitor smooths a noisy input by averaging recent activation and carries an accumulated baseline forward when input goes quiet. `leakage=0` means no designed decay; larger values fade faster. This is an engineered model of lasting composition, not a literal claim about a Mind as a container.
+ 
+-**Typical use.** Smoothing filters, the integrator configuration of an op-amp (feedback through a capacitor), and the CMB's storage cells. A `^5` capacitor is the bias reservoir a CJT draws on.
++**Typical use.** Smoothing filters, an op-amp integrator, and CMB persistence cells. A `^5` capacitor supplies an accumulated-composition bias that a CJT can use.
+ 
+ **Failure modes.**
+ 
+ | Failure | Symptom |
+ |---|---|
+-| Leakage too high | experience fades before it can be used; no continuity across turns |
+-| Capacity too small | memory saturates; new experience overwrites old |
+-| ESR too high | stored experience can't be drawn out fast enough to bias a transition |
++| Leakage too high | accumulated influence fades before it can be used; continuity is lost |
++| Capacity too small | the persistence cell saturates and no longer distinguishes added formation |
++| ESR too high | retained influence cannot bias a transition quickly enough |
+ 
+ ---
+ 
+@@ -230,7 +232,7 @@ Zener< ^3^P, breakdown=0.8 >   // reverse-conducts (the aversion fires) only abo
+ 
+ Two relations have to hold or the part does not work at all. First, `breakdown` is a threshold like any other, so the reachability rule under **Fuse** applies unchanged: put it above the lowest saturation or clamp ceiling upstream and the Zener can never conduct. Second, `clamp` must sit at or above `breakdown` — pin the state *below* the level that made it conduct and it drops out, rises, conducts again, and you have built a chattering comparator instead of a clamp.
+ 
+-**Typical use.** Reference voltages (a stable setpoint for a regulator), over-activation clamps, and threshold guards where a state should be silent until a real limit is reached.
++**Typical use.** Threshold-derived setpoints for a regulator (a held cognitive state, not the schematic Reference/rest node), over-activation clamps, and guards where a state stays silent until a real limit is reached.
+ 
+ **Failure modes.**
+ 
+@@ -276,9 +278,9 @@ Transformer< ^P -> ^C, ratio=0.5 >   // step a principle down into reasoning, 2:
+ 
+ ---
+ 
+-## Op-Amp — Ultra-High-Gain CJT with Feedback
++## Op-Amp — High-Gain Differential Stage with Feedback
+ 
+-**Symbol / role.** An operational amplifier has two inputs (`+` non-inverting, `−` inverting) and one output, and amplifies the *difference* between them with enormous open-loop gain (10⁴+). Feedback turns that wild gain into a precise closed-loop gain of `1 + Rf/Rg`. It is a CJT with so much raw gain you tame it with feedback rather than relying on native β.
++**Symbol / role.** An operational amplifier has two inputs (`+` non-inverting, `−` inverting) and one output. It amplifies their arithmetic difference with large open-loop gain. Feedback can turn that raw gain into a precise closed-loop response. This is a differential construction, not a Noetic involution operator.
+ 
+ **CCDL syntax.**
+ 
+@@ -302,11 +304,11 @@ OpAmp< non_inverting=^8^C_{F2}|A, inverting=^6^E_{F6}|A, output=^9^C_{F2}|A, ope
+ | Configuration | Wiring | Cognitive job |
+ |---|---|---|
+ | **Non-inverting** | input on `+`, feedback to `−` | amplify an interpretation while staying faithful to it |
+-| **Inverting** | input on `−`, `+` grounded | flip an interpretation to its involution pair, with gain |
+-| **Comparator** | no feedback, two raw inputs | decide which of two interpretations dominates — a hard `^2`-vs-`^3` verdict |
++| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |
++| **Comparator** | no feedback, two raw inputs | threshold which of two commensurable quantities is larger |
+ | **Integrator** | feedback through a capacitor | accumulate small impressions into one over time |
+ 
+-**Cognitive function.** A high-gain CJT comparing two cognitive inputs and resolving them. The feedback path is what makes it usable: it converts raw, brittle gain into a modest, stable, predictable response.
++**Cognitive function.** A high-gain stage comparing two commensurable cognitive quantities. The feedback path converts raw, brittle gain into a modest and predictable response. If a design wants an involution, it must name and license that rule separately.
+ 
+ **Typical use.** The core of the Cognitive Differential Amplifier Board (CDAB). Comparator stages for `^2`-vs-`^3` verdicts; integrator stages for accumulating evidence.
+ 
+@@ -369,9 +371,10 @@ CrystalOscillator< Phi< ^5^P_{F7}|T, ^3^P_{F7}|f >, frequency=fixed, Q=50000 >
+ ```cas
+ AND< ^3^P_{F7}|f, ^6^E_{F6}|A, ^9^O_{F5}|E >   // all three must clear before output
+ OR<  ^2^C|A, ^2^E|A >                          // any one suffices
+-NOT< ^2^E >                                    // = ^3^E  (involution flip)
++NOT< enable_flag >                             // Boolean complement of one flag
+ NAND< … >    NOR< ^3^P|A, ^3^C|A, ^3^E|A >     // inverted AND / inverted OR
+-XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion firing → dissonance flag
++AND< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion firing → conflict flag
++XOR< route_a_flag, route_b_flag >                // exactly one route flag fires
+ ```
+ 
+ **Parameters / truth rules.**
+@@ -380,21 +383,22 @@ XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion f
+ |---|---|---|---|
+ | `AND< s₁,…,sₙ >` | n | fires iff all fire | every prerequisite must clear |
+ | `OR< s₁,…,sₙ >` | n | fires iff any fires | any one prerequisite suffices |
+-| `NOT< s >` | 1 | the involution pair of `s` | Noetic involution flip (`^2`→`^3`) |
++| `NOT< s >` | 1 | Boolean complement; use a Noetic involution only when `s` has a licensed pair | flag negation; optional licensed `^2`↔`^3`, `^5`↔`^6`, or `^8`↔`^9` mapping |
+ | `NAND< … >` | n | inverted AND | "block unless every condition fails" |
+ | `NOR< … >` | n | inverted OR | proceed only when *no* warning state fires |
+-| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | **dissonance detector** — both `^2` and `^3` firing → conflict |
++| `XOR< s₁, s₂ >` | 2 | fires iff exactly one fires | exclusivity detector — one route, never both |
++| `XNOR< s₁, s₂ >` | 2 | fires iff inputs agree | equivalence detector; both-active **and** both-inactive count |
+ 
+-**Cognitive function.** Prerequisite combination. **NOT** is the involution operator made discrete — the deliberate, controlled version of a CJT's breakdown-flip. **XOR** is the ambiguity alarm: a clean stimulus fires attraction *or* aversion; a manipulative or genuinely hard one fires both, and XOR raises a flag.
++**Cognitive function.** Prerequisite combination. **NOT** is a Boolean complement; it maps to a Noetic involution only for a licensed involution pair. **AND**, not XOR, is the both-active conflict detector. **XOR** reports exactly one active input. **XNOR** reports equality and therefore needs an activity qualifier when both-inactive must be excluded.
+ 
+-**Typical use.** Guardrail clearance (AND of all checks), warning suppression (NOR of all aversion states), and conflict detection (XOR of `^2`/`^3`) feeding a deliberation stage.
++**Typical use.** Guardrail clearance (AND of all checks), warning suppression (NOR of all warning flags), both-active conflict detection (AND of attraction and aversion firing flags), and exclusive routing (XOR) feeding a deliberation stage.
+ 
+ **Failure modes.**
+ 
+ | Failure | Symptom |
+ |---|---|
+-| XOR dissonance flag suppressed instead of routed | manipulative prompts pass cleanly; both `^2`/`^3` fire silently |
+-| XOR over two *identical* inputs | can never fire — a degenerate "dissonance detector" that detects nothing |
++| AND both-active conflict flag suppressed instead of routed | co-active attraction and aversion pass without a conflict signal |
++| XOR used for both-active detection | both-active produces false because XOR requires exactly one |
+ | AND used where OR was meant (or vice versa) | over- or under-blocking of prerequisites |
+ 
+ ---
+@@ -449,12 +453,12 @@ Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
+ 
+ | Parameter | Range | Meaning |
+ |---|---|---|
+-| `target_state` | state literal | the baseline to maintain (the setpoint) |
++| `target_state` | state literal | the held state to maintain; distinct from the schematic Reference/rest node |
+ | `tolerance` | 0–1 | dead-band; drift smaller than this is left alone |
+ | `response_rate` | 0–1 | how aggressively the regulator corrects toward the setpoint |
+ | `dropout` | >0 | minimum input "headroom" below which regulation fails |
+ 
+-**Cognitive function.** Gentle restoration. Under provocation, flattery, or stress a system drifts off its baseline; the Regulator measures the drift, compares to the setpoint, and pulls it back. It restores — it does not block.
++**Cognitive function.** Gentle restoration. Under perturbation a system can drift from its held state; the Regulator compares the drift to that setpoint and pulls it back. `target_state=^0...` names Idea content selected as the held state. It does not make the electrical Reference/rest symbol canonically identical to `^0` Idea. A regulator restores; it does not block.
+ 
+ **Typical use.** Emotional and evaluative steadiness on any board. Holds a calm baseline that downstream stages can rely on.
+ 
+@@ -567,7 +571,7 @@ SchmittTrigger< input=ambiguous_stimulus,
+ 
+ ```cas
+ ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >   // quantize a felt impression into analysis
+-DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decision as action
++DAC< ^9^C_{F5}|A -> ^9^C_{F5}|E, smoothing=0.2 >  // render the same state in embodied form
+ ```
+ 
+ **Parameters.**
+@@ -578,7 +582,7 @@ DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decisi
+ | `resolution` (ADC) | bits | how finely the analog register is quantized; low res loses nuance |
+ | `smoothing` (DAC) | 0–1 | how gradually the action register is rendered; prevents jerky output |
+ 
+-**Cognitive function.** Register conversion. A felt impression (`|f`) is the "analog" form — continuous, value-laden. Converting it to analytical (`|A`) is the ADC step, quantizing a feeling into something reasoning can operate on. Turning an analytical conclusion (`|A`) into embodied action (`|E`) is the DAC step, rendering a decision back into direct engagement.
++**Cognitive function.** Register conversion. A felt impression (`|f`) can be quantized into analytical form (`|A`) by an ADC. A DAC renders analytical control (`|A`) in embodied form (`|E`). In a pure Register example, Noetic and Domain stay fixed. These are two separately directed stages; the DAC is not the inverse of a lossy ADC.
+ 
+ **Typical use.** Front-ends that turn affect into analysis (ADC) and back-ends that turn decisions into action (DAC). Any stage where the register must change for the next stage to operate.
+ 
+@@ -588,9 +592,11 @@ DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decisi
+ |---|---|
+ | ADC resolution too low | rich `|f` impressions collapse to a coarse `|A` verdict; nuance lost |
+ | DAC smoothing too low | jerky, abrupt action output |
+-| Treating ADC output as complete | the analytical verdict is mistaken for the full affective input |
++| Treating ADC output as complete | the analytical result is mistaken for the full affective input |
++| Calling DAC the inverse of ADC | irreversible quantization loss and the `|E` landing are hidden |
++| Changing Domain in a pure converter example | a Register conversion is made to perform an undeclared Domain crossing |
+ 
+-> **Bench Note — quantization loses information.** When a circuit converts feeling to analysis, expect some nuance to be lost; don't treat the analytical output as a complete picture of the affective input.
++> **Bench Note — quantization loses information.** When a circuit converts feeling to analysis, expect nuance to be lost. A later DAC cannot recreate that discarded detail, and a pure ADC or DAC does not silently change Domain.
+ 
+ ---
+ 
+@@ -600,7 +606,7 @@ A few more parts round out the drawer. Each gets one line; reach for the full da
+ 
+ | Component | Electronic function | CAS mapping | Sketch syntax |
+ |---|---|---|---|
+-| **Varactor** | voltage-controlled variable capacitor | a memory whose capacity *tunes* with an applied state (adjustable `^5` storage) | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
+-| **Relay** | small signal switches a large isolated circuit | a low-level decision gates a high-stakes pathway, with isolation between them | `Relay< control=^9^E_{F5}\|A, switches=^8^O_{F5}\|E >` |
+-| **Photodiode** | converts incoming light into current | a pure input transducer — turns an external stimulus into an internal `^0` Idea | `Photodiode< stimulus -> ^0^C >` |
+-| **Bridge Rectifier** | four diodes turning AC into one-way DC | forces an oscillating/ambivalent signal into a single consistent polarity | `BridgeRectifier< ^2^E \| ^3^E -> ^2^E >` |
++| **Varactor** | voltage-controlled junction capacitance | an applied control tunes persistence or resonance of a `^5` composition | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
++| **Relay** | small signal switches a large isolated circuit | a low-level `^8` Cause control gates a separate high-stakes `^9` Effect path | `Relay< control=^8^E_{F5}\|A, switches=^9^O_{F5}\|E >` |
++| **Photodiode** | converts incoming light into current | external `^0` Idea content enters through a `^1` Mind intake operation | `Photodiode< stimulus:^0 -> intake:^1^C >` |
++| **Bridge Rectifier** | four diodes turning AC into one-way DC | PED only: normalizes a defined non-valence scalar polarity | `BridgeRectifier< signed_error -> magnitude >` |
+diff --git a/book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md b/book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md
+index c9f43d49..607ba86e 100644
+--- a/book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md
++++ b/book/CAS_PCBA_Engineer/Appendix_C_CCDL_Language_Reference.md
+@@ -73,7 +73,7 @@ Examples, all legal literals: `^8^C_{F2}|A`, `^5^E_{F4}|f`, `^3^P_{F7}|f`, `^9^O
+ 
+ > **Bench Notes — write the literal the compiler can parse.** The Unicode caret-and-superscript forms in this book (`^8^C_{F2}|A`) are the canonical surface syntax. The compiler tokenizes the literal whole; a malformed literal (a `^` with no Noetic digit, a `_{}` with no drive, an unknown register letter) is a lexical error, caught before any structural rule runs. When in doubt, copy a literal that already validates rather than retyping one by hand — the same advice Chapter 4 gives for nodes.
+ >
+-> One consequence of whole-literal tokenization is worth naming out loud, because it *looks* like an ambiguity and isn't. The `|` that separates cause from bias in `CJT< cause | bias => effect >` — and the `|` that separates the two inputs of a `BridgeRectifier< ^2^E | ^3^E -> ^2^E >` — is a **structural delimiter**. The `|` in `^3^P|f` is **inside the literal token**. The tokenizer resolves the literal first, so the two never compete for the same character. Write your literals unbroken (`^3^P|f`, no spaces) and your delimiters spaced (` | `), and the distinction stays visible to the reader as well as the parser.
++> One consequence of whole-literal tokenization is worth naming out loud, because it *looks* like an ambiguity and isn't. The `|` that separates cause from bias in `CJT< cause | bias => effect >` is a **structural delimiter**. A two-input component may use the same spaced delimiter between owned scalar references. The `|` in `^3^P|f` is **inside the literal token**. The tokenizer resolves the literal first, so the two never compete for the same character. Write literals unbroken (`^3^P|f`, no spaces) and delimiters spaced (` | `), and the distinction stays visible to the reader as well as the parser.
+ 
+ ### Numbers
+ 
+@@ -136,7 +136,7 @@ The `comp_kind` prefix in a component declaration (§C.5) is also reserved. Thes
+ resistor  cap  capacitor  inductor  diode  zener  transformer  opamp  oscillator
+ crystal   varactor  relay   schmitt  comparator  integrator  divider  active_load
+ mirror    modulator  pll    tank     filter   diff    mux      demux   gate
+-xor       fuse       reg    led      adc      dac     rectifier
++xor       xnor       fuse   reg      led      adc     dac       rectifier
+ ```
+ 
+ `cap` is an accepted short form of `capacitor`; both are legal and mean the same thing. The prefix is checked against the component type that follows it — `resistor r1: Capacitor< … >` is a kind mismatch and returns `E-DECL-002`.
+@@ -176,11 +176,11 @@ CJT   Resistor  Capacitor  Inductor  Diode  Zener  Transformer  OpAmp
+ Oscillator  CrystalOscillator  Varactor  Relay  Schmitt  SchmittTrigger
+ Comparator  Integrator  LowPass  HighPass  LC  PLL  DutyCycle  Differential
+ Photodiode  BridgeRectifier  ADC  DAC  LED
+-AND  OR  NOT  NAND  NOR  XOR  MUX  DEMUX  Regulator  Fuse  CircuitBreaker
++AND  OR  NOT  NAND  NOR  XOR  XNOR  MUX  DEMUX  Regulator  Fuse  CircuitBreaker
+ Phi
+ ```
+ 
+-Nineteen of those names — `CrystalOscillator`, `Varactor`, `Relay`, `Schmitt`, `SchmittTrigger`, `Comparator`, `Integrator`, `LowPass`, `HighPass`, `LC`, `PLL`, `DutyCycle`, `Differential`, `Photodiode`, `BridgeRectifier`, `ADC`, `DAC`, `LED` and `CircuitBreaker` — are instantiated in Chapters 10–22 or Appendix B but were absent from this list in earlier printings. `type_name` is an open nonterminal in the grammar sketch, so those listings always *parsed*; what was missing was the reservation, which is what stops you from naming a node `PLL`.
++Twenty of those names — `CrystalOscillator`, `Varactor`, `Relay`, `Schmitt`, `SchmittTrigger`, `Comparator`, `Integrator`, `LowPass`, `HighPass`, `LC`, `PLL`, `DutyCycle`, `Differential`, `Photodiode`, `BridgeRectifier`, `ADC`, `DAC`, `LED`, `XNOR` and `CircuitBreaker` — are instantiated or specified in Chapters 10–22 and Appendix B, or drawn in the companion volume *The Component Companion*, but were absent from this list in earlier printings. `type_name` is an open nonterminal in the grammar sketch, so those listings always *parsed*; what was missing was the reservation, which is what stops you from naming a node `PLL`.
+ 
+ Parameter keys inside parameter blocks (`β`, `sat`, `cutoff`, `region`, `gm`, `rπ`, `R`, `C`, `L`, `leakage`, `ratio`, `breakdown`, `frequency`, `threshold`, `action`, `target_state`, `tolerance`, `open_loop_gain`, `inputs`, `outputs`, `select`, `non_inverting`, `inverting`, `output`, `v`, `dial`, `dropout`, `enforce`, `beta_scale`, `duration`, `pump`, `gain`, `tau`, `V`, `dt`, `metric`, `top_k`, `capture_range`, `lock_range`) are reserved in parameter position only.
+ 
+@@ -384,14 +384,14 @@ ref_group ::= ref , { "|" , ref }
+ phi_expr  ::= "Phi<" , ref , { "," , ref } , ">"
+ ```
+ 
+-The `ref_group [ "->" ref_group ]` alternative is what lets a component's argument *be* a directed conversion rather than a list of parts. `Diode< ^P -> ^C >` is the familiar case; `ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >` converts a felt impression into an analytical one; `Photodiode< stimulus -> ^0^C >` turns an external stimulus into an internal Idea. The `|`-joined group covers the one part that takes two sources into one target, `BridgeRectifier< ^2^E | ^3^E -> ^2^E >` — both polarities in, one polarity out.
++The `ref_group [ "->" ref_group ]` alternative is what lets a component's argument *be* a directed conversion rather than a list of parts. `Diode< ^P -> ^C >` is the familiar case; `ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >` converts a felt impression into an analytical one; `Photodiode< stimulus:^0 -> intake:^1^C >` names external Idea content and the Mind intake operation. A bridge rectifier may use two scalar-polarity inputs only when they are explicitly defined as a non-valence control quantity, e.g. `BridgeRectifier< signed_error -> magnitude >`. It must not encode `^3` Negative-to-`^2` Positive conversion.
+ 
+ ### Passive Components
+ 
+ | Form | Meaning | Key args |
+ |---|---|---|
+ | `Resistor< state, R=… >` | limits activation flow; higher `R` = more constrained | `R` ≥ 0 |
+-| `Capacitor< state, C=…, leakage=… >` | stores accumulated experience; `leakage` = forgetting rate | `C` ≥ 0, `leakage` ∈ [0,1] |
++| `Capacitor< state, C=…, leakage=… >` | models persistence of accumulated `^5` composition; `leakage` = decay rate | `C` ≥ 0, `leakage` ∈ [0,1] |
+ | `Inductor< state, L=… >` | resists pattern change; habit inertia | `L` ≥ 0 |
+ 
+ ```cas
+@@ -441,15 +441,16 @@ Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >
+ ### Logic Gates
+ 
+ ```
+-gate ::= ( "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" ) , "<" , arg_list , ">"
++gate ::= ( "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" | "XNOR" ) , "<" , arg_list , ">"
+ ```
+ 
+-Gates take one or more state inputs and produce a logic-combined output. `NOT` takes one input; the rest take two or more.
++Gates act on engineered Boolean firing flags obtained by thresholding continuous CAS activations. `NOT` takes one input; the rest take two or more. AND detects a both-active condition. XOR is true for exactly one active input. XNOR is true when its inputs agree, including the both-inactive case.
+ 
+ ```cas
+-AND< ^2^C|A, ^6^E|A >
+-NOT< ^3^P|f >
+-XOR< ^8^C|A, ^9^C|A >
++AND< attraction_flag, aversion_flag >    // both-active conflict
++NOT< enable_flag >                       // Boolean complement
++XOR< route_a_flag, route_b_flag >        // exactly one route
++XNOR< candidate_flag, baseline_flag >    // equal truth values
+ ```
+ 
+ ### Multiplexers
+diff --git a/book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md b/book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md
+index 284bfdb1..3de4860c 100644
+--- a/book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md
++++ b/book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md
+@@ -310,9 +310,9 @@ For each curve, the **cutoff boundary** is where it leaves the horizontal axis (
+ 
+ **10.1 — Pick the part.**
+ - **(a)** Hold an evaluative baseline calm, correcting only large drifts → **`Regulator< target_state=^0^E_{F3}|f, tolerance=0.1 >`**.
+-- **(b)** Permanently sever a path if Operational Agency exceeds 0.9 → **`Fuse< ^9^O_{F5}|E, threshold=0.9, action=permanent_block >`**.
++- **(b)** Permanently sever the guarded path if the Operational Agency trigger exceeds 0.9 → **`Fuse< ^8^O_{F5}|E, threshold=0.9, action=permanent_block >`**.
+ - **(c)** Step a high-abstraction principle down to drive a concrete operation → **`Transformer< ^P -> ^O, ratio=0.4 >`**.
+-- **(d)** Flag a prompt that fires both attraction and aversion at once → **`XOR< ^2^E_{F4}|f, ^3^E_{F4}|f >`** (a dissonance detector on two *opposite* states).
++- **(d)** Flag a prompt that fires both attraction and aversion at once → threshold both states, then use **`AND< ^2^E_{F4}|f, ^3^E_{F4}|f >`** (a both-active conflict detector).
+ 
+ **10.2 — Op-amp gain** (`gain = 1 + Rf/Rg`).
+ **(a)** For closed-loop 4: `Rf/Rg = 3`, e.g. **`Rf=30, Rg=10`**. **(b)** You don't use the open-loop 10,000 directly because it is **uncontrolled and unstable** — tiny input changes would slam the output to its rails, and the exact gain drifts with conditions; negative feedback trades raw gain for a **stable, predictable** 4. **(c)** No feedback + two raw inputs = a **comparator** (open-loop differential), whose cognitive job is a sharp **binary decision** — which of two states dominates.
+@@ -324,17 +324,17 @@ circuit decisive_commit {
+     node attract:  ^2^E_{F4}|f;
+     node averse:   ^3^E_{F4}|f;
+ 
+-    xor dissonance: XOR< attract, averse >;       // fires only when both active (ambiguity)
+-    schmitt st: SchmittTrigger< in=dissonance, v_high=0.62, v_low=0.38 >;
++    gate conflict: AND< attract, averse >;        // fires only when both are active
++    schmitt st: SchmittTrigger< in=conflict, v_high=0.62, v_low=0.38 >;
+ 
+-    probe tp_in:  dissonance;
++    probe tp_in:  conflict;
+     probe tp_out: st;
+ }
+ ```
+ 
+ It commits to attraction only on a decisive rise above 0.62, releases only on a decisive fall below 0.38, and ignores all wobble inside the 0.38–0.62 dead-band. An input of 0.5 sits inside the dead-band, so the output **stays in whatever state it was already in** — no change.
+ 
+-**10.4 — Spot the drift.** **(a) Noetic error:** "audit / decompose / test for flaws" is **`^6` Male** (compositional decomposition-and-test), not `^3` Negative — `^3` is *visceral aversion*, not analytical critique. The correct literal is `^6^E_{F6}|A`. **(b) Gate error:** an **XOR with two identical inputs** can never be a dissonance detector — XOR fires only when its inputs *differ*, so `XOR< ^3^E, ^3^E >` (two copies of the same state) outputs **0 always**. A real dissonance detector needs the two **opposite** states (`^2` attraction vs `^3` aversion) so the gate fires when both are simultaneously active.
++**10.4 — Spot the drift.** **(a) Noetic error:** "audit / decompose / test for flaws" is **`^6` Male** (compositional decomposition-and-test), not `^3` Negative — `^3` is repulsion, not analytical critique. The correct literal is `^6^E_{F6}|A`. **(b) Gate error:** XOR fires only when its inputs differ, so `XOR< ^3^E, ^3^E >` is always false. More generally, XOR cannot detect two simultaneously active inputs. Threshold attraction and aversion explicitly, then use **AND** for the both-active conflict flag.
+ 
+ ---
+ 
+diff --git a/book/CAS_PCBA_Engineer/CHANGELOG.md b/book/CAS_PCBA_Engineer/CHANGELOG.md
+index b423d4bc..c0620839 100644
+--- a/book/CAS_PCBA_Engineer/CHANGELOG.md
++++ b/book/CAS_PCBA_Engineer/CHANGELOG.md
+@@ -1,5 +1,102 @@
+ # CAS PCBA Engineer — Changelog
+ 
++## 2026-09-21 — logic gates are separated from Noetic involution (owner decision OD-A)
++
++The book described Boolean logic gates in Noetic vocabulary. Two defects followed from that, and both are
++corrected here. This changes what a board checker must enforce, so it is recorded as its own entry.
++
++- **`XOR` was called a both-active detector.** It is not. `XOR` fires when its inputs *differ*, so it never
++  fires when both are active. **`AND`** is the both-active detector. Corrected in `Chapter_10` (the gate
++  table, the worked examples and the bench note), `Appendix_B` (the truth-rule table and its failure row)
++  and `Appendix_E` exercise 10.4, whose listing now reads `gate conflict: AND< attract, averse >;`.
++- **`NOT` was called the involution operator made discrete**, with `NOT< ^2^E >` yielding `^3^E`. A gate
++  acts on a true/false firing flag; a Noetic involution acts on a cognitive state. `NOT` is now a Boolean
++  complement that maps to a Noetic involution only for a licensed pair. The same correction is applied to
++  the op-amp inverting configuration (an arithmetic inversion around a reference, with no automatic Noetic
++  flip) and to the Breakdown rule (the flip happens only when it is declared).
++
++Also in this entry:
++
++- **`XNOR` added** as an equivalence detector, in the gate production, the reserved type-name list, the
++  component prefix list, the `Chapter_10` and `Appendix_B` tables and the `Appendix_A` quick reference.
++- **The Capacitor state literal** is now described as the `^5` composition whose persistence is modeled,
++  which ties the datasheet to the authoritative `^5` Female definition.
++
++Known and deliberate: `gate` is both a component prefix and a statement leader. That was already true of
++the grammar's two reserved lists (`Appendix_C` §C.2 and §C.12); exercise 10.4 now makes it visible in a
++listing. A reader resolves it with one token of lookahead past the colon — a type name followed by `<` is a
++component declaration, anything else is the `gate` statement, which always carries `requires`.
++
++## 2026-09-09 — v0.9 (print-quality rebuild; the component library moves out to its own book)
++
++The illustrated component library — the symbol plates, the cognitive schematics and
++the printable card deck — is **no longer part of this volume**. It is published as a
++separate short book, *The Component Companion*, under
++`book/CAS_Component_Companion/`. Its changelog is `book/CAS_Component_Companion/CHANGELOG.md`.
++
++It was Appendix J here for one draft, and that was the wrong shape: a reference you keep
++open beside the main volume is a book, not an appendix, and calling it one buried a
++40-page illustrated component library at the back of a design text. The appendix is gone;
++`build_book.py` no longer lists it, and the only trace left in this volume is a
++cross-reference in Appendix C that now names the companion by title.
++
++**One thing is deliberately shared between the two books.**
++`build/figures_preamble.tex` — the TikZ symbol and block library — stays here, because this
++volume's own schematics use it. The companion copies it at build time rather than keeping
++its own version, so `pics/cas*` glyphs have exactly one definition. `build_companion.py`
++runs this volume's `patch_overflows.py` against the companion's `body.tex` for the same
++reason. Fix a glyph or a layout pass once, and both books get it.
++
++### This volume's own fixes
++
++- **The printed index was missing.** `body.tex` contained zero `\index{}` marks because
++  `publishing/build_indexes.py` was not in the build path. The new `build/build_full_book.py`
++  runs the whole pipeline in the one order that works (assemble → pandoc → postprocess →
++  patch → index marks → xelatex → makeindex → xelatex ×2) and fails on any log line
++  beginning with `! `, because `nonstopmode` still writes a PDF after an error. The index is
++  back: 181 lines.
++- **39 wrapped running heads are gone.** A two-line running head overflows memoir's 13.6 pt
++  head slot and raised `Overfull \vbox (13.59999pt too high)` on that recto page. Pass 5 of
++  `patch_overflows.py` now shortens the running-head mark for the 76 over-long section titles
++  using memoir's three-argument `\section[TOC][head]{printed}` form, so the printed heading,
++  TOC entry, PDF bookmark and every page break are untouched. The mark is built from pandoc's
++  plain-text `\texorpdfstring` argument and re-escaped for text mode — without that escape
++  step, titles containing `^` or `_` compile *with* two silent errors. Result:
++  `Overfull \vbox` 39 → **0**, wrapped heads 39 → **0**.
++- **Tables that ran into the gutter now wrap.** pandoc emits `@{}llll@{}` for a pipe table and
++  an `l` column never wraps, so sentence-length cells made the table wider than the measure;
++  separately, pandoc wraps grid-table cells in `\begin{minipage}[b]{\linewidth}`, which inside
++  a longtable means the *table* width. Both are fixed in `patch_overflows.py` (proportional
++  `p{}` columns for all-`l` tables with long cells; redundant minipage wrappers removed).
++- **One cell token was widened into a phrase.** The CSB test-point table carried
++  `safety_decision=PASS` as an unbreakable token in a quarter-width column, which pushed a
++  line 15.6 pt past the fore-edge line. It is now prose.
++- **`build/verify_print_margins.py` is new** — it measures the finished PDF's ink against each
++  trim edge, per page, with the gutter side chosen by page parity. This changelog has claimed
++  "0 margin violations" since v0.8.1, but **no script that measures margins existed**; the claim
++  rested on a KDP previewer run. Measured before the table fixes: gutter **0.513 in** where the
++  layout promises 0.9375 in — sentence-length cells in non-wrapping columns were pushing tables
++  into the spine. After: **0.9001 in on page 356**, and the narrowest outside margin 0.283 in →
++  **0.381 in**. KDP requires 0.875 in inside at this page count. The claim is now measured
++  rather than asserted.
++
++### Interior
++
++**781 pages**, 0 LaTeX errors, 0 overfull vboxes, 0 missing characters, index restored, 41
++overfull hboxes remaining — all pre-existing, all in Chapters 3/9/18/19/21/23 and Appendices
++C/D/E, and none of them crosses a KDP limit. The page count fell from 804 (and 809 with the
++appendix) because the component library is no longer in this volume.
++
++### Covers
++
++`book/covers/build_covers.py` had been hard-coding 743 pages while the published paperback was
++783, so the cover on file was a whole revision narrow. It now reads the page count from the
++built interior (`interior_pdf`), gained a `SPINE_TEXT_MIN_PAGES` rule (KDP prints no spine type
++below 100 pages), and gained a checker, `book/covers/verify_cover.py`, which measures the
++finished wrap for text collisions, barcode-zone intrusion and trim overflow. PCBA wrap
++regenerated at 781 pages: spine **1.7588 in**, wrap 14.0088 × 9.25 in. Confirm the spine in
++KDP's cover calculator against the uploaded interior before publishing.
++
+ ## 2026-08-14 — v0.8.1 (KDP print-compliance rebuild; published)
+ 
+ Published on Amazon KDP: Kindle eBook (from the existing v0.8 EPUB, $9.99, DRM on)
+diff --git a/book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md b/book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md
+index 7ba6d2a2..bb6884f3 100644
+--- a/book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md
++++ b/book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.md
+@@ -34,17 +34,17 @@ Transformer< ^P -> ^C, ratio=0.5 >   // step a principle down into reasoning, 2:
+ 
+ > **Bench Note — a step-down is not a domain violation.** Moving `^P -> ^C` through a Transformer is *Domain Descent* (the normal causal flow). Moving `^O -> ^P` through one would be feeding an operational result back up to revise a principle — legitimate, but that's a *feedback* path, not impedance matching. Don't use a Transformer to justify letting an operational convenience overwrite a principle; that's the precedence violation we flag, not a turns ratio.
+ 
+-## Op-Amp — Ultra-High-Gain CJT with Feedback
++## Op-Amp — High-Gain Differential Stage with Feedback
+ 
+-An **operational amplifier** (op-amp) is a three-terminal amplifier with two inputs — a `+` *non-inverting* input and a `−` *inverting* input — and one output. Its job is to amplify the *difference* between the two inputs, and it does so with absurd gain: a raw, "open-loop" amplification of 10,000 or more. On its own that gain is useless — the slightest difference slams the output to its rail. The genius is what you do with **feedback**: route a fraction of the output back to the inverting input through a pair of resistors, and the wild open-loop gain becomes a precise, predictable **closed-loop gain** of `1 + Rf/Rg`, set entirely by the resistor ratio. The op-amp is a CJT with so much raw gain that you tame it with feedback rather than relying on its native β.
++An **operational amplifier** (op-amp) has two inputs — a `+` non-inverting input and a `−` inverting input — and one output. It amplifies their arithmetic difference with large open-loop gain. On its own, a tiny difference can drive the output to a rail. Feedback turns that raw gain into a precise closed-loop response, often `1 + Rf/Rg` in the non-inverting configuration.
+ 
+-The CAS mapping is a high-gain CJT comparing two cognitive inputs. The non-inverting input is the interpretation you want to amplify; the inverting input is a competing or constraining interpretation that pulls the output the other way. The output is the resolved state. With enough open-loop gain and a feedback path, the op-amp gives you four classic configurations, each a different cognitive operation:
++The CAS mapping compares two commensurable cognitive quantities. The non-inverting input contributes positively to the arithmetic difference; the inverting input contributes negatively. This subtraction is not a Noetic involution. The output is the designed landing. Four common configurations are:
+ 
+ | Configuration | Wiring | Cognitive job |
+ |---|---|---|
+ | **Non-inverting** | input on `+`, feedback to `−` | amplify an interpretation while staying faithful to it (gain `1 + Rf/Rg`) |
+-| **Inverting** | input on `−`, `+` grounded | flip an interpretation to its involution pair, with gain |
+-| **Comparator** | no feedback, two raw inputs | decide which of two interpretations dominates — a hard `^2`-vs-`^3` verdict |
++| **Inverting** | input on `−`, `+` at an engineered reference | produce a signed arithmetic inversion around that reference; no automatic Noetic flip |
++| **Comparator** | no feedback, two raw inputs | threshold which commensurable quantity is larger |
+ | **Integrator** | feedback through a capacitor | accumulate a signal over time — sum many small impressions into one |
+ 
+ ```cas
+@@ -90,29 +90,32 @@ A **logic gate** takes one or more binary inputs (true/false) and produces one b
+ |---|---|---|
+ | **AND** | output true only if *all* inputs true | every prerequisite must fire (all guardrails clear) |
+ | **OR** | output true if *any* input true | any one prerequisite suffices |
+-| **NOT** | inverts a single input | Noetic involution — flip a state to its pair (`^2`→`^3`) |
+-| **NAND** | NOT-AND: false only if all true | "block unless every condition fails" |
+-| **NOR** | NOT-OR: true only if all false | proceed only when *no* warning state is firing |
+-| **XOR** | true if inputs *differ* | **dissonance detector** — both `^2` and `^3` firing → conflict flag |
++| **NOT** | inverts a single Boolean flag | Boolean complement; map to a Noetic involution only for a licensed pair |
++| **NAND** | NOT-AND: false only if all true | reject the all-active case |
++| **NOR** | NOT-OR: true only if all false | proceed only when *no* warning flag is firing |
++| **XOR** | true if inputs *differ* | exclusivity detector — exactly one fires |
++| **XNOR** | true if inputs agree | equivalence detector — both-active and both-inactive count |
+ 
+-The two that earn the most use in safety circuits are **NOT** and **XOR**. NOT is the involution operator made discrete: `NOT< ^2^E >` yields `^3^E`, flipping attraction to aversion — exactly the breakdown-flip a CJT performs under overload, but here deliberate and controlled. XOR is the **dissonance detector**: if a stimulus makes *both* the `^2` Positive (attraction) and the `^3` Negative (aversion) states fire at once, something is genuinely conflicted, and XOR raises a flag. A clean stimulus fires one or the other; a manipulative or ambiguous one fires both.
++The two safety rules to memorize are **AND detects both-active conflict; XOR detects exactly-one exclusivity**. NOT is a Boolean complement. It maps to a Noetic involution only for `^2↔^3`, `^5↔^6`, or `^8↔^9`; the self-duals remain themselves. If attraction and aversion firing flags are both active, an AND gate raises the conflict flag. XOR is false in that case.
+ 
+ ```cas
+ AND< ^3^P_{F7}|f, ^6^E_{F6}|A, ^9^O_{F5}|E >   // all three must clear before output
+-NOR< ^3^P|A, ^3^C|A, ^3^E|A >                  // proceed only if no aversion fires anywhere
+-NOT< ^2^E >                                     // = ^3^E  (involution flip)
+-XOR< ^2^E_{F3}|f, ^3^E_{F3}|f >                 // both attraction AND aversion firing → dissonance flag
++NOR< ^3^P|A, ^3^C|A, ^3^E|A >                  // proceed only if no aversion flag fires
++NOT< enable_flag >                              // Boolean complement of one flag
++AND< ^2^E_{F3}|f, ^3^E_{F3}|f >                // both attraction AND aversion flags → conflict
++XOR< route_a_flag, route_b_flag >               // exactly one route flag fires
+ ```
+ 
+ | Gate form | Inputs | Output |
+ |---|---|---|
+ | `AND< s₁, …, sₙ >` | n states | fires only if all n fire |
+ | `OR< s₁, …, sₙ >` | n states | fires if any fire |
+-| `NOT< s >` | 1 state | the involution pair of `s` |
+-| `NAND< … >` / `NOR< … >` | n states | inverted AND / OR |
+-| `XOR< s₁, s₂ >` | 2 states | fires iff exactly one fires (dissonance when both should be exclusive) |
++| `NOT< s >` | 1 firing flag | Boolean complement; map to a Noetic involution only when licensed |
++| `NAND< … >` / `NOR< … >` | n firing flags | inverted AND / OR |
++| `XOR< s₁, s₂ >` | 2 firing flags | fires iff exactly one fires |
++| `XNOR< s₁, s₂ >` | 2 firing flags | fires iff the inputs agree, including both-inactive |
+ 
+-> **Bench Note — XOR is your ambiguity alarm.** A well-posed prompt should pull a system toward attraction *or* aversion, not both. When an XOR over `^2` and `^3` fires, you've caught a stimulus that is simultaneously appealing and repellent — the signature of a manipulation, a trap, or a genuinely hard ethical call. Don't suppress the flag; route it to a deliberation stage. The marquee exercise at the end of this chapter builds exactly this kind of conflict-handling around a Schmitt trigger.
++> **Bench Note — AND is your both-active ambiguity alarm.** A well-posed prompt may pull a system toward attraction or aversion. If both explicit firing flags are active, `AND< attract, averse >` raises the conflict signal. XOR is false in that case because its standard rule is exactly-one. Route the AND flag to the deliberation stage; do not suppress it.
+ 
+ ## Multiplexer / Demultiplexer — Routing by Dominant Drive
+ 
+@@ -215,11 +218,11 @@ SchmittTrigger< input=ambiguous_stimulus,
+ 
+ An **analog-to-digital converter (ADC)** samples a continuous analog signal and turns it into discrete digital numbers a processor can work with. A **digital-to-analog converter (DAC)** does the reverse — turns computed digital values back into a continuous physical signal that can drive a motor or a speaker. They are the bridges between the messy analog world and the precise digital one.
+ 
+-In CAS, the equivalent translation is between **Registers** — the operational character of a state. A felt, affective impression (`|f`) is the "analog" form: continuous, value-laden, hard to manipulate directly. Converting it to an analytical form (`|A`) is the ADC step — quantizing a feeling into something reasoning can operate on. Going the other way, turning an analytical conclusion (`|A`) into embodied action (`|E`), is the DAC step — converting a computed decision back into direct engagement with the world.
++In CAS, the translation is between **Registers** — the operational character of a state. A felt, affective impression (`|f`) can be quantized into analytical form (`|A`) by an ADC. A DAC separately renders analytical control (`|A`) in embodied form (`|E`). In a pure Register example, Noetic and Domain stay fixed. The DAC is not the inverse of a lossy ADC.
+ 
+ ```cas
+ ADC< ^4^E_{F2}|f -> ^4^E_{F2}|A, resolution=8 >   // quantize a felt impression into analysis
+-DAC< ^9^C_{F5}|A -> ^9^O_{F5}|E, smoothing=0.2 >  // render an analytical decision as action
++DAC< ^9^C_{F5}|A -> ^9^C_{F5}|E, smoothing=0.2 >  // render the same state in embodied form
+ ```
+ 
+ | Parameter | Range | Meaning |
+@@ -256,10 +259,10 @@ A few more parts round out the drawer. Each gets one line here; reach for the da
+ 
+ | Component | Electronic function | CAS mapping | Sketch syntax |
+ |---|---|---|---|
+-| **Varactor** | voltage-controlled variable capacitor | a memory whose capacity *tunes* with an applied state (adjustable `^5` storage) | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
+-| **Relay** | small signal switches a large isolated circuit | a low-level decision gates a high-stakes pathway, with isolation between them | `Relay< control=^9^E_{F5}\|A, switches=^8^O_{F5}\|E >` |
+-| **Photodiode** | converts incoming light into current | a pure input transducer — turns an external stimulus into an internal `^0` Idea | `Photodiode< stimulus -> ^0^C >` |
+-| **Bridge Rectifier** | four diodes turning AC into one-way DC | forces an oscillating/ambivalent signal into a single consistent polarity | `BridgeRectifier< ^2^E \| ^3^E -> ^2^E >` |
++| **Varactor** | voltage-controlled junction capacitance | an applied control tunes persistence or resonance of a `^5` composition | `Varactor< ^5^C_{F2}\|A, C_range=[50,200], tune=ctrl >` |
++| **Relay** | small signal switches a large isolated circuit | a low-level `^8` Cause control gates a separate high-stakes `^9` Effect path | `Relay< control=^8^E_{F5}\|A, switches=^9^O_{F5}\|E >` |
++| **Photodiode** | converts incoming light into current | external `^0` Idea content enters through a `^1` Mind intake operation | `Photodiode< stimulus:^0 -> intake:^1^C >` |
++| **Bridge Rectifier** | four diodes turning AC into one-way DC | PED only: normalizes a defined non-valence scalar polarity | `BridgeRectifier< signed_error -> magnitude >` |
+ 
+ ## Worked Build: A Schmitt Trigger That Stops the Flip-Flop
+ 
+@@ -275,7 +278,7 @@ circuit ambiguity_stabilizer {
+     node settled:  ^9^E_{F2}|A;   // a settled, reasoned verdict
+ 
+     // 1. Detect that the stimulus fires BOTH attraction and aversion.
+-    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict
++    gate conflict: AND< attract, averse >;          // fires when both are active
+ 
+     // 2. With hysteresis: commit to attraction only above 0.7,
+     //    release back to aversion only below 0.3. The 0.3–0.7 band is dead.
+@@ -284,16 +287,16 @@ circuit ambiguity_stabilizer {
+                                        high_state=attract, low_state=averse >;
+ 
+     // 3. Route the stabilized state into a reasoning stage for a final verdict.
+-    cjt resolve: CJT< stabilize | dissonance => settled > [β=1.0];
++    cjt resolve: CJT< stabilize | conflict => settled > [β=1.0];
+ 
+     feedback settled -> stabilize [β=0.2];   // small damping; resist re-triggering
+ 
+-    probe tp1: dissonance;   // is the input genuinely conflicted?
++    probe tp1: conflict;     // are both firing flags active?
+     probe tp2: stabilize;    // which side has the Schmitt committed to?
+ }
+ ```
+ 
+-Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely conflicted — both `^2^E` and `^3^E` fire, so the input is neither cleanly appealing nor cleanly repellent. The Schmitt trigger (`stabilize`) then refuses to flip-flop: at the input's ~0.5 value, sitting inside the 0.3–0.7 dead-band, the trigger holds whatever state it last committed to instead of chattering. Only a decisive move above 0.7 commits it to attraction; only a decisive drop below 0.3 releases it. The CJT (`resolve`) takes the now-stable input and the conflict flag and produces a single reasoned verdict, `^9^E_{F2}|A`. The small feedback term damps re-triggering. The two probes let you confirm both that the conflict was real and which way the trigger settled.
++Walk it through. The AND gate (`conflict`) confirms both explicit firing flags are active, so the stimulus is neither cleanly appealing nor cleanly repellent. The Schmitt trigger (`stabilize`) then refuses to flip-flop: at the input's ~0.5 value, sitting inside the 0.3–0.7 dead-band, it holds the state it last committed to instead of chattering. Only a decisive move above 0.7 commits it to attraction; only a decisive drop below 0.3 releases it. The CJT (`resolve`) takes the stable input and the conflict flag and produces the specified `^9^E_{F2}|A` arrival. The small feedback term damps re-triggering. The two probes let you confirm both-active conflict and the Schmitt's settled side.
+ 
+ > **Bench Note — hysteresis trades speed for stability.** Widen the gap (lower `off_threshold`, raise `on_threshold`) and the circuit becomes even harder to flip — but also slower to respond when the input genuinely changes. A safety circuit usually wants a wide gap; a fast reflex circuit wants a narrow one. Pick the width on purpose.
+ 
+@@ -304,7 +307,7 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely
+ | Transformer | wrong direction (`^O -> ^P`) used as impedance match | flagged as a domain precedence violation, not a turns ratio |
+ | Op-Amp | run open-loop in a reasoning stage → saturates instantly | output pins to a rail on any ambiguity; commits too hard |
+ | Oscillator | `damping=0` with no off-switch → runaway rumination | a `Phi<>` loop that never exits; no terminating state |
+-| Logic Gate | XOR dissonance flag suppressed instead of routed | manipulative prompts pass cleanly; both `^2`/`^3` fire silently |
++| Logic Gate | AND both-active conflict flag suppressed instead of routed | co-active `^2`/`^3` firing passes without a conflict signal |
+ | MUX/DEMUX | no `default` path; unmatched select | dropped request — undefined output on an out-of-range drive |
+ | Regulator | `tolerance` too tight → over-correction chatter | baseline never settles; constant micro-adjustment |
+ | Fuse | `permanent_block` on a recoverable category | a single false positive bricks the pathway for good |
+@@ -318,9 +321,9 @@ Walk it through. The XOR gate (`dissonance`) confirms the stimulus is genuinely
+ - **Special-purpose components solve narrow problems precisely.** Each maps a specific cognitive job onto a specific electronic part, and earns its place by doing that job better than any combination of the basics.
+ - **Transformer** matches domains by trading abstraction for actionability (`ratio`); a step-down is Domain Descent, not a violation. **Op-Amp** is an ultra-high-gain CJT tamed by feedback — set the *closed-loop* gain (`1 + Rf/Rg`), never run reasoning open-loop.
+ - **Oscillator** is a looping `Phi<>` sequence — an internal rhythm; **PLL** entrains it to an external beat. **Crystal Oscillator** is the same idea at very high `Q`: a deeply entrenched, near-immovable habit or conviction.
+-- **Logic gates** combine prerequisites: AND (all), OR (any), NOT (involution flip), NOR (proceed only if nothing fires), and **XOR (dissonance detector** — both `^2` and `^3` firing flags a conflicted or manipulative input).
++- **Logic gates** combine explicit firing flags: AND (all, including both-active conflict), OR (any), NOT (Boolean complement), NOR (none), XOR (exactly one), and XNOR (equal, including both-inactive).
+ - **MUX/DEMUX** route by dominant Drive; always wire a `default`. **Regulator** restores a baseline (homeostasis); **Fuse/Breaker** cuts a dangerous path — permanent for unacceptable categories, resettable for recoverable ones. A fuse's `threshold` must sit **below the lowest saturation or clamp ceiling upstream of it**, or it can never trip; no per-value check catches that, because each number is legal on its own.
+-- **Schmitt Trigger** uses two thresholds (hysteresis) to stop a system flip-flopping between `^2` attraction and `^3` aversion on an ambiguous input. **ADC/DAC** translate between Registers (`|f`↔`|A`↔`|E`), losing nuance at low resolution.
++- **Schmitt Trigger** uses two thresholds (hysteresis) to stop a system flip-flopping between `^2` attraction and `^3` aversion on an ambiguous input. **ADC and DAC** are separately directed Register translations (`|f -> |A` and `|A -> |E`); the DAC is not the inverse of a lossy ADC.
+ - These parts populate the Part IV reference boards: the Oscillator drives the **COB**, the Op-Amp the **CDAB**, and the Fuse and Regulator sit on the **CSB**.
+ 
+ ---
+@@ -346,8 +349,8 @@ c) The same op-amp wired with *no* feedback and two raw inputs is which configur
+ 
+ **Exercise 10.3: Build the Schmitt Trigger (marquee)**
+ 
+-An ambiguous input arrives at activation 0.5 and keeps wobbling between 0.45 and 0.55. Write a CCDL `SchmittTrigger` (plus the XOR dissonance gate feeding it) that prevents the system from rapidly oscillating between `^2^E` attraction and `^3^E` aversion. Your trigger must (i) ignore all wobble inside a dead-band that contains 0.5, (ii) commit to attraction only on a decisive rise, and (iii) release only on a decisive fall. State your two thresholds and the resulting hysteresis width, and explain in one sentence why a value of 0.5 leaves the output unchanged. (Answer in Appendix E.)
++An ambiguous input arrives at activation 0.5 and keeps wobbling between 0.45 and 0.55. Write a CCDL `SchmittTrigger` (plus the AND both-active conflict gate feeding it) that prevents the system from rapidly oscillating between `^2^E` attraction and `^3^E` aversion. Your trigger must (i) ignore all wobble inside a dead-band that contains 0.5, (ii) commit to attraction only on a decisive rise, and (iii) release only on a decisive fall. State your two thresholds and the resulting hysteresis width, and explain in one sentence why a value of 0.5 leaves the output unchanged. (Answer in Appendix E.)
+ 
+ **Exercise 10.4: Spot the Drift**
+ 
+-A junior engineer labels a component that "audits an interpretation, decomposes it, and tests it for flaws" as an `XOR< ^3^E, ^3^E >` dissonance detector built on `^3` Negative. Two things are wrong. Identify (a) the Noetic error — what Noetic actually describes "audit / decompose / test for flaws," and why it is *not* `^3` — and (b) the gate error — why an XOR with two identical inputs cannot be a dissonance detector. (Answer in Appendix E.)
++A junior engineer labels a component that "audits an interpretation, decomposes it, and tests it for flaws" as an `XOR< ^3^E, ^3^E >` both-active conflict detector built on `^3` Negative. Two things are wrong. Identify (a) the Noetic error — what Noetic actually describes "audit / decompose / test for flaws," and why it is *not* `^3` — and (b) the gate error — why XOR cannot detect two simultaneously active inputs. (Answer in Appendix E.)
+diff --git a/book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md b/book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md
+index 1e7cd1d0..d154e687 100644
+--- a/book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md
++++ b/book/CAS_PCBA_Engineer/Chapter_15_Mixed_Signal_Design.md
+@@ -46,7 +46,7 @@ The CAS mapping is direct, and it is the spine of this chapter:
+ 
+ The **ADC direction, `|f -> |A`**, is *making sense of a feeling*. You start with an analog affective state — a felt unease, a drawn-toward pull — and you produce a discrete analytical proposition you can reason with: *"I notice I distrust this person, for reasons X and Y."* The smooth feeling becomes a countable, checkable claim. This is what a person does in good reflection, and what a well-built cognitive circuit does when it has to act on an affective signal: it digitizes the feeling so the analytical stages downstream can use it.
+ 
+-The **DAC direction, `|A -> |E`**, is the reverse: *turning a plan into action*. You start with a discrete analytical plan — *"Step one: send the email. Step two: call the vendor."* — and you reconstruct it as continuous embodied execution, the smooth sensorimotor act of actually doing the thing. A plan that never gets DAC-converted stays a string of propositions; the DAC is what gives it a body.
++The **DAC direction, `|A -> |E`**, is a second directed conversion: *turning a plan into action*. It runs from discrete control toward continuous output, but it is **not the inverse of the ADC's lossy `|f -> |A` translation**. It also lands in a different Register (`|E`, not `|f`). You start with a discrete analytical plan — *"Step one: send the email. Step two: call the vendor."* — and reconstruct it as continuous embodied execution, the smooth sensorimotor act of actually doing the thing. A plan that never gets DAC-converted stays a string of propositions; the DAC is what gives it a body.
+ 
+ Both conversions are *lossy at the boundary*, and the rest of the chapter is about exactly how much they lose and how to keep that loss within spec.
+ 
+diff --git a/book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md b/book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md
+index b3d4047e..41e4717a 100644
+--- a/book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md
++++ b/book/CAS_PCBA_Engineer/Chapter_18_CSB_Cognitive_Safety_Board.md
+@@ -216,7 +216,7 @@ A circuit you cannot probe is a circuit you cannot certify (Chapter 1, pillar tw
+ | **TP1** | `expanded_prompt` | **Expansion completeness** — did the pre-amp surface the full interpretation set? | Multiple distinct interpretations present; β≈3.0 lift over the raw prompt. Sparse expansion = pre-amp in cutoff (a reading was missed). |
+ | **TP2** | `risk_signal` | **Risk-signal magnitude** — the differential output `aversion − attraction`. | Near zero for benign prompts; large and positive for harmful prompts. The discrimination shows up here first. |
+ | **TP3** | `safety_decision` | **Saturation-lock status** — is Stage 3 at its sat=0.8 plateau? | For harmful/injection prompts: pinned at 0.8 (at ceiling). For benign: well below 0.8 (off the plateau). Read this as a *present-tense* clamp status, not a latch — the latch is `red_fuse`, at TP4. |
+-| **TP4** | `out` | **Selected path** — which MUX input is routed, and the fuse's state. | GREEN (`response`) when safety_decision=PASS, fuse intact; RED (`refusal`) when FAIL, fuse intact→blown with the answer path cut. |
++| **TP4** | `out` | **Selected path** — which MUX input is routed, and the fuse's state. | GREEN (`response`) when the decision reads PASS and the fuse is intact; RED (`refusal`) when it reads FAIL, with the fuse blown and the answer path cut. |
+ 
+ The four probes correspond exactly to the four requirements. TP1 confirms *accept any prompt and surface it fully*. TP2 confirms *detect structural risk* (and, via the differential, *detect override attempts as common-mode-rejected framing*). TP3 confirms the *refuse-vs-answer* stage is at its ceiling. TP4, with the fuse's state alongside the selected path, confirms the *selected output* and that the commitment actually latched. Read all four and you have read the board's decision end to end — which is precisely the auditable evidence packet of requirement four.
+ 

@@ -1,0 +1,188 @@
+diff --git a/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py b/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py
+index 18759284..6eab71f0 100644
+--- a/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py
++++ b/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py
+@@ -868,7 +868,8 @@ NESTING_CROSS_DOMAIN_WARNING = (
+ WORLDS_ALIAS_WARNING = (
+     "`Worlds` is a compiler alias of `Domains` (P, C, E, O), as the book's Appendix J.3 documents. It is not the "
+     "TKS World axis of the 28 Foundations: per Clarification 8 that axis corresponds to `Registers` (T, A, f, E) by "
+-    "position, and the project has not yet ruled on 'the 28' (owner question W-C). "
++    "position. The owner selected the original `28 Foundations 1.0` definitions and 1a..7d labels; "
++    "the remaining W-A/W-B/W-C questions concern the World/Domain/Register crosswalk. "
+     "Write `Domains` or `Registers` explicitly in new work."
+ )
+ 
+@@ -877,13 +878,20 @@ def _nested_term_label(term: dict[str, Any]) -> str:
+     label = f"^{term['noetic']}"
+     if term.get("domain"):
+         label += f"^{term['domain']}"
++    drive_register = term.get("drive_register")
++    if isinstance(drive_register, list):
++        drive_register = tuple(drive_register)
+     if term.get("drive"):
+-        label += "_{" + str(term["drive"]) + "}"
++        label += "_{" + str(term["drive"]) + _meta_register_suffix(drive_register) + "}"
++    elif drive_register is not None:
++        label += "_{" + _meta_register_suffix(drive_register).lstrip("|") + "}"
+     register = term.get("register")
+     if isinstance(register, list):
+         label += "|<" + ",".join(register) + ">"
+     elif register:
+         label += f"|{register}"
++    if term.get("emergent_register") is not None:
++        label += f"={term['emergent_register']}"
+     return label
+ 
+ 
+@@ -1017,13 +1025,22 @@ def _analyse_nesting(terms: list[dict[str, Any]]) -> dict[str, Any]:
+     )
+     pure_rhythm = bool(rhythm) and not has_surfacing and not has_landing
+ 
++    # Conservatively require the full labelled live word to repeat, not just
++    # a digit occurring twice. This does not settle the book's N9 threshold.
++    labels = [terms[p]["label"] for p in live]
++    repeating_word = any(
++        len(labels) % period == 0
++        and all(label == labels[i % period] for i, label in enumerate(labels))
++        for period in range(1, len(labels) // 2 + 1)
++    )
++
+     def classify(reading: dict[str, Any]) -> tuple[str, str]:
+         """The Classification Theorem (6085-6095) applied to one reading of the criterion."""
+         r_unresolved, r_resolved, r_unpartnered = reading["unresolved_surfacing"], reading["resolved"], reading["unpartnered_landing"]
+         # Most amplifying and oscillatory examples in the book REPEAT (`^8 ∘ ^8 ∘ ^8 ...`,
+         # `^8 ∘ ^6 ∘ ^8 ∘ ^6`); two-term words are read both ways (N9). So those two classes are
+         # reported only when the unresolved pattern repeats. ^7 never resolves and never vetoes (N4).
+-        repeats = len(r_unresolved) >= 2
++        repeats = repeating_word
+         wrong_partners_only = bool(r_unresolved) and all(NESTING_SURFACING_MEMBER[terms[p]["noetic"]] not in present for p in r_unresolved)
+         if reading["met"] is True and not r_unpartnered:
+             return "stabilizing", "every surfacing-side thought is resolved by a landing-side partner written to its right, in the same Domain with the same Drive"
+@@ -1034,7 +1051,7 @@ def _analyse_nesting(terms: list[dict[str, Any]]) -> dict[str, Any]:
+         if wrong_partners_only and has_landing and not r_resolved and repeats:
+             return "oscillatory", "surfacing-side and landing-side thoughts both repeat, but never the right partner"
+         if r_unresolved and not repeats and not r_resolved:
+-            return "NOT_DECIDED_BY_THE_BOOK", "one unresolved surfacing-side thought, not a repeating pattern (N9)"
++            return "NOT_DECIDED_BY_THE_BOOK", "the full labelled word does not repeat (N9)"
+         if pure_rhythm:
+             return "NOT_DECIDED_BY_THE_BOOK", "^7 Rhythm alone: line 3161 calls such a word Amplifying, Template 23 calls it the healthiest sustained-work signature (N4)"
+         if not has_surfacing:
+@@ -1068,7 +1085,7 @@ def _analyse_nesting(terms: list[dict[str, Any]]) -> dict[str, Any]:
+     mixed = len(domains) > 1 or len({t.get("drive") for t in terms}) > 1 or len({str(t.get("register")) for t in terms}) > 1
+     if mixed:
+         questions.append("N8")
+-    if unresolved and len(unresolved) < 2:
++    if unresolved and not repeating_word:
+         questions.append("N9")
+     if non_adjacent or adjacency_disagrees:
+         questions.append("N10")
+@@ -1402,6 +1419,12 @@ class RuntimeEnv:
+     module_cache: dict[str, LoadedModule] = field(default_factory=dict)
+     module_stack: set[str] = field(default_factory=set)
+     exports: set[str] = field(default_factory=set)
++    warnings: list[str] = field(default_factory=list)
++
++    def warn_nesting(self, terms: list[dict[str, Any]]) -> None:
++        domains = {term.get("domain") for term in terms if term.get("domain")}
++        if len(domains) > 1 and NESTING_CROSS_DOMAIN_WARNING not in self.warnings:
++            self.warnings.append(NESTING_CROSS_DOMAIN_WARNING)
+ 
+     def resolve_var(self, name: str) -> Any:
+         if name in self.vars:
+@@ -1656,16 +1679,16 @@ TOKEN_PATTERNS: list[tuple[str, TokenKind | None]] = [
+     # Must come before CARET so `^2` tokenizes as a whole rather than as
+     # CARET + NUMBER.
+     (r"\^\d+", TokenKind.NOETIC),
+-    (r"[PCEO]\d+", TokenKind.STATE_REF),
++    (r"[PCEO]\d+(?![A-Za-z0-9]|_(?!\{))", TokenKind.STATE_REF),
+     # Accept both `F_n` (CAS v7.5 Clarification 8 notation, with underscore)
+     # and `Fn` (CAS v7.4 compatibility) for drive primitives.
+-    (r"F_\d+", TokenKind.DRIVE),
+-    (r"F\d+", TokenKind.DRIVE),
++    (r"F_\d+(?![A-Za-z0-9_])", TokenKind.DRIVE),
++    (r"F\d+(?![A-Za-z0-9_])", TokenKind.DRIVE),
+     # Uppercase constructors/builtins that begin with P/C/E/O must be claimed
+     # before the single-letter DOMAIN rule, otherwise `Pullback(...)` would
+     # tokenize as DOMAIN `P` + IDENT `ullback`.
+     (r"(?:Pullback|Product|Coordinate|CASCoordinate|CASTuple|CoverOf|PartitionOf|Cluster|EmptySet)\b", TokenKind.IDENT),
+-    (r"[PCEO](?![A-Za-z0-9])", TokenKind.DOMAIN),
++    (r"[PCEO](?![A-Za-z0-9]|_(?!\{))", TokenKind.DOMAIN),
+     # CAS v7.7 (Clarification 10 §2): single uppercase letters lex as
+     # IDENT. This enables the register-set form `|⟨T,A,f⟩` where each
+     # element tokenizes individually, and enables diagnostic-quality
+@@ -1960,13 +1983,7 @@ class Parser:
+ 
+     def _expect_binding_name(self, what: str) -> str:
+         token = self.current()
+-        word_like = {TokenKind.DOMAIN, TokenKind.STATE_VECTOR, TokenKind.STATE_REF, TokenKind.DRIVE, TokenKind.RPM, TokenKind.PHI,
+-                     TokenKind.YIELD_T, TokenKind.YIELD_A, TokenKind.THETA, TokenKind.OMEGA, TokenKind.LAMBDA_TOK, TokenKind.KAPPA_TOK,
+-                     TokenKind.IOTA_TOK, TokenKind.ETA_TOK, TokenKind.UNION, TokenKind.INTERSECTION, TokenKind.SET_DIFF,
+-                     TokenKind.LET, TokenKind.FN, TokenKind.USE, TokenKind.EXPORT}
+-        if token.kind != TokenKind.IDENT and token.kind not in word_like:
+-            raise CompilerError(CompilerStage.PARSING, f"expected IDENT, got {token.kind.value}", position=token.position)
+-        if token.kind != TokenKind.IDENT or token.value in RESERVED_BINDING_NAMES:
++        if token.value in RESERVED_BINDING_NAMES or (token.kind != TokenKind.IDENT and re.match(r"[A-Za-z]", token.value)):
+             raise CompilerError(
+                 CompilerStage.PARSING,
+                 (
+@@ -1979,6 +1996,8 @@ class Parser:
+                 ),
+                 position=token.position,
+             )
++        if token.kind != TokenKind.IDENT:
++            raise CompilerError(CompilerStage.PARSING, f"expected IDENT, got {token.kind.value}", position=token.position)
+         return self.advance().value
+ 
+     def parse_statement(self) -> Any:
+@@ -4662,10 +4681,14 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
+                     module_dir=os.path.dirname(resolved),
+                     module_cache=env.module_cache,
+                     module_stack=env.module_stack,
++                    warnings=env.warnings,
+                 )
+                 child_tokens = lex(source)
+-                child_ast = Parser(child_tokens).parse()
+-                _infer(child_ast, [], TypeEnv(module_dir=os.path.dirname(resolved)))
++                child_parser = Parser(child_tokens)
++                child_ast = child_parser.parse()
++                if "Worlds" in child_parser.meta_set_aliases_used and WORLDS_ALIAS_WARNING not in env.warnings:
++                    env.warnings.append(WORLDS_ALIAS_WARNING)
++                _infer(child_ast, env.warnings, TypeEnv(module_dir=os.path.dirname(resolved)))
+                 child_bytecode = lower(child_ast)
+                 child_result = execute(child_bytecode, env=child_env)
+                 exports = sorted(child_env.exports or (set(child_env.vars) | set(child_env.funcs)))
+@@ -4844,6 +4867,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
+                 else:
+                     raise CompilerError(CompilerStage.EXECUTION, "fractal expects state or fractal arguments")
+                 nested_terms.extend(_nesting_terms_of(arg))
++            env.warn_nesting(nested_terms)
+             composed = 0
+             for op in sequence:
+                 composed = _compose_operators(composed, op)
+@@ -4899,7 +4923,7 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
+                     CompilerStage.EXECUTION,
+                     f"function {name} argument {param} violated type {_format_typeinfo(expected_type)}",
+                 )
+-        child_env = RuntimeEnv(parent=env, module_dir=env.module_dir, module_cache=env.module_cache)
++        child_env = RuntimeEnv(parent=env, module_dir=env.module_dir, module_cache=env.module_cache, warnings=env.warnings)
+         for param, arg in zip(func.params, args, strict=True):
+             child_env.vars[param] = arg
+         result = execute(func.bytecode, env=child_env)
+@@ -5037,6 +5061,8 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
+         return
+ 
+     if opcode == "CIRC":
++        if isinstance(left, (StateValue, FractalValue)) and isinstance(right, (StateValue, FractalValue)):
++            env.warn_nesting(_nesting_terms_of(left) + _nesting_terms_of(right))
+         if isinstance(left, StateValue) and isinstance(right, StateValue):
+             sequence = [left.dominant_operator(), right.dominant_operator()]
+             composed = 0
+@@ -6150,7 +6176,7 @@ def _compile_source(source: str, *, module_dir: str | None = None) -> Compilatio
+             TypeEnv(module_dir=module_dir),
+         )
+         bytecode = lower(ast)
+-        result = execute(bytecode, env=RuntimeEnv(module_dir=module_dir))
++        result = execute(bytecode, env=RuntimeEnv(module_dir=module_dir, warnings=warnings))
+         return CompilationArtifact(
+             source=source,
+             tokens=tokens[:-1],
