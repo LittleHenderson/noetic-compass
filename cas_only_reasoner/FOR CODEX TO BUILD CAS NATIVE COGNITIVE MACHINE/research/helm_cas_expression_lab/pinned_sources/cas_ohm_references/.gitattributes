@@ -1,0 +1,2 @@
+# Raw source-reference hashes must survive checkout byte for byte.
+* -text whitespace=cr-at-eol

@@ -1,0 +1,51 @@
+{
+  "status": "ENGINEERING_DEMONSTRATION_ONLY",
+  "implementation_sha256_lf": {
+    "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+    "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+  },
+  "supporting_source_sha256_lf": {
+    "cas_ohm_connections.py": "20af61f178bc7d423ce71860a432763f7a2d03d66cd1d5c76e60de0aa09bb752",
+    "pcba_check.py": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb",
+    "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd",
+    "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd",
+    "historical_compiler.py": "3278924871544780134d28ef70410ea3f833be9683465c1dc1fe605747aec762",
+    "q3_behaviour_records.py": "5b3e03cd3b8bc1eac044e30b99781c0e1229e1039f5775b52848582055473787",
+    "cas_ohm_evidence/run_demonstrations.py": "7d394abbebfce9d303fb3c9b5217e4361d337d9322bf421e56eece6c57c080a7"
+  },
+  "source_offline_zip_parity": {
+    "compiler.py": {
+      "main_sha256_raw": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "offline_sha256_raw": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "zip_member_sha256_raw": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+    },
+    "cas_ohm.py": {
+      "main_sha256_raw": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "offline_sha256_raw": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "zip_member_sha256_raw": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    }
+  },
+  "offline_zip_sha256_raw": "d475ab9bd2b0407ecc82882b2fa63d98cf736a7488bcc7b3ff7b695cb71f34f0",
+  "historical_compiler": {
+    "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+    "resolved_from": "pinned_historical_snapshot",
+    "snapshot_path": "pinned_sources/compiler_pre_ohm_61ed5a45.py",
+    "sha256": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+    "hash_policy": "lf-normalised",
+    "origin_commit": "4345aa36ab056f9539cad3feb9207bba5356bef4"
+  },
+  "source_reference_snapshots": "ALL_MANIFEST_HASHES_MATCH",
+  "demonstrations": {
+    "compiler_valid": 4,
+    "compiler_invalid": 1,
+    "offline_cli_valid": 1,
+    "offline_cli_invalid": 1,
+    "pcba_resistor": 1,
+    "synthetic_pair": 1,
+    "rpa_nodes": 2
+  },
+  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+  "control_status": "NOT_CONNECTED",
+  "helm_status": "NOT_TRAINED",
+  "frozen_rust_engine": "UNCHANGED"
+}

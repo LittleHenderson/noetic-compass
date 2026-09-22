@@ -1,0 +1,132 @@
+{
+  "schema": "cas.ohm.demo-pair/0.1",
+  "observation": {
+    "schema": "cas.ohm.demo-observation/0.1",
+    "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+    "reference_id": "demo:lower-flow",
+    "implementation_sha256_lf": {
+      "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    "fixture_status": "DEMO_NOT_A_TRAIN_DEV_EVAL_SPLIT",
+    "record_id": "ohm-demo-input-b277ec3c1f5e1db0fa15e8adfaaba1b5f9bcb670543350efeae22fff76fb8368"
+  },
+  "target": {
+    "schema": "cas.ohm.demo-target/0.1",
+    "observation_id": "ohm-demo-input-b277ec3c1f5e1db0fa15e8adfaaba1b5f9bcb670543350efeae22fff76fb8368",
+    "quantity_report": {
+      "kind": "cas_ohm_quantity",
+      "convention": "cas.ohm.declared-linear/0.1",
+      "quantity": "attention",
+      "value": "2",
+      "exact_value": {
+        "numerator": "2",
+        "denominator": "1"
+      },
+      "decimal_is_rounded": false,
+      "unit": "declared_attention",
+      "scale": {
+        "kind": "cas_ohm_scale",
+        "convention": "cas.ohm.declared-linear/0.1",
+        "id": "demo-linear",
+        "drive_unit": "declared_drive",
+        "attention_unit": "declared_attention",
+        "constraint_unit": "(declared_drive)/(declared_attention)",
+        "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+        "calibration_status": "NOT_VERIFIED",
+        "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+      },
+      "origin": "calculated",
+      "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+      "numeric_representation": "exact_rational",
+      "input_literal": null,
+      "operation": "attention_flow",
+      "inputs": [
+        {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "drive",
+          "value": "12",
+          "exact_value": {
+            "numerator": "12",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "declared_drive",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "design",
+          "reference": "demo:first",
+          "numeric_representation": "exact_decimal_text",
+          "input_literal": "12",
+          "operation": null,
+          "inputs": [],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "682aa02d3947abb93a3085683c8fa0d8d23af52a787b40bdb36b2491144b5ddc"
+        },
+        {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "constraint",
+          "value": "6",
+          "exact_value": {
+            "numerator": "6",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "(declared_drive)/(declared_attention)",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "design",
+          "reference": "demo:second",
+          "numeric_representation": "exact_decimal_text",
+          "input_literal": "6",
+          "operation": null,
+          "inputs": [],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "53cede9f74691009e2d78f291b56b2204a15c88b851dffb6e76def5228bf517c"
+        }
+      ],
+      "notes": [],
+      "measurement_status": "NO_MEASUREMENT_PERFORMED",
+      "observation_status": "NOT_AN_OBSERVATION",
+      "control_status": "NOT_CONNECTED",
+      "semantic_outcome": "NOT_ASSESSED",
+      "record_sha256": "4b9319de276be00fbe38b27417dcf1f9e6585ee3073b1e537e824b9355e9dc25"
+    },
+    "implementation_sha256_lf": {
+      "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    "status": "REFERENCE_CALCULATED_NOT_LEARNED",
+    "record_id": "ohm-demo-target-33e1dc03f5f17c37d2f4f70a0f0086a2510306aff986a26ecdf7af9f71944157"
+  },
+  "generation_status": "REFERENCE_CALCULATED_NOT_LEARNED",
+  "training_status": "NOT_RUN"
+}

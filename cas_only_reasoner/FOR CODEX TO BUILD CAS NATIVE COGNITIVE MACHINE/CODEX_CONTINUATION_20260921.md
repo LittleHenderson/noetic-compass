@@ -1,5 +1,21 @@
 # Codex continuation — 2026-09-21
 
+## Follow-up: CAS-Ohm calculations and prepared connections
+
+The active compiler now exposes named attention-flow, required-Drive and
+effective-constraint calculations. Explicit scales and provenance, exact
+arithmetic, invalid-input refusal and a matching offline package are tested.
+PCBA single-resistor calculations, separate synthetic reference records, and
+CAS-RPA parent/child projections are prepared without runtime or learning claims.
+
+The pre-Ohm compiler is preserved as a hash-checked snapshot for historical
+Q3 generation and PCBA state parsing. Existing Q3 data, pins, Rust engine and
+frozen contracts remain unchanged. Current scope, examples, source comparison
+and evidence: research/helm_cas_expression_lab/CAS_OHM_STATUS_20260921.md.
+No Helm measurement, inference, training, control, release or deployment ran.
+This follow-up uses branch codex/helm-cas-ohm-20260921 in the same isolated
+continuation checkout. Earlier branch/implementation claims below are history.
+
 ## Follow-up: PCBA whole-document reader
 
 The owner's instruction to work on the PCBA issue is implemented as a bounded

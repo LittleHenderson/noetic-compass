@@ -29,8 +29,8 @@ MAX_GRAPH_STEPS = 20000
 
 @lru_cache(maxsize=1)
 def _compiler():
-    """Load this checkout's pinned compiler, never an unrelated checkout."""
-    path = Path(__file__).resolve().parents[4] / "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py"
+    """Load the historical state checker; new arithmetic uses the active compiler."""
+    path = Path(__file__).resolve().parent / "pinned_sources/compiler_pre_ohm_61ed5a45.py"
     raw = path.read_bytes().replace(b"\r\n", b"\n")
     if hashlib.sha256(raw).hexdigest() != COMPILER_SHA256_LF:
         raise ValueError("CAS compiler source differs from the reviewed pin")

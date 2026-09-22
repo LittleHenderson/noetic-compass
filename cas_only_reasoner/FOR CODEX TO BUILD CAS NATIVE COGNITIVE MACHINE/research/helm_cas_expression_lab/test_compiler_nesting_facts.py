@@ -1,7 +1,8 @@
 """MEASURED FACTS about how the CAS compiler handles a thought inside a thought, pinned so nobody has to re-derive them.
 
-Subject: `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, LF sha256 61ed5a45970459e4... -- the SAME text that
-ships in `dist/cas-offline/`. First measured 2026-09-21 on text 8169188ad73df8fc... by my own probes and by five independent
+Historical subject: the pre-CAS-Ohm compiler snapshot, LF sha256 61ed5a45970459e4...
+The active compiler and offline package also expose CAS-Ohm; run() compares their legacy nesting behavior.
+First measured 2026-09-21 on text 8169188ad73df8fc... by my own probes and by five independent
 examiners plus a critic who re-ran twelve of their experiments (all twelve confirmed). RE-MEASURED the same day after the
 compiler was changed (book meaning for the Nesting Operator; defects fixed): the facts marked FIXED below flipped and
 are pinned in their new form; the name-keyed set limit is kept on purpose (owner decision pending). Symbolic only; no model is involved.
@@ -17,6 +18,7 @@ Run:  python -m pytest research/helm_cas_expression_lab/test_compiler_nesting_fa
 """
 import pathlib
 import sys
+import importlib.util
 
 import pytest
 
@@ -28,10 +30,20 @@ COMPILER_SHA256_LF = "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff25
 RING = "∘"          # the ring operator, the book's Nesting Operator sign
 IN, NOT_IN, SUBSET = "∈", "∉", "⊆"
 compile_expression, PIN = q3._load_compiler()
+_current_path = HERE.parents[3] / "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py"
+_current_spec = importlib.util.spec_from_file_location("_cas_nesting_current_regression", _current_path)
+_current_module = importlib.util.module_from_spec(_current_spec)
+sys.modules[_current_spec.name] = _current_module
+_current_spec.loader.exec_module(_current_module)
 
 
 def run(text):
     artifact = compile_expression(text).to_dict()
+    # Historical targets remain bound to their old bytes; the active compiler
+    # must still agree on every nesting fact exercised by this suite.
+    current = _current_module.compile_expression(text).to_dict()
+    for key in ("valid", "ast", "result", "warnings", "error"):
+        assert current.get(key) == artifact.get(key), (key, text)
     result = artifact.get("result")
     if isinstance(result, dict) and result.get("kind") == "program":
         result = result.get("final_result")
@@ -44,13 +56,11 @@ def ring(*parts):
 
 def test_these_facts_are_about_this_exact_compiler_text():
     assert PIN["sha256"] == COMPILER_SHA256_LF, "the compiler changed: re-measure every fact in this file"
-    bundle = HERE.parents[5] / "dist/cas-offline/api/notation/compiler.py"
-    for parent in HERE.parents:                                   # the offline bundle lives in the main checkout
-        candidate = parent / "dist/cas-offline/api/notation/compiler.py"
-        if candidate.is_file():
-            import hashlib
-            assert hashlib.sha256(candidate.read_bytes().replace(b"\r\n", b"\n")).hexdigest() == COMPILER_SHA256_LF, "the offline bundle no longer carries the same compiler"
-            break
+    import hashlib
+    snapshot = HERE / PIN["snapshot_path"]
+    assert hashlib.sha256(snapshot.read_bytes().replace(b"\r\n", b"\n")).hexdigest() == COMPILER_SHA256_LF
+    bundle = HERE.parents[3] / "dist/cas-offline/api/notation/compiler.py"
+    assert bundle.read_bytes().replace(b"\r\n", b"\n") == _current_path.read_bytes().replace(b"\r\n", b"\n")
 
 
 # ---------------------------------------------------------------- the ring operator: WRITES
@@ -172,7 +182,8 @@ def test_LIMIT_single_letters_are_reserved():
 
 # ---------------------------------------------------------------- the picture: boxes inside boxes already exist for sets
 def test_the_diagram_draws_a_set_inside_a_set_as_a_box_inside_a_box():
-    from api.notation.compiler import build_diagram, compile_expression as raw_compile
+    build_diagram = _current_module.build_diagram
+    raw_compile = _current_module.compile_expression
     diagram = build_diagram(raw_compile("{NoeticSet{^2, ^7}, NoeticSet{^3}}").ast)
     outer = [c for c in diagram["containers"] if c["kind"] == "typed_meta_set"][0]
     inner = {c["id"]: c for c in diagram["containers"] if c["kind"] == "noetic_cluster"}

@@ -1,0 +1,1 @@
+ohm_required_drive(ohm_attention("3", ohm_scale("demo-linear", "declared_drive", "declared_attention"), "design", "demo:first"), ohm_constraint("4", ohm_scale("demo-linear", "declared_drive", "declared_attention"), "design", "demo:second"))

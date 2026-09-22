@@ -2,6 +2,12 @@
 
 ## 2026-09-21 Codex continuation: engineering only
 
+CAS-Ohm adds tested compiler arithmetic and prepared PCBA, synthetic-data and
+CAS-RPA connections. The calculation evidence is in
+research/helm_cas_expression_lab/cas_ohm_evidence/VERIFICATION.md.
+The historical compiler/data oracle stays pinned; no learned result,
+measurement, control capability, checkpoint or Helm version is added.
+
 PCBA follow-up adds a deterministic whole-document reader and bounded static
 checker. Its tests and CLI examples are recorded in
 `research/helm_cas_expression_lab/pcba_evidence/VERIFICATION.md`.

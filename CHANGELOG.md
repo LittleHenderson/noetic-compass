@@ -1,5 +1,37 @@
 # tksCAS — Changelog
 
+## 2026-09-21 — Checked CAS-Ohm compiler arithmetic and prepared connections
+
+Added named calculations for attention I=V/R, required Drive V=IR, and
+effective constraint R=V/I. The standard-library helper preserves exact
+rationals, explicit coherent ratio scales, source references and input
+lineage. Design, caller-supplied observations and calculations remain distinct.
+Invalid/nonfinite/missing numbers, wrong quantity types, scale mismatches,
+zero denominators and excessive numeric/lineage size fail explicitly.
+Runtime checks close any-typed generic-operator bypasses; helper loading is
+synchronized across concurrent compiler imports and records executed bytes.
+
+Compared canonical book sources, named extensions, a recovered August 27
+simulator, current Cortex code and Harness quantifiers before choosing the
+narrow declared-scale contract. Separate PCBA single-resistor, synthetic
+input/reference and CAS-RPA parent/child adapters are prepared. No topology,
+calibration, measurement, control, neural learning or live UI is inferred.
+
+Preserved the pre-Ohm 61ed5a45 compiler as a checked snapshot for Q3 v0.7
+generation and PCBA state parsing. Historical row/report files reproduce
+their hashes; frozen datasets, manifests, contracts and Rust engine remain
+unchanged. Both active compiler files ship identically in source, offline
+folder and ZIP. Actual compiler/CLI examples prove valid calculations and
+invalid zero-denominator handling.
+
+Validation: 771 compiler/arithmetic/help checks and 704 distinct lab checks
+passed across the installed Python environments; the final 83 affected lab
+checks passed again after review (overlap, not extra tests). Exact source
+hashes, test XML, executed examples, source comparisons, initial invocation
+failures and boundaries are in the lab's cas_ohm_evidence directory and
+CAS_OHM_STATUS_20260921.md. This is engineering work, with no Helm release,
+model execution, production activation, deployment or scientific acceptance.
+
 ## 2026-09-21 — PCBA circuit and board reader with bounded static checks
 
 Added a whole-document CCDL reader and CLI report with separate parsing,

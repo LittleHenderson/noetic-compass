@@ -1,5 +1,16 @@
 # Current compiler continuation status
 
+## CAS-Ohm follow-up
+
+The active branch is now codex/helm-cas-ohm-20260921. Named Ohm calls extend
+the compiler with explicit quantity types, scales, provenance and checked
+arithmetic. See CAS_OHM_STATUS_20260921.md for examples and verification.
+The complete current implementation identity includes compiler.py and
+cas_ohm.py; both source hashes and offline/ZIP parity are recorded in
+cas_ohm_evidence/implementation_receipt.json. The old 61ed5a45 compiler stays
+byte-pinned for Q3 v0.7 generation and PCBA state checks. Previous recovery
+claims below refer to that earlier stage. No Rust engine or model changed.
+
 The recovered compiler work is integrated in the isolated
 `codex/helm-cas-data-boundary-20260921` worktree. The original `helm3-lab`
 worktree is preserved. This is experimental symbolic compiler work, not a

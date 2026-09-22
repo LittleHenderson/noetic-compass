@@ -1,5 +1,15 @@
 # PCBA circuit and board reader — 2026-09-21
 
+## CAS-Ohm follow-up
+
+The active compiler subsequently gained named CAS-Ohm arithmetic. The PCBA
+state parser now loads the preserved pre-Ohm compiler snapshot with the same
+61ed5a45 hash; the checker rules remain unchanged. A separate prepared
+pcba_resistor_flow connection calculates one checked Resistor's flow using
+explicitly declared Drive, units and provenance. It does not infer topology
+or execute the board. See CAS_OHM_STATUS_20260921.md and cas_ohm_evidence/.
+The original implementation record below is retained as history.
+
 The lab now reads complete CCDL circuit/board documents and checks a bounded
 set of structural rules. It reuses the recovered PCBA/CJT component parsers
 through a strict adapter. The main CAS compiler, frozen engine, Q3 records,

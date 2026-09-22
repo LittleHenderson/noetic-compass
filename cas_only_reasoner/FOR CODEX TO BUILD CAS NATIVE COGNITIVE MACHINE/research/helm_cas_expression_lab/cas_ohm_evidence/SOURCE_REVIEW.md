@@ -114,6 +114,18 @@ rejecting that number without a separately identified scale.
    behaviors do not satisfy the new nonnegative finite-input contract.
    This module was not imported into the new helper.
 
+3. **Current Cortex control module.**
+   `cas_only_reasoner/CAS_CORTEX_v0.1/cortex/ohm_control.py`, SHA-256:
+   `342da4652598cc84fbf4e70a4c22d925f7e66fcd05c400e107c3a43d8055152e`.
+   The source declares a native language-pipeline profile and three equations
+   at lines 86–99: measure_i, design_v, and diagnose_r. These return floats
+   rounded to four decimal places. Isolated checks found negative/NaN values
+   propagate and a zero denominator raises raw ZeroDivisionError. The name
+   measure_i still performs a quotient; that call does not itself collect a
+   measurement. This related implementation exists today, but its broader
+   control profile and arithmetic boundary are not the compiler contract.
+   Its source snapshot is retained alongside the historical simulator.
+
 These probes establish software behavior only. Historical passing tests and
 source comments cannot establish calibration, live measurement, or correctness
 outside their covered inputs.

@@ -1,0 +1,47 @@
+{
+  "purpose": "read-only authority and implementation comparison; reference snapshots are not imported as runtime",
+  "sources": [
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Chapter_05_Resistors.md",
+      "origin_commit": null,
+      "snapshot_path": "pinned_sources/cas_ohm_references/Chapter_05_Resistors.md",
+      "sha256_raw": "105ef2f963bcf679ae4b96724505e4512f553a127afb63da7e95f2ba998e28b1",
+      "sha256_lf": "b670feae016f0eff43d771922ae1110ea22192fd14d93d93f9e2218e8ef6c1fd"
+    },
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "origin_commit": null,
+      "snapshot_path": "pinned_sources/cas_ohm_references/Appendix_I_CAS_Ohm_Measurement_and_Calibration.md",
+      "sha256_raw": "5be5667eb9b37460a7b7c2f9c21ca664582445f54136c0cb0a87cec6dd98de60",
+      "sha256_lf": "0f3d9add1ecc3c2d238739d7435908f45bf24402285bf04fef83ddd875583fcf"
+    },
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\cognitive-circuit-grimoire\\manuscript\\ch04_cas_ohms_law.md",
+      "origin_commit": null,
+      "snapshot_path": "pinned_sources/cas_ohm_references/grimoire_ch04_cas_ohms_law.md",
+      "sha256_raw": "694b25834c5b46d1c806a040b6d0b54f0229ea74c576831a19293dab5ff905f6",
+      "sha256_lf": "694b25834c5b46d1c806a040b6d0b54f0229ea74c576831a19293dab5ff905f6"
+    },
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\CAS_CORTEX_v0.1\\cortex\\ohm_control.py",
+      "origin_commit": null,
+      "snapshot_path": "pinned_sources/cas_ohm_references/cortex_ohm_control.py.txt",
+      "sha256_raw": "342da4652598cc84fbf4e70a4c22d925f7e66fcd05c400e107c3a43d8055152e",
+      "sha256_lf": "342da4652598cc84fbf4e70a4c22d925f7e66fcd05c400e107c3a43d8055152e"
+    },
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\noetic-compass-scaffold\\noetic-compass\\api\\cas_ohm\\quantifiers.py",
+      "origin_commit": null,
+      "snapshot_path": "pinned_sources/cas_ohm_references/harness_quantifiers.py.txt",
+      "sha256_raw": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4",
+      "sha256_lf": "0a486d0658ecef8b0039b15a8dc2e259637fffb98b677211c6c6fe91559ae9a4"
+    },
+    {
+      "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\scripts\\ccb_r1\\cjt_sim.py",
+      "origin_commit": "f436e42476ca0127581d6085c3a22056bd509e73",
+      "snapshot_path": "pinned_sources/cas_ohm_references/historical_ccb_r1_cjt_sim.py.txt",
+      "sha256_raw": "073af9f068ed96fb479a18296d14ccc480b8129f15cbb23b23e80a87e6f5975e",
+      "sha256_lf": "073af9f068ed96fb479a18296d14ccc480b8129f15cbb23b23e80a87e6f5975e"
+    }
+  ]
+}

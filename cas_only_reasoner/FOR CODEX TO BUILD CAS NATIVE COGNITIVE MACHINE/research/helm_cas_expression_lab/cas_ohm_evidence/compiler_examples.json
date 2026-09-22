@@ -1,0 +1,2197 @@
+{
+  "implementation_sha256_lf": {
+    "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+    "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+  },
+  "cases": {
+    "attention_3": {
+      "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+      "artifact": {
+        "source": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+        "valid": true,
+        "error": null,
+        "engine": "python",
+        "warnings": [],
+        "tokens": [
+          {
+            "kind": "IDENT",
+            "value": "ohm_flow",
+            "position": 0
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 8
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_drive",
+            "position": 9
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 18
+          },
+          {
+            "kind": "STRING",
+            "value": "\"12\"",
+            "position": 19
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 23
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 25
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 34
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 35
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 48
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 50
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 66
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 68
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 88
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 89
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 91
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 99
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:first\"",
+            "position": 101
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 113
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 114
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_constraint",
+            "position": 116
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 130
+          },
+          {
+            "kind": "STRING",
+            "value": "\"4\"",
+            "position": 131
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 134
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 136
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 145
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 146
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 159
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 161
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 177
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 179
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 199
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 200
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 202
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 210
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:second\"",
+            "position": 212
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 225
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 226
+          }
+        ],
+        "ast": {
+          "node": "CallExpr",
+          "callee": "ohm_flow",
+          "args": [
+            {
+              "node": "CallExpr",
+              "callee": "ohm_drive",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "12"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:first"
+                }
+              ]
+            },
+            {
+              "node": "CallExpr",
+              "callee": "ohm_constraint",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "4"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:second"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "kind": "ohm_attention",
+          "domains": [],
+          "singular": true
+        },
+        "bytecode": [
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "12"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:first"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_drive",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "4"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:second"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_constraint",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_flow",
+              "argc": 2
+            }
+          }
+        ],
+        "result": {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "attention",
+          "value": "3",
+          "exact_value": {
+            "numerator": "3",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "declared_attention",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "calculated",
+          "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+          "numeric_representation": "exact_rational",
+          "input_literal": null,
+          "operation": "attention_flow",
+          "inputs": [
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "drive",
+              "value": "12",
+              "exact_value": {
+                "numerator": "12",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "declared_drive",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:first",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "12",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "682aa02d3947abb93a3085683c8fa0d8d23af52a787b40bdb36b2491144b5ddc"
+            },
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "constraint",
+              "value": "4",
+              "exact_value": {
+                "numerator": "4",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "(declared_drive)/(declared_attention)",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:second",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "4",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "a731e8b51919646eb227cab863c4d6dcca60fda59a498cae90a01f075f6c627e"
+            }
+          ],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "baa597ee1fce00585ad6920647454d15f7748a9b338239624866d49c27307f5d"
+        }
+      }
+    },
+    "attention_2": {
+      "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+      "artifact": {
+        "source": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+        "valid": true,
+        "error": null,
+        "engine": "python",
+        "warnings": [],
+        "tokens": [
+          {
+            "kind": "IDENT",
+            "value": "ohm_flow",
+            "position": 0
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 8
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_drive",
+            "position": 9
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 18
+          },
+          {
+            "kind": "STRING",
+            "value": "\"12\"",
+            "position": 19
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 23
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 25
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 34
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 35
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 48
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 50
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 66
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 68
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 88
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 89
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 91
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 99
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:first\"",
+            "position": 101
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 113
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 114
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_constraint",
+            "position": 116
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 130
+          },
+          {
+            "kind": "STRING",
+            "value": "\"6\"",
+            "position": 131
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 134
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 136
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 145
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 146
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 159
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 161
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 177
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 179
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 199
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 200
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 202
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 210
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:second\"",
+            "position": 212
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 225
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 226
+          }
+        ],
+        "ast": {
+          "node": "CallExpr",
+          "callee": "ohm_flow",
+          "args": [
+            {
+              "node": "CallExpr",
+              "callee": "ohm_drive",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "12"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:first"
+                }
+              ]
+            },
+            {
+              "node": "CallExpr",
+              "callee": "ohm_constraint",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "6"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:second"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "kind": "ohm_attention",
+          "domains": [],
+          "singular": true
+        },
+        "bytecode": [
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "12"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:first"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_drive",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "6"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:second"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_constraint",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_flow",
+              "argc": 2
+            }
+          }
+        ],
+        "result": {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "attention",
+          "value": "2",
+          "exact_value": {
+            "numerator": "2",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "declared_attention",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "calculated",
+          "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+          "numeric_representation": "exact_rational",
+          "input_literal": null,
+          "operation": "attention_flow",
+          "inputs": [
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "drive",
+              "value": "12",
+              "exact_value": {
+                "numerator": "12",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "declared_drive",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:first",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "12",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "682aa02d3947abb93a3085683c8fa0d8d23af52a787b40bdb36b2491144b5ddc"
+            },
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "constraint",
+              "value": "6",
+              "exact_value": {
+                "numerator": "6",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "(declared_drive)/(declared_attention)",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:second",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "6",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "53cede9f74691009e2d78f291b56b2204a15c88b851dffb6e76def5228bf517c"
+            }
+          ],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "4b9319de276be00fbe38b27417dcf1f9e6585ee3073b1e537e824b9355e9dc25"
+        }
+      }
+    },
+    "required_drive_12": {
+      "expression": "ohm_required_drive(ohm_attention(\"3\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+      "artifact": {
+        "source": "ohm_required_drive(ohm_attention(\"3\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+        "valid": true,
+        "error": null,
+        "engine": "python",
+        "warnings": [],
+        "tokens": [
+          {
+            "kind": "IDENT",
+            "value": "ohm_required_drive",
+            "position": 0
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 18
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_attention",
+            "position": 19
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 32
+          },
+          {
+            "kind": "STRING",
+            "value": "\"3\"",
+            "position": 33
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 36
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 38
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 47
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 48
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 61
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 63
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 79
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 81
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 101
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 102
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 104
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 112
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:first\"",
+            "position": 114
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 126
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 127
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_constraint",
+            "position": 129
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 143
+          },
+          {
+            "kind": "STRING",
+            "value": "\"4\"",
+            "position": 144
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 147
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 149
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 158
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 159
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 172
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 174
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 190
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 192
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 212
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 213
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 215
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 223
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:second\"",
+            "position": 225
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 238
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 239
+          }
+        ],
+        "ast": {
+          "node": "CallExpr",
+          "callee": "ohm_required_drive",
+          "args": [
+            {
+              "node": "CallExpr",
+              "callee": "ohm_attention",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "3"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:first"
+                }
+              ]
+            },
+            {
+              "node": "CallExpr",
+              "callee": "ohm_constraint",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "4"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:second"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "kind": "ohm_drive",
+          "domains": [],
+          "singular": true
+        },
+        "bytecode": [
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "3"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:first"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_attention",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "4"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:second"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_constraint",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_required_drive",
+              "argc": 2
+            }
+          }
+        ],
+        "result": {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "drive",
+          "value": "12",
+          "exact_value": {
+            "numerator": "12",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "declared_drive",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "calculated",
+          "reference": "cas.ohm.declared-linear/0.1:required_drive",
+          "numeric_representation": "exact_rational",
+          "input_literal": null,
+          "operation": "required_drive",
+          "inputs": [
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "attention",
+              "value": "3",
+              "exact_value": {
+                "numerator": "3",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "declared_attention",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:first",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "3",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "cc9ffb0f3bc6153ecda156634102c7a34dbfe259e03efafb3d21f581fd541011"
+            },
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "constraint",
+              "value": "4",
+              "exact_value": {
+                "numerator": "4",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "(declared_drive)/(declared_attention)",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:second",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "4",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "a731e8b51919646eb227cab863c4d6dcca60fda59a498cae90a01f075f6c627e"
+            }
+          ],
+          "notes": [],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "29a8f720e4133ebe0bfb20a8e821b906605ff38655f5213a777f7a2843f96b5d"
+        }
+      }
+    },
+    "effective_constraint_4": {
+      "expression": "ohm_effective_constraint(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_attention(\"3\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+      "artifact": {
+        "source": "ohm_effective_constraint(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_attention(\"3\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+        "valid": true,
+        "error": null,
+        "engine": "python",
+        "warnings": [],
+        "tokens": [
+          {
+            "kind": "IDENT",
+            "value": "ohm_effective_constraint",
+            "position": 0
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 24
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_drive",
+            "position": 25
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 34
+          },
+          {
+            "kind": "STRING",
+            "value": "\"12\"",
+            "position": 35
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 39
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 41
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 50
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 51
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 64
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 66
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 82
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 84
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 104
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 105
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 107
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 115
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:first\"",
+            "position": 117
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 129
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 130
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_attention",
+            "position": 132
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 145
+          },
+          {
+            "kind": "STRING",
+            "value": "\"3\"",
+            "position": 146
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 149
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 151
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 160
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 161
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 174
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 176
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 192
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 194
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 214
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 215
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 217
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 225
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:second\"",
+            "position": 227
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 240
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 241
+          }
+        ],
+        "ast": {
+          "node": "CallExpr",
+          "callee": "ohm_effective_constraint",
+          "args": [
+            {
+              "node": "CallExpr",
+              "callee": "ohm_drive",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "12"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:first"
+                }
+              ]
+            },
+            {
+              "node": "CallExpr",
+              "callee": "ohm_attention",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "3"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:second"
+                }
+              ]
+            }
+          ]
+        },
+        "type": {
+          "kind": "ohm_constraint",
+          "domains": [],
+          "singular": true
+        },
+        "bytecode": [
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "12"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:first"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_drive",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "3"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo-linear"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_drive"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "declared_attention"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_scale",
+              "argc": 3
+            }
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "design"
+          },
+          {
+            "opcode": "PUSH_STRING",
+            "arg": "demo:second"
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_attention",
+              "argc": 4
+            }
+          },
+          {
+            "opcode": "CALL",
+            "arg": {
+              "name": "ohm_effective_constraint",
+              "argc": 2
+            }
+          }
+        ],
+        "result": {
+          "kind": "cas_ohm_quantity",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "quantity": "constraint",
+          "value": "4",
+          "exact_value": {
+            "numerator": "4",
+            "denominator": "1"
+          },
+          "decimal_is_rounded": false,
+          "unit": "(declared_drive)/(declared_attention)",
+          "scale": {
+            "kind": "cas_ohm_scale",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "id": "demo-linear",
+            "drive_unit": "declared_drive",
+            "attention_unit": "declared_attention",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+            "calibration_status": "NOT_VERIFIED",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+          },
+          "origin": "calculated",
+          "reference": "cas.ohm.declared-linear/0.1:effective_constraint",
+          "numeric_representation": "exact_rational",
+          "input_literal": null,
+          "operation": "effective_constraint",
+          "inputs": [
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "drive",
+              "value": "12",
+              "exact_value": {
+                "numerator": "12",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "declared_drive",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:first",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "12",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "682aa02d3947abb93a3085683c8fa0d8d23af52a787b40bdb36b2491144b5ddc"
+            },
+            {
+              "kind": "cas_ohm_quantity",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "quantity": "attention",
+              "value": "3",
+              "exact_value": {
+                "numerator": "3",
+                "denominator": "1"
+              },
+              "decimal_is_rounded": false,
+              "unit": "declared_attention",
+              "scale": {
+                "kind": "cas_ohm_scale",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "id": "demo-linear",
+                "drive_unit": "declared_drive",
+                "attention_unit": "declared_attention",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE",
+                "calibration_status": "NOT_VERIFIED",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382"
+              },
+              "origin": "design",
+              "reference": "demo:second",
+              "numeric_representation": "exact_decimal_text",
+              "input_literal": "3",
+              "operation": null,
+              "inputs": [],
+              "notes": [],
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "control_status": "NOT_CONNECTED",
+              "semantic_outcome": "NOT_ASSESSED",
+              "record_sha256": "1df86cac08a03643f78f311b45132d2c3206e269e3e8963f0e711b60258d8d86"
+            }
+          ],
+          "notes": [
+            "INVERSE_RATIO_NOT_CAUSAL_IDENTIFICATION"
+          ],
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "control_status": "NOT_CONNECTED",
+          "semantic_outcome": "NOT_ASSESSED",
+          "record_sha256": "c99f2289f827c7eff3c7186cbe3056faf0f8686612e961b83406568ac0190920"
+        }
+      }
+    },
+    "invalid_zero_constraint": {
+      "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"0\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+      "artifact": {
+        "source": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:first\"), ohm_constraint(\"0\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:second\"))",
+        "valid": false,
+        "error": "execution: CAS-Ohm: OHM_ZERO_CONSTRAINT: attention flow is undefined for zero constraint",
+        "engine": "python",
+        "warnings": [],
+        "tokens": [
+          {
+            "kind": "IDENT",
+            "value": "ohm_flow",
+            "position": 0
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 8
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_drive",
+            "position": 9
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 18
+          },
+          {
+            "kind": "STRING",
+            "value": "\"12\"",
+            "position": 19
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 23
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 25
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 34
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 35
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 48
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 50
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 66
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 68
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 88
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 89
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 91
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 99
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:first\"",
+            "position": 101
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 113
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 114
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_constraint",
+            "position": 116
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 130
+          },
+          {
+            "kind": "STRING",
+            "value": "\"0\"",
+            "position": 131
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 134
+          },
+          {
+            "kind": "IDENT",
+            "value": "ohm_scale",
+            "position": 136
+          },
+          {
+            "kind": "LPAREN",
+            "value": "(",
+            "position": 145
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo-linear\"",
+            "position": 146
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 159
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_drive\"",
+            "position": 161
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 177
+          },
+          {
+            "kind": "STRING",
+            "value": "\"declared_attention\"",
+            "position": 179
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 199
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 200
+          },
+          {
+            "kind": "STRING",
+            "value": "\"design\"",
+            "position": 202
+          },
+          {
+            "kind": "COMMA",
+            "value": ",",
+            "position": 210
+          },
+          {
+            "kind": "STRING",
+            "value": "\"demo:second\"",
+            "position": 212
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 225
+          },
+          {
+            "kind": "RPAREN",
+            "value": ")",
+            "position": 226
+          }
+        ],
+        "ast": {
+          "node": "CallExpr",
+          "callee": "ohm_flow",
+          "args": [
+            {
+              "node": "CallExpr",
+              "callee": "ohm_drive",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "12"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:first"
+                }
+              ]
+            },
+            {
+              "node": "CallExpr",
+              "callee": "ohm_constraint",
+              "args": [
+                {
+                  "node": "StringLiteral",
+                  "value": "0"
+                },
+                {
+                  "node": "CallExpr",
+                  "callee": "ohm_scale",
+                  "args": [
+                    {
+                      "node": "StringLiteral",
+                      "value": "demo-linear"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_drive"
+                    },
+                    {
+                      "node": "StringLiteral",
+                      "value": "declared_attention"
+                    }
+                  ]
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "design"
+                },
+                {
+                  "node": "StringLiteral",
+                  "value": "demo:second"
+                }
+              ]
+            }
+          ]
+        },
+        "type": null,
+        "bytecode": [],
+        "result": null
+      }
+    }
+  }
+}

@@ -150,13 +150,10 @@ def _find_scaffold():
 
 
 def _load_compiler():
-    scaffold = _find_scaffold()
-    sys.path.insert(0, str(scaffold))
-    from api.notation.compiler import compile_expression  # noqa: E402
-    source = (scaffold / "api/notation/compiler.py").read_bytes().replace(b"\r\n", b"\n")
-    return compile_expression, {"path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
-                                "resolved_from": "worktree" if scaffold.is_relative_to(REPO) else "main_checkout",
-                                "sha256": _sha_bytes(source), "hash_policy": "lf-normalised"}
+    # This version generates historical Q3 v0.7. New language extensions must
+    # not replace its target oracle or cause an in-place dataset repin.
+    from historical_compiler import load_historical_compiler, source_receipt
+    return load_historical_compiler().compile_expression, source_receipt()
 
 
 def _find_pool():

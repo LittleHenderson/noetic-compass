@@ -83,6 +83,44 @@ preview, and SVG diagram.
 
 Use `--color` to force ANSI colors and `--no-color` to suppress them.
 
+## CAS-Ohm calculations
+
+The compiler accepts named calculations for attention flow (`I=V/R`), required
+Drive (`V=IR`), and effective constraint (`R=V/I`). Each input carries its
+quantity type, a declared linear scale, its origin, and a source reference.
+The scale below is an illustrative design choice, not a canonical calibration
+or a measurement of Helm.
+
+```cas
+let scale = ohm_scale("illustrative-linear-v1", "drive-units", "attention-units");
+let potential = ohm_drive("12", scale, "design", "example:declared-drive");
+let constraint = ohm_constraint("4", scale, "design", "example:declared-constraint");
+ohm_flow(potential, constraint)
+```
+
+This calculates attention flow `3` in the declared attention units. Numeric
+values also work (`ohm_drive(12, ...)`); decimal strings preserve exact decimal
+input even beyond floating-point precision. The result retains the supplied
+provenance and labels the output as calculated. A supplied measurement reference
+is a declaration by the caller, not verification that a measurement occurred.
+
+Use `ohm_attention(value, scale, origin, reference)` for a supplied flow, then
+`ohm_required_drive(attention, constraint)` or
+`ohm_effective_constraint(potential, attention)` for the other two calculations.
+Wrong quantity types, mismatched scales, invalid numbers, missing arguments,
+and zero denominators produce invalid compiler artifacts. For example:
+
+```cas
+let scale = ohm_scale("illustrative-linear-v1", "drive-units", "attention-units");
+ohm_flow(ohm_drive("12", scale, "design", "example:drive"), ohm_constraint("0", scale, "design", "example:zero-constraint"))
+```
+
+The optional type annotations are `ohm_scale`, `ohm_drive`, `ohm_attention`, and
+`ohm_constraint`. Existing CAS symbols keep their meanings; use the named
+operations for these calculations. They do not measure Helm, control a live
+circuit, or establish correctness of a cognitive result. Both compiler files
+must travel together: `api/notation/compiler.py` and `api/notation/cas_ohm.py`.
+
 ## Full Demo Pack
 
 Generate SVG and HTML diagrams for every bundled example:

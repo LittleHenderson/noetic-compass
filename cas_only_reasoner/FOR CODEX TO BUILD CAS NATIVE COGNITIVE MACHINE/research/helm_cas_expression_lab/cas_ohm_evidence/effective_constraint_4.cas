@@ -1,0 +1,1 @@
+ohm_effective_constraint(ohm_drive("12", ohm_scale("demo-linear", "declared_drive", "declared_attention"), "design", "demo:first"), ohm_attention("3", ohm_scale("demo-linear", "declared_drive", "declared_attention"), "design", "demo:second"))
