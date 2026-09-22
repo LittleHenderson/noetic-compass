@@ -46,7 +46,7 @@ The CAS mapping is direct, and it is the spine of this chapter:
 
 The **ADC direction, `|f -> |A`**, is *making sense of a feeling*. You start with an analog affective state — a felt unease, a drawn-toward pull — and you produce a discrete analytical proposition you can reason with: *"I notice I distrust this person, for reasons X and Y."* The smooth feeling becomes a countable, checkable claim. This is what a person does in good reflection, and what a well-built cognitive circuit does when it has to act on an affective signal: it digitizes the feeling so the analytical stages downstream can use it.
 
-The **DAC direction, `|A -> |E`**, is the reverse: *turning a plan into action*. You start with a discrete analytical plan — *"Step one: send the email. Step two: call the vendor."* — and you reconstruct it as continuous embodied execution, the smooth sensorimotor act of actually doing the thing. A plan that never gets DAC-converted stays a string of propositions; the DAC is what gives it a body.
+The **DAC direction, `|A -> |E`**, is a second directed conversion: *turning a plan into action*. It runs from discrete control toward continuous output, but it is **not the inverse of the ADC's lossy `|f -> |A` translation**. It also lands in a different Register (`|E`, not `|f`). You start with a discrete analytical plan — *"Step one: send the email. Step two: call the vendor."* — and reconstruct it as continuous embodied execution, the smooth sensorimotor act of actually doing the thing. A plan that never gets DAC-converted stays a string of propositions; the DAC is what gives it a body.
 
 Both conversions are *lossy at the boundary*, and the rest of the chapter is about exactly how much they lose and how to keep that loss within spec.
 
