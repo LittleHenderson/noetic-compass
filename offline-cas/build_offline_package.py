@@ -3,7 +3,7 @@
 Creates dist/cas-offline/ and dist/cas-offline.zip with:
   - cas.py
   - cas_svg.py
-  - vendored api/notation/compiler.py
+  - vendored api/notation/compiler.py and its CAS-Ohm helper
   - small launch helpers
 """
 
@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "offline-cas"
 NOETIC_ROOT = ROOT / "noetic-compass-scaffold" / "noetic-compass"
 COMPILER = NOETIC_ROOT / "api" / "notation" / "compiler.py"
+CAS_OHM = COMPILER.with_name("cas_ohm.py")
 DIST = ROOT / "dist"
 PACKAGE = DIST / "cas-offline"
 STAGING = DIST / "_cas-offline-build"
@@ -71,6 +72,7 @@ def _populate(target: Path) -> None:
         newline="\n",
     )
     shutil.copy2(COMPILER, notation_dir / "compiler.py")
+    shutil.copy2(CAS_OHM, notation_dir / "cas_ohm.py")
 
     (target / "cas.bat").write_bytes(b'@echo off\r\npython "%~dp0cas.py" %*\r\n')
 
@@ -78,6 +80,8 @@ def _populate(target: Path) -> None:
 def build() -> None:
     if not COMPILER.exists():
         raise FileNotFoundError(f"compiler not found: {COMPILER}")
+    if not CAS_OHM.exists():
+        raise FileNotFoundError(f"CAS-Ohm helper not found: {CAS_OHM}")
 
     DIST.mkdir(exist_ok=True)
     _safe_remove(STAGING)

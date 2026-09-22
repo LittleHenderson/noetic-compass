@@ -18,9 +18,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
+import hashlib
+import importlib.util
 import math
 import os
+from pathlib import Path
 import re
+import sys
 from typing import Any
 
 try:
@@ -164,7 +168,7 @@ CAS_GRAMMAR_BNF = """<program>       ::= <statement> (";" <statement>)* ;
 <typed_param_list> ::= <typed_param> ("," <typed_param>)* ;
 <typed_param>   ::= <ident> (":" <type_expr>)? ;
 <type_expr>     ::= <type_name> ("[" <domain_list> "]")? ;
-<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "number" | "tuple" | "meta_set" | "meta_symbol" | "meta_assertion" | "any" ;
+<type_name>     ::= "state" | "drive" | "string" | "void" | "function" | "fractal" | "rpm" | "relation" | "program" | "number" | "tuple" | "meta_set" | "meta_symbol" | "meta_assertion" | "ohm_scale" | "ohm_drive" | "ohm_attention" | "ohm_constraint" | "any" ;
 <domain_list>   ::= <domain> ("," <domain>)* ;
 <expression>    ::= <meta_relation> ;
 <meta_relation> ::= <set_expr> (("∈" | "∉" | "⊂" | "⊆" | "⊃" | "⊇") <set_expr>)* ;
@@ -209,6 +213,7 @@ CAS_LANGUAGE_NOTES = {
     "set_operations": "Finite meta-sets support ∪ union, ∩ intersection, ∖ set difference, Pullback(A, B) as a finite subobject meet, Product(A, B) as a namespaced Cartesian product, and validated CoverOf/PartitionOf over an explicit base universe.",
     "tuples": "Tuple{^2, P, F2, A}, Coordinate{^2, P, F2, A}, and ⟨^2, P, F2, A⟩ compile as typed tuple/coordinate values.",
     "diagrams": "Every valid compiled artifact can be projected to a graph diagram with nodes, edges, containment boxes, and layout hints for radial, dependency, recipe, and topos-style renderers.",
+    "cas_ohm": "Named ohm_scale/ohm_drive/ohm_attention/ohm_constraint constructors and ohm_flow/ohm_required_drive/ohm_effective_constraint calculations preserve declared linear scales and provenance. Supply decimal strings for exact decimal input. Calculations are not measurements, empirical validation, or Helm control; existing CAS symbols keep their meanings.",
 }
 
 
@@ -302,6 +307,10 @@ class TypeKind(Enum):
     META_SET = "meta_set"
     META_SYMBOL = "meta_symbol"
     META_ASSERTION = "meta_assertion"
+    OHM_SCALE = "ohm_scale"
+    OHM_DRIVE = "ohm_drive"
+    OHM_ATTENTION = "ohm_attention"
+    OHM_CONSTRAINT = "ohm_constraint"
 
 
 @dataclass(frozen=True)
@@ -347,6 +356,45 @@ class CompilerError(ValueError):
         if position is not None:
             prefix = f"{prefix}@{position}"
         super().__init__(f"{prefix}: {message}")
+
+
+_CAS_OHM_MODULE = None
+
+
+def _load_cas_ohm():
+    """Load only this compiler's sibling helper, also for file-spec imports.
+
+    No package/cwd/sys.path discovery: an unrelated checkout cannot supply the
+    numerical implementation. Register before execution for dataclass support,
+    and execute the same bytes used to identify the private namespace.
+    """
+    global _CAS_OHM_MODULE
+    if _CAS_OHM_MODULE is not None:
+        return _CAS_OHM_MODULE
+    path = Path(__file__).resolve().with_name("cas_ohm.py")
+    try:
+        source = path.read_bytes()
+        identity = hashlib.sha256(str(path).encode("utf-8") + b"\0" + source).hexdigest()
+        name = "_cas_ohm_compiler_" + identity
+        existing = sys.modules.get(name)
+        if existing is not None:
+            if getattr(existing, "__cas_ohm_identity__", None) != identity:
+                raise CompilerError(CompilerStage.EXECUTION, "CAS-Ohm private module namespace is occupied")
+            _CAS_OHM_MODULE = existing
+            return existing
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        try:
+            exec(compile(source, str(path), "exec"), module.__dict__)
+        except Exception:
+            sys.modules.pop(name, None)
+            raise
+        module.__cas_ohm_identity__ = identity
+        _CAS_OHM_MODULE = module
+        return module
+    except (OSError, ImportError, SyntaxError) as exc:
+        raise CompilerError(CompilerStage.EXECUTION, f"CAS-Ohm sibling helper unavailable: {exc}") from exc
 
 
 @dataclass
@@ -1455,6 +1503,29 @@ BUILTIN_NAMES = {
     "Difference",
     "CoverOf",
     "PartitionOf",
+    "ohm_scale",
+    "ohm_drive",
+    "ohm_attention",
+    "ohm_constraint",
+    "ohm_flow",
+    "ohm_required_drive",
+    "ohm_effective_constraint",
+}
+
+OHM_CONSTRUCTORS = {
+    "ohm_drive": TypeKind.OHM_DRIVE,
+    "ohm_attention": TypeKind.OHM_ATTENTION,
+    "ohm_constraint": TypeKind.OHM_CONSTRAINT,
+}
+OHM_OPERATIONS = {
+    "ohm_flow": ((TypeKind.OHM_DRIVE, TypeKind.OHM_CONSTRAINT), TypeKind.OHM_ATTENTION, "attention_flow"),
+    "ohm_required_drive": ((TypeKind.OHM_ATTENTION, TypeKind.OHM_CONSTRAINT), TypeKind.OHM_DRIVE, "required_drive"),
+    "ohm_effective_constraint": ((TypeKind.OHM_DRIVE, TypeKind.OHM_ATTENTION), TypeKind.OHM_CONSTRAINT, "effective_constraint"),
+}
+OHM_TYPE_QUANTITIES = {
+    TypeKind.OHM_DRIVE: "drive",
+    TypeKind.OHM_ATTENTION: "attention",
+    TypeKind.OHM_CONSTRAINT: "constraint",
 }
 
 
@@ -1855,6 +1926,10 @@ def _type_keyword_to_kind(name: str) -> TypeKind:
         "meta_set": TypeKind.META_SET,
         "meta_symbol": TypeKind.META_SYMBOL,
         "meta_assertion": TypeKind.META_ASSERTION,
+        "ohm_scale": TypeKind.OHM_SCALE,
+        "ohm_drive": TypeKind.OHM_DRIVE,
+        "ohm_attention": TypeKind.OHM_ATTENTION,
+        "ohm_constraint": TypeKind.OHM_CONSTRAINT,
     }
     if name not in mapping:
         raise CompilerError(CompilerStage.PARSING, f"unknown type {name}")
@@ -1898,6 +1973,56 @@ def _assert_type_compatible(actual: TypeInfo, expected: TypeInfo, *, context: st
             CompilerStage.TYPECHECK,
             f"{context}: expected {_format_typeinfo(expected)}, got {_format_typeinfo(actual)}",
         )
+
+
+def _infer_cas_ohm_call(name: str, arguments: list[TypeInfo]) -> TypeInfo:
+    if name == "ohm_scale":
+        expected = ((TypeKind.STRING,),) * 3
+        result = TypeKind.OHM_SCALE
+    elif name in OHM_CONSTRUCTORS:
+        expected = ((TypeKind.STRING, TypeKind.NUMBER), (TypeKind.OHM_SCALE,), (TypeKind.STRING,), (TypeKind.STRING,))
+        result = OHM_CONSTRUCTORS[name]
+    else:
+        kinds, result, _ = OHM_OPERATIONS[name]
+        expected = tuple((kind,) for kind in kinds)
+    if len(arguments) != len(expected):
+        raise CompilerError(CompilerStage.TYPECHECK, f"builtin {name} expects {len(expected)} arguments, got {len(arguments)}")
+    for index, (actual, allowed) in enumerate(zip(arguments, expected), 1):
+        if actual.kind not in (*allowed, TypeKind.ANY):
+            label = " or ".join(kind.value for kind in allowed)
+            raise CompilerError(CompilerStage.TYPECHECK, f"builtin {name} argument {index} expects {label}, got {actual.kind.value}")
+    return TypeInfo(kind=result, singular=True)
+
+
+def _execute_cas_ohm_call(name: str, args: list[Any]) -> Any:
+    """Repeat contracts at runtime so untyped user functions cannot bypass them."""
+    expected_count = 3 if name == "ohm_scale" else 4 if name in OHM_CONSTRUCTORS else 2
+    if len(args) != expected_count:
+        raise CompilerError(CompilerStage.EXECUTION, f"{name} expects {expected_count} arguments, got {len(args)}")
+    module = _load_cas_ohm()
+    try:
+        if name == "ohm_scale":
+            if not all(isinstance(value, str) for value in args):
+                raise CompilerError(CompilerStage.EXECUTION, "ohm_scale expects three strings")
+            return module.make_scale(*args)
+        if name in OHM_CONSTRUCTORS:
+            value, scale, origin, reference = args
+            if isinstance(value, CardinalityValue):
+                value = value.value
+            if isinstance(value, bool) or not isinstance(value, (str, int, float)):
+                raise CompilerError(CompilerStage.EXECUTION, f"{name} value must be a number or decimal string")
+            if not isinstance(scale, module.OhmScale):
+                raise CompilerError(CompilerStage.EXECUTION, f"{name} expects an ohm_scale")
+            if not isinstance(origin, str) or not isinstance(reference, str):
+                raise CompilerError(CompilerStage.EXECUTION, f"{name} origin and reference must be strings")
+            return module.make_quantity(OHM_TYPE_QUANTITIES[OHM_CONSTRUCTORS[name]], value, scale, origin, reference)
+        expected, _, implementation = OHM_OPERATIONS[name]
+        for index, (value, kind) in enumerate(zip(args, expected), 1):
+            if not isinstance(value, module.OhmQuantity) or value.quantity != OHM_TYPE_QUANTITIES[kind]:
+                raise CompilerError(CompilerStage.EXECUTION, f"{name} argument {index} expects {kind.value}")
+        return getattr(module, implementation)(*args)
+    except module.CasOhmError as exc:
+        raise CompilerError(CompilerStage.EXECUTION, f"CAS-Ohm: {exc}") from exc
 
 
 def _compose_operators(left: int, right: int) -> int:
@@ -2178,6 +2303,8 @@ class Parser:
                 self.advance()
                 domains.append(self.expect(TokenKind.DOMAIN).value)
             self.expect(TokenKind.RBRACKET)
+        if domains and (kind == TypeKind.OHM_SCALE or kind in OHM_TYPE_QUANTITIES):
+            raise CompilerError(CompilerStage.PARSING, "CAS-Ohm quantity types use declared scales, not CAS Domain qualifiers", position=token.position)
         singular = kind in {
             TypeKind.STATE,
             TypeKind.DRIVE,
@@ -2190,6 +2317,10 @@ class Parser:
             TypeKind.META_SET,
             TypeKind.META_SYMBOL,
             TypeKind.META_ASSERTION,
+            TypeKind.OHM_SCALE,
+            TypeKind.OHM_DRIVE,
+            TypeKind.OHM_ATTENTION,
+            TypeKind.OHM_CONSTRAINT,
         }
         return TypeInfo(kind=kind, domains=tuple(domains), singular=singular)
 
@@ -2401,9 +2532,12 @@ class Parser:
 
     def parse_number(self) -> NumberLiteral:
         token = self.expect(TokenKind.NUMBER)
-        if "." in token.value:
-            return NumberLiteral(value=float(token.value))
-        return NumberLiteral(value=int(token.value))
+        try:
+            if "." in token.value:
+                return NumberLiteral(value=float(token.value))
+            return NumberLiteral(value=int(token.value))
+        except (ValueError, OverflowError) as exc:
+            raise CompilerError(CompilerStage.PARSING, "numeric literal exceeds the supported conversion limit", position=token.position) from exc
 
     def parse_cardinality(self) -> CardinalityExpr:
         start = self.expect(TokenKind.PIPE)
@@ -3503,6 +3637,8 @@ def _infer(node: Any, warnings: list[str], env: TypeEnv | None = None) -> TypeIn
     if isinstance(node, CallExpr):
         if node.callee in BUILTIN_NAMES:
             arg_types = [_infer(arg, warnings, env) for arg in node.args]
+            if node.callee == "ohm_scale" or node.callee in OHM_CONSTRUCTORS or node.callee in OHM_OPERATIONS:
+                return _infer_cas_ohm_call(node.callee, arg_types)
             if node.callee in {"dominant_state", "dominant_domain", "dominant_operator"}:
                 if len(arg_types) != 1:
                     raise CompilerError(
@@ -4068,6 +4204,11 @@ def _merge_drives(left: dict[int, float], right: dict[int, float]) -> dict[int, 
 def _value_matches_type(value: Any, expected: TypeInfo) -> bool:
     if expected.kind == TypeKind.ANY:
         return True
+    if expected.kind == TypeKind.OHM_SCALE or expected.kind in OHM_TYPE_QUANTITIES:
+        module = _load_cas_ohm()
+        if expected.kind == TypeKind.OHM_SCALE:
+            return isinstance(value, module.OhmScale)
+        return isinstance(value, module.OhmQuantity) and value.quantity == OHM_TYPE_QUANTITIES[expected.kind]
     if expected.kind == TypeKind.STRING:
         return isinstance(value, str)
     if expected.kind == TypeKind.NUMBER:
@@ -4812,6 +4953,10 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
         args.reverse()
         name = str(payload["name"])
 
+        if name == "ohm_scale" or name in OHM_CONSTRUCTORS or name in OHM_OPERATIONS:
+            stack.append(_execute_cas_ohm_call(name, args))
+            return
+
         if name == "dominant_state":
             value = args[0]
             if not isinstance(value, StateValue):
@@ -5370,6 +5515,8 @@ def serialize_instruction_arg(arg: Any) -> Any:
 def serialize_value(value: Any) -> Any:
     if value is None:
         return None
+    if _CAS_OHM_MODULE is not None and isinstance(value, (_CAS_OHM_MODULE.OhmScale, _CAS_OHM_MODULE.OhmQuantity)):
+        return value.to_dict()
     if isinstance(value, (int, float)):
         return value
     if isinstance(value, str):
