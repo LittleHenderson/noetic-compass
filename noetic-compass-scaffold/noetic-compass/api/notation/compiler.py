@@ -390,6 +390,11 @@ def _load_cas_ohm():
         except Exception:
             sys.modules.pop(name, None)
             raise
+        # Receipts describe the bytes actually executed, not a later reread of
+        # a mutable sibling file. These stay fixed for this cached module.
+        module.__cas_ohm_source_sha256_raw__ = hashlib.sha256(source).hexdigest()
+        module.__cas_ohm_source_sha256_lf__ = hashlib.sha256(source.replace(b"\r\n", b"\n")).hexdigest()
+        module.__cas_ohm_loaded_path__ = str(path)
         module.__cas_ohm_identity__ = identity
         _CAS_OHM_MODULE = module
         return module

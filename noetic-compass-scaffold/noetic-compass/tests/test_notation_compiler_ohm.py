@@ -5,6 +5,7 @@ Pure arithmetic only. No model, server, network, calibration, or Rust execution.
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -209,6 +210,33 @@ def test_file_spec_import_loads_its_exact_sibling_and_keeps_global_names(monkeyp
     assert Path(helper.__file__).resolve() == (tmp_path / "cas_ohm.py").resolve()
     assert sys.modules["cas_ohm"] is foreign
     assert isolated.compile_expression(FLOW).to_dict()["result"] == good(FLOW).to_dict()["result"]
+
+
+@pytest.mark.parametrize("newline", [b"\n", b"\r\n"])
+def test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change(tmp_path, monkeypatch, newline):
+    compiler_path = Path(compiler.__file__).resolve()
+    helper_path = tmp_path / "cas_ohm.py"
+    normalized = compiler_path.with_name("cas_ohm.py").read_bytes().replace(b"\r\n", b"\n")
+    executed = normalized.replace(b"\n", newline)
+    shutil.copyfile(compiler_path, tmp_path / "compiler.py")
+    helper_path.write_bytes(executed)
+    isolated = _load_file(tmp_path / "compiler.py")
+    helper = isolated._load_cas_ohm()
+    assert helper.__cas_ohm_source_sha256_raw__ == hashlib.sha256(executed).hexdigest()
+    assert helper.__cas_ohm_source_sha256_lf__ == hashlib.sha256(normalized).hexdigest()
+    assert helper.__cas_ohm_loaded_path__ == str(helper_path.resolve())
+
+    helper_path.write_bytes(b"raise RuntimeError('changed bytes must not execute or describe the cached module')\n")
+    original_read = Path.read_bytes
+    def forbid_cached_helper_reread(path):
+        assert path.resolve() != helper_path.resolve(), "receipt reread the changed helper"
+        return original_read(path)
+    monkeypatch.setattr(Path, "read_bytes", forbid_cached_helper_reread)
+
+    assert isolated._load_cas_ohm() is helper
+    assert isolated.compile_expression(FLOW).to_dict()["result"]["value"] == "3"
+    assert helper.__cas_ohm_source_sha256_raw__ == hashlib.sha256(executed).hexdigest()
+    assert helper.__cas_ohm_source_sha256_lf__ == hashlib.sha256(normalized).hexdigest()
 
 
 def test_missing_sibling_fails_closed_without_using_available_other_checkout(tmp_path):
