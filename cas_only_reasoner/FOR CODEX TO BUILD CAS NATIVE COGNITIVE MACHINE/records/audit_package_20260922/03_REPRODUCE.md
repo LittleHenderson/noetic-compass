@@ -17,7 +17,18 @@ export of the named revisions; the receipts are in `receipts_reproduction_pins_2
 - No third-party packages are needed for the CAS-Ohm module or the compiler, only `pytest` for the suites.
 - Set `PYTHONIOENCODING=utf-8`, or CAS symbols (`^`, `∘`, `∈`) will fail to print on a cp1252 console.
 - Point `TEMP` and `TMP` **outside the repository** for every suite. The Q4 key fixtures refuse to run otherwise.
-- Every pytest run prints one warning: an unknown `asyncio_mode` config option. It is not a test result.
+- The compiler-suite runs print one warning: an unknown `asyncio_mode` config option. It is not a test result.
+  (The cold reviewer's lab-suite run printed none.)
+- **Windows path length.** The repository path is already long. Exporting into a deep scratch folder can push a
+  file path past 259–260 characters, and then Python fails with a misleading `ModuleNotFoundError` or the working
+  folder is refused. The cold reviewer hit both. Export into a short folder (for example `C:/r/<rev>`).
+- **Side effect of the lab suite.** `test_learner_q4.py` (line 245) starts a child Python with `-I`, which ignores
+  `PYTHONDONTWRITEBYTECODE`, so running it inside a worktree leaves untracked `__pycache__` folders. Run it in an
+  export, or delete them afterwards.
+
+**Cold-run record.** On 2026-09-22 an independent reviewer, given only this file (at `d8fea12d`) and the repository,
+reproduced every count in it, including the lab suite, which I had not re-run that day. The problems it found were in
+the instructions, not the numbers; they are fixed below and listed at the end.
 
 ## Two repositories, not one
 
@@ -54,8 +65,11 @@ already hold CAS-Ohm compiler operations and a PCBA reader (for example `codex/h
 
 ### 1a. The implementation × test matrix
 
-Each cell: `quantifiers.py` + `__init__.py` from the row revision, `test_quantifiers.py` from the column revision,
-run as `python -B api/cas_ohm/test_quantifiers.py` from a fresh folder. Script: `receipts_reproduction_pins_20260922/ohm_matrix.py`.
+The module lives at `noetic-compass-scaffold/noetic-compass/api/cas_ohm/`. Each cell: `quantifiers.py` +
+`__init__.py` from the row revision, `test_quantifiers.py` from the column revision, laid out as
+`<folder>/api/__init__.py` (empty) and `<folder>/api/cas_ohm/{__init__,quantifiers,test_quantifiers}.py`, then run
+as `python -B api/cas_ohm/test_quantifiers.py` from `<folder>`. Script:
+`receipts_reproduction_pins_20260922/ohm_matrix.py <path-to-repository> <short-work-folder>`.
 
 | implementation ↓ / tests → | `078d00ed` | `86ba3d75` | `a4b2e0d7` |
 |---|---|---|---|
@@ -84,7 +98,15 @@ The peer audit's probes (`records/peer_audit_20260922/ohm/contract_boundary_prob
 | `r_hidden(1e308, 0.1, 2.0)` | `magnitude=inf`, `r_apparent=inf` | same, uncensored |
 | `r_hidden(8, 0, 2, i_obs_interval=(1, 2))` | `ZeroDivisionError` | the interval path skips the zero guard and crashes |
 | `admissible_trend(2, 8, …, earlier_interval=(3, 1), later_interval=(9, 7), …)` | verdict `RISING` | reversed intervals are accepted |
-| `maturity_q4(Decimal("2.4999…9"))` (53 nines) | band `Q1`, saved `i_q_exact='2.5'` | reopening the saved value gives band **`Q2`** |
+| `maturity_q4(Decimal("2.4999…9"))` (`2.4` followed by 52 nines) | band `Q1`, saved `i_q_exact='2.5'` | reopening the saved value gives band **`Q2`** |
+
+The peer probe file has two more cases not in this table: an unsupported uncertainty-rule label is accepted
+(verdict `RISING`), and two separated exact-Decimal intervals near 1.0 give `NO_TREND` instead of `RISING`.
+
+To run the peer probes yourself: the original file at `0922f339` finds the repository by walking up from its own
+folder and pins `626cc84b`, so it cannot run from an export as written. Use the pinned copy
+`receipts_reproduction_pins_20260922/peer_contract_boundary_probes_pinned_9fe1eb36.py`, which differs only in those
+two lines (it hard-codes the lab worktree path — edit `ROOT` to your own repository path).
 
 **Do not use this module's outputs as dependable readings until these are closed.** A repair exists on
 `codex/ohm-invalid-numbers-20260922` @ `9e2e3a8a` (quantifiers blob `17295cd3…`). It is the other agent's work, not
@@ -113,14 +135,21 @@ PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -B -m pytest -
   tests/test_full_demo_program.py -q -p no:cacheprovider
 ```
 
-Implementation and tests from the **same** revision. Script: `receipts_reproduction_pins_20260922/compiler_suite_by_rev.sh`.
+Implementation and tests from the **same** revision. Script:
+`receipts_reproduction_pins_20260922/compiler_suite_by_rev.sh <path-to-repository> <short-work-folder> <rev>...`.
+At `7f32129d` two of the five files do not exist yet, so the command typed as above stops with `file or directory
+not found` (exit code 4). Drop the missing files, or use the script, which skips them.
 
 | revision | observed | note |
 |---|---|---|
 | `7f32129d` | `601 passed` | only 3 of the 5 files existed yet |
-| `078d00ed` | `458 passed` | the merge; seven passing tests were missing |
+| `078d00ed` | `458 passed` | the merge; seven passing test **functions** were missing |
 | `626cc84b` | `639 passed` | three help-text guards restored |
 | `9fe1eb36` | `643 passed` | the four remaining tests restored |
+
+**Functions versus cases.** The counts are pytest *cases*. Several functions run once per row of a parameter
+table. The seven deleted test functions expand to **185 cases**: that is the whole gap from 458 to 643 (181 from the
+three help-text guards, 4 from the four nesting tests). At `9fe1eb36` the five files give 99 / 48 / 41 / 454 / 1.
 
 The 99 tests in `tests/test_notation_compiler.py` are unchanged since `c3855275`:
 `git diff c3855275 9fe1eb36 -- noetic-compass-scaffold/noetic-compass/tests/test_notation_compiler.py` is empty.
@@ -139,7 +168,19 @@ PYTHONDONTWRITEBYTECODE=1 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -B -m pytest -
 ```
 
 **`348 passed` at `626cc84b`**, reproduced by the peer audit in a complete checkout. The lab folder is unchanged
-from `626cc84b` to `9fe1eb36` (`git diff --stat` is empty), so the pin carries. I did not re-run it on 2026-09-22.
+from `626cc84b` to `9fe1eb36` (`git diff --stat` is empty), so the pin carries. I did not re-run it on 2026-09-22;
+the cold reviewer did, at `9fe1eb36`, and got **`348 passed in 137.81s`**.
+
+**You do not need the full 6 GB checkout.** The cold reviewer's export at `9fe1eb36` was 418 files: the lab folder;
+`_handoffs/FABLE_HELM_CAS_v1`; `noetic-compass-scaffold/noetic-compass/{api, cas-engine/src, cas-native/model}`;
+`dist/cas-offline/api/notation/compiler.py`; two `cas-synthetic` data files; `book/manuscript/FULL_MANUSCRIPT_v2.md`;
+and the Foundations-28 capture file.
+
+**A reproducibility hazard, open.** Several lab tests find the book, the offline compiler, the scaffold and the
+Foundations capture by **searching upward through parent folders**. In this machine's real layout the worktree sits
+inside the main checkout, so that search can leave the lab repository and read the main checkout's files — which
+belong to a different repository and a different revision. A 348 measured inside the worktree may therefore depend
+on files that are not part of the named revision. An export avoids this. The tests themselves are not changed here.
 The peer audit observed that a sparse checkout missing the export schema gives 342 passed / 6 failed — a setup
 error, not a code defect. Takes about three and a half minutes.
 
@@ -147,9 +188,14 @@ error, not a code defect. Takes about three and a half minutes.
 
 ## 4. The book canon
 
+**Run every command in this section in the lab repository.** `dbb388ee` and `d50abbbc` do not exist in the main
+repository, and the main working tree stores many book files CRLF, so the line-ending check gives different answers
+there (24 `w/crlf`, 14 `w/lf`, 1 `w/mixed`, observed by the cold reviewer).
+
 Canon pin `d50abbbc`. `git diff dbb388ee d50abbbc -- book/CAS_PCBA_Engineer/` → 8 files, **202 insertions, 95
 deletions** (commit `0fc6bb30` alone shows 1765/1658: the line-ending mistake fixed by `d50abbbc`).
-`git ls-files --eol -- book/CAS_PCBA_Engineer/*.md` → all 39 files `i/lf w/lf`. Both repositories hold identical
+`git ls-files --eol -- book/CAS_PCBA_Engineer/*.md` (unquoted, so the shell expands the pattern) → all 39 files
+`i/lf w/lf`. Quoted, git also matches one `.md` in a subfolder and lists 40. Both repositories hold identical
 book content (`02_MANIFEST.json`, `canon_pin_cross_repository_check`). Listings: **58 blocks, 42 distinct names**
 (reproduced by the peer audit):
 
@@ -159,7 +205,10 @@ blocks, names = 0, set()
 for f in sorted(pathlib.Path("book/CAS_PCBA_Engineer").glob("*.md")):
     for m in re.finditer(r"^\s*(circuit|board)\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{", f.read_text(encoding="utf-8"), re.M):
         blocks += 1; names.add(m.group(2))
+print("blocks", blocks, "distinct names", len(names))
 ```
+
+The same count comes out at `d50abbbc`, at `9fe1eb36`, and at `eb3c9b1e` in the main repository.
 
 The `gate`/`xor` prefix self-correction:
 
@@ -168,7 +217,8 @@ git show dbb388ee:book/CAS_PCBA_Engineer/Chapter_10_Special_Purpose_Components.m
 git show dbb388ee:book/CAS_PCBA_Engineer/Appendix_E_Exercise_Answers.md | sed -n '327p'
 ```
 
-→ `278:    gate dissonance: XOR< attract, averse >;` and `327:    xor dissonance: XOR< attract, averse >;`.
+→ `278:    gate dissonance: XOR< attract, averse >;        // fires → genuine conflict` and (sed prints no line
+number) `    xor dissonance: XOR< attract, averse >;       // fires only when both active (ambiguity)`.
 
 **Open book issues found by the peer audit — not settled by this package, and not edited:** the breakdown flip is
 conditional in `Appendix_B:59` but automatic in `Appendix_A:40/:121` and `Appendix_C:549`; XOR/XNOR take two
@@ -181,8 +231,11 @@ inputs in `Chapter_10:115–116` and `Appendix_B:389–390` but "two or more" in
 
 ## 5. The compiler comparison that decided the merge — corrected
 
-Digests over LF-normalised bytes: mine (`7f32129d`) `f1a44678438a65c3…`, theirs (`04547c55`) `61ed5a45970459e4…`.
-Three of the original five points stand:
+Digests of `noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`, over LF-normalised bytes: mine
+(`7f32129d`) `f1a44678438a65c3245cfd1192b3f40bdc3db6cdad9217f102fa9ddffc9432e4`, theirs (`04547c55`)
+`61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527`. Run each expression with
+`api.notation.compiler.compile_expression(text).to_dict()` from an export of each revision's
+`noetic-compass-scaffold/noetic-compass`. Three of the original five points stand:
 
 | expression | mine | theirs |
 |---|---|---|
@@ -200,7 +253,9 @@ Two of the five were **false** and are corrected here, not repeated:
 | `7f32129d` (old `.cas` files) | invalid | invalid |
 | `04547c55` (the other agent's edited `.cas` files) | valid | valid |
 
-The files were the variable, not the compiler.
+The files are `docs/CAS_FULL_DEMO_APP.cas` and `docs/CAS_FULL_DEMO_LIB.cas`, both giving the same result. Keep them in
+one folder: APP imports LIB. At `7f32129d` APP fails with `'difference' is reserved` and LIB with `expected fractal,
+got state[C]` (cold reviewer). The files were the variable, not the compiler.
 
 | `let <name> = ^2^C` | before my commit (`7f32129d^`) | mine | theirs |
 |---|---|---|---|
@@ -244,3 +299,19 @@ earlier version of claim GOV-3 said. The refusal exists; my pointer was wrong.
 | pytest "9.1.1" | not reproducible | 9.0.2 |
 | GOV-3 refusal "in VERIFICATION.md" | wrong pointer | `CODEX_CONTINUATION_20260921.md:53–55` |
 | "I verified their work before merging" | UNVERIFIABLE, accepted | section 7 |
+
+## Instruction problems found by the cold run of `d8fea12d`, and fixed in this revision
+
+| found | fix |
+|---|---|
+| section 1 named `api/cas_ohm/` without its full path; script arguments undocumented | full path, folder layout and arguments given |
+| Windows path-length limit broke a hand run (262 chars) and the lab working folder (259) | warning added under Environment |
+| "53 nines" — the probe's number has 52 | corrected; the result is the same either way |
+| the original peer probe cannot run from an export as written | pinned copy named, with the two changed lines |
+| section 2's command, typed exactly, exits 4 at `7f32129d` | explained; use the script or drop missing files |
+| "seven passing tests" versus counts of cases | functions vs cases explained: 7 functions = 185 cases |
+| lab section implied a full 6 GB checkout; upward folder search not mentioned | minimal export listed; hazard recorded as open |
+| "every pytest run prints one warning" — the lab run printed none | narrowed to the compiler runs |
+| section 4 did not name the repository; listing snippet printed nothing; grep/sed output truncated | repository named; `print` added; full lines quoted |
+| section 5 did not name the digest file, the call, or the demo files | all three named |
+| lab suite writes `__pycache__` into the worktree despite `-B` | side effect recorded |

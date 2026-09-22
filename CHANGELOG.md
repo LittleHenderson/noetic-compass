@@ -1,5 +1,27 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - COLD RUN OF THE REPRODUCTION GUIDE: every count reproduced; ten instruction
+problems found and fixed.
+
+An independent reviewer, given only `03_REPRODUCE.md` at `d8fea12d` and the repository, followed it cold from exports.
+**Every count matched**: all 12 CAS-Ohm matrix cells (four also by hand), every open-defect call, the probes (7
+failures, 1 error), the compiler suite at all four revisions (601 / 458 / 639 / 643), the book counts (202/95,
+58 blocks / 42 names), all 21 cells of the comparison tables - and the lab suite, which I had not re-run today:
+**348 passed in 137.81s** at `9fe1eb36`.
+
+The problems were in the instructions. My slips: the long Decimal has **52** nines, not 53; the typed compiler
+command exits 4 at `7f32129d` (only my script skips the two missing files); "every run prints one warning" is false
+for the lab suite. Also missing: full module path and script arguments; the Windows path-length limit (it broke a
+hand run at 262 characters); which repository section 4 runs in; the digest file, the call and the demo files in
+section 5; functions-versus-cases (seven deleted functions = 185 cases = 643 - 458). All fixed, with a table of what
+the cold run found.
+
+**One open reproducibility hazard recorded, not fixed:** several lab tests search UPWARD through parent folders for
+the book, the offline compiler and other inputs. In this machine's layout the worktree sits inside the main checkout,
+so a run inside the worktree can read files from a different repository and revision. Exports avoid it. Also
+recorded: `test_learner_q4.py:245` starts Python with `-I`, so the lab suite writes `__pycache__` into a worktree
+despite `-B`.
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - SELF-REPORT UPDATED FROM THE PEER AUDIT: six more of my errors recorded
 (04_WHAT_I_GOT_WRONG.md items 15-20); claims file annotated in place, nothing deleted.
 
