@@ -1,5 +1,24 @@
 # tksCAS — Changelog
 
+## 2026-09-21 — Q3 loader 0.4: remaining malformed-input errors
+
+The loader now reports Q3LoadError for malformed schema/count/pin/contract
+metadata, undecodable pin/contract/baseline bytes, oversized JSON integers,
+unpaired Unicode surrogates, malformed refusal kinds, and deep chain/AST input.
+JSON nesting is limited to 128 levels before recursive AST helpers are reached.
+Existing file/hash/reference error codes and all pinned data remain unchanged.
+The initial record-count guard incorrectly rejected the baseline file's valid
+`records: null`; it now checks JSONL row files only.
+
+The 56 new regression cases pass; against base `0c4eb7da42389eb7cd94f089e73e150066346afa`
+the same cases yield 48 failures and 8 passes. The existing 82 loader/export
+checks passed with the new loader, and the original worktree's pinned Q3 v0.5
+still loads all 10,421 rows. These are deterministic data checks. No model,
+GPU, cloud, compiler, target, operation contract, or dataset generation ran.
+Unexpected implementation errors and process resource exhaustion are not
+silently converted into data errors. Reconstruction remains structure-checked,
+not independently recompiled by the loader.
+
 ## 2026-09-21 — Codex Helm continuation: Q3 loader 0.3
 
 Fixed exponent-overflow JSON values, malformed visibility declarations, and
