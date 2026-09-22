@@ -32,12 +32,28 @@ _COORD_DOMAIN_RE = re.compile(
 _REGISTER_RE = re.compile(r"\|([TAfE])(?![A-Za-z])")
 _REGISTER_SET_RE = re.compile(r"\|(?:<|\u27e8)([^>\u27e9]+)(?:>|\u27e9)")
 _OMEGA_RE = re.compile(r"(?:Omega|[\u03a9])_[A-Za-z0-9_]+")
+_RECORD_IDENTITY_VERSION = "2"
 
 _DOMAIN_NAMES = {
     "P": "principled",
     "C": "cognitive",
     "E": "evaluative",
     "O": "operational",
+}
+# The ten canonical Noetic NAMES (docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md, Clarification 1). These are the only
+# names allowed in a name slot such as "^6 (Male)". The plain-word glosses in _NOETIC_NAMES below are DESCRIPTIONS
+# for story sentences only; before 2026-09-21 they were also written into the name slot ("^6 (analysis)").
+_NOETIC_CANONICAL_NAMES = {
+    0: "Idea",
+    1: "Mind",
+    2: "Positive",
+    3: "Negative",
+    4: "Vibration",
+    5: "Female",
+    6: "Male",
+    7: "Rhythm",
+    8: "Above/Cause",
+    9: "Below/Effect",
 }
 _NOETIC_NAMES = {
     0: "open possibility",
@@ -149,7 +165,7 @@ class Level3ConversationalGenerator:
     """Deterministic wrapper from Level 2 examples to Level 3 conversations."""
 
     BUCKET = "level3_conversational"
-    GENERATOR_VERSION = "level3_conversational_v1"
+    GENERATOR_VERSION = "level3_conversational_v2_canonical_names"
 
     def __init__(
         self,
@@ -382,19 +398,49 @@ class Level3ConversationalGenerator:
             "domain_summary": _target_summary(domain_targets, "domain"),
         }
 
+        source_meta = source.get("_meta") if isinstance(source.get("_meta"), dict) else {}
+        # Preserve the rendering order (and therefore random draws), but bind
+        # identity to the actual training content as well as the generator.
+        # Previously published v1 rows keep their original identities.
+        record_content = {
+            "source_level2_id": source_id,
+            "bucket": source_bucket,
+            "cas_expression": expression,
+            "user_prompt": _render(style, "user_prompt_templates", values, self.rng),
+            "natural_language_mapping": _render(
+                style, "natural_language_mapping_templates", values, self.rng
+            ),
+            "assistant_response": _render(
+                style, "assistant_response_templates", values, self.rng
+            ),
+            "follow_up_question": _render(
+                style, "follow_up_question_templates", values, self.rng
+            ),
+            "soft_operator_targets": operator_targets,
+            "soft_domain_targets": domain_targets,
+            "tags": _tags_for(source_bucket, expression, source_meta, style_id),
+        }
+        content_sha256 = hashlib.sha256(
+            json.dumps(
+                record_content, sort_keys=True, ensure_ascii=False, separators=(",", ":")
+            ).encode("utf-8")
+        ).hexdigest()
         record_id = _record_id(
             source_id=source_id,
             expression=expression,
             variant_index=variant_index,
             seed=self.seed,
             style_id=style_id,
+            generator_version=self.GENERATOR_VERSION,
+            content_sha256=content_sha256,
         )
-        source_meta = source.get("_meta") if isinstance(source.get("_meta"), dict) else {}
         provenance = {
             "level3_spec_version": "0.1.0",
             "generation_method": "deterministic_template",
             "generator": type(self).__name__,
             "generator_version": self.GENERATOR_VERSION,
+            "record_identity_version": _RECORD_IDENTITY_VERSION,
+            "content_sha256": content_sha256,
             "level2_dataset": Path(source_path).name if source_path is not None else "inline",
             "seed": self.seed,
             "source_path": str(source_path) if source_path is not None else None,
@@ -420,22 +466,7 @@ class Level3ConversationalGenerator:
 
         return ConversationalExample(
             id=record_id,
-            source_level2_id=source_id,
-            bucket=source_bucket,
-            cas_expression=expression,
-            user_prompt=_render(style, "user_prompt_templates", values, self.rng),
-            natural_language_mapping=_render(
-                style, "natural_language_mapping_templates", values, self.rng
-            ),
-            assistant_response=_render(
-                style, "assistant_response_templates", values, self.rng
-            ),
-            follow_up_question=_render(
-                style, "follow_up_question_templates", values, self.rng
-            ),
-            soft_operator_targets=operator_targets,
-            soft_domain_targets=domain_targets,
-            tags=_tags_for(source_bucket, expression, source_meta, style_id),
+            **record_content,
             provenance=provenance,
         )
 
@@ -516,9 +547,14 @@ def _record_id(
     variant_index: int,
     seed: int,
     style_id: str,
+    generator_version: str,
+    content_sha256: str,
 ) -> str:
-    digest = _short_hash(f"{seed}|{source_id}|{variant_index}|{style_id}|{expression}")
-    return f"l3conv-{digest}"
+    identity = [generator_version, seed, source_id, variant_index, style_id, expression, content_sha256]
+    digest = hashlib.sha256(
+        json.dumps(identity, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()[:24]
+    return f"l3conv-v{_RECORD_IDENTITY_VERSION}-{digest}"
 
 
 def _short_hash(value: str) -> str:
@@ -865,7 +901,7 @@ def _cas_reading(expression: str) -> str:
     domain = _top_domain(expression)
     pieces: list[str] = []
     if noetic is not None:
-        pieces.append(f"{_NOETIC_NAMES.get(noetic, f'Noetic ^{noetic}')} as the main noetic signal")
+        pieces.append(f"^{noetic} {_NOETIC_CANONICAL_NAMES.get(noetic, '')} as the main noetic signal".replace("  ", " "))
     if domain is not None:
         pieces.append(f"{_DOMAIN_STORY_NAMES.get(domain, domain)} as the main domain")
     registers = _registers(expression)
@@ -921,7 +957,7 @@ def _conversation_need(source_bucket: str, expression: str, rng: random.Random) 
 def _focus_summary(expression: str) -> str:
     noetic_counts = extract_noetic_counts(expression)
     domain_counts = extract_domain_counts(expression)
-    noetic_part = _axis_focus(noetic_counts, _NOETIC_NAMES, "Noetic")
+    noetic_part = _axis_focus(noetic_counts, _NOETIC_CANONICAL_NAMES, "Noetic")
     domain_part = _axis_focus(domain_counts, _DOMAIN_NAMES, "domain")
     return f"{noetic_part}; {domain_part}; {_feature_summary(expression)}"
 
