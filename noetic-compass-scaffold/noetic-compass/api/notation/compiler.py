@@ -25,6 +25,7 @@ import os
 from pathlib import Path
 import re
 import sys
+import threading
 from typing import Any
 
 try:
@@ -376,26 +377,35 @@ def _load_cas_ohm():
         source = path.read_bytes()
         identity = hashlib.sha256(str(path).encode("utf-8") + b"\0" + source).hexdigest()
         name = "_cas_ohm_compiler_" + identity
-        existing = sys.modules.get(name)
-        if existing is not None:
-            if getattr(existing, "__cas_ohm_identity__", None) != identity:
-                raise CompilerError(CompilerStage.EXECUTION, "CAS-Ohm private module namespace is occupied")
-            _CAS_OHM_MODULE = existing
-            return existing
         spec = importlib.util.spec_from_file_location(name, path)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        try:
-            exec(compile(source, str(path), "exec"), module.__dict__)
-        except Exception:
-            sys.modules.pop(name, None)
-            raise
-        # Receipts describe the bytes actually executed, not a later reread of
-        # a mutable sibling file. These stay fixed for this cached module.
-        module.__cas_ohm_source_sha256_raw__ = hashlib.sha256(source).hexdigest()
-        module.__cas_ohm_source_sha256_lf__ = hashlib.sha256(source.replace(b"\r\n", b"\n")).hexdigest()
-        module.__cas_ohm_loaded_path__ = str(path)
-        module.__cas_ohm_identity__ = identity
+        candidate = importlib.util.module_from_spec(spec)
+        candidate.__cas_ohm_load_lock__ = threading.RLock()
+        # Acquire before publishing: another thread (including a separately
+        # imported copy of this compiler) must wait for complete execution.
+        # setdefault selects exactly one module without replacing a namespace
+        # occupied by unrelated code.
+        with candidate.__cas_ohm_load_lock__:
+            module = sys.modules.setdefault(name, candidate)
+            if module is candidate:
+                try:
+                    exec(compile(source, str(path), "exec"), module.__dict__)
+                except BaseException:
+                    if sys.modules.get(name) is module:
+                        sys.modules.pop(name)
+                    raise
+                # Receipts describe the bytes actually executed, not a later
+                # reread of a mutable sibling file. Cached receipts stay fixed.
+                module.__cas_ohm_source_sha256_raw__ = hashlib.sha256(source).hexdigest()
+                module.__cas_ohm_source_sha256_lf__ = hashlib.sha256(source.replace(b"\r\n", b"\n")).hexdigest()
+                module.__cas_ohm_loaded_path__ = str(path)
+                module.__cas_ohm_identity__ = identity
+            else:
+                load_lock = getattr(module, "__cas_ohm_load_lock__", None)
+                if load_lock is None:
+                    raise CompilerError(CompilerStage.EXECUTION, "CAS-Ohm private module namespace is occupied")
+                with load_lock:
+                    if getattr(module, "__cas_ohm_identity__", None) != identity:
+                        raise CompilerError(CompilerStage.EXECUTION, "CAS-Ohm private module namespace is occupied")
         _CAS_OHM_MODULE = module
         return module
     except (OSError, ImportError, SyntaxError) as exc:
@@ -4616,6 +4626,29 @@ def _evaluate_meta_assertion(op: str, left: Any, right: Any) -> MetaAssertionVal
     raise CompilerError(CompilerStage.EXECUTION, f"unsupported meta assertion {op}")
 
 
+def _contains_cas_ohm_value(value: Any) -> bool:
+    """Find Ohm operands through CAS containers without loading optional code."""
+    module = _CAS_OHM_MODULE
+    if module is None:
+        return False
+    pending = [value]
+    seen: set[int] = set()
+    while pending:
+        item = pending.pop()
+        if isinstance(item, (module.OhmScale, module.OhmQuantity)):
+            return True
+        if id(item) in seen:
+            continue
+        seen.add(id(item))
+        if isinstance(item, ProgramValue):
+            pending.extend(item.results)
+        elif isinstance(item, BindingValue):
+            pending.append(item.value)
+        elif isinstance(item, TupleValue):
+            pending.extend(item.elements)
+    return False
+
+
 def _execute_instruction(stack: list[Any], instruction: Instruction, env: RuntimeEnv) -> None:
     opcode = instruction.opcode
 
@@ -5087,6 +5120,12 @@ def _execute_instruction(stack: list[Any], instruction: Instruction, env: Runtim
 
     right = stack.pop()
     left = stack.pop()
+
+    if _contains_cas_ohm_value(left) or _contains_cas_ohm_value(right):
+        raise CompilerError(
+            CompilerStage.EXECUTION,
+            f"{opcode} cannot operate on CAS-Ohm values; use named ohm_* operations",
+        )
 
     if opcode == "META_ASSERT":
         payload = instruction.arg

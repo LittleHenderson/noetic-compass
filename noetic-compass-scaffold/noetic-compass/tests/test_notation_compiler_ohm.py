@@ -4,6 +4,8 @@ Pure arithmetic only. No model, server, network, calibration, or Rust execution.
 """
 from __future__ import annotations
 
+import builtins
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import importlib.util
 import hashlib
 import json
@@ -13,6 +15,7 @@ import re
 import shutil
 import subprocess
 import sys
+import threading
 import types
 import uuid
 
@@ -170,6 +173,63 @@ def test_untyped_functions_cannot_bypass_runtime_quantity_contracts(source):
     assert artifact.error.startswith("execution:"), artifact.error
 
 
+@pytest.mark.parametrize("operator", ["+", "-", "*", "/", "∘", "->", "<-", "<->"])
+@pytest.mark.parametrize("operand", [SCALE, V, I, R])
+@pytest.mark.parametrize("side", ["left", "right"])
+def test_untyped_functions_cannot_apply_cas_operators_to_ohm_values(operator, operand, side):
+    left, right = (operand, "^2^C") if side == "left" else ("^2^C", operand)
+    artifact = compiler.compile_expression(f"fn combine(x,y):any=x {operator} y; combine({left},{right})")
+    assert not artifact.valid
+    assert artifact.error.startswith("execution:"), artifact.error
+    assert "use named ohm_* operations" in artifact.error
+    assert artifact.to_dict()["result"] is None
+
+
+@pytest.mark.parametrize("operator", ["+", "-"])
+@pytest.mark.parametrize("operand", [V, f"Tuple{{{V}}}"])
+def test_any_bindings_cannot_silently_aggregate_or_discard_ohm_values(operator, operand):
+    artifact = compiler.compile_expression(f"let lhs:any={operand}; let rhs:any={operand}; lhs {operator} rhs")
+    assert not artifact.valid
+    assert "use named ohm_* operations" in artifact.error
+
+
+@pytest.mark.parametrize("operator", ["+", "-"])
+def test_program_containers_cannot_hide_ohm_operands(operator):
+    # A caller can reuse an artifact's program value through the public VM API.
+    program = good(f"let value={V}; ^2^C").result
+    env = compiler.RuntimeEnv(vars={"lhs": program, "rhs": good("^3^C").result})
+    bytecode = [compiler.Instruction("LOAD_VAR", "lhs"), compiler.Instruction("LOAD_VAR", "rhs"),
+                compiler.Instruction("PLUS" if operator == "+" else "MINUS")]
+    with pytest.raises(compiler.CompilerError, match=r"use named ohm_\* operations"):
+        compiler.execute(bytecode, env=env)
+
+
+@pytest.mark.parametrize("source", [
+    'fn combine(x,y):any=x+y; combine(F2,RPM(F2))',
+    'fn remove(x,y):any=x-y; remove(F2,RPM(F2))',
+    'let lhs:any=^2^C; let rhs:any=^3^C; lhs+rhs',
+    'let lhs:any=^2^C; let rhs:any=^3^C; lhs-rhs',
+])
+def test_existing_non_ohm_operator_behavior_remains_valid(source):
+    good(source)
+
+
+@pytest.mark.parametrize("expression", ["|x|", "RPM(x)", "rpm_of(x)", "dominant_state(x)",
+                                        "dominant_domain(x)", "dominant_operator(x)", "+x", "-x"])
+@pytest.mark.parametrize("operand", [SCALE, V, I, R])
+def test_unary_cas_paths_do_not_interpret_any_typed_ohm_values_as_numbers(expression, operand):
+    artifact = compiler.compile_expression(f"let x:any={operand}; {expression}")
+    assert not artifact.valid
+    # Unary +/- are not language operations; the other paths already require
+    # a CAS state, drive, or meta-set at runtime and must reject Ohm values.
+    stage = "parsing:" if expression in {"+x", "-x"} else "execution:"
+    if stage == "parsing:":
+        assert artifact.error.startswith("parsing@"), artifact.error
+    else:
+        assert artifact.error.startswith(stage), artifact.error
+    assert artifact.to_dict()["result"] is None
+
+
 def test_no_rust_operator_is_used_for_ohm_calculation(monkeypatch):
     class ForbiddenEngine:
         def __getattr__(self, name):
@@ -237,6 +297,84 @@ def test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change(t
     assert isolated.compile_expression(FLOW).to_dict()["result"]["value"] == "3"
     assert helper.__cas_ohm_source_sha256_raw__ == hashlib.sha256(executed).hexdigest()
     assert helper.__cas_ohm_source_sha256_lf__ == hashlib.sha256(normalized).hexdigest()
+
+
+@pytest.mark.parametrize("separate_compiler_import", [False, True])
+def test_concurrent_first_load_waits_for_one_completed_helper(tmp_path, monkeypatch, separate_compiler_import):
+    source = Path(compiler.__file__).resolve()
+    shutil.copyfile(source, tmp_path / "compiler.py")
+    shutil.copyfile(source.with_name("cas_ohm.py"), tmp_path / "cas_ohm.py")
+    first = _load_file(tmp_path / "compiler.py")
+    second = _load_file(tmp_path / "compiler.py") if separate_compiler_import else first
+    entered = threading.Event()
+    release = threading.Event()
+    second_started = threading.Event()
+    executions = []
+
+    def paused_compile(data, filename, mode):
+        executions.append(filename)
+        entered.set()
+        assert release.wait(5), "test did not release helper initialization"
+        return builtins.compile(data, filename, mode)
+
+    monkeypatch.setattr(first, "compile", paused_compile, raising=False)
+    if second is not first:
+        monkeypatch.setattr(second, "compile", paused_compile, raising=False)
+
+    def second_load():
+        second_started.set()
+        return second._load_cas_ohm()
+
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        first_result = pool.submit(first._load_cas_ohm)
+        try:
+            assert entered.wait(5)
+            second_result = pool.submit(second_load)
+            assert second_started.wait(5)
+            # Returning a partial module or rejecting our own in-flight module
+            # is wrong: the second caller must wait for successful execution.
+            with pytest.raises(TimeoutError):
+                second_result.result(timeout=0.1)
+        finally:
+            release.set()
+        helper = first_result.result(timeout=5)
+        assert second_result.result(timeout=5) is helper
+    assert len(executions) == 1
+    assert first.compile_expression(FLOW).result.__class__ is helper.OhmQuantity
+    assert second.compile_expression(FLOW).result.__class__ is helper.OhmQuantity
+    assert helper.__cas_ohm_source_sha256_raw__ == hashlib.sha256((tmp_path / "cas_ohm.py").read_bytes()).hexdigest()
+
+
+def test_helper_loader_does_not_replace_an_occupied_private_namespace(tmp_path, monkeypatch):
+    source = Path(compiler.__file__).resolve()
+    shutil.copyfile(source, tmp_path / "compiler.py")
+    helper_path = tmp_path / "cas_ohm.py"
+    shutil.copyfile(source.with_name("cas_ohm.py"), helper_path)
+    identity = hashlib.sha256(str(helper_path.resolve()).encode("utf-8") + b"\0" + helper_path.read_bytes()).hexdigest()
+    name = "_cas_ohm_compiler_" + identity
+    foreign = types.ModuleType(name)
+    monkeypatch.setitem(sys.modules, name, foreign)
+    isolated = _load_file(tmp_path / "compiler.py")
+    result = isolated.compile_expression(FLOW)
+    assert not result.valid
+    assert "private module namespace is occupied" in result.error
+    assert sys.modules[name] is foreign
+
+
+def test_failed_helper_load_cleans_up_before_retry(tmp_path):
+    source = Path(compiler.__file__).resolve()
+    shutil.copyfile(source, tmp_path / "compiler.py")
+    helper_path = tmp_path / "cas_ohm.py"
+    invalid = b"def syntax_error(:\n"
+    helper_path.write_bytes(invalid)
+    identity = hashlib.sha256(str(helper_path.resolve()).encode("utf-8") + b"\0" + invalid).hexdigest()
+    isolated = _load_file(tmp_path / "compiler.py")
+    result = isolated.compile_expression(FLOW)
+    assert not result.valid
+    assert "sibling helper unavailable" in result.error
+    assert "_cas_ohm_compiler_" + identity not in sys.modules
+    shutil.copyfile(source.with_name("cas_ohm.py"), helper_path)
+    assert isolated.compile_expression(FLOW).valid
 
 
 def test_missing_sibling_fails_closed_without_using_available_other_checkout(tmp_path):
