@@ -480,3 +480,22 @@ def test_direct_result_cannot_change_its_calculation_reference_or_notes(scale, f
     with pytest.raises(ohm.CasOhmError) as caught:
         ohm.OhmQuantity(**fields)
     assert caught.value.code == "OHM_PROVENANCE"
+
+
+@pytest.mark.skipif(not hasattr(sys, "set_int_max_str_digits"), reason="Python lacks integer-string limit control")
+@pytest.mark.parametrize("stage", ["declaration", "serialization"])
+def test_host_integer_string_limit_cannot_leak_untyped_exceptions(scale, stage):
+    # This exact integer fits the helper's 4096-bit budget, but has more than
+    # the host's minimum configurable 640 decimal digits. The declared exact
+    # arithmetic contract and serialized evidence must survive that setting.
+    value = 1 << 3000
+    prepared = quantity(scale, "drive", value)
+    baseline = prepared.to_dict()
+    old_limit = sys.get_int_max_str_digits()
+    try:
+        sys.set_int_max_str_digits(640)
+        result = (quantity(scale, "drive", value).to_dict()
+                  if stage == "declaration" else prepared.to_dict())
+        assert result == baseline
+    finally:
+        sys.set_int_max_str_digits(old_limit)
