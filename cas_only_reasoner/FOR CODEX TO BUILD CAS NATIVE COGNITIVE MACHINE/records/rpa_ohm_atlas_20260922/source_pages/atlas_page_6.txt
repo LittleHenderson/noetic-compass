@@ -1,0 +1,24 @@
+CAS-RPA  /  DESIGN ATLAS v0.1
+PLATE 04 / COORDINATES
+16 SEPTEMBER 2026  /  PROPOSED ARCHITECTURE
+06
+The present inside the simplex
+p* = (0.10, 0.30, 0.60)
+G1
+G2
+G3
+z = 0
+ALR FRAME
+Present is the reference origin.
+Left: a three-group illustration with composition (10%, 30%, 60%). Right: a relative coordinate view centered on that state. The triangle is a toy
+aggregation, not the entire 40-component CAS profile.
+The cited Noetic Topos defines 40 positive coordinates whose sum is one, giving the open simplex of dimension 39.
+Its geometric layer is separate from the site/topos construction. [C5, §8 and Remark 8.6]
+Keep that profile unchanged. To make the present p* the origin, use relative log-ratio coordinates for i = 1,…,39:
+[M3; proposed centering]
+zᵢ(p; p*) = ln(pᵢ / p₄₀) − ln(p*ᵢ / p*₄₀)
+At p = p*, every zᵢ is zero. A different reference shifts the coordinates but does not change the underlying state
+or its history.
+This coordinate map reaches an unbounded real space while the simplex remains bounded. Circles drawn in that coordinate view
+generally distort when mapped back. ALR is not distance-preserving; it must not silently replace the source’s Fisher–Rao metric. Exact
+zeros require a separate boundary policy. [M3, M4; C5, §8]

@@ -1,0 +1,71 @@
+CAS-RPA  /  DESIGN ATLAS v0.1
+CAS FOUNDATION
+16 SEPTEMBER 2026  /  PROPOSED ARCHITECTURE
+07
+Forty coordinates, not forty futures
+P / Principled
+C / Cognitive
+E / Evaluative
+O / Operational
+^0 Idea
+p[0,P]
+p[0,C]
+p[0,E]
+p[0,O]
+^1 Mind
+p[1,P]
+p[1,C]
+p[1,E]
+p[1,O]
+^2 Positive
+p[2,P]
+p[2,C]
+p[2,E]
+p[2,O]
+^3 Negative
+p[3,P]
+p[3,C]
+p[3,E]
+p[3,O]
+^4 Vibration
+p[4,P]
+p[4,C]
+p[4,E]
+p[4,O]
+^5 Female
+p[5,P]
+p[5,C]
+p[5,E]
+p[5,O]
+^6 Male
+p[6,P]
+p[6,C]
+p[6,E]
+p[6,O]
+^7 Rhythm
+p[7,P]
+p[7,C]
+p[7,E]
+p[7,O]
+^8 Above/Cause
+p[8,P]
+p[8,C]
+p[8,E]
+p[8,O]
+^9 Below/Effect
+p[9,P]
+p[9,C]
+p[9,E]
+p[9,O]
+The 10 Noetics × 4 Processing Domains supply 40 coordinate labels. Their simplex has 39 independent coordinates because of the sum-to-one
+constraint. [C1, §2.2–2.3; C5, Definition 8.1]
+A profile p describes a modeled mixture over these labels. It is not automatically a probability distribution over
+future events. A 60% activation or composition weight does not mean an outcome has a 60% chance of occurring.
+Nor does p encode an entire reality. Two different projects can have the same CAS profile. Store the actual idea
+content, context, resources, observations and time in the node record; the 40-component profile is a descriptor
+attached to it.
+Do not collapse the namespaces
+Noetic = operation label. Domain = processing level. Drive = local motive. Register = mode of operation.
+Foundation = goal class. None is interchangeable with a petal count or a geometric axis. [C1; C3]
+Registers retain the source spelling: |T Transcendent, |A Analytical, |f Affective and |E Embodied. The |E register is not the E Evaluative
+Domain. [C1, §2.5]

@@ -1,0 +1,613 @@
+{
+  "addresses": {
+    "board-r4": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-board",
+        "node_id": "board-r4",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/board-r4?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=demo-board"
+    },
+    "board-r6": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-board",
+        "node_id": "board-r6",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v2"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/board-r6?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v2&item=demo-board"
+    },
+    "calculation-r4": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-calculation",
+        "node_id": "calculation-r4",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/calculation-r4?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=demo-calculation"
+    },
+    "calculation-r6": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-calculation",
+        "node_id": "calculation-r6",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v2"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/calculation-r6?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v2&item=demo-calculation"
+    },
+    "note-unprofiled": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "unprofiled-note",
+        "node_id": "note-unprofiled",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/note-unprofiled?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=unprofiled-note"
+    },
+    "project": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "ohm-project",
+        "node_id": "project",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/project?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=ohm-project"
+    },
+    "resistor-r4": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-resistor",
+        "node_id": "resistor-r4",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/resistor-r4?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=demo-resistor"
+    },
+    "resistor-r6": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-resistor",
+        "node_id": "resistor-r6",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v2"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/resistor-r6?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v2&item=demo-resistor"
+    },
+    "stage-r4": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-stage",
+        "node_id": "stage-r4",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v1"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/stage-r4?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v1&item=demo-stage"
+    },
+    "stage-r6": {
+      "address": {
+        "context_sha256": "ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b",
+        "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+        "item_id": "demo-stage",
+        "node_id": "stage-r6",
+        "schema_version": "cas.rpa.ohm-address/0.1",
+        "version_id": "v2"
+      },
+      "uri": "cas-rpa://8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3/stage-r6?context=ccbdea6ce4db824cfd869b5525733a3efe256fcd01306a24a7447ae6647a5d4b&version=v2&item=demo-stage"
+    }
+  },
+  "checks": {
+    "all_exact_addresses_resolve": true,
+    "declared_present_maps_to_zero": true,
+    "focus_and_reference_leave_present_and_source_unchanged": true,
+    "inverse_uses_actual_reference_and_round_trips": true,
+    "named_profile_order_permutation_round_trips": true,
+    "nested_containment_and_breadcrumb_return": true,
+    "pcba_compiler_projection_quantity_equality": true,
+    "reference_change_identity": true,
+    "renderer_dispatch_and_source_immutability": true,
+    "same_profile_does_not_merge_identity": true,
+    "saved_versions_remain_separate": true,
+    "source_hashes_unchanged_during_reproduction": true,
+    "unassigned_profile_remains_unassigned": true,
+    "wire_decode_and_all_record_replay": true
+  },
+  "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+  "mathematics": {
+    "alternate_order": "P,C,E,O x ^0..^9; domain-major",
+    "alternative_centered_coordinates": [
+      1.3862943611198906,
+      0.0,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453,
+      0.6931471805599453
+    ],
+    "basis": "declared-demo-noetic-domain-basis-v1",
+    "canonical_order": "^0..^9 x P,C,E,O; row-major",
+    "changed_reference_coordinates": [
+      -1.3862943611198906,
+      0.0,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453,
+      -0.6931471805599453
+    ],
+    "denominator_label": "^9/O",
+    "max_absolute_round_trip_error": 2.0816681711721685e-17,
+    "numerical_policy": {
+      "boundary_policy": "reject zero, subnormal, nonfinite, or rounded-to-one inverse components; no clipping or imputation",
+      "coordinate_absolute_tolerance": 2e-13,
+      "coordinate_output": "39 approximate binary64 natural log ratios in canonical order",
+      "denominator_label": "^9/O",
+      "inverse_output": "40 approximate binary64 components; not an exact recorded profile",
+      "measurement_status": "NO_MEASUREMENT_PERFORMED",
+      "metric_status": "CHART_ONLY_NOT_FISHER_RAO_OR_TRANSITION_COST",
+      "minimum_inverse_component": 2.2250738585072014e-308,
+      "normalization_absolute_tolerance": 2e-15,
+      "profile_input": "forty canonical positive rational strings; exact sum one; 128-bit integers",
+      "reference_rule": "explicit supplied profile; no uniform default",
+      "round_trip_absolute_tolerance": 0.0,
+      "round_trip_relative_tolerance": 5e-13,
+      "schema_version": "cas.rpa.centered-alr/0.1"
+    },
+    "present_centered_coordinates": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "recovered_alternative_profile": [
+      0.04999999999999998,
+      0.012499999999999999,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.025,
+      0.012499999999999999
+    ]
+  },
+  "navigation": {
+    "present_after": "project",
+    "present_before": "project",
+    "source_after_sha256": "25656fb5ffdb56f9aa4b097b998880db0a155bd80fd17d89d3b02287aa92c7b9",
+    "source_before_sha256": "25656fb5ffdb56f9aa4b097b998880db0a155bd80fd17d89d3b02287aa92c7b9",
+    "steps": [
+      {
+        "action": "start",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "project",
+          "path": [
+            "project"
+          ],
+          "reference_node_id": "project",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        }
+      },
+      {
+        "action": "enter",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "board-r4",
+          "path": [
+            "project",
+            "board-r4"
+          ],
+          "reference_node_id": "project",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "board-r4"
+      },
+      {
+        "action": "enter",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "stage-r4",
+          "path": [
+            "project",
+            "board-r4",
+            "stage-r4"
+          ],
+          "reference_node_id": "project",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "stage-r4"
+      },
+      {
+        "action": "enter",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "resistor-r4",
+          "path": [
+            "project",
+            "board-r4",
+            "stage-r4",
+            "resistor-r4"
+          ],
+          "reference_node_id": "project",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "resistor-r4"
+      },
+      {
+        "action": "inspect",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "calculation-r4",
+          "path": [
+            "project",
+            "board-r4",
+            "stage-r4",
+            "resistor-r4"
+          ],
+          "reference_node_id": "project",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "calculation-r4"
+      },
+      {
+        "action": "change_reference",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "calculation-r4",
+          "path": [
+            "project",
+            "board-r4",
+            "stage-r4",
+            "resistor-r4"
+          ],
+          "reference_node_id": "board-r6",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "board-r6"
+      },
+      {
+        "action": "inspect_hypothetical_alternative",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "calculation-r6",
+          "path": [
+            "project",
+            "board-r4",
+            "stage-r4",
+            "resistor-r4"
+          ],
+          "reference_node_id": "board-r6",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        },
+        "node_id": "calculation-r6"
+      },
+      {
+        "action": "return_to_project",
+        "cursor": {
+          "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+          "focus_node_id": "project",
+          "path": [
+            "project"
+          ],
+          "reference_node_id": "board-r6",
+          "schema_version": "cas.rpa.ohm-navigation/0.1"
+        }
+      }
+    ]
+  },
+  "ohm_calculations": {
+    "case-r4": {
+      "compiler_expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+      "drive_literal": "12",
+      "exact_value": {
+        "denominator": "1",
+        "numerator": "3"
+      },
+      "implementation_sha256_lf": {
+        "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+        "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+      },
+      "measurement_status": "NO_MEASUREMENT_PERFORMED",
+      "quantity_record_sha256": "fc85d1fa3c3d7b3d3fb254c992498b2242950f2750a261c8ce37c17227243116",
+      "receipt_sha256": "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0",
+      "resistance_literal": "4",
+      "result": "3"
+    },
+    "case-r6": {
+      "compiler_expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+      "drive_literal": "12",
+      "exact_value": {
+        "denominator": "1",
+        "numerator": "2"
+      },
+      "implementation_sha256_lf": {
+        "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+        "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+      },
+      "measurement_status": "NO_MEASUREMENT_PERFORMED",
+      "quantity_record_sha256": "9f7c7a61909c8cd443eabd536c17e5bd7f742759f683465961270cda0d8f07ec",
+      "receipt_sha256": "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f",
+      "resistance_literal": "6",
+      "result": "2"
+    }
+  },
+  "schema_version": "cas.rpa.ohm-atlas-reproduction/0.1",
+  "scope": {
+    "authority": "INSPECTION_ONLY",
+    "browser_interaction_status": "NOT_RUN_BY_THIS_REPRODUCER",
+    "present": "HOST_DECLARED_FIXTURE_NOT_MEASURED",
+    "profiles": "EXPLICIT_DECLARED_EXAMPLE_VALUES",
+    "runtime": "NOT_CONNECTED",
+    "test_suite_status": "NOT_RUN_BY_THIS_REPRODUCER",
+    "training": "NOT_RUN"
+  },
+  "source_hashes": {
+    "cncm/canonical.py": {
+      "bytes": 1696,
+      "sha256_raw": "424323335452fecd26cd6659136475c0fd19bda695ab07811d34d1734564877a"
+    },
+    "cncm/model.py": {
+      "bytes": 58492,
+      "sha256_raw": "aafa82f0267d0e741a90ba095d939da47401be577b5682832608a6845be54766"
+    },
+    "cncm/rpa_coordinates.py": {
+      "bytes": 7661,
+      "sha256_raw": "b0be441b571081753651ac15026a75e06def4f5fd754d8f4df9f27ce08c1eeed"
+    },
+    "cncm/rpa_model.py": {
+      "bytes": 24726,
+      "sha256_raw": "323a53b951644a93603cd2f56204fd5a038a3161f4778e28777e650a4f966f01"
+    },
+    "cncm/rpa_ohm_atlas.py": {
+      "bytes": 30449,
+      "sha256_raw": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f"
+    },
+    "docs/CAS_RPA_MATHEMATICAL_REVIEW.md": {
+      "bytes": 9244,
+      "sha256_raw": "e3a0ffae40ea2a8f5c1d856536749e22e94447f206712c145acaed957a66dd0b"
+    },
+    "records/rpa_001/source_identity.json": {
+      "bytes": 411,
+      "sha256_raw": "4d6a93c605d8a0655cc0681014fe7eb1a85446feb92391d3f0f252c7778de8ca"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_20.png": {
+      "bytes": 75162,
+      "sha256_raw": "0cb5e7cf6408d7b0441349b5458d3178884e3f4e7d2b3979809ade398077d6f4"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_20.txt": {
+      "bytes": 1830,
+      "sha256_raw": "81b94ec6c7952b997b3a345598be463c4ea84bd78676fff2841dbebcf96e9ef2"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_21.png": {
+      "bytes": 70252,
+      "sha256_raw": "7e35790e1059a4843f8abc330667d4030264642ce3e71a26e359513315ade13d"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_21.txt": {
+      "bytes": 1751,
+      "sha256_raw": "4ae7076433685a025931e8b433bdb765b012de6b8be4bb39f3e8b113f769f155"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_22.png": {
+      "bytes": 105771,
+      "sha256_raw": "f0ffbd3d07987f395fc9607d399295c45e628cc9e911ccb0f24fdb969e3d483f"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_22.txt": {
+      "bytes": 1440,
+      "sha256_raw": "2bb3e107ca19379cfeef512111b0e03179a366bae99f383b5b2e3c85fd5cffcf"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_6.png": {
+      "bytes": 75099,
+      "sha256_raw": "39d3b6db2e7c8800502d036dfa2cc15615b249f33ae695e58629e1d7a121a1c8"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_6.txt": {
+      "bytes": 1300,
+      "sha256_raw": "7de559ed6df1591c7d178cfd12bdac56779ed264e3bd692d071be746be02cce2"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_7.png": {
+      "bytes": 85125,
+      "sha256_raw": "76caa31740b4c479ff04efe55730aab4232d89605be9862bd7c0965810eb0108"
+    },
+    "records/rpa_ohm_atlas_20260922/source_pages/atlas_page_7.txt": {
+      "bytes": 1701,
+      "sha256_raw": "03207c893d0143cc22598a8fbb6539ccc4a8a871a262d8e527c69030c40deec6"
+    },
+    "repository/noetic-compass-scaffold/noetic-compass/api/notation/cas_ohm.py": {
+      "bytes": 14027,
+      "sha256_raw": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    "repository/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py": {
+      "bytes": 279903,
+      "sha256_raw": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+    },
+    "research/helm_cas_expression_lab/cas_ohm_connections.py": {
+      "bytes": 18937,
+      "sha256_raw": "20af61f178bc7d423ce71860a432763f7a2d03d66cd1d5c76e60de0aa09bb752"
+    },
+    "research/helm_cas_expression_lab/pcba_check.py": {
+      "bytes": 21391,
+      "sha256_raw": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb"
+    },
+    "research/helm_cas_expression_lab/pcba_component_adapter.py": {
+      "bytes": 17666,
+      "sha256_raw": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd"
+    },
+    "research/helm_cas_expression_lab/pcba_reader.py": {
+      "bytes": 18221,
+      "sha256_raw": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd"
+    },
+    "research/helm_cas_expression_lab/pinned_sources/compiler_pre_ohm_61ed5a45.py": {
+      "bytes": 270085,
+      "sha256_raw": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527"
+    },
+    "tools/render_rpa_ohm_view.py": {
+      "bytes": 38164,
+      "sha256_raw": "6fbe16e18b472846f47cfbccd72baf5209f1cf7a44648ca2872eefb4918cdc4f"
+    },
+    "tools/render_rpa_view.py": {
+      "bytes": 33394,
+      "sha256_raw": "a40e71766f8ffc57398e47e266b820049b3f4dc10e48c18dc1c7acb001d997f7"
+    },
+    "tools/reproduce_rpa_ohm_atlas.py": {
+      "bytes": 15326,
+      "sha256_raw": "f54b51ff118432b0c4c63b521f063868f679122f89b0aabb553ea1a890754c3e"
+    }
+  },
+  "source_reference": {
+    "atlas_pdf_sha256": "e1acd28bbdc91e5b33e1f29f2610e75b80960dc55b6907b1dc34311a3a6386ab",
+    "page_artifacts": "records/rpa_ohm_atlas_20260922/source_pages",
+    "pages": [
+      6,
+      7,
+      20,
+      21,
+      22
+    ],
+    "pdf_read_status": "HISTORICAL_IDENTITY_MATCHED_NOT_REOPENED_THIS_RUN"
+  },
+  "status": "PASS_EXECUTED_DETERMINISTIC_CHECKS"
+}

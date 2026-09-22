@@ -1,5 +1,11 @@
 # CAS-RPA: project fit and first prototype
 
+**2026-09-22 follow-up:** The separate checked CAS-Ohm atlas now supplies explicit
+profile coordinates, nested board-part navigation and saved-view restoration.
+See [current scope and usage](CAS_RPA_OHM_ATLAS_20260922.md). The original native
+episode prototype and its runtime contracts below remain unchanged; its older
+missing-feature statements describe that prototype.
+
 The two supplied PDFs are useful for CNCM. Adopt their typed relationships and
 separation of actual state from exploration. Treat the Noetic Flower as an
 optional concept view of the same data used by an ordinary graph.
@@ -91,4 +97,3 @@ General transition generation, learned planning, full board composition,
 measured40-coordinate assignment and live write controls remain open. Native
 kernel acceptance and current full-project requirement gates remain separate
 from this viewer.
-

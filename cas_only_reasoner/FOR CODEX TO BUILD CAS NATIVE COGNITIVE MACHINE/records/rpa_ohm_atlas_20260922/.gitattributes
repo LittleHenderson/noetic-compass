@@ -1,0 +1,3 @@
+# Retain exact generated test output and source-page bytes on every platform.
+*.xml binary
+source_pages/*.txt -text whitespace=cr-at-eol

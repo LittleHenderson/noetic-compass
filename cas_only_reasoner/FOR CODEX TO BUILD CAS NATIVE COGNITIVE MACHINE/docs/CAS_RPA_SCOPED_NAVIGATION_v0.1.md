@@ -1,5 +1,10 @@
 # Declared-structure navigation v0.1
 
+**2026-09-22 follow-up:** The new CAS-Ohm atlas applies the same contains-only
+inspection rules to checked board/stage/resistor/calculation records and adds
+coordinates plus saved views. See [current scope and usage](CAS_RPA_OHM_ATLAS_20260922.md).
+The compound-runtime adapter and its saved evidence described below are unchanged.
+
 The user's proposed acceptance behavior is useful and concrete: enter a saved
 procedure, enter its declared parts, then return through breadcrumbs while the
 actual execution-state identity stays fixed. This extension implements that

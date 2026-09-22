@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="37" failures="1" skipped="0" tests="282" time="7.636" timestamp="2026-09-22T01:14:51.224810-07:00" hostname="MSI"><testcase classname="tests.test_rpa_coordinates" name="test_source_label_order_and_denominator_are_explicit" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_known_existing_domain_major_order_matches_state_labels" time="0.012" /><testcase classname="tests.test_rpa_coordinates" name="test_reorder_preserves_each_labeled_value_and_exact_bytes" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_pdf_synthetic_fixture_maps_noetic_six_cognitive_to_index_16_in_alternate" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[None]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[order1]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[order2]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[0]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[True]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[row-major]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[PCEO]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[|T,|A,|f,|E]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_unknown_order_never_guessed_or_crosswalked[^0..^9 x T,A,f,E; row-major]" time="0.000" /><testcase classname="tests.test_rpa_coordinates" name="test_order_arguments_are_required" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[None]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile1]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile2]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile3]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile4]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile5]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile6]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile7]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile8]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile9]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile10]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile11]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile12]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile13]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile14]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile15]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile16]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile17]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile18]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile19]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_invalid_profile_is_refused_without_normalization_or_imputation[profile20]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_actual_reference_maps_exactly_to_zero_and_recovers_itself[profile0]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_actual_reference_maps_exactly_to_zero_and_recovers_itself[profile1]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_actual_reference_maps_exactly_to_zero_and_recovers_itself[profile2]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_zero_is_nonuniform_when_actual_reference_is_nonuniform" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_pdf_fixture_has_only_declared_coordinate_displacement_from_uniform" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_each_coordinate_matches_the_printed_two_log_ratio_formula" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_denominator_change_shifts_all_thirty_nine_coordinates" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_reference_change_shifts_chart_without_changing_underlying_profile" time="0.002" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[0]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[1]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[2]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[3]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[4]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[5]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[6]" time="0.002" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[7]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[8]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[9]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[10]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[11]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[12]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[13]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[14]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[15]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[16]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[17]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[18]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_nonuniform_profiles_round_trip_using_nonuniform_reference[19]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_extreme_but_valid_exact_profile_round_trips_without_flooring" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_near_one_exact_ratio_does_not_disappear_before_logarithm" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_mixed_input_orders_and_requested_inverse_output_order" time="0.002" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[None]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates1]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates2]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates3]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates4]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates5]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates6]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates7]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates8]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates9]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates10]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates11]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_bad_coordinates_fail_with_contract_error[coordinates12]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_refuses_nonrepresentable_interior_instead_of_clipping[coordinates0]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_refuses_nonrepresentable_interior_instead_of_clipping[coordinates1]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_refuses_nonrepresentable_interior_instead_of_clipping[coordinates2]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_refuses_nonrepresentable_interior_instead_of_clipping[coordinates3]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_inverse_refuses_nonrepresentable_interior_instead_of_clipping[coordinates4]" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_log_sum_exp_can_recover_finite_profile_when_naive_exponentials_overflow" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_decimal_context_does_not_change_coordinate_arithmetic" time="0.002" /><testcase classname="tests.test_rpa_coordinates" name="test_calculated_profile_is_not_silently_admitted_as_exact_input" time="0.001" /><testcase classname="tests.test_rpa_coordinates" name="test_policy_declares_approximation_and_no_metric_or_measurement_claim" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_real_compiler_and_pcba_exact_results_and_provenance" time="0.358" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_demo_is_deterministic_and_round_trips_wire" time="0.163" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_full_sources_and_expressions_are_preserved" time="0.055" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_supplied_observation_unicode_reference_remains_unverified" time="0.036" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_saved_versions_share_identity_but_not_node_addresses" time="0.219" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_equal_profiles_never_merge_identity" time="0.135" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_navigation_and_reference_preserve_present_source_and_saved_addresses" time="0.405" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_initial_coordinate_profiles_explicit_and_nonuniform_alternative" time="0.053" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_absent_present_profile_stays_absent_until_explicit_reference" time="0.251" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_incompatible_basis_is_explicit_without_guessing_mapping" time="0.090" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_explicit_alternate_order_is_converted_and_retained" time="0.036" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path0-cas.rpa.ohm-atlas/99]" time="0.008" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path1-CONNECTED]" time="0.046" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path2-MEASURED]" time="0.046" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path3-fabricated-reference]" time="0.046" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path4-0000000000000000000000000000000000000000000000000000000000000000]" time="0.045" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path5-0000000000000000000000000000000000000000000000000000000000000000]" time="0.045" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path6-0000000000000000000000000000000000000000000000000000000000000000]" time="0.047" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path7-1000]" time="0.047" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path8-VERIFIED]" time="0.045" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path9-1000]" time="0.051" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path10-ohm_flow(12, 4)]" time="0.044" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path11-0000000000000000000000000000000000000000000000000000000000000000]" time="0.045" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path12-EXECUTE]" time="0.044" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path13-board-r6]" time="0.043" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path14-board-r6]" time="0.043" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_resealed_record_tampering_is_rejected[path15-forged-label]" time="0.043" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;0]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;1]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;2]" time="0.003" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;3]" time="0.003" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;4]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;5]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;6]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;7]" time="0.003" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;8]" time="0.005" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;9]" time="0.009" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;10]" time="0.010" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;11]" time="0.008" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;12]" time="0.005" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;13]" time="0.005" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;14]" time="0.008" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;15]" time="0.008" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;16]" time="0.014" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;17]" time="0.015" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;18]" time="0.005" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;19]" time="0.004" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;20]" time="0.004" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;21]" time="0.003" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;22]" time="0.003" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;23]" time="0.026" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;24]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;25]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;26]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;27]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;28]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;29]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_declarations_fail_closed[&lt;lambda&gt;30]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[object]" time="0.001" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[list]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[null]" time="0.001" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[utf8]" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[duplicate-key]" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[nan]" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[infinity]" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[depth]" time="0.002" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wire_decoder_rejects_invalid_unsupported_and_unbounded[size]" time="0.000" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_structural_budget_and_cycles_rejected_before_build" time="0.006" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wrong_address_bindings_rejected[document_sha256-0000000000000000000000000000000000000000000000000000000000000000]" time="0.082" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wrong_address_bindings_rejected[context_sha256-0000000000000000000000000000000000000000000000000000000000000000]" time="0.081" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wrong_address_bindings_rejected[version_id-v999]" time="0.081" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wrong_address_bindings_rejected[item_id-wrong]" time="0.081" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_wrong_address_bindings_rejected[schema_version-old]" time="0.082" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_stale_snapshot_address_and_cursor_rejected" time="0.195" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;0]" time="0.092" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;1]" time="0.096" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;2]" time="0.094" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;3]" time="0.090" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;4]" time="0.093" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;5]" time="0.088" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;6]" time="0.097" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;7]" time="0.087" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;8]" time="0.089" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_invalid_navigation_cannot_change_saved_document[&lt;lambda&gt;9]" time="0.090" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_noncanonical_address_text_refused[#fragment]" time="0.042" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_noncanonical_address_text_refused[&amp;item=duplicate]" time="0.042" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_noncanonical_address_text_refused[&amp;extra=x]" time="0.041" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_maximum_identifiers_have_round_trippable_exact_addresses" time="0.001" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_cross_checkout_lab_module_is_refused" time="0.001" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_view_payload_is_detached_and_contains_all_bound_nodes" time="0.056" /><testcase classname="tests.test_rpa_ohm_atlas" name="test_payload_validation_runs_once" time="0.054" /><testcase classname="tests.test_rpa_model" name="test_atlas_roundtrip_and_canonical_record_order" time="0.002" /><testcase classname="tests.test_rpa_model" name="test_oversized_field_total_is_rejected_before_serialization" time="0.003" /><testcase classname="tests.test_rpa_model" name="test_focus_hypothesis_and_expansion_do_not_change_present_or_records" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_same_idea_can_have_multiple_contexts_and_refined_views" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_part_projection_does_not_imply_same_variable_subset" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_refinement_requires_explicit_subset_and_identical_context[None-ctx0]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_refinement_requires_explicit_subset_and_identical_context[members1-ctx1]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_refinement_requires_explicit_subset_and_identical_context[members2-ctx2]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_refinement_requires_explicit_subset_and_identical_context[members3-ctx3]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_empty_finite_region_is_explicit_not_unknown" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_refinement_rejects_conflicting_shared_fields_and_accepts_added_detail" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_contains_part_cycles_rejected_while_typed_feedback_is_finite" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_pairwise_overlap_does_not_certify_common_three_way_overlap" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_common_witness_certificate_binds_every_region_and_version" time="0.002" /><testcase classname="tests.test_rpa_model" name="test_geometric_or_unbound_overlap_is_not_accepted" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_compatibility_checks_shared_fields_under_same_observation_and_version" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_depth_node_and_generator_limits_leave_explicit_deferred_work" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_shared_constituent_is_reused_and_new_version_is_not_collapsed" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_flat_graph_traversal_matches_typed_graph_with_same_budget" time="0.002" /><testcase classname="tests.test_rpa_model" name="test_optional_profile_is_exact_descriptor_and_never_created_by_default" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile0-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile1-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile2-None]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile3-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile4-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile5-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile6-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile7-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile8-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile9-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[profile10-test]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_malformed_profiles_rejected[None-orphan basis]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[True-1]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[1-True]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[-1-1]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[33-1]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[1-0]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[1-513]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_expansion_budgets_are_strict_and_bounded[1.0-2]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;0]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;1]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;2]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;3]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;4]" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;5]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;6]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;7]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_wire_decoding_rejects_unknown_types_versions_and_fields[&lt;lambda&gt;8]" time="0.001" /><testcase classname="tests.test_rpa_model" name="test_transition_evidence_and_relation_metadata_are_not_interchangeable" time="0.000" /><testcase classname="tests.test_rpa_model" name="test_returned_wire_is_independent_of_frozen_atlas_records" time="0.001" /><testcase classname="tests.test_rpa_scoped_compound" name="test_checked_correction_and_rollback_keep_current_identity_and_original_links[checked_solution]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_checked_correction_and_rollback_keep_current_identity_and_original_links[corrected_reuse]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_checked_correction_and_rollback_keep_current_identity_and_original_links[compound_rollback]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_checked_correction_and_rollback_keep_current_identity_and_original_links[primitive_rollback]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_all_ten_actual_packages_have_no_assigned_geometry_or_overlap_proof" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_declared_calls_bindings_and_instructions_match_retained_artifacts[checked_solution]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_declared_calls_bindings_and_instructions_match_retained_artifacts[corrected_reuse]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_declared_calls_bindings_and_instructions_match_retained_artifacts[compound_rollback]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_declared_calls_bindings_and_instructions_match_retained_artifacts[primitive_rollback]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_recursive_navigation_and_breadcrumbs_preserve_current" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[True]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[False]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[1.0]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[-1]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[33]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[0]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_breadcrumb_requires_raw_in_range_integer[None]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_leaf_entry_nonchild_jump_and_wrong_snapshot_are_refused" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_path_is_immutable_bounded_acyclic_and_contains_only" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_resealed_projection_tampering_is_reconstructed_and_refused[label]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_resealed_projection_tampering_is_reconstructed_and_refused[binding]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_resealed_projection_tampering_is_reconstructed_and_refused[current]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_resealed_projection_tampering_is_reconstructed_and_refused[extra_field]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_resealed_projection_tampering_is_reconstructed_and_refused[profile]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_forged_source_current_identity_is_refused" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_source_step_declaration_cannot_disagree_with_retained_program" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_output_does_not_alias_mutable_caller_source" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_renamed_source_primitive_cannot_claim_original_artifact_identity" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_whole_retained_step_set_must_match_exact_program[omit_node_and_edge]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_whole_retained_step_set_must_match_exact_program[omit_edge_only]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_whole_retained_step_set_must_match_exact_program[extra_step]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_whole_retained_step_set_must_match_exact_program[rename_step]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_primitive_dependency_edge_must_equal_retained_program_pin[omit]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_primitive_dependency_edge_must_equal_retained_program_pin[redirect]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_primitive_dependency_edge_must_equal_retained_program_pin[wrong_relation]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_primitive_dependency_edge_must_equal_retained_program_pin[wrong_evidence]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_scoped_compound" name="test_primitive_dependency_edge_must_equal_retained_program_pin[duplicate]" time="0.000"><error message="failed on setup with &quot;FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'&quot;">@pytest.fixture(scope='module')
+    def accepted():
+&gt;       raw = (ACCEPTANCE/'receipt.json').read_bytes()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_rpa_scoped_compound.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1019: in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/...as_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_compound_001/acceptance_002/receipt.json')
+mode = 'rb', buffering = -1, encoding = None, errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\records\\rpa_compound_001\\acceptance_002\\receipt.json'
+
+C:\Users\wakil\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError</error></testcase><testcase classname="tests.test_rpa_view" name="test_actual_replayed_episode_renders_deterministically_without_mutation" time="0.311" /><testcase classname="tests.test_rpa_view" name="test_hostile_labels_remain_inert_data" time="0.006" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;0]" time="0.001" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;1]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;2]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;3]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;4]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;5]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;6]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;7]" time="0.004" /><testcase classname="tests.test_rpa_view" name="test_conflicting_identity_and_unsafe_contracts_fail_closed[&lt;lambda&gt;8]" time="0.002" /><testcase classname="tests.test_rpa_view" name="test_partial_acceptance_and_rejection_details_are_preserved" time="0.006" /><testcase classname="tests.test_rpa_view" name="test_cli_path_boundary_and_duplicate_json_keys" time="0.001" /><testcase classname="tests.test_rpa_view" name="test_cli_writes_only_distinct_bounded_html" time="0.105" /><testcase classname="tests.test_rpa_view" name="test_actual_browser_focus_layout_filter_injection_and_offline_behavior" time="1.026"><failure message="AssertionError: &#10;  node:internal/modules/run_main:107&#10;      triggerUncaughtException(&#10;      ^&#10;  ErrorEvent {&#10;    Symbol(type): 'error',&#10;    Symbol(kTarget): WebSocket {&#10;      Symbol(kEvents): SafeMap(3) {&#10;        'message' =&gt; &lt;ref *1&gt; {&#10;          size: 1,&#10;          next: Listener {&#10;            next: undefined,&#10;            previous: [Circular *1],&#10;            listener: [Function (anonymous)],&#10;            flags: 0,&#10;            callback: [Function (anonymous)]&#10;          },&#10;          resistStopPropagation: false&#10;        },&#10;        'open' =&gt; &lt;ref *2&gt; {&#10;          size: 1,&#10;          next: Listener {&#10;            next: undefined,&#10;            previous: [Circular *2],&#10;            listener: [Function (anonymous)],&#10;            flags: 0,&#10;            callback: [Function (anonymous)]&#10;          },&#10;          resistStopPropagation: false&#10;        },&#10;        'error' =&gt; &lt;ref *3&gt; {&#10;          size: 1,&#10;          next: Listener {&#10;            next: undefined,&#10;            previous: [Circular *3],&#10;            listener: [Function (anonymous)],&#10;            flags: 0,&#10;            callback: [Function (anonymous)]&#10;          },&#10;          resistStopPropagation: false&#10;        }&#10;      },&#10;      Symbol(events.maxEventTargetListeners): 10,&#10;      Symbol(events.maxEventTargetListenersWarned): false,&#10;      Symbol(kHandlers): SafeMap(0) {}&#10;    },&#10;    Symbol(kIsBeingDispatched): false,&#10;    Symbol(kInPassiveListener): false&#10;  }&#10;  &#10;  Node.js v24.11.1&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['C:\\Program Files\\nodejs\\node.EXE', '--input-type=module', '-e', '\nconst [url,pageUrl,scree...feMap(0) {}\n  },\n  Symbol(kIsBeingDispatched): false,\n  Symbol(kInPassiveListener): false\n}\n\nNode.js v24.11.1\n&quot;).returncode">document = {'atlas': {'current_state_id': 'native-state-f7bfb797bd91602ecc2af5fbecbe76d3391c475aa05d95f3b57dc7aefe147e19', 'focus...te trusted-host operation.'], 'readiness': 'requires_new_episode'}], 'schema_version': 'cncm.native-rpa-view/0.1', ...}
+
+    @pytest.mark.skipif(CHROME is None or shutil.which("node") is None, reason="Chromium and Node are optional local browser tools")
+    def test_actual_browser_focus_layout_filter_injection_and_offline_behavior(document):
+        scratch = viewer.PROJECT_ROOT / "records/rpa_001/_scratch"
+        scratch.mkdir(parents=True, exist_ok=True)
+        # Keep Chrome's own profile paths below its Windows file-path limit.
+        with tempfile.TemporaryDirectory(prefix="b", dir=scratch) as directory:
+            directory = Path(directory)
+            wire = deepcopy(document)
+            wire["atlas"]["nodes"][0]["label"] = '&lt;/script&gt;&lt;img src="https://invalid.example/leak" onerror="globalThis.viewerPwned=true"&gt;'
+            page = directory / "view.html"
+            page.write_text(viewer.render_rpa_view(wire), encoding="utf-8")
+            profile = directory
+            process = subprocess.Popen([str(CHROME), "--headless=new", "--disable-gpu", "--no-first-run",
+                "--no-default-browser-check", "--disable-background-networking", "--disable-extensions",
+                "--remote-debugging-port=0", "--user-data-dir=" + str(profile), "about:blank"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
+            target_websocket = None
+            try:
+                port_file = profile / "DevToolsActivePort"
+                deadline = time.monotonic() + 15
+                while not port_file.exists() and time.monotonic() &lt; deadline and process.poll() is None:
+                    time.sleep(.05)
+                assert port_file.exists(), "headless browser did not expose its local test port"
+                port = port_file.read_text().splitlines()[0]
+                with urllib.request.urlopen("http://127.0.0.1:" + port + "/json/list", timeout=5) as response:
+                    targets = json.load(response)
+                target = next(row for row in targets if row["type"] == "page")
+                target_websocket = target["webSocketDebuggerUrl"]
+                result = subprocess.run([shutil.which("node"), "--input-type=module", "-e", CDP_CHECK,
+                    target["webSocketDebuggerUrl"], page.as_uri(), ""], capture_output=True, text=True, timeout=30)
+&gt;               assert result.returncode == 0, result.stderr
+E               AssertionError: 
+E                 node:internal/modules/run_main:107
+E                     triggerUncaughtException(
+E                     ^
+E                 ErrorEvent {
+E                   Symbol(type): 'error',
+E                   Symbol(kTarget): WebSocket {
+E                     Symbol(kEvents): SafeMap(3) {
+E                       'message' =&gt; &lt;ref *1&gt; {
+E                         size: 1,
+E                         next: Listener {
+E                           next: undefined,
+E                           previous: [Circular *1],
+E                           listener: [Function (anonymous)],
+E                           flags: 0,
+E                           callback: [Function (anonymous)]
+E                         },
+E                         resistStopPropagation: false
+E                       },
+E                       'open' =&gt; &lt;ref *2&gt; {
+E                         size: 1,
+E                         next: Listener {
+E                           next: undefined,
+E                           previous: [Circular *2],
+E                           listener: [Function (anonymous)],
+E                           flags: 0,
+E                           callback: [Function (anonymous)]
+E                         },
+E                         resistStopPropagation: false
+E                       },
+E                       'error' =&gt; &lt;ref *3&gt; {
+E                         size: 1,
+E                         next: Listener {
+E                           next: undefined,
+E                           previous: [Circular *3],
+E                           listener: [Function (anonymous)],
+E                           flags: 0,
+E                           callback: [Function (anonymous)]
+E                         },
+E                         resistStopPropagation: false
+E                       }
+E                     },
+E                     Symbol(events.maxEventTargetListeners): 10,
+E                     Symbol(events.maxEventTargetListenersWarned): false,
+E                     Symbol(kHandlers): SafeMap(0) {}
+E                   },
+E                   Symbol(kIsBeingDispatched): false,
+E                   Symbol(kInPassiveListener): false
+E                 }
+E                 
+E                 Node.js v24.11.1
+E                 
+E               assert 1 == 0
+E                +  where 1 = CompletedProcess(args=['C:\\Program Files\\nodejs\\node.EXE', '--input-type=module', '-e', '\nconst [url,pageUrl,scree...feMap(0) {}\n  },\n  Symbol(kIsBeingDispatched): false,\n  Symbol(kInPassiveListener): false\n}\n\nNode.js v24.11.1\n").returncode
+
+tests\test_rpa_view.py:259: AssertionError</failure></testcase></testsuite></testsuites>

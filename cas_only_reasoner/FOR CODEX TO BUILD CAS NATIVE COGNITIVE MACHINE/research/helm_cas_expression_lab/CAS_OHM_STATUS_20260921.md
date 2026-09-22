@@ -1,5 +1,14 @@
 # CAS-Ohm compiler calculations — 2026-09-21
 
+**2026-09-22 atlas follow-up:** The formerly prepared CAS-RPA connection now has a
+working offline view with present-centered coordinates, exact saved addresses,
+nested board-part navigation and restorable views. It displays the existing
+checked calculation records, including attention 3 for R=4 and 2 for the R=6
+alternative at declared Drive 12. The current implementation and evidence are
+documented in [CAS-RPA atlas status](../../docs/CAS_RPA_OHM_ATLAS_20260922.md).
+This does not add live Helm measurement, board execution or model control.
+The original compiler arithmetic and source pins described below are unchanged.
+
 The active CAS compiler now calculates attention flow, required Drive, and
 effective constraint through named operations. PCBA, synthetic-data and CAS-RPA
 connections are prepared and exercised with declared examples. This is tested

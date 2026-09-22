@@ -1,5 +1,32 @@
 # tksCAS — Changelog
 
+## 2026-09-22 — Connected CAS-RPA coordinates, navigation and Ohm view
+
+Added exact saved addresses and versions, a fixed declared present, independent
+inspection/reference selection, bounded entry into declared board parts, and
+restorable offline views. The existing renderer dispatches the new checked atlas
+document without changing native runtime view contracts.
+
+Forty explicitly ordered positive rational profile values produce 39
+reference-centered log-ratio coordinates. The reference is exactly zero;
+inverse recovery uses its actual supplied profile. Missing profiles and
+incompatible declared bases remain unavailable. Flower/Graph positions are
+separate from the coordinate chart and do not imply a metric or transition cost.
+
+The atlas replays existing PCBA and compiler CAS-Ohm records. A saved resistance-4
+design yields attention 3; its hypothetical resistance-6 version yields 2 with
+the same declared Drive 12. The browser displays the bound records without
+implementing separate Ohm arithmetic or assigning parent totals.
+
+Validation: 354 distinct tests passed, including real Chrome and existing atlas/Ohm
+regressions. Desktop and mobile screenshots were visually inspected.
+
+Reproduction, exact source hashes, verification records and browser evidence:
+cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/rpa_ohm_atlas_20260922/.
+Current scope and usage are documented in docs/CAS_RPA_OHM_ATLAS_20260922.md under
+that project. These are declared engineering fixtures; live Helm measurement,
+execution, control and learned outcomes remain unconnected.
+
 ## 2026-09-21 — Checked CAS-Ohm compiler arithmetic and prepared connections
 
 Added named calculations for attention I=V/R, required Drive V=IR, and

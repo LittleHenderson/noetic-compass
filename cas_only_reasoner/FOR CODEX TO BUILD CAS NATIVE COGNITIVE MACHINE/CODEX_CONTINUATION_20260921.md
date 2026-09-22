@@ -1,5 +1,22 @@
 # Codex continuation — 2026-09-21
 
+## Follow-up: connected CAS-RPA atlas — 2026-09-22
+
+The requested offline integration now connects present-centered coordinates,
+nested navigation, exact saved addresses, saved-view restoration and existing
+CAS-Ohm calculations. The recorded present stays fixed while focus and coordinate
+reference change. Reproducible resistance-4/6 design examples display attention
+3/2 from the original checked compiler and PCBA calculations.
+
+Current instructions and boundaries: docs/CAS_RPA_OHM_ATLAS_20260922.md.
+Artifacts and verification: records/rpa_ohm_atlas_20260922/.
+Branch: codex/helm-cas-rpa-atlas-20260922, in the same isolated checkout.
+
+The supplied present/profiles are explicit fixtures. This extension does not
+connect live Helm, measure a board, execute a circuit or train a model. Existing
+native runtime atlas adapters, frozen datasets/contracts, and CAS-Ohm compiler
+sources remain unchanged. The older prepared-only RPA status below is historical.
+
 ## Follow-up: CAS-Ohm calculations and prepared connections
 
 The active compiler now exposes named attention-flow, required-Drive and

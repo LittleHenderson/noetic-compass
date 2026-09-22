@@ -1,5 +1,14 @@
 # The learning brain — lineage record
 
+## 2026-09-22 CAS-RPA connected atlas: engineering only
+
+Present-centered coordinates, declared-part navigation, saved-view recovery and
+checked CAS-Ohm calculation display now work together in an offline atlas.
+Evidence is in records/rpa_ohm_atlas_20260922/; scope and reproduction are in
+docs/CAS_RPA_OHM_ATLAS_20260922.md. The example present, profiles and input scales
+are declared fixtures. No model was loaded, trained, evaluated or promoted;
+no live measurement, control, neural result or Helm version is added.
+
 ## 2026-09-21 Codex continuation: engineering only
 
 CAS-Ohm adds tested compiler arithmetic and prepared PCBA, synthetic-data and

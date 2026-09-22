@@ -1,0 +1,41 @@
+CAS-RPA  /  DESIGN ATLAS v0.1
+DATA CONTRACT
+16 SEPTEMBER 2026  /  PROPOSED ARCHITECTURE
+21
+What one flower stores
+Illustrative record format, not compiler-accepted CCDL and not a frozen production schema. The CAS profile below is synthetic and
+dimensionally valid.
+Minimal capsule record
+{
+  "id": "q17", "snapshot": 12,
+  "kind": "idea_context", "label": "Verifier",
+  "scope": "atlas prototype / model v0.1",
+  "status": "hypothetical",
+  "present_state_id": "S0",
+  "cas": {
+    "noetic": "^6", "domain": "C",
+    "drive": "DF6", "register": "|A",
+    "profile_order": "^0..^9 x P,C,E,O; row-major",
+    "profile40": [
+      0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01,
+      0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01,
+      0.01, 0.01, 0.01, 0.01, 0.01, 0.61, 0.01, 0.01, 0.01, 0.01,
+      0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01
+    ],
+    "profile_basis": "synthetic demonstration"
+  },
+  "links": [
+    {"type": "contains_part", "target": "q18"},
+    {"type": "refines_state", "target": "q19"}
+  ],
+  "bias_version": "B12",
+  "evidence_refs": [], "probability": null,
+  "verifier": {"predicate": "input_hash_match",
+               "result": "not_run"},
+  "expansion": {"max_depth": 3, "max_nodes": 100},
+  "provenance": "synthetic fixture"
+}
+Example profile: set ^6/C to 0.61 and each of the other 39 coordinates to 0.01. The sum is 0.61+0.39 = 1 and all entries are positive.
+This is a fixture, not a measured cognitive profile.
+A production schema should store actual numeric arrays, typed units, generator IDs, observation times, model versions, overlap
+witnesses and immutable trace references. Null probability means “not assigned,” not zero.

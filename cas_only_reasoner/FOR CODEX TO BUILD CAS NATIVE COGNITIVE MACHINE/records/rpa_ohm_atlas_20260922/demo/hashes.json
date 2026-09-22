@@ -1,0 +1,23 @@
+{
+  "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+  "files": {
+    "atlas.html": {
+      "bytes": 259778,
+      "sha256_raw": "fd7eb404184cfdef6639fb05037a60955f08f7941073d0a1cb9abfa269158153"
+    },
+    "atlas.json": {
+      "bytes": 100025,
+      "sha256_raw": "f672c3362524f575ccc2b487131d2ab362cf2682554ab5d0975b0e94c7424b05"
+    },
+    "declaration.json": {
+      "bytes": 16182,
+      "sha256_raw": "00cb327748cadf005d48ab44f01087a05099a5f1ba223ee3ac25964526534162"
+    },
+    "verification.json": {
+      "bytes": 22568,
+      "sha256_raw": "820f22f3cdd07f58d77f0f2ea183dd138d501487cf1dfdfee788db9facead88a"
+    }
+  },
+  "manifest_self_hash": "OMITTED_TO_AVOID_SELF_REFERENCE",
+  "schema_version": "cas.rpa.ohm-atlas-artifacts/0.1"
+}

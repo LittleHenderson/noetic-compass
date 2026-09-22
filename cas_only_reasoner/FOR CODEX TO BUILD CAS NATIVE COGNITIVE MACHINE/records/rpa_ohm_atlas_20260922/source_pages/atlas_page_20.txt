@@ -1,0 +1,31 @@
+CAS-RPA  /  DESIGN ATLAS v0.1
+FORMAL CONTRACT
+16 SEPTEMBER 2026  /  PROPOSED ARCHITECTURE
+20
+The smallest coherent mathematical model
+OBJECT
+DEFINITION / RULE
+Full state space X
+Structured records containing content, context, time, resources, Bias, evidence and version.
+CAS descriptor σ
+σ: X → Δ°39. It need not be one-to-one; the descriptor is not the full state.
+Present x*
+The current authorized state estimate or observation-backed snapshot; σ(x*) = p*.
+Region Uq
+A subset of X defined by a membership predicate under a named context and model version.
+Typed links
+contains_part, refines_state, reachable_via, overlaps_with and references_same_idea have distinct contracts.
+Transition T
+T(x,a) returns a candidate successor or a set/model of successors with explicit prerequisites and uncertainty.
+Display φ
+A declared view of selected features. Concept layouts need not preserve metric distances or intersections.
+Refinement
+For same-variable refinements, Uchild is contained in Uparent. For part views, use a declared projection π and
+compatibility conditions instead.
+Nerve K
+A finite family belongs to K when the corresponding regions have a nonempty common intersection. [M1, M6]
+Three distances must stay separate. The source’s geometric layer specifies the Fisher–Rao tangent metric gp(u,v)=Σ
+uᵢvᵢ/pᵢ. A transition cost describes work along a path and may be asymmetric. A screen distance is a layout quantity.
+One cannot substitute for another without an explicit model. [C5, Definition 8.4; proposed separation]
+For a compatible child decomposition, parent summaries require a declared aggregation map. Do not average child CAS vectors or
+multiply child probabilities by default. Shared parts, common causes and logical constraints can invalidate those operations.

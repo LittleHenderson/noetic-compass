@@ -1,0 +1,44 @@
+CAS-RPA  /  DESIGN ATLAS v0.1
+PLATE 11 / INTERFACE
+16 SEPTEMBER 2026  /  PROPOSED ARCHITECTURE
+22
+What the application would look like
+CAS-RPA
+Concept  |  Geometry  |  Transition  |  Evidence
+ROOT
+S0 / snapshot 12
+FOCUS
+Verifier / part
+HORIZON
+3 transitions
+EXPANSION
+43 / 100 nodes
+STATUS
+Hypothetical view
+S0 / NOW
+SELECTED: q17
+relation: contains_part
+Noetic: ^6 Male
+Domain: C
+Drive: DF6
+Register: |A
+VERIFICATION
+Input available: yes
+Predicate: specified
+Result: not run
+PROBABILITY
+Not assigned
+Expand
+Simulate
+Trace
+Proposed application mockup. Flower shapes show nested structure; the inspector carries the authoritative type, context and evidence status.
+No live application is claimed.
+Concept mode emphasizes the nested-flower layout. Geometry mode displays a named coordinate system and its
+limitations. Transition mode shows permitted arrows and costs. Evidence mode exposes observations, assumptions,
+witnesses and conflicts.
+Controls should distinguish Expand, Focus, Simulate and Recenter from observation. The last control requires an
+authorized snapshot update; it is not a shortcut for treating an attractive future as actual.
+Labels carry the meaning
+Use relation names, node IDs, line styles and status text, not color alone. A dashed branch is hypothetical; a
+recorded outcome includes its observation and verifier reference. Shared data remains linked when the view
+moves.

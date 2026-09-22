@@ -1,0 +1,3120 @@
+{
+  "atlas": {
+    "current_state_id": "project",
+    "focus_node_id": "project",
+    "hypothesis_branch_id": null,
+    "links": [
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-2c15c71b0182b5b997101a5bb94fc82f36f74569812fbe633bb5b4f839c7f5d5",
+        "projection": "declared board version v2",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "project",
+        "target_id": "board-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-9627844adc68caa2808cadec4d73493b250312a06370675298bea3658227c6c7",
+        "projection": null,
+        "relation": "references_same_idea",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "resistor-r4",
+        "target_id": "resistor-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-96ec6a6f49e1e7ff086656741991bd56b42091f3c5839bbc6552f6254c7230d5",
+        "projection": "declared explanatory note",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "project",
+        "target_id": "note-unprofiled",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-a46e9f367d34b970564a09af275dd2a57696738ef48f787887eefc9c871ccb2f",
+        "projection": "declared stage part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "board-r6",
+        "target_id": "stage-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-b18f0c926ea2591ee6ef2b8ea49ee6de7b5a8632a060e96c35d965c72a4d60a9",
+        "projection": "declared resistor part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "stage-r6",
+        "target_id": "resistor-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-c433cde5d303a057518dfb20af8b51dec8ff6cb214544e217bb8454718aa5257",
+        "projection": "declared board version v1",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "project",
+        "target_id": "board-r4",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-ca9479332f19cd0b17dd6c74c1cfab412a59f51cc190b45e251cdb72541c24a0",
+        "projection": null,
+        "relation": "references_same_idea",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "stage-r4",
+        "target_id": "stage-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-d17f8c2a3b1a186602535ada154335e1eb98f6d43b5b9203525a1345dc6b71f7",
+        "projection": null,
+        "relation": "references_same_idea",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "board-r4",
+        "target_id": "board-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-d32e05c91acd5065c06858ba12c835ec22da5d12fc226b35ab0b7278b855e50d",
+        "projection": "declared calculation part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "resistor-r6",
+        "target_id": "calculation-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-e788394ed6af600577b5c55e64ecae3eee5c63fe01e9b74184840c2925c5e206",
+        "projection": "declared calculation part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "resistor-r4",
+        "target_id": "calculation-r4",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-e9fb6b03fd6b7161c075b3cd288ad15cd761a7e238824ca053cff8168596032e",
+        "projection": "declared stage part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "board-r4",
+        "target_id": "stage-r4",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-f62f569d60bcc7ecf965d8257a61fc06d97bc49574703e09bccd065075febc7d",
+        "projection": null,
+        "relation": "references_same_idea",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "calculation-r4",
+        "target_id": "calculation-r6",
+        "transition_status": null
+      },
+      {
+        "action_id": null,
+        "certificate_id": null,
+        "evidence_refs": [],
+        "link_id": "link-fdc2ea2a9e2e755e6db427650c33a19f93b1ff97cc520ec8904a70785170c33f",
+        "projection": "declared resistor part",
+        "relation": "contains_part",
+        "schema_version": "cas.rpa.link/0.1",
+        "source_id": "stage-r4",
+        "target_id": "resistor-r4",
+        "transition_status": null
+      }
+    ],
+    "nodes": [
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=4>; }"
+          ],
+          [
+            "case_receipt_sha256",
+            "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-board"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "board"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "demo-board",
+        "kind": "idea_context",
+        "label": "Board \u00b7 saved R=4 design",
+        "members": null,
+        "node_id": "board-r4",
+        "profile40": [
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "unknown"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=6>; }"
+          ],
+          [
+            "case_receipt_sha256",
+            "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-board"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "board"
+          ],
+          [
+            "version_id",
+            "v2"
+          ]
+        ],
+        "idea_id": "demo-board",
+        "kind": "idea_context",
+        "label": "Board \u00b7 hypothetical R=6",
+        "members": null,
+        "node_id": "board-r6",
+        "profile40": [
+          "1/20",
+          "1/80",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/80"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "hypothetical"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))"
+          ],
+          [
+            "case_receipt_sha256",
+            "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-calculation"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "calculation"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "demo-calculation",
+        "kind": "idea_context",
+        "label": "Flow calculation \u00b7 12 / 4 = 3",
+        "members": null,
+        "node_id": "calculation-r4",
+        "profile40": [
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "unknown"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))"
+          ],
+          [
+            "case_receipt_sha256",
+            "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-calculation"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "calculation"
+          ],
+          [
+            "version_id",
+            "v2"
+          ]
+        ],
+        "idea_id": "demo-calculation",
+        "kind": "idea_context",
+        "label": "Flow calculation \u00b7 12 / 6 = 2",
+        "members": null,
+        "node_id": "calculation-r6",
+        "profile40": [
+          "1/20",
+          "1/80",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/80"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "hypothetical"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "No profile was supplied for this explanatory note."
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "unprofiled-note"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "note"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "unprofiled-note",
+        "kind": "idea_context",
+        "label": "Note \u00b7 no profile assigned",
+        "members": null,
+        "node_id": "note-unprofiled",
+        "profile40": null,
+        "profile_basis": null,
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "unknown"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "Declared CAS-Ohm comparison project. Present design: R=4; R=6 is hypothetical."
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "ohm-project"
+          ],
+          [
+            "present_designation",
+            "HOST_DECLARED_FIXTURE"
+          ],
+          [
+            "present_reference",
+            "owner-declared-demo-present"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "project"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "ohm-project",
+        "kind": "state",
+        "label": "CAS-Ohm design atlas",
+        "members": null,
+        "node_id": "project",
+        "profile40": [
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "observed"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "Resistor<a,R=4>"
+          ],
+          [
+            "case_receipt_sha256",
+            "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-resistor"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "resistor"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "demo-resistor",
+        "kind": "idea_context",
+        "label": "Resistor \u00b7 R=4",
+        "members": null,
+        "node_id": "resistor-r4",
+        "profile40": [
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "unknown"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "Resistor<a,R=6>"
+          ],
+          [
+            "case_receipt_sha256",
+            "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-resistor"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "resistor"
+          ],
+          [
+            "version_id",
+            "v2"
+          ]
+        ],
+        "idea_id": "demo-resistor",
+        "kind": "idea_context",
+        "label": "Resistor \u00b7 R=6 alternative",
+        "members": null,
+        "node_id": "resistor-r6",
+        "profile40": [
+          "1/20",
+          "1/80",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/80"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "hypothetical"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "Declared single-resistor stage at state ^8^C|A."
+          ],
+          [
+            "case_receipt_sha256",
+            "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-stage"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "stage"
+          ],
+          [
+            "version_id",
+            "v1"
+          ]
+        ],
+        "idea_id": "demo-stage",
+        "kind": "idea_context",
+        "label": "Stage \u00b7 saved R=4 design",
+        "members": null,
+        "node_id": "stage-r4",
+        "profile40": [
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "unknown"
+      },
+      {
+        "context": {
+          "context_id": "ohm-demo",
+          "model_version": "cas-ohm-atlas/0.1",
+          "observation_id": "declared-fixture",
+          "observation_time": "logical-fixture:1",
+          "record_version": 1,
+          "schema_version": "cas.rpa.context/0.1"
+        },
+        "evidence_refs": [
+          "receipt-b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+        ],
+        "expansion_ref": null,
+        "fields": [
+          [
+            "cas_description",
+            "Declared single-resistor stage at state ^8^C|A."
+          ],
+          [
+            "case_receipt_sha256",
+            "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+          ],
+          [
+            "identity_status",
+            "CALLER_ASSIGNED_PERMANENT_ITEM"
+          ],
+          [
+            "item_id",
+            "demo-stage"
+          ],
+          [
+            "record_status",
+            "DECLARED_SAVED_VERSION"
+          ],
+          [
+            "role",
+            "stage"
+          ],
+          [
+            "version_id",
+            "v2"
+          ]
+        ],
+        "idea_id": "demo-stage",
+        "kind": "idea_context",
+        "label": "Stage \u00b7 hypothetical R=6",
+        "members": null,
+        "node_id": "stage-r6",
+        "profile40": [
+          "1/20",
+          "1/80",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/40",
+          "1/80"
+        ],
+        "profile_basis": "declared-demo-noetic-domain-basis-v1",
+        "schema_version": "cas.rpa.node/0.1",
+        "status": "hypothetical"
+      }
+    ],
+    "overlap_certificates": [],
+    "schema_version": "cas.rpa.snapshot/0.1"
+  },
+  "boundary": {
+    "aggregation_status": "NONE_NO_TOTAL_INFERRED",
+    "authority": "INSPECTION_ONLY",
+    "integration_status": "READ_ONLY_ATLAS_CONNECTED",
+    "learning_status": "NOT_RUN",
+    "measurement_status": "NO_MEASUREMENT_PERFORMED",
+    "present_status": "HOST_DECLARED_FIXTURE_NOT_MEASURED",
+    "provenance_status": "CALLER_REFERENCES_UNVERIFIED",
+    "runtime_status": "NOT_CONNECTED",
+    "semantic_outcome": "NOT_ASSESSED"
+  },
+  "declaration": {
+    "atlas_id": "cas-ohm-demo",
+    "cases": [
+      {
+        "board_node_id": "board-r4",
+        "calculation_node_id": "calculation-r4",
+        "case_id": "case-r4",
+        "drive": {
+          "origin": "design",
+          "reference": "demo:drive",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear"
+          },
+          "value": "12"
+        },
+        "resistance": {
+          "origin": "design",
+          "reference": "demo:resistor-scale",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear"
+          }
+        },
+        "resistor_name": "r1",
+        "resistor_node_id": "resistor-r4",
+        "source": "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=4>; }",
+        "stage_node_id": "stage-r4"
+      },
+      {
+        "board_node_id": "board-r6",
+        "calculation_node_id": "calculation-r6",
+        "case_id": "case-r6",
+        "drive": {
+          "origin": "design",
+          "reference": "demo:drive",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear"
+          },
+          "value": "12"
+        },
+        "resistance": {
+          "origin": "design",
+          "reference": "demo:resistor-scale",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear"
+          }
+        },
+        "resistor_name": "r1",
+        "resistor_node_id": "resistor-r6",
+        "source": "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=6>; }",
+        "stage_node_id": "stage-r6"
+      }
+    ],
+    "context": {
+      "context_id": "ohm-demo",
+      "model_version": "cas-ohm-atlas/0.1",
+      "observation_id": "declared-fixture",
+      "observation_time": "logical-fixture:1",
+      "record_version": 1,
+      "schema_version": "cas.rpa.context/0.1"
+    },
+    "items": [
+      {
+        "cas_description": "Declared CAS-Ohm comparison project. Present design: R=4; R=6 is hypothetical.",
+        "item_id": "ohm-project",
+        "label": "CAS-Ohm design atlas",
+        "node_id": "project",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-example-profile",
+          "values": [
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40"
+          ]
+        },
+        "role": "project",
+        "status": "unknown",
+        "version_id": "v1"
+      },
+      {
+        "cas_description": "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=4>; }",
+        "item_id": "demo-board",
+        "label": "Board \u00b7 saved R=4 design",
+        "node_id": "board-r4",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-example-profile",
+          "values": [
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40"
+          ]
+        },
+        "role": "board",
+        "status": "unknown",
+        "version_id": "v1"
+      },
+      {
+        "cas_description": "Declared single-resistor stage at state ^8^C|A.",
+        "item_id": "demo-stage",
+        "label": "Stage \u00b7 saved R=4 design",
+        "node_id": "stage-r4",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-example-profile",
+          "values": [
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40"
+          ]
+        },
+        "role": "stage",
+        "status": "unknown",
+        "version_id": "v1"
+      },
+      {
+        "cas_description": "Resistor<a,R=4>",
+        "item_id": "demo-resistor",
+        "label": "Resistor \u00b7 R=4",
+        "node_id": "resistor-r4",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-example-profile",
+          "values": [
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40"
+          ]
+        },
+        "role": "resistor",
+        "status": "unknown",
+        "version_id": "v1"
+      },
+      {
+        "cas_description": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+        "item_id": "demo-calculation",
+        "label": "Flow calculation \u00b7 12 / 4 = 3",
+        "node_id": "calculation-r4",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-example-profile",
+          "values": [
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40"
+          ]
+        },
+        "role": "calculation",
+        "status": "unknown",
+        "version_id": "v1"
+      },
+      {
+        "cas_description": "board demo { node a: ^8^C|A; resistor r1: Resistor<a,R=6>; }",
+        "item_id": "demo-board",
+        "label": "Board \u00b7 hypothetical R=6",
+        "node_id": "board-r6",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-alternative-example-profile",
+          "values": [
+            "1/20",
+            "1/80",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/80"
+          ]
+        },
+        "role": "board",
+        "status": "hypothetical",
+        "version_id": "v2"
+      },
+      {
+        "cas_description": "Declared single-resistor stage at state ^8^C|A.",
+        "item_id": "demo-stage",
+        "label": "Stage \u00b7 hypothetical R=6",
+        "node_id": "stage-r6",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-alternative-example-profile",
+          "values": [
+            "1/20",
+            "1/80",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/80"
+          ]
+        },
+        "role": "stage",
+        "status": "hypothetical",
+        "version_id": "v2"
+      },
+      {
+        "cas_description": "Resistor<a,R=6>",
+        "item_id": "demo-resistor",
+        "label": "Resistor \u00b7 R=6 alternative",
+        "node_id": "resistor-r6",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-alternative-example-profile",
+          "values": [
+            "1/20",
+            "1/80",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/80"
+          ]
+        },
+        "role": "resistor",
+        "status": "hypothetical",
+        "version_id": "v2"
+      },
+      {
+        "cas_description": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+        "item_id": "demo-calculation",
+        "label": "Flow calculation \u00b7 12 / 6 = 2",
+        "node_id": "calculation-r6",
+        "profile": {
+          "basis": "declared-demo-noetic-domain-basis-v1",
+          "order": "^0..^9 x P,C,E,O; row-major",
+          "origin": "declared",
+          "reference": "owner-declared-alternative-example-profile",
+          "values": [
+            "1/20",
+            "1/80",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/40",
+            "1/80"
+          ]
+        },
+        "role": "calculation",
+        "status": "hypothetical",
+        "version_id": "v2"
+      },
+      {
+        "cas_description": "No profile was supplied for this explanatory note.",
+        "item_id": "unprofiled-note",
+        "label": "Note \u00b7 no profile assigned",
+        "node_id": "note-unprofiled",
+        "profile": null,
+        "role": "note",
+        "status": "unknown",
+        "version_id": "v1"
+      }
+    ],
+    "links": [
+      {
+        "projection": "declared board version v1",
+        "relation": "contains_part",
+        "source_id": "project",
+        "target_id": "board-r4"
+      },
+      {
+        "projection": "declared stage part",
+        "relation": "contains_part",
+        "source_id": "board-r4",
+        "target_id": "stage-r4"
+      },
+      {
+        "projection": "declared resistor part",
+        "relation": "contains_part",
+        "source_id": "stage-r4",
+        "target_id": "resistor-r4"
+      },
+      {
+        "projection": "declared calculation part",
+        "relation": "contains_part",
+        "source_id": "resistor-r4",
+        "target_id": "calculation-r4"
+      },
+      {
+        "projection": "declared board version v2",
+        "relation": "contains_part",
+        "source_id": "project",
+        "target_id": "board-r6"
+      },
+      {
+        "projection": "declared stage part",
+        "relation": "contains_part",
+        "source_id": "board-r6",
+        "target_id": "stage-r6"
+      },
+      {
+        "projection": "declared resistor part",
+        "relation": "contains_part",
+        "source_id": "stage-r6",
+        "target_id": "resistor-r6"
+      },
+      {
+        "projection": "declared calculation part",
+        "relation": "contains_part",
+        "source_id": "resistor-r6",
+        "target_id": "calculation-r6"
+      },
+      {
+        "projection": null,
+        "relation": "references_same_idea",
+        "source_id": "board-r4",
+        "target_id": "board-r6"
+      },
+      {
+        "projection": null,
+        "relation": "references_same_idea",
+        "source_id": "stage-r4",
+        "target_id": "stage-r6"
+      },
+      {
+        "projection": null,
+        "relation": "references_same_idea",
+        "source_id": "resistor-r4",
+        "target_id": "resistor-r6"
+      },
+      {
+        "projection": null,
+        "relation": "references_same_idea",
+        "source_id": "calculation-r4",
+        "target_id": "calculation-r6"
+      },
+      {
+        "projection": "declared explanatory note",
+        "relation": "contains_part",
+        "source_id": "project",
+        "target_id": "note-unprofiled"
+      }
+    ],
+    "present": {
+      "designation": "HOST_DECLARED_FIXTURE",
+      "node_id": "project",
+      "reference": "owner-declared-demo-present"
+    },
+    "schema_version": "cas.rpa.ohm-atlas-input/0.1"
+  },
+  "document_sha256": "8946016c6f6a2bd0f38992753591447dd9e148b2bcea983d2e69d206407179c3",
+  "profiles": {
+    "board-r4": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40"
+      ]
+    },
+    "board-r6": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-alternative-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/20",
+        "1/80",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/80"
+      ]
+    },
+    "calculation-r4": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40"
+      ]
+    },
+    "calculation-r6": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-alternative-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/20",
+        "1/80",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/80"
+      ]
+    },
+    "note-unprofiled": null,
+    "project": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40"
+      ]
+    },
+    "resistor-r4": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40"
+      ]
+    },
+    "resistor-r6": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-alternative-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/20",
+        "1/80",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/80"
+      ]
+    },
+    "stage-r4": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40"
+      ]
+    },
+    "stage-r6": {
+      "assignment_status": "CALLER_DECLARED_NOT_MEASURED",
+      "basis": "declared-demo-noetic-domain-basis-v1",
+      "order": "^0..^9 x P,C,E,O; row-major",
+      "origin": "declared",
+      "reference": "owner-declared-alternative-example-profile",
+      "source_order": "^0..^9 x P,C,E,O; row-major",
+      "values": [
+        "1/20",
+        "1/80",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/40",
+        "1/80"
+      ]
+    }
+  },
+  "receipts": [
+    {
+      "board_source_sha256": "12e35cfea5b590fc4f914ead212be56e22474264c8ffbd6f41e2ffab27d81e3e",
+      "case_id": "case-r4",
+      "compiler": {
+        "generation_status": "REFERENCE_CALCULATED_NOT_LEARNED",
+        "observation": {
+          "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"4\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+          "fixture_status": "DEMO_NOT_A_TRAIN_DEV_EVAL_SPLIT",
+          "implementation_sha256_lf": {
+            "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+            "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+          },
+          "record_id": "ohm-demo-input-3968326341b0898c5020df584f1c0efea2a6af91cde79ee55c2db83c3d0b8f57",
+          "reference_id": "case-r4",
+          "schema": "cas.ohm.demo-observation/0.1"
+        },
+        "schema": "cas.ohm.demo-pair/0.1",
+        "target": {
+          "implementation_sha256_lf": {
+            "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+            "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+          },
+          "observation_id": "ohm-demo-input-3968326341b0898c5020df584f1c0efea2a6af91cde79ee55c2db83c3d0b8f57",
+          "quantity_report": {
+            "control_status": "NOT_CONNECTED",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "decimal_is_rounded": false,
+            "exact_value": {
+              "denominator": "1",
+              "numerator": "3"
+            },
+            "input_literal": null,
+            "inputs": [
+              {
+                "control_status": "NOT_CONNECTED",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "decimal_is_rounded": false,
+                "exact_value": {
+                  "denominator": "1",
+                  "numerator": "12"
+                },
+                "input_literal": "12",
+                "inputs": [],
+                "kind": "cas_ohm_quantity",
+                "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                "notes": [],
+                "numeric_representation": "exact_decimal_text",
+                "observation_status": "NOT_AN_OBSERVATION",
+                "operation": null,
+                "origin": "design",
+                "quantity": "drive",
+                "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+                "reference": "demo:drive",
+                "scale": {
+                  "attention_unit": "declared_attention",
+                  "calibration_status": "NOT_VERIFIED",
+                  "constraint_unit": "(declared_drive)/(declared_attention)",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                  "drive_unit": "declared_drive",
+                  "id": "demo-linear",
+                  "kind": "cas_ohm_scale",
+                  "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                },
+                "semantic_outcome": "NOT_ASSESSED",
+                "unit": "declared_drive",
+                "value": "12"
+              },
+              {
+                "control_status": "NOT_CONNECTED",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "decimal_is_rounded": false,
+                "exact_value": {
+                  "denominator": "1",
+                  "numerator": "4"
+                },
+                "input_literal": "4",
+                "inputs": [],
+                "kind": "cas_ohm_quantity",
+                "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                "notes": [],
+                "numeric_representation": "exact_decimal_text",
+                "observation_status": "NOT_AN_OBSERVATION",
+                "operation": null,
+                "origin": "design",
+                "quantity": "constraint",
+                "record_sha256": "8514273c0cb9fcf3f17924f36a864095fd962ef70e366c98047597d91fbdf137",
+                "reference": "demo:resistor-scale",
+                "scale": {
+                  "attention_unit": "declared_attention",
+                  "calibration_status": "NOT_VERIFIED",
+                  "constraint_unit": "(declared_drive)/(declared_attention)",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                  "drive_unit": "declared_drive",
+                  "id": "demo-linear",
+                  "kind": "cas_ohm_scale",
+                  "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                },
+                "semantic_outcome": "NOT_ASSESSED",
+                "unit": "(declared_drive)/(declared_attention)",
+                "value": "4"
+              }
+            ],
+            "kind": "cas_ohm_quantity",
+            "measurement_status": "NO_MEASUREMENT_PERFORMED",
+            "notes": [],
+            "numeric_representation": "exact_rational",
+            "observation_status": "NOT_AN_OBSERVATION",
+            "operation": "attention_flow",
+            "origin": "calculated",
+            "quantity": "attention",
+            "record_sha256": "fc85d1fa3c3d7b3d3fb254c992498b2242950f2750a261c8ce37c17227243116",
+            "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+            "scale": {
+              "attention_unit": "declared_attention",
+              "calibration_status": "NOT_VERIFIED",
+              "constraint_unit": "(declared_drive)/(declared_attention)",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+              "drive_unit": "declared_drive",
+              "id": "demo-linear",
+              "kind": "cas_ohm_scale",
+              "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+            },
+            "semantic_outcome": "NOT_ASSESSED",
+            "unit": "declared_attention",
+            "value": "3"
+          },
+          "record_id": "ohm-demo-target-d05a7961b83adef3a74f73ed10a6d5a9d571e0b328edfba9c2fba85fabe54814",
+          "schema": "cas.ohm.demo-target/0.1",
+          "status": "REFERENCE_CALCULATED_NOT_LEARNED"
+        },
+        "training_status": "NOT_RUN"
+      },
+      "expression_sha256": "59f928616cef9382a9d1a091e4a4b0769520f92adccc04f04e737bfd7f1866b2",
+      "node_ids": [
+        "board-r4",
+        "stage-r4",
+        "resistor-r4",
+        "calculation-r4"
+      ],
+      "pcba": {
+        "board_source_sha256": "12e35cfea5b590fc4f914ead212be56e22474264c8ffbd6f41e2ffab27d81e3e",
+        "control_status": "NOT_CONNECTED",
+        "helm_status": "NOT_TRAINED",
+        "implementation_sha256_lf": {
+          "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+          "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+        },
+        "integration_status": "PREPARATORY_NOT_RUNTIME_CONNECTED",
+        "measurement_status": "NO_MEASUREMENT_PERFORMED",
+        "pcba_check": {
+          "diagnostics": [],
+          "parse_status": "PASS",
+          "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+          "sources": {
+            "book_authority": {
+              "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+              "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+              "sections": [
+                "Passive Components",
+                "One-Way and Threshold Components",
+                "CJT Parameter Block Grammar"
+              ],
+              "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f"
+            },
+            "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+            "component_frontends": [
+              {
+                "bytes": 7741,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+                "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+                "use": "syntax_parser_with_isolated_enum_import"
+              },
+              {
+                "bytes": 4943,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+                "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+                "use": "syntax_parser_with_isolated_enum_import"
+              },
+              {
+                "bytes": 5998,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+                "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+                "use": "enum_class_only"
+              },
+              {
+                "bytes": 5771,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+                "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+                "use": "enum_class_only"
+              }
+            ],
+            "implementation_sha256_lf": {
+              "pcba_check.py": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb",
+              "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd",
+              "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd"
+            }
+          },
+          "structural_status": "PASS"
+        },
+        "quantity_report": {
+          "control_status": "NOT_CONNECTED",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "decimal_is_rounded": false,
+          "exact_value": {
+            "denominator": "1",
+            "numerator": "3"
+          },
+          "input_literal": null,
+          "inputs": [
+            {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "12"
+              },
+              "input_literal": "12",
+              "inputs": [],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_decimal_text",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": null,
+              "origin": "design",
+              "quantity": "drive",
+              "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+              "reference": "demo:drive",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "declared_drive",
+              "value": "12"
+            },
+            {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "4"
+              },
+              "input_literal": "4",
+              "inputs": [],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_decimal_text",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": null,
+              "origin": "design",
+              "quantity": "constraint",
+              "record_sha256": "8514273c0cb9fcf3f17924f36a864095fd962ef70e366c98047597d91fbdf137",
+              "reference": "demo:resistor-scale",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "(declared_drive)/(declared_attention)",
+              "value": "4"
+            }
+          ],
+          "kind": "cas_ohm_quantity",
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "notes": [],
+          "numeric_representation": "exact_rational",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "operation": "attention_flow",
+          "origin": "calculated",
+          "quantity": "attention",
+          "record_sha256": "fc85d1fa3c3d7b3d3fb254c992498b2242950f2750a261c8ce37c17227243116",
+          "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "calibration_status": "NOT_VERIFIED",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear",
+            "kind": "cas_ohm_scale",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+          },
+          "semantic_outcome": "NOT_ASSESSED",
+          "unit": "declared_attention",
+          "value": "3"
+        },
+        "resistance_literal": "4",
+        "resistor_name": "r1",
+        "resistor_terminal": "a",
+        "schema": "cas.pcba.ohm-resistor-flow/0.1",
+        "status": "CALCULATED_DECLARED_SINGLE_RESISTOR",
+        "topology_status": "NO_SERIES_PARALLEL_OR_TOTAL_INFERENCE"
+      },
+      "projection": {
+        "aggregation_status": "NONE_NO_TOTAL_INFERRED",
+        "authority": "NONE",
+        "formula_status": "REPLAYED_CALCULATION_ONLY",
+        "implementation_sha256_lf": {
+          "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+          "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+        },
+        "measurement_status": "NO_MEASUREMENT_PERFORMED",
+        "nodes": [
+          {
+            "children": [],
+            "node_id": "calculation-r4",
+            "parent_id": null,
+            "quantity_report": {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "3"
+              },
+              "input_literal": null,
+              "inputs": [
+                {
+                  "control_status": "NOT_CONNECTED",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "decimal_is_rounded": false,
+                  "exact_value": {
+                    "denominator": "1",
+                    "numerator": "12"
+                  },
+                  "input_literal": "12",
+                  "inputs": [],
+                  "kind": "cas_ohm_quantity",
+                  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                  "notes": [],
+                  "numeric_representation": "exact_decimal_text",
+                  "observation_status": "NOT_AN_OBSERVATION",
+                  "operation": null,
+                  "origin": "design",
+                  "quantity": "drive",
+                  "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+                  "reference": "demo:drive",
+                  "scale": {
+                    "attention_unit": "declared_attention",
+                    "calibration_status": "NOT_VERIFIED",
+                    "constraint_unit": "(declared_drive)/(declared_attention)",
+                    "convention": "cas.ohm.declared-linear/0.1",
+                    "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                    "drive_unit": "declared_drive",
+                    "id": "demo-linear",
+                    "kind": "cas_ohm_scale",
+                    "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                  },
+                  "semantic_outcome": "NOT_ASSESSED",
+                  "unit": "declared_drive",
+                  "value": "12"
+                },
+                {
+                  "control_status": "NOT_CONNECTED",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "decimal_is_rounded": false,
+                  "exact_value": {
+                    "denominator": "1",
+                    "numerator": "4"
+                  },
+                  "input_literal": "4",
+                  "inputs": [],
+                  "kind": "cas_ohm_quantity",
+                  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                  "notes": [],
+                  "numeric_representation": "exact_decimal_text",
+                  "observation_status": "NOT_AN_OBSERVATION",
+                  "operation": null,
+                  "origin": "design",
+                  "quantity": "constraint",
+                  "record_sha256": "8514273c0cb9fcf3f17924f36a864095fd962ef70e366c98047597d91fbdf137",
+                  "reference": "demo:resistor-scale",
+                  "scale": {
+                    "attention_unit": "declared_attention",
+                    "calibration_status": "NOT_VERIFIED",
+                    "constraint_unit": "(declared_drive)/(declared_attention)",
+                    "convention": "cas.ohm.declared-linear/0.1",
+                    "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                    "drive_unit": "declared_drive",
+                    "id": "demo-linear",
+                    "kind": "cas_ohm_scale",
+                    "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                  },
+                  "semantic_outcome": "NOT_ASSESSED",
+                  "unit": "(declared_drive)/(declared_attention)",
+                  "value": "4"
+                }
+              ],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_rational",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": "attention_flow",
+              "origin": "calculated",
+              "quantity": "attention",
+              "record_sha256": "fc85d1fa3c3d7b3d3fb254c992498b2242950f2750a261c8ce37c17227243116",
+              "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "declared_attention",
+              "value": "3"
+            }
+          }
+        ],
+        "parent_child_binding": "CALLER_DECLARED_UNVERIFIED",
+        "projection_sha256": "b4ddd38e0cb8125865501fda87f29bfa67412a8627fdcf110d4844775a81717c",
+        "provenance_status": "CALLER_REFERENCES_UNVERIFIED",
+        "roots": [
+          "calculation-r4"
+        ],
+        "runtime_status": "NOT_CONNECTED",
+        "schema": "cas.rpa.ohm-projection/0.1",
+        "semantic_outcome": "NOT_ASSESSED",
+        "status": "PREPARATORY_NOT_INTEGRATED"
+      },
+      "receipt_sha256": "7d4fca5c427fa81cb7999b39111089574f6d068af94324b2b2046cd7db52cda0"
+    },
+    {
+      "board_source_sha256": "16da77c29e5378c99ce4fcfd2e28a1736e6d543f045376dd2161b532c8933659",
+      "case_id": "case-r6",
+      "compiler": {
+        "generation_status": "REFERENCE_CALCULATED_NOT_LEARNED",
+        "observation": {
+          "expression": "ohm_flow(ohm_drive(\"12\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:drive\"), ohm_constraint(\"6\", ohm_scale(\"demo-linear\", \"declared_drive\", \"declared_attention\"), \"design\", \"demo:resistor-scale\"))",
+          "fixture_status": "DEMO_NOT_A_TRAIN_DEV_EVAL_SPLIT",
+          "implementation_sha256_lf": {
+            "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+            "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+          },
+          "record_id": "ohm-demo-input-0bdbd155fa811dd37f34026f83e7ab1e5e37758c740cd0def5d070906f14f088",
+          "reference_id": "case-r6",
+          "schema": "cas.ohm.demo-observation/0.1"
+        },
+        "schema": "cas.ohm.demo-pair/0.1",
+        "target": {
+          "implementation_sha256_lf": {
+            "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+            "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+          },
+          "observation_id": "ohm-demo-input-0bdbd155fa811dd37f34026f83e7ab1e5e37758c740cd0def5d070906f14f088",
+          "quantity_report": {
+            "control_status": "NOT_CONNECTED",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "decimal_is_rounded": false,
+            "exact_value": {
+              "denominator": "1",
+              "numerator": "2"
+            },
+            "input_literal": null,
+            "inputs": [
+              {
+                "control_status": "NOT_CONNECTED",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "decimal_is_rounded": false,
+                "exact_value": {
+                  "denominator": "1",
+                  "numerator": "12"
+                },
+                "input_literal": "12",
+                "inputs": [],
+                "kind": "cas_ohm_quantity",
+                "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                "notes": [],
+                "numeric_representation": "exact_decimal_text",
+                "observation_status": "NOT_AN_OBSERVATION",
+                "operation": null,
+                "origin": "design",
+                "quantity": "drive",
+                "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+                "reference": "demo:drive",
+                "scale": {
+                  "attention_unit": "declared_attention",
+                  "calibration_status": "NOT_VERIFIED",
+                  "constraint_unit": "(declared_drive)/(declared_attention)",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                  "drive_unit": "declared_drive",
+                  "id": "demo-linear",
+                  "kind": "cas_ohm_scale",
+                  "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                },
+                "semantic_outcome": "NOT_ASSESSED",
+                "unit": "declared_drive",
+                "value": "12"
+              },
+              {
+                "control_status": "NOT_CONNECTED",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "decimal_is_rounded": false,
+                "exact_value": {
+                  "denominator": "1",
+                  "numerator": "6"
+                },
+                "input_literal": "6",
+                "inputs": [],
+                "kind": "cas_ohm_quantity",
+                "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                "notes": [],
+                "numeric_representation": "exact_decimal_text",
+                "observation_status": "NOT_AN_OBSERVATION",
+                "operation": null,
+                "origin": "design",
+                "quantity": "constraint",
+                "record_sha256": "d21309d4db59e42c25e479281daef4f47fc2d40c17c34751031e1ad4ccc160b2",
+                "reference": "demo:resistor-scale",
+                "scale": {
+                  "attention_unit": "declared_attention",
+                  "calibration_status": "NOT_VERIFIED",
+                  "constraint_unit": "(declared_drive)/(declared_attention)",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                  "drive_unit": "declared_drive",
+                  "id": "demo-linear",
+                  "kind": "cas_ohm_scale",
+                  "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                },
+                "semantic_outcome": "NOT_ASSESSED",
+                "unit": "(declared_drive)/(declared_attention)",
+                "value": "6"
+              }
+            ],
+            "kind": "cas_ohm_quantity",
+            "measurement_status": "NO_MEASUREMENT_PERFORMED",
+            "notes": [],
+            "numeric_representation": "exact_rational",
+            "observation_status": "NOT_AN_OBSERVATION",
+            "operation": "attention_flow",
+            "origin": "calculated",
+            "quantity": "attention",
+            "record_sha256": "9f7c7a61909c8cd443eabd536c17e5bd7f742759f683465961270cda0d8f07ec",
+            "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+            "scale": {
+              "attention_unit": "declared_attention",
+              "calibration_status": "NOT_VERIFIED",
+              "constraint_unit": "(declared_drive)/(declared_attention)",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+              "drive_unit": "declared_drive",
+              "id": "demo-linear",
+              "kind": "cas_ohm_scale",
+              "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+            },
+            "semantic_outcome": "NOT_ASSESSED",
+            "unit": "declared_attention",
+            "value": "2"
+          },
+          "record_id": "ohm-demo-target-a515e67f6aefd448160e35ba21949edfecdb23abda2146227b2dc12c772e5af5",
+          "schema": "cas.ohm.demo-target/0.1",
+          "status": "REFERENCE_CALCULATED_NOT_LEARNED"
+        },
+        "training_status": "NOT_RUN"
+      },
+      "expression_sha256": "9df5a841cba5a8c4f49c53d5399bf3e248fbd94d7789ea3c717f7efc8771d403",
+      "node_ids": [
+        "board-r6",
+        "stage-r6",
+        "resistor-r6",
+        "calculation-r6"
+      ],
+      "pcba": {
+        "board_source_sha256": "16da77c29e5378c99ce4fcfd2e28a1736e6d543f045376dd2161b532c8933659",
+        "control_status": "NOT_CONNECTED",
+        "helm_status": "NOT_TRAINED",
+        "implementation_sha256_lf": {
+          "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+          "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+        },
+        "integration_status": "PREPARATORY_NOT_RUNTIME_CONNECTED",
+        "measurement_status": "NO_MEASUREMENT_PERFORMED",
+        "pcba_check": {
+          "diagnostics": [],
+          "parse_status": "PASS",
+          "scope": "bounded schematic static checks; not full CCDL or runtime validation",
+          "sources": {
+            "book_authority": {
+              "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\book\\CAS_PCBA_Engineer\\Appendix_C_CCDL_Language_Reference.md",
+              "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\pcba_book\\Appendix_C_CCDL_Language_Reference.md",
+              "sections": [
+                "Passive Components",
+                "One-Way and Threshold Components",
+                "CJT Parameter Block Grammar"
+              ],
+              "sha256": "452d64308f860b1c0e5b6c3f4d9c8a91760822baa9b9fcd1a6e12a4797983d8f"
+            },
+            "compiler_sha256_lf": "61ed5a45970459e49a6948282ce4060e7c3d3d3f7042078228bc97ff252b2527",
+            "component_frontends": [
+              {
+                "bytes": 7741,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\pcba_syntax.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\pcba_syntax.py",
+                "sha256": "ca4728d4e03d1db2e627fb5eebea7370b6500309fcb04b64f15c4a5ed24ee7f1",
+                "use": "syntax_parser_with_isolated_enum_import"
+              },
+              {
+                "bytes": 4943,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\cjt_syntax.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\cjt_syntax.py",
+                "sha256": "ba05a2e889b638b2afef8ba67b5d1f3a9e62ac53c322f658281084129316f540",
+                "use": "syntax_parser_with_isolated_enum_import"
+              },
+              {
+                "bytes": 5998,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\pcba.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\pcba.py",
+                "sha256": "dfe920dfb22faf9a00438a9a76d92d5bd86336beb5d57ecb0aa40c7f829bce8d",
+                "use": "enum_class_only"
+              },
+              {
+                "bytes": 5771,
+                "original_path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-forex\\cas_forex\\schemas\\cjt.py",
+                "path": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_worktrees\\codex-helm-data\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\research\\helm_cas_expression_lab\\pinned_sources\\cas-forex\\cas_forex\\schemas\\cjt.py",
+                "sha256": "c9cef41723e5cd6f8de3f3087faa430aa95cbf4c741fdbb11b659c9deab083b0",
+                "use": "enum_class_only"
+              }
+            ],
+            "implementation_sha256_lf": {
+              "pcba_check.py": "25e9fd253d4975ae90602e234f15a0f16837b4944c4350ed20c8b9efbdd2a5cb",
+              "pcba_component_adapter.py": "9b9f72b67c7d2d3c6dbfd553e709ff1539632d930ecb7da73b15d65525782edd",
+              "pcba_reader.py": "3af9771a72e8b5976bd506be6c51b3127518fd44c0076c79d8de6c3ffe6355fd"
+            }
+          },
+          "structural_status": "PASS"
+        },
+        "quantity_report": {
+          "control_status": "NOT_CONNECTED",
+          "convention": "cas.ohm.declared-linear/0.1",
+          "decimal_is_rounded": false,
+          "exact_value": {
+            "denominator": "1",
+            "numerator": "2"
+          },
+          "input_literal": null,
+          "inputs": [
+            {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "12"
+              },
+              "input_literal": "12",
+              "inputs": [],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_decimal_text",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": null,
+              "origin": "design",
+              "quantity": "drive",
+              "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+              "reference": "demo:drive",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "declared_drive",
+              "value": "12"
+            },
+            {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "6"
+              },
+              "input_literal": "6",
+              "inputs": [],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_decimal_text",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": null,
+              "origin": "design",
+              "quantity": "constraint",
+              "record_sha256": "d21309d4db59e42c25e479281daef4f47fc2d40c17c34751031e1ad4ccc160b2",
+              "reference": "demo:resistor-scale",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "(declared_drive)/(declared_attention)",
+              "value": "6"
+            }
+          ],
+          "kind": "cas_ohm_quantity",
+          "measurement_status": "NO_MEASUREMENT_PERFORMED",
+          "notes": [],
+          "numeric_representation": "exact_rational",
+          "observation_status": "NOT_AN_OBSERVATION",
+          "operation": "attention_flow",
+          "origin": "calculated",
+          "quantity": "attention",
+          "record_sha256": "9f7c7a61909c8cd443eabd536c17e5bd7f742759f683465961270cda0d8f07ec",
+          "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+          "scale": {
+            "attention_unit": "declared_attention",
+            "calibration_status": "NOT_VERIFIED",
+            "constraint_unit": "(declared_drive)/(declared_attention)",
+            "convention": "cas.ohm.declared-linear/0.1",
+            "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+            "drive_unit": "declared_drive",
+            "id": "demo-linear",
+            "kind": "cas_ohm_scale",
+            "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+          },
+          "semantic_outcome": "NOT_ASSESSED",
+          "unit": "declared_attention",
+          "value": "2"
+        },
+        "resistance_literal": "6",
+        "resistor_name": "r1",
+        "resistor_terminal": "a",
+        "schema": "cas.pcba.ohm-resistor-flow/0.1",
+        "status": "CALCULATED_DECLARED_SINGLE_RESISTOR",
+        "topology_status": "NO_SERIES_PARALLEL_OR_TOTAL_INFERENCE"
+      },
+      "projection": {
+        "aggregation_status": "NONE_NO_TOTAL_INFERRED",
+        "authority": "NONE",
+        "formula_status": "REPLAYED_CALCULATION_ONLY",
+        "implementation_sha256_lf": {
+          "cas_ohm.py": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+          "compiler.py": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+        },
+        "measurement_status": "NO_MEASUREMENT_PERFORMED",
+        "nodes": [
+          {
+            "children": [],
+            "node_id": "calculation-r6",
+            "parent_id": null,
+            "quantity_report": {
+              "control_status": "NOT_CONNECTED",
+              "convention": "cas.ohm.declared-linear/0.1",
+              "decimal_is_rounded": false,
+              "exact_value": {
+                "denominator": "1",
+                "numerator": "2"
+              },
+              "input_literal": null,
+              "inputs": [
+                {
+                  "control_status": "NOT_CONNECTED",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "decimal_is_rounded": false,
+                  "exact_value": {
+                    "denominator": "1",
+                    "numerator": "12"
+                  },
+                  "input_literal": "12",
+                  "inputs": [],
+                  "kind": "cas_ohm_quantity",
+                  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                  "notes": [],
+                  "numeric_representation": "exact_decimal_text",
+                  "observation_status": "NOT_AN_OBSERVATION",
+                  "operation": null,
+                  "origin": "design",
+                  "quantity": "drive",
+                  "record_sha256": "9c29e74999862996a4c0f24fd4dfeb397368f7169cc77ff846e570a074525e91",
+                  "reference": "demo:drive",
+                  "scale": {
+                    "attention_unit": "declared_attention",
+                    "calibration_status": "NOT_VERIFIED",
+                    "constraint_unit": "(declared_drive)/(declared_attention)",
+                    "convention": "cas.ohm.declared-linear/0.1",
+                    "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                    "drive_unit": "declared_drive",
+                    "id": "demo-linear",
+                    "kind": "cas_ohm_scale",
+                    "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                  },
+                  "semantic_outcome": "NOT_ASSESSED",
+                  "unit": "declared_drive",
+                  "value": "12"
+                },
+                {
+                  "control_status": "NOT_CONNECTED",
+                  "convention": "cas.ohm.declared-linear/0.1",
+                  "decimal_is_rounded": false,
+                  "exact_value": {
+                    "denominator": "1",
+                    "numerator": "6"
+                  },
+                  "input_literal": "6",
+                  "inputs": [],
+                  "kind": "cas_ohm_quantity",
+                  "measurement_status": "NO_MEASUREMENT_PERFORMED",
+                  "notes": [],
+                  "numeric_representation": "exact_decimal_text",
+                  "observation_status": "NOT_AN_OBSERVATION",
+                  "operation": null,
+                  "origin": "design",
+                  "quantity": "constraint",
+                  "record_sha256": "d21309d4db59e42c25e479281daef4f47fc2d40c17c34751031e1ad4ccc160b2",
+                  "reference": "demo:resistor-scale",
+                  "scale": {
+                    "attention_unit": "declared_attention",
+                    "calibration_status": "NOT_VERIFIED",
+                    "constraint_unit": "(declared_drive)/(declared_attention)",
+                    "convention": "cas.ohm.declared-linear/0.1",
+                    "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                    "drive_unit": "declared_drive",
+                    "id": "demo-linear",
+                    "kind": "cas_ohm_scale",
+                    "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+                  },
+                  "semantic_outcome": "NOT_ASSESSED",
+                  "unit": "(declared_drive)/(declared_attention)",
+                  "value": "6"
+                }
+              ],
+              "kind": "cas_ohm_quantity",
+              "measurement_status": "NO_MEASUREMENT_PERFORMED",
+              "notes": [],
+              "numeric_representation": "exact_rational",
+              "observation_status": "NOT_AN_OBSERVATION",
+              "operation": "attention_flow",
+              "origin": "calculated",
+              "quantity": "attention",
+              "record_sha256": "9f7c7a61909c8cd443eabd536c17e5bd7f742759f683465961270cda0d8f07ec",
+              "reference": "cas.ohm.declared-linear/0.1:attention_flow",
+              "scale": {
+                "attention_unit": "declared_attention",
+                "calibration_status": "NOT_VERIFIED",
+                "constraint_unit": "(declared_drive)/(declared_attention)",
+                "convention": "cas.ohm.declared-linear/0.1",
+                "descriptor_sha256": "3f424c7c0fff7e5d205750923d2f511acd71efe589210b356b7502fed8449382",
+                "drive_unit": "declared_drive",
+                "id": "demo-linear",
+                "kind": "cas_ohm_scale",
+                "status": "USER_DECLARED_COHERENT_RATIO_SCALE"
+              },
+              "semantic_outcome": "NOT_ASSESSED",
+              "unit": "declared_attention",
+              "value": "2"
+            }
+          }
+        ],
+        "parent_child_binding": "CALLER_DECLARED_UNVERIFIED",
+        "projection_sha256": "612a8d1af345fc7f7825a26ddbf5e7a2269a223ca2b12c1761d920369da9a1df",
+        "provenance_status": "CALLER_REFERENCES_UNVERIFIED",
+        "roots": [
+          "calculation-r6"
+        ],
+        "runtime_status": "NOT_CONNECTED",
+        "schema": "cas.rpa.ohm-projection/0.1",
+        "semantic_outcome": "NOT_ASSESSED",
+        "status": "PREPARATORY_NOT_INTEGRATED"
+      },
+      "receipt_sha256": "b2881a35669bfa2054cb66fc68e7285ba83f20c02fd61064fc155dd438bfa87f"
+    }
+  ],
+  "schema_version": "cas.rpa.ohm-atlas/0.1"
+}
