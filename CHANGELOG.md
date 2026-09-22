@@ -1,5 +1,35 @@
 # tksCAS — Changelog
 
+## 2026-09-22 UTC (HELM 3.0 LAB) - REPRODUCTION GUIDE REWRITTEN WITH PINNED IMPLEMENTATION AND TEST REVISIONS.
+One of my reproduction claims was FALSE as written; the CAS-Ohm module on this branch still has open defects.
+
+The peer audit found `records/audit_package_20260922/03_REPRODUCE.md` stale: it still said 458 compiler tests,
+48/48 CAS-Ohm tests and kept the withdrawn demo comparison. Rewritten so **every expected result names two
+revisions - the implementation and the tests**. Every number re-measured today from clean exports; receipts in
+`receipts_reproduction_pins_20260922/`.
+
+**CAS-Ohm implementation x test matrix** (older module, `api/cas_ohm/`): `078d00ed` code gives 39/39 with its own
+tests, **42/48 with the `86ba3d75` tests** (6 named failures) and **44/51 with the `a4b2e0d7` tests** (7). My
+claim OHM-4 said "HEAD's test file against the pre-fix code gives 42/48" - **FALSE as written**: that needs the
+`86ba3d75` tests. `86ba3d75` code with `a4b2e0d7` tests: 50/51. `a4b2e0d7` and `9fe1eb36` code: 51/51.
+
+**Compiler suite by revision** (same five files, same command): `7f32129d` 601 (3 of 5 files existed), `078d00ed`
+**458** (the merge), `626cc84b` **639**, `9fe1eb36` **643**.
+
+**The older CAS-Ohm module on this branch is NOT dependable yet.** Its `quantifiers.py` is blob `f842a9f2...` at
+`a4b2e0d7`, `626cc84b` and `9fe1eb36`. Observed on `9fe1eb36`: `delta_current(100, 0, tolerance=nan)` ->
+`WITHIN_TOLERANCE`; `i_pred(1e308, 1e-308)` -> `inf`; `r_hidden(1e308, 0.1, 2.0)` -> `inf` magnitude;
+`r_hidden(8, 0, 2, i_obs_interval=(1, 2))` -> `ZeroDivisionError`; reversed trend intervals -> `RISING`;
+`maturity_q4` just below 2.5 -> band Q1 saved as `'2.5'`, which reopens as **Q2**. My earlier advice to the owner
+to "take my hardened version" was too strong: the hardening closed the cases its own tests asked about and left
+these open. A repair exists on `codex/ohm-invalid-numbers-20260922` @ `9e2e3a8a` (other agent, unpushed, not
+merged) and is under independent verification.
+
+Also corrected: GOV-3 pointed at `VERIFICATION.md`; the refusal is at `CODEX_CONTINUATION_20260921.md:53-55`.
+pytest is 9.0.2 here, not 9.1.1. The feedback-gain book issue is now stated with its exact numbers: 3000/1249 at
+A=12 and 1000/433 at A=10 with beta=0.333; even the infinite-gain limit is 1000/333; "exactly 3" holds only as
+that limit with beta exactly 1/3. The book is NOT edited; three book issues await the owner.
+
 ## 2026-09-22 UTC (HELM 3.0 LAB) - RESTORED THE FOUR MORE TESTS MY MERGE DELETED. 639 -> 643. Found by the
 peer audit, not by me. Then checked, this time, that nothing else was lost.
 
