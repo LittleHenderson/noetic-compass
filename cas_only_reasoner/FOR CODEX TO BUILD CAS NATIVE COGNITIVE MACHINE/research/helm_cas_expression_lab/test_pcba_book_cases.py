@@ -411,3 +411,79 @@ def test_declared_cutoff_region_does_not_fabricate_runtime_activation():
     ))
     assert report["parse_status"] == "PASS", report
     assert "E-CJT-003" not in _codes(report, "error"), report
+
+
+@pytest.mark.parametrize("first_edge", [
+    "feedback first: a -> b [β=1.0000000000000001];",
+    "cjt first: CJT< a | bias => b > [β=1.0000000000000001];",
+])
+def test_exact_decimal_loop_threshold_survives_float_rounding(first_edge):
+    # Exact product is 1.000000000000000039999999999999994, above one.
+    # Rounding each declaration to float instead yields .9999999999999999.
+    _structural_error(_typed_board(
+        first_edge + "feedback back: b -> a [β=0.99999999999999994];"
+    ), code="E-CJT-005")
+
+
+def test_large_finite_gain_product_returns_a_report_without_integer_string_crash():
+    # Only 15 nodes and <6 KiB of source, but the exact product has 4,621
+    # digits. Python's default int-to-string limit must not break the API.
+    names = ["n%02d" % i for i in range(15)]
+    statements = ["node " + name + ": ^1^C;" for name in names]
+    gain = "1" + "0" * 308
+    for i, name in enumerate(names):
+        statements.append(
+            "feedback f%d: %s -> %s [β=%s];"
+            % (i, name, names[(i + 1) % len(names)], gain)
+        )
+    _structural_error(
+        "board large_product {" + "\n".join(statements) + "}",
+        code="E-CJT-005",
+    )
+
+
+def test_book_bare_domain_diode_endpoints_are_not_numbered_state_literals():
+    # Appendix C 1021 prints exactly this domain-to-domain component form.
+    report = _check("board domain_diode { diode d1: Diode< ^P -> ^C >; }")
+    assert report["parse_status"] == "PASS", report
+    assert not _errors(report), report
+
+
+def test_book_cap_prefix_alias_does_not_become_a_kind_mismatch():
+    # Appendix C 142: cap and capacitor name the same declaration kind.
+    report = _check("""
+board cap_alias {
+    node store: ^5^C;
+    cap memory: Capacitor< store, C=1 >;
+}
+""")
+    assert report["parse_status"] == "PASS", report
+    assert not _errors(report), report
+
+
+def test_printed_cjt_guard_does_not_inherit_bare_transition_descent_rule():
+    # Appendix C 1009,1037: the example labels C->P CJT guard admissible.
+    # No general operator-specific admission relation is supplied, so the
+    # safe result is uncertainty, not a invented blanket descent violation.
+    report = _check("""
+board guard_example {
+    node understand: ^1^C_{F2}|A;
+    node guard: ^3^P_{F7}|f;
+    node bias_charter: ^5^P_{F7}|T;
+    cjt c2: CJT< understand | bias_charter => guard > [β=2.2, sat=0.97, cutoff=0.05];
+}
+""")
+    assert report["parse_status"] == "PASS", report
+    assert not _errors(report), report
+    assert report["structural_status"] == "UNVERIFIED", report
+
+
+def test_equal_inline_bias_literals_do_not_prove_distinct_terminal_identity():
+    report = _check(_typed_board(
+        "cjt first: CJT< a | ^5^P => b > [β=0.2];"
+        "cjt second: CJT< a | ^5^P => c > [β=0.2];"
+        "assert: first.bias == second.bias;"
+    ))
+    assert report["parse_status"] == "PASS", report
+    assert not _errors(report), report
+    assert report["structural_status"] == "UNVERIFIED", report
