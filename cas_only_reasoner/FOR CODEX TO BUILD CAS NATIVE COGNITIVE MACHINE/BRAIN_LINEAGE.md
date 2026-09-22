@@ -18,6 +18,13 @@ and report on.
 
 ## The brain
 
+**2026-09-21 Codex continuation (engineering only).** Loader 0.3 closes three
+input-validation gaps; 82 loader/export tests passed, and the newer local Q3
+v0.5 data still loads (10,421 records). No Helm model was loaded or trained,
+and no version or scientific status changed. The prior uncommitted compiler
+work remains in its original checkout. See
+`CODEX_CONTINUATION_20260921.md` for source identity, tests, and remaining work.
+
 | | |
 |---|---|
 | **Name** | **Helm** |

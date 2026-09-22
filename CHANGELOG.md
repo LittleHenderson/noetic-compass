@@ -1,5 +1,21 @@
 # tksCAS — Changelog
 
+## 2026-09-21 — Codex Helm continuation: Q3 loader 0.3
+
+Fixed exponent-overflow JSON values, malformed visibility declarations, and
+unchecked learner-visible mode/operation headers. The last gap allowed answer
+payloads in fields intended to identify the task. Existing loader/export tests:
+19 passed before the change. New regression cases: 52 failed before the fix;
+the combined suite now passes 82 tests. All 10,421 newer local Q3 v0.5 records
+also load with their existing pins. No data, model weights, reference operations,
+or frozen contracts changed.
+
+Work is isolated on `codex/helm-cas-data-boundary-20260921` from recovered local
+HEAD `c38552754388573be36a07f6863299d9db1a5f63`. Prior compiler/data edits remain
+untouched in `helm3-lab`; compiler/package pin reconciliation remains open.
+No neural or cloud execution occurred. See the CNCM
+`CODEX_CONTINUATION_20260921.md` for the exact boundary and next work.
+
 Monorepo-level log. Subprojects keep their own changelogs
 (`cas-forex/CHANGELOG.md`, `noetic-compass-scaffold/noetic-compass/CHANGELOG.md`,
 `book/CAS_PCBA_Engineer/CHANGELOG.md`). This file records cross-cutting campaign milestones.

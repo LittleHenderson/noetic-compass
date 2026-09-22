@@ -1,4 +1,8 @@
-"""The lab's ONE door for reading Q3 records (loader 0.2). Nothing downstream calls json.loads on a data file directly.
+"""The lab's ONE door for reading Q3 records (loader 0.3). Nothing downstream calls json.loads on a data file directly.
+
+0.3 rejects overflowing JSON numbers, malformed visibility declarations, and
+learner-visible mode/operation headers that differ from the fixed family contract.
+The frozen data, reference operations, and operation contracts are unchanged.
 
 Why this exists. Until 2026-09-21 every consumer parsed the .jsonl files raw, and the strict checks were re-applied
 to loaded records only by the pytest file. Loader 0.1 closed that for family A. An attacker then showed (60+ forged
@@ -19,7 +23,8 @@ copies) that everything else in 0.1 was a SHAPE check. 0.2 answers each finding 
     eval, counts equal to the manifest, no undeclared .jsonl file in the folder, baselines.json hashed.
   * THE MANIFEST IS PINNED OUTSIDE THE DATA FOLDER (`Q3_DATA_PINS.json`, beside this file). A forged copy of the data
     carries its own forged manifest; it cannot carry the pin. `check_pins` refuses it (MANIFEST_NOT_THE_PINNED_ONE).
-  * No exception other than Q3LoadError escapes for a malformed manifest, a missing file or undecodable bytes.
+  * The covered manifest/record/file failures raise Q3LoadError. Error normalization is not exhaustive:
+    malformed pin/contract metadata, undecodable pin bytes, and oversized JSON integers need separate checks.
 
 Two doors, deliberately separate:
   load_visible(data_dir, family, split)   the LEARNER's door: the visible file only.
@@ -27,6 +32,7 @@ Two doors, deliberately separate:
 """
 import hashlib
 import json
+import math
 import pathlib
 import re
 import sys
@@ -42,6 +48,9 @@ PINS = HERE / "Q3_DATA_PINS.json"
 # Fixed in code on purpose. The manifest must agree with these; it cannot change them.
 VISIBLE_KEYS = {"R": {"record_id", "family", "mode", "observation"}, "G": {"record_id", "family", "mode", "observation"},
                 "A": {"record_id", "family", "mode", "operation_id", "observation"}, "C": {"record_id", "family", "mode", "operation_id", "observation"}}
+VISIBLE_MODES = {"R": "reconstruction", "G": "reconstruction",
+                 "A": "neural_operation_execution", "C": "neural_operation_execution"}
+OPERATION_IDS = {"A": "cas.op.is_admissible/1.0", "C": "cas.op.compose/1.0"}
 _RECON = {"record_id", "family", "target_canonical_ast", "target_ast", "ast_size", "shape_key", "tree_shape_key", "depth", "validity", "oracle"}
 SEALED_KEYS = {"R": _RECON, "G": _RECON,
                "A_valid": {"record_id", "family", "outcome", "target", "cell", "order_flip", "case_family", "swapped_target", "oracle", "trace"},
@@ -69,9 +78,15 @@ def _lf(path):
 
 
 def strict_loads(text, where="<text>"):
-    """json.loads that refuses what json.loads silently accepts: NaN / Infinity and duplicate object keys."""
+    """Reject nonfinite numbers (including exponent overflow) and duplicate keys."""
     def constant(name):
         raise Q3LoadError("NONFINITE_NUMBER: %s in %s" % (name, where))
+
+    def finite_float(number):
+        value = float(number)
+        if not math.isfinite(value):
+            constant(number)
+        return value
 
     def pairs(items):
         keys = [k for k, _ in items]
@@ -79,7 +94,7 @@ def strict_loads(text, where="<text>"):
             raise Q3LoadError("DUPLICATE_JSON_KEYS: %s in %s" % (sorted({k for k in keys if keys.count(k) > 1}), where))
         return dict(items)
     try:
-        return json.loads(text, parse_constant=constant, object_pairs_hook=pairs)
+        return json.loads(text, parse_constant=constant, parse_float=finite_float, object_pairs_hook=pairs)
     except json.JSONDecodeError as error:
         raise Q3LoadError("MALFORMED_JSON: %s in %s" % (error.msg, where))
 
@@ -89,14 +104,22 @@ def manifest_of(data_dir):
     try:
         manifest = strict_loads(body.decode("utf-8"), "manifest.json")
         files, seed, visibility = manifest["files"], manifest["seed"], manifest["visibility"]
-        assert isinstance(files, dict) and isinstance(seed, int) and not isinstance(seed, bool) and isinstance(visibility, dict)
-        assert all(isinstance(v, dict) and isinstance(v.get("sha256"), str) for v in files.values())
+        if not (isinstance(files, dict) and type(seed) is int and isinstance(visibility, dict)):
+            raise Q3LoadError("MANIFEST_MALFORMED: files, seed or visibility has the wrong type")
+        if not all(isinstance(v, dict) and isinstance(v.get("sha256"), str) for v in files.values()):
+            raise Q3LoadError("MANIFEST_MALFORMED: file entries require a sha256 string")
     except Q3LoadError:
         raise
     except Exception as error:
         raise Q3LoadError("MANIFEST_MALFORMED: %s" % type(error).__name__)
     for family in FAMILIES:                                   # the manifest may DESCRIBE the policy; it may not change it
         declared = visibility.get(family, {})
+        if not isinstance(declared, dict):
+            raise Q3LoadError("MANIFEST_MALFORMED: visibility for family %s must be an object" % family)
+        for key in ("visible", "withheld"):
+            names = declared.get(key, [])
+            if not isinstance(names, list) or not all(isinstance(name, str) for name in names):
+                raise Q3LoadError("MANIFEST_MALFORMED: %s.%s must be a list of field names" % (family, key))
         withheld = (SEALED_KEYS["A_valid"] | SEALED_KEYS["A_refusal"]) if family == "A" else SEALED_KEYS[family]
         if set(declared.get("visible", [])) != VISIBLE_KEYS[family] or set(declared.get("withheld", [])) != withheld - {"record_id", "family"}:
             raise Q3LoadError("VISIBILITY_POLICY_EDITED: the manifest's field lists for family %s are not the ones fixed in q3_load.py" % family)
@@ -172,6 +195,10 @@ def load_visible(data_dir, family, split):
             raise Q3LoadError("ROW_KEYS_WRONG: visible %s has %s" % (row["record_id"], sorted(set(row) ^ VISIBLE_KEYS[family])))
         if row["family"] != family:
             raise Q3LoadError("WRONG_FAMILY: %s" % row["record_id"])
+        if row["mode"] != VISIBLE_MODES[family]:
+            raise Q3LoadError("WRONG_MODE: %s requires %s" % (row["record_id"], VISIBLE_MODES[family]))
+        if family in OPERATION_IDS and row["operation_id"] != OPERATION_IDS[family]:
+            raise Q3LoadError("WRONG_OPERATION_ID: %s requires %s" % (row["record_id"], OPERATION_IDS[family]))
     return rows
 
 
