@@ -1,5 +1,28 @@
 # tksCAS — Changelog
 
+## 2026-09-22 — Reconcile parallel audits and repair diagnostic invalid numbers
+
+Preserved the completed compiler/atlas branch while carrying the peer's older
+diagnostic finite guards and repairing invalid tolerances, result overflow,
+interval censoring and exact Decimal replay. Diagnostic policy 0.2.0 retains
+public call signatures; source, distribution and atlas bytes remain unchanged
+outside the diagnostic package. The shared exact core is a separate proposal.
+
+Recovered the original handoff fingerprint, matched all 38 initial atlas
+nonpasses to later passes, and indexed four existing adapter acceptance records.
+Historical missing receipts remain unavailable. Full reconciliation, separate
+function/case/new/existing counts and source hashes are retained in
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/`.
+
+New selected integration checks pass 836 cases across 256 functions: 152 newly
+authored cases across 19 functions and 684 existing cases across 237 functions,
+including 12 imported peer guards. All 58 initial runner setup errors have exact
+later passing IDs. These selected checks are not full repository coverage.
+Fresh retained-Helm replay reproduces the same saved view; new metadata-only Q4
+preparation passes. No model, GPU execution, training, authorization or spending
+occurred. Q4 remains NOT_RUN. Shared module inventory and full evidence:
+`cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/README.md`.
+
 ## 2026-09-22 — Inspect genuine retained Helm answers in CAS-RPA
 
 Connected a source-bound correct and wrong Helm 2.0-experimental development

@@ -1,0 +1,24 @@
+{
+  "schema": "cas.q4-fresh-preparation/0.1",
+  "observed_utc": "2026-09-22T21:52:58.481271+00:00",
+  "repository_commit": "2ab01f53482b09338483b447f3bf2cb88466d2f8",
+  "plan_canonical_sha256": "a3f5a8b30ac80ee820a85e301802effd77552da2e5fb3b1fb71e96d4a3496863",
+  "plan_file_sha256": "2a462db570a4fa3676b339054f0db36119f6f93040a0e4ef796f0c47fb9cdd48",
+  "metadata_revalidation": "PASS",
+  "neural_execution": "NOT_RUN",
+  "torch_imported": false,
+  "cuda_execution": "NOT_PROBED",
+  "gpu_capacity": "NOT_QUERIED",
+  "owner_authorization": "NOT_SUPPLIED",
+  "owner_trust_anchor": "EXTERNALLY_ESTABLISHED_MATERIAL_STILL_REQUIRED",
+  "proposed_output_exists": false,
+  "test_functions": 0,
+  "test_cases": 0,
+  "history": "New preparation for this checkout. Does not replace any prior receipt or authorize a run.",
+  "command": [
+    "C:\\Users\\wakil\\venvs\\cas-gpu\\Scripts\\python.exe",
+    "tools/prepare_q4_reconciliation.py",
+    "--out",
+    "records/cas_reconciliation_20260922/q4_preparation"
+  ]
+}

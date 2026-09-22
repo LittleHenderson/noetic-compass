@@ -1,5 +1,19 @@
 # The learning brain — lineage record
 
+## 2026-09-22 audit reconciliation and numeric repair: no new learned result
+
+The working recorded-Helm atlas and compiler are preserved. The older diagnostic
+module now rejects invalid numeric paths under policy 0.2.0. Historical audit
+counts and attachment custody are reconciled additively; missing evidence stays
+unavailable. Fresh selected checks pass 836 cases / 256 functions, and a fresh
+recorded-view replay preserves the same Helm 2.0-experimental outputs.
+
+New Q4 metadata preparation binds the integration checkout but remains
+PREPARED_NOT_AUTHORIZATION. No Torch import, model inference, training, CUDA
+execution or new learned checkpoint occurred. Existing external owner trust and
+resource gates remain required. Evidence and exact limits:
+`records/cas_reconciliation_20260922/README.md`.
+
 ## 2026-09-22 retained Helm answers in CAS-RPA: engineering only
 
 The workbench now inspects one genuine correct and one genuine wrong saved

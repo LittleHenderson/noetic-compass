@@ -1,0 +1,839 @@
+{
+  "schema": "helm-cas-expression-lab.q4-auth-dependencies/0.1",
+  "root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_runtime\\q4_auth_20260922",
+  "pythonpath": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_runtime\\q4_auth_20260922",
+  "files": [
+    {
+      "path": "_cffi_backend.cp314-win_amd64.pyd",
+      "bytes": 181248,
+      "sha256": "58bbe1eb15f9ab8e9ea45715a8311e2366b360d910a4685448bdd728d5177a01"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/METADATA",
+      "bytes": 2627,
+      "sha256": "6444fa102f91029ef6f6d5b5a3860997ad71f6caead0ed00fed678377322dee7"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/RECORD",
+      "bytes": 2513,
+      "sha256": "5179836522440ac21b96c0678dc902bbbf21ec9df1282466e7d3ec3cbd2f15e1"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/REQUESTED",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/WHEEL",
+      "bytes": 101,
+      "sha256": "ee4e96732e7cf222587b995fe4ad3de4d2e0faea014e713e4fc78727dd86e3fe"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/entry_points.txt",
+      "bytes": 75,
+      "sha256": "cba8d3c67c9eb8b9cbf9725c0eff2e30bde7eb0c98886460f0c4e9fd0189f47a"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/licenses/AUTHORS",
+      "bytes": 208,
+      "sha256": "2a67a60bbfb33759d67d645ff131b8e6d6bc4cafc232d751fcac3eda4d314cc8"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/licenses/LICENSE",
+      "bytes": 1123,
+      "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+    },
+    {
+      "path": "cffi-2.0.0.dist-info/top_level.txt",
+      "bytes": 19,
+      "sha256": "ac4ed6477ad97cd2b1588f7e8e7ea1b0708097b303901f859ae41bc568c57a14"
+    },
+    {
+      "path": "cffi/__init__.py",
+      "bytes": 511,
+      "sha256": "fa4b0143b31f0f356f6c1955fdfb5805602612a7c0f3a963233331cda65e0252"
+    },
+    {
+      "path": "cffi/_cffi_errors.h",
+      "bytes": 3908,
+      "sha256": "cd05edeee47f9bc8145be7c8da1260d0aa129091705eff111949040d9d7bedd4"
+    },
+    {
+      "path": "cffi/_cffi_include.h",
+      "bytes": 15055,
+      "sha256": "131866826f6acc75b35a2be37d37b40fb5e9e2b3d4915c5d36ec0684c4cccdbc"
+    },
+    {
+      "path": "cffi/_embedding.h",
+      "bytes": 18786,
+      "sha256": "022df71476e513b5d2a47382a7c90f716c0de7ff41575e0ebcdd0955ae884e9c"
+    },
+    {
+      "path": "cffi/_imp_emulation.py",
+      "bytes": 2960,
+      "sha256": "4714441bccc06c8d913c6070c3dd2eff97e2f2c59d6a1a5d8a93a83f3929ec2d"
+    },
+    {
+      "path": "cffi/_shimmed_dist_utils.py",
+      "bytes": 2230,
+      "sha256": "0638f6c26f3265bbc5bd6131e4011f9aa6aa6726458587e8c8b2d01e45d9b9aa"
+    },
+    {
+      "path": "cffi/api.py",
+      "bytes": 42169,
+      "sha256": "6a506fea1650923a66669941a6175a467da53cef7e08e46cfccee2c5a6ef6562"
+    },
+    {
+      "path": "cffi/backend_ctypes.py",
+      "bytes": 42454,
+      "sha256": "879648ccb73a0455579c6c9cf713ea656512eea1b2ef21520ea5deebc49af33e"
+    },
+    {
+      "path": "cffi/cffi_opcode.py",
+      "bytes": 5731,
+      "sha256": "243579974474fce69d057fee13bc4f3d362d31d9a9a7c23d51877a6afeda8835"
+    },
+    {
+      "path": "cffi/commontypes.py",
+      "bytes": 2805,
+      "sha256": "ecdeb33ed08596fc57316847574f29b148dd6082b65e0b0ddf2a39760b9afefe"
+    },
+    {
+      "path": "cffi/cparser.py",
+      "bytes": 44790,
+      "sha256": "4144df9a52fe68ef8c611f1b14696f0141dcdfa390afb5d82ded162e41858d1a"
+    },
+    {
+      "path": "cffi/error.py",
+      "bytes": 877,
+      "sha256": "bfac53892e14d24bc3732e21fc10d1a39bf7f5942e8fe20c4582efe444dd759b"
+    },
+    {
+      "path": "cffi/ffiplatform.py",
+      "bytes": 3584,
+      "sha256": "6afc458dd8a460626812d9893bb7b0566c06fd511597a119fd668d859602aafe"
+    },
+    {
+      "path": "cffi/lock.py",
+      "bytes": 747,
+      "sha256": "97d4d37703083298ba8c39091a742013d72f4c847b0809ed209afc1061edde96"
+    },
+    {
+      "path": "cffi/model.py",
+      "bytes": 21797,
+      "sha256": "5b7d14150644ef78cbe4cc7937cd584fbeeeb365b68898d39b45d87e7c33d5c8"
+    },
+    {
+      "path": "cffi/parse_c_type.h",
+      "bytes": 5976,
+      "sha256": "39dc107f033d92dababe5081e377b11509b10c1b63d8c04d74af0b625d79b63c"
+    },
+    {
+      "path": "cffi/pkgconfig.py",
+      "bytes": 4374,
+      "sha256": "2cfd70eef996be62b0caa2da535676e3714e58635032b80c519aef805b8e95ca"
+    },
+    {
+      "path": "cffi/recompiler.py",
+      "bytes": 65509,
+      "sha256": "efc27a94c1043b28173668cdf7e7ce1453b78fb796fa21714abc5fbd06f9e1b6"
+    },
+    {
+      "path": "cffi/setuptools_ext.py",
+      "bytes": 9411,
+      "sha256": "d2b0b0049d56ec51d6b6230a7cd5ec4924fcf15f145ebba2e687971650cd2c6f"
+    },
+    {
+      "path": "cffi/vengine_cpy.py",
+      "bytes": 43881,
+      "sha256": "a3240a0f6de4a44d1a0a150a03c260d1eef6ddfa0f898ccb60475bf89d0c88db"
+    },
+    {
+      "path": "cffi/vengine_gen.py",
+      "bytes": 26939,
+      "sha256": "0d494422b0e25629f53e7867d6c7e86a69d2e4d2ea7c970e76146879235e2518"
+    },
+    {
+      "path": "cffi/verifier.py",
+      "bytes": 11182,
+      "sha256": "a17f23a5aa21836426dda1dcce789d01dbeb566e4de2c4181b46b7128e66225e"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/METADATA",
+      "bytes": 4343,
+      "sha256": "1fc839d24efc355f0e5c507aa807822bca4371e732603b6d3e92b24038deded2"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/RECORD",
+      "bytes": 12092,
+      "sha256": "65041710acdac9becd3e8d3e0f76a5c678fb29dd4457f56109a4a6c1c23ceaf1"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/REQUESTED",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/WHEEL",
+      "bytes": 96,
+      "sha256": "9f90c5e08e4ac0929e2da8da4b56c1d1a30a50aad5056a3dcb069361fb0afbde"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/licenses/LICENSE",
+      "bytes": 197,
+      "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/licenses/LICENSE.APACHE",
+      "bytes": 11360,
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/licenses/LICENSE.BSD",
+      "bytes": 1532,
+      "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/sboms/cryptography-rust.cyclonedx.json",
+      "bytes": 45592,
+      "sha256": "1efda14501a10fa09a8634355d52a54c8dfefe2e1eb2869558645d18ea11e46d"
+    },
+    {
+      "path": "cryptography-49.0.0.dist-info/sboms/sbom.json",
+      "bytes": 1223,
+      "sha256": "3c84a13e98a66e600308a4691de245e4f1c6cc1b818901a9d22fc5c1b69e006f"
+    },
+    {
+      "path": "cryptography/__about__.py",
+      "bytes": 445,
+      "sha256": "a76732bedad7ff170492adc155113351d6a43303f113936997dc4d281bdacbe9"
+    },
+    {
+      "path": "cryptography/__init__.py",
+      "bytes": 364,
+      "sha256": "9ad86e52b4dde0544e0a9518ad322a863cfab3a4fd763019ad5ee7675a0c9b6a"
+    },
+    {
+      "path": "cryptography/exceptions.py",
+      "bytes": 1087,
+      "sha256": "f37e445882dcd9fc31c3e83214cae27220b64aa8558844c1d742c14b2b670c87"
+    },
+    {
+      "path": "cryptography/fernet.py",
+      "bytes": 6963,
+      "sha256": "dc2bf1921d0a2526d7f076e7087bb8c1f096ed4d0681f500deffea43c6bc8967"
+    },
+    {
+      "path": "cryptography/hazmat/__init__.py",
+      "bytes": 455,
+      "sha256": "e48c2b2d6ad5a7402312bff815d586fd5d39ecd489198fd6e1e80d36cb9cb748"
+    },
+    {
+      "path": "cryptography/hazmat/_oid.py",
+      "bytes": 17879,
+      "sha256": "98724bda6e0b9d736a7adbbfc97f109cd6fc51a3ae5f8cb9f6e299106ba44f5a"
+    },
+    {
+      "path": "cryptography/hazmat/asn1/__init__.py",
+      "bytes": 776,
+      "sha256": "df440d4124d9c807e233c97d492b4b9d5db477a79fce7c26e1ee373244c70156"
+    },
+    {
+      "path": "cryptography/hazmat/asn1/asn1.py",
+      "bytes": 19152,
+      "sha256": "f6671fae676f2bb2ad8e1458a1f3330235b4bbb9efa9b7ecbcf7db84d40ad414"
+    },
+    {
+      "path": "cryptography/hazmat/backends/__init__.py",
+      "bytes": 361,
+      "sha256": "3b98ef28541d6675e129ea89f87b6e95a10bf4d8bb9abd660f3658e641e56212"
+    },
+    {
+      "path": "cryptography/hazmat/backends/openssl/__init__.py",
+      "bytes": 305,
+      "sha256": "a778e625f9c26a0f62139b1d32b37a56f544bb9e6ee3ac5a4bf223a08d12ae60"
+    },
+    {
+      "path": "cryptography/hazmat/backends/openssl/backend.py",
+      "bytes": 10591,
+      "sha256": "dd17b231edde7bf03cfb77d2ae81aeef1bbaa4f7af5d02edf567793bdc7179c6"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/__init__.py",
+      "bytes": 180,
+      "sha256": "b3da0a090db2705757a0445d4b58a669fb9e4a406c2fd92f6f27e085a6ae67d6"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust.pyd",
+      "bytes": 9907712,
+      "sha256": "813b101f70efb79c388239ce82ac891e195a1e19eeaeb43c32d9bf425e7b51b8"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/__init__.pyi",
+      "bytes": 2285,
+      "sha256": "b949e7bceabfb9a99e62704da66b2fdd244054ed16406a63239f1a47594be0ac"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/_openssl.pyi",
+      "bytes": 228,
+      "sha256": "4ffe53a583bc6e08483e3010dc1b40001ab0f82718b241e9f76c26e4f358e9d7"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/asn1.pyi",
+      "bytes": 354,
+      "sha256": "06b1a30bc27a9f0b92fabdc455c757241f27768b5f63d99b41839fa5b3c6d070"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/declarative_asn1.pyi",
+      "bytes": 3866,
+      "sha256": "30198e6732d37663c9ebed4ae80ab73d3b872753068117c8bb484881a83ba1c1"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/exceptions.pyi",
+      "bytes": 640,
+      "sha256": "7b15ebdb1c3fd29075924f777186ccdcca216f3a149233a6b3564c522d2e4191"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/ocsp.pyi",
+      "bytes": 4020,
+      "sha256": "54f556b8a1c8f4432cd3d64b458006bd1d08cf49823261335c0920247a2fa683"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/__init__.pyi",
+      "bytes": 1550,
+      "sha256": "24309e7f6f6f5e7ac432f175dc91fdcf5f96f5a8624d9400939c61bbf287ea9a"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/aead.pyi",
+      "bytes": 4582,
+      "sha256": "eddfbec5d734beecd17b84b6bae41a1a6fbd1862afe0d7122d070bc9671a0fab"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/ciphers.pyi",
+      "bytes": 1315,
+      "sha256": "2e13f31d649726ae20ac02579facd2bd249d57e698208b1c1c3c083e524618fb"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/cmac.pyi",
+      "bytes": 564,
+      "sha256": "9cf1f45f9ed1629b00911a305698d0887139eba4e1513c7b617aec69d9ab9879"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/dh.pyi",
+      "bytes": 1564,
+      "sha256": "6774c2f86d38f931ed49d00e3cb3358761bb9a5e5b75ad4495951c9f9c29ba19"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/dsa.pyi",
+      "bytes": 1299,
+      "sha256": "a81b64823d9a95bb76a8572767d503ae1ce83610953bb1d36f2e5549fd445cc2"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/ec.pyi",
+      "bytes": 1691,
+      "sha256": "cc9cb4a516b99fefe9d9d9b8e4fc44081ffe07a49567234a7e3c450e93ea4f7f"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/ed25519.pyi",
+      "bytes": 532,
+      "sha256": "5577d77791ba8548af837f7d4750d87665b77936f411e6f30d3aa3442da0691c"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/ed448.pyi",
+      "bytes": 514,
+      "sha256": "631e3d96a7678ec0fb6f188357591c68cac392dba0e5ebe2e5aeb37ab322cb6b"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/hashes.pyi",
+      "bytes": 1076,
+      "sha256": "6c57b74f5dd47b24489d424c0fe47902b19318ba960e25a8d8bbf6286cd46dfe"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/hmac.pyi",
+      "bytes": 702,
+      "sha256": "057667ecd0e32f72406d85b4490f298358b20b90db4175615008b0b22f03151f"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/hpke.pyi",
+      "bytes": 2914,
+      "sha256": "a7f8462e7e981fe11aac91755796d4b14b638a9be2100a5c4793b4b141c92ed7"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/kdf.pyi",
+      "bytes": 6619,
+      "sha256": "1e288b74407d9ea32c4ef330885a694297cfcfa7c7533f7f8298c407f5c03970"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/keys.pyi",
+      "bytes": 912,
+      "sha256": "b5e22df0ce9910c26b9f8b375b45275b40d9fb7d0977af169d2b0a286d76e25d"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/mldsa.pyi",
+      "bytes": 1073,
+      "sha256": "1c284db235b40bfbcef4e543e0584466b5cedff16212ad994c5e7d8657dc11d3"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/mlkem.pyi",
+      "bytes": 835,
+      "sha256": "6f2a1ebace3e9483a55a5122450742734d2a0a45e9381e6978163aca8f6293cb"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/poly1305.pyi",
+      "bytes": 585,
+      "sha256": "fd25bd36d4391439406dd72516d5a94f89469b1288287a4dfb88fc27607361f4"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/rsa.pyi",
+      "bytes": 1364,
+      "sha256": "d8e4023525e4c6073edeec35c620829682104d5ea9f7f90aefd62ed2b85980f7"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/x25519.pyi",
+      "bytes": 523,
+      "sha256": "7b09f81a94326fbccfc04fa78bb1adc9080c0b403598bbaa62c4b2aafea723fb"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/openssl/x448.pyi",
+      "bytes": 505,
+      "sha256": "8ee4d94e6962f233bfe5572e7e0faf1efc7fb42c9ece648b221ffd3d4dd37332"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/pkcs12.pyi",
+      "bytes": 1605,
+      "sha256": "bc411de700e266f6fc64615ace22c26962f3030a06fedbcf5312d0c39fee3a5f"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/pkcs7.pyi",
+      "bytes": 1601,
+      "sha256": "b711812628ea66c84472aadae9bc8f35b9e2b08765c733922073f6865f5aacfb"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/test_support.pyi",
+      "bytes": 757,
+      "sha256": "3cf86577e5a43bbe3789714f79b786d0bb602b4693cc6763708b1acb51a6e461"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/_rust/x509.pyi",
+      "bytes": 10204,
+      "sha256": "0239e81e5e42df57390164809b0d97bc6736928b14a73795f002ed32507160e8"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/openssl/__init__.py",
+      "bytes": 180,
+      "sha256": "b3da0a090db2705757a0445d4b58a669fb9e4a406c2fd92f6f27e085a6ae67d6"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/openssl/_conditional.py",
+      "bytes": 5611,
+      "sha256": "bdfce2fb11dd4ad01c2508cbaaa3a54a8b3de0bf03feda85b417bb3afc3e2ad6"
+    },
+    {
+      "path": "cryptography/hazmat/bindings/openssl/binding.py",
+      "bytes": 3706,
+      "sha256": "16cb8bc5b4e7aea5bad3e7405ad6a482e7deabb4e7a9a41a8b53dcec3a30ae3a"
+    },
+    {
+      "path": "cryptography/hazmat/decrepit/__init__.py",
+      "bytes": 216,
+      "sha256": "c0709b59f69e7daf9f93a4c74b0f6d87d7c952c4ad268ef6e39c1f141aa676e0"
+    },
+    {
+      "path": "cryptography/hazmat/decrepit/ciphers/__init__.py",
+      "bytes": 216,
+      "sha256": "c0709b59f69e7daf9f93a4c74b0f6d87d7c952c4ad268ef6e39c1f141aa676e0"
+    },
+    {
+      "path": "cryptography/hazmat/decrepit/ciphers/algorithms.py",
+      "bytes": 3566,
+      "sha256": "caa1edee4e4ecc5fcabaf3bc33dbd394d2ed1bb128b5bbd287260a21a509aa18"
+    },
+    {
+      "path": "cryptography/hazmat/decrepit/ciphers/modes.py",
+      "bytes": 1649,
+      "sha256": "3aafcf1300a47b938b73339faffbf300e27ac0fc7eae5b2f1c05cf06e8796fda"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/__init__.py",
+      "bytes": 180,
+      "sha256": "b3da0a090db2705757a0445d4b58a669fb9e4a406c2fd92f6f27e085a6ae67d6"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/_asymmetric.py",
+      "bytes": 532,
+      "sha256": "46181ca2e501e874e214306b4752f1aa4323a54c4888dbd0d6bff3263446eaa4"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/_cipheralgorithm.py",
+      "bytes": 1522,
+      "sha256": "121de2ee5c1e7477e2d1e2d2b07f773d9c502b363d23a9642baeef2f8579b4e7"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/_modes.py",
+      "bytes": 3075,
+      "sha256": "fc4880383f096fa5a915796ec247144f7102cff4c7f318c6bdb4251a4366e7d4"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/_serialization.py",
+      "bytes": 4440,
+      "sha256": "862d3125b941019f29999c769566be96bba9871befbc6de0f4334ad06f0e75fb"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/__init__.py",
+      "bytes": 180,
+      "sha256": "b3da0a090db2705757a0445d4b58a669fb9e4a406c2fd92f6f27e085a6ae67d6"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/dh.py",
+      "bytes": 3912,
+      "sha256": "925bc755ac401645326965cbcada988c14e1f35671d41c8224d65545c483617f"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/dsa.py",
+      "bytes": 4482,
+      "sha256": "910cd3562a8023d3e210b34e05ca3f9fa31f3f737d7a120f91276e3a9ba9b743"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/ec.py",
+      "bytes": 10183,
+      "sha256": "2e495508b2f16db433aa213a1d16984d16ae2cca61614c37b44e9cf28048c584"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/ed25519.py",
+      "bytes": 2998,
+      "sha256": "99b7df2efb3edcf8020de835ad05d55e1ec62e7b6554be004e390811ce29b793"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/ed448.py",
+      "bytes": 4002,
+      "sha256": "9f474aeb2f952f1bb0fb3beb0f1b8f4f8e7df21ca6817fb5472fe3abd6944211"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/mldsa.py",
+      "bytes": 13750,
+      "sha256": "8a1e19fffb3b6d102e64ab3da8a72e350ef3f56eaadf1ad5730e4e73cd7ff57d"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/mlkem.py",
+      "bytes": 7901,
+      "sha256": "c2f5647854fee287fe55c500111dbecc8ff98574faaf04c93cc090f2017d1930"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/padding.py",
+      "bytes": 2854,
+      "sha256": "bd0ea5ea03a0f47a9c6ceb2f1eb4a225154b7448fd2f89b81e4446633893c850"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/rsa.py",
+      "bytes": 8492,
+      "sha256": "94813b9467b8e3d5b95112d3282a6f1467ab213a2e2a8655f46c2e4f349cb12a"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/types.py",
+      "bytes": 2409,
+      "sha256": "b3cf96aa33a7b5a375a00395e5b1dcccb14cda6a528b4249bb2103ffd168179c"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/utils.py",
+      "bytes": 821,
+      "sha256": "42cf117bd1853e35bfb4da7fef721e2448cf09fd2c94e22c58ec68eaaca64fa9"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/x25519.py",
+      "bytes": 3888,
+      "sha256": "950720524f8f8ae6e3f329c535641e6267b7b5864c80742a9112a42033872f3a"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/asymmetric/x448.py",
+      "bytes": 3913,
+      "sha256": "6f7ee283b93ba681ba4890ebcb8da3f849428f9ab8790d17e421663744a7f33f"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/ciphers/__init__.py",
+      "bytes": 680,
+      "sha256": "7b21179a393afc265768e3d80ebeef018197af6f50bf38162f6fb8092a252c5b"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/ciphers/aead.py",
+      "bytes": 634,
+      "sha256": "173972c7bc3c29841a9330e9d735a026722beb6ce066b815875bb68787b1079e"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/ciphers/algorithms.py",
+      "bytes": 3496,
+      "sha256": "2067c2c9c6093a1d53be8237e2b7f0f0a7c9ff19add69fc3a4186dd8582171ea"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/ciphers/base.py",
+      "bytes": 4253,
+      "sha256": "6810bb1c7041a22c5e6e6a5aad5af4525383b37543d00ec1ea8cff01a4630eff"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/ciphers/modes.py",
+      "bytes": 5999,
+      "sha256": "1080dd1400ae20f87039a0de528b92ae8c6d7458bbbcead7c096c1e193f144bb"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/cmac.py",
+      "bytes": 338,
+      "sha256": "b33fece87fdc6273afc7e54d59d20a85185edd89a9f33f09d03dc206a397de08"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/constant_time.py",
+      "bytes": 422,
+      "sha256": "c5dba7593d277fc3af29d72a52186514a6b21a9e3f3e0549454d96d702d2aff0"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/hashes.py",
+      "bytes": 5184,
+      "sha256": "33c06b94a07753a0c4b47bd64d5e55463a6d787bf5912dd9c66fc1b24d3872bf"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/hmac.py",
+      "bytes": 423,
+      "sha256": "469077cfdcf9b248ab090ae6ef341bb67a7da4b327023ae54d4bcaa85e5a0c37"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/hpke.py",
+      "bytes": 865,
+      "sha256": "46c1e2b2c0b997e7533e7d69d896dcac8ac09c306b2ea339ba0045486a662aee"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/__init__.py",
+      "bytes": 1037,
+      "sha256": "bf7ca2601194dbbd84a233576f07d865d6db7c8f5c54e0821b79d78530dd6b79"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/argon2.py",
+      "bytes": 632,
+      "sha256": "649c7e7a7525000e28edbe3a0b5c25cc6fd7010416d3022416050a92b33fc00f"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/concatkdf.py",
+      "bytes": 591,
+      "sha256": "0459ce292ef6b71285d3242f012af435aeee873bcb1e95027242b988d002fda4"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/hkdf.py",
+      "bytes": 543,
+      "sha256": "33494011f468738929a78fa7c038fdc81faf359ba420e60442b5255ac04d9fda"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/kbkdf.py",
+      "bytes": 737,
+      "sha256": "0b7c3df6f8c5aa1ab3031cc5387e33cef5681e46f9002e8bcfa00440657b77f8"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/pbkdf2.py",
+      "bytes": 468,
+      "sha256": "5dc86493df6cf8c93a6fa2920a8baa764f0557288d54e48521e9e69d6ded2e04"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/scrypt.py",
+      "bytes": 590,
+      "sha256": "5f259475452686e23d57a4ea00f3afba3092306bf55d0760d1adb52160a63be5"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/kdf/x963kdf.py",
+      "bytes": 456,
+      "sha256": "40a8e145e86e4ec02cb4bdfce1b29fbe3bafd727dd6a6007561b014567a7d95c"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/keywrap.py",
+      "bytes": 5776,
+      "sha256": "508fb4504490c415d3294d47aeb4685300e216cad689ff35ab25e55757bb9326"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/padding.py",
+      "bytes": 1865,
+      "sha256": "413f94f8dbd5d9e4063b5c153db0e234635273d91e4434be8a0e5c40eacbcf41"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/poly1305.py",
+      "bytes": 355,
+      "sha256": "3f910f415f9107f1493da869834d6ed13b384bf3e7026b2ba312065db19e451a"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/serialization/__init__.py",
+      "bytes": 1705,
+      "sha256": "43bb9380396dee7dd67ec313ea3630bad0ba0c883fed211ea009b51876790791"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/serialization/base.py",
+      "bytes": 615,
+      "sha256": "8a4ab9309230a7fa149e389a05ca3f3e643039362e1a2f979185181cacbc568d"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/serialization/pkcs12.py",
+      "bytes": 5104,
+      "sha256": "992f5c14d1b869fcefb1ea1ce5ed4c5a863656c91f2fc37c63f3858e5ebb96e6"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/serialization/pkcs7.py",
+      "bytes": 13998,
+      "sha256": "98533b385b99f1c0b1506528a380a87fa06708773f21bc750108e37f19cf971a"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/serialization/ssh.py",
+      "bytes": 53789,
+      "sha256": "1d5e99a888ea34d68d50be8ce2043234926d67be44b22499b3acb175da81ad62"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/twofactor/__init__.py",
+      "bytes": 258,
+      "sha256": "b66319181fa0e08535afb94816a012534d7dcebd2e3e9ff010161cc1d0c22820"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/twofactor/hotp.py",
+      "bytes": 3256,
+      "sha256": "8af668e41adc08658bb2aaa5e27655d175c28f218f8bf8877c3165b4694e2709"
+    },
+    {
+      "path": "cryptography/hazmat/primitives/twofactor/totp.py",
+      "bytes": 1652,
+      "sha256": "9b92cfa512f4d24a78cd8f204e3af9e477f3f5a3253d2e7790799591240299d6"
+    },
+    {
+      "path": "cryptography/py.typed",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "cryptography/utils.py",
+      "bytes": 4281,
+      "sha256": "c029f291f9969a9e8be73505a2eef5e6c9d82fdfd82cb1e3a63e3f3479a58705"
+    },
+    {
+      "path": "cryptography/x509/__init__.py",
+      "bytes": 8273,
+      "sha256": "cdc8b269d4609c2a760cd3cf9baba310a77a117fbcff33a7c2d0a325b6416ad8"
+    },
+    {
+      "path": "cryptography/x509/base.py",
+      "bytes": 27056,
+      "sha256": "93dcc4142ec7ec6cace7c02624d7847e94de242be883ca7ca0311af0383408ed"
+    },
+    {
+      "path": "cryptography/x509/certificate_transparency.py",
+      "bytes": 797,
+      "sha256": "26aa0e203865c089eb60c156e88167efb589d2f885f8f07fae5655defb3d3187"
+    },
+    {
+      "path": "cryptography/x509/extensions.py",
+      "bytes": 77968,
+      "sha256": "d00520bad2dedba48b83529ac527a8d1f1bb7d4040c8adad120265f5cfc04113"
+    },
+    {
+      "path": "cryptography/x509/general_name.py",
+      "bytes": 7836,
+      "sha256": "b0ffeb575d50969b24e31dd75c6258fccbf443fb3d76d8de2dc907b23a4b4284"
+    },
+    {
+      "path": "cryptography/x509/name.py",
+      "bytes": 15566,
+      "sha256": "a08db0e95758f33830eeaa4d865c44c79d765b40215835d0ac361fe44b0cd8f6"
+    },
+    {
+      "path": "cryptography/x509/ocsp.py",
+      "bytes": 12699,
+      "sha256": "61ecba35d155d4c3e3a29db8323fd57a78c4a60de451a328a5258e2b401b781b"
+    },
+    {
+      "path": "cryptography/x509/oid.py",
+      "bytes": 931,
+      "sha256": "054ce05d71955a296406474a3d39bd478a84944f600061e07583cc640a7b3c9a"
+    },
+    {
+      "path": "cryptography/x509/verification.py",
+      "bytes": 958,
+      "sha256": "811d82d9cf97650b5b959853e53e6f8d228eb426fbe1e7f66a53d59847301653"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/INSTALLER",
+      "bytes": 4,
+      "sha256": "ceebae7b8927a3227e5303cf5e0f1f7b34bb542ad7250ac03fbcde36ec2f1508"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/METADATA",
+      "bytes": 8229,
+      "sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/RECORD",
+      "bytes": 1217,
+      "sha256": "3933f8a6aac246506fd11de053cf49971b6a652fd7d5f9231723d8f641395afb"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/REQUESTED",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/WHEEL",
+      "bytes": 92,
+      "sha256": "a842dba36b35633977f599ab0226d70368e33cb5187e756150d4e5c85d6bab46"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/licenses/LICENSE",
+      "bytes": 1543,
+      "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+    },
+    {
+      "path": "pycparser-3.0.dist-info/top_level.txt",
+      "bytes": 10,
+      "sha256": "73e94f712ef82fff0aa07ec813a3d0179a1fca2ad140d57856191b48520f7963"
+    },
+    {
+      "path": "pycparser/__init__.py",
+      "bytes": 2829,
+      "sha256": "a6156247202e52682a13890d99a0aaa66e56544048bf351215aa41bf85d7df1a"
+    },
+    {
+      "path": "pycparser/_ast_gen.py",
+      "bytes": 11292,
+      "sha256": "1311f9626e2993b7503c422442bf512629b97deced7414304813efa6f13ee413"
+    },
+    {
+      "path": "pycparser/_c_ast.cfg",
+      "bytes": 4255,
+      "sha256": "95de5ecc4f72cc82452150147f0edecc94a5322e275ca342cdf9aa8cec904cda"
+    },
+    {
+      "path": "pycparser/ast_transforms.py",
+      "bytes": 5899,
+      "sha256": "5f032c6ab73968375d35680888a9b8fa33963116226fdeb2350528d3fbb6f160"
+    },
+    {
+      "path": "pycparser/c_ast.py",
+      "bytes": 32954,
+      "sha256": "bb091c6561df5c3408c3a583bc22f5ee258cffed11f94443a843263e35cb3807"
+    },
+    {
+      "path": "pycparser/c_generator.py",
+      "bytes": 20661,
+      "sha256": "4552893e0bafd82be8bc71d27d092a8a672452bf70194f4fa1fc421a3db9d500"
+    },
+    {
+      "path": "pycparser/c_lexer.py",
+      "bytes": 25155,
+      "sha256": "075568a9b6213d690e2495827a6e0e638ce3d08c6b3e4b4165915ed98f3b9148"
+    },
+    {
+      "path": "pycparser/c_parser.py",
+      "bytes": 89798,
+      "sha256": "dc504a18b8e3942deff1a7f00ff727311ebb226a18232ef76b858a411ea15fb8"
+    }
+  ],
+  "total_bytes": 11233284,
+  "manifest_sha256": "1b59d30cabc5635cc5c7344b722b2a4f8de76abfd724d1fc3b72f3837e12fa74"
+}

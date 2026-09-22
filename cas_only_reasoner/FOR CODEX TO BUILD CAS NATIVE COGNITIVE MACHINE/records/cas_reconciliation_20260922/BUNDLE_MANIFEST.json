@@ -1,0 +1,391 @@
+{
+  "schema": "cas.reconciliation-bundle/0.1",
+  "scope": "Artifact integrity and preserved source identity, not scientific acceptance or model execution.",
+  "source_commit": "2ab01f53482b09338483b447f3bf2cb88466d2f8",
+  "manifest_excludes_itself": true,
+  "files": [
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/CAS_OHM_SHARED_CORE_PROPOSAL_20260922.md",
+      "bytes": 5955,
+      "sha256_raw": "53c90584ba6d3847af82a9a78082daa5bf1367a306c23175324534f85975c9ac"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/docs/CAS_SHARED_MODULE_INVENTORY_20260922.json",
+      "bytes": 275046,
+      "sha256_raw": "8010632ed9af5f645e60fbdb58591c2a7ecfa64b2da18c93f1a1079e3c4bc000"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/.gitattributes",
+      "bytes": 44,
+      "sha256_raw": "f1e3b6bc7e782754bfc418468a35dc487502958c4af335927dc9f1fa9b53e09f"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/acceptance_record_index.json",
+      "bytes": 279003,
+      "sha256_raw": "b0ce817443271e8c8c06ed656471e3a54c113da61e7367e86d253ea43e344748"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/AMENDMENT.md",
+      "bytes": 12903,
+      "sha256_raw": "3e20f47ec7f54b22de618ff0b1c8d0e7b3c64ef07434243df4b113ece91bbb7f"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/atlas_case_reconciliation.json",
+      "bytes": 611611,
+      "sha256_raw": "37e10723d7b9e2ec8f87c4505d89aad586c69627a6018c14f32b709c93e9ab08"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/attachment_recovery.json",
+      "bytes": 1557,
+      "sha256_raw": "d047ebf86de4be4fc6f7593f226f54d9af975b15a2acd5e9dee6760c2371a8ec"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/inputs/PEER_AUDIT_65ad3008.md",
+      "bytes": 8501,
+      "sha256_raw": "330c6b220b8420edd319f56c79de552f8d2a134cdf5fb5b43ca21da67de822b6"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/inputs/RECOVERED_ORIGINAL_CONTINUATION.md",
+      "bytes": 18307,
+      "sha256_raw": "76d7821ac2cb6e007df42c7143ab1a81aa22ef46e6a29c71e5bb42d40665d1f5"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/lab_history_reconciliation.json",
+      "bytes": 564177,
+      "sha256_raw": "0a77bcd849c9b8d68edb63ecfb13bdac2d95857c5331dbf1c6ec854d98c04559"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/PACKAGE_MANIFEST.json",
+      "bytes": 2788,
+      "sha256_raw": "6bb362a6e0454f2059f1814485460cff72c975fab70a91f0e49d4ba503de9872"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/publication_observation_NEW.json",
+      "bytes": 675,
+      "sha256_raw": "547b79c5c1f48a5ffbdb73335cd432ec16a7fe3ba9098425b5d6fcf383ee4ea1"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/receipt_and_source_index.json",
+      "bytes": 211501,
+      "sha256_raw": "97e2def8df4153cfd5e1dc48bd41ef0808c5dc67c555cb24571205066e79b74a"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/reconcile.py",
+      "bytes": 24291,
+      "sha256_raw": "b17b6db9d0548779fd94c5acf6e7149499ec698c6fea77c36cac8740cf0b4763"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/seal_package.py",
+      "bytes": 1004,
+      "sha256_raw": "0a67ef26e4411ce45774f108eb2f4d4fba4ceaf2d19548689a83e22ab7b3ee2a"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/selected_case_inventory.json",
+      "bytes": 314748,
+      "sha256_raw": "58e0afdc45317379afc7c7d680030d4edfd038f96024f03d541c3f81ccfbfd74"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/selected_q4_collection_NEW.json",
+      "bytes": 2664,
+      "sha256_raw": "fad8872904417720d28a401f4533aaaad8e257263c62766008f52b14b1e28d07"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/audit_reconciliation_20260922/selected_q4_collection_NEW.txt",
+      "bytes": 14784,
+      "sha256_raw": "b69a8ccb8e0ba56ad5537ecad7f41f999200861392adeeb7601294c3cc10f20e"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/.gitattributes",
+      "bytes": 98,
+      "sha256_raw": "b627d95c57f9c0cf11b639e1bcfc8ce2d12155fc060e2b02190cb0bae5883f5c"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/integration_checks.json",
+      "bytes": 219478,
+      "sha256_raw": "147bf94607e1f739e72264f3f04a004a77ca74d0e3879744fdb914bfb58a171b"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/numeric_interfaces.txt",
+      "bytes": 1171,
+      "sha256_raw": "a31efc0d88507f01adb46e45440b21698d0f15355e111645b137ef556d41ef10"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/numeric_interfaces.xml",
+      "bytes": 98262,
+      "sha256_raw": "93e7eef67f21de9645a3b1365b63259ed1972d0db7a4592fc1d4622596a1b334"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/q4_preparation.txt",
+      "bytes": 183,
+      "sha256_raw": "231cb2d93a8ed7a137dc3cceb0531a32d4d4a714dc08ab7d63a0cb52a7eec97b"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/q4_preparation.xml",
+      "bytes": 19166,
+      "sha256_raw": "db9db4ebe5ba6ad6cb1a7e0f8a7856071bfa1a38ef4709d0bb1d67931f347400"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/recorded_and_design.txt",
+      "bytes": 265,
+      "sha256_raw": "9d5eb3b0dd45be7540ef2db1bd6d33f71c6bfde544c99f0622e69823ab3d6cee"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/final/recorded_and_design.xml",
+      "bytes": 51170,
+      "sha256_raw": "3c5a9a35402437e1d435336725a58e88aa9596ae204969146cc02c516fb5d1a3"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/fresh_replay.json",
+      "bytes": 1278,
+      "sha256_raw": "8fde17cc21a419f598d89c5a3ad1752655a7011cbdeb4980d3ff9c293c2abb0e"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/integration_checks.json",
+      "bytes": 219457,
+      "sha256_raw": "a75add4740c3deae934c5dcab3eb04c9cde7d1d88e32c6d26021af39d89022ca"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/numeric_interfaces.txt",
+      "bytes": 10110,
+      "sha256_raw": "7d6d99d587bead6bdf9320bcb5689fc1288eadd27e1df9a4e5048fa4a50597ca"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/numeric_interfaces.xml",
+      "bytes": 108090,
+      "sha256_raw": "4904b7345330efaf7714993a34448810884745b37ec31b092e9cfd84a1234b76"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/q4_preparation/dependency_manifest.json",
+      "bytes": 29279,
+      "sha256_raw": "aa22ca90d4eec474fcfb53a0ecbedc91d51407d5560dee61d7eeb2a4ae08bce4"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/q4_preparation/plan.json",
+      "bytes": 4019,
+      "sha256_raw": "2a462db570a4fa3676b339054f0db36119f6f93040a0e4ef796f0c47fb9cdd48"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/q4_preparation/verification.json",
+      "bytes": 1006,
+      "sha256_raw": "11a64dfad5c9ecc16396d81cdc3f5906b4414c6d284de1b2f303b8ce41254f9b"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/q4_preparation.txt",
+      "bytes": 43549,
+      "sha256_raw": "ee9304333bbbc863b4f186f12a5c9bbd413b5de4a0f0d1f3119c9c02e56fd963"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/q4_preparation.xml",
+      "bytes": 68847,
+      "sha256_raw": "a57d61e795c35515b4cbb6a24f752a61008069e0b7a41e6ca89bf126d433026d"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/README.md",
+      "bytes": 9330,
+      "sha256_raw": "a0d241d7605f5bb9ab263f994676546b4ed5c136080d5d735d1029bb84fa4ea6"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/recorded_and_design.txt",
+      "bytes": 3343,
+      "sha256_raw": "faf4f02f71c67ad9aaf4411a57fb23c230019b9778d35ae18d1c9e74d5a812a8"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/recorded_and_design.xml",
+      "bytes": 54456,
+      "sha256_raw": "3cb442947369bb7fc92dfd64aa0b8724071562420e80090cd87dadda2fe5180e"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/run_integration_checks.py",
+      "bytes": 4401,
+      "sha256_raw": "e475e015ab7756112d8d265aa89af0deb3b39a059625a654a6729c48f1b06512"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/run_integration_checks_initial.py.txt",
+      "bytes": 3961,
+      "sha256_raw": "9699b7be4f4a505f12e52be7862697d0aa3ca646bee148f7fce8bdde37fd669b"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/summarize_checks.py",
+      "bytes": 4189,
+      "sha256_raw": "93654f2fbf7dcd1a16400a208aba058ae8e79c05c39edacb916f9cca4d7e9221"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/TEST_SCOPE.json",
+      "bytes": 116673,
+      "sha256_raw": "7487e21a825bfaa69dc987b447389564595c779b9cf3bc8a6afb38fcc83199be"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/verify_bundle.py",
+      "bytes": 3445,
+      "sha256_raw": "37297269905f21673bafcfb299c6a8b845d5ce5e3b81d6dbb0edeb4a5806a758"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/helm.html",
+      "bytes": 1849451,
+      "sha256_raw": "34ce37a286b02da2324276e4492d2cf836a999d41e57a51d3d54a6b291298405"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/helm.json",
+      "bytes": 792794,
+      "sha256_raw": "e46df51e825e4e4091223c293ee0706084ff4a7bcff2b9c2d87720693d4b18cb"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/index.html",
+      "bytes": 2251,
+      "sha256_raw": "fed8f1f7971a197208e4fc77f0c26b18fefd7e089044e3592b4333f8c14b5d18"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/manifest.json",
+      "bytes": 838,
+      "sha256_raw": "9f5decd9a2f4d058e7f1c8743ebfa5508b60527234149717eac43f7508270388"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/saved_view.json",
+      "bytes": 577,
+      "sha256_raw": "ad6ecde479d878af310e9cea84e4c36497736654052d09838774b03b9f5581a7"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/cas_reconciliation_20260922/workbench/verification.json",
+      "bytes": 16260,
+      "sha256_raw": "cd95fc1c939f5247cac71fa4ffd81583cc6d7643a6589c7e356b58ac01ea131b"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/.gitattributes",
+      "bytes": 39,
+      "sha256_raw": "0b789f162d8b8bdee829f3fa50b158c2ec61d7fe55c899cefdb496f5716d2464"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/ACCEPTANCE_MANIFEST.json",
+      "bytes": 4591,
+      "sha256_raw": "b7bbad09f8cf73c9e8fa0607cce0f792fca6c738ccf4b531c8711c3c6deeaef7"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/before_eb998556.txt",
+      "bytes": 197134,
+      "sha256_raw": "79bec5b9684f9ef7220166749f71ebbb8e19ef3e46696415ba67fb9754b91e93"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/before_eb998556.xml",
+      "bytes": 214924,
+      "sha256_raw": "2fd038b06bf6e9538949c255311e0ec6c987b699230e2cdf79eaa7f6caabe256"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/peer_a4b2e0d7.txt",
+      "bytes": 171567,
+      "sha256_raw": "1a2989a62b5be4634a8e72966ee0496be4e576eea65989b076881087e43aafce"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/peer_a4b2e0d7.xml",
+      "bytes": 190147,
+      "sha256_raw": "7490cfd9c994adb5a5820eeb320622f6a695507356c0a2cadf792dfc9a34f83d"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/probe_public_entrypoints.py",
+      "bytes": 2728,
+      "sha256_raw": "4befbce0f8adcdbdd55216dc304d31b3b4c84c9c75829d082a3b0990620e1f79"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/PUBLIC_ENTRYPOINT.json",
+      "bytes": 2498,
+      "sha256_raw": "c64c6c5a541b89fc8260dbf897c42f2a3169d95dac5922005a1fb078c31cebd5"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/README.md",
+      "bytes": 5930,
+      "sha256_raw": "1b659c0bd3232be46d289d70da09c2f34794532dd7b637462c0d0d301a4668f0"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/RECEIPTS.json",
+      "bytes": 270585,
+      "sha256_raw": "612c0e497299a24e51e0b340b5a728687f4c4c53f21ac1b1cd770c78ec434b30"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/repaired.txt",
+      "bytes": 264,
+      "sha256_raw": "59eac72ddd1e07ecaed4b263066d393e72c292b2c142699f0952ddca62544e36"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/repaired.xml",
+      "bytes": 22509,
+      "sha256_raw": "b40437af9fd9847ccc57ba2571ef60f48310941033335b5e83b4e03d9c49340c"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/run_repair_receipts.py",
+      "bytes": 7343,
+      "sha256_raw": "439f5beb7ada716d56b221bb991f331e20934c2914b78f2dbc254d948db44d43"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/records/ohm_numeric_repair_20260922/verify_acceptance.py",
+      "bytes": 1732,
+      "sha256_raw": "bde9bfb8c49eceb33e52e35ac5b6d73e74ef61f0e79b0c967750bfb71750b2fe"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/inventory_cas_shared_modules.py",
+      "bytes": 7564,
+      "sha256_raw": "1b4c066e770c47591d5e9976877389727a1d0e81ae4df62390fe0e7a05274446"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/prepare_q4_reconciliation.py",
+      "bytes": 3313,
+      "sha256_raw": "17ef84cef23ac3fe821637fe30f9fdecf0c7b4ba0a747a02884ed36c9581ab1a"
+    }
+  ],
+  "preserved_sources": [
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/compiler.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "439c4908df2718a3ca1e1ff40bda63020cf71efa",
+      "sha256_git_bytes": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "sha256_working_bytes": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/api/notation/cas_ohm.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "bb6c70f7b41c50c110ea62d769edab885d212d0c",
+      "sha256_git_bytes": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "sha256_working_bytes": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    {
+      "path": "dist/cas-offline/api/notation/compiler.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "439c4908df2718a3ca1e1ff40bda63020cf71efa",
+      "sha256_git_bytes": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e",
+      "sha256_working_bytes": "9910a381a9eaba7f75cae8f325867bfe28766676d28b84a09b15e1bf9c10f79e"
+    },
+    {
+      "path": "dist/cas-offline/api/notation/cas_ohm.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "bb6c70f7b41c50c110ea62d769edab885d212d0c",
+      "sha256_git_bytes": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb",
+      "sha256_working_bytes": "20cc15753b43115478c524b00cd015661b225cc57b3f686cdba824e4c2f67afb"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_ohm_atlas.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "571f8e0e614801f1537890a8fcd59225f52181bb",
+      "sha256_git_bytes": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f",
+      "sha256_working_bytes": "6aa030651278f217965a788427d55d3f475bb666b366a8095d6a5fb05be9694f"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_coordinates.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "c908c53c11abb4aa9118055f61f3243d7facd1d3",
+      "sha256_git_bytes": "b0be441b571081753651ac15026a75e06def4f5fd754d8f4df9f27ce08c1eeed",
+      "sha256_working_bytes": "b0be441b571081753651ac15026a75e06def4f5fd754d8f4df9f27ce08c1eeed"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/cncm/rpa_recorded_helm.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "6921bbec8e3edd757238adeae01144d5fbae6d69",
+      "sha256_git_bytes": "5118428791af0aca4665485db7d1c34dd4b07dca20777ef7d158421f63e5ed03",
+      "sha256_working_bytes": "5118428791af0aca4665485db7d1c34dd4b07dca20777ef7d158421f63e5ed03"
+    },
+    {
+      "path": "cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/tools/render_rpa_view.py",
+      "base_commit": "eb9985566bd11a89f485d627186ef0efa7177f02",
+      "git_blob": "29eaa15750edfcff7060ad48bc8db9f8c61aaf67",
+      "sha256_git_bytes": "e3facb51458aac200dc97b89bbf6070511bd54344d2d617ab72cfbf78a779bb9",
+      "sha256_working_bytes": "e3facb51458aac200dc97b89bbf6070511bd54344d2d617ab72cfbf78a779bb9"
+    }
+  ]
+}

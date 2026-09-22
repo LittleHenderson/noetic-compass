@@ -1,0 +1,153 @@
+........................................................................ [ 13%]
+........................................................................ [ 27%]
+........................................................................ [ 41%]
+........................................................................ [ 55%]
+...................................................................EEEEE [ 69%]
+EEEE.................................................................... [ 83%]
+........................................................................ [ 97%]
+.............                                                            [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_file_spec_import_loads_its_exact_sibling_and_keeps_global_names _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change[\n] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change[\r\n] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_concurrent_first_load_waits_for_one_completed_helper[False] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_concurrent_first_load_waits_for_one_completed_helper[True] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_helper_loader_does_not_replace_an_occupied_private_namespace _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+______ ERROR at setup of test_failed_helper_load_cleans_up_before_retry _______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_missing_sibling_fails_closed_without_using_available_other_checkout _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_offline_population_includes_identical_core_and_helper_and_cli_runs _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/numeric_interfaces')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\numeric_interfaces'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+============================== warnings summary ===============================
+..\..\..\..\..\..\..\..\..\AppData\Roaming\Python\Python314\site-packages\_pytest\config\__init__.py:1428
+  C:\Users\wakil\AppData\Roaming\Python\Python314\site-packages\_pytest\config\__init__.py:1428: PytestConfigWarning: Unknown config option: asyncio_mode
+  
+    self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+ERROR tests/test_notation_compiler_ohm.py::test_file_spec_import_loads_its_exact_sibling_and_keeps_global_names
+ERROR tests/test_notation_compiler_ohm.py::test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change[\n]
+ERROR tests/test_notation_compiler_ohm.py::test_cached_helper_receipt_stays_bound_to_executed_bytes_after_file_change[\r\n]
+ERROR tests/test_notation_compiler_ohm.py::test_concurrent_first_load_waits_for_one_completed_helper[False]
+ERROR tests/test_notation_compiler_ohm.py::test_concurrent_first_load_waits_for_one_completed_helper[True]
+ERROR tests/test_notation_compiler_ohm.py::test_helper_loader_does_not_replace_an_occupied_private_namespace
+ERROR tests/test_notation_compiler_ohm.py::test_failed_helper_load_cleans_up_before_retry
+ERROR tests/test_notation_compiler_ohm.py::test_missing_sibling_fails_closed_without_using_available_other_checkout
+ERROR tests/test_notation_compiler_ohm.py::test_offline_population_includes_identical_core_and_helper_and_cli_runs
+508 passed, 1 warning, 9 errors in 3.43s

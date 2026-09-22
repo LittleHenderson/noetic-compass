@@ -1,0 +1,51 @@
+...........................EEE.......................................... [ 33%]
+........................................................................ [ 67%]
+....................................................................     [100%]
+=================================== ERRORS ====================================
+_ ERROR at setup of test_mutating_selected_source_and_its_manifest_cannot_replace_external_anchor _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/recorded_and_design')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\recorded_and_design'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_changed_checker_bytes_are_refused_even_after_module_cache _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/recorded_and_design')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\recorded_and_design'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+___ ERROR at setup of test_changed_saved_prediction_refused_before_checker ____
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/recorded_and_design')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\recorded_and_design'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/test_rpa_recorded_helm.py::test_mutating_selected_source_and_its_manifest_cannot_replace_external_anchor
+ERROR tests/test_rpa_recorded_helm.py::test_changed_checker_bytes_are_refused_even_after_module_cache
+ERROR tests/test_rpa_recorded_helm.py::test_changed_saved_prediction_refused_before_checker
+209 passed, 3 errors in 122.34s (0:02:02)

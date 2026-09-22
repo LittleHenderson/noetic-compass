@@ -1,0 +1,695 @@
+.....................................................EEEEEEEEEEEEEEEEEEE [ 67%]
+EEEEEEEEEEEEEEE.....E.EEEEE.EEEEEE.                                      [100%]
+=================================== ERRORS ====================================
+_____ ERROR at setup of test_checkpoint_verification_is_not_a_neural_load _____
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_restore_consumes_verified_bytes_even_if_disk_file_changes _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_read_stays_bounded_if_file_grows_after_stat _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights_and_manifest] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[source] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[width] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[unsafe_path] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_checkpoint_tamper_refused_even_if_local_manifest_resealed[extra_key] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_reads_metadata_only_and_any_explicit_pinned_version _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[seed-True] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[max_updates-129] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[max_wall_seconds-1801] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[width-16] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[device-cpu] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[train_examples-2049] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[dev_examples-257] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dry_run_limits_and_exact_version_fail_closed[data_version-latest] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+________ ERROR at setup of test_modified_plan_refused[status-APPROVED] ________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+______ ERROR at setup of test_modified_plan_refused[source_pins-value1] _______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_________ ERROR at setup of test_modified_plan_refused[splits-value2] _________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_______ ERROR at setup of test_modified_plan_refused[learning_rate-0.9] _______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+__________ ERROR at setup of test_modified_plan_refused[resume-True] __________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+___________ ERROR at setup of test_modified_plan_refused[answer-3] ____________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+________ ERROR at setup of test_signed_scope_cryptographic_check_only _________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+______ ERROR at setup of test_forged_or_expired_signature_refused[scope] ______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_____ ERROR at setup of test_forged_or_expired_signature_refused[expiry] ______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+____ ERROR at setup of test_forged_or_expired_signature_refused[signature] ____
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+___ ERROR at setup of test_forged_or_expired_signature_refused[fingerprint] ___
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+__ ERROR at setup of test_forged_or_expired_signature_refused[approval_word] __
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+__________ ERROR at setup of test_external_anchor_location_required ___________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+____________ ERROR at setup of test_no_launch_on_bad_authorization ____________
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_____ ERROR at setup of test_supervisor_kills_timed_out_mock_worker_once ______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+______ ERROR at setup of test_busy_device_lock_blocks_a_different_output ______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dependency_identity_binds_path_bytes_and_extra_files _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dependency_search_path_must_match_bound_directory[] __
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dependency_search_path_must_match_bound_directory[other] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dependency_search_path_must_match_bound_directory[two;paths] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_______ ERROR at setup of test_external_dependency_directory_is_refused _______
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_short_dependency_path_inside_homebase_need_not_be_in_nested_checkout _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+___ ERROR at setup of test_dependency_byte_and_entry_bounds_precede_reading ___
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_dependency_distribution_must_resolve_from_bound_directory _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+__ ERROR at setup of test_mutated_auth_dependency_invalidates_prepared_plan ___
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_torch_build_type_comes_from_bounded_literal_metadata_only[None-NO_CUDA_BUILD] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_torch_build_type_comes_from_bounded_literal_metadata_only[12.8-CUDA_BUILD_RUNTIME_UNPROBED] _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+_ ERROR at setup of test_unreadable_or_executable_version_metadata_is_not_readiness _
+
+self = WindowsPath('C:/Users/wakil/OneDrive/Desktop/tksCAS/cas_only_reasoner/FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE/_test_runs/cas_reconcile_integration_20260922/q4_preparation')
+mode = 448, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [WinError 3] The system cannot find the path specified: 'C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas_only_reasoner\\FOR CODEX TO BUILD CAS NATIVE COGNITIVE MACHINE\\_test_runs\\cas_reconcile_integration_20260922\\q4_preparation'
+
+C:\Python314\Lib\pathlib\__init__.py:1016: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR test_q4_followup.py::test_checkpoint_verification_is_not_a_neural_load
+ERROR test_q4_followup.py::test_restore_consumes_verified_bytes_even_if_disk_file_changes
+ERROR test_q4_followup.py::test_checkpoint_read_stays_bounded_if_file_grows_after_stat
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights]
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[weights_and_manifest]
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[source]
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[width]
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[unsafe_path]
+ERROR test_q4_followup.py::test_checkpoint_tamper_refused_even_if_local_manifest_resealed[extra_key]
+ERROR test_q4_followup.py::test_dry_run_reads_metadata_only_and_any_explicit_pinned_version
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[seed-True]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[max_updates-129]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[max_wall_seconds-1801]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[width-16]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[device-cpu]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[train_examples-2049]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[dev_examples-257]
+ERROR test_q4_followup.py::test_dry_run_limits_and_exact_version_fail_closed[data_version-latest]
+ERROR test_q4_followup.py::test_modified_plan_refused[status-APPROVED] - File...
+ERROR test_q4_followup.py::test_modified_plan_refused[source_pins-value1] - F...
+ERROR test_q4_followup.py::test_modified_plan_refused[splits-value2] - FileNo...
+ERROR test_q4_followup.py::test_modified_plan_refused[learning_rate-0.9] - Fi...
+ERROR test_q4_followup.py::test_modified_plan_refused[resume-True] - FileNotF...
+ERROR test_q4_followup.py::test_modified_plan_refused[answer-3] - FileNotFoun...
+ERROR test_q4_followup.py::test_signed_scope_cryptographic_check_only - FileN...
+ERROR test_q4_followup.py::test_forged_or_expired_signature_refused[scope] - ...
+ERROR test_q4_followup.py::test_forged_or_expired_signature_refused[expiry]
+ERROR test_q4_followup.py::test_forged_or_expired_signature_refused[signature]
+ERROR test_q4_followup.py::test_forged_or_expired_signature_refused[fingerprint]
+ERROR test_q4_followup.py::test_forged_or_expired_signature_refused[approval_word]
+ERROR test_q4_followup.py::test_external_anchor_location_required - FileNotFo...
+ERROR test_q4_followup.py::test_no_launch_on_bad_authorization - FileNotFound...
+ERROR test_q4_followup.py::test_supervisor_kills_timed_out_mock_worker_once
+ERROR test_q4_followup.py::test_busy_device_lock_blocks_a_different_output - ...
+ERROR test_q4_preparation.py::test_dependency_identity_binds_path_bytes_and_extra_files
+ERROR test_q4_preparation.py::test_dependency_search_path_must_match_bound_directory[]
+ERROR test_q4_preparation.py::test_dependency_search_path_must_match_bound_directory[other]
+ERROR test_q4_preparation.py::test_dependency_search_path_must_match_bound_directory[two;paths]
+ERROR test_q4_preparation.py::test_external_dependency_directory_is_refused
+ERROR test_q4_preparation.py::test_short_dependency_path_inside_homebase_need_not_be_in_nested_checkout
+ERROR test_q4_preparation.py::test_dependency_byte_and_entry_bounds_precede_reading
+ERROR test_q4_preparation.py::test_dependency_distribution_must_resolve_from_bound_directory
+ERROR test_q4_preparation.py::test_mutated_auth_dependency_invalidates_prepared_plan
+ERROR test_q4_preparation.py::test_torch_build_type_comes_from_bounded_literal_metadata_only[None-NO_CUDA_BUILD]
+ERROR test_q4_preparation.py::test_torch_build_type_comes_from_bounded_literal_metadata_only[12.8-CUDA_BUILD_RUNTIME_UNPROBED]
+ERROR test_q4_preparation.py::test_unreadable_or_executable_version_metadata_is_not_readiness
+61 passed, 46 errors in 2.02s

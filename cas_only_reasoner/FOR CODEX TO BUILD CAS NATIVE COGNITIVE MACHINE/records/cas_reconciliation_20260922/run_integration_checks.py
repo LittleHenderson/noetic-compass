@@ -1,0 +1,89 @@
+"""Run selected integration checks and retain new case/function receipts."""
+import argparse
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+CN = Path(__file__).resolve().parents[2]
+ROOT = CN.parents[1]
+RECORD = Path(__file__).resolve().parent
+APP = ROOT / "noetic-compass-scaffold/noetic-compass"
+LAB = CN / "research/helm_cas_expression_lab"
+TEMP = ROOT.parents[1] / "_test_runs/cas_reconcile_integration_20260922"
+GROUPS = [
+    ("numeric_interfaces", APP, sys.executable, [
+        "api/cas_ohm/test_quantifiers.py", "api/cas_ohm/test_numeric_boundaries.py",
+        "tests/test_notation_compiler_ohm.py", "tests/test_cas_ohm_numeric.py"]),
+    ("recorded_and_design", CN, "python", [
+        "tests/test_rpa_recorded_helm.py", "tests/test_rpa_ohm_atlas.py",
+        "research/helm_cas_expression_lab/test_cas_ohm_connections.py"]),
+    ("q4_preparation", LAB, sys.executable, [
+        "test_learner_q4.py", "test_q4_followup.py", "test_q4_preparation.py"]),
+]
+
+
+def fingerprint(path):
+    raw = path.read_bytes()
+    return {"path": str(path), "bytes": len(raw), "sha256_raw": hashlib.sha256(raw).hexdigest()}
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--out", type=Path, default=RECORD)
+    args = parser.parse_args()
+    record = args.out.resolve()
+    if not record.is_relative_to(RECORD):
+        raise ValueError("Receipts must stay inside this reconciliation record.")
+    record.mkdir(parents=True, exist_ok=True)
+    temp = TEMP / record.name
+    temp.mkdir(parents=True, exist_ok=True)
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1",
+               PYTEST_DISABLE_PLUGIN_AUTOLOAD="1", PYTHONIOENCODING="utf-8")
+    env.pop("HELM_Q4_AUTH_DEPENDENCY_DIR", None)
+    env.pop("PYTHONPATH", None)
+    rows = []
+    for name, cwd, interpreter, files in GROUPS:
+        xml = record / (name+".xml")
+        log = record / (name+".txt")
+        if xml.exists() or log.exists():
+            raise RuntimeError("Preserve existing receipts; use a separate new run directory.")
+        command = [interpreter, "-B", "-m", "pytest", *files, "-q", "--noconftest",
+                   "-o", "addopts=", "-p", "no:cacheprovider",
+                   "--basetemp", str(temp/name), "--junitxml", str(xml)]
+        began = datetime.now(timezone.utc).isoformat()
+        run = subprocess.run(command, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        log.write_bytes(run.stdout)
+        row = {"group": name, "started_utc": began,
+               "ended_utc": datetime.now(timezone.utc).isoformat(), "command": command,
+               "cwd": str(cwd), "exit_code": run.returncode,
+               "selected_test_files": [fingerprint(cwd/path) for path in files],
+               "log": fingerprint(log)}
+        if xml.exists():
+            suites = ET.parse(xml).getroot()
+            cases = suites.findall(".//testcase")
+            row["xml"] = fingerprint(xml)
+            row["cases"] = [{"classname": case.get("classname"), "name": case.get("name"),
+                             "outcome": "ERROR" if case.find("error") is not None else
+                                        "FAIL" if case.find("failure") is not None else
+                                        "SKIP" if case.find("skipped") is not None else "PASS"}
+                            for case in cases]
+            row["case_count"] = len(cases)
+            row["function_count"] = len({(case.get("classname"), case.get("name").split("[")[0])
+                                         for case in cases})
+        rows.append(row)
+        print(json.dumps({key:row.get(key) for key in ("group","exit_code","case_count","function_count")}), flush=True)
+    receipt = {"schema":"cas.integration-checks/0.1",
+               "source_commit":subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),
+               "scope":"Selected new deterministic runs, no neural execution. Not full-repository collection or source coverage.",
+               "new_test_cases_authored_by_this_driver":0, "runs":rows}
+    (record/"integration_checks.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf-8")
+    raise SystemExit(1 if any(row["exit_code"] for row in rows) else 0)
+
+
+if __name__ == "__main__":
+    main()
